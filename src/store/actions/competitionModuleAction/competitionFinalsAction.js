@@ -1,0 +1,36 @@
+import ApiConstants from "../../../themes/apiConstants";
+
+
+/* Get Competion Finals */
+function getCompetitionFinalsAction(payload) {
+    const action = {
+        type: ApiConstants.API_GET_COMPETITION_FINALS_LOAD,
+        payload: payload
+    };
+    return action;
+}
+
+/* Save Competion Finals */
+function saveCompetitionFinalsAction(payload) {
+    const action = {
+        type: ApiConstants.API_SAVE_COMPETITION_FINALS_LOAD,
+        payload: payload
+    };
+    return action;
+}
+
+function updateCompetitionFinalsAction(data, key, index) {
+    const action = {
+      type: ApiConstants.UPDATE_COMPETITION_FINALS,
+      updatedData: data,
+      key: key,
+      index: index
+    };
+    return action;
+  }
+
+export {
+    getCompetitionFinalsAction,
+    saveCompetitionFinalsAction,
+    updateCompetitionFinalsAction
+}

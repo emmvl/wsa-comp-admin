@@ -1,0 +1,494 @@
+import { takeEvery, takeLatest } from "redux-saga/effects";
+import { loginApiSaga } from "./authenticationSaga";
+
+import ApiConstants from "../../themes/apiConstants";
+import {
+  getRegistrationFormSaga,
+  regMembershipFeeListSaga,
+  regMembershipFeeListDeleteSaga,
+  regGetMembershipProductDetailSaga,
+  regSaveMembershipProductDetailSaga,
+  regDefaultMembershipProductTypesSaga,
+  regSaveMembershipProductFeeSaga,
+  regSaveMembershipProductDiscountSaga,
+  membershipProductDiscountTypeSaga,
+  regSaveRegistrationForm,
+  getMembershipproduct,
+  getDivisionsListSaga
+} from "./registrationSaga/registrationSaga";
+
+import {
+  getYearListSaga,
+  getOnlyYearListSaga,
+  getProductValidityListSaga,
+  getCompetitionTypeListSaga,
+  // getRoleSaga,
+  // getUreSaga,
+  getVenuesTypeSaga,
+  getRegFormAdvSettings,
+  getRegFormMethod,
+  getMembershipProductFeesTypeSaga,
+  getCommonDiscountTypeTypeSaga,
+  getCompetitionFeeInitSaga,
+  getMatchTypesSaga,
+  getCompetitionTypesSaga,
+  getCompetitionFormatTypesSaga,
+  getOnlyYearAndCompetitionListSaga
+} from "./appSaga";
+
+import {
+  regCompetitionFeeListSaga,
+  regCompetitionFeeListDeleteSaga,
+  getAllCompetitionFeesDeatilsSaga,
+  saveCompetitionFeesDetailsSaga,
+  saveCompetitionFeesMembershipTabSaga,
+  getDefaultCompFeesMembershipProductSaga,
+  saveCompetitionFeesDivisionSaga,
+  getCasualFeeDefault,
+  getSeasonalFeeDefault,
+  postPaymentOptionSaga,
+  saveCompetitionFeesSection,
+  postCompetitonDiscountSaga,
+  defaultCompetitionDiscountSaga,
+  defaultCharity_voucherSaga,
+  getDefaultCompFeesLogoSaga
+} from './registrationSaga/competitionFeeSaga';
+
+
+////**************************Live Score***************************Start
+// import { liveScorePlayerSaga } from "./liveScoreSaga/liveScorePlayerSaga";
+import { liveScoreMatchListSaga, liveScoreAddMatchSaga, liveScoreCreateMatchSaga, liveScoreDeleteMatchSaga, liveScoreCompetitionVenuesList, liveScoreMatchImportSaga, liveScoreMatchSaga } from './liveScoreSaga/liveScoreMatchSaga';
+
+import { liveScoreDivisionSaga, getLiveScoreScorerSaga } from "./liveScoreSaga/liveScoreSaga";
+import {
+  liveScoreTeamSaga,
+  liveScoreTeamViewPlayerListSaga,
+  liveScoreDeleteTeamSaga,
+  liveScoreTeamDivisionSaga,
+  liveScoreAffilateSaga,
+  addTeamLiveScoreSaga,
+  liveScoreTeamImportSaga,
+  liveScoreGetTeamSaga
+} from './liveScoreSaga/liveScoreTeamSaga';
+import { liveScoreLaddersDivisionsaga, liveScoreLaddersListSaga } from './liveScoreSaga/liveScoreLadderSaga';
+import { liveScoreIncidentListSaga } from './liveScoreSaga/liveScoreIncidentSaga';
+import { liveScoreRoundSaga } from './liveScoreSaga/liveScoreRoundSaga';
+import { liveScoreNewsListSaga, liveScoreAddNewsSaga, liveScoreNewsNotificationSaga, liveScoreNewsDeleteSaga } from './liveScoreSaga/liveScoreNewsSaga';
+import { liveScoreBannerSaga, liveScoreAddBannerSaga, liveScoreRemoveBannerSaga } from './liveScoreSaga/liveScoreBannerSaga';
+import { liveScoreGoalSaga } from './liveScoreSaga/liveScoreGoalSaga'
+import { liveScoreManagerListSaga, liveScoreAddEditManagerSaga } from './liveScoreSaga/liveScoreManagerSaga';
+import { liveScoreScorerListSaga, liveScorerSearchUserSaga } from '../saga/liveScoreSaga/liveScoreScorerSaga';
+import { liveScoreBulkPushBack, liveScoreBulkBringForwardSaga, liveScoreMatchResult, liveScoreEndMatchesSaga, liveScoreDoubleHeaderSaga, liveScoreAbandonMatchSaga } from './liveScoreSaga/liveScoreBulkMatchSaga';
+
+
+import { liveScorePlayerSaga, liveScoreAddEditPlayerSaga } from "./liveScoreSaga/liveScorePlayerSaga";
+import { liveScoreDashboardSaga } from './liveScoreSaga/liveScoreDashboardSaga';
+import { liveScoreCompetitionSaga, liveScoreCompetitionDelete } from './liveScoreSaga/liveScoreCompetionSaga'
+import { liveScoreDivisionsaga, liveScoreDeleteDivisionSaga, liveScoreCreateDivisionsaga, liveScoreDivisionImportSaga } from './liveScoreSaga/liveScoreDivisionSaga';
+
+////*******************Live Score********************************************End
+
+////Competition Management
+
+import { competitionModuleSaga, competitonGenerateDrawSaga } from './competitionManagementSaga/competitionModuleSaga'
+import * as competitionFormatSaga from '../saga/competitionManagementSaga/competitionFormatSaga';
+import * as competitionFinalSaga from '../saga/competitionManagementSaga/competitionFinalsSaga';
+import * as ladderFormatSaga from '../saga/competitionManagementSaga/ladderFormatSaga';
+import { competitonWithTimeSlots, competitonWithTimeSlotsPostApi } from './competitionManagementSaga/competitionTimeAndSlotSaga';
+import {
+  getTimeSlotInit, getCommonDataSaga, addVenueSaga,
+  venueListSaga, gradesReferenceListSaga, countryReferenceSaga,
+  registrationOtherInfoReferenceSaga, firebirdPlayerReferenceSaga, favouriteTeamReferenceSaga,
+  nationalityReferenceSaga, heardByReferenceSaga, playerPositionReferenceSaga, venuesListSaga,
+  venueByIdSaga, venueDeleteSaga
+} from "./commonSaga/commonSaga";
+////Venue constraints
+import { venueTimeSaga, venueConstraintPostSaga } from './competitionManagementSaga/venueTimeSaga'
+import {
+  getCompPartPlayerGradingSummarySaga,
+  saveCompPartPlayerGradingSummarySaga,
+  getCompPartPlayerGradingSaga,
+  addNewTeamPartPlayerGradingSaga,
+  dragTeamPartPlayerSaga
+} from './competitionManagementSaga/competitionPartPlayerGradingSaga';
+import {
+  getCompOwnProposedTeamGradingSaga,
+  saveOwnFinalTeamGradingDataSaga,
+  getCompPartProposedTeamGradingSaga,
+  savePartProposedTeamGradingDataSaga,
+  getTeamGradingSummarySaga,
+  saveUpdatedGradeTeamSummarySaga,
+  publishGradeTeamSummarySaga,
+  getCompFinalGradesListSaga
+} from './competitionManagementSaga/competitionTeamGradingSaga';
+
+// UserSaga
+import * as userSaga from '../saga/userSaga/userSaga';
+
+////////competition draws 
+import {
+  getCompetitionDrawsSaga, getDrawsRoundsSaga,
+  updateCompetitionDraws, saveDrawsSaga,
+  getCompetitionVenues, updateCourtTimingsDrawsAction
+} from './competitionManagementSaga/competitionDrawsSaga';
+
+////Competition Dashboard Saga
+import { competitionDashboardSaga } from './competitionManagementSaga/competitionDashboardSaga';
+// import { liveScoreAddEditManagerSaga } from './liveScoreSaga/liveScoreManagerSaga';
+
+// EndUserRegistrationSaga
+import * as endUserRegSaga from '../saga/registrationSaga/endUserRegistrationSaga';
+
+import * as divisionsaga from "../saga/liveScoreSaga/liveScoreDivisionSaga"
+
+import { liveScoreGameTimeStatisticsSaga } from '../saga/liveScoreSaga/liveScoreGameTimeStatisticsSaga'
+import { liveScoreSettingSaga, liveScorePostSaga } from './liveScoreSaga/liveScoreSettingSaga'
+import { liveScoreUmpiresSaga } from './liveScoreSaga/liveScoreUmpiresSaga'
+
+import { liveScoreTeamAttendanceListSaga } from './liveScoreSaga/liveScoreTeamAttendanceSaga'
+
+
+export default function* root_saga() {
+  yield takeEvery(ApiConstants.API_LOGIN_LOAD, loginApiSaga);
+  yield takeEvery(ApiConstants.API_ROLE_LOAD, userSaga.getRoleSaga);
+  yield takeEvery(ApiConstants.API_URE_LOAD, userSaga.getUreSaga);
+  yield takeEvery(ApiConstants.API_REG_COMPETITION_LIST_LOAD, regCompetitionFeeListSaga);
+  yield takeEvery(ApiConstants.API_REG_MEMBERSHIP_LIST_LOAD, regMembershipFeeListSaga);
+  yield takeEvery(ApiConstants.API_REG_COMPETITION_LIST_DELETE_LOAD, regCompetitionFeeListDeleteSaga);
+  yield takeEvery(ApiConstants.API_REG_MEMBERSHIP_LIST_DELETE_LOAD, regMembershipFeeListDeleteSaga);
+  yield takeEvery(ApiConstants.API_REG_GET_MEMBERSHIP_PRODUCT__LOAD, regGetMembershipProductDetailSaga);
+  yield takeEvery(ApiConstants.API_REG_SAVE_MEMBERSHIP_PRODUCT__LOAD, regSaveMembershipProductDetailSaga);
+  yield takeEvery(ApiConstants.API_YEAR_LIST__LOAD, getYearListSaga);
+  yield takeEvery(ApiConstants.API_ONLY_YEAR_LIST__LOAD, getOnlyYearListSaga);
+  yield takeEvery(ApiConstants.API_REG_GET_DEFAULT_MEMBERSHIP_PRODUCT_TYPES__LOAD, regDefaultMembershipProductTypesSaga)
+  yield takeEvery(ApiConstants.API_REG_SAVE_MEMBERSHIP_PRODUCT_FEES__LOAD, regSaveMembershipProductFeeSaga);
+  yield takeEvery(ApiConstants.API_REG_SAVE_MEMBERSHIP_PRODUCT_DISCOUNT__LOAD, regSaveMembershipProductDiscountSaga);
+  yield takeEvery(ApiConstants.API_COMMON_MEMBERSHIP_PRODUCT_FEES_TYPE__LOAD, getMembershipProductFeesTypeSaga);
+  yield takeEvery(ApiConstants.API_COMMON_DISCOUNT_TYPE__LOAD, getCommonDiscountTypeTypeSaga);
+  yield takeEvery(ApiConstants.API_MEMBERSHIP_PRODUCT_DISCOUNT_TYPE__LOAD, membershipProductDiscountTypeSaga);
+  yield takeEvery(ApiConstants.API_COMMON_MEMBERSHIP_PRODUCT_FEES_TYPE__LOAD, getMembershipProductFeesTypeSaga);
+  yield takeEvery(ApiConstants.API_COMMON_DISCOUNT_TYPE__LOAD, getCommonDiscountTypeTypeSaga);
+  yield takeEvery(ApiConstants.API_MEMBERSHIP_PRODUCT_DISCOUNT_TYPE__LOAD, membershipProductDiscountTypeSaga);
+  yield takeEvery(ApiConstants.API_PRODUCT_VALIDITY_LIST__LOAD, getProductValidityListSaga);
+  yield takeEvery(ApiConstants.API_COMPETITION_TYPE_LIST__LOAD, getCompetitionTypeListSaga);
+  yield takeEvery(ApiConstants.API_REG_FORM_VENUE_LOAD, getVenuesTypeSaga);
+  yield takeEvery(ApiConstants.API_REG_FORM_LOAD, regSaveRegistrationForm);
+  yield takeEvery(ApiConstants.API_REG_FORM_SETTINGS_LOAD, getRegFormAdvSettings);
+  yield takeEvery(ApiConstants.API_REG_FORM_METHOD_LOAD, getRegFormMethod);
+  yield takeEvery(ApiConstants.API_REG_FORM_MEMBERSHIP_PRODUCT_LOAD, getMembershipproduct);
+  yield takeEvery(ApiConstants.API_GET_REG_FORM_LOAD, getRegistrationFormSaga);
+  ///competition Init saga
+  yield takeEvery(ApiConstants.API_REG_COMPETITION_FEE_INIT_LOAD, getCompetitionFeeInitSaga)
+  yield takeEvery(ApiConstants.API_SAVE_COMPETITION_FEES_DETAILS_LOAD, saveCompetitionFeesDetailsSaga)
+  yield takeEvery(ApiConstants.API_GET_COMPETITION_FEES_DETAILS_LOAD, getAllCompetitionFeesDeatilsSaga)
+  yield takeEvery(ApiConstants.API_SAVE_COMPETITION_FEES_MEMBERHSIP_TAB_LOAD, saveCompetitionFeesMembershipTabSaga)
+  yield takeEvery(ApiConstants.API_GET_DEFAULT_COMPETITION_FEES_MEMBERHSIP_PRODUCT_LOAD, getDefaultCompFeesMembershipProductSaga)
+  yield takeEvery(ApiConstants.API_SAVE_COMPETITION_FEES_DIVISION_TAB_LOAD, saveCompetitionFeesDivisionSaga)
+  yield takeEvery(ApiConstants.GET_CASUAL_FEE_DETAIL_API_LOAD, getCasualFeeDefault)
+  yield takeEvery(ApiConstants.GET_SEASONAL_FEE_DETAIL_API_LOAD, getSeasonalFeeDefault)
+
+  // competition fee payment post api
+  yield takeEvery(ApiConstants.API_POST_COMPETITION_FEE_PAYMENT_LOAD, postPaymentOptionSaga)
+  yield takeEvery(ApiConstants.API_SAVE_COMPETITION_FEES_SECTION_LOAD, saveCompetitionFeesSection)
+
+  //competition fee discount post api
+  yield takeEvery(ApiConstants.API_POST_COMPETITION_FEE_DISCOUNT_LOAD, postCompetitonDiscountSaga)
+  yield takeEvery(ApiConstants.API_COMPETITION_DISCOUNT_TYPE_LOAD, defaultCompetitionDiscountSaga)
+  yield takeEvery(ApiConstants.API_COMPETITION_FEE_DEFAULT_CHARITY_LOAD, defaultCharity_voucherSaga)
+
+
+  //// ****************************Live Score Saga**************************************Start
+
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_LIST_LOAD, liveScorePlayerSaga);
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_LADDERS_DIVISION_LOAD, liveScoreLaddersDivisionsaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_LADDERS_LIST_LOAD, liveScoreLaddersListSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_DIVISION_LOAD, liveScoreDivisionSaga);
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_TEAM_LOAD, liveScoreTeamSaga);
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_INCIDENT_LIST_LOAD, liveScoreIncidentListSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_MATCH_LIST_LOAD, liveScoreMatchListSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_EDIT_MATCH_LOAD, liveScoreAddMatchSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_CREATE_MATCH_LOAD, liveScoreCreateMatchSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_NEWS_LIST_LOAD, liveScoreNewsListSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_CREATE_ROUND_LOAD, liveScoreRoundSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_BULK_PUSH_BACK_LOAD, liveScoreBulkPushBack)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_BULK_BRING_FORWARD_LOAD, liveScoreBulkBringForwardSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_BULK_END_MATCHES_LOAD, liveScoreEndMatchesSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_GOAL_LIST_LOAD, liveScoreGoalSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_MANAGER_LIST_LOAD, liveScoreManagerListSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_SCORER_LIST_LOAD, liveScoreScorerListSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_NEWS_LOAD, liveScoreAddNewsSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_BANNERS_LOAD, liveScoreBannerSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_BANNER_LOAD, liveScoreAddBannerSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_REMOVE_BANNER_LOAD, liveScoreRemoveBannerSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_BULK_DOUBLE_HEADER_LOAD, liveScoreDoubleHeaderSaga)
+  yield takeEvery(ApiConstants.API_LIVESCORE_COMPETITION_INITATE, liveScoreCompetitionSaga)
+  yield takeEvery(ApiConstants.API_LIVESCORE_COMPETION_DELETE_INITIATE, liveScoreCompetitionDelete)
+  yield takeEvery(ApiConstants.LiveScore_SETTING_VIEW_INITITAE, liveScoreSettingSaga)
+  yield takeEvery(ApiConstants.LiveScore_SETTING_DATA_POST_INITATE, liveScorePostSaga)
+
+  // ****************************Live Score Saga**************************************End
+
+  /* ************Competition Management Starts************ */
+  yield takeEvery(ApiConstants.API_GET_YEAR_LOAD, competitionModuleSaga)
+
+  //////
+  yield takeEvery(ApiConstants.API_COMPETITION_FEE_DEFAULT_LOGO_LOAD, getDefaultCompFeesLogoSaga)
+
+
+  // ****************************Venue And Tiemes**************************************Start
+  ////Year and Competition
+  yield takeEvery(ApiConstants.API_GET_YEAR_COMPETITION_LOAD, getOnlyYearAndCompetitionListSaga)
+
+
+  /* Competition Format */
+  yield takeEvery(ApiConstants.API_GET_COMPETITION_FORMAT_LOAD, competitionFormatSaga.getCompetitionFormatSaga)
+  yield takeEvery(ApiConstants.API_SAVE_COMPETITION_FORMAT_LOAD, competitionFormatSaga.saveCompetitionFormatSaga)
+
+  /* Competition Finals  */
+  yield takeEvery(ApiConstants.API_GET_COMPETITION_FINALS_LOAD, competitionFinalSaga.getCompetitionFinalsSaga)
+  yield takeEvery(ApiConstants.API_SAVE_COMPETITION_FINALS_LOAD, competitionFinalSaga.saveCompetitionFinalsSaga)
+
+  /* Ladder Format */
+  yield takeEvery(ApiConstants.API_GET_LADDER_FORMAT_LOAD, ladderFormatSaga.getLadderFormatSaga)
+  yield takeEvery(ApiConstants.API_SAVE_LADDER_FORMAT_LOAD, ladderFormatSaga.saveLadderFormatSaga)
+
+  yield takeEvery(ApiConstants.API_MATCH_TYPES_LOAD, getMatchTypesSaga)
+  yield takeEvery(ApiConstants.API_COMPETITION_TYPES_LOAD, getCompetitionTypesSaga)
+  yield takeEvery(ApiConstants.API_COMPETITION_FORMAT_TYPES_LOAD, getCompetitionFormatTypesSaga)
+
+
+  /* ************Competition Management Ends************ */
+
+  /* ************Competition Management Ends************ */
+
+  yield takeEvery(ApiConstants.API_GET_COMPETITION_WITH_TIME_SLOTS_LOAD, competitonWithTimeSlots)
+  yield takeEvery(ApiConstants.API_TIME_SLOT_INIT_LOAD, getTimeSlotInit)
+  yield takeEvery(ApiConstants.API_GET_COMMON_REF_DATA_LOAD, getCommonDataSaga)
+  yield takeEvery(ApiConstants.API_ADD_VENUE_LOAD, addVenueSaga)
+
+  ////Venue Constraints
+  yield takeEvery(ApiConstants.API_VENUE_CONSTRAINTS_LIST_LOAD, venueTimeSaga)
+
+  ////ownCompetition venue list
+  yield takeEvery(ApiConstants.API_VENUE_LIST_LOAD, venueListSaga)
+
+  ///part player grading
+  yield takeEvery(ApiConstants.API_GET_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMMARY_LIST_LOAD, getCompPartPlayerGradingSummarySaga)
+
+  ////own team grading
+  yield takeEvery(ApiConstants.API_GET_COMPETITION_OWN_PROPOSED_TEAM_GRADING_LIST_LOAD, getCompOwnProposedTeamGradingSaga)
+  yield takeEvery(ApiConstants.API_SAVE_COMPETITION_OWN_FINAL_TEAM_GRADING_LOAD, saveOwnFinalTeamGradingDataSaga)
+
+  /* Affiliates starts */
+
+  // Affiliates Listing
+  yield takeEvery(ApiConstants.API_AFFILIATES_LISTING_LOAD, userSaga.getAffiliatesListingSaga)
+
+  //Save Affiliate
+  yield takeEvery(ApiConstants.API_SAVE_AFFILIATE_LOAD, userSaga.saveAffiliateSaga)
+
+  //Affiliate by Organisation Id
+  yield takeEvery(ApiConstants.API_AFFILIATE_BY_ORGANISATION_LOAD, userSaga.getAffiliateByOrganisationIdSaga)
+
+  //Affiliate Our Organisation Id
+  yield takeEvery(ApiConstants.API_AFFILIATE_OUR_ORGANISATION_LOAD, userSaga.getAffiliateOurOrganisationIdSaga)
+
+  //AffiliateToOrganisation
+  yield takeEvery(ApiConstants.API_AFFILIATE_TO_ORGANISATION_LOAD, userSaga.getAffiliatedToOrganisationSaga)
+
+  //AFfiliateDelete
+  yield takeEvery(ApiConstants.API_AFFILIATE_DELETE_LOAD, userSaga.deleteAffiliateSaga)
+
+  ////////get the divisions list on the basis of year and competition
+  yield takeEvery(ApiConstants.API_GET_DIVISIONS_LIST_ON_YEAR_AND_COMPETITION_LOAD, getDivisionsListSaga)
+
+  ////////get the grades reference data
+  yield takeEvery(ApiConstants.API_GRADES_REFERENCE_LIST_LOAD, gradesReferenceListSaga)
+
+  ////competition part proposed team grading get api
+  yield takeEvery(ApiConstants.API_GET_COMPETITION_PART_PROPOSED_TEAM_GRADING_LIST_LOAD, getCompPartProposedTeamGradingSaga)
+
+  ////competition part proposed team grading get api
+  yield takeEvery(ApiConstants.API_SAVE_COMPETITION_PART_PROPOSED_TEAM_GRADING_LOAD, savePartProposedTeamGradingDataSaga)
+
+  /********competition time slot post Api */
+  yield takeEvery(ApiConstants.API_COMPETITION_TIMESLOT_POST_LOAD, competitonWithTimeSlotsPostApi)
+
+  ///////save the competition part player grade calculate player grading summmary or say proposed player grading toggle
+  yield takeEvery(ApiConstants.API_SAVE_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMMARY_LIST_LOAD, saveCompPartPlayerGradingSummarySaga)
+
+  /////////get the own team grading summary listing data
+  yield takeEvery(ApiConstants.API_GET_COMPETITION_OWN_TEAM_GRADING_SUMMARY_LIST_LOAD, getTeamGradingSummarySaga)
+
+  /////////competition part player grading get API 
+  yield takeEvery(ApiConstants.API_GET_COMPETITION_PART_PLAYER_GRADING_LIST_LOAD, getCompPartPlayerGradingSaga)
+
+  ////////competition Draws
+  yield takeEvery(ApiConstants.API_GET_COMPETITION_DRAWS_LOAD, getCompetitionDrawsSaga)
+
+  ////////competition Draws rounds
+  yield takeEvery(ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_LOAD, getDrawsRoundsSaga)
+
+  ////venueConstraintPostSaga
+  yield takeEvery(ApiConstants.API_VENUE_CONSTRAINT_POST_LOAD, venueConstraintPostSaga)
+
+  ////////save the changed grade name in own competition team grading summary data
+  yield takeEvery(ApiConstants.API_SAVE_UPDATED_GRADE_NAME_TEAM_GRADING_SUMMARY_LOAD, saveUpdatedGradeTeamSummarySaga)
+
+  ////////save the changed grade name in own competition team grading summary data
+  yield takeEvery(ApiConstants.API_PUBLISH_TEAM_GRADING_SUMMARY_LOAD, publishGradeTeamSummarySaga)
+
+
+  ////Competition Dashboard Saga
+  yield takeEvery(ApiConstants.API_COMPETITION_DASHBOARD_LOAD, competitionDashboardSaga)
+
+  ////////competition Draws update
+  yield takeEvery(ApiConstants.API_UPDATE_COMPETITION_DRAWS_LOAD, updateCompetitionDraws)
+
+  ////// Save Draws
+  yield takeEvery(ApiConstants.API_UPDATE_COMPETITION_SAVE_DRAWS_LOAD, saveDrawsSaga)
+
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_EDIT_PLAYER_LOAD, liveScoreAddEditPlayerSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_DASHBOARD_LOAD, liveScoreDashboardSaga)
+
+  ///// Get Competition Venue 
+  yield takeEvery(ApiConstants.API_GET_COMPETITION_VENUES_LOAD, getCompetitionVenues)
+
+  // Get oraganisation for Add venue
+  yield takeEvery(ApiConstants.API_ORGANISATION_LOAD, userSaga.getOrganisationForVenueSaga)
+
+  ////Add/Edit Manager Saga
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_EDIT_MANAGER_LOAD, liveScoreAddEditManagerSaga)
+
+  //// Delete Match Saga
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_DELETE_MATCH_LOAD, liveScoreDeleteMatchSaga)
+  //////////////get the competition final grades on the basis of competition and division
+  yield takeEvery(ApiConstants.API_GET_COMPETITION_FINAL_GRADES_LIST_LOAD, getCompFinalGradesListSaga)
+
+  /////////////////update draws court timing where N/A(null) is there
+  yield takeEvery(ApiConstants.API_UPDATE_COMPETITION_DRAWS_COURT_TIMINGS_LOAD, updateCourtTimingsDrawsAction)
+
+  //// Team View Player List saga
+  yield takeEvery(ApiConstants.API_GET_TEAM_VIEW_PLAYER_LIST_LOAD, liveScoreTeamViewPlayerListSaga);
+
+  //// Delete Team saga
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_DELETE_TEAM_LOAD, liveScoreDeleteTeamSaga);
+  /// Favourite Team Reference Saga
+  yield takeEvery(ApiConstants.API_FAVOURITE_TEAM_REFERENCE_LOAD, favouriteTeamReferenceSaga)
+
+  /// Firebird Player Reference Saga
+  yield takeEvery(ApiConstants.API_FIREBIRD_PLAYER_REFERENCE_LOAD, firebirdPlayerReferenceSaga)
+
+  /// Registration Other Info Reference Saga
+  yield takeEvery(ApiConstants.API_REGISTRATION_OTHER_INFO_REFERENCE_LOAD, registrationOtherInfoReferenceSaga)
+
+  /// Country Reference Saga
+  yield takeEvery(ApiConstants.API_COUNTRY_REFERENCE_LOAD, countryReferenceSaga)
+
+  /// Nationality Reference Saga
+  yield takeEvery(ApiConstants.API_NATIONALITY_REFERENCE_LOAD, nationalityReferenceSaga)
+
+  /// HeardBy Reference Saga
+  yield takeEvery(ApiConstants.API_HEARDBY_REFERENCE_LOAD, heardByReferenceSaga)
+
+  /// Player Position Saga
+  yield takeEvery(ApiConstants.API_PLAYER_POSITION_REFERENCE_LOAD, playerPositionReferenceSaga)
+
+  //AFfiliateDelete
+  yield takeEvery(ApiConstants.API_AFFILIATE_DELETE_LOAD, userSaga.deleteAffiliateSaga)
+
+  //EndUserRegistrationSave
+  yield takeEvery(ApiConstants.API_SAVE_END_USER_REGISTRATION_LOAD, endUserRegSaga.endUserRegistrationSaveSaga)
+
+  // liveScore division saga
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_LOAD, divisionsaga.liveScoreDivisionsaga)
+
+  //get particular user organisation 
+  yield takeEvery(ApiConstants.API_GET_USER_ORGANISATION_LOAD, userSaga.getUserOrganisationSaga)
+
+  //get competiiton Venue - live score
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_COMPETITION_VENUES_LIST_LOAD, liveScoreCompetitionVenuesList)
+  // get notification liveScoreNewsNotificationSaga
+  yield takeEvery(ApiConstants.API_LIVESCORE_NEWS_NOTIFICATION_LOAD, liveScoreNewsNotificationSaga)
+
+  //delete news 
+
+  yield takeEvery(ApiConstants.API_LIVESCORE_DELETE_NEWS_LOAD, liveScoreNewsDeleteSaga)
+
+  //linescore create dividion saga
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_CREATE_DIVISION_LOAD, liveScoreCreateDivisionsaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_DELETE_DIVISION_LOAD, liveScoreDeleteDivisionSaga)
+  // yield takeEvery(ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_LOAD, liveScoreDivisionsaga)
+  // yield takeEvery(ApiConstants.API_LIVESCORE_COMPETION_DELETE_INITIATE)
+
+  //liveScoreGameTimeStatisticsSaga
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_GAME_TIME_STATISTICS_LIST_LOAD, liveScoreGameTimeStatisticsSaga)
+  //EndUserRegistration Registration Settings
+  yield takeEvery(ApiConstants.API_ORG_REGISTRATION_REG_SETTINGS_LOAD, endUserRegSaga.orgRegistrationRegistrationSettings)
+
+  //EndUserRegistration Membership Products
+  yield takeEvery(ApiConstants.API_MEMBERSHIP_PRODUCT_END_USER_REG_LOAD, endUserRegSaga.endUserRegistrationMembershipProducts)
+
+
+  ////Venues list for user module
+  yield takeEvery(ApiConstants.API_VENUES_LIST_LOAD, venuesListSaga)
+  /// Venue By Id
+  yield takeEvery(ApiConstants.API_VENUE_BY_ID_LOAD, venueByIdSaga)
+
+  yield takeEvery(ApiConstants.API_VENUE_DELETE_LOAD, venueDeleteSaga)
+
+  yield takeEvery(ApiConstants.API_ADD_NEW_TEAM_LOAD, addNewTeamPartPlayerGradingSaga)
+
+
+  yield takeEvery(ApiConstants.API_DRAG_NEW_TEAM_LOAD, dragTeamPartPlayerSaga)
+
+  yield takeEvery(ApiConstants.API_MATCH_RESULT_LOAD, liveScoreMatchResult)
+
+  //umpires saga
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_UMPIRES_LIST_LOAD, liveScoreUmpiresSaga)
+
+
+  /// TEam ADD SAGA
+  yield takeEvery(ApiConstants.GET_DIVISION_TEAM, liveScoreTeamDivisionSaga)
+  yield takeEvery(ApiConstants.GET_AFFILATE_TEAM, liveScoreAffilateSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_TEAM_LOAD, addTeamLiveScoreSaga)
+
+  //// Bulk Abandon Match Saga
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_BULK_ABANDON_MATCH_LOAD, liveScoreAbandonMatchSaga)
+
+  //// LiveScore Match Import Saga
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_MATCH_IMPORT_LOAD, liveScoreMatchImportSaga)
+
+  //// Live Score Scorer List
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_GET_SCORER_LIST_LOAD, getLiveScoreScorerSaga)
+
+  yield takeEvery(ApiConstants.API_GET_LIVESCOREMATCH_DETAIL_INITAITE, liveScoreMatchSaga)
+  // User Dashboard Textual Listing
+  yield takeEvery(ApiConstants.API_USER_DASHBOARD_TEXTUAL_LOAD, userSaga.getUserDashboardTextualListingSaga)
+
+  //UserModule Personal Info
+  yield takeEvery(ApiConstants.API_USER_MODULE_PERSONAL_DETAIL_LOAD, userSaga.getUserModulePersonalDataSaga)
+
+  //UserModule Personal Info by competition
+  yield takeEvery(ApiConstants.API_USER_MODULE_PERSONAL_BY_COMPETITION_LOAD, userSaga.getUserModulePersonalByCompDataSaga)
+
+  //UserModule Registration
+  yield takeEvery(ApiConstants.API_USER_MODULE_REGISTRATION_LOAD, userSaga.getUserModuleRegistrationDataSaga)
+
+  // User Module Medical Info
+  yield takeEvery(ApiConstants.API_USER_MODULE_MEDICAL_INFO_LOAD, userSaga.getUserModuleMedicalInfoSaga)
+
+  ////Live Score Team Import Saga
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_TEAM_IMPORT_LOAD, liveScoreTeamImportSaga)
+
+  ////Live Score Division Import Saga
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_DIVISION_IMPORT_LOAD, liveScoreDivisionImportSaga)
+
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_TEAM_ATTENDANCE_LIST_LOAD, liveScoreTeamAttendanceListSaga)
+
+  //// Get Team Data
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_GET_TEAM_LOAD, liveScoreGetTeamSaga)
+
+  yield takeEvery(ApiConstants.API_GENERATE_DRAW_LOAD, competitonGenerateDrawSaga);
+
+}

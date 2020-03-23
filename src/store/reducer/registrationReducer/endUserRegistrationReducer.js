@@ -1,0 +1,106 @@
+import ApiConstants from "../../../themes/apiConstants";
+import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
+
+
+let registrationObj = {
+    organisationUniqueKey: "",
+	registrationId: 0,
+	orgRegistrationId: 0,
+	postalCode: "",
+	alternativeLocation: "",
+	countryRefId: null,
+	nationalityRefId: null,
+	languages: "",
+	volunteers:[],
+    competitionUniqueKey: "",
+    childrenCheckNumber: "",
+    userRegistrations:[],
+    vouchers: []
+}
+
+let membershipProdInfoObj = {
+    specialNote: "",
+    training: "",
+    competitionName: "",
+    membershipProducts: []
+}
+
+
+const initialState = {
+    onLoad: false,
+    error: null,
+    result: null,
+    status: 0,
+    registrationDetail: registrationObj,
+    registrationSettings: [],
+    membershipProductInfo: membershipProdInfoObj
+}
+
+
+function  endUserRegistrationReducer(state = initialState, action)
+{
+    switch(action.type)
+    {
+        case ApiConstants.API_END_USER_REGISTRATION_FAIL:
+            return {
+                ...state,
+                onLoad: false,
+                error: action.error,
+                status: action.status
+            };
+
+        case ApiConstants.API_END_USER_REGISTRATION_ERROR:
+            return {
+                ...state,
+                onLoad: false,
+                error: action.error,
+                status: action.status
+            };
+        case ApiConstants.API_SAVE_END_USER_REGISTRATION_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_SAVE_END_USER_REGISTRATION_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status
+            };
+
+        case ApiConstants.UPDATE_END_USER_REGISTRATION:
+
+            let oldData = state.registrationDetail;
+            let updatedValue = action.updatedData;
+            let getKey = action.key;
+            oldData[getKey] = updatedValue;
+            return { ...state, error: null };  
+
+        case ApiConstants.API_MEMBERSHIP_PRODUCT_END_USER_REG_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_MEMBERSHIP_PRODUCT_END_USER_REG_SUCCESS:
+            let data = action.result;
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                membershipProductInfo: data
+            };
+
+        case ApiConstants.API_ORG_REGISTRATION_REG_SETTINGS_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_ORG_REGISTRATION_REG_SETTINGS_SUCCESS:
+            let orgData = action.result;
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                registrationSettings: orgData
+            };
+
+        default:
+            return state;
+    }
+}
+
+export default endUserRegistrationReducer;

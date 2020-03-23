@@ -1,0 +1,798 @@
+import ApiConstants from "../../../themes/apiConstants";
+import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
+
+
+const postTimeSlot = {
+    mainTimeRotationID: 7,
+    competitionUniqueKey: null,
+    organisationId: null,
+    applyToVenueRefId: null,
+    timeslotRotationRefId: null,
+    timeslotGenerationRefId: null,
+    compititionTimeslotId: 0,
+    competitionVenueTimeslotsDayTime: [],
+    competitionTimeslotsEntity: [],
+    competitionTimeslotManual: [],
+
+}
+// initial state
+const initialState = {
+    onLoad: false,
+    onGetTimeSlotLoad: false,
+    error: null,
+    result: [],
+    status: 0,
+    getcompetitionTimeSlotData: postTimeSlot,
+    applyVenue: [],
+    timeSlotRotation: [],
+    timeSlotGeneration: [],
+    weekDays: [],
+    manaualTimeSlotObj: {
+        "venueId": null,
+        "timeslots": []
+    },
+    allVenueList: [],
+    timeSlotManualAllVenue: [],
+    defaultDataAllVenue: [],
+    timeSlotEntityManualkey: [],
+    allResult: []
+};
+
+//time slot Entity
+function timeSlotEntity(entityId, SelectedEntity) {
+    let object = {
+        status: false,
+        result: []
+    }
+
+    for (let i in SelectedEntity) {
+        if (SelectedEntity[i].venuePreferenceTypeRefId == entityId) {
+            object = {
+                status: true,
+                result: SelectedEntity[i]
+            }
+            break;
+        }
+    }
+
+    return object
+}
+
+
+
+
+
+// get timeslot all venue per day
+function getTimeslotPerVenuePerDay(timeslotData) {
+    let updatedtimeSlotArr = []
+    for (let i in timeslotData) {
+        let matchUpdatedTimeSlot = timeslotData[i]
+        let competitionTimeslotsEntityArr = timeslotData[i].competitionTimeslotsEntity
+        if (updatedtimeSlotArr.length > 0) {
+            for (let j in updatedtimeSlotArr) {
+                if (matchUpdatedTimeSlot.dayRefId == updatedtimeSlotArr[j].dayRefId) {
+                    console.log(competitionTimeslotsEntityArr, "called")
+                    let startTime = {
+
+                        "startTime": matchUpdatedTimeSlot.startTime,
+                        "sortOrder": null,
+                        "competitionTimeslotsEntity": matchUpdatedTimeSlot.competitionTimeslotsEntity,
+                        "timeSlotEntityManualkey": matchUpdatedTimeSlot.timeSlotEntityManualkey,
+                        "timeSlotEntityGradeKey": matchUpdatedTimeSlot.timeSlotEntityGradeKey
+                    }
+                    updatedtimeSlotArr[j]['startTime'].push(startTime)
+
+
+                }
+                else {
+                    let timeslotUpdatedArray = {
+                        "startTime": matchUpdatedTimeSlot.startTime,
+                        "sortOrder": null,
+                        "competitionTimeslotsEntity": matchUpdatedTimeSlot.competitionTimeslotsEntity,
+                        "timeSlotEntityManualkey": matchUpdatedTimeSlot.timeSlotEntityManualkey,
+                        "timeSlotEntityGradeKey": matchUpdatedTimeSlot.timeSlotEntityGradeKey
+                    }
+                    timeslotData[i].startTime = []
+                    delete timeslotData[i].sortOrder
+                    delete timeslotData[i].competitionTimeslotsEntity
+                    delete timeslotData[i].timeSlotEntityManualkey
+                    delete timeslotData[i].timeSlotEntityGradeKey
+                    timeslotData[i].startTime.push(timeslotUpdatedArray)
+                    updatedtimeSlotArr.push(timeslotData[i])
+                }
+            }
+        }
+        else {
+            let timeslotUpdatedarr = {
+                "startTime": matchUpdatedTimeSlot.startTime,
+                "sortOrder": null,
+                "competitionTimeslotsEntity": matchUpdatedTimeSlot.competitionTimeslotsEntity,
+                "timeSlotEntityManualkey": matchUpdatedTimeSlot.timeSlotEntityManualkey,
+                "timeSlotEntityGradeKey": matchUpdatedTimeSlot.timeSlotEntityGradeKey
+            }
+            timeslotData[i].startTime = []
+            delete timeslotData[i].sortOrder
+            delete timeslotData[i].competitionTimeslotsEntity
+            delete timeslotData[i].timeSlotEntityManualkey
+            delete timeslotData[i].timeSlotEntityGradeKey
+            timeslotData[i].startTime.push(timeslotUpdatedarr)
+            updatedtimeSlotArr.push(timeslotData[i])
+        }
+    }
+
+    return updatedtimeSlotArr
+}
+
+//getTimeslotAllVenuePerDay
+function getTimeslotAllVenuePerDay(timeslotData) {
+    console.log(timeslotData)
+    // timeslotData
+    let allVenuetimeSlotArr = []
+    for (let i in timeslotData) {
+        let matchUpdatedTimeSlot = timeslotData[i]
+        let competitionTimeslotsEntityArrdata = timeslotData[i].competitionTimeslotsEntity
+        if (allVenuetimeSlotArr.length > 0) {
+            for (let j in allVenuetimeSlotArr) {
+                if (matchUpdatedTimeSlot.dayRefId == allVenuetimeSlotArr[j].dayRefId) {
+                    console.log(competitionTimeslotsEntityArrdata, "called")
+                    let startTime = {
+                        "startTime": matchUpdatedTimeSlot.startTime,
+                        "sortOrder": null,
+                        "competitionTimeslotsEntity": matchUpdatedTimeSlot.competitionTimeslotsEntity,
+                        "timeSlotEntityManualkey": matchUpdatedTimeSlot.timeSlotEntityManualkey,
+                        "timeSlotEntityGradeKey": matchUpdatedTimeSlot.timeSlotEntityGradeKey
+                    }
+                    allVenuetimeSlotArr[j]['startTime'].push(startTime)
+                }
+                else {
+                    let timeslotUpdatedArray = {
+                        "startTime": matchUpdatedTimeSlot.startTime,
+                        "sortOrder": null,
+                        "competitionTimeslotsEntity": matchUpdatedTimeSlot.competitionTimeslotsEntity,
+                        "timeSlotEntityManualkey": matchUpdatedTimeSlot.timeSlotEntityManualkey,
+                        "timeSlotEntityGradeKey": matchUpdatedTimeSlot.timeSlotEntityGradeKey
+                    }
+                    timeslotData[i].startTime = []
+                    delete timeslotData[i].sortOrder
+                    delete timeslotData[i].competitionTimeslotsEntity
+                    delete timeslotData[i].timeSlotEntityManualkey
+                    delete timeslotData[i].timeSlotEntityGradeKey
+                    timeslotData[i].startTime.push(timeslotUpdatedArray)
+                    allVenuetimeSlotArr.push(timeslotData[i])
+                }
+            }
+        }
+        else {
+            let allVenuetimeSlotArray = {
+                "startTime": matchUpdatedTimeSlot.startTime,
+                "sortOrder": null,
+                "competitionTimeslotsEntity": matchUpdatedTimeSlot.competitionTimeslotsEntity,
+                "timeSlotEntityManualkey": matchUpdatedTimeSlot.timeSlotEntityManualkey,
+                "timeSlotEntityGradeKey": matchUpdatedTimeSlot.timeSlotEntityGradeKey
+            }
+            timeslotData[i].startTime = []
+            delete timeslotData[i].sortOrder
+            delete timeslotData[i].competitionTimeslotsEntity
+            delete timeslotData[i].timeSlotEntityManualkey
+            delete timeslotData[i].timeSlotEntityGradeKey
+            timeslotData[i].startTime.push(allVenuetimeSlotArray)
+            allVenuetimeSlotArr.push(timeslotData[i])
+        }
+    }
+    return allVenuetimeSlotArr
+}
+
+//get getTimeSlotPerVenueEntity
+function getTimeSlotPerVenueEntity(timeSlotArr, rotationId) {
+    if (timeSlotArr !== []) {
+        for (let i in timeSlotArr) {
+
+            let perVenueEntity = timeSlotArr[i].competitionTimeslotsEntity
+            timeSlotArr[i]["timeSlotEntityManualkey"] = []
+            timeSlotArr[i]["timeSlotEntityGradeKey"] = []
+            for (let k in perVenueEntity) {
+                if (rotationId == 4) {
+                    timeSlotArr[i]["timeSlotEntityManualkey"].push(perVenueEntity[k].venuePreferenceTypeRefId)
+                }
+                else {
+                    timeSlotArr[i]["timeSlotEntityGradeKey"].push(perVenueEntity[k].venuePreferenceTypeRefId)
+                }
+            }
+        }
+    }
+    let perDayVenueTimeSlot = getTimeslotPerVenuePerDay(timeSlotArr)
+
+    return perDayVenueTimeSlot
+}
+
+// get api  getTimeSlotManualEntity
+function getTimeSlotManualEntity(timeSlotsArr, rotationId) {
+    if (isArrayNotEmpty(timeSlotsArr)) {
+        for (let i in timeSlotsArr) {
+            let entitiyArr = timeSlotsArr[i].competitionTimeslotsEntity
+            timeSlotsArr[i]["timeSlotEntityManualkey"] = []
+            timeSlotsArr[i]["timeSlotEntityGradeKey"] = []
+            for (let k in entitiyArr) {
+                if (rotationId == 4) {
+                    timeSlotsArr[i]["timeSlotEntityManualkey"].push(entitiyArr[k].venuePreferenceTypeRefId)
+                }
+                else {
+                    timeSlotsArr[i]["timeSlotEntityGradeKey"].push(entitiyArr[k].venuePreferenceTypeRefId)
+
+
+                }
+            }
+        }
+    }
+
+    let updateTimeSlotManualData = getTimeslotAllVenuePerDay(timeSlotsArr)
+
+    return updateTimeSlotManualData
+}
+
+//get api time Slot entity
+function getTimeSlotEntity(data, id) {
+    for (let i in data) {
+        let entityInfoArr = data[i].competitionTimeslotsEntityInfo
+        for (let j in entityInfoArr) {
+
+            data[i]["timeSlotEntityManualkeyArr"] = []
+            data[i]["timeSlotEntityGradeKeyArr"] = []
+            if (id == 4) {
+
+                data[i]["timeSlotEntityManualkeyArr"].push(entityInfoArr[j].venuePreferenceTypeRefId)
+            } else {
+                data[i]["timeSlotEntityGradeKeyArr"].push(entityInfoArr[j].venuePreferenceTypeRefId)
+            }
+        }
+    }
+    return data
+}
+
+
+
+// time Slot entity key 
+function getTimeSlotEntityObj(selectedEntityArray, value, mainId, index, ) {
+    let modifiedEntityKeyArray = []
+    let modifiedEntityArray = []
+    for (let j in value) {
+        let matchTimeSlot = timeSlotEntity(value[j], selectedEntityArray[index].competitionTimeslotsEntityInfo)
+        let timeSlotEntityObject = null
+        if (matchTimeSlot.status == true) {
+            timeSlotEntityObject = {
+                "competitionVenueTimeslotEntityId": matchTimeSlot.result.competitionVenueTimeslotEntityId,
+                "venuePreferenceTypeRefId": matchTimeSlot.result.venuePreferenceTypeRefId,
+                "venuePreferenceEntityId": mainId == 4 ? 1 : 2
+            }
+        }
+        else {
+            timeSlotEntityObject =
+                {
+                    "competitionVenueTimeslotEntityId": 0,
+                    "venuePreferenceTypeRefId": value[j],
+                    "venuePreferenceEntityId": mainId == 4 ? 1 : 2
+                }
+        }
+        modifiedEntityArray.push(timeSlotEntityObject)
+    }
+    return modifiedEntityArray
+}
+
+
+
+function updateManualTimeSlotEntity(data, value, mainId, index) {
+    let modifiedManualEntityArray = []
+    for (let i in value) {
+        let matchTimeSlotManual = timeSlotEntity(value[i], data)
+        let timeSlotEntityManualObject = null
+        if (matchTimeSlotManual.status == true) {
+            timeSlotEntityManualObject = {
+                "competitionVenueTimeslotEntityId": matchTimeSlotManual.result.competitionVenueTimeslotEntityId,
+                "venuePreferenceTypeRefId": matchTimeSlotManual.result.venuePreferenceTypeRefId,
+                "venuePreferenceEntityId": mainId == 4 ? 1 : 2
+            }
+        } else {
+            timeSlotEntityManualObject = {
+                "competitionVenueTimeslotEntityId": 0,
+                "venuePreferenceTypeRefId": value[i],
+                "venuePreferenceEntityId": mainId == 4 ? 1 : 2
+            }
+        }
+        modifiedManualEntityArray.push(timeSlotEntityManualObject)
+    }
+    return modifiedManualEntityArray
+}
+
+
+//get Selected time rotation data
+function getSelectedTimeRotation(defaultData, data) {
+    let parentId
+    let subParentId
+    for (let i in defaultData) {
+        if (defaultData[i].id !== data.timeslotRotationRefId) {
+            if (defaultData[i].subReferences !== null) {
+                let subReferencesArr = defaultData[i].subReferences
+                for (let j in subReferencesArr) {
+                    if (subReferencesArr[j].id == data.timeslotRotationRefId) {
+                        subParentId = subReferencesArr[j].id
+                        parentId = defaultData[i].id
+                    }
+                }
+            }
+        }
+        else {
+            if (defaultData[i].subReferences !== null) {
+                parentId = defaultData[i].id
+                subParentId = defaultData[i].subReferences[0].id
+            }
+            else {
+                parentId = defaultData[i].id
+                subParentId = defaultData[i].id
+            }
+        }
+    }
+    return {
+        parentId,
+        subParentId
+    }
+}
+
+
+// get Selected Time Rotation Data
+function getSelectedTimeGeneration(defaultData, data) {
+    let matchtimeRotaion = defaultData.findIndex(x => x.id === data.timeslotRotationRefId)
+    if (matchtimeRotaion > -1) {
+        defaultData[matchtimeRotaion].isSelected = true
+    }
+    return defaultData
+}
+
+//result update 
+function updatedResultData(data, result) {
+    result["mainTimeRotationID"] = data.parentId
+    if (result.timeslotGenerationRefId == 2 && result.applyToVenueRefId == 0) {
+        result.applyToVenueRefId = 1
+    }
+    return result
+}
+
+
+///get Rotation Data
+function getRotationData(data) {
+    let RotationData = []
+    if (isArrayNotEmpty(data)) {
+        for (let i in data) {
+            data[i]["isSelected"] = false
+            if (data[i].subReferences !== null) {
+                let subReferencesData = data[i].subReferences
+                for (let j in subReferencesData) {
+                    subReferencesData[j]['isSelected'] = false
+                }
+            }
+        }
+        RotationData = data
+    }
+    return RotationData
+}
+
+
+/// get venue Data
+function getVenueData(data) {
+    let updatedData = []
+    if (isArrayNotEmpty(data)) {
+        for (let i in data) {
+            data[i]["isSelected"] = false
+        }
+        updatedData = data
+    }
+    return updatedData
+}
+
+//
+function matchSelectedVenues(venueId, selectedVenues) {
+    let object = {
+        status: false,
+        result: []
+    }
+    for (let i in selectedVenues) {
+        if (selectedVenues[i].venueId == venueId) {
+            object = {
+                status: true,
+                result: selectedVenues[i]
+            }
+            break;
+        }
+    }
+    return object
+}
+
+//check per venue details
+function checkPerVenueManual(data, rotaionId) {
+    let modifiedPerVenueTimeSlotArr = []
+    let perVenueObj = {
+        'venueId': 0,
+        "timeslots": [],
+    }
+    if (data.length > 0) {
+        for (let i in data) {
+            if (data[i].venueId == 0) {
+                perVenueObj = {
+                    'venueId': 0,
+                    "timeslots": getTimeSlotPerVenueEntity(data[i].timeslots, rotaionId),
+                }
+
+            }
+
+        }
+    }
+    modifiedPerVenueTimeSlotArr.push(perVenueObj)
+    return modifiedPerVenueTimeSlotArr
+}
+
+// check selected Venue Details
+function checkSelectedVenueDetails(allVenues, selectedVenues, rotationId) {
+    let modifiedVenueArray = []
+    for (let i in allVenues) {
+        let matchedObject = matchSelectedVenues(allVenues[i].id, selectedVenues)
+        let timeSloteObject = null
+        if (matchedObject.status == true) {
+            timeSloteObject = {
+                "venueName": allVenues[i].name,
+                "venueId": matchedObject.result.venueId,
+                "timeslots": getTimeSlotManualEntity(matchedObject.result.timeslots, rotationId),
+            }
+        } else {
+            timeSloteObject = {
+                "venueName": allVenues[i].name,
+                "venueId": allVenues[i].id,
+                "timeslots": [],
+
+            }
+        }
+        modifiedVenueArray.push(timeSloteObject)
+    }
+    return modifiedVenueArray
+}
+
+
+// state Competition TIme Slots
+function CompetitionTimeSlots(state = initialState, action) {
+    switch (action.type) {
+
+
+        ///get competition with time slot
+        case ApiConstants.API_GET_COMPETITION_WITH_TIME_SLOTS_LOAD:
+            return { ...state, onLoad: true, onGetTimeSlotLoad: true, error: null };
+        case ApiConstants.API_GET_COMPETITION_WITH_TIME_SLOTS_SUCCESS:
+            let resultData = JSON.parse(JSON.stringify(action.result))
+            let selectedTimeGeneration = getSelectedTimeGeneration(state.timeSlotGeneration, action.result)
+            let SelectedTimeRotationData = getSelectedTimeRotation(state.timeSlotRotation, action.result)
+            let timeSlotResult = updatedResultData(SelectedTimeRotationData, action.result)
+            let timeSlotEntityKey = getTimeSlotEntity(action.result.competitionTimeslotsEntity, SelectedTimeRotationData.subParentId)
+            let timeSlotsManualVenue = checkSelectedVenueDetails(state.allVenueList, resultData.competitionTimeslotManual, SelectedTimeRotationData.subParentId)
+            let timeSlotsPerVenue = checkPerVenueManual(action.result.competitionTimeslotManual, SelectedTimeRotationData.subParentId)
+            state.timeSlotManualAllVenue = timeSlotsManualVenue
+            state.defaultDataAllVenue = timeSlotsManualVenue
+            timeSlotResult["competitionTimeslotsEntity"] = timeSlotEntityKey
+            timeSlotResult['competitionTimeslotManual'] = timeSlotsPerVenue
+            state.getcompetitionTimeSlotData = timeSlotResult
+            state.timeSlotGeneration = selectedTimeGeneration
+            state.allResult = timeSlotResult
+            state.onGetTimeSlotLoad = false
+            return {
+                ...state,
+                status: action.status,
+                onLoad: false,
+                error: null,
+
+            }
+
+        case ApiConstants.API_COMPETITION_TIMESLOT_ERROR:
+            return {
+                ...state,
+                onLoad: false,
+                error: action.error,
+                status: action.status
+            };
+
+        case ApiConstants.API_COMPETITION_TIMESLOT_FAIL:
+            return {
+                ...state,
+                onLoad: false,
+                error: action.error,
+                status: action.status
+            };
+
+        // update Post Data For Time SLot COMPETITION
+        case ApiConstants.UPDATE_POST_DATA_TIME_SLOTS_COMPETITION:
+            if (action.key == 'mainTimeRotationID') {
+                if (action.value == 9) {
+                    state.getcompetitionTimeSlotData.timeslotRotationRefId = 1
+                    state.getcompetitionTimeSlotData.mainTimeRotationID = action.value
+
+                }
+                else if (action.value == 8) {
+                    state.getcompetitionTimeSlotData.timeslotRotationRefId = 4
+                    state.getcompetitionTimeSlotData.mainTimeRotationID = action.value
+
+                }
+                else {
+                    state.getcompetitionTimeSlotData.timeslotRotationRefId = action.value
+                    state.getcompetitionTimeSlotData.mainTimeRotationID = action.value
+
+                }
+            }
+            if (action.key == "timeslotGenerationRefId") {
+                if (action.value == 2) {
+                    state.getcompetitionTimeSlotData.applyToVenueRefId = 1
+                    state.getcompetitionTimeSlotData[action.key] = action.value
+
+                }
+                else {
+                    state.getcompetitionTimeSlotData[action.key] = action.value
+                }
+            }
+            if (action.contentType == "competitionVenueTimeslotsDayTime") {
+                let data1 = JSON.parse(JSON.stringify(state.getcompetitionTimeSlotData.competitionVenueTimeslotsDayTime))
+                let changeTimeSlotData = data1
+                if (action.id == 4) {
+                    changeTimeSlotData[action.index][action.key] = action.value
+                }
+                else {
+                    changeTimeSlotData[action.index][action.key] = action.value
+                }
+                state.getcompetitionTimeSlotData.competitionVenueTimeslotsDayTime = changeTimeSlotData
+            }
+
+            if (action.contentType == "competitionTimeslotsEntity") {
+                let changeTimeSlotDivision = getTimeSlotEntityObj(state.allResult.competitionTimeslotsEntity, action.value, action.id, action.index)
+                if (action.id == 4) {
+                    state.getcompetitionTimeSlotData.competitionTimeslotsEntity[action.index].timeSlotEntityManualkeyArr = action.value
+                    state.getcompetitionTimeSlotData.competitionTimeslotsEntity[action.index].competitionTimeslotsEntityInfo = changeTimeSlotDivision
+                }
+                else {
+                    state.getcompetitionTimeSlotData.competitionTimeslotsEntity[action.index].timeSlotEntityGradeKeyArr = action.value
+                    state.getcompetitionTimeSlotData.competitionTimeslotsEntity[action.index].competitionTimeslotsEntityInfo = changeTimeSlotDivision
+                }
+
+            }
+            if (action.key == "applyToVenueRefId") {
+                state.getcompetitionTimeSlotData[action.key] = action.value
+            }
+            if (action.key == 'timeslotRotationRefId') {
+                state.getcompetitionTimeSlotData[action.key] = action.value
+            }
+            return { ...state }
+
+
+        case ApiConstants.API_TIME_SLOT_INIT_SUCCESS:
+            let venueData = getVenueData(action.result.ApplyToVenue)
+            let timeSlotGeneration = getVenueData(action.result.TimeslotGeneration)
+            let rotationData = getRotationData(action.result.TimeslotRotation)
+            state.applyVenue = venueData
+            state.timeSlotRotation = rotationData
+            state.timeSlotGeneration = timeSlotGeneration
+            state.weekDays = action.result.Day
+            return { ...state }
+
+        case ApiConstants.Api_ADD_REMOVE_TIME_SLOT_TABLE:
+            if (action.key == "addTimeSlotManual") {
+                let timeSlotObj = {
+                    "startTime": "00:00",
+                    "sortOrder": null,
+                    "competitionTimeslotsEntity": [{
+                        "competitionVenueTimeslotEntityId": 0,
+                        "venuePreferenceTypeRefId": '',
+                        "venuePreferenceEntityId": '',
+
+                    }
+                    ],
+                    "timeSlotEntityManualkey": [],
+                    "timeSlotEntityGradeKey": []
+                }
+
+                state.getcompetitionTimeSlotData['competitionTimeslotManual'][0].timeslots[action.index].startTime.push(timeSlotObj)
+            }
+            if (action.key == "removeTimeSlotManual") {
+                state.getcompetitionTimeSlotData['competitionTimeslotManual'][0].timeslots[action.parentIndex].startTime.splice(action.index, 1)
+            }
+            if (action.key == "addTimeSlotManualperVenue") {
+                let timeSlotPerVenueObj = {
+                    "startTime": "00:00",
+                    "sortOrder": null,
+                    "competitionTimeslotsEntity": [{
+                        "competitionVenueTimeslotEntityId": 0,
+                        "venuePreferenceTypeRefId": '',
+                        "venuePreferenceEntityId": '',
+
+                    }
+                    ],
+                    "timeSlotEntityManualkey": [],
+                    "timeSlotEntityGradeKey": []
+                }
+                state.timeSlotManualAllVenue[action.parentIndex].timeslots[action.index].startTime.push(timeSlotPerVenueObj)
+            }
+            if (action.key == "removeTimeSlotManualPerVenue") {
+                state.timeSlotManualAllVenue[action.item].timeslots[action.parentIndex].startTime.splice(action.index, 1)
+            }
+
+            if (action.key == "competitionVenueTimeslotsDayTime") {
+                let timeSlotObj = {
+                    "competitionVenueTimeslotsDayTimeId": 0,
+                    "dayRefId": null,
+                    "startTime": "00:00",
+                    "endTime": "00:00"
+                }
+                state.getcompetitionTimeSlotData[action.key].push(timeSlotObj)
+            }
+            else if (action.key == "competitionTimeslotsEntity") {
+                let timeSlotDivisionObj =
+                {
+                    "sortOrder": 0,
+                    "competitionTimeslotsEntityInfo": [
+                        {
+                            "competitionVenueTimeslotEntityId": 0,
+                            "venuePreferenceTypeRefId": 0,
+                            "venuePreferenceEntityId": 0
+                        }
+                    ],
+                    "timeSlotEntityManualkeyArr": [],
+                    "timeSlotEntityGradeKeyArr": []
+                }
+                state.getcompetitionTimeSlotData[action.key].push(timeSlotDivisionObj)
+            }
+            else if (action.key == 'competitionTimeslotManual') {
+                if (state.getcompetitionTimeSlotData[action.key] == []) {
+                    state.getcompetitionTimeSlotData[action.key] = state.manaualTimeSlotObj
+                }
+                let timeSlotManaualObj =
+                {
+                    "competitionVenueTimeslotsDayTimeId": 0,
+                    "dayRefId": null,
+                    "startTime": [{
+                        "startTime": "00:00",
+                        "sortOrder": null,
+                        "competitionTimeslotsEntity": [{
+                            "competitionVenueTimeslotEntityId": 0,
+                            "venuePreferenceTypeRefId": '',
+                            "venuePreferenceEntityId": '',
+
+                        }
+                        ],
+                        "timeSlotEntityManualkey": [],
+                        "timeSlotEntityGradeKey": []
+                    }]
+
+                }
+                state.getcompetitionTimeSlotData[action.key][0].timeslots.push(timeSlotManaualObj)
+            }
+            else if (action.key == "competitionTimeslotManualAllVenue") {
+                let timeSlotManaualAllVenueObj =
+                {
+                    "competitionVenueTimeslotsDayTimeId": 0,
+                    "dayRefId": null,
+                    "startTime": [{
+                        "startTime": "00:00",
+                        "sortOrder": null,
+                        "competitionTimeslotsEntity": [{
+                            "competitionVenueTimeslotEntityId": 0,
+                            "venuePreferenceTypeRefId": '',
+                            "venuePreferenceEntityId": '',
+
+                        }
+                        ],
+                        "timeSlotEntityManualkey": [],
+                        "timeSlotEntityGradeKey": []
+                    }
+                    ]
+                }
+
+                state.timeSlotManualAllVenue[action.index].timeslots.push(timeSlotManaualAllVenueObj)
+            }
+            else if (action.key == "competitionVenueTimeslotsDayTimedelete") {
+                state.getcompetitionTimeSlotData['competitionVenueTimeslotsDayTime'].splice(action.index, 1)
+            }
+            else if (action.key == "competitionTimeslotsEntitydelete") {
+                state.getcompetitionTimeSlotData['competitionTimeslotsEntity'].splice(action.index, 1)
+            }
+            else if (action.key == "competitionTimeslotManualAllVenuedelete") {
+                state.timeSlotManualAllVenue[action.item].timeslots.splice(action.index, 1)
+            }
+            else if (action.key == "competitionTimeslotManualdelete") {
+                state.getcompetitionTimeSlotData["competitionTimeslotManual"][0].timeslots.splice(action.index, 1)
+            }
+            return { ...state }
+
+        case ApiConstants.UPDATE_POST_DATA_TIME_SLOTS_MANUAL_COMPETITION:
+            if (action.contentType == "competitionTimeslotManualDivision") {
+                let changeTimeSlotDataManualDivision = state.getcompetitionTimeSlotData.competitionTimeslotManual
+                changeTimeSlotDataManualDivision[0].timeslots[action.parentIndex].startTime[action.index].timeSlotEntityManualkey = action.value
+            }
+            if (action.contentType == "competitionTimeslotManual") {
+                let changeTimeSlotDataManual = state.getcompetitionTimeSlotData.competitionTimeslotManual
+                if (action.mainId == null) {
+                    changeTimeSlotDataManual = state.getcompetitionTimeSlotData.competitionTimeslotManual
+                    changeTimeSlotDataManual[0].timeslots[action.index][action.key] = action.value
+                    state.getcompetitionTimeSlotData.competitionTimeslotManual = changeTimeSlotDataManual
+                }
+                else {
+                    let timeSlotEntityManual = updateManualTimeSlotEntity(changeTimeSlotDataManual[0].timeslots[action.parentIndex].startTime[action.index].competitionTimeslotsEntity, action.value, action.id)
+                    if (action.id == 4) {
+                        changeTimeSlotDataManual[0].timeslots[action.parentIndex].startTime[action.index].competitionTimeslotsEntity = timeSlotEntityManual
+                        changeTimeSlotDataManual[0].timeslots[action.parentIndex].startTime[action.index].timeSlotEntityManualkey = action.value
+                        state.getcompetitionTimeSlotData.competitionTimeslotManual = changeTimeSlotDataManual
+                    }
+                    else {
+                        changeTimeSlotDataManual[0].timeslots[action.parentIndex].startTime[action.index].competitionTimeslotsEntity = timeSlotEntityManual
+                        changeTimeSlotDataManual[0].timeslots[action.parentIndex].startTime[action.index].timeSlotEntityGradeKey = action.value
+                        state.getcompetitionTimeSlotData.competitionTimeslotManual = changeTimeSlotDataManual
+                    }
+                }
+            }
+            if (action.contentType == "competitionTimeslotManualAllvenue") {
+                let changeTimeSlotDataManualAllVenue = state.timeSlotManualAllVenue
+                if (action.mainId == null) {
+                    changeTimeSlotDataManualAllVenue[action.parentIndex].timeslots[action.index][action.key] = action.value
+                    state.getcompetitionTimeSlotData.competitionTimeslotManual = changeTimeSlotDataManualAllVenue
+                }
+                else {
+                    console.log(action, changeTimeSlotDataManualAllVenue[action.parentIndex].timeslots[action.id])
+                    let timeSlotEntityManualAll = updateManualTimeSlotEntity(changeTimeSlotDataManualAllVenue[action.parentIndex].timeslots[action.id].startTime[action.index].competitionTimeslotsEntity, action.value, action.mainId, 0)
+                    if (action.mainId == 4) {
+                        changeTimeSlotDataManualAllVenue[action.parentIndex].timeslots[action.id].startTime[action.index].competitionTimeslotsEntity = timeSlotEntityManualAll
+                        changeTimeSlotDataManualAllVenue[action.parentIndex].timeslots[action.id].startTime[action.index].timeSlotEntityManualkey = action.value
+                        state.timeSlotManualAllVenue = changeTimeSlotDataManualAllVenue
+                    }
+                    else {
+                        changeTimeSlotDataManualAllVenue[action.parentIndex].timeslots[action.id].startTime[action.index].competitionTimeslotsEntity = timeSlotEntityManualAll
+                        changeTimeSlotDataManualAllVenue[action.parentIndex].timeslots[action.id].startTime[action.index].timeSlotEntityGradeKey = action.value
+                        state.timeSlotManualAllVenue = changeTimeSlotDataManualAllVenue
+                    }
+
+                }
+            }
+            if (action.contentType == "competitionTimeslotManualTime") {
+                console.log(action)
+                let changeTimeSlotDataManualTime = state.getcompetitionTimeSlotData.competitionTimeslotManual
+                console.log(changeTimeSlotDataManualTime[0].timeslots[action.id])
+                changeTimeSlotDataManualTime[0].timeslots[action.id].startTime[action.index].startTime = action.value
+            }
+
+
+            if (action.contentType == "competitionTimeslotManualperVenueTime") {
+                let changeTimeSlotDataManualperVenueTime = state.timeSlotManualAllVenue
+                changeTimeSlotDataManualperVenueTime[action.parentIndex].timeslots[action.id].startTime[action.index].startTime = action.value
+            }
+            return { ...state }
+
+
+        case ApiConstants.API_COMPETITION_TIMESLOT_POST_LOAD:
+            return { ...state, onLoad: true, error: null }
+
+        case ApiConstants.API_COMPETITION_TIMESLOT_POST_SUCCESS:
+            return {
+                ...state,
+                result: action.result,
+                onLoad: false,
+                error: null,
+                status: action.status
+            }
+
+        /// Venue list 
+        case ApiConstants.API_REG_FORM_VENUE_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                allVenueList: action.result,
+                status: action.status
+            };
+
+
+        default:
+            return state;
+    }
+}
+
+
+
+export default CompetitionTimeSlots;
