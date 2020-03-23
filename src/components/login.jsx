@@ -11,7 +11,7 @@ import AppConstants from "../themes/appConstants";
 
 const { Header, Content } = Layout;
 const loginFormSchema = Yup.object().shape({
-    userName: Yup.string().min(2, 'Username must be at least 3 characters').required('Username is required'),
+    userName: Yup.string().min(2, 'Username must be at least 2 characters').required('Username is required'),
     password: Yup.string().min(5, 'Too Short!').required('Password is required')
 });
 class Login extends Component {
