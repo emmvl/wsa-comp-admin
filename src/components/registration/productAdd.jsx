@@ -92,7 +92,7 @@ class ProductAdd extends Component {
     }
 
     onSelect = (selectedKeys, info) => {
-        console.log('selected', selectedKeys, info);
+        console.log('onSelect', selectedKeys, info);
     };
 
     onCheck = (checkedKeys, info) => {
