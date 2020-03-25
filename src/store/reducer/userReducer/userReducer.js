@@ -68,7 +68,24 @@ const initialState = {
     userRegistrationList: [],
     userRegistrationPage: 1,
     userRegistrationTotalCount: 1,
-    userRegistrationOnLoad: false
+    userRegistrationOnLoad: false,
+    activityPlayerOnLoad: false,
+    activityPlayerList: [],
+    activityPlayerPage: 1,
+    activityPlayerTotalCount: 1,
+    activityParentOnLoad: false,
+    activityParentList: [],
+    activityParentPage: 1,
+    activityParentTotalCount: 1,
+    activityScorerOnLoad: false,
+    activityScorerList: [],
+    activityScorerPage: 1,
+    activityScorerTotalCount: 1,
+    activityManagerOnLoad: false,
+    activityManagerList: [],
+    activityManagerPage: 1,
+    activityManagerTotalCount: 1
+
 };
 
 function userReducer(state = initialState, action) {
@@ -300,7 +317,7 @@ function userReducer(state = initialState, action) {
                 personalByCompData: personalByCompData,
                 status: action.status
             };
-    
+
         case ApiConstants.API_USER_MODULE_MEDICAL_INFO_LOAD:
             return { ...state, onLoad: true };
 
@@ -327,6 +344,63 @@ function userReducer(state = initialState, action) {
                 userRegistrationDataTotalCount: userRegistrationData.page.totalCount,
                 status: action.status
             };
+
+        case ApiConstants.API_USER_MODULE_ACTIVITY_PLAYER_LOAD:
+            return { ...state, activityPlayerOnLoad: true };
+
+        case ApiConstants.API_USER_MODULE_ACTIVITY_PLAYER_SUCCESS:
+            let activityPlayerData = action.result;
+            return {
+                ...state,
+                activityPlayerOnLoad: false,
+                activityPlayerList: activityPlayerData.activityPlayers,
+                activityPlayerPage: activityPlayerData.page ? activityPlayerData.page.currentPage : 1,
+                activityPlayerTotalCount: activityPlayerData.page.totalCount,
+                status: action.status
+            };
+
+        case ApiConstants.API_USER_MODULE_ACTIVITY_PARENT_LOAD:
+            return { ...state, activityParentOnLoad: true };
+
+        case ApiConstants.API_USER_MODULE_ACTIVITY_PARENT_SUCCESS:
+            let activityParentData = action.result;
+            return {
+                ...state,
+                activityParentOnLoad: false,
+                activityParentList: activityParentData.activityParents,
+                activityParentPage: activityParentData.page ? activityParentData.page.currentPage : 1,
+                activityParentTotalCount: activityParentData.page.totalCount,
+                status: action.status
+            };
+
+        case ApiConstants.API_USER_MODULE_ACTIVITY_SCORER_LOAD:
+            return { ...state, activityScorerOnLoad: true };
+
+        case ApiConstants.API_USER_MODULE_ACTIVITY_SCORER_SUCCESS:
+            let activityScorerData = action.result;
+            return {
+                ...state,
+                activityScorerOnLoad: false,
+                activityScorerList: activityScorerData.activityScorer,
+                activityScorerPage: activityScorerData.page ? activityScorerData.page.currentPage : 1,
+                activityScorerTotalCount: activityScorerData.page.totalCount,
+                status: action.status
+            };
+
+        case ApiConstants.API_USER_MODULE_ACTIVITY_MANAGER_LOAD:
+            return { ...state, activityManagerOnLoad: true };
+
+        case ApiConstants.API_USER_MODULE_ACTIVITY_MANAGER_SUCCESS:
+            let activityManagerData = action.result;
+            return {
+                ...state,
+                activityManagerOnLoad: false,
+                activityManagerList: activityManagerData.activityManager,
+                activityManagerPage: activityManagerData.page ? activityManagerData.page.currentPage : 1,
+                activityManagerTotalCount: activityManagerData.page.totalCount,
+                status: action.status
+            };
+
 
         default:
             return state;

@@ -325,8 +325,9 @@ class LiveScoreDashboard extends Component {
     }
 
     componentDidMount() {
-        // let competitionID = getCompetitonId()
+        let competitionID = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
+        console.log(id, 'getLiveScoreCompetiton', competitionID)
         if (id !== null) {
             this.props.liveScorePlayerListAction(id)
         } else {

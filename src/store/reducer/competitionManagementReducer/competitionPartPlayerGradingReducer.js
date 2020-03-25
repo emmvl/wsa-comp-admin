@@ -179,27 +179,30 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
 
         case ApiConstants.API_ADD_NEW_TEAM_SUCCESS:
             let newobj = {
-                "teamId": action.result.id,
-                "teamName": action.teamName,
-                "players": []
+                "teamId": action.result.teamId,
+                "teamName": action.result.teamName,
+                "playerCount": action.result.playerCount,
+                "players": action.result.players
             }
             state.assignedPartPlayerGradingListData.push(newobj)
+            state.AllPartPlayerGradingListData.push(newobj)
             return {
                 ...state,
                 onLoad: false,
-                newTeam: action.result,
+                // newTeam: action.result,
                 error: null
             }
         // 
         case ApiConstants.API_DRAG_NEW_TEAM_LOAD:
-            return { ...state, onLoad: true }
-
-        case ApiConstants.API_DRAG_NEW_TEAM_SUCCESS:
             let assignData = JSON.parse(JSON.stringify(state.AllPartPlayerGradingListData))
             let sourceData = updatedAssignData(assignData, action.source, action.destination)
             state.AllPartPlayerGradingListData = sourceData.assignArr
             state.unassignedPartPlayerGradingListData = sourceData.updatedplayerAssignData.unassignedPartPlayerGradingListData
             state.assignedPartPlayerGradingListData = sourceData.updatedplayerAssignData.assignedPartPlayerGradingListData
+            return { ...state, onLoad: true }
+
+        case ApiConstants.API_DRAG_NEW_TEAM_SUCCESS:
+
             state.onLoad = false
             return {
                 ...state,

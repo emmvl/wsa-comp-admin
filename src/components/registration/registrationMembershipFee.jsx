@@ -75,7 +75,7 @@ const columns = [
         dataIndex: "casualFee",
         key: "casualFee",
         render: (casualFee, record) => (
-            <Input prefix="$" className="input-inside-table-fees" value={casualFee}
+            <Input type="number" prefix="$" className="input-inside-table-fees" value={casualFee}
                 onChange={e => this_Obj.props.membershipFeesTableInputChangeAction(e.target.value, record, "casualFee")} />
         )
     },
@@ -84,7 +84,7 @@ const columns = [
         dataIndex: "casualGst",
         key: "casualGst",
         render: (casualFeeGst, record) => (
-            <Input prefix="$" className="input-inside-table-fees" value={casualFeeGst}
+            <Input type="number" prefix="$" className="input-inside-table-fees" value={casualFeeGst}
                 onChange={e => this_Obj.props.membershipFeesTableInputChangeAction(e.target.value, record, "casualGst")} />
         )
     },
@@ -93,7 +93,7 @@ const columns = [
         dataIndex: "seasonalFee",
         key: "seasonalFee",
         render: (seasonalFee, record) => (
-            <Input prefix="$" className="input-inside-table-fees" value={seasonalFee}
+            <Input type="number" prefix="$" className="input-inside-table-fees" value={seasonalFee}
                 onChange={e => this_Obj.props.membershipFeesTableInputChangeAction(e.target.value, record, "seasonalFee")} />
         )
     },
@@ -102,7 +102,7 @@ const columns = [
         dataIndex: "seasonalGst",
         key: "seasonalGst",
         render: (seasonalFeeGst, record) => (
-            <Input prefix="$" className="input-inside-table-fees" value={seasonalFeeGst}
+            <Input type="number" prefix="$" className="input-inside-table-fees" value={seasonalFeeGst}
                 onChange={e => this_Obj.props.membershipFeesTableInputChangeAction(e.target.value, record, "seasonalGst")} />
         )
     }
@@ -672,6 +672,7 @@ class RegistrationMembershipFee extends Component {
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                 value={item.amount}
                                 suffix={item.discountTypeRefId == "2" ? "%" : null}
+                                type="number"
                             />
                         </div>
                         <div className="col-sm">
@@ -745,6 +746,8 @@ class RegistrationMembershipFee extends Component {
                                 placeholder={AppConstants.percentageOff_FixedAmount}
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                 value={item.amount}
+                                suffix={item.discountTypeRefId == "2" ? "%" : null}
+                                type="number"
                             />
                         </div>
                         <div className="col-sm">
@@ -837,6 +840,7 @@ class RegistrationMembershipFee extends Component {
                                 placeholder={AppConstants.percentageOff_FixedAmount}
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                 value={item.amount}
+                                type="number"
                             />
                         </div>
                         <div className="col-sm">

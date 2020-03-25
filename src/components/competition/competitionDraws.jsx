@@ -18,7 +18,7 @@ import {
 import Swappable from '../../customComponents/SwappableComponent';
 import { getDayName, getTime } from '../../themes/dateformate';
 import {
-  getYearAndCompetitionAction,
+  getYearAndCompetitionOwnAction,
   getVenuesTypeAction
 } from '../../store/actions/appAction';
 import Loader from '../../customComponents/loader'
@@ -102,13 +102,13 @@ class CompetitionDraws extends Component {
       this.props.getDrawsRoundsAction(yearId, storedCompetitionId);
     }
     else if (yearId) {
-      this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, yearId, 'own_competition')
+      this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
       this.setState({
         yearRefId: JSON.parse(yearId)
       })
     }
     else {
-      this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, null, 'own_competition')
+      this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
       setOwnCompetitionYear(1)
     }
   }
@@ -253,7 +253,7 @@ class CompetitionDraws extends Component {
     setOwnCompetitionYear(yearId)
     setOwn_competition(undefined)
     this.setState({ firstTimeCompId: null, yearRefId: yearId, roundId: null, venueId: null });
-    this.props.getYearAndCompetitionAction(
+    this.props.getYearAndCompetitionOwnAction(
       this.props.appState.own_YearArr,
       yearId,
       "own_competition"
@@ -584,7 +584,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       getCompetitionDrawsAction,
-      getYearAndCompetitionAction,
+      getYearAndCompetitionOwnAction,
       getVenuesTypeAction,
       getDrawsRoundsAction,
       updateCompetitionDraws,

@@ -6,7 +6,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import moment from 'moment';
 import AppConstants from "../../themes/appConstants";
 import {
-    getYearAndCompetitionAction,
+    getYearAndCompetitionOwnAction,
     clearYearCompetitionAction
 } from "../../store/actions/appAction";
 import {
@@ -45,7 +45,6 @@ class CompetitionCourtAndTimesAssign extends Component {
         this.props.clearYearCompetitionAction()
         this.props.timeSlotInit()
         this.props.getVenuesTypeAction()
-
     }
 
 
@@ -55,23 +54,23 @@ class CompetitionCourtAndTimesAssign extends Component {
         let storedCompetitionId = getOwn_competition()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
-
+        console.log(this.props.appState)
         if (storedCompetitionId && yearId && propsData && compData) {
             this.setState({
                 yearRefId: JSON.parse(yearId),
                 firstTimeCompId: storedCompetitionId,
                 getDataLoading: true
             })
-            this.props.getCompetitionWithTimeSlots(yearId, storedCompetitionId, 1, 6)
+            this.props.getCompetitionWithTimeSlots(yearId, storedCompetitionId, 1, 6);
         }
         else if (yearId) {
-            this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, yearId, 'own_competition')
+            this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
             this.setState({
                 yearRefId: JSON.parse(yearId)
             })
         }
         else {
-            this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, null, 'own_competition')
+            this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
             setOwnCompetitionYear(1)
         }
     }
@@ -95,7 +94,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                 if (competitionList.length > 0) {
                     let competitionId = competitionList[0].competitionId
                     setOwn_competition(competitionId)
-                    this.props.getCompetitionWithTimeSlots(this.state.yearRefId, competitionId, 1, 6)
+                    this.props.getCompetitionWithTimeSlots(this.state.yearRefId, competitionId, 1, 6);
                     this.setState({ getDataLoading: true, firstTimeCompId: competitionId })
 
                 }
@@ -280,11 +279,11 @@ class CompetitionCourtAndTimesAssign extends Component {
                     timeSlotData.competitionTimeslotManual = JSON.parse(JSON.stringify(checkTimeRotationDataArr))
                 }
 
-                if (timeSlotData.timeslotRotationRefId == 7) {
-                    timeSlotData.competitionVenueTimeslotsDayTime = []
-                    timeSlotData.competitionTimeslotsEntity = []
-                    timeSlotData.competitionTimeslotManual = []
-                }
+                // if (timeSlotData.timeslotRotationRefId == 7) {
+                //     timeSlotData.competitionVenueTimeslotsDayTime = []
+                //     timeSlotData.competitionTimeslotsEntity = []
+                //     //     timeSlotData.competitionTimeslotManual = []
+                // }
                 delete timeSlotData["divisions"]
                 delete timeSlotData["grades"]
                 delete timeSlotData["mainTimeRotationID"]
@@ -334,7 +333,7 @@ class CompetitionCourtAndTimesAssign extends Component {
     onYearChange = (yearId) => {
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
-        this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, yearId, 'own_competition')
+        this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
         this.setState({ firstTimeCompId: null, yearRefId: yearId })
         this.setDetailsFieldValue()
     }
@@ -342,7 +341,7 @@ class CompetitionCourtAndTimesAssign extends Component {
     // on Competition change
     onCompetitionChange(competitionId) {
         setOwn_competition(competitionId)
-        this.props.getCompetitionWithTimeSlots(this.state.yearRefId, competitionId, 1, 6)
+        this.props.getCompetitionWithTimeSlots(this.state.yearRefId, competitionId, 1, 6);
         this.setState({ getDataLoading: true, firstTimeCompId: competitionId })
     }
 
@@ -490,7 +489,9 @@ class CompetitionCourtAndTimesAssign extends Component {
     contentView = (getFieldDecorator) => {
         let timeSlotData = this.props.competitionTimeSlots.getcompetitionTimeSlotData
         let commonState = this.props.competitionTimeSlots
-        let timeSlotManual = this.props.competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotManual
+        let timeSlotManual = this.props.competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotManual;
+        console.log("&&&&&&&" + JSON.stringify(commonState.timeSlotManualAllVenue));
+        console.log("&&&&&&" + timeSlotData.timeslotGenerationRefId);
         return (
             <div className="content-view pt-3">
                 <span className="applicable-to-heading">
@@ -606,7 +607,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                         )}
                     </Form.Item>
 
-                    {timeSlotData.timeslotGenerationRefId === 2 && timeSlotData.applyToVenueRefId == 1 && (timeSlotData.mainTimeRotationID === 8 || timeSlotData.mainTimeRotationID === 9 || timeSlotData.mainTimeRotationID === 6) &&
+                    {timeSlotData.timeslotGenerationRefId === 2 && timeSlotData.applyToVenueRefId == 1 && (timeSlotData.mainTimeRotationID === 8 || timeSlotData.mainTimeRotationID === 9 || timeSlotData.mainTimeRotationID === 6 || timeSlotData.mainTimeRotationID === 7) &&
                         <div>
                             <div className="fluid-width">
                                 {timeSlotManual && timeSlotManual[0].timeslots.map((item, index) => {
@@ -617,11 +618,11 @@ class CompetitionCourtAndTimesAssign extends Component {
                         </div>
                     }
                     {
-                        timeSlotData.timeslotGenerationRefId === 2 && timeSlotData.applyToVenueRefId == 2 && (timeSlotData.mainTimeRotationID === 8 || timeSlotData.mainTimeRotationID === 9 || timeSlotData.mainTimeRotationID === 6) &&
+                        timeSlotData.timeslotGenerationRefId === 2 && timeSlotData.applyToVenueRefId == 2 && (timeSlotData.mainTimeRotationID === 8 || timeSlotData.mainTimeRotationID === 9 || timeSlotData.mainTimeRotationID === 6 || timeSlotData.mainTimeRotationID === 7) &&
                         <div>
                             <div>
                                 <div className="fluid-width">
-                                    {commonState.timeSlotManualAllVenue.map((item, venueIndex) => {
+                                    {(commonState.timeSlotManualAllVenue || []).map((item, venueIndex) => {
                                         return (
                                             <div>
                                                 <span className="applicable-to-heading mt-3">{item.venueName}</span>
@@ -632,7 +633,7 @@ class CompetitionCourtAndTimesAssign extends Component {
 
                                                         )
                                                     })}
-                                                <span className='input-heading-add-another' onClick={() => this.addTimeManualAllVenue(venueIndex, item, "competitionTimeslotManualAllVenue")} > + {AppConstants.addAnotherDay}</span>
+                                                <span className='input-heading-add-another pointer' onClick={() => this.addTimeManualAllVenue(venueIndex, item, "competitionTimeslotManualAllVenue")} > + {AppConstants.addAnotherDay}</span>
                                             </div>
                                         )
                                     }
@@ -1123,7 +1124,7 @@ class CompetitionCourtAndTimesAssign extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getYearAndCompetitionAction,
+        getYearAndCompetitionOwnAction,
         getCompetitionWithTimeSlots,
         addRemoveTimeSlot,
         UpdateTimeSlotsData,

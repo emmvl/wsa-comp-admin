@@ -12,7 +12,7 @@ import AppConstants from '../../themes/appConstants';
 import history from "../../util/history";
 
 import {
-    getYearAndCompetitionAction,
+    getYearAndCompetitionOwnAction,
     getVenuesTypeAction
 } from '../../store/actions/appAction';
 import {
@@ -117,13 +117,13 @@ class CompetitionDrawEdit extends Component {
             this.props.getDrawsRoundsAction(yearId, storedCompetitionId);
         }
         else if (yearId) {
-            this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, yearId, 'own_competition')
+            this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
             this.setState({
                 yearRefId: JSON.parse(yearId)
             })
         }
         else {
-            this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, null, 'own_competition')
+            this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
             setOwnCompetitionYear(1)
         }
     }
@@ -286,7 +286,7 @@ class CompetitionDrawEdit extends Component {
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
         this.setState({ firstTimeCompId: null, yearRefId: yearId, roundId: null });
-        this.props.getYearAndCompetitionAction(
+        this.props.getYearAndCompetitionOwnAction(
             this.props.appState.own_YearArr,
             yearId,
             "own_competition"
@@ -686,7 +686,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
             getCompetitionDrawsAction,
-            getYearAndCompetitionAction,
+            getYearAndCompetitionOwnAction,
             getVenuesTypeAction,
             getDrawsRoundsAction,
             updateCompetitionDraws,

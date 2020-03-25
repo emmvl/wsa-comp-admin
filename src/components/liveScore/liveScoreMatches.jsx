@@ -12,7 +12,7 @@ import { bindActionCreators } from 'redux';
 import { liveScoreMatchListAction } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
 import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
-import { liveScore_formateDateTime } from '../../themes/dateformate'
+import { liveScore_formateDateTime, formatDateTime, liveScore_MatchFormate } from '../../themes/dateformate'
 
 const { Content } = Layout;
 
@@ -35,7 +35,7 @@ const columns = [
         key: 'startTime',
         sorter: (a, b) => a.startTime.length - b.startTime.length,
         render: (startTime) =>
-            <span>{startTime ? liveScore_formateDateTime(startTime) : ""}</span>
+            <span>{startTime ? liveScore_MatchFormate(startTime) : ""}</span>
     },
     {
         title: 'Home',

@@ -6,7 +6,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getYearAndCompetitionAction } from "../../store/actions/appAction";
+import { getYearAndCompetitionOwnAction } from "../../store/actions/appAction";
 import { getDivisionsListAction, clearReducerDataAction } from "../../store/actions/registrationAction/registration";
 import {
     getCompPartPlayerGradingAction, clearReducerCompPartPlayerGradingAction,
@@ -22,6 +22,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import AppImages from "../../themes/appImages";
 import Loader from '../../customComponents/loader';
 import InputWithHead from "../../customComponents/InputWithHead";
+import ColorsArray from "../../util/colorsArray";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -83,13 +84,13 @@ class CompetitionPlayerGrades extends Component {
         }
         else {
             if (yearId) {
-                this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, yearId, 'own_competition')
+                this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
                 this.setState({
                     yearRefId: JSON.parse(yearId)
                 })
             }
             else {
-                this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, yearId, 'own_competition')
+                this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
                 setOwnCompetitionYear(1)
             }
         }
@@ -119,7 +120,7 @@ class CompetitionPlayerGrades extends Component {
         setOwn_competition(undefined)
         this.props.clearReducerCompPartPlayerGradingAction("partPlayerGradingListData")
         this.props.clearReducerDataAction("allDivisionsData")
-        this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, yearId, 'own_competition')
+        this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
         this.setState({ firstTimeCompId: null, yearRefId: yearId, divisionId: null })
 
     }
@@ -149,7 +150,8 @@ class CompetitionPlayerGrades extends Component {
         this.props.addNewTeamAction(this.state.firstTimeCompId, this.state.divisionId, this.state.newTeam)
         this.setState({
             visible: false,
-            newNameMembershipType: ""
+            newNameMembershipType: "",
+            newTeam: ""
         });
     };
 
@@ -157,6 +159,7 @@ class CompetitionPlayerGrades extends Component {
     handleCancel = e => {
         this.setState({
             visible: false,
+            newTeam:""
         });
     };
 
@@ -315,7 +318,6 @@ class CompetitionPlayerGrades extends Component {
     //////for the assigned teams on the left side of the view port
     assignedView = () => {
         let assignedData = this.props.partPlayerGradingState.assignedPartPlayerGradingListData
-        console.log(assignedData)
         return (
             <div className="d-flex flex-column">
                 {assignedData.map((teamItem, teamIndex) =>
@@ -343,55 +345,61 @@ class CompetitionPlayerGrades extends Component {
                                         </div>
                                     </div>
                                     <div class="collapse" id={teamIndex}>
-                                        {teamItem.players.length > 0 && teamItem.players.map((playerItem, playerIndex) => (
-                                            <Draggable
-                                                key={JSON.stringify(playerItem.playerId)}
-                                                draggableId={JSON.stringify(playerItem.playerId)}
-                                                index={playerIndex}>
-                                                {(provided, snapshot) => (
-                                                    <div
-                                                        ref={provided.innerRef}
-                                                        {...provided.draggableProps}
-                                                        {...provided.dragHandleProps}
-                                                        className="player-grading-draggable-view"
-                                                    >
-                                                        <div className="row" >
-                                                            <div className="col-sm d-flex align-items-center"  >
-                                                                <span className="player-grading-haeding-player-name-text">{playerItem.playerName}</span>
-                                                            </div>
-                                                            <div
-                                                                className="col-sm d-flex justify-content-end "
-                                                                style={{ flexFlow: 'wrap' }}>
-                                                                <div className="col-sm">
-                                                                    {playerItem.playerHistory.map(item => {
-                                                                        return (
-                                                                            <Tag className="comp-player-table-tag" key={item.teamId}>
-                                                                                {item.teamText}
-                                                                            </Tag>
+                                        {teamItem.players.length > 0 && teamItem.players.map((playerItem, playerIndex) => {
 
-                                                                        )
-                                                                    })}
+                                            return (
+                                                <Draggable
+                                                    key={JSON.stringify(playerItem.playerId)}
+                                                    draggableId={JSON.stringify(playerItem.playerId)}
+                                                    index={playerIndex}>
+                                                    {(provided, snapshot) => (
+                                                        <div
+                                                            ref={provided.innerRef}
+                                                            {...provided.draggableProps}
+                                                            {...provided.dragHandleProps}
+                                                            className="player-grading-draggable-view"
+                                                        >
+                                                            <div className="row" >
+                                                                <div className="col-sm d-flex align-items-center"  >
+                                                                    <span className="player-grading-haeding-player-name-text">{playerItem.playerName}</span>
                                                                 </div>
-                                                                <div>
-                                                                    <Tag className="comp-player-table-tag" style={{ background: '#ee3346', color: "#ffffff" }} key={playerItem.position1}>
-                                                                        {playerItem.position1}
-                                                                    </Tag>
-                                                                    <Tag className="comp-player-table-tag" style={{ background: "#1658ef", color: "#ffffff" }} key={playerItem.position2}>
-                                                                        {playerItem.position2}
-                                                                    </Tag>
+                                                                <div
+                                                                    className="col-sm d-flex justify-content-end "
+                                                                    style={{ flexFlow: 'wrap' }}>
+                                                                    <div className="col-sm">
+                                                                        {playerItem.playerHistory.map((item, index) => {
 
-                                                                    <img className="comp-player-table-img" src={playerItem.comments !== null ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="20" width="20" />
-                                                                    {/* </div> */}
+                                                                            return (
+                                                                                <Tag className="comp-player-table-tag" key={item.teamId}>
+                                                                                    {item.teamText}
+                                                                                </Tag>
+
+                                                                            )
+                                                                        })}
+                                                                    </div>
+                                                                    <div>
+                                                                        <Tag className="comp-player-table-tag" style={{ background: playerIndex < 37 ? ColorsArray[playerIndex + 1] : '#ee3346', color: "#ffffff" }} key={playerItem.position1}>
+                                                                            {playerItem.position1}
+                                                                        </Tag>
+                                                                        <Tag className="comp-player-table-tag" style={{ background: playerIndex < 36 ? ColorsArray[(playerIndex + 2)] : '#1658ef', color: "#ffffff" }} key={playerItem.position2}>
+                                                                            {playerItem.position2}
+                                                                        </Tag>
+
+                                                                        <img className="comp-player-table-img" src={
+                                                                            // playerItem.comments !== null ? AppImages.commentFilled :
+                                                                            AppImages.commentEmpty} alt="" height="20" width="20" />
+                                                                        {/* </div> */}
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                )}
+                                                    )}
 
-                                            </Draggable>
+                                                </Draggable>
 
 
-                                        ))}
+                                            )
+                                        })}
                                     </div>
                                     {provided.placeholder}
                                 </div>
@@ -405,9 +413,12 @@ class CompetitionPlayerGrades extends Component {
         )
     }
 
+
     ////////for the unassigned teams on the right side of the view port
     unassignedView = () => {
         let unassignedData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData;
+        let colorPosition1
+        let colorPosition2
         return (
             <div>
                 <Droppable droppableId={'0'}>
@@ -444,11 +455,52 @@ class CompetitionPlayerGrades extends Component {
                                             {...provided.dragHandleProps}
                                             className="player-grading-draggable-view">
 
-                                            <span className="player-grading-haeding-player-name-text">{playerItem.playerName}</span>
+                                            <div className="row" >
+                                                <div className="col-sm d-flex align-items-center"  >
+                                                    <span className="player-grading-haeding-player-name-text">{playerItem.playerName}</span>
+                                                </div>
+                                                <div
+                                                    className="col-sm d-flex justify-content-end "
+                                                    style={{ flexFlow: 'wrap' }}>
+                                                    <div className="col-sm">
+                                                        {playerItem.playerHistory.map((item, index) => {
+                                                            colorPosition1 =
+                                                                colorPosition2 = index <= 36 ? ColorsArray[index + 2] : ColorsArray[index - 3]
+                                                            return (
+                                                                <Tag className="comp-player-table-tag" key={item.teamId}>
+                                                                    {item.teamText}
+                                                                </Tag>
+
+                                                            )
+                                                        })}
+                                                    </div>
+                                                    <div>
+                                                        {playerItem.position1 &&
+                                                            <Tag className="comp-player-table-tag" style={{ background: playerIndex <= 38 ? ColorsArray[playerIndex] : '#ee3346', color: "#ffffff" }} key={playerItem.position1}>
+                                                                {playerItem.position1}
+                                                            </Tag>
+                                                        }
+                                                        {playerItem.position2 &&
+                                                            <Tag className="comp-player-table-tag" style={{ background: playerIndex <= 37 ? ColorsArray[(playerIndex + 1)] : '#1658ef', color: "#ffffff" }} key={playerItem.position2}>
+                                                                {playerItem.position2}
+                                                            </Tag>
+                                                        }
+                                                        <img className="comp-player-table-img" src={
+                                                            // playerItem.comments !== null ? AppImages.commentFilled :
+                                                            AppImages.commentEmpty} alt="" height="20" width="20" />
+                                                        {/* </div> */}
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     )}
+
                                 </Draggable>
+
+
                             ))}
+                            {/* </Draggable> */}
+                            {/* ))} */}
                             {provided.placeholder}
 
                         </div>
@@ -542,7 +594,7 @@ class CompetitionPlayerGrades extends Component {
 }
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getYearAndCompetitionAction,
+        getYearAndCompetitionOwnAction,
         getDivisionsListAction,
         clearReducerDataAction,
         getCompPartPlayerGradingAction,

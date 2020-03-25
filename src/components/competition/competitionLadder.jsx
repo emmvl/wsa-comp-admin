@@ -11,7 +11,7 @@ import {getLadderFormatAction, saveLadderFormatAction, updateLadderFormatAction}
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 import history from "../../util/history";
-import {getYearAndCompetitionAction} from "../../store/actions/appAction";
+import {getYearAndCompetitionOwnAction,clearYearCompetitionAction,} from "../../store/actions/appAction";
 import Loader from '../../customComponents/loader';
 import {getOrganisationData,  setOwnCompetitionYear,
     getOwnCompetitionYear,
@@ -37,6 +37,8 @@ class CompetitionLadder extends Component {
             buttonPressed: "",
             loading: false
         }
+
+        this.referenceApiCalls();
     }
 
     componentDidMount(){
@@ -55,13 +57,13 @@ class CompetitionLadder extends Component {
             this.apiCalls(storedCompetitionId, yearId);
         }
         else if (yearId) {
-            this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, yearId, 'own_competition')
+            this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
             this.setState({
                 yearRefId: JSON.parse(yearId)
             })
         }
         else {
-            this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, null, 'own_competition')
+            this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
             setOwnCompetitionYear(1)
         }
     }
@@ -116,13 +118,13 @@ class CompetitionLadder extends Component {
     }
 
     referenceApiCalls = () => {
-       
+        this.props.clearYearCompetitionAction();
     }
 
     onYearChange(yearId) {
         setOwnCompetitionYear(yearId);
         setOwn_competition(undefined);
-        this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, yearId, 'own_competition')
+        this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
         this.setState({ firstTimeCompId: null, yearRefId: yearId })
     }
 
@@ -401,6 +403,7 @@ class CompetitionLadder extends Component {
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
+        const { own_YearArr, own_CompetitionArr, } = this.props.appState
         return (
             <div className="comp-venue-courts-dropdown-view mt-0" >
                 <div className="fluid-width" >
@@ -414,7 +417,7 @@ class CompetitionLadder extends Component {
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
-                                    {this.props.appState.yearList.map(item => {
+                                     {own_YearArr.length > 0 && own_YearArr.map(item => {
                                         return (
                                             <Option key={"yearRefId" + item.id} value={item.id}>
                                                 {item.description}
@@ -439,7 +442,7 @@ class CompetitionLadder extends Component {
                                     }
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {this.props.appState.competitionList.map(item => {
+                                   {own_CompetitionArr.length > 0 && own_CompetitionArr.map(item => {
                                         return (
                                             <Option key={"competition" + item.competitionId} value={item.competitionId}>
                                                 {item.competitionName}
@@ -687,7 +690,8 @@ function mapDispatchToProps(dispatch)
         getLadderFormatAction,
         saveLadderFormatAction,
         updateLadderFormatAction,
-        getYearAndCompetitionAction,
+        getYearAndCompetitionOwnAction,
+        clearYearCompetitionAction,
     }, dispatch);
 
 }

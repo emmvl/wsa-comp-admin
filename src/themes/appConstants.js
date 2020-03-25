@@ -58,7 +58,6 @@ const AppConstants = {
   uploadPhoto: "Upload Photo",
   or: "or",
   takePhoto: "Take Photo",
-  otherInformation: "Other Information",
   emergencyContacts: "Emergency Contacts",
   emergencyContactName: "Emergency Contact Name",
   emergencyContactMobile: "Emergency Contact Mobile",
@@ -100,7 +99,6 @@ const AppConstants = {
   childNationality: "What nationality are you",
   childLangSpoken: "Languages spoken at home",
   haveDisability: "Do you have a disability?",
-  disability: "Disability",
   addanotherQuestion: "Add Another question",
   uniformAndMerchandise: "Uniforms and Merchandise",
   vouchers: "Vouchers",
@@ -172,7 +170,7 @@ const AppConstants = {
   twelveMonth: "12 months from registration",
   membershipTypes: "Membership Types",
   membershipTYpe: "Membership Type",
-  player: "Player",
+  playerHeading: "Player",
   mandatePlayerAge: "Mandate Player Age Restrictions",
   dob_from: "DOB-From",
   dob_To: "DOB-To",
@@ -583,7 +581,7 @@ const AppConstants = {
   selectDivision: "Select Division",
   club_Association: "Club/Association/State Body",
   selectClub: "Select Club/Association/State Body",
-  manager: "Manager",
+  managerHeading: "Manager",
   new: "New",
   exsiting: "Exisiting",
   teamList: "Team List",
@@ -663,7 +661,7 @@ const AppConstants = {
   publish_notify: "Publish and Notify",
   backToNews: "Back to all news",
 
-  scorer: "Scorer",
+  scorerHeading: "Scorer",
   banners: "Banners",
   uploadImage: "Upload Image",
   selectImage: "Select Image",
@@ -858,6 +856,7 @@ const AppConstants = {
   attendance_recorder: "attendance_recorder",
   player: "player",
   parent: "parent",
+  parentHeading: "Parent",
   web_communications_admin: "web_communications_admin",
   web_umpires_admin: "web_umpires_admin",
   web_results_admin: "web_results_admin",
@@ -890,9 +889,7 @@ const AppConstants = {
   selectRound: "Select Round",
   linked: "Linked",
   importDivision: "Import Division",
-  primaryContact: "Primary Contact",
-  countryOfBirth: "Country of Birth",
-  
+  primaryContact: "Primary Contact"
 };
 
 export default AppConstants;

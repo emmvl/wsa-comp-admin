@@ -78,10 +78,22 @@ const initialState = {
   defaultCompetitionID: "",
   allDivisionsData: [],
   selectedInvitees: [],
+  expendKeyArr: []
 };
 
 
+//get selected expendable key
+// function getExpendableKey(keyArray) {
+//   let keyArr = []
+//   for (let i in keyArray) {
+//     if (keyArray[i] == "2" || keyArray[i] == "3" || keyArray[i] == "4") {
+//       keyArr.push("1")
+//       break
+//     }
 
+//   }
+//   return keyArr
+// }
 
 //get selected invitees 
 function checkSlectedInvitees(array) {
@@ -550,8 +562,9 @@ function registration(state = initialState, action) {
       let objValue = JSON.parse(JSON.stringify([newObjvalue]))
       let formData = action.result.length > 0 ? action.result : objValue
       let selectedInvitees = checkSlectedInvitees(formData[0].registrationSettings)
-      console.log(selectedInvitees)
       state.selectedInvitees = selectedInvitees
+      // let expendKey = getExpendableKey(selectedInvitees)
+      // state.expendKeyArr = expendKey
       let productListValue = getProductArr(
         productList,
         formData[0].membershipProductTypes
@@ -589,6 +602,7 @@ function registration(state = initialState, action) {
         state.registrationFormData = JSON.parse(JSON.stringify([newObjvalue]));
       }
       if (action.key == "selectedkeys") {
+
         state.selectedInvitees = action.updatedData
       }
       else {
@@ -597,7 +611,7 @@ function registration(state = initialState, action) {
         let getKey = action.key;
         oldData[0][getKey] = updatedValue;
       }
-      return { ...state, error: null };
+      return { ...state, error: action.error };
 
 
     ///******fail and error handling */
@@ -605,7 +619,7 @@ function registration(state = initialState, action) {
     case ApiConstants.API_REGISTRATION_FAIL:
       return {
         ...state,
-        onLoad: false,
+
         error: action.error,
         status: action.status
       };

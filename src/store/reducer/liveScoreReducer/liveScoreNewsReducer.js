@@ -1,7 +1,7 @@
 import ApiConstants from '../../../themes/apiConstants'
 import moment from 'moment';
 import { isArrayNotEmpty, isNullOrEmptyString } from '../../../util/helpers';
-
+import { getLiveScoreCompetiton } from '../../../util/sessionStorage';
 
 var object = {
     id: '',
@@ -80,9 +80,10 @@ function liveScoreNewsState(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_ADD_NEWS_DETAILS:
             let news_data = action.addNewItemDetail
-
+            let authorData = JSON.parse(getLiveScoreCompetiton())
+         
             state.addEditNews = news_data
-
+            state.addEditNews["author"] = authorData.longName
             // state.expire_date = moment(news_data.news_expire_date).format('DD-MM-YYYY')
             state.expire_date = news_data.news_expire_date
             state.expire_time = news_data.news_expire_date !== null ? moment(news_data.news_expire_date, 'HH:mm') : null
@@ -108,7 +109,7 @@ function liveScoreNewsState(state = initialState, action) {
             };
 
         case ApiConstants.API_LIVE_SCORE_UPDATE_NEWS:
-
+            
             let news_object = state.addEditNews
             let dateFormat = null
             let utcTimestamp = null
@@ -203,6 +204,8 @@ function liveScoreNewsState(state = initialState, action) {
 
 
         case ApiConstants.API_DEFAULT_NEWS_IMAGE_VIDEO:
+            console.log(action.payload)
+            
             return {
                 ...state,
                 addEditNews: {

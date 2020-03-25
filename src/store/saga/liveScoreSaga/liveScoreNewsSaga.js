@@ -72,6 +72,7 @@ export function* liveScoreNewsNotificationSaga(action) {
                 status: result.status,
             });
             // message.success(action.newsId ? 'News Edited Successfully.' : 'News Added Successfully .');
+            history.push('./liveScoreNewsList')
         } else {
             yield call(failSaga, result)
         }

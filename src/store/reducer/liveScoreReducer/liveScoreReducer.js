@@ -33,6 +33,14 @@ function LiveScoreState(state = initialState, action) {
                 roundResult: action.roundResult,
                 status: action.status
             };
+        case ApiConstants.API_LIVE_SCORE_CREATE_ROUND_SUCCESS:
+            state.roundResult.push(action.result)
+            return {
+                ...state,
+                onLoad: false,
+                // result: action.result,
+                // status: action.status
+            };
 
         //// scorer list
         case ApiConstants.API_LIVE_SCORE_GET_SCORER_LIST_LOAD:

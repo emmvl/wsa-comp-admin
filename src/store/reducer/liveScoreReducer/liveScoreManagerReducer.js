@@ -1,10 +1,12 @@
 import ApiConstants from '../../../themes/apiConstants'
 
 var managerObj = {
+    id: null,
     firstName: "",
     lastName: "",
     mobileNumber: "",
-    email: ""
+    email: "",
+    teams: null
 }
 
 const initialState = {
@@ -17,7 +19,8 @@ const initialState = {
     managerData: managerObj,
     teamId: null,
     managerRadioBtn: 'new',
-    exsitingManagerId: null
+    exsitingManagerId: null,
+    teamResult: []
 }
 
 /////get manager List Object on index basis
@@ -39,6 +42,28 @@ function genrateTeamId(teamIdArr) {
     }
 
     return teamId
+
+}
+
+function getTeamObj(teamSelectId, teamArr) {
+    console.log(teamSelectId, teamArr)
+    let teamObj = []
+    let obj = ''
+    for (let i in teamArr) {
+
+        for (let j in teamSelectId) {
+            if (teamSelectId[j] == teamArr[i].id) {
+                obj = {
+                    "name": teamArr[i].name,
+                    "id": teamArr[i].id
+                }
+                teamObj.push(obj)
+            }
+
+        }
+
+    }
+    return teamObj;
 
 }
 
@@ -66,12 +91,24 @@ function liveScoreMangerState(state = initialState, action) {
                 ...state,
 
             }
+        case ApiConstants.API_LIVE_SCORE_DIVISION_SUCCESS:
+            console.log('API_LIVE_SCORE_DIVISION_SUCCESS', action.teamResult)
+            return {
+                ...state,
+                onLoad: false,
+                teamResult: action.teamResult,
+
+            };
 
         ////Update Manager Data
         case ApiConstants.API_LIVE_SCORE_UPDATE_MANAGER_DATA:
 
 
             if (action.key == 'teamId') {
+                console.log(action, 'API_LIVE_SCORE_UPDATE_MANAGER_DATA')
+                let teamObj = getTeamObj(action.data, state.teamResult)
+                state.managerData['teams'] = teamObj
+                console.log(teamObj, 'teamObj')
                 state.teamId = action.data
 
             } else if (action.key == 'managerRadioBtn') {
@@ -84,18 +121,25 @@ function liveScoreMangerState(state = initialState, action) {
                 state.exsitingManagerId = action.data
 
             } else if (action.key == 'isEditManager') {
+                state.managerData.id = action.data.id
                 state.managerData.firstName = action.data.firstName
                 state.managerData.lastName = action.data.lastName
                 state.managerData.mobileNumber = action.data.mobileNumber
                 state.managerData.email = action.data.email
 
+
+
                 let getTeamId = genrateTeamId(action.data.linkedEntity)
                 state.teamId = getTeamId
+
+                let managerTeamObj = getTeamObj(state.teamId, state.teamResult)
+                state.managerData['teams'] = managerTeamObj
 
                 state.managerRadioBtn = 'new'
 
             } else if (action.key == 'isAddManager') {
                 state.managerData = managerObj
+                state.managerData.id = null
                 state.teamId = []
                 state.managerRadioBtn = 'new'
 

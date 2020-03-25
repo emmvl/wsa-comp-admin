@@ -78,22 +78,20 @@ class LiveScoreAddNews extends Component {
     componentDidMount() {
 
         const AuthorData = JSON.parse(getLiveScoreCompetiton())
-        console.log(AuthorData)
+
         const name = AuthorData.longName
-        this.setState({ authorName: name })
+        // this.setState({  })
         // let competitionId = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.props.getliveScoreScorerList(id, 4)
-        this.props.liveScoreManagerListAction(3, 1, 1)
-        this.setState({ getDataLoading: false })
+        this.props.liveScoreManagerListAction(3, 1, id)
+        this.setState({ getDataLoading: false, authorName: name })
 
         const { addEditNews } = this.props.liveScoreNewsState;
-        console.log(addEditNews, 'addEditNews')
 
-        // this.props.form.setFieldsValue({
-
-        //     'author': addEditNews.author ? addEditNews.author : name
-        // })
+        this.props.form.setFieldsValue({
+            'author': addEditNews.author ? addEditNews.author : name
+        })
         if (this.state.isEdit == true) {
             this.props.setDefaultImageVideoNewAction({ newsImage: this.props.location.state.item.newsImage, newsVideo: this.props.location.state.item.newsVideo, author: name })
             this.props.liveScoreAddNewsDetailsAction(this.props.location.state.item)
@@ -105,7 +103,7 @@ class LiveScoreAddNews extends Component {
     }
 
     onChangeEditorData = (event) => {
-        console.log(event)
+        console.log("event", event)
         this.props.liveScoreUpdateNewsAction(event, "body")
         // this.setState({ editorState: event })
     }
@@ -148,6 +146,7 @@ class LiveScoreAddNews extends Component {
     setInitalFiledValue(data, author) {
         const { addEditNews } = this.props.liveScoreNewsState;
         const authorData = JSON.parse(getLiveScoreCompetiton())
+        console.log(authorData, 'authorDataauthorData')
         this.props.form.setFieldsValue({
             'news_Title': data.title,
             'author': author ? author : authorData.longName
@@ -320,7 +319,7 @@ class LiveScoreAddNews extends Component {
         return (
             <div className="row" >
                 <div className="col-sm" >
-                    <InputWithHead required={'pb-0'} heading={AppConstants.scorer} />
+                    <InputWithHead required={'pb-0'} heading={AppConstants.scorerHeading} />
                     <Select
                         mode="tags"
                         placeholder={AppConstants.searchScorer}
@@ -347,7 +346,7 @@ class LiveScoreAddNews extends Component {
         return (
             <div className="row" >
                 <div className="col-sm" >
-                    <InputWithHead required={'pb-0'} heading={AppConstants.manager} />
+                    <InputWithHead required={'pb-0'} heading={AppConstants.managerHeading} />
                     <Select
                         mode="tags"
                         placeholder={'Select Manager'}
@@ -518,7 +517,7 @@ class LiveScoreAddNews extends Component {
                             // value={editData.news_expire_date ? moment(editData.news_expire_date, 'HH:mm') : editData.expire_time}
                             value={expiryTime !== null && moment(expiryTime, 'HH:mm')}
                             format={"HH:mm"}
-                            minuteStep={15}
+                            // minuteStep={15}
                             placeholder='Select Time'
                         // use12Hours={true}
                         />
@@ -553,6 +552,7 @@ class LiveScoreAddNews extends Component {
                 }
                 const { liveScoreNewsState } = this.props;
                 let editData = liveScoreNewsState.addEditNews;
+
                 this.props.liveScoreAddNewsAction(editData, mediaArry, newsId, this.state.key)
                 this.setState({ getDataLoading: true })
             }
@@ -592,6 +592,7 @@ class LiveScoreAddNews extends Component {
     /////main render method
     render() {
         const { getFieldDecorator } = this.props.form;
+        console.log(this.props.liveScoreNewsState)
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <Loader visible={this.props.liveScoreNewsState.onLoad_2} />

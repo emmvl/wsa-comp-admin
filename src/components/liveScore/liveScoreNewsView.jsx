@@ -26,8 +26,8 @@ class LiveScoreNewsView extends Component {
             visible: false,
             isVideo: false,
             modaldata: '',
-            newsItem: props.location.state.item,
-            id: props.location.state.id ? props.location.state.id : null,
+            newsItem: props.location.state ? props.location.state.item : null,
+            id: props.location.state ? props.location.state.id ? props.location.state.id : null : null,
             getDataLoading: false,
             deleteLoading: false
         }
@@ -64,6 +64,7 @@ class LiveScoreNewsView extends Component {
             if (onLoad_2Data.notifyLoad == false && this.state.getDataLoading == true) {
                 if (newsState !== []) {
                     history.push(this.state.id == "dashboard" ? "/liveScoreDashboard" : './liveScoreNewsList')
+                    // history.push(this.state.id == "dashboard" && "/liveScoreDashboard")
                 }
             }
             if (onLoad_2Data.onLoad_2 == false && this.state.deleteLoading == true) {

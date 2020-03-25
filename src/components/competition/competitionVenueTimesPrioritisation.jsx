@@ -27,7 +27,7 @@ import {
     clearVenueTimesDataAction,
     removePrefencesObjectAction
 } from "../../store/actions/competitionModuleAction/venueTimeAction";
-import { getYearAndCompetitionAction, clearYearCompetitionAction } from '../../store/actions/appAction'
+import { getYearAndCompetitionOwnAction, clearYearCompetitionAction } from '../../store/actions/appAction'
 import { getVenuesTypeAction } from "../../store/actions/appAction";
 import { venueListAction, getCommonRefData, searchVenueList, clearFilter } from '../../store/actions/commonAction/commonAction'
 import { isArrayNotEmpty, isNullOrEmptyString } from "../../util/helpers";
@@ -77,13 +77,13 @@ class CompetitionVenueTimesPrioritisation extends Component {
         }
         else {
             if (yearId !== undefined) {
-                this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, yearId, "own_competition")
+                this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, "own_competition")
                 this.setState({
                     yearRefId: JSON.parse(yearId),
                 })
             }
             else {
-                this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, null, "own_competition")
+                this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, "own_competition")
                 setOwnCompetitionYear(1)
             }
         }
@@ -185,7 +185,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
         this.setState({ yearRefId: yearId })
-        this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, yearId, "own_competition")
+        this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, "own_competition")
     }
 
     onCompetitionClick(competitionId) {
@@ -727,7 +727,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         venueConstraintListAction,
         updateVenuListAction,
-        getYearAndCompetitionAction,
+        getYearAndCompetitionOwnAction,
         getVenuesTypeAction,
         updateVenuAndTimeDataAction,
         updateVenueConstraintsData,

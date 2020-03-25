@@ -5,11 +5,14 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { NavLink } from "react-router-dom";
+import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 import {getUserModulePersonalDetailsAction,
     getUserModulePersonalByCompetitionAction, getUserModuleRegistrationAction,
-    getUserModuleMedicalInfoAction} from "../../store/actions/userAction/userAction";
+    getUserModuleMedicalInfoAction, getUserModuleActivityPlayerAction,
+    getUserModuleActivityParentAction,getUserModuleActivityScorerAction,
+    getUserModuleActivityManagerAction} from "../../store/actions/userAction/userAction";
 import moment from 'moment';
 import history from '../../util/history'
 import { liveScore_formateDate } from '../../themes/dateformate'
@@ -58,12 +61,222 @@ const columns = [
     }
 ];
 
+const columnsPlayer = [
+
+    {
+        title: 'Match Id',
+        dataIndex: 'matchId',
+        key: 'matchId',
+        sorter: (a, b) => a.matchId.localeCompare(b.matchId),
+    },
+    {
+        title: 'Date',
+        dataIndex: 'stateDate',
+        key: 'stateDate',
+        sorter: (a, b) => a.stateDate.localeCompare(b.stateDate),
+        render: (stateDate, record, index) => {
+            return (
+                <div>
+                   {stateDate!= null ? moment(stateDate).format("DD/MM/YYYY") : ""}
+                </div>
+            )
+        }
+    },
+    {
+        title: 'Home',
+        dataIndex: 'home',
+        key: 'home',
+        sorter: (a, b) => a.home.localeCompare(b.home),
+    },
+    {
+        title: 'Away',
+        dataIndex: 'away',
+        key: 'away',
+        sorter: (a, b) => a.away.localeCompare(b.away),
+    },
+    {
+        title: 'Result',
+        dataIndex: 'teamScore',
+        key: 'teamScore',
+        sorter: (a, b) => a.teamScore.localeCompare(b.teamScore),
+    },
+    {
+        title: 'Game time',
+        dataIndex: 'gameTime',
+        key: 'gameTime',
+        sorter: (a, b) => a.gameTime.localeCompare(b.gameTime),
+    },
+    {
+        title: 'Status',
+        dataIndex: 'status',
+        key: 'status',
+        sorter: (a, b) => a.status.localeCompare(b.status),
+    },
+    {
+        title: 'Competition',
+        dataIndex: 'competitionName',
+        key: 'competitionName',
+        sorter: (a, b) => a.competitionName.localeCompare(b.competitionName),
+    },
+    {
+        title: 'Affiliate',
+        dataIndex: 'affiliate',
+        key: 'affiliate',
+        sorter: (a, b) => a.affiliate.localeCompare(b.affiliate),
+    }
+
+];
+
+const columnsParent = [
+
+    {
+        title: 'First Name',
+        dataIndex: 'firstName',
+        key: 'firstName',
+        sorter: (a, b) => a.firstName.localeCompare(b.firstName),
+    },
+    {
+        title: 'Last Name',
+        dataIndex: 'lastName',
+        key: 'lastName',
+        sorter: (a, b) => a.lastName.localeCompare(b.lastName),
+    },
+    {
+        title: 'DOB',
+        dataIndex: 'dateOfBirth',
+        key: 'dateOfBirth',
+        sorter: (a, b) => a.dateOfBirth.localeCompare(b.dateOfBirth),
+        render: (dateOfBirth, record, index) => {
+            return (
+                <div>
+                   {dateOfBirth!= null ? moment(dateOfBirth).format("DD/MM/YYYY") : ""}
+                </div>
+            )
+        }
+    },
+    {
+        title: 'Team',
+        dataIndex: 'team',
+        key: 'team',
+        sorter: (a, b) => a.team.localeCompare(b.team),
+    },
+    {
+        title: 'Div',
+        dataIndex: 'divisionName',
+        key: 'divisionName',
+        sorter: (a, b) => a.divisionName.localeCompare(b.divisionName),
+    },
+    {
+        title: 'Affiliate',
+        dataIndex: 'affiliate',
+        key: 'affiliate',
+        sorter: (a, b) => a.affiliate.localeCompare(b.affiliate),
+    }
+];
+
+const columnsScorer = [
+    {
+        title: 'Start',
+        dataIndex: 'startTime',
+        key: 'startTime',
+        sorter: (a, b) => a.startTime.localeCompare(b.startTime),
+        render: (startTime, record, index) => {
+            return (
+                <div>
+                   {startTime!= null ? moment(startTime).format("DD/MM/YYYY") : ""}
+                </div>
+            )
+        }
+    },
+    {
+        title: 'Match ID',
+        dataIndex: 'matchId',
+        key: 'matchId',
+        sorter: (a, b) => a.matchId.localeCompare(b.matchId),
+    },
+    {
+        title: 'Team',
+        dataIndex: 'teamName',
+        key: 'teamName',
+        sorter: (a, b) => a.teamName.localeCompare(b.teamName),
+    },
+    {
+        title: 'Status',
+        dataIndex: 'status',
+        key: 'status',
+        sorter: (a, b) => a.status.localeCompare(b.status),
+    },
+    {
+        title: 'Competition',
+        dataIndex: 'competitionName',
+        key: 'competitionName',
+        sorter: (a, b) => a.competitionName.localeCompare(b.competitionName),
+    },
+    {
+        title: 'Affiliate',
+        dataIndex: 'affiliate',
+        key: 'affiliate',
+        sorter: (a, b) => a.affiliate.localeCompare(b.affiliate),
+    }
+];
+
+const columnsManager = [
+    {
+        title: 'Match ID',
+        dataIndex: 'matchId',
+        key: 'matchId',
+        sorter: (a, b) => a.matchId.localeCompare(b.matchId),
+    },
+    {
+        title: 'Date',
+        dataIndex: 'startTime',
+        key: 'startTime',
+        sorter: (a, b) => a.startTime.localeCompare(b.startTime),
+        render: (startTime, record, index) => {
+            return (
+                <div>
+                   {startTime!= null ? moment(startTime).format("DD/MM/YYYY") : ""}
+                </div>
+            )
+        }
+    },
+    {
+        title: 'Home',
+        dataIndex: 'home',
+        key: 'home',
+        sorter: (a, b) => a.home.localeCompare(b.home),
+    },
+    {
+        title: 'Away',
+        dataIndex: 'away',
+        key: 'away',
+        sorter: (a, b) => a.away.localeCompare(b.away),
+    },
+    {
+        title: 'Results',
+        dataIndex: 'teamScore',
+        key: 'teamScore',
+        sorter: (a, b) => a.teamScore.localeCompare(b.teamScore),
+    },
+    {
+        title: 'Competition',
+        dataIndex: 'competitionName',
+        key: 'competitionName',
+        sorter: (a, b) => a.competitionName.localeCompare(b.competitionName),
+    },
+    {
+        title: 'Affiliate',
+        dataIndex: 'affiliate',
+        key: 'affiliate',
+        sorter: (a, b) => a.affiliate.localeCompare(b.affiliate),
+    }
+];
 class UserModulePersonalDetail extends Component{
     constructor(props) {
         super(props);
         this.state = {
             userId: 0,
-            tabKey: 1,
+            tabKey: "1",
             competition: {
                 team:{teamId: 0, teamName: ""},
                 divisionName: "",competitionUniqueKey: "",
@@ -79,6 +292,7 @@ class UserModulePersonalDetail extends Component{
             let userId = this.props.location.state.userId;
             this.setState({ userId: userId});
             this.apiCalls(userId);
+            
         }
     }
 
@@ -98,6 +312,7 @@ class UserModulePersonalDetail extends Component{
         if(this.state.competition.competitionUniqueKey == "" && personal.competitions != undefined)
         {
             this.setState({competition: personal.competitions[0]})
+            this.tabApiCalls(this.state.tabKey,personal.competitions[0], this.state.userId );
         }
     }
 
@@ -126,6 +341,13 @@ class UserModulePersonalDetail extends Component{
             userId: userId,
             competitionUniqueKey: competition.competitionUniqueKey
         }
+        if(tabKey == "1")
+        {
+            this.hanleActivityTableList(1, userId, competition, "player");
+            this.hanleActivityTableList(1, userId, competition, "parent");
+            this.hanleActivityTableList(1, userId, competition, "scorer");
+            this.hanleActivityTableList(1, userId, competition, "manager");
+        }
         if(tabKey === "3"){
             this.props.getUserModulePersonalByCompetitionAction(payload)
         }
@@ -136,6 +358,26 @@ class UserModulePersonalDetail extends Component{
             this.handleRegistrationTableList(1, userId, competition);
             
         }
+    }
+
+    hanleActivityTableList = (page, userId, competition, key) => {
+        let filter = 
+        {
+            competitionUniqueKey: competition.competitionUniqueKey,
+            userId: userId,
+            paging : {
+                limit : 10,
+                offset: (page ? (10 * (page -1)) : 0)
+            }
+        }
+        if(key == "player")
+            this.props.getUserModuleActivityPlayerAction(filter);
+        if(key == "parent")
+            this.props.getUserModuleActivityParentAction(filter);
+        if(key == "scorer")
+            this.props.getUserModuleActivityScorerAction(filter);
+        if(key == "manager")
+            this.props.getUserModuleActivityManagerAction(filter);
     }
 
     handleRegistrationTableList = (page, userId, competition) => {
@@ -217,7 +459,7 @@ class UserModulePersonalDetail extends Component{
                             onChange={(e) => this.onChangeSetValue(e)}
                             value={this.state.competition.competitionUniqueKey}>
                             {(personal.competitions || []).map((comp, index) => (
-                                <Option key={comp.competitionUniqueKey} value={comp.competitionUniqueKey}>{comp.competitionName + " " + comp.year}</Option>
+                                <Option key={comp.competitionUniqueKey} value={comp.competitionUniqueKey}>{comp.competitionName}</Option>
                             ))}
                         </Select>
                 </div>
@@ -245,10 +487,110 @@ class UserModulePersonalDetail extends Component{
         )
     }
 
-    activityView = () => {
+    playerActivityView = () => {
+        let userState = this.props.userState;
+        let activityPlayerList = userState.activityPlayerList;
+        let total = userState.activityPlayerTotalCount;
         return(
-            <div>
-                <h4>Activity</h4>
+            <div className="comp-dash-table-view mt-2" style={{ backgroundColor: "#f7fafc" }}>
+                <div className="user-module-row-heading">{AppConstants.playerHeading}</div>
+                <div className="table-responsive home-dash-table-view">
+                    <Table className="home-dashboard-table" 
+                    columns={columnsPlayer}
+                    dataSource={activityPlayerList} 
+                    pagination={false}
+                    loading={userState.activityPlayerOnLoad == true && true}
+                    />
+                </div>
+                <div className="d-flex justify-content-end">
+                    <Pagination
+                        className="antd-pagination"
+                        current={userState.activityPlayerPage}
+                        total={total}
+                        onChange={(page) => this.hanleActivityTableList(page, this.state.userId, this.state.competition, "player")}
+                    />
+                </div>
+            </div>
+        )
+    }
+
+    parentActivityView = () => {
+        let userState = this.props.userState;
+        let activityParentList = userState.activityParentList;
+        let total = userState.activityParentTotalCount;
+        return(
+            <div className="comp-dash-table-view mt-2" style={{ backgroundColor: "#f7fafc" }}>
+                <div className="user-module-row-heading">{AppConstants.parentHeading}</div>
+                <div className="table-responsive home-dash-table-view">
+                    <Table className="home-dashboard-table"
+                        columns={columnsParent}
+                        dataSource={activityParentList} 
+                        pagination={false}
+                        loading={userState.activityParentOnLoad == true && true}
+                    />
+                </div>
+                <div className="d-flex justify-content-end">
+                    <Pagination
+                        className="antd-pagination"
+                        current={userState.activityParentPage}
+                        total={total}
+                        onChange={(page) => this.hanleActivityTableList(page, this.state.userId, this.state.competition, "parent")}
+                    />
+                </div>
+            </div>
+        )
+    }
+
+    scorerActivityView = () => {
+        let userState = this.props.userState;
+        let activityScorerList = userState.activityScorerList;
+        let total = userState.activityScorerTotalCount;
+        return(
+            <div className="comp-dash-table-view mt-2" style={{ backgroundColor: "#f7fafc" }}>
+                <div className="user-module-row-heading">{AppConstants.scorerHeading}</div>
+                <div className="table-responsive home-dash-table-view">
+                    <Table className="home-dashboard-table"
+                    columns={columnsScorer}
+                    dataSource={activityScorerList} 
+                    pagination={false}
+                    loading={userState.activityScorerOnLoad == true && true}
+                    />
+                </div>
+                <div className="d-flex justify-content-end">
+                    <Pagination
+                        className="antd-pagination"
+                        current={userState.activityScorerPage}
+                        total={total}
+                        onChange={(page) => this.hanleActivityTableList(page, this.state.userId, this.state.competition, "scorer")}
+                    />
+                </div>
+            </div>
+        )
+    }
+
+    managerActivityView = () => {
+        let userState = this.props.userState;
+        let activityManagerList = userState.activityManagerList;
+        let total = userState.activityScorerTotalCount;
+        return(
+            <div className="comp-dash-table-view mt-2" style={{ backgroundColor: "#f7fafc" }}>
+                 <div className="user-module-row-heading">{AppConstants.managerHeading}</div>
+                <div className="table-responsive home-dash-table-view">
+                    <Table className="home-dashboard-table"
+                    columns={columnsManager}
+                    dataSource={activityManagerList} 
+                    pagination={false}
+                    loading={userState.activityManagerOnLoad == true && true}
+                    />
+                </div>
+                <div className="d-flex justify-content-end">
+                    <Pagination
+                        className="antd-pagination"
+                        current={userState.activityManagerPage}
+                        total={total}
+                        onChange={(page) => this.hanleActivityTableList(page, this.state.userId, this.state.competition, "manager")}
+                    />
+                </div>
             </div>
         )
     }
@@ -377,23 +719,44 @@ class UserModulePersonalDetail extends Component{
         let total = userState.userRegistrationDataTotalCount;
         return(
             <div className="comp-dash-table-view mt-2">
-            <div className="table-responsive home-dash-table-view">
-                 <Table className="home-dashboard-table" 
-                 columns={columns}
-                  dataSource={userRegistrationList} 
-                  pagination={false}
-                  loading={this.props.userState.userRegistrationOnLoad == true && true}
-                />
+                <div className="table-responsive home-dash-table-view">
+                    <Table className="home-dashboard-table" 
+                    columns={columns}
+                    dataSource={userRegistrationList} 
+                    pagination={false}
+                    loading={this.props.userState.userRegistrationOnLoad == true && true}
+                    />
+                </div>
+                <div className="d-flex justify-content-end">
+                    <Pagination
+                        className="antd-pagination"
+                        current={userState.userRegistrationDataPage}
+                        total={total}
+                        onChange={(page) => this.handleRegistrationTableList(page)}
+                    />
+                </div>
             </div>
-            <div className="d-flex justify-content-end">
-                <Pagination
-                    className="antd-pagination"
-                    current={userState.userRegistrationDataPage}
-                    total={total}
-                    onChange={(page) => this.handleRegistrationTableList(page)}
-                />
+        )
+    }
+
+    headerView = () => {
+        return (
+            <div>
+                <Header className="form-header-view" style={{
+                    backgroundColor: "transparent",
+                    display: "flex", paddingLeft: '0px',
+                    alignItems: "center",
+                }} >
+                    <Breadcrumb separator=" > ">
+                        <NavLink to="/userGraphicalDashboard" >
+                            <Breadcrumb.Item separator=">" className="breadcrumb-product">{AppConstants.user}</Breadcrumb.Item>
+                        </NavLink>
+                        <NavLink to="/userTextualDashboard" >
+                            <Breadcrumb.Item separator=">" className="breadcrumb-product">{AppConstants.textualDashboard}</Breadcrumb.Item>
+                        </NavLink>
+                    </Breadcrumb>
+                </Header >
             </div>
-        </div>
         )
     }
 
@@ -401,7 +764,7 @@ class UserModulePersonalDetail extends Component{
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
-                {/* <InnerHorizontalMenu menu={"userModule"} userModuleSelectedKey={"3"} /> */}
+                <InnerHorizontalMenu menu={"user"} userSelectedKey={"5"} />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">
                         <div className="fluid-width" >
@@ -409,11 +772,16 @@ class UserModulePersonalDetail extends Component{
                                 <div className="col-sm-3 " style={{ marginBottom: "7%" }} >
                                     {this.leftHandSideView()}
                                 </div>
-                                <div className="col-sm-9 " style={{ backgroundColor: "#f7fafc", }}>
+                                
+                                <div className="col-sm-9" style={{ backgroundColor: "#f7fafc", }}>
+                                    <div>{this.headerView()}</div>
                                     <div className="inside-table-view mt-4" >
                                         <Tabs defaultActiveKey="1" onChange={(e) => this.onChangeTab(e)}>
                                             <TabPane tab={AppConstants.activity} key="1">
-                                                {this.activityView()}
+                                                {this.playerActivityView()}
+                                                {this.parentActivityView()}
+                                                {this.scorerActivityView()}
+                                                {this.managerActivityView()}
                                             </TabPane>
                                             <TabPane tab={AppConstants.statistics} key="2">
                                                 {this.statisticsView()}
@@ -447,7 +815,12 @@ function mapDispatchToProps(dispatch)
         getUserModulePersonalDetailsAction,
         getUserModuleMedicalInfoAction,
         getUserModuleRegistrationAction,
-        getUserModulePersonalByCompetitionAction
+        getUserModulePersonalByCompetitionAction,
+        getUserModuleActivityPlayerAction,
+        getUserModuleActivityParentAction,
+        getUserModuleActivityScorerAction,
+        getUserModuleActivityManagerAction
+
     }, dispatch);
 
 }

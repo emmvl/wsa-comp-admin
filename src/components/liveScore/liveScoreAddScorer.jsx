@@ -255,7 +255,7 @@ class LiveScoreAddScorer extends Component {
         return (
             <div >
                 {/* <div></div> */}
-                {/* {this.radioBtnContainer()} */}
+                {this.radioBtnContainer()}
                 {this.state.competitionFormat == 'new' ?
                     this.managerNewRadioBtnView(getFieldDecorator) :
                     this.managerExistingRadioButton(getFieldDecorator)}

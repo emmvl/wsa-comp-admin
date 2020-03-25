@@ -98,7 +98,7 @@ const columns = [
         render: (dateOfBirth, record, index) => {
             return (
                 <div>
-                   {dateOfBirth!= null ? moment(dateOfBirth).format("DD-MM-YYYY") : ""}
+                   {dateOfBirth!= null ? moment(dateOfBirth).format("DD/MM/YYYY") : ""}
                 </div>
             )
         }

@@ -15,6 +15,7 @@ const initialState = {
 function login(state = initialState, action) {
   switch (action.type) {
     case ApiConstants.API_LOGIN_LOAD:
+
       return { ...state, onLoad: true };
 
     case ApiConstants.API_LOGIN_SUCCESS:

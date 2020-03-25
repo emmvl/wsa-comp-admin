@@ -10,6 +10,7 @@ import AppImages from "../../themes/appImages";
 import { liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 const { Content } = Layout;
 
 //// table columns
@@ -82,7 +83,8 @@ class LiveScoreManagerList extends Component {
     }
 
     componentDidMount() {
-        this.props.liveScoreManagerListAction(3, 1, 1)
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        this.props.liveScoreManagerListAction(3, 1, id)
     }
 
     ////////form content view

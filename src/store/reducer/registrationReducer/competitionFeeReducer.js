@@ -119,8 +119,10 @@ function getDefaultCompMemberhsipProduct(data, apiSelectedData) {
     let compMembershipProductTempArray = []
     if (data) {
         let getmembershipProducts = data
+
         for (let i in getmembershipProducts) {
             let statusData = checkMembershipProductData(getmembershipProducts[i], apiSelectedData.membershipProducts)
+
             if (statusData.status == false) {
                 getmembershipProducts[i]["isProductSelected"] = false;
             }
@@ -128,14 +130,23 @@ function getDefaultCompMemberhsipProduct(data, apiSelectedData) {
                 getmembershipProducts[i]["isProductSelected"] = true;
                 getmembershipProducts[i]["competitionMembershipProductId"] = statusData.competitionMembershipProductId;
             }
+
             if (isArrayNotEmpty(getmembershipProducts[i].membershipProductTypes)) {
                 for (let j in getmembershipProducts[i].membershipProductTypes) {
                     if (!checkMembershipProductTypes(getmembershipProducts[i].membershipProductTypes[j], statusData.types)) {
                         getmembershipProducts[i].membershipProductTypes[j]["isTypeSelected"] = false;
                     }
                     else {
+                        console.log("statusData", statusData, getmembershipProducts[i].membershipProductTypes)
                         getmembershipProducts[i].membershipProductTypes[j]["isTypeSelected"] = true;
                         getmembershipProducts[i].membershipProductTypes[j]["competitionMembershipProductId"] = statusData.competitionMembershipProductId;
+                        for (let k in statusData.types) {
+                            if (statusData.types[k].membershipProductTypeMappingId == getmembershipProducts[i].membershipProductTypes[j].membershipProductTypeMappingId) {
+                                getmembershipProducts[i].membershipProductTypes[j]["competitionMembershipProductTypeId"] = statusData.types[k].competitionMembershipProductTypeId
+
+                                break
+                            }
+                        }
                     }
                 }
             }
@@ -143,6 +154,7 @@ function getDefaultCompMemberhsipProduct(data, apiSelectedData) {
         }
         compMembershipProductTempArray = getmembershipProducts
     }
+    console.log("compMembershipProductTempArray", compMembershipProductTempArray)
     return compMembershipProductTempArray
 }
 
@@ -744,8 +756,8 @@ function childFeesMapping(getFeeData) {
 /////get the all total fees 
 function getTotalFees(feesOwner, data, mFees) {
     let totalFees = 0
-    let dataFees = parseInt(data.Fees)
-    let dataGst = parseInt(data.GST)
+    let dataFees = data.Fees ? parseInt(data.Fees) : 0
+    let dataGst = data.GST ? parseInt(data.GST) : 0
     let dataAffiliateFees = data.affiliateFee == null ? 0 : parseInt(data.affiliateFee)
     let dataAffiliateGst = data.affiliateGst == null ? 0 : parseInt(data.affiliateGst)
     if (!feesOwner) {
@@ -777,17 +789,17 @@ function checkFeeType(feeArray) {
 ///// check Fee Type ---- 
 
 function checkIsDivisionAllType(productArray) {
-console.log(productArray)
+    console.log(productArray)
     for (let i in productArray) {
-        if (productArray[i].competitionMembershipProductDivisionId==null) {
+        if (productArray[i].competitionMembershipProductDivisionId == null) {
             return null
-            
+
         } else {
             return productArray[i].competitionMembershipProductDivisionId
         }
-        
+
     }
-    
+
 }
 
 
@@ -847,7 +859,9 @@ function createProductFeeArr(data) {
                     "membershipProductTypeName": memberShipProductType[j].membershipProductTypeName,
                     "membershipProductUniqueKey": divisions[i].membershipProductUniqueKey,
                     "total": getTotalFees(feesOwner, statusCasual.result, mFeesCasual),
-                    "mFees": mFeesCasual
+                    "mFees": mFeesCasual,
+                    "membershipCasual": memberShipProductType[j].mCasualFee,
+                    "membershipGst": memberShipProductType[j].mCasualGst
                 }
             } else {
                 type_Object_casual = {
@@ -862,7 +876,9 @@ function createProductFeeArr(data) {
                     "membershipProductTypeName": memberShipProductType[j].membershipProductTypeName,
                     "membershipProductUniqueKey": divisions[i].membershipProductUniqueKey,
                     "total": null,
-                    "mFees": parseInt(memberShipProductType[j].mCasualFee) + parseInt(memberShipProductType[j].mCasualGst)
+                    "mFees": parseInt(memberShipProductType[j].mCasualFee) + parseInt(memberShipProductType[j].mCasualGst),
+                    "membershipCasual": memberShipProductType[j].mCasualFee,
+                    "membershipGst": memberShipProductType[j].mCasualGst
                 }
             }
 
@@ -882,7 +898,9 @@ function createProductFeeArr(data) {
                     "membershipProductTypeName": memberShipProductType[j].membershipProductTypeName,
                     "membershipProductUniqueKey": divisions[i].membershipProductUniqueKey,
                     "total": getTotalFees(feesOwner, statusSeasonal.result, mFeesSeasonal),
-                    "mFees": mFeesSeasonal
+                    "mFees": mFeesSeasonal,
+                    "membershipSeasonal": memberShipProductType[j].mSeasonalFee,
+                    "membershipGst": memberShipProductType[j].mSeasonalGst
                 }
             } else {
                 type_Object_seasonal = {
@@ -897,7 +915,9 @@ function createProductFeeArr(data) {
                     "membershipProductTypeName": memberShipProductType[j].membershipProductTypeName,
                     "membershipProductUniqueKey": divisions[i].membershipProductUniqueKey,
                     "total": null,
-                    "mFees": parseInt(memberShipProductType[j].mSeasonalFee) + parseInt(memberShipProductType[j].mSeasonalGst)
+                    "mFees": parseInt(memberShipProductType[j].mSeasonalFee) + parseInt(memberShipProductType[j].mSeasonalGst),
+                    "membershipSeasonal": memberShipProductType[j].mSeasonalFee,
+                    "membershipGst": memberShipProductType[j].mSeasonalGst
                 }
             }
 
@@ -933,7 +953,9 @@ function createProductFeeArr(data) {
                         "divisionName": divisionProductType[j].divisionName,
                         "membershipProductUniqueKey": divisions[i].membershipProductUniqueKey,
                         "total": getTotalFees(feesOwner, statusCasual.result, mFeesCasualPer),
-                        "mFees": mFeesCasualPer
+                        "mFees": mFeesCasualPer,
+                        "membershipCasual": memberShipProductType[k].mCasualFee,
+                        "membershipGst": memberShipProductType[k].mCasualGst
                     }
                 } else {
                     type_Object_casual = {
@@ -949,7 +971,9 @@ function createProductFeeArr(data) {
                         "divisionName": divisionProductType[j].divisionName,
                         "membershipProductUniqueKey": divisions[i].membershipProductUniqueKey,
                         "total": null,
-                        "mFees": parseInt(memberShipProductType[k].mCasualFee) + parseInt(memberShipProductType[k].mCasualGst)
+                        "mFees": parseInt(memberShipProductType[k].mCasualFee) + parseInt(memberShipProductType[k].mCasualGst),
+                        "membershipCasual": memberShipProductType[k].mCasualFee,
+                        "membershipGst": memberShipProductType[k].mCasualGst
                     }
                 }
 
@@ -969,7 +993,9 @@ function createProductFeeArr(data) {
                         "divisionName": divisionProductType[j].divisionName,
                         "membershipProductUniqueKey": divisions[i].membershipProductUniqueKey,
                         "total": getTotalFees(feesOwner, statusSeasonal.result, mFeesCasualPer),
-                        "mFees": mFeesCasualPer
+                        "mFees": mFeesCasualPer,
+                        "membershipSeasonal": memberShipProductType[k].mSeasonalFee,
+                        "membershipGst": memberShipProductType[k].mSeasonalGst
                     }
                 } else {
                     type_Object_seasonal = {
@@ -985,7 +1011,9 @@ function createProductFeeArr(data) {
                         "divisionName": divisionProductType[j].divisionName,
                         "membershipProductUniqueKey": divisions[i].membershipProductUniqueKey,
                         "total": null,
-                        "mFees": parseInt(memberShipProductType[k].mSeasonalFee) + parseInt(memberShipProductType[k].mSeasonalGst)
+                        "mFees": parseInt(memberShipProductType[k].mSeasonalFee) + parseInt(memberShipProductType[k].mSeasonalGst),
+                        "membershipSeasonal": memberShipProductType[k].mSeasonalFee,
+                        "membershipGst": memberShipProductType[k].mSeasonalGst
                     }
                 }
                 perTypeArrayCasual.push(type_Object_casual)
@@ -996,14 +1024,14 @@ function createProductFeeArr(data) {
 
         let productArrayToCheckAllType = isArrayNotEmpty(getFeeData) ? getFeeData : []
         let divisionIdToCheckAllType = null
-        for( let x in productArrayToCheckAllType){
-            if(product[i].membershipProductUniqueKey == productArrayToCheckAllType[x].membershipProductUniqueKey){
+        for (let x in productArrayToCheckAllType) {
+            if (product[i].membershipProductUniqueKey == productArrayToCheckAllType[x].membershipProductUniqueKey) {
                 divisionIdToCheckAllType = checkIsDivisionAllType(productArrayToCheckAllType[x].fees)
-                product[i]["isProductTypeALL"] = divisionIdToCheckAllType? true :false
+                product[i]["isProductTypeALL"] = divisionIdToCheckAllType ? true : false
                 console.log("divisionIdToCheckAllType", divisionIdToCheckAllType)
                 break;
             }
-           
+
         }
         let isSeasonalFeeTypeAvailable = null
         let isCasualFeeTypeAvailable = null
@@ -1022,7 +1050,7 @@ function createProductFeeArr(data) {
             "seasonal": { allType: alltypeArraySeasonal, perType: perTypeArraySeasonal },
             "casual": { allType: alltypeArrayCasual, perType: perTypeArrayCasual, perType: perTypeArrayCasual },
             "isAllType": product[i].isProductTypeALL === false ? "allDivisions" : "perDivision",
-            "isSeasonal":isSeasonalFeeTypeAvailable,
+            "isSeasonal": isSeasonalFeeTypeAvailable,
             "isCasual": isCasualFeeTypeAvailable
         }
 
@@ -1533,32 +1561,32 @@ function competitionFees(state = initialState, action) {
 
 
         case ApiConstants.API_ADD_EDIT_COMPETITION_FEES_SECTION:
-            let array = state.competitionFeesData
+            let array = JSON.parse(JSON.stringify(state.competitionFeesData))
 
             let index = array.findIndex(x => x.membershipProductUniqueKey == action.record.membershipProductUniqueKey)
 
             if (index > -1) {
                 if (array[index].isAllType == "allDivisions") {
                     if (action.key == "fee") {
-                        array[index][action.arrayKey].allType[action.tableIndex].fee = Number(action.data)
-                        array[index][action.arrayKey].allType[action.tableIndex].gst = Number(action.data) / 10
+                        array[index][action.arrayKey].allType[action.tableIndex].fee = (action.data)
+                        array[index][action.arrayKey].allType[action.tableIndex].gst = (action.data) / 10
                         array[index][action.arrayKey].allType[action.tableIndex].total = Number(action.data) + (Number(action.data / 10)) + (Number(action.record.mFees))
                     }
                     else if (action.key == "gst") {
                         let fee = array[index][action.arrayKey].allType[action.tableIndex].fee
-                        array[index][action.arrayKey].allType[action.tableIndex].gst = Number(action.data)
+                        array[index][action.arrayKey].allType[action.tableIndex].gst = (action.data)
                         array[index][action.arrayKey].allType[action.tableIndex].total = Number(fee) + (Number(action.data)) + (Number(action.record.mFees))
                     }
                     else if (action.key == "affiliateFee") {
                         let feesOwner = array[index][action.arrayKey].allType[action.tableIndex].fee + array[index][action.arrayKey].allType[action.tableIndex].gst
-                        array[index][action.arrayKey].allType[action.tableIndex].affiliateFee = Number(action.data)
-                        array[index][action.arrayKey].allType[action.tableIndex].affiliateGst = Number(action.data) / 10
+                        array[index][action.arrayKey].allType[action.tableIndex].affiliateFee = (action.data)
+                        array[index][action.arrayKey].allType[action.tableIndex].affiliateGst = (action.data) / 10
                         array[index][action.arrayKey].allType[action.tableIndex].total = Number(feesOwner) + Number(action.data) + (Number(action.data / 10)) + (Number(action.record.mFees))
                     }
                     else if (action.key == "affiliateGst") {
                         let feesOwner = array[index][action.arrayKey].allType[action.tableIndex].fee + array[index][action.arrayKey].allType[action.tableIndex].gst
                         let feeAffiliate = array[index][action.arrayKey].allType[action.tableIndex].affiliateFee
-                        array[index][action.arrayKey].allType[action.tableIndex].affiliateGst = Number(action.data)
+                        array[index][action.arrayKey].allType[action.tableIndex].affiliateGst = (action.data)
                         array[index][action.arrayKey].allType[action.tableIndex].total = Number(feesOwner) + Number(feeAffiliate) + (Number(action.data)) + (Number(action.record.mFees))
                     }
 
@@ -1566,25 +1594,25 @@ function competitionFees(state = initialState, action) {
                 } else {
 
                     if (action.key == "fee") {
-                        array[index][action.arrayKey].perType[action.tableIndex].fee = Number(action.data)
-                        array[index][action.arrayKey].perType[action.tableIndex].gst = Number(action.data) / 10
+                        array[index][action.arrayKey].perType[action.tableIndex].fee = (action.data)
+                        array[index][action.arrayKey].perType[action.tableIndex].gst = (action.data) / 10
                         array[index][action.arrayKey].perType[action.tableIndex].total = Number(action.data) + (Number(action.data / 10)) + (Number(action.record.mFees))
                     }
                     else if (action.key == "gst") {
                         let fee = array[index][action.arrayKey].perType[action.tableIndex].fee
-                        array[index][action.arrayKey].perType[action.tableIndex].gst = Number(action.data)
+                        array[index][action.arrayKey].perType[action.tableIndex].gst = (action.data)
                         array[index][action.arrayKey].perType[action.tableIndex].total = Number(fee) + (Number(action.data)) + (Number(action.record.mFees))
                     }
                     else if (action.key == "affiliateFee") {
                         let feesOwner = array[index][action.arrayKey].perType[action.tableIndex].fee + array[index][action.arrayKey].perType[action.tableIndex].gst
-                        array[index][action.arrayKey].perType[action.tableIndex].affiliateFee = Number(action.data)
-                        array[index][action.arrayKey].perType[action.tableIndex].affiliateGst = Number(action.data) / 10
+                        array[index][action.arrayKey].perType[action.tableIndex].affiliateFee = (action.data)
+                        array[index][action.arrayKey].perType[action.tableIndex].affiliateGst = (action.data) / 10
                         array[index][action.arrayKey].perType[action.tableIndex].total = Number(feesOwner) + Number(action.data) + (Number(action.data / 10)) + (Number(action.record.mFees))
                     }
                     else if (action.key == "affiliateGst") {
                         let feesOwner = array[index][action.arrayKey].perType[action.tableIndex].fee + array[index][action.arrayKey].perType[action.tableIndex].gst
                         let feeAffiliate = array[index][action.arrayKey].perType[action.tableIndex].affiliateFee
-                        array[index][action.arrayKey].perType[action.tableIndex].affiliateGst = Number(action.data)
+                        array[index][action.arrayKey].perType[action.tableIndex].affiliateGst = (action.data)
                         array[index][action.arrayKey].perType[action.tableIndex].total = Number(feesOwner) + Number(feeAffiliate) + (Number(action.data)) + (Number(action.record.mFees))
                     }
                 }

@@ -8,7 +8,7 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getYearAndCompetitionAction, getCompetitionFormatTypesAction } from "../../store/actions/appAction";
+import { getYearAndCompetitionOwnAction, getCompetitionFormatTypesAction } from "../../store/actions/appAction";
 import {
     getCompPartPlayerGradingSummaryAction,
     onchangeCompPartPlayerGradingSummaryData,
@@ -140,13 +140,13 @@ class CompetitionPlayerGradeCalculate extends Component {
         }
         else {
             if (yearId) {
-                this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, yearId, 'own_competition')
+                this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
                 this.setState({
                     yearRefId: JSON.parse(yearId)
                 })
             }
             else {
-                this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, yearId, 'own_competition')
+                this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
                 setOwnCompetitionYear(1)
             }
         }
@@ -186,7 +186,7 @@ class CompetitionPlayerGradeCalculate extends Component {
     onYearChange = (yearId) => {
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
-        this.props.getYearAndCompetitionAction(this.props.appState.yearList, yearId, "own_competition")
+        this.props.getYearAndCompetitionOwnAction(this.props.appState.yearList, yearId, "own_competition")
         this.setState({ firstTimeCompId: null, yearRefId: yearId })
         // this.setDetailsFieldValue()
     }
@@ -325,7 +325,7 @@ class CompetitionPlayerGradeCalculate extends Component {
 }
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getYearAndCompetitionAction,
+        getYearAndCompetitionOwnAction,
         getCompPartPlayerGradingSummaryAction,
         onchangeCompPartPlayerGradingSummaryData,
         saveCompPartPlayerGradingSummaryAction

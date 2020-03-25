@@ -774,7 +774,7 @@ class AppRegistrationForm extends Component {
                             className="reg-competition-radio"
                             onChange={ (e) => this.onChangeSetParticipantValue(e.target.value, "whatTypeOfRegistration", index)}
                             value={item.whatTypeOfRegistration}>
-                            <Radio value={1}>{AppConstants.player}</Radio>
+                            <Radio value={1}>{AppConstants.playerHeading}</Radio>
                             <Radio value={2}>{AppConstants.nonPlayer}</Radio>
                         </Radio.Group>
                     </div>

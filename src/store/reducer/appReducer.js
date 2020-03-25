@@ -256,10 +256,10 @@ function appState(state = initialState, action) {
       return {
         ...state,
         onLoad: false,
-        own_YearArr: action.key === 'own_competition' ? action.yearList : state.own_YearArr,
-        own_CompetitionArr: action.key === 'own_competition' ? action.competetionListResult : state.own_CompetitionArr,
-        participate_CompetitionArr: action.key === "participate_competition" ? action.competetionListResult : state.participate_CompetitionArr,
-        participate_YearArr: action.key === "participate_competition" ? action.yearList : state.participate_YearArr,
+        // own_YearArr: action.key === 'own_competition' ? action.yearList : state.own_YearArr,
+        // own_CompetitionArr: action.key === 'own_competition' ? action.competetionListResult : state.own_CompetitionArr,
+        // participate_CompetitionArr: action.key === "participate_competition" ? action.competetionListResult : state.participate_CompetitionArr,
+        // participate_YearArr: action.key === "participate_competition" ? action.yearList : state.participate_YearArr,
         yearList: action.yearList,
         competitionList: action.competetionListResult,
         status: action.status,
@@ -280,7 +280,35 @@ function appState(state = initialState, action) {
 
     case ApiConstants.CLEAR_COMPETITION_DATA:
       state.competitionList = []
-      return { ...state }
+      return { ...state };
+
+
+    /////////
+    case ApiConstants.API_GET_YEAR_Participate_COMPETITION_LOAD:
+      return { ...state, onLoad: true };
+
+    case ApiConstants.API_GET_YEAR_Participate_COMPETITION_SUCCESS:
+      return {
+        ...state,
+        onLoad: false,
+        participate_CompetitionArr: action.competetionListResult,
+        participate_YearArr: action.yearList,
+        status: action.status,
+      };
+
+    /////////
+    case ApiConstants.API_GET_YEAR_OWN_COMPETITION_LOAD:
+      console.log(action)
+      return { ...state, onLoad: true };
+
+    case ApiConstants.API_GET_YEAR_OWN_COMPETITION_SUCCESS:
+      return {
+        ...state,
+        onLoad: false,
+        own_CompetitionArr: action.competetionListResult,
+        own_YearArr: action.yearList,
+        status: action.status,
+      };
 
 
     default:

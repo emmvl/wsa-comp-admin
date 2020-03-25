@@ -216,8 +216,10 @@ let AxiosApi = {
   },
 
   ////get default competition membershipproduct tab details
-  getDefaultCompFeesMembershipProduct() {
-    var url = `/api/competitionfee/membershipdetails`;
+  async getDefaultCompFeesMembershipProduct() {
+    let orgItem = await getOrganisationData();
+    let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+    var url = `/api/competitionfee/membershipdetails?organisationUniqueKey=${organisationUniqueKey}`;
     return Method.dataGet(url, token);
   },
 

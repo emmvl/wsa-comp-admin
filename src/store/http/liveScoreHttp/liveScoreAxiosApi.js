@@ -26,7 +26,8 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, null)
     },
     liveScoreGetAffilate(data) {
-        const url = `clubs?name=${data.name}&competitionId=${data.id}`
+        // const url = `clubs?name=${data.name}&competitionId=${data.id}`
+        const url = `clubs?competitionId=${data.id}`
         return Method.dataGet(url, null)
     },
     liveScoreAddNewTeam(data) {
@@ -87,14 +88,26 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token)
     },
     liveScoreCreateRound(roundName, sequence, competitionID, divisionId) {
-        let body = JSON.stringify(
-            {
-                "name": roundName,
-                "sequence": sequence,
-                "competitionId": competitionID,
-                "divisionId": divisionId,
-            }
-        )
+
+        let body = ''
+        if (divisionId) {
+            body = JSON.stringify(
+                {
+                    "name": roundName,
+                    "sequence": sequence,
+                    "competitionId": competitionID,
+                    "divisionId": divisionId,
+                }
+            )
+        } else {
+            body = JSON.stringify(
+                {
+                    "name": roundName,
+                    "sequence": sequence,
+                    "competitionId": competitionID,
+                }
+            )
+        }
         var url = "/round";
         return Method.dataPost(url, localStorage.token, body)
     },
@@ -110,6 +123,7 @@ let LiveScoreAxiosApi = {
     },
 
     liveScoreCreateMatch(data, competitionId) {
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
 
         console.log(data, 'liveScoreCreateMatch')
 
@@ -118,7 +132,7 @@ let LiveScoreAxiosApi = {
             "startTime": data.startTime,
             "divisionId": data.divisionId,
             "type": data.type,
-            "competitionId": 1,
+            "competitionId": id,
             "mnbMatchId": data.mnbMatchId,
             "team1Id": data.team1id,
             "team2Id": data.team2id,
@@ -126,7 +140,7 @@ let LiveScoreAxiosApi = {
             "roundId": data.roundId,
             "matchDuration": data.matchDuration,
             "mainBreakDuration": data.mainBreakDuration,
-            // "breakDuration": data.breakDuration,
+            "breakDuration": (data.type == 'TWO_HALVES' || data.type == 'SINGLE') ? data.mainBreakDuration : data.qtrBreak,
             "team1Score": data.team1Score,
             "team2Score": data.team2Score,
             // "breakDuration": data.breakDuration
@@ -288,19 +302,24 @@ let LiveScoreAxiosApi = {
     liveScoreAddEditManager(data, teamId, exsitingManagerId) {
         let competitionID = localStorage.getItem("competitionId");
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        console.log(data, 'liveScoreAddEditManager')
         let body = {
+            "id": data.id ? data.id : 0,
             "firstName": data.firstName,
             "lastName": data.lastName,
             "mobileNumber": data.mobileNumber,
-            "email": data.email
+            "email": data.email,
+            "teams": data.teams
         }
         if (exsitingManagerId) {
             let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-            var url = `/users/manager?teamId=${teamId}&userId=${exsitingManagerId}&competitionId=${id}`;
+            // var url = `/users/manager?teamId=${teamId}&userId=${exsitingManagerId}&competitionId=${id}`;
+            var url = `/users/manager?userId=${exsitingManagerId}&competitionId=${id}`;
             return Method.dataPost(url, token)
         } else {
             let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-            var url = `/users/manager?teamId=${teamId}&userId=${userId}&competitionId=${id}`;
+            // var url = `/users/manager?teamId=${teamId}&userId=${userId}&competitionId=${id}`;
+            var url = `/users/manager?userId=${userId}&competitionId=${id}`;
             return Method.dataPost(url, token, body)
         }
     },
@@ -338,8 +357,8 @@ let LiveScoreAxiosApi = {
             "entityTypeId": data.entityTypeId,
             "id": data.id
         }
-        var url = `/news?id=${data.id}&silent=${value}`
-        return Method.dataPost(url, token, body)
+        var url = `/news/publish?id=${data.id}&silent=${value}`
+        return Method.dataGet(url, token, body)
     },
 
     /// delete news
@@ -451,7 +470,17 @@ let LiveScoreAxiosApi = {
     liveScoreGetTeamData(teamId) {
         var url = `/teams/id/${teamId}`;
         return Method.dataGet(url, token)
-    }
+    },
+
+    liveScorePlayerImport(competitionId, csvFile) {
+
+        let body = new FormData();
+        body.append("file", csvFile, csvFile.name);
+
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        var url = `/players/import?competitionId=${id}`;
+        return Method.dataPost(url, token, body)
+    },
 
 };
 

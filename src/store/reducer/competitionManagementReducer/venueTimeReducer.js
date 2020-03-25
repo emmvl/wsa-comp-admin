@@ -420,9 +420,10 @@ function VenueTimeState(state = initialState, action) {
                 state.courtRotation[1].selectedPrefrence = 5
                 state.selectedRadioBtn = 5
             } else {
-                state.courtRotation[2].selectedPrefrence = 8
-                state.selectedRadioBtn = 8
+                state.courtRotation[2].selectedPrefrence = 8;
+                state.selectedRadioBtn = 8;
             }
+          //  state.venueConstrainstData['courtRotationRefId'] = state.selectedRadioBtn;
 
             return {
                 ...state,

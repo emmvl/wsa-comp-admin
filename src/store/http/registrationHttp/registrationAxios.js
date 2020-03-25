@@ -127,6 +127,24 @@ let AxiosApi = {
         return Method.dataGet(url, token);
     },
 
+    async  getOwnCompetitionList(year) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem.organisationUniqueKey
+        // var url = `/api/orgregistration/competitionyear/${year}`;
+        var url = `/api/orgregistration/owncompetition/${year}?organisationUniqueKey=${organisationUniqueKey}`;
+        return Method.dataGet(url, token);
+    },
+
+    async  getParticipateCompetitionList(year) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem.organisationUniqueKey
+        // var url = `/api/orgregistration/competitionyear/${year}`;
+        var url = `/api/orgregistration/affiliatedcompetition/${year}?organisationUniqueKey=${organisationUniqueKey}`;
+        return Method.dataGet(url, token);
+    },
+
+
+
     getVenue() {
         var url = `/api/venue/all`;
         return Method.dataGet(url, token);
@@ -244,8 +262,10 @@ let AxiosApi = {
     },
 
     ////get default competition membershipproduct tab details
-    getDefaultCompFeesMembershipProduct() {
-        var url = `/api/competitionfee/membershipdetails`;
+    async getDefaultCompFeesMembershipProduct() {
+        let orgItem = await getOrganisationData();
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        var url = `/api/competitionfee/membershipdetails?organisationUniqueKey=${organisationUniqueKey}`;
         return Method.dataGet(url, token);
     },
 

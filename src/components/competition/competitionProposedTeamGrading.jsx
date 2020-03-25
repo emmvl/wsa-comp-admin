@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Form, Button, Table, Select, Tag } from 'antd';
+import { Layout, Breadcrumb, Form, Button, Table, Select, Tag, Input, message } from 'antd';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -8,7 +8,7 @@ import history from "../../util/history";
 import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getYearAndCompetitionAction, clearYearCompetitionAction } from "../../store/actions/appAction";
+import { getYearAndCompetitionOwnAction, clearYearCompetitionAction } from "../../store/actions/appAction";
 import { getDivisionsListAction, clearReducerDataAction } from "../../store/actions/registrationAction/registration";
 import {
     getCompOwnProposedTeamGradingAction,
@@ -24,6 +24,7 @@ import {
     setOwn_competition,
     getOwn_competition
 } from "../../util/sessionStorage"
+import ValidationConstants from "../../themes/validationConstant";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -33,11 +34,11 @@ let this_obj = null;
 function gradeName(proposedGradeRefId) {
     let gradeName = proposedGradeRefId
     let GradeReferenceData = this_obj.props.ownTeamGradingState.getFinalGradesListData
-    let gradeNameIndex = GradeReferenceData.findIndex(x => x.id == proposedGradeRefId)
+    let gradeNameIndex = GradeReferenceData.findIndex(x => x.gradeRefId == proposedGradeRefId)
     if (gradeNameIndex >= 0 && GradeReferenceData.length > 0) {
         gradeName = GradeReferenceData.length > 0 && GradeReferenceData[gradeNameIndex].Grade
     }
-    return gradeName;
+    return gradeName == 0 ? "" : gradeName;
 }
 
 /////function to sort table column
@@ -52,14 +53,36 @@ const columns = [
         title: 'Team',
         dataIndex: 'sortOrder',
         key: 'sortOrder',
-        sorter: (a, b) => tableSort(a, b, "sortOrder")
+        sorter: (a, b) => tableSort(a, b, "sortOrder"),
+        render: (sortOrder, record, index) => (
+            record.isDirectRegistration == 0 ? (
+                <span >{sortOrder}</span>
+            ): (
+                <Input className="input-inside-team-grades-table" style={{width: '50px'}}
+                    onChange={e => this_obj.props.onchangeCompOwnFinalTeamGradingData(e.target.value, index, "sortOrder")}
+                    placeholder={"Team"}
+                    value={sortOrder}
+                />
+            )
+        )
 
     },
     {
         title: 'Team Name',
         dataIndex: 'teamName',
         key: 'teamName',
-        sorter: (a, b) => tableSort(a, b, "teamName")
+        sorter: (a, b) => tableSort(a, b, "teamName"),
+        render: (teamName, record, index) => (
+            record.isDirectRegistration == 0 ? (
+                <span >{teamName}</span>
+            ): (
+                <Input className="input-inside-team-grades-table" style={{width: '230px'}}
+                    onChange={e => this_obj.props.onchangeCompOwnFinalTeamGradingData(e.target.value, index, "teamName")}
+                    placeholder={"Team Name"}
+                    value={teamName}
+                />
+            )
+        )
     },
     {
         title: 'History',
@@ -82,7 +105,10 @@ const columns = [
         title: 'Proposed Grade',
         dataIndex: 'proposedGradeRefId',
         key: 'proposedGradeRefId',
-        render: proposedGradeRefId => <span >{gradeName(proposedGradeRefId)}</span>,
+        render: (proposedGradeRefId, record) => (
+            record.isDirectRegistration == 0 ? 
+            <span >{gradeName(proposedGradeRefId)}</span> : ""
+            ),
         sorter: (a, b) => tableSort(a, b, "proposedGradeRefId")
 
     },
@@ -135,8 +161,10 @@ class CompetitionProposedTeamGrading extends Component {
     }
 
     componentDidMount() {
-        let divisionId = this.props.location.state ? this.props.location.state.id : null
-        this.setState({ divisionId })
+        let divisionId = this.props.location.state ? this.props.location.state.id : null;
+        let gradeRefId = this.props.location.state ? this.props.location.state.gradeRefId : null;
+        console.log("gradeRefId::" + gradeRefId);
+        this.setState({ divisionId: divisionId, gradeRefId:  gradeRefId})
         // this.props.gradesReferenceListAction()
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
@@ -153,13 +181,13 @@ class CompetitionProposedTeamGrading extends Component {
         }
         else {
             if (yearId) {
-                this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, yearId, 'own_competition')
+                this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
                 this.setState({
                     yearRefId: JSON.parse(yearId)
                 })
             }
             else {
-                this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, null, 'own_competition')
+                this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
                 setOwnCompetitionYear(1)
             }
         }
@@ -208,24 +236,45 @@ class CompetitionProposedTeamGrading extends Component {
     ////save the final team grading data
     submitApiCall = () => {
         let finalTeamGradingData = this.props.ownTeamGradingState.getCompOwnProposedTeamGradingData
-        console.log("finalTeamGradingData", finalTeamGradingData)
+        console.log("finalTeamGradingData", finalTeamGradingData);
+        let finalGrades =  this.props.ownTeamGradingState.compFinalTeamGradingFinalGradesData;
+        let isError = false;
+
         finalTeamGradingData.map((item) => {
-            item['finalGradeRefId'] = item.finalGradeId
-            delete item['finalGradeId']
-            return item
+           if(item.finalGradeId == 0 || item.finalGradeId == null || item.finalGradeId == "" ||
+           item.finalGradeId == undefined){
+                isError = true
+           }
         })
-        let payload = {
-            "yearRefId": this.state.yearRefId,
-            "competitionUniqueKey": this.state.firstTimeCompId,
-            "divisionId": this.state.divisionId,
-            "gradeRefId": this.state.gradeRefId,
-            "teams": finalTeamGradingData
+
+        if(!isError){
+            finalTeamGradingData.map((item) => {
+                let obj = finalGrades.find(x=>x.gradeRefId == item.finalGradeId);
+                item['finalGradeRefId'] = obj.id
+                item["gradeRefId"] = obj.gradeRefId
+                delete item['finalGradeId']
+                return item
+            })
+            let payload = {
+                "yearRefId": this.state.yearRefId,
+                "competitionUniqueKey": this.state.firstTimeCompId,
+                "divisionId": this.state.divisionId,
+                "gradeRefId": this.state.gradeRefId,
+                "teams": finalTeamGradingData
+            }
+            console.log("payload", JSON.stringify(payload));
+            this.props.saveOwnFinalTeamGradingDataAction(payload)
+            this.setState({ saveLoad: true })
         }
-        console.log("payload", payload)
-        this.props.saveOwnFinalTeamGradingDataAction(payload)
-        this.setState({ saveLoad: true })
+        else{
+            message.error(ValidationConstants.finalGrading[0]);
+        }
+       
     }
 
+    cancelCall = () => {
+        history.push('/competitionPartTeamGradeCalculate');
+    }
 
     ///////view for breadcrumb
     headerView = () => {
@@ -242,14 +291,13 @@ class CompetitionProposedTeamGrading extends Component {
         )
     }
 
-
     /////year change onchange
     onYearChange = (yearId) => {
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
         this.props.clearTeamGradingReducerDataAction("finalTeamGrading")
         this.props.clearReducerDataAction("allDivisionsData")
-        this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, yearId, 'own_competition')
+        this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
         this.setState({ firstTimeCompId: null, yearRefId: yearId, divisionId: null, gradeRefId: null })
 
     }
@@ -262,8 +310,6 @@ class CompetitionProposedTeamGrading extends Component {
         this.setState({ firstTimeCompId: competitionId, divisionId: null, gradeRefId: null })
         this.props.getDivisionsListAction(this.state.yearRefId, competitionId)
     }
-
-
 
     /////on division change
     onDivisionChange = (divisionId) => {
@@ -387,7 +433,6 @@ class CompetitionProposedTeamGrading extends Component {
         )
     }
 
-
     ////////form content view
     contentView = () => {
         let proposedTeamGradingData = this.props.ownTeamGradingState.getCompOwnProposedTeamGradingData
@@ -407,8 +452,6 @@ class CompetitionProposedTeamGrading extends Component {
         )
     }
 
-
-
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
@@ -419,10 +462,15 @@ class CompetitionProposedTeamGrading extends Component {
                             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
                                 {/* <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button> */}
                                 {/* <NavLink to="/competitionPartTeamGradeCalculate" > */}
+                                <Button className="open-reg-button" style={{marginRight: '20px'}}
+                                    onClick={() => this.cancelCall()}
+                                    type="primary">{AppConstants.cancel}
+                                </Button>
                                 <Button className="open-reg-button"
                                     onClick={() => this.submitApiCall()}
                                     type="primary">{AppConstants.submit}
                                 </Button>
+                               
                                 {/* </NavLink> */}
                             </div>
                         </div>
@@ -454,7 +502,7 @@ class CompetitionProposedTeamGrading extends Component {
 }
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getYearAndCompetitionAction,
+        getYearAndCompetitionOwnAction,
         getCompOwnProposedTeamGradingAction,
         getDivisionsListAction,
         gradesReferenceListAction,

@@ -123,6 +123,19 @@
   font-weight: normal;
 }
 
+.select-inside-team-grades-table .ant-select-selection .ant-select-arrow{
+  right: 3.5px;
+}
+
+.select-inside-team-grades-table .ant-select-selection .ant-select-selection__rendered{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 56px;
+  overflow: hidden;
+}
+
+
+
 .input-inside-team-grades-table {
   height: 40px;
   min-width: 100px;

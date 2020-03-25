@@ -137,6 +137,29 @@ function clearYearCompetitionAction() {
   return action
 }
 
+function getYearAndCompetitionOwnAction(yearData, yearId, key) {
+  const action = {
+    type: ApiConstants.API_GET_YEAR_OWN_COMPETITION_LOAD,
+    yearData: yearData,
+    yearId: yearId,
+    key: key
+  }
+  console.log(action)
+  return action
+}
+
+function getYearAndCompetitionParticipateAction(yearData, yearId, key) {
+  const action = {
+    type: ApiConstants.API_GET_YEAR_Participate_COMPETITION_LOAD,
+    yearData: yearData,
+    yearId: yearId,
+    key: key
+  }
+  console.log(action)
+  return action
+}
+
+
 export {
   getYearListAction,
   getOnlyYearListAction,
@@ -152,5 +175,7 @@ export {
   getCompetitionTypesAction,
   getCompetitionFormatTypesAction,
   getYearAndCompetitionAction,
-  clearYearCompetitionAction
+  clearYearCompetitionAction,
+  getYearAndCompetitionOwnAction,
+  getYearAndCompetitionParticipateAction
 };

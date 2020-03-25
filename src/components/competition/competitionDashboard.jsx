@@ -257,7 +257,10 @@ class CompetitionDashboard extends Component {
                                 </Select>
                             </div>
                         </div> */}
-                        <div className="col-sm">
+                        <div className="col-sm" style={{
+                            display: "flex", maxWidth: "99%",
+                            justifyContent: "flex-end"
+                        }}>
                             <div className="row">
                                 <div className="col-sm">
                                     <div

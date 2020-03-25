@@ -71,3 +71,21 @@ export function* liveScoreAddEditPlayerSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+////Match Import
+export function* liveScorePlayerImportSaga(action) {
+    try {
+        const result = yield call(LiveScoreAxiosApi.liveScorePlayerImport, action.competitionId, action.csvFile);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_LIVE_SCORE_MATCH_IMPORT_SUCCESS,
+            });
+            history.push('/liveScorePlayerList')
+            message.success('Player Imported Successfully.')
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

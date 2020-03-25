@@ -40,7 +40,7 @@ const columns = [
         title: 'Action',
         dataIndex: 'isUsed',
         key: 'isUsed',
-        width: 20,
+        // width: 20,
         render: (isUsed, record) =>
             <Menu
                 className="action-triple-dot-submenu"

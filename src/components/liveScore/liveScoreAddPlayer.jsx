@@ -22,6 +22,8 @@ import moment from "moment";
 import history from '../../util/history'
 import Loader from '../../customComponents/loader'
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
+
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
@@ -44,10 +46,9 @@ class LiveScoreAddPlayer extends Component {
 
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        console.log(this.props.location.state)
-        this.props.getliveScoreDivisions(id)
+        // this.props.getliveScoreDivisions(id)
+        this.props.getliveScoreTeams(id)
         if (this.state.isEdit == true) {
-            console.log('^^^^', this.state.playerData)
             if (this.props.location.state.screen === 'editTeam') {
                 this.props.liveScoreUpdatePlayerDataAction({
                     playerId: this.state.playerData.id,
@@ -128,9 +129,10 @@ class LiveScoreAddPlayer extends Component {
 
     ////////form content view
     contentView = (getFieldDecorator) => {
-        let teamData = this.props.liveScoreState.teamResult ? this.props.liveScoreState.teamResult : []
+        // let teamData = this.props.liveScoreState.teamResult ? this.props.liveScoreState.teamResult : []
         const { playerData } = this.props.liveScorePlayerState
-
+        const teamResult = this.props.liveScoreTeamState;
+        const teamData = teamResult.teamResult;
 
         return (
             <div className="content-view pt-0">
@@ -289,8 +291,8 @@ class LiveScoreAddPlayer extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log(this.props.location.state)
-                this.props.liveScoreAddEditPlayerAction(playerData, playerId, this.state.image, this.state.temaViewPlayer, { teamId: playerData.teamId, screen: this.props.location.state.screen })
+                console.log(this.props.location)
+                this.props.liveScoreAddEditPlayerAction(playerData, playerId, this.state.image, this.state.temaViewPlayer, { teamId: playerData.teamId, screen: this.props.location.state ? this.props.location.state.screen : null })
             }
         });
     }
@@ -351,14 +353,16 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getliveScoreDivisions,
         liveScoreUpdatePlayerDataAction,
-        liveScoreAddEditPlayerAction
+        liveScoreAddEditPlayerAction,
+        getliveScoreTeams
     }, dispatch)
 }
 
 function mapStatetoProps(state) {
     return {
         liveScoreState: state.LiveScoreState,
-        liveScorePlayerState: state.LiveScorePlayerState
+        liveScorePlayerState: state.LiveScorePlayerState,
+        liveScoreTeamState: state.LiveScoreTeamState
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(LiveScoreAddPlayer));

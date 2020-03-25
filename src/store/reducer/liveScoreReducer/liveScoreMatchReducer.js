@@ -156,7 +156,8 @@ const initialState = {
     matchData: matchObj,
     matchLoad: false,
     matchDetails: [],
-    start_post_date: null
+    start_post_date: null,
+    displayTime: ""
 };
 
 function setMatchData(data) {
@@ -247,7 +248,7 @@ function liveScoreMatchReducer(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_ADD_EDIT_MATCH_SUCCESS:
 
 
-
+         
             let data = action.result
             state.addEditMatch = action.result;
             state.start_date = moment(action.result.startTime).format("DD-MM-YYYY")
@@ -256,7 +257,7 @@ function liveScoreMatchReducer(state = initialState, action) {
             // state.start_date = moment(action.result.startTime, "DD-MM-YYYY")
             // state.start_date = action.result.startTime
             state.start_time = moment(action.result.startTime, "HH:mm")
-
+            state.displayTime = action.result.startTime
             let checkSelectedVenue = [data.venueCourt.venueId]
 
             let matchPostObject = setMatchData(data)
@@ -304,7 +305,7 @@ function liveScoreMatchReducer(state = initialState, action) {
             if (action.key === "start_date") {
                 state.start_date = action.data
                 state.start_post_date = action.data
-                console.log(action)
+               
                 // state.matchData.startTime = action.data
                 // date = state.start_date + " " + state.start_time
                 // if (state.start_time) {
@@ -314,8 +315,9 @@ function liveScoreMatchReducer(state = initialState, action) {
 
 
             } else if (action.key === "start_time") {
-                console.log(action.data)
+              
                 state.start_time = action.data
+                state.displayTime = action.data
                 // state.matchData.startTime = action.data
                 // date = state.start_date + " " + state.start_time
                 // if (state.start_date) {
@@ -324,7 +326,7 @@ function liveScoreMatchReducer(state = initialState, action) {
                 // }
 
             } else {
-                console.log(action)
+               
                 state.addEditMatch[action.key] = action.data
                 state.matchData[action.key] = action.data
             }
@@ -361,7 +363,7 @@ function liveScoreMatchReducer(state = initialState, action) {
 
 
             let venueCourts = generateCourtsArray(action.venues)
-            console.log(venueCourts, "result")
+            
             state.venueData = venueCourts
             return {
                 ...state,
@@ -388,6 +390,17 @@ function liveScoreMatchReducer(state = initialState, action) {
             return {
                 ...state
             }
+
+        case ApiConstants.API_LIVE_SCORE_CREATE_ROUND_SUCCESS:
+            
+            state.matchData.roundId = action.result.id
+            state.addEditMatch.roundId = action.result.id
+            state.addEditMatch.round = action.result
+            return {
+                ...state,
+                onLoad: false,
+
+            };
 
         case ApiConstants.API_GET_LIVESCOREMATCH_DETAIL_INITAITE:
             return {

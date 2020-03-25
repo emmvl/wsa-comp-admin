@@ -52,7 +52,8 @@ class LiveScoreAddMatch extends Component {
             loadvalue: false,
             loading: false,
             createMatch: false,
-            key: props.location.state ? props.location.state.key : null
+            key: props.location.state ? props.location.state.key : null,
+            roundLoad: false
         }
         // this.props.getVenuesTypeAction()
 
@@ -85,37 +86,50 @@ class LiveScoreAddMatch extends Component {
 
     componentDidUpdate(nextProps) {
         console.log(this.props.liveScoreMatchState.addEditMatch)
-        let { addEditMatch, start_date, start_time } = this.props.liveScoreMatchState
+        let { addEditMatch, start_date, start_time, displayTime } = this.props.liveScoreMatchState
 
         if (this.state.isEdit == true) {
             if (nextProps.liveScoreMatchState !== this.props.liveScoreMatchState) {
 
                 if (this.props.liveScoreMatchState.matchLoad == false && this.state.loadvalue == true) {
 
-                    this.setInitalFiledValue(addEditMatch, start_date, start_time)
+                    this.setInitalFiledValue(addEditMatch, start_date, start_time, displayTime)
                     this.setState({ loadvalue: false })
 
                 }
             }
         }
+
+        if (nextProps.liveScoreMatchState !== this.props.liveScoreMatchState) {
+            if (this.props.liveScoreMatchState.matchLoad == false && this.state.roundLoad == true) {
+                this.setState({ roundLoad: false })
+                let addedRound = this.props.liveScoreMatchState.addEditMatch.roundId
+                this.props.form.setFieldsValue({
+                    'round': addedRound,
+                })
+            }
+        }
     }
 
     ////set initial value for all validated fields
-    setInitalFiledValue(data, start_date, start_time) {
+    setInitalFiledValue(data, start_date, start_time, displayTime) {
         let formated_date = moment(start_date).format("DD-MM-YYYY")
-        console.log(formated_date + " DDD**** " + start_date)
+        let time_formate = moment(displayTime).format("HH:mm");
+        // let time_value = datee.toLocaleTimeString()
+
         this.props.form.setFieldsValue({
             'date': moment(start_date, "DD-MM-YYYY"),
-            'time': start_time,
+            'time': moment(time_formate, "HH:mm"),
             'division': data.division ? data.division.name : "",
             'type': data.type,
             'home': data.team1.name,
             'away': data.team2.name,
-            'round': data.round.name,
+            'round': data.roundId,
             'venue': data.venueCourtId,
             'matchDuration': data.matchDuration,
             'mainBreak': data.type == 'FOUR_QUARTERS' ? data.mainBreakDuration : data.breakDuration,
-            'qtrBreak': data.breakDuration
+            'qtrBreak': data.breakDuration,
+            'addRound': ''
         })
 
     }
@@ -144,13 +158,13 @@ class LiveScoreAddMatch extends Component {
 
 
     onCreateRound = () => {
-        let { addEditMatch } = this.props.liveScoreMatchState
+        let { addEditMatch, start_date, start_time } = this.props.liveScoreMatchState
         let sequence = 1
-        // let competitionId = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
         let divisionID = addEditMatch.division.id
         this.props.liveScoreCreateRoundAction(this.state.createRound, sequence, id, divisionID)
-        this.setState({ visible: false, createRound: '' })
+        // this.setInitalFiledValue(addEditMatch, start_date, start_time)
+        this.setState({ visible: false, createRound: '', roundLoad: true })
     }
 
     ////modal view
@@ -286,7 +300,7 @@ class LiveScoreAddMatch extends Component {
         let { venueData } = this.props.liveScoreMatchState
         const { scorerListResult } = this.props.liveScoreState
 
-        console.log('1234', addEditMatch.competition)
+        console.log('1234', addEditMatch)
 
         return (
             <div className="content-view pt-4">
@@ -323,9 +337,9 @@ class LiveScoreAddMatch extends Component {
                                     style={{ width: "100%" }}
                                     onChange={(time) => this.props.liveScoreUpdateMatchAction(time, 'start_time')}
                                     format={"HH:mm"}
-                                    minuteStep={15}
+                                    // minuteStep={15}
                                     placeholder='Select Time'
-                                    defaultOpenValue={moment("00:00", "HH:mm")}
+                                    // defaultOpenValue={moment("00:00", "HH:mm")}
                                     // value={start_time !== null && moment(start_time, 'HH:mm')}
                                     // value={moment(start_time, 'HH:mm')}
                                     use12Hours={false}
@@ -411,7 +425,7 @@ class LiveScoreAddMatch extends Component {
                                         onChange={(homeTeam) => this.props.liveScoreUpdateMatchAction(homeTeam, "team1id")}
                                         value={addEditMatch.team1Id ? addEditMatch.team1Id : ''}
                                     >
-                                        {liveScoreState.teamResult.length > 0 && liveScoreState.teamResult.map((item) => (
+                                        {isArrayNotEmpty(liveScoreState.teamResult) && liveScoreState.teamResult.map((item) => (
                                             < Option value={item.id} > {item.name}</Option>
                                         ))
                                         }
@@ -432,7 +446,7 @@ class LiveScoreAddMatch extends Component {
                                         style={{ width: "100%", }}
                                         onChange={(awayTeam) => this.props.liveScoreUpdateMatchAction(awayTeam, "team2id")}
                                         value={addEditMatch.team2Id ? addEditMatch.team2Id : ''} >
-                                        {liveScoreState.teamResult.length > 0 && liveScoreState.teamResult.map((item) => (
+                                        {isArrayNotEmpty(liveScoreState.teamResult) && liveScoreState.teamResult.map((item) => (
                                             < Option value={item.id} > {item.name}</Option>
                                         ))
                                         }
@@ -486,7 +500,7 @@ class LiveScoreAddMatch extends Component {
                                         style={{ width: "100%", }}
                                         value={addEditMatch.roundId ? addEditMatch.roundId : ''}
                                     >
-                                        {liveScoreState.roundResult.length > 0 && liveScoreState.roundResult.map((item) => (
+                                        {isArrayNotEmpty(liveScoreState.roundResult) && liveScoreState.roundResult.map((item) => (
                                             < Option value={item.id} > {item.name}</Option>
                                         ))
                                         }

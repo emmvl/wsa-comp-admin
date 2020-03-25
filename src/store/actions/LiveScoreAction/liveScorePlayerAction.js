@@ -32,8 +32,19 @@ function liveScoreAddEditPlayerAction(data, playerId, playerImage, temaViewPlaye
     return action;
 }
 
+function liveScorePlayerImportAction(competitionID, csvFile) {
+    const action = {
+        type: ApiConstants.API_LIVE_SCORE_PLAYER_IMPORT_LOAD,
+        competitionID,
+        csvFile
+
+    }
+    return action
+}
+
 export {
     liveScorePlayerListAction,
     liveScoreAddEditPlayerAction,
-    liveScoreUpdatePlayerDataAction
+    liveScoreUpdatePlayerDataAction,
+    liveScorePlayerImportAction
 };

@@ -78,6 +78,11 @@ const columns = [
         dataIndex: 'published_at',
         key: 'published_at',
         sorter: (a, b) => checkSorting(a, b, 'published_at'),
+        render: published_at =>
+            <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
+                {published_at && liveScore_formateDate(published_at)}
+            </span>,
+
     },
     {
         title: 'Notification',

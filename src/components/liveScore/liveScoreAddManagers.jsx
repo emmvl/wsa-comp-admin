@@ -29,27 +29,20 @@ const { Option } = Select;
 const OPTIONS = [];
 
 class LiveScoreAddManager extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             selectedItems: [],
             load: false,
-            tableRecord: null,
-            isEdit: null,
+            tableRecord: this.props.location.state ? this.props.location.state.tableRecord : null,
+            isEdit: this.props.location.state ? this.props.location.state.isEdit : null,
             loader: false,
             showOption: false,
         }
 
-        console.log("colled ****")
     }
 
     componentDidMount() {
-
-        this.setState({
-            tableRecord: this.props.location.state ? this.props.location.state.tableRecord : null,
-            isEdit: this.props.location.state ? this.props.location.state.isEdit : null,
-        })
-
         this.props.liveScoreManagerListAction(3, 1, 1)
         // let competitionID = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
@@ -75,13 +68,16 @@ class LiveScoreAddManager extends Component {
 
             if (this.state.load == true && this.props.liveScoreMangerState.onLoad == false) {
                 this.filterManagerList()
-                this.setState({ load: false })
+                if (this.state.isEdit == true) {
+                    this.setInitalFiledValue()
+                }
+                this.setState({ load: false, loader: false })
             }
-
-            if (this.state.loader == true && this.props.liveScoreMangerState.onLoad == false) {
-                this.setInitalFiledValue()
-                this.setState({ loader: false })
-            }
+            // if (this.state.loader == true && this.props.liveScoreMangerState.onLoad == false) {
+            //     alert('g')
+            //     this.setInitalFiledValue()
+            //     this.setState({ loader: false })
+            // }
 
         }
 
@@ -91,8 +87,15 @@ class LiveScoreAddManager extends Component {
 
     setInitalFiledValue() {
         const { managerData, teamId } = this.props.liveScoreMangerState
-        // console.log('manager', managerData)
+        let data = this.state.tableRecord
+        console.log(managerData, 'tableRecord&**', data)
         this.props.form.setFieldsValue({
+            // 'First Name': managerData.firstName,
+            // 'Last Name': managerData.lastName,
+            // 'Email Address': managerData.email,
+            // 'Contact no': managerData.mobileNumber,
+            // 'Select Team': teamId
+
             'First Name': managerData.firstName,
             'Last Name': managerData.lastName,
             'Email Address': managerData.email,
@@ -330,6 +333,7 @@ class LiveScoreAddManager extends Component {
                                     placeholder={AppConstants.enterEmail}
                                     onChange={(email) => this.props.liveScoreUpdateManagerDataAction(email.target.value, 'email')}
                                     value={managerData.email}
+                                    disabled={this.state.isEdit == true && true}
                                 />
                             )}
                         </Form.Item>
@@ -363,7 +367,7 @@ class LiveScoreAddManager extends Component {
                             })(
                                 <Select
                                     // loading={this.props.liveScoreState.onLoad == true && true}
-                                    // mode="multiple"
+                                    mode="multiple"
                                     placeholder={AppConstants.selectTeam}
                                     style={{ width: "100%", }}
                                     onChange={(teamId) => this.props.liveScoreUpdateManagerDataAction(teamId, 'teamId')}
@@ -392,7 +396,7 @@ class LiveScoreAddManager extends Component {
         const { managerRadioBtn } = this.props.liveScoreMangerState
         return (
             <div className="content-view pb-0 pt-4 row">
-                <span className="applicable-to-heading ml-4">{AppConstants.manager}</span>
+                <span className="applicable-to-heading ml-4">{AppConstants.managerHeading}</span>
                 <Radio.Group
                     className="reg-competition-radio"
                     onChange={(e) => this.onButtonChage(e)}
@@ -415,7 +419,7 @@ class LiveScoreAddManager extends Component {
         return (
             <div >
 
-                {/* {this.radioBtnContainer()} */}
+                {this.radioBtnContainer()}
                 {managerRadioBtn == 'new' ?
                     this.managerNewRadioBtnView(getFieldDecorator) :
                     this.managerExistingRadioButton(getFieldDecorator)}

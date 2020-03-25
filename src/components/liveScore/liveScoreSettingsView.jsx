@@ -193,9 +193,9 @@ class LiveScoreSettingsView extends Component {
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
+            console.log(this.props.location.state)
 
             if (!err) {
-                console.log('reducer', this.props.liveScoreSetting.form)
                 const arrayOfVenue = this.props.liveScoreSetting.form.allVenue.map(data => data.id)
                 const {
                     id,
@@ -230,12 +230,10 @@ class LiveScoreSettingsView extends Component {
                 formData.append('attendanceRecordingPeriod', attendanceRecordingPeriod)
                 formData.append('scoringType', scoring)
                 formData.append('timerType', timerType)
-                console.log('new', ...formData)
-                console.log('reducer', this.props.liveScoreSetting.form)
-                this.props.settingDataPostInititae({ body: formData, venue: venue })
-                this.props.clearLiveScoreSetting()
-                this.props.history.push('/liveScoreCompetitions')
-                this.props.clearLiveScoreSetting()
+                this.props.settingDataPostInititae({ body: formData, venue: venue, settingView: this.props.location.state })
+                // this.props.clearLiveScoreSetting()
+                // this.props.history.push('/liveScoreCompetitions')
+                // this.props.clearLiveScoreSetting()
             }
         });
     };
@@ -271,7 +269,7 @@ class LiveScoreSettingsView extends Component {
         const applyTo1 = [{ label: 'Record Umpire', value: "recordUmpire" }, { label: ' Game Time Tracking', value: "gameTimeTracking" }, { label: 'Position Tracking', value: "positionTracking" }];
         const applyTo2 = [{ label: 'Record Goal Attempts', value: "recordGoalAttempts" }, { label: 'Centre Pass Enabled', value: "centrePassEnabled" }, { label: 'Incidents Enabled', value: "incidentsEnabled" }];
 
-        return !loader ? (
+        return (
             <div className="content-view pt-4">
                 <Form.Item>
                     {getFieldDecorator('competition_name', {
@@ -489,7 +487,7 @@ class LiveScoreSettingsView extends Component {
                     </div>
                 </div> */}
             </div>
-        ) : <Loader visible={true} />;
+        )
     };
 
 
@@ -509,7 +507,7 @@ class LiveScoreSettingsView extends Component {
                                 {/* <Button className="save-draft-text" type="save-draft-text">
                                     {AppConstants.saveAsDraft}
                                 </Button> */}
-                                <Button onClick={this.handleSubmit} className="publish-button" type="primary">
+                                <Button onClick={this.handleSubmit} htmlType='submit' className="publish-button" type="primary">
                                     {this.state.competitionTabKey == 6 ? AppConstants.publish : AppConstants.save}
                                 </Button>
                             </div>
@@ -522,7 +520,10 @@ class LiveScoreSettingsView extends Component {
     };
 
 
+
+
     render() {
+        console.log(this.props.liveScoreSetting)
         const { getFieldDecorator } = this.props.form
         let local_Id = getLiveScoreCompetiton()
         return (
@@ -531,10 +532,12 @@ class LiveScoreSettingsView extends Component {
                 {local_Id &&
                     <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"18"} />
                 }
+                <Loader visible={this.props.liveScoreSetting.loader} />
                 <Layout>
                     {this.headerView()}
                     {/* <Content> */}
                     <Form onSubmit={this.handleSubmit} className="login-form">
+                        {/* <Form onSubmit={this.checkSubmit} noValidate="novalidate" className="login-form"> */}
                         <div className="formView">{this.contentView(getFieldDecorator)}</div>
                     </Form>
 
@@ -546,7 +549,7 @@ class LiveScoreSettingsView extends Component {
 }
 function mapStatetoProps(state) {
     return {
-        liveScoreSetting: state.liveScoreSetting,
+        liveScoreSetting: state.LiveScoreSetting,
         venueList: state.LiveScoreMatchState
     }
 }

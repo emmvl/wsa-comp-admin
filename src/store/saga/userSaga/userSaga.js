@@ -320,3 +320,75 @@ export function* getUserModuleRegistrationDataSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+/* Get the User Module Activity Player */
+export function* getUserModuleActivityPlayerSaga(action) {
+    try {
+        const result = yield call(userHttpApi.getUserModuleActivityPlayer, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_USER_MODULE_ACTIVITY_PLAYER_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+/* Get the User Module Activity Parent */
+export function* getUserModuleActivityParentSaga(action) {
+    try {
+        const result = yield call(userHttpApi.getUserModuleActivityParent, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_USER_MODULE_ACTIVITY_PARENT_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+/* Get the User Module Activity Scorer */
+export function* getUserModuleActivityScorerSaga(action) {
+    try {
+        const result = yield call(userHttpApi.getUserModuleActivityScorer, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_USER_MODULE_ACTIVITY_SCORER_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+/* Get the User Module Activity Manager */
+export function* getUserModuleActivityManagerSaga(action) {
+    try {
+        const result = yield call(userHttpApi.getUserModuleActivityManager, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_USER_MODULE_ACTIVITY_MANAGER_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

@@ -469,3 +469,65 @@ export function* getOnlyYearAndCompetitionListSaga(action) {
     });
   }
 }
+
+
+////get the OWN competition and  year list reference
+export function* getOwnYearAndCompetitionListSaga(action) {
+  console.log(action, 'YearSaga')
+  try {
+    const result = isArrayNotEmpty(action.yearData) ? { status: 1, result: { data: action.yearData } } : yield call(CommonAxiosApi.getYearList, action);
+    if (result.status === 1) {
+      let yearId = action.yearId == null ? result.result.data[0].id : action.yearId
+      const resultCompetition = yield call(RegistrationAxiosApi.getOwnCompetitionList, yearId);
+      if (resultCompetition.status === 1) {
+        yield put({
+          type: ApiConstants.API_GET_YEAR_OWN_COMPETITION_SUCCESS,
+          yearList: result.result.data,
+          competetionListResult: resultCompetition.result.data,
+          status: result.status,
+        });
+      }
+    } else {
+      yield put({ type: ApiConstants.API_APP_FAIL });
+      setTimeout(() => {
+        alert(result.data.message);
+      }, 800);
+    }
+  } catch (error) {
+    yield put({
+      type: ApiConstants.API_APP_ERROR,
+      error: error,
+      status: error.status
+    });
+  }
+}
+
+////get the participate competition and  year list reference
+export function* getParticipateYearAndCompetitionListSaga(action) {
+  try {
+    const result = isArrayNotEmpty(action.yearData) ? { status: 1, result: { data: action.yearData } } : yield call(CommonAxiosApi.getYearList, action);
+    if (result.status === 1) {
+      let yearId = action.yearId == null ? result.result.data[0].id : action.yearId
+      const resultCompetition = yield call(RegistrationAxiosApi.getParticipateCompetitionList, yearId);
+      if (resultCompetition.status === 1) {
+        yield put({
+          type: ApiConstants.API_GET_YEAR_Participate_COMPETITION_SUCCESS,
+          yearList: result.result.data,
+          competetionListResult: resultCompetition.result.data,
+          status: result.status,
+        });
+      }
+    } else {
+      yield put({ type: ApiConstants.API_APP_FAIL });
+      setTimeout(() => {
+        alert(result.data.message);
+      }, 800);
+    }
+  } catch (error) {
+    yield put({
+      type: ApiConstants.API_APP_ERROR,
+      error: error,
+      status: error.status
+    });
+  }
+}

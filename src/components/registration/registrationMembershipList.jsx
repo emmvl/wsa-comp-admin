@@ -14,6 +14,8 @@ import {
 } from "../../store/actions/registrationAction/registration";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { routePermissionForOrgLevel } from "../../util/permissions";
+import { currencyFormat } from "../../util/currencyFormat";
+
 
 const { confirm } = Modal;
 const { Content } = Layout;
@@ -58,10 +60,9 @@ const columns = [
         render: (seasonalFee, record) => {
             let fee = (JSON.parse(seasonalFee) + JSON.parse(record.seasonalGst))
             return (
-                <span>{fee.toFixed(2)}</span>
+                <span style={{ float: "right" }}>{currencyFormat(fee)}</span>
             )
         },
-        // sorter: (a, b) => isNullOrEmptyString(a) && a.seasonalFee.length - isNullOrEmptyString(b) && b.seasonalFee.length,
         sorter: (a, b) => tableSort(a, b, "seasonalFee")
     },
     {
@@ -71,7 +72,7 @@ const columns = [
         render: (casualFee, record) => {
             let fee = (JSON.parse(casualFee) + JSON.parse(record.casualGst))
             return (
-                <span>{fee.toFixed(2)}</span>
+                <span style={{ float: "right" }}>{currencyFormat(fee)}</span>
             )
         },
         sorter: (a, b) => tableSort(a, b, "casualFee")
@@ -188,7 +189,7 @@ class RegistrationMembershipList extends Component {
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width" >
-                    <div className="row" >
+                    <div className="row">
                         <div className="col-sm-2" >
                             <div className="com-year-select-heading-view" >
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
@@ -207,7 +208,7 @@ class RegistrationMembershipList extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm d-flex justify-content-end"
+                        <div className="col-sm d-flex justify-content-end" style={{ display: 'flex', alignItems: 'center' }}
                             onClick={() => this.props.clearReducerDataAction("getMembershipProductDetails")}>
                             <NavLink to={{ pathname: `/registrationMembershipFee`, state: { id: null } }}
                                 className="text-decoration-none">

@@ -33,7 +33,9 @@ import {
   getMatchTypesSaga,
   getCompetitionTypesSaga,
   getCompetitionFormatTypesSaga,
-  getOnlyYearAndCompetitionListSaga
+  getOnlyYearAndCompetitionListSaga,
+  getParticipateYearAndCompetitionListSaga,
+  getOwnYearAndCompetitionListSaga,
 } from "./appSaga";
 
 import {
@@ -81,7 +83,7 @@ import { liveScoreScorerListSaga, liveScorerSearchUserSaga } from '../saga/liveS
 import { liveScoreBulkPushBack, liveScoreBulkBringForwardSaga, liveScoreMatchResult, liveScoreEndMatchesSaga, liveScoreDoubleHeaderSaga, liveScoreAbandonMatchSaga } from './liveScoreSaga/liveScoreBulkMatchSaga';
 
 
-import { liveScorePlayerSaga, liveScoreAddEditPlayerSaga } from "./liveScoreSaga/liveScorePlayerSaga";
+import { liveScorePlayerSaga, liveScoreAddEditPlayerSaga, liveScorePlayerImportSaga } from "./liveScoreSaga/liveScorePlayerSaga";
 import { liveScoreDashboardSaga } from './liveScoreSaga/liveScoreDashboardSaga';
 import { liveScoreCompetitionSaga, liveScoreCompetitionDelete } from './liveScoreSaga/liveScoreCompetionSaga'
 import { liveScoreDivisionsaga, liveScoreDeleteDivisionSaga, liveScoreCreateDivisionsaga, liveScoreDivisionImportSaga } from './liveScoreSaga/liveScoreDivisionSaga';
@@ -475,6 +477,7 @@ export default function* root_saga() {
   //UserModule Registration
   yield takeEvery(ApiConstants.API_USER_MODULE_REGISTRATION_LOAD, userSaga.getUserModuleRegistrationDataSaga)
 
+
   // User Module Medical Info
   yield takeEvery(ApiConstants.API_USER_MODULE_MEDICAL_INFO_LOAD, userSaga.getUserModuleMedicalInfoSaga)
 
@@ -490,5 +493,26 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_LIVE_SCORE_GET_TEAM_LOAD, liveScoreGetTeamSaga)
 
   yield takeEvery(ApiConstants.API_GENERATE_DRAW_LOAD, competitonGenerateDrawSaga);
+
+  ////Year and  OWN Competition
+  yield takeEvery(ApiConstants.API_GET_YEAR_OWN_COMPETITION_LOAD, getOwnYearAndCompetitionListSaga)
+
+  ////Year and Participate Competition
+  yield takeEvery(ApiConstants.API_GET_YEAR_Participate_COMPETITION_LOAD, getParticipateYearAndCompetitionListSaga)
+  // User Module Activity Player
+  yield takeEvery(ApiConstants.API_USER_MODULE_ACTIVITY_PLAYER_LOAD, userSaga.getUserModuleActivityPlayerSaga)
+
+  // User Module Activity Parent
+  yield takeEvery(ApiConstants.API_USER_MODULE_ACTIVITY_PARENT_LOAD, userSaga.getUserModuleActivityParentSaga)
+
+  // User Module Activity Scorer
+  yield takeEvery(ApiConstants.API_USER_MODULE_ACTIVITY_SCORER_LOAD, userSaga.getUserModuleActivityScorerSaga)
+
+  // User Module Activity Manager
+  yield takeEvery(ApiConstants.API_USER_MODULE_ACTIVITY_MANAGER_LOAD, userSaga.getUserModuleActivityManagerSaga)
+
+  ////Import Player Saga
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_IMPORT_LOAD, liveScorePlayerImportSaga)
+
 
 }

@@ -59,6 +59,7 @@ function ownTeamGradingSummaryFunction(ownTeamGradingSummaryData, sortOrderArray
                     gradeName: checkGradesArray.result.gradeName,
                     teamCount: checkGradesArray.result.teamCount,
                     sortOrder: checkGradesArray.result.sortOrder,
+                    gradeRefId: checkGradesArray.result.gradeRefId,
                 }
             } else {
                 defaultObj = {
@@ -123,6 +124,14 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
 
         case ApiConstants.API_GET_COMPETITION_OWN_PROPOSED_TEAM_GRADING_LIST_SUCCESS:
             let finalTeamGradingData = action.result
+            let teamGradingData = isArrayNotEmpty(finalTeamGradingData.teamGradings) ? finalTeamGradingData.teamGradings : [];
+            let registrationInvitees = isArrayNotEmpty(finalTeamGradingData.registrationInvitees) ? finalTeamGradingData.registrationInvitees : [];
+            if(isArrayNotEmpty(teamGradingData))
+            {
+                teamGradingData.map((item, index) => {
+                    item["isDirectRegistration"] = registrationInvitees.length > 0 ? 1: 0;
+                });
+            }
             return {
                 ...state,
                 getCompOwnProposedTeamGradingData: isArrayNotEmpty(finalTeamGradingData.teamGradings) ? finalTeamGradingData.teamGradings : [],
@@ -133,11 +142,18 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
 
         ////////competition own final team grading data on Change table 
         case ApiConstants.ONCHANGE_COMPETITION_OWN_PROPOSED_TEAM_GRADING_DATA:
-            let finalGradingOnChangeData = JSON.parse(JSON.stringify(state.getCompOwnProposedTeamGradingData))
+            let finalGradingOnChangeData = JSON.parse(JSON.stringify(state.getCompOwnProposedTeamGradingData));
+            let finalGrades =  state.compFinalTeamGradingFinalGradesData;
+            //console.log("finalGrades::" + JSON.stringify(finalGrades));
+          //  console.log("Index" + action.index + "Value" + action.value);
+            let obj = finalGrades.find(x=>x.gradeRefId == action.value);
+            finalGradingOnChangeData[action.index][action.key] = action.value
             if (action.key == "finalGradeId") {
-                finalGradingOnChangeData[action.index]["finalGradeId"] = action.value
+                finalGradingOnChangeData[action.index]["finalGradeName"] = obj.name;
+               
             }
             state.getCompOwnProposedTeamGradingData = finalGradingOnChangeData
+            
             return {
                 ...state,
                 onLoad: false,

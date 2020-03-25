@@ -68,8 +68,9 @@ class LiveScoreManagerView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: props.location.state.tableRecord
+            data: props.location.state ? props.location.state.tableRecord : null
         }
+        console.log(this.state.data, 'dataManager')
     }
 
     ////view for profile image

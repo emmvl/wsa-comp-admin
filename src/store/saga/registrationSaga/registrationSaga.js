@@ -4,6 +4,7 @@ import AxiosApi from "../../http/registrationHttp/registrationAxios";
 import { message } from "antd";
 
 function* failSaga(result) {
+
   yield put({
     type: ApiConstants.API_REGISTRATION_FAIL,
     error: result,
@@ -15,6 +16,7 @@ function* failSaga(result) {
 }
 
 function* errorSaga(error) {
+  console.log(error)
   yield put({
     type: ApiConstants.API_REGISTRATION_ERROR,
     error: error,
@@ -121,12 +123,12 @@ export function* getRegistrationFormSaga(action) {
         AxiosApi.getMembershipProductList,
         action.competitionId
       );
-
+      console.log(resultMembershipProduct)
       yield put({
         type: ApiConstants.API_GET_REG_FORM_SUCCESS,
         result: result.result.data,
         MembershipProductList:
-          resultMembershipProduct.status === 1
+          resultMembershipProduct.result.status == 200
             ? resultMembershipProduct.result.data
             : [],
         status: result.status

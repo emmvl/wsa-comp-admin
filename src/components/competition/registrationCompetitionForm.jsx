@@ -62,7 +62,7 @@ import ValidationConstants from "../../themes/validationConstant";
 import { NavLink } from "react-router-dom";
 import Loader from '../../customComponents/loader';
 import { venueListAction, getCommonRefData, searchVenueList, clearFilter } from '../../store/actions/commonAction/commonAction'
-
+import { getUserId, getOrganisationData } from "../../util/sessionStorage"
 
 
 const { Header, Footer, Content } = Layout;
@@ -178,7 +178,31 @@ const playerSeasoTable = [
         )
     },
     {
-        title: "Competition fees",
+        title: "Membership Fees (excl. GST)",
+        dataIndex: "membershipSeasonal",
+        key: "membershipSeasonal",
+        render: (membershipSeasonal, record) => (
+            <Input
+                className="input-inside-table-fees"
+                disabled={true}
+                value={membershipSeasonal}
+            />
+        )
+    },
+    {
+        title: "Membership GST",
+        dataIndex: "membershipGst",
+        key: "membershipGst",
+        render: (membershipGst, record) => (
+            <Input
+                className="input-inside-table-fees"
+                disabled={true}
+                value={membershipGst}
+            />
+        )
+    },
+    {
+        title: "Competition Fees (excl. GST)",
         dataIndex: "fee",
         key: "fee",
         render: (fee, record, index) => (
@@ -231,7 +255,31 @@ const playercasualTable = [
         )
     },
     {
-        title: "Competition fees",
+        title: "Membership Fees (excl. GST)",
+        dataIndex: "membershipCasual",
+        key: "membershipCasual",
+        render: (membershipCasual, record) => (
+            <Input
+                className="input-inside-table-fees"
+                disabled={true}
+                value={membershipCasual}
+            />
+        )
+    },
+    {
+        title: "Membership GST",
+        dataIndex: "membershipGst",
+        key: "membershipGst",
+        render: (membershipGst, record) => (
+            <Input
+                className="input-inside-table-fees"
+                disabled={true}
+                value={membershipGst}
+            />
+        )
+    },
+    {
+        title: "Competition Fees (excl. GST)",
         dataIndex: "fee",
         key: "fee",
         render: (fee, record, index) => (
@@ -290,6 +338,7 @@ class RegistrationCompetitionForm extends Component {
             logoUrl: "",
             isSetDefaul: false,
             competitionIsUsed: false,
+            organisationTypeRefId: 0
         };
         this_Obj = this;
         this.props.clearCompReducerDataAction("all")
@@ -297,12 +346,14 @@ class RegistrationCompetitionForm extends Component {
     }
     componentDidUpdate(nextProps) {
         let competitionFeesState = this.props.competitionFeesState
+        let competitionId = null
+        competitionId = this.props.location.state ? this.props.location.state.id : null
         if (competitionFeesState.onLoad === false && this.state.loading === true) {
+            this.setState({ loading: false })
             if (!competitionFeesState.error) {
-                this.setState({ loading: false })
                 this.setState({
-                    // loading: false,
-                    competitionTabKey: JSON.stringify(JSON.parse(this.state.competitionTabKey) + 1),
+                    competitionTabKey: competitionId == null ? JSON.stringify(JSON.parse(this.state.competitionTabKey) + 1) :
+                        JSON.stringify(JSON.parse(this.state.competitionTabKey) + 2),
                     logoSetDefault: false,
                     image: null
                 })
@@ -326,9 +377,12 @@ class RegistrationCompetitionForm extends Component {
 
 
     componentDidMount() {
+        let orgData = getOrganisationData()
+        this.setState({ organisationTypeRefId: orgData.organisationTypeRefId })
         let competitionId = null
         competitionId = this.props.location.state ? this.props.location.state.id : null
         this.apiCalls(competitionId)
+        this.setDetailsFieldValue()
     }
 
     ////alll the api calls
@@ -342,7 +396,6 @@ class RegistrationCompetitionForm extends Component {
         this.props.getCommonDiscountTypeTypeAction()
         this.props.getVenuesTypeAction();
         this.props.venueListAction();
-        console.log("competitionId !== null", competitionId !== null)
         if (competitionId !== null) {
             this.props.getAllCompetitionFeesDeatilsAction(competitionId)
             this.setState({ getDataLoading: true })
@@ -407,7 +460,9 @@ class RegistrationCompetitionForm extends Component {
         this.props.form.setFieldsValue({
             competition_name: compFeesState.competitionDetailData.competitionName,
             numberOfRounds: compFeesState.competitionDetailData.noOfRounds,
-            yearRefId: compFeesState.competitionDetailData.yearRefId
+            yearRefId: compFeesState.competitionDetailData.yearRefId,
+            competitionTypeRefId: compFeesState.competitionDetailData.competitionTypeRefId,
+            competitionFormatRefId: compFeesState.competitionDetailData.competitionFormatRefId,
         })
         let data = this.props.competitionFeesState.competionDiscountValue
         let discountData = data && data.competitionDiscounts !== null ? data.competitionDiscounts[0].discounts : []
@@ -423,12 +478,120 @@ class RegistrationCompetitionForm extends Component {
 
 
 
+    saveCompFeesApiCall = (e) => {
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                let compFeesState = this.props.competitionFeesState
+                let competitionId = compFeesState.competitionId
+                let finalPostData = []
+                let fee_data = compFeesState.competitionFeesData
+                let feeSeasonalData = []
+                let feeCasualData = []
+                let finalpostarray = []
+                for (let i in fee_data) {
+                    if (fee_data[i].isSeasonal == true && fee_data[i].isCasual == true) {
+                        if (fee_data[i].isAllType == "allDivisions") {
+                            feeSeasonalData = fee_data[i].seasonal.allType
+                            feeCasualData = fee_data[i].casual.allType
+                            for (let j in feeSeasonalData) {
+                                for (let k in feeCasualData) {
+
+                                    if (feeSeasonalData[j].competitionMembershipProductTypeId == feeCasualData[k].competitionMembershipProductTypeId) {
+                                        feeSeasonalData[j]["casualFees"] = feeCasualData[k].fee
+                                        feeSeasonalData[j]["casualGST"] = feeCasualData[k].gst
+                                        feeSeasonalData[j]["seasonalFees"] = feeSeasonalData[j].fee
+                                        feeSeasonalData[j]["seasonalGST"] = feeSeasonalData[j].gst
+                                        feeSeasonalData[j]["affiliateCasualFees"] = feeCasualData[k].affiliateFee
+                                        feeSeasonalData[j]["affiliateCasualGST"] = feeCasualData[k].affiliateGst
+                                        feeSeasonalData[j]["affiliateSeasonalFees"] = feeSeasonalData[j].affiliateFee
+                                        feeSeasonalData[j]["affiliateSeasonalGST"] = feeSeasonalData[j].affiliateGst
+                                        break;
+                                    }
+                                }
+                            }
+                            finalPostData = [...feeSeasonalData]
+                            console.log(finalPostData)
+                        } else {
+                            feeSeasonalData = fee_data[i].seasonal.perType
+                            feeCasualData = fee_data[i].casual.perType
+                            console.log("feeSeasonalData", feeSeasonalData, "feeCasualData", feeCasualData)
+                            for (let j in feeSeasonalData) {
+                                for (let k in feeCasualData) {
+
+                                    if (feeSeasonalData[j].competitionMembershipProductTypeId == feeCasualData[k].competitionMembershipProductTypeId) {
+                                        feeSeasonalData[j]["casualFees"] = feeCasualData[j].fee
+                                        feeSeasonalData[j]["casualGST"] = feeCasualData[j].gst
+                                        feeSeasonalData[j]["seasonalFees"] = feeSeasonalData[j].fee
+                                        feeSeasonalData[j]["seasonalGST"] = feeSeasonalData[j].gst
+                                        feeSeasonalData[j]["affiliateCasualFees"] = feeCasualData[j].affiliateFee
+                                        feeSeasonalData[j]["affiliateCasualGST"] = feeCasualData[j].affiliateGst
+                                        feeSeasonalData[j]["affiliateSeasonalFees"] = feeSeasonalData[j].affiliateFee
+                                        feeSeasonalData[j]["affiliateSeasonalGST"] = feeSeasonalData[j].affiliateGst
+                                        break;
+                                    }
+                                }
+                            }
+                            finalPostData = [...feeSeasonalData]
+                        }
+                    }
+
+
+                    else if (fee_data[i].isSeasonal == true && fee_data[i].isCasual == false) {
+
+                        if (fee_data[i].isAllType == "allDivisions") {
+                            feeSeasonalData = fee_data[i].seasonal.allType
+                            finalPostData = [...feeSeasonalData]
+                        } else {
+                            feeSeasonalData = fee_data[i].seasonal.perType
+                            finalPostData = [...feeSeasonalData]
+                        }
+
+                        finalPostData.map((item) => {
+                            item["seasonalFees"] = (item.fee)
+                            item["seasonalGST"] = (item.gst)
+                            item["affiliateSeasonalFees"] = (item.affiliateFee)
+                            item["affiliateSeasonalGST"] = (item.affiliateGst)
+                        })
+                    }
+
+                    else if (fee_data[i].isSeasonal == false && fee_data[i].isCasual == true) {
+
+                        if (fee_data[i].isAllType == "allDivisions") {
+                            feeCasualData = fee_data[i].casual.allType
+                            finalPostData = [...feeCasualData]
+                        } else {
+                            feeCasualData = fee_data[i].casual.perType
+                            finalPostData = [...feeCasualData]
+                        }
+
+                        finalPostData.map((item) => {
+                            item["casualFees"] = (item.fee)
+                            item["casualGST"] = (item.gst)
+                            item["affiliateCasualFees"] = (item.affiliateFee)
+                            item["affiliateCasualGST"] = (item.affiliateGst)
+                        })
+                    }
+                    else {
+                        // alert("check fees")
+                    }
+                    let modifyArr = [...finalpostarray, ...finalPostData]
+                    finalpostarray = modifyArr
+                }
+                this.props.saveCompetitionFeeSection(finalpostarray, competitionId)
+                this.setState({ loading: true })
+            }
+        })
+    }
+
+
+
     saveAPIsActionCall = (e) => {
         e.preventDefault();
         let tabKey = this.state.competitionTabKey
         let compFeesState = this.props.competitionFeesState
         let competitionId = compFeesState.competitionId
         let postData = compFeesState.competitionDetailData
+        console.log("postData", postData)
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 let nonPlayingDate = JSON.stringify(postData.nonPlayingDates)
@@ -456,26 +619,26 @@ class RegistrationCompetitionForm extends Component {
                         formData.append("nonPlayingDates", nonPlayingDate);
                         formData.append("invitees", invitees);
                         formData.append("logoSetAsDefault", this.state.logoSetDefault)
-
+                        if (this.state.logoSetDefault) {
+                            formData.append("organisationLogoId", compFeesState.defaultCompFeesOrgLogoData.id)
+                        }
                         if (postData.logoIsDefault == true) {
-                            formData.append("competitionLogoId", compFeesState.defaultCompFeesOrgLogoData.id);
+                            formData.append("competitionLogoId", postData.competitionLogoId ? postData.competitionLogoId : 0);
                             formData.append("logoFileUrl", compFeesState.defaultCompFeesOrgLogo);
                             formData.append("competition_logo", compFeesState.defaultCompFeesOrgLogo)
                         }
                         else {
                             if (this.state.image !== null) {
                                 formData.append("competition_logo", this.state.image)
-                                formData.append("competitionLogoId", 0);
+                                formData.append("competitionLogoId", postData.competitionLogoId ? postData.competitionLogoId : 0);
                             } else {
-                                formData.append("competitionLogoId", compFeesState.defaultCompFeesOrgLogoData.id);
+                                formData.append("competitionLogoId", postData.competitionLogoId ? postData.competitionLogoId : 0);
                                 formData.append("logoFileUrl", compFeesState.defaultCompFeesOrgLogo);
                                 formData.append("competition_logo", compFeesState.defaultCompFeesOrgLogo)
                             }
-
                         }
-
-                        formData.append("logoIsDefault", postData.logoIsDefault);
-                        this.props.saveCompetitionFeesDetailsAction(formData)
+                        formData.append("logoIsDefault", postData.logoIsDefault)
+                        this.props.saveCompetitionFeesDetailsAction(formData, compFeesState.defaultCompFeesOrgLogoData.id)
                         this.setState({ loading: true })
                     } else {
                         message.error(ValidationConstants.competitionLogoIsRequired)
@@ -516,26 +679,7 @@ class RegistrationCompetitionForm extends Component {
                     this.setState({ loading: true })
                 }
                 else if (tabKey == "4") {
-                    let finalPostData = []
-                    let fee_data = compFeesState.competitionFeesData
-                    let feeSeasonalData = []
-                    let feeCasualData = []
-                    let finalpostarray = []
-                    for (let i in fee_data) {
-                        if (fee_data[i].isAllType == "allDivisions") {
-                            feeSeasonalData = fee_data[i].seasonal.allType
-                            feeCasualData = fee_data[i].casual.allType
-                            finalPostData = [...feeSeasonalData, ...feeCasualData]
-                        } else {
-                            feeSeasonalData = fee_data[i].seasonal.perType
-                            feeCasualData = fee_data[i].casual.perType
-                            finalPostData = [...feeSeasonalData, ...feeCasualData]
-                        }
-                        let modifyArr = [...finalpostarray, ...finalPostData]
-                        finalpostarray = modifyArr
-                    }
-                    this.props.saveCompetitionFeeSection(finalpostarray, competitionId)
-                    this.setState({ loading: true })
+                    this.saveCompFeesApiCall(e)
                 }
                 else if (tabKey == "5") {
                     this.paymentApiCall(competitionId)
@@ -585,6 +729,19 @@ class RegistrationCompetitionForm extends Component {
         return <span>{item.description}</span>;
     };
 
+    disableInviteeNode = (inItem) => {
+        let orgLevelId = JSON.stringify(this.state.organisationTypeRefId)
+        if (inItem.id == "2" && orgLevelId == "3") {
+            return true
+        }
+        else if (orgLevelId == "4") {
+            return true
+        }
+        else {
+            return false
+        }
+    }
+
     showSubAdvancedNode(item, catIndex) {
         const { TreeNode } = Tree;
         return item.subReferences.map((inItem, scatIndex) => {
@@ -592,6 +749,7 @@ class RegistrationCompetitionForm extends Component {
                 <TreeNode
                     title={this.makeSubAdvancedNode(inItem)}
                     key={inItem.id}
+                    disabled={this.disableInviteeNode(inItem)}
                 ></TreeNode>
             );
         });
@@ -844,8 +1002,34 @@ class RegistrationCompetitionForm extends Component {
 
     //// On change Invitees
     onInviteesChange(value) {
-        this.props.add_editcompetitionFeeDeatils(value, "invitees")
+        let regInviteesselectedData = this.props.competitionFeesState.selectedInvitees
+        let upcomingData = [...value]
+        let associationIndex = regInviteesselectedData.findIndex(x => x == "2")
+        if (associationIndex > -1) {
+            let index = upcomingData.findIndex(x => x == "2")
+            if (index > -1) {
+                upcomingData.splice(index, 1)
+            }
+            let mainIndex = upcomingData.findIndex(x => x == "1")
+            if (mainIndex > -1) {
+                upcomingData.splice(mainIndex, 1)
+            }
+
+        }
+        let clubIndex = regInviteesselectedData.findIndex(x => x == "3")
+        if (clubIndex > -1) {
+            let index = upcomingData.findIndex(x => x == "3")
+            if (index > -1) {
+                upcomingData.splice(index, 1)
+            }
+            let mainIndex = upcomingData.findIndex(x => x == "1")
+            if (mainIndex > -1) {
+                upcomingData.splice(mainIndex, 1)
+            }
+        }
+        this.props.add_editcompetitionFeeDeatils(upcomingData, "invitees")
     }
+
     /////on change logo isdefault
     logoIsDefaultOnchange = (value, key) => {
         this.props.add_editcompetitionFeeDeatils(value, key)
@@ -982,7 +1166,7 @@ class RegistrationCompetitionForm extends Component {
                         })}
 
                     </Select> */}
-
+                    <InputWithHead required={"required-field pb-0 "} heading={AppConstants.venue} />
                     <Select
                         mode="multiple"
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
@@ -991,6 +1175,7 @@ class RegistrationCompetitionForm extends Component {
                             this.props.clearFilter()
                         }}
                         // value={selectedVenueId}
+                        value={detailsData.selectedVenues}
                         placeholder={'Select Venue'}
                         filterOption={false}
                         onSearch={(value) => { this.handleSearch(value, venueList) }}
@@ -1249,7 +1434,7 @@ class RegistrationCompetitionForm extends Component {
         let divisionArray = divisionData !== null ? divisionData : []
         return (
             <div className="fees-view pt-5">
-                <span className="form-heading">{AppConstants.divisions}</span>
+                <span className="form-heading required-field">{AppConstants.divisions}</span>
                 {divisionArray.length == 0 && (
                     <span className="applicable-to-heading pt-0">
                         {AppConstants.please_Sel_mem_pro}
@@ -1406,7 +1591,7 @@ class RegistrationCompetitionForm extends Component {
                         className="tree-government-rebate"
                         style={{ flexDirection: 'column' }}
                         checkable
-                        checkedKeys={detailsData.selectedInvitees}
+                        checkedKeys={[...detailsData.selectedInvitees]}
                         onCheck={(e) => this.onInviteesChange(e)}
 
                     >
@@ -1589,6 +1774,8 @@ class RegistrationCompetitionForm extends Component {
                                 placeholder={AppConstants.percentageOff_FixedAmount}
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                 value={item.amount}
+                                suffix={item.discountTypeRefId == "2" ? "%" : null}
+                                type="number"
                             />
                         </div>
                         <div className="col-sm">
@@ -1662,6 +1849,8 @@ class RegistrationCompetitionForm extends Component {
                                 placeholder={AppConstants.percentageOff_FixedAmount}
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                 value={item.amount}
+                                suffix={item.discountTypeRefId == "2" ? "%" : null}
+                                type="number"
                             />
                         </div>
                         <div className="col-sm">
@@ -2088,6 +2277,41 @@ class RegistrationCompetitionForm extends Component {
 
     };
 
+    //////footer view containing all the buttons like submit and cancel
+    editFooterView = () => {
+        let tabKey = this.state.competitionTabKey
+        let competitionId = this.props.competitionFeesState.competitionId
+        return (
+            <div className="fluid-width">
+
+                <div className="footer-view">
+                    <div className="row">
+                        <div className="col-sm">
+                            <div className="reg-add-save-button">
+                                <Button type="cancel-button" onClick={() => history.push('/competitionDashboard')} >{AppConstants.cancel}</Button>
+                            </div>
+                        </div>
+                        <div className="col-sm">
+                            <div className="comp-buttons-view">
+                                <Button className="publish-button" type="primary"
+                                    htmlType="submit" onClick={() => this.setState({
+                                        statusRefId: tabKey == "3" ? 2 : 1,
+                                        buttonPressed: tabKey == "3" ? "publish" : "next"
+                                    })}
+                                >
+                                    {tabKey === "3"
+                                        ? AppConstants.save
+                                        : AppConstants.next}
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+
+    };
+
 
 
     tabCallBack = (key) => {
@@ -2104,6 +2328,8 @@ class RegistrationCompetitionForm extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         console.log(this.props.competitionFeesState)
+        let competitionId = null
+        competitionId = this.props.location.state ? this.props.location.state.id : null
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout
@@ -2127,29 +2353,34 @@ class RegistrationCompetitionForm extends Component {
                                         <div className="tab-formView mt-5">{this.contentView(getFieldDecorator)}</div>
                                         <div className="tab-formView mt-5">{this.regInviteesView(getFieldDecorator)}</div>
                                     </TabPane>
-                                    <TabPane tab={AppConstants.membership} key="2">
-                                        <div className="tab-formView mt-5">{this.membershipProductView(getFieldDecorator)}</div>
-                                        <div className="tab-formView mt-5">{this.membershipTypeView(getFieldDecorator)}</div>
-                                    </TabPane>
+                                    {competitionId == null &&
+                                        <TabPane tab={AppConstants.membership} key="2">
+                                            <div className="tab-formView mt-5">{this.membershipProductView(getFieldDecorator)}</div>
+                                            <div className="tab-formView mt-5">{this.membershipTypeView(getFieldDecorator)}</div>
+                                        </TabPane>
+                                    }
                                     <TabPane tab={AppConstants.divisions} key={"3"}>
                                         <div className="tab-formView">{this.divisionsView(getFieldDecorator)}</div>
                                     </TabPane>
-                                    <TabPane tab={AppConstants.fees} key={"4"}>
-                                        <div className="tab-formView">{this.feesView(getFieldDecorator)}</div>
-                                    </TabPane>
-                                    <TabPane tab={AppConstants.payments} key={"5"}>
-                                        <div className="tab-formView">{this.paymentOptionsView(getFieldDecorator)}</div>
-                                        <div className="tab-formView">{this.charityVoucherView(getFieldDecorator)}</div>
-                                    </TabPane>
-                                    <TabPane tab={AppConstants.discounts} key={"6"}>
-                                        <div className="tab-formView">{this.discountView(getFieldDecorator)}</div>
-                                        <div className="tab-formView">{this.voucherView(getFieldDecorator)}</div>
-                                    </TabPane>
+                                    {competitionId == null &&
+                                        <TabPane tab={AppConstants.fees} key={"4"}>
+                                            <div className="tab-formView">{this.feesView(getFieldDecorator)}</div>
+                                        </TabPane>}
+                                    {competitionId == null &&
+                                        <TabPane tab={AppConstants.payments} key={"5"}>
+                                            <div className="tab-formView">{this.paymentOptionsView(getFieldDecorator)}</div>
+                                            <div className="tab-formView">{this.charityVoucherView(getFieldDecorator)}</div>
+                                        </TabPane>}
+                                    {competitionId == null &&
+                                        <TabPane tab={AppConstants.discounts} key={"6"}>
+                                            <div className="tab-formView">{this.discountView(getFieldDecorator)}</div>
+                                            <div className="tab-formView">{this.voucherView(getFieldDecorator)}</div>
+                                        </TabPane>}
                                 </Tabs>
                             </div>
                             <Loader visible={this.props.competitionFeesState.onLoad || this.state.getDataLoading} />
                         </Content>
-                        <Footer>{this.footerView()}</Footer>
+                        <Footer>{competitionId == null ? this.footerView() : this.editFooterView()}</Footer>
                     </Form>
                 </Layout>
             </div>

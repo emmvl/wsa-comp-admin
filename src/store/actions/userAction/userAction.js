@@ -171,6 +171,38 @@ function getUserModuleMedicalInfoAction(userId){
   return action;
 }
 
+function getUserModuleActivityPlayerAction(userId){
+  const action = {
+    type: ApiConstants.API_USER_MODULE_ACTIVITY_PLAYER_LOAD,
+    payload: userId
+  };
+  return action;
+}
+
+function getUserModuleActivityParentAction(userId){
+  const action = {
+    type: ApiConstants.API_USER_MODULE_ACTIVITY_PARENT_LOAD,
+    payload: userId
+  };
+  return action;
+}
+
+function getUserModuleActivityScorerAction(userId){
+  const action = {
+    type: ApiConstants.API_USER_MODULE_ACTIVITY_SCORER_LOAD,
+    payload: userId
+  };
+  return action;
+}
+
+function getUserModuleActivityManagerAction(userId){
+  const action = {
+    type: ApiConstants.API_USER_MODULE_ACTIVITY_MANAGER_LOAD,
+    payload: userId
+  };
+  return action;
+}
+
 export {
   getRoleAction,
   getUreAction,
@@ -190,5 +222,9 @@ export {
   getUserModulePersonalDetailsAction,
   getUserModuleMedicalInfoAction,
   getUserModuleRegistrationAction,
-  getUserModulePersonalByCompetitionAction
+  getUserModulePersonalByCompetitionAction,
+  getUserModuleActivityPlayerAction,
+  getUserModuleActivityParentAction,
+  getUserModuleActivityScorerAction,
+  getUserModuleActivityManagerAction
 }

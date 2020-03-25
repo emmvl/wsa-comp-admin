@@ -37,6 +37,7 @@ const ValidationConstants = {
     affiliateContactRequired: ["Affiliate should have atleast one contact with admin role"],
     requiredMessage: ["Please fill all the required fields"],
     drawsMessage: ["Something went wrong with Draws Generation"],
+    finalGrading: ["Please provide final grade for all the teams"],
 
     /////////////membership 
     membershipProductIsRequired: "Membership product name is required.",

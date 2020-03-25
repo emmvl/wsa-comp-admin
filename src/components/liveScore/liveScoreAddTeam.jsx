@@ -61,7 +61,8 @@ class LiveScoreAddTeam extends Component {
             load: false,
             timeout: null,
             showOption: false,
-            loaclCompetitionID : null
+            loaclCompetitionID: null,
+            image: null
         };
     }
 
@@ -75,15 +76,16 @@ class LiveScoreAddTeam extends Component {
             this.props.liveScoreAddTeamform({ key: 'addTeam' })
         }
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({loaclCompetitionID :id })
-        console.log(id, "check comp")
+        this.setState({ loaclCompetitionID: id })
+
         // this.props.getliveScoreDivisions(1)
         this.props.liveScoreGetDivision(id)
-        this.props.liveScoreGetaffilate({ id:id , name: '' })
-        this.props.liveScoreManagerListAction(3, 1, 1)
+        this.props.liveScoreGetaffilate({ id: id, name: '' })
+        this.props.liveScoreManagerListAction(3, 1, id)
     }
     componentDidUpdate(nextProps) {
         let { teamManagerData } = this.props.liveScoreTeamState
+
 
         if (this.state.isEdit == true) {
             if (nextProps.liveScoreTeamState !== this.props.liveScoreTeamState) {
@@ -99,13 +101,13 @@ class LiveScoreAddTeam extends Component {
 
     ////set initial value for all validated fields
     setInitalFiledValue(data) {
-        console.log(data, 'setInitalFiledValue')
+
         const { selectedManager } = this.props.liveScoreTeamState
         this.props.form.setFieldsValue({
             'teamName': data.name,
             'teamAlias': data.alias,
             'division': data.divisionId,
-            'affiliate': data.organisation.name,
+            'affiliate': data.organisation ? data.organisation.name : "",
             'managerId': selectedManager
 
         })
@@ -114,7 +116,10 @@ class LiveScoreAddTeam extends Component {
 
     setImage = (data) => {
         if (data.files[0] !== undefined) {
-            this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]) })
+            let profileImage = URL.createObjectURL(data.files[0])
+            this.setState({ image: data.files[0], profileImage: profileImage })
+            this.props.liveScoreAddTeamform({ key: 'logoUrl', data: profileImage })
+            // this.props.liveScoreAddTeamform({ key: 'teamLogo', data: data.files[0] })
         }
     };
 
@@ -250,13 +255,15 @@ class LiveScoreAddTeam extends Component {
                                 id="user-pic"
                                 style={{ display: 'none' }}
                                 onChange={(evt) => {
-                                    var urlImage = URL.createObjectURL(evt.target.files[0])
-                                    this.props.liveScoreAddTeamform({ key: 'logoUrl', data: urlImage })
-                                    this.props.liveScoreAddTeamform({ key: 'teamLogo', data: evt.target.files[0] })
-                                    this.setState({ timeout: 3000 })
-                                    setTimeout(() => {
-                                        this.setState({ timeout: null })
-                                    }, 3000);
+
+                                    this.setImage(evt.target)
+                                    // var urlImage = URL.createObjectURL(evt.target.files[0])
+                                    // this.props.liveScoreAddTeamform({ key: 'logoUrl', data: urlImage })
+                                    // this.props.liveScoreAddTeamform({ key: 'teamLogo', data: evt.target.files[0] })
+                                    // this.setState({ timeout: 3000 })
+                                    // setTimeout(() => {
+                                    //     this.setState({ timeout: null })
+                                    // }, 3000);
                                 }} />
                             <span className="form-err">{this.state.imageError}</span>
                         </div>
@@ -307,26 +314,40 @@ class LiveScoreAddTeam extends Component {
                         {getFieldDecorator('affiliate', {
                             rules: [{ required: true, message: ValidationConstants.affiliateField }],
                         })(
-                            <AutoComplete
-                                style={{ width: "100%", height: '56px' }}
-                                placeholder="Select User"
-                                onSelect={(item, option) => {
-                                    console.log(item, 'dfdsfsdfdsf', option)
-                                    const ManagerId = JSON.parse(option.key)
-                                    this.props.liveScoreAddTeamform({ key: 'organisationId', data: ManagerId })
+                            // <AutoComplete
+                            //     style={{ width: "100%", height: '56px' }}
+                            //     placeholder="Select User"
+                            //     onSelect={(item, option) => {
+                            //         console.log(item, 'dfdsfsdfdsf', option)
+                            //         const ManagerId = JSON.parse(option.key)
+                            //         this.props.liveScoreAddTeamform({ key: 'organisationId', data: ManagerId })
+                            //     }}
+                            //     // onSelect={(affilateId) => this.props.liveScoreAddTeamform({ key: 'organisationId', data: affilateId })}
+                            //     // onSearch={(value) => { this.props.liveScoreGetaffilate({ id: this.state.loaclCompetitionID, name: value }) }}
+                            //     value={teamManagerData.organisationId}
+                            // >
+                            //     {affilateList.map((item) => {
+                            //         console.log(item)
+                            //         return <Option key={item.id} value={item.name}>
+                            //             {item.name}
+                            //         </Option>
+                            //     })}
+
+                            // </AutoComplete>
+
+                            <Select
+                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                onChange={affiliateId => {
+                                    this.props.liveScoreAddTeamform({ key: 'organisationId', data: affiliateId })
                                 }}
-                                // onSelect={(affilateId) => this.props.liveScoreAddTeamform({ key: 'organisationId', data: affilateId })}
-                                onSearch={(value) => { this.props.liveScoreGetaffilate({ id: this.state.loaclCompetitionID, name: value }) }}
-                                value={teamManagerData.organisationId}
-                            >
+                                value={teamManagerData.divisionId}
+                                placeholder={"Select User"}  >
                                 {affilateList.map((item) => {
-                                    console.log(item)
-                                    return <Option key={item.id} value={item.name}>
+                                    return <Option key={item.id} value={item.id}>
                                         {item.name}
                                     </Option>
                                 })}
-
-                            </AutoComplete>
+                            </Select>
                         )}
                     </Form.Item>
 
@@ -334,7 +355,7 @@ class LiveScoreAddTeam extends Component {
 
                 <div className="row" >
                     {/* <span required={"required-field"} className="applicable-to-heading ml-4">{AppConstants.manager}</span> */}
-                    <InputWithHead required={"required-field ml-4"} heading={AppConstants.manager} />
+                    <InputWithHead required={"required-field ml-4"} heading={AppConstants.managerHeading} />
 
                     <Radio.Group
                         className="reg-competition-radio"
@@ -527,6 +548,7 @@ class LiveScoreAddTeam extends Component {
     };
 
     handleSubmit = e => {
+        const { id } = JSON.parse(getLiveScoreCompetiton())
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
@@ -552,8 +574,12 @@ class LiveScoreAddTeam extends Component {
                     formData.append('id', this.state.teamId ? this.state.teamId : 0)
                     formData.append('name', name)
                     formData.append('alias', alias)
-                    formData.append('logo', this.props.liveScoreTeamState.teamLogo)
-                    formData.append('competitionId', 1)
+                    if (this.state.image) {
+                        formData.append('logo', this.state.image)
+                    } else {
+                        formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
+                    }
+                    formData.append('competitionId', id)
                     formData.append('organisationId', organisationId)
                     formData.append('divisionId', divisionId)
                     formData.append('userIds', usersArray)
@@ -566,7 +592,7 @@ class LiveScoreAddTeam extends Component {
                     formData.append('name', name)
                     formData.append('alias', alias)
                     formData.append('logo', this.props.liveScoreTeamState.teamLogo)
-                    formData.append('competitionId', 1)
+                    formData.append('competitionId', id)
                     formData.append('organisationId', organisationId)
                     formData.append('divisionId', divisionId)
                     formData.append('firstName', firstName)

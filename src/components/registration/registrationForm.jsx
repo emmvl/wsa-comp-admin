@@ -200,7 +200,8 @@ class RegistrationForm extends Component {
 
     //Registration Method
     methodSelection(value, item, formDataValue) {
-        let registrationMethodArray = formDataValue.registerMethods
+        let registrationMethodArray = isArrayNotEmpty(formDataValue.registerMethods) ? formDataValue.registerMethods : []
+
         let index = registrationMethodArray.findIndex(
             x => x.registrationMethodRefId == item.id);
         if (index > -1) {
@@ -447,7 +448,7 @@ class RegistrationForm extends Component {
             <div className="content-view pt-4">
                 <div className="row">
                     <div className="col-sm">
-                        <InputWithHead heading={AppConstants.teamAttendane} />
+                        <InputWithHead heading={AppConstants.registrationOpen} />
                         <Form.Item >
                             {getFieldDecorator('registrationOpenDate',
                                 { rules: [{ required: true, message: ValidationConstants.registrationOpenDateIsRequired }] })(
@@ -897,7 +898,8 @@ class RegistrationForm extends Component {
         let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
         let registrationAdvanceSetting = this.props.appState.formSettings !== 0 ? this.props.appState.formSettings : []
         let selectedInvitees = this.props.registrationState.selectedInvitees
-        console.log(selectedInvitees)
+        let expendKeyArray = this.props.registrationState.expendKeyArr
+        console.log(expendKeyArray)
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading">{AppConstants.advancedSettings}</span>
@@ -906,7 +908,11 @@ class RegistrationForm extends Component {
                         className="tree-government-rebate"
                         style={{ flexDirection: 'column' }}
                         checkable
-                        defaultExpandedKeys={[]}
+                        defaultExpandParent={true}
+                        // defaultExpandParent
+                        // defaultExpandedKeys={[...expendKeyArray]}
+                        // autoExpandParent={[...expendKeyArray]}
+                        // onExpand={[...expendKeyArray]}
                         defaultCheckedKeys={[]}
                         checkedKeys={[...selectedInvitees]}
                         onCheck={(e) => this.onTreeSelected(e, formDataValue)}

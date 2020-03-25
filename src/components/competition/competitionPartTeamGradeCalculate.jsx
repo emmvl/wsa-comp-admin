@@ -7,7 +7,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getYearAndCompetitionAction, clearYearCompetitionAction } from "../../store/actions/appAction";
+import { getYearAndCompetitionOwnAction, clearYearCompetitionAction } from "../../store/actions/appAction";
 import {
     getTeamGradingSummaryAction,
     saveUpdatedGradeTeamSummaryAction,
@@ -138,13 +138,13 @@ class CompetitionPartTeamGradeCalculate extends Component {
         }
         else {
             if (yearId) {
-                this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, yearId, 'own_competition')
+                this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
                 this.setState({
                     yearRefId: JSON.parse(yearId)
                 })
             }
             else {
-                this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, null, 'own_competition')
+                this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
                 setOwnCompetitionYear(1)
             }
         }
@@ -173,7 +173,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                             </span>
                         </a>
                         <NavLink
-                            to={{ pathname: `/competitionProposedTeamGrading`, state: { id: record.competitionMembershipProductDivisionId } }}>
+                            to={{ pathname: `/competitionProposedTeamGrading`, state: { id: record.competitionMembershipProductDivisionId, gradeRefId: grades.gradeRefId } }}>
                             {grades.teamCount !== null ?
                                 <Tag className="comp-dashboard-table-tag  text-center" key={grades}
                                 >{grades.teamCount}
@@ -210,7 +210,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
     onYearChange = (yearId) => {
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
-        this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, yearId, 'own_competition')
+        this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
         this.setState({ firstTimeCompId: null, yearRefId: yearId })
         // this.setDetailsFieldValue()
     }
@@ -406,7 +406,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
 }
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getYearAndCompetitionAction,
+        getYearAndCompetitionOwnAction,
         getTeamGradingSummaryAction,
         saveUpdatedGradeTeamSummaryAction,
         publishGradeTeamSummaryAction,

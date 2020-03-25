@@ -106,7 +106,9 @@ function LiveScoreTeamState(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
+
             const result = action.result
+            console.log(result)
             return {
                 ...state,
                 onLoad: false,
@@ -241,6 +243,8 @@ function LiveScoreTeamState(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_GET_TEAM_SUCCESS:
             state.teamManagerData = action.result.team[0]
+
+            state.teamLogo = action.result.team[0].logoUrl
             let managerId = getManagerId(action.result.managers)
 
             state.teamManagerData['userIds'] = managerId

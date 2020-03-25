@@ -35,7 +35,8 @@ const initialState = {
     timeSlotManualAllVenue: [],
     defaultDataAllVenue: [],
     timeSlotEntityManualkey: [],
-    allResult: []
+    allResult: [],
+    competitionVenues: []
 };
 
 //time slot Entity
@@ -469,7 +470,7 @@ function CompetitionTimeSlots(state = initialState, action) {
             let SelectedTimeRotationData = getSelectedTimeRotation(state.timeSlotRotation, action.result)
             let timeSlotResult = updatedResultData(SelectedTimeRotationData, action.result)
             let timeSlotEntityKey = getTimeSlotEntity(action.result.competitionTimeslotsEntity, SelectedTimeRotationData.subParentId)
-            let timeSlotsManualVenue = checkSelectedVenueDetails(state.allVenueList, resultData.competitionTimeslotManual, SelectedTimeRotationData.subParentId)
+            let timeSlotsManualVenue = checkSelectedVenueDetails(resultData.competitionVenues, resultData.competitionTimeslotManual, SelectedTimeRotationData.subParentId)
             let timeSlotsPerVenue = checkPerVenueManual(action.result.competitionTimeslotManual, SelectedTimeRotationData.subParentId)
             state.timeSlotManualAllVenue = timeSlotsManualVenue
             state.defaultDataAllVenue = timeSlotsManualVenue
@@ -786,8 +787,7 @@ function CompetitionTimeSlots(state = initialState, action) {
                 allVenueList: action.result,
                 status: action.status
             };
-
-
+  
         default:
             return state;
     }

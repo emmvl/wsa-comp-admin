@@ -14,7 +14,7 @@ import history from "../../util/history";
 import ValidationConstants from "../../themes/validationConstant";
 import {
     getMatchTypesAction, getCompetitionFormatTypesAction, getCompetitionTypesAction,
-     getYearAndCompetitionAction
+    getYearAndCompetitionOwnAction, clearYearCompetitionAction
 } from "../../store/actions/appAction";
 
 import {generateDrawAction} from "../../store/actions/competitionModuleAction/competitionModuleAction";
@@ -64,13 +64,13 @@ class CompetitionFormat extends Component {
             this.apiCalls(storedCompetitionId, yearId);
         }
         else if (yearId) {
-            this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, yearId, 'own_competition')
+            this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
             this.setState({
                 yearRefId: JSON.parse(yearId)
             })
         }
         else {
-            this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, null, 'own_competition')
+            this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
             setOwnCompetitionYear(1)
         }
 
@@ -170,6 +170,7 @@ class CompetitionFormat extends Component {
     }
 
     referenceApiCalls = () => {
+        this.props.clearYearCompetitionAction()
          this.props.getMatchTypesAction();
          this.props.getCompetitionFormatTypesAction();
          this.props.getCompetitionTypesAction();
@@ -179,7 +180,7 @@ class CompetitionFormat extends Component {
     onYearChange(yearId) {
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
-        this.props.getYearAndCompetitionAction(this.props.appState.own_YearArr, yearId, 'own_competition')
+        this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
         this.setState({ firstTimeCompId: null, yearRefId: yearId })
     }
 
@@ -453,6 +454,7 @@ class CompetitionFormat extends Component {
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
+        const { own_YearArr, own_CompetitionArr, } = this.props.appState
         return (
             <div className="comp-venue-courts-dropdown-view mt-0" >
                 <div className="fluid-width" >
@@ -466,7 +468,7 @@ class CompetitionFormat extends Component {
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
-                                    {this.props.appState.yearList.map(item => {
+                                    {own_YearArr.length > 0 && own_YearArr.map(item => {
                                         return (
                                             <Option key={"yearRefId" + item.id} value={item.id}>
                                                 {item.description}
@@ -476,7 +478,7 @@ class CompetitionFormat extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-3" >
+                        <div className="col-sm-4" >
                             <div style={{
                                 width: "100%", display: "flex",
                                 flexDirection: "row",
@@ -491,7 +493,7 @@ class CompetitionFormat extends Component {
                                     }
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {this.props.appState.competitionList.map(item => {
+                                     {own_CompetitionArr.length > 0 && own_CompetitionArr.map(item => {
                                         return (
                                             <Option key={"competition" + item.competitionId} value={item.competitionId}>
                                                 {item.competitionName}
@@ -750,7 +752,8 @@ function mapDispatchToProps(dispatch)
         updateCompetitionFormatAction,
         getCompetitionFormatTypesAction,
         getCompetitionTypesAction,
-        getYearAndCompetitionAction,
+        getYearAndCompetitionOwnAction,
+        clearYearCompetitionAction,
         generateDrawAction
     }, dispatch);
 

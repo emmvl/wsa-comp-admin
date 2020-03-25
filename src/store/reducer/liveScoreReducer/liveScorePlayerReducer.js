@@ -77,6 +77,17 @@ function LiveScorePlayerState(state = initialState, action) {
                 playerData: action.result,
             };
 
+        ////live score add/edit player
+        case ApiConstants.API_LIVE_SCORE_PLAYER_IMPORT_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_LIVE_SCORE_PLAYER_IMPORT_SUCCESS:
+
+            return {
+                ...state,
+                onLoad: false,
+            };
+
         case ApiConstants.API_LIVE_SCORE_PLAYER_FAIL:
             return {
                 ...state,

@@ -82,6 +82,14 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
         case ApiConstants.LiveScore_SETTING_VIEW_ERROR:
             return {
                 ...state,
+                loader: false
+                // error: payload
+            }
+
+        case ApiConstants.LiveScore_SETTING_VIEW_FAIL:
+            return {
+                ...state,
+                loader: false
                 // error: payload
             }
         case ApiConstants.LiveScore_SETTING_CHANGE_FORM:
@@ -97,7 +105,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
         case ApiConstants.LiveScore_SETTING_DATA_POST_INITATE:
             return {
                 ...state,
-                loader: false
+                loader: true
             }
         case ApiConstants.LiveScore_SETTING_DATA_POST_SUCCESS:
             return {

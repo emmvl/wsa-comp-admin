@@ -25,7 +25,7 @@ const columns = [
             return (
                 <div>
                     {_this.removeBtn(record)}
-                    <img alt="" className="banner-image" src={bannerUrl} />
+                    <img thumbnail={true} alt="" className="banner-image" src={bannerUrl} />
                     {_this.footerView(record)}
                 </div>
             )

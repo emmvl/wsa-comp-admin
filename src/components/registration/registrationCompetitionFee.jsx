@@ -179,14 +179,26 @@ const playerSeasoTable = [
         )
     },
     {
-        title: "Membership Fees (inc GST)",
-        dataIndex: "mFees",
-        key: "mFees",
-        render: (mFees, record) => (
+        title: "Membership Fees (excl. GST)",
+        dataIndex: "membershipSeasonal",
+        key: "membershipSeasonal",
+        render: (membershipSeasonal, record) => (
             <Input
                 className="input-inside-table-fees"
                 disabled={true}
-                value={mFees}
+                value={membershipSeasonal}
+            />
+        )
+    },
+    {
+        title: "Membership GST",
+        dataIndex: "membershipGst",
+        key: "membershipGst",
+        render: (membershipGst, record) => (
+            <Input
+                className="input-inside-table-fees"
+                disabled={true}
+                value={membershipGst}
             />
         )
     },
@@ -195,7 +207,7 @@ const playerSeasoTable = [
         dataIndex: "fee",
         key: "fee",
         render: (fee, record, index) => (
-            <Input className="input-inside-table-fees" value={fee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "fee", "seasonal")} />
+            <Input type="number" className="input-inside-table-fees" value={fee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "fee", "seasonal")} />
         )
     },
     {
@@ -203,7 +215,7 @@ const playerSeasoTable = [
         dataIndex: "gst",
         key: "gst",
         render: (gst, record, index) => (
-            <Input className="input-inside-table-fees" value={gst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "gst", "seasonal")} />
+            <Input type="number" className="input-inside-table-fees" value={gst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "gst", "seasonal")} />
         )
     },
 
@@ -244,14 +256,26 @@ const playercasualTable = [
         )
     },
     {
-        title: "Membership Fees (inc GST)",
-        dataIndex: "mFees",
-        key: "mFees",
-        render: (mFees, record) => (
+        title: "Membership Fees (excl. GST)",
+        dataIndex: "membershipCasual",
+        key: "membershipCasual",
+        render: (membershipCasual, record) => (
             <Input
                 className="input-inside-table-fees"
                 disabled={true}
-                value={mFees}
+                value={membershipCasual}
+            />
+        )
+    },
+    {
+        title: "Membership GST",
+        dataIndex: "membershipGst",
+        key: "membershipGst",
+        render: (membershipGst, record) => (
+            <Input
+                className="input-inside-table-fees"
+                disabled={true}
+                value={membershipGst}
             />
         )
     },
@@ -260,7 +284,7 @@ const playercasualTable = [
         dataIndex: "fee",
         key: "fee",
         render: (fee, record, index) => (
-            <Input className="input-inside-table-fees" value={fee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "fee", "casual")} />
+            <Input type="number" className="input-inside-table-fees" value={fee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "fee", "casual")} />
         )
     },
     {
@@ -268,7 +292,7 @@ const playercasualTable = [
         dataIndex: "gst",
         key: "gst",
         render: (gst, record, index) => (
-            <Input className="input-inside-table-fees" value={gst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "gst", "casual")} />
+            <Input type="number" className="input-inside-table-fees" value={gst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "gst", "casual")} />
         )
     },
 
@@ -310,14 +334,26 @@ const playerSeasonalTableAssociation = [
         )
     },
     {
-        title: "Membership Fees (inc GST)",
-        dataIndex: "mFees",
-        key: "mFees",
-        render: (mFees, record) => (
+        title: "Membership Fees (excl. GST)",
+        dataIndex: "membershipSeasonal",
+        key: "membershipSeasonal",
+        render: (membershipSeasonal, record) => (
             <Input
                 className="input-inside-table-fees"
                 disabled={true}
-                value={mFees}
+                value={membershipSeasonal}
+            />
+        )
+    },
+    {
+        title: "Membership GST",
+        dataIndex: "membershipGst",
+        key: "membershipGst",
+        render: (membershipGst, record) => (
+            <Input
+                className="input-inside-table-fees"
+                disabled={true}
+                value={membershipGst}
             />
         )
     },
@@ -326,7 +362,7 @@ const playerSeasonalTableAssociation = [
         dataIndex: "fee",
         key: "fee",
         render: (fee, record, index) => (
-            <Input disabled={true} className="input-inside-table-fees" value={fee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "fee", "seasonal")} />
+            <Input type="number" disabled={true} className="input-inside-table-fees" value={fee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "fee", "seasonal")} />
         )
     },
     {
@@ -334,7 +370,7 @@ const playerSeasonalTableAssociation = [
         dataIndex: "gst",
         key: "gst",
         render: (gst, record, index) => (
-            <Input disabled={true} className="input-inside-table-fees" value={gst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "gst", "seasonal")} />
+            <Input type="number" disabled={true} className="input-inside-table-fees" value={gst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "gst", "seasonal")} />
         )
     },
     {
@@ -342,7 +378,7 @@ const playerSeasonalTableAssociation = [
         dataIndex: "affiliateFee",
         key: "affiliateFee",
         render: (affiliateFee, record, index) => (
-            <Input className="input-inside-table-fees" value={affiliateFee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "affiliateFee", "seasonal")} />
+            <Input type="number" className="input-inside-table-fees" value={affiliateFee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "affiliateFee", "seasonal")} />
         )
     },
     {
@@ -350,7 +386,7 @@ const playerSeasonalTableAssociation = [
         dataIndex: "affiliateGst",
         key: "affiliateGst",
         render: (affiliateGst, record, index) => (
-            <Input className="input-inside-table-fees" value={affiliateGst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "affiliateGst", "seasonal")} />
+            <Input type="number" className="input-inside-table-fees" value={affiliateGst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "affiliateGst", "seasonal")} />
         )
     },
 
@@ -391,14 +427,26 @@ const playercasualTableAssociation = [
         )
     },
     {
-        title: "Membership Fees (inc GST)",
-        dataIndex: "mFees",
-        key: "mFees",
-        render: (mFees, record) => (
+        title: "Membership Fees (excl. GST)",
+        dataIndex: "membershipCasual",
+        key: "membershipCasual",
+        render: (membershipCasual, record) => (
             <Input
                 className="input-inside-table-fees"
                 disabled={true}
-                value={mFees}
+                value={membershipCasual}
+            />
+        )
+    },
+    {
+        title: "Membership GST",
+        dataIndex: "membershipGst",
+        key: "membershipGst",
+        render: (membershipGst, record) => (
+            <Input
+                className="input-inside-table-fees"
+                disabled={true}
+                value={membershipGst}
             />
         )
     },
@@ -407,7 +455,7 @@ const playercasualTableAssociation = [
         dataIndex: "fee",
         key: "fee",
         render: (fee, record, index) => (
-            <Input disabled={true} className="input-inside-table-fees" value={fee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "fee", "casual")} />
+            <Input type="number" disabled={true} className="input-inside-table-fees" value={fee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "fee", "casual")} />
         )
     },
     {
@@ -415,7 +463,7 @@ const playercasualTableAssociation = [
         dataIndex: "gst",
         key: "gst",
         render: (gst, record, index) => (
-            <Input disabled={true} className="input-inside-table-fees" value={gst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "gst", "casual")} />
+            <Input type="number" disabled={true} className="input-inside-table-fees" value={gst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "gst", "casual")} />
         )
     },
     {
@@ -423,7 +471,7 @@ const playercasualTableAssociation = [
         dataIndex: "affiliateFee",
         key: "affiliateFee",
         render: (affiliateFee, record, index) => (
-            <Input className="input-inside-table-fees" value={affiliateFee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "affiliateFee", "casual")} />
+            <Input type="number" className="input-inside-table-fees" value={affiliateFee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "affiliateFee", "casual")} />
         )
     },
     {
@@ -431,7 +479,7 @@ const playercasualTableAssociation = [
         dataIndex: "affiliateGst",
         key: "affiliateGst",
         render: (affiliateGst, record, index) => (
-            <Input className="input-inside-table-fees" value={affiliateGst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "affiliateGst", "casual")} />
+            <Input type="number" className="input-inside-table-fees" value={affiliateGst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "affiliateGst", "casual")} />
         )
     },
     {
@@ -469,14 +517,26 @@ const playerSeasonalTableClub = [
         )
     },
     {
-        title: "Membership Fees (inc GST)",
-        dataIndex: "mFees",
-        key: "mFees",
-        render: (mFees, record) => (
+        title: "Membership Fees (excl. GST)",
+        dataIndex: "membershipSeasonal",
+        key: "membershipSeasonal",
+        render: (membershipSeasonal, record) => (
             <Input
                 className="input-inside-table-fees"
                 disabled={true}
-                value={mFees}
+                value={membershipSeasonal}
+            />
+        )
+    },
+    {
+        title: "Membership GST",
+        dataIndex: "membershipGst",
+        key: "membershipGst",
+        render: (membershipGst, record) => (
+            <Input
+                className="input-inside-table-fees"
+                disabled={true}
+                value={membershipGst}
             />
         )
     },
@@ -485,7 +545,7 @@ const playerSeasonalTableClub = [
         dataIndex: "fee",
         key: "fee",
         render: (fee, record, index) => (
-            <Input disabled={true} className="input-inside-table-fees" value={fee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "fee", "seasonal")} />
+            <Input type="number" disabled={true} className="input-inside-table-fees" value={fee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "fee", "seasonal")} />
         )
     },
     {
@@ -493,7 +553,7 @@ const playerSeasonalTableClub = [
         dataIndex: "gst",
         key: "gst",
         render: (gst, record, index) => (
-            <Input disabled={true} className="input-inside-table-fees" value={gst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "gst", "seasonal")} />
+            <Input type="number" disabled={true} className="input-inside-table-fees" value={gst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "gst", "seasonal")} />
         )
     },
     {
@@ -501,7 +561,7 @@ const playerSeasonalTableClub = [
         dataIndex: "affiliateFee",
         key: "affiliateFee",
         render: (affiliateFee, record, index) => (
-            <Input className="input-inside-table-fees" value={affiliateFee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "affiliateFee", "seasonal")} />
+            <Input type="number" className="input-inside-table-fees" value={affiliateFee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "affiliateFee", "seasonal")} />
         )
     },
     {
@@ -509,7 +569,7 @@ const playerSeasonalTableClub = [
         dataIndex: "affiliateGst",
         key: "affiliateGst",
         render: (affiliateGst, record, index) => (
-            <Input className="input-inside-table-fees" value={affiliateGst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "affiliateGst", "seasonal")} />
+            <Input type="number" className="input-inside-table-fees" value={affiliateGst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "affiliateGst", "seasonal")} />
         )
     },
 
@@ -550,14 +610,26 @@ const playercasualTableClub = [
         )
     },
     {
-        title: "Membership Fees (inc GST)",
-        dataIndex: "mFees",
-        key: "mFees",
-        render: (mFees, record) => (
+        title: "Membership Fees (excl. GST)",
+        dataIndex: "membershipCasual",
+        key: "membershipCasual",
+        render: (membershipCasual, record) => (
             <Input
                 className="input-inside-table-fees"
                 disabled={true}
-                value={mFees}
+                value={membershipCasual}
+            />
+        )
+    },
+    {
+        title: "Membership GST",
+        dataIndex: "membershipGst",
+        key: "membershipGst",
+        render: (membershipGst, record) => (
+            <Input
+                className="input-inside-table-fees"
+                disabled={true}
+                value={membershipGst}
             />
         )
     },
@@ -566,7 +638,7 @@ const playercasualTableClub = [
         dataIndex: "fee",
         key: "fee",
         render: (fee, record, index) => (
-            <Input disabled={true} className="input-inside-table-fees" value={fee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "fee", "casual")} />
+            <Input type="number" disabled={true} className="input-inside-table-fees" value={fee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "fee", "casual")} />
         )
     },
     {
@@ -574,7 +646,7 @@ const playercasualTableClub = [
         dataIndex: "gst",
         key: "gst",
         render: (gst, record, index) => (
-            <Input disabled={true} className="input-inside-table-fees" value={gst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "gst", "casual")} />
+            <Input type="number" disabled={true} className="input-inside-table-fees" value={gst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "gst", "casual")} />
         )
     },
     {
@@ -582,7 +654,7 @@ const playercasualTableClub = [
         dataIndex: "affiliateFee",
         key: "affiliateFee",
         render: (affiliateFee, record, index) => (
-            <Input className="input-inside-table-fees" value={affiliateFee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "fee", "casual")} />
+            <Input type="number" className="input-inside-table-fees" value={affiliateFee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "fee", "casual")} />
         )
     },
     {
@@ -590,7 +662,7 @@ const playercasualTableClub = [
         dataIndex: "affiliateGst",
         key: "affiliateGst",
         render: (affiliateGst, record, index) => (
-            <Input className="input-inside-table-fees" value={affiliateGst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "affiliateGst", "casual")} />
+            <Input type="number" className="input-inside-table-fees" value={affiliateGst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "affiliateGst", "casual")} />
         )
     },
 
@@ -642,6 +714,7 @@ class RegistrationCompetitionFee extends Component {
             organisationTypeRefId: 0
         };
         this_Obj = this;
+
     }
 
     componentDidUpdate(nextProps) {
@@ -687,6 +760,7 @@ class RegistrationCompetitionFee extends Component {
         let competitionId = null
         competitionId = this.props.location.state ? this.props.location.state.id : null
         this.apiCalls(competitionId)
+        this.setDetailsFieldValue()
     }
 
     ////alll the api calls
@@ -763,7 +837,9 @@ class RegistrationCompetitionFee extends Component {
         this.props.form.setFieldsValue({
             competition_name: compFeesState.competitionDetailData.competitionName,
             numberOfRounds: compFeesState.competitionDetailData.noOfRounds,
-            yearRefId: compFeesState.competitionDetailData.yearRefId
+            yearRefId: compFeesState.competitionDetailData.yearRefId,
+            competitionTypeRefId: compFeesState.competitionDetailData.competitionTypeRefId,
+            competitionFormatRefId: compFeesState.competitionDetailData.competitionFormatRefId,
         })
         let data = this.props.competitionFeesState.competionDiscountValue
         let discountData = data && data.competitionDiscounts !== null ? data.competitionDiscounts[0].discounts : []
@@ -872,7 +948,7 @@ class RegistrationCompetitionFee extends Component {
                         })
                     }
                     else {
-                        alert("check fees")
+                        // alert("check fees")
                     }
                     let modifyArr = [...finalpostarray, ...finalPostData]
                     finalpostarray = modifyArr
@@ -1348,6 +1424,7 @@ class RegistrationCompetitionFee extends Component {
         let detailsData = this.props.competitionFeesState
         let defaultCompFeesOrgLogo = detailsData.defaultCompFeesOrgLogo
         let isCreatorEdit = this.state.isCreatorEdit
+        console.log(detailsData.competitionDetailData)
         return (
             <div className="content-view pt-4">
                 <Form.Item >
@@ -1357,6 +1434,7 @@ class RegistrationCompetitionFee extends Component {
                                 required={"required-field pb-0 "}
                                 heading={AppConstants.competition_name}
                                 placeholder={AppConstants.competition_name}
+                                // setFieldsValue={}
                                 // value={detailsData.competitionDetailData.competitionName}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionName")}
                                 disabled={isCreatorEdit}
@@ -2116,6 +2194,7 @@ class RegistrationCompetitionFee extends Component {
                                 value={item.amount}
                                 disabled={this.state.isCreatorEdit}
                                 suffix={item.discountTypeRefId == "2" ? "%" : null}
+                                type="number"
                             />
                         </div>
                         <div className="col-sm">
@@ -2194,6 +2273,8 @@ class RegistrationCompetitionFee extends Component {
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                 value={item.amount}
                                 disabled={this.state.isCreatorEdit}
+                                suffix={item.discountTypeRefId == "2" ? "%" : null}
+                                type="number"
                             />
                         </div>
                         <div className="col-sm">

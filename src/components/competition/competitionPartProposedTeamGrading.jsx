@@ -6,7 +6,7 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getYearAndCompetitionAction } from "../../store/actions/appAction";
+import { getYearAndCompetitionParticipateAction } from "../../store/actions/appAction";
 import { getDivisionsListAction, clearReducerDataAction } from "../../store/actions/registrationAction/registration";
 import {
     getCompPartProposedTeamGradingAction,
@@ -165,13 +165,13 @@ class CompetitionPartProposedTeamGrading extends Component {
         }
         else {
             if (yearId) {
-                this.props.getYearAndCompetitionAction(this.props.appState.participate_YearArr, yearId, 'participate_competition')
+                this.props.getYearAndCompetitionParticipateAction(this.props.appState.participate_YearArr, yearId, 'participate_competition')
                 this.setState({
                     yearRefId: JSON.parse(yearId)
                 })
             }
             else {
-                this.props.getYearAndCompetitionAction(this.props.appState.participate_YearArr, yearId, 'participate_competition')
+                this.props.getYearAndCompetitionParticipateAction(this.props.appState.participate_YearArr, yearId, 'participate_competition')
                 setParticipatingYear(1)
             }
         }
@@ -215,7 +215,7 @@ class CompetitionPartProposedTeamGrading extends Component {
         setParticipating_competition(undefined)
         this.props.clearTeamGradingReducerDataAction("getPartProposedTeamGradingData")
         this.props.clearReducerDataAction("allDivisionsData")
-        this.props.getYearAndCompetitionAction(this.props.appState.participate_YearArr, yearId, 'participate_competition')
+        this.props.getYearAndCompetitionParticipateAction(this.props.appState.participate_YearArr, yearId, 'participate_competition')
         this.setState({ firstTimeCompId: null, yearRefId: yearId, divisionId: null })
     }
 
@@ -388,7 +388,7 @@ class CompetitionPartProposedTeamGrading extends Component {
 }
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getYearAndCompetitionAction,
+        getYearAndCompetitionParticipateAction,
         getCompPartProposedTeamGradingAction,
         getDivisionsListAction,
         gradesReferenceListAction,
