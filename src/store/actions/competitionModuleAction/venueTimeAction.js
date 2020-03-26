@@ -98,6 +98,13 @@ function venueByIdAction(data) {
     return action;
 }
 
+function clearVenueDataAction(dataName) {
+    const action = {
+        type: ApiConstants.API_CLEARING_VENUE_DATA,
+        dataName: dataName
+    };
+    return action;
+}
 
 
 export {
@@ -110,5 +117,6 @@ export {
     clearVenueTimesDataAction,
     removePrefencesObjectAction,
     removeObjectAction,
-    venueByIdAction
+    venueByIdAction,
+    clearVenueDataAction
 }

@@ -184,7 +184,7 @@ class LiveScoreManagerList extends Component {
                                         </Button>
                                     </div>
                                 </div>
-                                <div className="col-sm">
+                                {/* <div className="col-sm">
                                     <div
                                         className="comp-dashboard-botton-view-mobile"
                                         style={{
@@ -210,7 +210,7 @@ class LiveScoreManagerList extends Component {
                                             </Button>
                                         </NavLink>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>

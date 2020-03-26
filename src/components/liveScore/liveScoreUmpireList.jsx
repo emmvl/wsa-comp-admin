@@ -13,13 +13,23 @@ import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStora
 import { getTime, formateTime, liveScore_formateDate } from '../../themes/dateformate'
 const { Content } = Layout;
 
+
+/////function to sort table column
+function tableSort(a, b, key) {
+    let stringA = JSON.stringify(a[key])
+    let stringB = JSON.stringify(b[key])
+    return stringA.localeCompare(stringB)
+}
+
+
+
 ////columens data
 const columns = [
     {
-        title: 'hgjh',
+        title: 'Date',
         dataIndex: 'match',
         key: 'match',
-        sorter: (a, b) => a.match.length - b.match.length,
+        sorter: (a, b) => tableSort(a,b,"match"),
         render: (match) =>
             <span  >{match ? liveScore_formateDate(match.startTime) : ""}</span>
     },
@@ -27,7 +37,7 @@ const columns = [
         title: 'Time',
         dataIndex: 'match',
         key: 'match',
-        sorter: (a, b) => a.match.length - b.match.length,
+        sorter: (a, b) => tableSort(a,b,"match"),
         render: (match) =>
             <span  >{match ? getTime(match.startTime) : ""}</span>
     },
@@ -35,7 +45,7 @@ const columns = [
         title: 'Match',
         dataIndex: 'match',
         key: 'match',
-        sorter: (a, b) => a.match.length - b.match.length,
+        sorter: (a, b) => tableSort(a,b,"match"),
         render: (match, record) =>
             <NavLink to={{
                 pathname: "/liveScoreMatchDetails",
@@ -48,7 +58,7 @@ const columns = [
         title: 'First Umpire Name',
         dataIndex: 'umpire1FullName',
         key: 'umpire1FullName',
-        sorter: (a, b) => a.umpire1FullName.length - b.umpire1FullName.length,
+        sorter: (a, b) => tableSort(a,b,"umpire1FullName"),
         key: 'umpire1FullName',
         render: (umpire1FullName) => <NavLink to={{
             // pathname: "/liveScoreMatchDetails",
@@ -62,15 +72,15 @@ const columns = [
         title: 'First Umpire Club',
         dataIndex: 'umpire1Club',
         key: 'umpire1Club',
-        sorter: (a, b) => a.umpire1Club.length - b.umpire1Club.length,
+        sorter: (a, b) => tableSort(a,b,"umpire1Club"),
         render: (umpire1Club) =>
-            <span>{umpire1Club.name}</span>
+            <span>{umpire1Club ? umpire1Club.name : ""}</span>
     },
     {
         title: 'Second Umpire Name',
-        dataIndex: 'umpire1FullName',
-        key: 'umpire1FullName',
-        sorter: (a, b) => a.umpire2FullName.length - b.umpire2FullName.length,
+        dataIndex: 'umpire2FullName',
+        key: 'umpire2FullName',
+        sorter: (a, b) => tableSort(a,b,"umpire2FullName"),
         render: (umpire2FullName) => <NavLink to={{
             // pathname: "/liveScoreMatchDetails",
             // state: { tableRecord: record }
@@ -80,11 +90,11 @@ const columns = [
     },
     {
         title: 'Second Umpire Club',
-        dataIndex: 'umpire1Club',
-        key: 'umpire1Club',
-        sorter: (a, b) => a.umpire1Club.length - b.umpire1Club.length,
-        render: (umpire1Club) =>
-            <span>{umpire1Club.name}</span>
+        dataIndex: 'umpire2Club',
+        key: 'umpire2Club',
+        sorter: (a, b) => tableSort(a,b,"umpire2Club"),
+        render: (umpire2Club) =>
+            <span>{umpire2Club? umpire2Club.name:""}</span>
     },
 ];
 

@@ -16,6 +16,15 @@ const { Option } = Select;
 
 var this_obj = null
 
+/////function to sort table column
+function tableSort(a, b, key) {
+    let stringA = JSON.stringify(a[key])
+    let stringB = JSON.stringify(b[key])
+    return stringA.localeCompare(stringB)
+}
+
+
+
 /// Check play percentage value
 function checkPlay(record) {
 
@@ -95,7 +104,7 @@ const columns = [
         title: 'Player Id',
         dataIndex: 'player',
         key: 'player',
-        sorter: (a, b) => a.player.length - b.player.length,
+        sorter: (a, b) => tableSort(a,b,"player"),
         render: (player) =>
             <span class="input-heading-add-another pt-0" >{player.mnbPlayerId ? player.mnbPlayerId : player.id}</span>
     },
@@ -103,7 +112,7 @@ const columns = [
         title: 'First name',
         dataIndex: 'firstName',
         key: 'firstName',
-        sorter: (a, b) => a.firstName.length - b.firstName.length,
+        sorter: (a, b) => tableSort(a,b,"firstName"),
         render: (firstName) =>
             <span class="input-heading-add-another pt-0" >{firstName}</span>
     },
@@ -111,7 +120,7 @@ const columns = [
         title: 'Last Name',
         dataIndex: 'lastName',
         key: 'lastName',
-        sorter: (a, b) => a.lastName.length - b.lastName.length,
+        sorter: (a, b) => tableSort(a,b,"lastName"),
         render: (lastName) =>
             <span class="input-heading-add-another pt-0" >{lastName}</span>
     },
@@ -119,7 +128,7 @@ const columns = [
         title: 'Team',
         dataIndex: 'team',
         key: 'team',
-        sorter: (a, b) => a.team.length - b.team.length,
+        sorter: (a, b) =>  tableSort(a,b,"team"),
         render: (team) =>
             <span class="input-heading-add-another pt-0" >{team.name}</span>
     },
@@ -127,7 +136,7 @@ const columns = [
         title: 'DIV',
         dataIndex: 'division',
         key: 'division',
-        sorter: (a, b) => a.division.length - b.division.length,
+        sorter: (a, b) => tableSort(a,b,"division"),
         render: (division) =>
             <span >{division ? division.name : ""}</span>
     },
@@ -135,7 +144,7 @@ const columns = [
         title: 'Play Time',
         dataIndex: 'playTime',
         key: 'playTime',
-        sorter: (a, b) => a.playTime.length - b.playTime.length,
+        // sorter: (a, b) => tableSort(a,b,"playTime"),
         render: (playTime, record) =>
             <span >{checkPlayTime(record)}</span>
     },

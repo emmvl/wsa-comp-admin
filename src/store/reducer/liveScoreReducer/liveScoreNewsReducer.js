@@ -44,7 +44,9 @@ const initialState = {
     expire_date: null,
     expire_time: null,
     notificationResult: [],
-    deleteNews: []
+    deleteNews: [],
+    newExpiryDate : null,
+    newExpiryTime : null
 };
 
 function liveScoreNewsState(state = initialState, action) {
@@ -85,8 +87,16 @@ function liveScoreNewsState(state = initialState, action) {
             state.addEditNews = news_data
             state.addEditNews["author"] = authorData.longName
             // state.expire_date = moment(news_data.news_expire_date).format('DD-MM-YYYY')
-            state.expire_date = news_data.news_expire_date
-            state.expire_time = news_data.news_expire_date !== null ? moment(news_data.news_expire_date, 'HH:mm') : null
+            // state.expire_date = news_data.news_expire_date
+            // state.expire_time = news_data.news_expire_date !== null ? moment(news_data.news_expire_date, 'HH:mm') : null
+
+            state.expire_date = moment(news_data.news_expire_date,"YYYY-MM-DD")
+            state.newExpiryDate = moment(news_data.news_expire_date, "YYYY-MM-DD")
+            state.expire_time = news_data.news_expire_date
+            state.newExpiryTime = news_data.news_expire_date
+            // state.expire_time = news_data.news_expire_date !== null ? moment(news_data.news_expire_date, 'HH:mm') : null
+            // state.newExpiryDate = moment(news_data.news_expire_date, "YYYY-MM-DD")
+
 
             return {
                 ...state,
@@ -115,25 +125,26 @@ function liveScoreNewsState(state = initialState, action) {
             let utcTimestamp = null
             if (action.key === "expire_date") {
                 state[action.key] = action.data
-                state.addEditNews['news_expire_date'] = action.data + " " + state['expire_time']
+                state.newExpiryDate =  moment(action.data , "YYYY-MM-DD")
+                // state.addEditNews['news_expire_date'] = action.data + " " + state['expire_time']
 
-                if (state.expire_time) {
-                    dateFormat = moment(state.expire_date).format('MM/DD/YYYY') + " " + state.expire_time
-                    utcTimestamp = new Date(dateFormat).toISOString();
+                // if (state.expire_time) {
+                //     dateFormat = moment(state.expire_date).format('MM/DD/YYYY') + " " + state.expire_time
+                //     utcTimestamp = new Date(dateFormat).toISOString();
 
-                    state.addEditNews['news_expire_date'] = utcTimestamp
-                }
+                //     state.addEditNews['news_expire_date'] = utcTimestamp
+                // }
 
             } else if (action.key === "expire_time") {
 
                 state[action.key] = action.data
 
 
-                if (state.expire_date) {
-                    dateFormat = moment(state.expire_date).format('MM/DD/YYYY') + " " + state.expire_time
-                }
-                utcTimestamp = new Date(dateFormat).toISOString();
-                state.addEditNews['news_expire_date'] = utcTimestamp
+                // if (state.expire_date) {
+                //     dateFormat = moment(state.expire_date).format('MM/DD/YYYY') + " " + state.expire_time
+                // }
+                // utcTimestamp = new Date(dateFormat).toISOString();
+                // state.addEditNews['news_expire_date'] = utcTimestamp
 
             } else {
                 state.addEditNews[action.key] = action.data

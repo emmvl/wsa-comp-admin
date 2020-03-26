@@ -1,10 +1,11 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-function liveScoreMatchListAction(competitionID, start) {
+function liveScoreMatchListAction(competitionID, start,offset) {
     const action = {
         type: ApiConstants.API_LIVE_SCORE_MATCH_LIST_LOAD,
         competitionID,
-        start
+        start,
+        offset
     }
     return action;
 }

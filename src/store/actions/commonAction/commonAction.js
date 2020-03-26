@@ -110,7 +110,6 @@ function searchVenueList(filterData) {
 function clearFilter() {
     const action = {
         type: ApiConstants.CLEAR_FILTER_SEARCH,
-
     }
     return action;
 
@@ -126,8 +125,7 @@ function venuesListAction(payload) {
     return action;
 }
 
-function venueDeleteAction(payload)
-{
+function venueDeleteAction(payload) {
     const action = {
         type: ApiConstants.API_VENUE_DELETE_LOAD,
         data: payload

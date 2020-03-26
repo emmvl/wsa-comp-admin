@@ -49,6 +49,7 @@ const initialState = {
     venuData: venueDataObj,
     venue: [],
     selectedVenueId: [],
+    selectedVenueIdAdd: null,
     venueConstrainstData: objData,
     venueConstrainstListData: null, // final get object
     homeTeamRotation: [],
@@ -395,9 +396,9 @@ function VenueTimeState(state = initialState, action) {
                 selecetdVenueListId.push(action.result.venues[i].venueId)
                 // state.courtArray.push(action.result.venues[i]
             }
-
-            state.selectedVenueId = selecetdVenueListId
-
+            if (state.selectedVenueIdAdd == null) {
+                state.selectedVenueId = selecetdVenueListId
+            }
             state.courtPrefArrayStore = selectedCourtPrefArray.courtPreferencesPost
             state.venueConstrainstData.courtPreferences = selectedCourtPrefArray.courtsArray
             state.courtPreferencesPost = selectedCourtPrefArray.courtPreferencesPost
@@ -774,6 +775,7 @@ function VenueTimeState(state = initialState, action) {
             }
         ////Competition Dashboard Case
         case ApiConstants.API_VENUE_CONSTRAINT_POST_LOAD:
+            state.selectedVenueIdAdd = null
             return { ...state, onLoad: true };
 
         case ApiConstants.API_VENUE_CONSTRAINT_POST_SUCCESS:
@@ -908,6 +910,39 @@ function VenueTimeState(state = initialState, action) {
                 venuData: venueDataByIdRes,
                 status: action.status
             };
+
+        case ApiConstants.API_ADD_VENUE_SUCCESS:
+            state.selectedVenueIdAdd = "addVenue"
+            state.selectedVenueId.push(action.result.venueId)
+
+            return { ...state }
+
+        case ApiConstants.API_CLEARING_VENUE_DATA:
+            var venueDataObj = {
+                competitionUniqueKey: '',
+                yearRefId: 1,
+                competitionMembershipProductDivisionId: 1,
+                venueId: 0,
+                name: "",
+                street1: "",
+                street2: "",
+                suburb: "",
+                stateRefId: "",
+                postalCode: "",
+                statusRefId: 1,
+                contactNumber: '',
+                organisations: [],
+                gameDays: [],
+                affiliate: false,
+                affiliateData: [],
+                venueCourts: [],
+                expandedRowKeys: [],
+            }
+            state.venuData = venueDataObj;
+            return {
+                ...state, error: null
+            };
+
         default:
             return state;
     }

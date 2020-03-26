@@ -40,8 +40,10 @@ class LiveScoreAddPlayer extends Component {
             isEdit: this.props.location.state ? this.props.location.state.isEdit : null,
             loading: false,
             playerData: props.location.state ? props.location.state.playerData : null,
-            temaViewPlayer: props.location.state ? props.location.state.temaViewPlayer ? props.location.state.temaViewPlayer : null : null
+            temaViewPlayer: props.location.state ? props.location.state.temaViewPlayer ? props.location.state.temaViewPlayer : null : null,
+            screenName: props.location.state ? props.location.state.screenName : null,
         };
+        console.log(this.props.location.state, '^^^^^**')
     }
 
     componentDidMount() {
@@ -292,7 +294,7 @@ class LiveScoreAddPlayer extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log(this.props.location)
-                this.props.liveScoreAddEditPlayerAction(playerData, playerId, this.state.image, this.state.temaViewPlayer, { teamId: playerData.teamId, screen: this.props.location.state ? this.props.location.state.screen : null })
+                this.props.liveScoreAddEditPlayerAction(playerData, playerId, this.state.image, this.state.temaViewPlayer, { teamId: playerData.teamId, screen: this.props.location.state ? this.props.location.state.screen : null, screenName: this.state.screenName })
             }
         });
     }

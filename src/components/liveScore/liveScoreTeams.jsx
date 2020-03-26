@@ -29,7 +29,7 @@ const columns = [
         render: (name, record) =>
             <NavLink to={{
                 pathname: "/liveScoreTeamView",
-                state: { teamId: record.id, screen: 'Team' }
+                state: { teamId: record.id, screenName: 'fromTeamList' }
             }} >
                 <span className="input-heading-add-another pt-0">{name}</span>
             </NavLink>,

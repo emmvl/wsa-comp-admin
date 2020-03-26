@@ -21,10 +21,14 @@ const columns = [
 
     {
         title: 'Profile Picture',
-        dataIndex: 'profilePic',
-        key: 'profilePic',
-        sorter: (a, b) => a.profilePic.length - b.profilePic.length,
-        render: text => <span >{'No Image'}</span>,
+        dataIndex: 'photoUrl',
+        key: 'photoUrl',
+        sorter: (a, b) => a.photoUrl.length - b.photoUrl.length,
+        render: photoUrl =>
+            photoUrl ?
+                <img className="live-score-user-image" src={photoUrl} alt="" height="70" width="70" />
+                :
+                <span>{'No Image'}</span>
     },
     {
         title: 'Name',
@@ -57,15 +61,19 @@ class LiveScoreTeamView extends Component {
         super(props);
         this.state = {
             data: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord : null : null,
-            teamId: props.location.state ? props.location.state.teamId : null,
+            // teamId: props.location.state ? props.location.state.teamId : null,
+            teamId: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord.id : null : null,
+            screenName: this.props.location.state ? this.props.location.state.screenName : null
         }
-        console.log(props.location, 'props.location.state')
+        console.log(props.location, 'props.location.state@@@@')
         _this = this
     }
 
     componentDidMount() {
         const { teamId } = this.props.location.state
-        this.props.getTeamViewPlayerList(teamId)
+        console.log(this.state.teamId, 'this.state.teamId')
+        let teamIds = this.state.teamId ? this.state.teamId : teamId
+        this.props.getTeamViewPlayerList(teamIds)
     }
     componentDidUpdate(nextProps) {
         if (nextProps.liveScoreTeamState != this.props.liveScoreTeamState) {
@@ -159,7 +167,7 @@ class LiveScoreTeamView extends Component {
                     >
                         <NavLink to={{
                             pathname: '/liveScoreAddPlayer',
-                            state: { ...this.props.location.state }
+                            state: { ...this.props.location.state, screenName: this.state.screenName }
                         }}>
                             <Button className="primary-add-comp-form" type="primary">
                                 + {AppConstants.addPlayer}
@@ -273,7 +281,7 @@ class LiveScoreTeamView extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"3"} />
+                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.screenName == 'fromMatchList' ? '2' : "3"} />
                 <Loader visible={this.props.liveScoreTeamState.onLoad_2} />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">

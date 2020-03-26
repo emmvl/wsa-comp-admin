@@ -63,7 +63,7 @@ export function* liveScoreAddEditPlayerSaga(action) {
             });
             message.success(action.playerId ? 'Player Edited Successfully.' : 'Player Added Successfully.')
             // history.push(action.temaViewPlayer ? '/liveScoreTeamView' : '/liveScorePlayerList', { tableRecord: action.data.teamId })
-            history.push(action.propsData.screen === ('Team' || 'editTeam') ? '/liveScoreTeamView' : '/liveScorePlayerList', { ...action.propsData })
+            history.push(action.propsData.screenName == 'fromMatchList' || action.propsData.screenName == 'fromTeamList' ? '/liveScoreTeamView' : '/liveScorePlayerList', { ...action.propsData })
         } else {
             yield call(failSaga, result)
         }

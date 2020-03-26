@@ -39,11 +39,14 @@ function competitionFormatReducer(state = initialState, action) {
             let isAllDivisionChecked = false
             getCompetitionFormatDivisions(data);
            //console.log("&&&&&&" + JSON.stringify(data));
-           if(data.competionFormatDivisions.length == 1)
+           if(data.competionFormatDivisions.length == 1 || !isArrayNotEmpty(data.competionFormatDivisions))
            {
-               if(data.competionFormatDivisions[0].selectedDivisions.length == 0)
-               {
-                isAllDivisionChecked = true;
+               if(isArrayNotEmpty(data.competionFormatDivisions)){
+                    if(data.competionFormatDivisions[0].selectedDivisions.length == 0)
+                        isAllDivisionChecked = true;
+               }
+               else{
+                    isAllDivisionChecked = true;
                }
            }
             return {

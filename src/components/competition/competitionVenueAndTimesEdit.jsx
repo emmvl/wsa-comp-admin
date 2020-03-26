@@ -19,7 +19,8 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { updateVenuAndTimeDataAction, updateVenuListAction, refreshVenueFieldsAction, removeObjectAction, venueByIdAction } from '../../store/actions/competitionModuleAction/venueTimeAction'
+import { updateVenuAndTimeDataAction, updateVenuListAction, refreshVenueFieldsAction, 
+    removeObjectAction, venueByIdAction, clearVenueDataAction } from '../../store/actions/competitionModuleAction/venueTimeAction'
 import { getYearAndCompetitionAction } from '../../store/actions/appAction'
 import { getCommonRefData, addVenueAction } from '../../store/actions/commonAction/commonAction'
 import { getOrganisationAction } from "../../store/actions/userAction/userAction";
@@ -50,7 +51,7 @@ class CompetitionVenueAndTimesEdit extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            initialData: null,
+           // initialData: null,
             getDataLoading: false,
             venueId: 0,
             saveContraintLoad: false,
@@ -200,7 +201,7 @@ class CompetitionVenueAndTimesEdit extends Component {
 
     componentWillMount() {
        console.log("componentWillMount" + JSON.stringify(this.props.venueTimeState.venuData));
-       this.setState({initialData: this.props.venueTimeState.venuData});
+      // this.setState({initialData: this.props.venueTimeState.venuData});
     }
 
     componentDidMount() {
@@ -298,14 +299,14 @@ class CompetitionVenueAndTimesEdit extends Component {
        
         if(this.state.screenNavigationKey == AppConstants.venuesList){
             setTimeout(() => {
-                this.props.venueTimeState.venuData = this.state.initialData;
+                this.props.clearVenueDataAction("venue");
                 history.push('/venuesList')
             }, 800);
             this.setState({ saveContraintLoad: false })
         }
         else {
             setTimeout(() => {
-                this.props.venueTimeState.venuData = this.state.initialData;
+                this.props.clearVenueDataAction("venue");
                 history.push('/')
             }, 800);
             this.setState({ saveContraintLoad: false })
@@ -775,7 +776,8 @@ function mapDispatchToProps(dispatch) {
         refreshVenueFieldsAction,
         getOrganisationAction,
         removeObjectAction,
-        venueByIdAction
+        venueByIdAction,
+        clearVenueDataAction
     }, dispatch)
 }
 

@@ -360,6 +360,7 @@ class CompetitionDraws extends Component {
 
   ////////form content view
   contentView = () => {
+    console.log("Venue Id" + this.state.venueId + "RoundId" + this.state.roundId);
     return (
       <div className="comp-draw-content-view">
         <div className="row comp-draw-list-top-head">

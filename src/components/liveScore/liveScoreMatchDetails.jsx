@@ -10,6 +10,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { liveScoreDeleteMatch, liveScoreGetMatchDetailInitiate } from "../../store/actions/LiveScoreAction/liveScoreMatchAction";
 import Loader from '../../customComponents/loader'
+import { isArrayNotEmpty } from '../../util/helpers'
 
 
 const { Content } = Layout;
@@ -17,22 +18,28 @@ const { confirm } = Modal;
 const columns = [
     {
         title: 'Profile Picture',
-        dataIndex: 'image',
-        key: 'image',
-        sorter: (a, b) => a.image.length - b.image.length,
-        render: (id) =>
-            <img className="live-score-user-image" src={AppImages.playerDp} alt="" height="70" width="70" />
+        dataIndex: 'photoUrl',
+        key: 'photoUrl',
+        sorter: (a, b) => a.photoUrl.length - b.photoUrl.length,
+        render: (photoUrl) =>
+            // <img className="live-score-user-image" src={AppImages.playerDp} alt="" height="70" width="70" />
+            photoUrl ?
+                <img className="live-score-user-image" src={photoUrl} alt="" height="70" width="70" />
+                :
+                <span>{'No Image'}</span>
     },
     {
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
         sorter: (a, b) => a.name.length - b.name.length,
-        render: (name) =>
-            <NavLink to={{
-                pathname: '/liveScorePlayerProfile',
-                state: { playerName: name }
-            }}><span class="input-heading-add-another pt-0" >{name}</span></NavLink>
+        // render: (record, name) => console.log(record, 'record')
+        // <NavLink to={{
+        //     pathname: '/liveScorePlayerProfile',
+        //     state: { playerName: name }
+        // }}>
+        //     {/* <span class="input-heading-add-another pt-0" >{record.firstName + " " + record.lastName}</span> */}
+        //     </NavLink>
 
     },
     {
@@ -40,6 +47,7 @@ const columns = [
         dataIndex: 'team',
         key: 'team',
         sorter: (a, b) => a.team.length - b.team.length,
+        // render: (record) => <span class="input-heading-add-another pt-0" >{record.team.name}</span>
     },
     {
         title: 'Attended?',
@@ -49,7 +57,7 @@ const columns = [
         render: attended =>
             <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
                 <img className="dot-image"
-                    src={attended === true ? AppImages.greenDot : AppImages.greyDot}
+                    src={attended ? AppImages.greenDot : AppImages.greyDot}
                     alt="" width="12" height="12" />
             </span>,
     },
@@ -169,7 +177,7 @@ class LiveScoreMatchDetails extends Component {
                             <span className="form-heading pb-0" > {length >= 1 ? match ? match[0].team2.name : '' : ''}</span>
                         </div>
                         <div className="col-sm-2" >
-                            <span className='year-select-heading' >#111</span>
+                            <span className='year-select-heading' >{'#' + this.state.matchId}</span>
                         </div>
                     </div>
                     <div className="col-sm" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
@@ -226,9 +234,10 @@ class LiveScoreMatchDetails extends Component {
     //// Umpire & Score details
 
     umpireScore_View = () => {
-        const { match } = this.props.liveScoreMatchState.matchDetails
+        const { match, umpires } = this.props.liveScoreMatchState.matchDetails
         const length = match ? match.length : 0
-        // console.log('length', length)
+        let UmpireData = isArrayNotEmpty(umpires) ? umpires : []
+        console.log(umpires, 'umpires****')
         return (
 
             <div className="comp-dash-table-view row mt-5">
@@ -237,10 +246,19 @@ class LiveScoreMatchDetails extends Component {
                         <span className="event-time-start-text" >{AppConstants.umpireName}</span>
                     </div>
                     <div style={{ display: "flex", alignContent: "center" }} >
-                        <span className="inbox-name-text pt-2" >U1:</span>
+                        {/* <span className="inbox-name-text pt-2" >{'U1: '}</span> */}
+                        {UmpireData.map((item) => (
+                            <span className="inbox-name-text pt-2" >U1: {item.umpire1FullName}</span>
+                        ))
+                        }
+
                     </div>
                     <div style={{ display: "flex", alignContent: "center" }} >
-                        <span className="inbox-name-text pt-2" >U2:</span>
+                        {/* <span className="inbox-name-text pt-2" >{'U2: '}</span> */}
+                        {UmpireData.map((item) => (
+                            <span className="inbox-name-text pt-2" >U2: {item.umpire2FullName}</span>
+                        ))
+                        }
                     </div>
                 </div>
                 <div className="col-sm">
@@ -248,10 +266,16 @@ class LiveScoreMatchDetails extends Component {
                         <span className="event-time-start-text" >{AppConstants.umpireClubName}</span>
                     </div>
                     <div style={{ display: "flex", alignContent: "center" }} >
-                        <span className="inbox-name-text pt-2" >-</span>
+                        {UmpireData.map((item) => (
+                            <span className="inbox-name-text pt-2" >{item.umpire1Club.name}</span>
+                        ))
+                        }
                     </div>
                     <div style={{ display: "flex", alignContent: "center" }} >
-                        <span className="inbox-name-text pt-2" >-</span>
+                        {UmpireData.map((item) => (
+                            <span className="inbox-name-text pt-2" >{item.umpire2Club.name}</span>
+                        ))
+                        }
                     </div>
                 </div>
                 <div className="col-sm">
@@ -259,10 +283,10 @@ class LiveScoreMatchDetails extends Component {
                         <span className="event-time-start-text" >{AppConstants.scorerName}</span>
                     </div>
                     <div style={{ display: "flex", alignContent: "center" }} >
-                        <span className="inbox-name-text pt-2" >S1:{length >= 1 ? match ? match[0].scorer1 ? match[0].scorer1.firstName + '' + match[0].scorer1.lastName : '' : '' : ''}</span>
+                        <span className="inbox-name-text pt-2" >S1: {length >= 1 ? match ? match[0].scorer1 ? match[0].scorer1.firstName + ' ' + match[0].scorer1.lastName : '' : '' : ''}</span>
                     </div>
                     <div style={{ display: "flex", alignContent: "center" }} >
-                        <span className="inbox-name-text pt-2" >S2:{length >= 1 ? match ? match[0].scorer2 ? match[0].scorer2.firstName + '' + match[0].scorer2.lastName : '' : '' : ''}</span>
+                        <span className="inbox-name-text pt-2" >S2: {length >= 1 ? match ? match[0].scorer2 ? match[0].scorer2.firstName + ' ' + match[0].scorer2.lastName : '' : '' : ''}</span>
                     </div>
                 </div>
                 <div className="col-sm">
@@ -270,7 +294,7 @@ class LiveScoreMatchDetails extends Component {
                         <span className="event-time-start-text" >{AppConstants.score}</span>
                     </div>
                     <div style={{ display: "flex", alignContent: "center" }} >
-                        <span className="inbox-name-text pt-2" >H : - : A</span>
+                        <span className="inbox-name-text pt-2" >{length >= 1 ? match ? match[0] ? match[0].team1Score + ' : ' + match[0].team2Score : '' : '' : ''}</span>
                     </div>
                 </div>
             </div >
@@ -281,8 +305,10 @@ class LiveScoreMatchDetails extends Component {
 
     //// Team details 
     team_View = () => {
-        const { match, umpires, team1players, team2players } = this.props.liveScoreMatchState.matchDetails
+        const { match, umpires } = this.props.liveScoreMatchState.matchDetails
+        const { team1Players, team2Players } = this.props.liveScoreMatchState
         const length = match ? match.length : 0
+        console.log(this.props.liveScoreMatchState, 'team1players')
 
         return (
             <div className="match-details-rl-padding row mt-5">
@@ -296,8 +322,8 @@ class LiveScoreMatchDetails extends Component {
                     <div className="comp-dash-table-view mt-2">
                         <span className="live-score-profile-user-name">{AppConstants.players}</span>
                         <div>
-                            <Table className="home-dashboard-table pt-2" columns={columns} dataSource={team1players ? team1players : data} pagination={false}
-                            />
+                            {/* <Table className="home-dashboard-table pt-2" columns={columns} dataSource={team1players ? team1players : data} pagination={false}/> */}
+                            <Table className="home-dashboard-table pt-2" columns={columns} dataSource={team1Players} pagination={false} />
                         </div>
                     </div>
                 </div>
@@ -311,7 +337,7 @@ class LiveScoreMatchDetails extends Component {
                     <div className="comp-dash-table-view mt-2">
                         <span className="live-score-profile-user-name">{AppConstants.players}</span>
                         <div>
-                            <Table className="home-dashboard-table pt-2" columns={columns} dataSource={team2players ? team2players : data2} pagination={false}
+                            <Table className="home-dashboard-table pt-2" columns={columns} dataSource={team2Players} pagination={false}
                             />
                         </div>
                     </div>

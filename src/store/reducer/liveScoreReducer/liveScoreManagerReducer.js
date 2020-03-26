@@ -46,7 +46,7 @@ function genrateTeamId(teamIdArr) {
 }
 
 function getTeamObj(teamSelectId, teamArr) {
-    console.log(teamSelectId, teamArr)
+    
     let teamObj = []
     let obj = ''
     for (let i in teamArr) {
@@ -58,6 +58,7 @@ function getTeamObj(teamSelectId, teamArr) {
                     "id": teamArr[i].id
                 }
                 teamObj.push(obj)
+                break;
             }
 
         }
@@ -92,7 +93,7 @@ function liveScoreMangerState(state = initialState, action) {
 
             }
         case ApiConstants.API_LIVE_SCORE_DIVISION_SUCCESS:
-            console.log('API_LIVE_SCORE_DIVISION_SUCCESS', action.teamResult)
+          
             return {
                 ...state,
                 onLoad: false,
@@ -105,10 +106,10 @@ function liveScoreMangerState(state = initialState, action) {
 
 
             if (action.key == 'teamId') {
-                console.log(action, 'API_LIVE_SCORE_UPDATE_MANAGER_DATA')
+              
                 let teamObj = getTeamObj(action.data, state.teamResult)
                 state.managerData['teams'] = teamObj
-                console.log(teamObj, 'teamObj')
+            
                 state.teamId = action.data
 
             } else if (action.key == 'managerRadioBtn') {
@@ -116,8 +117,7 @@ function liveScoreMangerState(state = initialState, action) {
                 state.exsitingManagerId = null
 
             } else if (action.key == "managerSearch") {
-                // let managerObj = getManagerListObject(state.managerListResult, action.data)
-                // state.managerData = managerObj
+        
                 state.exsitingManagerId = action.data
 
             } else if (action.key == 'isEditManager') {
@@ -126,9 +126,6 @@ function liveScoreMangerState(state = initialState, action) {
                 state.managerData.lastName = action.data.lastName
                 state.managerData.mobileNumber = action.data.mobileNumber
                 state.managerData.email = action.data.email
-
-
-
                 let getTeamId = genrateTeamId(action.data.linkedEntity)
                 state.teamId = getTeamId
 
@@ -170,14 +167,13 @@ function liveScoreMangerState(state = initialState, action) {
             };
 
         case ApiConstants.API_LIVESCORE_MANAGER_FILTER:
-            console.log(action)
-
+           
             return {
                 ...state,
                 managerListResult: action.payload
             }
         case ApiConstants.CLEAR_LIVESCORE_MANAGER:
-            console.log('clear')
+           
             return {
                 ...state,
                 managerListResult: state.MainManagerListResult

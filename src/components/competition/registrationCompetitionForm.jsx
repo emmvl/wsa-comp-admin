@@ -53,7 +53,8 @@ import {
 } from "../../store/actions/registrationAction/competitionFeeAction";
 import {
     competitionFeeInit, getVenuesTypeAction,
-    getCommonDiscountTypeTypeAction, getOnlyYearListAction
+    getCommonDiscountTypeTypeAction, getOnlyYearListAction,
+    clearFilter, searchVenueList,
 } from "../../store/actions/appAction";
 import moment from "moment";
 import history from "../../util/history";
@@ -61,9 +62,9 @@ import { isArrayNotEmpty, isNullOrEmptyString } from "../../util/helpers";
 import ValidationConstants from "../../themes/validationConstant";
 import { NavLink } from "react-router-dom";
 import Loader from '../../customComponents/loader';
-import { venueListAction, getCommonRefData, searchVenueList, clearFilter } from '../../store/actions/commonAction/commonAction'
+import { venueListAction, getCommonRefData, } from '../../store/actions/commonAction/commonAction'
 import { getUserId, getOrganisationData } from "../../util/sessionStorage"
-
+import { clearVenueDataAction } from '../../store/actions/competitionModuleAction/venueTimeAction'
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -78,7 +79,10 @@ const divisionTable = [
         dataIndex: "divisionName",
         key: "divisionName",
         render: (divisionName, record, index) => (
-            <Input className="input-inside-table-fees" value={divisionName} onChange={e => this_Obj.divisionTableDataOnchange(e.target.value, record, index, "divisionName")} />
+            <Input className="input-inside-table-fees"
+                value={divisionName}
+                onChange={e => this_Obj.divisionTableDataOnchange(e.target.value, record, index, "divisionName")}
+                disabled={this_Obj.state.isCreatorEdit} />
         )
     },
 
@@ -92,6 +96,7 @@ const divisionTable = [
                 className="single-checkbox mt-1"
                 checked={ageRestriction}
                 onChange={e => this_Obj.divisionTableDataOnchange(e.target.checked, record, index, "ageRestriction")}
+                disabled={this_Obj.state.isCreatorEdit}
             ></Checkbox>
         )
     },
@@ -143,7 +148,7 @@ const divisionTable = [
                     alt=""
                     width="16"
                     height="16"
-                    onClick={() => this_Obj.addRemoveDivision(index, record, "remove")}
+                    onClick={() => !this_Obj.state.isCreatorEdit ? this_Obj.addRemoveDivision(index, record, "remove") : null}
                 />
             </span>
         )
@@ -206,7 +211,7 @@ const playerSeasoTable = [
         dataIndex: "fee",
         key: "fee",
         render: (fee, record, index) => (
-            <Input className="input-inside-table-fees" value={fee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "fee", "seasonal")} />
+            <Input type="number" className="input-inside-table-fees" value={fee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "fee", "seasonal")} />
         )
     },
     {
@@ -214,7 +219,7 @@ const playerSeasoTable = [
         dataIndex: "gst",
         key: "gst",
         render: (gst, record, index) => (
-            <Input className="input-inside-table-fees" value={gst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "gst", "seasonal")} />
+            <Input type="number" className="input-inside-table-fees" value={gst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "gst", "seasonal")} />
         )
     },
 
@@ -283,7 +288,7 @@ const playercasualTable = [
         dataIndex: "fee",
         key: "fee",
         render: (fee, record, index) => (
-            <Input className="input-inside-table-fees" value={fee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "fee", "casual")} />
+            <Input type="number" className="input-inside-table-fees" value={fee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "fee", "casual")} />
         )
     },
     {
@@ -291,9 +296,11 @@ const playercasualTable = [
         dataIndex: "gst",
         key: "gst",
         render: (gst, record, index) => (
-            <Input className="input-inside-table-fees" value={gst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "gst", "casual")} />
+            <Input type="number" className="input-inside-table-fees" value={gst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "gst", "casual")} />
         )
     },
+
+
 
     {
         title: "Total",
@@ -338,7 +345,8 @@ class RegistrationCompetitionForm extends Component {
             logoUrl: "",
             isSetDefaul: false,
             competitionIsUsed: false,
-            organisationTypeRefId: 0
+            organisationTypeRefId: 0,
+            isCreatorEdit: false, //////// user is owner of the competition than isCreatorEdit will be false 
         };
         this_Obj = this;
         this.props.clearCompReducerDataAction("all")
@@ -370,6 +378,13 @@ class RegistrationCompetitionForm extends Component {
                     competitionIsUsed: competitionFeesState.competitionDetailData.isUsed
                 })
                 this.setDetailsFieldValue()
+                let creatorId = competitionFeesState.competitionCreator
+                let userId = getUserId();
+                if (creatorId == userId) {
+                    this.setState({ isCreatorEdit: false })
+                } else {
+                    this.setState({ isCreatorEdit: true })
+                }
             }
         }
 
@@ -929,6 +944,7 @@ class RegistrationCompetitionForm extends Component {
 
     // Non playing dates view
     nonPlayingDateView(item, index) {
+        let isCreatorEdit = this.state.isCreatorEdit
         return (
             <div className="fluid-width mt-3">
                 <div className="row">
@@ -937,6 +953,8 @@ class RegistrationCompetitionForm extends Component {
                             placeholder={AppConstants.name}
                             value={item.name}
                             onChange={(e) => this.updateNonPlayingNames(e.target.value, index, "name")}
+                            disabled={isCreatorEdit}
+
                         />
                     </div>
                     <div className="col-sm">
@@ -948,9 +966,11 @@ class RegistrationCompetitionForm extends Component {
                             format={"DD-MM-YYYY"}
                             showTime={false}
                             value={item.nonPlayingDate && moment(item.nonPlayingDate, "YYYY-MM-DD")}
+                            disabled={isCreatorEdit}
+
                         />
                     </div>
-                    <div className="col-sm-2 transfer-image-view" onClick={() => this.props.add_editcompetitionFeeDeatils(index, "nonPlayingDataRemove")}>
+                    <div className="col-sm-2 transfer-image-view" onClick={() => !this.state.isCreatorEdit ? this.props.add_editcompetitionFeeDeatils(index, "nonPlayingDataRemove") : null}>
                         <a className="transfer-image-view">
                             <span className="user-remove-btn">
                                 <i className="fa fa-trash-o" aria-hidden="true"></i>
@@ -963,9 +983,11 @@ class RegistrationCompetitionForm extends Component {
         )
     }
 
+
     //On selection of venue
     onSelectValues(item, detailsData) {
         this.props.add_editcompetitionFeeDeatils(item, "venues")
+        this.props.clearFilter()
     }
 
     ///// Add Non Playing dates
@@ -1004,6 +1026,14 @@ class RegistrationCompetitionForm extends Component {
     onInviteesChange(value) {
         let regInviteesselectedData = this.props.competitionFeesState.selectedInvitees
         let upcomingData = [...value]
+        let index = upcomingData.findIndex(x => x == "1")
+        if (index > -1) {
+            upcomingData.splice(index, 1)
+            let clubIndex = upcomingData.findIndex(x => x == "3")
+            if (clubIndex > -1) {
+                upcomingData.splice(clubIndex, 1)
+            }
+        }
         let associationIndex = regInviteesselectedData.findIndex(x => x == "2")
         if (associationIndex > -1) {
             let index = upcomingData.findIndex(x => x == "2")
@@ -1014,7 +1044,6 @@ class RegistrationCompetitionForm extends Component {
             if (mainIndex > -1) {
                 upcomingData.splice(mainIndex, 1)
             }
-
         }
         let clubIndex = regInviteesselectedData.findIndex(x => x == "3")
         if (clubIndex > -1) {
@@ -1027,6 +1056,32 @@ class RegistrationCompetitionForm extends Component {
                 upcomingData.splice(mainIndex, 1)
             }
         }
+        let directIndex = regInviteesselectedData.findIndex(x => x == "5")
+        if (directIndex > -1) {
+            let index = upcomingData.findIndex(x => x == "5")
+            if (index > -1) {
+                upcomingData.splice(index, 1)
+            }
+            let mainIndex = upcomingData.findIndex(x => x == "1")
+            if (mainIndex > -1) {
+                upcomingData.splice(mainIndex, 1)
+            }
+        }
+        let notApplIndex = regInviteesselectedData.findIndex(x => x == "6")
+        if (notApplIndex > -1) {
+            let index = upcomingData.findIndex(x => x == "6")
+            if (index > -1) {
+                upcomingData.splice(index, 1)
+            }
+            let mainIndex = upcomingData.findIndex(x => x == "1")
+            if (mainIndex > -1) {
+                upcomingData.splice(mainIndex, 1)
+            }
+        }
+
+
+
+        console.log(upcomingData, "upcomingData")
         this.props.add_editcompetitionFeeDeatils(upcomingData, "invitees")
     }
 
@@ -1047,22 +1102,21 @@ class RegistrationCompetitionForm extends Component {
 
 
     handleSearch = (value, data) => {
-        console.log(value, data)
-
         const filteredData = data.filter(memo => {
-            return memo.venueName.indexOf(value) > -1
+            return memo.name.indexOf(value) > -1
         })
         this.props.searchVenueList(filteredData)
 
     };
 
-    ////////form content view - fee details
+    ///////form content view - fee details
     contentView = (getFieldDecorator) => {
         let appState = this.props.appState
-        // const { venueList } = this.props.appState
         const { venueList, mainVenueList } = this.props.commonReducerState
         let detailsData = this.props.competitionFeesState
         let defaultCompFeesOrgLogo = detailsData.defaultCompFeesOrgLogo
+        let isCreatorEdit = this.state.isCreatorEdit
+        console.log(detailsData.competitionDetailData)
         return (
             <div className="content-view pt-4">
                 <Form.Item >
@@ -1072,8 +1126,10 @@ class RegistrationCompetitionForm extends Component {
                                 required={"required-field pb-0 "}
                                 heading={AppConstants.competition_name}
                                 placeholder={AppConstants.competition_name}
+                                // setFieldsValue={}
                                 // value={detailsData.competitionDetailData.competitionName}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionName")}
+                                disabled={isCreatorEdit}
                             />
                         )}
                 </Form.Item>
@@ -1098,6 +1154,7 @@ class RegistrationCompetitionForm extends Component {
                                 </label>
                             </div>
                             <input
+                                disabled={isCreatorEdit}
                                 type="file"
                                 id="user-pic"
                                 style={{ display: 'none' }}
@@ -1117,6 +1174,7 @@ class RegistrationCompetitionForm extends Component {
                                 onChange={e =>
                                     this.logoIsDefaultOnchange(e.target.checked, "logoIsDefault")
                                 }
+                                disabled={isCreatorEdit}
                             >
                                 {AppConstants.useDefault}
                             </Checkbox>}
@@ -1126,8 +1184,8 @@ class RegistrationCompetitionForm extends Component {
                                 checked={this.state.logoSetDefault}
                                 onChange={e =>
                                     this.logoSaveAsDefaultOnchange(e.target.checked, "logoIsDefault")
-
                                 }
+                                disabled={isCreatorEdit}
                             >
                                 {AppConstants.saveAsDefault}
                             </Checkbox>}
@@ -1143,18 +1201,23 @@ class RegistrationCompetitionForm extends Component {
                     allowClear
                     value={detailsData.competitionDetailData.description}
                     onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "description")}
+                    disabled={isCreatorEdit}
                 />
 
-
                 <div style={{ marginTop: 15 }}>
-                    {/* <Select
+                    <InputWithHead required={"required-field pb-0 "} heading={AppConstants.venue} />
+                    <Select
                         mode="multiple"
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        onChange={venueSelection => this.onSelectValues(venueSelection, detailsData)}
+                        onChange={venueSelection => {
+                            this.onSelectValues(venueSelection, detailsData)
+
+                        }}
+
                         value={detailsData.selectedVenues}
                         placeholder={AppConstants.selectVenue}
-
-
+                        filterOption={false}
+                        onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
                     >
                         {appState.venueList.length > 0 && appState.venueList.map((item) => {
                             return (
@@ -1164,35 +1227,17 @@ class RegistrationCompetitionForm extends Component {
                                     {item.name}</Option>
                             )
                         })}
-
-                    </Select> */}
-                    <InputWithHead required={"required-field pb-0 "} heading={AppConstants.venue} />
-                    <Select
-                        mode="multiple"
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        onChange={venueId => {
-                            this.props.add_editcompetitionFeeDeatils(venueId, "venues")
-                            this.props.clearFilter()
-                        }}
-                        // value={selectedVenueId}
-                        value={detailsData.selectedVenues}
-                        placeholder={'Select Venue'}
-                        filterOption={false}
-                        onSearch={(value) => { this.handleSearch(value, venueList) }}
-                    >
-                        {venueList.length > 0 && venueList.map((item) => (
-                            < Option value={item.venueId} key={item.venueId} > {item.venueName}</Option>
-                        ))
-                        }
                     </Select>
-                </div>
-                <NavLink
-                    to={{ pathname: `/competitionVenueAndTimesAdd`, state: { key: AppConstants.dashboard } }}
-                >
-                    <span className="input-heading-add-another">+{AppConstants.addVenue}</span>
-                </NavLink>
-                {/* <span className="input-heading-add-another">+{AppConstants.addVenue}</span> */}
 
+                </div>
+                <div onClick={() => this.props.clearVenueDataAction("venue") }>
+                    <NavLink
+                        to={{ pathname: `/competitionVenueAndTimesAdd`, state: { key: AppConstants.competitionFees } }}
+                    >
+                        <span className="input-heading-add-another">+{AppConstants.addVenue}</span>
+                    </NavLink>
+                </div>
+               
                 <span className="applicable-to-heading required-field">{AppConstants.typeOfCompetition}</span>
                 <Form.Item  >
                     {getFieldDecorator('competitionTypeRefId', { initialValue: 1 }, { rules: [{ required: true, message: ValidationConstants.pleaseSelectCompetitionType }] })(
@@ -1200,6 +1245,8 @@ class RegistrationCompetitionForm extends Component {
                             className="reg-competition-radio"
                             onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionTypeRefId")}
                             setFieldsValue={detailsData.competitionTypeRefId}
+                            disabled={isCreatorEdit}
+
                         >
                             {appState.typesOfCompetition.length > 0 && appState.typesOfCompetition.map(item => {
                                 return (
@@ -1219,6 +1266,8 @@ class RegistrationCompetitionForm extends Component {
                             onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionFormatRefId")}
                             // setFieldsValue={1}
                             setFieldsValue={detailsData.competitionFormatRefId}
+                            disabled={isCreatorEdit}
+
                         >
                             {appState.competitionFormatTypes.length > 0 && appState.competitionFormatTypes.map(item => {
                                 return (
@@ -1240,6 +1289,8 @@ class RegistrationCompetitionForm extends Component {
                                 format={"DD-MM-YYYY"}
                                 showTime={false}
                                 value={detailsData.competitionDetailData.startDate && moment(detailsData.competitionDetailData.startDate, "YYYY-MM-DD")}
+                                disabled={isCreatorEdit}
+
                             />
 
                         </div>
@@ -1253,6 +1304,8 @@ class RegistrationCompetitionForm extends Component {
                                             placeholder={AppConstants.numberOfRounds}
                                             value={detailsData.competitionDetailData.noOfRounds}
                                             onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "noOfRounds")}
+                                            disabled={isCreatorEdit}
+
                                         />
                                     )}
                             </Form.Item>
@@ -1267,6 +1320,8 @@ class RegistrationCompetitionForm extends Component {
                                 placeholder={AppConstants.days}
                                 value={detailsData.competitionDetailData.roundInDays}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInDays")}
+                                disabled={isCreatorEdit}
+
                             />
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
@@ -1274,6 +1329,8 @@ class RegistrationCompetitionForm extends Component {
                                 placeholder={AppConstants.hours}
                                 value={detailsData.competitionDetailData.roundInHours}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInHours")}
+                                disabled={isCreatorEdit}
+
                             />
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
@@ -1281,6 +1338,8 @@ class RegistrationCompetitionForm extends Component {
                                 placeholder={AppConstants.mins}
                                 value={detailsData.competitionDetailData.roundInMins}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInMins")}
+                                disabled={isCreatorEdit}
+
                             />
                         </div>
                     </div>
@@ -1293,6 +1352,8 @@ class RegistrationCompetitionForm extends Component {
                     format={"DD-MM-YYYY"}
                     showTime={false}
                     value={detailsData.competitionDetailData.registrationCloseDate && moment(detailsData.competitionDetailData.registrationCloseDate)}
+                    disabled={isCreatorEdit}
+
                 />
                 <div className="inside-container-view pt-4">
                     <InputWithHead heading={AppConstants.nonPlayingDates} />
@@ -1300,7 +1361,7 @@ class RegistrationCompetitionForm extends Component {
                         this.nonPlayingDateView(item, index))
                     }
                     <a>
-                        <span onClick={() => this.addNonPlayingDate()} className="input-heading-add-another">
+                        <span onClick={() => !this.state.isCreatorEdit ? this.addNonPlayingDate() : null} className="input-heading-add-another">
                             + {AppConstants.addAnotherNonPlayingDate}
                         </span>
                     </a>
@@ -1313,6 +1374,8 @@ class RegistrationCompetitionForm extends Component {
                                 placeholder={AppConstants.minNumber}
                                 value={detailsData.competitionDetailData.minimunPlayers}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "minimunPlayers")}
+                                disabled={isCreatorEdit}
+
                             />
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
@@ -1320,6 +1383,8 @@ class RegistrationCompetitionForm extends Component {
                                 placeholder={AppConstants.maxNumber}
                                 value={detailsData.competitionDetailData.maximumPlayers}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "maximumPlayers")}
+                                disabled={isCreatorEdit}
+
                             />
                         </div>
                     </div>
@@ -1430,11 +1495,10 @@ class RegistrationCompetitionForm extends Component {
 
     divisionsView = () => {
         let divisionData = this.props.competitionFeesState.competitionDivisionsData
-        console.log("divisionData", divisionData)
         let divisionArray = divisionData !== null ? divisionData : []
         return (
             <div className="fees-view pt-5">
-                <span className="form-heading required-field">{AppConstants.divisions}</span>
+                <span className="form-heading required-field" >{AppConstants.divisions}</span>
                 {divisionArray.length == 0 && (
                     <span className="applicable-to-heading pt-0">
                         {AppConstants.please_Sel_mem_pro}
@@ -1442,7 +1506,6 @@ class RegistrationCompetitionForm extends Component {
                 )}
                 {divisionArray.map((item, index) =>
                     <div>
-
                         <div className="inside-container-view">
                             <span className="form-heading pt-2 pl-2">
                                 {item.membershipProductName}
@@ -1457,7 +1520,7 @@ class RegistrationCompetitionForm extends Component {
                                 />
                             </div>
                             <a>
-                                <span className="input-heading-add-another" onClick={() => this.addRemoveDivision(index, item, "add")}>+ {AppConstants.addDivision}</span>
+                                <span className="input-heading-add-another" onClick={() => !this.state.isCreatorEdit ? this.addRemoveDivision(index, item, "add") : null}>+ {AppConstants.addDivision}</span>
                             </a>
                         </div>
                     </div>
@@ -1466,6 +1529,7 @@ class RegistrationCompetitionForm extends Component {
             </div>
         );
     };
+
 
     ////// Edit fee details
     onChangeDetails(value, tableIndex, item, key, arrayKey) {
@@ -1583,6 +1647,7 @@ class RegistrationCompetitionForm extends Component {
     regInviteesView = () => {
         let invitees = this.props.appState.registrationInvitees.length > 0 ? this.props.appState.registrationInvitees : []
         let detailsData = this.props.competitionFeesState
+        let isCreatorEdit = this.state.isCreatorEdit
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.registrationInvitees}</span>
@@ -1593,7 +1658,7 @@ class RegistrationCompetitionForm extends Component {
                         checkable
                         checkedKeys={[...detailsData.selectedInvitees]}
                         onCheck={(e) => this.onInviteesChange(e)}
-
+                        disabled={isCreatorEdit}
                     >
                         {this.AffiliatesLevel(invitees)}
                     </Tree>
@@ -1601,6 +1666,7 @@ class RegistrationCompetitionForm extends Component {
             </div>
         );
     };
+
 
 
     //on change of casual fee payment option
@@ -2239,9 +2305,13 @@ class RegistrationCompetitionForm extends Component {
     footerView = () => {
         let tabKey = this.state.competitionTabKey
         let competitionId = this.props.competitionFeesState.competitionId
+        let statusRefId = this.props.competitionFeesState.competitionDetailData.statusRefId ?
+            this.props.competitionFeesState.competitionDetailData.statusRefId : 1
+        console.log("statusRefId", statusRefId)
         return (
             <div className="fluid-width">
-                {!this.state.competitionIsUsed &&
+                {/* {!this.state.competitionIsUsed && */}
+                {statusRefId == 1 &&
                     <div className="footer-view">
                         <div className="row">
                             <div className="col-sm">
@@ -2422,7 +2492,8 @@ function mapDispatchToProps(dispatch) {
         clearCompReducerDataAction,
         searchVenueList,
         venueListAction,
-        clearFilter
+        clearFilter,
+        clearVenueDataAction
     }, dispatch)
 }
 
@@ -2430,7 +2501,8 @@ function mapStatetoProps(state) {
     return {
         competitionFeesState: state.CompetitionFeesState,
         appState: state.AppState,
-        commonReducerState: state.CommonReducerState
+        commonReducerState: state.CommonReducerState,
+        venueTimeState: state.VenueTimeState
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(RegistrationCompetitionForm));

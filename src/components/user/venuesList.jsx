@@ -8,6 +8,7 @@ import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import {venuesListAction, venueDeleteAction } from 
                 "../../store/actions/commonAction/commonAction";
+import { clearVenueDataAction } from '../../store/actions/competitionModuleAction/venueTimeAction'
 import { bindActionCreators } from "redux";
 import AppImages from "../../themes/appImages";
 import { getOrganisationData } from "../../util/sessionStorage";
@@ -147,6 +148,7 @@ class VenuesList extends Component {
     };
 
     naviageToVenue = (e) => {
+        this.props.clearVenueDataAction();
         this.props.history.push("/venueEdit", {venueId: e.id})
     }
 
@@ -219,7 +221,7 @@ class VenuesList extends Component {
                         </div>
                     </div>
                     <div style={{marginRight: '4.2%'}}>
-                        <div className="d-flex flex-row-reverse">
+                        <div className="d-flex flex-row-reverse" onClick={() => this.props.clearVenueDataAction("venue") }>
                             <NavLink to={{pathname:`/competitionVenueAndTimesAdd` , state: { key: AppConstants.venuesList }}}>
                                 <Button className='primary-add-product' type='primary'>+ {AppConstants.addVenue}</Button>
                             </NavLink>
@@ -333,14 +335,16 @@ function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
         venuesListAction,
-        venueDeleteAction 
+        venueDeleteAction,
+        clearVenueDataAction
     }, dispatch);
 
 }
 
 function mapStatetoProps(state){
     return {
-        commonReducerState: state.CommonReducerState
+        commonReducerState: state.CommonReducerState,
+        venueTimeState: state.VenueTimeState,
     }
 }
 

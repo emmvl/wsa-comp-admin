@@ -53,7 +53,10 @@ import {
 } from "../../store/actions/registrationAction/competitionFeeAction";
 import {
     competitionFeeInit, getVenuesTypeAction, getCommonDiscountTypeTypeAction,
-    getYearListAction, getCompetitionTypeListAction, getYearAndCompetitionOwnAction
+    getYearListAction, getCompetitionTypeListAction, getYearAndCompetitionOwnAction,
+    searchVenueList,
+    clearFilter,
+
 } from "../../store/actions/appAction";
 import moment from "moment";
 import history from "../../util/history";
@@ -67,7 +70,8 @@ import {
     getOwn_competition
 } from "../../util/sessionStorage";
 import Loader from '../../customComponents/loader';
-import { getUserId, getOrganisationData } from "../../util/sessionStorage"
+import { getUserId, getOrganisationData } from "../../util/sessionStorage";
+import { clearVenueDataAction } from '../../store/actions/competitionModuleAction/venueTimeAction'
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -484,7 +488,7 @@ class CompetitionOpenRegForm extends Component {
                         let formData = new FormData();
                         formData.append("competitionUniqueKey", competitionId);
                         formData.append("name", postData.competitionName);
-                        formData.append("yearRefId", values.yearRefId);
+                        formData.append("yearRefId", this.state.yearRefId);
                         formData.append("description", postData.description);
                         formData.append("competitionTypeRefId", postData.competitionTypeRefId);
                         formData.append("competitionFormatRefId", postData.competitionFormatRefId);
@@ -925,7 +929,9 @@ class CompetitionOpenRegForm extends Component {
 
     //On selection of venue
     onSelectValues(item, detailsData) {
+        console.log("Venue" + item);
         this.props.add_editcompetitionFeeDeatils(item, "venues")
+        this.props.clearFilter()
     }
 
     ///// Add Non Playing dates
@@ -962,32 +968,64 @@ class CompetitionOpenRegForm extends Component {
 
     //// On change Invitees
     onInviteesChange(value) {
-        let regInviteesselectedData = this.props.competitionFeesState.selectedInvitees
-        let upcomingData = [...value]
-        let associationIndex = regInviteesselectedData.findIndex(x => x == "2")
-        if (associationIndex > -1) {
-            let index = upcomingData.findIndex(x => x == "2")
-            if (index > -1) {
-                upcomingData.splice(index, 1)
-            }
-            let mainIndex = upcomingData.findIndex(x => x == "1")
-            if (mainIndex > -1) {
-                upcomingData.splice(mainIndex, 1)
-            }
+        //let regInviteesselectedData = this.props.competitionFeesState.selectedInvitees;
+        let arr = [value];
+        // let upcomingData = [...value]
+        // let index = upcomingData.findIndex(x => x == "1")
+        // if (index > -1) {
+        //     upcomingData.splice(index, 1)
+        //     let clubIndex = upcomingData.findIndex(x => x == "3")
+        //     if (clubIndex > -1) {
+        //         upcomingData.splice(clubIndex, 1)
+        //     }
+        // }
+        // let associationIndex = regInviteesselectedData.findIndex(x => x == "2")
+        // if (associationIndex > -1) {
+        //     let index = upcomingData.findIndex(x => x == "2")
+        //     if (index > -1) {
+        //         upcomingData.splice(index, 1)
+        //     }
+        //     let mainIndex = upcomingData.findIndex(x => x == "1")
+        //     if (mainIndex > -1) {
+        //         upcomingData.splice(mainIndex, 1)
+        //     }
+        // }
+        // let clubIndex = regInviteesselectedData.findIndex(x => x == "3")
+        // if (clubIndex > -1) {
+        //     let index = upcomingData.findIndex(x => x == "3")
+        //     if (index > -1) {
+        //         upcomingData.splice(index, 1)
+        //     }
+        //     let mainIndex = upcomingData.findIndex(x => x == "1")
+        //     if (mainIndex > -1) {
+        //         upcomingData.splice(mainIndex, 1)
+        //     }
+        // }
+        // let directIndex = regInviteesselectedData.findIndex(x => x == "5")
+        // if (directIndex > -1) {
+        //     let index = upcomingData.findIndex(x => x == "5")
+        //     if (index > -1) {
+        //         upcomingData.splice(index, 1)
+        //     }
+        //     let mainIndex = upcomingData.findIndex(x => x == "1")
+        //     if (mainIndex > -1) {
+        //         upcomingData.splice(mainIndex, 1)
+        //     }
+        // }
+        // let notApplIndex = regInviteesselectedData.findIndex(x => x == "6")
+        // if (notApplIndex > -1) {
+        //     let index = upcomingData.findIndex(x => x == "6")
+        //     if (index > -1) {
+        //         upcomingData.splice(index, 1)
+        //     }
+        //     let mainIndex = upcomingData.findIndex(x => x == "1")
+        //     if (mainIndex > -1) {
+        //         upcomingData.splice(mainIndex, 1)
+        //     }
+        // }
 
-        }
-        let clubIndex = regInviteesselectedData.findIndex(x => x == "3")
-        if (clubIndex > -1) {
-            let index = upcomingData.findIndex(x => x == "3")
-            if (index > -1) {
-                upcomingData.splice(index, 1)
-            }
-            let mainIndex = upcomingData.findIndex(x => x == "1")
-            if (mainIndex > -1) {
-                upcomingData.splice(mainIndex, 1)
-            }
-        }
-        this.props.add_editcompetitionFeeDeatils(upcomingData, "invitees")
+       // console.log(upcomingData, "upcomingData")
+        this.props.add_editcompetitionFeeDeatils(arr, "invitees");
     }
 
     /////on change logo isdefault
@@ -1003,6 +1041,17 @@ class CompetitionOpenRegForm extends Component {
         this.props.add_editcompetitionFeeDeatils(false, key)
         this.setState({ logoSetDefault: value })
     }
+
+    // search venue  
+    handleSearch = (value, data) => {
+        console.log(value, data)
+        const filteredData = data.filter(memo => {
+            return memo.name.indexOf(value) > -1
+        })
+        this.props.searchVenueList(filteredData)
+
+    };
+
 
     ////////form content view - fee details
     contentView = (getFieldDecorator) => {
@@ -1100,6 +1149,10 @@ class CompetitionOpenRegForm extends Component {
                         onChange={venueSelection => this.onSelectValues(venueSelection, detailsData)}
                         value={detailsData.selectedVenues}
                         placeholder={AppConstants.selectVenue}
+                        filterOption={false}
+                        onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
+
+
                     >
                         {appState.venueList.length > 0 && appState.venueList.map((item) => {
                             return (
@@ -1112,13 +1165,14 @@ class CompetitionOpenRegForm extends Component {
 
                     </Select>
                 </div>
-
-                <NavLink
-                    to={{ pathname: `/competitionVenueAndTimesAdd`, state: { key: AppConstants.competitionDetails } }}
-                >
-                    <span className="input-heading-add-another">+{AppConstants.addVenue}</span>
-                </NavLink>
-
+                <div onClick={() => this.props.clearVenueDataAction("venue") }>
+                    <NavLink
+                        to={{ pathname: `/competitionVenueAndTimesAdd`, state: { key: AppConstants.competitionDetails } }}
+                    >
+                        <span className="input-heading-add-another">+{AppConstants.addVenue}</span>
+                    </NavLink>
+                </div>        
+                
                 <span className="applicable-to-heading required-field">{AppConstants.typeOfCompetition}</span>
                 <Form.Item  >
                     {getFieldDecorator('competitionTypeRefId', { initialValue: 1 }, { rules: [{ required: true, message: ValidationConstants.pleaseSelectCompetitionType }] })(
@@ -1508,12 +1562,35 @@ class CompetitionOpenRegForm extends Component {
 
     regInviteesView = () => {
         let invitees = this.props.appState.registrationInvitees.length > 0 ? this.props.appState.registrationInvitees : []
-        let detailsData = this.props.competitionFeesState
+        let detailsData = this.props.competitionFeesState;
+        let seletedInvitee = detailsData.selectedInvitees.find(x=>x);
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.registrationInvitees}</span>
                 <div>
-                    <Tree
+                    <Radio.Group
+                        className="reg-competition-radio"
+                        onChange={(e) => this.onInviteesChange(e.target.value)}
+                        value={seletedInvitee}>
+                        {(invitees || []).map((item, index) => 
+                            (
+                                <div>
+                                    {item.subReferences.length == 0 ? 
+                                        <Radio value={item.id}>{item.description}</Radio>
+                                        : <div>
+                                            <div class="applicable-to-heading invitees-main">{item.description}</div>
+                                            {(item.subReferences).map((subItem, subIndex) => (
+                                               <div style={{marginLeft: '20px'}}> 
+                                                   <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
+                                                </div> 
+                                            ))}
+                                          </div>
+                                    }
+                                </div>
+                            ))
+                        }
+                    </Radio.Group>
+                    {/* <Tree
                         className="tree-government-rebate"
                         style={{ flexDirection: 'column' }}
                         checkable
@@ -1522,7 +1599,7 @@ class CompetitionOpenRegForm extends Component {
 
                     >
                         {this.AffiliatesLevel(invitees)}
-                    </Tree>
+                    </Tree> */}
                 </div>
             </div>
         );
@@ -2158,42 +2235,36 @@ class CompetitionOpenRegForm extends Component {
     footerView = () => {
         let tabKey = this.state.competitionTabKey
         let competitionId = this.props.competitionFeesState.competitionId
+        let statusRefId = this.props.competitionFeesState.competitionDetailData.statusRefId ?
+            this.props.competitionFeesState.competitionDetailData.statusRefId : 1
+        console.log("statusRefId", statusRefId)
         return (
             <div className="fluid-width">
-
-                <div className="footer-view">
-                    <div className="row">
-                        <div className="col-sm">
-                            <div className="reg-add-save-button">
-                                {/* {competitionId ? */}
-                                {/* <Button type="cancel-button" onClick={() => this.showDeleteConfirm()}>{AppConstants.delete}</Button> */}
-                                <Button type="cancel-button" onClick={() => history.push('/competitionDashboard')} >{AppConstants.cancel}</Button>
-                                {/* : null} */}
+                {statusRefId == 1 &&
+                    <div className="footer-view">
+                        <div className="row">
+                            <div className="col-sm">
+                                <div className="reg-add-save-button">
+                                    <Button type="cancel-button" onClick={() => history.push('/competitionDashboard')} >{AppConstants.cancel}</Button>
+                                </div>
                             </div>
-                        </div>
-                        <div className="col-sm">
-                            {/* {!this.state.competitionIsUsed && */}
-                            <div className="comp-buttons-view">
-                                {/* <Button className="save-draft-text" type="save-draft-text"
-                                    htmlType="submit" onClick={() => this.setState({ statusRefId: 1, buttonPressed: "save" })}>
-                                    {AppConstants.saveAsDraft}
-                                </Button> */}
-                                <Button className="publish-button" type="primary"
-                                    htmlType="submit" onClick={() => this.setState({
-                                        // statusRefId: tabKey == "6" ? 2 : 1,
-                                        statusRefId: tabKey == "3" ? 2 : 1,
-                                        buttonPressed: tabKey == "3" ? "publish" : "next"
-                                    })}
-                                >
-                                    {tabKey === "3"
-                                        ? AppConstants.save
-                                        : AppConstants.next}
-                                </Button>
+                            <div className="col-sm">
+                                <div className="comp-buttons-view">
+                                    <Button className="publish-button" type="primary"
+                                        htmlType="submit" onClick={() => this.setState({
+                                            statusRefId: tabKey == "3" ? 2 : 1,
+                                            buttonPressed: tabKey == "3" ? "publish" : "next"
+                                        })}
+                                    >
+                                        {tabKey === "3"
+                                            ? AppConstants.save
+                                            : AppConstants.next}
+                                    </Button>
+                                </div>
                             </div>
-                            {/* } */}
                         </div>
                     </div>
-                </div>
+                }
             </div>
         );
 
@@ -2300,7 +2371,10 @@ function mapDispatchToProps(dispatch) {
         clearCompReducerDataAction,
         getDefaultCharity,
         getDefaultCompFeesLogoAction,
-        getYearAndCompetitionOwnAction
+        getYearAndCompetitionOwnAction,
+        searchVenueList,
+        clearFilter,
+        clearVenueDataAction
     }, dispatch)
 }
 
@@ -2308,6 +2382,7 @@ function mapStatetoProps(state) {
     return {
         competitionFeesState: state.CompetitionFeesState,
         appState: state.AppState,
+        venueTimeState: state.VenueTimeState,
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionOpenRegForm));

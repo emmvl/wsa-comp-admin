@@ -592,3 +592,9 @@ input[type=number] {
 .pointer{
   cursor: pointer;
 }
+
+.invitees-main{
+  font-size: 15px;
+  padding-top: 5px;
+  padding-left: 5px;
+}

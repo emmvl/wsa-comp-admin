@@ -25,7 +25,8 @@ import {
     updateVenueConstraintsData,
     venueConstraintPostAction,
     clearVenueTimesDataAction,
-    removePrefencesObjectAction
+    removePrefencesObjectAction,
+    clearVenueDataAction
 } from "../../store/actions/competitionModuleAction/venueTimeAction";
 import { getYearAndCompetitionOwnAction, clearYearCompetitionAction } from '../../store/actions/appAction'
 import { getVenuesTypeAction } from "../../store/actions/appAction";
@@ -117,14 +118,11 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     // }
                     setOwn_competition(competitionId)
                     this.props.venueConstraintListAction(this.state.yearRefId, competitionId, 1)
-                    this.setState({ getDataLoading: true, loading: false, firstTimeCompId: competitionUniqueKey })
+                    this.setState({ getDataLoading: true, loading: false, firstTimeCompId: competitionId })
                 }
             }
         }
-        // if (this.state.saveContraintLoad == true && this.props.venueTimeState.onLoad == false) {
-        //     history.push('/competitionCourtAndTimesAssign')
-        //     this.setState({ saveContraintLoad: false })
-        // }
+
         if (this.state.getDataLoading == true && this.props.venueTimeState.onLoad == false) {
             this.setState({ getDataLoading: false })
             this.setDetailsFieldValue()
@@ -241,12 +239,13 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                 <Select
                                     className="year-select"
                                     onChange={competitionId => this.onCompetitionClick(competitionId)}
-                                    value={this.state.firstTimeCompId}
+                                    value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {own_CompetitionArr.length > 0 && own_CompetitionArr.map((item) => (
-                                        < Option value={item.competitionId}> {item.competitionName}</Option>
-                                    ))
-                                    }
+                                    {own_CompetitionArr.length > 0 && own_CompetitionArr.map(item => {
+                                        return (
+                                            < Option value={item.competitionId}> {item.competitionName}</Option>
+                                        );
+                                    })}
                                 </Select>
                             </div>
                         </div>
@@ -590,7 +589,6 @@ class CompetitionVenueTimesPrioritisation extends Component {
         const { venueList, mainVenueList } = this.props.commonReducerState
         const { searchVenueList } = this.props.commonReducerState
         const { selectedVenueId } = this.props.venueTimeState
-
         return (
             <div className="fluid-width">
                 <div className="row">
@@ -600,7 +598,6 @@ class CompetitionVenueTimesPrioritisation extends Component {
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                             onChange={venueId => {
                                 this.props.updateVenueConstraintsData(venueId, null, 'venues', 'venueListSection')
-                                // console.log('lol')
                                 this.props.clearFilter()
                             }}
                             value={selectedVenueId}
@@ -613,11 +610,13 @@ class CompetitionVenueTimesPrioritisation extends Component {
                             ))
                             }
                         </Select>
-                        <NavLink
-                            to={{ pathname: `/competitionVenueAndTimesAdd`, state: { key: AppConstants.venues } }}
-                        >
-                            <span className="input-heading-add-another">+{AppConstants.addVenue}</span>
-                        </NavLink>
+                        <div  onClick={() => this.props.clearVenueDataAction("venue") }>
+                            <NavLink
+                                to={{ pathname: `/competitionVenueAndTimesAdd`, state: { key: AppConstants.venues } }}
+                            >
+                                <span className="input-heading-add-another">+{AppConstants.addVenue}</span>
+                            </NavLink>
+                        </div>
                     </div>
                 </div>
 
@@ -738,7 +737,8 @@ function mapDispatchToProps(dispatch) {
         removePrefencesObjectAction,
         clearYearCompetitionAction,
         searchVenueList,
-        clearFilter
+        clearFilter,
+        clearVenueDataAction
     }, dispatch)
 }
 

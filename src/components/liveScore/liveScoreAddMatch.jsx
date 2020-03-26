@@ -85,7 +85,7 @@ class LiveScoreAddMatch extends Component {
     }
 
     componentDidUpdate(nextProps) {
-        console.log(this.props.liveScoreMatchState.addEditMatch)
+  
         let { addEditMatch, start_date, start_time, displayTime } = this.props.liveScoreMatchState
 
         if (this.state.isEdit == true) {
@@ -161,7 +161,8 @@ class LiveScoreAddMatch extends Component {
         let { addEditMatch, start_date, start_time } = this.props.liveScoreMatchState
         let sequence = 1
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        let divisionID = addEditMatch.division.id
+        let divisionID = addEditMatch.divisionId
+        console.log(addEditMatch)
         this.props.liveScoreCreateRoundAction(this.state.createRound, sequence, id, divisionID)
         // this.setInitalFiledValue(addEditMatch, start_date, start_time)
         this.setState({ visible: false, createRound: '', roundLoad: true })
@@ -387,7 +388,7 @@ class LiveScoreAddMatch extends Component {
                                 >
                                     <Option value={'SINGLE'}> Single</Option>
                                     <Option value={"TWO_HALVES"}>Halves</Option>
-                                    <Option value={"FOUR_QUARTERS"}>Quaters</Option>
+                                    <Option value={"FOUR_QUARTERS"}>Quarters</Option>
                                 </Select>
                             )}
                         </Form.Item>
@@ -486,7 +487,7 @@ class LiveScoreAddMatch extends Component {
                         </Form.Item>
                     </div>
                     {
-                        addEditMatch.divisionId !== '' &&
+                        addEditMatch.divisionId &&
                         <div className="col-sm-6" >
                             <InputWithHead required={"required-field pb-0"} heading={AppConstants.round} />
                             <Form.Item>
@@ -631,7 +632,9 @@ class LiveScoreAddMatch extends Component {
                 // let startDate = moment(start_date).format("YYYY-MMM-DD")
 
                 let startDate = moment(start_post_date).format("YYYY-MMM-DD")
-                let start = moment(start_time).format("hh:mm")
+                let start = moment.utc(start_time).format("HH:mm")
+
+                console.log(start , "start start", start_time)
 
                 let postDate = startDate + " " + start + " " + "UTC"
                 let formatedDate = new Date(postDate).toISOString()

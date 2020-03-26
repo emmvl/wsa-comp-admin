@@ -159,6 +159,21 @@ function getYearAndCompetitionParticipateAction(yearData, yearId, key) {
   return action
 }
 
+function searchVenueList(filterData) {
+  const action = {
+    type: ApiConstants.Search_Venue_updated_Competition,
+    filterData: filterData
+  }
+  return action
+}
+function clearFilter() {
+  const action = {
+    type: ApiConstants.CLEAR_FILTER_SEARCH_VENUE,
+  }
+  return action;
+
+}
+
 
 export {
   getYearListAction,
@@ -177,5 +192,7 @@ export {
   getYearAndCompetitionAction,
   clearYearCompetitionAction,
   getYearAndCompetitionOwnAction,
-  getYearAndCompetitionParticipateAction
+  getYearAndCompetitionParticipateAction,
+  searchVenueList,
+  clearFilter
 };

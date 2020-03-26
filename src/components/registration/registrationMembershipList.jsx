@@ -60,7 +60,7 @@ const columns = [
         render: (seasonalFee, record) => {
             let fee = (JSON.parse(seasonalFee) + JSON.parse(record.seasonalGst))
             return (
-                <span style={{ float: "right" }}>{currencyFormat(fee)}</span>
+                <span>{currencyFormat(fee)}</span>
             )
         },
         sorter: (a, b) => tableSort(a, b, "seasonalFee")
@@ -72,7 +72,7 @@ const columns = [
         render: (casualFee, record) => {
             let fee = (JSON.parse(casualFee) + JSON.parse(record.casualGst))
             return (
-                <span style={{ float: "right" }}>{currencyFormat(fee)}</span>
+                <span>{currencyFormat(fee)}</span>
             )
         },
         sorter: (a, b) => tableSort(a, b, "casualFee")

@@ -28,7 +28,12 @@ const columns = [
         key: 'matchId',
         sorter: (a, b) => handleSorting(a, b, "matchId"),
         render: (matchId) =>
-            <span className="input-heading-add-another pt-0">{matchId}</span>
+            <NavLink to={{
+                pathname: '/liveScoreMatchDetails',
+                state: { matchId: matchId }
+            }}>
+                <span className="input-heading-add-another pt-0">{matchId}</span>
+            </NavLink>
 
     },
     {

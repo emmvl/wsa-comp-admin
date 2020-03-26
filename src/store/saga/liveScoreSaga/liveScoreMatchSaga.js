@@ -32,7 +32,7 @@ function* errorSaga(error) {
 ////Match List
 export function* liveScoreMatchListSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreMatchList, action.competitionID, action.start);
+        const result = yield call(LiveScoreAxiosApi.liveScoreMatchList, action.competitionID, action.start, action.offset);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_MATCH_LIST_SUCCESS,

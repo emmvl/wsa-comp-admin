@@ -40,7 +40,7 @@ const deepCopyFunction = inObject => {
 
 const stringTONumber = (value) => {
     if (value) {
-        return (typeof value === "string") ? parseInt(value) : value;
+        return (typeof value === "string") ? Number(value) : value;
     } else {
         return 0;
     }

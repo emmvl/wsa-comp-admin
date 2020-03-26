@@ -17,7 +17,6 @@ let userId = getUserId();
 let LiveScoreAxiosApi = {
     livescoreMatchDetails(data) {
         const url = `/matches/admin/${data}`
-        console.log(url)
         return Method.dataGet(url, null)
     },
     liveScoreGetDivision(data) {
@@ -46,7 +45,6 @@ let LiveScoreAxiosApi = {
     },
     liveScoreCompetitionDelete(data) {
         const url = `/competitions/id/${data}`
-        // return { status: 1 }
         return Method.dataDelete(url, localStorage.token)
     },
     liveScoreCompetition(data) {
@@ -73,8 +71,9 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token)
     },
 
-    liveScoreMatchList(competitionID, start) {
-        var url = `/matches?competitionId=${competitionID}&start=${start}`;
+    liveScoreMatchList(competitionID, start,offset) {
+        // start=<1 year in past>&limit=<limit>&offset=<offset></offset>
+        var url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}`;
         return Method.dataGet(url, localStorage.token)
     },
 
@@ -89,25 +88,14 @@ let LiveScoreAxiosApi = {
     },
     liveScoreCreateRound(roundName, sequence, competitionID, divisionId) {
 
-        let body = ''
-        if (divisionId) {
-            body = JSON.stringify(
-                {
-                    "name": roundName,
-                    "sequence": sequence,
-                    "competitionId": competitionID,
-                    "divisionId": divisionId,
-                }
-            )
-        } else {
-            body = JSON.stringify(
-                {
-                    "name": roundName,
-                    "sequence": sequence,
-                    "competitionId": competitionID,
-                }
-            )
-        }
+        let body = JSON.stringify(
+            {
+                "name": roundName,
+                "sequence": sequence,
+                "competitionId": competitionID,
+                "divisionId": divisionId,
+            }
+        )
         var url = "/round";
         return Method.dataPost(url, localStorage.token, body)
     },

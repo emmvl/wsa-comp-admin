@@ -195,15 +195,10 @@ function commonReducerState(state = initialState, action) {
             };
 
         case ApiConstants.Search_Venue_updated:
-            console.log(action, 'action.filterData')
-
             return { ...state, venueList: action.filterData }
 
         case ApiConstants.CLEAR_FILTER_SEARCH:
-            console.log('Called clear Filter', state.mainVenueList)
-            // state.venueList= [...state.mainVenueList]
             return {
-
                 ...state,
                 venueList: [...state.mainVenueList],
             }

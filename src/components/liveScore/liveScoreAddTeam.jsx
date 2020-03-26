@@ -354,8 +354,8 @@ class LiveScoreAddTeam extends Component {
                 </div>
 
                 <div className="row" >
-                    {/* <span required={"required-field"} className="applicable-to-heading ml-4">{AppConstants.manager}</span> */}
-                    <InputWithHead required={"required-field ml-4"} heading={AppConstants.managerHeading} />
+                    <span required={"required-field"} className="applicable-to-heading ml-4">{AppConstants.manager}</span>
+                    {/* <InputWithHead required={"required-field ml-4"} heading={AppConstants.managerHeading} /> */}
 
                     <Radio.Group
                         className="reg-competition-radio"
@@ -591,7 +591,11 @@ class LiveScoreAddTeam extends Component {
                     formData.append('id', this.state.teamId ? this.state.teamId : 0)
                     formData.append('name', name)
                     formData.append('alias', alias)
-                    formData.append('logo', this.props.liveScoreTeamState.teamLogo)
+                    if (this.state.image) {
+                        formData.append('logo', this.state.image)
+                    } else {
+                        formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
+                    }
                     formData.append('competitionId', id)
                     formData.append('organisationId', organisationId)
                     formData.append('divisionId', divisionId)
@@ -601,9 +605,24 @@ class LiveScoreAddTeam extends Component {
                     formData.append('email', email)
 
                     this.props.liveAddNewTeam(formData, this.state.teamId)
-                } else {
-                    message.config({ duration: 0.9, maxCount: 1 })
-                    message.error('Please select manager section.')
+                }
+                else {
+                    // message.config({ duration: 0.9, maxCount: 1 })
+                    // message.error('Please select manager section.')
+                    const formData = new FormData();
+                    formData.append('id', this.state.teamId ? this.state.teamId : 0)
+                    formData.append('name', name)
+                    formData.append('alias', alias)
+                    if (this.state.image) {
+                        formData.append('logo', this.state.image)
+                    } else {
+                        formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
+                    }
+                    formData.append('competitionId', id)
+                    formData.append('organisationId', organisationId)
+                    formData.append('divisionId', divisionId)
+
+                    this.props.liveAddNewTeam(formData, this.state.teamId)
                 }
             }
         });

@@ -74,17 +74,18 @@ const columnActiveNews = [
     },
     {
         title: "Published",
-        dataIndex: 'published',
-        key: 'published',
+        dataIndex: 'published_at',
+        key: 'published_at',
         sorter: (a, b) => tableSort(a, b, 'published'),
-
-
+        render: (published_at) =>
+        <span>{published_at && liveScore_formateDate(published_at)}</span>
     },
     {
         title: "Published Date",
-        dataIndex: 'publishDate',
-        key: 'publishDate',
-        sorter: (a, b) => tableSort(a, b, 'publishDate'),
+        dataIndex: 'Published_date',
+        key: 'Published_date',
+        // sorter: (a, b) => tableSort(a, b, 'Published_date'),
+       
     },
     {
         title: "Notification",
@@ -105,8 +106,12 @@ const columnsTodaysMatch = [
         dataIndex: 'id',
         key: 'id',
         sorter: (a, b) => tableSort(a, b, 'id'),
-        render: (id) =>
-            <span class="input-heading-add-another pt-0" onClick={() => { console.log('hello clcicked ') }} >{id}</span>
+        render: (id) =><NavLink to={{
+            pathname: '/liveScoreMatchDetails',
+            state: { matchId: id }
+        }} >
+            <span class="input-heading-add-another pt-0" >{id}</span>
+        </NavLink>
     },
     {
         title: 'Start Time',
@@ -114,7 +119,7 @@ const columnsTodaysMatch = [
         key: 'startTime',
         sorter: (a, b) => tableSort(a, b, 'startTime'),
         render: (startTime) =>
-            <span className="input-heading-add-another pt-0">{liveScore_formateDateTime(startTime)}</span>
+            <span >{liveScore_formateDateTime(startTime)}</span>
 
     },
 
@@ -123,8 +128,13 @@ const columnsTodaysMatch = [
         dataIndex: 'team1',
         key: 'team1',
         sorter: (a, b) => tableSort(a, b, 'team1'),
-        render: (team1) =>
-            <span class="input-heading-add-another pt-0" onClick={() => { console.log('hello clcicked ') }} >{team1.name}</span>
+        render: (team1, record) =>
+        <NavLink to={{
+            pathname: '/liveScoreTeamView',
+            state: { tableRecord: team1 }
+        }} >
+            <span class="input-heading-add-another pt-0" >{team1.name}</span>
+        </NavLink>
 
     },
     {
@@ -132,9 +142,13 @@ const columnsTodaysMatch = [
         dataIndex: 'team2',
         key: 'team2',
         sorter: (a, b) => tableSort(a, b, 'team2'),
-        render: (team2) =>
-            <span class="input-heading-add-another pt-0" onClick={() => { console.log('hello clcicked ') }} >{team2.name}</span>
-
+        render: (team2, record) =>
+        <NavLink to={{
+            pathname: '/liveScoreTeamView',
+            state: { tableRecord: team2 }
+        }} >
+            <span class="input-heading-add-another pt-0" >{team2.name}</span>
+        </NavLink>
     },
     {
         title: 'Venue',

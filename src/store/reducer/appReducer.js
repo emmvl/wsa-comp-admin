@@ -32,7 +32,10 @@ const initialState = {
   own_YearArr: [],
   own_CompetitionArr: [],
   participate_CompetitionArr: [],
-  participate_YearArr: []
+  participate_YearArr: [],
+  searchVenueList: [],
+  mainVenueList: []
+
 };
 
 function appState(state = initialState, action) {
@@ -176,7 +179,10 @@ function appState(state = initialState, action) {
         ...state,
         onLoad: false,
         venueList: action.result,
-        status: action.status
+        status: action.status,
+        error: action.error,
+        mainVenueList: action.result,
+        searchVenueList: action.result
       };
 
     //registration form advance  settings
@@ -310,6 +316,23 @@ function appState(state = initialState, action) {
         status: action.status,
       };
 
+    case ApiConstants.CLEAR_FILTER_SEARCH_VENUE:
+      //console.log('Called clear Filter', state.mainVenueList)
+      // state.venueList= [...state.mainVenueList]
+      return {
+        ...state,
+        venueList: [...state.mainVenueList],
+      }
+
+    case ApiConstants.API_ADD_VENUE_SUCCESS:
+      state.mainVenueList.push(action.result)
+      state.venueList.push(action.result)
+      state.searchVenueList.push(action.result)
+      return {
+        ...state,
+      }
+      case ApiConstants.Search_Venue_updated_Competition:
+          return { ...state, venueList: action.filterData }
 
     default:
       return state;

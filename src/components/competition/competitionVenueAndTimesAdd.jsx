@@ -19,7 +19,8 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { updateVenuAndTimeDataAction, updateVenuListAction, refreshVenueFieldsAction, removeObjectAction } from '../../store/actions/competitionModuleAction/venueTimeAction'
+import { updateVenuAndTimeDataAction, updateVenuListAction, refreshVenueFieldsAction, 
+    removeObjectAction, clearVenueDataAction } from '../../store/actions/competitionModuleAction/venueTimeAction'
 import { getYearAndCompetitionAction } from '../../store/actions/appAction'
 import { getCommonRefData, addVenueAction } from '../../store/actions/commonAction/commonAction'
 import { getOrganisationAction } from "../../store/actions/userAction/userAction"
@@ -257,36 +258,42 @@ class CompetitionVenueAndTimesAdd extends Component {
     navigateTo = () => {
         if (this.state.screenNavigationKey == AppConstants.venues) {
             setTimeout(() => {
+                this.props.clearVenueDataAction("venue");
                 history.push('/competitionVenueTimesPrioritisation')
             }, 800);
             this.setState({ saveContraintLoad: false })
         }
         else if (this.state.screenNavigationKey == AppConstants.competitionFees) {
             setTimeout(() => {
+                this.props.clearVenueDataAction("venue");
                 history.push('/registrationCompetitionFee')
             }, 800);
             this.setState({ saveContraintLoad: false })
         }
         else if (this.state.screenNavigationKey == AppConstants.competitionDetails) {
             setTimeout(() => {
+                this.props.clearVenueDataAction("venue");
                 history.push('/competitionOpenRegForm')
             }, 800);
             this.setState({ saveContraintLoad: false })
         }
         else if (this.state.screenNavigationKey == AppConstants.dashboard) {
             setTimeout(() => {
+                this.props.clearVenueDataAction("venue");
                 history.push('/registrationCompetitionForm')
             }, 800);
             this.setState({ saveContraintLoad: false })
         }
         else if(this.state.screenNavigationKey == AppConstants.venuesList){
             setTimeout(() => {
+                this.props.clearVenueDataAction("venue");
                 history.push('/venuesList')
             }, 800);
             this.setState({ saveContraintLoad: false })
         }
         else {
             setTimeout(() => {
+                this.props.clearVenueDataAction("venue");
                 history.push('/')
             }, 800);
             this.setState({ saveContraintLoad: false })
@@ -731,7 +738,8 @@ function mapDispatchToProps(dispatch) {
         addVenueAction,
         refreshVenueFieldsAction,
         getOrganisationAction,
-        removeObjectAction
+        removeObjectAction,
+        clearVenueDataAction
     }, dispatch)
 }
 

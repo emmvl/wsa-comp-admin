@@ -596,7 +596,7 @@ class CompetitionFormat extends Component {
                         <div className="fluid-width" >
                             <div style = {{display:'flex'}}>
                                 <div className="applicable-to-heading" style={{paddingTop: '0px'}}>{AppConstants.applyMatchFormat}</div>
-                                <div className="transfer-image-view pt-0" style = {{marginLeft:'auto'}} onClick ={ () => this.deleteModal(index)}>
+                                <div className="transfer-image-view pt-0 pointer" style = {{marginLeft:'auto'}} onClick ={ () => this.deleteModal(index)}>
                                     <span className="user-remove-btn" ><i className="fa fa-trash-o" aria-hidden="true"></i></span>
                                     <span className="user-remove-text">
                                         {AppConstants.remove}
@@ -604,7 +604,7 @@ class CompetitionFormat extends Component {
                                 </div>
                                 {this.deleteConfirmModalView(data.competionFormatDivisions)}
                             </div>
-                            <Checkbox className="single-checkbox pt-2"  onChange={(e) => this.onChangeAllDivision(e, data.competionFormatDivisions,index)}>{AppConstants.allDivisions}</Checkbox> 
+                            <Checkbox className="single-checkbox pt-2" checked={isAllDivisionChecked}  onChange={(e) => this.onChangeAllDivision(e, data.competionFormatDivisions,index)}>{AppConstants.allDivisions}</Checkbox> 
                             {!isAllDivisionChecked ?                             <div className="fluid-width" >
                                 <div className="row" >
                                     <div className="col-sm">
@@ -661,7 +661,7 @@ class CompetitionFormat extends Component {
                     <span className='input-heading-add-another'> {AppConstants.setUpFinalTemplate_optional}</span>
                 </NavLink> */}
                 { !isAllDivisionChecked ?
-                <span className='input-heading-add-another' onClick={() => this.addCompetitionFormatDivision(data)} >+ {AppConstants.addNewCompetitionFormat}</span> : null}
+                <span className='input-heading-add-another pointer' onClick={() => this.addCompetitionFormatDivision(data)} >+ {AppConstants.addNewCompetitionFormat}</span> : null}
                 <Checkbox className="single-checkbox pt-2" defaultChecked={data.isDefault} onChange={(e) => this.onChangeSetValue(e.target.checked, 'isDefault')}>{AppConstants.setAsDefault}</Checkbox>
             </div>
         )
