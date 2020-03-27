@@ -1579,7 +1579,8 @@ function competitionFees(state = initialState, action) {
                 if (array[index].isAllType == "allDivisions") {
                     if (action.key == "fee") {
                         array[index][action.arrayKey].allType[action.tableIndex].fee = (action.data)
-                        array[index][action.arrayKey].allType[action.tableIndex].gst = (action.data) / 10
+                        let gstAll = (Number(action.data) / 10).toFixed(2)
+                        array[index][action.arrayKey].allType[action.tableIndex].gst = gstAll
                         array[index][action.arrayKey].allType[action.tableIndex].total = (Number(action.data) + (Number(action.data / 10)) + (Number(action.record.mFees))).toFixed(2)
                     }
                     else if (action.key == "gst") {
@@ -1590,7 +1591,8 @@ function competitionFees(state = initialState, action) {
                     else if (action.key == "affiliateFee") {
                         let feesOwner = array[index][action.arrayKey].allType[action.tableIndex].fee + array[index][action.arrayKey].allType[action.tableIndex].gst
                         array[index][action.arrayKey].allType[action.tableIndex].affiliateFee = (action.data)
-                        array[index][action.arrayKey].allType[action.tableIndex].affiliateGst = (action.data) / 10
+                        let affiliateGstAll = (Number(action.data) / 10).toFixed(2)
+                        array[index][action.arrayKey].allType[action.tableIndex].affiliateGst = affiliateGstAll
                         array[index][action.arrayKey].allType[action.tableIndex].total = (Number(feesOwner) + Number(action.data) + (Number(action.data / 10)) + (Number(action.record.mFees))).toFixed(2)
                     }
                     else if (action.key == "affiliateGst") {
@@ -1605,7 +1607,8 @@ function competitionFees(state = initialState, action) {
 
                     if (action.key == "fee") {
                         array[index][action.arrayKey].perType[action.tableIndex].fee = (action.data)
-                        array[index][action.arrayKey].perType[action.tableIndex].gst = (action.data) / 10
+                        let gstPer = (Number(action.data) / 10).toFixed(2)
+                        array[index][action.arrayKey].perType[action.tableIndex].gst = gstPer
                         array[index][action.arrayKey].perType[action.tableIndex].total = (Number(action.data) + (Number(action.data / 10)) + (Number(action.record.mFees)).toFixed(2))
                     }
                     else if (action.key == "gst") {
@@ -1616,7 +1619,8 @@ function competitionFees(state = initialState, action) {
                     else if (action.key == "affiliateFee") {
                         let feesOwner = array[index][action.arrayKey].perType[action.tableIndex].fee + array[index][action.arrayKey].perType[action.tableIndex].gst
                         array[index][action.arrayKey].perType[action.tableIndex].affiliateFee = (action.data)
-                        array[index][action.arrayKey].perType[action.tableIndex].affiliateGst = (action.data) / 10
+                        let affiliateGstPer = (Number(action.data) / 10).toFixed(2)
+                        array[index][action.arrayKey].perType[action.tableIndex].affiliateGst = affiliateGstPer
                         array[index][action.arrayKey].perType[action.tableIndex].total = (Number(feesOwner) + Number(action.data) + (Number(action.data / 10)) + (Number(action.record.mFees))).toFixed(2)
                     }
                     else if (action.key == "affiliateGst") {

@@ -148,6 +148,7 @@ class LiveScorePlayerList extends Component {
 
     ///////view for breadcrumb
     headerView = () => {
+        const { id } = JSON.parse(getLiveScoreCompetiton())
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="fluid-width">
@@ -195,7 +196,7 @@ class LiveScorePlayerList extends Component {
                                             justifyContent: "flex-end"
                                         }}
                                     >
-                                        <Button href={AppConstants.exportUrl + 1} className="primary-add-comp-form" type="primary">
+                                        <Button href={AppConstants.exportUrl + id} className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">
                                                     <img

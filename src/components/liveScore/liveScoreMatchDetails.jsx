@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { liveScoreDeleteMatch, liveScoreGetMatchDetailInitiate } from "../../store/actions/LiveScoreAction/liveScoreMatchAction";
 import Loader from '../../customComponents/loader'
 import { isArrayNotEmpty } from '../../util/helpers'
-
+import { getLiveScoreCompetiton } from '../../util/sessionStorage';
 
 const { Content } = Layout;
 const { confirm } = Modal;
@@ -63,55 +63,6 @@ const columns = [
     },
 ];
 
-const data = [
-    {
-        key: '1',
-        name: "Michelle smart",
-        image: "1/03/2019",
-        team: "WSA 2",
-        attended: true
-    },
-    {
-        key: '2',
-        name: "Catherine Chiltern",
-        image: "1/03/2019",
-        team: "WSA 2",
-        attended: true
-    },
-    {
-        key: '3',
-        name: "game gun",
-        image: "1/03/2019",
-        team: "WSA 2",
-        attended: false
-
-    },
-    {
-        key: '4',
-        name: "gertrude game",
-        image: "1/03/2019",
-        team: "9a",
-        attended: false
-    },
-
-];
-
-
-const data2 = [
-    {
-        key: '1',
-        name: "Michelle smart",
-        image: "1/03/2019",
-        team: "WSA 2",
-    },
-    {
-        key: '2',
-        name: "Catherine Chiltern",
-        image: "1/03/2019",
-        team: "WSA 2",
-    }
-
-];
 
 class LiveScoreMatchDetails extends Component {
     constructor(props) {
@@ -132,7 +83,6 @@ class LiveScoreMatchDetails extends Component {
     }
     componentDidUpdate(nextProps) {
         if (nextProps != this.props.liveScoreMatchState.matchDetails) {
-            console.log(this.props.liveScoreMatchState.matchDetails)
         }
     }
     onChange = e => {
@@ -166,7 +116,7 @@ class LiveScoreMatchDetails extends Component {
     headerView = () => {
         const { match } = this.props.liveScoreMatchState.matchDetails
         const length = match ? match.length : 0
-        console.log(match)
+       
         return (
             <div className="comp-player-grades-header-drop-down-view mb-5">
                 <div className="row">
@@ -237,7 +187,8 @@ class LiveScoreMatchDetails extends Component {
         const { match, umpires } = this.props.liveScoreMatchState.matchDetails
         const length = match ? match.length : 0
         let UmpireData = isArrayNotEmpty(umpires) ? umpires : []
-        console.log(umpires, 'umpires****')
+        const { scoringType } = JSON.parse(getLiveScoreCompetiton())
+     
         return (
 
             <div className="comp-dash-table-view row mt-5">
@@ -285,9 +236,9 @@ class LiveScoreMatchDetails extends Component {
                     <div style={{ display: "flex", alignContent: "center" }} >
                         <span className="inbox-name-text pt-2" >S1: {length >= 1 ? match ? match[0].scorer1 ? match[0].scorer1.firstName + ' ' + match[0].scorer1.lastName : '' : '' : ''}</span>
                     </div>
-                    <div style={{ display: "flex", alignContent: "center" }} >
+                 {  scoringType !== 'SINGLE' &&   <div style={{ display: "flex", alignContent: "center" }} >
                         <span className="inbox-name-text pt-2" >S2: {length >= 1 ? match ? match[0].scorer2 ? match[0].scorer2.firstName + ' ' + match[0].scorer2.lastName : '' : '' : ''}</span>
-                    </div>
+                    </div>}
                 </div>
                 <div className="col-sm">
                     <div className="match-score-detail">

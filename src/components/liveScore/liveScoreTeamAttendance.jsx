@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { liveScore_formateDateTime } from '../../themes/dateformate'
 import history from "../../util/history";
+import { isArrayNotEmpty } from '../../util/helpers'
 
 function handleSorting(a, b, key) {
     if (a[key] && b[key]) {
@@ -213,9 +214,10 @@ class LiveScoreTeamAttendance extends Component {
     ////////form content view
     contentView = () => {
         const { teamAttendanceResult, teamAttendancePage, teamAttendanceTotalCount } = this.props.liveScoreTeamAttendanceState
-        let dataSource = teamAttendanceResult ? teamAttendanceResult.stats : ''
+        // let dataSource = teamAttendanceResult ? teamAttendanceResult.stats : ''
+        let dataSource = isArrayNotEmpty(teamAttendanceResult) ? teamAttendanceResult : []
         // console.log(dataSource, "dataSource")
-        let total = teamAttendanceTotalCount ? teamAttendanceTotalCount : ''
+        let total = isArrayNotEmpty(teamAttendanceTotalCount) ? teamAttendanceTotalCount : ''
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">

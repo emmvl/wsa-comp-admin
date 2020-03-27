@@ -18,7 +18,15 @@ function checkSorting(a, b, key) {
         return a[key].length - b[key].length
     }
 }
+/////function to sort table column
+function tableSort(a, b, key) {
+    //if (a[key] && b[key]) {
+    let stringA = JSON.stringify(a[key])
+    let stringB = JSON.stringify(b[key])
+    return stringA.localeCompare(stringB)
+    //}
 
+}
 
 // compare dates
 
@@ -73,16 +81,36 @@ const columns = [
         sorter: (a, b) => checkSorting(a, b, 'recipients'),
 
     },
+    // {
+    //     title: 'Published',
+    //     dataIndex: 'published_at',
+    //     key: 'published_at',
+    //     sorter: (a, b) => checkSorting(a, b, 'published_at'),
+    //     render: published_at =>
+    //         <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
+    //             {published_at && liveScore_formateDate(published_at)}
+    //         </span>,
+
+    // },
     {
-        title: 'Published',
+        title: "Published",
+        dataIndex: 'isActive',
+        key: 'isActive',
+        sorter: (a, b) => tableSort(a, b, 'isActive'),
+        
+        render: isActive =>
+        <span>{isActive == 1 ? "Yes":"NO"}</span>
+      
+    },
+    {
+        title: "Published Date",
         dataIndex: 'published_at',
         key: 'published_at',
-        sorter: (a, b) => checkSorting(a, b, 'published_at'),
-        render: published_at =>
-            <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
-                {published_at && liveScore_formateDate(published_at)}
-            </span>,
-
+        render: (published_at) =>
+        <span>{published_at && liveScore_formateDate(published_at)}</span>
+        
+        // sorter: (a, b) => tableSort(a, b, 'Published_date'),
+       
     },
     {
         title: 'Notification',

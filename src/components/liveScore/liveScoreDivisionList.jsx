@@ -10,6 +10,8 @@ import { getLiveScoreDivisionList, liveScoreDeleteDivision } from '../../store/a
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { isArrayNotEmpty } from '../../util/helpers'
+
 const { Content } = Layout;
 const { SubMenu } = Menu;
 const { confirm } = Modal;
@@ -87,8 +89,8 @@ class LiveScoreDivisionList extends Component {
 
     ////////form content view
     contentView = () => {
+        let divisionList = isArrayNotEmpty(this.props.liveScoreDivisionState.liveScoreDivisionList) ? this.props.liveScoreDivisionState.liveScoreDivisionList : []
 
-        let divisionList = this.props.liveScoreDivisionState.liveScoreDivisionList
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">

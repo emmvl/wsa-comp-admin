@@ -18,7 +18,7 @@ const initialState = {
     MainManagerListResult: [],
     managerData: managerObj,
     teamId: null,
-    managerRadioBtn: 'new',
+    managerRadioBtn: null,
     exsitingManagerId: null,
     teamResult: []
 }
@@ -90,7 +90,6 @@ function liveScoreMangerState(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_ADD_EDIT_MANAGER_SUCCESS:
             return {
                 ...state,
-
             }
         case ApiConstants.API_LIVE_SCORE_DIVISION_SUCCESS:
           

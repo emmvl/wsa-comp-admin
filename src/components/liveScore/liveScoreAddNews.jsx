@@ -151,7 +151,8 @@ class LiveScoreAddNews extends Component {
             'news_Title': data.title,
             'author': author ? author : authorData.longName
         })
-        let body = EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(data.body)))
+        let finalBody = data ? data.body ? data.body : "" : ""
+        let body = EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(finalBody)))
         this.setState({ editorState: body })
     }
 
@@ -383,9 +384,9 @@ class LiveScoreAddNews extends Component {
         let editData = liveScoreNewsState.addEditNews;
         let expiryDate = liveScoreNewsState.expire_date
         let expiryTime = liveScoreNewsState.expire_time
-       
+
         let expiryTime_formate = expiryTime ? moment(expiryTime).format("HH:mm") : null;
-        
+
 
         return (
             <div className="content-view pt-4">
@@ -436,6 +437,7 @@ class LiveScoreAddNews extends Component {
                         <Option value={"All Managers"}>{'All Managers'}</Option>
                         <Option value={"All Scorers"}>{'All Scorers'}</Option>
                         <Option value={"All Managers and Scorers"}>{'All Managers and Scorers'}</Option>
+                        <Option value={"All Users"}>{'All Users'}</Option>
                         <Option value={"Individual Manager"}>{'Individual Manager'}</Option>
                         <Option value={"Individual Scorer"}>{'Individual Scorer'}</Option>
                     </Select>
@@ -516,13 +518,13 @@ class LiveScoreAddNews extends Component {
                             style={{ width: "100%" }}
                             format={"HH:mm"}
                             // onChange={(time) => time !== null && this.props.liveScoreUpdateNewsAction(time.format('HH:mm'), "expire_time")}
-                            value={expiryTime_formate !== null && moment(expiryTime_formate,"HH:mm")}
-                                    
-                           
+                            value={expiryTime_formate !== null && moment(expiryTime_formate, "HH:mm")}
+
+
                             onChange={(time) => this.props.liveScoreUpdateNewsAction(time, "expire_time")}
 
                             // value={editData.news_expire_date ? moment(editData.news_expire_date, 'HH:mm') : editData.expire_time}
-                           
+
                             // minuteStep={15}
                             placeholder='Select Time'
                         // use12Hours={true}
@@ -561,27 +563,27 @@ class LiveScoreAddNews extends Component {
 
 
                 let data = liveScoreNewsState
-                
+
 
                 let experyDate = moment(data.newExpiryDate).format("YYYY-MM-DD")
-              
+
                 let expiryTime = moment.utc(data.expire_time).format("HH:mm")
-              
-               
+
+
 
                 let postDate = experyDate + " " + expiryTime + " " + "UTC"
                 let formatedDate = new Date(postDate).toISOString()
                 liveScoreNewsState.addEditNews.news_expire_date = formatedDate
                 console.log(formatedDate)
-            
-                
-                 let editData = liveScoreNewsState.addEditNews;
+
+
+                let editData = liveScoreNewsState.addEditNews;
 
 
 
 
 
-                 this.props.liveScoreAddNewsAction(editData, mediaArry, newsId, this.state.key)
+                this.props.liveScoreAddNewsAction(editData, mediaArry, newsId, this.state.key)
                 this.setState({ getDataLoading: true })
             }
         });

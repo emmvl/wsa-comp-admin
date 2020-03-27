@@ -261,9 +261,9 @@ class InnerHorizontalMenu extends React.Component {
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="10">
-                            {/* <NavLink to=""> */}
-                            <span>Venues</span>
-                            {/* </NavLink> */}
+                            <NavLink to="/venuesList">
+                                <span>Venues</span>
+                            </NavLink>
                         </Menu.Item>
 
                         <Menu.Item key="11">
@@ -285,9 +285,9 @@ class InnerHorizontalMenu extends React.Component {
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="13">
-                            {/* <NavLink to=""> */}
-                            <span>Court Change</span>
-                            {/* </NavLink> */}
+                            <NavLink to="liveScoreVenueChange">
+                                <span>Court Change</span>
+                            </NavLink>
                         </Menu.Item>
                         <Menu.Item key="14">
                             <NavLink to="/liveScoreTeamAttendance">

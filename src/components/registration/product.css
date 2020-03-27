@@ -538,6 +538,14 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+.ant-tooltip-inner {
+  color: var(--app-color);
+  background-color: var(--app-f7fafc);
+  font-weight: 600;
+  font-family: inter-semi-bold;
+  font-size: 16px;
+}
+
 @media (max-width: 767px) {
   .reg-add-save-button {
     display: flex;

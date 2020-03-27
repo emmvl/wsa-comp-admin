@@ -149,7 +149,7 @@ function setLadderFormats(ladderFormats, ladderSchemeDefaults, defaultDivisions)
                 ladderFormatId: 0,
                 ladderSchemeId: firstItem.ladderSchemeId,
                 schemeName: firstItem.schemeName,
-                isDefault: 0,
+                isDefault: firstItem.isDefault,
                 isEditted: false,
                 divisions:[],
                 resultTypes: firstItem.resultTypes,

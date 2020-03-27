@@ -182,7 +182,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
     onYearClick(yearId) {
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
-        this.setState({ yearRefId: yearId })
+        this.setState({ yearRefId: yearId, firstTimeCompId: null })
         this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, "own_competition")
     }
 
@@ -696,6 +696,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
 
     render() {
+        console.log(this.props.venueTimeState.courtRotation)
         const { getFieldDecorator } = this.props.form;
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>

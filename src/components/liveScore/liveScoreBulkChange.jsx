@@ -34,7 +34,7 @@ import { getliveScoreDivisions } from '../../store/actions/LiveScoreAction/liveS
 import Loader from '../../customComponents/loader'
 import history from '../../util/history'
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
-
+import { isArrayNotEmpty } from "../../util/helpers";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -288,7 +288,8 @@ class LiveScoreBulkChange extends Component {
 
                 {/* end time date and time picker row */}
                 <InputWithHead heading={AppConstants.endTime}
-                    required={"required-field"} />
+                // required={"required-field"} 
+                />
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm" style={{ marginTop: 5 }}>
@@ -330,7 +331,8 @@ class LiveScoreBulkChange extends Component {
                 </div>
 
                 {/* venue drop down view */}
-                <InputWithHead heading={AppConstants.venue} />
+                <InputWithHead heading={AppConstants.venue}
+                    required={"required-field"} />
                 <div>
                     <Form.Item>
                         {getFieldDecorator("pushBackVenue", {
@@ -361,13 +363,15 @@ class LiveScoreBulkChange extends Component {
                 </div>
 
                 {/* court drop down view */}
-                <InputWithHead heading={AppConstants.court} />
+                <InputWithHead heading={AppConstants.court}
+                    required={"required-field pt-0"} />
                 <div>
                     <Form.Item>
                         {getFieldDecorator("pushBackCourt", {
                             rules: [{ required: true, message: ValidationConstants.court }],
                         })(
                             <Select
+                                mode='multiple'
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 onChange={(court) => this.props.liveScoreUpdateBulkAction(court, "venueCourtId")}
                                 value={pushBackData.courtId}
@@ -546,7 +550,8 @@ class LiveScoreBulkChange extends Component {
                 </div>
 
                 {/* venue drop down view */}
-                <InputWithHead heading={AppConstants.venue} />
+                <InputWithHead heading={AppConstants.venue}
+                    required={"required-field"} />
                 <div>
                     <Form.Item>
                         {getFieldDecorator("bringVenue", {
@@ -573,13 +578,15 @@ class LiveScoreBulkChange extends Component {
                 </div>
 
                 {/* court drop down view */}
-                <InputWithHead heading={AppConstants.court} />
+                <InputWithHead heading={AppConstants.court}
+                    required={"required-field pb-0"} />
                 <div>
                     <Form.Item>
                         {getFieldDecorator("bringCourt", {
                             rules: [{ required: true, message: ValidationConstants.court }],
                         })(
                             <Select
+                                mode='multiple'
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 onChange={(courtId) => this.props.liveScoreUpdateBulkAction(courtId, "courtId")}
                                 value={bringForwardData.courtId}
@@ -764,7 +771,8 @@ class LiveScoreBulkChange extends Component {
                 </div>
 
                 {/* venue drop down view */}
-                <InputWithHead heading={AppConstants.venue} />
+                <InputWithHead heading={AppConstants.venue}
+                    required={"required-field"} />
                 <div>
                     <Form.Item>
                         {getFieldDecorator("venueEndMatch", {
@@ -793,7 +801,7 @@ class LiveScoreBulkChange extends Component {
 
                 {/* court drop down view */}
                 <InputWithHead heading={AppConstants.court}
-                />
+                    required={"required-field pb-0"} />
                 <div>
                     <Form.Item>
                         {getFieldDecorator("courtID", {
@@ -801,6 +809,7 @@ class LiveScoreBulkChange extends Component {
                         })(
 
                             <Select
+                                mode='multiple'
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 onChange={(courtId) => this.props.liveScoreUpdateBulkAction(courtId, "courtId")}
                                 value={endMatchData.courtId}
@@ -1009,7 +1018,8 @@ class LiveScoreBulkChange extends Component {
                     </div>
 
                     {/* venue drop down view */}
-                    <InputWithHead heading={AppConstants.venue} />
+                    <InputWithHead heading={AppConstants.venue}
+                        required={"required-field"} />
                     <div>
                         <Select
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
@@ -1031,9 +1041,11 @@ class LiveScoreBulkChange extends Component {
                     </div>
 
                     {/* court drop down view */}
-                    <InputWithHead heading={AppConstants.court} />
+                    <InputWithHead heading={AppConstants.court}
+                        required={"required-field pb-0"} />
                     <div>
                         <Select
+                            mode='multiple'
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                             onChange={(courtId) => this.props.liveScoreUpdateBulkAction(courtId, "courtId")}
                             value={abandonData.courtId}
@@ -1099,7 +1111,7 @@ class LiveScoreBulkChange extends Component {
                                 onChange={(resultType) => this.props.liveScoreUpdateBulkAction(resultType, "resultType")}
                                 value={abandonData.resultType}
                             >
-                                {matchResult.length > 0 && matchResult.map((item, index) => {
+                                {isArrayNotEmpty(matchResult) && matchResult.map((item, index) => {
                                     return (
                                         <Option key={item.id}
                                             value={item.id}>
@@ -1130,12 +1142,15 @@ class LiveScoreBulkChange extends Component {
             abandonData
         } = this.props.liveScoreBulkMatchState
 
+        console.log(pushBackData, 'pushBackData')
+
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 if (selectedOption == 'pushBack') {
                     let formatedStartDate = formatDateTime(pushBackData.startDate, pushBackData.startTime)
                     let formatedEndDate = formatDateTime(pushBackData.endDate, pushBackData.endTime)
+
                     if (pushBackData.hours == "" && pushBackData.minutes == "" && pushBackData.seconds == "") {
                         message.error(ValidationConstants.selectMinuteHourSecond)
                     }
@@ -1151,7 +1166,6 @@ class LiveScoreBulkChange extends Component {
 
                 } else if (selectedOption == 'bringForward') {
                     let formatedStartDate = formatDateTime(bringForwardData.startDate, bringForwardData.startTime)
-                    console.log(bringForwardData, 'bringForwardData')
                     let formatedEndDate = formatDateTime(bringForwardData.endDate, bringForwardData.endTime)
                     if (bringForwardData.hours == "" && bringForwardData.minutes == "" && bringForwardData.seconds == "") {
                         message.config({ duration: 0.9, maxCount: 1 })

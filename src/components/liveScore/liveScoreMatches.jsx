@@ -29,7 +29,7 @@ const columns = [
         title: 'Match Id',
         dataIndex: 'id',
         key: 'id',
-        sorter: (a, b) => tableSort(a,b,"id"),
+        sorter: (a, b) => tableSort(a, b, "id"),
         render: (id) => <NavLink to={{
             pathname: '/liveScoreMatchDetails',
             state: { matchId: id }
@@ -41,7 +41,7 @@ const columns = [
         title: 'Start Time',
         dataIndex: 'startTime',
         key: 'startTime',
-        sorter: (a, b) => tableSort(a,b,"startTime"),
+        sorter: (a, b) => tableSort(a, b, "startTime"),
         render: (startTime) =>
             <span>{startTime ? liveScore_MatchFormate(startTime) : ""}</span>
     },
@@ -49,7 +49,7 @@ const columns = [
         title: 'Home',
         dataIndex: 'team1',
         key: 'team1',
-        sorter: (a, b) => tableSort(a,b,"team1"),
+        sorter: (a, b) => tableSort(a, b, "team1"),
         // render: (team1) => <span class="input-heading-add-another pt-0">{team1.name}</span>
         render: (team1, record) =>
             <NavLink to={{
@@ -63,7 +63,7 @@ const columns = [
         title: 'Away',
         dataIndex: 'team2',
         key: 'team2',
-        sorter: (a, b) => tableSort(a,b,"team2"),
+        sorter: (a, b) => tableSort(a, b, "team2"),
 
         render: (team2, record) =>
             <NavLink to={{
@@ -77,46 +77,46 @@ const columns = [
         title: 'Venue',
         dataIndex: 'venueCourt',
         key: 'venueCourt',
-        sorter: (a, b) => tableSort(a,b,"venueCourt"),
+        sorter: (a, b) => tableSort(a, b, "venueCourt"),
         render: (venueCourt) => <span>{venueCourt.venue.name}</span>
     },
     {
         title: 'Division',
         dataIndex: 'division',
         key: 'division',
-        sorter: (a, b) => tableSort(a,b,"division"),
+        sorter: (a, b) => tableSort(a, b, "division"),
         render: (division) => <span>{division.name}</span>
     },
     {
         title: 'Score',
         dataIndex: 'score',
         key: 'score',
-        sorter: (a, b) => tableSort(a,b,"score"),
+        sorter: (a, b) => tableSort(a, b, "score"),
         render: (score) => <span nowrap>{score}</span>
     },
     {
         title: 'Type',
         dataIndex: 'type',
         key: 'type',
-        sorter: (a, b) => tableSort(a,b,"type"),
+        sorter: (a, b) => tableSort(a, b, "type"),
     },
     {
         title: 'Match Duration',
         dataIndex: 'matchDuration',
         key: 'matchDuration',
-        sorter: (a, b) => tableSort(a,b,"matchDuration"),
+        sorter: (a, b) => tableSort(a, b, "matchDuration"),
     },
     {
         title: 'Main Break',
         dataIndex: 'mainBreakDuration',
         key: 'mainBreakDuration',
-        sorter: (a, b) => tableSort(a,b,"mainBreakDuration"),
+        sorter: (a, b) => tableSort(a, b, "mainBreakDuration"),
     },
     {
         title: 'Quater Break',
         dataIndex: 'qtrBreak',
         key: 'qtrBreak',
-        sorter: (a, b) => tableSort(a,b,"qtrBreak"),
+        sorter: (a, b) => tableSort(a, b, "qtrBreak"),
     },
 ];
 
@@ -141,7 +141,7 @@ class LiveScoreMatchesList extends Component {
     handleMatchTableList(page, competitionID) {
         let offset = page ? 10 * (page - 1) : 0;
         let start = 1
-        this.props.liveScoreMatchListAction(competitionID,start, offset)
+        this.props.liveScoreMatchListAction(competitionID, start, offset)
 
     }
 
@@ -242,7 +242,7 @@ class LiveScoreMatchesList extends Component {
     tableView = () => {
         const { liveScoreMatchListState } = this.props;
         let DATA = liveScoreMatchListState ? liveScoreMatchListState.liveScoreMatchListData : []
-         // let competitionID = getCompetitonId()
+        // let competitionID = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
         let total = liveScoreMatchListState.liveScoreMatchListTotalCount;
 

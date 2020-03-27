@@ -46,11 +46,24 @@ export function* getDrawsRoundsSaga(action) {
         const result = yield call(CompetitionAxiosApi.getDrawsRounds,
             action.yearRefId, action.competitionId);
         if (result.status === 1) {
-            yield put({
-                type: ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_SUCCESS,
-                result: result.result.data,
-                status: result.status,
-            });
+            const VenueResult = yield call(RegstrartionAxiosApi.getCompetitionVenue, action.competitionId);
+            console.log(VenueResult)
+            if (VenueResult.status === 1) {
+                yield put({
+                    type: ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_SUCCESS,
+                    result: result.result.data,
+                    Venue_Result:  VenueResult.result.data ,
+                    status: result.status,
+                });
+            }
+            else {
+                yield put({
+                    type: ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_SUCCESS,
+                    result: result.result.data,
+                    Venue_Result: [],
+                    status: result.status,
+                });
+            }
         } else {
             yield call(failSaga, result)
         }

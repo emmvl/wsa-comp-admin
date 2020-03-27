@@ -44,7 +44,7 @@ import LiveScoreGameTimeStatisticsState from './liveScoreReducer/liveScoreGameTi
 import LiveScoreSetting from './liveScoreReducer/liveScoreSettingReducer';
 import LiveScoreUmpiresState from './liveScoreReducer/liveScoreUmpiresReducer'
 import LiveScoreTeamAttendanceState from './liveScoreReducer/liveScoreTeamAttendanceReducer';
-
+import LiveScoreVenueChangeState from './liveScoreReducer/liveScoreVenueChangeReducer'
 
 
 const rootReducer = combineReducers({
@@ -87,7 +87,8 @@ const rootReducer = combineReducers({
   LiveScoreGameTimeStatisticsState,
   LiveScoreSetting,
   LiveScoreUmpiresState,
-  LiveScoreTeamAttendanceState
+  LiveScoreTeamAttendanceState,
+  LiveScoreVenueChangeState
 });
 
 export default rootReducer;

@@ -9,6 +9,7 @@ import { getliveScoreDivisions } from '../../store/actions/LiveScoreAction/liveS
 import { liveScoreLaddersListAction } from '../../store/actions/LiveScoreAction/liveScoreLadderAction'
 import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { isArrayNotEmpty } from '../../util/helpers'
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -151,7 +152,8 @@ class LiveScoreLadderList extends Component {
     ///dropdown view containing dropdown
     dropdownView = () => {
         const { liveScoreLadderState } = this.props;
-        let grade = liveScoreLadderState.liveScoreLadderDivisionData !== [] ? liveScoreLadderState.liveScoreLadderDivisionData : []
+        // let grade = liveScoreLadderState.liveScoreLadderDivisionData !== [] ? liveScoreLadderState.liveScoreLadderDivisionData : []
+        let grade = isArrayNotEmpty(liveScoreLadderState.liveScoreLadderDivisionData) ? liveScoreLadderState.liveScoreLadderDivisionData : []
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <span className='year-select-heading'>{AppConstants.filterByDivision}:</span>

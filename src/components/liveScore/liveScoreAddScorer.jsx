@@ -5,12 +5,18 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import InputWithHead from "../../customComponents/InputWithHead";
-import { getliveScoreDivisions } from '../../store/actions/LiveScoreAction/liveScoreActions'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import ValidationConstants from "../../themes/validationConstant";
 import history from "../../util/history";
+import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage';
+import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
+import { NavLink } from 'react-router-dom';
 
+import { liveScoreScorerUpdate, liveScoreAddEditScorer } from '../../store/actions/LiveScoreAction/liveScoreScorerAction'
+import Loader from '../../customComponents/loader'
+
+import { isArrayNotEmpty } from "../../util/helpers";
 const { Footer, Content, Header } = Layout;
 const { Option } = Select;
 
@@ -20,7 +26,14 @@ class LiveScoreAddScorer extends Component {
         this.state = {
             team: [],
             competitionFormat: "new",
+            load: false,
+            tableRecord: this.props.location.state ? this.props.location.state.tableRecord : null,
+            isEdit: this.props.location.state ? this.props.location.state.isEdit : null,
+            loader: false,
+            load: false
         }
+        console.log(this.state.tableRecord, 'tableRecordadd')
+
     }
 
     competition_formate = e => {
@@ -30,7 +43,55 @@ class LiveScoreAddScorer extends Component {
     };
 
     componentDidMount() {
-        this.props.getliveScoreDivisions(1)
+
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        if (id !== null) {
+            // this.props.getliveScoreDivisions(id)
+            this.props.getliveScoreTeams(id)
+        } else {
+            history.push('/')
+        }
+
+        if (this.state.isEdit == true) {
+            this.props.liveScoreScorerUpdate(this.state.tableRecord, "isEditScorer")
+            this.setState({ loader: true })
+        } else {
+            this.props.liveScoreScorerUpdate("", "isAddScorer")
+        }
+        this.setState({ load: true })
+    }
+
+    componentDidUpdate(nextProps) {
+
+        if(this.props.liveScoreScorerState.scorerData !== this.props.liveScoreScorerState.scorerData){
+            if (this.state.load == true && this.props.liveScoreScorerState.onLoad == false) {
+                if (this.state.isEdit == true) {
+                    this.setInitalFiledValue()
+                }
+                this.setState({ load: false, loader: false })
+            }
+        }
+        
+
+    }
+
+    setInitalFiledValue() {
+        const { scorerData, teamId } = this.props.liveScoreScorerState
+
+       
+        this.props.form.setFieldsValue({
+            // 'First Name': managerData.firstName,
+            // 'Last Name': managerData.lastName,
+            // 'Email Address': managerData.email,
+            // 'Contact no': managerData.mobileNumber,
+            // 'Select Team': teamId
+
+            'First Name': scorerData.firstName,
+            'Last Name': scorerData.lastName,
+            'Email Address': scorerData.email,
+            'Contact no': scorerData.mobileNumber,
+            'Select Team': teamId
+        })
     }
 
     success = () => {
@@ -71,6 +132,10 @@ class LiveScoreAddScorer extends Component {
                 <div className="row" >
                     <div className="col-sm" >
                         <Form.Item>
+                            <InputWithHead
+                                required={"required-field pb-0 pt-0"}
+                                heading={AppConstants.scorerSearch}
+                                onChange />
                             {getFieldDecorator("addScorer", {
                                 rules: [{ required: true, message: ValidationConstants.searchScorer }],
                             })(
@@ -86,17 +151,16 @@ class LiveScoreAddScorer extends Component {
                                         // this.props.liveScoreClear()
                                         this.setState({ showOption: false })
                                         // this.props.liveScoreUpdateManagerDataAction(ManagerId, 'managerSearch')
-
                                     }}
 
                                     onSearch={(value) => {
-
                                         this.setState({ showOption: true })
 
                                         // const filteredData = MainManagerListResult.filter(data => {
                                         //     return data.firstName.indexOf(value) > -1
                                         // })
                                         // this.props.liveScoreManagerFilter(filteredData)
+
 
                                     }}
 
@@ -115,7 +179,6 @@ class LiveScoreAddScorer extends Component {
                             )}
                         </Form.Item>
                     </div>
-
                 </div>
                 <div className="row" >
                     <div className="col-sm" >
@@ -126,7 +189,10 @@ class LiveScoreAddScorer extends Component {
                                 <InputWithHead
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.team}
-                                    placeholder={AppConstants.team} />
+                                    placeholder={AppConstants.team}
+                                    onChange={(firstName) => this.props.liveScoreScorerUpdate(firstName.target.value, "firstName")}
+
+                                />
                             )}
 
                         </Form.Item>
@@ -139,7 +205,11 @@ class LiveScoreAddScorer extends Component {
     }
 
     managerNewRadioBtnView(getFieldDecorator) {
-        let teamData = this.props.liveScoreState.teamResult ? this.props.liveScoreState.teamResult : []
+        // let teamData = this.props.liveScoreState.teamResult ? this.props.liveScoreState.teamResult : []
+        const teamResult = this.props.liveScoreTeamState;
+        const teamData = teamResult.teamResult ? teamResult.teamResult : "";
+        const { scorerData } = this.props.liveScoreScorerState
+
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -151,6 +221,7 @@ class LiveScoreAddScorer extends Component {
                                 <InputWithHead
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.firstName}
+                                    onChange={(firstName) => this.props.liveScoreScorerUpdate(firstName.target.value, "firstName")}
                                     placeholder={AppConstants.firstName} />
                             )}
 
@@ -165,6 +236,8 @@ class LiveScoreAddScorer extends Component {
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.lastName}
+                                    onChange={(lastName) => this.props.liveScoreScorerUpdate(lastName.target.value, "lastName")}
+
                                 />
                             )}
                         </Form.Item>
@@ -181,7 +254,8 @@ class LiveScoreAddScorer extends Component {
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.emailAdd}
                                     placeholder={AppConstants.enterEmail}
-
+                                    onChange={(emailAddress) => this.props.liveScoreScorerUpdate(emailAddress.target.value, "emailAddress")}
+                                    disabled={this.state.isEdit == true && true}
                                 />
                             )}
                         </Form.Item>
@@ -196,6 +270,8 @@ class LiveScoreAddScorer extends Component {
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.contactNO}
                                     placeholder={AppConstants.enterContactNo}
+                                    onChange={(contactNo) => this.props.liveScoreScorerUpdate(contactNo.target.value, "contactNo")}
+
                                     maxLength={15} />
                             )}
                         </Form.Item>
@@ -211,14 +287,15 @@ class LiveScoreAddScorer extends Component {
                                 rules: [{ required: true, message: ValidationConstants.teamName }]
                             })(
                                 <Select
-                                    loading={this.props.liveScoreState.onLoad == true && true}
-                                    mode="tags"
+                                    loading={this.props.liveScoreTeamState.onLoad == true && true}
+                                    mode="multiple"
                                     placeholder={AppConstants.selectTeam}
                                     style={{ width: "100%", }}
-                                    onChange={e => this.teamChange(e)}
+                                    onChange={(teamId) => this.props.liveScoreScorerUpdate(teamId, "teamId")}
+
                                     value={this.state.team === [] ? AppConstants.selectTeam : this.state.team}
                                 >
-                                    {teamData.length > 0 && teamData.map((item) => (
+                                    {isArrayNotEmpty(teamData) && teamData.map((item) => (
                                         < Option value={item.name} > {item.name}</Option>
                                     ))
                                     }
@@ -231,14 +308,20 @@ class LiveScoreAddScorer extends Component {
         )
     }
 
+    onButtonChange(e) {
+        // this.setState({ loader: true })
+        this.props.liveScoreScorerUpdate(e.target.value, 'scorerRadioBtn')
+    }
+
     radioBtnContainer() {
+        const { scorerRadioBtn } = this.props.liveScoreScorerState
         return (
             <div className="content-view pb-0 pt-4 row">
-                <span className="applicable-to-heading ml-4">{AppConstants.team}</span>
+                <span className="applicable-to-heading ml-4">{AppConstants.scorerHeading}</span>
                 <Radio.Group
                     className="reg-competition-radio"
-                    onChange={e => this.competition_formate(e)}
-                    value={this.state.competitionFormat}
+                    onChange={(e) => this.onButtonChange(e)}
+                    value={scorerRadioBtn}
                 >
                     <div className="row ml-2" style={{ marginTop: 18 }} >
                         <Radio value={"new"}>{AppConstants.new}</Radio>
@@ -252,13 +335,14 @@ class LiveScoreAddScorer extends Component {
     ////form view
     contentView = (getFieldDecorator) => {
         // let teamData = this.props.liveScoreState.teamResult ? this.props.liveScoreState.teamResult : []
+        const { scorerRadioBtn } = this.props.liveScoreScorerState
         return (
             <div >
                 {/* <div></div> */}
-                {this.radioBtnContainer()}
-                {this.state.competitionFormat == 'new' ?
-                    this.managerNewRadioBtnView(getFieldDecorator) :
-                    this.managerExistingRadioButton(getFieldDecorator)}
+                {/* {this.radioBtnContainer()}
+                {scorerRadioBtn == 'new' ? */}
+                {this.managerNewRadioBtnView(getFieldDecorator)}
+                {/* this.managerExistingRadioButton(getFieldDecorator)} */}
 
             </div>
         )
@@ -269,14 +353,16 @@ class LiveScoreAddScorer extends Component {
             <div className="fluid-width">
                 <div className="footer-view">
                     <div className="row">
-                        <div className="col-sm">
+                        <div className="col-sm-3">
                             <div className="reg-add-save-button">
-                                <Button onClick={() => history.push('/liveScorerList')} type="cancel-button">{AppConstants.cancel}</Button>
+                                <NavLink to='/liveScorerList'>
+                                    <Button onClick={() => history.push('/liveScorerList')} type="cancel-button">{AppConstants.cancel}</Button>
+                                </NavLink>
                             </div>
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button onClick={this.handleSubmit} className="user-approval-button" type="primary" htmlType="submit" disabled={isSubmitting}>
+                                <Button className="user-approval-button" type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.save}
                                 </Button>
                             </div>
@@ -296,38 +382,58 @@ class LiveScoreAddScorer extends Component {
             }
         });
     };
+
+
+    onSaveClick = e => {
+        const { scorerData, teamId, scorerRadioBtn, existingScorerId } = this.props.liveScoreScorerState
+        console.log("scorerData", "scorerData")
+
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                this.props.liveScoreAddEditScorer(scorerData, teamId, existingScorerId)
+
+            }
+        });
+    };
     /////// render function 
     render() {
+
         const { getFieldDecorator } = this.props.form;
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"5"} />
+                <Loader visible={this.props.liveScoreScorerState.onLoad} />
                 <Layout>
                     {this.headerView()}
-                    <Form
-                        onSubmit={this.handleSubmit}
-                        noValidate="noValidate">
+                    <Form onSubmit={this.onSaveClick} className="login-form" noValidate="noValidate">
                         <Content>
-                            <div className="formView"> {this.contentView(getFieldDecorator)}  </div>
+                            <div className="formView">
+                                {this.contentView(getFieldDecorator)}
+                            </div>
                         </Content>
+                        <Footer>
+                            {this.footerView()}
+                        </Footer>
                     </Form>
-
-                    <Footer>
-                        {this.footerView()}
-                    </Footer>
                 </Layout>
             </div>
         );
     }
 }
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ getliveScoreDivisions }, dispatch)
+    return bindActionCreators({
+        getliveScoreTeams,
+        liveScoreScorerUpdate,
+        liveScoreAddEditScorer
+    }, dispatch)
 }
 
 function mapStatetoProps(state) {
     return {
-        liveScoreState: state.LiveScoreState,
+        liveScoreTeamState: state.LiveScoreTeamState,
+        liveScoreScorerState: state.LiveScoreScorerState
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(LiveScoreAddScorer));

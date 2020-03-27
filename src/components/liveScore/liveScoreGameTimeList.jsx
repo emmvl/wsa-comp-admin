@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { parseTwoDigitYear } from "moment";
-
+import { NavLink } from 'react-router-dom';
 const { Content } = Layout;
 const { Option } = Select;
 
@@ -105,32 +105,60 @@ const columns = [
         dataIndex: 'player',
         key: 'player',
         sorter: (a, b) => tableSort(a,b,"player"),
-        render: (player) =>
-            <span class="input-heading-add-another pt-0" >{player.mnbPlayerId ? player.mnbPlayerId : player.id}</span>
+
+        render: (player,record) => <NavLink to={{
+                pathname: '/liveScorePlayerView',
+                state: { tableRecord: player }
+            }} >
+               <span class="input-heading-add-another pt-0" >{player.mnbPlayerId ? player.mnbPlayerId : player.id}</span>
+            </NavLink>
+          
+            // sorter: (a, b) => tableSort(a, b, "id"),
+            // render: (id) => <NavLink to={{
+            //     pathname: '/liveScoreMatchDetails',
+            //     state: { matchId: id }
+            // }} >
+            //     <span class="input-heading-add-another pt-0" >{id}</span>
+            // </NavLink>
     },
     {
         title: 'First name',
         dataIndex: 'firstName',
         key: 'firstName',
-        sorter: (a, b) => tableSort(a,b,"firstName"),
-        render: (firstName) =>
-            <span class="input-heading-add-another pt-0" >{firstName}</span>
+        sorter: (a, b) => tableSort(a,b,"firstName"),          
+
+            render: (firstName,player) => <NavLink to={{
+                pathname: '/liveScorePlayerView',
+                state: { tableRecord: player }
+            }} >
+               <span class="input-heading-add-another pt-0" >{firstName}</span>
+            </NavLink>
     },
     {
         title: 'Last Name',
         dataIndex: 'lastName',
         key: 'lastName',
         sorter: (a, b) => tableSort(a,b,"lastName"),
-        render: (lastName) =>
-            <span class="input-heading-add-another pt-0" >{lastName}</span>
+    
+            render: (lastName,player) => <NavLink to={{
+                pathname: '/liveScorePlayerView',
+                state: { tableRecord: player }
+            }} >
+              <span class="input-heading-add-another pt-0" >{lastName}</span>
+            </NavLink>
     },
     {
         title: 'Team',
         dataIndex: 'team',
         key: 'team',
         sorter: (a, b) =>  tableSort(a,b,"team"),
-        render: (team) =>
-            <span class="input-heading-add-another pt-0" >{team.name}</span>
+            render: (team) => 
+            <NavLink to={{
+                pathname: '/liveScoreTeamView',
+                state: { tableRecord: team, screenName: 'fromGameTimeList' }
+            }} >
+              <span class="input-heading-add-another pt-0" >{team.name}</span>
+            </NavLink>
     },
     {
         title: 'DIV',

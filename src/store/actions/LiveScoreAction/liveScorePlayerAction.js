@@ -20,13 +20,11 @@ function liveScoreUpdatePlayerDataAction(data, key) {
 }
 
 
-function liveScoreAddEditPlayerAction(data, playerId, playerImage, temaViewPlayer, propsData) {
+function liveScoreAddEditPlayerAction(data, playerId, propsData) {
     const action = {
         type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_PLAYER_LOAD,
         data,
         playerId,
-        playerImage,
-        temaViewPlayer,
         propsData,
     };
     return action;

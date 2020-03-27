@@ -36,7 +36,7 @@ const columns = [
         key: 'name',
         sorter: (a, b) => a.name.length - b.name.length,
         render: (name, record) => {
-            return <span style={{ color: '#ff8237' }}>{(record.firstName && record.lastName) && record.firstName + '' + record.lastName}</span>
+            return <span style={{ color: '#ff8237' }}>{(record.firstName && record.lastName) && record.firstName + ' ' + record.lastName}</span>
         }
     },
     {
@@ -65,13 +65,13 @@ class LiveScoreTeamView extends Component {
             teamId: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord.id : null : null,
             screenName: this.props.location.state ? this.props.location.state.screenName : null
         }
-        console.log(props.location, 'props.location.state@@@@')
+
         _this = this
     }
 
     componentDidMount() {
         const { teamId } = this.props.location.state
-        console.log(this.state.teamId, 'this.state.teamId')
+
         let teamIds = this.state.teamId ? this.state.teamId : teamId
         this.props.getTeamViewPlayerList(teamIds)
     }

@@ -81,7 +81,7 @@ import LiveScorerPlayerImport from "../components/liveScore/liveScorePlayerImpor
 import LiveScoreAddPlayer from "../components/liveScore/liveScoreAddPlayer"
 import LiveScorePlayerView from "../components/liveScore/liveScorePlayerView"
 import LiveScoreIncidentView from "../components/liveScore/liveScoreIncidentView"
-import LiveScoreIncidentList from "../components/liveScore/liveScoreMatchIncidentList"
+import LiveScoreIncidentList from "../components/liveScore/liveScoreIncidentList"
 import LiveScoreNewsList from "../components/liveScore/liveScoreNewsList"
 import LiveScoreAddNews from "../components/liveScore/liveScoreAddNews"
 import LiveScoreNewsView from "../components/liveScore/liveScoreNewsView"
@@ -99,6 +99,9 @@ import LiveScoreAddIncident from "../components/liveScore/liveScoreAddInicident"
 import LiveScoreLadderSettings from '../components/liveScore/liveScoreLadderSettings'
 import LiveScoreDivisionImport from '../components/liveScore/liveScoreDivisionImport'
 import userModuleMedical from "../components/user/userModuleMedical";
+import LiveScoreAssignMatch from "../components/liveScore/liveScoreAssignMatches"
+import LiveScoreVenueChange from '../components/liveScore/liveScoreVenueChange'
+import LiveScoreIncidentImport from '../components/liveScore/liveScoreIncidentImport'
 
 const lazyLoad = Component => {
   const lazy = props => {
@@ -522,6 +525,20 @@ class Routes extends React.Component {
         <PrivateRoute
           path="/liveScoreDivisionImport"
           component={lazyLoad(LiveScoreDivisionImport)}
+        />
+
+        <PrivateRoute
+          path="/liveScoreAssignMatch"
+          component={lazyLoad(LiveScoreAssignMatch)}
+        />
+        <PrivateRoute
+          path="/liveScoreVenueChange"
+          component={lazyLoad(LiveScoreVenueChange)}
+        />
+
+        <PrivateRoute
+          path="/liveScoreIncidentImport"
+          component={lazyLoad(LiveScoreIncidentImport)}
         />
 
         <Route path="/" component={lazyLoad(NotFound)} />

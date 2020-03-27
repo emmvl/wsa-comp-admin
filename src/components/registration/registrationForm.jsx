@@ -10,7 +10,8 @@ import {
     Breadcrumb,
     Form,
     Table,
-    message
+    message,
+    Tooltip
 } from "antd";
 import "./product.css";
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -110,13 +111,15 @@ class RegistrationForm extends Component {
             regClose: "",
             regStart: "",
             payLoad: "",
-            statusRefId: null,
+            statusRefId: 1,
             registrationMethodArray: [],
             selectedMemberShipType: [],
             disclaimerText: "",
             disclaimerLink: "",
             onRegistrationLoad: false,
-            selectedInvitees: []
+            selectedInvitees: [],
+            tooltipVisibleDraft: false,
+            tooltipVisiblePublish: false
         };
         this_Obj = this;
 
@@ -244,14 +247,14 @@ class RegistrationForm extends Component {
     /// post api
     registrationSubmit = e => {
         e.preventDefault();
-        let SelectedProduct = this.props.registrationState.registrationFormData.length !== 0 ? this.props.registrationState.registrationFormData[0] : [];
+        let SelectedProduct = JSON.parse(JSON.stringify(this.props.registrationState.registrationFormData.length !== 0 ? this.props.registrationState.registrationFormData[0] : []));
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 if (SelectedProduct.membershipProductTypes.length > 0) {
                     SelectedProduct['competitionUniqueKeyId'] = this.state.firstTimeCompId
                     SelectedProduct['yearRefId'] = this.state.yearRefId
-                    this.props.regSaveRegistrationForm(SelectedProduct)
-
+                    SelectedProduct["statusRefId"] = this.state.statusRefId
+                    this.props.regSaveRegistrationForm(SelectedProduct, this.state.statusRefId)
                 }
                 else {
                     message.error(ValidationConstants.pleaseSelectMembershipProduct)
@@ -804,9 +807,11 @@ class RegistrationForm extends Component {
 
     // for change and update tree props
     onTreeSelected(itemValue, formDataValue) {
+        console.log(itemValue)
         let selectedInvitees = this.props.registrationState.selectedInvitees
         let upcomingData = [...itemValue]
         let mainValueIndex = upcomingData.findIndex(x => x == "1")
+
         if (mainValueIndex > -1) {
             for (let i in upcomingData) {
                 if (upcomingData[i] == "2") {
@@ -823,57 +828,43 @@ class RegistrationForm extends Component {
                 }
             }
         }
-        let selectedIndex = selectedInvitees.findIndex(x => x == "4")
-        if (selectedIndex > -1) {
-            let index = upcomingData.findIndex(x => x == "4")
-            if (index > -1) {
-                upcomingData.splice(index, 1)
-            }
-            let mainIndex = upcomingData.findIndex(x => x == "1")
-            if (mainIndex > -1) {
-                upcomingData.splice(mainIndex, 1)
-            }
-        }
-
-        let selectedMainIndex = selectedInvitees.findIndex(x => x == "3")
-        if (selectedMainIndex > -1) {
-            let index = upcomingData.findIndex(x => x == "3")
-            if (index > -1) {
-                upcomingData.splice(index, 1)
-            }
-            let mainIndex = upcomingData.findIndex(x => x == "1")
-            if (mainIndex > -1) {
-                upcomingData.splice(mainIndex, 1)
-            }
-        }
-        let selectedSubIndex = selectedInvitees.findIndex(x => x == "2")
-        if (selectedSubIndex > -1) {
-            let index = upcomingData.findIndex(x => x == "2")
-            if (index > -1) {
-                upcomingData.splice(index, 1)
-            }
-            let mainIndex = upcomingData.findIndex(x => x == "1")
-            if (mainIndex > -1) {
-                upcomingData.splice(mainIndex, 1)
-            }
-        }
-
-        let settingArr = []
-
-        if (formDataValue) {
-            for (let i in upcomingData) {
-                if (upcomingData[i] == 1) {
+        if (upcomingData.includes("2") && upcomingData.includes("3") || upcomingData.includes("3") && upcomingData.includes("4") || upcomingData.includes("2") && upcomingData.includes("4")) {
+            let selectedIndex = selectedInvitees.findIndex(x => x == "4")
+            if (selectedIndex > -1) {
+                let index = upcomingData.findIndex(x => x == "4")
+                if (index > -1) {
+                    upcomingData.splice(index, 1)
                 }
-                else {
-                    let settingObj = {
-                        "registrationSettingsRefId": upcomingData[i]
-                    }
-                    settingArr.push(settingObj)
+                let mainIndex = upcomingData.findIndex(x => x == "1")
+                if (mainIndex > -1) {
+                    upcomingData.splice(mainIndex, 1)
                 }
             }
-            this.props.updateRegistrationForm(upcomingData, "selectedkeys")
-            this.props.updateRegistrationForm(settingArr, "registrationSettings")
+
+            let selectedMainIndex = selectedInvitees.findIndex(x => x == "3")
+            if (selectedMainIndex > -1) {
+                let index = upcomingData.findIndex(x => x == "3")
+                if (index > -1) {
+                    upcomingData.splice(index, 1)
+                }
+                let mainIndex = upcomingData.findIndex(x => x == "1")
+                if (mainIndex > -1) {
+                    upcomingData.splice(mainIndex, 1)
+                }
+            }
+            let selectedSubIndex = selectedInvitees.findIndex(x => x == "2")
+            if (selectedSubIndex > -1) {
+                let index = upcomingData.findIndex(x => x == "2")
+                if (index > -1) {
+                    upcomingData.splice(index, 1)
+                }
+                let mainIndex = upcomingData.findIndex(x => x == "1")
+                if (mainIndex > -1) {
+                    upcomingData.splice(mainIndex, 1)
+                }
+            }
         }
+        this.props.updateRegistrationForm(upcomingData, "registrationSettings")
     }
 
     makeSeletedArr(formDataValue) {
@@ -1033,6 +1024,9 @@ class RegistrationForm extends Component {
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
+        let registrationData = this.props.registrationState.registrationFormData.length > 0 ? this.props.registrationState.registrationFormData[0] : [];
+        console.log("registrationData", registrationData.statusRefId)
+        let statusRefId = registrationData.statusRefId
         return (
             <div className="fluid-width">
                 <div className="footer-view">
@@ -1044,27 +1038,41 @@ class RegistrationForm extends Component {
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button
-                                    className="save-draft-text"
-                                    type="save-draft-text"
-                                    htmlType="submit"
-                                    // disabled={isSubmitting}
-                                    onClick={() => this.props.updateRegistrationForm(1, "statusRefId")}
-                                >
-                                    {AppConstants.saveAsDraft}
-                                </Button>
+                                <Tooltip style={{ height: "100%" }}
+                                    onMouseEnter={() => this.setState({ tooltipVisibleDraft: statusRefId == 2 ? true : false })}
+                                    onMouseLeave={() => this.setState({ tooltipVisibleDraft: false })}
+                                    visible={this.state.tooltipVisibleDraft}
+                                    title={AppConstants.compRegHaveBeenSent}>
+                                    <Button
+                                        className="save-draft-text"
+                                        type="save-draft-text"
+                                        htmlType="submit"
+                                        disabled={statusRefId == 2 ? true : false}
+                                        onClick={() => this.setState({ statusRefId: 1 })}
+                                    >
+                                        {AppConstants.saveAsDraft}
+                                    </Button>
+                                </Tooltip>
+
                                 <Button className="save-draft-text" type="save-draft-text">
                                     {AppConstants.preview}
                                 </Button>
-                                <Button
-                                    className="open-reg-button"
-                                    htmlType="submit"
-                                    type="primary"
-                                    onClick={() => this.props.updateRegistrationForm(2, "statusRefId")}
-                                // disabled={isSubmitting}
-                                >
-                                    {AppConstants.openRegistrations}
-                                </Button>
+                                <Tooltip style={{ height: "100%" }}
+                                    onMouseEnter={() => this.setState({ tooltipVisiblePublish: statusRefId == 2 ? true : false })}
+                                    onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
+                                    visible={this.state.tooltipVisiblePublish}
+                                    title={AppConstants.compRegHaveBeenSent}>
+                                    <Button
+                                        className="open-reg-button"
+                                        htmlType="submit"
+                                        type="primary"
+                                        onClick={() => this.setState({ statusRefId: 2 })}
+                                        disabled={statusRefId == 2 ? true : false}
+                                        style={{ height: statusRefId == 2 ? "100%" : null, borderRadius: statusRefId == 2 ? 5 : null }}
+                                    >
+                                        {AppConstants.openRegistrations}
+                                    </Button>
+                                </Tooltip>
                             </div>
                         </div>
                     </div>

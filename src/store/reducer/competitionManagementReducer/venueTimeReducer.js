@@ -81,6 +81,14 @@ const initialState = {
     searchVenueList: []
 };
 
+////get court rotation
+function getCourtRotation(data) {
+    for (let i in data) {
+        data[i]["selectedPrefrence"] = null
+    }
+    return data
+}
+
 ///
 function getOrganisation(key) {
     let organisationsArr = []
@@ -424,7 +432,7 @@ function VenueTimeState(state = initialState, action) {
                 state.courtRotation[2].selectedPrefrence = 8;
                 state.selectedRadioBtn = 8;
             }
-          //  state.venueConstrainstData['courtRotationRefId'] = state.selectedRadioBtn;
+            //  state.venueConstrainstData['courtRotationRefId'] = state.selectedRadioBtn;
 
             return {
                 ...state,
@@ -789,10 +797,10 @@ function VenueTimeState(state = initialState, action) {
         ////get common data for rotation radio button on own competition venue and times 
         case ApiConstants.API_GET_COMMON_REF_DATA_SUCCESS:
 
-            for (let i in action.result.CourtRotation) {
-                action.result.CourtRotation[i]["selectedPrefrence"] = null
-            }
-            state.courtRotation = action.result.CourtRotation
+            // for (let i in action.result.CourtRotation) {
+            //     action.result.CourtRotation[i]["selectedPrefrence"] = null
+            // }
+            state.courtRotation = getCourtRotation(action.result.CourtRotation)
             state.evenRotation = action.result.CourtRotation[0].subReferences[0].id
             state.radioButton = action.result.CourtRotation[2].id
             state.allocateToSameCourt = action.result.CourtRotation[1].subReferences[0].id

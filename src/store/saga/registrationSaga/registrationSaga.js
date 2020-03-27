@@ -230,7 +230,8 @@ export function* regSaveRegistrationForm(action) {
       yield put({
         type: ApiConstants.API_REG_FORM_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
+        payload: action.payload
       });
       message.success(result.result.data.message);
     } else {

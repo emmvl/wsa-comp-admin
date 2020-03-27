@@ -132,7 +132,7 @@ class LiveScorePlayerView extends Component {
         super(props);
         this.state = {
             playerTabKey: 1,
-            data: props.location.state ? props.location.state.tableRecord : null
+            data: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord : null : null
         }
     }
 

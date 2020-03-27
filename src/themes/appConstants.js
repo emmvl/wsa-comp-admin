@@ -713,7 +713,8 @@ const AppConstants = {
   editBanner: 'Edit Banner',
   addBanners: 'Add Banners',
   ////export URl
-  exportUrl: 'http://world-sport-action-socket.appspot.com/players/csv?competitionId=',
+  // exportUrl: 'http://world-sport-action-socket.appspot.com/players/csv?competitionId=',
+  exportUrl: 'https://livescores-api-dev.worldsportaction.com/players/csv?competitionId=',
 
   ////Registartion
   membershipTypeName: "Membership Type Name",
@@ -889,7 +890,12 @@ const AppConstants = {
   selectRound: "Select Round",
   linked: "Linked",
   importDivision: "Import Division",
-  primaryContact: "Primary Contact"
+  primaryContact: "Primary Contact",
+  compRegHaveBeenSent: "Competition Registrations have been sent already",
+  assignMatches: "Assign Matches",
+  venueChange: 'Venue Change',
+  importIncident: "Import Incident",
+  endDate:"End Date"
 };
 
 export default AppConstants;

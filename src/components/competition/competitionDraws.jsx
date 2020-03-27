@@ -14,6 +14,7 @@ import {
   saveDraws,
   getCompetitionVenue,
   updateCourtTimingsDrawsAction,
+  clearDraws,
 } from '../../store/actions/competitionModuleAction/competitionDrawsAction';
 import Swappable from '../../customComponents/SwappableComponent';
 import { getDayName, getTime } from '../../themes/dateformate';
@@ -39,14 +40,34 @@ class CompetitionDraws extends Component {
       yearRefId: 1,
       firstTimeCompId: '',
       venueId: '',
-      roundId: ''
+      roundId: '',
+      venueLoad: false,
+      roundTime: null
     };
   }
 
   componentDidUpdate(nextProps) {
     let drawsRoundData = this.props.drawsState.getDrawsRoundsData;
     let venueData = this.props.drawsState.competitionVenues;
-    console.log(drawsRoundData)
+
+    if (this.state.venueLoad == true && this.props.drawsState.updateLoad == false) {
+      if (nextProps.drawsState.getDrawsRoundsData !== drawsRoundData) {
+        if (venueData.length > 0) {
+          if (drawsRoundData.length > 0) {
+            let venueId = venueData[0].id
+            let roundId = drawsRoundData[0].roundId;
+            let roundTime = drawsRoundData[0].startDateTime
+            this.props.getCompetitionDrawsAction(
+              this.state.yearRefId,
+              this.state.firstTimeCompId,
+              venueId,
+              roundId
+            );
+            this.setState({ roundId, venueId, venueLoad: false, roundTime });
+          }
+        }
+      }
+    }
     if (nextProps.appState !== this.props.appState) {
       let competitionList = this.props.appState.own_CompetitionArr;
       if (nextProps.appState.own_CompetitionArr !== competitionList) {
@@ -54,32 +75,12 @@ class CompetitionDraws extends Component {
           let competitionId = competitionList[0].competitionId;
           this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId);
           setOwn_competition(competitionId)
-          this.setState({ firstTimeCompId: competitionId }, () => {
-            this.props.getCompetitionVenue(competitionId);
-          });
-
+          this.setState({ firstTimeCompId: competitionId, venueLoad: true })
         }
       }
     }
 
-    if (nextProps.drawsState.competitionVenues !== venueData) {
 
-      // if (nextProps.drawsState.getDrawsRoundsData !== drawsRoundData) {
-      if (venueData.length > 0) {
-        if (drawsRoundData.length > 0) {
-          let venueId = venueData[0].id
-          let roundId = drawsRoundData[0].roundId;
-          this.props.getCompetitionDrawsAction(
-            this.state.yearRefId,
-            this.state.firstTimeCompId,
-            venueId,
-            roundId
-          );
-          this.setState({ roundId, venueId });
-          // }
-        }
-      }
-    }
   }
   componentDidMount() {
     loadjs('assets/js/custom.js');
@@ -87,6 +88,7 @@ class CompetitionDraws extends Component {
   }
 
   apiCalls() {
+    this.props.clearDraws()
     let yearId = getOwnCompetitionYear()
     let storedCompetitionId = getOwn_competition()
     let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
@@ -96,9 +98,9 @@ class CompetitionDraws extends Component {
       this.setState({
         yearRefId: JSON.parse(yearId),
         firstTimeCompId: storedCompetitionId,
-        getDataLoading: true
+        venueLoad: true
       })
-      this.props.getCompetitionVenue(storedCompetitionId);
+      // this.props.getCompetitionVenue(storedCompetitionId);
       this.props.getDrawsRoundsAction(yearId, storedCompetitionId);
     }
     else if (yearId) {
@@ -250,9 +252,10 @@ class CompetitionDraws extends Component {
 
   //////year change onchange
   onYearChange = yearId => {
+    this.props.clearDraws("rounds")
     setOwnCompetitionYear(yearId)
     setOwn_competition(undefined)
-    this.setState({ firstTimeCompId: null, yearRefId: yearId, roundId: null, venueId: null });
+    this.setState({ firstTimeCompId: null, yearRefId: yearId, roundId: null, roundTime: null, venueId: null });
     this.props.getYearAndCompetitionOwnAction(
       this.props.appState.own_YearArr,
       yearId,
@@ -263,13 +266,15 @@ class CompetitionDraws extends Component {
   // on Competition change
   onCompetitionChange(competitionId) {
     setOwn_competition(competitionId)
-    this.setState({ firstTimeCompId: competitionId, roundId: null, venueId: null });
-    this.props.getCompetitionVenue(competitionId);
+    this.props.clearDraws("rounds")
+    this.setState({ firstTimeCompId: competitionId, roundId: null, venueId: null, roundTime: null, venueLoad: true });
+    // this.props.getCompetitionVenue(competitionId);
     this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId);
   }
 
   ///dropdown view containing all the dropdown of header
   dropdownView = () => {
+    console.log(this.state.roundTime)
     return (
       <div className="row">
         <div className="col-sm-3">
@@ -333,6 +338,7 @@ class CompetitionDraws extends Component {
   ////////on venue change
   onVenueChange = venueId => {
     this.setState({ venueId });
+    this.props.clearDraws()
     this.props.getCompetitionDrawsAction(
       this.state.yearRefId,
       this.state.firstTimeCompId,
@@ -343,8 +349,12 @@ class CompetitionDraws extends Component {
 
   //////onRoundsChange
   onRoundsChange = roundId => {
+    let roundData = this.props.drawsState.getDrawsRoundsData
+    this.props.clearDraws()
+    let matchRoundData = roundData.findIndex(x => x.roundId == roundId)
+    let roundTime = roundData[matchRoundData].startDateTime
     // this.props.dateSelection(roundId)
-    this.setState({ roundId });
+    this.setState({ roundId, roundTime });
     this.props.getCompetitionDrawsAction(
       this.state.yearRefId,
       this.state.firstTimeCompId,
@@ -424,9 +434,11 @@ class CompetitionDraws extends Component {
                         );
                       })}
                   </Select>
-                  <span className="year-select-heading pb-1">
-                    {AppConstants.statringSaturday}
-                  </span>
+                  {this.state.roundTime !== null &&
+                    <span className="year-select-heading pb-1">
+                      {"Starting"} {"  "}{moment(this.state.roundTime).format("ddd DD/MM")}
+                    </span>
+                  }
                 </div>
               </div>
             </div>
@@ -592,6 +604,7 @@ function mapDispatchToProps(dispatch) {
       saveDraws,
       getCompetitionVenue,
       updateCourtTimingsDrawsAction,
+      clearDraws
     },
     dispatch
   );

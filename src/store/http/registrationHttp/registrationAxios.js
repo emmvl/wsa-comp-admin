@@ -98,7 +98,7 @@ let AxiosApi = {
         var url = `/api/membershipproduct?organisationUniqueKey=${organisationUniqueKey}`;
         return Method.dataPost(url, token, payload);
     },
-
+    // post regsitration form save
     async regSaveRegistrationForm(payload) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
@@ -126,7 +126,7 @@ let AxiosApi = {
         var url = `/api/orgregistration/competitionyear/${year}?organisationUniqueKey=${organisationUniqueKey}`;
         return Method.dataGet(url, token);
     },
-
+    // get own competition list
     async  getOwnCompetitionList(year) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem.organisationUniqueKey
@@ -134,7 +134,7 @@ let AxiosApi = {
         var url = `/api/orgregistration/owncompetition/${year}?organisationUniqueKey=${organisationUniqueKey}`;
         return Method.dataGet(url, token);
     },
-
+    // get participate competition list
     async  getParticipateCompetitionList(year) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem.organisationUniqueKey
@@ -144,23 +144,28 @@ let AxiosApi = {
     },
 
 
-
+    // get venue for registration form
     getVenue() {
         var url = `/api/venue/all`;
         return Method.dataGet(url, token);
     },
+    // get reg form settings
     getRegFormSetting() {
         var url = "/common/reference/RegistrationSettings";
         return Method.dataGet(url, token);
     },
+    //get registration form registration method
     getRegFormMethod() {
         var url = "/common/reference/RegistrationMethod";
         return Method.dataGet(url, token);
     },
+    // get membership products in registration products
     getMembershipProductList(CompetitionId) {
         var url = `/api/details/membershipproduct/${CompetitionId}`;
         return Method.dataGet(url, token);
     },
+
+    // get registration form  data
     getRegistrationForm(year, CompetitionId) {
         let body = {
             yearRefId: year,
@@ -217,21 +222,22 @@ let AxiosApi = {
         var url = `/common/reference/CompetitionFormat`;
         return Method.dataGet(url, token);
     },
-
+    //get registration invitees
     getRegistrationInvitees() {
         var url = "/common/reference/RegistrationInvitees";
         return Method.dataGet(url, token)
     },
-
+    //get charity round up
     getCharityRoundUp() {
         var url = "/common/reference/CharityRoundUp";
         return Method.dataGet(url, token)
     },
+    ///get payment option
     getPaymentOption() {
         var url = "/common/reference/PaymentOption";
         return Method.dataGet(url, token)
     },
-
+    // get government vouchers
     getGovtVouchers() {
         var url = '/common/reference/GovernmentVoucher';
         return Method.dataGet(url, token)
@@ -334,20 +340,21 @@ let AxiosApi = {
     },
 
     ///// Get Competition Venue 
-
     getCompetitionVenue(competitionId) {
         var url = `/api/competitionfee/getVenues/${competitionId}`;
         return Method.dataGet(url, token);
     },
-
+    // save end user registration
     saveEndUserRegistration(payload) {
         var url = `/api/registration/save`;
         return Method.dataPost(url, token, payload);
     },
+    // save end user registration
     getOrgRegistrationRegistrationSettings(payload) {
         var url = `/api/registration/registrationsettings?userId=${userId}`;
         return Method.dataPost(url, token, payload);
     },
+    //get end user membership products
     getEndUserRegMembershipProducts(payload) {
         var url = `/api/registration/membershipproducts?userId=${userId}`;
         return Method.dataPost(url, token, payload);

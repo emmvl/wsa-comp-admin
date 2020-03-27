@@ -20,6 +20,8 @@ function getliveScoreScorerList(competitionId, roleId) {
     return action;
 }
 
+
+
 export {
     liveScorePlayerListAction,
     getliveScoreScorerList

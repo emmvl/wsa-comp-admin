@@ -12,7 +12,7 @@ import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStora
 import { liveScore_formateDate } from '../../themes/dateformate'
 import { liveScore_formateDateTime } from '../../themes/dateformate'
 import { NavLink } from 'react-router-dom';
-
+import AppImages from "../../themes/appImages";
 const { Content } = Layout;
 
 /////function to sort table column
@@ -74,16 +74,25 @@ const columnActiveNews = [
     },
     {
         title: "Published",
-        dataIndex: 'published_at',
-        key: 'published_at',
-        sorter: (a, b) => tableSort(a, b, 'published'),
-        render: (published_at) =>
-        <span>{published_at && liveScore_formateDate(published_at)}</span>
+        dataIndex: 'isActive',
+        key: 'isActive',
+        sorter: (a, b) => tableSort(a, b, 'isActive'),
+        
+        render: isActive =>
+        <span>{isActive == 1 ? "Yes":"NO"}</span>
+        // <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
+        //     <img className="dot-image"
+        //         src={isActive == 1 ? AppImages.greenDot : AppImages.redDot}
+        //         alt="" width="12" height="12" />
+        // </span>,
     },
     {
         title: "Published Date",
-        dataIndex: 'Published_date',
-        key: 'Published_date',
+        dataIndex: 'published_at',
+        key: 'published_at',
+        render: (published_at) =>
+        <span>{published_at && liveScore_formateDate(published_at)}</span>
+        
         // sorter: (a, b) => tableSort(a, b, 'Published_date'),
        
     },
@@ -175,7 +184,10 @@ const columnsTodaysMatch = [
         key: 'score',
         sorter: (a, b, records) => tableSort(a, b, records.team1Score, records.team2Score),
         render: (score, records) =>
-            <span nowrap class="input-heading-add-another pt-0" onClick={() => { console.log('hello clcicked ') }} >{records.team1Score + " : " + records.team2Score} </span>
+        <NavLink to={{
+            pathname: '/liveScoreMatchDetails',
+            state: { matchId: records.id }
+        }} ><span nowrap class="input-heading-add-another pt-0" >{records.team1Score + " : " + records.team2Score} </span></NavLink>
     }, {
         title: "Umpire",
         dataIndex: 'competition',
@@ -189,6 +201,7 @@ const columnsTodaysMatch = [
         dataIndex: 'scorerStatus',
         key: 'scorerStatus',
         sorter: (a, b) => tableSort(a, b, "scorerStatus"),
+        
 
     }, {
         title: "Status",
@@ -243,8 +256,8 @@ const columnsTodaysIncient = [
         // sorter: (a, b) => a.incidentPlayers.player.firstName.length - b.incidentPlayers.player.firstName.length,
         render: (incidentPlayers, record) =>
             <NavLink to={{
-                pathname: "/liveScoreIncidentView",
-                state: { item: record }
+                pathname: '/liveScorePlayerView',
+                state: { tableRecord: incidentPlayers[0].player }
             }}>
                 <span className="input-heading-add-another pt-0">{getFirstName(incidentPlayers)}</span>
             </NavLink>
@@ -260,8 +273,8 @@ const columnsTodaysIncient = [
         //sorter: (a, b,incidentPlayers) => checkSorting(a, b, incidentPlayers.),
         render: (incidentPlayers, record) =>
             <NavLink to={{
-                pathname: "/liveScoreIncidentView",
-                state: { item: record }
+                pathname: '/liveScorePlayerView',
+                state: { tableRecord: incidentPlayers[0].player }
             }}>
                 <span className="input-heading-add-another pt-0">{getLastName(incidentPlayers)}</span>
             </NavLink>
@@ -285,12 +298,13 @@ const columnsTodaysIncient = [
         sorter: (a, b) => checkSorting(a, b, "team"),
         render: (team) =>
             <span class="input-heading-add-another pt-0">{team}</span>
-    }, {
-        title: "Clam",
-        dataIndex: 'clam',
-        key: 'clam',
-        sorter: (a, b) => checkSorting(a, b, "clam"),
-    },
+    }, 
+    // {
+    //     title: "Clam",
+    //     dataIndex: 'clam',
+    //     key: 'clam',
+    //     sorter: (a, b) => checkSorting(a, b, "clam"),
+    // },
     {
         title: "Description",
         dataIndex: 'description',
@@ -358,7 +372,7 @@ class LiveScoreDashboard extends Component {
                 {this.incidentHeading()}
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        // loading={this.props.liveScoreDashboardState.onLoad == true && true}
+                        loading={this.props.liveScoreDashboardState.onLoad == true && true}
                         className="home-dashboard-table" columns={columnsTodaysIncient}
                         dataSource={dashboardIncidentList}
                         pagination={false}

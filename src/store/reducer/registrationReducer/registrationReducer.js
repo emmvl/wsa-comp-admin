@@ -78,7 +78,8 @@ const initialState = {
   defaultCompetitionID: "",
   allDivisionsData: [],
   selectedInvitees: [],
-  expendKeyArr: []
+  expendKeyArr: [],
+  defaultRegistrationSettings: []
 };
 
 
@@ -108,6 +109,60 @@ function checkSlectedInvitees(array) {
 
 }
 
+//checkExistingSettings
+function checkExistingSettings(settingArr, settingID) {
+  console.log(settingArr)
+  let object = {
+    status: false,
+    result: []
+  }
+
+  if (settingArr) {
+    for (let i in settingArr) {
+      if (settingArr[i].registrationSettingsRefId == settingID) {
+        object = {
+          status: true,
+          result: settingArr[i]
+        }
+
+        break
+      }
+    }
+  }
+
+  return object
+}
+
+
+//get registration form setting 
+function getResitrationFormSettings(selectedSettings, reg_settings) {
+  console.log(reg_settings, selectedSettings)
+  let postArr = []
+  for (let i in selectedSettings) {
+    let selected_settings = checkExistingSettings(reg_settings, selectedSettings[i])
+    let settingObject = null
+
+    if (selected_settings.status == false) {
+      settingObject = {
+        "registrationSettingsId": 0,
+        "registrationSettingsRefId": selectedSettings[i]
+      }
+    } else {
+      console.log(selected_settings)
+      settingObject = {
+        "registrationSettingsId": selected_settings.result.registrationSettingsId,
+        "registrationSettingsRefId": selectedSettings[i]
+      }
+    }
+
+
+    postArr.push(settingObject)
+
+
+  }
+  return postArr;
+
+}
 
 // get selection of cheked in reg form
 function getSelectedCheck(obj, regFormData) {
@@ -528,10 +583,12 @@ function registration(state = initialState, action) {
       );
       data[onChangeIndex][key] = action.value;
       if (key == "casualFee") {
-        data[onChangeIndex]["casualGst"] = (action.value) / 10
+        let casualGst = Number((action.value) / 10).toFixed(2)
+        data[onChangeIndex]["casualGst"] = casualGst
       }
       if (key == "seasonalFee") {
-        data[onChangeIndex]["seasonalGst"] = (action.value) / 10
+        let seasonalGst = Number((action.value) / 10).toFixed(2)
+        data[onChangeIndex]["seasonalGst"] = seasonalGst
       }
       return {
         ...state,
@@ -561,6 +618,7 @@ function registration(state = initialState, action) {
       let productList = action.MembershipProductList.id;
       let objValue = JSON.parse(JSON.stringify([newObjvalue]))
       let formData = action.result.length > 0 ? action.result : objValue
+      state.defaultRegistrationSettings = formData[0].registrationSettings !== null ? formData[0].registrationSettings : []
       let selectedInvitees = checkSlectedInvitees(formData[0].registrationSettings)
       state.selectedInvitees = selectedInvitees
       // let expendKey = getExpendableKey(selectedInvitees)
@@ -601,8 +659,10 @@ function registration(state = initialState, action) {
       if (state.registrationFormData == 0) {
         state.registrationFormData = JSON.parse(JSON.stringify([newObjvalue]));
       }
-      if (action.key == "selectedkeys") {
-
+      if (action.key == "registrationSettings") {
+        // let formDataObj = JSON.parse(JSON.stringify(state.registrationFormData))
+        let updatedObjData = getResitrationFormSettings(action.updatedData, state.defaultRegistrationSettings)
+        state.registrationFormData[0]["registrationSettings"] = updatedObjData
         state.selectedInvitees = action.updatedData
       }
       else {

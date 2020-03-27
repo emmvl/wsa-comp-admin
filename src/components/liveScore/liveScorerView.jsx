@@ -78,10 +78,14 @@ class LiveScorerView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: props.location.state.tableRecord
+            data:props.location.state? props.location.state.tableRecord:null
         }
+        console.log(this.state.data,'tableRecordView')
     }
 
+    componentDidMount(){
+        console.log(this.state.data)
+    }
     ////view for profile image
     profileImageView = () => {
         let data = this.state.data
@@ -177,7 +181,7 @@ class LiveScorerView extends Component {
                                 >
                                     <NavLink to={{
                                         pathname: "/liveScoreAddScorer",
-                                        state: { isEdit: true }
+                                        state: { isEdit: true,tableRecord:this.state.data }
                                     }}>
                                         <Button className="primary-add-comp-form" type="primary">
                                             + {AppConstants.edit}

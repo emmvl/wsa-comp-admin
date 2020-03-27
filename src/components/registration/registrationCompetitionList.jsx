@@ -50,7 +50,7 @@ function totalSeasonalFees(seasonalFees1, record) {
     let fee = record.parentCreator ? parentFees : childFees
     return (
         affiliateFeeStatus ?
-            <span>Affiliate fee not set!</span>
+            <span>{record.feeOrgId == null ? "N/A" : "Affiliate fee not set!"}</span>
             :
             <span>
                 {currencyFormat(fee)}
@@ -81,7 +81,7 @@ function totalCasualFees(casualFees1, record) {
 
     return (
         affiliateFeeStatus ?
-            <span>Affiliate fee not set!</span>
+            <span>{record.feeOrgId == null ? "N/A" : "Affiliate fee not set!"}</span>
             :
             <span>
                 {currencyFormat(fee)}

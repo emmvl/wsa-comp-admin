@@ -20,7 +20,8 @@ import {
     getDrawsRoundsAction,
     updateCompetitionDraws,
     saveDraws,
-    getCompetitionVenue
+    getCompetitionVenue,
+    clearDraws,
 } from '../../store/actions/competitionModuleAction/competitionDrawsAction';
 import Loader from '../../customComponents/loader'
 import {
@@ -29,7 +30,7 @@ import {
     setOwn_competition,
     getOwn_competition
 } from "../../util/sessionStorage"
-import { actionChannel } from 'redux-saga/effects';
+import moment from "moment"
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
@@ -40,7 +41,9 @@ class CompetitionDrawEdit extends Component {
             yearRefId: 1,
             firstTimeCompId: '',
             venueId: '',
-            roundId: ''
+            roundId: '',
+            venueLoad: false,
+            roundTime: null
         };
     }
 
@@ -49,31 +52,55 @@ class CompetitionDrawEdit extends Component {
         let venueData = this.props.drawsState.competitionVenues;
 
         if (nextProps.appState !== this.props.appState) {
-            let competitionList = this.props.appState.competitionList;
-            if (nextProps.appState.competitionList !== competitionList) {
+            let competitionList = this.props.appState.own_CompetitionArr;
+            if (nextProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
                     let competitionId = competitionList[0].competitionId;
                     this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId);
                     setOwn_competition(competitionId)
-                    this.setState({ firstTimeCompId: competitionId }, () => { this.props.getCompetitionVenue(competitionId) });
+                    this.setState({ firstTimeCompId: competitionId, venueLoad: true })
                 }
             }
         }
-        if (nextProps.drawsState.competitionVenues !== venueData) {
-            if (venueData.length > 0) {
-                if (drawsRoundData.length > 0) {
-                    let venueId = venueData[0].id
-                    let roundId = drawsRoundData[0].roundId;
-                    this.props.getCompetitionDrawsAction(
-                        this.state.yearRefId,
-                        this.state.firstTimeCompId,
-                        venueId,
-                        roundId
-                    );
-                    this.setState({ roundId, venueId });
+        if (this.state.venueLoad == true && this.props.drawsState.updateLoad == false) {
+            if (nextProps.drawsState !== this.props.drawsState) {
+                if (nextProps.drawsState.getDrawsRoundsData !== drawsRoundData) {
+                    if (venueData.length > 0) {
+                        if (drawsRoundData.length > 0) {
+                            let venueId = venueData[0].id
+                            let roundId = drawsRoundData[0].roundId;
+                            let roundTime = drawsRoundData[0].startDateTime
+                            this.props.getCompetitionDrawsAction(
+                                this.state.yearRefId,
+                                this.state.firstTimeCompId,
+                                venueId,
+                                roundId
+                            );
+                            this.setState({ roundId, venueId, roundTime, venueLoad: false });
+                        }
+                    }
                 }
             }
         }
+        // if (this.state.venueLoad == true && this.props.drawsState.updateLoad == false) {
+        //     if (nextProps.drawsState !== this.props.drawsState) {
+        //         if (nextProps.drawsState.getDrawsRoundsData !== drawsRoundData) {
+        //             if (venueData.length > 0) {
+        //                 if (drawsRoundData.length > 0) {
+        //                     let venueId = venueData[0].id
+        //                     let roundId = drawsRoundData[0].roundId;
+        //                     this.props.getCompetitionDrawsAction(
+        //                         this.state.yearRefId,
+        //                         this.state.firstTimeCompId,
+        //                         venueId,
+        //                         roundId
+        //                     );
+        //                     this.setState({ roundId, venueId, });
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         // if (nextProps.drawsState.getDrawsRoundsData !== drawsRoundData) {
         //     if (venueData.length > 0) {
@@ -102,6 +129,7 @@ class CompetitionDrawEdit extends Component {
     }
 
     apiCalls() {
+        this.props.clearDraws()
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
@@ -111,9 +139,8 @@ class CompetitionDrawEdit extends Component {
             this.setState({
                 yearRefId: JSON.parse(yearId),
                 firstTimeCompId: storedCompetitionId,
-                getDataLoading: true
+                venueLoad: true
             })
-            this.props.getCompetitionVenue(storedCompetitionId);
             this.props.getDrawsRoundsAction(yearId, storedCompetitionId);
         }
         else if (yearId) {
@@ -283,9 +310,10 @@ class CompetitionDrawEdit extends Component {
 
     //////year change onchange
     onYearChange = yearId => {
+        this.props.clearDraws("rounds")
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
-        this.setState({ firstTimeCompId: null, yearRefId: yearId, roundId: null });
+        this.setState({ firstTimeCompId: null, yearRefId: yearId, roundId: null, roundTime: null, venueId: null });
         this.props.getYearAndCompetitionOwnAction(
             this.props.appState.own_YearArr,
             yearId,
@@ -296,8 +324,9 @@ class CompetitionDrawEdit extends Component {
 
     // on Competition change
     onCompetitionChange(competitionId) {
+        this.props.clearDraws("rounds")
         setOwn_competition(competitionId)
-        this.setState({ firstTimeCompId: competitionId, roundId: null });
+        this.setState({ firstTimeCompId: competitionId, roundId: null, venueId: null, roundTime: null, venueLoad: true });
         this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId);
     }
 
@@ -365,6 +394,7 @@ class CompetitionDrawEdit extends Component {
 
     ////////on venue change
     onVenueChange = venueId => {
+        this.props.clearDraws()
         this.setState({ venueId });
         this.props.getCompetitionDrawsAction(
             this.state.yearRefId,
@@ -376,7 +406,12 @@ class CompetitionDrawEdit extends Component {
 
     //////onRoundsChange
     onRoundsChange = roundId => {
-        this.setState({ roundId });
+        let roundData = this.props.drawsState.getDrawsRoundsData
+        this.props.clearDraws()
+        let matchRoundData = roundData.findIndex(x => x.roundId == roundId)
+        let roundTime = roundData[matchRoundData].startDateTime
+        // this.props.dateSelection(roundId)
+        this.setState({ roundId, roundTime });
         this.props.getCompetitionDrawsAction(
             this.state.yearRefId,
             this.state.firstTimeCompId,
@@ -451,9 +486,11 @@ class CompetitionDrawEdit extends Component {
                                                 );
                                             })}
                                     </Select>
-                                    <span className="year-select-heading pb-1">
-                                        {AppConstants.statringSaturday}
-                                    </span>
+                                    {this.state.roundTime !== null &&
+                                        <span className="year-select-heading pb-1">
+                                            {"Starting"} {"  "}{moment(this.state.roundTime).format("ddd DD/MM")}
+                                        </span>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -691,7 +728,8 @@ function mapDispatchToProps(dispatch) {
             getDrawsRoundsAction,
             updateCompetitionDraws,
             saveDraws,
-            getCompetitionVenue
+            getCompetitionVenue,
+            clearDraws
         },
         dispatch
     );

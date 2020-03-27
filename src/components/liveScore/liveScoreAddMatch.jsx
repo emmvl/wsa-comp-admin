@@ -37,7 +37,7 @@ import { formateTime, liveScore_formateDate, formatDateTime } from '../../themes
 import { getVenuesTypeAction } from "../../store/actions/appAction"
 import Loader from '../../customComponents/loader'
 import { getliveScoreScorerList } from '../../store/actions/LiveScoreAction/liveScoreAction';
-import { isArrayNotEmpty, isNullOrEmptyString } from '../../util/helpers';
+import { isArrayNotEmpty } from '../../util/helpers';
 const { Footer, Content, Header } = Layout;
 const { Option } = Select;
 
@@ -66,6 +66,7 @@ class LiveScoreAddMatch extends Component {
     componentDidMount() {
         // let competitionId = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
+        
         if (id !== null) {
             this.props.getCompetitonVenuesList(id);
             this.props.getliveScoreDivisions(id)
@@ -228,7 +229,7 @@ class LiveScoreAddMatch extends Component {
     /// Duration & Break View
     duration_break = (getFieldDecorator) => {
         let { addEditMatch } = this.props.liveScoreMatchState
-        console.log(addEditMatch, "addEditMatch");
+        
         return (
 
             <div className="row">
@@ -300,9 +301,8 @@ class LiveScoreAddMatch extends Component {
         let { liveScoreState } = this.props
         let { venueData } = this.props.liveScoreMatchState
         const { scorerListResult } = this.props.liveScoreState
-
-        console.log('1234', addEditMatch)
-
+        const { scoringType } = JSON.parse(getLiveScoreCompetiton())
+    
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -338,11 +338,8 @@ class LiveScoreAddMatch extends Component {
                                     style={{ width: "100%" }}
                                     onChange={(time) => this.props.liveScoreUpdateMatchAction(time, 'start_time')}
                                     format={"HH:mm"}
-                                    // minuteStep={15}
                                     placeholder='Select Time'
-                                    // defaultOpenValue={moment("00:00", "HH:mm")}
-                                    // value={start_time !== null && moment(start_time, 'HH:mm')}
-                                    // value={moment(start_time, 'HH:mm')}
+                                    defaultOpenValue={moment("00:00", "HH:mm")}
                                     use12Hours={false}
                                 />
                             )}
@@ -577,7 +574,7 @@ class LiveScoreAddMatch extends Component {
                     </div>
 
                     {
-                        addEditMatch.type !== 'SINGLE' &&
+                       scoringType !== 'SINGLE' &&
                         <div className="col-sm-6" >
                             <InputWithHead heading={AppConstants.scorer2} />
                             <Select

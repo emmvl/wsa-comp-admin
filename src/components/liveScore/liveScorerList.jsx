@@ -9,7 +9,7 @@ import scorerData from "../../mocks/liveScorerList";
 import { liveScoreScorerListAction } from '../../store/actions/LiveScoreAction/liveScoreScorerAction';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
-import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import history from '../../util/history'
 
 
@@ -67,8 +67,8 @@ const columns = [
         sorter: (a, b) => a.teams.length - b.teams.length,
         render: (teams, record) =>
             <NavLink to={{
-
-                state: { tableRecord: record }
+                pathname:"./liveScoreAssignMatch",
+                state: { teams: record }
             }}>
                 {teams.length > 0 && teams.map((item) => (
                     <span class="input-heading-add-another pt-0" >{item.name}</span>
@@ -194,8 +194,6 @@ class LiveScorerList extends Component {
         // let currentPage = liveScoreScorerState.scorerListResult ? scorerList.page.currentPage : 0
         // let totalpage = liveScoreScorerState.scorerListResult ? scorerList.page.totalCount : 0
 
-        console.log(scorerListResult, "scorerListResult")
-        console.log('******', liveScoreScorerState)
         return (
 
             <div className="comp-dash-table-view mt-4">

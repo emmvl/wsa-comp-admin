@@ -75,6 +75,13 @@ function dateSelectionRounds(data) {
     return action
 
 }
+function clearDraws(key) {
+    const action = {
+        type: ApiConstants.cleardrawsData,
+        key
+    }
+    return action
+}
 
 export {
     getCompetitionDrawsAction,
@@ -83,5 +90,6 @@ export {
     saveDraws,
     getCompetitionVenue,
     updateCourtTimingsDrawsAction,
-    dateSelectionRounds
+    dateSelectionRounds,
+    clearDraws
 }

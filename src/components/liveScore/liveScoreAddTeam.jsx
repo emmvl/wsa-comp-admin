@@ -64,6 +64,7 @@ class LiveScoreAddTeam extends Component {
             loaclCompetitionID: null,
             image: null
         };
+        
     }
 
     componentDidMount() {
@@ -379,7 +380,7 @@ class LiveScoreAddTeam extends Component {
     managerExistingRadioBtnView(getFieldDecorator) {
         let grade = this.state.managerData
         const { selectedManager } = this.props.liveScoreTeamState
-        console.log(this.props.liveScoreMangerState.managerListResult)
+       
         const { managerListResult } = this.props.liveScoreMangerState
         return (
             <div >
@@ -548,6 +549,7 @@ class LiveScoreAddTeam extends Component {
     };
 
     handleSubmit = e => {
+        console.log(this.state.teamId)
         const { id } = JSON.parse(getLiveScoreCompetiton())
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -571,14 +573,19 @@ class LiveScoreAddTeam extends Component {
 
                     let usersArray = JSON.stringify(userIds)
 
-                    formData.append('id', this.state.teamId ? this.state.teamId : 0)
+                     if(this.state.teamId !== null){
+                        formData.append('id', this.state.teamId)
+                     }
+                   
                     formData.append('name', name)
                     formData.append('alias', alias)
+                    
                     if (this.state.image) {
                         formData.append('logo', this.state.image)
                     } else {
                         formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
                     }
+                    
                     formData.append('competitionId', id)
                     formData.append('organisationId', organisationId)
                     formData.append('divisionId', divisionId)
@@ -588,7 +595,11 @@ class LiveScoreAddTeam extends Component {
                 }
                 else if (this.props.liveScoreTeamState.managerType === 'new') {
                     const formData = new FormData();
-                    formData.append('id', this.state.teamId ? this.state.teamId : 0)
+                     
+                    if(this.state.teamId){
+                        formData.append('id', this.state.teamId)
+                     }
+
                     formData.append('name', name)
                     formData.append('alias', alias)
                     if (this.state.image) {
@@ -610,7 +621,11 @@ class LiveScoreAddTeam extends Component {
                     // message.config({ duration: 0.9, maxCount: 1 })
                     // message.error('Please select manager section.')
                     const formData = new FormData();
-                    formData.append('id', this.state.teamId ? this.state.teamId : 0)
+
+                    if(this.state.teamId){
+                        formData.append('id', this.state.teamId)
+                    }
+                    
                     formData.append('name', name)
                     formData.append('alias', alias)
                     if (this.state.image) {

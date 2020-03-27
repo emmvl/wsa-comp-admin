@@ -61,8 +61,6 @@ import ValidationConstants from "../../themes/validationConstant";
 import { NavLink } from "react-router-dom";
 import Loader from '../../customComponents/loader';
 import { getUserId, getOrganisationData } from "../../util/sessionStorage"
-import { clearVenueDataAction } from '../../store/actions/competitionModuleAction/venueTimeAction'
-
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -297,9 +295,6 @@ const playercasualTable = [
             <Input type="number" className="input-inside-table-fees" value={gst} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "gst", "casual")} />
         )
     },
-
-
-
     {
         title: "Total",
         dataIndex: "total",
@@ -656,7 +651,7 @@ const playercasualTableClub = [
         dataIndex: "affiliateFee",
         key: "affiliateFee",
         render: (affiliateFee, record, index) => (
-            <Input type="number" className="input-inside-table-fees" value={affiliateFee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "fee", "casual")} />
+            <Input type="number" className="input-inside-table-fees" value={affiliateFee} onChange={(e) => this_Obj.onChangeDetails(e.target.value, index, record, "affiliateFee", "casual")} />
         )
     },
     {
@@ -969,6 +964,7 @@ class RegistrationCompetitionFee extends Component {
         let compFeesState = this.props.competitionFeesState
         let competitionId = compFeesState.competitionId
         let postData = compFeesState.competitionDetailData
+        console.log("postData", postData)
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 let nonPlayingDate = JSON.stringify(postData.nonPlayingDates)
@@ -979,7 +975,7 @@ class RegistrationCompetitionFee extends Component {
                         let formData = new FormData();
                         formData.append("competitionUniqueKey", competitionId);
                         formData.append("name", postData.competitionName);
-                        formData.append("yearRefId", this.state.yearRefId);
+                        formData.append("yearRefId", values.yearRefId);
                         formData.append("description", postData.description);
                         formData.append("competitionTypeRefId", postData.competitionTypeRefId);
                         formData.append("competitionFormatRefId", postData.competitionFormatRefId);
@@ -1010,8 +1006,8 @@ class RegistrationCompetitionFee extends Component {
                                 formData.append("competitionLogoId", postData.competitionLogoId ? postData.competitionLogoId : 0);
                             } else {
                                 formData.append("competitionLogoId", postData.competitionLogoId ? postData.competitionLogoId : 0);
-                                formData.append("logoFileUrl", compFeesState.defaultCompFeesOrgLogo);
-                                formData.append("competition_logo", compFeesState.defaultCompFeesOrgLogo)
+                                formData.append("logoFileUrl", postData.competitionLogoUrl);
+                                // formData.append("competition_logo", compFeesState.defaultCompFeesOrgLogo)
                             }
                         }
                         formData.append("logoIsDefault", postData.logoIsDefault)
@@ -1375,11 +1371,76 @@ class RegistrationCompetitionFee extends Component {
     }
 
 
+    // //// On change Invitees
+    // onInviteesChange(value) {
+    //     let regInviteesselectedData = this.props.competitionFeesState.selectedInvitees
+    //     let upcomingData = [...value]
+    //     let orgLevelId = JSON.stringify(this.state.organisationTypeRefId)
+    //     if (orgLevelId == "1" || orgLevelId == "2") {
+    //         let index = upcomingData.findIndex(x => x == "1")
+    //         if (index > -1) {
+    //             upcomingData.splice(index, 1)
+    //             let clubIndex = upcomingData.findIndex(x => x == "3")
+
+    //             if (clubIndex > -1) {
+    //                 upcomingData.splice(clubIndex, 1)
+    //             }
+
+    //         }
+    //     }
+    //     let associationIndex = regInviteesselectedData.findIndex(x => x == "2")
+    //     if (associationIndex > -1) {
+    //         let index = upcomingData.findIndex(x => x == "2")
+    //         if (index > -1) {
+    //             upcomingData.splice(index, 1)
+    //         }
+    //         let mainIndex = upcomingData.findIndex(x => x == "1")
+    //         if (mainIndex > -1) {
+    //             upcomingData.splice(mainIndex, 1)
+    //         }
+    //     }
+    //     let clubIndex = regInviteesselectedData.findIndex(x => x == "3")
+    //     if (clubIndex > -1) {
+    //         let index = upcomingData.findIndex(x => x == "3")
+    //         if (index > -1) {
+    //             upcomingData.splice(index, 1)
+    //         }
+    //         let mainIndex = upcomingData.findIndex(x => x == "1")
+    //         if (mainIndex > -1) {
+    //             upcomingData.splice(mainIndex, 1)
+    //         }
+    //     }
+    //     let directIndex = regInviteesselectedData.findIndex(x => x == "5")
+    //     if (directIndex > -1) {
+    //         let index = upcomingData.findIndex(x => x == "5")
+    //         if (index > -1) {
+    //             upcomingData.splice(index, 1)
+    //         }
+    //         let mainIndex = upcomingData.findIndex(x => x == "1")
+    //         if (mainIndex > -1) {
+    //             upcomingData.splice(mainIndex, 1)
+    //         }
+    //     }
+    //     let notApplIndex = regInviteesselectedData.findIndex(x => x == "6")
+    //     if (notApplIndex > -1) {
+    //         let index = upcomingData.findIndex(x => x == "6")
+    //         if (index > -1) {
+    //             upcomingData.splice(index, 1)
+    //         }
+    //         let mainIndex = upcomingData.findIndex(x => x == "1")
+    //         if (mainIndex > -1) {
+    //             upcomingData.splice(mainIndex, 1)
+    //         }
+    //     }
+    //     this.props.add_editcompetitionFeeDeatils(upcomingData, "invitees")
+    // }
+
+
     //// On change Invitees
     onInviteesChange(value) {
-        //let regInviteesselectedData = this.props.competitionFeesState.selectedInvitees
+        let regInviteesselectedData = this.props.competitionFeesState.selectedInvitees
         console.log("value" + value);
-        let arr = [value];
+        let arr = [value]
         // let upcomingData = [...value]
         // let associationIndex = regInviteesselectedData.findIndex(x => x == "2")
         // if (associationIndex > -1) {
@@ -1404,9 +1465,8 @@ class RegistrationCompetitionFee extends Component {
         //     }
         // }
         // this.props.add_editcompetitionFeeDeatils(upcomingData, "invitees")
-        this.props.add_editcompetitionFeeDeatils(arr, "invitees");
+        this.props.add_editcompetitionFeeDeatils(arr, "invitees")
     }
-
 
     /////on change logo isdefault
     logoIsDefaultOnchange = (value, key) => {
@@ -1552,13 +1612,11 @@ class RegistrationCompetitionFee extends Component {
                     </Select>
                 </div>
                 {isCreatorEdit == false &&
-                    <div onClick={() => this.props.clearVenueDataAction("venue") }>
-                        <NavLink
-                            to={{ pathname: `/competitionVenueAndTimesAdd`, state: { key: AppConstants.competitionFees } }}
-                        >
-                            <span className="input-heading-add-another">+{AppConstants.addVenue}</span>
-                        </NavLink>
-                    </div>
+                    <NavLink
+                        to={{ pathname: `/competitionVenueAndTimesAdd`, state: { key: AppConstants.competitionFees } }}
+                    >
+                        <span className="input-heading-add-another">+{AppConstants.addVenue}</span>
+                    </NavLink>
                 }
                 <span className="applicable-to-heading required-field">{AppConstants.typeOfCompetition}</span>
                 <Form.Item  >
@@ -2013,14 +2071,37 @@ class RegistrationCompetitionFee extends Component {
     };
 
 
+    // regInviteesView = () => {
+    //     let invitees = this.props.appState.registrationInvitees.length > 0 ? this.props.appState.registrationInvitees : []
+    //     let detailsData = this.props.competitionFeesState
+    //     let isCreatorEdit = this.state.isCreatorEdit
+    //     return (
+    //         <div className="fees-view pt-5">
+    //             <span className="form-heading">{AppConstants.registrationInvitees}</span>
+    //             <div>
+    //                 <Tree
+    //                     className="tree-government-rebate"
+    //                     style={{ flexDirection: 'column' }}
+    //                     checkable
+    //                     checkedKeys={[...detailsData.selectedInvitees]}
+    //                     onCheck={(e) => this.onInviteesChange(e)}
+    //                     disabled={isCreatorEdit}
+    //                 >
+    //                     {this.AffiliatesLevel(invitees)}
+    //                 </Tree>
+    //             </div>
+    //         </div>
+    //     );
+    // };
+
     regInviteesView = () => {
-        
+
         let invitees = this.props.appState.registrationInvitees.length > 0 ? this.props.appState.registrationInvitees : [];
         console.log("invitees" + JSON.stringify(invitees));
         let detailsData = this.props.competitionFeesState
         console.log("********" + JSON.stringify(detailsData.selectedInvitees));
         let isCreatorEdit = this.state.isCreatorEdit;
-        let seletedInvitee = detailsData.selectedInvitees.find(x=>x);
+        let seletedInvitee = detailsData.selectedInvitees.find(x => x);
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.registrationInvitees}</span>
@@ -2029,19 +2110,19 @@ class RegistrationCompetitionFee extends Component {
                         className="reg-competition-radio"
                         onChange={(e) => this.onInviteesChange(e.target.value)}
                         value={seletedInvitee}>
-                        {(invitees || []).map((item, index) => 
+                        {(invitees || []).map((item, index) =>
                             (
                                 <div>
-                                    {item.subReferences.length == 0 ? 
+                                    {item.subReferences.length == 0 ?
                                         <Radio value={item.id}>{item.description}</Radio>
                                         : <div>
                                             <div class="applicable-to-heading invitees-main">{item.description}</div>
                                             {(item.subReferences).map((subItem, subIndex) => (
-                                               <div style={{marginLeft: '20px'}}> 
-                                                   <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
-                                                </div> 
+                                                <div style={{ marginLeft: '20px' }}>
+                                                    <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
+                                                </div>
                                             ))}
-                                          </div>
+                                        </div>
                                     }
                                 </div>
                             ))
@@ -2739,19 +2820,20 @@ class RegistrationCompetitionFee extends Component {
         console.log("statusRefId", statusRefId)
         return (
             <div className="fluid-width">
-                {/* {!this.state.competitionIsUsed && */}
-                {statusRefId == 1 &&
-                    <div className="footer-view">
-                        {this.buttonShowView() ?
-                            <div className="row">
-                                <div className="col-sm">
+                <div className="footer-view">
+                    {this.buttonShowView() ?
+                        <div className="row">
+                            <div className="col-sm">
+                                {statusRefId == 1 &&
                                     <div className="reg-add-save-button">
                                         {competitionId ?
                                             <Button type="cancel-button" onClick={() => this.showDeleteConfirm()}>{AppConstants.delete}</Button>
                                             : null}
                                     </div>
-                                </div>
-                                <div className="col-sm">
+                                }
+                            </div>
+                            <div className="col-sm">
+                                {statusRefId == 1 &&
                                     <div className="comp-buttons-view">
                                         <Button className="save-draft-text" type="save-draft-text"
                                             htmlType="submit" onClick={() => this.setState({ statusRefId: 1, buttonPressed: "save" })}>
@@ -2768,26 +2850,26 @@ class RegistrationCompetitionFee extends Component {
                                                 : AppConstants.next}
                                         </Button>
                                     </div>
+                                }
+                            </div>
+                        </div>
+                        :
+                        tabKey == "4" &&
+                        <div className="row">
+                            <div className="col-sm">
+                                <div className="comp-buttons-view">
+                                    <Button className="publish-button" type="primary"
+                                        htmlType="submit" onClick={() => this.setState({
+                                            statusRefId: 2,
+                                            buttonPressed: "publish"
+                                        })}
+                                    >
+                                        {AppConstants.save}
+                                    </Button>
                                 </div>
                             </div>
-                            :
-                            tabKey == "4" &&
-                            <div className="row">
-                                <div className="col-sm">
-                                    <div className="comp-buttons-view">
-                                        <Button className="publish-button" type="primary"
-                                            htmlType="submit" onClick={() => this.setState({
-                                                statusRefId: 2,
-                                                buttonPressed: "publish"
-                                            })}
-                                        >
-                                            {AppConstants.save}
-                                        </Button>
-                                    </div>
-                                </div>
-                            </div>}
-                    </div>
-                }
+                        </div>}
+                </div>
             </div>
         );
 
@@ -2890,8 +2972,7 @@ function mapDispatchToProps(dispatch) {
         getDefaultCompFeesLogoAction,
         getOnlyYearListAction,
         searchVenueList,
-        clearFilter,
-        clearVenueDataAction
+        clearFilter
     }, dispatch)
 }
 
@@ -2899,7 +2980,6 @@ function mapStatetoProps(state) {
     return {
         competitionFeesState: state.CompetitionFeesState,
         appState: state.AppState,
-        venueTimeState: state.VenueTimeState
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(RegistrationCompetitionFee));

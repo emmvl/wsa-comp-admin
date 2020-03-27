@@ -461,12 +461,14 @@ function CompetitionDraws(state = initialState, action) {
 
     /////get rounds in the competition draws
     case ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_LOAD:
-      return { ...state, onLoad: true, error: null };
+      return { ...state, onLoad: true, updateLoad: true, error: null };
 
     case ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_SUCCESS:
-      state.getDrawsRoundsData = isArrayNotEmpty(action.result) ? action.result : []
+      state.updateLoad = false
       return {
         ...state,
+        getDrawsRoundsData: action.result,
+        competitionVenues: action.Venue_Result,
         onLoad: false,
         error: null
       };
@@ -581,6 +583,15 @@ function CompetitionDraws(state = initialState, action) {
         error: null,
         updateLoad: false
       };
+
+    case ApiConstants.cleardrawsData:
+      state.getDrawsData = []
+      state.dateArray = []
+      if (action.key == "round") {
+        state.competitionVenues = []
+        state.getDrawsRoundsData = []
+      }
+      return { ...state }
 
     default:
       return state;

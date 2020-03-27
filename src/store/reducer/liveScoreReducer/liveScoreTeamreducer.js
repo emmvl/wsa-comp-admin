@@ -156,6 +156,7 @@ function LiveScoreTeamState(state = initialState, action) {
             }
             else {
                 state.teamManagerData[key] = data
+                
             }
             return {
                 ...state,
@@ -242,6 +243,8 @@ function LiveScoreTeamState(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_GET_TEAM_SUCCESS:
+
+      
             state.teamManagerData = action.result.team[0]
 
             state.teamLogo = action.result.team[0].logoUrl
@@ -250,7 +253,7 @@ function LiveScoreTeamState(state = initialState, action) {
             state.teamManagerData['userIds'] = managerId
 
             state.selectedManager = managerId
-            state.managerType = action.result.managers.length > 0 ? 'existing' : 'new'
+            state.managerType = action.result.managers.length > 0 ? 'existing' : null
             return {
                 ...state,
                 onLoad: false,

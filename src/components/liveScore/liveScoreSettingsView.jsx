@@ -124,14 +124,10 @@ class LiveScoreSettingsView extends Component {
             this.props.getCompetitonVenuesList()
         }
 
-
-        // console.log('wo', this.props.form)
-        // console.log('reducer', this.props.liveScoreSetting)
-
     }
+
     componentDidUpdate(nextProps) {
         if (nextProps.liveScoreSetting != this.props.liveScoreSetting) {
-            console.log('reducer', this.props.liveScoreSetting)
             const { competitionName, competitionLogo, scoring } = this.props.liveScoreSetting.form
             this.props.form.setFieldsValue({
                 competition_name: competitionName,
@@ -142,14 +138,12 @@ class LiveScoreSettingsView extends Component {
 
         }
         if (nextProps.venueList != this.props.venueList) {
-            console.log('9999', this.props.venueList)
         }
     }
 
 
     ////method to select multiple value
     teamChange = (value) => {
-        console.log(value)
         this.props.onChangeSettingForm({ key: 'venue', data: value })
     }
 
@@ -193,7 +187,7 @@ class LiveScoreSettingsView extends Component {
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
-            console.log(this.props.location.state)
+
 
             if (!err) {
                 const arrayOfVenue = this.props.liveScoreSetting.form.allVenue.map(data => data.id)
@@ -216,7 +210,16 @@ class LiveScoreSettingsView extends Component {
                 const recordGoalAttempts = record2.includes("recordGoalAttempts")
                 const centrePassEnabled = record2.includes("centrePassEnabled")
                 const incidentsEnabled = record2.includes("incidentsEnabled")
+
+
+                let orgId = null
+                if (this.props.location.state === 'add') {
+                    let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
+                    orgId = organisationId
+                }
+
                 var formData = new FormData();
+
                 formData.append('id', id)
                 formData.append('longName', competitionName)
                 formData.append('logo', competitionLogo)
@@ -230,6 +233,8 @@ class LiveScoreSettingsView extends Component {
                 formData.append('attendanceRecordingPeriod', attendanceRecordingPeriod)
                 formData.append('scoringType', scoring)
                 formData.append('timerType', timerType)
+                formData.append('organisationId', orgId ? orgId : this.props.liveScoreSetting.data.organisationId)
+
                 this.props.settingDataPostInititae({ body: formData, venue: venue, settingView: this.props.location.state })
                 // this.props.clearLiveScoreSetting()
                 // this.props.history.push('/liveScoreCompetitions')
@@ -268,7 +273,7 @@ class LiveScoreSettingsView extends Component {
         let grade = this.state.venueData
         const applyTo1 = [{ label: 'Record Umpire', value: "recordUmpire" }, { label: ' Game Time Tracking', value: "gameTimeTracking" }, { label: 'Position Tracking', value: "positionTracking" }];
         const applyTo2 = [{ label: 'Record Goal Attempts', value: "recordGoalAttempts" }, { label: 'Centre Pass Enabled', value: "centrePassEnabled" }, { label: 'Incidents Enabled', value: "incidentsEnabled" }];
-
+        console.log(this.props.venueList, 'this.props.venueList')
         return (
             <div className="content-view pt-4">
                 <Form.Item>
@@ -472,6 +477,7 @@ class LiveScoreSettingsView extends Component {
                                 placeholder={"Select Time"}
                             >
                                 <Option value={"CENTRAL"}>{'Central'}</Option>
+                                <Option value={"PER_MATCH"}>{'Per Match'}</Option>
                                 <Option value={"CENTRAL_WITH_MATCH_OVERRIDE"}>{'Central with Per Match Override '}</Option>
 
                             </Select>
@@ -523,7 +529,6 @@ class LiveScoreSettingsView extends Component {
 
 
     render() {
-        console.log(this.props.liveScoreSetting)
         const { getFieldDecorator } = this.props.form
         let local_Id = getLiveScoreCompetiton()
         return (

@@ -574,6 +574,8 @@ class CompetitionLadder extends Component {
     }
 
     schemeModalView = (ladderFormat) => {
+        let scheme = ladderFormat[this.state.currentIndex];
+        let schemeName = (scheme!= null && scheme!= undefined) ? scheme.schemeName : null;
         return (
             <div>
               <Modal
@@ -582,7 +584,7 @@ class CompetitionLadder extends Component {
                 onOk={() => this.handleSchemeModal(false, "ok", this.state.currentIndex, ladderFormat)}
                 onCancel={() => this.handleSchemeModal(false, "cancel", this.state.currentIndex, ladderFormat)}>
                   <InputWithHead heading={AppConstants.ladderFormatScheme} placeholder={AppConstants.ladderFormatScheme}
-                        value={ladderFormat[this.state.currentIndex].schemeName} 
+                        value={schemeName} 
                         onChange={(e)=> this.onUpdateSchemeName(e, ladderFormat, this.state.currentIndex)}></InputWithHead>
               </Modal>
             </div>
@@ -669,9 +671,9 @@ class CompetitionLadder extends Component {
                         <div className="formView">
                             {this.contentView()}
                         </div>
-                        <div className="formView">
+                        {/* <div className="formView">
                             {this.ladderAdjustmentView()}
-                        </div>
+                        </div> */}
                         <Loader visible={this.props.ladderFormatState.onLoad} />
                     </Content>
                     <Footer>

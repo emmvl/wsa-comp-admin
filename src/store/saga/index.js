@@ -79,7 +79,7 @@ import { liveScoreNewsListSaga, liveScoreAddNewsSaga, liveScoreNewsNotificationS
 import { liveScoreBannerSaga, liveScoreAddBannerSaga, liveScoreRemoveBannerSaga } from './liveScoreSaga/liveScoreBannerSaga';
 import { liveScoreGoalSaga } from './liveScoreSaga/liveScoreGoalSaga'
 import { liveScoreManagerListSaga, liveScoreAddEditManagerSaga } from './liveScoreSaga/liveScoreManagerSaga';
-import { liveScoreScorerListSaga, liveScorerSearchUserSaga } from '../saga/liveScoreSaga/liveScoreScorerSaga';
+import { liveScoreScorerListSaga, liveScorerSearchUserSaga, liveScoreAssigneMatches,liveScoreChangeAssignStatus } from '../saga/liveScoreSaga/liveScoreScorerSaga';
 import { liveScoreBulkPushBack, liveScoreBulkBringForwardSaga, liveScoreMatchResult, liveScoreEndMatchesSaga, liveScoreDoubleHeaderSaga, liveScoreAbandonMatchSaga } from './liveScoreSaga/liveScoreBulkMatchSaga';
 
 
@@ -514,5 +514,9 @@ export default function* root_saga() {
   ////Import Player Saga
   yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_IMPORT_LOAD, liveScorePlayerImportSaga)
 
+/// Assigne Matches 
 
+yield takeEvery(ApiConstants.API_LIVESCORE_ASSIGN_MATCHES_LOAD , liveScoreAssigneMatches)
+
+yield takeEvery(ApiConstants.API_LIVESCORE_ASSIGN_CHANGE_STATUS_LOAD , liveScoreChangeAssignStatus)
 }

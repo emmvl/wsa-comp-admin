@@ -50,7 +50,7 @@ export function* liveScorePlayerSaga(action) {
 export function* liveScoreAddEditPlayerSaga(action) {
     try {
         console.log('^^^^^', action)
-        const result = yield call(LiveScoreAxiosApi.liveScoreAddEditPlayer, action.data, action.playerId, action.playerImage);
+        const result = yield call(LiveScoreAxiosApi.liveScoreAddEditPlayer, action.data);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_PLAYER_SUCCESS,

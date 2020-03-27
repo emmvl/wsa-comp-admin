@@ -23,7 +23,7 @@ import history from '../../util/history'
 import Loader from '../../customComponents/loader'
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
-
+import { isArrayNotEmpty, isNullOrEmptyString } from '../../util/helpers';
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
@@ -42,14 +42,16 @@ class LiveScoreAddPlayer extends Component {
             playerData: props.location.state ? props.location.state.playerData : null,
             temaViewPlayer: props.location.state ? props.location.state.temaViewPlayer ? props.location.state.temaViewPlayer : null : null,
             screenName: props.location.state ? props.location.state.screenName : null,
+            teamId: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord.id : null : null,
         };
-        console.log(this.props.location.state, '^^^^^**')
+        console.log(this.props.location, '^^^^^**')
     }
 
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         // this.props.getliveScoreDivisions(id)
         this.props.getliveScoreTeams(id)
+        // this.setInitalFiledValue()
         if (this.state.isEdit == true) {
             if (this.props.location.state.screen === 'editTeam') {
                 this.props.liveScoreUpdatePlayerDataAction({
@@ -69,15 +71,27 @@ class LiveScoreAddPlayer extends Component {
             this.setInitalFiledValue()
         } else {
             this.props.liveScoreUpdatePlayerDataAction('', 'addplayerScreen')
+            let teamsId = this.state.teamId ? this.state.teamId : this.props.location.state ? this.props.location.state.teamId : null
+            const { playerData } = this.props.liveScorePlayerState
+            console.log(teamsId, 'teamsId&$')
+            playerData.phoneNumber = ""
+            playerData.dateOfBirth = ""
+
+            if (teamsId) {
+                this.props.form.setFieldsValue({
+                    "team": teamsId
+                })
+            }
         }
     }
 
     setInitalFiledValue() {
         const { playerData } = this.props.liveScorePlayerState
+        console.log(playerData, 'playerData##', this.state.teamId)
         this.props.form.setFieldsValue({
             'firstName': playerData.firstName,
             'lastName': playerData.lastName,
-            "team": playerData.teamId
+            "team": playerData.teamId ? playerData.teamId : this.state.teamId
         })
     }
 
@@ -134,7 +148,8 @@ class LiveScoreAddPlayer extends Component {
         // let teamData = this.props.liveScoreState.teamResult ? this.props.liveScoreState.teamResult : []
         const { playerData } = this.props.liveScorePlayerState
         const teamResult = this.props.liveScoreTeamState;
-        const teamData = teamResult.teamResult;
+        // const teamData = teamResult.teamResult;
+        let teamData = isArrayNotEmpty(teamResult.teamResult) ? teamResult.teamResult : []
 
         return (
             <div className="content-view pt-0">
@@ -226,7 +241,7 @@ class LiveScoreAddPlayer extends Component {
                                     value={playerData.teamId}
                                     placeholder={AppConstants.selectTeam}
                                 >
-                                    {teamData.length > 0 && teamData.map((item) => (
+                                    {isArrayNotEmpty(teamData) && teamData.map((item) => (
                                         < Option value={item.id} > {item.name}</Option>
                                     ))
                                     }
@@ -286,15 +301,47 @@ class LiveScoreAddPlayer extends Component {
 
     ////Api call after on save click
     onSaveClick = (e) => {
-        const { playerData } = this.props.liveScorePlayerState
+        const {
+            firstName,
+            lastName,
+            dateOfBirth,
+            phoneNumber,
+            mnbPlayerId,
+            teamId,
+            competitionId,
+            photoUrl } = this.props.liveScorePlayerState.playerData
+
+
+
+        console.log(this.props.liveScorePlayerState.playerData, 'liveScoreAddEditPlayerAction')
 
 
         let playerId = this.state.playerData ? this.state.playerData.playerId : ''
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log(this.props.location)
-                this.props.liveScoreAddEditPlayerAction(playerData, playerId, this.state.image, this.state.temaViewPlayer, { teamId: playerData.teamId, screen: this.props.location.state ? this.props.location.state.screen : null, screenName: this.state.screenName })
+
+                let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+
+                let selectedTeamId = teamId ? teamId : this.state.teamId ? this.state.teamId : this.props.location.state ? this.props.location.state.teamId : null
+
+                let body = new FormData();
+                body.append('id', playerId ? playerId : 0)
+                body.append('firstName', firstName)
+                body.append('lastName', lastName);
+                body.append("dateOfBirth", dateOfBirth);
+                body.append("phoneNumber", phoneNumber);
+                body.append("mnbPlayerId", mnbPlayerId);
+                body.append("teamId", selectedTeamId);
+                body.append("competitionId", id)
+
+                if (this.state.image) {
+                    body.append("photo", this.state.image) //// this.props.location.state ? this.props.location.state.teamId
+                }
+
+                this.props.liveScoreAddEditPlayerAction(body, playerId, { teamId: selectedTeamId, screen: this.props.location.state ? this.props.location.state.screen : null, screenName: this.state.screenName })
+
+                // this.props.liveScoreAddEditPlayerAction(playerData, playerId, this.state.image, this.state.temaViewPlayer, { teamId: playerData.teamId, screen: this.props.location.state ? this.props.location.state.screen : null, screenName: this.state.screenName })
             }
         });
     }
@@ -334,7 +381,7 @@ class LiveScoreAddPlayer extends Component {
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
                 <Loader visible={this.props.liveScorePlayerState.onLoad} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"7"} />
+                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.screenName == 'fromTeamList' ? '3' : this.state.screenName == 'fromMatchList' ? '2' : "7"} />
                 <Layout>
                     {this.headerView()}
                     <Form

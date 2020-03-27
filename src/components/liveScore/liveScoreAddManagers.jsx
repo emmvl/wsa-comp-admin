@@ -19,7 +19,7 @@ import {
     liveScoreClear,
     liveScoreManagerFilter
 } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../util/helpers";
+import { isArrayNotEmpty } from "../../util/helpers";
 import Loader from '../../customComponents/loader'
 
 
@@ -59,7 +59,6 @@ class LiveScoreAddManager extends Component {
             this.props.liveScoreUpdateManagerDataAction('', 'isAddManager')
         }
         this.setState({ load: true })
-
     }
 
     componentDidUpdate(nextProps) {
@@ -88,7 +87,7 @@ class LiveScoreAddManager extends Component {
     setInitalFiledValue() {
         const { managerData, teamId } = this.props.liveScoreMangerState
         let data = this.state.tableRecord
-        console.log(managerData, 'tableRecord&**', data)
+        console.log(managerData, 'tableRecord&**', teamId)
         this.props.form.setFieldsValue({
             // 'First Name': managerData.firstName,
             // 'Last Name': managerData.lastName,
@@ -161,7 +160,6 @@ class LiveScoreAddManager extends Component {
                             {getFieldDecorator(AppConstants.team, {
                                 rules: [{ required: true, message: ValidationConstants.searchManager }],
                             })(
-
 
                                 // <Select
                                 //     // mode="multiple"
@@ -267,7 +265,7 @@ class LiveScoreAddManager extends Component {
                                     onChange={(teamId) => this.props.liveScoreUpdateManagerDataAction(teamId, 'teamId')}
                                     value={teamId}
                                 >
-                                    {teamData.length > 0 && teamData.map((item) => (
+                                    {isArrayNotEmpty(teamData) > 0 && teamData.map((item) => (
                                         < Option value={item.id} > {item.name}</Option>
                                     ))
                                     }
@@ -282,7 +280,6 @@ class LiveScoreAddManager extends Component {
     }
 
     managerNewRadioBtnView(getFieldDecorator) {
-
         let teamData = this.props.liveScoreState.teamResult ? this.props.liveScoreState.teamResult : []
         const { managerData, teamId } = this.props.liveScoreMangerState
         return (
@@ -334,7 +331,7 @@ class LiveScoreAddManager extends Component {
                                     onChange={(email) => this.props.liveScoreUpdateManagerDataAction(email.target.value, 'email')}
                                     value={managerData.email}
                                     disabled={this.state.isEdit == true && true}
-                                />
+                                /> 
                             )}
                         </Form.Item>
 
@@ -373,7 +370,7 @@ class LiveScoreAddManager extends Component {
                                     onChange={(teamId) => this.props.liveScoreUpdateManagerDataAction(teamId, 'teamId')}
                                     value={teamId}
                                 >
-                                    {teamData.length > 0 && teamData.map((item) => (
+                                    {isArrayNotEmpty(teamData) && teamData.map((item) => (
                                         < Option value={item.id} > {item.name}</Option>
                                     ))
                                     }
@@ -419,10 +416,10 @@ class LiveScoreAddManager extends Component {
         return (
             <div >
 
-                {this.radioBtnContainer()}
-                {managerRadioBtn == 'new' ?
-                    this.managerNewRadioBtnView(getFieldDecorator) :
-                    this.managerExistingRadioButton(getFieldDecorator)}
+                {/* {this.radioBtnContainer()}
+                {managerRadioBtn == 'new' ? */}
+                   { this.managerNewRadioBtnView(getFieldDecorator)} 
+                    {/* this.managerExistingRadioButton(getFieldDecorator)} */}
 
             </div>
         )
@@ -433,7 +430,7 @@ class LiveScoreAddManager extends Component {
             <div className="flud-widtih">
                 <div className="footer-view">
                     <div className="row">
-                        <div className="col-sm">
+                        <div className="col-sm-3">
                             <div className="reg-add-save-button">
                                 <NavLink to='/liveScoreManagerList'>
                                     <Button type="cancel-button">{AppConstants.cancel}</Button>
@@ -462,7 +459,7 @@ class LiveScoreAddManager extends Component {
                 this.props.liveScoreAddEditManager(managerData, teamId, exsitingManagerId)
 
             }
-        });
+        });  
     };
 
     /////// render function 

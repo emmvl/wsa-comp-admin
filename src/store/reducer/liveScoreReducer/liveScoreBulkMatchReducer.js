@@ -18,7 +18,7 @@ var pushBackObject = {
     endDate: "",
     endTime: "",
     venueId: "",
-    courtId: "",
+    courtId: [],
     hours: "",
     minutes: "",
     seconds: "",
@@ -32,7 +32,7 @@ var bringForwardObject = {
     endDate: "",
     endTime: "",
     venueId: '',
-    courtId: '',
+    courtId: [],
     hours: "",
     minutes: "",
     seconds: "",
@@ -47,7 +47,7 @@ var endMatchObject = {
     endDate: "",
     endTime: "",
     venueId: '',
-    courtId: '',
+    courtId: [],
 }
 
 var doubleHeaderObject = {
