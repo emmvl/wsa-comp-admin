@@ -2,7 +2,7 @@ import axios from "axios";
 
 const competitionManagementHttp = axios.create({
 
-    baseURL: "http://a90830342b690491db1e89b76ed1d900-512956195.ap-southeast-2.elb.amazonaws.com/competition",
+    baseURL: "http://ac3812371ecb342998edfafd640b8ad7-673095728.ap-southeast-2.elb.amazonaws.com/competition",
 });
 
 competitionManagementHttp.interceptors.request.use(function (config) {
