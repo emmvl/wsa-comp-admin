@@ -17,6 +17,7 @@ import {getAffiliateToOrganisationAction,saveAffiliateAction,updateNewAffiliateA
 import ValidationConstants from "../../themes/validationConstant";
 import { getCommonRefData } from '../../store/actions/commonAction/commonAction';
 import { getUserId, getOrganisationData } from "../../util/sessionStorage";
+import Loader from '../../customComponents/loader';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -64,7 +65,7 @@ class UserAddAffiliates extends Component {
                 })
             }
 
-            if (this.state.buttonPressed == "save") {
+            if (userState.status == 1 && this.state.buttonPressed == "save") {
                 history.push('/userAffiliatesList');
             }
            
@@ -397,6 +398,7 @@ class UserAddAffiliates extends Component {
 
 
     contacts = (getFieldDecorator) => {
+        let userState = this.props.userState;
         let affiliate = this.props.userState.affiliate.affiliate;
         let roles = this.props.userState.roles.filter(x=>x.applicableToWeb == 1);
         console.log("Roles::" + JSON.stringify(roles));
@@ -496,6 +498,10 @@ class UserAddAffiliates extends Component {
                         + {AppConstants.addContact}
                     </span>
                 </div>
+                {
+                    (userState.error && userState.status == 4) ? 
+                    <div style={{color:'red'}}>{userState.error.result.data.message}</div> : null
+                }
             </div >
         )
     }
@@ -541,6 +547,7 @@ class UserAddAffiliates extends Component {
         );
     };
     render() {
+        let userState = this.props.userState;
         const { getFieldDecorator } = this.props.form;
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
@@ -558,6 +565,7 @@ class UserAddAffiliates extends Component {
                             <div className="formView" >
                                 {this.contacts(getFieldDecorator)}
                             </div>
+                            <Loader visible={userState.onLoad} />
                         </Content>
                         <Footer>{this.footerView()}</Footer>
                     </Form>

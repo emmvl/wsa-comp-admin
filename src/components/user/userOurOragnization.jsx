@@ -16,6 +16,7 @@ import {getAffiliateToOrganisationAction,saveAffiliateAction,updateOrgAffiliateA
 import ValidationConstants from "../../themes/validationConstant";
 import { getCommonRefData } from '../../store/actions/commonAction/commonAction';
 import { getUserId, getOrganisationData } from "../../util/sessionStorage";
+import Loader from '../../customComponents/loader';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -58,7 +59,7 @@ class UserOurOragnization extends Component {
                     loading: false,
                 })
             }
-            if (this.state.buttonPressed == "save") {
+            if (userState.status == 1 && this.state.buttonPressed == "save") {
                 history.push('/userAffiliatesList');
             }
         }
@@ -512,8 +513,9 @@ class UserOurOragnization extends Component {
 
 
     contacts = (getFieldDecorator) => {
+        let userState = this.props.userState;
         let affiliate = this.props.userState.affiliateOurOrg;
-        let roles = this.props.userState.roles.filter(x=>x.applicableToWeb == 1);;
+        let roles = this.props.userState.roles.filter(x=>x.applicableToWeb == 1);
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading">{AppConstants.contacts}</span>
@@ -610,6 +612,10 @@ class UserOurOragnization extends Component {
                         + {AppConstants.addContact}
                     </span>
                 </div>
+                {
+                    (userState.error && userState.status == 4) ? 
+                    <div style={{color:'red'}}>{userState.error.result.data.message}</div> : null
+                }
             </div >
         )
     }
@@ -656,6 +662,7 @@ class UserOurOragnization extends Component {
     };
     
     render() {
+        let userState = this.props.userState;
         const { getFieldDecorator } = this.props.form;
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
@@ -673,6 +680,7 @@ class UserOurOragnization extends Component {
                             <div className="formView" >
                                 {this.contacts(getFieldDecorator)}
                             </div>
+                            <Loader visible={userState.onLoad} />
                         </Content>
                         <Footer>{this.footerView()}</Footer>
                     </Form>

@@ -15,6 +15,7 @@ import {getAffiliateToOrganisationAction,saveAffiliateAction,updateAffiliateActi
 import ValidationConstants from "../../themes/validationConstant";
 import { getCommonRefData } from '../../store/actions/commonAction/commonAction';
 import { getUserId,getOrganisationData } from "../../util/sessionStorage";
+import Loader from '../../customComponents/loader';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -32,7 +33,7 @@ class UserEditAffiliates extends Component {
             getDataLoading: false,
             deleteModalVisible: false,
             currentIndex: 0,
-            organisationName: "",
+            organisationName: ""
 
         }
         this.props.getCommonRefData();
@@ -58,13 +59,18 @@ class UserEditAffiliates extends Component {
        let userState = this.props.userState;
        let affiliateTo = this.props.userState.affiliateTo;
         if (userState.onLoad === false && this.state.loading === true) {
-            if (!userState.error) {
+            console.log("*********" + userState.status);
+            console.log("***************" + JSON.stringify(userState.error));
+           
+            if (!userState.error) 
+            {
                 this.setState({
                     loading: false,
-                })
-            }
-            if (this.state.buttonPressed == "save") {
-                history.push('/userAffiliatesList');
+                });
+
+                if (userState.status == 1 && this.state.buttonPressed == "save") {
+                    history.push('/userAffiliatesList');
+                }
             }
         }
         if (this.state.buttonPressed == "cancel") {
@@ -453,6 +459,7 @@ class UserEditAffiliates extends Component {
 
 
     contacts = (getFieldDecorator) => {
+        let userState = this.props.userState;
         let affiliate = this.props.userState.affiliateEdit;
         let roles = this.props.userState.roles.filter(x=>x.applicableToWeb == 1);
         return (
@@ -551,6 +558,11 @@ class UserEditAffiliates extends Component {
                         + {AppConstants.addContact}
                     </span>
                 </div>
+                {
+                    (userState.error && userState.status == 4) ? 
+                    <div style={{color:'red'}}>{userState.error.result.data.message}</div> : null
+                }
+                
             </div >
         )
     }
@@ -596,6 +608,7 @@ class UserEditAffiliates extends Component {
         );
     };
     render() {
+        let userState = this.props.userState;
         const { getFieldDecorator } = this.props.form;
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
@@ -613,6 +626,7 @@ class UserEditAffiliates extends Component {
                             <div className="formView" >
                                 {this.contacts(getFieldDecorator)}
                             </div>
+                            <Loader visible={userState.onLoad} />
                         </Content>
                         <Footer>{this.footerView()}</Footer>
                     </Form>
