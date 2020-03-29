@@ -1081,6 +1081,35 @@ class RegistrationForm extends Component {
         );
     };
 
+    navigateToExternalUrl = (url) =>
+        window.open(url, "_blank");
+
+    userRegisrationLinkView = () => {
+        let formDataValue = this.props.registrationState.registrationFormData !== 0 ? 
+                        this.props.registrationState.registrationFormData[0] : [];
+        let statusRefId = formDataValue.statusRefId
+        return(
+            <div>
+                { statusRefId == 2 ?
+                    <div className="formView">
+                        <div className="content-view pt-4" style={{marginBottom: '20px'}}>
+                            <div className="row">
+                                <div className="col-sm">
+                                    <InputWithHead heading={AppConstants.endUserRegistrationUrl} />
+                                    <div>
+                                        <a className="userRegLink" href={formDataValue.userRegistrationUrl} target='_blank' >
+                                            {formDataValue.userRegistrationUrl}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> : null
+                }
+            </div>
+           
+        )
+    }
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -1100,6 +1129,7 @@ class RegistrationForm extends Component {
                             getFieldDecorator
                         )}
                         <Content>
+                            {this.userRegisrationLinkView()}
                             <div className="formView">
                                 {this.contentView(
                                     getFieldDecorator

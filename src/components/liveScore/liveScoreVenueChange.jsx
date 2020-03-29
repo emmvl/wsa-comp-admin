@@ -89,18 +89,18 @@ class LiveScoreVenueChange extends Component {
         const { venueChangeData, venueData, courtData } = this.props.liveScoreVenueChangeState
         let venueList = isArrayNotEmpty(venueData) ? venueData : []
         let courtList = isArrayNotEmpty(courtData) ? courtData : []
-        
+
         return (
             <div>
                 {/* start time date and time picker row */}
                 <span className='bulk-match-heading mt-5 mb-0' >{AppConstants.changeMatchCriteria}</span>
-                
+
                 <div className="fluid-width">
-                    
+
                     <div className="row">
-                        
+
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                        <InputWithHead heading={AppConstants.startDate} />
+                            <InputWithHead heading={AppConstants.startDate} />
                             <DatePicker
                                 size="large"
                                 style={{ width: "100%" }}
@@ -112,7 +112,7 @@ class LiveScoreVenueChange extends Component {
                             />
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                        <InputWithHead heading={AppConstants.startTime} />
+                            <InputWithHead heading={AppConstants.startTime} />
                             <TimePicker
                                 className="comp-venue-time-timepicker"
                                 style={{ width: "100%" }}
@@ -127,11 +127,11 @@ class LiveScoreVenueChange extends Component {
                 </div>
 
                 {/* end time date and time picker row */}
-               
+
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                        <InputWithHead heading={AppConstants.endDate} />
+                            <InputWithHead heading={AppConstants.endDate} />
                             <DatePicker
                                 size="large"
                                 style={{ width: "100%" }}
@@ -143,7 +143,7 @@ class LiveScoreVenueChange extends Component {
                             />
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                        <InputWithHead heading={AppConstants.endTime} />
+                            <InputWithHead heading={AppConstants.endTime} />
                             <TimePicker
                                 className="comp-venue-time-timepicker"
                                 style={{ width: "100%" }}
@@ -158,6 +158,64 @@ class LiveScoreVenueChange extends Component {
                 </div>
 
                 {/* venue drop down view */}
+                <InputWithHead heading={AppConstants.venue} />
+                <div>
+                    <Select
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        placeholder={AppConstants.selectVenue}
+                        onChange={(venueId) => this.props.liveScoreUpdateVenueChange(venueId, "venueId")}
+                        value={venueChangeData.venueId}>
+
+                        {venueList.map((item) => {
+                            return (
+                                <Option key={'venue' + item.id}
+                                    value={item.venueId}>
+                                    {item.venueName}
+
+                                </Option>
+                            )
+                        })}
+
+                    </Select>
+
+                </div>
+
+                {/* court drop down view */}
+                <InputWithHead heading={AppConstants.court} />
+                <div>
+                    <Select
+                        mode='multiple'
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        placeholder={AppConstants.selectCourt}
+                        onChange={(courtId) => this.props.liveScoreUpdateVenueChange(courtId, "courtId")}
+                        value={venueChangeData.courtId}
+                    >
+                        {courtList.map((item) => {
+                            return (
+                                <Option key={'court' + item.venueCourtId}
+                                    value={item.venueCourtId}>
+                                    {item.name}
+                                </Option>
+                            )
+                        })}
+                    </Select>
+
+                </div>
+
+            </div>
+        )
+    }
+
+    changeToView() {
+        const { venueChangeData, venueData, courtData } = this.props.liveScoreVenueChangeState
+        let venueList = isArrayNotEmpty(venueData) ? venueData : []
+        let courtList = isArrayNotEmpty(courtData) ? courtData : []
+
+        return (
+            <div className="content-view mt-5">
+
+                {/* venue drop down view */}
+                <span className='bulk-match-heading' >{'Change To'}</span>
                 <InputWithHead heading={AppConstants.venue} />
                 <div>
                     <Select
@@ -246,9 +304,16 @@ class LiveScoreVenueChange extends Component {
                     {this.headerView()}
                     <Content>
                         <div className="formView">{this.contentView()}</div>
+                        <div className="formView">{this.changeToView()}</div>
                     </Content>
                     <Footer >{this.footerView()}</Footer>
                 </Layout>
+                {/* <Layout>
+                    <Content>
+                        <div className="formView">{this.changeToView()}</div>
+                    </Content>
+                    <Footer >{this.footerView()}</Footer>
+                </Layout> */}
             </div>
         );
     }

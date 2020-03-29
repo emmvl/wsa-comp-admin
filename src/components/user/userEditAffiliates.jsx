@@ -33,7 +33,9 @@ class UserEditAffiliates extends Component {
             getDataLoading: false,
             deleteModalVisible: false,
             currentIndex: 0,
-            organisationName: ""
+            organisationName: "",
+            isSameUserEmailId: "",
+            isSameUserEmailChanged: false
 
         }
         this.props.getCommonRefData();
@@ -69,7 +71,12 @@ class UserEditAffiliates extends Component {
                 });
 
                 if (userState.status == 1 && this.state.buttonPressed == "save") {
-                    history.push('/userAffiliatesList');
+                    if(this.state.isSameUserEmailChanged){
+                        this.logout();
+                    }
+                    else{
+                        history.push('/userAffiliatesList');
+                    }
                 }
             }
         }
@@ -101,6 +108,11 @@ class UserEditAffiliates extends Component {
             }
         }
     }
+
+    logout = async () => {
+        await localStorage.clear();
+        history.push("/");
+      };
  
     referenceCalls = (organisationId) => {
         this.props.getAffiliateToOrganisationAction(organisationId);
@@ -158,6 +170,7 @@ class UserEditAffiliates extends Component {
             lastName:'',
             mobileNumber: '',
             email: '',
+            isSameUser: true,
             permissions: []
         }
         contacts.push(obj);
@@ -194,6 +207,12 @@ class UserEditAffiliates extends Component {
                 [`lastName${index}`]: item.lastName,
                 [`email${index}`]: item.email,
             });
+
+            item['isSameUser'] =  getUserId() == item.userId ? true: false;
+            if(item.userId == getUserId())
+            {
+                this.setState({isSameUserEmailId: item.email});
+            }
             let permissions = item.permissions;
             permissions.map((perm, permIndex) => {
                 this.props.form.setFieldsValue({
@@ -222,7 +241,22 @@ class UserEditAffiliates extends Component {
             permissions.push(obj);
             contact.permissions = permissions;
 
-        }else{
+        }
+        else if(key == "email")
+        {
+            if(contact.isSameUser  && contact.userId!= 0)
+            {
+                if(val != this.state.isSameUserEmailId)
+                {
+                    this.setState({isSameUserEmailChanged: true});
+                }
+                else{
+                    this.setState({isSameUserEmailChanged: false});
+                }
+            }
+            contact[key] = val;
+        }
+        else{
             contact[key] = val;
         }
         
@@ -521,12 +555,18 @@ class UserEditAffiliates extends Component {
                             required={"required-field pt-0 pb-0"}
                             heading={AppConstants.email}
                             placeholder={AppConstants.email}
+                            disabled={!item.isSameUser}
                             onChange={(e) => this.onChangeContactSetValue(e.target.value, "email", index )}
                             //value={item.email}
                             setFieldsValue={item.email}
                         />
                     )}
                     </Form.Item>
+                    {(item.isSameUser && this.state.isSameUserEmailChanged) ?
+                        <div className="same-user-validation"> 
+                            {ValidationConstants.emailField[2] }
+                        </div>
+                     : null}
                     
                     <InputWithHead heading={AppConstants.phoneNumber}
                         placeholder={AppConstants.phoneNumber} 
@@ -617,6 +657,7 @@ class UserEditAffiliates extends Component {
                 <Layout>
                     {this.headerView()}
                     <Form
+                        autocomplete="off"
                         onSubmit={this.saveAffiliate}
                         noValidate="noValidate">
                         <Content>

@@ -66,8 +66,9 @@ class CompetitionDrawEdit extends Component {
             if (nextProps.drawsState !== this.props.drawsState) {
                 if (nextProps.drawsState.getDrawsRoundsData !== drawsRoundData) {
                     if (venueData.length > 0) {
+                        let venueId = venueData[0].id
                         if (drawsRoundData.length > 0) {
-                            let venueId = venueData[0].id
+
                             let roundId = drawsRoundData[0].roundId;
                             let roundTime = drawsRoundData[0].startDateTime
                             this.props.getCompetitionDrawsAction(
@@ -78,49 +79,16 @@ class CompetitionDrawEdit extends Component {
                             );
                             this.setState({ roundId, venueId, roundTime, venueLoad: false });
                         }
+                        else {
+                            this.setState({
+                                venueId,
+                                venueLoad: false
+                            })
+                        }
                     }
                 }
             }
         }
-        // if (this.state.venueLoad == true && this.props.drawsState.updateLoad == false) {
-        //     if (nextProps.drawsState !== this.props.drawsState) {
-        //         if (nextProps.drawsState.getDrawsRoundsData !== drawsRoundData) {
-        //             if (venueData.length > 0) {
-        //                 if (drawsRoundData.length > 0) {
-        //                     let venueId = venueData[0].id
-        //                     let roundId = drawsRoundData[0].roundId;
-        //                     this.props.getCompetitionDrawsAction(
-        //                         this.state.yearRefId,
-        //                         this.state.firstTimeCompId,
-        //                         venueId,
-        //                         roundId
-        //                     );
-        //                     this.setState({ roundId, venueId, });
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
-        // if (nextProps.drawsState.getDrawsRoundsData !== drawsRoundData) {
-        //     if (venueData.length > 0) {
-        //         let venueId = venueData[0].id
-        //         if (drawsRoundData.length > 0) {
-        //             let roundId = drawsRoundData[0].roundId;
-        //             this.props.getCompetitionDrawsAction(
-        //                 this.state.yearRefId,
-        //                 this.state.firstTimeCompId,
-        //                 venueId,
-        //                 roundId
-        //             );
-        //             this.setState({ roundId, });
-        //         }
-        //         this.setState({
-        //             venueId
-        //         })
-
-        //     }
-        // }
     }
 
     componentDidMount() {

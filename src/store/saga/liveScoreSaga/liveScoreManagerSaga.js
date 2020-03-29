@@ -18,7 +18,8 @@ function* errorSaga(error) {
         error: error,
         status: error.status
     });
-    message.error("Something went wrong.")
+    console.log(error)
+    message.error(error.error ? error.error : "Something went wrong.")
 }
 
 //// get manager list
@@ -56,6 +57,33 @@ export function* liveScoreAddEditManagerSaga(action) {
 
         } else {
             yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+//// Add/Edit Manager Saga
+export function* liveScoreManagerSearch(action) {
+    try {
+        const result = yield call(userHttpApi.liveScoreSearchManager, action.data)
+        console.log(result)
+        if (result) {
+            if (result.status == 1) {
+                yield put({
+                    type: ApiConstants.API_LIVESCORE_MANAGER_SEARCH_SUCCESS,
+                    result: result.result.data,
+                    status: result.status,
+                });
+            }
+            else {
+                yield call(failSaga, result)
+            }
+        } else {
+            yield put({
+                type: ApiConstants.API_LIVESCORE_MANAGER_SEARCH_SUCCESS,
+                result: [],
+            });
         }
     } catch (error) {
         yield call(errorSaga, error)

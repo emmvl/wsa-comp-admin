@@ -17,7 +17,8 @@ import {
     liveScoreAddEditManager,
     liveScoreManagerListAction,
     liveScoreClear,
-    liveScoreManagerFilter
+    liveScoreManagerFilter,
+    liveScoreManagerSearch
 } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 import { isArrayNotEmpty } from "../../util/helpers";
 import Loader from '../../customComponents/loader'
@@ -140,9 +141,10 @@ class LiveScoreAddManager extends Component {
 
     managerExistingRadioButton(getFieldDecorator) {
 
-        const { managerListResult, MainManagerListResult } = this.props.liveScoreMangerState
+        const { managerListResult, MainManagerListResult, onLoadSearch, managerSearchResult } = this.props.liveScoreMangerState
 
-        let managerList = isArrayNotEmpty(managerListResult) ? managerListResult : []
+        // let managerList = isArrayNotEmpty(managerListResult) ? managerListResult : []
+        let managerList = isArrayNotEmpty(managerSearchResult) ? managerSearchResult : []
 
         let teamData = this.props.liveScoreState.teamResult ? this.props.liveScoreState.teamResult : []
         const { teamId } = this.props.liveScoreMangerState
@@ -161,87 +163,32 @@ class LiveScoreAddManager extends Component {
                                 rules: [{ required: true, message: ValidationConstants.searchManager }],
                             })(
 
-                                // <Select
-                                //     // mode="multiple"
-                                //     // showSearch={false}
-                                //     style={{ width: "100%", }}
-                                //     onChange={(item) => {
-                                //         console.log('hellos', item)
-                                //         this.props.liveScoreUpdateManagerDataAction(item, 'managerSearch')
-                                //     }}
-                                //     filterOption={true}
-                                //     placeholder={'Select Manager'}
-
-                                // // onFocus={() => { console.log('done') }}
-
-                                // // value={managerData.firstName}
-                                // // onSearch={(Value) => { this.setState({ showOption: true }) }}
-                                // >
-                                //     {managerList.map((item) => {
-                                //         return <Option key={item.id} value={item.id}>
-                                //             {item.firstName + " " + item.lastName}
-                                //         </Option>
-                                //     })}
-                                // </Select>
                                 <AutoComplete
+                                    loading={true}
                                     style={{ width: "100%", height: '56px' }}
                                     placeholder="Select User"
                                     onSelect={(item, option) => {
                                         const ManagerId = JSON.parse(option.key)
                                         this.props.liveScoreClear()
-                                        this.setState({ showOption: false })
                                         this.props.liveScoreUpdateManagerDataAction(ManagerId, 'managerSearch')
 
                                     }}
+                                    notFoundContent={onLoadSearch == true ? <Spin size="small" /> : null}
 
                                     onSearch={(value) => {
-
-                                        this.setState({ showOption: true })
-
-                                        const filteredData = MainManagerListResult.filter(data => {
-                                            return data.firstName.indexOf(value) > -1
-                                        })
-                                        this.props.liveScoreManagerFilter(filteredData)
-
+                                        this.props.liveScoreManagerSearch(value)
                                     }}
 
-                                // onSearch={(value) => { console.log('value', value) }}
-                                >{this.state.showOption ? managerList.map((item) => {
+
+                                >{managerList.map((item) => {
                                     return <Option key={item.id} value={item.firstName + " " + item.lastName}>
                                         {item.firstName + " " + item.lastName + " " + item.id}
                                     </Option>
-                                }) : null}
-
+                                })}
                                 </AutoComplete>
                             )}
 
                         </Form.Item>
-
-                        {/* <Form.Item>
-                            <InputWithHead
-                                required={"required-field pb-0 pt-0"}
-                                heading={AppConstants.managerSearch} />
-                            {getFieldDecorator(AppConstants.team, {
-                                rules: [{ required: true, message: ValidationConstants.searchManager }],
-                            })(
-                                <Select
-                                    // mode="multiple"
-                                    placeholder={'Select Manager'}
-                                    value={selectedItems}
-                                    showSearch={true}
-                                    onChange={(item) => this.props.liveScoreUpdateManagerDataAction(item, 'managerSearch')}
-                                    // notFoundContent={fetching ? <Spin size="small" /> : null}
-                                    style={{ width: '100%' }}
-                                >
-                                    {filteredOptions.map(item => (
-                                        <Select.Option key={item} value={item}>
-                                            {item}
-                                        </Select.Option>
-                                    ))}
-                                </Select>
-                            )}
-
-                        </Form.Item> */}
                     </div>
 
 
@@ -331,7 +278,7 @@ class LiveScoreAddManager extends Component {
                                     onChange={(email) => this.props.liveScoreUpdateManagerDataAction(email.target.value, 'email')}
                                     value={managerData.email}
                                     disabled={this.state.isEdit == true && true}
-                                /> 
+                                />
                             )}
                         </Form.Item>
 
@@ -411,15 +358,28 @@ class LiveScoreAddManager extends Component {
 
 
     ////form view
-    contentView = (getFieldDecorator) => {
+    contentViewForAddManager = (getFieldDecorator) => {
         const { managerRadioBtn } = this.props.liveScoreMangerState
         return (
             <div >
 
-                {/* {this.radioBtnContainer()}
-                {managerRadioBtn == 'new' ? */}
-                   { this.managerNewRadioBtnView(getFieldDecorator)} 
-                    {/* this.managerExistingRadioButton(getFieldDecorator)} */}
+                {this.radioBtnContainer()}
+                {managerRadioBtn == 'new' ?
+                    this.managerNewRadioBtnView(getFieldDecorator)
+                    :
+                    this.managerExistingRadioButton(getFieldDecorator)}
+
+            </div>
+        )
+    }
+
+    contentViewForEditManager = (getFieldDecorator) => {
+        const { managerRadioBtn } = this.props.liveScoreMangerState
+        return (
+            <div >
+
+
+                {this.managerNewRadioBtnView(getFieldDecorator)}
 
             </div>
         )
@@ -459,7 +419,7 @@ class LiveScoreAddManager extends Component {
                 this.props.liveScoreAddEditManager(managerData, teamId, exsitingManagerId)
 
             }
-        });  
+        });
     };
 
     /////// render function 
@@ -476,7 +436,7 @@ class LiveScoreAddManager extends Component {
                     <Form onSubmit={this.onSaveClick} className="login-form" noValidate="noValidate">
                         <Content>
                             <div className="formView">
-                                {this.contentView(getFieldDecorator)}
+                                {this.state.isEdit == true ? this.contentViewForEditManager(getFieldDecorator) : this.contentViewForAddManager(getFieldDecorator)}
                             </div>
                         </Content>
                         <Footer>
@@ -496,7 +456,8 @@ function mapDispatchToProps(dispatch) {
         liveScoreAddEditManager,
         liveScoreManagerListAction,
         liveScoreClear,
-        liveScoreManagerFilter
+        liveScoreManagerFilter,
+        liveScoreManagerSearch
     }, dispatch)
 }
 

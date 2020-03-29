@@ -84,7 +84,7 @@ class LiveScoreAssignMatch extends Component {
         this.state = {
             filter:'',
             competitionId: 0,
-            teamID : this.props.location.state ? this.props.location.state.teams.id : null,
+            teamID : this.props.location.state ? this.props.location.state.teams : null,
             columns:[
 
                 {

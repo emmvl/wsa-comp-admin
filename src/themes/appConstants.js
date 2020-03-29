@@ -462,6 +462,7 @@ const AppConstants = {
   organisationLogo: "Organisation Logo",
   registrationOpen: "Registration Open",
   registrationLock: "Registration Lock",
+  endUserRegistrationUrl: "End User Registration URL",
   addMembershipCategory: "Add Membership Category",
   training: "Training",
   trainingVenue: "Training Venue",
@@ -895,7 +896,8 @@ const AppConstants = {
   assignMatches: "Assign Matches",
   venueChange: 'Venue Change',
   importIncident: "Import Incident",
-  endDate:"End Date"
+  endDate: "End Date",
+  please_Sel_Fee: "Please fill the fees First",
 };
 
 export default AppConstants;

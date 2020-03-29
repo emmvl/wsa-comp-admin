@@ -606,3 +606,7 @@ input[type=number] {
   padding-top: 5px;
   padding-left: 5px;
 }
+
+.userRegLink{
+  color: var(--app-color);
+}

@@ -78,8 +78,8 @@ import { liveScoreRoundSaga } from './liveScoreSaga/liveScoreRoundSaga';
 import { liveScoreNewsListSaga, liveScoreAddNewsSaga, liveScoreNewsNotificationSaga, liveScoreNewsDeleteSaga } from './liveScoreSaga/liveScoreNewsSaga';
 import { liveScoreBannerSaga, liveScoreAddBannerSaga, liveScoreRemoveBannerSaga } from './liveScoreSaga/liveScoreBannerSaga';
 import { liveScoreGoalSaga } from './liveScoreSaga/liveScoreGoalSaga'
-import { liveScoreManagerListSaga, liveScoreAddEditManagerSaga } from './liveScoreSaga/liveScoreManagerSaga';
-import { liveScoreScorerListSaga, liveScorerSearchUserSaga, liveScoreAssigneMatches,liveScoreChangeAssignStatus } from '../saga/liveScoreSaga/liveScoreScorerSaga';
+import { liveScoreManagerListSaga, liveScoreAddEditManagerSaga, liveScoreManagerSearch } from './liveScoreSaga/liveScoreManagerSaga';
+import { liveScoreScorerListSaga, liveScorerSearchUserSaga, liveScoreAssigneMatches,liveScoreChangeAssignStatus, liveScoreAddEditScorerSaga } from '../saga/liveScoreSaga/liveScoreScorerSaga';
 import { liveScoreBulkPushBack, liveScoreBulkBringForwardSaga, liveScoreMatchResult, liveScoreEndMatchesSaga, liveScoreDoubleHeaderSaga, liveScoreAbandonMatchSaga } from './liveScoreSaga/liveScoreBulkMatchSaga';
 
 
@@ -514,9 +514,16 @@ export default function* root_saga() {
   ////Import Player Saga
   yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_IMPORT_LOAD, liveScorePlayerImportSaga)
 
-/// Assigne Matches 
+  /// Assigne Matches 
 
-yield takeEvery(ApiConstants.API_LIVESCORE_ASSIGN_MATCHES_LOAD , liveScoreAssigneMatches)
+  yield takeEvery(ApiConstants.API_LIVESCORE_ASSIGN_MATCHES_LOAD, liveScoreAssigneMatches)
+
+  yield takeEvery(ApiConstants.API_LIVESCORE_ASSIGN_CHANGE_STATUS_LOAD, liveScoreChangeAssignStatus)
+
+  //// Manager search saga
+  yield takeEvery(ApiConstants.API_LIVESCORE_MANAGER_SEARCH_LOAD, liveScoreManagerSearch)
 
 yield takeEvery(ApiConstants.API_LIVESCORE_ASSIGN_CHANGE_STATUS_LOAD , liveScoreChangeAssignStatus)
+
+yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_EDIT_SCORER_LOAD ,liveScoreAddEditScorerSaga)
 }

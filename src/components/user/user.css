@@ -152,3 +152,8 @@
   font-size: 14px;
   font-family: inter-medium;
 }
+
+.same-user-validation{
+  margin-top:5px;
+  color:red;
+}

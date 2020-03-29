@@ -66,7 +66,7 @@ class LiveScoreAddMatch extends Component {
     componentDidMount() {
         // let competitionId = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        
+
         if (id !== null) {
             this.props.getCompetitonVenuesList(id);
             this.props.getliveScoreDivisions(id)
@@ -86,7 +86,7 @@ class LiveScoreAddMatch extends Component {
     }
 
     componentDidUpdate(nextProps) {
-  
+
         let { addEditMatch, start_date, start_time, displayTime } = this.props.liveScoreMatchState
 
         if (this.state.isEdit == true) {
@@ -229,7 +229,7 @@ class LiveScoreAddMatch extends Component {
     /// Duration & Break View
     duration_break = (getFieldDecorator) => {
         let { addEditMatch } = this.props.liveScoreMatchState
-        
+
         return (
 
             <div className="row">
@@ -302,7 +302,7 @@ class LiveScoreAddMatch extends Component {
         let { venueData } = this.props.liveScoreMatchState
         const { scorerListResult } = this.props.liveScoreState
         const { scoringType } = JSON.parse(getLiveScoreCompetiton())
-    
+
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -574,7 +574,7 @@ class LiveScoreAddMatch extends Component {
                     </div>
 
                     {
-                       scoringType !== 'SINGLE' &&
+                        scoringType !== 'SINGLE' &&
                         <div className="col-sm-6" >
                             <InputWithHead heading={AppConstants.scorer2} />
                             <Select
@@ -631,7 +631,7 @@ class LiveScoreAddMatch extends Component {
                 let startDate = moment(start_post_date).format("YYYY-MMM-DD")
                 let start = moment.utc(start_time).format("HH:mm")
 
-                console.log(start , "start start", start_time)
+                console.log(start, "start start", start_time)
 
                 let postDate = startDate + " " + start + " " + "UTC"
                 let formatedDate = new Date(postDate).toISOString()
@@ -645,6 +645,7 @@ class LiveScoreAddMatch extends Component {
         });
     }
 
+
     //////footer view containing all the buttons like save and cancel
     footerView = (isSubmitting) => {
 
@@ -652,8 +653,8 @@ class LiveScoreAddMatch extends Component {
             <div className="fluid-width">
                 <div className="footer-view">
                     <div className="row">
-                        <div className="col-sm ">
-                            <div className="row " >
+                        <div className="col-sm-5">
+                            <div className="row" >
 
                                 <div className="col-sm-3 live-score-edit-match-buttons">
                                     <Button onClick={() => history.push(this.state.key == 'dashboard' ? 'liveScoreDashboard' : '/liveScoreMatches')} type="cancel-button">{AppConstants.cancel}</Button>
@@ -676,7 +677,7 @@ class LiveScoreAddMatch extends Component {
 
                         </div>
 
-                        <div className="col-sm-3">
+                        <div className="col-sm-7">
                             <div className="comp-buttons-view">
                                 <Button
                                     className="user-approval-button" type="primary" htmlType="submit" >
@@ -689,6 +690,8 @@ class LiveScoreAddMatch extends Component {
             </div >
         );
     };
+
+
     /////// render function
     render() {
         const { getFieldDecorator } = this.props.form

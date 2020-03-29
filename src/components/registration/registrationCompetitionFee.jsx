@@ -48,7 +48,8 @@ import {
     competitionDiscountTypesAction,
     regCompetitionListDeleteAction,
     getDefaultCharity,
-    getDefaultCompFeesLogoAction
+    getDefaultCompFeesLogoAction,
+    clearCompReducerDataAction
 } from "../../store/actions/registrationAction/competitionFeeAction";
 import {
     competitionFeeInit, getVenuesTypeAction, clearFilter, searchVenueList,
@@ -711,7 +712,9 @@ class RegistrationCompetitionFee extends Component {
             organisationTypeRefId: 0
         };
         this_Obj = this;
-
+        let competitionId = null
+        competitionId = this.props.location.state ? this.props.location.state.id : null
+        competitionId !== null && this.props.clearCompReducerDataAction("all")
     }
 
     componentDidUpdate(nextProps) {
@@ -2094,20 +2097,39 @@ class RegistrationCompetitionFee extends Component {
     //     );
     // };
 
-    regInviteesView = () => {
 
+
+    disableInvitee = (inItem) => {
+        let orgLevelId = JSON.stringify(this.state.organisationTypeRefId)
+        if (inItem.id == "2" && orgLevelId == "3") {
+            return false
+        }
+        if (inItem.id == "3" && orgLevelId == "4") {
+            return false
+        }
+        if (inItem.id == "2" && orgLevelId == "4") {
+            return false
+        }
+        else {
+            return true
+        }
+    }
+
+
+    regInviteesView = () => {
         let invitees = this.props.appState.registrationInvitees.length > 0 ? this.props.appState.registrationInvitees : [];
-        console.log("invitees" + JSON.stringify(invitees));
         let detailsData = this.props.competitionFeesState
-        console.log("********" + JSON.stringify(detailsData.selectedInvitees));
         let isCreatorEdit = this.state.isCreatorEdit;
         let seletedInvitee = detailsData.selectedInvitees.find(x => x);
+        let orgLevelId = JSON.stringify(this.state.organisationTypeRefId)
+        console.log("invitees", invitees)
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.registrationInvitees}</span>
                 <div>
                     <Radio.Group
                         className="reg-competition-radio"
+                        disabled={isCreatorEdit}
                         onChange={(e) => this.onInviteesChange(e.target.value)}
                         value={seletedInvitee}>
                         {(invitees || []).map((item, index) =>
@@ -2116,10 +2138,12 @@ class RegistrationCompetitionFee extends Component {
                                     {item.subReferences.length == 0 ?
                                         <Radio value={item.id}>{item.description}</Radio>
                                         : <div>
-                                            <div class="applicable-to-heading invitees-main">{item.description}</div>
+                                            <div class="applicable-to-heading invitees-main">{orgLevelId == "4" ? "" : item.description}</div>
                                             {(item.subReferences).map((subItem, subIndex) => (
                                                 <div style={{ marginLeft: '20px' }}>
-                                                    <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
+                                                    {this.disableInvitee(subItem) &&
+                                                        <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
+                                                    }
                                                 </div>
                                             ))}
                                         </div>
@@ -2156,20 +2180,78 @@ class RegistrationCompetitionFee extends Component {
         this.props.updatePaymentFeeOption(itemValue, "seasonalfee")
     }
 
+    checkIsSeasonal = (feeDetails) => {
+        let isSeasonalValue = false
+
+        for (let i in feeDetails) {
+            if (feeDetails[i].isSeasonal == true) {
+                console.log(feeDetails[i].isSeasonal)
+                isSeasonalValue = true
+                break
+            }
+
+        }
+        return isSeasonalValue
+
+
+
+    }
+    checkIsCasual = (feeDetails) => {
+        let isCasuallValue = false
+
+        for (let i in feeDetails) {
+            console.log(feeDetails[i].isCasual)
+            if (feeDetails[i].isCasual == true) {
+                isCasuallValue = true
+                break
+            }
+
+        }
+        return isCasuallValue
+
+    }
+
 
 
     //payment Option View in tab 5
     paymentOptionsView = () => {
+        let allStates = this.props.competitionFeesState
+        let feeDetails = allStates.competitionFeesData
+        let isSeasonal = this.checkIsSeasonal(feeDetails)
+        let isCasual = this.checkIsCasual(feeDetails)
         let casualPayment = this.props.competitionFeesState.casualPaymentDefault
         let seasonalPayment = this.props.competitionFeesState.seasonalPaymentDefault
         let paymentData = this.props.competitionFeesState.competitionPaymentsData
         let selectedSeasonalFeeKey = this.props.competitionFeesState.SelectedSeasonalFeeKey
         let selectedCasualFeeKey = this.props.competitionFeesState.selectedCasualFeeKey
+        console.log(isSeasonal, isCasual)
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.paymentOptions}</span>
-                <div className="mt-3">
-                    <span className="home-dash-left-text">{AppConstants.casualFee}</span>
+                {(isSeasonal == false && isCasual == false) &&
+                    <span className="applicable-to-heading pt-0">
+                        {AppConstants.please_Sel_Fee}
+                    </span>
+                }
+                {isSeasonal == true &&
+                    <div className="inside-container-view">
+                        <span className="form-heading">{AppConstants.seasonalFee}</span>
+                        <Tree
+                            style={{ flexDirection: 'column' }}
+                            className="tree-government-rebate"
+                            checkable
+                            defaultExpandedKeys={[]}
+                            defaultCheckedKeys={[]}
+                            checkedKeys={selectedSeasonalFeeKey}
+                            onCheck={(e) => this.onChangeSeasonalFee(e, paymentData)}
+                            disabled={this.state.isCreatorEdit}
+                        >
+                            {this.seasonalDataTree(seasonalPayment)}
+                        </Tree>
+                    </div>
+                }
+                {isCasual == true && <div className="inside-container-view">
+                    <span className="form-heading">{AppConstants.casualFee}</span>
                     <Tree
                         style={{ flexDirection: 'column' }}
                         className="tree-government-rebate"
@@ -2183,21 +2265,7 @@ class RegistrationCompetitionFee extends Component {
                         {this.casualDataTree(casualPayment)}
                     </Tree>
                 </div>
-                <div className="mt-3">
-                    <span className="home-dash-left-text">{AppConstants.seasonalFee}</span>
-                    <Tree
-                        style={{ flexDirection: 'column' }}
-                        className="tree-government-rebate"
-                        checkable
-                        defaultExpandedKeys={[]}
-                        defaultCheckedKeys={[]}
-                        checkedKeys={selectedSeasonalFeeKey}
-                        onCheck={(e) => this.onChangeSeasonalFee(e, paymentData)}
-                        disabled={this.state.isCreatorEdit}
-                    >
-                        {this.seasonalDataTree(seasonalPayment)}
-                    </Tree>
-                </div>
+                }
                 <div>
                 </div>
             </div >
@@ -2878,6 +2946,7 @@ class RegistrationCompetitionFee extends Component {
 
 
     tabCallBack = (key) => {
+
         let competitionId = this.props.competitionFeesState.competitionId
         if (competitionId !== null && competitionId.length > 0) {
             this.setState({ competitionTabKey: key })
@@ -2972,7 +3041,8 @@ function mapDispatchToProps(dispatch) {
         getDefaultCompFeesLogoAction,
         getOnlyYearListAction,
         searchVenueList,
-        clearFilter
+        clearFilter,
+        clearCompReducerDataAction
     }, dispatch)
 }
 

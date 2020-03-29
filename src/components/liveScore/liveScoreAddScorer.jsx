@@ -32,8 +32,7 @@ class LiveScoreAddScorer extends Component {
             loader: false,
             load: false
         }
-        console.log(this.state.tableRecord, 'tableRecordadd')
-
+    
     }
 
     competition_formate = e => {
@@ -54,6 +53,7 @@ class LiveScoreAddScorer extends Component {
 
         if (this.state.isEdit == true) {
             this.props.liveScoreScorerUpdate(this.state.tableRecord, "isEditScorer")
+            this.setInitalFiledValue(this.state.tableRecord)
             this.setState({ loader: true })
         } else {
             this.props.liveScoreScorerUpdate("", "isAddScorer")
@@ -63,21 +63,24 @@ class LiveScoreAddScorer extends Component {
 
     componentDidUpdate(nextProps) {
 
-        if(this.props.liveScoreScorerState.scorerData !== this.props.liveScoreScorerState.scorerData){
-            if (this.state.load == true && this.props.liveScoreScorerState.onLoad == false) {
+        // if(this.props.liveScoreScorerState.scorerData !== this.props.liveScoreScorerState.scorerData){
+            // if (this.state.load == true && this.props.liveScoreScorerState.onLoad == false) {
                 if (this.state.isEdit == true) {
-                    this.setInitalFiledValue()
+                    // this.setInitalFiledValue()
                 }
-                this.setState({ load: false, loader: false })
-            }
-        }
+                // this.setState({ load: false, loader: false })
+            // }
+        // }
         
 
     }
 
-    setInitalFiledValue() {
-        const { scorerData, teamId } = this.props.liveScoreScorerState
-
+    setInitalFiledValue(scorerData) {
+        console.log(scorerData)
+        let teamsArray = []
+        for(let i in scorerData.teams){
+            teamsArray.push(scorerData.teams[i].id)
+        }
        
         this.props.form.setFieldsValue({
             // 'First Name': managerData.firstName,
@@ -90,7 +93,7 @@ class LiveScoreAddScorer extends Component {
             'Last Name': scorerData.lastName,
             'Email Address': scorerData.email,
             'Contact no': scorerData.mobileNumber,
-            'Select Team': teamId
+            'Select Team': teamsArray
         })
     }
 
@@ -255,7 +258,7 @@ class LiveScoreAddScorer extends Component {
                                     heading={AppConstants.emailAdd}
                                     placeholder={AppConstants.enterEmail}
                                     onChange={(emailAddress) => this.props.liveScoreScorerUpdate(emailAddress.target.value, "emailAddress")}
-                                    disabled={this.state.isEdit == true && true}
+                                    // disabled={this.state.isEdit == true && true}
                                 />
                             )}
                         </Form.Item>
@@ -296,7 +299,7 @@ class LiveScoreAddScorer extends Component {
                                     value={this.state.team === [] ? AppConstants.selectTeam : this.state.team}
                                 >
                                     {isArrayNotEmpty(teamData) && teamData.map((item) => (
-                                        < Option value={item.name} > {item.name}</Option>
+                                        < Option value={item.id} > {item.name}</Option>
                                     ))
                                     }
                                 </Select>
@@ -386,12 +389,13 @@ class LiveScoreAddScorer extends Component {
 
     onSaveClick = e => {
         const { scorerData, teamId, scorerRadioBtn, existingScorerId } = this.props.liveScoreScorerState
-        console.log("scorerData", "scorerData")
+        
+        console.log(scorerData, teamId, existingScorerId)
 
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                this.props.liveScoreAddEditScorer(scorerData, teamId, existingScorerId)
+                 this.props.liveScoreAddEditScorer(scorerData, teamId, existingScorerId)
 
             }
         });

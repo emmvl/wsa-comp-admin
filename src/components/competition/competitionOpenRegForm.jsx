@@ -300,7 +300,9 @@ class CompetitionOpenRegForm extends Component {
             organisationTypeRefId: 0
         };
         this_Obj = this;
-        this.props.clearCompReducerDataAction("all")
+        let competitionId = null
+        competitionId = this.props.location.state ? this.props.location.state.id : null
+        competitionId !== null && this.props.clearCompReducerDataAction("all")
 
     }
     componentDidUpdate(nextProps) {
@@ -487,7 +489,7 @@ class CompetitionOpenRegForm extends Component {
                         let formData = new FormData();
                         formData.append("competitionUniqueKey", competitionId);
                         formData.append("name", postData.competitionName);
-                        formData.append("yearRefId", values.yearRefId);
+                        formData.append("yearRefId", this.state.yearRefId);
                         formData.append("description", postData.description);
                         formData.append("competitionTypeRefId", postData.competitionTypeRefId);
                         formData.append("competitionFormatRefId", postData.competitionFormatRefId);
@@ -1636,7 +1638,7 @@ class CompetitionOpenRegForm extends Component {
                             (
                                 <div>
                                     {item.subReferences.length == 0 ?
-                                        <Radio value={item.id}>{item.description}</Radio>
+                                        <Radio key={item.id} value={item.id}>{item.description}</Radio>
                                         : <div>
                                             <div class="applicable-to-heading invitees-main">{item.description}</div>
                                             {(item.subReferences).map((subItem, subIndex) => (
@@ -1679,9 +1681,35 @@ class CompetitionOpenRegForm extends Component {
     }
 
 
+    checkIsSeasonal = (feeDetails) => {
+        let isSeasonalValue = false
+        for (let i in feeDetails) {
+            if (feeDetails[i].isSeasonal == true) {
+                isSeasonalValue = true
+                break
+            }
+        }
+        return isSeasonalValue
+    }
+    checkIsCasual = (feeDetails) => {
+        let isCasuallValue = false
+        for (let i in feeDetails) {
+            if (feeDetails[i].isCasual == true) {
+                isCasuallValue = true
+                break
+            }
+        }
+        return isCasuallValue
+    }
+
+
 
     //payment Option View in tab 5
     paymentOptionsView = () => {
+        let allStates = this.props.competitionFeesState
+        let feeDetails = allStates.competitionFeesData
+        let isSeasonal = this.checkIsSeasonal(feeDetails)
+        let isCasual = this.checkIsCasual(feeDetails)
         let casualPayment = this.props.competitionFeesState.casualPaymentDefault
         let seasonalPayment = this.props.competitionFeesState.seasonalPaymentDefault
         let paymentData = this.props.competitionFeesState.competitionPaymentsData
@@ -1690,34 +1718,45 @@ class CompetitionOpenRegForm extends Component {
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.paymentOptions}</span>
-                <div className="mt-3">
-                    <span className="home-dash-left-text">{AppConstants.casualFee}</span>
-                    <Tree
-                        style={{ flexDirection: 'column' }}
-                        className="tree-government-rebate"
-                        checkable
-                        defaultExpandedKeys={[]}
-                        defaultCheckedKeys={[]}
-                        checkedKeys={selectedCasualFeeKey}
-                        onCheck={(e) => this.onChangeCasualFee(e, paymentData)}
-                    >
-                        {this.casualDataTree(casualPayment)}
-                    </Tree>
-                </div>
-                <div className="mt-3">
-                    <span className="home-dash-left-text">{AppConstants.seasonalFee}</span>
-                    <Tree
-                        style={{ flexDirection: 'column' }}
-                        className="tree-government-rebate"
-                        checkable
-                        defaultExpandedKeys={[]}
-                        defaultCheckedKeys={[]}
-                        checkedKeys={selectedSeasonalFeeKey}
-                        onCheck={(e) => this.onChangeSeasonalFee(e, paymentData)}
-                    >
-                        {this.seasonalDataTree(seasonalPayment)}
-                    </Tree>
-                </div>
+                {(isSeasonal == false && isCasual == false) &&
+                    <span className="applicable-to-heading pt-0">
+                        {AppConstants.please_Sel_Fee}
+                    </span>
+                }
+                {isSeasonal == true &&
+                    <div className="inside-container-view">
+                        <span className="form-heading">{AppConstants.seasonalFee}</span>
+                        <Tree
+                            style={{ flexDirection: 'column' }}
+                            className="tree-government-rebate"
+                            checkable
+                            defaultExpandedKeys={[]}
+                            defaultCheckedKeys={[]}
+                            checkedKeys={selectedSeasonalFeeKey}
+                            onCheck={(e) => this.onChangeSeasonalFee(e, paymentData)}
+                            disabled={this.state.isCreatorEdit}
+                        >
+                            {this.seasonalDataTree(seasonalPayment)}
+                        </Tree>
+                    </div>
+                }
+                {isCasual == true &&
+                    <div className="inside-container-view">
+                        <span className="form-heading">{AppConstants.casualFee}</span>
+                        <Tree
+                            style={{ flexDirection: 'column' }}
+                            className="tree-government-rebate"
+                            checkable
+                            defaultExpandedKeys={[]}
+                            defaultCheckedKeys={[]}
+                            checkedKeys={selectedCasualFeeKey}
+                            onCheck={(e) => this.onChangeCasualFee(e, paymentData)}
+                            disabled={this.state.isCreatorEdit}
+                        >
+                            {this.casualDataTree(casualPayment)}
+                        </Tree>
+                    </div>
+                }
                 <div>
                 </div>
             </div >

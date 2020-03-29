@@ -751,6 +751,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 <Layout>
                     {this.headerView()}
                     <Form
+                        autocomplete="off"
                         onSubmit={this.onAddVenue}
                         noValidate="noValidate">
                         <Content>

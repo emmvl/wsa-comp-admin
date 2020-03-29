@@ -77,8 +77,6 @@ function totalCasualFees(casualFees1, record) {
 
     let fee = record.parentCreator ? parentFees : childFees
 
-
-
     return (
         affiliateFeeStatus ?
             <span>{record.feeOrgId == null ? "N/A" : "Affiliate fee not set!"}</span>

@@ -466,20 +466,34 @@ let LiveScoreAxiosApi = {
     },
 
     liveScoreAddEditScorer(data, teamId, exsitingScorerrId) {
-        console.log(data, teamId, exsitingScorerrId, "scData")
+        
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-        console.log(data, 'liveScoreAddEditsgcorer')
-        let body = {
-            "firstName": data.firstName,
-            "lastName": data.lastName,
-            "mobileNumber": data.contactNo,
-            "email": data.emailAddress,
-            // "teams": data.teams
-            "teams": [{
-                "name": data.teams.firstName,
-                "id": data.id ? data.id : 0,
-            }]
+            
+        
+        let body = null
+        if(data.id){
+            body =  {
+                "id" : data.id,
+                "firstName": data.firstName,
+                "lastName": data.lastName,
+                "mobileNumber": data.mobileNumber,
+                "email": data.email,
+                "teams": data.teams
+                
+            }
+        }else{
+            body =  {
+
+                "firstName": data.firstName,
+                "lastName": data.lastName,
+                "mobileNumber": data.contactNo,
+                "email": data.emailAddress,
+                "teams": data.teams
+              
+            }
         }
+      
+       
         var url = `/users/member?&competitionId=${id}`;
         return Method.dataPost(url, token, body)
     },

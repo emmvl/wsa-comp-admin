@@ -28,8 +28,6 @@ function LiveScoreVenueChange(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_UPDATE_VENUE_CHANGE:
 
-            console.log(action, 'LiveScoreVenueChange')
-
 
             if (action.key == "venueId") {
                 state.venueChangeData[action.key] = action.data
@@ -38,7 +36,7 @@ function LiveScoreVenueChange(state = initialState, action) {
                 if (index > -1) {
                     let courts = state.venueData[index].venueCourts
                     state.courtData = courts
-                    
+
                 }
             } else {
                 state.venueChangeData[action.key] = action.data

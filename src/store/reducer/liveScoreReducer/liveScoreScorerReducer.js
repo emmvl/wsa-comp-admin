@@ -2,11 +2,11 @@ import ApiConstants from '../../../themes/apiConstants'
 
 let scorerObj = {
     id: null,
-    firstName: "firstName",
-    lastName: "lastName",
-    emailAddress: "emailAddress",
-    contactNo: "contactNo",
-    teams: null
+    firstName: "",
+    lastName: "",
+    emailAddress: "",
+    contactNo: "",
+    teams: []
 }
 
 const initialState = {
@@ -41,7 +41,7 @@ function genrateTeamId(teamIdArr) {
 
 
 function getTeamObj(teamSelectId, teamArr) {
-    console.log(teamSelectId, teamArr, "getTeamObj")
+    
     let teamObj = []
     let obj = ''
     for (let i in teamArr) {
@@ -80,7 +80,7 @@ function liveScoreScorerState(state = initialState, action) {
             }
 
         case ApiConstants.API_LIVE_SCORE_DIVISION_SUCCESS:
-            console.log('API_LIVE_SCORE_DIVISION_SUCCESS******', action)
+       
             return {
                 ...state,
                 onLoad: false,
@@ -90,33 +90,41 @@ function liveScoreScorerState(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_UPDATE_SCORER:
 
             if (action.key == 'teamId') {
-                // console.log(action, 'API_LIVE_SCORE_UPDATE_SCORER')
                 let selectedTeams = getTeamObj(action.data, state.teamResult)
                 state.scorerData['teams'] = selectedTeams
                 state.teamId = action.data
-
             } else if (action.key == 'scorerRadioBtn') {
                 state[action.key] = action.data
                 state.existingScorerId = null
             } else if (action.key == 'isEditScorer') {
-                console.log(action.data, "actionnn")
+                
+                state.scorerData = action.data
 
-                state.scorerData.id = action.data.id
-                state.scorerData.firstName = action.data.firstName
-                state.scorerData.lastName = action.data.lastName
-                state.scorerData.mobileNumber = action.data.mobileNumber
-                state.scorerData.email = action.data.email
+                console.log(state.scorerData)
+                // state.scorerData.id = action.data.id
+                // state.scorerData.firstName = action.data.firstName
+                // state.scorerData.lastName = action.data.lastName
+                // state.scorerData.mobileNumber = action.data.mobileNumber
+                // state.scorerData.email = action.data.email
 
-                let getTeamId = genrateTeamId(action.data.teams)
-                console.log(action.data, "idddddddddd")
+                // let getTeamId = genrateTeamId(action.data.teams)
+                
                 // state.teamId = action.data.id
-                state.teamId = getTeamId
-                let selectedTeams = getTeamObj(action.data, state.teamResult)
-                state.scorerData['teams'] = selectedTeams
+                // state.teamId = getTeamId
+                // let selectedTeams = getTeamObj(action.data, state.teamResult)
+                // state.scorerData['teams'] = selectedTeams
 
             } else if (action.key == 'isAddScorer') {
-                state.managerData = scorerObj
-                state.managerData.id = null
+                scorerObj = {
+                        firstName: "",
+                        lastName: "",
+                        emailAddress: "",
+                        contactNo: "",
+                        teams: []  
+                }
+                state.scorerData = scorerObj
+                // state.managerData = scorerObj
+                // state.managerData.id = null
                 state.teamId = null
                 state.scorerRadioBtn = "new"
 

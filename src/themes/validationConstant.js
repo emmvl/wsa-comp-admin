@@ -10,7 +10,7 @@ const ValidationConstants = {
     venueField: 'Venue is required.',
     roundField: 'Round is required.',
     durationField: 'Duration time is required.',
-    emailField: ['Email is required.', 'Pleae enter valid email.'],
+    emailField: ['Email is required.', 'Pleae enter valid email.', 'After changing your email address, you will need to relogin with your new email address'],
     contactField: 'Contact is required.',
     competitionField: 'Competition is required.',
     timerField: 'Timer is required.',

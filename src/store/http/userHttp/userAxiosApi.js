@@ -112,6 +112,16 @@ let userHttpApi = {
     var url = `api/user/activity/manager`;
     return Method.dataPost(url, token, payload);
   },
+
+  liveScoreSearchManager(data) {
+    console.log(data, 'liveScoreSearchManager')
+    let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+    if (data) {
+      var url = `users/byRole?roleId=5&entityTypeId=1&entityId=${1}&userName=${data}`;
+      return Method.dataGet(url, token);
+    }
+
+  }
 }
 
 let Method = {

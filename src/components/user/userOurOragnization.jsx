@@ -33,7 +33,9 @@ class UserOurOragnization extends Component {
             getDataLoading: false,
             deleteModalVisible: false,
             currentIndex: 0,
-            image: null
+            image: null,
+            isSameUserEmailId: "",
+            isSameUserEmailChanged: false
 
         }
         this.props.getCommonRefData();
@@ -60,7 +62,12 @@ class UserOurOragnization extends Component {
                 })
             }
             if (userState.status == 1 && this.state.buttonPressed == "save") {
-                history.push('/userAffiliatesList');
+                if(this.state.isSameUserEmailChanged){
+                    this.logout();
+                }
+                else{
+                    history.push('/userAffiliatesList');
+                }
             }
         }
         if (this.state.buttonPressed == "cancel") {
@@ -90,6 +97,11 @@ class UserOurOragnization extends Component {
             }
         }
     }
+
+    logout = async () => {
+        await localStorage.clear();
+        history.push("/");
+      };
  
     referenceCalls = (organisationId) => {
         this.props.getAffiliateToOrganisationAction(organisationId);
@@ -102,7 +114,7 @@ class UserOurOragnization extends Component {
 
     setFormFieldValue = () => {
         let affiliate = this.props.userState.affiliateOurOrg;
-        console.log("setFormFieldValue" + JSON.stringify(affiliate));
+        //console.log("setFormFieldValue" + JSON.stringify(affiliate));
         this.props.form.setFieldsValue({
             name: affiliate.name,
             addressOne: affiliate.street1,
@@ -111,7 +123,7 @@ class UserOurOragnization extends Component {
             postcode: affiliate.postalCode
         })
         let contacts = affiliate.contacts;
-        console.log("contacts::" + contacts);
+       // console.log("contacts::" + contacts);
         if(contacts == null || contacts == undefined || contacts == "")
         {
             this.addContact();
@@ -146,6 +158,7 @@ class UserOurOragnization extends Component {
             lastName:'',
             mobileNumber: '',
             email: '',
+            isSameUser: true,
             permissions: []
         }
         contacts.push(obj);
@@ -182,6 +195,11 @@ class UserOurOragnization extends Component {
                 [`lastName${index}`]: item.lastName,
                 [`email${index}`]: item.email,
             });
+            item['isSameUser'] =  getUserId() == item.userId ? true: false;
+            if(item.userId == getUserId())
+            {
+                this.setState({isSameUserEmailId: item.email});
+            }
             let permissions = item.permissions;
             permissions.map((perm, permIndex) => {
                 this.props.form.setFieldsValue({
@@ -210,7 +228,22 @@ class UserOurOragnization extends Component {
             permissions.push(obj);
             contact.permissions = permissions;
 
-        }else{
+        }
+        else if(key == "email")
+        {
+            if(contact.isSameUser && contact.userId!= 0)
+            {
+                if(val != this.state.isSameUserEmailId)
+                {
+                    this.setState({isSameUserEmailChanged: true});
+                }
+                else{
+                    this.setState({isSameUserEmailChanged: false});
+                }
+            }
+            contact[key] = val;
+        }
+        else{
             contact[key] = val;
         }
         
@@ -575,12 +608,19 @@ class UserOurOragnization extends Component {
                             required={"required-field pt-0 pb-0"}
                             heading={AppConstants.email}
                             placeholder={AppConstants.email}
+                            disabled={!item.isSameUser}
                             onChange={(e) => this.onChangeContactSetValue(e.target.value, "email", index )}
                             //value={item.email}
                             setFieldsValue={item.email}
                         />
                     )}
                     </Form.Item>
+                    {(item.isSameUser && this.state.isSameUserEmailChanged) ?
+                        <div className="same-user-validation"> 
+                            {ValidationConstants.emailField[2] }
+                        </div>
+                     : null}
+                    
                     
                     <InputWithHead heading={AppConstants.phoneNumber}
                         placeholder={AppConstants.phoneNumber} 
@@ -671,6 +711,7 @@ class UserOurOragnization extends Component {
                 <Layout>
                     {this.headerView()}
                     <Form
+                        autocomplete="off"
                         onSubmit={this.saveAffiliate}
                         noValidate="noValidate">
                         <Content>

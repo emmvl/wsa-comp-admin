@@ -31,7 +31,7 @@ function liveScoreAddEditScorer( data, teamId ,existingScorerId) {
         teamId,
         existingScorerId
     };
-  
+
     return action;
 }
 

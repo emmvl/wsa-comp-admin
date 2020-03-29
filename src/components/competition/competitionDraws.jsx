@@ -53,8 +53,9 @@ class CompetitionDraws extends Component {
     if (this.state.venueLoad == true && this.props.drawsState.updateLoad == false) {
       if (nextProps.drawsState.getDrawsRoundsData !== drawsRoundData) {
         if (venueData.length > 0) {
+          let venueId = venueData[0].id
           if (drawsRoundData.length > 0) {
-            let venueId = venueData[0].id
+
             let roundId = drawsRoundData[0].roundId;
             let roundTime = drawsRoundData[0].startDateTime
             this.props.getCompetitionDrawsAction(
@@ -63,7 +64,16 @@ class CompetitionDraws extends Component {
               venueId,
               roundId
             );
-            this.setState({ roundId, venueId, venueLoad: false, roundTime });
+            this.setState({
+              roundId, roundTime, venueId,
+              venueLoad: false,
+            });
+          }
+          else {
+            this.setState({
+              venueId,
+              venueLoad: false,
+            })
           }
         }
       }

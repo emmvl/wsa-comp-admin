@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Table, Pagination } from 'antd';
+import { Layout, Breadcrumb, Button, Table, Pagination, Menu } from 'antd';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -67,7 +67,7 @@ const columns = [
         sorter: (a, b) => a.teams.length - b.teams.length,
         render: (teams, record) =>
             <NavLink to={{
-                pathname:"./liveScoreAssignMatch",
+                pathname: "./liveScoreAssignMatch",
                 state: { teams: record }
             }}>
                 {teams.length > 0 && teams.map((item) => (
@@ -76,6 +76,35 @@ const columns = [
                 }
             </NavLink>
     },
+    {
+        title: "Action",
+        render: (data, record) => <Menu
+            className="action-triple-dot-submenu"
+            theme="light"
+            mode="horizontal"
+            style={{ lineHeight: '25px' }}
+        >
+            <Menu.SubMenu
+                key="sub1"
+                title={
+                    <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
+                }
+            >
+                <Menu.Item  key={'1'}>
+                    <NavLink to={{
+                        pathname: '/liveScorerView',
+                        state: { tableRecord: record }
+                    }}><span >Edit</span></NavLink>
+                </Menu.Item>
+                <Menu.Item key="2" >
+                    <NavLink to={{
+                        pathname: "./liveScoreAssignMatch",
+                        state: { teams: 562 }
+                    }}><span >Assign to match</span></NavLink>
+                </Menu.Item>
+            </Menu.SubMenu>
+        </Menu>
+    }
 ];
 
 const { id } = 1

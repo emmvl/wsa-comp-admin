@@ -47,11 +47,21 @@ function liveScoreClear() {
     }
     return action
 }
+
+function liveScoreManagerSearch(data) {
+    const action = {
+        type: ApiConstants.API_LIVESCORE_MANAGER_SEARCH_LOAD,
+        data
+    }
+    console.log(data, '@#$#@')
+    return action
+}
 export {
     liveScoreAddEditManager,
     liveScoreManagerListAction,
     liveScoreUpdateManagerDataAction,
     liveScoreManagerFilter,
-    liveScoreClear
+    liveScoreClear,
+    liveScoreManagerSearch
 
 };

@@ -556,6 +556,7 @@ class UserAddAffiliates extends Component {
                 <Layout>
                     {this.headerView()}
                     <Form
+                        autocomplete="off"
                         onSubmit={this.saveAffiliate}
                         noValidate="noValidate">
                         <Content>

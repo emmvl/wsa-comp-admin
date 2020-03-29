@@ -6,7 +6,7 @@ var managerObj = {
     lastName: "",
     mobileNumber: "",
     email: "",
-    teams: null
+    teams: null,
 }
 
 const initialState = {
@@ -20,7 +20,9 @@ const initialState = {
     teamId: null,
     managerRadioBtn: null,
     exsitingManagerId: null,
-    teamResult: []
+    teamResult: [],
+    onLoadSearch: false,
+    managerSearchResult: []
 }
 
 /////get manager List Object on index basis
@@ -46,7 +48,7 @@ function genrateTeamId(teamIdArr) {
 }
 
 function getTeamObj(teamSelectId, teamArr) {
-    
+
     let teamObj = []
     let obj = ''
     for (let i in teamArr) {
@@ -92,7 +94,7 @@ function liveScoreMangerState(state = initialState, action) {
                 ...state,
             }
         case ApiConstants.API_LIVE_SCORE_DIVISION_SUCCESS:
-          
+
             return {
                 ...state,
                 onLoad: false,
@@ -105,10 +107,10 @@ function liveScoreMangerState(state = initialState, action) {
 
 
             if (action.key == 'teamId') {
-              
+
                 let teamObj = getTeamObj(action.data, state.teamResult)
                 state.managerData['teams'] = teamObj
-            
+
                 state.teamId = action.data
 
             } else if (action.key == 'managerRadioBtn') {
@@ -116,7 +118,7 @@ function liveScoreMangerState(state = initialState, action) {
                 state.exsitingManagerId = null
 
             } else if (action.key == "managerSearch") {
-        
+
                 state.exsitingManagerId = action.data
 
             } else if (action.key == 'isEditManager') {
@@ -166,16 +168,29 @@ function liveScoreMangerState(state = initialState, action) {
             };
 
         case ApiConstants.API_LIVESCORE_MANAGER_FILTER:
-           
+
             return {
                 ...state,
                 managerListResult: action.payload
             }
         case ApiConstants.CLEAR_LIVESCORE_MANAGER:
-           
+
             return {
                 ...state,
                 managerListResult: state.MainManagerListResult
+            }
+
+        ////Manager Search
+        case ApiConstants.API_LIVESCORE_MANAGER_SEARCH_LOAD:
+            return { ...state, onLoadSearch: true };
+
+        case ApiConstants.API_LIVESCORE_MANAGER_SEARCH_SUCCESS:
+            console.log(action.result, 'API_LIVESCORE_MANAGER_SEARCH_SUCCESS')
+            return {
+                ...state,
+                onLoadSearch: false,
+                managerSearchResult: action.result,
+                status: action.status,
             }
         default:
             return state;
