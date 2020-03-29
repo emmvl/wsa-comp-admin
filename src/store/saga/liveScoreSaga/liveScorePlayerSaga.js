@@ -23,7 +23,7 @@ function* errorSaga(error) {
     });
     setTimeout(() => {
         // message.error("Something went wrong.");
-        message.error(error.error);
+        message.error(error ? error.error ? error.error : "Something went wrong." : "Something went wrong.");
     }, 800);
 }
 

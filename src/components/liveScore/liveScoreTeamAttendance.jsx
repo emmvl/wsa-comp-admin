@@ -13,10 +13,12 @@ import { liveScore_formateDateTime } from '../../themes/dateformate'
 import history from "../../util/history";
 import { isArrayNotEmpty } from '../../util/helpers'
 
-function handleSorting(a, b, key) {
-    if (a[key] && b[key]) {
-        return a[key].length - b[key].length
-    }
+
+/////function to sort table column
+function tableSort(a, b, key) {
+    let stringA = JSON.stringify(a[key])
+    let stringB = JSON.stringify(b[key])
+    return stringA.localeCompare(stringB)
 }
 
 const { Content } = Layout;
@@ -27,7 +29,7 @@ const columns = [
         title: 'Match id',
         dataIndex: 'matchId',
         key: 'matchId',
-        sorter: (a, b) => handleSorting(a, b, "matchId"),
+        sorter: (a, b) => tableSort(a, b, "matchId"),
         render: (matchId) =>
             <NavLink to={{
                 pathname: '/liveScoreMatchDetails',
@@ -41,7 +43,7 @@ const columns = [
         title: 'Start Time',
         dataIndex: 'startTime',
         key: 'startTime',
-        sorter: (a, b) => handleSorting(a, b, 'startTime'),
+        sorter: (a, b) => tableSort(a, b, 'startTime'),
         render: (teamName) =>
             <span >{liveScore_formateDateTime(teamName)}</span>
     },
@@ -49,7 +51,7 @@ const columns = [
         title: 'Team',
         dataIndex: 'teamName',
         key: 'teamName',
-        sorter: (a, b) => handleSorting(a, b, 'teamName'),
+        sorter: (a, b) => tableSort(a, b, 'teamName'),
         render: (teamName) =>
 
             <span className="input-heading-add-another pt-0">{teamName}</span>
@@ -60,13 +62,13 @@ const columns = [
         title: 'Player Id',
         dataIndex: 'playerId',
         key: 'playerId',
-        sorter: (a, b) => handleSorting(a, b, 'playerId'),
+        sorter: (a, b) => tableSort(a, b, 'playerId'),
     },
     {
         title: 'First Name',
         dataIndex: 'firstName',
         key: 'firstName',
-        sorter: (a, b) => handleSorting(a, b, 'firstName'),
+        sorter: (a, b) => tableSort(a, b, 'firstName'),
         render: (firstName) =>
             <span className="input-heading-add-another pt-0">{firstName}</span>
 
@@ -75,7 +77,7 @@ const columns = [
         title: 'Last Name',
         dataIndex: 'lastName',
         key: 'lastName',
-        sorter: (a, b) => handleSorting(a, b, 'lastName'),
+        sorter: (a, b) => tableSort(a, b, 'lastName'),
         render: (lastName) =>
 
             <span className="input-heading-add-another pt-0">{lastName}</span>
@@ -85,19 +87,19 @@ const columns = [
         title: 'Division',
         dataIndex: 'divisionName',
         key: 'divisionName',
-        sorter: (a, b) => handleSorting(a, b, 'divisionName'),
+        sorter: (a, b) => tableSort(a, b, 'divisionName'),
     },
     {
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
-        sorter: (a, b) => handleSorting(a, b, 'status'),
+        sorter: (a, b) => tableSort(a, b, 'status'),
     },
     {
         title: 'Position',
         dataIndex: 'positionName',
         key: 'positionName',
-        sorter: (a, b) => handleSorting(a, b, 'positionName'),
+        sorter: (a, b) => tableSort(a, b, 'positionName'),
     },
 ];
 
@@ -133,7 +135,7 @@ class LiveScoreTeamAttendance extends Component {
 
     handleTablePagination(page) {
         let offset = page ? 10 * (page - 1) : 0;
-        console.log(page)
+      
         const paginationBody = {
             "paging": {
                 "limit": 10,
@@ -214,10 +216,8 @@ class LiveScoreTeamAttendance extends Component {
     ////////form content view
     contentView = () => {
         const { teamAttendanceResult, teamAttendancePage, teamAttendanceTotalCount } = this.props.liveScoreTeamAttendanceState
-        // let dataSource = teamAttendanceResult ? teamAttendanceResult.stats : ''
         let dataSource = isArrayNotEmpty(teamAttendanceResult) ? teamAttendanceResult : []
-        // console.log(dataSource, "dataSource")
-        let total = isArrayNotEmpty(teamAttendanceTotalCount) ? teamAttendanceTotalCount : ''
+        let total = teamAttendanceTotalCount
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">

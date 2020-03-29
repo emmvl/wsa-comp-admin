@@ -50,13 +50,15 @@ function assignMatchesAction(competitionId, teamId, body){
 }
 
 /// Chnage assign status
-function changeAssignStatus(index, records, roleId, teamID){
+function changeAssignStatus(index, records, roleId, teamID, scorerKey, teamkey){
     const action = {
         type: ApiConstants.API_LIVESCORE_ASSIGN_CHANGE_STATUS_LOAD,
         index,
         records,
         roleId,
-        teamID
+        teamID,
+        scorerKey, 
+        teamkey
     };
    
     return action;

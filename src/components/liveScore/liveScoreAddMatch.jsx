@@ -30,7 +30,7 @@ import {
 } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
 import { liveScoreScorerListAction } from '../../store/actions/LiveScoreAction/liveScoreScorerAction';
 import InputWithHead from "../../customComponents/InputWithHead";
-import liveScoreCreateRoundAction from '../../store/actions/LiveScoreAction/liveScoreRoundAction'
+import { liveScoreCreateRoundAction, liveScoreRoundListAction } from '../../store/actions/LiveScoreAction/liveScoreRoundAction'
 import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage';
 import { formateTime, liveScore_formateDate, formatDateTime } from '../../themes/dateformate'
@@ -38,6 +38,8 @@ import { getVenuesTypeAction } from "../../store/actions/appAction"
 import Loader from '../../customComponents/loader'
 import { getliveScoreScorerList } from '../../store/actions/LiveScoreAction/liveScoreAction';
 import { isArrayNotEmpty } from '../../util/helpers';
+import { getLiveScoreDivisionList } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction'
+
 const { Footer, Content, Header } = Layout;
 const { Option } = Select;
 
@@ -53,7 +55,7 @@ class LiveScoreAddMatch extends Component {
             loading: false,
             createMatch: false,
             key: props.location.state ? props.location.state.key : null,
-            roundLoad: false
+            roundLoad: false,
         }
         // this.props.getVenuesTypeAction()
 
@@ -64,13 +66,13 @@ class LiveScoreAddMatch extends Component {
     }
 
     componentDidMount() {
-        // let competitionId = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
 
         if (id !== null) {
             this.props.getCompetitonVenuesList(id);
-            this.props.getliveScoreDivisions(id)
+            this.props.getLiveScoreDivisionList(id)
             this.props.getliveScoreScorerList(id, 4)
+            this.props.liveScoreRoundListAction(id)
             this.setState({ loadvalue: true })
         } else {
             history.push('/')
@@ -295,9 +297,18 @@ class LiveScoreAddMatch extends Component {
         });
     };
 
+    selectDivision(divisionId) {
+        console.log(divisionId, 'divisionId')
+        this.props.liveScoreUpdateMatchAction(divisionId, 'divisionId')
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        // this.props.getliveScoreDivisions(id)
+        this.props.getliveScoreTeams(id, divisionId)
+    }
+
     //// Form View
     contentView = (getFieldDecorator) => {
-        let { addEditMatch, start_date, start_time } = this.props.liveScoreMatchState
+        let { addEditMatch, start_date, start_time, divisionList, roundList } = this.props.liveScoreMatchState
+        const { teamResult } = this.props.liveScoreTeamState
         let { liveScoreState } = this.props
         let { venueData } = this.props.liveScoreMatchState
         const { scorerListResult } = this.props.liveScoreState
@@ -357,11 +368,11 @@ class LiveScoreAddMatch extends Component {
                                 <Select
                                     // loading={(!addEditMatch.division.name && liveScoreState.divisionList.length == 0) && true}
                                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                    onChange={(divisionName) => this.props.liveScoreUpdateMatchAction(divisionName, 'divisionId')}
+                                    onChange={(divisionName) => this.selectDivision(divisionName)}
                                     value={addEditMatch.divisionId}
                                     placeholder={'Select Division'}
                                 >
-                                    {isArrayNotEmpty(liveScoreState.divisionList) && liveScoreState.divisionList.map((item) => (
+                                    {isArrayNotEmpty(divisionList) && divisionList.map((item) => (
                                         <Option key={item.id} value={item.id} > {item.name}</Option>
                                     ))
                                     }
@@ -407,7 +418,7 @@ class LiveScoreAddMatch extends Component {
                         />
                     </div>
                 </div>
-                {
+                {addEditMatch.divisionId &&
                     <div className="row" >
                         <div className="col-sm-6" >
                             <InputWithHead required={"required-field pb-0"} heading={AppConstants.homeTeam} />
@@ -423,7 +434,7 @@ class LiveScoreAddMatch extends Component {
                                         onChange={(homeTeam) => this.props.liveScoreUpdateMatchAction(homeTeam, "team1id")}
                                         value={addEditMatch.team1Id ? addEditMatch.team1Id : ''}
                                     >
-                                        {isArrayNotEmpty(liveScoreState.teamResult) && liveScoreState.teamResult.map((item) => (
+                                        {isArrayNotEmpty(teamResult) && teamResult.map((item) => (
                                             < Option value={item.id} > {item.name}</Option>
                                         ))
                                         }
@@ -444,7 +455,7 @@ class LiveScoreAddMatch extends Component {
                                         style={{ width: "100%", }}
                                         onChange={(awayTeam) => this.props.liveScoreUpdateMatchAction(awayTeam, "team2id")}
                                         value={addEditMatch.team2Id ? addEditMatch.team2Id : ''} >
-                                        {isArrayNotEmpty(liveScoreState.teamResult) && liveScoreState.teamResult.map((item) => (
+                                        {isArrayNotEmpty(teamResult) && teamResult.map((item) => (
                                             < Option value={item.id} > {item.name}</Option>
                                         ))
                                         }
@@ -498,7 +509,7 @@ class LiveScoreAddMatch extends Component {
                                         style={{ width: "100%", }}
                                         value={addEditMatch.roundId ? addEditMatch.roundId : ''}
                                     >
-                                        {isArrayNotEmpty(liveScoreState.roundResult) && liveScoreState.roundResult.map((item) => (
+                                        {isArrayNotEmpty(roundList) && roundList.map((item) => (
                                             < Option value={item.id} > {item.name}</Option>
                                         ))
                                         }
@@ -649,46 +660,69 @@ class LiveScoreAddMatch extends Component {
     //////footer view containing all the buttons like save and cancel
     footerView = (isSubmitting) => {
 
+        // return (
+        //     <div className="fluid-width">
+        //         <div className="footer-view">
+        //             <div className="row">
+        //                 <div className="col-sm">
+
+        //                         <div className="col-sm live-score-edit-match-buttons">
+        //                             <Button onClick={() => history.push(this.state.key == 'dashboard' ? 'liveScoreDashboard' : '/liveScoreMatches')} type="cancel-button">{AppConstants.cancel}</Button>
+        //                         </div>
+        //                         {this.state.isEdit == true && <div className="col-sm">
+
+        //                                 <div className="col-sm live-score-edit-match-buttons">
+        //                                     <Button type="cancel-button">{AppConstants.forfiet}</Button>
+        //                                 </div>
+        //                                 <div className="col-sm live-score-edit-match-buttons">
+        //                                     <Button type="cancel-button">{AppConstants.abandon}</Button>
+        //                                 </div>
+        //                                 <div className="col-sm live-score-edit-match-buttons">
+        //                                     <Button type="cancel-button">{AppConstants.endMatch}</Button>
+        //                                 </div>
+        //                         </div>}
+
+        //                 </div>
+
+        //                 <div className="col-sm-1">
+        //                     <div className="comp-buttons-view">
+        //                         <Button
+        //                             className="user-approval-button" type="primary" htmlType="submit" >
+        //                             {AppConstants.save}
+        //                         </Button>
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //         </div>
+        //     </div >
+        // );
+
         return (
             <div className="fluid-width">
-                <div className="footer-view">
-                    <div className="row">
-                        <div className="col-sm-5">
-                            <div className="row" >
-
-                                <div className="col-sm-3 live-score-edit-match-buttons">
+                {!this.state.membershipIsUsed &&
+                    <div className="footer-view">
+                        <div className="row">
+                            <div className="col-sm">
+                                <div className="reg-add-save-button">
                                     <Button onClick={() => history.push(this.state.key == 'dashboard' ? 'liveScoreDashboard' : '/liveScoreMatches')} type="cancel-button">{AppConstants.cancel}</Button>
+                                    {this.state.isEdit == true && <Button className="ml-3" type="cancel-button">{AppConstants.forfiet}</Button>}
+                                    {this.state.isEdit == true && <Button className="ml-3" type="cancel-button">{AppConstants.abandon}</Button>}
+                                    {this.state.isEdit == true && <Button className="ml-3" type="cancel-button">{AppConstants.endMatch}</Button>}
                                 </div>
-                                {this.state.isEdit == true && <div className="col-sm">
-                                    <div className="row">
-
-                                        <div className="col-sm live-score-edit-match-buttons">
-                                            <Button type="cancel-button">{AppConstants.forfiet}</Button>
-                                        </div>
-                                        <div className="col-sm live-score-edit-match-buttons">
-                                            <Button type="cancel-button">{AppConstants.abandon}</Button>
-                                        </div>
-                                        <div className="col-sm live-score-edit-match-buttons">
-                                            <Button type="cancel-button">{AppConstants.endMatch}</Button>
-                                        </div>
-                                    </div>
-                                </div>}
                             </div>
-
-                        </div>
-
-                        <div className="col-sm-7">
-                            <div className="comp-buttons-view">
-                                <Button
-                                    className="user-approval-button" type="primary" htmlType="submit" >
-                                    {AppConstants.save}
-                                </Button>
+                            <div className="col-sm">
+                                <div className="comp-buttons-view">
+                                    <Button
+                                        className="user-approval-button" type="primary" htmlType="submit" >
+                                        {AppConstants.save}
+                                    </Button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div >
-        );
+                }
+            </div>
+        )
     };
 
 
@@ -735,7 +769,9 @@ function mapDispatchToProps(dispatch) {
         liveScoreScorerListAction,
         clearMatchAction,
         getCompetitonVenuesList,
-        getliveScoreScorerList
+        getliveScoreScorerList,
+        getLiveScoreDivisionList,
+        liveScoreRoundListAction
     }, dispatch)
 }
 
@@ -744,7 +780,7 @@ function mapStatetoProps(state) {
         liveScoreState: state.LiveScoreState,
         liveScoreMatchState: state.LiveScoreMatchState,
         liveScoreScorerState: state.LiveScoreScorerState,
-        liveScoreState: state.LiveScoreState
+        liveScoreTeamState: state.LiveScoreTeamState
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(LiveScoreAddMatch));

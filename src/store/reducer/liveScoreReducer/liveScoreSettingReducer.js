@@ -5,6 +5,7 @@ const initialState = {
     form: {
         id: 0,
         competitionName: "",
+        shortName: "",
         competitionLogo: '',
         Logo: "",
         venue: [],
@@ -64,6 +65,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     ...state.form,
                     id: payload.id,
                     competitionName: payload.longName,
+                    shortName: payload.name,
                     competitionLogo: payload.logoUrl,
                     Logo: payload.logoUrl,
                     scoring: payload.scoringType,
@@ -93,6 +95,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 // error: payload
             }
         case ApiConstants.LiveScore_SETTING_CHANGE_FORM:
+            console.log(payload)
             const keys = payload.key
             const Data = payload.data
             return {

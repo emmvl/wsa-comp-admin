@@ -115,6 +115,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         })
         let timeSlotMatchDuration = competitionTimeSlots.getcompetitionTimeSlotData.competitionVenueTimeslotsDayTime ? competitionTimeSlots.getcompetitionTimeSlotData.competitionVenueTimeslotsDayTime : []
         timeSlotMatchDuration.length > 0 && timeSlotMatchDuration.map((item, index) => {
+            console.log(item)
             let dayRefId = `dayRefId${index}`
             this.props.form.setFieldsValue({
                 [dayRefId]: item.dayRefId,
@@ -135,6 +136,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         let timeSlotManualPerVenue = competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotManual ? competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotManual : []
         timeSlotManualPerVenue.length > 0 && timeSlotManualPerVenue.map((PerVenueItem, perVenueIndex) => {
             PerVenueItem.timeslots.length > 0 && PerVenueItem.timeslots.map((timeSlotItem, timeSlotIndex) => {
+                console.log(timeSlotItem)
                 let dayRefIdManual = `dayRefIdManual${timeSlotIndex}`
                 this.props.form.setFieldsValue({
                     [dayRefIdManual]: timeSlotItem.dayRefId,
@@ -197,6 +199,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                         for (let i in timeSlotEntity) {
                             delete timeSlotEntity[i]["timeSlotEntityManualkeyArr"]
                             delete timeSlotEntity[i]["timeSlotEntityGradeKeyArr"]
+                            timeSlotEntity[i].sortOrder = JSON.parse(i)
                         }
                     }
                 } else {
@@ -229,7 +232,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                         "competitionVenueTimeslotsDayTimeId": 0,
                                         "dayRefId": getTimeSlot[j].dayRefId,
                                         "startTime": getStartTime[k].startTime,
-                                        "sortOrder": getStartTime[k].sortOrder,
+                                        "sortOrder": JSON.parse(k),
                                         "competitionTimeslotsEntity": timeSlotData.mainTimeRotationID == 8 ? getStartTime[k].competitionTimeslotsEntity : [],
                                     }
                                 timeSlotManualAllVenueArray.push(manualperVenueObj)
@@ -267,7 +270,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                             "competitionVenueTimeslotsDayTimeId": 0,
                                             "dayRefId": timeSloltdataArr[j].dayRefId,
                                             "startTime": manualStartTime[k].startTime,
-                                            "sortOrder": manualStartTime[k].sortOrder,
+                                            "sortOrder": JSON.parse(k),
                                             "competitionTimeslotsEntity": timeSlotData.mainTimeRotationID !== 8 ? [] : manualStartTime[k].competitionTimeslotsEntity,
                                         }
                                     timeSlotManualperVenueArray.push(manualAllVenueObj)
@@ -484,6 +487,13 @@ class CompetitionCourtAndTimesAssign extends Component {
         )
     }
 
+    onChangevenueRefId = (value) => {
+        this.props.UpdateTimeSlotsData(value, "applyToVenueRefId", null, null, null, null)
+        setTimeout(() => {
+            this.setDetailsFieldValue()
+        }, 300)
+    }
+
 
     ////////form content view
     contentView = (getFieldDecorator) => {
@@ -588,7 +598,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                         <Form.Item  >
                                             {getFieldDecorator('applyToVenueRefId', { rules: [{ required: true, message: ValidationConstants.venueField }] })(
                                                 <Radio.Group className="reg-competition-radio"
-                                                    onChange={(e) => this.props.UpdateTimeSlotsData(e.target.value, "applyToVenueRefId", null, null, null, null)}
+                                                    onChange={(e) => this.onChangevenueRefId(e.target.value)}
                                                     setFieldsValue={timeSlotData.applyToVenueRefId}
                                                 >
                                                     {commonState.applyVenue.length > 0 && commonState.applyVenue.map(item => {
@@ -860,10 +870,15 @@ class CompetitionCourtAndTimesAssign extends Component {
 
     addTimeManualPerVenue = (index, item, keyword, parentIndex) => {
         this.props.addRemoveTimeSlot(index, item, keyword, parentIndex)
-
+        setTimeout(() => {
+            this.setDetailsFieldValue()
+        }, 500);
     }
     addTimeManualAllVenue = (index, item, keyword) => {
         this.props.addRemoveTimeSlot(index, item, keyword)
+        setTimeout(() => {
+            this.setDetailsFieldValue()
+        }, 500);
     }
 
     addDivisionOrGrade = (index, item, keyword) => {

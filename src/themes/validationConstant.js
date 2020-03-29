@@ -95,7 +95,11 @@ const ValidationConstants = {
     court: "Court is required.",
 
 
-    csvField: "Please select CSV file."
+    csvField: "Please select CSV file.",
+    compRegHaveBeenSent: "Competition Registrations have been sent already",
+    feesCannotBeEmpty: "Please select fees.",
+
+    shortField: "Short name is required."
 };
 
 export default ValidationConstants;

@@ -73,11 +73,6 @@ class LiveScoreAddManager extends Component {
                 }
                 this.setState({ load: false, loader: false })
             }
-            // if (this.state.loader == true && this.props.liveScoreMangerState.onLoad == false) {
-            //     alert('g')
-            //     this.setInitalFiledValue()
-            //     this.setState({ loader: false })
-            // }
 
         }
 
@@ -205,7 +200,7 @@ class LiveScoreAddManager extends Component {
 
                                 <Select
                                     // loading={this.props.liveScoreState.onLoad == true && true}
-                                    // mode="tags"
+                                    mode="multiple"
                                     showSearch={true}
                                     placeholder={AppConstants.selectTeam}
                                     style={{ width: "100%", }}
@@ -228,7 +223,7 @@ class LiveScoreAddManager extends Component {
 
     managerNewRadioBtnView(getFieldDecorator) {
         let teamData = this.props.liveScoreState.teamResult ? this.props.liveScoreState.teamResult : []
-        const { managerData, teamId } = this.props.liveScoreMangerState
+        const { managerData, teamId, teamResult } = this.props.liveScoreMangerState
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -377,8 +372,6 @@ class LiveScoreAddManager extends Component {
         const { managerRadioBtn } = this.props.liveScoreMangerState
         return (
             <div >
-
-
                 {this.managerNewRadioBtnView(getFieldDecorator)}
 
             </div>
@@ -413,10 +406,22 @@ class LiveScoreAddManager extends Component {
     onSaveClick = e => {
 
         const { managerData, teamId, managerRadioBtn, exsitingManagerId } = this.props.liveScoreMangerState
+      
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
+            let body = ''
             if (!err) {
-                this.props.liveScoreAddEditManager(managerData, teamId, exsitingManagerId)
+                if (managerRadioBtn == 'new') {
+                    body = {
+                        "id": managerData.id ? managerData.id : 0,
+                        "firstName": managerData.firstName,
+                        "lastName": managerData.lastName,
+                        "mobileNumber": managerData.mobileNumber,
+                        "email": managerData.email,
+                        "teams": managerData.teams
+                    }
+                    this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
+                } 
 
             }
         });

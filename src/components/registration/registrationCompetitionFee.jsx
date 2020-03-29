@@ -953,8 +953,14 @@ class RegistrationCompetitionFee extends Component {
                     let modifyArr = [...finalpostarray, ...finalPostData]
                     finalpostarray = modifyArr
                 }
-                this.props.saveCompetitionFeeSection(finalpostarray, competitionId)
-                this.setState({ loading: true })
+                console.log("finalpostarray", finalpostarray)
+                if (finalpostarray.length > 0) {
+                    this.props.saveCompetitionFeeSection(finalpostarray, competitionId)
+                    this.setState({ loading: true })
+                }
+                else {
+                    message.error(ValidationConstants.feesCannotBeEmpty)
+                }
             }
         })
     }

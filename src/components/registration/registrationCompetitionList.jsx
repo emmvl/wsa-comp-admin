@@ -53,7 +53,7 @@ function totalSeasonalFees(seasonalFees1, record) {
             <span>{record.feeOrgId == null ? "N/A" : "Affiliate fee not set!"}</span>
             :
             <span>
-                {currencyFormat(fee)}
+                {(record.seasonalFees == null && record.seasonalGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
             </span>
     )
 }
@@ -82,7 +82,7 @@ function totalCasualFees(casualFees1, record) {
             <span>{record.feeOrgId == null ? "N/A" : "Affiliate fee not set!"}</span>
             :
             <span>
-                {currencyFormat(fee)}
+                {(record.casualFees == null && record.casualGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
             </span>
     )
 }

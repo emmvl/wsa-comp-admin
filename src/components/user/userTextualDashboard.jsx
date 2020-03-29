@@ -84,7 +84,7 @@ const columns = [
             return (
                 <div>
                     {(team || []).map((item, index) => (
-                        <div key={item.teamId}>{item.teamName}</div>
+                        <div key={item.teamId}>{item.team}</div>
                     ))}
                 </div>
             )

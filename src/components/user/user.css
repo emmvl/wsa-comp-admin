@@ -142,10 +142,6 @@
   margin-bottom: 10px;
 }
 
-.user-module-divider{
-  border: 0.5px solid var(--app-e1e1f5);
-}
-
 .user-module-personal-row{
   padding-left: 0px;
   color: var(--app-1b1b34);
@@ -156,4 +152,19 @@
 .same-user-validation{
   margin-top:5px;
   color:red;
+}
+
+.other-info-row{
+  display: flex;
+  padding-left: 20px;
+}
+
+.other-info-label{
+  padding-top: 10px;
+  padding-right: 20px;
+  width: 225px;
+}
+
+.other-info-font{
+  font-family: inter !important;
 }

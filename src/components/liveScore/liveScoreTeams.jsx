@@ -11,26 +11,36 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
 import history from "../../util/history";
+import { isArrayNotEmpty } from "../../util/helpers";
 const { Content } = Layout;
 
+
+/////function to sort table column
+function tableSort(a, b, key) {
+    let stringA = JSON.stringify(a[key])
+    let stringB = JSON.stringify(b[key])
+    return stringA.localeCompare(stringB)
+}
 ////columens data
 const columns = [
     {
         title: 'Logo',
         dataIndex: 'logoUrl',
         key: 'logoUrl',
+        sorter: (a, b) => tableSort(a, b, "logoUrl"),
         render: (logoUrl) => logoUrl ? <img style={{ height: 60, width: 80 }} src={logoUrl} /> : <span>{AppConstants.noImage}</span>,
     },
     {
         title: 'Team Name',
         dataIndex: 'name',
         key: 'name',
-        // sorter: (a, b) => a.team.length - b.team.length,
+        sorter: (a, b) => tableSort(a, b, "name"),
         render: (name, record) =>
+       
             <NavLink to={{
                 pathname: "/liveScoreTeamView",
                 state: { tableRecord: record, screenName: 'fromTeamList' }
-            }} >
+            }} > 
                 <span className="input-heading-add-another pt-0">{name}</span>
             </NavLink>,
     },
@@ -38,14 +48,14 @@ const columns = [
         title: 'Team Alias Name',
         dataIndex: 'alias',
         key: 'alias',
-        // sorter: (a, b) => a.alias.length - b.alias.length,
+        sorter: (a, b) =>tableSort(a, b, "alias"),
         render: (alias) => <span>{alias}</span>
     },
     {
         title: 'Affiliate',
         dataIndex: 'organisation',
         key: 'organisation',
-        // sorter: (a, b) => a.organisation.length - b.organisation.length,
+        sorter: (a, b) =>tableSort(a, b, "organisation"),
         render: (organisation) => <span>{organisation.name}</span>
     },
 
@@ -54,58 +64,54 @@ const columns = [
         title: 'Division',
         dataIndex: 'division',
         key: 'division',
-        // sorter: (a, b) => a.division.length - b.division.length,
+        sorter: (a, b) =>tableSort(a, b, "division"),
         render: (division) => <span>{division.name}</span>
     },
     {
         title: '#Players',
         dataIndex: 'playersCount',
         key: 'playersCount',
-        // sorter: (a, b) => a.playersCount.length - b.playersCount.length,
+        sorter: (a, b) =>tableSort(a, b, "playersCount"),
         render: (playersCount) => <span>{playersCount}</span>
     },
     {
         title: 'Manager',
         dataIndex: 'managers',
         key: 'managers',
-        // sorter: (a, b) => a.manager.length - b.manager.length,
-        render: (managers) => <span>{managers[0].name}</span>
+        sorter: (a, b) =>tableSort(a, b, "managers"),
+        render: (managers, record) => <span >
+      
+            {managers.length > 0 && managers.map((item) => (
+                <span className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
+            ))
+            }
+            </span>
     },
     {
         title: 'Contact',
         dataIndex: 'managers',
         key: 'managers',
-        // sorter: (a, b) => a.managers.length - b.managers.length,
-        render: (managers) => <span>{managers[0].mobileNumber}</span>
-        // render: (managers, record) =>
-        //     <NavLink to={{
-        //         pathname: '',
-        //         state: { tableRecord: record }
-        //     }}>
-        //         {managers.length > 0 && managers.map((item) => (
-        //             <span class="input-heading-add-another pt-0" >{item.mobileNumber}</span>
-        //         ))
-        //         }
-        //     </NavLink>
+        sorter: (a, b) =>tableSort(a, b, "managers"),
+      
+        render: (managers, record) =><span>
+                {managers.length > 0 && managers.map((item) => (
+                    <span className="live-score-desc-text side-bar-profile-data" >{item.mobileNumber}</span>
+                ))
+                }
+            </span>
     },
 
     {
         title: 'Email',
         dataIndex: 'managers',
         key: 'managers',
-        // sorter: (a, b) => a.managers.length - b.managers.length,
-        render: (managers) => <span>{managers[0].email}</span>
-
-        // render: (managers, record) =>
-        //     <NavLink to={{
-        //         pathname: '',
-        //         state: { tableRecord: record }
-        //     }}>
-        //         {managers.length > 0 && managers.map((item) => (
-        //             <span class="input-heading-add-another pt-0" >{item.email}</span>
-        //         ))
-        //         }
-        //     </NavLink>
+        sorter: (a, b) =>tableSort(a, b, "managers"),
+        render: (managers, record) =><span>
+                {managers.length > 0 && managers.map((item) => (
+                    <span className="live-score-desc-text side-bar-profile-data" >{item.email}</span>
+                ))
+                }
+                </span>
     },
 ];
 
@@ -131,7 +137,6 @@ const data = [
         email: "darren.geros@oracle.com",
         image: null
     },
-
 
 ];
 

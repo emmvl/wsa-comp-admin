@@ -14,7 +14,7 @@ function getMatchListSettings(data) {
 }
 
 function getData(data) {
-    console.log(data, "*** DATAT ****")
+   
     return {
         id: data.id,
         team1Score: data.team1Score,

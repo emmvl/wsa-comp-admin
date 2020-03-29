@@ -17,15 +17,15 @@ function* failSaga(result) {
 }
 
 function* errorSaga(error) {
-    console.log(error)
+   
     yield put({
         type: ApiConstants.API_LIVE_SCORE_CREATE_MATCH_ERROR,
         error: error,
         status: error.status
     });
     setTimeout(() => {
-        console.log(error, 'errorerror&**&*s')
-        message.error(error ? error.error : "Something went wrong.");
+      
+        message.error(error ? error.error ? error.error : "Something went wrong." : "Something went wrong.");
         // message.error("Something went wrong.");
     }, 800);
 }
@@ -42,10 +42,10 @@ export function* liveScoreMatchListSaga(action) {
             });
 
         } else {
-            // yield call(failSaga, result)
+            yield call(failSaga, result)
         }
     } catch (error) {
-        // yield call(errorSaga, error)
+        yield call(errorSaga, error)
     }
 }
 
@@ -72,7 +72,7 @@ export function* liveScoreAddMatchSaga(action) {
 
 ////Add Match
 export function* liveScoreCreateMatchSaga(action) {
-    console.log(action.data)
+    
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreCreateMatch, action.data, action.competitionId);
         if (result.status === 1) {
@@ -116,8 +116,6 @@ export function* liveScoreDeleteMatchSaga(action) {
 export function* liveScoreCompetitionVenuesList(action) {
     try {
         const result = yield call(CommonAxiosApi.getVenueList, action.competitionID);
-
-        console.log('bla bla', result)
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_COMPETITION_VENUES_LIST_SUCCESS,
@@ -152,17 +150,19 @@ export function* liveScoreMatchImportSaga(action) {
 }
 export function* liveScoreMatchSaga({ payload }) {
     try {
-        yield console.log(payload)
+        // yield console.log(payload)
         const result = yield call(LiveScoreAxiosApi.livescoreMatchDetails, payload)
         if (result.status === 1) {
             yield put({ type: ApiConstants.API_GET_LIVESCOREMATCH_DETAIL_SUCCESS, payload: result.result.data })
         } else {
-            yield setTimeout(() => { message.error('Something went wrong.') }, 800)
+            // yield setTimeout(() => { message.error('Something went wrong.') }, 800)
 
+            yield call(failSaga, result)
         }
-    } catch (e) {
-        yield put({ type: ApiConstants.API_GET_LIVESCOREMATCH_DETAIL_ERROR, payload: e })
-        yield setTimeout(() => { message.error('Something went wrong') }, 800)
+    } catch (error) {
+        // yield put({ type: ApiConstants.API_GET_LIVESCOREMATCH_DETAIL_ERROR, payload: e })
+        // yield setTimeout(() => { message.error('Something went wrong') }, 800)
+        yield call(errorSaga, error)
 
     }
 }

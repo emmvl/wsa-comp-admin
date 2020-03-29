@@ -1042,7 +1042,7 @@ class RegistrationForm extends Component {
                                     onMouseEnter={() => this.setState({ tooltipVisibleDraft: statusRefId == 2 ? true : false })}
                                     onMouseLeave={() => this.setState({ tooltipVisibleDraft: false })}
                                     visible={this.state.tooltipVisibleDraft}
-                                    title={AppConstants.compRegHaveBeenSent}>
+                                    title={ValidationConstants.compRegHaveBeenSent}>
                                     <Button
                                         className="save-draft-text"
                                         type="save-draft-text"
@@ -1061,7 +1061,7 @@ class RegistrationForm extends Component {
                                     onMouseEnter={() => this.setState({ tooltipVisiblePublish: statusRefId == 2 ? true : false })}
                                     onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
                                     visible={this.state.tooltipVisiblePublish}
-                                    title={AppConstants.compRegHaveBeenSent}>
+                                    title={ValidationConstants.compRegHaveBeenSent}>
                                     <Button
                                         className="open-reg-button"
                                         htmlType="submit"
@@ -1085,14 +1085,14 @@ class RegistrationForm extends Component {
         window.open(url, "_blank");
 
     userRegisrationLinkView = () => {
-        let formDataValue = this.props.registrationState.registrationFormData !== 0 ? 
-                        this.props.registrationState.registrationFormData[0] : [];
+        let formDataValue = this.props.registrationState.registrationFormData !== 0 ?
+            this.props.registrationState.registrationFormData[0] : [];
         let statusRefId = formDataValue.statusRefId
-        return(
+        return (
             <div>
-                { statusRefId == 2 ?
+                {statusRefId == 2 ?
                     <div className="formView">
-                        <div className="content-view pt-4" style={{marginBottom: '20px'}}>
+                        <div className="content-view pt-4" style={{ marginBottom: '20px' }}>
                             <div className="row">
                                 <div className="col-sm">
                                     <InputWithHead heading={AppConstants.endUserRegistrationUrl} />
@@ -1107,7 +1107,7 @@ class RegistrationForm extends Component {
                     </div> : null
                 }
             </div>
-           
+
         )
     }
 

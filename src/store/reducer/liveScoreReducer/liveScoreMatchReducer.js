@@ -160,7 +160,10 @@ const initialState = {
     start_post_date: null,
     displayTime: "",
     team1Players: [],
-    team2Players: []
+    team2Players: [],
+    divisionList: [],
+    teamResult: [],
+    roundList: []
 };
 
 function setMatchData(data) {
@@ -212,7 +215,7 @@ function liveScoreMatchReducer(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_MATCH_LIST_SUCCESS:
-            
+
             const result = getMatchListSettings(action.result.matches)
 
             // state.liveScoreMatchListData = result
@@ -305,7 +308,7 @@ function liveScoreMatchReducer(state = initialState, action) {
 
                 state.start_time = action.data
                 state.displayTime = action.data
-      
+
 
             } else {
 
@@ -392,7 +395,7 @@ function liveScoreMatchReducer(state = initialState, action) {
         case ApiConstants.API_GET_LIVESCOREMATCH_DETAIL_SUCCESS:
             let team1Player = liveScoreMatchModal.getMatchViewData(action.payload.team1players)
             let team2Player = liveScoreMatchModal.getMatchViewData(action.payload.team2players)
-            console.log(team1Player, 'team1Player**')
+
             return {
                 ...state,
                 onLoad: false,
@@ -441,6 +444,44 @@ function liveScoreMatchReducer(state = initialState, action) {
                 ...state,
                 onLoad: false,
 
+            };
+        case ApiConstants.API_LIVE_SCORE_DIVISION_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_LIVE_SCORE_DIVISION_SUCCESS:
+
+            return {
+                ...state,
+                onLoad: false,
+            };
+
+        case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_SUCCESS:
+
+            return {
+                ...state,
+                onLoad: false,
+                divisionList: action.result,
+                status: action.status
+            };
+
+        case ApiConstants.API_LIVE_SCORE_TEAM_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
+            console.log(action.result, 'API_LIVE_SCORE_TEAM_SUCCESS')
+            return {
+                ...state,
+                onLoad: false,
+                teamResult: action.result,
+                status: action.status
+
+            }
+        case ApiConstants.API_LIVE_SCORE_ROUND_LIST_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                roundList: action.result,
+                status: action.status
             };
     };
 

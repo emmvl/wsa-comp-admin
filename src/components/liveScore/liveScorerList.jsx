@@ -130,6 +130,7 @@ class LiveScorerList extends Component {
         }
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
+           
             this.props.liveScoreScorerListAction(id, 4, body)
         } else {
             history.push('/')
@@ -137,7 +138,6 @@ class LiveScorerList extends Component {
     }
     handlePaggination(page) {
         let offset = page ? 10 * (page - 1) : 0;
-        console.log(page)
         const body = {
             "paging": {
                 "limit": 10,

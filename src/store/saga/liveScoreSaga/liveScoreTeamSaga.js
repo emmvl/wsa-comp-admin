@@ -24,13 +24,13 @@ function* errorSaga(error) {
         status: error.status
     });
     setTimeout(() => {
-        message.error(error ? error.error : "Something went wrong.");
+        message.error(error ? error.error ? error.error : "Something went wrong." : "Something went wrong.");
     }, 800);
 }
 
 export function* liveScoreTeamSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreTeam, action.competitionID);
+        const result = yield call(LiveScoreAxiosApi.liveScoreTeam, action.competitionID, action.divisionId);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS,

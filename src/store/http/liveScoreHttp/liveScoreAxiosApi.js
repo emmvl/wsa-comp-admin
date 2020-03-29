@@ -77,8 +77,12 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token)
     },
 
-    liveScoreTeam(competitionID) {
-        var url = `/teams/list?competitionId=${competitionID}`;
+    liveScoreTeam(competitionID, divisionId) {
+        if (divisionId) {
+            var url = `/teams/list?competitionId=${competitionID}&divisionId=${divisionId}`;
+        } else {
+            var url = `/teams/list?competitionId=${competitionID}`;
+        }
         return Method.dataGet(url, localStorage.token)
     },
 
@@ -284,28 +288,23 @@ let LiveScoreAxiosApi = {
     },
 
     liveScoreAddEditManager(data, teamId, exsitingManagerId) {
-        let competitionID = localStorage.getItem("competitionId");
+        let body = data
+
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-        console.log(data, 'liveScoreAddEditManager')
-        let body = {
-            "id": data.id ? data.id : 0,
-            "firstName": data.firstName,
-            "lastName": data.lastName,
-            "mobileNumber": data.mobileNumber,
-            "email": data.email,
-            "teams": data.teams
-        }
-        if (exsitingManagerId) {
-            let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-            // var url = `/users/manager?teamId=${teamId}&userId=${exsitingManagerId}&competitionId=${id}`;
-            var url = `/users/manager?userId=${exsitingManagerId}&competitionId=${id}`;
-            return Method.dataPost(url, token)
-        } else {
-            let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-            // var url = `/users/manager?teamId=${teamId}&userId=${userId}&competitionId=${id}`;
-            var url = `/users/manager?userId=${userId}&competitionId=${id}`;
-            return Method.dataPost(url, token, body)
-        }
+        var url = `/users/manager?userId=${userId}&competitionId=${id}`;
+        return Method.dataPost(url, token, body)
+
+
+
+        // if (exsitingManagerId) {
+        //     let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        //     var url = `/users/manager?userId=${exsitingManagerId}&competitionId=${id}`;
+        //     return Method.dataPost(url, token)
+        // } else {
+        //     let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        //     var url = `/users/manager?userId=${userId}&competitionId=${id}`;
+        //     return Method.dataPost(url, token, body)
+        // }
     },
 
     // deleta match
@@ -466,34 +465,34 @@ let LiveScoreAxiosApi = {
     },
 
     liveScoreAddEditScorer(data, teamId, exsitingScorerrId) {
-        
+
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-            
-        
+
+
         let body = null
-        if(data.id){
-            body =  {
-                "id" : data.id,
+        if (data.id) {
+            body = {
+                "id": data.id,
                 "firstName": data.firstName,
                 "lastName": data.lastName,
                 "mobileNumber": data.mobileNumber,
                 "email": data.email,
                 "teams": data.teams
-                
+
             }
-        }else{
-            body =  {
+        } else {
+            body = {
 
                 "firstName": data.firstName,
                 "lastName": data.lastName,
                 "mobileNumber": data.contactNo,
                 "email": data.emailAddress,
                 "teams": data.teams
-              
+
             }
         }
-      
-       
+
+
         var url = `/users/member?&competitionId=${id}`;
         return Method.dataPost(url, token, body)
     },
@@ -503,22 +502,23 @@ let LiveScoreAxiosApi = {
     /// Assign Matches list
 
     getAssignMatchesList(competitionID, teamId, body) {
-       
+
         var url = `/matches/admin?competitionId=${competitionID}&teamId=${teamId}`;
         return Method.dataPost(url, token, body)
 
     },
 
     //change assign status
-    changeAssignStatus(roleId, records, teamID) {
+    changeAssignStatus(roleId, records, teamID, teamKey) {
         let body = JSON.stringify({
-            "matchId":records.id,
-            "roleId":roleId,
-            "teamId":teamID,
-            "userId":userId
+            "matchId": records.id,
+            "roleId": roleId,
+            "teamId": records[teamKey].id,
+            "userId": userId
         })
-        console.log(body)
-        var url = `https://livescores-api-dev.worldsportaction.com/roster`;
+
+      
+         var url = `https://livescores-api-dev.worldsportaction.com/roster`;
         return Method.dataPost(url, token, body)
     }
 };

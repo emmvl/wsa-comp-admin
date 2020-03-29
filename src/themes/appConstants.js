@@ -891,13 +891,18 @@ const AppConstants = {
   selectRound: "Select Round",
   linked: "Linked",
   importDivision: "Import Division",
-  primaryContact: "Primary Contact",
-  compRegHaveBeenSent: "Competition Registrations have been sent already",
+  primaryContact: "Primary Contacts",
   assignMatches: "Assign Matches",
   venueChange: 'Venue Change',
   importIncident: "Import Incident",
   endDate: "End Date",
   please_Sel_Fee: "Please fill the fees First",
+
+  short_Name: "Short Name",
+  endDate:"End Date",
+  otherInformation: "Other Information",
+  countryOfBirth: "Country of Birth",
+  disability: "Disability"
 };
 
 export default AppConstants;

@@ -46,7 +46,8 @@ const initialState = {
     notificationResult: [],
     deleteNews: [],
     newExpiryDate : null,
-    newExpiryTime : null
+    newExpiryTime : null,
+    newsBody : null
 };
 
 function liveScoreNewsState(state = initialState, action) {
@@ -94,6 +95,8 @@ function liveScoreNewsState(state = initialState, action) {
             state.newExpiryDate = moment(news_data.news_expire_date, "YYYY-MM-DD")
             state.expire_time = news_data.news_expire_date
             state.newExpiryTime = news_data.news_expire_date
+           
+       
             // state.expire_time = news_data.news_expire_date !== null ? moment(news_data.news_expire_date, 'HH:mm') : null
             // state.newExpiryDate = moment(news_data.news_expire_date, "YYYY-MM-DD")
 
@@ -146,7 +149,11 @@ function liveScoreNewsState(state = initialState, action) {
                 // utcTimestamp = new Date(dateFormat).toISOString();
                 // state.addEditNews['news_expire_date'] = utcTimestamp
 
-            } else {
+            }else if(action.key == "body"){
+                console.log(action.data)
+                state.newsBody = action.data
+            } 
+            else {
                 state.addEditNews[action.key] = action.data
             }
 

@@ -103,7 +103,7 @@ class LiveScoreAddNews extends Component {
     }
 
     onChangeEditorData = (event) => {
-        console.log("event", event)
+       
         this.props.liveScoreUpdateNewsAction(event, "body")
         // this.setState({ editorState: event })
     }
@@ -122,7 +122,7 @@ class LiveScoreAddNews extends Component {
                         editorClassName="demo-editor"
                         toolbarClassName="toolbar-class"
                         placeholder="News body"
-                        onChange={(e) => this.onChangeEditorData(e.blocks[0].text)}
+                        onChange={(e) => this.onChangeEditorData(e.blocks)}
                         onEditorStateChange={this.onEditorStateChange}
                         toolbar={{
                             inline: { inDropdown: true },
@@ -574,13 +574,26 @@ class LiveScoreAddNews extends Component {
                 let postDate = experyDate + " " + expiryTime + " " + "UTC"
                 let formatedDate = new Date(postDate).toISOString()
                 liveScoreNewsState.addEditNews.news_expire_date = formatedDate
-                console.log(formatedDate)
+                
 
+                console.log(data.newsBody)
 
+               if(data.newsBody){
+                let newstringArr = []
+                for(let i in data.newsBody){
+                    newstringArr.push(data.newsBody[i].text)
+                }
+
+                let bodyText =  newstringArr.join(`<br/>`)
+                // let bodyText = newstringArr.join("")
+              
+                liveScoreNewsState.addEditNews.body = bodyText
+               }
+               
                 let editData = liveScoreNewsState.addEditNews;
 
 
-
+                // console.log(editData)
 
 
                 this.props.liveScoreAddNewsAction(editData, mediaArry, newsId, this.state.key)

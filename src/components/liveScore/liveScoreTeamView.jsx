@@ -11,6 +11,7 @@ import { bindActionCreators } from 'redux';
 import { getTeamViewPlayerList, liveScoreDeleteTeam } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 import moment from "moment";
 import Loader from '../../customComponents/loader'
+import { isArrayNotEmpty } from '../../util/helpers'
 
 const { Content } = Layout;
 const { confirm } = Modal;
@@ -84,14 +85,12 @@ class LiveScoreTeamView extends Component {
     profileImageView = () => {
         // let data = this.state.data 
         let data = this.props.location.state ? this.props.location.state.tableRecord ? this.props.location.state.tableRecord : null : null
-        console.log(this.state.data, 'this.state.data')
-        const { teamData, managerData, } = this.props.liveScoreTeamState
+        const { teamData, managerData, managerList } = this.props.liveScoreTeamState
         const { name, logoUrl } = teamData ? teamData : ''
         const { mobileNumber, email } = managerData ? managerData : ''
-        console.log('76', name, mobileNumber, email, logoUrl)
-        if (this.props.liveScoreTeamState.onLoad) {
-            return <Loader visible={true} />
-        }
+        console.log('76', managerList)
+
+        let managerDataList = isArrayNotEmpty(managerList) ? managerList : []
         return (
             <div className="fluid-width mt-2">
                 {/* <img className="live-score-user-image" src={'https://www.si.com/specials/fittest50-2017/img/men/ngolo_kante.jpg'} alt="" height="80" width="80" />
@@ -121,7 +120,11 @@ class LiveScoreTeamView extends Component {
                             </div>
                             <span className='year-select-heading ml-3'>{AppConstants.name}</span>
                         </div>
-                        <span className="live-score-desc-text side-bar-profile-data">{name ? name : ''}</span>
+                        {/* <span className="live-score-desc-text side-bar-profile-data">{name ? name : ''}</span> */}
+                        {managerDataList.map((item) => (
+                            <span className="live-score-desc-text side-bar-profile-data">{(item.firstName || item.lastName) && item.firstName + " " + item.lastName}</span>
+                        ))
+                        }
                     </div>
 
                     <div className="live-score-side-desc-view">
@@ -131,7 +134,10 @@ class LiveScoreTeamView extends Component {
                             </div>
                             <span className='year-select-heading ml-3'>{AppConstants.email}</span>
                         </div>
-                        <span className="live-score-desc-text side-bar-profile-data">{email ? email : ""}</span>
+                        {managerDataList.map((item) => (
+                            <span className="live-score-desc-text side-bar-profile-data">{item.email}</span>
+                        ))
+                        }
                     </div>
 
                     <div className="live-score-side-desc-view">
@@ -141,7 +147,10 @@ class LiveScoreTeamView extends Component {
                             </div>
                             <span className='year-select-heading ml-3'>{AppConstants.contactNumber}</span>
                         </div>
-                        <span className="live-score-desc-text side-bar-profile-data">{mobileNumber ? mobileNumber : ''}</span>
+                        {managerDataList.map((item) => (
+                            <span className="live-score-desc-text side-bar-profile-data">{item.mobileNumber}</span>
+                        ))
+                        }
                     </div>
 
                 </div>
@@ -282,7 +291,7 @@ class LiveScoreTeamView extends Component {
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.screenName == 'fromMatchList' ? '2' : "3"} />
-                <Loader visible={this.props.liveScoreTeamState.onLoad_2} />
+                <Loader visible={this.props.liveScoreTeamState.onLoad} />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">
                         <div className="fluid-width" >

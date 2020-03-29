@@ -7,7 +7,8 @@ var venueChangeObj = {
     endTime: "",
     venueId: [],
     courtId: [],
-
+    changeToVenueId: [],
+    changeToCourtId: []
 }
 
 
@@ -20,6 +21,7 @@ const initialState = {
 
     venueData: "",
     courtData: "",
+    courtDataForChange: "",
 };
 
 function LiveScoreVenueChange(state = initialState, action) {
@@ -31,11 +33,21 @@ function LiveScoreVenueChange(state = initialState, action) {
 
             if (action.key == "venueId") {
                 state.venueChangeData[action.key] = action.data
-                // new_object[action.key] = action.data
+                state.venueChangeData['courtId'] = []
                 let index = state.venueData.findIndex(x => x.venueId == action.data)
                 if (index > -1) {
                     let courts = state.venueData[index].venueCourts
                     state.courtData = courts
+
+                }
+            } if (action.key == "changeToVenueId") {
+                state.venueChangeData[action.key] = action.data
+                state.venueChangeData['changeToCourtId'] = []
+
+                let index = state.venueData.findIndex(x => x.venueId == action.data)
+                if (index > -1) {
+                    let courts = state.venueData[index].venueCourts
+                    state.courtDataForChange = courts
 
                 }
             } else {

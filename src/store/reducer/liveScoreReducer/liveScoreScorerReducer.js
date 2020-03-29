@@ -41,7 +41,6 @@ function genrateTeamId(teamIdArr) {
 
 
 function getTeamObj(teamSelectId, teamArr) {
-    
     let teamObj = []
     let obj = ''
     for (let i in teamArr) {
@@ -52,7 +51,6 @@ function getTeamObj(teamSelectId, teamArr) {
                     "id": teamArr[i].id
                 }
                 teamObj.push(obj)
-                break;
             }
         }
     }
@@ -80,7 +78,7 @@ function liveScoreScorerState(state = initialState, action) {
             }
 
         case ApiConstants.API_LIVE_SCORE_DIVISION_SUCCESS:
-       
+            console.log(action.result, 'selectedTeams')
             return {
                 ...state,
                 onLoad: false,
@@ -91,16 +89,16 @@ function liveScoreScorerState(state = initialState, action) {
 
             if (action.key == 'teamId') {
                 let selectedTeams = getTeamObj(action.data, state.teamResult)
+                console.log(selectedTeams, 'selectedTeams')
                 state.scorerData['teams'] = selectedTeams
                 state.teamId = action.data
             } else if (action.key == 'scorerRadioBtn') {
                 state[action.key] = action.data
                 state.existingScorerId = null
             } else if (action.key == 'isEditScorer') {
-                
+
                 state.scorerData = action.data
 
-                console.log(state.scorerData)
                 // state.scorerData.id = action.data.id
                 // state.scorerData.firstName = action.data.firstName
                 // state.scorerData.lastName = action.data.lastName
@@ -108,7 +106,7 @@ function liveScoreScorerState(state = initialState, action) {
                 // state.scorerData.email = action.data.email
 
                 // let getTeamId = genrateTeamId(action.data.teams)
-                
+
                 // state.teamId = action.data.id
                 // state.teamId = getTeamId
                 // let selectedTeams = getTeamObj(action.data, state.teamResult)
@@ -116,11 +114,11 @@ function liveScoreScorerState(state = initialState, action) {
 
             } else if (action.key == 'isAddScorer') {
                 scorerObj = {
-                        firstName: "",
-                        lastName: "",
-                        emailAddress: "",
-                        contactNo: "",
-                        teams: []  
+                    firstName: "",
+                    lastName: "",
+                    emailAddress: "",
+                    contactNo: "",
+                    teams: []
                 }
                 state.scorerData = scorerObj
                 // state.managerData = scorerObj
@@ -163,23 +161,23 @@ function liveScoreScorerState(state = initialState, action) {
                 assignMatchListPage: 0,
                 assignMatchTotalCount: action.result.page.totalCount,
             }
-        
+
         case ApiConstants.API_LIVESCORE_ASSIGN_CHANGE_STATUS_LOAD:
-            return{
+            return {
                 ...state,
-                onLoad : true
-            }    
+                onLoad: true
+            }
 
         case ApiConstants.API_LIVESCORE_ASSIGN_CHANGE_STATUS_SUCCESS:
 
-            console.log( action.result)
-            // let index = action.index
-            // state.assignMatches[index].scorer1.rosterStatus = "YES"
+            console.log( action.result, action.scorerKey)
+            let index = action.index
+            // state.assignMatches[index][action.scorerKey] = action.result
             
             return {
                 ...state,
                 onLoad: false,
-            
+
             }
 
 

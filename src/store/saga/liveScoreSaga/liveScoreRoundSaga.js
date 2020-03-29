@@ -38,3 +38,21 @@ export function* liveScoreRoundSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+export function* liveScoreRoundListSaga(action) {
+
+    try {
+        const result = yield call(LiveScoreAxiosApi.liveScoreRound, action.competitionID);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_LIVE_SCORE_ROUND_LIST_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

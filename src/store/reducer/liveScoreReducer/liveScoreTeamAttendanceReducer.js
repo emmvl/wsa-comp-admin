@@ -20,14 +20,13 @@ function liveScoreTeamAttendanceState(state = initialState, action) {
                 onLoad: true,
             }
         case ApiConstants.API_LIVE_SCORE_TEAM_ATTENDANCE_LIST_SUCCESS:
-            let result = action.result
+            let result = action.result.stats
             state.teamAttendanceResult = result
 
             return {
                 ...state,
                 onLoad: false,
                 status: action.status,
-                teamAttendanceResult: result,
                 teamAttendancePage: action.result.page.currentPage,
                 teamAttendanceTotalCount: action.result.page.totalCount
             }

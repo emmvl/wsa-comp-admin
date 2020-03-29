@@ -194,7 +194,7 @@ class RegistrationMembershipFee extends Component {
             if (!err) {
                 if (this.state.membershipTabKey == "1") {
                     const { yearRefId, membershipProductName, validityRefId } = values;
-                    let membershipTypesData = this.props.registrationState.getDefaultMembershipProductTypes;
+                    let membershipTypesData = JSON.parse(JSON.stringify(this.props.registrationState.getDefaultMembershipProductTypes));
                     let finalMembershipTypes = []
                     membershipTypesData.map((item) => {
                         if (item.isMemebershipType == true) {

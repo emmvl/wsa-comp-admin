@@ -271,6 +271,86 @@ const columnsManager = [
         sorter: (a, b) => a.affiliate.localeCompare(b.affiliate),
     }
 ];
+
+const columnsPersonalAddress = [
+    {
+        title: 'Street',
+        dataIndex: 'street',
+        key: 'street'
+    },
+    {
+        title: 'Suburb',
+        dataIndex: 'suburb',
+        key: 'suburb'
+    },
+    {
+        title: 'State',
+        dataIndex: 'state',
+        key: 'state'
+    },
+    {
+        title: 'Postcode',
+        dataIndex: 'postalcode',
+        key: 'postalcode'
+    },
+    {
+        title: 'Email',
+        dataIndex: 'email',
+        key: 'email',
+    }
+];
+
+const columnsPersonalPrimaryContacts = [
+    {
+        title: 'Name',
+        dataIndex: 'parentName',
+        key: 'parentName'
+    },
+    {
+        title: 'Street',
+        dataIndex: 'street',
+        key: 'street'
+    },
+    {
+        title: 'Suburb',
+        dataIndex: 'suburb',
+        key: 'suburb'
+    },
+    {
+        title: 'State',
+        dataIndex: 'state',
+        key: 'state'
+    },
+    {
+        title: 'Postcode',
+        dataIndex: 'postalcode',
+        key: 'postalcode'
+    },
+    {
+        title: 'Phone Number',
+        dataIndex: 'mobileNumber',
+        key: 'mobileNumber'
+    },
+    {
+        title: 'Email',
+        dataIndex: 'email',
+        key: 'email',
+    }
+];
+
+const columnsPersonalEmergency = [
+    {
+        title: 'Name',
+        dataIndex: 'emergencyContactName',
+        key: 'emergencyContactName'
+    },
+    {
+        title: 'Phone Number',
+        dataIndex: 'emergencyContactNumber',
+        key: 'emergencyContactNumber'
+    }
+];
+
 class UserModulePersonalDetail extends Component{
     constructor(props) {
         super(props);
@@ -279,7 +359,7 @@ class UserModulePersonalDetail extends Component{
             tabKey: "1",
             competition: {
                 team:{teamId: 0, teamName: ""},
-                divisionName: "",competitionUniqueKey: "",
+                divisionName: "",competitionId: null,
                 competitionName:"",year:0
             },
             loading: false,
@@ -309,7 +389,7 @@ class UserModulePersonalDetail extends Component{
             }
         }
 
-        if(this.state.competition.competitionUniqueKey == "" && personal.competitions != undefined)
+        if(this.state.competition.competitionId == null && personal.competitions != undefined)
         {
             this.setState({competition: personal.competitions[0]})
             this.tabApiCalls(this.state.tabKey,personal.competitions[0], this.state.userId );
@@ -325,7 +405,7 @@ class UserModulePersonalDetail extends Component{
         let userState = this.props.userState;
         let personal = userState.personalData;
 
-        let competition = personal.competitions.find(x=>x.competitionUniqueKey === value);
+        let competition = personal.competitions.find(x=>x.competitionId === value);
         this.setState({competition: competition});
         this.tabApiCalls(this.state.tabKey, competition, this.state.userId);
     }
@@ -339,7 +419,7 @@ class UserModulePersonalDetail extends Component{
     tabApiCalls = (tabKey, competition, userId) => {
         let payload = {
             userId: userId,
-            competitionUniqueKey: competition.competitionUniqueKey
+            competitionId: competition.competitionId
         }
         if(tabKey == "1")
         {
@@ -363,7 +443,7 @@ class UserModulePersonalDetail extends Component{
     hanleActivityTableList = (page, userId, competition, key) => {
         let filter = 
         {
-            competitionUniqueKey: competition.competitionUniqueKey,
+            competitionId: competition.competitionId,
             userId: userId,
             paging : {
                 limit : 10,
@@ -383,7 +463,7 @@ class UserModulePersonalDetail extends Component{
     handleRegistrationTableList = (page, userId, competition) => {
         let filter = 
         {
-            competitionUniqueKey: competition.competitionUniqueKey,
+            competitionId: competition.competitionId,
             userId: userId,
             paging : {
                 limit : 10,
@@ -457,9 +537,9 @@ class UserModulePersonalDetail extends Component{
                         <Select
                             style={{ width: "100%", paddingRight: 1, paddingTop: '15px' }}
                             onChange={(e) => this.onChangeSetValue(e)}
-                            value={this.state.competition.competitionUniqueKey}>
+                            value={this.state.competition.competitionId}>
                             {(personal.competitions || []).map((comp, index) => (
-                                <Option key={comp.competitionUniqueKey} value={comp.competitionUniqueKey}>{comp.competitionName}</Option>
+                                <Option key={comp.competitionId} value={comp.competitionId}>{comp.competitionName}</Option>
                             ))}
                         </Select>
                 </div>
@@ -470,7 +550,10 @@ class UserModulePersonalDetail extends Component{
                         </div>
                         <span className='year-select-heading ml-3'>{AppConstants.team}</span>
                     </div>
-                    <span className="live-score-desc-text side-bar-profile-data">{this.state.competition.team!= null ? this.state.competition.team.teamName : ""}</span>
+                    {(this.state.competition.teams || []).map((item, index) => (
+                        <div key={item.teamId} className="live-score-desc-text side-bar-profile-data">{item.teamName}</div>
+                    ))}
+                    
                 </div>
                 <div className="live-score-side-desc-view">
                     <div className="live-score-title-icon-view">
@@ -606,77 +689,53 @@ class UserModulePersonalDetail extends Component{
     personalView = () => {
         let userState = this.props.userState;
         let personal = userState.personalData;
-        let personalByCompData = userState.personalByCompData;
+        let personalByCompData = userState.personalByCompData!= null ? userState.personalByCompData : [];
+        let primaryContacts = personalByCompData.length > 0 ? personalByCompData[0].primaryContacts : [];
         return(
-            <div>
-                <div style={{ marginBottom: "7%" }} >
-                    <div className="user-module-row-heading">{AppConstants.address}</div>
-                    <div className="user-module-divider"></div>
-                    <div className="user-module-personal-row" style={{marginTop: '10px'}}>
-                        <div className="col-sm-5" style={{paddingLeft: '0px'}}>
-                            {personalByCompData.street1 == undefined ? "" : personalByCompData.street1  + " " + 
-                            personalByCompData.street2  == undefined ? "" : personalByCompData.street2+ " " + 
-                            personalByCompData.suburb == undefined ? "": personalByCompData.suburb + " "+ 
-                            personalByCompData.state == undefined ? " ": personalByCompData.state}
-                        </div>
-                        <div  className="col-sm-3" style={{paddingLeft: '0px'}}>
-                            {personalByCompData.mobileNumber}
-                        </div>
-                        <div  className="col-sm-3" style={{paddingLeft: '0px'}}>
-                            {personalByCompData.email}
-                        </div>
+            <div className="comp-dash-table-view mt-2">
+                <div className="user-module-row-heading">{AppConstants.address}</div>
+                <div className="table-responsive home-dash-table-view">
+                    <Table className="home-dashboard-table"
+                    columns={columnsPersonalAddress}
+                    dataSource={personalByCompData} 
+                    pagination={false}
+                    />
+                </div>
+
+                <div className="user-module-row-heading" style={{marginTop: '30px'}}>{AppConstants.primaryContact}</div>
+                <div className="table-responsive home-dash-table-view">
+                    <Table className="home-dashboard-table"
+                    columns={columnsPersonalPrimaryContacts}
+                    dataSource={primaryContacts} 
+                    pagination={false}
+                    />
+                </div>
+
+                <div className="user-module-row-heading" style={{marginTop: '30px'}}>{AppConstants.emergencyContacts}</div>
+                <div className="table-responsive home-dash-table-view">
+                    <Table className="home-dashboard-table"
+                    columns={columnsPersonalEmergency}
+                    dataSource={userState.personalEmergency} 
+                    pagination={false}
+                    />
+                </div>
+                <div className="user-module-row-heading" style={{marginTop: '30px'}}>{AppConstants.otherInformation}</div>
+                <div className="table-responsive home-dash-table-view" style={{display: 'flex', flexDirection: 'column'}}>
+                    <div className="other-info-row" style={{paddingTop: '10px'}}>
+                        <div className="year-select-heading other-info-label" >{AppConstants.countryOfBirth}</div>
+                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personal.countryName}</div>
                     </div>
-                </div>
-                <div style={{ marginBottom: "7%" }} >
-                    <div className="user-module-row-heading">{AppConstants.primaryContact}</div>
-                    <div className="user-module-divider"></div>
-                    
-                    {(personalByCompData.primaryContacts || []).map((item, index) => (
-                        <div key={item.userId} style={{marginTop: '10px', color: 'var(--app-1b1b34)', fontSize: '14px', fontFamily: 'inter-medium'}}>
-                            <div style={{fontSize: '15px', marginBottom: '10px'}}>
-                                {item.parentName}
-                            </div>
-                            <div style={{display: 'flex', marginBottom: '20px'}}>
-                            <div className="col-sm-5 user-module-personal-row">
-                            {item.street1 == null ? "" :  item.street1+ " " + 
-                            item.street2 == null ? "" : item.street2+ " " + 
-                            item.suburb == null ? "" : item.suburb + " "+ 
-                            item.state == null ? "" : item.state}
-                            </div>
-                            <div className="col-sm-3 user-module-personal-row">{item.mobileNumber}</div>
-                                <div className="col-sm-3 user-module-personal-row">{item.email}</div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-                <div style={{ marginBottom: "7%" }} >
-                    <div className="user-module-row-heading">{AppConstants.emergencyContacts}</div>
-                    <div className="user-module-divider"></div>
-                    <div  style={{marginTop: '10px', display:'flex'}}>
-                        <div className="col-sm-4 user-module-personal-row">{personal.emergencyContactName}</div>
-                        <div className="col-sm-4 user-module-personal-row">{personal.emergencyContactNumber}</div>
+                    <div className="other-info-row">
+                        <div className="year-select-heading other-info-label">{AppConstants.nationalityReference}</div>
+                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personal.nationalityName}</div>
                     </div>
-                </div>
-                <div style={{ marginBottom: "7%" }} >
-                    <div className="user-module-row-heading">{AppConstants.otherInformation}</div>
-                    <div className="user-module-divider"></div>
-                    <div style={{display: 'flex', marginTop: '10px'}}>
-                        <div className="col-sm-3" style={{paddingLeft: '0px'}}>
-                            <div style={{fontSize: '14px'}}>{AppConstants.countryOfBirth}</div>
-                            <div className="user-module-personal-row">{personal.countryName}</div>
-                        </div>
-                        <div className="col-sm-3" style={{paddingLeft: '0px'}}>
-                            <div style={{fontSize: '14px'}}>{AppConstants.nationalityReference}</div>
-                            <div className="user-module-personal-row">{personal.nationalityName}</div>
-                        </div>
-                        <div className="col-sm-4" style={{paddingLeft: '0px'}}>
-                            <div style={{fontSize: '14px'}}>{AppConstants.childLangSpoken}</div>
-                            <div className="user-module-personal-row">{personal.languages}</div>
-                        </div>
-                        <div className="col-sm-3" style={{paddingLeft: '0px'}}>
-                            <div style={{fontSize: '14px'}}>{AppConstants.disability}</div>
-                            <div className="user-module-personal-row">{personal.isDisability == 0 ? "False": "True"}</div>
-                        </div>
+                    <div className="other-info-row">
+                        <div className="year-select-heading other-info-label">{AppConstants.childLangSpoken}</div>
+                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personal.languages}</div>
+                    </div>
+                    <div className="other-info-row">
+                        <div className="year-select-heading other-info-label" style={{paddingBottom: '20px'}}>{AppConstants.disability}</div>
+                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personal.isDisability == 0 ? "No": "Yes"}</div>
                     </div>
                 </div>
             </div>
@@ -690,18 +749,16 @@ class UserModulePersonalDetail extends Component{
             <div>
                 {
                     (medical || []).map((item, index) => (
-                        <div key={item.id}>
-                            <div style={{ marginBottom: "7%" }} >
-                                <div className="user-module-row-heading">{AppConstants.existingMedConditions}</div>
-                                <div className="user-module-divider"></div>
-                                <div style={{color: 'var(--app-1b1b34)', fontSize: '14px', fontFamily: 'inter-medium', marginTop: '10px'}}>
+                        <div key={item.id} className="table-responsive home-dash-table-view">
+                            <div style={{ marginBottom: "1%", display: 'flex' }} >
+                                <div className="year-select-heading other-info-label col-sm-2">{AppConstants.existingMedConditions}</div>
+                                <div className="live-score-desc-text side-bar-profile-data other-info-font" style={{textAlign: 'left'}}>
                                     {item.existingMedicalCondition}
                                 </div>
                             </div>
-                            <div style={{ marginBottom: "7%" }} >
-                                <div className="user-module-row-heading">{AppConstants.redularMedicalConditions}</div>
-                                <div className="user-module-divider"></div>
-                                <div style={{color: 'var(--app-1b1b34)', fontSize: '14px', fontFamily: 'inter-medium', marginTop: '10px'}}>
+                            <div style={{ marginBottom: "3%", display: 'flex' }} >
+                                <div className="year-select-heading other-info-label col-sm-2">{AppConstants.redularMedicalConditions}</div>
+                                <div className="live-score-desc-text side-bar-profile-data other-info-font" style={{textAlign: 'left'}}>
                                     {item.regularMedication}
                                 </div>
                             </div>

@@ -6,12 +6,13 @@ import AppConstants from "../../themes/appConstants";
 import { NavLink } from "react-router-dom";
 import { liveScore_MatchFormate } from '../../themes/dateformate'
 import { assignMatchesAction, changeAssignStatus } from '../../store/actions/LiveScoreAction/liveScoreScorerAction'
+import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import AppImages from "../../themes/appImages";
 import history from "../../util/history";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
+import { isArrayNotEmpty } from '../../util/helpers';
 import { parseTwoDigitYear } from "moment";
 
 const { Content } = Layout;
@@ -26,213 +27,193 @@ function tableSort(a, b, key) {
     return stringA.localeCompare(stringB)
 }
 
-const matches = [
+///columens data
+const columns1 = [
+
     {
-        "id": 1923,
-        "team1Score": null,
-        "team2Score": null,
-        "startTime": null,
-        "team1Id": null,
-        "team2Id": null,
-        "competitionId": null,
-        "divisionId": null,
-        "venueCourtId": null,
-        "type": null,
-        "matchDuration": null,
-        "breakDuration": null,
-        "mnbMatchId": null,
-        "mainBreakDuration": null,
-        "scorerStatus": "SCORER1",
-        "mnbPushed": null,
-        "created_at": "2020-03-17T10:13:38.000Z",
-        "updated_at": "2020-03-17T10:13:38.000Z",
-        "deleted_at": null,
-        "extraTimeDuration": null,
-        "matchEnded": 0,
-        "matchStatus": null,
-        "endTime": null,
-        "team1ResultId": null,
-        "team2ResultId": null,
-        "roundId": null,
-        "originalStartTime": null,
-        "pauseStartTime": null,
-        "totalPausedMs": 0,
-        "centrePassStatus": null,
-        "centrePassWonBy": null,
-        "team1": {
-            "id": 142,
-            "name": "Wakehurst S05",
-            "logoUrl": "https://firebasestorage.googleapis.com/v0/b/world-sport-action.appspot.com/o/MWNA%2FClub%20Logos%2Flogo_0000_wakehurst.jpg?alt=media&token=6a5cda80-3a28-4ef4-aef9-ce897770b2b6"
-        },
-        "team2": {
-            "id": 562,
-            "name": "Ambulance",
-            "logoUrl": "https://www.googleapis.com/download/storage/v1/b/world-sport-action.appspot.com/o/Ambulance%2Fteam_562.jpeg?generation=1585172673468157&alt=media"
-        },
-        "scorer1": null,
-        "scorer2": null
+        title: 'Match Id',
+        dataIndex: 'id',
+        key: 'id',
+        sorter: (a, b) => tableSort(a, b, "id"),
+        render: (id) => <NavLink to={{
+            pathname: '/liveScoreMatchDetails',
+            state: { matchId: id }
+        }} >
+            <span class="input-heading-add-another pt-0" >{id}</span>
+        </NavLink>
     },
+    {
+        title: 'Start Time',
+        dataIndex: 'startTime',
+        key: 'startTime',
+        sorter: (a, b) => tableSort(a, b, "startTime"),
+        render: (startTime) =>
+            <span>{startTime ? liveScore_MatchFormate(startTime) : ""}</span>
+    },
+    {
+        title: 'Team 1',
+        dataIndex: 'team1',
+        key: 'team1',
+        sorter: (a, b) => tableSort(a, b, "team1"),
+        render: (team1, records, index) => {
+            return (
+                <div className="row" style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
+                    <div className="col-sm-1">
+                        <img className="dot-image"
+                            src={records.scorer1 ? records.scorer1.rosterStatus? records.scorer1.rosterStatus = "YES" ? AppImages.greenDot : AppImages.redDot :AppImages.yellowDot : AppImages.greyDot}
+                            alt="" width="12" height="12" />
+                    </div>
+                    <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
+                        <span style={{ overflowX: "auto", whiteSpace: "nowrap" }} class="input-heading-add-another pt-0 " >{records.team1.name} ({records.scorer1? records.scorer1.firstName +" "+records.scorer1.lastName  : "Unassign"} )}</span>
+                    </div>
+                    <div className="col-sm" >
+                        <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer1", "team1")} class="input-heading-add-another pt-0" >{records.scorer1 ? "Unassign" : "Assign"}</span>
+                    </div>
+                </div>
+            )
+        }
+    }
 ]
 
 
-///columens data
-// const 
+const columns2 = [
+
+    {
+        title: 'Match Id',
+        dataIndex: 'id',
+        key: 'id',
+        sorter: (a, b) => tableSort(a, b, "id"),
+        render: (id) => <NavLink to={{
+            pathname: '/liveScoreMatchDetails',
+            state: { matchId: id }
+        }} >
+            <span class="input-heading-add-another pt-0" >{id}</span>
+        </NavLink>
+    },
+    {
+        title: 'Start Time',
+        dataIndex: 'startTime',
+        key: 'startTime',
+        sorter: (a, b) => tableSort(a, b, "startTime"),
+        render: (startTime) =>
+            <span>{startTime ? liveScore_MatchFormate(startTime) : ""}</span>
+    },
+    {
+        title: 'Team 1',
+        dataIndex: 'team1',
+        key: 'team1',
+        width:"40%",
+        sorter: (a, b) => tableSort(a, b, "team1"),
+        render: (team1, records, index) => {
+            return (
+                <div className="row" style={{ display: 'flex', justifyContent: 'center' }}>
+                    <div className="col-sm-1">
+                        <img className="dot-image"
+                            src={records.scorer1 ? records.scorer1.rosterStatus? records.scorer1.rosterStatus = "YES" ? AppImages.greenDot : AppImages.redDot :AppImages.yellowDot : AppImages.greyDot}
+                            alt="" width="12" height="12" />
+                    </div>
+                    <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
+                        <span  class="input-heading-add-another pt-0 " >{records.team1.name} ( {records.scorer1?  records.scorer1.firstName +" "+records.scorer1.lastName  : "Unassign"} )</span>
+                    </div>
+                    <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer1", "team1")} class="input-heading-add-another pt-0" >{records.scorer1 ? "Unassign" : "Assign"}</span>
+                    </div>
+                </div>
+            )
+        }
+    },
+
+    {
+        title: 'Team 2',
+        dataIndex: 'team2',
+        key: 'team2',
+        width:"40%",
+        sorter: (a, b) => tableSort(a, b, "team2"),
+        render: (team2, records, index) => {
+            return (
+                <div className="row" style={{ display: 'flex', justifyContent: 'center' }}>
+                    <div className="col-sm-1">
+                        <img className="dot-image"
+                           src={records.scorer2 ? records.scorer2.rosterStatus? records.scorer2.rosterStatus = "YES" ? AppImages.greenDot : AppImages.redDot :AppImages.yellowDot : AppImages.greyDot}
+                            alt="" width="12" height="12" />
+                    </div>
+                    <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
+                        <span  class="input-heading-add-another pt-0" >{records.team2.name} ({records.scorer2?  records.scorer2.firstName +" "+ records.scorer2.lastName  : "Unassign"} )</span>
+                    </div>
+                    <div className="col-sm"style={{ display: 'flex', justifyContent: 'flex-end' }} >
+                        <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer2", "team2")} class="input-heading-add-another pt-0" >{records.scorer2 ? "Unassign" : "Assign"}</span>
+                    </div>
+                </div>
+            )
+        }
+    },
+    // {
+    //     title: '',
+    //     dataIndex: 'scorer',
+    //     key: 'scorer',
+    //     render: (team1, records, index) => {
+    //         return <span onClick={() => this.onChangeStatus(index, records)} class="input-heading-add-another pt-0" >{records.scorer2 ? "Assign" : "Unassign"}</span>
+    //     }
+    // }
+]
+
+
 
 class LiveScoreAssignMatch extends Component {
     constructor(props) {
         super(props);
+        const { scoringType } = JSON.parse(getLiveScoreCompetiton())
         this.state = {
-            filter:'',
+            filter: '',
             competitionId: 0,
-            teamID : this.props.location.state ? this.props.location.state.teams : null,
-            columns:[
-
-                {
-                    title: 'Match Id',
-                    dataIndex: 'id',
-                    key: 'id',
-                    sorter: (a, b) => tableSort(a, b, "id"),
-                    render: (id) => <NavLink to={{
-                        pathname: '/liveScoreMatchDetails',
-                        state: { matchId: id }
-                    }} >
-                        <span class="input-heading-add-another pt-0" >{id}</span>
-                    </NavLink>
-                },
-                {
-                    title: 'Start Time',
-                    dataIndex: 'startTime',
-                    key: 'startTime',
-                    sorter: (a, b) => tableSort(a, b, "startTime"),
-                    render: (startTime) =>
-                        <span>{startTime ? liveScore_MatchFormate(startTime) : ""}</span>
-                },
-                {
-                    title: 'Team 1',
-                    dataIndex: 'team1',
-                    key: 'team1',
-                    sorter: (a, b) => tableSort(a, b, "team1"),
-                    render: (team1, records, index) => {
-                        return (
-                            <div className="row" style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
-                                <div className="col-sm-1">
-                                    <img className="dot-image"
-                                        src={records.scorer1 ? records.scorer1.rosterStatus = "YES" ? AppImages.greenDot : AppImages.redDot : AppImages.greyDot}
-                                        alt="" width="12" height="12" />
-                                </div>
-                                <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
-                                    <span style={{overflowX: "auto" ,whiteSpace: "nowrap"}} class="input-heading-add-another pt-0 " >{records.team1.name}</span>
-                                </div>
-                                <div className="col-sm-2" >
-                                <span style={{textDecoration:"underline"}} onClick={()=>this.onChangeStatus(index, records)} class="input-heading-add-another pt-0" >{records.scorer1? "Assign": "Unassign"}</span>
-                                </div>
-                            </div>
-                        )
-                    }
-                },
-                //  {
-                //     title: '',
-                //     dataIndex: 'scorer',
-                //     key: 'scorer',
-                //     render: (team1, records, index) => {
-                //         return <span onClick={()=>this.onChangeStatus(index, records)} class="input-heading-add-another pt-0" >{records.scorer1? "Assign": "Unassign"}</span>
-                // }
-            
-            // {
-            //     title: 'Team 2',
-            //     dataIndex: 'team2',
-            //     key: 'team2',
-            //     sorter: (a, b) => tableSort(a, b, "team2"),
-            //     render: (team2, records) => {
-            //         if(records.scorer2){  
-            //             return (
-            //             <div className="row" style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
-            //                 <div className="col-sm-1">
-            //                     <img className="dot-image"
-            //                         src={records.scorer1 ? records.scorer2.rosterStatus = "YES" ? AppImages.greenDot : AppImages.redDot : AppImages.greyDot}
-            //                         alt="" width="12" height="12" />
-            //                 </div>
-            //                 <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
-            //                     <span class="input-heading-add-another pt-0" >{records.team2.name}</span>
-            //                 </div>
-            //             </div>
-            //         )
-            //         }else{
-            //             return(
-            //                 <span/>
-            //                 )
-            //         }
-            //     }
-            // },
-            //  {
-            //     title: '',
-            //     dataIndex: 'scorer',
-            //     key: 'scorer',
-            //     render: (team1, records, index) => {
-            //         if(records.scorer2){
-            //             return <span onClick={()=>this.onChangeStatus(index, records)} class="input-heading-add-another pt-0" >{records.scorer2? "Assign": "Unassign"}</span>
-            //         }
-            //         else{
-            //             return <span/>
-            //         }
-            // }
-            // }
-
-            ],
+            teamID: null,
+            columns:scoringType == "SINGLE"?columns1:columns2,
             lodding: false
-            
+
         };
-        console.log( this.props.location.state)
-        // this_obj = this
+        this_obj = this
     }
 
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({lodding:true})
-        const body = {
-            "paging": {
-                "limit": 10,
-                "offset": 0
-            }
+        this.setState({ lodding: true })
+       
+        if (id !== null) {
+            this.props.getliveScoreTeams(id)
+          
+        } else {
+            history.push('/')
         }
-        this.props.assignMatchesAction(id, this.state.teamID, body)
+      
     }
 
-    componentDidUpdate(nextProps){
-        // if(nextProps.liveScoreScorerState.assignMatches !== this.props.liveScoreScorerState.assignMatches ){
-        //     if(this.state.lodding == true && this.props.liveScoreScorerState.onLoad == false){
-        //         this.setState({lodding:false})
-        //         let array = this.props.liveScoreScorerState.assignMatches
-        //         // this.addColums(array)
-        //     }
-        // }
+    componentDidUpdate(nextProps) {
+      if(nextProps.liveScoreScorerState.teamResult !== this.props.liveScoreScorerState.teamResult ){
+        if(this.state.lodding == true && this.props.liveScoreScorerState.onLoad == false){
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            const body = {
+                "paging": {
+                    "limit": 10,
+                    "offset": 0
+                }
+                
+            }
+            let teamId = this.props.liveScoreScorerState.teamResult[0].id
+            this.props.assignMatchesAction(id, teamId, body)
+            this.setState({loading:false,teamID:teamId })
+        }
+      }
     }
 
     /// on status change 
-    onChangeStatus(index, data){
-        // alert(index)
-        
-        this.props.changeAssignStatus(index, data,4, this.state.teamID )
-    
+    onChangeStatus(index, data, scorerKey, teamKey) {
+        this.props.changeAssignStatus(index, data, 4, this.state.teamID, scorerKey, teamKey)
     }
-
-
-
-
-    /// Add columns
-
-    addColums(array){
-        const newColumn = this.state.columns
-        for(let i in array){
-            // if
-        }
-    }
-
 
     /// On change values  
-    handlePaggination=(page)=>{
+    handlePaggination = (page) => {
         let offset = page ? 10 * (page - 1) : 0;
-        this.setState({lodding:true})
+        this.setState({ lodding: true })
         const body = {
             "paging": {
                 "limit": 10,
@@ -245,8 +226,25 @@ class LiveScoreAssignMatch extends Component {
     }
 
 
+    onChangeTeam(filter){
+       
+        this.setState({teamID :filter.filter})
+        const body = {
+            "paging": {
+                "limit": 10,
+                "offset": 0
+            },
+            "searchText": ""
+        }
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        this.props.assignMatchesAction(id, filter.filter, body)
+    }
+
     ///////view for breadcrumb
     headerView = () => {
+        
+        let teamData = isArrayNotEmpty(this.props.liveScoreScorerState.teamResult) ? this.props.liveScoreScorerState.teamResult :[]
+        console.log(teamData)
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 < div className="row" >
@@ -267,16 +265,24 @@ class LiveScoreAssignMatch extends Component {
                                 className="year-select"
                                 style={{ display: "flex", alignItems: "flex-start" }}
                                 // onChange={(selectStatus) => this.setState({ selectStatus })}
-                                // onChange={(filter) => this.setFilterValue({ filter })}
-                                value={this.state.filter} >
-                                <Option value={AppConstants.period}>{AppConstants.periods}</Option>
-                                <Option value={AppConstants.minute}>{AppConstants.minutes}</Option>
-                                <Option value={AppConstants.totalGame}>{AppConstants.totalGames}</Option>
+                                    onChange={(filter) => this.onChangeTeam({ filter })}
+                                    value={this.state.teamID} >
+                                    {
+                                        teamData.map((item, index)=>{
+                                            return (
+                                                <Option key={"teamname" + item.id} value={item.id}>
+                                                {item.name}
+                                            </Option>
+                                            )
+                                        })
+                                    }
+                               
+                            
                             </Select>
 
-                            
+
                         </div>
-                        </div>
+                    </div>
                 </div >
             </div >
         )
@@ -324,7 +330,7 @@ class LiveScoreAssignMatch extends Component {
 
     ////main render method
     render() {
-        
+
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
@@ -342,7 +348,7 @@ class LiveScoreAssignMatch extends Component {
 
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ assignMatchesAction , changeAssignStatus}, dispatch)
+    return bindActionCreators({ assignMatchesAction, changeAssignStatus, getliveScoreTeams }, dispatch)
 }
 
 function mapStateToProps(state) {

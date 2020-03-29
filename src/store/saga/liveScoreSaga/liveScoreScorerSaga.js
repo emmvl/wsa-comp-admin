@@ -18,7 +18,7 @@ function* errorSaga(error) {
     });
   
     setTimeout(() => {
-        message.error(error ? error.error : "Something went wrong.");
+        message.error(error ? error.error ? error.error : "Something went wrong." : "Something went wrong.");
         // message.error("Something went wrong.");
     }, 800);
 }
@@ -85,13 +85,14 @@ export function* liveScoreAssigneMatches(action) {
 export function* liveScoreChangeAssignStatus(action) {
     
     try {
-        const result = yield call(LiveScoreAxiosApi.changeAssignStatus, action.roleId, action.records, action.teamID)
+        const result = yield call(LiveScoreAxiosApi.changeAssignStatus, action.roleId, action.records, action.teamID, action.teamkey)
         if (result.status == 1) {
             yield put({
                 type: ApiConstants.API_LIVESCORE_ASSIGN_CHANGE_STATUS_SUCCESS,
                 result: result.result.data,
                 status: result.status,
-                index : action.index
+                index : action.index,
+                scorerKey : action.scorerKey
             });
             message.success('Match assign successfully.')
         } else {

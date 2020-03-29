@@ -77,9 +77,9 @@ const columnActiveNews = [
         dataIndex: 'isActive',
         key: 'isActive',
         sorter: (a, b) => tableSort(a, b, 'isActive'),
-        
+
         render: isActive =>
-        <span>{isActive == 1 ? "Yes":"NO"}</span>
+            <span>{isActive == 1 ? "Yes" : "NO"}</span>
         // <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
         //     <img className="dot-image"
         //         src={isActive == 1 ? AppImages.greenDot : AppImages.redDot}
@@ -91,10 +91,10 @@ const columnActiveNews = [
         dataIndex: 'published_at',
         key: 'published_at',
         render: (published_at) =>
-        <span>{published_at && liveScore_formateDate(published_at)}</span>
-        
+            <span>{published_at && liveScore_formateDate(published_at)}</span>
+
         // sorter: (a, b) => tableSort(a, b, 'Published_date'),
-       
+
     },
     {
         title: "Notification",
@@ -115,7 +115,7 @@ const columnsTodaysMatch = [
         dataIndex: 'id',
         key: 'id',
         sorter: (a, b) => tableSort(a, b, 'id'),
-        render: (id) =><NavLink to={{
+        render: (id) => <NavLink to={{
             pathname: '/liveScoreMatchDetails',
             state: { matchId: id }
         }} >
@@ -138,12 +138,12 @@ const columnsTodaysMatch = [
         key: 'team1',
         sorter: (a, b) => tableSort(a, b, 'team1'),
         render: (team1, record) =>
-        <NavLink to={{
-            pathname: '/liveScoreTeamView',
-            state: { tableRecord: team1 }
-        }} >
-            <span class="input-heading-add-another pt-0" >{team1.name}</span>
-        </NavLink>
+            <NavLink to={{
+                pathname: '/liveScoreTeamView',
+                state: { tableRecord: team1 }
+            }} >
+                <span class="input-heading-add-another pt-0" >{team1.name}</span>
+            </NavLink>
 
     },
     {
@@ -152,12 +152,12 @@ const columnsTodaysMatch = [
         key: 'team2',
         sorter: (a, b) => tableSort(a, b, 'team2'),
         render: (team2, record) =>
-        <NavLink to={{
-            pathname: '/liveScoreTeamView',
-            state: { tableRecord: team2 }
-        }} >
-            <span class="input-heading-add-another pt-0" >{team2.name}</span>
-        </NavLink>
+            <NavLink to={{
+                pathname: '/liveScoreTeamView',
+                state: { tableRecord: team2 }
+            }} >
+                <span class="input-heading-add-another pt-0" >{team2.name}</span>
+            </NavLink>
     },
     {
         title: 'Venue',
@@ -184,10 +184,10 @@ const columnsTodaysMatch = [
         key: 'score',
         sorter: (a, b, records) => tableSort(a, b, records.team1Score, records.team2Score),
         render: (score, records) =>
-        <NavLink to={{
-            pathname: '/liveScoreMatchDetails',
-            state: { matchId: records.id }
-        }} ><span nowrap class="input-heading-add-another pt-0" >{records.team1Score + " : " + records.team2Score} </span></NavLink>
+            <NavLink to={{
+                pathname: '/liveScoreMatchDetails',
+                state: { matchId: records.id }
+            }} ><span nowrap class="input-heading-add-another pt-0" >{records.team1Score + " : " + records.team2Score} </span></NavLink>
     }, {
         title: "Umpire",
         dataIndex: 'competition',
@@ -201,7 +201,7 @@ const columnsTodaysMatch = [
         dataIndex: 'scorerStatus',
         key: 'scorerStatus',
         sorter: (a, b) => tableSort(a, b, "scorerStatus"),
-        
+
 
     }, {
         title: "Status",
@@ -298,7 +298,7 @@ const columnsTodaysIncient = [
         sorter: (a, b) => checkSorting(a, b, "team"),
         render: (team) =>
             <span class="input-heading-add-another pt-0">{team}</span>
-    }, 
+    },
     // {
     //     title: "Clam",
     //     dataIndex: 'clam',
@@ -355,7 +355,7 @@ class LiveScoreDashboard extends Component {
     componentDidMount() {
         let competitionID = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
-      
+
         if (id !== null) {
             this.props.liveScorePlayerListAction(id)
         } else {

@@ -207,9 +207,9 @@ class LiveScoreVenueChange extends Component {
     }
 
     changeToView() {
-        const { venueChangeData, venueData, courtData } = this.props.liveScoreVenueChangeState
+        const { venueChangeData, venueData, courtDataForChange } = this.props.liveScoreVenueChangeState
         let venueList = isArrayNotEmpty(venueData) ? venueData : []
-        let courtList = isArrayNotEmpty(courtData) ? courtData : []
+        let courtList = isArrayNotEmpty(courtDataForChange) ? courtDataForChange : []
 
         return (
             <div className="content-view mt-5">
@@ -221,8 +221,8 @@ class LiveScoreVenueChange extends Component {
                     <Select
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         placeholder={AppConstants.selectVenue}
-                        onChange={(venueId) => this.props.liveScoreUpdateVenueChange(venueId, "venueId")}
-                        value={venueChangeData.venueId}>
+                        onChange={(venueId) => this.props.liveScoreUpdateVenueChange(venueId, "changeToVenueId")}
+                        value={venueChangeData.changeToVenueId}>
 
                         {venueList.map((item) => {
                             return (
@@ -245,8 +245,8 @@ class LiveScoreVenueChange extends Component {
                         mode='multiple'
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         placeholder={AppConstants.selectCourt}
-                        onChange={(courtId) => this.props.liveScoreUpdateVenueChange(courtId, "courtId")}
-                        value={venueChangeData.courtId}
+                        onChange={(courtId) => this.props.liveScoreUpdateVenueChange(courtId, "changeToCourtId")}
+                        value={venueChangeData.changeToCourtId}
                     >
                         {courtList.map((item) => {
                             return (

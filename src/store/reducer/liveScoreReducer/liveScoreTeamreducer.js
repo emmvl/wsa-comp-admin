@@ -60,6 +60,7 @@ const initialState = {
     managerType: null,
     selectedManager: [],
     teamLogo: null,
+    managerList: []
 
 };
 
@@ -89,7 +90,8 @@ function LiveScoreTeamState(state = initialState, action) {
                 playerList: action.result.players,
                 allData: action.result,
                 teamData: action.result.team[0],
-                managerData: action.result.managers[0]
+                managerData: action.result.managers[0],
+                managerList: action.result.managers
 
             };
 
@@ -156,7 +158,7 @@ function LiveScoreTeamState(state = initialState, action) {
             }
             else {
                 state.teamManagerData[key] = data
-                
+
             }
             return {
                 ...state,
@@ -244,7 +246,7 @@ function LiveScoreTeamState(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_GET_TEAM_SUCCESS:
 
-      
+
             state.teamManagerData = action.result.team[0]
 
             state.teamLogo = action.result.team[0].logoUrl

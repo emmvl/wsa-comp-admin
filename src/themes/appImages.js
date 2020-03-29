@@ -31,8 +31,8 @@ const AppImages = {
   import: require("../images/import.png"),
   commentEmpty: require("../images/chat-empty.png"),
   commentFilled: require("../images/chat-filled.png"),
-  defaultUser: require("../images/default_user.png")
-
+  defaultUser: require("../images/default_user.png"),
+  yellowDot : require("../images/yellow_dot.png")
 };
 
 export default AppImages;

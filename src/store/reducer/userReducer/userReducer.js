@@ -63,8 +63,9 @@ const initialState = {
     userDashboardTextualPage: 1,
     userDashboardTextualTotalCount: 1,
     personalData: {},
+    personalEmergency: [],
     medicalData: [],
-    personalByCompData: {},
+    personalByCompData: [],
     userRegistrationList: [],
     userRegistrationPage: 1,
     userRegistrationTotalCount: 1,
@@ -299,10 +300,19 @@ function userReducer(state = initialState, action) {
 
         case ApiConstants.API_USER_MODULE_PERSONAL_DETAIL_SUCCESS:
             let personalData = action.result;
+            let arr = [];
+            if(personalData!= null){
+                let obj = {
+                    emergencyContactName: personalData.emergencyContactName,
+                    emergencyContactNumber: personalData.emergencyContactNumber
+                };
+                arr.push(obj);
+            }
             return {
                 ...state,
                 onLoad: false,
                 personalData: personalData,
+                personalEmergency: arr,
                 status: action.status
             };
 

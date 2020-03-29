@@ -1,5 +1,14 @@
 import ApiConstants from "../../../themes/apiConstants";
 
+
+function liveScoreRoundListAction(competitionID) {
+    const action = {
+        type: ApiConstants.API_LIVE_SCORE_ROUND_LIST_LOAD,
+        competitionID
+    };
+    return action;
+}
+
 function liveScoreCreateRoundAction(roundName, sequence, competitionID, divisionId) {
     const action = {
         type: ApiConstants.API_LIVE_SCORE_CREATE_ROUND_LOAD,
@@ -11,4 +20,7 @@ function liveScoreCreateRoundAction(roundName, sequence, competitionID, division
     return action;
 }
 
-export default liveScoreCreateRoundAction;
+export {
+    liveScoreRoundListAction,
+    liveScoreCreateRoundAction
+} 

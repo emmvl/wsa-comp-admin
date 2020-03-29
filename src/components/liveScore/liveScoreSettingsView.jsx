@@ -128,9 +128,10 @@ class LiveScoreSettingsView extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.liveScoreSetting != this.props.liveScoreSetting) {
-            const { competitionName, competitionLogo, scoring } = this.props.liveScoreSetting.form
+            const { competitionName, shortName, competitionLogo, scoring } = this.props.liveScoreSetting.form
             this.props.form.setFieldsValue({
                 competition_name: competitionName,
+                short_name: shortName,
                 time: this.props.liveScoreSetting.form.timerType,
                 venue: this.props.liveScoreSetting.form.venue
             })
@@ -194,6 +195,7 @@ class LiveScoreSettingsView extends Component {
                 const {
                     id,
                     competitionName,
+                    shortName,
                     competitionLogo,
                     scoring,
                     record1,
@@ -222,6 +224,7 @@ class LiveScoreSettingsView extends Component {
 
                 formData.append('id', id)
                 formData.append('longName', competitionName)
+                formData.append('name', shortName)
                 formData.append('logo', competitionLogo)
                 formData.append('recordUmpire', umpirenum)
                 formData.append('gameTimeTracking', gameTimeTracking)
@@ -285,6 +288,24 @@ class LiveScoreSettingsView extends Component {
                             heading={AppConstants.competition_name}
                             placeholder={AppConstants.competition_name}
                             name="competitionName"
+                            // value="xyz"
+                            onChange={(e) => {
+                                console.log(e.target.name, e.target.value)
+                                this.props.onChangeSettingForm({ key: e.target.name, data: e.target.value })
+                            }}
+                        />
+                    )}
+                </Form.Item>
+
+                <Form.Item>
+                    {getFieldDecorator('short_name', {
+                        rules: [{ required: true, message: ValidationConstants.shortField }]
+                    })(
+                        <InputWithHead
+                            required={"required-field pb-0"}
+                            heading={AppConstants.short_Name}
+                            placeholder={AppConstants.short_Name}
+                            name="shortName"
                             // value="xyz"
                             onChange={(e) => {
                                 console.log(e.target.name, e.target.value)
