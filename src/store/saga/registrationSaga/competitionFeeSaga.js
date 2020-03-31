@@ -38,7 +38,7 @@ function* errorSaga(error) {
 //////get the competition fee list in registration
 export function* regCompetitionFeeListSaga(action) {
     try {
-        const result = yield call(AxiosApi.registrationCompetitionFeeList, action.offset, action.yearRefId);
+        const result = yield call(AxiosApi.registrationCompetitionFeeList, action.offset, action.yearRefId,action.searchText);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_REG_COMPETITION_LIST_SUCCESS,

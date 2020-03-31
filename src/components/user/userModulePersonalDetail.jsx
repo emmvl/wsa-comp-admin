@@ -836,9 +836,9 @@ class UserModulePersonalDetail extends Component{
                                         <Tabs defaultActiveKey="1" onChange={(e) => this.onChangeTab(e)}>
                                             <TabPane tab={AppConstants.activity} key="1">
                                                 {this.playerActivityView()}
-                                                {this.parentActivityView()}
-                                                {this.scorerActivityView()}
                                                 {this.managerActivityView()}
+                                                {this.scorerActivityView()}
+                                                {this.parentActivityView()}
                                             </TabPane>
                                             <TabPane tab={AppConstants.statistics} key="2">
                                                 {this.statisticsView()}

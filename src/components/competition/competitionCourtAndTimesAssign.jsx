@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Select, Button, TimePicker, Radio, Form } from 'antd';
+import { Layout, Breadcrumb, Select, Button, TimePicker, Radio, Form, message } from 'antd';
 import './competition.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -28,6 +28,7 @@ import {
     getOwn_competition
 } from "../../util/sessionStorage"
 import AppImages from "../../themes/appImages";
+import Loader from '../../customComponents/loader'
 
 
 
@@ -61,7 +62,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                 firstTimeCompId: storedCompetitionId,
                 getDataLoading: true
             })
-            this.props.getCompetitionWithTimeSlots(yearId, storedCompetitionId, 1, 6);
+            this.props.getCompetitionWithTimeSlots(yearId, storedCompetitionId);
         }
         else if (yearId) {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
@@ -94,7 +95,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                 if (competitionList.length > 0) {
                     let competitionId = competitionList[0].competitionId
                     setOwn_competition(competitionId)
-                    this.props.getCompetitionWithTimeSlots(this.state.yearRefId, competitionId, 1, 6);
+                    this.props.getCompetitionWithTimeSlots(this.state.yearRefId, competitionId);
                     this.setState({ getDataLoading: true, firstTimeCompId: competitionId })
 
                 }
@@ -290,7 +291,12 @@ class CompetitionCourtAndTimesAssign extends Component {
                 delete timeSlotData["divisions"]
                 delete timeSlotData["grades"]
                 delete timeSlotData["mainTimeRotationID"]
-                this.props.addTimeSlotDataPost(timeSlotData)
+                if (timeSlotData.competitionUniqueKey == null || timeSlotData.competitionUniqueKey == "") {
+                    message.error(ValidationConstants.pleaseSelectCompetition)
+                }
+                else {
+                    this.props.addTimeSlotDataPost(timeSlotData)
+                }
             }
         })
     }
@@ -344,7 +350,7 @@ class CompetitionCourtAndTimesAssign extends Component {
     // on Competition change
     onCompetitionChange(competitionId) {
         setOwn_competition(competitionId)
-        this.props.getCompetitionWithTimeSlots(this.state.yearRefId, competitionId, 1, 6);
+        this.props.getCompetitionWithTimeSlots(this.state.yearRefId, competitionId);
         this.setState({ getDataLoading: true, firstTimeCompId: competitionId })
     }
 
@@ -556,7 +562,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     return (
                                         <div>
                                             <Radio key={item.id} value={item.id}> {item.description}</Radio>
-                                            {timeSlotData.timeslotGenerationRefId === index + 1 && item.id == 1 && (timeSlotData.mainTimeRotationID === 8 || timeSlotData.mainTimeRotationID === 9 || timeSlotData.mainTimeRotationID === 6) &&
+                                            {timeSlotData.timeslotGenerationRefId === index + 1 && item.id == 1 && (timeSlotData.mainTimeRotationID === 8 || timeSlotData.mainTimeRotationID === 9 || timeSlotData.mainTimeRotationID === 6 || timeSlotData.mainTimeRotationID === 7) &&
                                                 <div>
                                                     <div className="fluid-width">
                                                         {timeSlotData.competitionVenueTimeslotsDayTime.map((item, index) => {
@@ -620,7 +626,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                     {timeSlotData.timeslotGenerationRefId === 2 && timeSlotData.applyToVenueRefId == 1 && (timeSlotData.mainTimeRotationID === 8 || timeSlotData.mainTimeRotationID === 9 || timeSlotData.mainTimeRotationID === 6 || timeSlotData.mainTimeRotationID === 7) &&
                         <div>
                             <div className="fluid-width">
-                                {timeSlotManual && timeSlotManual[0].timeslots.map((item, index) => {
+                                {timeSlotManual.length > 0 && timeSlotManual[0].timeslots.map((item, index) => {
                                     return (this.addDataTimeSlotManual(item, index, getFieldDecorator, timeSlotData.timeslotRotationRefId, timeSlotData.mainTimeRotationID))
                                 })}
                             </div>
@@ -1113,6 +1119,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
                 <InnerHorizontalMenu menu={"competition"} compSelectedKey={"6"} />
                 <Layout>
+
                     <Form
                         onSubmit={this.saveAPIsActionCall}
                         noValidate="noValidate"
@@ -1120,6 +1127,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                         {this.headerView()}
                         <Content>
                             {this.dropdownView(getFieldDecorator)}
+                            <Loader visible={this.props.competitionTimeSlots.onGetTimeSlotLoad} />
                             <div className="formView">
                                 {this.contentView(getFieldDecorator)}
                             </div>

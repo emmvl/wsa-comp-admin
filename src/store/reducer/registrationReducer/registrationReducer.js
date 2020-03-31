@@ -2,6 +2,7 @@ import ApiConstants from "../../../themes/apiConstants";
 import history from "../../../util/history";
 import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
 
+
 const newObjvalue = {
   orgRegistrationId: 0,
   yearRefId: 1,
@@ -79,7 +80,10 @@ const initialState = {
   allDivisionsData: [],
   selectedInvitees: [],
   expendKeyArr: [],
-  defaultRegistrationSettings: []
+  defaultRegistrationSettings: [],
+  defaultRegistrationMethod: [],
+  selectedMethod: [],
+  defaultMembershipProduct: []
 };
 
 
@@ -96,6 +100,18 @@ const initialState = {
 //   return keyArr
 // }
 
+// selected methods
+
+function checkSlectedMethod(array) {
+  let selectedMethodArr = []
+  if (array) {
+    for (let i in array) {
+      selectedMethodArr.push(array[i].registrationMethodRefId)
+    }
+  }
+  return selectedMethodArr
+}
+
 //get selected invitees 
 function checkSlectedInvitees(array) {
   console.log(array)
@@ -108,6 +124,58 @@ function checkSlectedInvitees(array) {
   return selected
 
 }
+
+//update registration form method 
+function getRegistrationFormMethod(selectedMethod, reg_method) {
+  let postMethodArr = []
+  for (let i in selectedMethod) {
+    let selected_Method = checkExistingMethod(reg_method, selectedMethod[i])
+    let MethodObject = null
+    if (selected_Method.status == false) {
+      MethodObject = {
+        "registrationMethodId": 0,
+        "registrationMethodRefId": selectedMethod[i]
+      }
+    } else {
+      MethodObject = {
+        "registrationMethodId": selected_Method.result.registrationMethodId,
+        "registrationMethodRefId": selectedMethod[i]
+      }
+    }
+
+
+    postMethodArr.push(MethodObject)
+
+
+  }
+  return postMethodArr;
+
+}
+
+///check exisiting method
+
+function checkExistingMethod(reg_method, selectedMethodId) {
+  let methodObj = {
+    status: false,
+    result: []
+  }
+
+  if (reg_method) {
+    for (let i in reg_method) {
+      if (reg_method[i].registrationMethodRefId == selectedMethodId) {
+        methodObj = {
+          status: true,
+          result: reg_method[i]
+        }
+
+        break
+      }
+    }
+  }
+
+  return methodObj
+}
+
 
 //checkExistingSettings
 function checkExistingSettings(settingArr, settingID) {
@@ -139,6 +207,7 @@ function getResitrationFormSettings(selectedSettings, reg_settings) {
   console.log(reg_settings, selectedSettings)
   let postArr = []
   for (let i in selectedSettings) {
+    console.log(selectedSettings)
     let selected_settings = checkExistingSettings(reg_settings, selectedSettings[i])
     let settingObject = null
 
@@ -154,14 +223,12 @@ function getResitrationFormSettings(selectedSettings, reg_settings) {
         "registrationSettingsRefId": selectedSettings[i]
       }
     }
-
+    console.log(settingObject, postArr)
 
     postArr.push(settingObject)
 
-
   }
   return postArr;
-
 }
 
 // get selection of cheked in reg form
@@ -294,31 +361,67 @@ function getFillteredData(
   return productArr;
 }
 
+function checkDefaultProduct(checkProduct, defaultProductArr) {
+  let prd_obj = {
+    status: false,
+    result: []
+  }
+  for (let i in defaultProductArr) {
+    if (defaultProductArr[i].id == checkProduct) {
+      console.log(defaultProductArr[i])
+      prd_obj = {
+        status: true,
+        result: defaultProductArr[i]
+      }
+      break
+    }
+  }
+  return prd_obj
+}
+
+
 //// Final selected product arr
 
-function makeFinalProductArr(arr) {
+function makeFinalProductArr(arr, defaultMembershipProduct) {
   let array = [];
+  let selectedObj
   for (let i in arr) {
     let typesArray = arr[i].membershipProductTypes;
     for (let j in typesArray) {
       if (typesArray[j].isSelected == true) {
-        let selectedObj = {
-          divisionId: typesArray[j].divisionId,
-          divisionName: typesArray[j].divisionName,
-          registrationLock: typesArray[j].registrationLock,
-          membershipProductId: typesArray[j].membershipProductId,
-          membershipProductTypeId: typesArray[j].membershipProductTypeId,
-          membershipProductTypeMappingId:
-            typesArray[j].membershipProductTypeMappingId,
-          id: typesArray[j].id
-        };
+        let matchDefaultProduct = checkDefaultProduct(typesArray[j].id, defaultMembershipProduct)
+        if (matchDefaultProduct.status == true) {
+          selectedObj = {
+            orgRegMemProTypeId: matchDefaultProduct.result.orgRegMemProTypeId,
+            divisionId: typesArray[j].divisionId,
+            divisionName: typesArray[j].divisionName,
+            registrationLock: typesArray[j].registrationLock,
+            membershipProductId: typesArray[j].membershipProductId,
+            membershipProductTypeId: typesArray[j].membershipProductTypeId,
+            membershipProductTypeMappingId:
+              typesArray[j].membershipProductTypeMappingId,
+            id: typesArray[j].id
+          };
+        }
+        else {
+          selectedObj = {
+            orgRegMemProTypeId: 0,
+            divisionId: typesArray[j].divisionId,
+            divisionName: typesArray[j].divisionName,
+            registrationLock: typesArray[j].registrationLock,
+            membershipProductId: typesArray[j].membershipProductId,
+            membershipProductTypeId: typesArray[j].membershipProductTypeId,
+            membershipProductTypeMappingId:
+              typesArray[j].membershipProductTypeMappingId,
+            id: typesArray[j].id
+          };
+        }
         array.push(selectedObj);
       }
     }
   }
   return array;
 }
-
 
 
 //////function for adding default fees object in the fees table array
@@ -619,10 +722,12 @@ function registration(state = initialState, action) {
       let objValue = JSON.parse(JSON.stringify([newObjvalue]))
       let formData = action.result.length > 0 ? action.result : objValue
       state.defaultRegistrationSettings = formData[0].registrationSettings !== null ? formData[0].registrationSettings : []
+      state.defaultRegistrationMethod = formData[0].registerMethods !== null ? JSON.parse(JSON.stringify(formData[0].registerMethods)) : []
+      let selected_Method = checkSlectedMethod(JSON.parse(JSON.stringify(formData[0].registerMethods)))
+      state.selectedMethod = selected_Method
       let selectedInvitees = checkSlectedInvitees(formData[0].registrationSettings)
+      state.defaultMembershipProduct = JSON.parse(JSON.stringify(formData[0].membershipProductTypes))
       state.selectedInvitees = selectedInvitees
-      // let expendKey = getExpendableKey(selectedInvitees)
-      // state.expendKeyArr = expendKey
       let productListValue = getProductArr(
         productList,
         formData[0].membershipProductTypes
@@ -638,6 +743,7 @@ function registration(state = initialState, action) {
       state.defaultChecked = trainingSelection
       newObjvalue.competitionUniqueKeyId = state.defaultCompetitionID
       state.sendRegistrationFormData = JSON.parse(JSON.stringify([newObjvalue]))
+      console.log(SelectedProduct, "***", productListValue)
       return {
         ...state,
         onLoad: false,
@@ -653,17 +759,21 @@ function registration(state = initialState, action) {
 
 
     case ApiConstants.API_UPDATE_REG_FORM_LOAD:
-      console.log(action)
-
-
       if (state.registrationFormData == 0) {
         state.registrationFormData = JSON.parse(JSON.stringify([newObjvalue]));
       }
       if (action.key == "registrationSettings") {
-        // let formDataObj = JSON.parse(JSON.stringify(state.registrationFormData))
-        let updatedObjData = getResitrationFormSettings(action.updatedData, state.defaultRegistrationSettings)
-        state.registrationFormData[0]["registrationSettings"] = updatedObjData
         state.selectedInvitees = action.updatedData
+        let updatedObjData = getResitrationFormSettings(action.updatedData, state.defaultRegistrationSettings)
+        console.log(updatedObjData)
+        state.registrationFormData[0].registrationSettings = updatedObjData
+
+        console.log(state.registrationFormData[0])
+      }
+      else if (action.key == "registerMethods") {
+        state.selectedMethod = action.updatedData
+        let updateRegistrationMethod = getRegistrationFormMethod(action.updatedData, JSON.parse(JSON.stringify(state.defaultRegistrationMethod)))
+        state.registrationFormData[0]["registerMethods"] = updateRegistrationMethod
       }
       else {
         let oldData = state.registrationFormData;
@@ -848,14 +958,12 @@ function registration(state = initialState, action) {
 
     case ApiConstants.REG_FORM_UPDATE_MEMBERSHIP_PRODUCT_TYPES:
       let productsData = state.selectedMemberShipType;
-
       let getFormValue = state.registrationFormData;
       let tableValue = action.tableKey;
       let matchIndexKey = action.matchkey;
-
       productsData[matchIndexKey].membershipProductTypes[tableValue].isSelected = action.isSelected;
       productsData[matchIndexKey].membershipProductTypes[tableValue].registrationLock = action.registrationLock;
-      let selectedArray = makeFinalProductArr(productsData);
+      let selectedArray = makeFinalProductArr(productsData, state.defaultMembershipProduct);
       getFormValue[0].membershipProductTypes = selectedArray;
       state.selectedMemberShipType = productsData;
       return { ...state, error: null };
@@ -867,7 +975,7 @@ function registration(state = initialState, action) {
       let match_Key = action.matchValue;
       product_Data[match_Key].membershipProductTypes[table_Value].isSelected = action.isSelected;
       product_Data[match_Key].membershipProductTypes[table_Value].registrationLock = action.registrationLock;
-      let selected_Array = makeFinalProductArr(product_Data);
+      let selected_Array = makeFinalProductArr(product_Data, state.defaultMembershipProduct);
       Form_Value[0].membershipProductTypes = selected_Array;
       state.selectedMemberShipType = product_Data;
       return { ...state, error: null };

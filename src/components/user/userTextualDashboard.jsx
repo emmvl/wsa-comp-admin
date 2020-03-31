@@ -182,7 +182,7 @@ class UserTextualDashboard extends Component{
      ///////view for breadcrumb
      headerView = () => {
         return (
-            <Header className="comp-player-grades-header-view container mb-n3" >
+            <Header className="comp-player-grades-header-view" >
                 <div className="row" >
                     <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
                         <Breadcrumb separator=" > ">
@@ -197,10 +197,10 @@ class UserTextualDashboard extends Component{
       ///dropdown view containing all the dropdown of header
       dropdownView = () => {
         return (
-            <div >
+            <div style={{paddingLeft: '3.0%'}}>
                 <div className="fluid-width" >
                     <div className="row" >
-                        <div className="col-sm" >
+                        {/* <div className="col-sm" >
                             <div style={{ width: "100%", display: "flex", flexDirection: "row",
                                 alignItems: "center",
                             }} >
@@ -214,7 +214,7 @@ class UserTextualDashboard extends Component{
                                     <Option value={"all"}>{AppConstants.all}</Option>
                                 </Select>
                             </div>
-                        </div>
+                        </div> */}
                         <div className="col-sm" >
                             <div style={{ width: "100%", display: "flex", flexDirection: "row",
                                 alignItems: "center",
@@ -329,7 +329,7 @@ class UserTextualDashboard extends Component{
                 <InnerHorizontalMenu menu={"user"} userSelectedKey={"5"} />
                 <Layout>
                     {this.headerView()}
-                    <Content className="container">
+                    <Content>
                         {this.dropdownView()}
                         {this.contentView()}
                     </Content>

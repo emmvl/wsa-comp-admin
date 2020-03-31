@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Table, Select, Menu, Pagination, Modal } from "antd";
+import { Layout, Breadcrumb, Button, Table, Input, Icon, Select, Menu, Pagination, Modal } from "antd";
 import "./product.css";
 import { NavLink } from "react-router-dom";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -43,10 +43,8 @@ function totalSeasonalFees(seasonalFees1, record) {
     let mSeasonalgst = stringTONumber(record.mSeasonalgst);
     let seasonalGST = stringTONumber(record.seasonalGST);
     let seasonalFees = stringTONumber(record.seasonalFees);
-
     let parentFees = (seasonalFees + seasonalGST + mSeasonalfee + mSeasonalgst);
     let childFees = parentFees + (childSeasonalFee + childSeasonalGst)
-
     let fee = record.parentCreator ? parentFees : childFees
     return (
         affiliateFeeStatus ?
@@ -192,6 +190,7 @@ class RegistrationCompetitionList extends Component {
             yearRefId: 1,
             deleteLoading: false,
             userRole: "",
+            searchText: '',
         };
         this_Obj = this;
         this.props.getOnlyYearListAction(this.props.appState.yearList)
@@ -203,7 +202,7 @@ class RegistrationCompetitionList extends Component {
             this.setState({
                 deleteLoading: false,
             })
-            this.handleCompetitionTableList(1, this.state.yearRefId)
+            this.handleCompetitionTableList(1, this.state.yearRefId, this.state.searchText)
         }
     }
 
@@ -211,7 +210,7 @@ class RegistrationCompetitionList extends Component {
         checkUserRole().then((value) => (
             this.setState({ userRole: value })
         ))
-        this.handleCompetitionTableList(1, this.state.yearRefId)
+        this.handleCompetitionTableList(1, this.state.yearRefId, this.state.searchText)
     }
 
     deleteProduct = (competitionId) => {
@@ -259,17 +258,41 @@ class RegistrationCompetitionList extends Component {
     //////year change onchange
     yearChange = (yearRefId) => {
         this.setState({ yearRefId })
-        this.handleCompetitionTableList(1, yearRefId)
+        this.handleCompetitionTableList(1, yearRefId, this.state.searchText)
+    }
+    // on change search text
+    onChangeSearchText = (e) => {
+        this.setState({ searchText: e.target.value })
+        if (e.target.value == null || e.target.value == "") {
+            this.handleCompetitionTableList(1, this.state.yearRefId, e.target.value);
+        }
     }
 
+    // search key 
+    onKeyEnterSearchText = (e) => {
+        var code = e.keyCode || e.which;
+        console.log(e.keyCode, "******", e.which)
+        if (code === 13) { //13 is the enter keycode
+            this.handleCompetitionTableList(1, this.state.yearRefId, this.state.searchText);
+        }
+    }
+
+    // on click of search icon
+    onClickSearchIcon = () => {
+        if (this.state.searchText == null || this.state.searchText == "") {
+        }
+        else {
+            this.handleCompetitionTableList(1, this.state.yearRefId, this.state.searchText);
+        }
+    }
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
-                    <div className="row">
-                        <div className="col-sm-2">
+                    <div className="row" >
+                        <div className="col-sm">
                             <div className="com-year-select-heading-view">
                                 <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
@@ -287,17 +310,34 @@ class RegistrationCompetitionList extends Component {
                                 </Select>
                             </div>
                         </div>
+                        <div style={{ marginRight: "25px", display: "flex", alignItems: 'center' }} >
+                            <div className="comp-product-search-inp-width" >
+                                <Input className="product-reg-search-input"
+                                    onChange={(e) => this.onChangeSearchText(e)}
+                                    placeholder="Search..."
+                                    onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                    prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                        onClick={() => this.onClickSearchIcon()}
+                                    />}
+                                    allowClear
+                                />
+                            </div>
+                        </div>
+
                         {/* {this.state.userRole == AppConstants.admin && */}
-                        <div className="col-sm d-flex justify-content-end"
-                            onClick={() => this.props.clearCompReducerDataAction("all")}>
-                            <NavLink
-                                to={{ pathname: `/registrationCompetitionFee`, state: { id: null } }}
-                                className="text-decoration-none"
-                            >
-                                <Button className="primary-add-product" type="primary">
-                                    + {AppConstants.addCompetition}
-                                </Button>
-                            </NavLink>
+                        <div style={{ marginRight: '1%', display: "flex", alignItems: 'center' }}>
+                            <div className="d-flex flex-row-reverse button-with-search"
+                                // <div className="col-sm d-flex justify-content-end"
+                                onClick={() => this.props.clearCompReducerDataAction("all")}>
+                                <NavLink
+                                    to={{ pathname: `/registrationCompetitionFee`, state: { id: null } }}
+                                    className="text-decoration-none"
+                                >
+                                    <Button className="primary-add-product" type="primary">
+                                        + {AppConstants.addCompetition}
+                                    </Button>
+                                </NavLink>
+                            </div>
                         </div>
                         {/* } */}
                     </div>
@@ -306,9 +346,9 @@ class RegistrationCompetitionList extends Component {
         );
     };
 
-    handleCompetitionTableList = (page, yearRefId) => {
+    handleCompetitionTableList = (page, yearRefId, searchText) => {
         let offset = page ? 10 * (page - 1) : 0;
-        this.props.regCompetitionListAction(offset, yearRefId);
+        this.props.regCompetitionListAction(offset, yearRefId, searchText);
     };
 
     ////////form content view
@@ -332,7 +372,7 @@ class RegistrationCompetitionList extends Component {
                         className="antd-pagination"
                         current={competitionFeesState.regCompetitonFeeListPage}
                         total={total}
-                        onChange={(page) => this.handleCompetitionTableList(page, this.state.yearRefId)}
+                        onChange={(page) => this.handleCompetitionTableList(page, this.state.yearRefId, this.state.searchText)}
                     />
                 </div>
             </div>

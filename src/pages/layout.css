@@ -100,6 +100,10 @@
   width: 352px;
 }
 
+.comp-product-search-inp-width{
+  width: 352px;
+}
+
 .dashboard-lay-search-button {
   display: none;
   border-radius: 16.5px;
@@ -150,6 +154,9 @@
   .reg-product-search-inp-width {
     width: 100%;
   }
+  .comp-product-search-inp-width{
+    width: 100%;
+  }
 }
 
 @media (max-width: 767px) {
@@ -161,6 +168,11 @@
   .reg-product-search-inp-width {
     width: 250px !important;
     display: none;
+  }
+
+  .comp-product-search-inp-width{
+    width: 180px !important;
+    margin-left: 15px
   }
   .dashboard-lay-search-button {
     display: block;
@@ -193,5 +205,11 @@
   }
   .org-select .ant-select-selection-selected-value {
     font-size: 12px;
+  }
+
+  .product-reg-search-input .ant-input {
+   
+    padding: 0px 15px
+    
   }
 }

@@ -11,25 +11,26 @@ function liveScoreScorerListAction(competitionId, roleId, data) {
     }
     return action
 }
-    function liveScoreScorerUpdate(data, key) {
-        const action = {
-            type: ApiConstants.API_LIVE_SCORE_UPDATE_SCORER,
-            data: data,
-            key: key,
-        }
-      
-        return action;
+function liveScoreScorerUpdate(data, key) {
+    const action = {
+        type: ApiConstants.API_LIVE_SCORE_UPDATE_SCORER,
+        data: data,
+        key: key,
     }
 
-     
+    return action;
+}
+
+
 //Devision action
-function liveScoreAddEditScorer( data, teamId ,existingScorerId) {
- 
+function liveScoreAddEditScorer(body, teamId, existingScorerId) {
+
     const action = {
         type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_SCORER_LOAD,
-        data,
+        body,
         teamId,
-        existingScorerId
+        existingScorerId,
+
     };
 
     return action;
@@ -38,36 +39,51 @@ function liveScoreAddEditScorer( data, teamId ,existingScorerId) {
 
 /// Assign matches action
 
-function assignMatchesAction(competitionId, teamId, body){
+function assignMatchesAction(competitionId, teamId, body) {
     const action = {
         type: ApiConstants.API_LIVESCORE_ASSIGN_MATCHES_LOAD,
         competitionId,
         teamId,
         body
     };
-   
+
     return action;
 }
 
 /// Chnage assign status
-function changeAssignStatus(index, records, roleId, teamID, scorerKey, teamkey){
+function changeAssignStatus(index, records, roleId, teamID, scorerKey, teamkey) {
     const action = {
         type: ApiConstants.API_LIVESCORE_ASSIGN_CHANGE_STATUS_LOAD,
         index,
         records,
         roleId,
         teamID,
-        scorerKey, 
+        scorerKey,
         teamkey
     };
-   
+
     return action;
 }
 
-export { 
+
+/// Chnage assign status
+function unAssignMatcheStatus(index, records, scorerKey, teamkey) {
+    const action = {
+        type: ApiConstants.API_LIVESCORE_UNASSIGN_STATUS_LOAD,
+        index,
+        records,
+        scorerKey,
+        teamkey
+    };
+
+    return action;
+}
+
+export {
     liveScoreScorerListAction,
     liveScoreScorerUpdate,
     liveScoreAddEditScorer,
     assignMatchesAction,
-    changeAssignStatus
+    changeAssignStatus,
+    unAssignMatcheStatus
 };

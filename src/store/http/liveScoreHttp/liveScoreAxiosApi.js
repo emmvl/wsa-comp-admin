@@ -464,37 +464,87 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
-    liveScoreAddEditScorer(data, teamId, exsitingScorerrId) {
+    // liveScoreAddEditScorer(data, teamId, exsitingScorerrId) {
 
+    //     let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+
+
+    //     let body = null
+    //     if (data.id) {
+    //         body = {
+    //             "id": data.id,
+    //             "firstName": data.firstName,
+    //             "lastName": data.lastName,
+    //             "mobileNumber": data.mobileNumber,
+    //             "email": data.email,
+    //             "teams": data.teams
+
+    //         }
+    //     } else {
+    //         body = {
+
+    //             "firstName": data.firstName,
+    //             "lastName": data.lastName,
+    //             "mobileNumber": data.contactNo,
+    //             "email": data.emailAddress,
+    //             "teams": data.teams
+
+    //         }
+    //     }
+
+
+    //     var url = `/users/member?&competitionId=${id}`;
+    //     return Method.dataPost(url, token, body)
+    // },
+
+    liveScoreAddEditScorer(scorerData, existingScorerId, scorerRadioBtn) {
+        let competitionID = localStorage.getItem("competitionId");
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
 
-
         let body = null
-        if (data.id) {
-            body = {
-                "id": data.id,
-                "firstName": data.firstName,
-                "lastName": data.lastName,
-                "mobileNumber": data.mobileNumber,
-                "email": data.email,
-                "teams": data.teams
+        if (scorerRadioBtn == "new") {
+            if (scorerData.id) {
 
+                body = {
+                    "id": scorerData.id,
+                    "firstName": scorerData.firstName,
+                    "lastName": scorerData.lastName,
+                    "mobileNumber": scorerData.contactNo,
+                    "email": scorerData.emailAddress,
+                    "teams": scorerData.teams
+
+                }
+            } else {
+
+                body = {
+
+                    "firstName": scorerData.firstName,
+                    "lastName": scorerData.lastName,
+                    "mobileNumber": scorerData.contactNo,
+                    "email": scorerData.emailAddress,
+                    "teams": scorerData.teams
+                }
             }
-        } else {
+            var url = `/users/member?&competitionId=${id}`;
+            return Method.dataPost(url, token, body)
+
+        } else if (scorerRadioBtn == "existing") {
+
+            // if (existingScorerId) {
             body = {
-
-                "firstName": data.firstName,
-                "lastName": data.lastName,
-                "mobileNumber": data.contactNo,
-                "email": data.emailAddress,
-                "teams": data.teams
-
+                "id": existingScorerId,
+                "teams": scorerData.teams
             }
+            // }
+
+            console.log(body)
+
+            var url = `/users/member?&competitionId=${id}`;
+            return Method.dataPost(url, token, body)
+
         }
 
 
-        var url = `/users/member?&competitionId=${id}`;
-        return Method.dataPost(url, token, body)
     },
 
 
@@ -517,9 +567,15 @@ let LiveScoreAxiosApi = {
             "userId": userId
         })
 
-      
-         var url = `https://livescores-api-dev.worldsportaction.com/roster`;
+        var url = `/roster/admin/assign`
+        //  var url = `https://livescores-api-dev.worldsportaction.com/roster`;
         return Method.dataPost(url, token, body)
+    },
+
+    // Unassign status 
+    unAssignMatcheStatus(records) {
+        var url = `/roster/admin?id=${records.rosterId}`
+        return Method.dataDelete(url, token)
     }
 };
 

@@ -203,18 +203,20 @@ class RegistrationForm extends Component {
 
     //Registration Method
     methodSelection(value, item, formDataValue) {
-        let registrationMethodArray = isArrayNotEmpty(formDataValue.registerMethods) ? formDataValue.registerMethods : []
-
-        let index = registrationMethodArray.findIndex(
-            x => x.registrationMethodRefId == item.id);
+        // let registrationMethodArray = isArrayNotEmpty(formDataValue.registerMethods) ? formDataValue.registerMethods : []
+        let methodArr = []
+        methodArr = this.props.registrationState.selectedMethod
+        let index = methodArr.findIndex(
+            x => x == item.id);
         if (index > -1) {
-            registrationMethodArray.splice(index, 1);
-        } else {
-            registrationMethodArray.push(
-                { "registrationMethodRefId": item.id }
+            methodArr.splice(index, 1);
+        }
+        else {
+            methodArr.push(
+                item.id
             );
         }
-        this.props.updateRegistrationForm(registrationMethodArray, "registerMethods")
+        this.props.updateRegistrationForm(methodArr, "registerMethods")
     }
 
     // for add disclaimer
@@ -265,6 +267,7 @@ class RegistrationForm extends Component {
 
     ///for change table productType and Division selection 
     getSelectionofProduct(value, record, key) {
+        console.log(record)
         console.log(this.props.registrationState.selectedMemberShipType, "this.props.registrationState.selectedMemberShipType")
         let allMemberProductArr = this.props.registrationState.selectedMemberShipType
         let matchIndexValue = allMemberProductArr.findIndex(x => x.membershipProductId == record.membershipProductId)
@@ -277,6 +280,7 @@ class RegistrationForm extends Component {
 
     //
     getRegistrationLock(value, record, key) {
+        console.log(record)
         console.log(this.props.registrationState.selectedMemberShipType, "this.props.registrationState.selectedMemberShipType")
         let allMemberProductArr = this.props.registrationState.selectedMemberShipType
         let matchIndexValue = allMemberProductArr.findIndex(x => x.membershipProductId == record.membershipProductId)

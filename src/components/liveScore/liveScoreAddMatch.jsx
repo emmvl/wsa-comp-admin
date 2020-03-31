@@ -637,6 +637,8 @@ class LiveScoreAddMatch extends Component {
             if (!err) {
                 let { addEditMatch, matchData, start_date, start_time, start_post_date } = this.props.liveScoreMatchState
 
+                console.log(start_time, start_post_date, 'start_time, start_post_date ')
+
                 // let startDate = moment(start_date).format("YYYY-MMM-DD")
 
                 let startDate = moment(start_post_date).format("YYYY-MMM-DD")

@@ -26,7 +26,7 @@ let CompetitionAxiosApi = {
     },
 
     //get time slot
-    async  getTimeSlotData(yearRefId, competitionId, organisationId) {
+    async  getTimeSlotData(yearRefId, competitionId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {

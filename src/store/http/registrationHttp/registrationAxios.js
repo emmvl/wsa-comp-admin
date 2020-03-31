@@ -38,7 +38,7 @@ let AxiosApi = {
     },
 
     ////registrationMembershipFeeList in membership table in the registration tab
-    async registrationCompetitionFeeList(offset, yearRefId) {
+    async registrationCompetitionFeeList(offset, yearRefId, searchText) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
@@ -47,7 +47,7 @@ let AxiosApi = {
                 limit: 10
             }
         };
-        var url = `/api/competitionfee/listing/${yearRefId}?organisationUniqueKey=${organisationUniqueKey}`;
+        var url = `/api/competitionfee/listing/${yearRefId}?organisationUniqueKey=${organisationUniqueKey}&search=${searchText}`;
         // var url = `/api/competitionfee/listing/${yearRefId}?organisationUniqueKey=${organisationUniqueKey}&search=${"umpire"}`;
         return Method.dataPost(url, token, body);
     },

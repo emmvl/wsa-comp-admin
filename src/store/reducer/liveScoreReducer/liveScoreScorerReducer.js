@@ -89,7 +89,7 @@ function liveScoreScorerState(state = initialState, action) {
 
             if (action.key == 'teamId') {
                 let selectedTeams = getTeamObj(action.data, state.teamResult)
-                console.log(selectedTeams, 'selectedTeams')
+
                 state.scorerData['teams'] = selectedTeams
                 state.teamId = action.data
             } else if (action.key == 'scorerRadioBtn') {
@@ -98,20 +98,6 @@ function liveScoreScorerState(state = initialState, action) {
             } else if (action.key == 'isEditScorer') {
 
                 state.scorerData = action.data
-
-                // state.scorerData.id = action.data.id
-                // state.scorerData.firstName = action.data.firstName
-                // state.scorerData.lastName = action.data.lastName
-                // state.scorerData.mobileNumber = action.data.mobileNumber
-                // state.scorerData.email = action.data.email
-
-                // let getTeamId = genrateTeamId(action.data.teams)
-
-                // state.teamId = action.data.id
-                // state.teamId = getTeamId
-                // let selectedTeams = getTeamObj(action.data, state.teamResult)
-                // state.scorerData['teams'] = selectedTeams
-
             } else if (action.key == 'isAddScorer') {
                 scorerObj = {
                     firstName: "",
@@ -121,11 +107,10 @@ function liveScoreScorerState(state = initialState, action) {
                     teams: []
                 }
                 state.scorerData = scorerObj
-                // state.managerData = scorerObj
-                // state.managerData.id = null
                 state.teamId = null
                 state.scorerRadioBtn = "new"
-
+            } else if (action.key == 'scorerSearch') {
+                state.existingScorerId = action.data
             } else {
                 state.scorerData[action.key] = action.data
             }
@@ -170,16 +155,30 @@ function liveScoreScorerState(state = initialState, action) {
 
         case ApiConstants.API_LIVESCORE_ASSIGN_CHANGE_STATUS_SUCCESS:
 
-            console.log( action.result, action.scorerKey)
             let index = action.index
-            // state.assignMatches[index][action.scorerKey] = action.result
-            
+            state.assignMatches[index][action.scorerKey] = action.result
+
             return {
                 ...state,
                 onLoad: false,
 
             }
 
+        case ApiConstants.API_LIVESCORE_UNASSIGN_STATUS_LOAD:
+            return {
+                ...state,
+                onLoad: true
+            }
+        case ApiConstants.API_LIVESCORE_UNASSIGN_STATUS_SUCCESS:
+
+            let indexValue = action.index
+            state.assignMatches[indexValue][action.scorerKey] = null
+
+            return {
+                ...state,
+                onLoad: false,
+
+            }
 
 
         case ApiConstants.API_LIVE_SCORE_SCORER_LIST_FAIL:

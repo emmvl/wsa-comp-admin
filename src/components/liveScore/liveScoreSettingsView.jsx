@@ -358,7 +358,7 @@ class LiveScoreSettingsView extends Component {
                                 className="single-checkbox"
                                 defaultChecked={true}
 
-                                onChange={e => this.onChange(e)}
+                                // onChange={e => this.onChange(e)}
                             >
                                 {AppConstants.useDefault}
                             </Checkbox>

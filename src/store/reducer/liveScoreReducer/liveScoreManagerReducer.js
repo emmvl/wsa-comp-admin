@@ -118,6 +118,11 @@ function liveScoreMangerState(state = initialState, action) {
                 state[action.key] = action.data
                 state.exsitingManagerId = null
 
+            }else if (action.key == "managerSearch") {
+
+                state.exsitingManagerId = action.data
+            
+
             } else if (action.key == 'isEditManager') {
                 state.managerData.id = action.data.id
                 state.managerData.firstName = action.data.firstName
@@ -141,7 +146,6 @@ function liveScoreMangerState(state = initialState, action) {
             } else {
                 state.managerData[action.key] = action.data
             }
-
             return {
                 ...state,
 

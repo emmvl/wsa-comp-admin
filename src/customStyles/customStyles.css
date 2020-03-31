@@ -202,6 +202,7 @@
   padding: 0 4.5%;
 }
 
+
 @media (max-width: 767px) {
   .form-header-view.ant-layout-header {
     padding: 0 0px;
@@ -209,4 +210,11 @@
   .comp-draw-head-content-view {
     padding: 0 7%;
   }
+
+  .button-with-search{
+  padding-left: 18px;
+  padding-top:10px;
+  align-items: center
+  }
+  
 }

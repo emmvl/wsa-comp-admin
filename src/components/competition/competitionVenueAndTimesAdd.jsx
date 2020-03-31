@@ -384,7 +384,7 @@ class CompetitionVenueAndTimesAdd extends Component {
 
                 <InputWithHead
                     required={"required-field"}
-                    heading={AppConstants.state}
+                    heading={AppConstants.State}
                 />
 
                 <Form.Item >

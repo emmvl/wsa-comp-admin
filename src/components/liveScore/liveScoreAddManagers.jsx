@@ -190,9 +190,9 @@ class LiveScoreAddManager extends Component {
                 </div>
                 <div className="row" >
                     <div className="col-sm" >
-                        <Form.Item>
+                        <Form.Item className="slct-in-add-manager-livescore">
                             <InputWithHead
-                                required={"required-field pb-0 pt-0"}
+                                required={"required-field pb-1"}
                                 heading={AppConstants.team} />
                             {getFieldDecorator("managerTeamName", {
                                 rules: [{ required: true, message: ValidationConstants.teamName }],
@@ -298,9 +298,9 @@ class LiveScoreAddManager extends Component {
                 <div className="row" >
                     <div className="col-sm" >
                         <InputWithHead heading={AppConstants.team}
-                        // required={"required-field pb-0"} 
+                            required={"required-field pb-0 pt-3"}
                         />
-                        <Form.Item>
+                        <Form.Item className="slct-in-add-manager-livescore">
                             {getFieldDecorator(AppConstants.selectTeam, {
                                 rules: [{ required: true, message: ValidationConstants.teamName }]
                             })(
@@ -308,9 +308,10 @@ class LiveScoreAddManager extends Component {
                                     // loading={this.props.liveScoreState.onLoad == true && true}
                                     mode="multiple"
                                     placeholder={AppConstants.selectTeam}
-                                    style={{ width: "100%", }}
+                                    style={{ width: "100%"}}
                                     onChange={(teamId) => this.props.liveScoreUpdateManagerDataAction(teamId, 'teamId')}
                                     value={teamId}
+                                    
                                 >
                                     {isArrayNotEmpty(teamData) && teamData.map((item) => (
                                         < Option value={item.id} > {item.name}</Option>
@@ -406,7 +407,7 @@ class LiveScoreAddManager extends Component {
     onSaveClick = e => {
 
         const { managerData, teamId, managerRadioBtn, exsitingManagerId } = this.props.liveScoreMangerState
-      
+
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             let body = ''
@@ -421,7 +422,13 @@ class LiveScoreAddManager extends Component {
                         "teams": managerData.teams
                     }
                     this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
-                } 
+                } else if (managerRadioBtn == 'existing') {
+                    body = {
+                        "id": exsitingManagerId,
+                        "teams": managerData.teams
+                    }
+                    this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
+                }
 
             }
         });

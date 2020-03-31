@@ -79,7 +79,7 @@ import { liveScoreNewsListSaga, liveScoreAddNewsSaga, liveScoreNewsNotificationS
 import { liveScoreBannerSaga, liveScoreAddBannerSaga, liveScoreRemoveBannerSaga } from './liveScoreSaga/liveScoreBannerSaga';
 import { liveScoreGoalSaga } from './liveScoreSaga/liveScoreGoalSaga'
 import { liveScoreManagerListSaga, liveScoreAddEditManagerSaga, liveScoreManagerSearch } from './liveScoreSaga/liveScoreManagerSaga';
-import { liveScoreScorerListSaga, liveScorerSearchUserSaga, liveScoreAssigneMatches, liveScoreChangeAssignStatus, liveScoreAddEditScorerSaga } from '../saga/liveScoreSaga/liveScoreScorerSaga';
+import { liveScoreScorerListSaga, liveScorerSearchUserSaga, liveScoreAssigneMatches, liveScoreChangeAssignStatus, liveScoreAddEditScorerSaga, liveScoreUnAssignMatcheSaga } from '../saga/liveScoreSaga/liveScoreScorerSaga';
 import { liveScoreBulkPushBack, liveScoreBulkBringForwardSaga, liveScoreMatchResult, liveScoreEndMatchesSaga, liveScoreDoubleHeaderSaga, liveScoreAbandonMatchSaga } from './liveScoreSaga/liveScoreBulkMatchSaga';
 
 
@@ -523,7 +523,7 @@ export default function* root_saga() {
   //// Manager search saga
   yield takeEvery(ApiConstants.API_LIVESCORE_MANAGER_SEARCH_LOAD, liveScoreManagerSearch)
 
-  // yield takeEvery(ApiConstants.API_LIVESCORE_ASSIGN_CHANGE_STATUS_LOAD , liveScoreChangeAssignStatus)
+  yield takeEvery(ApiConstants.API_LIVESCORE_UNASSIGN_STATUS_LOAD , liveScoreUnAssignMatcheSaga)
 
   yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_EDIT_SCORER_LOAD, liveScoreAddEditScorerSaga)
 

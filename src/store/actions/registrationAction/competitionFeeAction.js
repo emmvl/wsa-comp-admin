@@ -1,11 +1,12 @@
 import ApiConstants from "../../../themes/apiConstants";
 
 // get the competition fees list in registration
-function regCompetitionListAction(offset, yearRefId) {
+function regCompetitionListAction(offset, yearRefId, searchText) {
     const action = {
         type: ApiConstants.API_REG_COMPETITION_LIST_LOAD,
         offset: offset,
         yearRefId: yearRefId,
+        searchText: searchText
     };
     return action;
 }

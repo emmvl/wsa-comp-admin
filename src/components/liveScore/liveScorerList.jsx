@@ -99,7 +99,7 @@ const columns = [
                 <Menu.Item key="2" >
                     <NavLink to={{
                         pathname: "./liveScoreAssignMatch",
-                        state: { teams: 562 }
+                        state: { record: record }
                     }}><span >Assign to match</span></NavLink>
                 </Menu.Item>
             </Menu.SubMenu>

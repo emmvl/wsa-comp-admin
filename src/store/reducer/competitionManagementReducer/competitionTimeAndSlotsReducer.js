@@ -15,7 +15,7 @@ const initailTimeSlotObj = {
     "timeSlotEntityGradeKey": []
 }
 const postTimeSlot = {
-    mainTimeRotationID: 7,
+    mainTimeRotationID: null,
     competitionUniqueKey: null,
     organisationId: null,
     applyToVenueRefId: null,
@@ -24,7 +24,10 @@ const postTimeSlot = {
     compititionTimeslotId: 0,
     competitionVenueTimeslotsDayTime: [],
     competitionTimeslotsEntity: [],
-    competitionTimeslotManual: [],
+    competitionTimeslotManual: [{
+        "venueId": null,
+        "timeslots": []
+    }],
 
 }
 // initial state
@@ -341,6 +344,7 @@ function getSelectedTimeRotation(defaultData, data) {
     let parentId
     let subParentId
     for (let i in defaultData) {
+        console.log(defaultData)
         if (defaultData[i].id !== data.timeslotRotationRefId) {
             if (defaultData[i].subReferences !== null) {
                 let subReferencesArr = defaultData[i].subReferences
@@ -351,18 +355,22 @@ function getSelectedTimeRotation(defaultData, data) {
                     }
                 }
             }
+
         }
         else {
             if (defaultData[i].subReferences !== null) {
                 parentId = defaultData[i].id
                 subParentId = defaultData[i].subReferences[0].id
+                break
             }
             else {
                 parentId = defaultData[i].id
                 subParentId = defaultData[i].id
+                break
             }
         }
     }
+    console.log(parentId, subParentId)
     return {
         parentId,
         subParentId
@@ -531,7 +539,6 @@ function CompetitionTimeSlots(state = initialState, action) {
         case ApiConstants.API_GET_COMPETITION_WITH_TIME_SLOTS_LOAD:
             return { ...state, onLoad: true, onGetTimeSlotLoad: true, error: null };
         case ApiConstants.API_GET_COMPETITION_WITH_TIME_SLOTS_SUCCESS:
-
             let resultData = JSON.parse(JSON.stringify(action.result))
             let selectedTimeGeneration = getSelectedTimeGeneration(state.timeSlotGeneration, action.result)
             let SelectedTimeRotationData = getSelectedTimeRotation(state.timeSlotRotation, action.result)
@@ -552,7 +559,6 @@ function CompetitionTimeSlots(state = initialState, action) {
                 status: action.status,
                 onLoad: false,
                 error: null,
-
             }
 
         case ApiConstants.API_COMPETITION_TIMESLOT_ERROR:

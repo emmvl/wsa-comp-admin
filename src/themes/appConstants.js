@@ -899,6 +899,8 @@ const AppConstants = {
   please_Sel_Fee: "Please fill the fees First",
 
   short_Name: "Short Name",
+  backToScorer: "Back to all Scorer",
+  State : "State",
   endDate:"End Date",
   otherInformation: "Other Information",
   countryOfBirth: "Country of Birth",

@@ -14,6 +14,7 @@ import {
     Form,
     Modal,
     message,
+    Tooltip
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -79,7 +80,7 @@ const divisionTable = [
             <Input className="input-inside-table-fees"
                 value={divisionName}
                 onChange={e => this_Obj.divisionTableDataOnchange(e.target.value, record, index, "divisionName")}
-                disabled={this_Obj.state.isCreatorEdit} />
+                disabled={this_Obj.state.isCreatorEdit || this_Obj.state.isPublished} />
         )
     },
 
@@ -93,7 +94,7 @@ const divisionTable = [
                 className="single-checkbox mt-1"
                 checked={ageRestriction}
                 onChange={e => this_Obj.divisionTableDataOnchange(e.target.checked, record, index, "ageRestriction")}
-                disabled={this_Obj.state.isCreatorEdit}
+                disabled={this_Obj.state.isCreatorEdit || this_Obj.state.isPublished}
             ></Checkbox>
         )
     },
@@ -145,7 +146,7 @@ const divisionTable = [
                     alt=""
                     width="16"
                     height="16"
-                    onClick={() => !this_Obj.state.isCreatorEdit ? this_Obj.addRemoveDivision(index, record, "remove") : null}
+                    onClick={() => !this_Obj.state.isCreatorEdit && !this_Obj.state.isPublished ? this_Obj.addRemoveDivision(index, record, "remove") : null}
                 />
             </span>
         )
@@ -709,7 +710,11 @@ class RegistrationCompetitionFee extends Component {
             isSetDefaul: false,
             competitionIsUsed: false,
             isCreatorEdit: false, //////// user is owner of the competition than isCreatorEdit will be false 
-            organisationTypeRefId: 0
+            organisationTypeRefId: 0,
+            isPublished: false,
+            tooltipVisibleDelete: false,
+            tooltipVisibleDraft: false,
+            tooltipVisiblePublish: false,
         };
         this_Obj = this;
         let competitionId = null
@@ -739,7 +744,7 @@ class RegistrationCompetitionFee extends Component {
                     getDataLoading: false,
                     profileImage: competitionFeesState.competitionDetailData.competitionLogoUrl,
                     competitionIsUsed: competitionFeesState.competitionDetailData.isUsed,
-
+                    isPublished: competitionFeesState.competitionDetailData.statusRefId == 2 ? true : false
                 })
                 this.setDetailsFieldValue()
                 let creatorId = competitionFeesState.competitionCreator
@@ -840,6 +845,8 @@ class RegistrationCompetitionFee extends Component {
             yearRefId: compFeesState.competitionDetailData.yearRefId,
             competitionTypeRefId: compFeesState.competitionDetailData.competitionTypeRefId,
             competitionFormatRefId: compFeesState.competitionDetailData.competitionFormatRefId,
+            registrationCloseDate: compFeesState.competitionDetailData.registrationCloseDate && moment(compFeesState.competitionDetailData.registrationCloseDate)
+
         })
         let data = this.props.competitionFeesState.competionDiscountValue
         let discountData = data && data.competitionDiscounts !== null ? data.competitionDiscounts[0].discounts : []
@@ -978,9 +985,11 @@ class RegistrationCompetitionFee extends Component {
             if (!err) {
                 let nonPlayingDate = JSON.stringify(postData.nonPlayingDates)
                 let venue = JSON.stringify(compFeesState.postVenues)
-                let invitees = JSON.stringify(compFeesState.postInvitees)
+                // let invitees = JSON.stringify(compFeesState.postInvitees)
+                let invitees = compFeesState.postInvitees
                 if (tabKey == "1") {
-                    if (compFeesState.competitionDetailData.competitionLogoUrl !== null) {
+                    console.log(invitees.length > 0, invitees)
+                    if (compFeesState.competitionDetailData.competitionLogoUrl !== null && invitees.length > 0) {
                         let formData = new FormData();
                         formData.append("competitionUniqueKey", competitionId);
                         formData.append("name", postData.competitionName);
@@ -997,9 +1006,9 @@ class RegistrationCompetitionFee extends Component {
                         if (postData.maximumPlayers !== null && postData.maximumPlayers !== '') formData.append("maximumPlayers", postData.maximumPlayers);
                         formData.append("venues", venue);
                         formData.append("registrationCloseDate", postData.registrationCloseDate);
-                        formData.append("statusRefId", this.state.statusRefId);
+                        formData.append("statusRefId", this.state.isPublished ? 2 : this.state.statusRefId);
                         formData.append("nonPlayingDates", nonPlayingDate);
-                        formData.append("invitees", invitees);
+                        formData.append("invitees", JSON.stringify(invitees));
                         formData.append("logoSetAsDefault", this.state.logoSetDefault)
                         if (this.state.logoSetDefault) {
                             formData.append("organisationLogoId", compFeesState.defaultCompFeesOrgLogoData.id)
@@ -1023,7 +1032,12 @@ class RegistrationCompetitionFee extends Component {
                         this.props.saveCompetitionFeesDetailsAction(formData, compFeesState.defaultCompFeesOrgLogoData.id)
                         this.setState({ loading: true })
                     } else {
-                        message.error(ValidationConstants.competitionLogoIsRequired)
+                        if (compFeesState.postInvitees.length == 0) {
+                            message.error(ValidationConstants.pleaseSelectRegInvitees)
+                        }
+                        if (compFeesState.competitionDetailData.competitionLogoUrl == null) {
+                            message.error(ValidationConstants.competitionLogoIsRequired)
+                        }
                     }
                 }
                 else if (tabKey == "2") {
@@ -1734,7 +1748,22 @@ class RegistrationCompetitionFee extends Component {
                     </div>
                 </div>
                 <InputWithHead heading={AppConstants.registration_close} />
-                <DatePicker
+                <Form.Item >
+                    {getFieldDecorator('registrationCloseDate',
+                        { rules: [{ required: true, message: ValidationConstants.registrationCloseDateIsRequired }] })(
+                            <DatePicker
+                                size="large"
+                                placeholder={"Select Date"}
+                                style={{ width: "100%" }}
+                                onChange={date => this.dateOnChangeFrom(date, "registrationCloseDate")}
+                                name={"registrationCloseDate"}
+                                format={"DD-MM-YYYY"}
+                                showTime={false}
+                                disabled={isCreatorEdit}
+                            />
+                        )}
+                </Form.Item>
+                {/* <DatePicker
                     size="large"
                     style={{ width: "100%" }}
                     onChange={date => this.dateOnChangeFrom(date, "registrationCloseDate")}
@@ -1743,7 +1772,7 @@ class RegistrationCompetitionFee extends Component {
                     value={detailsData.competitionDetailData.registrationCloseDate && moment(detailsData.competitionDetailData.registrationCloseDate)}
                     disabled={isCreatorEdit}
 
-                />
+                /> */}
                 <div className="inside-container-view pt-4">
                     <InputWithHead heading={AppConstants.nonPlayingDates} />
                     {detailsData.competitionDetailData.nonPlayingDates && detailsData.competitionDetailData.nonPlayingDates.map((item, index) =>
@@ -1798,6 +1827,7 @@ class RegistrationCompetitionFee extends Component {
         let membershipProductData = this.props.competitionFeesState.defaultCompFeesMembershipProduct
         let membershipProductArray = membershipProductData !== null ? membershipProductData : []
         let isCreatorEdit = this.state.isCreatorEdit
+        let isPublished = this.state.isPublished
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.membershipProduct}</span>
@@ -1812,7 +1842,7 @@ class RegistrationCompetitionFee extends Component {
                             checked={item.isProductSelected}
                             onChange={e => this.membershipProductSelected(e.target.checked, index, item.membershipProductUniqueKey)}
                             key={index}
-                            disabled={isCreatorEdit}
+                            disabled={isCreatorEdit || isPublished}
                         >
                             {item.membershipProductName}
                         </Checkbox>
@@ -1826,6 +1856,7 @@ class RegistrationCompetitionFee extends Component {
     membershipTypeInnerView = (item, index) => {
         let typeData = isArrayNotEmpty(item.membershipProductTypes) ? item.membershipProductTypes : []
         let isCreatorEdit = this.state.isCreatorEdit
+        let isPublished = this.state.isPublished
         return (
             <div  >
                 {typeData.map((typeItem, typeIndex) =>
@@ -1835,7 +1866,7 @@ class RegistrationCompetitionFee extends Component {
                             checked={typeItem.isTypeSelected}
                             onChange={e => this.membershipTypeSelected(e.target.checked, index, typeIndex)}
                             key={typeIndex}
-                            disabled={isCreatorEdit}
+                            disabled={isCreatorEdit || isPublished}
                         >
                             {typeItem.membershipProductTypeName}
                         </Checkbox>
@@ -1870,7 +1901,6 @@ class RegistrationCompetitionFee extends Component {
                         </div> : null
                 ))}
             </div>
-
         )
     }
 
@@ -1883,6 +1913,7 @@ class RegistrationCompetitionFee extends Component {
     divisionsView = () => {
         let divisionData = this.props.competitionFeesState.competitionDivisionsData
         let divisionArray = divisionData !== null ? divisionData : []
+        let isPublished = this.state.isPublished
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading required-field" >{AppConstants.divisions}</span>
@@ -1907,7 +1938,7 @@ class RegistrationCompetitionFee extends Component {
                                 />
                             </div>
                             <a>
-                                <span className="input-heading-add-another" onClick={() => !this.state.isCreatorEdit ? this.addRemoveDivision(index, item, "add") : null}>+ {AppConstants.addDivision}</span>
+                                <span className="input-heading-add-another" onClick={() => !this.state.isCreatorEdit && !isPublished ? this.addRemoveDivision(index, item, "add") : null}>+ {AppConstants.addDivision}</span>
                             </a>
                         </div>
                     </div>
@@ -1922,8 +1953,6 @@ class RegistrationCompetitionFee extends Component {
         this.props.add_editFee_deatialsScetion(value, tableIndex, item, key, arrayKey)
 
     }
-
-
 
     getOrgLevelForFeesTable = () => {
         const registrationInviteesRefIdObject = {
@@ -1969,12 +1998,11 @@ class RegistrationCompetitionFee extends Component {
         }
     }
 
-
-
     feesView = () => {
         let allStates = this.props.competitionFeesState
         let feeDetails = allStates.competitionFeesData
         let isCreatorEdit = this.state.isCreatorEdit
+        let isPublished = this.state.isPublished
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.fees}</span>
@@ -1994,7 +2022,7 @@ class RegistrationCompetitionFee extends Component {
                                 className="reg-competition-radio"
                                 onChange={e => this.props.checkUncheckcompetitionFeeSction(e.target.value, index, "isAllType")}
                                 value={item.isAllType}
-                                disabled={isCreatorEdit}
+                                disabled={isCreatorEdit || isPublished}
                             >
                                 <div className="fluid-width">
                                     <div className="row">
@@ -2015,13 +2043,10 @@ class RegistrationCompetitionFee extends Component {
                                     <Checkbox
                                         checked={item.isSeasonal}
                                         className="single-checkbox"
-                                        disabled={isCreatorEdit}
+                                        disabled={isCreatorEdit || isPublished}
                                         onChange={e => {
                                             this.props.checkUncheckcompetitionFeeSction(e.target.checked, index, "isSeasonal")
                                         }
-                                            // this.setState({
-                                            //     SeasonalFeeSelected: !this.state.SeasonalFeeSelected
-                                            // })
                                         }
                                     >
                                         {AppConstants.seasonalFee}
@@ -2047,7 +2072,7 @@ class RegistrationCompetitionFee extends Component {
                                     <Checkbox
                                         checked={item.isCasual}
                                         className="single-checkbox"
-                                        disabled={isCreatorEdit}
+                                        disabled={isCreatorEdit || isPublished}
                                         onChange={e =>
                                             this.props.checkUncheckcompetitionFeeSction(e.target.checked, index, "isCasual")
                                         }
@@ -2079,32 +2104,6 @@ class RegistrationCompetitionFee extends Component {
         );
     };
 
-
-    // regInviteesView = () => {
-    //     let invitees = this.props.appState.registrationInvitees.length > 0 ? this.props.appState.registrationInvitees : []
-    //     let detailsData = this.props.competitionFeesState
-    //     let isCreatorEdit = this.state.isCreatorEdit
-    //     return (
-    //         <div className="fees-view pt-5">
-    //             <span className="form-heading">{AppConstants.registrationInvitees}</span>
-    //             <div>
-    //                 <Tree
-    //                     className="tree-government-rebate"
-    //                     style={{ flexDirection: 'column' }}
-    //                     checkable
-    //                     checkedKeys={[...detailsData.selectedInvitees]}
-    //                     onCheck={(e) => this.onInviteesChange(e)}
-    //                     disabled={isCreatorEdit}
-    //                 >
-    //                     {this.AffiliatesLevel(invitees)}
-    //                 </Tree>
-    //             </div>
-    //         </div>
-    //     );
-    // };
-
-
-
     disableInvitee = (inItem) => {
         let orgLevelId = JSON.stringify(this.state.organisationTypeRefId)
         if (inItem.id == "2" && orgLevelId == "3") {
@@ -2128,14 +2127,14 @@ class RegistrationCompetitionFee extends Component {
         let isCreatorEdit = this.state.isCreatorEdit;
         let seletedInvitee = detailsData.selectedInvitees.find(x => x);
         let orgLevelId = JSON.stringify(this.state.organisationTypeRefId)
-        console.log("invitees", invitees)
+        let isPublished = this.state.isPublished
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.registrationInvitees}</span>
                 <div>
                     <Radio.Group
                         className="reg-competition-radio"
-                        disabled={isCreatorEdit}
+                        disabled={isCreatorEdit || isPublished}
                         onChange={(e) => this.onInviteesChange(e.target.value)}
                         value={seletedInvitee}>
                         {(invitees || []).map((item, index) =>
@@ -2178,9 +2177,6 @@ class RegistrationCompetitionFee extends Component {
     onChangeCasualFee(itemValue, paymentData) {
         this.props.updatePaymentFeeOption(itemValue, "casualfee")
     }
-
-
-
     //on change of casual fee payment option
     onChangeSeasonalFee(itemValue, paymentData) {
         this.props.updatePaymentFeeOption(itemValue, "seasonalfee")
@@ -2188,25 +2184,17 @@ class RegistrationCompetitionFee extends Component {
 
     checkIsSeasonal = (feeDetails) => {
         let isSeasonalValue = false
-
         for (let i in feeDetails) {
             if (feeDetails[i].isSeasonal == true) {
-                console.log(feeDetails[i].isSeasonal)
                 isSeasonalValue = true
                 break
             }
-
         }
         return isSeasonalValue
-
-
-
     }
     checkIsCasual = (feeDetails) => {
         let isCasuallValue = false
-
         for (let i in feeDetails) {
-            console.log(feeDetails[i].isCasual)
             if (feeDetails[i].isCasual == true) {
                 isCasuallValue = true
                 break
@@ -2214,7 +2202,6 @@ class RegistrationCompetitionFee extends Component {
 
         }
         return isCasuallValue
-
     }
 
 
@@ -2331,7 +2318,7 @@ class RegistrationCompetitionFee extends Component {
                                     className="single-checkbox mt-3"
                                     checked={item.isSelected}
                                     onChange={(e) => this.onChangeCharity(e.target.checked, index, "govermentVouchers")}
-                                    disabled={this.state.isCreatorEdit}
+                                    disabled={this.state.isCreatorEdit || this.state.isPublished}
                                 >
                                     {item.description}
                                 </Checkbox>
@@ -2366,6 +2353,7 @@ class RegistrationCompetitionFee extends Component {
 
     discountViewChange = (item, index) => {
         let childDiscounts = item.childDiscounts !== null && item.childDiscounts.length > 0 ? item.childDiscounts : []
+        let isPublished = this.state.isPublished
         switch (item.competitionTypeDiscountTypeRefId) {
 
             case 1:
@@ -2376,7 +2364,7 @@ class RegistrationCompetitionFee extends Component {
                         onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
                         placeholder="Select"
                         value={item.discountTypeRefId}
-                        disabled={this.state.isCreatorEdit}
+                        disabled={this.state.isCreatorEdit || isPublished}
                     >
                         {this.props.appState.commonDiscountTypes.map(item => {
                             return (
@@ -2393,7 +2381,7 @@ class RegistrationCompetitionFee extends Component {
                                 placeholder={AppConstants.percentageOff_FixedAmount}
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                 value={item.amount}
-                                disabled={this.state.isCreatorEdit}
+                                disabled={this.state.isCreatorEdit || isPublished}
                                 suffix={item.discountTypeRefId == "2" ? "%" : null}
                                 type="number"
                             />
@@ -2404,7 +2392,7 @@ class RegistrationCompetitionFee extends Component {
                                 placeholder={AppConstants.gernalDiscount}
                                 onChange={(e) => this.onChangeDescription(e.target.value, index)}
                                 value={item.description}
-                                disabled={this.state.isCreatorEdit}
+                                disabled={this.state.isCreatorEdit || isPublished}
                             />
                         </div>
                     </div>
@@ -2419,7 +2407,7 @@ class RegistrationCompetitionFee extends Component {
                                     format={"DD-MM-YYYY"}
                                     showTime={false}
                                     value={item.availableFrom !== null && moment(item.availableFrom)}
-                                    disabled={this.state.isCreatorEdit}
+                                    disabled={this.state.isCreatorEdit || isPublished}
                                 />
                             </div>
                             <div className="col-sm">
@@ -2433,7 +2421,7 @@ class RegistrationCompetitionFee extends Component {
                                     format={"DD-MM-YYYY"}
                                     showTime={false}
                                     value={item.availableTo !== null && moment(item.availableTo)}
-                                    disabled={this.state.isCreatorEdit}
+                                    disabled={this.state.isCreatorEdit || isPublished}
                                 />
                             </div>
                         </div>
@@ -2449,7 +2437,7 @@ class RegistrationCompetitionFee extends Component {
                         onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
                         placeholder="Select"
                         value={item.discountTypeRefId}
-                        disabled={this.state.isCreatorEdit}
+                        disabled={this.state.isCreatorEdit || isPublished}
                     >
                         {this.props.appState.commonDiscountTypes.map(item => {
                             return (
@@ -2464,7 +2452,7 @@ class RegistrationCompetitionFee extends Component {
                         placeholder={AppConstants.code}
                         onChange={(e) => this.onChangeDiscountCode(e.target.value, index)}
                         value={item.discountCode}
-                        disabled={this.state.isCreatorEdit}
+                        disabled={this.state.isCreatorEdit || isPublished}
                     />
                     <div className="row">
                         <div className="col-sm">
@@ -2473,7 +2461,7 @@ class RegistrationCompetitionFee extends Component {
                                 placeholder={AppConstants.percentageOff_FixedAmount}
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                 value={item.amount}
-                                disabled={this.state.isCreatorEdit}
+                                disabled={this.state.isCreatorEdit || isPublished}
                                 suffix={item.discountTypeRefId == "2" ? "%" : null}
                                 type="number"
                             />
@@ -2484,7 +2472,7 @@ class RegistrationCompetitionFee extends Component {
                                 placeholder={AppConstants.gernalDiscount}
                                 onChange={(e) => this.onChangeDescription(e.target.value, index)}
                                 value={item.description}
-                                disabled={this.state.isCreatorEdit}
+                                disabled={this.state.isCreatorEdit || isPublished}
                             />
                         </div>
                     </div>
@@ -2500,7 +2488,7 @@ class RegistrationCompetitionFee extends Component {
                                     format={"DD-MM-YYYY"}
                                     showTime={false}
                                     value={item.availableFrom !== null ? moment(item.availableFrom) : null}
-                                    disabled={this.state.isCreatorEdit}
+                                    disabled={this.state.isCreatorEdit || isPublished}
                                 />
                             </div>
                             <div className="col-sm">
@@ -2514,7 +2502,7 @@ class RegistrationCompetitionFee extends Component {
                                     format={"DD-MM-YYYY"}
                                     showTime={false}
                                     value={item.availableTo !== null ? moment(item.availableTo) : null}
-                                    disabled={this.state.isCreatorEdit}
+                                    disabled={this.state.isCreatorEdit || isPublished}
                                 />
                             </div>
                         </div>
@@ -2532,11 +2520,11 @@ class RegistrationCompetitionFee extends Component {
                                     placeholder={`Child ${childindex + 1}%`}
                                     onChange={(e) => this.onChangeChildPercent(e.target.value, index, childindex, childItem)}
                                     value={childItem.percentageValue}
-                                    disabled={this.state.isCreatorEdit}
+                                    disabled={this.state.isCreatorEdit || isPublished}
                                 />
                             </div>
                             <div className="col-sm-2 delete-image-view pb-4"
-                                onClick={() => !this.state.isCreatorEdit ? this.addRemoveChildDiscount(index, "delete", childindex) : null}>
+                                onClick={() => !this.state.isCreatorEdit && !isPublished ? this.addRemoveChildDiscount(index, "delete", childindex) : null}>
                                 <span className="user-remove-btn">
                                     <i className="fa fa-trash-o" aria-hidden="true"></i>
                                 </span>
@@ -2545,7 +2533,7 @@ class RegistrationCompetitionFee extends Component {
                         </div>
                     ))}
                     <span className="input-heading-add-another"
-                        onClick={() => !this.state.isCreatorEdit ? this.addRemoveChildDiscount(index, "add", -1) : null}>
+                        onClick={() => !this.state.isCreatorEdit && !isPublished ? this.addRemoveChildDiscount(index, "add", -1) : null}>
                         + {AppConstants.addChild}
                     </span>
                 </div>
@@ -2558,7 +2546,7 @@ class RegistrationCompetitionFee extends Component {
                         onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
                         placeholder="Select"
                         value={item.discountTypeRefId}
-                        disabled={this.state.isCreatorEdit}
+                        disabled={this.state.isCreatorEdit || isPublished}
                     >
                         {this.props.appState.commonDiscountTypes.map(item => {
                             return (
@@ -2575,7 +2563,7 @@ class RegistrationCompetitionFee extends Component {
                                 placeholder={AppConstants.percentageOff_FixedAmount}
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                 value={item.amount}
-                                disabled={this.state.isCreatorEdit}
+                                disabled={this.state.isCreatorEdit || isPublished}
                             />
                         </div>
                         <div className="col-sm">
@@ -2584,7 +2572,7 @@ class RegistrationCompetitionFee extends Component {
                                 placeholder={AppConstants.gernalDiscount}
                                 onChange={(e) => this.onChangeDescription(e.target.value, index)}
                                 value={item.description}
-                                disabled={this.state.isCreatorEdit}
+                                disabled={this.state.isCreatorEdit || isPublished}
                             />
                         </div>
                     </div>
@@ -2600,7 +2588,7 @@ class RegistrationCompetitionFee extends Component {
                                     format={"DD-MM-YYYY"}
                                     showTime={false}
                                     value={item.availableFrom !== null && moment(item.availableFrom)}
-                                    disabled={this.state.isCreatorEdit}
+                                    disabled={this.state.isCreatorEdit || isPublished}
 
                                 />
                             </div>
@@ -2615,7 +2603,7 @@ class RegistrationCompetitionFee extends Component {
                                     format={"DD-MM-YYYY"}
                                     showTime={false}
                                     value={item.availableTo !== null && moment(item.availableTo)}
-                                    disabled={this.state.isCreatorEdit}
+                                    disabled={this.state.isCreatorEdit || isPublished}
 
                                 />
                             </div>
@@ -2631,21 +2619,21 @@ class RegistrationCompetitionFee extends Component {
                         placeholder={AppConstants.description}
                         onChange={(e) => this.onChangeDescription(e.target.value, index)}
                         value={item.description}
-                        disabled={this.state.isCreatorEdit}
+                        disabled={this.state.isCreatorEdit || isPublished}
                     />
                     <InputWithHead
                         heading={AppConstants.question}
                         placeholder={AppConstants.question}
                         onChange={(e) => this.onChangeQuestion(e.target.value, index)}
                         value={item.question}
-                        disabled={this.state.isCreatorEdit}
+                        disabled={this.state.isCreatorEdit || isPublished}
                     />
                     <InputWithHead heading={"Apply Discount if Answer is Yes"} />
                     <Radio.Group
                         className="reg-competition-radio"
                         onChange={e => this.applyDiscountQuestionCheck(e.target.value, index)}
                         value={JSON.stringify(JSON.parse(item.applyDiscount))}
-                        disabled={this.state.isCreatorEdit}
+                        disabled={this.state.isCreatorEdit || isPublished}
                     >
                         <Radio value={"1"}>{AppConstants.yes}</Radio>
                         <Radio value={"0"}>{AppConstants.no}</Radio>
@@ -2749,13 +2737,14 @@ class RegistrationCompetitionFee extends Component {
         let data = this.props.competitionFeesState.competionDiscountValue
         let discountData = data && data.competitionDiscounts !== null ? data.competitionDiscounts[0].discounts : []
         let membershipPrdArr = this.props.competitionFeesState.competitionMembershipProductData !== null ? this.props.competitionFeesState.competitionMembershipProductData : []
+        let isPublished = this.state.isPublished
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading">{AppConstants.discounts}</span>
                 {discountData.length > 0 && discountData.map((item, index) => (
                     <div className="prod-reg-inside-container-view">
                         <div className="transfer-image-view pt-2"
-                            onClick={() => !this.state.isCreatorEdit ? this.addRemoveDiscount("remove", index) : null}>
+                            onClick={() => !this.state.isCreatorEdit && !isPublished ? this.addRemoveDiscount("remove", index) : null}>
                             <span className="user-remove-btn">
                                 <i className="fa fa-trash-o" aria-hidden="true"></i>
                             </span>
@@ -2769,7 +2758,7 @@ class RegistrationCompetitionFee extends Component {
                                     onChange={discountTypeItem => this.onChangeMembershipProductDisType(discountTypeItem, index)}
                                     placeholder="Select"
                                     value={item.competitionTypeDiscountTypeRefId !== 0 && item.competitionTypeDiscountTypeRefId}
-                                    disabled={this.state.isCreatorEdit}
+                                    disabled={this.state.isCreatorEdit || isPublished}
                                 >
                                     {this.props.competitionFeesState.defaultDiscountType.map((discountTypeItem, discountTypeIndex) => {
                                         return (
@@ -2794,7 +2783,7 @@ class RegistrationCompetitionFee extends Component {
                                                 placeholder={"Select"}
                                                 // value={item.membershipProductUniqueKey}
                                                 onChange={item => this.onChangeMembershipProduct(item, index)}
-                                                disabled={this.state.isCreatorEdit}
+                                                disabled={this.state.isCreatorEdit || isPublished}
                                             >
                                                 {membershipPrdArr && membershipPrdArr.membershipProducts && membershipPrdArr.membershipProducts.map(item => {
                                                     return (
@@ -2824,7 +2813,7 @@ class RegistrationCompetitionFee extends Component {
                                             }
                                             placeholder={"Select"}
                                             // value={item.competitionMembershipProductTypeId}
-                                            disabled={this.state.isCreatorEdit}
+                                            disabled={this.state.isCreatorEdit || isPublished}
                                         >
                                             {item.membershipProductTypes.map(item => {
                                                 return (
@@ -2841,7 +2830,7 @@ class RegistrationCompetitionFee extends Component {
                     </div>
                 ))}
 
-                < span className="input-heading-add-another" onClick={() => !this.state.isCreatorEdit ? this.addRemoveDiscount("add", -1) : null}>
+                < span className="input-heading-add-another" onClick={() => !this.state.isCreatorEdit && !isPublished ? this.addRemoveDiscount("add", -1) : null}>
                     + {AppConstants.addDiscount}
                 </span>
 
@@ -2889,42 +2878,68 @@ class RegistrationCompetitionFee extends Component {
     footerView = () => {
         let tabKey = this.state.competitionTabKey
         let competitionId = this.props.competitionFeesState.competitionId
-        let statusRefId = this.props.competitionFeesState.competitionDetailData.statusRefId ?
-            this.props.competitionFeesState.competitionDetailData.statusRefId : 1
-        console.log("statusRefId", statusRefId)
+        let isPublished = this.state.isPublished
+        console.log("this.statet.ispublished", isPublished)
         return (
             <div className="fluid-width">
                 <div className="footer-view">
                     {this.buttonShowView() ?
                         <div className="row">
                             <div className="col-sm">
-                                {statusRefId == 1 &&
-                                    <div className="reg-add-save-button">
-                                        {competitionId ?
-                                            <Button type="cancel-button" onClick={() => this.showDeleteConfirm()}>{AppConstants.delete}</Button>
-                                            : null}
-                                    </div>
-                                }
+                                <div className="reg-add-save-button">
+                                    {competitionId ?
+                                        <Tooltip style={{ height: "100%" }}
+                                            onMouseEnter={() => this.setState({ tooltipVisibleDelete: isPublished ? true : false })}
+                                            onMouseLeave={() => this.setState({ tooltipVisibleDelete: false })}
+                                            visible={this.state.tooltipVisibleDelete}
+                                            title={ValidationConstants.compIsPublished}>
+                                            <Button
+                                                disabled={isPublished}
+                                                type="cancel-button"
+                                                onClick={() => this.showDeleteConfirm()}>{AppConstants.delete}</Button>
+                                        </Tooltip>
+                                        : null}
+                                </div>
                             </div>
                             <div className="col-sm">
-                                {statusRefId == 1 &&
-                                    <div className="comp-buttons-view">
-                                        <Button className="save-draft-text" type="save-draft-text"
-                                            htmlType="submit" onClick={() => this.setState({ statusRefId: 1, buttonPressed: "save" })}>
+                                <div className="comp-buttons-view">
+                                    <Tooltip style={{ height: "100%" }}
+                                        onMouseEnter={() => this.setState({ tooltipVisibleDraft: isPublished ? true : false })}
+                                        onMouseLeave={() => this.setState({ tooltipVisibleDraft: false })}
+                                        visible={this.state.tooltipVisibleDraft}
+                                        title={ValidationConstants.compIsPublished}>
+                                        <Button
+                                            className="save-draft-text" type="save-draft-text"
+                                            disabled={isPublished}
+                                            htmlType="submit"
+                                            onClick={() => this.setState({ statusRefId: 1, buttonPressed: "save" })}>
                                             {AppConstants.saveAsDraft}
                                         </Button>
-                                        <Button className="publish-button" type="primary"
-                                            htmlType="submit" onClick={() => this.setState({
+                                    </Tooltip>
+                                    <Tooltip
+                                        style={{ height: "100%" }}
+                                        onMouseEnter={() =>
+                                            this.setState({ tooltipVisiblePublish: (isPublished) && (tabKey === "2" || tabKey === "3" || tabKey === "6") ? true : false })}
+                                        onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
+                                        visible={this.state.tooltipVisiblePublish}
+                                        title={ValidationConstants.compIsPublished}>
+                                        <Button
+                                            className="publish-button"
+                                            type="primary"
+                                            htmlType="submit"
+                                            disabled={tabKey === "1" || tabKey === "4" || tabKey === "5" ? false : isPublished}
+                                            onClick={() => this.setState({
                                                 statusRefId: tabKey == "6" ? 2 : 1,
                                                 buttonPressed: tabKey == "6" ? "publish" : "next"
                                             })}
+                                            style={{ height: 48, width: 92.5 }}
                                         >
                                             {tabKey === "6"
                                                 ? AppConstants.publish
                                                 : AppConstants.next}
                                         </Button>
-                                    </div>
-                                }
+                                    </Tooltip>
+                                </div>
                             </div>
                         </div>
                         :
@@ -2952,7 +2967,6 @@ class RegistrationCompetitionFee extends Component {
 
 
     tabCallBack = (key) => {
-
         let competitionId = this.props.competitionFeesState.competitionId
         if (competitionId !== null && competitionId.length > 0) {
             this.setState({ competitionTabKey: key })
@@ -2962,6 +2976,7 @@ class RegistrationCompetitionFee extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
+        console.log(this.props.competitionFeesState)
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout

@@ -62,9 +62,11 @@ class LiveScoreAddTeam extends Component {
             timeout: null,
             showOption: false,
             loaclCompetitionID: null,
-            image: null
+            image: null,
+            loading: false,
+            progress: 0,
         };
-        
+
     }
 
     componentDidMount() {
@@ -159,12 +161,11 @@ class LiveScoreAddTeam extends Component {
     };
 
 
-
     ////////form content view
     contentView = (getFieldDecorator) => {
 
         const { teamManagerData, affilateList, divisionList, managerType } = this.props.liveScoreTeamState
-        console.log(managerType, 'teamManagerData')
+        console.log(teamManagerData, 'teamManagerData')
         return (
             <div className="content-view pt-4">
                 <Form.Item>
@@ -250,6 +251,7 @@ class LiveScoreAddTeam extends Component {
                                         }}
                                     />
                                 </label>
+
                             </div>
                             <input
                                 type="file"
@@ -274,9 +276,13 @@ class LiveScoreAddTeam extends Component {
                         >
                             <Checkbox
                                 className="single-checkbox"
-                                // defaultChecked={teamManagerData.logoUrl ? false : true}
-                                checked={teamManagerData.logoUrl ? false : true}
-                                onChange={(value) => this.props.liveScoreAddTeamform({ key: 'checkBox', data: value.target.checked })}
+                                // defaultChecked={false}
+                                checked={this.props.liveScoreTeamState.isCheked}
+                                onChange={(value) => {
+                                    console.log( value.target.checked)
+                                    this.props.liveScoreAddTeamform({ key: 'checkBox', data: value.target.checked })
+                                    this.setState({ image: null })
+                                }}
                             >
                                 {AppConstants.useClubLogo}
                             </Checkbox>
@@ -380,7 +386,7 @@ class LiveScoreAddTeam extends Component {
     managerExistingRadioBtnView(getFieldDecorator) {
         let grade = this.state.managerData
         const { selectedManager } = this.props.liveScoreTeamState
-       
+
         const { managerListResult } = this.props.liveScoreMangerState
         return (
             <div >
@@ -568,24 +574,26 @@ class LiveScoreAddTeam extends Component {
                     email,
                 } = this.props.liveScoreTeamState.teamManagerData
 
+                console.log(this.props.liveScoreTeamState.teamManagerData)
+
                 if (this.props.liveScoreTeamState.managerType === 'existing') {
                     const formData = new FormData();
 
                     let usersArray = JSON.stringify(userIds)
 
-                     if(this.state.teamId !== null){
+                    if (this.state.teamId !== null) {
                         formData.append('id', this.state.teamId)
-                     }
-                   
+                    }
+
                     formData.append('name', name)
                     formData.append('alias', alias)
-                    
+
                     if (this.state.image) {
                         formData.append('logo', this.state.image)
                     } else {
                         formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
                     }
-                    
+
                     formData.append('competitionId', id)
                     formData.append('organisationId', organisationId)
                     formData.append('divisionId', divisionId)
@@ -595,10 +603,10 @@ class LiveScoreAddTeam extends Component {
                 }
                 else if (this.props.liveScoreTeamState.managerType === 'new') {
                     const formData = new FormData();
-                     
-                    if(this.state.teamId){
+
+                    if (this.state.teamId) {
                         formData.append('id', this.state.teamId)
-                     }
+                    }
 
                     formData.append('name', name)
                     formData.append('alias', alias)
@@ -622,15 +630,16 @@ class LiveScoreAddTeam extends Component {
                     // message.error('Please select manager section.')
                     const formData = new FormData();
 
-                    if(this.state.teamId){
+                    if (this.state.teamId) {
                         formData.append('id', this.state.teamId)
                     }
-                    
+
                     formData.append('name', name)
                     formData.append('alias', alias)
                     if (this.state.image) {
                         formData.append('logo', this.state.image)
-                    } else {
+                    }
+                    else {
                         formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
                     }
                     formData.append('competitionId', id)

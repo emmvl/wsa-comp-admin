@@ -33,7 +33,7 @@ function liveScoreDeleteTeam(teamId) {
     return action;
 }
 function liveScoreAddTeamform(data) {
-    console.log(data, 'datadatadatadata')
+  
     return {
         type: ApiConstants.LIVE_SCORE_TEAM_EDIT,
         payload: data
