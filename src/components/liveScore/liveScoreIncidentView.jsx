@@ -164,7 +164,7 @@ class LiveScoreIncidentView extends Component {
                     <div className="col-sm-10" >
                         {array.map((item) => {
                             return <div className="side-bar-profile-data">
-                                <span>{item.player.firstName} {item.player.description}</span>
+                                <span>{this.state.incidentItem.description}</span>
                             </div>
                         }
                         )}

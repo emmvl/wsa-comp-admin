@@ -55,6 +55,7 @@ const columns = [
             <Checkbox
                 className="single-checkbox mt-1"
                 checked={record.isSelected}
+                disabled={this_Obj.state.isPublished}
                 onChange={e => this_Obj.getSelectionofProduct(e.target.checked, record, index)}
             ></Checkbox>
         )
@@ -119,7 +120,8 @@ class RegistrationForm extends Component {
             onRegistrationLoad: false,
             selectedInvitees: [],
             tooltipVisibleDraft: false,
-            tooltipVisiblePublish: false
+            tooltipVisiblePublish: false,
+            isPublished: false
         };
         this_Obj = this;
 
@@ -148,7 +150,10 @@ class RegistrationForm extends Component {
         if (nextProps.registrationState.registrationFormData !== registrationState.registrationFormData) {
             if (this.state.onRegistrationLoad == true && registrationState.onLoad == false) {
                 this.setFieldDecoratorValues()
-                this.setState({ onRegistrationLoad: false })
+                this.setState({
+                    onRegistrationLoad: false,
+                    isPublished: registrationState.registrationFormData[0].statusRefId == 2 ? true : false
+                })
             }
         }
 
@@ -450,7 +455,7 @@ class RegistrationForm extends Component {
         let dateOpen = this.regOpenDate()
         let closeDate = this.regCloseDate()
         let defaultChecked = this.props.registrationState.defaultChecked
-
+        let isPublished = this.state.isPublished
         return (
             <div className="content-view pt-4">
                 <div className="row">
@@ -468,6 +473,7 @@ class RegistrationForm extends Component {
                                         name={"registrationOpenDate"}
                                         format={"DD-MM-YYYY"}
                                         showTime={false}
+                                        disabled={isPublished}
                                     // value={dateOpen ? moment(dateOpen, "YYYY-MM-DD") : ''}
 
                                     />
@@ -504,6 +510,7 @@ class RegistrationForm extends Component {
                     onChange={(e) => this.onSelectionMembershipCategory(e)}
                     value={fillteredProduct}
                     placeholder="Select"
+                    disabled={isPublished}
                 >
                     {productList.map((item, index) => {
                         return (
@@ -540,8 +547,6 @@ class RegistrationForm extends Component {
                     className="single-checkbox pt-2"
                     checked={defaultChecked.trainingVisible}
                     onChange={(e) => this.updateTraining(e.target.checked, "trainingVisible")}
-
-
                 >
                     {AppConstants.training}
                 </Checkbox>
@@ -641,6 +646,7 @@ class RegistrationForm extends Component {
     ) => {
         let defaultChecked = this.props.registrationState.defaultChecked
         let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
+        let isPublished = this.state.isPublished
         return (
             <div className="fees-view">
                 <Checkbox
@@ -789,6 +795,7 @@ class RegistrationForm extends Component {
     ) => {
         let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
         let registrationMethod = this.props.appState.regMethod.length !== 0 ? this.props.appState.regMethod : []
+        let isPublished = this.state.isPublished
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading">{AppConstants.how_users_Register}</span>
@@ -800,6 +807,7 @@ class RegistrationForm extends Component {
                             checked={this.onChangeRegistrationMethod(item, index)}
                             onChange={(e) => this.methodSelection(e, item, formDataValue)
                             }
+                            disabled={isPublished}
                         >
                             {item.description}
                         </Checkbox>))
@@ -895,6 +903,7 @@ class RegistrationForm extends Component {
         let selectedInvitees = this.props.registrationState.selectedInvitees
         let expendKeyArray = this.props.registrationState.expendKeyArr
         console.log(expendKeyArray)
+        let isPublished = this.state.isPublished
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading">{AppConstants.advancedSettings}</span>
@@ -904,6 +913,7 @@ class RegistrationForm extends Component {
                         style={{ flexDirection: 'column' }}
                         checkable
                         defaultExpandParent={true}
+                        disabled={isPublished}
                         // defaultExpandParent
                         // defaultExpandedKeys={[...expendKeyArray]}
                         // autoExpandParent={[...expendKeyArray]}
@@ -956,9 +966,9 @@ class RegistrationForm extends Component {
     disclaimerView = (
         getFieldDecorator
     ) => {
-        console.log(this.props.registrationState.registrationFormData)
         let registrationData = this.props.registrationState.registrationFormData.length > 0 ? this.props.registrationState.registrationFormData[0] : [];
         let disclaimerData = registrationData.registrationDisclaimer !== null ? isArrayNotEmpty(registrationData.registrationDisclaimer) ? registrationData.registrationDisclaimer : [] : []
+        let isPublished = this.state.isPublished
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading">{AppConstants.disclaimers}</span>
@@ -1018,7 +1028,7 @@ class RegistrationForm extends Component {
                 )}
                 <span
                     className="input-heading-add-another"
-                    onClick={() => this.addDisclaimerLink()}
+                    onClick={() => !isPublished ? this.addDisclaimerLink() : null}
                 >
                     + {AppConstants.addAnotherDisclaimerLink}
                 </span>
@@ -1061,22 +1071,23 @@ class RegistrationForm extends Component {
                                 <Button className="save-draft-text" type="save-draft-text">
                                     {AppConstants.preview}
                                 </Button>
-                                <Tooltip style={{ height: "100%" }}
+                                {/* <Tooltip style={{ height: "100%" }}
                                     onMouseEnter={() => this.setState({ tooltipVisiblePublish: statusRefId == 2 ? true : false })}
                                     onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
                                     visible={this.state.tooltipVisiblePublish}
-                                    title={ValidationConstants.compRegHaveBeenSent}>
-                                    <Button
-                                        className="open-reg-button"
-                                        htmlType="submit"
-                                        type="primary"
-                                        onClick={() => this.setState({ statusRefId: 2 })}
-                                        disabled={statusRefId == 2 ? true : false}
-                                        style={{ height: statusRefId == 2 ? "100%" : null, borderRadius: statusRefId == 2 ? 5 : null }}
-                                    >
-                                        {AppConstants.openRegistrations}
-                                    </Button>
-                                </Tooltip>
+                                    title={ValidationConstants.compRegHaveBeenSent}> */}
+                                <Button
+                                    className="open-reg-button"
+                                    htmlType="submit"
+                                    type="primary"
+                                    onClick={() => this.setState({ statusRefId: 2 })}
+                                // disabled={statusRefId == 2 ? true : false}
+                                // style={{ height: statusRefId == 2 ? "100%" : null, borderRadius: statusRefId == 2 ? 5 : null }}
+                                // style={{ height: statusRefId == 2 ? "100%" : null, borderRadius: statusRefId == 2 ? 5 : null }}
+                                >
+                                    {AppConstants.openRegistrations}
+                                </Button>
+                                {/* </Tooltip> */}
                             </div>
                         </div>
                     </div>

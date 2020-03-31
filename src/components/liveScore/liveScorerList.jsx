@@ -30,7 +30,8 @@ const columns = [
         render: (firstName, record) =>
             <NavLink to={{
                 pathname: '/liveScorerView',
-                state: { tableRecord: record }
+                // pathname: '/userPersonal',
+                state: { tableRecord: record, userId: record.id }
             }}>
                 <span className="input-heading-add-another pt-0">{firstName}</span>
             </NavLink>
@@ -43,7 +44,7 @@ const columns = [
         render: (firstName, record) =>
             <NavLink to={{
                 pathname: '/liveScorerView',
-                state: { tableRecord: record }
+                state: { tableRecord: record, userId: record.id }
             }}>
                 <span className="input-heading-add-another pt-0">{firstName}</span>
             </NavLink>
@@ -67,8 +68,9 @@ const columns = [
         sorter: (a, b) => a.teams.length - b.teams.length,
         render: (teams, record) =>
             <NavLink to={{
-                pathname: "./liveScoreAssignMatch",
-                state: { teams: record }
+                pathname: '/liveScorerView',
+                // pathname: '/userPersonal',
+                state: { tableRecord: record, userId: record.id }
             }}>
                 {teams.length > 0 && teams.map((item) => (
                     <span class="input-heading-add-another pt-0" >{item.name}</span>
@@ -90,7 +92,7 @@ const columns = [
                     <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                 }
             >
-                <Menu.Item  key={'1'}>
+                <Menu.Item key={'1'}>
                     <NavLink to={{
                         pathname: '/liveScorerView',
                         state: { tableRecord: record }
@@ -130,7 +132,7 @@ class LiveScorerList extends Component {
         }
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
-           
+
             this.props.liveScoreScorerListAction(id, 4, body)
         } else {
             history.push('/')

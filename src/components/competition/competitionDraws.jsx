@@ -284,7 +284,6 @@ class CompetitionDraws extends Component {
 
   ///dropdown view containing all the dropdown of header
   dropdownView = () => {
-    console.log(this.state.roundTime)
     return (
       <div className="row">
         <div className="col-sm-3">
@@ -380,7 +379,6 @@ class CompetitionDraws extends Component {
 
   ////////form content view
   contentView = () => {
-    console.log("Venue Id" + this.state.venueId + "RoundId" + this.state.roundId);
     return (
       <div className="comp-draw-content-view">
         <div className="row comp-draw-list-top-head">

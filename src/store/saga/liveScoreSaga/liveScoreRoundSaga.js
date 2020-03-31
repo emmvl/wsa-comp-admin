@@ -29,7 +29,6 @@ export function* liveScoreRoundSaga(action) {
                 type: ApiConstants.API_LIVE_SCORE_CREATE_ROUND_SUCCESS,
                 result: result.result.data,
                 status: result.status,
-                navigation: action.navigation
             });
         } else {
             yield call(failSaga, result)

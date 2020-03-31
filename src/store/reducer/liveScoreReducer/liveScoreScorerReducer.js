@@ -21,6 +21,7 @@ const initialState = {
     scorerRadioBtn: 'new',
     existingScorerId: null,
     teamResult: [],
+    allTeamData: [],
     teamId: null,
     assignMatches: [],
     assignMatchListPage: 0,
@@ -54,7 +55,7 @@ function getTeamObj(teamSelectId, teamArr) {
             }
         }
     }
-    console.log(teamObj)
+
     return teamObj;
 }
 
@@ -78,11 +79,22 @@ function liveScoreScorerState(state = initialState, action) {
             }
 
         case ApiConstants.API_LIVE_SCORE_DIVISION_SUCCESS:
-            console.log(action.result, 'selectedTeams')
+
+            let data23 = JSON.parse(JSON.stringify(action.result))
+
+            let teamObject = {
+                name: "All Team",
+                id: null
+            }
+
+
             return {
                 ...state,
                 onLoad: false,
-                teamResult: action.result,
+                teamResult: data23,
+                allTeamData: data23.unshift(teamObject)
+                //    teamResult :  action.result
+
 
             };
         case ApiConstants.API_LIVE_SCORE_UPDATE_SCORER:

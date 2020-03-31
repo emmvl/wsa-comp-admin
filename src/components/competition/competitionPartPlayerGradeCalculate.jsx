@@ -103,7 +103,6 @@ class CompetitionPartPlayerGradeCalculate extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.appState !== this.props.appState) {
-            console.log("appstate", this.props.appState)
             let competitionList = this.props.appState.participate_CompetitionArr
             if (nextProps.appState.participate_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {

@@ -253,7 +253,6 @@ class CompetitionPartPlayerGrades extends Component {
 
     onDragEnd = result => {
         const { source, destination } = result;
-        console.log(source, destination)
         let assignedPlayerData = this.props.partPlayerGradingState.assignedPartPlayerGradingListData
         let unassignedPlayerData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData
         let playerId
@@ -563,7 +562,6 @@ class CompetitionPartPlayerGrades extends Component {
 
 
     render() {
-        console.log(this.props.partPlayerGradingState.assignedPartPlayerGradingListData)
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />

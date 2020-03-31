@@ -324,7 +324,6 @@ class CompetitionPartProposedTeamGrading extends Component {
     ////////form content view
     contentView = () => {
         let getPartProposedTeamGradingData = this.props.ownTeamGradingState.getPartProposedTeamGradingData
-        console.log("getPartProposedTeamGradingData", getPartProposedTeamGradingData)
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">

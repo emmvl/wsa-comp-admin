@@ -4,7 +4,6 @@ import AxiosApi from "../../http/registrationHttp/registrationAxios";
 import { message } from "antd";
 
 function* failSaga(result) {
-
   yield put({
     type: ApiConstants.API_REGISTRATION_FAIL,
     error: result,
@@ -16,12 +15,12 @@ function* failSaga(result) {
 }
 
 function* errorSaga(error) {
-  console.log(error)
   yield put({
     type: ApiConstants.API_REGISTRATION_ERROR,
     error: error,
     status: error.status
   });
+
   setTimeout(() => {
     // message.error(error.result.data.message);
     message.error("Something went wrong.");
@@ -45,7 +44,6 @@ export function* regMembershipFeeListSaga(action) {
     yield call(errorSaga, error)
   }
 }
-
 
 
 //////delete the membership list product
@@ -123,7 +121,6 @@ export function* getRegistrationFormSaga(action) {
         AxiosApi.getMembershipProductList,
         action.competitionId
       );
-      console.log(resultMembershipProduct)
       yield put({
         type: ApiConstants.API_GET_REG_FORM_SUCCESS,
         result: result.result.data,
@@ -249,6 +246,7 @@ export function* getMembershipproduct(action) {
       action.competition
     );
     if (result.status === 1) {
+
       yield put({
         type: ApiConstants.API_REG_FORM_MEMBERSHIP_PRODUCT_SUCCESS,
         MembershipProductList: result.result.data,

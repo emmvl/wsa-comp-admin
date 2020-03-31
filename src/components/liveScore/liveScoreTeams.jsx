@@ -56,7 +56,7 @@ const columns = [
         dataIndex: 'organisation',
         key: 'organisation',
         sorter: (a, b) =>tableSort(a, b, "organisation"),
-        render: (organisation) => <span>{organisation.name}</span>
+        render: (organisation) => <span>{organisation?organisation.name:""}</span>
     },
 
     // Affiliate
@@ -65,7 +65,7 @@ const columns = [
         dataIndex: 'division',
         key: 'division',
         sorter: (a, b) =>tableSort(a, b, "division"),
-        render: (division) => <span>{division.name}</span>
+        render: (division) => <span>{division? division.name:""}</span>
     },
     {
         title: '#Players',
@@ -81,7 +81,7 @@ const columns = [
         sorter: (a, b) =>tableSort(a, b, "managers"),
         render: (managers, record) => <span >
       
-            {managers.length > 0 && managers.map((item) => (
+      {isArrayNotEmpty(managers) && managers.map((item) => (
                 <span className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
             ))
             }
@@ -94,7 +94,7 @@ const columns = [
         sorter: (a, b) =>tableSort(a, b, "managers"),
       
         render: (managers, record) =><span>
-                {managers.length > 0 && managers.map((item) => (
+                {isArrayNotEmpty(managers) && managers.map((item) => (
                     <span className="live-score-desc-text side-bar-profile-data" >{item.mobileNumber}</span>
                 ))
                 }
@@ -107,7 +107,7 @@ const columns = [
         key: 'managers',
         sorter: (a, b) =>tableSort(a, b, "managers"),
         render: (managers, record) =><span>
-                {managers.length > 0 && managers.map((item) => (
+                {isArrayNotEmpty(managers) && managers.map((item) => (
                     <span className="live-score-desc-text side-bar-profile-data" >{item.email}</span>
                 ))
                 }

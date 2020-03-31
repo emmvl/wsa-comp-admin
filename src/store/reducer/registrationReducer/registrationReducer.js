@@ -328,24 +328,10 @@ function getFillteredData(
     : [];
 
   let productArr = [];
-
-  if (memberShipSelectedArr.length > 0) {
-    for (let i in memberShipSelectedArr) {
-      if (productArr.length == 0) {
-        productArr.push(memberShipSelectedArr[i].membershipProductId);
-        let matchIndex = productListArray.findIndex(
-          x =>
-            x.membershipProductId ==
-            memberShipSelectedArr[i].membershipProductId
-        );
-        selectedMemberShipType.push(productListArray[matchIndex]);
-      } else {
-        if (
-          !checkExistngProductId(
-            productArr,
-            memberShipSelectedArr[i].membershipProductId
-          )
-        ) {
+  if (productListArray.length > 0) {
+    if (memberShipSelectedArr.length > 0) {
+      for (let i in memberShipSelectedArr) {
+        if (productArr.length == 0) {
           productArr.push(memberShipSelectedArr[i].membershipProductId);
           let matchIndex = productListArray.findIndex(
             x =>
@@ -353,10 +339,25 @@ function getFillteredData(
               memberShipSelectedArr[i].membershipProductId
           );
           selectedMemberShipType.push(productListArray[matchIndex]);
+        } else {
+          if (
+            !checkExistngProductId(
+              productArr,
+              memberShipSelectedArr[i].membershipProductId
+            )
+          ) {
+            productArr.push(memberShipSelectedArr[i].membershipProductId);
+            let matchIndex = productListArray.findIndex(
+              x =>
+                x.membershipProductId ==
+                memberShipSelectedArr[i].membershipProductId
+            );
+            selectedMemberShipType.push(productListArray[matchIndex]);
+          }
         }
       }
+    } else {
     }
-  } else {
   }
   return productArr;
 }
@@ -718,7 +719,7 @@ function registration(state = initialState, action) {
       };
 
     case ApiConstants.API_GET_REG_FORM_SUCCESS:
-      let productList = action.MembershipProductList.id;
+      let productList = action.MembershipProductList.id ? action.MembershipProductList.id : [];
       let objValue = JSON.parse(JSON.stringify([newObjvalue]))
       let formData = action.result.length > 0 ? action.result : objValue
       state.defaultRegistrationSettings = formData[0].registrationSettings !== null ? formData[0].registrationSettings : []
@@ -743,7 +744,6 @@ function registration(state = initialState, action) {
       state.defaultChecked = trainingSelection
       newObjvalue.competitionUniqueKeyId = state.defaultCompetitionID
       state.sendRegistrationFormData = JSON.parse(JSON.stringify([newObjvalue]))
-      console.log(SelectedProduct, "***", productListValue)
       return {
         ...state,
         onLoad: false,
@@ -765,10 +765,7 @@ function registration(state = initialState, action) {
       if (action.key == "registrationSettings") {
         state.selectedInvitees = action.updatedData
         let updatedObjData = getResitrationFormSettings(action.updatedData, state.defaultRegistrationSettings)
-        console.log(updatedObjData)
         state.registrationFormData[0].registrationSettings = updatedObjData
-
-        console.log(state.registrationFormData[0])
       }
       else if (action.key == "registerMethods") {
         state.selectedMethod = action.updatedData
@@ -785,11 +782,10 @@ function registration(state = initialState, action) {
 
 
     ///******fail and error handling */
-
     case ApiConstants.API_REGISTRATION_FAIL:
       return {
         ...state,
-
+        onLoad: false,
         error: action.error,
         status: action.status
       };

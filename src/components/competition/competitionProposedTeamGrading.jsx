@@ -163,7 +163,6 @@ class CompetitionProposedTeamGrading extends Component {
     componentDidMount() {
         let divisionId = this.props.location.state ? this.props.location.state.id : null;
         let gradeRefId = this.props.location.state ? this.props.location.state.gradeRefId : null;
-        console.log("gradeRefId::" + gradeRefId);
         this.setState({ divisionId: divisionId, gradeRefId:  gradeRefId})
         // this.props.gradesReferenceListAction()
         let yearId = getOwnCompetitionYear()
@@ -236,7 +235,6 @@ class CompetitionProposedTeamGrading extends Component {
     ////save the final team grading data
     submitApiCall = () => {
         let finalTeamGradingData = this.props.ownTeamGradingState.getCompOwnProposedTeamGradingData
-        console.log("finalTeamGradingData", finalTeamGradingData);
         let finalGrades =  this.props.ownTeamGradingState.compFinalTeamGradingFinalGradesData;
         let isError = false;
 
@@ -262,7 +260,6 @@ class CompetitionProposedTeamGrading extends Component {
                 "gradeRefId": this.state.gradeRefId,
                 "teams": finalTeamGradingData
             }
-            console.log("payload", JSON.stringify(payload));
             this.props.saveOwnFinalTeamGradingDataAction(payload)
             this.setState({ saveLoad: true })
         }
@@ -436,7 +433,6 @@ class CompetitionProposedTeamGrading extends Component {
     ////////form content view
     contentView = () => {
         let proposedTeamGradingData = this.props.ownTeamGradingState.getCompOwnProposedTeamGradingData
-        console.log("proposedTeamGradingData", proposedTeamGradingData)
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">

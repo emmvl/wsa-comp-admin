@@ -760,10 +760,14 @@ class RegistrationCompetitionFee extends Component {
 
 
     componentDidMount() {
+        let checkVenueScreen = this.props.location.state ? this.props.location.state.venueScreen ?
+            this.props.location.state.venueScreen : null : null
+        checkVenueScreen && window.scrollTo(0, 500)
         let orgData = getOrganisationData()
         this.setState({ organisationTypeRefId: orgData.organisationTypeRefId })
         let competitionId = null
-        competitionId = this.props.location.state ? this.props.location.state.id : null
+        competitionId = this.props.location.state ? this.props.location.state.id ?
+            this.props.location.state.id : null : null
         this.apiCalls(competitionId)
         this.setDetailsFieldValue()
     }

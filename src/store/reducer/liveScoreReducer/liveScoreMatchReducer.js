@@ -377,7 +377,7 @@ function liveScoreMatchReducer(state = initialState, action) {
             }
 
         case ApiConstants.API_LIVE_SCORE_CREATE_ROUND_SUCCESS:
-
+            state.roundList.push(action.result)
             state.matchData.roundId = action.result.id
             state.addEditMatch.roundId = action.result.id
             state.addEditMatch.round = action.result
@@ -469,6 +469,7 @@ function liveScoreMatchReducer(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
             console.log(action.result, 'API_LIVE_SCORE_TEAM_SUCCESS')
+            
             return {
                 ...state,
                 onLoad: false,

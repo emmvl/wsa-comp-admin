@@ -10,8 +10,9 @@ import AppImages from "../../themes/appImages";
 import { liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { getLiveScoreCompetiton, getUserId } from '../../util/sessionStorage'
 const { Content } = Layout;
+let userId = getUserId();
 
 //// table columns
 const columns = [
@@ -24,6 +25,8 @@ const columns = [
             <NavLink to={{
                 pathname: '/liveScoreManagerView',
                 state: { tableRecord: record }
+                // pathname: '/userPersonal',
+                // state: { userId: userId }
             }}>
                 <span class="input-heading-add-another pt-0" >{firstName}</span>
             </NavLink>
@@ -35,6 +38,8 @@ const columns = [
         sorter: (a, b) => a.lastName.length - b.lastName.length,
         render: (lastName, record) =>
             <NavLink to={{
+                // pathname: '/userPersonal',
+                // state: { userId: userId }
                 pathname: '/liveScoreManagerView',
                 state: { tableRecord: record }
             }}>
@@ -63,6 +68,8 @@ const columns = [
             <NavLink to={{
                 pathname: '/liveScoreManagerView',
                 state: { tableRecord: record }
+                // pathname: '/userPersonal',
+                // state: { tableRecord: record, userId: record.id }
             }}>
                 {linkedEntity.length > 0 && linkedEntity.map((item) => (
                     <span class="input-heading-add-another pt-0" >{item.name}</span>

@@ -19,8 +19,10 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { updateVenuAndTimeDataAction, updateVenuListAction, refreshVenueFieldsAction, 
-    removeObjectAction, clearVenueDataAction } from '../../store/actions/competitionModuleAction/venueTimeAction'
+import {
+    updateVenuAndTimeDataAction, updateVenuListAction, refreshVenueFieldsAction,
+    removeObjectAction, clearVenueDataAction
+} from '../../store/actions/competitionModuleAction/venueTimeAction'
 import { getYearAndCompetitionAction } from '../../store/actions/appAction'
 import { getCommonRefData, addVenueAction } from '../../store/actions/commonAction/commonAction'
 import { getOrganisationAction } from "../../store/actions/userAction/userAction"
@@ -40,10 +42,10 @@ const papaparseOptions = {
     dynamicTyping: true,
     skipEmptyLines: true,
     transformHeader: header =>
-      header
-        .toLowerCase()
-        .replace(/\W/g, '_')
-  }
+        header
+            .toLowerCase()
+            .replace(/\W/g, '_')
+}
 
 class CompetitionVenueAndTimesAdd extends Component {
     constructor(props) {
@@ -54,7 +56,7 @@ class CompetitionVenueAndTimesAdd extends Component {
             yearRefId: 1,
             screenNavigationKey: null,
             csvData: null,
-            loading:false,
+            loading: false,
             screenHeader: "",
             courtColumns: [
                 {
@@ -62,7 +64,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                     dataIndex: "courtNumber",
                     key: "courtNumber",
                     render: (courtNumber, record, index) => (
-                        <div style={{textAlign:'center'}}>
+                        <div style={{ textAlign: 'center' }}>
                             {courtNumber}
                         </div>
                     )
@@ -74,7 +76,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                     render: (courtName, record, index) => {
                         const { getFieldDecorator } = this.props.form;
                         return (
-            
+
                             <Form.Item >
                                 {getFieldDecorator(`venueCourtName${index}`, {
                                     rules: [{ required: true, message: ValidationConstants.courtField[3] }],
@@ -188,8 +190,8 @@ class CompetitionVenueAndTimesAdd extends Component {
         this.props.updateVenuAndTimeDataAction(e.target.checked, index, 'overideSlot')
     }
     componentDidMount() {
-        window.scroll(0,0);
-       // this.myRef.current.scrollTo(0, 0);
+        window.scroll(0, 0);
+        // this.myRef.current.scrollTo(0, 0);
         let screenNavigationKey = this.props.location.state.key;
         this.setState({
             screenNavigationKey: screenNavigationKey
@@ -200,15 +202,15 @@ class CompetitionVenueAndTimesAdd extends Component {
 
     setHeaderValue = (screenNavigationKey) => {
 
-        if(screenNavigationKey == AppConstants.venues)
-            this.setState({screenHeader: AppConstants.competitions});
-        else if((screenNavigationKey == AppConstants.competitionFees) || 
-                (screenNavigationKey == AppConstants.competitionDetails) ||
-                (screenNavigationKey == AppConstants.dashboard))
-            this.setState({screenHeader: AppConstants.registration});
-        else if(screenNavigationKey == AppConstants.venuesList)
-            this.setState({screenHeader: AppConstants.user});
-        
+        if (screenNavigationKey == AppConstants.venues)
+            this.setState({ screenHeader: AppConstants.competitions });
+        else if ((screenNavigationKey == AppConstants.competitionFees) ||
+            (screenNavigationKey == AppConstants.competitionDetails) ||
+            (screenNavigationKey == AppConstants.dashboard))
+            this.setState({ screenHeader: AppConstants.registration });
+        else if (screenNavigationKey == AppConstants.venuesList)
+            this.setState({ screenHeader: AppConstants.user });
+
     }
 
     componentDidUpdate(nextProps) {
@@ -218,17 +220,16 @@ class CompetitionVenueAndTimesAdd extends Component {
         }
 
         if (nextProps.venueTimeState !== this.props.venueTimeState) {
-            if(this.state.csvData != null)
-            {
-                this.setState({csvData: null, loading:false});
+            if (this.state.csvData != null) {
+                this.setState({ csvData: null, loading: false });
                 this.setFormFieldValue();
-               
+
             }
         }
     }
 
     setFormFieldValue = () => {
-       
+
         let venueData = this.props.venueTimeState.venuData;
         console.log("setFormFieldValue" + JSON.stringify(venueData));
         // this.props.form.setFieldsValue({
@@ -249,11 +250,11 @@ class CompetitionVenueAndTimesAdd extends Component {
     }
 
     readVenueCourtCSV = (data) => {
-        this.setState({csvData: data, loading: true});
+        this.setState({ csvData: data, loading: true });
         this.props.updateVenuAndTimeDataAction(data, "addGameAndCourtThroughCSV", 'venueCourts');
         let e = document.getElementById("venueCourtUpload");
         e.value = null;
-      };
+    };
 
     navigateTo = () => {
         if (this.state.screenNavigationKey == AppConstants.venues) {
@@ -266,7 +267,7 @@ class CompetitionVenueAndTimesAdd extends Component {
         else if (this.state.screenNavigationKey == AppConstants.competitionFees) {
             setTimeout(() => {
                 this.props.clearVenueDataAction("venue");
-                history.push('/registrationCompetitionFee')
+                history.push('/registrationCompetitionFee', { venueScreen: true })
             }, 800);
             this.setState({ saveContraintLoad: false })
         }
@@ -284,7 +285,7 @@ class CompetitionVenueAndTimesAdd extends Component {
             }, 800);
             this.setState({ saveContraintLoad: false })
         }
-        else if(this.state.screenNavigationKey == AppConstants.venuesList){
+        else if (this.state.screenNavigationKey == AppConstants.venuesList) {
             setTimeout(() => {
                 this.props.clearVenueDataAction("venue");
                 history.push('/venuesList')
@@ -608,20 +609,20 @@ class CompetitionVenueAndTimesAdd extends Component {
         const { venueCourts } = this.props.venueTimeState.venuData
         return (
             <div className="fees-view pt-5">
-                <div style={{display:'flex'}}>
+                <div style={{ display: 'flex' }}>
                     <span className="form-heading">{AppConstants.courts}</span>
-                    <Button className="primary-add-comp-form" type="primary" style={{marginLeft:'auto'}}> 
+                    <Button className="primary-add-comp-form" type="primary" style={{ marginLeft: 'auto' }}>
                         <div className="row">
                             <div className="col-sm">
-                            <label for="venueCourtUpload" className="csv-reader">
-                                <img src={AppImages.import}  alt="" className="export-image"/> 
-                                {AppConstants.import}
-                            </label>
-                            <CSVReader
-                                inputId="venueCourtUpload"
-                                inputStyle={{display:'none'}}
-                                parserOptions={papaparseOptions}
-                                onFileLoaded={(e) => this.readVenueCourtCSV(e)}/>
+                                <label for="venueCourtUpload" className="csv-reader">
+                                    <img src={AppImages.import} alt="" className="export-image" />
+                                    {AppConstants.import}
+                                </label>
+                                <CSVReader
+                                    inputId="venueCourtUpload"
+                                    inputStyle={{ display: 'none' }}
+                                    parserOptions={papaparseOptions}
+                                    onFileLoaded={(e) => this.readVenueCourtCSV(e)} />
                             </div>
                         </div>
                     </Button>
@@ -680,7 +681,8 @@ class CompetitionVenueAndTimesAdd extends Component {
                         <div className="col-sm">
                             <div style={{ display: "flex", justifyContent: "flex-end" }}>
                                 {/* <Button onClick={() => this.props.addVenueAction(venuData)} className="open-reg-button" type="primary"> */}
-                                <Button className="open-reg-button" type="primary" style={{marginRight: '20px'}} onClick={() => this.navigateTo()}>
+                                <Button className="open-reg-button" type="primary" style={{ marginRight: '20px' }}
+                                    onClick={() => this.navigateTo()}>
                                     {AppConstants.cancel}
                                 </Button>
                                 <Button className="open-reg-button" type="primary" htmlType="submit">

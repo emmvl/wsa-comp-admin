@@ -165,7 +165,7 @@ class LiveScoreAddMatch extends Component {
         let sequence = 1
         const { id } = JSON.parse(getLiveScoreCompetiton())
         let divisionID = addEditMatch.divisionId
-        console.log(addEditMatch)
+      
         this.props.liveScoreCreateRoundAction(this.state.createRound, sequence, id, divisionID)
         // this.setInitalFiledValue(addEditMatch, start_date, start_time)
         this.setState({ visible: false, createRound: '', roundLoad: true })
@@ -637,14 +637,14 @@ class LiveScoreAddMatch extends Component {
             if (!err) {
                 let { addEditMatch, matchData, start_date, start_time, start_post_date } = this.props.liveScoreMatchState
 
-                console.log(start_time, start_post_date, 'start_time, start_post_date ')
+               
 
                 // let startDate = moment(start_date).format("YYYY-MMM-DD")
 
                 let startDate = moment(start_post_date).format("YYYY-MMM-DD")
                 let start = moment.utc(start_time).format("HH:mm")
 
-                console.log(start, "start start", start_time)
+              
 
                 let postDate = startDate + " " + start + " " + "UTC"
                 let formatedDate = new Date(postDate).toISOString()

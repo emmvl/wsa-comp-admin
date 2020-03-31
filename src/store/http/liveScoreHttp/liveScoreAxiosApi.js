@@ -14,6 +14,8 @@ async function logout() {
 let token = getAuthToken();
 let userId = getUserId();
 
+
+
 let LiveScoreAxiosApi = {
     livescoreMatchDetails(data) {
         const url = `/matches/admin/${data}`
@@ -537,7 +539,7 @@ let LiveScoreAxiosApi = {
             }
             // }
 
-            console.log(body)
+           
 
             var url = `/users/member?&competitionId=${id}`;
             return Method.dataPost(url, token, body)
@@ -553,7 +555,14 @@ let LiveScoreAxiosApi = {
 
     getAssignMatchesList(competitionID, teamId, body) {
 
-        var url = `/matches/admin?competitionId=${competitionID}&teamId=${teamId}`;
+        var url = null;
+        
+        if(teamId){
+            url = `/matches/admin?competitionId=${competitionID}&teamId=${teamId}`;
+        }else{
+            url = `/matches/admin?competitionId=${competitionID}`;
+        }
+        
         return Method.dataPost(url, token, body)
 
     },

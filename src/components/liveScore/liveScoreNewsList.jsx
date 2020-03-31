@@ -117,6 +117,8 @@ const columns = [
         dataIndex: 'isNotification',
         key: 'isNotification',
         sorter: (a, b) => checkSorting(a, b, 'isNotification'),
+        render: isNotification =>
+        <span>{isNotification == 1 ? "Yes":"NO"}</span>
     },
     {
         title: 'Active',

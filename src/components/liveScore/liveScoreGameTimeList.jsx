@@ -31,10 +31,14 @@ function checkPlay(record) {
     let playTimeTeamMatches = JSON.parse(record.playTimeTeamMatches)
     let playTime = JSON.parse(record.playTime)
 
+    if(playTimeTeamMatches == 0){
+        return ""
+    }else{
+       let result = 100 * (playTime / playTimeTeamMatches)
+        return result.toFixed(2) + "%"
+    } 
 
-    let result = 100 * (playTime / playTimeTeamMatches)
-
-    return result.toFixed(2) + "%"
+   
 
 }
 

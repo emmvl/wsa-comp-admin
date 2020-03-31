@@ -65,7 +65,7 @@ const columns1 = [
                             alt="" width="12" height="12" />
                     </div>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
-                        <span style={{ overflowX: "auto", whiteSpace: "nowrap" }} class="input-heading-add-another pt-0 " >{records.team1.name} ({records.scorer1 ? records.scorer1.firstName + " " + records.scorer1.lastName : "Unassign"})</span>
+                        <span style={{ overflowX: "auto", whiteSpace: "nowrap" }} class="input-heading-add-another pt-0 " >{records.team1.name} ({records.scorer1 ? records.scorer1.firstName + " " + records.scorer1.lastName : "Unassigned"})</span>
                     </div>
                     <div className="col-sm mr-5" style={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer1", "team1", records.scorer1)} class="input-heading-add-another pt-0" >{records.scorer1 ? "Unassign" : "Assign"}</span>
@@ -141,9 +141,9 @@ const columns2 = [
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
                         <span class="input-heading-add-another pt-0" >{records.team2.name} ({records.scorer2 ? records.scorer2.firstName + " " + records.scorer2.lastName : "Unassign"} )</span>
                     </div>
-                    <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-end' }} >
+                    {this_obj.state.scoring_Type == "SINGLE" ? <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-end' }} >
                         <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer2", "team2", records.scorer2)} class="input-heading-add-another pt-0" >{records.scorer2 ? "Unassign" : "Assign"}</span>
-                    </div>
+                    </div> : null}
                 </div>
             )
         }
@@ -168,9 +168,10 @@ class LiveScoreAssignMatch extends Component {
             filter: '',
             competitionId: 0,
             teamID: null,
-            columns: scoringType == "SINGLE" ? columns1 : columns2,
-            lodding: false
-
+            // columns: scoringType == "SINGLE" ? columns1 : columns2,
+            columns:columns2,
+            lodding: false,
+            scoring_Type : scoringType
         };
         this_obj = this
         console.log(this.props.location)
@@ -251,7 +252,7 @@ class LiveScoreAssignMatch extends Component {
     headerView = () => {
 
         let teamData = isArrayNotEmpty(this.props.liveScoreScorerState.teamResult) ? this.props.liveScoreScorerState.teamResult : []
-        console.log(teamData)
+    
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 < div className="row" >

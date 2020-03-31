@@ -34,7 +34,7 @@ function LiveScoreState(state = initialState, action) {
                 status: action.status
             };
         case ApiConstants.API_LIVE_SCORE_CREATE_ROUND_SUCCESS:
-            state.roundResult.push(action.result)
+            // state.roundResult.push(action.result)
             return {
                 ...state,
                 onLoad: false,

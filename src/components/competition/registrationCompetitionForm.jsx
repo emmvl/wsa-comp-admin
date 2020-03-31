@@ -1022,101 +1022,11 @@ class RegistrationCompetitionForm extends Component {
     }
 
 
-
-    // //// On change Invitees
-    // onInviteesChange(value) {
-    //     let regInviteesselectedData = this.props.competitionFeesState.selectedInvitees
-    //     let upcomingData = [...value]
-    //     let orgLevelId = JSON.stringify(this.state.organisationTypeRefId)
-    //     if (orgLevelId == "1" || orgLevelId == "2") {
-    //         let index = upcomingData.findIndex(x => x == "1")
-    //         if (index > -1) {
-    //             upcomingData.splice(index, 1)
-    //             let clubIndex = upcomingData.findIndex(x => x == "3")
-
-    //             if (clubIndex > -1) {
-    //                 upcomingData.splice(clubIndex, 1)
-    //             }
-
-    //         }
-    //     }
-    //     let associationIndex = regInviteesselectedData.findIndex(x => x == "2")
-    //     if (associationIndex > -1) {
-    //         let index = upcomingData.findIndex(x => x == "2")
-    //         if (index > -1) {
-    //             upcomingData.splice(index, 1)
-    //         }
-    //         let mainIndex = upcomingData.findIndex(x => x == "1")
-    //         if (mainIndex > -1) {
-    //             upcomingData.splice(mainIndex, 1)
-    //         }
-    //     }
-    //     let clubIndex = regInviteesselectedData.findIndex(x => x == "3")
-    //     if (clubIndex > -1) {
-    //         let index = upcomingData.findIndex(x => x == "3")
-    //         if (index > -1) {
-    //             upcomingData.splice(index, 1)
-    //         }
-    //         let mainIndex = upcomingData.findIndex(x => x == "1")
-    //         if (mainIndex > -1) {
-    //             upcomingData.splice(mainIndex, 1)
-    //         }
-    //     }
-    //     let directIndex = regInviteesselectedData.findIndex(x => x == "5")
-    //     if (directIndex > -1) {
-    //         let index = upcomingData.findIndex(x => x == "5")
-    //         if (index > -1) {
-    //             upcomingData.splice(index, 1)
-    //         }
-    //         let mainIndex = upcomingData.findIndex(x => x == "1")
-    //         if (mainIndex > -1) {
-    //             upcomingData.splice(mainIndex, 1)
-    //         }
-    //     }
-    //     let notApplIndex = regInviteesselectedData.findIndex(x => x == "6")
-    //     if (notApplIndex > -1) {
-    //         let index = upcomingData.findIndex(x => x == "6")
-    //         if (index > -1) {
-    //             upcomingData.splice(index, 1)
-    //         }
-    //         let mainIndex = upcomingData.findIndex(x => x == "1")
-    //         if (mainIndex > -1) {
-    //             upcomingData.splice(mainIndex, 1)
-    //         }
-    //     }
-    //     this.props.add_editcompetitionFeeDeatils(upcomingData, "invitees")
-    // }
-
-
     //// On change Invitees
     onInviteesChange(value) {
         let regInviteesselectedData = this.props.competitionFeesState.selectedInvitees
         console.log("value" + value);
         let arr = [value]
-        // let upcomingData = [...value]
-        // let associationIndex = regInviteesselectedData.findIndex(x => x == "2")
-        // if (associationIndex > -1) {
-        //     let index = upcomingData.findIndex(x => x == "2")
-        //     if (index > -1) {
-        //         upcomingData.splice(index, 1)
-        //     }
-        //     let mainIndex = upcomingData.findIndex(x => x == "1")
-        //     if (mainIndex > -1) {
-        //         upcomingData.splice(mainIndex, 1)
-        //     }
-        // }
-        // let clubIndex = regInviteesselectedData.findIndex(x => x == "3")
-        // if (clubIndex > -1) {
-        //     let index = upcomingData.findIndex(x => x == "3")
-        //     if (index > -1) {
-        //         upcomingData.splice(index, 1)
-        //     }
-        //     let mainIndex = upcomingData.findIndex(x => x == "1")
-        //     if (mainIndex > -1) {
-        //         upcomingData.splice(mainIndex, 1)
-        //     }
-        // }
-        // this.props.add_editcompetitionFeeDeatils(upcomingData, "invitees")
         this.props.add_editcompetitionFeeDeatils(arr, "invitees")
     }
 

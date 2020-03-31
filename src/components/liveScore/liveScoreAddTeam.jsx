@@ -279,7 +279,7 @@ class LiveScoreAddTeam extends Component {
                                 // defaultChecked={false}
                                 checked={this.props.liveScoreTeamState.isCheked}
                                 onChange={(value) => {
-                                    console.log( value.target.checked)
+                                    console.log(value.target.checked)
                                     this.props.liveScoreAddTeamform({ key: 'checkBox', data: value.target.checked })
                                     this.setState({ image: null })
                                 }}
@@ -555,7 +555,7 @@ class LiveScoreAddTeam extends Component {
     };
 
     handleSubmit = e => {
-        console.log(this.state.teamId)
+        console.log(this.props.liveScoreTeamState)
         const { id } = JSON.parse(getLiveScoreCompetiton())
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -573,8 +573,7 @@ class LiveScoreAddTeam extends Component {
                     mobileNumber,
                     email,
                 } = this.props.liveScoreTeamState.teamManagerData
-
-                console.log(this.props.liveScoreTeamState.teamManagerData)
+                let isCheked = this.props.liveScoreTeamState
 
                 if (this.props.liveScoreTeamState.managerType === 'existing') {
                     const formData = new FormData();
@@ -590,7 +589,7 @@ class LiveScoreAddTeam extends Component {
 
                     if (this.state.image) {
                         formData.append('logo', this.state.image)
-                    } else {
+                    } else if (this.props.liveScoreTeamState.teamLogo) {
                         formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
                     }
 
@@ -610,11 +609,13 @@ class LiveScoreAddTeam extends Component {
 
                     formData.append('name', name)
                     formData.append('alias', alias)
+                    console.log(isCheked, 'isCheked')
                     if (this.state.image) {
                         formData.append('logo', this.state.image)
-                    } else {
+                    } else if (this.props.liveScoreTeamState.teamLogo) {
                         formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
                     }
+
                     formData.append('competitionId', id)
                     formData.append('organisationId', organisationId)
                     formData.append('divisionId', divisionId)
@@ -636,12 +637,13 @@ class LiveScoreAddTeam extends Component {
 
                     formData.append('name', name)
                     formData.append('alias', alias)
+
                     if (this.state.image) {
                         formData.append('logo', this.state.image)
-                    }
-                    else {
+                    } else if (this.props.liveScoreTeamState.teamLogo) {
                         formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
                     }
+
                     formData.append('competitionId', id)
                     formData.append('organisationId', organisationId)
                     formData.append('divisionId', divisionId)

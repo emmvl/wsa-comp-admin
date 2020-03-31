@@ -55,7 +55,6 @@ class CompetitionCourtAndTimesAssign extends Component {
         let storedCompetitionId = getOwn_competition()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
-        console.log(this.props.appState)
         if (storedCompetitionId && yearId && propsData && compData) {
             this.setState({
                 yearRefId: JSON.parse(yearId),
@@ -116,7 +115,6 @@ class CompetitionCourtAndTimesAssign extends Component {
         })
         let timeSlotMatchDuration = competitionTimeSlots.getcompetitionTimeSlotData.competitionVenueTimeslotsDayTime ? competitionTimeSlots.getcompetitionTimeSlotData.competitionVenueTimeslotsDayTime : []
         timeSlotMatchDuration.length > 0 && timeSlotMatchDuration.map((item, index) => {
-            console.log(item)
             let dayRefId = `dayRefId${index}`
             this.props.form.setFieldsValue({
                 [dayRefId]: item.dayRefId,
@@ -137,7 +135,6 @@ class CompetitionCourtAndTimesAssign extends Component {
         let timeSlotManualPerVenue = competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotManual ? competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotManual : []
         timeSlotManualPerVenue.length > 0 && timeSlotManualPerVenue.map((PerVenueItem, perVenueIndex) => {
             PerVenueItem.timeslots.length > 0 && PerVenueItem.timeslots.map((timeSlotItem, timeSlotIndex) => {
-                console.log(timeSlotItem)
                 let dayRefIdManual = `dayRefIdManual${timeSlotIndex}`
                 this.props.form.setFieldsValue({
                     [dayRefIdManual]: timeSlotItem.dayRefId,
@@ -506,8 +503,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         let timeSlotData = this.props.competitionTimeSlots.getcompetitionTimeSlotData
         let commonState = this.props.competitionTimeSlots
         let timeSlotManual = this.props.competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotManual;
-        console.log("&&&&&&&" + JSON.stringify(commonState.timeSlotManualAllVenue));
-        console.log("&&&&&&" + timeSlotData.timeslotGenerationRefId);
+
         return (
             <div className="content-view pt-3">
                 <span className="applicable-to-heading">
