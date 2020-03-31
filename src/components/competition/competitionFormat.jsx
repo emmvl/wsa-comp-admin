@@ -542,6 +542,7 @@ class CompetitionFormat extends Component {
                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                     onChange={(fixTemplate) => this.onChangeSetValue(fixTemplate, 'fixtureTemplateId')}
                     value={data.fixtureTemplateId}>
+                    <Option style={{height: '30px'}} value={null} key={null}>{}</Option>
                     {(data.fixtureTemplates || []).map((fixture, fixIndex) => (
                         <Option value={fixture.id} key={fixture.id}>{fixture.name}</Option>
                     ))}
