@@ -1737,19 +1737,23 @@ function competitionFees(state = initialState, action) {
         case ApiConstants.API_ADD_VENUE_SUCCESS:
             console.log(state.selectedVenues)
             let venueSuccess = action.result
-            let updatedVenue = JSON.parse(JSON.stringify(state.newVenueObj))
-            updatedVenue["id"] = venueSuccess.venueId
-            updatedVenue['name'] = venueSuccess.name
-            updatedVenue['street1'] = venueSuccess.street1
-            updatedVenue['street2'] = venueSuccess.street2
-            updatedVenue['suburb'] = venueSuccess.suburb
-            updatedVenue['postalCode'] = venueSuccess.postalCode
-            updatedVenue['stateRefId'] = venueSuccess.stateRefId
-            updatedVenue['statusRefId'] = venueSuccess.statusRefId
-            updatedVenue['contactNumber'] = venueSuccess.contactNumber
-            state.venueList.push(updatedVenue)
-            state.selectedVenuesAdd = "Add"
-            state.selectedVenues.push(venueSuccess.venueId)
+            if(venueSuccess!= null)
+            {
+                let updatedVenue = JSON.parse(JSON.stringify(state.newVenueObj))
+                updatedVenue["id"] = venueSuccess.venueId
+                updatedVenue['name'] = venueSuccess.name
+                updatedVenue['street1'] = venueSuccess.street1
+                updatedVenue['street2'] = venueSuccess.street2
+                updatedVenue['suburb'] = venueSuccess.suburb
+                updatedVenue['postalCode'] = venueSuccess.postalCode
+                updatedVenue['stateRefId'] = venueSuccess.stateRefId
+                updatedVenue['statusRefId'] = venueSuccess.statusRefId
+                updatedVenue['contactNumber'] = venueSuccess.contactNumber
+                state.venueList.push(updatedVenue)
+                state.selectedVenuesAdd = "Add"
+                state.selectedVenues.push(venueSuccess.venueId)
+            }
+           
             console.log(state.selectedVenues)
             return { ...state }
 

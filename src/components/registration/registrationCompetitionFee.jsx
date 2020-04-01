@@ -760,16 +760,15 @@ class RegistrationCompetitionFee extends Component {
 
 
     componentDidMount() {
-        let checkVenueScreen = this.props.location.state ? this.props.location.state.venueScreen ?
-            this.props.location.state.venueScreen : null : null
-        checkVenueScreen && window.scrollTo(0, 500)
         let orgData = getOrganisationData()
         this.setState({ organisationTypeRefId: orgData.organisationTypeRefId })
         let competitionId = null
-        competitionId = this.props.location.state ? this.props.location.state.id ?
-            this.props.location.state.id : null : null
+        competitionId = this.props.location.state ? this.props.location.state.id : null
         this.apiCalls(competitionId)
         this.setDetailsFieldValue()
+        // let checkVenueScreen = this.props.location.state ? this.props.location.state.venueScreen ?
+        //     this.props.location.state.venueScreen : null : null
+        // checkVenueScreen && window.scrollTo(0, 500)
     }
 
     ////alll the api calls
@@ -1002,7 +1001,9 @@ class RegistrationCompetitionFee extends Component {
                         formData.append("competitionTypeRefId", postData.competitionTypeRefId);
                         formData.append("competitionFormatRefId", postData.competitionFormatRefId);
                         formData.append("startDate", postData.startDate);
-                        if (postData.noOfRounds !== null && postData.noOfRounds !== '') formData.append("noOfRounds", postData.noOfRounds);
+                        if (postData.competitionFormatRefId == 4) {
+                            if (postData.noOfRounds !== null && postData.noOfRounds !== '') formData.append("noOfRounds", postData.noOfRounds);
+                        }
                         if (postData.roundInDays !== null && postData.roundInDays !== '') formData.append("roundInDays", postData.roundInDays);
                         if (postData.roundInHours !== null && postData.roundInHours !== '') formData.append("roundInHours", postData.roundInHours);
                         if (postData.roundInMins !== null && postData.roundInMins !== '') formData.append("roundInMins", postData.roundInMins);
@@ -1702,20 +1703,33 @@ class RegistrationCompetitionFee extends Component {
 
                         </div>
                         <div className="col-sm">
-                            <Form.Item >
-                                {getFieldDecorator('numberOfRounds',
-                                    { rules: [{ required: true, message: ValidationConstants.numberOfRoundsNameIsRequired }] })(
-                                        <InputWithHead
-                                            required={"required-field pt-0"}
-                                            heading={AppConstants.numberOfRounds}
-                                            placeholder={AppConstants.numberOfRounds}
-                                            value={detailsData.competitionDetailData.noOfRounds}
-                                            onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "noOfRounds")}
-                                            disabled={isCreatorEdit}
+                            {detailsData.competitionDetailData.competitionFormatRefId == 4 &&
+                                <div>
+                                    <InputWithHead heading={AppConstants.numberOfRounds} />
+                                    <Form.Item >
+                                        {getFieldDecorator('numberOfRounds',
+                                            { rules: [{ required: true, message: ValidationConstants.numberOfRoundsNameIsRequired }] })(
 
-                                        />
-                                    )}
-                            </Form.Item>
+                                                <Select
+                                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                                    placeholder={AppConstants.selectRound}
+                                                    onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, "noOfRounds")}
+                                                    value={detailsData.competitionDetailData.noOfRounds}
+                                                    disabled={isCreatorEdit}
+                                                >
+                                                    {this.state.roundsArray.map(item => {
+                                                        return (
+                                                            <Option key={item.id} value={item.id}>{item.value}</Option>
+                                                        );
+                                                    })}
+
+
+                                                </Select>
+
+                                            )}
+                                    </Form.Item>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>

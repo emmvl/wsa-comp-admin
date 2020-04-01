@@ -23,10 +23,10 @@ const columns = [
         sorter: (a, b) => a.firstName.length - b.firstName.length,
         render: (firstName, record) =>
             <NavLink to={{
-                pathname: '/liveScoreManagerView',
-                state: { tableRecord: record }
-                // pathname: '/userPersonal',
-                // state: { userId: userId }
+                // pathname: '/liveScoreManagerView',
+                // state: { tableRecord: record }
+                pathname: '/userPersonal',
+                state: { userId: record.id }
             }}>
                 <span class="input-heading-add-another pt-0" >{firstName}</span>
             </NavLink>
@@ -38,10 +38,10 @@ const columns = [
         sorter: (a, b) => a.lastName.length - b.lastName.length,
         render: (lastName, record) =>
             <NavLink to={{
-                // pathname: '/userPersonal',
-                // state: { userId: userId }
-                pathname: '/liveScoreManagerView',
-                state: { tableRecord: record }
+                pathname: '/userPersonal',
+                state: { userId: record.id }
+                // pathname: '/liveScoreManagerView',
+                // state: { tableRecord: record }
             }}>
                 <span class="input-heading-add-another pt-0" >{lastName}</span>
             </NavLink>
@@ -66,10 +66,10 @@ const columns = [
         sorter: (a, b) => a.linkedEntity.length - b.linkedEntity.length,
         render: (linkedEntity, record) =>
             <NavLink to={{
-                pathname: '/liveScoreManagerView',
-                state: { tableRecord: record }
-                // pathname: '/userPersonal',
-                // state: { tableRecord: record, userId: record.id }
+                // pathname: '/liveScoreManagerView',
+                // state: { tableRecord: record }
+                pathname: '/userPersonal',
+                state: { userId: record.id }
             }}>
                 {linkedEntity.length > 0 && linkedEntity.map((item) => (
                     <span class="input-heading-add-another pt-0" >{item.name}</span>

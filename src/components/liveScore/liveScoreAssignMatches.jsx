@@ -114,7 +114,7 @@ const columns2 = [
                             alt="" width="12" height="12" />
                     </div>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
-                        <span class="input-heading-add-another pt-0 " >{records.team1.name} ( {records.scorer1 ? records.scorer1.firstName + " " + records.scorer1.lastName : "Unassign"} )</span>
+                        <span class="input-heading-add-another pt-0 " >{records.team1.name} ({records.scorer1 ? records.scorer1.firstName + " " + records.scorer1.lastName : "Unassigned"})</span>
                     </div>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer1", "team1", records.scorer1)} class="input-heading-add-another pt-0" >{records.scorer1 ? "Unassign" : "Assign"}</span>
@@ -139,7 +139,7 @@ const columns2 = [
                             alt="" width="12" height="12" />
                     </div>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
-                        <span class="input-heading-add-another pt-0" >{records.team2.name} ({records.scorer2 ? records.scorer2.firstName + " " + records.scorer2.lastName : "Unassign"} )</span>
+                        <span class="input-heading-add-another pt-0" >{records.team2.name} ({records.scorer2 ? records.scorer2.firstName + " " + records.scorer2.lastName : "Unassigned"})</span>
                     </div>
                     {this_obj.state.scoring_Type == "SINGLE" ? <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-end' }} >
                         <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer2", "team2", records.scorer2)} class="input-heading-add-another pt-0" >{records.scorer2 ? "Unassign" : "Assign"}</span>
@@ -174,7 +174,7 @@ class LiveScoreAssignMatch extends Component {
             scoring_Type : scoringType
         };
         this_obj = this
-        console.log(this.props.location)
+    
     }
 
     componentDidMount() {
@@ -201,7 +201,7 @@ class LiveScoreAssignMatch extends Component {
                     }
 
                 }
-                let teamId = this.props.liveScoreScorerState.teamResult[0].id
+                let teamId = this.props.liveScoreScorerState.allTeamData[0].id
                 this.props.assignMatchesAction(id, teamId, body)
                 this.setState({ loading: false, teamID: teamId })
             }
@@ -210,10 +210,11 @@ class LiveScoreAssignMatch extends Component {
 
     /// on status change 
     onChangeStatus(index, data, scorerKey, teamKey, isScorer) {
+        let scorerID = this.props.location.state ? this.props.location.state.record.id : null
         if (!isScorer) {
-            this.props.changeAssignStatus(index, data, 4, this.state.teamID, scorerKey, teamKey)
+            this.props.changeAssignStatus(index, data, 4, this.state.teamID, scorerKey, teamKey,scorerID)
         } else {
-            this.props.unAssignMatcheStatus(index, isScorer, scorerKey, teamKey)
+            this.props.unAssignMatcheStatus(index, isScorer, scorerKey, teamKey, scorerID)
         }
 
     }
@@ -251,7 +252,7 @@ class LiveScoreAssignMatch extends Component {
     ///////view for breadcrumb
     headerView = () => {
 
-        let teamData = isArrayNotEmpty(this.props.liveScoreScorerState.teamResult) ? this.props.liveScoreScorerState.teamResult : []
+        let teamData = isArrayNotEmpty(this.props.liveScoreScorerState.allTeamData) ? this.props.liveScoreScorerState.allTeamData : []
     
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">

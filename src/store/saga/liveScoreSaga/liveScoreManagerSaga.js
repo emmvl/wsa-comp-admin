@@ -18,7 +18,6 @@ function* errorSaga(error) {
         error: error,
         status: error.status
     });
-    console.log(error)
     message.error(error ? error.error ? error.error : "Something went wrong." : "Something went wrong.");
 }
 

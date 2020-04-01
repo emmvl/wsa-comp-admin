@@ -35,6 +35,7 @@ import Loader from '../../customComponents/loader'
 import history from '../../util/history'
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { isArrayNotEmpty } from "../../util/helpers";
+import { liveScoreRoundListAction } from '../../store/actions/LiveScoreAction/liveScoreRoundAction'
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -53,7 +54,8 @@ class LiveScoreBulkChange extends Component {
         this.props.liveScoreBulkMatchAction()
         if (id !== null) {
             this.props.getCompetitonVenuesList(id);
-            this.props.getliveScoreDivisions(id)
+            this.props.liveScoreRoundListAction(id)
+            // this.props.getliveScoreDivisions(id)
         } else {
             history.push('/')
         }
@@ -692,7 +694,8 @@ class LiveScoreBulkChange extends Component {
     ////this method called after slecting End Matches option from drop down
     endMatchedView(getFieldDecorator) {
         const { endMatchData, venueData, endCourtData } = this.props.liveScoreBulkMatchState
-        const { roundResult } = this.props.liveScoreState
+        const { roundList } = this.props.liveScoreRoundState
+        let roundResult = isArrayNotEmpty(roundList) ? roundList : []
         return (
             <div>
                 {/* start time date and time picker row */}
@@ -856,7 +859,7 @@ class LiveScoreBulkChange extends Component {
                                     placeholder={AppConstants.selectRound}
                                 >
                                     {
-                                        roundResult && roundResult.map((item) => {
+                                        roundResult.map((item) => {
                                             return (
                                                 <Option key={'round' + item.id}
                                                     value={item.id}>
@@ -877,7 +880,9 @@ class LiveScoreBulkChange extends Component {
 
     ////this method called after slecting Double Header option from drop down
     doublwHeaderView(getFieldDecorator) {
-        const { roundResult } = this.props.liveScoreState
+        const { roundList } = this.props.liveScoreRoundState
+
+        let roundResult = isArrayNotEmpty(roundList) ? roundList : []
 
         const { doubleHeaderResult } = this.props.liveScoreBulkMatchState
         console.log(doubleHeaderResult, "roundResult")
@@ -898,7 +903,7 @@ class LiveScoreBulkChange extends Component {
                                 placeholder={AppConstants.selectRoundOne}
                             >
                                 {
-                                    roundResult && roundResult.map((item) => {
+                                    roundResult.map((item) => {
                                         return (
                                             <Option key={'round' + item.id}
                                                 value={item.id}>
@@ -926,7 +931,7 @@ class LiveScoreBulkChange extends Component {
                                 value={doubleHeaderResult.round_2}
                                 placeholder={AppConstants.selectRoundOne}
                             >
-                                {roundResult && roundResult.map((item) => {
+                                {roundResult.map((item) => {
                                     return (
                                         <Option key={'round' + item.id}
                                             value={item.id}>
@@ -944,7 +949,9 @@ class LiveScoreBulkChange extends Component {
 
     ////this method called after slecting Abandon Matches option from drop down
     abandondMatchesView(getFieldDecorator) {
-        const { roundResult } = this.props.liveScoreState
+        const { roundList } = this.props.liveScoreRoundState
+        let roundResult = isArrayNotEmpty(roundList) ? roundList : []
+
         const { abandonData, venueData, abandonCourtData, matchResult } = this.props.liveScoreBulkMatchState
         console.log(abandonData, 'abandonData')
         return (
@@ -1104,7 +1111,7 @@ class LiveScoreBulkChange extends Component {
                                         value={abandonData.roundId}
                                     >
                                         {
-                                            roundResult && roundResult.map((item) => {
+                                            roundResult.map((item) => {
                                                 return (
                                                     <Option key={'round' + item.id}
                                                         value={item.id}>
@@ -1331,7 +1338,8 @@ function mapDispatchToProps(dispatch) {
         getCompetitonVenuesList,
         getliveScoreDivisions,
         liveScoreAbandonMatchAction,
-        matchResult
+        matchResult,
+        liveScoreRoundListAction
     }, dispatch)
 }
 
@@ -1340,6 +1348,7 @@ function mapStatetoProps(state) {
         liveScoreState: state.LiveScoreState,
         liveScoreBulkMatchState: state.LiveScoreBulkMatchState,
         liveScoreState: state.LiveScoreState,
+        liveScoreRoundState: state.LiveScoreRoundState
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(LiveScoreBulkChange));

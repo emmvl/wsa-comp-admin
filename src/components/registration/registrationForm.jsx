@@ -975,7 +975,7 @@ class RegistrationForm extends Component {
 
                 {disclaimerData.map((item, index) =>
                     <div className="inside-container-view">
-                        <div className="transfer-image-view pt-0" onClick={(e) => this.removeDisclaimer(e, index)} >
+                        <div className="transfer-image-view pt-0" onClick={(e) => !isPublished ? this.removeDisclaimer(e, index) : null} >
                             <span class="user-remove-btn" ><i class="fa fa-trash-o" aria-hidden="true"></i></span>
                             <span className="user-remove-text">
                                 {AppConstants.remove}
@@ -998,6 +998,7 @@ class RegistrationForm extends Component {
                                     heading={AppConstants.disclaimers}
                                     placeholder={AppConstants.disclaimers}
                                     onChange={(e) => this.disclamerText(e.target.value, index, "disclaimerText")}
+                                    disabled={isPublished}
                                 // value={disclaimerData.registrationDisclaimer[index].disclaimerText}
                                 />
                             )}
@@ -1019,6 +1020,7 @@ class RegistrationForm extends Component {
                                     heading={AppConstants.disclaimerLink}
                                     placeholder={AppConstants.disclaimerLink}
                                     onChange={(e) => this.disclamerText(e.target.value, index, "disclaimerLink")}
+                                    disabled={isPublished}
                                 // value={disclaimerData.registrationDisclaimer[index].disclaimerLink}
 
                                 />

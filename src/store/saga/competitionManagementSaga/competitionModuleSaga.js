@@ -1,6 +1,7 @@
 import { put, call } from '../../../../node_modules/redux-saga/effects'
 import ApiConstants from "../../../themes/apiConstants";
 import CompetitionAxiosApi from "../../http/competitionHttp/competitionAxiosApi";
+import { message } from "antd";
 
 export function* competitionModuleSaga(action) {
     try {
@@ -36,11 +37,19 @@ export function* competitonGenerateDrawSaga(action) {
                 status: result.status,
             });
         } else {
-            console.log("FAILED" + result.data.message);
+            let res = JSON.parse(JSON.stringify(result));
             yield put({ type: ApiConstants.API_GENERATE_DRAW_FAIL });
             setTimeout(() => {
-                alert(result.data.message);
+                message.config({
+                    duration: 4,
+                    maxCount: 1
+                })
+                message.error(JSON.stringify(result.result.data.message));
             }, 800);
+
+            // setTimeout(() => {
+            //     alert(JSON.stringify(result.result.data.message));
+            // }, 800);
         }
     } catch (error) {
         console.log("error" + error);

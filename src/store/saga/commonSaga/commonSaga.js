@@ -74,12 +74,13 @@ export function* getCommonDataSaga(action) {
 ////addVenueSaga
 export function* addVenueSaga(action) {
     try {
+        let venueId = action.data.venueId;
         const result = yield call(CommonAxiosApi.addVenue, action.data);
-        console.log(result, 'AddVenueSaga')
+        console.log(result, 'AddVenueSaga' + venueId);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_ADD_VENUE_SUCCESS,
-                result: result.result.data,
+                result: venueId == 0 ? result.result.data : null,
                 status: result.result.status
             });
             // setTimeout(() => {

@@ -151,7 +151,8 @@ const columns = [
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, record) => (
-            isUsed == false ? <Menu
+            // isUsed == false ? <Menu
+            <Menu
                 className="action-triple-dot-submenu"
                 theme="light"
                 mode="horizontal"
@@ -178,7 +179,8 @@ const columns = [
                         <span>Delete</span>
                     </Menu.Item>
                 </SubMenu>
-            </Menu> : null
+            </Menu>
+            //  : null
         )
     }
 ];

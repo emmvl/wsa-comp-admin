@@ -920,9 +920,11 @@ function VenueTimeState(state = initialState, action) {
             };
 
         case ApiConstants.API_ADD_VENUE_SUCCESS:
-            state.selectedVenueIdAdd = "addVenue"
-            state.selectedVenueId.push(action.result.venueId)
-
+            if(action.result!= null)
+            {
+                state.selectedVenueIdAdd = "addVenue"
+                state.selectedVenueId.push(action.result.venueId)
+            }
             return { ...state }
 
         case ApiConstants.API_CLEARING_VENUE_DATA:

@@ -74,6 +74,29 @@ const getParticipating_competition = () => {
     return localStorage.Participating_competition
 }
 
+const setDraws_venue = draws_venue => {
+    localStorage.setItem("draws_venue", draws_venue)
+}
+
+const getDraws_venue = () => {
+    return localStorage.draws_venue
+}
+const setDraws_round = draws_round => {
+    localStorage.setItem("draws_round", draws_round)
+}
+
+const getDraws_round = () => {
+    return localStorage.draws_round
+}
+
+const setDraws_roundTime = draws_roundTime => {
+    localStorage.setItem("draws_roundTime", draws_roundTime)
+}
+
+const getDraws_roundTime = () => {
+    return localStorage.draws_roundTime
+}
+
 
 
 module.exports = {
@@ -90,5 +113,11 @@ module.exports = {
     getParticipatingYear,
     setParticipating_competition,
     getParticipating_competition,
-    getLiveScoreCompetiton
+    getLiveScoreCompetiton,
+    setDraws_venue,
+    getDraws_venue,
+    setDraws_round,
+    getDraws_round,
+    setDraws_roundTime,
+    getDraws_roundTime
 }

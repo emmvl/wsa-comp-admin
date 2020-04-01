@@ -36,7 +36,7 @@ const ValidationConstants = {
     termsAndCondition: ["Terms and Condition is required"],
     affiliateContactRequired: ["Affiliate should have atleast one contact with admin role"],
     requiredMessage: ["Please fill all the required fields"],
-    drawsMessage: ["Something went wrong with Draws Generation"],
+    drawsMessage: ["Something went wrong with draws generation"],
     finalGrading: ["Please provide final grade for all the teams"],
 
     /////////////membership 

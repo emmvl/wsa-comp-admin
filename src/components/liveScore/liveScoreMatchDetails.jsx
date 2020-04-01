@@ -50,7 +50,7 @@ const columns = [
         // render: (record) => <span class="input-heading-add-another pt-0" >{record.team.name}</span>
     },
     {
-        title: 'Attended?',
+        title: 'Played?',
         dataIndex: 'attended',
         key: 'attended',
         sorter: (a, b) => a.attended.length - b.attended.length,

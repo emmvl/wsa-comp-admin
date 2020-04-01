@@ -37,6 +37,7 @@ import ApiConstants from "../../themes/apiConstants";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage';
 import { isArrayNotEmpty, isNullOrEmptyString } from "../../util/helpers";
 import { liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
+// import LoaderImg from 'react-loader-spinner'
 
 
 const { Header, Footer, Content } = Layout;
@@ -71,6 +72,8 @@ class LiveScoreAddNews extends Component {
             getDataLoading: false,
             editorState: EditorState.createEmpty(),
             authorName: 'abc',
+            imageTimeout: null,
+            videoTimeout: null
         };
     }
 
@@ -103,7 +106,7 @@ class LiveScoreAddNews extends Component {
     }
 
     onChangeEditorData = (event) => {
-       
+
         this.props.liveScoreUpdateNewsAction(event, "body")
         // this.setState({ editorState: event })
     }
@@ -461,21 +464,53 @@ class LiveScoreAddNews extends Component {
                                     }}
                                 />
                             </label>
+
+                            {/* {
+                                this.state.imageTimeout ?
+                                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 100, width: 100 }}>
+                                        <LoaderImg
+                                            type="TailSpin"
+                                            color="#e67531"
+                                            height={30}
+                                            width={30}
+                                            timeout={this.state.imageTimeout}
+
+                                        />
+                                    </label>
+                                    :
+                                    <label>
+                                        <img
+                                            src={editData.newsImage ? editData.newsImage : this.state.imageSelection}
+                                            alt=""
+                                            height="120"
+                                            width="120"
+                                            style={{ borderRadius: 60, marginLeft: 0 }}
+                                            name={'image'}
+                                            onError={ev => {
+                                                ev.target.src = AppImages.circleImage;
+                                            }}
+                                        />
+                                    </label>
+                            } */}
                         </div>
                         <input
                             type="file"
                             id="user-pic"
                             style={{ display: 'none' }}
-                            onChange={(event) => this.setImage(event.target, 'evt.target')}
-                        // value={editData.newsImage}
-                        // value={this.state.image}
+                            onChange={(event) => {
+                                this.setImage(event.target, 'evt.target')
+                                // this.setState({ imageTimeout: 3000 })
+                                // setTimeout(() => {
+                                //     this.setState({ imageTimeout: null })
+                                // }, 3000);
+                            }}
                         />
-                        {/* onChange={recipientSelection => this.props.liveScoreUpdateNewsAction(recipientSelection, "recipients")} */}
 
                     </div>
                     <div className="col-sm" >
                         <InputWithHead heading={AppConstants.newsVideo} />
                         <div className="reg-competition-logo-view" onClick={this.selectVideo}>
+
                             <label>
                                 <video
                                     src={editData.newsVideo ? editData.newsVideo : this.state.videoSelection}
@@ -483,12 +518,42 @@ class LiveScoreAddNews extends Component {
                                     width='120'
                                     poster={(editData.newsVideo || this.state.videoSelection != '') ? '' : AppImages.circleImage} />
                             </label>
+
+                            {/* {
+                                this.state.videoTimeout ?
+                                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 100, width: 100 }}>
+                                        <LoaderImg
+                                            type="TailSpin"
+                                            color="#e67531"
+                                            height={30}
+                                            width={30}
+                                            timeout={this.state.videoTimeout}
+
+                                        />
+                                    </label>
+                                    :
+                                    <label>
+                                        <video
+                                            src={editData.newsVideo ? editData.newsVideo : this.state.videoSelection}
+                                            height='120'
+                                            width='120'
+                                            poster={(editData.newsVideo || this.state.videoSelection != '') ? '' : AppImages.circleImage} />
+                                    </label>
+                            } */}
+
+
                         </div>
                         <input
                             type="file"
                             id="user-vdo"
                             style={{ display: 'none' }}
-                            onChange={(event) => this.setVideo(event.target, "evt.target")}
+                            onChange={(event) => {
+                                this.setVideo(event.target, "evt.target")
+                                // this.setState({ videoTimeout: 3000 })
+                                // setTimeout(() => {
+                                //     this.setState({ videoTimeout: null })
+                                // }, 3000);
+                            }}
                         />
                     </div>
                 </div>
@@ -564,33 +629,33 @@ class LiveScoreAddNews extends Component {
 
                 let data = liveScoreNewsState
 
-                if(data.newExpiryDate && data.expire_time){
+                if (data.newExpiryDate && data.expire_time) {
                     let experyDate = moment(data.newExpiryDate).format("YYYY-MM-DD")
 
                     let expiryTime = moment.utc(data.expire_time).format("HH:mm")
-    
-    
-    
+
+
+
                     let postDate = experyDate + " " + expiryTime + " " + "UTC"
                     let formatedDate = new Date(postDate).toISOString()
                     liveScoreNewsState.addEditNews.news_expire_date = formatedDate
-                    
+
                 }
 
-              
 
-               if(data.newsBody){
-                let newstringArr = []
-                for(let i in data.newsBody){
-                    newstringArr.push(data.newsBody[i].text)
+
+                if (data.newsBody) {
+                    let newstringArr = []
+                    for (let i in data.newsBody) {
+                        newstringArr.push(data.newsBody[i].text)
+                    }
+
+                    let bodyText = newstringArr.join(`<br/>`)
+                    // let bodyText = newstringArr.join("")
+
+                    liveScoreNewsState.addEditNews.body = bodyText
                 }
 
-                let bodyText =  newstringArr.join(`<br/>`)
-                // let bodyText = newstringArr.join("")
-              
-                liveScoreNewsState.addEditNews.body = bodyText
-               }
-               
                 let editData = liveScoreNewsState.addEditNews;
 
 

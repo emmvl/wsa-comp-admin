@@ -10,7 +10,7 @@ import { liveScoreLaddersListAction } from '../../store/actions/LiveScoreAction/
 import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { isArrayNotEmpty } from '../../util/helpers'
-
+import { getLiveScoreDivisionList, liveScoreDeleteDivision } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction'
 const { Content } = Layout;
 const { Option } = Select;
 
@@ -111,7 +111,7 @@ class LiveScoreLadderList extends Component {
         super(props);
         this.state = {
             division: "11A",
-
+            loadding:false
         }
     }
 
@@ -136,11 +136,30 @@ class LiveScoreLadderList extends Component {
 
         if (id !== null) {
             // this.props.getliveScoreDivisions(competitionID);
-            this.props.getliveScoreDivisions(id);
+            // this.props.getliveScoreDivisions(id);
+            this.setState({loadding : true})
+            this.props.getLiveScoreDivisionList(id)
+            
         } else {
             history.push('/')
         }
     }
+
+    componentDidUpdate(nextProps){
+        if(nextProps.liveScoreLadderState.liveScoreLadderDivisionData !== this.props.liveScoreLadderState.liveScoreLadderDivisionData){
+            if(this.state.loadding == true && this.props.liveScoreLadderState.onLoad == false){
+                const { id } = JSON.parse(getLiveScoreCompetiton())
+                let divisionArray = this.props.liveScoreLadderState.liveScoreLadderDivisionData
+               
+                let divisionId  = isArrayNotEmpty(divisionArray)? divisionArray[0].id : null
+                console.log(divisionId)
+                this.props.liveScoreLaddersListAction(id, divisionId)
+                this.setState({loadding : false})
+            }
+        }
+    }
+
+
 
     divisionChange = (value) => {
 
@@ -152,8 +171,10 @@ class LiveScoreLadderList extends Component {
     ///dropdown view containing dropdown
     dropdownView = () => {
         const { liveScoreLadderState } = this.props;
+        console.log(liveScoreLadderState)
         // let grade = liveScoreLadderState.liveScoreLadderDivisionData !== [] ? liveScoreLadderState.liveScoreLadderDivisionData : []
         let grade = isArrayNotEmpty(liveScoreLadderState.liveScoreLadderDivisionData) ? liveScoreLadderState.liveScoreLadderDivisionData : []
+    
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <span className='year-select-heading'>{AppConstants.filterByDivision}:</span>
@@ -214,7 +235,7 @@ class LiveScoreLadderList extends Component {
     }
 }
 function mapDispatchtoprops(dispatch) {
-    return bindActionCreators({ getliveScoreDivisions, liveScoreLaddersListAction }, dispatch)
+    return bindActionCreators({ getliveScoreDivisions, liveScoreLaddersListAction, getLiveScoreDivisionList }, dispatch)
 
 }
 

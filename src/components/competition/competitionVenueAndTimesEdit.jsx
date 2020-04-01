@@ -642,6 +642,7 @@ class CompetitionVenueAndTimesEdit extends Component {
         console.log(this.props.venueTimeState.venuData);
         let venueTimestate = this.props.venueTimeState;
         let {venueCourts}  = venueTimestate.venuData;
+        console.log("venueCourts::" +JSON.stringify(venueCourts));
         return (
             <div className="fees-view pt-5">
                 <div style={{display:'flex'}}>

@@ -27,7 +27,13 @@ import {
   setOwnCompetitionYear,
   getOwnCompetitionYear,
   setOwn_competition,
-  getOwn_competition
+  getOwn_competition,
+  setDraws_venue,
+  setDraws_round,
+  setDraws_roundTime,
+  getDraws_venue,
+  getDraws_round,
+  getDraws_roundTime,
 } from "../../util/sessionStorage"
 import moment from "moment"
 const { Header, Footer, Content } = Layout;
@@ -54,10 +60,12 @@ class CompetitionDraws extends Component {
       if (nextProps.drawsState.getDrawsRoundsData !== drawsRoundData) {
         if (venueData.length > 0) {
           let venueId = venueData[0].id
+          setDraws_venue(venueId)
           if (drawsRoundData.length > 0) {
-
             let roundId = drawsRoundData[0].roundId;
+            setDraws_round(roundId)
             let roundTime = drawsRoundData[0].startDateTime
+            setDraws_roundTime(roundTime)
             this.props.getCompetitionDrawsAction(
               this.state.yearRefId,
               this.state.firstTimeCompId,
@@ -103,15 +111,37 @@ class CompetitionDraws extends Component {
     let storedCompetitionId = getOwn_competition()
     let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
     let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
-
+    let venueId = getDraws_venue()
+    let roundId = getDraws_round()
+    let roundTime = getDraws_roundTime()
+    let roundData = this.props.drawsState.getDrawsRoundsData.length > 0 ? this.props.drawsState.getDrawsRoundsData : undefined
+    let venueData = this.props.drawsState.competitionVenues.length > 0 ? this.props.drawsState.competitionVenues : undefined
     if (storedCompetitionId && yearId && propsData && compData) {
       this.setState({
         yearRefId: JSON.parse(yearId),
         firstTimeCompId: storedCompetitionId,
         venueLoad: true
       })
-      // this.props.getCompetitionVenue(storedCompetitionId);
-      this.props.getDrawsRoundsAction(yearId, storedCompetitionId);
+      if (venueId && roundId && roundData && venueData) {
+        console.log(venueId, "*****", roundData)
+        console.log(roundTime, "&&", venueData)
+        this.props.getCompetitionDrawsAction(
+          yearId,
+          storedCompetitionId,
+          venueId,
+          roundId
+        );
+        this.setState({
+          venueId: JSON.parse(venueId),
+          roundId: JSON.parse(roundId),
+          roundTime,
+          venueLoad: false
+        })
+      }
+      else {
+
+        this.props.getDrawsRoundsAction(yearId, storedCompetitionId);
+      }
     }
     else if (yearId) {
       this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
@@ -347,6 +377,7 @@ class CompetitionDraws extends Component {
   ////////on venue change
   onVenueChange = venueId => {
     this.setState({ venueId });
+    setDraws_venue(venueId)
     this.props.clearDraws()
     this.props.getCompetitionDrawsAction(
       this.state.yearRefId,
@@ -364,6 +395,8 @@ class CompetitionDraws extends Component {
     let roundTime = roundData[matchRoundData].startDateTime
     // this.props.dateSelection(roundId)
     this.setState({ roundId, roundTime });
+    setDraws_round(roundId)
+    setDraws_roundTime(roundTime)
     this.props.getCompetitionDrawsAction(
       this.state.yearRefId,
       this.state.firstTimeCompId,

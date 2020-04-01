@@ -214,14 +214,16 @@ class LiveScoreAddTeam extends Component {
 
                                 {/* {
                                     this.state.timeout ?
-                                        <LoaderImg
-                                            type="TailSpin"
-                                            color="#e67531"
-                                            height={100}
-                                            width={100}
-                                            timeout={this.state.timeout}
+                                        <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 100, width: 100 }}>
+                                            <LoaderImg
+                                                type="TailSpin"
+                                                color="#e67531"
+                                                height={30}
+                                                width={30}
+                                                timeout={this.state.timeout}
 
-                                        />
+                                            />
+                                        </label>
                                         :
                                         <label>
                                             <img
@@ -260,9 +262,6 @@ class LiveScoreAddTeam extends Component {
                                 onChange={(evt) => {
 
                                     this.setImage(evt.target)
-                                    // var urlImage = URL.createObjectURL(evt.target.files[0])
-                                    // this.props.liveScoreAddTeamform({ key: 'logoUrl', data: urlImage })
-                                    // this.props.liveScoreAddTeamform({ key: 'teamLogo', data: evt.target.files[0] })
                                     // this.setState({ timeout: 3000 })
                                     // setTimeout(() => {
                                     //     this.setState({ timeout: null })

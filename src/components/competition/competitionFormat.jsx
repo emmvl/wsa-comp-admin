@@ -139,7 +139,7 @@ class CompetitionFormat extends Component {
                 if(competitionFormatState.onLoad == false && competitionModuleState.drawGenerateLoad == false
                      && this.state.loading === true && !this.state.isFinalAvailable){
                    
-                    if(!competitionModuleState.error){
+                    if(!competitionModuleState.error && competitionModuleState.status == 1){
                         history.push('/competitionDraws');
                     }
                    
@@ -294,6 +294,27 @@ class CompetitionFormat extends Component {
 
     onChangeSetValue = (id, fieldName) => {
         console.log("id::" + id);
+        let data = this.props.competitionFormatState.competitionFormatList;
+        console.log("*****" + JSON.stringify(data));
+        let fixtureTemplateId = null;
+        if(fieldName == "noOfRounds")
+        {
+            data.fixtureTemplates.map((item, index) => {
+                if(item.noOfRounds == id)
+                {
+                    fixtureTemplateId = item.id;
+                }
+            });
+            this.props.updateCompetitionFormatAction(fixtureTemplateId, "fixtureTemplateId");
+        }
+        else if(fieldName == "competitionFormatRefId")
+        {
+           if(id != 4){
+            this.props.updateCompetitionFormatAction(null, "noOfRounds");
+            this.props.updateCompetitionFormatAction(fixtureTemplateId, "fixtureTemplateId");
+           } 
+        }
+        
         this.props.updateCompetitionFormatAction(id, fieldName);
     }
     onChangeSetCompFormatDivisionValue = (id, fieldName, competitionFormatDivisions, index) =>{
@@ -536,8 +557,8 @@ class CompetitionFormat extends Component {
                         </div>
                     </Radio.Group>
                 </div>
-                <Checkbox className="single-checkbox pt-3" defaultChecked={false} onChange={(e) => this.onChange(e)}>{AppConstants.use_default_competitionFormat}</Checkbox>
-                <InputWithHead heading={AppConstants.fixture_template} />
+                {/* <Checkbox className="single-checkbox pt-3" defaultChecked={false} onChange={(e) => this.onChange(e)}>{AppConstants.use_default_competitionFormat}</Checkbox> */}
+                {/* <InputWithHead heading={AppConstants.fixture_template} />
                 <Select
                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                     onChange={(fixTemplate) => this.onChangeSetValue(fixTemplate, 'fixtureTemplateId')}
@@ -546,7 +567,7 @@ class CompetitionFormat extends Component {
                     {(data.fixtureTemplates || []).map((fixture, fixIndex) => (
                         <Option value={fixture.id} key={fixture.id}>{fixture.name}</Option>
                     ))}
-                </Select>
+                </Select> */}
 
                 <InputWithHead heading={"Match Type"} />
                 <Select
@@ -557,10 +578,21 @@ class CompetitionFormat extends Component {
                         <Option key={item.id} value={item.id}>{item.description}</Option>
                     ))}
                 </Select>
-
-                <InputWithHead heading={"Number of Rounds"} placeholder={"Number of Rounds"}  value={data.noOfRounds}
-                            onChange={(e)=>this.onChangeSetValue(e.target.value, 'noOfRounds')} >
-                </InputWithHead>
+                {data.competitionFormatRefId == 4 ?   
+                    <div>
+                         <InputWithHead heading={AppConstants.numberOfRounds} />
+                        <Select
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            onChange={(x) => this.onChangeSetValue(x, 'noOfRounds')}
+                            value={data.noOfRounds}>
+                            <Option style={{height: '30px'}} value={null} key={null}>{}</Option>
+                            {(data.fixtureTemplates || []).map((fixture, fixIndex) => (
+                                <Option value={fixture.noOfRounds} key={fixture.noOfRounds}>{fixture.noOfRounds}</Option>
+                            ))}
+                        </Select>
+                 </div>: null
+                }        
+              
                 <span className="applicable-to-heading">{AppConstants.frequency}</span>
                 <Radio.Group className="reg-competition-radio" onChange={ (e) => this.onChangeSetValue(e.target.value, 'competitionTypeRefId')} value={data.competitionTypeRefId} >
                     <div className="fluid-width" >

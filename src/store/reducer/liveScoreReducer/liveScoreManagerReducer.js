@@ -6,7 +6,7 @@ var managerObj = {
     lastName: "",
     mobileNumber: "",
     email: "",
-    teams: null,
+    teams: null
 }
 
 const initialState = {
@@ -22,7 +22,8 @@ const initialState = {
     exsitingManagerId: null,
     teamResult: [],
     onLoadSearch: false,
-    managerSearchResult: []
+    managerSearchResult: [],
+    loading: false
 }
 
 /////get manager List Object on index basis
@@ -83,23 +84,28 @@ function liveScoreMangerState(state = initialState, action) {
                 MainManagerListResult: action.result,
                 managerListResult: action.result,
                 status: action.status,
+                managerSearchResult: action.result
             }
 
         //// Add Edit Manager
         case ApiConstants.API_LIVE_SCORE_ADD_EDIT_MANAGER_LOAD:
-            return { ...state, onLoad: true };
+            return { ...state, loading: true };
 
         case ApiConstants.API_LIVE_SCORE_ADD_EDIT_MANAGER_SUCCESS:
             return {
                 ...state,
             }
-        case ApiConstants.API_LIVE_SCORE_DIVISION_SUCCESS:
 
+            case ApiConstants.API_LIVE_SCORE_TEAM_LOAD:
+                    return { ...state, onLoad: true };
+        
+            case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
+            console.log(action.result)
+            // let playerData = liveScoreTeamModal.getTeamViewPlayerListData(action.result.players)
             return {
                 ...state,
-                onLoad: false,
-                teamResult: action.teamResult,
-
+                teamResult: action.result,
+               
             };
 
         ////Update Manager Data
@@ -110,18 +116,16 @@ function liveScoreMangerState(state = initialState, action) {
 
                 let teamObj = getTeamObj(action.data, state.teamResult)
                 state.managerData['teams'] = teamObj
-                console.log(teamObj, 'teamObj')
-
                 state.teamId = action.data
 
             } else if (action.key == 'managerRadioBtn') {
                 state[action.key] = action.data
                 state.exsitingManagerId = null
 
-            }else if (action.key == "managerSearch") {
+            } else if (action.key == "managerSearch") {
 
                 state.exsitingManagerId = action.data
-            
+
 
             } else if (action.key == 'isEditManager') {
                 state.managerData.id = action.data.id
@@ -186,11 +190,13 @@ function liveScoreMangerState(state = initialState, action) {
             return { ...state, onLoadSearch: true };
 
         case ApiConstants.API_LIVESCORE_MANAGER_SEARCH_SUCCESS:
-         
+            console.log(action, 'API_LIVESCORE_MANAGER_SEARCH_SUCCESS')
+            // state.managerListResult = action.result ? action.result : state.managerSearchResult
             return {
                 ...state,
                 onLoadSearch: false,
-                managerSearchResult: action.result,
+                // managerSearchResult: action.result,
+                managerListResult: action.result,
                 status: action.status,
             }
         default:

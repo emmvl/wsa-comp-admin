@@ -88,7 +88,7 @@ export function* liveScoreAssigneMatches(action) {
 export function* liveScoreChangeAssignStatus(action) {
 
     try {
-        const result = yield call(LiveScoreAxiosApi.changeAssignStatus, action.roleId, action.records, action.teamID, action.teamkey)
+        const result = yield call(LiveScoreAxiosApi.changeAssignStatus, action.roleId, action.records, action.teamID, action.teamkey, action.scorer_Id)
         if (result.status == 1) {
             yield put({
                 type: ApiConstants.API_LIVESCORE_ASSIGN_CHANGE_STATUS_SUCCESS,

@@ -445,15 +445,15 @@ function liveScoreMatchReducer(state = initialState, action) {
                 onLoad: false,
 
             };
-        case ApiConstants.API_LIVE_SCORE_DIVISION_LOAD:
-            return { ...state, onLoad: true };
+        // case ApiConstants.API_LIVE_SCORE_DIVISION_LOAD:
+        //     return { ...state, onLoad: true };
 
-        case ApiConstants.API_LIVE_SCORE_DIVISION_SUCCESS:
+        // case ApiConstants.API_LIVE_SCORE_DIVISION_SUCCESS:
 
-            return {
-                ...state,
-                onLoad: false,
-            };
+        //     return {
+        //         ...state,
+        //         onLoad: false,
+        //     };
 
         case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_SUCCESS:
 
@@ -468,7 +468,6 @@ function liveScoreMatchReducer(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
-            console.log(action.result, 'API_LIVE_SCORE_TEAM_SUCCESS')
             
             return {
                 ...state,

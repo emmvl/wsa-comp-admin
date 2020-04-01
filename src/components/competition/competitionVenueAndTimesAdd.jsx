@@ -267,7 +267,8 @@ class CompetitionVenueAndTimesAdd extends Component {
         else if (this.state.screenNavigationKey == AppConstants.competitionFees) {
             setTimeout(() => {
                 this.props.clearVenueDataAction("venue");
-                history.push('/registrationCompetitionFee', { venueScreen: true })
+                history.push('/registrationCompetitionFee')
+                // history.push('/registrationCompetitionFee', { venueScreen: true })
             }, 800);
             this.setState({ saveContraintLoad: false })
         }

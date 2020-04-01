@@ -22,6 +22,7 @@ import {
 } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 import { isArrayNotEmpty } from "../../util/helpers";
 import Loader from '../../customComponents/loader'
+import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 
 
 const { Footer, Content, Header } = Layout;
@@ -48,7 +49,8 @@ class LiveScoreAddManager extends Component {
         // let competitionID = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
-            this.props.getliveScoreDivisions(id)
+            // this.props.getliveScoreDivisions(id)
+            this.props.getliveScoreTeams(id)
         } else {
             history.push('/')
         }
@@ -139,13 +141,15 @@ class LiveScoreAddManager extends Component {
         const { managerListResult, MainManagerListResult, onLoadSearch, managerSearchResult } = this.props.liveScoreMangerState
 
         // let managerList = isArrayNotEmpty(managerListResult) ? managerListResult : []
-        let managerList = isArrayNotEmpty(managerSearchResult) ? managerSearchResult : []
+        // let managerList = isArrayNotEmpty(managerSearchResult) ? managerSearchResult : isArrayNotEmpty(managerListResult) ? managerListResult : []
+        let managerList = isArrayNotEmpty(managerListResult) ? managerListResult : []
 
-        let teamData = this.props.liveScoreState.teamResult ? this.props.liveScoreState.teamResult : []
+        // let teamData = this.props.liveScoreState.teamResult ? this.props.liveScoreState.teamResult : []
         const { teamId } = this.props.liveScoreMangerState
         const { selectedItems } = this.state;
         const filteredOptions = OPTIONS.filter(o => !selectedItems.includes(o));
-
+        let teamData = isArrayNotEmpty(this.props.liveScoreMangerState.teamResult) ? this.props.liveScoreMangerState.teamResult : []
+     
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -171,7 +175,12 @@ class LiveScoreAddManager extends Component {
                                     notFoundContent={onLoadSearch == true ? <Spin size="small" /> : null}
 
                                     onSearch={(value) => {
-                                        this.props.liveScoreManagerSearch(value)
+                                        console.log(value, '8220')
+                                        value ?
+                                            this.props.liveScoreManagerSearch(value)
+                                            :
+                                            this.props.liveScoreManagerListAction(3, 1, 1)
+
                                     }}
 
 
@@ -207,7 +216,7 @@ class LiveScoreAddManager extends Component {
                                     onChange={(teamId) => this.props.liveScoreUpdateManagerDataAction(teamId, 'teamId')}
                                     value={teamId}
                                 >
-                                    {isArrayNotEmpty(teamData) > 0 && teamData.map((item) => (
+                                    {teamData.map((item) => (
                                         < Option value={item.id} > {item.name}</Option>
                                     ))
                                     }
@@ -222,8 +231,10 @@ class LiveScoreAddManager extends Component {
     }
 
     managerNewRadioBtnView(getFieldDecorator) {
-        let teamData = this.props.liveScoreState.teamResult ? this.props.liveScoreState.teamResult : []
+        // let teamData = this.props.liveScoreState.teamResult ? this.props.liveScoreState.teamResult : []
+        console.log(this.props.liveScoreMangerState)
         const { managerData, teamId, teamResult } = this.props.liveScoreMangerState
+        let teamData = isArrayNotEmpty(this.props.liveScoreMangerState.teamResult) ? this.props.liveScoreMangerState.teamResult : []
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -308,12 +319,12 @@ class LiveScoreAddManager extends Component {
                                     // loading={this.props.liveScoreState.onLoad == true && true}
                                     mode="multiple"
                                     placeholder={AppConstants.selectTeam}
-                                    style={{ width: "100%"}}
+                                    style={{ width: "100%" }}
                                     onChange={(teamId) => this.props.liveScoreUpdateManagerDataAction(teamId, 'teamId')}
                                     value={teamId}
-                                    
+
                                 >
-                                    {isArrayNotEmpty(teamData) && teamData.map((item) => (
+                                    {teamData.map((item) => (
                                         < Option value={item.id} > {item.name}</Option>
                                     ))
                                     }
@@ -441,7 +452,7 @@ class LiveScoreAddManager extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
-                <Loader visible={this.props.liveScoreMangerState.onLoad} />
+                <Loader visible={this.props.liveScoreMangerState.loading} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"4"} />
                 <Layout>
                     {this.headerView()}
@@ -469,7 +480,8 @@ function mapDispatchToProps(dispatch) {
         liveScoreManagerListAction,
         liveScoreClear,
         liveScoreManagerFilter,
-        liveScoreManagerSearch
+        liveScoreManagerSearch,
+        getliveScoreTeams
     }, dispatch)
 }
 
@@ -477,6 +489,7 @@ function mapStatetoProps(state) {
     return {
         liveScoreState: state.LiveScoreState,
         liveScoreMangerState: state.LiveScoreMangerState,
+        liveScoreScorerState: state.LiveScoreScorerState
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(LiveScoreAddManager));

@@ -16,16 +16,31 @@ function liveScoreLaddersReducer(state = initialState, action) {
         //LIVESCORE DIVISION LIST
         case ApiConstants.API_LIVE_SCORE_DIVISION_LOAD:
             return { ...state, onLoad: true };
+
         case ApiConstants.API_LIVE_SCORE_DIVISION_SUCCESS:
             let divisionDatafromAction = action.divisionList
             let ladderList = action.ladderList ? action.ladderList : []
+            console.log(divisionDatafromAction , ladderList)
             return {
                 ...state,
                 onLoad: false,
                 liveScoreLadderDivisionData: divisionDatafromAction,
                 liveScoreLadderListData: ladderList,
-                status: action.status
+                // status: action.status
             };
+
+
+            /// ONLY LADDER
+            case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_LOAD:
+                return { ...state, onLoad: true };
+            case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_SUCCESS:
+    
+                return {
+                    ...state,
+                    onLoad: false,
+                    liveScoreLadderDivisionData: action.result,
+                    status: action.status
+                };
 
 
 

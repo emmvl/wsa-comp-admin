@@ -568,12 +568,12 @@ let LiveScoreAxiosApi = {
     },
 
     //change assign status
-    changeAssignStatus(roleId, records, teamID, teamKey) {
+    changeAssignStatus(roleId, records, teamID, teamKey, scorer_Id) {
         let body = JSON.stringify({
             "matchId": records.id,
             "roleId": roleId,
             "teamId": records[teamKey].id,
-            "userId": userId
+            "userId": scorer_Id
         })
 
         var url = `/roster/admin/assign`

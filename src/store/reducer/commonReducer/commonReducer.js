@@ -65,8 +65,12 @@ function commonReducerState(state = initialState, action) {
 
         case ApiConstants.API_ADD_VENUE_SUCCESS:
             console.log(action, 'VenueResult')
-            state.venueList.push(action.result)
-            state.searchVenueList.push(action.result)
+            if(action.result!= null)
+            {
+                state.venueList.push(action.result)
+                state.searchVenueList.push(action.result)
+            }
+        
             return {
                 ...state,
                 mainVenueList: action.result,

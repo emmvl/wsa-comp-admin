@@ -325,9 +325,13 @@ function appState(state = initialState, action) {
       }
 
     case ApiConstants.API_ADD_VENUE_SUCCESS:
-      state.mainVenueList.push(action.result)
-      state.venueList.push(action.result)
-      state.searchVenueList.push(action.result)
+      if(action.result!= null)
+      {
+        state.mainVenueList.push(action.result)
+        state.venueList.push(action.result)
+        state.searchVenueList.push(action.result)
+      }
+   
       return {
         ...state,
       }

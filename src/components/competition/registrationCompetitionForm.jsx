@@ -347,6 +347,8 @@ class RegistrationCompetitionForm extends Component {
             competitionIsUsed: false,
             organisationTypeRefId: 0,
             isCreatorEdit: false, //////// user is owner of the competition than isCreatorEdit will be false 
+            roundsArray: [{ id: 4, value: 4 },
+            { id: 6, value: 6 }, { id: 8, value: 8 }, { id: 10, value: 10 }, { id: 12, value: 12 }, { id: 14, value: 14 }, { id: 16, value: 16 }, { id: 18, value: 18 }]
         };
         this_Obj = this;
         this.props.clearCompReducerDataAction("all")
@@ -622,7 +624,9 @@ class RegistrationCompetitionForm extends Component {
                         formData.append("competitionTypeRefId", postData.competitionTypeRefId);
                         formData.append("competitionFormatRefId", postData.competitionFormatRefId);
                         formData.append("startDate", postData.startDate);
-                        if (postData.noOfRounds !== null && postData.noOfRounds !== '') formData.append("noOfRounds", postData.noOfRounds);
+                        if (postData.competitionFormatRefId == 4) {
+                            if (postData.noOfRounds !== null && postData.noOfRounds !== '') formData.append("noOfRounds", postData.noOfRounds);
+                        }
                         if (postData.roundInDays !== null && postData.roundInDays !== '') formData.append("roundInDays", postData.roundInDays);
                         if (postData.roundInHours !== null && postData.roundInHours !== '') formData.append("roundInHours", postData.roundInHours);
                         if (postData.roundInMins !== null && postData.roundInMins !== '') formData.append("roundInMins", postData.roundInMins);
@@ -1239,20 +1243,34 @@ class RegistrationCompetitionForm extends Component {
 
                         </div>
                         <div className="col-sm">
-                            <Form.Item >
-                                {getFieldDecorator('numberOfRounds',
-                                    { rules: [{ required: true, message: ValidationConstants.numberOfRoundsNameIsRequired }] })(
-                                        <InputWithHead
-                                            required={"required-field pt-0"}
-                                            heading={AppConstants.numberOfRounds}
-                                            placeholder={AppConstants.numberOfRounds}
-                                            value={detailsData.competitionDetailData.noOfRounds}
-                                            onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "noOfRounds")}
-                                            disabled={isCreatorEdit}
+                            {detailsData.competitionDetailData.competitionFormatRefId == 4 &&
+                                <div>
+                                    <InputWithHead heading={AppConstants.numberOfRounds} />
+                                    <Form.Item >
+                                        {getFieldDecorator('numberOfRounds',
+                                            { rules: [{ required: true, message: ValidationConstants.numberOfRoundsNameIsRequired }] })(
 
-                                        />
-                                    )}
-                            </Form.Item>
+                                                <Select
+                                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                                    placeholder={AppConstants.selectRound}
+                                                    onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, "noOfRounds")}
+                                                    value={detailsData.competitionDetailData.noOfRounds}
+                                                    disabled={isCreatorEdit}
+                                                >
+                                                    {this.state.roundsArray.map(item => {
+                                                        console.log(item)
+                                                        return (
+                                                            <Option key={item.id} value={item.id}>{item.value}</Option>
+                                                        );
+                                                    })}
+
+
+                                                </Select>
+
+                                            )}
+                                    </Form.Item>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>

@@ -37,7 +37,7 @@ function CompetitionModuleState(state = initialState, action) {
             };
 
             case ApiConstants.API_GENERATE_DRAW_FAIL:
-                console.log("%%%%%%%%%%%%%%%%%55 Red Fail" + action.error);
+               // console.log("%%%%%%%%%%%%%%%%%55 Red Fail" + action.error);
                 return {
                     ...state,
                     drawGenerateLoad: false,
@@ -46,7 +46,7 @@ function CompetitionModuleState(state = initialState, action) {
                 };
     
             case ApiConstants.API_GENERATE_DRAW_ERROR:
-                console.log("%%%%%%%%%%%%%%%%%55 Red ERROR" + JSON.stringify(action.error) + "&&&&" + action.status);
+               // console.log("%%%%%%%%%%%%%%%%%55 Red ERROR" + JSON.stringify(action.error) + "&&&&" + action.status);
                 return {
                     ...state,
                     drawGenerateLoad: false,

@@ -78,25 +78,27 @@ function liveScoreScorerState(state = initialState, action) {
                 scorerListTotalCount: scorerList.page.totalCount
             }
 
-        case ApiConstants.API_LIVE_SCORE_DIVISION_SUCCESS:
+        case ApiConstants.API_LIVE_SCORE_TEAM_LOAD:
+            return { ...state, onLoad: true };
 
-            let data23 = JSON.parse(JSON.stringify(action.result))
-
-            let teamObject = {
-                name: "All Team",
-                id: null
-            }
-
-
+        case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
+                let teamsArray = JSON.parse(JSON.stringify(action.result))
+                state.allTeamData = JSON.parse(JSON.stringify(action.result))
+                let teamObject = {
+                             name: "All Team",
+                         id: null
+                }
+                
+                state.allTeamData.unshift(teamObject)
+            
             return {
                 ...state,
                 onLoad: false,
-                teamResult: data23,
-                allTeamData: data23.unshift(teamObject)
-                //    teamResult :  action.result
-
-
+                teamResult: teamsArray,
+              
             };
+
+    
         case ApiConstants.API_LIVE_SCORE_UPDATE_SCORER:
 
             if (action.key == 'teamId') {

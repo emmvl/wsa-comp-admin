@@ -19,11 +19,19 @@ class InnerHorizontalMenu extends React.Component {
         checkOrganisationLevel().then((value) => (
             this.setState({ organisationLevel: value })
         ))
+        if (this.props) {
+            if (this.props.compSelectedKey !== "18") {
+                localStorage.removeItem("draws_roundTime")
+                localStorage.removeItem("draws_round")
+                localStorage.removeItem("draws_venue")
+            }
+        }
 
     }
 
     render() {
         let orgLevel = this.state.organisationLevel
+
         return (
             <div>
                 {this.props.menu === "competition" && <Menu
@@ -116,7 +124,7 @@ class InnerHorizontalMenu extends React.Component {
                                     <span >Re-grading</span>
                                 </NavLink>
                             </Menu.Item>
-                            <Menu.Item key="18">
+                            <Menu.Item key="18" >
                                 {/* <a href="https://comp-management-test.firebaseapp.com/competitions-draws.html">Draws</a> */}
                                 <NavLink to="/competitionDraws" >
                                     <span >Draws</span>
