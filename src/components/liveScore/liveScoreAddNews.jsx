@@ -10,6 +10,7 @@ import {
     Form,
     Modal,
     Spin,
+    Skeleton
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -38,6 +39,7 @@ import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStora
 import { isArrayNotEmpty, isNullOrEmptyString } from "../../util/helpers";
 import { liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 // import LoaderImg from 'react-loader-spinner'
+import ImageLoader from '../../customComponents/ImageLoader'
 
 
 const { Header, Footer, Content } = Layout;
@@ -57,7 +59,7 @@ class LiveScoreAddNews extends Component {
             author: '',
             managerData: [],
             scorerData: [],
-            imageSelection: '',
+            imageSelection: AppImages.circleImage,
             videoSelection: '',
             date: null,
             time: null,
@@ -451,47 +453,10 @@ class LiveScoreAddNews extends Component {
                     <div className="col-sm" >
                         <InputWithHead heading={AppConstants.newsImage} />
                         <div className="reg-competition-logo-view" onClick={this.selectImage}>
-                            <label>
-                                <img
-                                    src={editData.newsImage ? editData.newsImage : this.state.imageSelection}
-                                    alt=""
-                                    height="120"
-                                    width="120"
-                                    style={{ borderRadius: 60, marginLeft: 0 }}
-                                    name={'image'}
-                                    onError={ev => {
-                                        ev.target.src = AppImages.circleImage;
-                                    }}
-                                />
-                            </label>
+                            <ImageLoader
+                                timeout={this.state.imageTimeout}
+                                src={editData.newsImage ? editData.newsImage : this.state.imageSelection} />
 
-                            {/* {
-                                this.state.imageTimeout ?
-                                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 100, width: 100 }}>
-                                        <LoaderImg
-                                            type="TailSpin"
-                                            color="#e67531"
-                                            height={30}
-                                            width={30}
-                                            timeout={this.state.imageTimeout}
-
-                                        />
-                                    </label>
-                                    :
-                                    <label>
-                                        <img
-                                            src={editData.newsImage ? editData.newsImage : this.state.imageSelection}
-                                            alt=""
-                                            height="120"
-                                            width="120"
-                                            style={{ borderRadius: 60, marginLeft: 0 }}
-                                            name={'image'}
-                                            onError={ev => {
-                                                ev.target.src = AppImages.circleImage;
-                                            }}
-                                        />
-                                    </label>
-                            } */}
                         </div>
                         <input
                             type="file"
@@ -499,10 +464,10 @@ class LiveScoreAddNews extends Component {
                             style={{ display: 'none' }}
                             onChange={(event) => {
                                 this.setImage(event.target, 'evt.target')
-                                // this.setState({ imageTimeout: 3000 })
-                                // setTimeout(() => {
-                                //     this.setState({ imageTimeout: null })
-                                // }, 3000);
+                                this.setState({ imageTimeout: 2000 })
+                                setTimeout(() => {
+                                    this.setState({ imageTimeout: null })
+                                }, 2000);
                             }}
                         />
 
@@ -510,37 +475,11 @@ class LiveScoreAddNews extends Component {
                     <div className="col-sm" >
                         <InputWithHead heading={AppConstants.newsVideo} />
                         <div className="reg-competition-logo-view" onClick={this.selectVideo}>
-
-                            <label>
-                                <video
-                                    src={editData.newsVideo ? editData.newsVideo : this.state.videoSelection}
-                                    height='120'
-                                    width='120'
-                                    poster={(editData.newsVideo || this.state.videoSelection != '') ? '' : AppImages.circleImage} />
-                            </label>
-
-                            {/* {
-                                this.state.videoTimeout ?
-                                    <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 100, width: 100 }}>
-                                        <LoaderImg
-                                            type="TailSpin"
-                                            color="#e67531"
-                                            height={30}
-                                            width={30}
-                                            timeout={this.state.videoTimeout}
-
-                                        />
-                                    </label>
-                                    :
-                                    <label>
-                                        <video
-                                            src={editData.newsVideo ? editData.newsVideo : this.state.videoSelection}
-                                            height='120'
-                                            width='120'
-                                            poster={(editData.newsVideo || this.state.videoSelection != '') ? '' : AppImages.circleImage} />
-                                    </label>
-                            } */}
-
+                            <ImageLoader
+                                timeout={this.state.videoTimeout}
+                                video
+                                src={editData.newsVideo ? editData.newsVideo : this.state.videoSelection}
+                                poster={(editData.newsVideo || this.state.videoSelection != '') ? '' : AppImages.circleImage} />
 
                         </div>
                         <input
@@ -549,10 +488,10 @@ class LiveScoreAddNews extends Component {
                             style={{ display: 'none' }}
                             onChange={(event) => {
                                 this.setVideo(event.target, "evt.target")
-                                // this.setState({ videoTimeout: 3000 })
-                                // setTimeout(() => {
-                                //     this.setState({ videoTimeout: null })
-                                // }, 3000);
+                                this.setState({ videoTimeout: 2000 })
+                                setTimeout(() => {
+                                    this.setState({ videoTimeout: null })
+                                }, 2000);
                             }}
                         />
                     </div>

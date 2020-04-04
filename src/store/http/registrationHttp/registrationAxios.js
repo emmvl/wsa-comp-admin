@@ -11,7 +11,7 @@ async function logout() {
 }
 
 let token = getAuthToken();
-let userId = getUserId();
+// let userId = getUserId();
 // let organisationUniqueKey = "sd-gdf45df-09486-sdg5sfd-546sdf"
 let AxiosApi = {
     // /login Api call
@@ -351,17 +351,17 @@ let AxiosApi = {
         return Method.dataPost(url, token, payload);
     },
     // save end user registration
-    getOrgRegistrationRegistrationSettings(payload) {
+    async  getOrgRegistrationRegistrationSettings(payload) {
+        let userId = await getUserId()
         var url = `/api/registration/registrationsettings?userId=${userId}`;
         return Method.dataPost(url, token, payload);
     },
     //get end user membership products
-    getEndUserRegMembershipProducts(payload) {
+    async  getEndUserRegMembershipProducts(payload) {
+        let userId = await getUserId()
         var url = `/api/registration/membershipproducts?userId=${userId}`;
         return Method.dataPost(url, token, payload);
     },
-
-
 };
 
 const Method = {

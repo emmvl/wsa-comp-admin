@@ -78,7 +78,8 @@ const initialState = {
     courtPreferencesPost: [],
     onVenueDataClear: false,
     courtPrefArrayStore: null,
-    searchVenueList: []
+    searchVenueList: [],
+    venueIsUsed: false
 };
 
 ////get court rotation
@@ -577,6 +578,10 @@ function VenueTimeState(state = initialState, action) {
                 console.log("action.data" + JSON.stringify(action.data));
                 console.log("organisations" + JSON.stringify(organisations));
             }
+            else if(action.key == "venueIsUsed")
+            {
+                state[action.key] = action.data;
+            }
 
             return {
                 ...state,
@@ -873,7 +878,7 @@ function VenueTimeState(state = initialState, action) {
                     for (let i in courts) {
                         let key = Number(i) + 1;
                         courts[i]["key"] = key.toString();
-                        courts[i]["isDisabled"] = isVenueMapped === 1 ? true : false;
+                        courts[i]["isDisabled"] =  state.venueIsUsed;
                         let availabilities = courts[i].availabilities;
                         if (isArrayNotEmpty(availabilities)) {
                             courts[i]["overideSlot"] = true;
@@ -883,7 +888,7 @@ function VenueTimeState(state = initialState, action) {
                         }
 
                         for (let j in courts[i].availabilities) {
-                            courts[i].availabilities[j]["isDisabled"] = isVenueMapped === 1 ? true : false;
+                            courts[i].availabilities[j]["isDisabled"] =  state.venueIsUsed;
                         }
 
                         venueDataByIdRes.expandedRowKeys.push(key.toString())
@@ -892,7 +897,7 @@ function VenueTimeState(state = initialState, action) {
                 let gameDays = venueDataByIdRes.gameDays;
                 if (isArrayNotEmpty(gameDays)) {
                     for (let k in gameDays) {
-                        gameDays[k]["isDisabled"] = isVenueMapped === 1 ? true : false;
+                        gameDays[k]["isDisabled"] = state.venueIsUsed;
                     }
                 }
 

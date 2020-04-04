@@ -12,7 +12,7 @@ async function logout() {
 }
 
 let token = getAuthToken();
-let userId = getUserId();
+// let userId = getUserId();
 
 
 
@@ -282,16 +282,14 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, localStorage.token, data)
     },
 
-    liveScoreDashboard() {
-        let competitionID = localStorage.getItem("competitionId");
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-        var url = `/dashboard/newsIncidentMatch?competitionId=${id}`;
+    liveScoreDashboard(competitionID, startDay) {
+        var url = `/dashboard/newsIncidentMatch?competitionId=${competitionID}&startDay=${startDay}`;
         return Method.dataGet(url, token)
     },
 
-    liveScoreAddEditManager(data, teamId, exsitingManagerId) {
+    async  liveScoreAddEditManager(data, teamId, exsitingManagerId) {
         let body = data
-
+        let userId = await getUserId()
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
         var url = `/users/manager?userId=${userId}&competitionId=${id}`;
         return Method.dataPost(url, token, body)
@@ -539,7 +537,7 @@ let LiveScoreAxiosApi = {
             }
             // }
 
-           
+
 
             var url = `/users/member?&competitionId=${id}`;
             return Method.dataPost(url, token, body)
@@ -556,13 +554,13 @@ let LiveScoreAxiosApi = {
     getAssignMatchesList(competitionID, teamId, body) {
 
         var url = null;
-        
-        if(teamId){
+
+        if (teamId) {
             url = `/matches/admin?competitionId=${competitionID}&teamId=${teamId}`;
-        }else{
+        } else {
             url = `/matches/admin?competitionId=${competitionID}`;
         }
-        
+
         return Method.dataPost(url, token, body)
 
     },

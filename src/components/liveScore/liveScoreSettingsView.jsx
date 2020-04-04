@@ -25,6 +25,8 @@ import {
 
     getCompetitonVenuesList
 } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
+import ImageLoader from '../../customComponents/ImageLoader'
+
 const { Header, Footer } = Layout;
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -104,7 +106,8 @@ class LiveScoreSettingsView extends Component {
             venueData: [],
             reportSelection: 'Period',
             recordSelection: 'Own',
-            competitionFormat: null
+            competitionFormat: null,
+            timeOut: null
         };
     }
     componentDidMount() {
@@ -156,6 +159,9 @@ class LiveScoreSettingsView extends Component {
     setImage = (data) => {
         if (data.files[0] !== undefined) {
             this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]) })
+            const imgData = URL.createObjectURL(data.files[0])
+            this.props.onChangeSettingForm({ key: 'competitionLogo', data: data.files[0] })
+            this.props.onChangeSettingForm({ key: 'Logo', data: imgData })
         }
     };
 
@@ -321,7 +327,7 @@ class LiveScoreSettingsView extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-competition-logo-view" onClick={this.selectImage}>
-                                <label>
+                                {/* <label>
                                     <img
                                         src={this.props.liveScoreSetting.form.Logo}
                                         alt=""
@@ -335,7 +341,11 @@ class LiveScoreSettingsView extends Component {
                                             ev.target.src = AppImages.circleImage;
                                         }}
                                     />
-                                </label>
+                                </label> */}
+
+                                <ImageLoader
+                                    timeout={this.state.timeout}
+                                    src={this.props.liveScoreSetting.form.Logo} />
 
                             </div>
                             <input
@@ -344,9 +354,11 @@ class LiveScoreSettingsView extends Component {
                                 style={{ display: 'none' }}
                                 name={"imageFile"}
                                 onChange={(evt) => {
-                                    const imgData = URL.createObjectURL(evt.target.files[0])
-                                    this.props.onChangeSettingForm({ key: 'competitionLogo', data: evt.target.files[0] })
-                                    this.props.onChangeSettingForm({ key: 'Logo', data: imgData })
+                                    this.setImage(evt.target)
+                                    this.setState({ timeout: 2000 })
+                                    setTimeout(() => {
+                                        this.setState({ timeout: null })
+                                    }, 2000);
                                 }} />
 
                         </div>
@@ -358,7 +370,7 @@ class LiveScoreSettingsView extends Component {
                                 className="single-checkbox"
                                 defaultChecked={true}
 
-                                // onChange={e => this.onChange(e)}
+                            // onChange={e => this.onChange(e)}
                             >
                                 {AppConstants.useDefault}
                             </Checkbox>

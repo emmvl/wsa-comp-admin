@@ -23,14 +23,14 @@ function liveScoreScorerUpdate(data, key) {
 
 
 //Devision action
-function liveScoreAddEditScorer(body, teamId, existingScorerId) {
+function liveScoreAddEditScorer(body, teamId, existingScorerId, isEdit) {
 
     const action = {
         type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_SCORER_LOAD,
         body,
         teamId,
         existingScorerId,
-
+        isEdit
     };
 
     return action;

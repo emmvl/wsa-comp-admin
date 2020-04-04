@@ -9,6 +9,7 @@ import { bindActionCreators } from 'redux';
 import { liveScoreNewsListAction } from '../../store/actions/LiveScoreAction/liveScoreNewsAction'
 import { liveScore_formateDate } from '../../themes/dateformate'
 import AppImages from "../../themes/appImages";
+import moment from "moment";
 const { Content } = Layout;
 
 ////columens data
@@ -30,20 +31,23 @@ function tableSort(a, b, key) {
 
 // compare dates
 
-function checkDate(expiryDate) {
+function checkDate(expiryDate, publishedDate) {
     let currentDate = new Date()
-
-    if (expiryDate) {
+    if (expiryDate && publishedDate) {
         let expiryFormate = new Date(expiryDate)
-        if (expiryFormate > currentDate) {
-            return true
-        } else {
-            return true
-        }
-
-    } else {
-        return false
-    }
+        if (expiryFormate > currentDate || expiryFormate == currentDate) {
+            return 'green'
+        } else return 'grey'
+    } else if (publishedDate) {
+        return 'green'
+    } else if (expiryDate) {
+        let expiryFormate = new Date(expiryDate)
+        if (expiryFormate > currentDate || expiryFormate == currentDate) {
+            return 'green'
+        } else if (expiryFormate < currentDate) {
+            return 'grey'
+        } else return 'red'
+    } else return 'red'
 
 }
 
@@ -97,20 +101,20 @@ const columns = [
         dataIndex: 'isActive',
         key: 'isActive',
         sorter: (a, b) => tableSort(a, b, 'isActive'),
-        
+
         render: isActive =>
-        <span>{isActive == 1 ? "Yes":"NO"}</span>
-      
+            <span>{isActive == 1 ? "Yes" : "NO"}</span>
+
     },
     {
         title: "Published Date",
         dataIndex: 'published_at',
         key: 'published_at',
         render: (published_at) =>
-        <span>{published_at && liveScore_formateDate(published_at)}</span>
-        
+            <span>{published_at && liveScore_formateDate(published_at)}</span>
+
         // sorter: (a, b) => tableSort(a, b, 'Published_date'),
-       
+
     },
     {
         title: 'Notification',
@@ -118,17 +122,17 @@ const columns = [
         key: 'isNotification',
         sorter: (a, b) => checkSorting(a, b, 'isNotification'),
         render: isNotification =>
-        <span>{isNotification == 1 ? "Yes":"NO"}</span>
+            <span>{isNotification == 1 ? "Yes" : "NO"}</span>
     },
     {
         title: 'Active',
         dataIndex: 'news_expire_date',
         key: 'news_expire_date',
         sorter: (a, b) => a.news_expire_date.length - b.news_expire_date.length,
-        render: news_expire_date =>
+        render: (news_expire_date, record) =>
             <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
                 <img className="dot-image"
-                    src={checkDate(news_expire_date) === true ? AppImages.greenDot : AppImages.redDot}
+                    src={checkDate(news_expire_date, record.published_at) === 'green' ? AppImages.greenDot : checkDate(news_expire_date, record.published_at) === 'grey' ? AppImages.greyDot : AppImages.redDot}
                     alt="" width="12" height="12" />
             </span>,
     },

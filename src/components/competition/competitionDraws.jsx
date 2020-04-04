@@ -123,8 +123,7 @@ class CompetitionDraws extends Component {
         venueLoad: true
       })
       if (venueId && roundId && roundData && venueData) {
-        console.log(venueId, "*****", roundData)
-        console.log(roundTime, "&&", venueData)
+
         this.props.getCompetitionDrawsAction(
           yearId,
           storedCompetitionId,
@@ -161,6 +160,21 @@ class CompetitionDraws extends Component {
     });
   };
 
+  getColumnData = (indexArray) => {
+    let yIndex = indexArray[1];
+    let drawData = this.props.drawsState.getStaticDrawsData;
+    let object = null
+
+    for (let i in drawData) {
+      let slot = drawData[i].slotsArray[yIndex]
+      if (slot.drawsId !== null) {
+        object = slot
+        break
+      }
+    }
+    return object
+  }
+
   ///////update the competition draws on  swapping and hitting update Apis if one has N/A(null)
   updateCompetitionNullDraws = (
     sourceObejct,
@@ -170,20 +184,24 @@ class CompetitionDraws extends Component {
   ) => {
     let postData = null
     if (sourceObejct.drawsId == null) {
+      let columnObject = this.getColumnData(sourceIndexArray)
+      console.log("Column Object Source", columnObject)
       postData = {
         "drawsId": targetObject.drawsId,
-        "venueCourtId": targetObject.venueCourtNumber,
-        "matchDate": moment(sourceObejct.matchDate).format("YYYY-MM-DD"),
-        "startTime": sourceObejct.startTime,
-        "endTime": sourceObejct.endTime,
+        "venueCourtId": targetObject.venueCourtId,
+        "matchDate": moment(columnObject.matchDate).format("YYYY-MM-DD HH:mm"),
+        "startTime": columnObject.startTime,
+        "endTime": columnObject.endTime,
       };
     } else {
+      let columnObject = this.getColumnData(targetIndexArray)
+      console.log("Column Object Target", columnObject)
       postData = {
         "drawsId": sourceObejct.drawsId,
-        "venueCourtId": sourceObejct.venueCourtNumber,
-        "matchDate": moment(targetObject.matchDate).format("YYYY-MM-DD"),
-        "startTime": targetObject.startTime,
-        "endTime": targetObject.endTime,
+        "venueCourtId": sourceObejct.venueCourtId,
+        "matchDate": moment(columnObject.matchDate).format("YYYY-MM-DD HH:mm"),
+        "startTime": columnObject.startTime,
+        "endTime": columnObject.endTime,
       };
     }
     this.props.updateCourtTimingsDrawsAction(
@@ -201,17 +219,19 @@ class CompetitionDraws extends Component {
     targetIndexArray
   ) => {
     let customSourceObject = {
-      drawsId: sourceObejct.drawsId,
+      // drawsId: sourceObejct.drawsId,
       drawsId: targetObject.drawsId,
       homeTeamId: sourceObejct.homeTeamId,
       awayTeamId: sourceObejct.awayTeamId,
       isLocked: 1
     };
     let customTargetObject = {
-      drawsId: targetObject.drawsId,
+      // drawsId: targetObject.drawsId,
       drawsId: sourceObejct.drawsId,
       homeTeamId: targetObject.homeTeamId,
       awayTeamId: targetObject.awayTeamId,
+      // homeTeamId: 268,
+      // awayTeamId: 262,
       isLocked: 1
     };
     let postObject = {
@@ -228,6 +248,7 @@ class CompetitionDraws extends Component {
 
 
 
+
   onSwap(source, target) {
     let sourceIndexArray = source.split(':');
     let targetIndexArray = target.split(':');
@@ -238,9 +259,11 @@ class CompetitionDraws extends Component {
     if (sourceXIndex === targetXIndex && sourceYIndex === targetYIndex) {
       return;
     }
-    let drawData = this.props.drawsState.getDrawsData;
+    let drawData = this.props.drawsState.getStaticDrawsData;
     let sourceObejct = drawData[sourceXIndex].slotsArray[sourceYIndex];
     let targetObject = drawData[targetXIndex].slotsArray[targetYIndex];
+    // console.log("Source",sourceObejct)
+    // console.log("Target",targetObject)
     // drawData
     if (sourceObejct.drawsId !== null && targetObject.drawsId !== null) {
       this.updateCompetitionDraws(
@@ -261,7 +284,6 @@ class CompetitionDraws extends Component {
       )
     }
   }
-
   ///////view for breadcrumb
   headerView = () => {
     return (
@@ -492,7 +514,14 @@ class CompetitionDraws extends Component {
             </NavLink>
           </div>
         </div>
-        {this.draggableView()}
+        {/* {this.draggableView()} */}
+        {
+          this.props.drawsState.updateLoad ?
+            <div><Loader visible={this.props.drawsState.updateLoad} />
+              {this.draggableView()}
+            </div> :
+            this.draggableView()
+        }
       </div>
     );
   };
@@ -536,7 +565,7 @@ class CompetitionDraws extends Component {
         </div>
 
         <div className="main-canvas Draws">
-          {this.props.drawsState.getDrawsData.map((courtData, index) => {
+          {this.props.drawsState.getStaticDrawsData.map((courtData, index) => {
             let leftMargin = 25;
             if (index !== 0) {
               topMargin += 55;
@@ -624,7 +653,7 @@ class CompetitionDraws extends Component {
         />
         <InnerHorizontalMenu menu={'competition'} compSelectedKey={'18'} />
         <Layout className="comp-dash-table-view">
-          <Loader visible={this.props.drawsState.updateLoad} />
+          {/* <Loader visible={this.props.drawsState.updateLoad} /> */}
           {this.headerView()}
           {this.dropdownView()}
           <Content>{this.contentView()}</Content>

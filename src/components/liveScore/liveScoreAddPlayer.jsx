@@ -24,6 +24,8 @@ import Loader from '../../customComponents/loader'
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 import { isArrayNotEmpty, isNullOrEmptyString } from '../../util/helpers';
+import ImageLoader from '../../customComponents/ImageLoader'
+
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
@@ -43,6 +45,7 @@ class LiveScoreAddPlayer extends Component {
             temaViewPlayer: props.location.state ? props.location.state.temaViewPlayer ? props.location.state.temaViewPlayer : null : null,
             screenName: props.location.state ? props.location.state.screenName : null,
             teamId: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord.id : null : null,
+            timeout: null
         };
         console.log(this.props.location, '^^^^^**')
     }
@@ -258,26 +261,24 @@ class LiveScoreAddPlayer extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-competition-logo-view" onClick={this.selectImage}>
-                                <label>
-                                    <img
-                                        src={playerData.photoUrl ? playerData.photoUrl : this.state.profileImage}
-                                        alt=""
-                                        height="120"
-                                        width="120"
-                                        style={{ borderRadius: 60, marginLeft: 0 }}
-                                        name={'image'}
-                                        onError={ev => {
-                                            ev.target.src = AppImages.circleImage;
-                                        }}
-                                    />
 
-                                </label>
+                                <ImageLoader
+                                    timeout={this.state.timeout}
+                                    src={playerData.photoUrl ? playerData.photoUrl : this.state.profileImage} />
                             </div>
                             <input
                                 type="file"
                                 id="user-pic"
                                 style={{ display: 'none' }}
-                                onChange={(evt) => this.setImage(evt.target)} />
+                                onChange={(evt) => {
+                                    this.setImage(evt.target)
+                                    this.setState({ timeout: 2000 })
+                                    setTimeout(() => {
+                                        this.setState({ timeout: null })
+                                    }, 2000);
+                                }}
+
+                            />
                             <span className="form-err">{this.state.imageError}</span>
                         </div>
                         {/* <div

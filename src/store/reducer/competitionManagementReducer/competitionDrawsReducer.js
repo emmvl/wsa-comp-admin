@@ -10,6 +10,7 @@ const initialState = {
   result: [],
   status: 0,
   getDrawsData: [],
+  getStaticDrawsData: [],
   dateArray: [],
   getDrawsRoundsData: [],
   competitionVenues: [],
@@ -193,233 +194,347 @@ function swapedDrawsArrayFunc(
   sourceYIndex,
   targetYIndex
 ) {
+  let sourceArray = JSON.parse(JSON.stringify(drawsArray))
+  let targetArray = JSON.parse(JSON.stringify(drawsArray))
+  let source = JSON.parse(JSON.stringify(sourceArray[sourtXIndex].slotsArray[sourceYIndex]));
+  let target = JSON.parse(JSON.stringify(targetArray[targetXIndex].slotsArray[targetYIndex]));
+  let sourceCopy = JSON.parse(JSON.stringify(sourceArray[sourtXIndex].slotsArray[sourceYIndex]));
+  let targetCopy = JSON.parse(JSON.stringify(targetArray[targetXIndex].slotsArray[targetYIndex]));
+  sourceCopy.drawsId = target.drawsId
+  targetCopy.drawsId = source.drawsId
+  if (source.drawsId === null) {
+    drawsArray[sourtXIndex].slotsArray[sourceYIndex] = target;
+    drawsArray[targetXIndex].slotsArray[targetYIndex] = source;
+  } else if (target.drawsId === null) {
+    drawsArray[sourtXIndex].slotsArray[sourceYIndex] = target;
+    drawsArray[targetXIndex].slotsArray[targetYIndex] = source;
+  } else {
+    drawsArray[sourtXIndex].slotsArray[sourceYIndex] = targetCopy;
+    drawsArray[targetXIndex].slotsArray[targetYIndex] = sourceCopy;
+  }
+
+  console.log("Source", source)
+  console.log("Target", target)
+  console.log("Draws", drawsArray)
+
+
+  /*
   var source = drawsArray[sourtXIndex].slotsArray[sourceYIndex];
   var target = drawsArray[targetXIndex].slotsArray[targetYIndex];
 
   /// object of source index
 
-  let sourceObject = {
-    drawsId: target.drawsId,
-    venueCourtNumber: target.venueCourtNumber,
-    venueCourtId: target.venueCourtId,
-    matchDate: target.matchDate,
-    startTime: target.startTime,
-    endTime: target.endTime,
-    homeTeamId: source.homeTeamId,
-    awayTeamId: source.awayTeamId,
-    homeTeamName: target.homeTeamName,
-    awayTeamName: target.awayTeamName,
-    competitionDivisionGradeId: source.competitionDivisionGradeId,
-    gradeName: source.gradeName,
-    isLocked: '1',
-    teamArray: source.teamArray,
-    colorCode: source.colorCode
-  };
-
-  //// object of target index
-  let targetObject = {
-    drawsId: source.drawsId,
-    venueCourtNumber: source.venueCourtNumber,
-    venueCourtId: source.venueCourtId,
-    matchDate: source.matchDate,
-    startTime: source.startTime,
-    endTime: source.endTime,
-    homeTeamId: target.homeTeamId,
-    awayTeamId: target.awayTeamId,
-    homeTeamName: source.homeTeamName,
-    awayTeamName: source.awayTeamName,
-    competitionDivisionGradeId: target.competitionDivisionGradeId,
-    gradeName: target.gradeName,
-    isLocked: '1',
-    teamArray: target.teamArray,
-    colorCode: target.colorCode
-  };
-
-
-  drawsArray[sourtXIndex].slotsArray[sourceYIndex] = targetObject;
-  drawsArray[targetXIndex].slotsArray[targetYIndex] = sourceObject;
-
+  // if(source.drawsId != target.drawsId){
+    let sourceObject = {
+      drawsId: target.drawsId,
+      venueCourtNumber: target.venueCourtNumber,
+      venueCourtId: target.venueCourtId,
+      matchDate: target.matchDate,
+      startTime: target.startTime,
+      endTime: target.endTime,
+      homeTeamId: source.homeTeamId,
+      awayTeamId: source.awayTeamId,
+      homeTeamName: target.homeTeamName,
+      awayTeamName: target.awayTeamName,
+      competitionDivisionGradeId: source.competitionDivisionGradeId,
+      gradeName: source.gradeName,
+      isLocked: '1',
+      teamArray: [{teamName: target.homeTeamName, teamId: source.homeTeamId},{teamName: target.awayTeamName, teamId: source.awayTeamId}],
+      // source.teamArray,
+      colorCode: source.colorCode
+    };
+  
+    //// object of target index
+    let targetObject = {
+      drawsId: source.drawsId,
+      venueCourtNumber: source.venueCourtNumber,
+      venueCourtId: source.venueCourtId,
+      matchDate: source.matchDate,
+      startTime: source.startTime,
+      endTime: source.endTime,
+      homeTeamId: target.homeTeamId,
+      awayTeamId: target.awayTeamId,
+      homeTeamName: source.homeTeamName,
+      awayTeamName: source.awayTeamName,
+      competitionDivisionGradeId: target.competitionDivisionGradeId,
+      gradeName: target.gradeName,
+      isLocked: '1',
+      // teamArray: target.teamArray,
+      teamArray: [{teamName: source.homeTeamName, teamId: target.homeTeamId},{teamName: source.awayTeamName, teamId: target.awayTeamId}],
+      colorCode: target.colorCode
+    };
+  
+  
+    drawsArray[sourtXIndex].slotsArray[sourceYIndex] = targetObject;
+    drawsArray[targetXIndex].slotsArray[targetYIndex] = sourceObject;
+  // }else{
+  //   let sourceObject = {
+  //     drawsId: target.drawsId,
+  //     venueCourtNumber: target.venueCourtNumber,
+  //     venueCourtId: target.venueCourtId,
+  //     matchDate: target.matchDate,
+  //     startTime: target.startTime,
+  //     endTime: target.endTime,
+  //     homeTeamId: source.awayTeamId,
+  //     awayTeamId: source.homeTeamId,
+  //     homeTeamName: source.awayTeamName,
+  //     awayTeamName: source.homeTeamName,
+  //     competitionDivisionGradeId: source.competitionDivisionGradeId,
+  //     gradeName: source.gradeName,
+  //     isLocked: '1',
+  //     teamArray: [{teamName: source.awayTeamName, teamId: source.awayTeamId},{teamName: source.homeTeamName, teamId: source.homeTeamId}],
+  //     // source.teamArray,
+  //     colorCode: source.colorCode
+  //   };
+  
+  //   drawsArray[sourtXIndex].slotsArray[sourceYIndex] = sourceObject;
+  // }
+  
+*/
   return drawsArray;
 }
 
 
+
 ///  Swipe Array object - Edit
 function swapedDrawsEditArrayFunc(drawsArray,
-  sourtXIndex,
+  sourceXIndex,
   targetXIndex,
   sourceYIndex,
   targetYIndex,
   sourceZIndex,
   targetZIndex
 ) {
-  var source = drawsArray[sourtXIndex].slotsArray[sourceYIndex];
-  var target = drawsArray[targetXIndex].slotsArray[targetYIndex];
+  var sourceArray = JSON.parse(JSON.stringify(drawsArray))
+  var targetArray = JSON.parse(JSON.stringify(drawsArray))
+  var sourceItem = sourceArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[sourceZIndex];
+  var targetItem = targetArray[targetXIndex].slotsArray[targetYIndex].teamArray[targetZIndex];
 
-  let sourceObject = null
-  let targetObject = null
+  var source = sourceArray[sourceXIndex].slotsArray[sourceYIndex];
+  var target = targetArray[targetXIndex].slotsArray[targetYIndex];
+  console.error("SourceXYZ", sourceXIndex, ":", sourceYIndex, ":", sourceZIndex)
+  console.error("TargetXYZ", targetXIndex, ":", targetYIndex, ":", targetZIndex)
+  if (sourceZIndex === "0") {
+    if (targetZIndex === "0") {
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].homeTeamId = target.homeTeamId
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].homeTeamName = target.homeTeamName
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[0].teamId = target.homeTeamId
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[0].teamName = target.homeTeamName
+    } else {
+      console.error("Called123")
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].homeTeamId = target.awayTeamId
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].homeTeamName = target.awayTeamName
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[0].teamId = target.awayTeamId
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[0].teamName = target.awayTeamName
+    }
+  } else {
+    if (targetZIndex === "0") {
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].awayTeamId = target.homeTeamId
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].awayTeamName = target.homeTeamName
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[1].teamId = target.homeTeamId
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[1].teamName = target.homeTeamName
+    } else {
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].awayTeamId = target.awayTeamId
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].awayTeamName = target.awayTeamName
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[1].teamId = target.awayTeamId
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[1].teamName = target.awayTeamName
+    }
+  }
+
+  if (targetZIndex === "0") {
+    if (sourceZIndex === "0") {
+      drawsArray[targetXIndex].slotsArray[targetYIndex].homeTeamId = source.homeTeamId
+      drawsArray[targetXIndex].slotsArray[targetYIndex].homeTeamName = source.homeTeamName
+      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[0].teamId = source.homeTeamId
+      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[0].teamName = source.homeTeamName
+    } else {
+      drawsArray[targetXIndex].slotsArray[targetYIndex].homeTeamId = source.awayTeamId
+      drawsArray[targetXIndex].slotsArray[targetYIndex].homeTeamName = source.awayTeamName
+      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[0].teamId = source.awayTeamId
+      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[0].teamName = source.awayTeamName
+    }
+  } else {
+    if (sourceZIndex === "0") {
+      drawsArray[targetXIndex].slotsArray[targetYIndex].awayTeamId = source.homeTeamId
+      drawsArray[targetXIndex].slotsArray[targetYIndex].awayTeamName = source.homeTeamName
+      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[1].teamId = source.homeTeamId
+      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[1].teamName = source.homeTeamName
+    } else {
+      drawsArray[targetXIndex].slotsArray[targetYIndex].awayTeamId = source.awayTeamId
+      drawsArray[targetXIndex].slotsArray[targetYIndex].awayTeamName = source.awayTeamName
+      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[1].teamId = source.awayTeamId
+      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[1].teamName = source.awayTeamName
+    }
+  }
+
+  console.log("Source", source)
+  console.log("Target", target)
+  console.log("Draws Data**", drawsArray)
+
+  // let sourceObject = null
+  // let targetObject = null
   /// object of source index
+  // if (sourceZIndex == 0) {
+  //   if (targetZIndex == 0) {
+  //     sourceObject = {
+  //       drawsId: source.drawsId,
+  //       venueCourtNumber: source.venueCourtNumber,
+  //       venueCourtId: source.venueCourtId,
+  //       matchDate: source.matchDate,
+  //       startTime: source.startTime,
+  //       endTime: source.endTime,
+  //       homeTeamId: target.homeTeamId,
+  //       awayTeamId: source.awayTeamId,
+  //       homeTeamName: source.homeTeamName, // home source
+  //       awayTeamName: source.awayTeamName,
+  //       competitionDivisionGradeId: source.competitionDivisionGradeId,
+  //       gradeName: source.gradeName,
+  //       isLocked: '1',
+  //       teamArray: source.teamArray,
+  //       colorCode: source.colorCode
+  //     };
+  //   } else {
+  //     sourceObject = {
+  //       drawsId: source.drawsId,
+  //       venueCourtNumber: source.venueCourtNumber,
+  //       venueCourtId: source.venueCourtId,
+  //       matchDate: source.matchDate,
+  //       startTime: source.startTime,
+  //       endTime: source.endTime,
+  //       homeTeamId: target.awayTeamId,
+  //       awayTeamId: source.awayTeamId,
+  //       homeTeamName: source.homeTeamName, // home source
+  //       awayTeamName: source.awayTeamName,
+  //       competitionDivisionGradeId: source.competitionDivisionGradeId,
+  //       gradeName: source.gradeName,
+  //       isLocked: '1',
+  //       teamArray: source.teamArray,
+  //       colorCode: source.colorCode
+  //     };
+  //   }
 
-  if (sourceZIndex == 0) {
-    if (targetZIndex == 0) {
-      sourceObject = {
-        drawsId: source.drawsId,
-        venueCourtNumber: source.venueCourtNumber,
-        venueCourtId: source.venueCourtId,
-        matchDate: source.matchDate,
-        startTime: source.startTime,
-        endTime: source.endTime,
-        homeTeamId: target.homeTeamId,
-        awayTeamId: source.awayTeamId,
-        homeTeamName: source.homeTeamName, // home source
-        awayTeamName: source.awayTeamName,
-        competitionDivisionGradeId: source.competitionDivisionGradeId,
-        gradeName: source.gradeName,
-        isLocked: '1',
-        teamArray: source.teamArray,
-        colorCode: source.colorCode
-      };
-    } else {
-      sourceObject = {
-        drawsId: source.drawsId,
-        venueCourtNumber: source.venueCourtNumber,
-        venueCourtId: source.venueCourtId,
-        matchDate: source.matchDate,
-        startTime: source.startTime,
-        endTime: source.endTime,
-        homeTeamId: target.awayTeamId,
-        awayTeamId: source.awayTeamId,
-        homeTeamName: source.homeTeamName, // home source
-        awayTeamName: source.awayTeamName,
-        competitionDivisionGradeId: source.competitionDivisionGradeId,
-        gradeName: source.gradeName,
-        isLocked: '1',
-        teamArray: source.teamArray,
-        colorCode: source.colorCode
-      };
-    }
+  // } else {
+  //   if (targetZIndex == 0) {
+  //     sourceObject = {
+  //       drawsId: source.drawsId,
+  //       venueCourtNumber: source.venueCourtNumber,
+  //       venueCourtId: source.venueCourtId,
+  //       matchDate: source.matchDate,
+  //       startTime: source.startTime,
+  //       endTime: source.endTime,
+  //       homeTeamId: source.homeTeamId,
+  //       awayTeamId: target.homeTeamId,
+  //       homeTeamName: source.homeTeamName,
+  //       awayTeamName: source.awayTeamName, // away target
+  //       competitionDivisionGradeId: source.competitionDivisionGradeId,
+  //       gradeName: source.gradeName,
+  //       isLocked: '1',
+  //       teamArray: source.teamArray,
+  //       colorCode: source.colorCode
+  //     };
+  //   } else {
+  //     sourceObject = {
+  //       drawsId: source.drawsId,
+  //       venueCourtNumber: source.venueCourtNumber,
+  //       venueCourtId: source.venueCourtId,
+  //       matchDate: source.matchDate,
+  //       startTime: source.startTime,
+  //       endTime: source.endTime,
+  //       homeTeamId: source.homeTeamId,
+  //       awayTeamId: target.awayTeamId,
+  //       homeTeamName: source.homeTeamName,
+  //       awayTeamName: source.awayTeamName, // away target
+  //       competitionDivisionGradeId: source.competitionDivisionGradeId,
+  //       gradeName: source.gradeName,
+  //       isLocked: '1',
+  //       teamArray: source.teamArray,
+  //       colorCode: source.colorCode
+  //     };
+  //   }
+  // }
 
-  } else {
-    if (targetZIndex == 0) {
-      sourceObject = {
-        drawsId: source.drawsId,
-        venueCourtNumber: source.venueCourtNumber,
-        venueCourtId: source.venueCourtId,
-        matchDate: source.matchDate,
-        startTime: source.startTime,
-        endTime: source.endTime,
-        homeTeamId: source.homeTeamId,
-        awayTeamId: target.homeTeamId,
-        homeTeamName: source.homeTeamName,
-        awayTeamName: source.awayTeamName, // away target
-        competitionDivisionGradeId: source.competitionDivisionGradeId,
-        gradeName: source.gradeName,
-        isLocked: '1',
-        teamArray: source.teamArray,
-        colorCode: source.colorCode
-      };
-    } else {
-      sourceObject = {
-        drawsId: source.drawsId,
-        venueCourtNumber: source.venueCourtNumber,
-        venueCourtId: source.venueCourtId,
-        matchDate: source.matchDate,
-        startTime: source.startTime,
-        endTime: source.endTime,
-        homeTeamId: source.homeTeamId,
-        awayTeamId: target.awayTeamId,
-        homeTeamName: source.homeTeamName,
-        awayTeamName: source.awayTeamName, // away target
-        competitionDivisionGradeId: source.competitionDivisionGradeId,
-        gradeName: source.gradeName,
-        isLocked: '1',
-        teamArray: source.teamArray,
-        colorCode: source.colorCode
-      };
-    }
-  }
-
-  //// object of target index
-  if (targetZIndex == 0) {
-    if (sourceZIndex == 0) {
-      targetObject = {
-        drawsId: target.drawsId,
-        venueCourtNumber: target.venueCourtNumber,
-        venueCourtId: target.venueCourtId,
-        matchDate: target.matchDate,
-        startTime: target.startTime,
-        endTime: target.endTime,
-        homeTeamId: source.homeTeamId,
-        awayTeamId: target.awayTeamId,
-        homeTeamName: source.homeTeamName, // home source
-        awayTeamName: source.awayTeamName,
-        competitionDivisionGradeId: target.competitionDivisionGradeId,
-        gradeName: target.gradeName,
-        isLocked: '1',
-        teamArray: target.teamArray,
-        colorCode: target.colorCode
-      };
-    } else {
-      targetObject = {
-        drawsId: target.drawsId,
-        venueCourtNumber: target.venueCourtNumber,
-        venueCourtId: target.venueCourtId,
-        matchDate: target.matchDate,
-        startTime: target.startTime,
-        endTime: target.endTime,
-        homeTeamId: source.awayTeamId,
-        awayTeamId: target.awayTeamId,
-        homeTeamName: target.homeTeamName, // home source
-        awayTeamName: target.awayTeamName,
-        competitionDivisionGradeId: target.competitionDivisionGradeId,
-        gradeName: target.gradeName,
-        isLocked: '1',
-        teamArray: target.teamArray,
-        colorCode: target.colorCode
-      };
-    }
-  } else {
-    if (sourceZIndex == 0) {
-      targetObject = {
-        drawsId: target.drawsId,
-        venueCourtNumber: target.venueCourtNumber,
-        venueCourtId: target.venueCourtId,
-        matchDate: target.matchDate,
-        startTime: target.startTime,
-        endTime: target.endTime,
-        homeTeamId: target.homeTeamId,
-        awayTeamId: source.homeTeamId,
-        homeTeamName: target.homeTeamName,
-        awayTeamName: source.awayTeamName, /// away source
-        competitionDivisionGradeId: target.competitionDivisionGradeId,
-        gradeName: target.gradeName,
-        isLocked: '1',
-        teamArray: target.teamArray,
-        colorCode: target.colorCode
-      };
-    } else {
-      targetObject = {
-        drawsId: target.drawsId,
-        venueCourtNumber: target.venueCourtNumber,
-        venueCourtId: target.venueCourtId,
-        matchDate: target.matchDate,
-        startTime: target.startTime,
-        endTime: target.endTime,
-        homeTeamId: target.homeTeamId,
-        awayTeamId: target.awayTeamId,
-        homeTeamName: target.homeTeamName,
-        awayTeamName: source.awayTeamName, /// away source
-        competitionDivisionGradeId: target.competitionDivisionGradeId,
-        gradeName: target.gradeName,
-        isLocked: '1',
-        teamArray: target.teamArray,
-        colorCode: target.colorCode
-      }
-    }
-  }
+  // //// object of target index
+  // if (targetZIndex == 0) {
+  //   if (sourceZIndex == 0) {
+  //     targetObject = {
+  //       drawsId: target.drawsId,
+  //       venueCourtNumber: target.venueCourtNumber,
+  //       venueCourtId: target.venueCourtId,
+  //       matchDate: target.matchDate,
+  //       startTime: target.startTime,
+  //       endTime: target.endTime,
+  //       homeTeamId: source.homeTeamId,
+  //       awayTeamId: target.awayTeamId,
+  //       homeTeamName: source.homeTeamName, // home source
+  //       awayTeamName: source.awayTeamName,
+  //       competitionDivisionGradeId: target.competitionDivisionGradeId,
+  //       gradeName: target.gradeName,
+  //       isLocked: '1',
+  //       teamArray: target.teamArray,
+  //       colorCode: target.colorCode
+  //     };
+  //   } else {
+  //     targetObject = {
+  //       drawsId: target.drawsId,
+  //       venueCourtNumber: target.venueCourtNumber,
+  //       venueCourtId: target.venueCourtId,
+  //       matchDate: target.matchDate,
+  //       startTime: target.startTime,
+  //       endTime: target.endTime,
+  //       homeTeamId: source.awayTeamId,
+  //       awayTeamId: target.awayTeamId,
+  //       homeTeamName: target.homeTeamName, // home source
+  //       awayTeamName: target.awayTeamName,
+  //       competitionDivisionGradeId: target.competitionDivisionGradeId,
+  //       gradeName: target.gradeName,
+  //       isLocked: '1',
+  //       teamArray: target.teamArray,
+  //       colorCode: target.colorCode
+  //     };
+  //   }
+  // } else {
+  //   if (sourceZIndex == 0) {
+  //     targetObject = {
+  //       drawsId: target.drawsId,
+  //       venueCourtNumber: target.venueCourtNumber,
+  //       venueCourtId: target.venueCourtId,
+  //       matchDate: target.matchDate,
+  //       startTime: target.startTime,
+  //       endTime: target.endTime,
+  //       homeTeamId: target.homeTeamId,
+  //       awayTeamId: source.homeTeamId,
+  //       homeTeamName: target.homeTeamName,
+  //       awayTeamName: source.awayTeamName, /// away source
+  //       competitionDivisionGradeId: target.competitionDivisionGradeId,
+  //       gradeName: target.gradeName,
+  //       isLocked: '1',
+  //       teamArray: target.teamArray,
+  //       colorCode: target.colorCode
+  //     };
+  //   } else {
+  //     targetObject = {
+  //       drawsId: target.drawsId,
+  //       venueCourtNumber: target.venueCourtNumber,
+  //       venueCourtId: target.venueCourtId,
+  //       matchDate: target.matchDate,
+  //       startTime: target.startTime,
+  //       endTime: target.endTime,
+  //       homeTeamId: target.homeTeamId,
+  //       awayTeamId: target.awayTeamId,
+  //       homeTeamName: target.homeTeamName,
+  //       awayTeamName: source.awayTeamName, /// away source
+  //       competitionDivisionGradeId: target.competitionDivisionGradeId,
+  //       gradeName: target.gradeName,
+  //       isLocked: '1',
+  //       teamArray: target.teamArray,
+  //       colorCode: target.colorCode
+  //     }
+  //   }
+  // }
 
 
-  drawsArray[sourtXIndex].slotsArray[sourceYIndex] = targetObject;
-  drawsArray[targetXIndex].slotsArray[targetYIndex] = sourceObject;
+  // drawsArray[sourtXIndex].slotsArray[sourceYIndex] = targetObject;
+  // drawsArray[targetXIndex].slotsArray[targetYIndex] = sourceObject;
 
   return drawsArray;
 }
@@ -454,6 +569,7 @@ function CompetitionDraws(state = initialState, action) {
       return {
         ...state,
         getDrawsData: resultData.mainCourtNumberArray,
+        getStaticDrawsData: JSON.parse(JSON.stringify(resultData.mainCourtNumberArray)),
         dateArray: resultData.sortedDateArray,
         onLoad: false,
         error: null
@@ -487,10 +603,10 @@ function CompetitionDraws(state = initialState, action) {
       let targetXIndex = action.targetArray[0];
       let targetYIndex = action.targetArray[1];
       let drawData = state.getDrawsData;
-      let swapedDrawsArray = state.getDrawsData
+      let swapedDrawsArray = state.getStaticDrawsData
       if (action.actionType == "add") {
         swapedDrawsArray = swapedDrawsArrayFunc(
-          drawData,
+          state.getStaticDrawsData,
           sourceXIndex,
           targetXIndex,
           sourceYIndex,
@@ -498,7 +614,7 @@ function CompetitionDraws(state = initialState, action) {
         );
       } else {
         swapedDrawsArray = swapedDrawsEditArrayFunc(
-          drawData,
+          state.getStaticDrawsData,
           sourceXIndex,
           targetXIndex,
           sourceYIndex,
@@ -507,7 +623,8 @@ function CompetitionDraws(state = initialState, action) {
           action.targetArray[2]
         );
       }
-      state.getDrawsData = swapedDrawsArray;
+      // state.getDrawsData = swapedDrawsArray;
+      state.getStaticDrawsData = swapedDrawsArray
       return {
         ...state,
         onLoad: false,
@@ -553,9 +670,9 @@ function CompetitionDraws(state = initialState, action) {
       let targetXNullCaseIndex = action.targetArray[0];
       let targetYNullCaseIndex = action.targetArray[1];
 
-      let drawDataNullCase = state.getDrawsData;
+      let drawDataNullCase = state.getStaticDrawsData;
 
-      let swapedDrawsArrayNullCase = state.getDrawsData
+      let swapedDrawsArrayNullCase = state.getStaticDrawsData
       if (action.actionType == "add") {
         swapedDrawsArrayNullCase = swapedDrawsArrayFunc(
           drawDataNullCase,
@@ -576,7 +693,7 @@ function CompetitionDraws(state = initialState, action) {
         );
 
       }
-      state.getDrawsData = swapedDrawsArrayNullCase;
+      state.getStaticDrawsData = swapedDrawsArrayNullCase;
       return {
         ...state,
         onLoad: false,

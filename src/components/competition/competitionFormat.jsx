@@ -14,7 +14,7 @@ import history from "../../util/history";
 import ValidationConstants from "../../themes/validationConstant";
 import {
     getMatchTypesAction, getCompetitionFormatTypesAction, getCompetitionTypesAction,
-    getYearAndCompetitionOwnAction, clearYearCompetitionAction
+    getYearAndCompetitionOwnAction, clearYearCompetitionAction, getEnhancedRoundRobinAction
 } from "../../store/actions/appAction";
 
 import {generateDrawAction} from "../../store/actions/competitionModuleAction/competitionModuleAction";
@@ -174,6 +174,7 @@ class CompetitionFormat extends Component {
          this.props.getMatchTypesAction();
          this.props.getCompetitionFormatTypesAction();
          this.props.getCompetitionTypesAction();
+         this.props.getEnhancedRoundRobinAction();
          this.setState({ getDataLoading: true })
     }
 
@@ -299,19 +300,19 @@ class CompetitionFormat extends Component {
         let fixtureTemplateId = null;
         if(fieldName == "noOfRounds")
         {
-            data.fixtureTemplates.map((item, index) => {
-                if(item.noOfRounds == id)
-                {
-                    fixtureTemplateId = item.id;
-                }
-            });
-            this.props.updateCompetitionFormatAction(fixtureTemplateId, "fixtureTemplateId");
+            // data.fixtureTemplates.map((item, index) => {
+            //     if(item.noOfRounds == id)
+            //     {
+            //         fixtureTemplateId = item.id;
+            //     }
+            // });
+            // this.props.updateCompetitionFormatAction(fixtureTemplateId, "fixtureTemplateId");
         }
         else if(fieldName == "competitionFormatRefId")
         {
            if(id != 4){
             this.props.updateCompetitionFormatAction(null, "noOfRounds");
-            this.props.updateCompetitionFormatAction(fixtureTemplateId, "fixtureTemplateId");
+           // this.props.updateCompetitionFormatAction(fixtureTemplateId, "fixtureTemplateId");
            } 
         }
         
@@ -590,6 +591,15 @@ class CompetitionFormat extends Component {
                                 <Option value={fixture.noOfRounds} key={fixture.noOfRounds}>{fixture.noOfRounds}</Option>
                             ))}
                         </Select>
+                        <InputWithHead heading={AppConstants.enhancedRoundRobinType} />
+                        <Select
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            onChange={(x) => this.onChangeSetValue(x, 'enhancedRoundRobinTypeRefId')}
+                            value={data.enhancedRoundRobinTypeRefId}>
+                            {(appState.enhancedRoundRobinTypes || []).map((round, roundIndex) => (
+                                <Option value={round.id} key={round.id}>{round.description}</Option>
+                            ))}
+                        </Select>
                  </div>: null
                 }        
               
@@ -787,7 +797,8 @@ function mapDispatchToProps(dispatch)
         getCompetitionTypesAction,
         getYearAndCompetitionOwnAction,
         clearYearCompetitionAction,
-        generateDrawAction
+        generateDrawAction,
+        getEnhancedRoundRobinAction
     }, dispatch);
 
 }

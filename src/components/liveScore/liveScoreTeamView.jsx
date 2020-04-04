@@ -64,7 +64,8 @@ class LiveScoreTeamView extends Component {
             data: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord : null : null,
             // teamId: props.location.state ? props.location.state.teamId : null,
             teamId: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord.id : null : null,
-            screenName: this.props.location.state ? this.props.location.state.screenName : null
+            screenName: this.props.location.state ? this.props.location.state.screenName : null,
+            key: props.location.state ? props.location.state.key ? props.location.state.key : null : null,
         }
 
         _this = this
@@ -231,7 +232,7 @@ class LiveScoreTeamView extends Component {
                             >
                                 <NavLink to={{
                                     pathname: "/liveScoreAddTeam",
-                                    state: { isEdit: true, teamId: this.state.teamId }
+                                    state: { isEdit: true, teamId: this.state.teamId, key: this.state.key }
                                 }}>
                                     <Button className="primary-add-comp-form" type="primary">
                                         + {AppConstants.edit}

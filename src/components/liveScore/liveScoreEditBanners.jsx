@@ -12,6 +12,7 @@ import { liveScoreAddBanner, liveScoreAddBannerUpdate, clearEditBannerAction } f
 import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage';
 import Loader from '../../customComponents/loader'
+import ImageLoader from '../../customComponents/ImageLoader'
 
 
 const { Header, Content, Footer } = Layout;
@@ -103,12 +104,6 @@ class LiveScoreEditBanners extends Component {
         )
     }
 
-    setData = (text) => {
-        let string = text.target.value;
-
-        this.setState({ bannerlink: string })
-
-    }
     handleSubmit = e => {
         e.preventDefault();
 
@@ -149,7 +144,14 @@ class LiveScoreEditBanners extends Component {
 
         return (
             <div className="content-view pt-2">
-                <img alt="" className="banner-image" src={bannerImage ? bannerImage : this.state.bannerImg} />
+                {/* <img alt="" className="banner-image" src={bannerImage ? bannerImage : this.state.bannerImg} /> */}
+                <ImageLoader
+                    className="banner-image"
+                    height
+                    width
+                    borderRadius
+                    timeout={this.state.timeout}
+                    src={bannerImage ? bannerImage : this.state.bannerImg} />
                 <div>
                     <div className="row">
                         <div className="col-sm" >
@@ -167,7 +169,13 @@ class LiveScoreEditBanners extends Component {
                                         type="file"
                                         id="user-pic"
                                         // style={{ display: 'none' }}
-                                        onChange={(evt) => this.setImage(evt.target)} />
+                                        onChange={(evt) => {
+                                            this.setImage(evt.target)
+                                            this.setState({ timeout: 1000 })
+                                            setTimeout(() => {
+                                                this.setState({ timeout: null })
+                                            }, 1000);
+                                        }} />
                                 )}
                             </Form.Item>
                             <span className="form-err">{this.state.imageError}</span>
@@ -271,6 +279,10 @@ class LiveScoreEditBanners extends Component {
         )
     }
 
+    onRemoveBtn() {
+        this.setState({ bannerImgSend: null, bannerImg: null })
+    }
+
     ///////view for breadcrumb
     removeBtn = () => {
         return (
@@ -286,7 +298,7 @@ class LiveScoreEditBanners extends Component {
                             justifyContent: "flex-end"
                         }}
                     >
-                        <Button onClick={() => this.setState({ bannerImg: null })} className="primary-add-comp-form" type="primary">
+                        <Button onClick={() => this.onRemoveBtn()} className="primary-add-comp-form" type="primary">
                             {AppConstants.removeBanner}
                         </Button>
 

@@ -4,6 +4,7 @@ import AxiosApi from "../http/axiosApi";
 import { isArrayNotEmpty, isNullOrEmptyString } from "../../util/helpers";
 import RegistrationAxiosApi from "../http/registrationHttp/registrationAxios";
 import CommonAxiosApi from "../http/commonHttp/commonAxios";
+import AppConstants from "../../themes/appConstants";
 // import UserAxiosApi from "../http/userHttp/userAxiosApi.js";
 ////get the common year list reference
 export function* getOnlyYearListSaga(action) {
@@ -517,6 +518,31 @@ export function* getParticipateYearAndCompetitionListSaga(action) {
           status: result.status,
         });
       }
+    } else {
+      yield put({ type: ApiConstants.API_APP_FAIL });
+      setTimeout(() => {
+        alert(result.data.message);
+      }, 800);
+    }
+  } catch (error) {
+    yield put({
+      type: ApiConstants.API_APP_ERROR,
+      error: error,
+      status: error.status
+    });
+  }
+}
+
+
+export function* getEnhancedRoundRobinTypesSaga(action) {
+  try {
+    const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.enhancedRoundRobin);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_ENHANCED_ROUND_ROBIN_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
     } else {
       yield put({ type: ApiConstants.API_APP_FAIL });
       setTimeout(() => {

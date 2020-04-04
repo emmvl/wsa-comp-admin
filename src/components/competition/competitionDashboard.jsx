@@ -158,8 +158,6 @@ class CompetitionDashboard extends Component {
 
     componentDidUpdate(nextProps) {
         const { yearList } = this.props.appState
-        console.log(this.props.appState, 'componentDidUpdate')
-
         if (this.state.loading == true && this.props.appState.onLoad == false) {
             if (yearList.length > 0) {
                 let storedYearID = localStorage.getItem("yearId");
@@ -176,7 +174,6 @@ class CompetitionDashboard extends Component {
     }
 
     onChange = e => {
-        console.log("radio checked", e.target.value);
         this.setState({
             value: e.target.value
         });

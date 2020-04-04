@@ -74,7 +74,7 @@ const columns = [
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, e) => (
-            isUsed == false ? <Menu
+            <Menu
                 className="action-triple-dot-submenu"
                 theme="light"
                 mode="horizontal"
@@ -85,7 +85,7 @@ const columns = [
                     title={ <img className="dot-image" src={AppImages.moreTripleDot}
                             alt="" width="16" height="16" /> }>
                     <Menu.Item key="1">
-                        <NavLink to={{ pathname: `/competitionVenueAndTimesEdit`, state: {venueId: e.id, key: AppConstants.venuesList} }} >
+                        <NavLink to={{ pathname: `/competitionVenueAndTimesEdit`, state: {venueId: e.id, key: AppConstants.venuesList, isUsed: isUsed} }} >
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
@@ -93,7 +93,7 @@ const columns = [
                         <span>Delete</span>
                     </Menu.Item>
                 </SubMenu>
-            </Menu> : null
+            </Menu>
         )
     }
 ];
@@ -291,7 +291,7 @@ class VenuesList extends Component {
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
                      <Table className="home-dashboard-table" 
-                     columns={getOrganisationData().organisationTypeRefId < 3 ?  columns : columns.filter((e,i) => i != (columns.length - 1))}
+                     columns={columns}
                       dataSource={venuesList} 
                       pagination={false}
                       loading={this.props.commonReducerState.onLoad == true && true}

@@ -10,7 +10,7 @@ async function logout() {
     history.push("/");
 }
 
-let userId = getUserId();
+// let userId = getUserId();
 let token = getAuthToken();
 
 let AxiosApi = {
@@ -111,7 +111,8 @@ let AxiosApi = {
     },
 
     ////Add Venue Api
-    addVenue(venuData) {
+    async  addVenue(venuData) {
+        let userId = await getUserId()
         console.log(venuData, 'venuData_FetchApi')
         let body = {
             "competitionUniqueKey": venuData.competitionUniqueKey,
@@ -156,19 +157,21 @@ let AxiosApi = {
         let url = `/common/reference/${referenceName}`;
         return Method.dataGet(url, token)
     },
-     
+
     /// All Venues Listing 
-    getVenuesList(payload) {
+    async  getVenuesList(payload) {
+        let userId = await getUserId()
         let url = `/api/venue/list?userId=${userId}`;
         return Method.dataPost(url, token, payload);
     },
     /// Get Venue by Id 
-    getVenueById(payload) {
+    async  getVenueById(payload) {
+        let userId = await getUserId()
         let url = `/api/venue/edit?userId=${userId}`;
         return Method.dataPost(url, token, payload);
-    },  
-    venueDelete(payload)
-    {
+    },
+    async  venueDelete(payload) {
+        let userId = await getUserId()
         let url = `/api/venue/delete?userId=${userId}`;
         return Method.dataPost(url, token, payload);
     }

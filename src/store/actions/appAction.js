@@ -174,6 +174,14 @@ function clearFilter() {
 
 }
 
+function getEnhancedRoundRobinAction() {
+  const action = {
+    type: ApiConstants.API_ENHANCED_ROUND_ROBIN_LOAD
+  };
+  return action;
+}
+
+
 
 export {
   getYearListAction,
@@ -194,5 +202,6 @@ export {
   getYearAndCompetitionOwnAction,
   getYearAndCompetitionParticipateAction,
   searchVenueList,
-  clearFilter
+  clearFilter,
+  getEnhancedRoundRobinAction
 };

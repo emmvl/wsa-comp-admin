@@ -16,6 +16,8 @@ import {
 } from "../../store/actions/LiveScoreAction/liveScoreNewsAction";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import Loader from '../../customComponents/loader'
+
 const { Header, Footer, Content } = Layout;
 const { confirm } = Modal;
 
@@ -232,6 +234,7 @@ class LiveScoreNewsView extends Component {
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"21"} />
+                <Loader visible={this.props.liveScoreNewsState.notifyLoad} />
                 <Layout>
                     {this.headerView()}
                     <Content>

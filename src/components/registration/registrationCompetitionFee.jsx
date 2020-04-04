@@ -715,6 +715,8 @@ class RegistrationCompetitionFee extends Component {
             tooltipVisibleDelete: false,
             tooltipVisibleDraft: false,
             tooltipVisiblePublish: false,
+            roundsArray: [{ id: 4, value: 4 },
+            { id: 6, value: 6 }, { id: 8, value: 8 }, { id: 10, value: 10 }, { id: 12, value: 12 }, { id: 14, value: 14 }, { id: 16, value: 16 }, { id: 18, value: 18 }]
         };
         this_Obj = this;
         let competitionId = null
@@ -766,9 +768,9 @@ class RegistrationCompetitionFee extends Component {
         competitionId = this.props.location.state ? this.props.location.state.id : null
         this.apiCalls(competitionId)
         this.setDetailsFieldValue()
-        // let checkVenueScreen = this.props.location.state ? this.props.location.state.venueScreen ?
-        //     this.props.location.state.venueScreen : null : null
-        // checkVenueScreen && window.scrollTo(0, 500)
+        let checkVenueScreen = this.props.location.state ? this.props.location.state.venueScreen ?
+            this.props.location.state.venueScreen : null : null
+        checkVenueScreen && window.scrollTo(0, 500)
     }
 
     ////alll the api calls
@@ -1641,7 +1643,13 @@ class RegistrationCompetitionFee extends Component {
                 </div>
                 {isCreatorEdit == false &&
                     <NavLink
-                        to={{ pathname: `/competitionVenueAndTimesAdd`, state: { key: AppConstants.competitionFees } }}
+                        to={{
+                            pathname: `/competitionVenueAndTimesAdd`,
+                            state: {
+                                key: AppConstants.competitionFees,
+                                id: this.props.location.state ? this.props.location.state.id : null
+                            }
+                        }}
                     >
                         <span className="input-heading-add-another">+{AppConstants.addVenue}</span>
                     </NavLink>

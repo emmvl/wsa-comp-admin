@@ -22,6 +22,7 @@ function liveScoreManagerListAction(roleId, entityTypeId, entityId) {
 
 
     }
+    console.log(action)
     return action
 }
 
@@ -48,12 +49,13 @@ function liveScoreClear() {
     return action
 }
 
-function liveScoreManagerSearch(data) {
+function liveScoreManagerSearch(data, competition_Id) {
     const action = {
         type: ApiConstants.API_LIVESCORE_MANAGER_SEARCH_LOAD,
-        data
+        data,
+        competition_Id
     }
-    console.log(data, '@#$#@')
+    console.log(action, '@#$#@')
     return action
 }
 export {

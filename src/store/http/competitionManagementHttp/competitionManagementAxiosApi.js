@@ -10,37 +10,42 @@ async function logout() {
 }
 
 let token = getAuthToken();
-let userId = getUserId()
+// let userId = getUserId()
 
 let CompManagementAxiosApi = {
 
-  getCompetitionFormat(input) {
+  async getCompetitionFormat(input) {
+    let userId = await getUserId()
     console.log("payload::" + JSON.stringify(input.payload));
     var url = `/api/competitionformat?userId=${userId}`;
     return Method.dataPost(url, token, input.payload);
   },
 
-  saveCompetitionFormat(input) {
+  async saveCompetitionFormat(input) {
+    let userId = await getUserId()
     var url = `/api/competitionformat/save?userId=${userId}`;
     return Method.dataPost(url, token, input);
   },
 
-  getCompetitonFinals(input) {
+  async getCompetitonFinals(input) {
+    let userId = await getUserId()
     var url = `/api/competitionfinals?userId=${userId}`;
     return Method.dataPost(url, token, input.payload);
   },
 
-  saveCompetitionFinals(input) {
+  async saveCompetitionFinals(input) {
+    let userId = await getUserId()
     var url = `/api/competitionfinals/save?userId=${userId}`;
-    console.log("Payload::" + JSON.stringify(input));
     return Method.dataPost(url, token, input);
   },
 
-  getLadderFormat(input) {
+  async getLadderFormat(input) {
+    let userId = await getUserId()
     var url = `/api/ladderformat?userId=${userId}`;
     return Method.dataPost(url, token, input.payload);
   },
-  saveLadderFormat(input) {
+  async saveLadderFormat(input) {
+    let userId = await getUserId()
     var url = `/api/ladderformat/save?userId=${userId}`;
     return Method.dataPost(url, token, input);
   }

@@ -54,7 +54,12 @@ export function* liveScoreAddEditScorerSaga(action) {
                 status: result.status,
             });
             message.success('Add Scorer - Successfully Added')
-            history.push('/liveScoreAssignMatch',{ record: result.result.data })
+            if(action.isEdit == true){
+                history.push('/liveScorerList')
+            }else{
+                history.push('/liveScoreAssignMatch',{ record: result.result.data })
+            }
+           
 
 
         } else {

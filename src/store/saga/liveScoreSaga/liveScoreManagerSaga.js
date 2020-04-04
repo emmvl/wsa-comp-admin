@@ -65,7 +65,7 @@ export function* liveScoreAddEditManagerSaga(action) {
 //// Add/Edit Manager Saga
 export function* liveScoreManagerSearch(action) {
     try {
-        const result = yield call(userHttpApi.liveScoreSearchManager, action.data)
+        const result = yield call(userHttpApi.liveScoreSearchManager, action.data, action.competition_Id)
         console.log(result)
         if (result) {
             if (result.status == 1) {

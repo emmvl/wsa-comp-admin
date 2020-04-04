@@ -94,8 +94,8 @@ const columns = [
             >
                 <Menu.Item key={'1'}>
                     <NavLink to={{
-                        pathname: '/liveScorerView',
-                        state: { tableRecord: record }
+                        pathname: '/liveScoreAddScorer',
+                        state: {isEdit: true, tableRecord: record }
                     }}><span >Edit</span></NavLink>
                 </Menu.Item>
                 <Menu.Item key="2" >

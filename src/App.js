@@ -17,8 +17,6 @@ import { Skeleton } from "antd";
 import PrivateRoute from "./util/protectedRoute";
 
 function App() {
-  console.log(localStorage.getItem("token"));
-
   const lazyLoad = Component => {
     const lazy = props => {
       return (

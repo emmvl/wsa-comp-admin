@@ -8,7 +8,8 @@ import {
     Radio,
     Form,
     AutoComplete,
-    message
+    message,
+    Spin
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -35,6 +36,7 @@ import Loader from '../../customComponents/loader'
 // import LoaderImg from 'react-loader-spinner'
 import { setTimeout } from "timers";
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
+import ImageLoader from '../../customComponents/ImageLoader'
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -65,6 +67,7 @@ class LiveScoreAddTeam extends Component {
             image: null,
             loading: false,
             progress: 0,
+            key: props.location.state ? props.location.state.key ? props.location.state.key : null : null,
         };
 
     }
@@ -186,24 +189,24 @@ class LiveScoreAddTeam extends Component {
                     )}
 
                 </Form.Item>
-                <Form.Item>
+                {/* <Form.Item>
                     {getFieldDecorator('teamAlias', {
                         rules: [{ required: true, message: "Team Alias is required" }],
-                    })(
-                        <InputWithHead
-                            required={"required-field pt-0 pb-0"}
-                            heading={"Team Alias"}
-                            placeholder={"please Enter Team Alias"}
-                            name={'teamAlias'}
-                            onChange={(event) => {
-                                this.props.liveScoreAddTeamform({ key: 'alias', data: event.target.value })
-                            }
-                            }
-                            value={teamManagerData.alias}
-                        />
-                    )}
+                    })( */}
+                <InputWithHead
+                    // required={"required-field pt-3 pb-3"}
+                    heading={"Team Alias"}
+                    placeholder={"please Enter Team Alias"}
+                    name={'teamAlias'}
+                    onChange={(event) => {
+                        this.props.liveScoreAddTeamform({ key: 'alias', data: event.target.value })
+                    }
+                    }
+                    value={this.state.isEdit == true ? teamManagerData.alias : ""}
+                />
+                {/* )}
 
-                </Form.Item>
+                </Form.Item> */}
                 <span className="form-err">{this.state.teanmNameError}</span>
 
                 <InputWithHead heading={AppConstants.teamLogo} />
@@ -212,60 +215,20 @@ class LiveScoreAddTeam extends Component {
                         <div className="col-sm">
                             <div className="reg-competition-logo-view" onClick={this.selectImage}>
 
-                                {/* {
-                                    this.state.timeout ?
-                                        <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 100, width: 100 }}>
-                                            <LoaderImg
-                                                type="TailSpin"
-                                                color="#e67531"
-                                                height={30}
-                                                width={30}
-                                                timeout={this.state.timeout}
-
-                                            />
-                                        </label>
-                                        :
-                                        <label>
-                                            <img
-                                                src={teamManagerData.logoUrl ? teamManagerData.logoUrl : AppImages.circleImage}
-                                                alt=""
-                                                height="120"
-                                                width="120"
-                                                style={{ borderRadius: 60, marginLeft: 0 }}
-                                                name={'image'}
-                                                onError={ev => {
-                                                    ev.target.src = AppImages.circleImage;
-                                                }}
-                                            />
-                                        </label>
-                                } */}
-
-                                <label>
-                                    <img
-                                        src={teamManagerData.logoUrl ? teamManagerData.logoUrl : AppImages.circleImage}
-                                        alt=""
-                                        height="120"
-                                        width="120"
-                                        style={{ borderRadius: 60, marginLeft: 0 }}
-                                        name={'image'}
-                                        onError={ev => {
-                                            ev.target.src = AppImages.circleImage;
-                                        }}
-                                    />
-                                </label>
-
+                                <ImageLoader
+                                    timeout={this.state.timeout}
+                                    src={teamManagerData.logoUrl ? teamManagerData.logoUrl : AppImages.circleImage} />
                             </div>
                             <input
                                 type="file"
                                 id="user-pic"
                                 style={{ display: 'none' }}
                                 onChange={(evt) => {
-
                                     this.setImage(evt.target)
-                                    // this.setState({ timeout: 3000 })
-                                    // setTimeout(() => {
-                                    //     this.setState({ timeout: null })
-                                    // }, 3000);
+                                    this.setState({ timeout: 2000 })
+                                    setTimeout(() => {
+                                        this.setState({ timeout: null })
+                                    }, 2000);
                                 }} />
                             <span className="form-err">{this.state.imageError}</span>
                         </div>
@@ -554,7 +517,6 @@ class LiveScoreAddTeam extends Component {
     };
 
     handleSubmit = e => {
-        console.log(this.props.liveScoreTeamState)
         const { id } = JSON.parse(getLiveScoreCompetiton())
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -597,7 +559,7 @@ class LiveScoreAddTeam extends Component {
                     formData.append('divisionId', divisionId)
                     formData.append('userIds', usersArray)
 
-                    this.props.liveAddNewTeam(formData, this.state.teamId)
+                    this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key)
                 }
                 else if (this.props.liveScoreTeamState.managerType === 'new') {
                     const formData = new FormData();
@@ -623,7 +585,7 @@ class LiveScoreAddTeam extends Component {
                     formData.append('mobileNumber', mobileNumber)
                     formData.append('email', email)
 
-                    this.props.liveAddNewTeam(formData, this.state.teamId)
+                    this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key)
                 }
                 else {
                     // message.config({ duration: 0.9, maxCount: 1 })
@@ -647,7 +609,7 @@ class LiveScoreAddTeam extends Component {
                     formData.append('organisationId', organisationId)
                     formData.append('divisionId', divisionId)
 
-                    this.props.liveAddNewTeam(formData, this.state.teamId)
+                    this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key)
                 }
             }
         });

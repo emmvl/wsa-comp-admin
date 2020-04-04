@@ -12,6 +12,7 @@ import { bindActionCreators } from 'redux';
 import { getliveScoreBanners, liveScoreRemoveBanner } from '../../store/actions/LiveScoreAction/liveScoreBannerAction'
 import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
+import ImageLoader from '../../customComponents/ImageLoader'
 
 const { Header, Content } = Layout;
 var _this = null
@@ -25,7 +26,7 @@ const columns = [
             return (
                 <div>
                     {_this.removeBtn(record)}
-                    <img thumbnail={true} alt="" className="banner-image" src={bannerUrl} />
+                    {_this.imageView(bannerUrl)}
                     {_this.footerView(record)}
                 </div>
             )
@@ -39,6 +40,7 @@ class LiveScoreBanners extends Component {
         this.state = {
             imageError: "",
             bannerImg: null,
+            timeout: null
 
         }
         _this = this
@@ -70,23 +72,39 @@ class LiveScoreBanners extends Component {
     };
 
     componentDidMount() {
-        // let competitionId = getCompetitonId()
+
+        this.setState({ timeout: 3000 })
+        setTimeout(() => {
+            this.setState({ timeout: null })
+        }, 3000);
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        console.log('666', id)
         if (id !== null) {
-            // debugger
             this.props.getliveScoreBanners(id)
         } else {
             history.push('/')
         }
     }
-
     loaderView() {
         return (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', }}>
                 {/* <Spin size="small" /> */}
                 <Spin />
                 {/* <Spin size="large" /> */}
+            </div>
+        )
+    }
+
+    imageView(bannerUrl) {
+        return (
+            <div>
+                <ImageLoader
+                    className="banner-image"
+                    height
+                    width
+                    borderRadius
+                    timeout={this.state.timeout}
+                    src={bannerUrl} />
+                {/* <img thumbnail={true} alt="" className="banner-image" src={bannerUrl} /> */}
             </div>
         )
     }
@@ -106,6 +124,8 @@ class LiveScoreBanners extends Component {
             </div>
         )
     }
+
+
 
     footerView(record) {
         let { bannerResult } = this.props.liveScoreBannerState

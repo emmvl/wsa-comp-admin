@@ -70,7 +70,8 @@ class LiveScoreMatchDetails extends Component {
         this.state = {
             team1: "WSA 1",
             team2: "WSA 2",
-            matchId: this.props.location.state ? this.props.location.state.matchId : null
+            matchId: this.props.location.state ? this.props.location.state.matchId : null,
+            key: this.props.location.state ? this.props.location.state.key ? this.props.location.state.key : null : null
         }
         this.umpireScore_View = this.umpireScore_View.bind(this)
         this.team_View = this.team_View.bind(this)
@@ -116,7 +117,7 @@ class LiveScoreMatchDetails extends Component {
     headerView = () => {
         const { match } = this.props.liveScoreMatchState.matchDetails
         const length = match ? match.length : 0
-       
+
         return (
             <div className="comp-player-grades-header-drop-down-view mb-5">
                 <div className="row">
@@ -145,7 +146,7 @@ class LiveScoreMatchDetails extends Component {
                                 >
                                     <NavLink to={{
                                         pathname: "/liveScoreAddMatch",
-                                        state: { isEdit: true, matchId: this.state.matchId }
+                                        state: { isEdit: true, matchId: this.state.matchId, key: this.state.key }
 
                                     }}>
                                         <Button className="primary-add-comp-form" type="primary">
@@ -188,7 +189,7 @@ class LiveScoreMatchDetails extends Component {
         const length = match ? match.length : 0
         let UmpireData = isArrayNotEmpty(umpires) ? umpires : []
         const { scoringType } = JSON.parse(getLiveScoreCompetiton())
-     
+
         return (
 
             <div className="comp-dash-table-view row mt-5">
@@ -236,7 +237,7 @@ class LiveScoreMatchDetails extends Component {
                     <div style={{ display: "flex", alignContent: "center" }} >
                         <span className="inbox-name-text pt-2" >S1: {length >= 1 ? match ? match[0].scorer1 ? match[0].scorer1.firstName + ' ' + match[0].scorer1.lastName : '' : '' : ''}</span>
                     </div>
-                 {  scoringType !== 'SINGLE' &&   <div style={{ display: "flex", alignContent: "center" }} >
+                    {scoringType !== 'SINGLE' && <div style={{ display: "flex", alignContent: "center" }} >
                         <span className="inbox-name-text pt-2" >S2: {length >= 1 ? match ? match[0].scorer2 ? match[0].scorer2.firstName + ' ' + match[0].scorer2.lastName : '' : '' : ''}</span>
                     </div>}
                 </div>

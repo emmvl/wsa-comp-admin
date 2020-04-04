@@ -11,6 +11,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import ReactPlayer from 'react-player';
 import { liveScore_formateDateTime } from '../../themes/dateformate'
+import { isArrayNotEmpty, isNullOrEmptyString } from "../../util/helpers";
 
 const { Header, Content } = Layout;
 
@@ -23,6 +24,7 @@ class LiveScoreIncidentView extends Component {
             isVideo: false,
             incidentItem: props.location.state.item
         };
+        console.log(this.state.incidentItem, 'incidentItem')
 
     }
 
@@ -72,6 +74,7 @@ class LiveScoreIncidentView extends Component {
 
     //// this method called insside modal view function to show content of the modal 
     innerViewOfModal() {
+        console.log(this.state.modaldata, 'incidentItem**##', this.state.incidentItem)
         return (
             <div className="comp-dashboard-botton-view-mobile" style={{ display: 'flex', justifyContent: 'center', }} onClick={this.showModal}>
                 {
@@ -134,7 +137,7 @@ class LiveScoreIncidentView extends Component {
     }
     mediaView = () => {
         let array = this.state.incidentItem.incidentPlayers
-        let mediaPlayer = this.state.incidentItem.incidentMediaList
+        let mediaPlayer = isArrayNotEmpty(this.state.incidentItem.incidentMediaList) ? this.state.incidentItem.incidentMediaList : []
 
         return (
             <div className="col-sm pt-3 pb-3 mt-5">
@@ -182,7 +185,7 @@ class LiveScoreIncidentView extends Component {
                         <div className="row pl-3">
                             {mediaPlayer.map((item) => {
                                 return <div className="side-bar-profile-data">
-                                    <img className='col-sum m-2  ' style={{ cursor: 'pointer', }} onClick={() => this.showModal(item.mediaUrl, true)} src={item.mediaUrl} height='70' width='70' />
+                                    <img className='col-sum m-2 ' style={{ cursor: 'pointer', }} onClick={() => this.showModal(item.mediaUrl, true)} src={item.mediaUrl} height='70' width='70' />
                                 </div>
                             }
                             )}

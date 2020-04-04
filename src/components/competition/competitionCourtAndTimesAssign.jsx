@@ -115,6 +115,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         })
         let timeSlotMatchDuration = competitionTimeSlots.getcompetitionTimeSlotData.competitionVenueTimeslotsDayTime ? competitionTimeSlots.getcompetitionTimeSlotData.competitionVenueTimeslotsDayTime : []
         timeSlotMatchDuration.length > 0 && timeSlotMatchDuration.map((item, index) => {
+            console.log(item)
             let dayRefId = `dayRefId${index}`
             this.props.form.setFieldsValue({
                 [dayRefId]: item.dayRefId,
@@ -682,7 +683,6 @@ class CompetitionCourtAndTimesAssign extends Component {
                             )(
 
                                 <Select
-                                    placeholder="Select"
                                     style={{ width: mainId == 8 ? "70%" : "70%", minWidth: 100 }}
                                     onChange={(dayOfTheWeek) => this.props.UpdateTimeSlotsDataManual(dayOfTheWeek, 'dayRefId', 'competitionTimeslotManualAllvenue', index, null, null, venueIndex)}
                                     // value={item.dayRefId}
@@ -874,13 +874,13 @@ class CompetitionCourtAndTimesAssign extends Component {
         this.props.addRemoveTimeSlot(index, item, keyword, parentIndex)
         setTimeout(() => {
             this.setDetailsFieldValue()
-        }, 500);
+        }, 300);
     }
     addTimeManualAllVenue = (index, item, keyword) => {
         this.props.addRemoveTimeSlot(index, item, keyword)
         setTimeout(() => {
             this.setDetailsFieldValue()
-        }, 500);
+        }, 300);
     }
 
     addDivisionOrGrade = (index, item, keyword) => {
@@ -916,7 +916,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                         </Select >
                     )}
                 </Form.Item>
-                <div className="col-sm-10 delete-image-timeSlot-view pt-2" onClick={() => this.addTimeManualPerVenue(index, item, "competitionTimeslotsEntitydelete")}>
+                <div className="col-sm-2 delete-image-timeSlot-view pt-2" onClick={() => this.addTimeManualPerVenue(index, item, "competitionTimeslotsEntitydelete")}>
                     <span className="user-remove-btn">
                         <i className="fa fa-trash-o" aria-hidden="true"></i>
                     </span>
@@ -938,7 +938,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         return (
 
             <div className="row">
-                <div className="col-sm-3">
+                <div className="col-sm-3" style={{ marginTop: index == 0 ? null : 18 }}>
                     <InputWithHead heading={index == 0 ? AppConstants.dayOfTheWeek : ' '} />
                     <Form.Item>
                         {getFieldDecorator(
@@ -953,8 +953,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             },
                         )(
                             <Select
-                                placeholder="Select"
-                                style={{ width: mainId == 8 ? "70%" : "70%", minWidth: 100 }}
+                                style={{ width: mainId == 8 ? "70%" : "70%", minWidth: 100, }}
                                 onChange={(dayOfTheWeek) => this.props.UpdateTimeSlotsDataManual(dayOfTheWeek, 'dayRefId', 'competitionTimeslotManual', index, null, null)}
                                 placeholder="Select Week Day"
                             >
@@ -1020,7 +1019,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                         mode='multiple'
                                                         placeholder="Select"
                                                         // value={item.timeSlotEntityManualkey}
-                                                        style={{ display: 'grid', alignContent: 'center', minWidth: 120 }}
+                                                        style={{ display: 'grid', alignContent: 'center', }}
                                                         onChange={(divisions) => this.props.UpdateTimeSlotsDataManual(divisions, 'venuePreferenceTypeRefId', 'competitionTimeslotManual', timeIndex, mainId, id, index)}
                                                     >
                                                         {id == 4 && division.divisions && division.divisions.map((item) => (
@@ -1051,7 +1050,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                     < Select
                                                         mode='multiple'
                                                         placeholder="Select"
-                                                        style={{ display: 'grid', alignContent: 'center', minWidth: 100 }}
+                                                        style={{ display: 'grid', alignContent: 'center', }}
                                                         onChange={(divisions) => this.props.UpdateTimeSlotsDataManual(divisions, 'venuePreferenceTypeRefId', 'competitionTimeslotManual', timeIndex, mainId, id, index)}
                                                     >
 

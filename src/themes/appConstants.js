@@ -306,6 +306,7 @@ const AppConstants = {
   addVenue: " Add Venue",
   typeOfCompetition: "Type of Competition",
   numberOfRounds: "Number of Rounds",
+  enhancedRoundRobinType: "Enhanced Round Robin Type",
   registration_close: "Registrations Close",
   registration_type: "Registration Type",
   nonPlayingDates: "Non-Playing Dates",
@@ -823,6 +824,7 @@ const AppConstants = {
   position2: "Position 2",
   venuesList: "Venue List",
   venueDeleteConfirm: "Are you sure you want to delete this venue?",
+  enhancedRoundRobin: "EnhancedRoundRobin",
 
   createTeam: "Create Team",
   unassigned: "Unassigned",

@@ -110,12 +110,9 @@ function getTimeslotPerVenuePerDay(timeslotData) {
                 "timeSlotEntityManualkey": matchUpdatedTimeSlot.timeSlotEntityManualkey,
                 "timeSlotEntityGradeKey": matchUpdatedTimeSlot.timeSlotEntityGradeKey
             }
-
             updatedtimeSlotArr[timeSlotStatusData.index].startTime.push(JSON.parse(JSON.stringify(timeslotUpdatedArrayValue)))
-
         }
         else {
-
             let timeslotUpdatedArray = {
                 "startTime": matchUpdatedTimeSlot.startTime,
                 "sortOrder": matchUpdatedTimeSlot.sortOrder,
@@ -132,44 +129,7 @@ function getTimeslotPerVenuePerDay(timeslotData) {
             updatedtimeSlotArr.push(JSON.parse(JSON.stringify(mainobj)))
 
         }
-        // if (updatedtimeSlotArr.length > 0) {
-        //     for (let j in updatedtimeSlotArr) {
-        //         console.log(timeslotData[i].dayRefId == updatedtimeSlotArr[j].dayRefId)
-
-        //         if (matchUpdatedTimeSlot.dayRefId == updatedtimeSlotArr[j].dayRefId) {
-        //             console.log("called")
-        //             let startTime = {
-        //                 "startTime": matchUpdatedTimeSlot.startTime,
-        //                 "sortOrder": null,
-        //                 "competitionTimeslotsEntity": matchUpdatedTimeSlot.competitionTimeslotsEntity,
-        //                 "timeSlotEntityManualkey": matchUpdatedTimeSlot.timeSlotEntityManualkey,
-        //                 "timeSlotEntityGradeKey": matchUpdatedTimeSlot.timeSlotEntityGradeKey
-        //             }
-        //             updatedtimeSlotArr[j]['startTime'].push(startTime)
-
-        //         }
-
-        //         break
-        //     }
-        // }
-        // else {
-        //     let timeslotUpdatedarr = {
-        //         "startTime": matchUpdatedTimeSlot.startTime,
-        //         "sortOrder": null,
-        //         "competitionTimeslotsEntity": matchUpdatedTimeSlot.competitionTimeslotsEntity,
-        //         "timeSlotEntityManualkey": matchUpdatedTimeSlot.timeSlotEntityManualkey,
-        //         "timeSlotEntityGradeKey": matchUpdatedTimeSlot.timeSlotEntityGradeKey
-        //     }
-        //     timeslotData[i].startTime = []
-        //     delete timeslotData[i].sortOrder
-        //     delete timeslotData[i].competitionTimeslotsEntity
-        //     delete timeslotData[i].timeSlotEntityManualkey
-        //     delete timeslotData[i].timeSlotEntityGradeKey
-        //     timeslotData[i].startTime.push(timeslotUpdatedarr)
-        //     updatedtimeSlotArr.push(timeslotData[i])
-        // }
     }
-
     return updatedtimeSlotArr
 }
 
@@ -267,7 +227,6 @@ function getTimeSlotManualEntity(timeSlotsArr, rotationId) {
 
 //get api time Slot entity
 function getTimeSlotEntity(data, id) {
-    console.log(data)
     for (let i in data) {
         data[i]["timeSlotEntityManualkeyArr"] = []
         data[i]["timeSlotEntityGradeKeyArr"] = []
@@ -280,8 +239,26 @@ function getTimeSlotEntity(data, id) {
             }
         }
     }
-    console.log(data)
-    return data
+    if (data.length > 0) {
+        return data
+    }
+    else {
+        let timeSlotEntityObj = {
+            "sortOrder": 0,
+            "competitionTimeslotsEntityInfo": [
+                {
+                    "competitionVenueTimeslotEntityId": 0,
+                    "venuePreferenceTypeRefId": 0,
+                    "venuePreferenceEntityId": 0
+                }
+            ],
+            "timeSlotEntityManualkeyArr": [],
+            "timeSlotEntityGradeKeyArr": []
+        }
+        data.push(timeSlotEntityObj)
+        return data
+    }
+
 }
 
 
@@ -529,6 +506,26 @@ function checkSelectedVenueDetails(allVenues, selectedVenues, rotationId) {
     return modifiedVenueArray
 }
 
+//updatedTimeslotsDayTime
+function updatedTimeslotsDayTime(result) {
+    let initalTimeSlotDaytime =
+    {
+        "competitionVenueTimeslotsDayTimeId": 0,
+        "dayRefId": 1,
+        "startTime": "00:00",
+        "endTime": "00:00",
+        "sortOrder": null
+    }
+    if (result.competitionVenueTimeslotsDayTime.length > 0) {
+        return result
+    }
+    else {
+        result.competitionVenueTimeslotsDayTime.push(initalTimeSlotDaytime)
+        return result
+    }
+
+}
+
 
 // state Competition TIme Slots
 function CompetitionTimeSlots(state = initialState, action) {
@@ -542,7 +539,8 @@ function CompetitionTimeSlots(state = initialState, action) {
             let resultData = JSON.parse(JSON.stringify(action.result))
             let selectedTimeGeneration = getSelectedTimeGeneration(state.timeSlotGeneration, action.result)
             let SelectedTimeRotationData = getSelectedTimeRotation(state.timeSlotRotation, action.result)
-            let timeSlotResult = updatedResultData(SelectedTimeRotationData, action.result)
+            let timeslotUpdatedResult = updatedResultData(SelectedTimeRotationData, action.result)
+            let timeSlotResult = updatedTimeslotsDayTime(JSON.parse(JSON.stringify(timeslotUpdatedResult)))
             let timeSlotEntityKey = getTimeSlotEntity(action.result.competitionTimeslotsEntity, SelectedTimeRotationData.subParentId)
             let timeSlotsManualVenue = checkSelectedVenueDetails(resultData.competitionVenues, resultData.competitionTimeslotManual, SelectedTimeRotationData.subParentId)
             let timeSlotsPerVenue = checkPerVenueManual(action.result.competitionTimeslotManual, SelectedTimeRotationData.subParentId)

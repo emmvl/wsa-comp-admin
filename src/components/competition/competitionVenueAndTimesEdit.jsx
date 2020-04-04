@@ -61,6 +61,7 @@ class CompetitionVenueAndTimesEdit extends Component {
             venueOrganisation: [],
             csvData: null,
             loading:false,
+            isUsed: false,
             courtColumns: [
                 {
                     title: "Court Number",
@@ -155,6 +156,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     render: (overideSlot, record, index) => (
                         <div>
                             <Checkbox
+                                disabled={this.state.isUsed }
                                 className="single-checkbox mt-1 d-flex justify-content-center"
                                 defaultChecked={overideSlot}
                                 onChange={e => this.overideVenueslotOnchange(e, index)}
@@ -208,9 +210,12 @@ class CompetitionVenueAndTimesEdit extends Component {
         console.log("componentDidMount");
         window.scroll(0,0);
         let venueId = this.props.location.state.venueId;
+        let isUsed  = this.props.location.state.isUsed;
+        this.props.updateVenuAndTimeDataAction(isUsed, 'venueIsUsed', "venueIsUsed")
         this.setState({
             screenNavigationKey: this.props.location.state.key,
-            venueId: venueId
+            venueId: venueId,
+            isUsed: isUsed
         })
         let payload = {
             venueId: venueId
@@ -282,13 +287,14 @@ class CompetitionVenueAndTimesEdit extends Component {
         if(venueOrganisation!= null && venueOrganisation.length > 0)
         {
             venueOrganisation.map((item, index) => {
-                let affiliate = affiliateData.find(x=>x == item.id);
-                if(affiliate!= null && affiliate!= undefined)
-                {
-                    item["isDisabled"] = isVenueMapped == true ? true: false;
-                }else{
-                    item["isDisabled"] = false;
-                }
+                // let affiliate = affiliateData.find(x=>x == item.id);
+                // if(affiliate!= null && affiliate!= undefined)
+                // {
+                //     item["isDisabled"] = isVenueMapped == true ? true: false;
+                // }else{
+                //     item["isDisabled"] = false;
+                // }
+                item["isDisabled"] = this.state.isUsed;
                 
             });
             this.setState({venueOrganisation : venueOrganisation});
@@ -358,6 +364,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         <InputWithHead
                             required={"required-field pt-0 pb-0"}
                             heading={AppConstants.name}
+                            disabled={this.state.isUsed}
                             placeholder={AppConstants.name}
                             onChange={(name) => this.props.updateVenuAndTimeDataAction(name.target.value, 'Venue', 'name')}
                             setFieldsValue={venuData.name}
@@ -375,6 +382,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                             placeholder={AppConstants.addressOne}
                             onChange={(street1) => this.props.updateVenuAndTimeDataAction(street1.target.value, 'Venue', 'street1')}
                             setFieldsValue={venuData.street1}
+                            disabled={this.state.isUsed}
                         />
                     )}
                 </Form.Item>
@@ -385,6 +393,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     placeholder={AppConstants.addressTwo}
                     onChange={(street2) => this.props.updateVenuAndTimeDataAction(street2.target.value, 'Venue', 'street2')}
                     value={venuData.street2}
+                    disabled={this.state.isUsed}
                 />
 
 
@@ -398,6 +407,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                             placeholder={AppConstants.suburb}
                             onChange={(suburb) => this.props.updateVenuAndTimeDataAction(suburb.target.value, 'Venue', 'suburb')}
                             setFieldsValue={venuData.suburb}
+                            disabled={this.state.isUsed}
                         />
                     )}
                 </Form.Item>
@@ -416,6 +426,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                             placeholder={AppConstants.select}
                             onChange={(stateRefId) => this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId')}
                             setFieldsValue={venuData.stateRefId}
+                            disabled={this.state.isUsed}
 
                         >
                             {stateList.length > 0 && stateList.map((item) => (
@@ -438,6 +449,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                             onChange={(postalCode) => this.props.updateVenuAndTimeDataAction(postalCode.target.value, 'Venue', 'postalCode')}
                             setFieldsValue={venuData.postalCode}
                             maxLength={4}
+                            disabled={this.state.isUsed}
                         />
                     )}
                 </Form.Item>
@@ -447,12 +459,14 @@ class CompetitionVenueAndTimesEdit extends Component {
                     placeholder={AppConstants.contactNumber}
                     onChange={(contactNumber) => this.props.updateVenuAndTimeDataAction(contactNumber.target.value, 'Venue', 'contactNumber')}
                     value={venuData.contactNumber}
+                    disabled={this.state.isUsed}
                 />
 
                 <div className="fluid-width" style={{ marginTop: 25 }}>
                     <div className="row">
                         <div className="col-sm">
                             <Checkbox
+                                disabled={this.state.isUsed}
                                 className="single-checkbox"
                                 checked={venuData.affiliate}
                                 onChange={e => this.props.updateVenuAndTimeDataAction(e.target.checked, 'Venue', 'affiliate')}
@@ -463,6 +477,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         {venuData.affiliate && (
                             <div className="col-sm">
                                 <Select
+                                    disabled={this.state.isUsed}
                                     mode="multiple"
                                     style={{ width: "100%" }}
                                     value={venuData.affiliateData}
@@ -554,9 +569,11 @@ class CompetitionVenueAndTimesEdit extends Component {
                         return this.gameData(item, index, getFieldDecorator)
                     })}
                 </div>
-                <span style={{ cursor: 'pointer' }} onClick={() => this.props.updateVenuAndTimeDataAction(null, "addGameAndCourt", 'gameDays')} className="input-heading-add-another">
-                    + {AppConstants.addAnotherDay}
-                </span>
+                { !this.state.isUsed ? 
+                    <span style={{ cursor: 'pointer' }} onClick={() => this.props.updateVenuAndTimeDataAction(null, "addGameAndCourt", 'gameDays')} className="input-heading-add-another">
+                        + {AppConstants.addAnotherDay}
+                    </span> : null
+                }  
             </div>
         );
     };
@@ -629,9 +646,11 @@ class CompetitionVenueAndTimesEdit extends Component {
                     return this.expendedRowData(item, index, tableIndex, getFieldDecorator)
                 })}
                 {/* {this.gameData(item, index)} */}
-                <span style={{ cursor: 'pointer' }} onClick={() => this.props.updateVenuAndTimeDataAction(null, tableIndex, 'availabilities', 'add_TimeSlot')} className="input-heading-add-another pt-3">
-                    + {AppConstants.add_TimeSlot}
-                </span>
+                {!this.state.isUsed ?
+                    <span style={{ cursor: 'pointer' }} onClick={() => this.props.updateVenuAndTimeDataAction(null, tableIndex, 'availabilities', 'add_TimeSlot')} className="input-heading-add-another pt-3">
+                        + {AppConstants.add_TimeSlot}
+                    </span> : null
+                }
             </div>
         )
     }
@@ -647,6 +666,7 @@ class CompetitionVenueAndTimesEdit extends Component {
             <div className="fees-view pt-5">
                 <div style={{display:'flex'}}>
                     <span className="form-heading">{AppConstants.courts}</span>
+                    {!this.state.isUsed  ? 
                     <Button className="primary-add-comp-form" type="primary" style={{marginLeft:'auto'}}> 
                         <div className="row">
                             <div className="col-sm">
@@ -662,7 +682,8 @@ class CompetitionVenueAndTimesEdit extends Component {
                                 />
                             </div>
                         </div>
-                    </Button>
+                    </Button> : null
+                    }
                 </div>
                 
                 <div className="inside-container-view">
@@ -680,9 +701,11 @@ class CompetitionVenueAndTimesEdit extends Component {
                             loading={this.state.loading == true && true}
                         />
                     </div>
-                    <span style={{ cursor: 'pointer' }} onClick={() => this.props.updateVenuAndTimeDataAction(null, "addGameAndCourt", 'venueCourts')} className="input-heading-add-another">
-                        + {AppConstants.addCourt}
-                    </span>
+                    {!this.state.isUsed ? 
+                        <span style={{ cursor: 'pointer' }} onClick={() => this.props.updateVenuAndTimeDataAction(null, "addGameAndCourt", 'venueCourts')} className="input-heading-add-another">
+                            + {AppConstants.addCourt}
+                        </span> : null
+                    }
                 </div>
             </div>
         );
@@ -721,9 +744,11 @@ class CompetitionVenueAndTimesEdit extends Component {
                                 <Button className="open-reg-button" type="primary" style={{marginRight: '20px'}} onClick={() => this.navigateTo()}>
                                     {AppConstants.cancel}
                                 </Button>
+                                {!this.state.isUsed ?
                                 <Button className="open-reg-button" type="primary" htmlType="submit">
                                     {AppConstants.save}
                                 </Button>
+                                : null }
                             </div>
                         </div>
                     </div>

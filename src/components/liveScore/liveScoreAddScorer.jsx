@@ -31,7 +31,8 @@ class LiveScoreAddScorer extends Component {
             tableRecord: this.props.location.state ? this.props.location.state.tableRecord : null,
             isEdit: this.props.location.state ? this.props.location.state.isEdit : null,
             loader: false,
-            load: false
+            load: false,
+            competition_id : null
         }
 
     }
@@ -43,8 +44,9 @@ class LiveScoreAddScorer extends Component {
     };
 
     componentDidMount() {
-        this.props.liveScoreManagerListAction(3, 1, 1)
         const { id } = JSON.parse(getLiveScoreCompetiton())
+        this.props.liveScoreManagerListAction(3, 1, id)
+      
         if (id !== null) {
             // this.props.getliveScoreDivisions(id)
             this.props.getliveScoreTeams(id)
@@ -60,7 +62,7 @@ class LiveScoreAddScorer extends Component {
         } else {
             this.props.liveScoreScorerUpdate("", "isAddScorer")
         }
-        this.setState({ load: true })
+        this.setState({ load: true, competition_id : id })
     }
 
     componentDidUpdate(nextProps) {
@@ -165,14 +167,14 @@ class LiveScoreAddScorer extends Component {
                                     notFoundContent={onLoadSearch == true ? <Spin size="small" /> : null}
                                     onSearch={(value) => {
                                         value ?
-                                            this.props.liveScoreManagerSearch(value)
+                                            this.props.liveScoreManagerSearch(value, this.state.competition_id)
                                             :
-                                            this.props.liveScoreManagerListAction(3, 1, 1)
+                                            this.props.liveScoreManagerListAction(3, 1, this.state.competition_id)
                                     }}
 
                                 >{managerList.map((item) => {
                                     return <Option key={item.id} value={item.firstName + " " + item.lastName}>
-                                        {item.firstName + " " + item.lastName + " " + item.id}
+                                        {item.firstName + " " + item.lastName}
                                     </Option>
                                 })}
                                 </AutoComplete>
@@ -427,7 +429,7 @@ class LiveScoreAddScorer extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 if (scorerRadioBtn == 'new') {
-                    this.props.liveScoreAddEditScorer(scorerData, existingScorerId, scorerRadioBtn)
+                    this.props.liveScoreAddEditScorer(scorerData, existingScorerId, scorerRadioBtn, this.state.isEdit)
                 } if (scorerRadioBtn == 'existing') {
                     this.props.liveScoreAddEditScorer(scorerData, existingScorerId, scorerRadioBtn)
                 }

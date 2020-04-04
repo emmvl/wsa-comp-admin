@@ -1263,8 +1263,6 @@ class RegistrationCompetitionForm extends Component {
                                                             <Option key={item.id} value={item.id}>{item.value}</Option>
                                                         );
                                                     })}
-
-
                                                 </Select>
 
                                             )}

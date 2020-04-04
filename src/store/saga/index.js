@@ -36,6 +36,7 @@ import {
   getOnlyYearAndCompetitionListSaga,
   getParticipateYearAndCompetitionListSaga,
   getOwnYearAndCompetitionListSaga,
+  getEnhancedRoundRobinTypesSaga
 } from "./appSaga";
 
 import {
@@ -257,7 +258,7 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_MATCH_TYPES_LOAD, getMatchTypesSaga)
   yield takeEvery(ApiConstants.API_COMPETITION_TYPES_LOAD, getCompetitionTypesSaga)
   yield takeEvery(ApiConstants.API_COMPETITION_FORMAT_TYPES_LOAD, getCompetitionFormatTypesSaga)
-
+  yield takeEvery(ApiConstants.API_ENHANCED_ROUND_ROBIN_LOAD, getEnhancedRoundRobinTypesSaga)
 
   /* ************Competition Management Ends************ */
 

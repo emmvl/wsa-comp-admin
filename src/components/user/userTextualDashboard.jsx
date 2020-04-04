@@ -69,7 +69,7 @@ const columns = [
             return (
                 <div>
                     {(competition || []).map((item, index) => (
-                        <div key={item.competitionId}>{item.competition}</div>
+                        <div key={item.competitionId}>{item.competitionName}</div>
                     ))}
                 </div>
             )

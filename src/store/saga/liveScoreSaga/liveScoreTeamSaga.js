@@ -120,7 +120,7 @@ export function* addTeamLiveScoreSaga(action) {
                 type: ApiConstants.API_LIVE_SCORE_ADD_TEAM_SUCCESS,
             });
             message.success(action.teamId ? 'Team has been updated Successfully' : 'Team has been created Successfully.')
-            history.push('/liveScoreTeam')
+            history.push(action.key ? 'liveScoreDashboard' : '/liveScoreTeam')
         }
         else {
             yield call(failSaga, result)

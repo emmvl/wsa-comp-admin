@@ -54,7 +54,7 @@ class LiveScoreAddMatch extends Component {
             loadvalue: false,
             loading: false,
             createMatch: false,
-            key: props.location.state ? props.location.state.key : null,
+            key: props.location.state ? props.location.state.key ? props.location.state.key : null : null,
             roundLoad: false,
         }
         // this.props.getVenuesTypeAction()
@@ -165,7 +165,7 @@ class LiveScoreAddMatch extends Component {
         let sequence = 1
         const { id } = JSON.parse(getLiveScoreCompetiton())
         let divisionID = addEditMatch.divisionId
-      
+
         this.props.liveScoreCreateRoundAction(this.state.createRound, sequence, id, divisionID)
         // this.setInitalFiledValue(addEditMatch, start_date, start_time)
         this.setState({ visible: false, createRound: '', roundLoad: true })
@@ -637,18 +637,25 @@ class LiveScoreAddMatch extends Component {
             if (!err) {
                 let { addEditMatch, matchData, start_date, start_time, start_post_date } = this.props.liveScoreMatchState
 
-               
+
 
                 // let startDate = moment(start_date).format("YYYY-MMM-DD")
+                // let startDate = moment(start_post_date).format("YYYY-MMM-DD")
+                // let start = moment.utc(start_time).format("HH:mm")
+
+                // let postDate = startDate + " " + start + " " + "UTC"
+
+                // let formatedDate = new Date(postDate).toISOString()
+                // matchData.startTime = formatedDate
 
                 let startDate = moment(start_post_date).format("YYYY-MMM-DD")
-                let start = moment.utc(start_time).format("HH:mm")
+                let start = moment(start_time).format("HH:mm")
 
-              
 
-                let postDate = startDate + " " + start + " " + "UTC"
-                let formatedDate = new Date(postDate).toISOString()
-                matchData.startTime = formatedDate
+                let datetimeA = moment(startDate + " " + start);
+                let formated__Date = new Date(datetimeA).toISOString()
+
+                matchData.startTime = formated__Date
 
                 // let competitionId = getCompetitonId();
                 const { id } = JSON.parse(getLiveScoreCompetiton())

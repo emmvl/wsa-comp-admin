@@ -23,6 +23,7 @@ const initialState = {
   govtVoucher: [],// vouchers in competition discount section
   casualPaymentOption: [],
   matchTypes: [],
+  enhancedRoundRobinTypes: [],
 
   ////******************Venue and time
   yearList: [],
@@ -335,8 +336,19 @@ function appState(state = initialState, action) {
       return {
         ...state,
       }
-      case ApiConstants.Search_Venue_updated_Competition:
-          return { ...state, venueList: action.filterData }
+    case ApiConstants.Search_Venue_updated_Competition:
+        return { ...state, venueList: action.filterData }
+
+    case ApiConstants.API_ENHANCED_ROUND_ROBIN_LOAD:
+      return { ...state, onLoad: true };
+
+    case ApiConstants.API_ENHANCED_ROUND_ROBIN_SUCCESS:
+      return {
+        ...state,
+        onLoad: false,
+        enhancedRoundRobinTypes: action.result,
+        status: action.status
+      };
 
     default:
       return state;

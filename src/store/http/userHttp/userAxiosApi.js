@@ -39,23 +39,28 @@ let userHttpApi = {
     return Method.dataGet(url, token);
   },
 
-  saveAffiliate(payload) {
+  async saveAffiliate(payload) {
+    let userId = await getUserId()
     var url = `api/affiliates/save?userId=${userId}`;
     return Method.dataPost(url, token, payload);
   },
-  affiliateByOrganisationId(organisationId) {
+  async affiliateByOrganisationId(organisationId) {
+    let userId = await getUserId()
     var url = `api/affiliate/${organisationId}?userId=${userId}`;
     return Method.dataGet(url, token);
   },
-  affiliatesListing(payload) {
+  async affiliatesListing(payload) {
+    let userId = await getUserId()
     var url = `api/affiliateslisting?userId=${userId}`;
     return Method.dataPost(url, token, payload);
   },
-  affiliateToOrganisation(organisationId) {
+  async affiliateToOrganisation(organisationId) {
+    let userId = await getUserId()
     var url = `api/affiliatedtoorganisation/${organisationId}?userId=${userId}`;
     return Method.dataGet(url, token);
   },
-  getVenueOrganisation() {
+  async getVenueOrganisation() {
+    let userId = await getUserId()
     var url = `api/organisation?userId=${userId}`;
     return Method.dataGet(url, token)
   },
@@ -72,9 +77,11 @@ let userHttpApi = {
   },
 
   //// get particular user organisation 
-  getUserOrganisation() {
-    var url = `api/userorganisation?userId=${userId}`;
-    return Method.dataGet(url, token)
+  async getUserOrganisation() {
+    const user_Id = await getUserId()
+    const Auth_token = await getAuthToken()
+    var url = `api/userorganisation?userId=${user_Id}`;
+    return Method.dataGet(url, Auth_token)
   },
   getUserDashboardTextualListing(payload) {
     var url = `api/user/dashboard/textual`;
@@ -113,11 +120,11 @@ let userHttpApi = {
     return Method.dataPost(url, token, payload);
   },
 
-  liveScoreSearchManager(data) {
+  liveScoreSearchManager(data, competition_Id) {
     console.log(data, 'liveScoreSearchManager')
     let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
     if (data) {
-      var url = `users/byRole?roleId=5&entityTypeId=1&entityId=${1}&userName=${data}`;
+      var url = `users/byRole?roleId=5&entityTypeId=1&entityId=${competition_Id}&userName=${data}`;
       return Method.dataGet(url, token);
     }
 

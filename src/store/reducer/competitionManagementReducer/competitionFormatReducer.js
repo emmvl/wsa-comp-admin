@@ -12,6 +12,7 @@ let obj = {
     fixtureTemplateId: 0,
     matchTypeRefId: 0,
     noOfRounds: 0,
+    enhancedRoundRobinRefId: 0,
     competitionTypeRefId: 0,
     roundInDays: 0,
     roundInHours: 0,

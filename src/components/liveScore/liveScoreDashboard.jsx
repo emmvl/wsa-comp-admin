@@ -13,6 +13,7 @@ import { liveScore_formateDate } from '../../themes/dateformate'
 import { liveScore_formateDateTime } from '../../themes/dateformate'
 import { NavLink } from 'react-router-dom';
 import AppImages from "../../themes/appImages";
+import moment from "moment";
 const { Content } = Layout;
 
 /////function to sort table column
@@ -117,7 +118,7 @@ const columnsTodaysMatch = [
         sorter: (a, b) => tableSort(a, b, 'id'),
         render: (id) => <NavLink to={{
             pathname: '/liveScoreMatchDetails',
-            state: { matchId: id }
+            state: { matchId: id, key: 'dashboard' }
         }} >
             <span class="input-heading-add-another pt-0" >{id}</span>
         </NavLink>
@@ -140,7 +141,7 @@ const columnsTodaysMatch = [
         render: (team1, record) =>
             <NavLink to={{
                 pathname: '/liveScoreTeamView',
-                state: { tableRecord: team1 }
+                state: { tableRecord: team1, key: 'dashboard' }
             }} >
                 <span class="input-heading-add-another pt-0" >{team1.name}</span>
             </NavLink>
@@ -154,7 +155,7 @@ const columnsTodaysMatch = [
         render: (team2, record) =>
             <NavLink to={{
                 pathname: '/liveScoreTeamView',
-                state: { tableRecord: team2 }
+                state: { tableRecord: team2, key: 'dashboard' }
             }} >
                 <span class="input-heading-add-another pt-0" >{team2.name}</span>
             </NavLink>
@@ -186,7 +187,7 @@ const columnsTodaysMatch = [
         render: (score, records) =>
             <NavLink to={{
                 pathname: '/liveScoreMatchDetails',
-                state: { matchId: records.id }
+                state: { matchId: records.id, key: 'dashboard' }
             }} ><span nowrap class="input-heading-add-another pt-0" >{records.team1Score + " : " + records.team2Score} </span></NavLink>
     }, {
         title: "Umpire",
@@ -354,15 +355,23 @@ class LiveScoreDashboard extends Component {
 
     componentDidMount() {
         let competitionID = getCompetitonId()
-        const { id } = JSON.parse(getLiveScoreCompetiton())
+        let startDay = this.getStartofDay()
 
+        const { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
-            this.props.liveScorePlayerListAction(id)
+            this.props.liveScorePlayerListAction(id, startDay)
         } else {
             history.push('/')
         }
     }
 
+
+    getStartofDay() {
+        var start = new Date();
+        start.setHours(0, 0, 0, 0);
+        let a = moment.utc(start).format()
+        return a
+    }
 
     ////////participatedView view for competition
     incidenceView = () => {

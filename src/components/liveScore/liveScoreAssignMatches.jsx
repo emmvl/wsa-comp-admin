@@ -141,7 +141,7 @@ const columns2 = [
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
                         <span class="input-heading-add-another pt-0" >{records.team2.name} ({records.scorer2 ? records.scorer2.firstName + " " + records.scorer2.lastName : "Unassigned"})</span>
                     </div>
-                    {this_obj.state.scoring_Type == "SINGLE" ? <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-end' }} >
+                    {this_obj.state.scoring_Type !== "SINGLE" ? <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-end' }} >
                         <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer2", "team2", records.scorer2)} class="input-heading-add-another pt-0" >{records.scorer2 ? "Unassign" : "Assign"}</span>
                     </div> : null}
                 </div>
