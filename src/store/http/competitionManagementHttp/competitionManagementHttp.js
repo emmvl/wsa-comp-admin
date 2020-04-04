@@ -2,7 +2,7 @@ import axios from "axios";
 
 const competitionManagementHttp = axios.create({
 
-    baseURL: "https://netball-api-stg.worldsportaction.com/competition",
+    baseURL: "https://competition-api-dev.worldsportaction.com",
 });
 
 competitionManagementHttp.interceptors.request.use(function (config) {

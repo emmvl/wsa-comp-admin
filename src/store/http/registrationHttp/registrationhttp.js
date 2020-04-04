@@ -10,9 +10,9 @@ const http = axios.create({
     // baseURL: "http://13.237.1.133:8085"
     // baseURL: "http://192.168.3.252:3000"
     // baseURL: "http://192.168.3.98:3000"
-    // baseURL: "http://192.168.3.79:3000"
+    // baseURL: "http://192.168.1.103:4000"
     // baseURL: "https://world-sport-action-socket.appspot.com"
-    baseURL: "https://netball-api-stg.worldsportaction.com/registration"
+    baseURL: "https://registration-api-dev.worldsportaction.com"
 });
 
 http.interceptors.request.use(function (config) {
