@@ -1,2 +1,2 @@
-//TypeOrm Reference
+//TypeOrm References
 https://typeorm.io/#/
