@@ -13,6 +13,7 @@ import {getUserModulePersonalDetailsAction,
     getUserModuleMedicalInfoAction, getUserModuleActivityPlayerAction,
     getUserModuleActivityParentAction,getUserModuleActivityScorerAction,
     getUserModuleActivityManagerAction} from "../../store/actions/userAction/userAction";
+import {getOrganisationData } from "../../util/sessionStorage";
 import moment from 'moment';
 import history from '../../util/history'
 import { liveScore_formateDate } from '../../themes/dateformate'
@@ -389,7 +390,8 @@ class UserModulePersonalDetail extends Component{
             }
         }
 
-        if(this.state.competition.competitionId == null && personal.competitions != undefined)
+        if(this.state.competition.competitionId == null && personal.competitions != undefined && 
+            personal.competitions.length > 0)
         {
             this.setState({competition: personal.competitions[0]})
             this.tabApiCalls(this.state.tabKey,personal.competitions[0], this.state.userId );
@@ -398,7 +400,11 @@ class UserModulePersonalDetail extends Component{
 
     apiCalls = (userId) => {
         console.log("apiCalls::" + userId);
-        this.props.getUserModulePersonalDetailsAction(userId);
+        let payload = {
+            userId: userId,
+            organisationId: getOrganisationData().organisationUniqueKey
+        }
+        this.props.getUserModulePersonalDetailsAction(payload);
     };
 
     onChangeSetValue = (value) =>{
