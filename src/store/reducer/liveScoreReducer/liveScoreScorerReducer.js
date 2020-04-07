@@ -85,7 +85,7 @@ function liveScoreScorerState(state = initialState, action) {
                 let teamsArray = JSON.parse(JSON.stringify(action.result))
                 state.allTeamData = JSON.parse(JSON.stringify(action.result))
                 let teamObject = {
-                             name: "All Team",
+                             name: "All Teams",
                          id: null
                 }
                 

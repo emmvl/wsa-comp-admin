@@ -114,11 +114,7 @@ class InnerHorizontalMenu extends React.Component {
                                 <span>Draw</span>
                             }
                         >
-                            <Menu.Item key="12">
-                                <NavLink to="/competitionMatchSheets" >
-                                    <span >Match Sheets</span>
-                                </NavLink>
-                            </Menu.Item>
+
                             <Menu.Item key="13">
                                 <NavLink to="/competitionReGrading" >
                                     <span >Re-grading</span>
@@ -353,12 +349,18 @@ class InnerHorizontalMenu extends React.Component {
                                 <span>Banners</span>
                             </NavLink>
                         </Menu.Item>
+                        <Menu.Item key="22">
+                            <NavLink to="/competitionMatchSheets" >
+                                <span >Match Sheets</span>
+                            </NavLink>
+                        </Menu.Item>
                     </SubMenu>
                     <Menu.Item key="21">
                         <NavLink to="/liveScoreNewsList">
                             <span>News & Messages</span>
                         </NavLink>
                     </Menu.Item>
+
                 </Menu>
                 }
 

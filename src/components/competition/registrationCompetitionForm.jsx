@@ -1137,7 +1137,7 @@ class RegistrationCompetitionForm extends Component {
                                 }
                                 disabled={isCreatorEdit}
                             >
-                                {AppConstants.saveAsDefault}
+                                {AppConstants.useAffiliateLogo}
                             </Checkbox>}
 
                         </div>

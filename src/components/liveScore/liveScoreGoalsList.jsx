@@ -31,83 +31,7 @@ function checkSorting(a, b, key) {
 
 const { Content } = Layout;
 const { Option } = Select;
-// const columns = [
-//     {
-//         title: 'Match Id',
-//         dataIndex: 'matchId',
-//         key: 'matchId',
-//         // hideOn: ,
-//         sorter: (a, b) => checkSorting(a, b, "matchId"),
-//         render: (matchId) => {
-//             // matchId ? matchId : hideOn
-//         }
 
-//     },
-//     {
-//         title: 'Date',
-//         dataIndex: 'date',
-//         key: 'date',
-//         sorter: (a, b) => checkSorting(a, b, "date"),
-//     },
-//     {
-//         title: 'Team',
-//         dataIndex: 'teamName',
-//         key: 'teamName',
-//         sorter: (a, b) => checkSorting(a, b, "teamName"),
-//     },
-//     {
-//         title: 'First Name',
-//         dataIndex: 'firstName',
-//         key: 'firstName',
-//         sorter: (a, b) => checkSorting(a, b, "firstName"),
-//         render: (firstName, record) =>
-//             <NavLink to={{
-//                 pathname: '/liveScorePlayerView',
-//                 state: { tableRecord: record }
-//             }}>
-//                 <span class="input-heading-add-another pt-0" >{firstName}</span>
-//             </NavLink>
-//     },
-//     {
-//         title: 'Last Name',
-//         dataIndex: 'lastName',
-//         key: 'lastName',
-//         sorter: (a, b) => checkSorting(a, b, 'lastName'),
-//         render: (lastName, record) =>
-//             <NavLink to={{
-//                 pathname: '/liveScorePlayerView',
-//                 state: { tableRecord: record }
-//             }}>
-//                 <span class="input-heading-add-another pt-0" >{lastName}</span>
-//             </NavLink>
-//     },
-//     {
-//         title: 'Position',
-//         dataIndex: 'gamePositionName',
-//         key: 'gamePositionName',
-//         sorter: (a, b) => checkSorting(a, b, "gamePositionName"),
-
-//     },
-//     {
-//         title: 'Attempts',
-//         dataIndex: 'attempts',
-//         key: 'attempts',
-//         sorter: (a, b) => checkSorting(a, b, "attempts"),
-//     },
-//     {
-//         title: 'Goals',
-//         dataIndex: 'goal',
-//         key: 'goal',
-//         sorter: (a, b) => checkSorting(a, b, "goal"),
-
-//     },
-//     {
-//         title: 'Goals%',
-//         dataIndex: 'goal_percent',
-//         key: 'goal_percent',
-//         sorter: (a, b) => checkSorting(a, b, "goal_percent"),
-//     },
-// ];
 
 class LiveScoreGoalList extends Component {
     constructor(props) {
@@ -290,7 +214,6 @@ class LiveScoreGoalList extends Component {
                                     style={{ display: "flex", alignItems: "flex-start" }}
                                     onChange={(filter) => {
                                         this.setState({ filter })
-                                        console.log(filter)
                                         this.props.liveScoreGoalListAction(1, filter)
                                     }}
                                     value={this.state.filter} >
@@ -337,7 +260,7 @@ class LiveScoreGoalList extends Component {
         const { liveScoreGoalState } = this.props;
         // let DATA = liveScoreMatchListState ? liveScoreMatchListState.liveScoreMatchListData : []
         let goalList = liveScoreGoalState ? liveScoreGoalState.result : [];
-        console.log(liveScoreGoalState, "goalList")
+       
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">

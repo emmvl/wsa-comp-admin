@@ -83,7 +83,14 @@ const initialState = {
   defaultRegistrationSettings: [],
   defaultRegistrationMethod: [],
   selectedMethod: [],
-  defaultMembershipProduct: []
+  defaultMembershipProduct: [],
+  selectedDemographic: [],
+  selectedNetballQuestions: [],
+  SelectedOtherQuestions: [],
+  reg_settings: [],
+  reg_demoSetting: [],
+  reg_NetballSetting: [],
+  reg_QuestionsSetting: []
 };
 
 
@@ -113,18 +120,43 @@ function checkSlectedMethod(array) {
 }
 
 //get selected invitees 
-function checkSlectedInvitees(array) {
-  console.log(array)
-  let selected = []
-  if (array) {
-    for (let i in array) {
-      selected.push(array[i].registrationSettingsRefId)
+function checkSlectedInvitees(result, reg_demoSetting, reg_NetballSetting, reg_QuestionsSetting, reg_settings) {
+  console.log(result)
+  let selectedAdvanceSettings = []
+  let selectedDemographic = []
+  let selectedNetballQuestions = []
+  let SelectedOtherQuestions = []
+
+  if (result) {
+    for (let i in result) {
+      if (result[i].registrationSettingsRefId == 13 || result[i].registrationSettingsRefId == 14
+        || result[i].registrationSettingsRefId == 15 || result[i].registrationSettingsRefId == 16) {
+        selectedDemographic.push(result[i].registrationSettingsRefId)
+        reg_demoSetting.push(result[i])
+
+      } else if (result[i].registrationSettingsRefId == 7 || result[i].registrationSettingsRefId == 6 || result[i].registrationSettingsRefId == 10) {
+        selectedNetballQuestions.push(result[i].registrationSettingsRefId)
+        reg_NetballSetting.push(result[i])
+      }
+      else if (result[i].registrationSettingsRefId == 8 || result[i].registrationSettingsRefId == 9 ||
+        result[i].registrationSettingsRefId == 12 || result[i].registrationSettingsRefId == 11) {
+        SelectedOtherQuestions.push(result[i].registrationSettingsRefId)
+        reg_QuestionsSetting.push(result[i])
+      }
+      else if (result[i].registrationSettingsRefId == 1 || result[i].registrationSettingsRefId == 17 ||
+        result[i].registrationSettingsRefId == 18 || result[i].registrationSettingsRefId == 2 || result[i].registrationSettingsRefId == 3 || result[i].registrationSettingsRefId == 4) {
+        selectedAdvanceSettings.push(result[i].registrationSettingsRefId)
+        reg_settings.push(result[i])
+      }
     }
   }
-  return selected
-
+  return {
+    selectedAdvanceSettings,
+    selectedDemographic,
+    selectedNetballQuestions,
+    SelectedOtherQuestions,
+  }
 }
-
 //update registration form method 
 function getRegistrationFormMethod(selectedMethod, reg_method) {
   let postMethodArr = []
@@ -496,6 +528,39 @@ function discountDataObject(data) {
 
 }
 
+function updatedSettingsData(result) {
+  console.log(result)
+  let updatedAdvanceSettings = []
+  let updatedDemographic = []
+  let updatedNetballQuestions = []
+  let updatedOtherQuestions = []
+
+  if (result) {
+    for (let i in result) {
+      if (result[i] == 13 || result[i] == 14
+        || result[i] == 15 || result[i] == 16) {
+        updatedDemographic.push(result[i])
+      } else if (result[i] == 7 || result[i] == 6 || result[i] == 10) {
+        updatedNetballQuestions.push(result[i])
+      }
+      else if (result[i] == 8 || result[i] == 9 ||
+        result[i] == 12 || result[i] == 11) {
+        updatedOtherQuestions.push(result[i])
+      }
+      else if (result[i] == 2 || result[i] == 17 ||
+        result[i] == 18 || result[i] == 3 || result[i] == 4) {
+        updatedAdvanceSettings.push(result[i])
+      }
+    }
+  }
+  return {
+    updatedAdvanceSettings,
+    updatedDemographic,
+    updatedNetballQuestions,
+    updatedOtherQuestions,
+  }
+}
+
 /////function to check membership types in the membership product section tab in membership fees
 function getDefaultMembershipType(data) {
   let membershipProductTypesTempArray = []
@@ -726,9 +791,12 @@ function registration(state = initialState, action) {
       state.defaultRegistrationMethod = formData[0].registerMethods !== null ? JSON.parse(JSON.stringify(formData[0].registerMethods)) : []
       let selected_Method = checkSlectedMethod(JSON.parse(JSON.stringify(formData[0].registerMethods)))
       state.selectedMethod = selected_Method
-      let selectedInvitees = checkSlectedInvitees(formData[0].registrationSettings)
+      let selectedInvitees = checkSlectedInvitees(formData[0].registrationSettings, state.reg_demoSetting, state.reg_NetballSetting, state.reg_QuestionsSetting, state.reg_settings)
       state.defaultMembershipProduct = JSON.parse(JSON.stringify(formData[0].membershipProductTypes))
-      state.selectedInvitees = selectedInvitees
+      state.selectedInvitees = selectedInvitees.selectedAdvanceSettings
+      state.selectedDemographic = selectedInvitees.selectedDemographic
+      state.SelectedOtherQuestions = selectedInvitees.SelectedOtherQuestions
+      state.selectedNetballQuestions = selectedInvitees.selectedNetballQuestions
       let productListValue = getProductArr(
         productList,
         formData[0].membershipProductTypes
@@ -765,8 +833,25 @@ function registration(state = initialState, action) {
       if (action.key == "registrationSettings") {
         state.selectedInvitees = action.updatedData
         let updatedObjData = getResitrationFormSettings(action.updatedData, state.defaultRegistrationSettings)
-        state.registrationFormData[0].registrationSettings = updatedObjData
+        state.reg_settings = updatedObjData
       }
+      else if (action.key == "demographicSettings") {
+        state.selectedDemographic = action.updatedData
+        let updatedDemoData = getResitrationFormSettings(action.updatedData, state.defaultRegistrationSettings)
+        state.reg_demoSetting = updatedDemoData
+      }
+      else if (action.key == "NetballQuestions") {
+        state.selectedNetballQuestions = action.updatedData
+        let NetballQuestionsData = getResitrationFormSettings(action.updatedData, state.defaultRegistrationSettings)
+        state.reg_NetballSetting = NetballQuestionsData
+
+      }
+      else if (action.key == "OtherQuestions") {
+        state.SelectedOtherQuestions = action.updatedData
+        let updatedQuestionsData = getResitrationFormSettings(action.updatedData, state.defaultRegistrationSettings)
+        state.reg_QuestionsSetting = updatedQuestionsData
+      }
+
       else if (action.key == "registerMethods") {
         state.selectedMethod = action.updatedData
         let updateRegistrationMethod = getRegistrationFormMethod(action.updatedData, JSON.parse(JSON.stringify(state.defaultRegistrationMethod)))
@@ -822,6 +907,16 @@ function registration(state = initialState, action) {
         state.defaultChecked["venueVisible"] = false
         state.defaultChecked['daysVisible'] = false
         state.defaultChecked['trainingVisible'] = false
+        state.reg_demoSetting = []
+        state.reg_NetballSetting = []
+        state.reg_QuestionsSetting = []
+        state.reg_settings = []
+        state.selectedDemographic = []
+        state.selectedInvitees = []
+        state.selectedNetballQuestions = []
+        state.SelectedOtherQuestions = []
+        state.defaultRegistrationMethod = []
+        state.defaultRegistrationSettings = []
 
       }
       if (action.dataName == "allDivisionsData") {

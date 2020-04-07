@@ -1,31 +1,33 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Table, Select } from 'antd';
+import { Layout, Breadcrumb, Button, Table, Select, Menu } from 'antd';
 import './product.css';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import {
+    getOnlyYearListAction,
+} from "../../store/actions/appAction";
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
+const { SubMenu } = Menu;
 const columns = [
 
     {
-        title: 'Registration Category',
-        dataIndex: 'registrationcategory',
-        key: 'registrationcategory',
-        sorter: (a, b) => a.registrationcategory.length - b.registrationcategory.length,
-
-
+        title: 'Competition Name',
+        dataIndex: 'competitionName',
+        key: 'competitionName',
+        sorter: (a, b) => a.competitionName.length - b.competitionName.length,
     },
     {
-        title: 'Registration Type',
-        dataIndex: 'registrationType',
-        key: 'registrationType',
-        sorter: (a, b) => a.registrationType.length - b.registrationType.length,
-
-
+        title: 'Membership Product(s)',
+        dataIndex: 'membershipProduct',
+        key: 'membershipProduct',
+        sorter: (a, b) => a.membershipProduct.length - b.membershipProduct.length,
     },
     {
         title: 'Division',
@@ -36,85 +38,108 @@ const columns = [
 
     },
     {
-        title: 'Discounts',
-        dataIndex: 'discounts',
-        key: 'discounts',
-        render: discounts => <span>{discounts == true ? "Yes" : "No"}</span>,
-        sorter: (a, b) => a.discounts.length - b.discounts.length,
+        title: 'Registration Open',
+        dataIndex: 'registrationOpen',
+        key: 'registrationOpen',
+        // render: discounts => <span>{discounts == true ? "Yes" : "No"}</span>,
+        sorter: (a, b) => a.registrationOpen.length - b.registrationOpen.length,
     },
     {
-        title: 'State Fee',
-        dataIndex: 'stateFee',
-        key: 'stateFee',
-        sorter: (a, b) => a.stateFee.length - b.stateFee.length,
+        title: 'Registration Close',
+        dataIndex: 'registrationClose',
+        key: 'registrationClose',
+        sorter: (a, b) => a.registrationClose.length - b.registrationClose.length,
     },
 
     {
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
-        render: status =>
-            <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
-                <img className="dot-image"
-                    src={status === "active" ? AppImages.greenDot : status === "inactive" ? AppImages.greyDot : status === "expired" && AppImages.redDot}
-                    alt="" width="12" height="12" />
-            </span>,
+        // render: status =>
+        //     <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
+        //         <img className="dot-image"
+        //             src={status === "active" ? AppImages.greenDot : status === "inactive" ? AppImages.greyDot : status === "expired" && AppImages.redDot}
+        //             alt="" width="12" height="12" />
+        //     </span>,
         sorter: (a, b) => a.status.length - b.status.length,
     },
     {
-        title: 'Frequency',
-        dataIndex: 'frequency',
-        key: 'frequency',
-        sorter: (a, b) => a.frequency.length - b.frequency.length,
-
-    },
+        title: "Action",
+        dataIndex: "isUsed",
+        key: "isUsed",
+        render: (isUsed, record) => (
+            // isUsed == false ? <Menu
+            <Menu
+                className="action-triple-dot-submenu"
+                theme="light"
+                mode="horizontal"
+                style={{ lineHeight: "25px" }}
+            >
+                <SubMenu
+                    key="sub1"
+                    title={
+                        <img
+                            className="dot-image"
+                            src={AppImages.moreTripleDot}
+                            alt=""
+                            width="16"
+                            height="16"
+                        />
+                    }
+                >
+                    <Menu.Item key="1">
+                        {/* <NavLink to={{ pathname: `/registrationCompetitionFee`, state: { id: record.competitionUniqueKey } }} > */}
+                        <span>Edit</span>
+                        {/* </NavLink> */}
+                    </Menu.Item>
+                    <Menu.Item key="2">
+                        {/* onClick={() => this_Obj.showDeleteConfirm(record.competitionUniqueKey)}> */}
+                        <span>Delete</span>
+                    </Menu.Item>
+                </SubMenu>
+            </Menu>
+            //  : null
+        )
+    }
 
 ];
 
 const data = [
     {
         key: '1',
-        registrationcategory: "Junior Winter",
-        registrationType: "Junior",
+        competitionName: "Social Competition",
+        membershipProduct: "Player",
         division: "Junior",
-        discounts: JSON.stringify(true),
-        stateFee: "$40.00",
-        status: "active",
-        frequency: "Once/year"
+        registrationOpen: "01-04-2020",
+        registrationClose: "01-06-2020",
+        status: "Draft",
+        Action: "Once/year"
     },
     {
         key: '2',
-        registrationcategory: "Walking Netball",
-        registrationType: "Program",
-        division: "Program",
-        discounts: JSON.stringify(false),
-        stateFee: "$27.27",
-        status: "inactive",
-        frequency: "Recurring"
+        competitionName: "Winter 2020",
+        membershipProduct: "Player",
+        division: "Senior",
+        registrationOpen: "01-03-2020",
+        registrationClose: "31-03-2020",
+        status: "Published",
+        Action: "Recurring"
 
     },
-    {
-        key: '3',
-        registrationcategory: "Casual Netball",
-        registrationType: "N/A",
-        division: "N/A",
-        discounts: true,
-        stateFee: "$0.00",
-        status: "expired",
-        frequency: "Recurring"
-
-    },
-
 ];
 
 class Registration extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            year: "2020",
+            yearRefId: 1,
         }
     }
 
+
+    componentDidMount() {
+        this.props.getOnlyYearListAction(this.props.appState.yearList)
+    }
 
     ///////view for breadcrumb
     headerView = () => {
@@ -123,7 +148,7 @@ class Registration extends Component {
                 <div className="row" >
                     <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
                         <Breadcrumb separator=" > ">
-                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.fees}</Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.registrationForm}</Breadcrumb.Item>
 
                         </Breadcrumb>
                     </div>
@@ -132,6 +157,9 @@ class Registration extends Component {
             </div >
 
         )
+    }
+    onYearChange = (yearRefId) => {
+        this.setState({ yearRefId: yearRefId, })
     }
 
     ///dropdown view containing all the dropdown of header
@@ -144,14 +172,18 @@ class Registration extends Component {
                             <div className="com-year-select-heading-view" >
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
+                                    name={"yearRefId"}
                                     className="year-select"
-                                    // style={{ width: 75 }}
-                                    onChange={(year) => this.setState({ year })}
-                                    value={this.state.year}
+                                    onChange={yearRefId => this.onYearChange(yearRefId)}
+                                    value={this.state.yearRefId}
                                 >
-                                    {/* <Option value={"2019winter"}>{AppConstants.winter2019}</Option> */}
-                                    <Option value={"2020"}>{AppConstants.year2020}</Option>
-                                    <Option value={"2019"}>{AppConstants.year2019}</Option>
+                                    {this.props.appState.yearList.map(item => {
+                                        return (
+                                            <Option key={"yearRefId" + item.id} value={item.id}>
+                                                {item.description}
+                                            </Option>
+                                        );
+                                    })}
                                 </Select>
                             </div>
                         </div>
@@ -171,9 +203,6 @@ class Registration extends Component {
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
                     <Table className="home-dashboard-table" columns={columns} dataSource={data} pagination={false}
-                        onRow={(r) => ({
-                            onClick: () => this.props.history.push("/productAddRegistration")
-                        })}
                     />
                 </div>
             </div>
@@ -204,11 +233,24 @@ class Registration extends Component {
                         {this.contentView()}
                     </Content>
                     <Footer>
-                        {this.footerView()}
+                        {/* {this.footerView()} */}
                     </Footer>
                 </Layout>
             </div>
         );
     }
 }
-export default Registration;
+
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        getOnlyYearListAction,
+    }, dispatch)
+}
+
+function mapStatetoProps(state) {
+    return {
+        appState: state.AppState,
+    }
+}
+export default connect(mapStatetoProps, mapDispatchToProps)(Registration);

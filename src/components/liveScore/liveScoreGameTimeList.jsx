@@ -29,9 +29,9 @@ function tableSort(a, b, key) {
 function checkPlay(record) {
 
     let playTimeTeamMatches = JSON.parse(record.playTimeTeamMatches)
-    let playTime = JSON.parse(record.playTime)
+    let playTime = record.playTime ? JSON.parse(record.playTime) : 0
 
-    if(playTimeTeamMatches == 0){
+    if(playTimeTeamMatches == 0 || playTimeTeamMatches == null){
         return ""
     }else{
        let result = 100 * (playTime / playTimeTeamMatches)
@@ -62,7 +62,7 @@ function checkPlay(record) {
 //// Check play time
 function checkPlayTime(record) {
     if (record.playTime !== null) {
-        if (this_obj.state.filter == AppConstants.totalGame) {
+        if (this_obj.state.filter == "MATCH") {
             if (record.playTime == 0) {
                 return record.playTime + " Games"
             } else if (record.playTime == 1) {
@@ -206,7 +206,7 @@ class LiveScoreGameTimeList extends Component {
         super(props);
         this.state = {
             selectStatus: "Select Status",
-            filter: "Periods"
+            filter: "Period"
         };
         this_obj = this
     }
@@ -222,7 +222,6 @@ class LiveScoreGameTimeList extends Component {
     }
 
     handleGameTimeTableList(page, competitionId, aggergate) {
-        console.log(page, competitionId, aggergate, "headers")
         let offset = page ? 10 * (page - 1) : 0
 
         this.props.gameTimeStatisticsListAction(competitionId, aggergate, offset)
@@ -264,7 +263,7 @@ class LiveScoreGameTimeList extends Component {
                                 value={this.state.filter} >
                                 <Option value={AppConstants.period}>{AppConstants.periods}</Option>
                                 <Option value={AppConstants.minute}>{AppConstants.minutes}</Option>
-                                <Option value={AppConstants.totalGame}>{AppConstants.totalGames}</Option>
+                                <Option value={AppConstants.matches}>{AppConstants.totalGames}</Option>
                             </Select>
 
                             <div className="col-sm"

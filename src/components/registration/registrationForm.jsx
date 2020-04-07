@@ -255,12 +255,27 @@ class RegistrationForm extends Component {
     registrationSubmit = e => {
         e.preventDefault();
         let SelectedProduct = JSON.parse(JSON.stringify(this.props.registrationState.registrationFormData.length !== 0 ? this.props.registrationState.registrationFormData[0] : []));
+        const { reg_settings, reg_demoSetting, reg_NetballSetting, reg_QuestionsSetting } = JSON.parse(JSON.stringify(this.props.registrationState))
+        let registration_settings = []
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 if (SelectedProduct.membershipProductTypes.length > 0) {
                     SelectedProduct['competitionUniqueKeyId'] = this.state.firstTimeCompId
                     SelectedProduct['yearRefId'] = this.state.yearRefId
                     SelectedProduct["statusRefId"] = this.state.statusRefId
+                    for (let i in reg_settings) {
+                        registration_settings.push(reg_settings[i])
+                    }
+                    for (let i in reg_demoSetting) {
+                        registration_settings.push(reg_demoSetting[i])
+                    }
+                    for (let i in reg_NetballSetting) {
+                        registration_settings.push(reg_NetballSetting[i])
+                    }
+                    for (let i in reg_QuestionsSetting) {
+                        registration_settings.push(reg_QuestionsSetting[i])
+                    }
+                    SelectedProduct['registrationSettings'] = registration_settings
                     this.props.regSaveRegistrationForm(SelectedProduct, this.state.statusRefId)
                 }
                 else {
@@ -818,9 +833,9 @@ class RegistrationForm extends Component {
     };
 
     // for change and update tree props
-    onTreeSelected(itemValue, formDataValue) {
+    onTreeSelected(itemValue, selectedInvitees) {
         console.log(itemValue)
-        let selectedInvitees = this.props.registrationState.selectedInvitees
+        // let selectedInvitees = this.props.registrationState.selectedInvitees
         let upcomingData = [...itemValue]
         let mainValueIndex = upcomingData.findIndex(x => x == "1")
 
@@ -879,6 +894,25 @@ class RegistrationForm extends Component {
         this.props.updateRegistrationForm(upcomingData, "registrationSettings")
     }
 
+
+    onDemoTreeSelected(itemValue, selectedInvitees) {
+        let upcomingData = [...itemValue]
+        this.props.updateRegistrationForm(upcomingData, "demographicSettings")
+    }
+    onNetballTreeSelected(itemValue, selectedInvitees) {
+        let upcomingData = [...itemValue]
+        let mainValueIndex = upcomingData.findIndex(x => x == "5")
+        if (mainValueIndex > -1) {
+            upcomingData.splice(mainValueIndex, 1)
+        }
+        this.props.updateRegistrationForm(upcomingData, "NetballQuestions")
+    }
+    onOtherTreeSelected(itemValue, selectedInvitees) {
+        let upcomingData = [...itemValue]
+
+        this.props.updateRegistrationForm(upcomingData, "OtherQuestions")
+    }
+
     makeSeletedArr(formDataValue) {
         if (formDataValue) {
             let arr = formDataValue.registrationSettings
@@ -900,27 +934,74 @@ class RegistrationForm extends Component {
     advancedSettingView = () => {
         let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
         let registrationAdvanceSetting = this.props.appState.formSettings !== 0 ? this.props.appState.formSettings : []
-        let selectedInvitees = this.props.registrationState.selectedInvitees
-        let expendKeyArray = this.props.registrationState.expendKeyArr
-        console.log(expendKeyArray)
+        let demographicSetting = this.props.appState.demographicSetting !== 0 ? this.props.appState.demographicSetting : []
+        let netballQuestionsSetting = this.props.appState.netballQuestionsSetting !== 0 ? this.props.appState.netballQuestionsSetting : []
+        let otherQuestionsSetting = this.props.appState.otherQuestionsSetting !== 0 ? this.props.appState.otherQuestionsSetting : []
+        const { selectedInvitees, selectedDemographic, SelectedOtherQuestions, selectedNetballQuestions } = this.props.registrationState
         let isPublished = this.state.isPublished
         return (
             <div className="discount-view pt-5">
-                <span className="form-heading">{AppConstants.advancedSettings}</span>
-                <div className="col-sm">
+                <span className="form-heading">{AppConstants.additionalQuestions}</span>
+                <div className="inside-container-view">
+                    <span className="form-heading">{AppConstants.demographicQuestions}</span>
                     <Tree
                         className="tree-government-rebate"
                         style={{ flexDirection: 'column' }}
                         checkable
                         defaultExpandParent={true}
                         disabled={isPublished}
-                        // defaultExpandParent
-                        // defaultExpandedKeys={[...expendKeyArray]}
-                        // autoExpandParent={[...expendKeyArray]}
-                        // onExpand={[...expendKeyArray]}
+                        defaultCheckedKeys={[]}
+                        checkedKeys={[...selectedDemographic]}
+                        onCheck={(e) => this.onDemoTreeSelected(e, selectedDemographic)}
+                    >
+                        {this.ShowAdvancedSettingSettingTree(demographicSetting)}
+                    </Tree>
+                </div>
+                <div className="inside-container-view">
+                    <span className="form-heading">{AppConstants.netballQuestions}</span>
+                    <Tree
+                        className="tree-government-rebate"
+                        style={{ flexDirection: 'column' }}
+                        checkable
+                        defaultExpandParent={true}
+                        disabled={isPublished}
+                        defaultCheckedKeys={[]}
+                        checkedKeys={[...selectedNetballQuestions]}
+                        onCheck={(e) => this.onNetballTreeSelected(e, selectedNetballQuestions)}
+                    >
+                        {this.ShowAdvancedSettingSettingTree(netballQuestionsSetting)}
+                    </Tree>
+                </div>
+                <div className="inside-container-view">
+                    <span className="form-heading">{AppConstants.otherQuestions}</span>
+                    <Tree
+                        className="tree-government-rebate"
+                        style={{ flexDirection: 'column' }}
+                        checkable
+                        defaultExpandParent={true}
+                        disabled={isPublished}
+                        defaultCheckedKeys={[]}
+                        checkedKeys={[...SelectedOtherQuestions]}
+                        onCheck={(e) => this.onOtherTreeSelected(e, SelectedOtherQuestions)}
+                    >
+                        {this.ShowAdvancedSettingSettingTree(otherQuestionsSetting)}
+                    </Tree>
+                </div>
+
+
+
+
+                <span className="form-heading pt-5">{AppConstants.advancedSettings}</span>
+                <div className="inside-container-view">
+                    <Tree
+                        className="tree-government-rebate"
+                        style={{ flexDirection: 'column' }}
+                        checkable
+                        defaultExpandParent={true}
+                        disabled={isPublished}
                         defaultCheckedKeys={[]}
                         checkedKeys={[...selectedInvitees]}
-                        onCheck={(e) => this.onTreeSelected(e, formDataValue)}
+                        onCheck={(e) => this.onTreeSelected(e, selectedInvitees)}
                     >
                         {this.ShowAdvancedSettingSettingTree(registrationAdvanceSetting)}
                     </Tree>
