@@ -10,7 +10,10 @@ import { connect } from 'react-redux';
 import { liveScoreCompetionActioninitiate, liveScoreCompetitionDeleteInitate } from '../../store/actions/LiveScoreAction/liveScoreCompetitionAction';
 import Loader from '../../customComponents/loader'
 import AppImages from "../../themes/appImages";
-
+import {
+   getOnlyYearListAction
+} from "../../store/actions/appAction";
+import { isArrayNotEmpty } from "../../util/helpers";
 const { Content } = Layout;
 const { Option } = Select;
 const { confirm } = Modal
@@ -151,10 +154,40 @@ class LiveScoreCompetitions extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            year: "2019"
+            year: "2019",
+            onLoad : false
         }
         this_Obj = this
     }
+
+    componentDidMount() {
+        this.props.getOnlyYearListAction(this.props.liveScoreCompetition.yearList)
+        this.setState({onLoad:true})
+
+        // this.props.liveScoreCompetionActioninitiate(body)
+        // setTimeout(() => { console.log('uhhhhh', this.props.liveScoreCompetition) }, 5000)
+        // console.log('uhhhhh', this.props.liveScoreCompetition)
+    }
+
+
+    componentDidUpdate(nextProps){
+        if(nextProps.liveScoreCompetition.yearList !== this.props.liveScoreCompetition.yearList){
+            if(this.props.liveScoreCompetition.loader == false && this.state.onLoad == true){
+                const body = {
+                    "paging": {
+                        "limit": 10,
+                        "offset": 0
+                    }
+                }
+               let selectedYear = this.props.liveScoreCompetition.yearList[0].id
+                 this.props.liveScoreCompetionActioninitiate(body, selectedYear)
+                 this.setState({onLoad:false, year: selectedYear })
+            }
+        }
+    }
+
+
+
     setCompetitionID = (competitiondata) => {
         localStorage.setItem("LiveScoreCompetiton", JSON.stringify(competitiondata))
     }
@@ -177,22 +210,10 @@ class LiveScoreCompetitions extends Component {
             },
         });
     }
-    componentDidMount() {
-        const body = {
-            "paging": {
-                "limit": 10,
-                "offset": 0
-            }
-        }
-
-        this.props.liveScoreCompetionActioninitiate(body)
-        // setTimeout(() => { console.log('uhhhhh', this.props.liveScoreCompetition) }, 5000)
-        // console.log('uhhhhh', this.props.liveScoreCompetition)
-    }
+ 
     /// Handle Pagination 
     handlePaggination(page) {
         let offset = page ? 10 * (page - 1) : 0;
-        console.log(page)
         const body = {
             "paging": {
                 "limit": 10,
@@ -200,14 +221,18 @@ class LiveScoreCompetitions extends Component {
             }
         }
 
-        this.props.liveScoreCompetionActioninitiate(body)
+        this.props.liveScoreCompetionActioninitiate(body, this.state.year)
     }
 
-
+    onChnageYear=(evt)=>{
+        this.setState({year: evt.year })
+        this.handlePaggination()
+    }
 
 
     ///dropdown view containing dropdown and next screen navigation button/text
     dropdownButtonView = () => {
+        let yearList = this.props.liveScoreCompetition.yearList
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="fluid-width">
@@ -221,10 +246,17 @@ class LiveScoreCompetitions extends Component {
                                 <Select
                                     className="year-select"
                                     // style={{ width: 75 }}
-                                    onChange={year => this.setState({ year })}
+                                    onChange={year => this.onChnageYear({ year })}
                                     value={this.state.year}
-                                >
-                                    <Option value={"2019"}>{AppConstants.year2019}</Option>
+                                >{
+                                    isArrayNotEmpty(yearList) && yearList.map(item => {
+                                    return (
+                                        <Option key={"yearRefId" + item.id} value={item.id}>
+                                            {item.description}
+                                        </Option>
+                                    );
+                                })}
+        
                                 </Select>
                             </div>
                         </div>
@@ -336,6 +368,7 @@ export default connect(
     mapStatetoProps,
     {
         liveScoreCompetionActioninitiate,
-        liveScoreCompetitionDeleteInitate
+        liveScoreCompetitionDeleteInitate,
+        getOnlyYearListAction,
     })(LiveScoreCompetitions);
 

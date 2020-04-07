@@ -868,8 +868,9 @@ const AppConstants = {
 
   //game time statistics list
 
-  period: "PERIODS",
-  minute: "MINUTES",
+  period: "PERIOD",
+  minute: "MINUTE",
+  matches: "MATCH",
   totalGame: "TOTAL GAMES",
   divisionList: "Division List",
   voucherDeleteConfirmMsg: "Are you sure you want to delete this voucher?",
@@ -901,12 +902,18 @@ const AppConstants = {
   please_Sel_Fee: "Please fill the fees First",
 
   short_Name: "Short Name",
-  backToScorer: "Back to all Scorer",
+  backToScorer: "Back to all Scorers",
   State : "State",
   endDate:"End Date",
   otherInformation: "Other Information",
   countryOfBirth: "Country of Birth",
-  disability: "Disability"
+  disability: "Disability",
+  additionalQuestions: "Additional Questions",
+  otherQuestions: "Other Questions",
+  netballQuestions: "Netball Questions",
+  demographicQuestions: "Demographic Questions",
+  addDivisionsAndGrades: "Add Divisions and Grades",
+  useAffiliateLogo: "Use Affiliate logo",
 };
 
 export default AppConstants;

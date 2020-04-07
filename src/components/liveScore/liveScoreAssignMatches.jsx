@@ -27,6 +27,17 @@ function tableSort(a, b, key) {
     return stringA.localeCompare(stringB)
 }
 
+
+function checkScorerMatch(data){
+    let scorerID = this_obj.props.location.state ? this_obj.props.location.state.record.id : null
+    console.log(scorerID, data)
+    if(data && data.id == scorerID){
+        return "Unassign"
+    }else{
+        return "Assign"
+    }
+}
+
 ///columens data
 const columns1 = [
 
@@ -114,10 +125,10 @@ const columns2 = [
                             alt="" width="12" height="12" />
                     </div>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
-                        <span class="input-heading-add-another pt-0 " >{records.team1.name} ({records.scorer1 ? records.scorer1.firstName + " " + records.scorer1.lastName : "Unassigned"})</span>
+                        <span class="pt-0 " >{records.team1.name} ({records.scorer1 ? records.scorer1.firstName + " " + records.scorer1.lastName : "Unassigned"})</span>
                     </div>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer1", "team1", records.scorer1)} class="input-heading-add-another pt-0" >{records.scorer1 ? "Unassign" : "Assign"}</span>
+                        <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer1", "team1", records.scorer1)} class="input-heading-add-another pt-0" >{checkScorerMatch(records.scorer1)}</span>
                     </div>
                 </div>
             )
@@ -139,10 +150,10 @@ const columns2 = [
                             alt="" width="12" height="12" />
                     </div>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
-                        <span class="input-heading-add-another pt-0" >{records.team2.name} ({records.scorer2 ? records.scorer2.firstName + " " + records.scorer2.lastName : "Unassigned"})</span>
+                        <span class="pt-0" >{records.team2.name} ({records.scorer2 ? records.scorer2.firstName + " " + records.scorer2.lastName : "Unassigned"})</span>
                     </div>
                     {this_obj.state.scoring_Type !== "SINGLE" ? <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-end' }} >
-                        <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer2", "team2", records.scorer2)} class="input-heading-add-another pt-0" >{records.scorer2 ? "Unassign" : "Assign"}</span>
+                        <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer2", "team2", records.scorer2)} class="input-heading-add-another pt-0" >{checkScorerMatch(records.scorer2)}</span>
                     </div> : null}
                 </div>
             )

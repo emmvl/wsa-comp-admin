@@ -84,6 +84,7 @@ function LiveScoreTeamState(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_GET_TEAM_VIEW_PLAYER_LIST_SUCCESS:
+            console.log(action.result)
             // let playerData = liveScoreTeamModal.getTeamViewPlayerListData(action.result.players)
             return {
                 ...state,
@@ -111,7 +112,7 @@ function LiveScoreTeamState(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
 
             const result = action.result
-            console.log(result)
+           
             return {
                 ...state,
                 onLoad: false,
@@ -138,7 +139,7 @@ function LiveScoreTeamState(state = initialState, action) {
         case ApiConstants.LIVE_SCORE_TEAM_EDIT:
             const { key } = action.payload;
             const { data } = action.payload
-        
+        console.log(data)
             if (key == 'managerType') {
 
                 state[key] = data
@@ -158,7 +159,7 @@ function LiveScoreTeamState(state = initialState, action) {
                 state.teamLogo = null
                 state.managerType = null
             }else if(key == "logoUrl"){
-                console.log(data)
+               
                 state.teamManagerData['logoUrl'] = data
                 state.isCheked = false
             }

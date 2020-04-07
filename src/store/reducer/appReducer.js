@@ -35,9 +35,48 @@ const initialState = {
   participate_CompetitionArr: [],
   participate_YearArr: [],
   searchVenueList: [],
-  mainVenueList: []
-
+  mainVenueList: [],
+  demographicSetting: [],
+  netballQuestionsSetting: [],
+  otherQuestionsSetting: [],
 };
+function arraymove(arr, fromIndex, toIndex) {
+  var element = arr[fromIndex];
+  arr.splice(fromIndex, 1);
+  arr.splice(toIndex, 0, element);
+  return arr
+}
+
+function filteredSettingArray(result) {
+  let demographic = []
+  let netballQuestions = []
+  let otherQuestions = []
+  let advanceSettings = []
+  console.log(result)
+  for (let i in result) {
+    if (result[i].id == 13 || result[i].id == 14 || result[i].id == 15 || result[i].id == 16) {
+      demographic.push(result[i])
+    } else if (result[i].id == 5 || result[i].id == 6 || result[i].id == 10) {
+      netballQuestions.push(result[i])
+    }
+    else if (result[i].id == 8 || result[i].id == 9 || result[i].id == 12 || result[i].id == 11) {
+      otherQuestions.push(result[i])
+    }
+    else if (result[i].id == 1 || result[i].id == 17 || result[i].id == 18) {
+      advanceSettings.push(result[i])
+    }
+
+  }
+  netballQuestions = arraymove(netballQuestions, 2, 1)
+  otherQuestions = arraymove(otherQuestions, 3, 2)
+  return {
+    demographic,
+    netballQuestions,
+    otherQuestions,
+    advanceSettings
+  }
+
+}
 
 function appState(state = initialState, action) {
   switch (action.type) {
@@ -192,10 +231,16 @@ function appState(state = initialState, action) {
 
     case ApiConstants.API_REG_FORM_SETTINGS_SUCCESS:
       const result = getRegistrationSetting(action.result);
+      let multipleSettingsArray = filteredSettingArray(result)
+      console.log(multipleSettingsArray)
+
       return {
         ...state,
         onLoad: false,
-        formSettings: result,
+        formSettings: multipleSettingsArray.advanceSettings,
+        demographicSetting: multipleSettingsArray.demographic,
+        netballQuestionsSetting: multipleSettingsArray.netballQuestions,
+        otherQuestionsSetting: multipleSettingsArray.otherQuestions,
         status: action.status
       };
 
@@ -326,18 +371,17 @@ function appState(state = initialState, action) {
       }
 
     case ApiConstants.API_ADD_VENUE_SUCCESS:
-      if(action.result!= null)
-      {
+      if (action.result != null) {
         state.mainVenueList.push(action.result)
         state.venueList.push(action.result)
         state.searchVenueList.push(action.result)
       }
-   
+
       return {
         ...state,
       }
     case ApiConstants.Search_Venue_updated_Competition:
-        return { ...state, venueList: action.filterData }
+      return { ...state, venueList: action.filterData }
 
     case ApiConstants.API_ENHANCED_ROUND_ROBIN_LOAD:
       return { ...state, onLoad: true };

@@ -202,7 +202,7 @@ class LiveScoreAddTeam extends Component {
                         this.props.liveScoreAddTeamform({ key: 'alias', data: event.target.value })
                     }
                     }
-                    value={this.state.isEdit == true ? teamManagerData.alias : ""}
+                    value={ teamManagerData.alias }
                 />
                 {/* )}
 

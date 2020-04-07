@@ -11,7 +11,7 @@ async function logout() {
 }
 
 let token = getAuthToken();
-// let userId = getUserId();
+let user_Id = getUserId();
 // let organisationUniqueKey = "sd-gdf45df-09486-sdg5sfd-546sdf"
 let AxiosApi = {
     // /login Api call
@@ -246,8 +246,12 @@ let AxiosApi = {
 
     ////get the competition fees all the data in one API
     async getAllCompetitionFeesDeatils(competitionId) {
+        let userId = await getUserId()
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        // if (userId !== user_Id) {
+        //     history.push("/")
+        // }
         var url = `/api/competitionfee/competitiondetails?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`;
         return Method.dataGet(url, token);
     },

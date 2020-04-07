@@ -189,8 +189,8 @@ class CompetitionMatchSheets extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
-                <InnerHorizontalMenu menu={"competition"} compSelectedKey={"12"} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <InnerHorizontalMenu menu={"liveScore"} compSelectedKey={"22"} />
                 <Layout>
                     {this.headerView()}
                     <Content>

@@ -356,10 +356,12 @@ class LiveScoreDashboard extends Component {
     componentDidMount() {
         let competitionID = getCompetitonId()
         let startDay = this.getStartofDay()
-
+    
+        let currentTime = moment.utc().format()
+       
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
-            this.props.liveScorePlayerListAction(id, startDay)
+            this.props.liveScorePlayerListAction(id, startDay, currentTime)
         } else {
             history.push('/')
         }

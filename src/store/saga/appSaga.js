@@ -8,11 +8,11 @@ import AppConstants from "../../themes/appConstants";
 // import UserAxiosApi from "../http/userHttp/userAxiosApi.js";
 ////get the common year list reference
 export function* getOnlyYearListSaga(action) {
+  
   try {
     const result = isArrayNotEmpty(action.yearsArray) ? { status: 1, result: { data: action.yearsArray } } : yield call(AxiosApi.getYearList, action);
     if (result.status === 1) {
-
-
+  
       yield put({
         type: ApiConstants.API_ONLY_YEAR_LIST_SUCCESS,
         result: result.result.data,

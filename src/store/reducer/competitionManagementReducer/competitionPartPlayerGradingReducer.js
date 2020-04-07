@@ -165,6 +165,14 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
         case ApiConstants.CLEARING_COMPETITION_PART_PLAYER_GRADING_REDUCER_DATA:
             if (action.key == "partPlayerGradingListData") {
                 state.partPlayerGradingListData = []
+                state.AllPartPlayerGradingListData = []
+                state.unassignedPartPlayerGradingListData = {
+                    teamId: null,
+                    teamName: "Unassigned",
+                    playerCount: 0,
+                    players: []
+                }
+                state.assignedPartPlayerGradingListData = []
             }
             return {
                 ...state,
