@@ -302,9 +302,10 @@ class CompetitionOpenRegForm extends Component {
             { id: 6, value: 6 }, { id: 8, value: 8 }, { id: 10, value: 10 }, { id: 12, value: 12 }, { id: 14, value: 14 }, { id: 16, value: 16 }, { id: 18, value: 18 }]
         };
         this_Obj = this;
-        let competitionId = null
-        competitionId = this.props.location.state ? this.props.location.state.id : null
-        competitionId !== null && this.props.clearCompReducerDataAction("all")
+        // let competitionId = null
+        // competitionId = this.props.location.state ? this.props.location.state.id : null
+        // competitionId !== null && this.props.clearCompReducerDataAction("all")
+        this.props.clearCompReducerDataAction("all")
 
     }
     componentDidUpdate(nextProps) {
@@ -1164,7 +1165,7 @@ class CompetitionOpenRegForm extends Component {
 
                                 }
                             >
-                                {AppConstants.saveAsDefault}
+                                {AppConstants.useAffiliateLogo}
                             </Checkbox>}
 
                         </div>

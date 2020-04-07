@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Select, Tag } from "antd";
+import { Layout, Button, Table, Select, Tag, Modal } from "antd";
 import { NavLink } from "react-router-dom";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -14,6 +14,7 @@ import { isArrayNotEmpty, isNullOrEmptyString } from "../../util/helpers";
 
 const { Content } = Layout;
 const { Option } = Select;
+const { confirm } = Modal;
 
 /////function to sort table column
 function tableSort(a, b, key) {
@@ -223,6 +224,40 @@ class CompetitionDashboard extends Component {
         );
     };
 
+    openModel = (props) => {
+        let competitionId = this.props.competitionFeesState.competitionId
+        let this_ = this
+        confirm({
+            title: 'Do you want to add registration?',
+            // content: 'Some descriptions',
+            okText: 'Yes',
+            okType: 'danger',
+            cancelText: 'No',
+            onOk() {
+                // [
+                // <NavLink 
+                //     // onClick={() => this.props.clearCompReducerDataAction("all")}
+                //     to={{ pathname: `/registrationCompetitionForm`, state: { id: null } }}
+                // />
+                // ]
+
+                this_.onRegistrationScreen()
+
+            },
+            onCancel() {
+                this_.onCompetitionScreen()
+            },
+        });
+    }
+
+    onCompetitionScreen = () => {
+        history.push("/registrationCompetitionForm", { id: null })
+    }
+
+    onRegistrationScreen = () => {
+        history.push("/registrationForm")
+    }
+
 
 
     ///dropdown view containing dropdown and next screen navigation button/text
@@ -237,23 +272,6 @@ class CompetitionDashboard extends Component {
                                 {AppConstants.ownedCompetitions}
                             </span>
                         </div>
-                        {/* <div className="col-sm">
-                            <div className="year-select-heading-view">
-                                <span className="year-select-heading">
-                                    {AppConstants.year}:
-                                    </span>
-                                <Select
-                                    className="year-select"
-                                    onChange={yearId => this.onYearClick(yearId)}
-                                    value={selectedYear}
-                                >
-                                    {yearList.length > 0 && yearList.map((item) => (
-                                        < Option value={item.id} > {item.name}</Option>
-                                    ))
-                                    }
-                                </Select>
-                            </div>
-                        </div> */}
                         <div className="col-sm" style={{
                             display: "flex", maxWidth: "99%",
                             justifyContent: "flex-end"
@@ -270,15 +288,11 @@ class CompetitionDashboard extends Component {
                                             justifyContent: "flex-end"
                                         }}
                                     >
-                                        <NavLink
-                                            onClick={() => this.props.clearCompReducerDataAction("all")}
-                                            to={{ pathname: `/registrationCompetitionForm`, state: { id: null } }}
-                                            className="text-decoration-none">
-                                            <Button className="primary-add-comp-form" type="primary"
-                                            >
-                                                + {AppConstants.newCompetition}
-                                            </Button>
-                                        </NavLink>
+                                        <Button className="primary-add-comp-form" type="primary" onClick={() => this.openModel(this.props)}
+                                        >
+                                            + {AppConstants.newCompetition}
+                                        </Button>
+
                                     </div>
                                 </div>
                                 <div className="col-sm">

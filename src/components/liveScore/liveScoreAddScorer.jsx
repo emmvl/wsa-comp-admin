@@ -45,7 +45,7 @@ class LiveScoreAddScorer extends Component {
 
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.props.liveScoreManagerListAction(3, 1, id)
+        this.props.liveScoreManagerListAction(5, 1, id)
       
         if (id !== null) {
             // this.props.getliveScoreDivisions(id)

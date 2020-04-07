@@ -63,6 +63,7 @@ import ValidationConstants from "../../themes/validationConstant";
 import { NavLink } from "react-router-dom";
 import Loader from '../../customComponents/loader';
 import { getUserId, getOrganisationData } from "../../util/sessionStorage"
+import ReactDOM from 'react-dom';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -675,6 +676,18 @@ const playercasualTableClub = [
     }
 ];
 
+
+
+const permissionObject = {
+    compDetailDisable: false,
+    regInviteesDisable: false,
+    membershipDisable: false,
+    divisionsDisable: false,
+    feesTableDisable: false,
+    paymentsDisable: false,
+    discountsDisable: false
+}
+
 class RegistrationCompetitionFee extends Component {
     constructor(props) {
         super(props);
@@ -712,12 +725,16 @@ class RegistrationCompetitionFee extends Component {
             isCreatorEdit: false, //////// user is owner of the competition than isCreatorEdit will be false 
             organisationTypeRefId: 0,
             isPublished: false,
+            isRegClosed: false,
             tooltipVisibleDelete: false,
             tooltipVisibleDraft: false,
             tooltipVisiblePublish: false,
             roundsArray: [{ id: 4, value: 4 },
-            { id: 6, value: 6 }, { id: 8, value: 8 }, { id: 10, value: 10 }, { id: 12, value: 12 }, { id: 14, value: 14 }, { id: 16, value: 16 }, { id: 18, value: 18 }]
+            { id: 6, value: 6 }, { id: 8, value: 8 }, { id: 10, value: 10 }, { id: 12, value: 12 }, { id: 14, value: 14 }, { id: 16, value: 16 }, { id: 18, value: 18 }],
+            permissionState: permissionObject
+
         };
+
         this_Obj = this;
         let competitionId = null
         competitionId = this.props.location.state ? this.props.location.state.id : null
@@ -742,24 +759,86 @@ class RegistrationCompetitionFee extends Component {
         }
         if (nextProps.competitionFeesState !== competitionFeesState) {
             if (competitionFeesState.getCompAllDataOnLoad === false && this.state.getDataLoading == true) {
+                let isPublished = competitionFeesState.competitionDetailData.statusRefId == 2 ? true : false
+
+                let registrationCloseDate = competitionFeesState.competitionDetailData.registrationCloseDate
+                    && moment(competitionFeesState.competitionDetailData.registrationCloseDate)
+                let isRegClosed = !registrationCloseDate.isSameOrAfter(moment());
+
+                let creatorId = competitionFeesState.competitionCreator
+                let userId = getUserId();
+                let isCreatorEdit = creatorId == userId ? false : true;
+
+                this.setPermissionFields(isPublished, isRegClosed, isCreatorEdit)
+
                 this.setState({
                     getDataLoading: false,
                     profileImage: competitionFeesState.competitionDetailData.competitionLogoUrl,
                     competitionIsUsed: competitionFeesState.competitionDetailData.isUsed,
-                    isPublished: competitionFeesState.competitionDetailData.statusRefId == 2 ? true : false
+                    isPublished,
+                    isRegClosed,
+                    isCreatorEdit
                 })
                 this.setDetailsFieldValue()
-                let creatorId = competitionFeesState.competitionCreator
-                let userId = getUserId();
-                if (creatorId == userId) {
-                    this.setState({ isCreatorEdit: false })
-                } else {
-                    this.setState({ isCreatorEdit: true })
-                }
             }
         }
     }
 
+
+    ////disable or enable particular fields
+    setPermissionFields = (isPublished, isRegClosed, isCreatorEdit) => {
+        if (isPublished) {
+            if (isRegClosed) {
+                let permissionObject = {
+                    compDetailDisable: true,
+                    regInviteesDisable: true,
+                    membershipDisable: true,
+                    divisionsDisable: true,
+                    feesTableDisable: true,
+                    paymentsDisable: true,
+                    discountsDisable: true
+                }
+                this.setState({ permissionState: permissionObject })
+                return
+            }
+            if (isCreatorEdit) {
+                let permissionObject = {
+                    compDetailDisable: true,
+                    regInviteesDisable: true,
+                    membershipDisable: true,
+                    divisionsDisable: true,
+                    feesTableDisable: true,
+                    paymentsDisable: true,
+                    discountsDisable: true
+                }
+                this.setState({ permissionState: permissionObject })
+            }
+            else {
+                let permissionObject = {
+                    compDetailDisable: false,
+                    regInviteesDisable: true,
+                    membershipDisable: true,
+                    divisionsDisable: true,
+                    feesTableDisable: true,
+                    paymentsDisable: false,
+                    discountsDisable: true
+                }
+                this.setState({ permissionState: permissionObject })
+            }
+        }
+        else {
+            let permissionObject = {
+                compDetailDisable: false,
+                regInviteesDisable: false,
+                membershipDisable: false,
+                divisionsDisable: false,
+                feesTableDisable: false,
+                paymentsDisable: false,
+                discountsDisable: false
+            }
+            this.setState({ permissionState: permissionObject })
+        }
+    }
 
     componentDidMount() {
         let orgData = getOrganisationData()
@@ -1401,100 +1480,12 @@ class RegistrationCompetitionFee extends Component {
     }
 
 
-    // //// On change Invitees
-    // onInviteesChange(value) {
-    //     let regInviteesselectedData = this.props.competitionFeesState.selectedInvitees
-    //     let upcomingData = [...value]
-    //     let orgLevelId = JSON.stringify(this.state.organisationTypeRefId)
-    //     if (orgLevelId == "1" || orgLevelId == "2") {
-    //         let index = upcomingData.findIndex(x => x == "1")
-    //         if (index > -1) {
-    //             upcomingData.splice(index, 1)
-    //             let clubIndex = upcomingData.findIndex(x => x == "3")
-
-    //             if (clubIndex > -1) {
-    //                 upcomingData.splice(clubIndex, 1)
-    //             }
-
-    //         }
-    //     }
-    //     let associationIndex = regInviteesselectedData.findIndex(x => x == "2")
-    //     if (associationIndex > -1) {
-    //         let index = upcomingData.findIndex(x => x == "2")
-    //         if (index > -1) {
-    //             upcomingData.splice(index, 1)
-    //         }
-    //         let mainIndex = upcomingData.findIndex(x => x == "1")
-    //         if (mainIndex > -1) {
-    //             upcomingData.splice(mainIndex, 1)
-    //         }
-    //     }
-    //     let clubIndex = regInviteesselectedData.findIndex(x => x == "3")
-    //     if (clubIndex > -1) {
-    //         let index = upcomingData.findIndex(x => x == "3")
-    //         if (index > -1) {
-    //             upcomingData.splice(index, 1)
-    //         }
-    //         let mainIndex = upcomingData.findIndex(x => x == "1")
-    //         if (mainIndex > -1) {
-    //             upcomingData.splice(mainIndex, 1)
-    //         }
-    //     }
-    //     let directIndex = regInviteesselectedData.findIndex(x => x == "5")
-    //     if (directIndex > -1) {
-    //         let index = upcomingData.findIndex(x => x == "5")
-    //         if (index > -1) {
-    //             upcomingData.splice(index, 1)
-    //         }
-    //         let mainIndex = upcomingData.findIndex(x => x == "1")
-    //         if (mainIndex > -1) {
-    //             upcomingData.splice(mainIndex, 1)
-    //         }
-    //     }
-    //     let notApplIndex = regInviteesselectedData.findIndex(x => x == "6")
-    //     if (notApplIndex > -1) {
-    //         let index = upcomingData.findIndex(x => x == "6")
-    //         if (index > -1) {
-    //             upcomingData.splice(index, 1)
-    //         }
-    //         let mainIndex = upcomingData.findIndex(x => x == "1")
-    //         if (mainIndex > -1) {
-    //             upcomingData.splice(mainIndex, 1)
-    //         }
-    //     }
-    //     this.props.add_editcompetitionFeeDeatils(upcomingData, "invitees")
-    // }
-
 
     //// On change Invitees
     onInviteesChange(value) {
         let regInviteesselectedData = this.props.competitionFeesState.selectedInvitees
         console.log("value" + value);
         let arr = [value]
-        // let upcomingData = [...value]
-        // let associationIndex = regInviteesselectedData.findIndex(x => x == "2")
-        // if (associationIndex > -1) {
-        //     let index = upcomingData.findIndex(x => x == "2")
-        //     if (index > -1) {
-        //         upcomingData.splice(index, 1)
-        //     }
-        //     let mainIndex = upcomingData.findIndex(x => x == "1")
-        //     if (mainIndex > -1) {
-        //         upcomingData.splice(mainIndex, 1)
-        //     }
-        // }
-        // let clubIndex = regInviteesselectedData.findIndex(x => x == "3")
-        // if (clubIndex > -1) {
-        //     let index = upcomingData.findIndex(x => x == "3")
-        //     if (index > -1) {
-        //         upcomingData.splice(index, 1)
-        //     }
-        //     let mainIndex = upcomingData.findIndex(x => x == "1")
-        //     if (mainIndex > -1) {
-        //         upcomingData.splice(mainIndex, 1)
-        //     }
-        // }
-        // this.props.add_editcompetitionFeeDeatils(upcomingData, "invitees")
         this.props.add_editcompetitionFeeDeatils(arr, "invitees")
     }
 
@@ -1526,6 +1517,7 @@ class RegistrationCompetitionFee extends Component {
         let defaultCompFeesOrgLogo = detailsData.defaultCompFeesOrgLogo
         let isCreatorEdit = this.state.isCreatorEdit
         console.log(detailsData.competitionDetailData)
+        let compDetailDisable = this.state.permissionState.compDetailDisable
         return (
             <div className="content-view pt-4">
                 <Form.Item >
@@ -1596,7 +1588,7 @@ class RegistrationCompetitionFee extends Component {
                                 }
                                 disabled={isCreatorEdit}
                             >
-                                {AppConstants.saveAsDefault}
+                                {AppConstants.useAffiliateLogo}
                             </Checkbox>}
 
                         </div>
@@ -1713,7 +1705,7 @@ class RegistrationCompetitionFee extends Component {
                         <div className="col-sm">
                             {detailsData.competitionDetailData.competitionFormatRefId == 4 &&
                                 <div>
-                                    <InputWithHead heading={AppConstants.numberOfRounds} />
+                                    <InputWithHead heading={AppConstants.numberOfRounds} required={"required-field"} />
                                     <Form.Item >
                                         {getFieldDecorator('numberOfRounds',
                                             { rules: [{ required: true, message: ValidationConstants.numberOfRoundsNameIsRequired }] })(
@@ -1773,7 +1765,7 @@ class RegistrationCompetitionFee extends Component {
                         </div>
                     </div>
                 </div>
-                <InputWithHead heading={AppConstants.registration_close} />
+                <InputWithHead heading={AppConstants.registration_close} required={"required-field"} />
                 <Form.Item >
                     {getFieldDecorator('registrationCloseDate',
                         { rules: [{ required: true, message: ValidationConstants.registrationCloseDateIsRequired }] })(
@@ -2031,7 +2023,7 @@ class RegistrationCompetitionFee extends Component {
         let isPublished = this.state.isPublished
         return (
             <div className="fees-view pt-5">
-                <span className="form-heading">{AppConstants.fees}</span>
+                <span className="form-heading required-field">{AppConstants.fees}</span>
                 {feeDetails == null || feeDetails.length == 0 && (
                     <span className="applicable-to-heading pt-0">
                         {AppConstants.please_Sel_mem_pro}
@@ -2156,7 +2148,7 @@ class RegistrationCompetitionFee extends Component {
         let isPublished = this.state.isPublished
         return (
             <div className="fees-view pt-5">
-                <span className="form-heading">{AppConstants.registrationInvitees}</span>
+                <span className="form-heading required-field">{AppConstants.registrationInvitees}</span>
                 <div>
                     <Radio.Group
                         className="reg-competition-radio"
@@ -3000,9 +2992,14 @@ class RegistrationCompetitionFee extends Component {
         this.setDetailsFieldValue()
     }
 
+
+
     render() {
         const { getFieldDecorator } = this.props.form;
+        console.log("this.props.form", this.props.form)
+        const { ...props } = this.props;
         console.log(this.props.competitionFeesState)
+        console.log("permissionObject", this.state.permissionState)
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout

@@ -282,8 +282,8 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, localStorage.token, data)
     },
 
-    liveScoreDashboard(competitionID, startDay) {
-        var url = `/dashboard/newsIncidentMatch?competitionId=${competitionID}&startDay=${startDay}`;
+    liveScoreDashboard(competitionID, startDay, currentTime) {
+        var url = `/dashboard/newsIncidentMatch?competitionId=${competitionID}&startDay=${startDay}&currentTime=${currentTime}`;
         return Method.dataGet(url, token)
     },
 
@@ -500,24 +500,20 @@ let LiveScoreAxiosApi = {
     liveScoreAddEditScorer(scorerData, existingScorerId, scorerRadioBtn) {
         let competitionID = localStorage.getItem("competitionId");
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-
+        
         let body = null
         if (scorerRadioBtn == "new") {
             if (scorerData.id) {
-
                 body = {
                     "id": scorerData.id,
                     "firstName": scorerData.firstName,
                     "lastName": scorerData.lastName,
-                    "mobileNumber": scorerData.contactNo,
-                    "email": scorerData.emailAddress,
+                    "mobileNumber": scorerData.mobileNumber,
+                    "email": scorerData.email,
                     "teams": scorerData.teams
-
                 }
             } else {
-
                 body = {
-
                     "firstName": scorerData.firstName,
                     "lastName": scorerData.lastName,
                     "mobileNumber": scorerData.contactNo,
@@ -525,8 +521,8 @@ let LiveScoreAxiosApi = {
                     "teams": scorerData.teams
                 }
             }
-            var url = `/users/member?&competitionId=${id}`;
-            return Method.dataPost(url, token, body)
+            // var url = `/users/member?&competitionId=${id}`;
+            // return Method.dataPost(url, token, body)
 
         } else if (scorerRadioBtn == "existing") {
 
@@ -537,14 +533,10 @@ let LiveScoreAxiosApi = {
             }
             // }
 
-
-
-            var url = `/users/member?&competitionId=${id}`;
-            return Method.dataPost(url, token, body)
-
         }
-
-
+        console.log(body)
+        var url = `/users/member?&competitionId=${id}`;
+        return Method.dataPost(url, token, body)
     },
 
 

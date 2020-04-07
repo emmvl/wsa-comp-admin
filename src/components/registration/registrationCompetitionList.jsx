@@ -48,14 +48,14 @@ function totalSeasonalFees(seasonalFees1, record) {
     let fee = record.parentCreator ? parentFees : childFees
     return (
         affiliateFeeStatus ?
-            <span>{record.feeOrgId == null ? "N/A" : (record.seasonalFees == null && record.seasonalGST == null) ? "" : "Affiliate fee not set!"}</span>
+            <span>{record.feeOrgId == null ? "N/A" : (record.seasonalFees == null && record.seasonalGST == null) ? "N/A" : "Affiliate fee not set!"}</span>
             :
-            // <span>
-            //     {(record.seasonalFees == null && record.seasonalGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
-            // </span>
             <span>
-                {(record.seasonalFees == null && record.seasonalGST == null) && record.parentCreator === true ? "" : currencyFormat(fee)}
+                {(record.seasonalFees == null && record.seasonalGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
             </span>
+        // <span>
+        //     {(record.seasonalFees == null && record.seasonalGST == null) && record.parentCreator === true ? "" : currencyFormat(fee)}
+        // </span>
     )
 }
 
@@ -80,14 +80,14 @@ function totalCasualFees(casualFees1, record) {
 
     return (
         affiliateFeeStatus ?
-            <span>{record.feeOrgId == null ? "N/A" : (record.casualFees == null && record.casualGST == null) ? "" : "Affiliate fee not set!"}</span>
+            <span>{record.feeOrgId == null ? "N/A" : (record.casualFees == null && record.casualGST == null) ? "N/A" : "Affiliate fee not set!"}</span>
             :
-            // <span>
-            //     {(record.casualFees == null && record.casualGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
-            // </span>
             <span>
-                {(record.casualFees == null && record.casualGST == null) && record.parentCreator === true ? "" : currencyFormat(fee)}
+                {(record.casualFees == null && record.casualGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
             </span>
+        // <span>
+        //     {(record.casualFees == null && record.casualGST == null) && record.parentCreator === true ? "" : currencyFormat(fee)}
+        // </span>
     )
 }
 
