@@ -273,4 +273,5 @@ function mapStatetoProps(state) {
         liveScoreScorerState: state.LiveScoreScorerState
     }
 }
+
 export default connect(mapStatetoProps, mapDispatchtoprops)((LiveScorerList));

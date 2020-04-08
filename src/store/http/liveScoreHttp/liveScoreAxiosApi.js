@@ -4,6 +4,7 @@ import { getUserId, getAuthToken, getOrganisationData, getLiveScoreCompetiton } 
 import history from "../../../util/history";
 import { message } from "antd";
 import ValidationConstants from "../../../themes/validationConstant";
+import { isArrayNotEmpty } from "../../../util/helpers";
 
 
 async function logout() {
@@ -13,6 +14,57 @@ async function logout() {
 
 let token = getAuthToken();
 // let userId = getUserId();
+
+function checlfixedDurationForBulkMatch(data) {
+
+    let url = ""
+
+    if (data.hours || data.minutes || data.seconds) {
+
+        if (data.hours && data.minutes && data.seconds) {
+            url = `&hours=${data.hours}&minutes=${data.minutes}&seconds=${data.seconds}`;
+
+        } else if (data.hours && data.minutes) {
+            url = `&hours=${data.hours}&minutes=${data.minutes}`;
+
+        } else if (data.hours && data.seconds) {
+            url = `&hours=${data.hours}&seconds=${data.seconds}`;
+
+        } else if (data.minutes && data.seconds) {
+            url = `&minutes=${data.minutes}&seconds=${data.seconds}`;
+
+        } else if (data.hours) {
+            url = `&hours=${data.hours}`;
+
+        } else if (data.minutes) {
+            url = `&minutes=${data.minutes}`;
+
+        } else {
+            url = `&seconds=${data.seconds}`;
+        }
+    }
+
+    return url
+}
+
+function checkVenueCourdId(data) {
+    var url = ""
+    let courtId = isArrayNotEmpty(data.courtId) ? data.courtId : []
+
+    if (data.venueId) {
+        if (data.venueId && courtId.length > 0) {
+            url = `&venueId=${data.venueId}&courtId=${data.courtId}`;
+        } else {
+            url = `&venueId=${data.venueId}`;
+        }
+    } else {
+        url = null
+    }
+
+    return url
+}
+
+
 
 
 
@@ -237,22 +289,65 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
-    bulkMatchPushBack(data, startTime, endTime) {
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-        var url = `/matches/bulk/time?startTimeStart=${startTime}&startTimeEnd=${endTime}&competitionId=${id}&type=${"backward"}&venueId=${data.venueId}&courtId=${data.courtId}`;
-        return Method.dataPost(url, token)
-    },
-    liveScoreBringForward(competition_ID, data, startDate, endDate) {
+    bulkMatchPushBack(data, startTime, endTime, bulkRadioBtn, formatedNewDate) {
+
+        var url = ''
         let competitionID = localStorage.getItem("competitionId");
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-        var url = `/matches/bulk/time?startTimeStart=${startDate}&startTimeEnd=${endDate}&competitionId=${id}&type=${"forward"}&venueId=${data.venueId}&courtId=${data.courtId}`;
+
+        let extendParam = checkVenueCourdId(data)
+
+        if (bulkRadioBtn == 'specificTime') {
+            if (extendParam) {
+                url = `/matches/bulk/time?startTimeStart=${startTime}&startTimeEnd=${endTime}&competitionId=${id}&type=${"backward"}&newDate=${formatedNewDate}` + extendParam;
+            } else {
+                url = `/matches/bulk/time?startTimeStart=${startTime}&startTimeEnd=${endTime}&competitionId=${id}&type=${"backward"}&newDate=${formatedNewDate}`;
+            }
+        } else {
+            let HMS = checlfixedDurationForBulkMatch(data)
+            if (extendParam) {
+                url = `/matches/bulk/time?startTimeStart=${startTime}&startTimeEnd=${endTime}&competitionId=${id}&type=${"backward"}` + HMS + extendParam;
+            } else {
+                url = `/matches/bulk/time?startTimeStart=${startTime}&startTimeEnd=${endTime}&competitionId=${id}&type=${"backward"}` + HMS;
+            }
+        }
+
+        return Method.dataPost(url, token)
+    },
+    liveScoreBringForward(competition_ID, data, startDate, endDate, bulkRadioBtn, formatedNewDate) {
+        var url = ''
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let extendParam = checkVenueCourdId(data)
+
+        if (bulkRadioBtn == 'specificTime') {
+            if (extendParam) {
+                url = `/matches/bulk/time?startTimeStart=${startDate}&startTimeEnd=${endDate}&competitionId=${id}&type=${"forward"}&newDate=${formatedNewDate}` + extendParam;
+            } else {
+                url = `/matches/bulk/time?startTimeStart=${startDate}&startTimeEnd=${endDate}&competitionId=${id}&type=${"forward"}&newDate=${formatedNewDate}`;
+            }
+        } else {
+            let HMS = checlfixedDurationForBulkMatch(data)
+            if (extendParam) {
+                url = `/matches/bulk/time?startTimeStart=${startDate}&startTimeEnd=${endDate}&competitionId=${id}&type=${"forward"}` + HMS + extendParam;
+            } else {
+                url = `/matches/bulk/time?startTimeStart=${startDate}&startTimeEnd=${endDate}&competitionId=${id}&type=${"forward"}` + HMS;
+            }
+
+        }
         return Method.dataPost(url, token)
     },
 
     liveScoreEndMatches(data, startTime, endTime) {
         let competitionID = localStorage.getItem("competitionId");
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-        var url = `/matches/bulk/end?startTimeStart=${startTime}&startTimeEnd=${endTime}&competitionId=${id}&venueId=${data.venueId}&courtId=${data.courtId}`;
+
+        let extendParam = checkVenueCourdId(data)
+
+        if (extendParam) {
+            var url = `/matches/bulk/end?startTimeStart=${startTime}&startTimeEnd=${endTime}&competitionId=${id}` + extendParam;
+        } else {
+            var url = `/matches/bulk/end?startTimeStart=${startTime}&startTimeEnd=${endTime}&competitionId=${id}`;
+        }
         return Method.dataPost(url, token)
     },
     liveScoreDoubleHeader(data) {
@@ -398,10 +493,16 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, Body)
     },
 
+
+
     liveScoreAbandonMatch(data, startTime, endTime) {
-        let competitionID = localStorage.getItem("competitionId");
+        let extendParam = checkVenueCourdId(data)
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-        var url = `/matches/bulk/end?startTimeStart=${startTime}&startTimeEnd=${endTime}&competitionId=${id}&resultTypeId=${data.resultType}&venueId=${data.venueId}&courtId=${data.courtId}`;
+        if (extendParam) {
+            var url = `/matches/bulk/end?startTimeStart=${startTime}&startTimeEnd=${endTime}&competitionId=${id}&resultTypeId=${data.resultType}` + extendParam;
+        } else {
+            var url = `/matches/bulk/end?startTimeStart=${startTime}&startTimeEnd=${endTime}&competitionId=${id}&resultTypeId=${data.resultType}`
+        }
         return Method.dataPost(url, token)
     },
 
@@ -445,8 +546,8 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
-    liveScoreAttendanceList(competitionId, body) {
-        let url = `/players/activity?competitionId=${competitionId}`
+    liveScoreAttendanceList(competitionId, body, status) {
+        let url = `/players/activity?competitionId=${competitionId}&status=${status}`
         return Method.dataPost(url, token, body)
     },
     liveScoreGetTeamData(teamId) {
@@ -464,43 +565,11 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
-    // liveScoreAddEditScorer(data, teamId, exsitingScorerrId) {
-
-    //     let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-
-
-    //     let body = null
-    //     if (data.id) {
-    //         body = {
-    //             "id": data.id,
-    //             "firstName": data.firstName,
-    //             "lastName": data.lastName,
-    //             "mobileNumber": data.mobileNumber,
-    //             "email": data.email,
-    //             "teams": data.teams
-
-    //         }
-    //     } else {
-    //         body = {
-
-    //             "firstName": data.firstName,
-    //             "lastName": data.lastName,
-    //             "mobileNumber": data.contactNo,
-    //             "email": data.emailAddress,
-    //             "teams": data.teams
-
-    //         }
-    //     }
-
-
-    //     var url = `/users/member?&competitionId=${id}`;
-    //     return Method.dataPost(url, token, body)
-    // },
 
     liveScoreAddEditScorer(scorerData, existingScorerId, scorerRadioBtn) {
         let competitionID = localStorage.getItem("competitionId");
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-        
+
         let body = null
         if (scorerRadioBtn == "new") {
             if (scorerData.id) {
@@ -510,7 +579,7 @@ let LiveScoreAxiosApi = {
                     "lastName": scorerData.lastName,
                     "mobileNumber": scorerData.mobileNumber,
                     "email": scorerData.email,
-                    "teams": scorerData.teams
+                    // "teams": scorerData.teams
                 }
             } else {
                 body = {
@@ -518,7 +587,7 @@ let LiveScoreAxiosApi = {
                     "lastName": scorerData.lastName,
                     "mobileNumber": scorerData.contactNo,
                     "email": scorerData.emailAddress,
-                    "teams": scorerData.teams
+                    // "teams": scorerData.teams
                 }
             }
             // var url = `/users/member?&competitionId=${id}`;
@@ -529,7 +598,7 @@ let LiveScoreAxiosApi = {
             // if (existingScorerId) {
             body = {
                 "id": existingScorerId,
-                "teams": scorerData.teams
+                // "teams": scorerData.teams
             }
             // }
 

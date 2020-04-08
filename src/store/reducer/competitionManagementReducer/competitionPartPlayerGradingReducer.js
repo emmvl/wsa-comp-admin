@@ -227,6 +227,46 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             return { ...state }
 
 
+        case ApiConstants.API_PLAYER_GRADING_COMMENT_LOAD:
+            return {
+                ...state,
+                onLoad: true,
+                error: null
+            }
+
+        case ApiConstants.API_PLAYER_GRADING_COMMENT_SUCCESS:
+            console.log(action)
+            if (action.teamIndex == null) {
+                let matchIndex = state.unassignedPartPlayerGradingListData.players.findIndex(x => x.playerId == action.playerId)
+                console.log(matchIndex)
+                if (matchIndex > -1) {
+                    state.unassignedPartPlayerGradingListData["players"][matchIndex].comments = action.comment
+                }
+            }
+            else {
+                let assignMatchIndex = state.assignedPartPlayerGradingListData[action.teamIndex].players.findIndex(x => x.playerId == action.playerId)
+                if (assignMatchIndex > -1) {
+                    state.assignedPartPlayerGradingListData[action.teamIndex].players[assignMatchIndex].comments = action.comment
+                }
+            }
+            state.onLoad = false
+            return {
+                ...state,
+            }
+
+        case ApiConstants.API_PLAYER_GRADING_SUMMARY_COMMENT_LOAD:
+            return { ...state, onLoad: true, error: null }
+
+        case ApiConstants.API_PLAYER_GRADING_SUMMARY_COMMENT_SUCCESS:
+            let matchindexData = state.getCompPartPlayerGradingSummaryData.findIndex(x => x.competitionMembershipProductDivisionId == action.divisionId)
+            if (matchindexData > -1) {
+                state.getCompPartPlayerGradingSummaryData[matchindexData].comments = action.comment
+            }
+            state.onLoad = false
+            return {
+                ...state,
+            }
+
         default:
             return state;
     }

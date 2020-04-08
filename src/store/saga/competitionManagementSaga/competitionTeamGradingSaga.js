@@ -175,3 +175,46 @@ export function* getCompFinalGradesListSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+/////////////get the competition final grades on the basis of competition and division
+export function* proposedTeamGradingComment(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.teamGradingComment,
+            action.year, action.competitionId, action.divisionId, action.gradeRefId, action.teamId, action.comment);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_TEAM_GRADING_COMMENT_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+                teamId: action.teamId,
+                comment: action.comment
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+
+/////////////part proposed team grading comment
+export function* partProposedTeamGradingComment(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.partTeamGradingComment,
+            action.competitionId, action.divisionId, action.teamId, action.comment);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_PART_TEAM_GRADING_COMMENT_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+                teamId: action.teamId,
+                comment: action.comment
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

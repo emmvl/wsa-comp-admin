@@ -12,7 +12,8 @@ import {
     getCompPartProposedTeamGradingAction,
     savePartProposedTeamGradingDataAction,
     clearTeamGradingReducerDataAction,
-    onchangeCompPartProposedTeamGradingData
+    onchangeCompPartProposedTeamGradingData,
+    partProposedSummaryComment
 } from "../../store/actions/competitionModuleAction/competitionTeamGradingAction";
 import { gradesReferenceListAction } from "../../store/actions/commonAction/commonAction";
 import {
@@ -21,6 +22,7 @@ import {
     setParticipating_competition,
     getParticipating_competition,
 } from "../../util/sessionStorage"
+import CommentModal from "../../customComponents/commentModal"
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -98,8 +100,8 @@ const columns = [
         dataIndex: 'comments',
         key: 'comments',
         width: 110,
-        render: comments =>
-            <div style={{ display: "flex", justifyContent: "center" }}>
+        render: (comments, record) =>
+            <div style={{ display: "flex", justifyContent: "center" }} onClick={() => this_obj.onClickComment(record)}>
                 <img src={comments !== null && comments.length > 0 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
             </div>,
     },
@@ -115,7 +117,10 @@ class CompetitionPartProposedTeamGrading extends Component {
             yearRefId: 1,
             divisionId: null,
             firstTimeCompId: "",
-            saveLoad: false
+            saveLoad: false,
+            visible: false,
+            comment: null,
+            teamId: null
         }
         this_obj = this;
         this.props.clearTeamGradingReducerDataAction("getPartProposedTeamGradingData")
@@ -177,6 +182,29 @@ class CompetitionPartProposedTeamGrading extends Component {
         }
 
     }
+
+
+    onClickComment(record) {
+        this.setState({ visible: true, comment: record.comments, teamId: record.teamId })
+    }
+
+    handleOk = e => {
+        this.props.partProposedSummaryComment(this.state.firstTimeCompId, this.state.divisionId, this.state.teamId, this.state.comment)
+        this.setState({
+            visible: false,
+            comment: "",
+            teamId: null,
+
+        });
+    };
+    // model cancel for dissapear a model
+    handleCancel = e => {
+        this.setState({
+            visible: false,
+            comment: "",
+            teamId: null,
+        });
+    };
 
 
     ////save the final team grading data
@@ -335,6 +363,15 @@ class CompetitionPartProposedTeamGrading extends Component {
                         loading={this.props.ownTeamGradingState.onLoad == true && true}
                     />
                 </div>
+                <CommentModal
+                    visible={this.state.visible}
+                    modalTitle={AppConstants.add_edit_comment}
+                    onOK={this.handleOk}
+                    onCancel={this.handleCancel}
+                    placeholder={AppConstants.addYourComment}
+                    onChange={(e) => this.setState({ comment: e.target.value })}
+                    value={this.state.comment}
+                />
             </div>
         )
     }
@@ -394,7 +431,8 @@ function mapDispatchToProps(dispatch) {
         savePartProposedTeamGradingDataAction,
         clearTeamGradingReducerDataAction,
         clearReducerDataAction,
-        onchangeCompPartProposedTeamGradingData
+        onchangeCompPartProposedTeamGradingData,
+        partProposedSummaryComment
     }, dispatch)
 }
 

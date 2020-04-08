@@ -32,7 +32,7 @@ class LiveScoreAddScorer extends Component {
             isEdit: this.props.location.state ? this.props.location.state.isEdit : null,
             loader: false,
             load: false,
-            competition_id : null
+            competition_id: null
         }
 
     }
@@ -46,7 +46,7 @@ class LiveScoreAddScorer extends Component {
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.props.liveScoreManagerListAction(5, 1, id)
-      
+
         if (id !== null) {
             // this.props.getliveScoreDivisions(id)
             this.props.getliveScoreTeams(id)
@@ -62,7 +62,7 @@ class LiveScoreAddScorer extends Component {
         } else {
             this.props.liveScoreScorerUpdate("", "isAddScorer")
         }
-        this.setState({ load: true, competition_id : id })
+        this.setState({ load: true, competition_id: id })
     }
 
     componentDidUpdate(nextProps) {
@@ -182,7 +182,7 @@ class LiveScoreAddScorer extends Component {
                         </Form.Item>
                     </div>
                 </div>
-                <div className="row" >
+                {/* <div className="row" >
                     <div className="col-sm" >
                         <Form.Item className="slct-in-add-manager-livescore">
                             <InputWithHead
@@ -212,7 +212,7 @@ class LiveScoreAddScorer extends Component {
                         </Form.Item>
                     </div>
 
-                </div>
+                </div> */}
             </div>
         )
 
@@ -290,7 +290,7 @@ class LiveScoreAddScorer extends Component {
                     </div>
                 </div>
 
-                <div className="row" >
+                {/* <div className="row" >
                     <div className="col-sm" >
                         <InputWithHead heading={AppConstants.team}
                             required={"required-field pb-0 pt-3"} />
@@ -314,7 +314,7 @@ class LiveScoreAddScorer extends Component {
                             )}
                         </Form.Item>
                     </div>
-                </div>
+                </div> */}
             </div>
         )
     }

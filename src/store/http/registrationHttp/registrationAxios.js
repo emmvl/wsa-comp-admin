@@ -64,6 +64,8 @@ let AxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
+
+
     ///registration Competition fee list product delete
     registrationCompetitionFeeListDelete(competitionId) {
         var url = `/api/competitionfee/${competitionId}`;
@@ -366,6 +368,23 @@ let AxiosApi = {
         var url = `/api/registration/membershipproducts?userId=${userId}`;
         return Method.dataPost(url, token, payload);
     },
+
+
+    //registration dash list 
+    async registrationDashboardList(offset, yearRefId) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        let body = {
+            paging: {
+                offset: offset,
+                limit: 10
+            }
+        };
+        var url = `/api/orgregistration/dashboard/${yearRefId}?organisationUniqueKey=${organisationUniqueKey}`;
+        return Method.dataPost(url, token, body);
+    },
+
+
 };
 
 const Method = {

@@ -61,7 +61,7 @@ const initialState = {
     selectedManager: [],
     teamLogo: null,
     managerList: [],
-    isCheked:false
+    isCheked: false
 
 };
 
@@ -112,7 +112,7 @@ function LiveScoreTeamState(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
 
             const result = action.result
-           
+
             return {
                 ...state,
                 onLoad: false,
@@ -139,7 +139,7 @@ function LiveScoreTeamState(state = initialState, action) {
         case ApiConstants.LIVE_SCORE_TEAM_EDIT:
             const { key } = action.payload;
             const { data } = action.payload
-        console.log(data)
+            console.log(data)
             if (key == 'managerType') {
 
                 state[key] = data
@@ -148,7 +148,7 @@ function LiveScoreTeamState(state = initialState, action) {
                 state[key] = data
             } else if (key == 'checkBox') {
                 state.isCheked = data
-                
+
                 if (data == true) {
                     state.teamManagerData['logoUrl'] = null
                     state.teamLogo = null
@@ -158,8 +158,9 @@ function LiveScoreTeamState(state = initialState, action) {
                 state.teamManagerData['logoUrl'] = null
                 state.teamLogo = null
                 state.managerType = null
-            }else if(key == "logoUrl"){
-               
+                state.teamManagerData['alias'] = ""
+            } else if (key == "logoUrl") {
+
                 state.teamManagerData['logoUrl'] = data
                 state.isCheked = false
             }

@@ -85,6 +85,31 @@ function onSameTeamDragAction(source, destination) {
 
 }
 
+//player grading comment
+function playerGradingComment(competitionId, divisionId, comment, playerId, teamId) {
+    const action = {
+        type: ApiConstants.API_PLAYER_GRADING_COMMENT_LOAD,
+        competitionId,
+        divisionId,
+        comment,
+        playerId,
+        teamId,
+    }
+    return action
+}
+
+function playerSummaryCommentAction(year, competitionId, divisionId, gradingOrgId, comment) {
+    const action = {
+        type: ApiConstants.API_PLAYER_GRADING_SUMMARY_COMMENT_LOAD,
+        year,
+        competitionId,
+        divisionId,
+        gradingOrgId,
+        comment,
+    }
+    return action
+}
+
 export {
     getCompPartPlayerGradingSummaryAction,
     onchangeCompPartPlayerGradingSummaryData,
@@ -93,5 +118,7 @@ export {
     clearReducerCompPartPlayerGradingAction,
     addNewTeamAction,
     onDragPlayerAction,
-    onSameTeamDragAction
+    onSameTeamDragAction,
+    playerGradingComment,
+    playerSummaryCommentAction
 }

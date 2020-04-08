@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Table, Select, Menu } from 'antd';
+import { Layout, Breadcrumb, Button, Table, Select, Menu, Pagination } from 'antd';
 import './product.css';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -11,57 +11,74 @@ import { bindActionCreators } from 'redux';
 import {
     getOnlyYearListAction,
 } from "../../store/actions/appAction";
-
+import {
+    regDashboardListAction
+}
+    from "../../store/actions/registrationAction/registrationDashboardAction"
+import moment from "moment"
 const { Footer, Content } = Layout;
 const { Option } = Select;
 const { SubMenu } = Menu;
+
+/////function to sort table column
+function tableSort(a, b, key) {
+    let stringA = JSON.stringify(a[key])
+    let stringB = JSON.stringify(b[key])
+    return stringA.localeCompare(stringB)
+}
 const columns = [
 
     {
         title: 'Competition Name',
         dataIndex: 'competitionName',
         key: 'competitionName',
-        sorter: (a, b) => a.competitionName.length - b.competitionName.length,
+        sorter: (a, b) => tableSort(a, b, "competitionName")
     },
     {
         title: 'Membership Product(s)',
-        dataIndex: 'membershipProduct',
-        key: 'membershipProduct',
-        sorter: (a, b) => a.membershipProduct.length - b.membershipProduct.length,
+        dataIndex: 'membershipProductName',
+        key: 'membershipProductName',
+        sorter: (a, b) => tableSort(a, b, "membershipProductName")
     },
     {
         title: 'Division',
-        dataIndex: 'division',
-        key: 'division',
-        sorter: (a, b) => a.division.length - b.division.length,
+        dataIndex: 'divisionName',
+        key: 'divisionName',
+        sorter: (a, b) => tableSort(a, b, "divisionName")
 
 
     },
     {
         title: 'Registration Open',
-        dataIndex: 'registrationOpen',
-        key: 'registrationOpen',
-        // render: discounts => <span>{discounts == true ? "Yes" : "No"}</span>,
-        sorter: (a, b) => a.registrationOpen.length - b.registrationOpen.length,
+        dataIndex: 'registrationOpenDate',
+        key: 'registrationOpenDate',
+        render: (registrationOpenDate, record) => {
+            return (
+                <span>{registrationOpenDate ? moment(registrationOpenDate).format("DD-MM-YYYY") : null}</span>
+            )
+        },
+        sorter: (a, b) => tableSort(a, b, "registrationOpenDate")
+
     },
     {
         title: 'Registration Close',
-        dataIndex: 'registrationClose',
-        key: 'registrationClose',
-        sorter: (a, b) => a.registrationClose.length - b.registrationClose.length,
+        dataIndex: 'registrationCloseDate',
+        key: 'registrationCloseDate',
+        render: (registrationCloseDate, record) => {
+            return (
+                <span>{registrationCloseDate ? moment(registrationCloseDate).format("DD-MM-YYYY") : null}</span>
+            )
+        },
+        sorter: (a, b) => tableSort(a, b, "registrationCloseDate")
+
     },
 
     {
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
-        // render: status =>
-        //     <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
-        //         <img className="dot-image"
-        //             src={status === "active" ? AppImages.greenDot : status === "inactive" ? AppImages.greyDot : status === "expired" && AppImages.redDot}
-        //             alt="" width="12" height="12" />
-        //     </span>,
-        sorter: (a, b) => a.status.length - b.status.length,
+        sorter: (a, b) => tableSort(a, b, "status")
+
     },
     {
         title: "Action",
@@ -88,13 +105,9 @@ const columns = [
                     }
                 >
                     <Menu.Item key="1">
-                        {/* <NavLink to={{ pathname: `/registrationCompetitionFee`, state: { id: record.competitionUniqueKey } }} > */}
-                        <span>Edit</span>
-                        {/* </NavLink> */}
-                    </Menu.Item>
-                    <Menu.Item key="2">
-                        {/* onClick={() => this_Obj.showDeleteConfirm(record.competitionUniqueKey)}> */}
-                        <span>Delete</span>
+                        <NavLink to={{ pathname: `/registrationForm` }} >
+                            <span>Edit</span>
+                        </NavLink>
                     </Menu.Item>
                 </SubMenu>
             </Menu>
@@ -134,12 +147,18 @@ class Registration extends Component {
         this.state = {
             yearRefId: 1,
         }
+        this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
 
 
     componentDidMount() {
-        this.props.getOnlyYearListAction(this.props.appState.yearList)
+        this.handleMembershipTableList(1, this.state.yearRefId)
     }
+
+    handleMembershipTableList = (page, yearRefId) => {
+        let offset = page ? 10 * (page - 1) : 0;
+        this.props.regDashboardListAction(offset, yearRefId)
+    };
 
     ///////view for breadcrumb
     headerView = () => {
@@ -160,6 +179,7 @@ class Registration extends Component {
     }
     onYearChange = (yearRefId) => {
         this.setState({ yearRefId: yearRefId, })
+        this.handleMembershipTableList(1, yearRefId)
     }
 
     ///dropdown view containing all the dropdown of header
@@ -199,10 +219,24 @@ class Registration extends Component {
 
     ////////form content view
     contentView = () => {
+        const { dashboardState } = this.props;
+        let total = dashboardState.regDashboardListTotalCount;
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
-                    <Table className="home-dashboard-table" columns={columns} dataSource={data} pagination={false}
+                    <Table className="home-dashboard-table"
+                        columns={columns}
+                        dataSource={dashboardState.regDashboardListData}
+                        pagination={false}
+                        loading={this.props.dashboardState.onLoad == true && true}
+                    />
+                </div>
+                <div className="d-flex justify-content-end">
+                    <Pagination
+                        className="antd-pagination"
+                        current={dashboardState.regDashboardListPage}
+                        total={total}
+                        onChange={(page) => this.handleMembershipTableList(page, this.state.yearRefId)}
                     />
                 </div>
             </div>
@@ -245,12 +279,14 @@ class Registration extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getOnlyYearListAction,
+        regDashboardListAction
     }, dispatch)
 }
 
 function mapStatetoProps(state) {
     return {
         appState: state.AppState,
+        dashboardState: state.RegistrationDashboardState
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Registration);

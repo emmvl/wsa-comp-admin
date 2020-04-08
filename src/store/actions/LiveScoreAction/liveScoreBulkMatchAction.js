@@ -1,24 +1,27 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-function BulkMatchPushBackAction(pushBackData, start_Date, end_Date, competitionId) {
+function BulkMatchPushBackAction(pushBackData, start_Date, end_Date, bulkRadioBtn, formatedNewDate) {
     const action = {
         type: ApiConstants.API_LIVE_SCORE_BULK_PUSH_BACK_LOAD,
         pushBackData: pushBackData,
         start_Date: start_Date,
         end_Date: end_Date,
-        competitionId: competitionId
+        bulkRadioBtn,
+        formatedNewDate
     };
-
+    console.log(action, 'BulkMatchPushBackAction')
     return action;
 }
 
-function liveScoreBringForwardAction(competitionID, data, start_Date, end_Date) {
+function liveScoreBringForwardAction(competitionID, data, start_Date, end_Date, bulkRadioBtn, formatedNewDate) {
     const action = {
         type: ApiConstants.API_LIVE_SCORE_BULK_BRING_FORWARD_LOAD,
         competitionID: competitionID,
         data: data,
         start_Date,
         end_Date,
+        bulkRadioBtn,
+        formatedNewDate
     };
     return action;
 
