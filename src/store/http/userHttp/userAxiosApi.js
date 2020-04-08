@@ -88,7 +88,7 @@ let userHttpApi = {
     return Method.dataPost(url, token, payload);
   },
   getUserModulePersonalData(payload) {
-    var url = `api/user/personaldetails?userId=${payload}`;
+    var url = `api/user/personaldetails?userId=${payload.userId}&organisationId=${payload.organisationId}`;
     return Method.dataGet(url, token);
   },
   getUserModulePersonalByCompData(payload) {
