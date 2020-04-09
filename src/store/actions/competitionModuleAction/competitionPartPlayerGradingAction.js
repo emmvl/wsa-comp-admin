@@ -85,6 +85,14 @@ function onSameTeamDragAction(source, destination) {
 
 }
 
+
+function competitionPlayerImportAction(data) {
+    return {
+        type: ApiConstants.API_COMPETITION_PLAYER_IMPORT_LOAD,
+        payload: data
+    }
+}
+
 export {
     getCompPartPlayerGradingSummaryAction,
     onchangeCompPartPlayerGradingSummaryData,
@@ -93,5 +101,6 @@ export {
     clearReducerCompPartPlayerGradingAction,
     addNewTeamAction,
     onDragPlayerAction,
-    onSameTeamDragAction
+    onSameTeamDragAction,
+    competitionPlayerImportAction
 }
