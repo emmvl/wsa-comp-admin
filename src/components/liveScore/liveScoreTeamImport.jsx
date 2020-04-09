@@ -13,7 +13,7 @@ import Loader from '../../customComponents/loader'
 import { message } from "antd";
 import ValidationConstants from "../../themes/validationConstant";
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
-
+import history from "../../util/history";
 
 const { Content, Header, Footer } = Layout;
 
@@ -105,7 +105,7 @@ class LiveScoreTeamImport extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"3"} />
                 <Loader visible={this.props.liveScoreTeamState.onLoad} />
                 <Layout>

@@ -7,7 +7,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { liveScore_formateDate } from '../../themes/dateformate'
-
+import history from "../../util/history";
 const { Content } = Layout;
 const { TabPane } = Tabs;
 
@@ -286,7 +286,7 @@ class LiveScorePlayerView extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"7"} />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">

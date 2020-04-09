@@ -98,7 +98,6 @@ class LiveScoreAddTeam extends Component {
                 if (this.props.liveScoreTeamState.onLoad == false && this.state.load == true) {
                     this.setInitalFiledValue(teamManagerData)
                     this.setState({ load: false })
-
                 }
             }
         }
@@ -139,6 +138,11 @@ class LiveScoreAddTeam extends Component {
     }
 
 
+    onRadioSwitch(e){
+        this.props.liveScoreAddTeamform({ key: 'managerType', data: e.target.value })
+        this.setState({load : true})
+    }
+
 
     ///////view for breadcrumb
     headerView = () => {
@@ -162,6 +166,16 @@ class LiveScoreAddTeam extends Component {
             </div>
         );
     };
+
+    radioBtnGroup(e) {
+        const { selectedManager } = this.props.liveScoreTeamState
+        this.props.liveScoreAddTeamform({ key: 'managerType', data: e.target.value })
+
+        console.log(selectedManager, 'selectedManager&&')
+        this.props.form.setFieldsValue({
+            'managerId': selectedManager
+        })
+    }
 
 
     ////////form content view
@@ -202,7 +216,7 @@ class LiveScoreAddTeam extends Component {
                         this.props.liveScoreAddTeamform({ key: 'alias', data: event.target.value })
                     }
                     }
-                    value={ teamManagerData.alias }
+                    value={teamManagerData.alias}
                 />
                 {/* )}
 
@@ -329,7 +343,7 @@ class LiveScoreAddTeam extends Component {
                     <Radio.Group
                         className="reg-competition-radio"
                         onChange={e => {
-                            this.props.liveScoreAddTeamform({ key: 'managerType', data: e.target.value })
+                            this.onRadioSwitch(e)
                         }}
                         value={managerType}
                     >
@@ -348,11 +362,12 @@ class LiveScoreAddTeam extends Component {
     managerExistingRadioBtnView(getFieldDecorator) {
         let grade = this.state.managerData
         const { selectedManager } = this.props.liveScoreTeamState
-
+        console.log(this.props.liveScoreTeamState, 'this.props.liveScoreTeamState$^')
         const { managerListResult } = this.props.liveScoreMangerState
         return (
             <div >
-                <InputWithHead heading={AppConstants.managerSearch} />
+                <InputWithHead heading={AppConstants.managerSearch}
+                    required={"required-field"} />
                 <div>
                     <Form.Item>
                         {getFieldDecorator("managerId", {
@@ -570,7 +585,7 @@ class LiveScoreAddTeam extends Component {
 
                     formData.append('name', name)
                     formData.append('alias', alias)
-                    console.log(isCheked, 'isCheked')
+            
                     if (this.state.image) {
                         formData.append('logo', this.state.image)
                     } else if (this.props.liveScoreTeamState.teamLogo) {
@@ -620,7 +635,7 @@ class LiveScoreAddTeam extends Component {
         const { getFieldDecorator } = this.props.form;
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"3"} />
                 <Loader visible={this.props.liveScoreTeamState.onLoad} />
                 <Layout>

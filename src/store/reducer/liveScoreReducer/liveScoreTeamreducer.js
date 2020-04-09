@@ -141,8 +141,8 @@ function LiveScoreTeamState(state = initialState, action) {
             const { data } = action.payload
             console.log(data)
             if (key == 'managerType') {
-
                 state[key] = data
+                console.log(state.teamManagerData, 'teamManagerData%^%')
             }
             else if (key == 'teamLogo') {
                 state[key] = data
@@ -166,6 +166,9 @@ function LiveScoreTeamState(state = initialState, action) {
             }
             else {
                 state.teamManagerData[key] = data
+                if (key == "userIds") {
+                    state.selectedManager = data
+                }
 
             }
             return {

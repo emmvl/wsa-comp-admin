@@ -1332,7 +1332,7 @@ class LiveScoreBulkChange extends Component {
         return (
             <div className="fluid-width">
                 <Loader visible={this.props.liveScoreBulkMatchState.onLoad} />
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"12"} />
                 <Layout>
                     {this.headerView()}

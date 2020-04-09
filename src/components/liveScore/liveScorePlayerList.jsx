@@ -84,8 +84,13 @@ const columns = [
         dataIndex: 'team',
         key: 'team',
         sorter: (a, b) => a.team.length - b.team.length,
-        render: (team) =>
-            <span >{team.name}</span>
+        render: (team, record) =>
+        <NavLink to={{
+            pathname: "/liveScoreTeamView",
+            state: { tableRecord: record, screenName: 'fromPlayerList' }
+        }} > 
+            <span class="input-heading-add-another pt-0" >{team.name}</span>
+            </NavLink>
     },
     {
         title: 'Contact No',
@@ -260,7 +265,7 @@ class LiveScorePlayerList extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"7"} />
                 <Layout>
                     {this.headerView()}

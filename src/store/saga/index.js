@@ -80,7 +80,7 @@ import { liveScoreNewsListSaga, liveScoreAddNewsSaga, liveScoreNewsNotificationS
 import { liveScoreBannerSaga, liveScoreAddBannerSaga, liveScoreRemoveBannerSaga } from './liveScoreSaga/liveScoreBannerSaga';
 import { liveScoreGoalSaga } from './liveScoreSaga/liveScoreGoalSaga'
 import { liveScoreManagerListSaga, liveScoreAddEditManagerSaga, liveScoreManagerSearch } from './liveScoreSaga/liveScoreManagerSaga';
-import { liveScoreScorerListSaga, liveScorerSearchUserSaga, liveScoreAssigneMatches, liveScoreChangeAssignStatus, liveScoreAddEditScorerSaga, liveScoreUnAssignMatcheSaga } from '../saga/liveScoreSaga/liveScoreScorerSaga';
+import { liveScoreScorerListSaga, liveScorerSearchUserSaga, liveScoreAssigneMatches, liveScoreChangeAssignStatus, liveScoreAddEditScorerSaga, liveScoreUnAssignMatcheSaga, liveScoreScorerSearchSaga } from '../saga/liveScoreSaga/liveScoreScorerSaga';
 import { liveScoreBulkPushBack, liveScoreBulkBringForwardSaga, liveScoreMatchResult, liveScoreEndMatchesSaga, liveScoreDoubleHeaderSaga, liveScoreAbandonMatchSaga } from './liveScoreSaga/liveScoreBulkMatchSaga';
 
 
@@ -547,4 +547,7 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_PART_TEAM_GRADING_COMMENT_LOAD, partProposedTeamGradingComment)
 
   yield takeEvery(ApiConstants.API_REG_DASHBOARD_LIST_LOAD, regDashboardListSaga)
+
+  //Search Scorer saga 
+  yield takeEvery(ApiConstants.API_LIVESCORE_SCORER_SEARCH_LOAD,liveScoreScorerSearchSaga)
 }

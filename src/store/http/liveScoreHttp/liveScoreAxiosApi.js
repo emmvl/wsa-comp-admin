@@ -644,7 +644,9 @@ let LiveScoreAxiosApi = {
     unAssignMatcheStatus(records) {
         var url = `/roster/admin?id=${records.rosterId}`
         return Method.dataDelete(url, token)
-    }
+    },
+
+    
 };
 
 

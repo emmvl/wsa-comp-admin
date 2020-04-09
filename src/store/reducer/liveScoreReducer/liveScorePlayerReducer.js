@@ -1,5 +1,6 @@
 import ApiConstants from "../../../themes/apiConstants";
 import liveScoreModal from '../../objectModel/liveScoreModal'
+import moment from "moment";
 
 var playerObj = {
     firstName: "",
@@ -48,7 +49,7 @@ function LiveScorePlayerState(state = initialState, action) {
                     var editPlayerObj = {
                         firstName: action.data.firstName,
                         lastName: action.data.lastName,
-                        dateOfBirth: action.data.dob,
+                        dateOfBirth: moment(action.data.dob).format('DD-MM-YYYY'),
                         phoneNumber: action.data.phoneNumber,
                         mnbPlayerId: action.data.playerId,
                         teamId: action.data.team.id,

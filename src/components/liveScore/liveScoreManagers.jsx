@@ -11,6 +11,7 @@ import { liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getLiveScoreCompetiton, getUserId } from '../../util/sessionStorage'
+import history from "../../util/history";
 const { Content } = Layout;
 let userId = getUserId();
 
@@ -229,7 +230,7 @@ class LiveScoreManagerList extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"4"} />
                 <Layout>
                     {this.headerView()}

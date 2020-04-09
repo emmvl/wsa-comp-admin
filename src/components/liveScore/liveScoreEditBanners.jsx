@@ -340,7 +340,7 @@ class LiveScoreEditBanners extends Component {
         const { getFieldDecorator } = this.props.form
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc", paddingBottom: 10 }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")} />
                 <Loader visible={this.props.liveScoreBannerState.onLoad} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"20"} />
                 <Layout>
