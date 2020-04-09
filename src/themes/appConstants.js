@@ -906,8 +906,8 @@ const AppConstants = {
 
   short_Name: "Short Name",
   backToScorer: "Back to all Scorers",
-  State : "State",
-  endDate:"End Date",
+  State: "State",
+  endDate: "End Date",
   otherInformation: "Other Information",
   countryOfBirth: "Country of Birth",
   disability: "Disability",
@@ -917,6 +917,10 @@ const AppConstants = {
   demographicQuestions: "Demographic Questions",
   addDivisionsAndGrades: "Add Divisions and Grades",
   useAffiliateLogo: "Use Affiliate logo",
+  add_edit_comment: "Add/Edit Comment",
+  addYourComment: "Please add your comment.",
+  fixedDuration: "Fixed Duration",
+  specificTime: "Specific Time"
 };
 
 export default AppConstants;

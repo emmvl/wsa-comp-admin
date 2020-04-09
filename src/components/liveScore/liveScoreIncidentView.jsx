@@ -12,7 +12,7 @@ import AppConstants from "../../themes/appConstants";
 import ReactPlayer from 'react-player';
 import { liveScore_formateDateTime } from '../../themes/dateformate'
 import { isArrayNotEmpty, isNullOrEmptyString } from "../../util/helpers";
-
+import history from "../../util/history";
 const { Header, Content } = Layout;
 
 class LiveScoreIncidentView extends Component {
@@ -202,7 +202,7 @@ class LiveScoreIncidentView extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"17"} />
                 <Layout>
                     {this.headerView()}

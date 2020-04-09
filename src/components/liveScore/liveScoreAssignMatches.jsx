@@ -31,7 +31,8 @@ function tableSort(a, b, key) {
 function checkScorerMatch(data){
     let scorerID = this_obj.props.location.state ? this_obj.props.location.state.record.id : null
     console.log(scorerID, data)
-    if(data && data.id == scorerID){
+    // if(data && data.id == scorerID){
+    if(data){
         return "Unassign"
     }else{
         return "Assign"
@@ -150,7 +151,9 @@ const columns2 = [
                             alt="" width="12" height="12" />
                     </div>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
-                        <span class="pt-0" >{records.team2.name} ({records.scorer2 ? records.scorer2.firstName + " " + records.scorer2.lastName : "Unassigned"})</span>
+                      {this_obj.state.scoring_Type !== "SINGLE" ?  <span class="pt-0" >{records.team2.name}  ({records.scorer2 ? records.scorer2.firstName + " " + records.scorer2.lastName : "Unassigned"})</span> 
+                      :
+                      <span class="pt-0" >{records.team2.name}</span>}
                     </div>
                     {this_obj.state.scoring_Type !== "SINGLE" ? <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-end' }} >
                         <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer2", "team2", records.scorer2)} class="input-heading-add-another pt-0" >{checkScorerMatch(records.scorer2)}</span>
@@ -225,7 +228,12 @@ class LiveScoreAssignMatch extends Component {
         if (!isScorer) {
             this.props.changeAssignStatus(index, data, 4, this.state.teamID, scorerKey, teamKey,scorerID)
         } else {
-            this.props.unAssignMatcheStatus(index, isScorer, scorerKey, teamKey, scorerID)
+            // if(isScorer.id == scorerID){
+                this.props.unAssignMatcheStatus(index, isScorer, scorerKey, teamKey, scorerID)
+            // }else{
+            //     this.props.changeAssignStatus(index, data, 4, this.state.teamID, scorerKey, teamKey,scorerID)
+            // }
+           
         }
 
     }
@@ -359,7 +367,7 @@ class LiveScoreAssignMatch extends Component {
 
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"5"} />
                 <Layout>
                     {this.headerView()}

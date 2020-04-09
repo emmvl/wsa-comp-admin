@@ -763,7 +763,7 @@ class RegistrationCompetitionFee extends Component {
 
                 let registrationCloseDate = competitionFeesState.competitionDetailData.registrationCloseDate
                     && moment(competitionFeesState.competitionDetailData.registrationCloseDate)
-                let isRegClosed = !registrationCloseDate.isSameOrAfter(moment());
+                let isRegClosed = registrationCloseDate?!registrationCloseDate.isSameOrAfter(moment()):false;
 
                 let creatorId = competitionFeesState.competitionCreator
                 let userId = getUserId();

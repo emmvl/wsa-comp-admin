@@ -193,7 +193,7 @@ class DashboardLayout extends React.Component {
                 <NavLink to="/" className="site-brand">
                   <img src={AppImages.netballLogo1} alt="" />
                 </NavLink>
-                <div className="col-sm dashboard-layout-menu-heading-view">
+                <div className="col-sm dashboard-layout-menu-heading-view" onClick = {this.props.onMenuHeadingClick}>
                   <span className="dashboard-layout-menu-heading">
                     {this.props.menuHeading}
                   </span>

@@ -16,7 +16,7 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import ValidationConstants from "../../themes/validationConstant";
-
+import history from "../../util/history";
 const { Header, Footer } = Layout;
 const { Option } = Select;
 
@@ -161,7 +161,7 @@ class LiveScoreLadderSettings extends Component {
 
 
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"19"} />
                 <Layout>
                     {this.headerView()}

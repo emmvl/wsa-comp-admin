@@ -5,6 +5,7 @@ class InputWithHead extends React.Component {
 
     render() {
         const { heading, placeholder, name, handleBlur, onChange, type, value } = this.props
+        console.log("called")
         return <div >
             {heading &&
                 <span className={`input-heading ${this.props.required}`}>{heading}</span>}

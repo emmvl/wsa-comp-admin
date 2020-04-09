@@ -26,6 +26,8 @@ const initialState = {
     assignMatches: [],
     assignMatchListPage: 0,
     assignMatchTotalCount: "",
+    searchScorer: [],
+    onLoadSearch: false
 }
 
 
@@ -82,23 +84,23 @@ function liveScoreScorerState(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
-                let teamsArray = JSON.parse(JSON.stringify(action.result))
-                state.allTeamData = JSON.parse(JSON.stringify(action.result))
-                let teamObject = {
-                             name: "All Teams",
-                         id: null
-                }
-                
-                state.allTeamData.unshift(teamObject)
-            
+            let teamsArray = JSON.parse(JSON.stringify(action.result))
+            state.allTeamData = JSON.parse(JSON.stringify(action.result))
+            let teamObject = {
+                name: "All Teams",
+                id: null
+            }
+
+            state.allTeamData.unshift(teamObject)
+
             return {
                 ...state,
                 onLoad: false,
                 teamResult: teamsArray,
-              
+
             };
 
-    
+
         case ApiConstants.API_LIVE_SCORE_UPDATE_SCORER:
 
             if (action.key == 'teamId') {
@@ -194,6 +196,21 @@ function liveScoreScorerState(state = initialState, action) {
 
             }
 
+
+
+        case ApiConstants.API_LIVESCORE_SCORER_SEARCH_LOAD:
+            
+            return {
+                ...state,
+                onLoadSearch: true
+            }
+        case ApiConstants.API_LIVESCORE_SCORER_SEARCH_SUCCESS:
+            let searchdata = action.result
+            return {
+                ...state,
+                onLoadSearch: false,
+                searchScorer: searchdata
+            }
 
         case ApiConstants.API_LIVE_SCORE_SCORER_LIST_FAIL:
             return {

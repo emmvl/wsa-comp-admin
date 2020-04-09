@@ -80,11 +80,26 @@ function unAssignMatcheStatus(index, records, scorerKey, teamkey) {
     return action;
 }
 
+
+// Scorer Search
+function liveScoreScorerSearch(roleId, entityTypeId, competitionId, searchText){
+    const action={
+        type : ApiConstants.API_LIVESCORE_SCORER_SEARCH_LOAD,
+        roleId,
+        entityTypeId,
+        competitionId,
+        searchText
+    }
+    console.log(action)
+    return action
+}
+
 export {
     liveScoreScorerListAction,
     liveScoreScorerUpdate,
     liveScoreAddEditScorer,
     assignMatchesAction,
     changeAssignStatus,
-    unAssignMatcheStatus
+    unAssignMatcheStatus,
+    liveScoreScorerSearch
 };

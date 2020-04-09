@@ -42,22 +42,6 @@ function checkPlay(record) {
 
 }
 
-// /// Check play time
-// function checkPlayTime(record) {
-//     console.log(this_obj.state.filter)
-//     if (this_obj.state.filter == "MINUTE") {
-//         let playTimeValue = JSON.parse(record.playTime)
-
-//         return (playTimeValue % 60) + " mins"
-
-//     } else {
-//         let playTimeValue = JSON.parse(record.playTime)
-
-//         return playTimeValue + " hrs"
-//     }
-
-// }
-
 
 //// Check play time
 function checkPlayTime(record) {
@@ -71,24 +55,26 @@ function checkPlayTime(record) {
                 return record.playTime + " Games"
             }
         } else if (this_obj.state.filter == AppConstants.minute) {
-            var num = record.playTime;
-            var hours = (num / 60);
-            var rhours = Math.floor(hours);
-            var minutes = (hours - rhours) * 60;
-            var rminutes = Math.round(minutes);
-            if (record.playTime == 1) {
-                return rminutes + " Minute";
-            } else if (record.playTime > 60) {
-                // if (rhours == 1 || rminutes == 1) {
-                //     return rhours + " Hour " + rminutes + " Minute";
-                // } else {
-                {
-                    return rhours + " Hours " + rminutes + " Minutes";
-                }
+            let d = Number(record.playTime);
+            var h = Math.floor(d / 3600);
+            var m = Math.floor(d % 3600 / 60);
+            var s = Math.floor(d % 3600 % 60);
+        
+            var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
+            var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
+            var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+            let time_value =  hDisplay + mDisplay + sDisplay; 
 
-            } else {
-                return rminutes + " Minutes";
-            }
+            return time_value
+            console.log(time_value)
+            // if (record.playTime == 1) {
+             
+            // } else if (record.playTime > 60) {
+            
+
+            // } else {
+
+            // }
         } else {
             if (record.playTime == 0) {
                 return record.playTime + " Periods"
@@ -308,8 +294,7 @@ class LiveScoreGameTimeList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         let dataSource = gameTimeStatisticsListResult ? gameTimeStatisticsListResult.stats : []
         let total = this.props.liveScoreGameTimeStatisticsState.gameTimeStatisticstotalCount
-        console.log(dataSource, 'dataSource')
-
+     
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
@@ -351,7 +336,7 @@ class LiveScoreGameTimeList extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"15"} />
                 <Layout>
                     {this.headerView()}

@@ -298,7 +298,7 @@ class LiveScoreVenueChange extends Component {
 
         return (
             <div className="fluid-width">
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"13"} />
                 <Layout>
                     {this.headerView()}

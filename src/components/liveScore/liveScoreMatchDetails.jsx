@@ -12,7 +12,7 @@ import { liveScoreDeleteMatch, liveScoreGetMatchDetailInitiate } from "../../sto
 import Loader from '../../customComponents/loader'
 import { isArrayNotEmpty } from '../../util/helpers'
 import { getLiveScoreCompetiton } from '../../util/sessionStorage';
-
+import history from "../../util/history";
 const { Content } = Layout;
 const { confirm } = Modal;
 const columns = [
@@ -302,7 +302,7 @@ class LiveScoreMatchDetails extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"2"} />
                 <Loader visible={this.props.liveScoreMatchState.onLoad} />
                 <Layout>

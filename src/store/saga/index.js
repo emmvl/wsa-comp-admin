@@ -80,7 +80,7 @@ import { liveScoreNewsListSaga, liveScoreAddNewsSaga, liveScoreNewsNotificationS
 import { liveScoreBannerSaga, liveScoreAddBannerSaga, liveScoreRemoveBannerSaga } from './liveScoreSaga/liveScoreBannerSaga';
 import { liveScoreGoalSaga } from './liveScoreSaga/liveScoreGoalSaga'
 import { liveScoreManagerListSaga, liveScoreAddEditManagerSaga, liveScoreManagerSearch } from './liveScoreSaga/liveScoreManagerSaga';
-import { liveScoreScorerListSaga, liveScorerSearchUserSaga, liveScoreAssigneMatches, liveScoreChangeAssignStatus, liveScoreAddEditScorerSaga, liveScoreUnAssignMatcheSaga } from '../saga/liveScoreSaga/liveScoreScorerSaga';
+import { liveScoreScorerListSaga, liveScorerSearchUserSaga, liveScoreAssigneMatches, liveScoreChangeAssignStatus, liveScoreAddEditScorerSaga, liveScoreUnAssignMatcheSaga, liveScoreScorerSearchSaga } from '../saga/liveScoreSaga/liveScoreScorerSaga';
 import { liveScoreBulkPushBack, liveScoreBulkBringForwardSaga, liveScoreMatchResult, liveScoreEndMatchesSaga, liveScoreDoubleHeaderSaga, liveScoreAbandonMatchSaga } from './liveScoreSaga/liveScoreBulkMatchSaga';
 
 
@@ -113,7 +113,9 @@ import {
   getCompPartPlayerGradingSaga,
   addNewTeamPartPlayerGradingSaga,
   dragTeamPartPlayerSaga,
-  importCompetitionPlayer
+  importCompetitionPlayer,
+  partPLayerCommentSaga,
+  partPlayerSummaryCommentSaga
 } from './competitionManagementSaga/competitionPartPlayerGradingSaga';
 import {
   getCompOwnProposedTeamGradingSaga,
@@ -123,9 +125,12 @@ import {
   getTeamGradingSummarySaga,
   saveUpdatedGradeTeamSummarySaga,
   publishGradeTeamSummarySaga,
-  getCompFinalGradesListSaga
+  getCompFinalGradesListSaga,
+  proposedTeamGradingComment,
+  partProposedTeamGradingComment
 } from './competitionManagementSaga/competitionTeamGradingSaga';
 
+import { regDashboardListSaga } from '../saga/registrationSaga/registrationDashboardSaga'
 // UserSaga
 import * as userSaga from '../saga/userSaga/userSaga';
 
@@ -527,10 +532,25 @@ export default function* root_saga() {
   //// Manager search saga
   yield takeEvery(ApiConstants.API_LIVESCORE_MANAGER_SEARCH_LOAD, liveScoreManagerSearch)
 
-  yield takeEvery(ApiConstants.API_LIVESCORE_UNASSIGN_STATUS_LOAD , liveScoreUnAssignMatcheSaga)
+  yield takeEvery(ApiConstants.API_LIVESCORE_UNASSIGN_STATUS_LOAD, liveScoreUnAssignMatcheSaga)
 
   yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_EDIT_SCORER_LOAD, liveScoreAddEditScorerSaga)
 
   //// Round List Saga
   yield takeEvery(ApiConstants.API_LIVE_SCORE_ROUND_LIST_LOAD, liveScoreRoundListSaga)
+
+  //player grading comment
+  yield takeEvery(ApiConstants.API_PLAYER_GRADING_COMMENT_LOAD, partPLayerCommentSaga)
+  //player grading summary comment
+  yield takeEvery(ApiConstants.API_PLAYER_GRADING_SUMMARY_COMMENT_LOAD, partPlayerSummaryCommentSaga)
+
+  yield takeEvery(ApiConstants.API_TEAM_GRADING_COMMENT_LOAD, proposedTeamGradingComment)
+
+  //part proposed team grading comment 
+  yield takeEvery(ApiConstants.API_PART_TEAM_GRADING_COMMENT_LOAD, partProposedTeamGradingComment)
+
+  yield takeEvery(ApiConstants.API_REG_DASHBOARD_LIST_LOAD, regDashboardListSaga)
+
+  //Search Scorer saga 
+  yield takeEvery(ApiConstants.API_LIVESCORE_SCORER_SEARCH_LOAD,liveScoreScorerSearchSaga)
 }

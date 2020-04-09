@@ -110,7 +110,7 @@ class LiveScoreTeamAttendance extends Component {
         this.state = {
             year: "2020",
             teamSelection: "WSA 1",
-            selectStatus: "Select Status"
+            selectStatus: "Borrowed"
         }
     }
 
@@ -125,7 +125,7 @@ class LiveScoreTeamAttendance extends Component {
         }
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
-            this.props.liveScoreTeamAttendanceListAction(id, paginationBody)
+            this.props.liveScoreTeamAttendanceListAction(id, paginationBody, "Borrowed")
             // this.handleTablePagination(page, competitionId,paginationBody)
         } else {
             history.pushState('/')
@@ -144,11 +144,25 @@ class LiveScoreTeamAttendance extends Component {
         }
         let { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
-            this.props.liveScoreTeamAttendanceListAction(id, paginationBody)
+            this.props.liveScoreTeamAttendanceListAction(id, paginationBody,  "")
         } else {
             history.pushState('/')
         }
     }
+
+    onchangeOption(option){
+        const paginationBody = {
+            "paging": {
+                "limit": 10,
+                "offset": 0
+            },
+        }
+        this.setState({selectStatus : option})
+        let { id } = JSON.parse(getLiveScoreCompetiton())
+        this.props.liveScoreTeamAttendanceListAction(id, paginationBody, option)
+    }
+
+
     ///////view for breadcrumb
     headerView = () => {
         return (
@@ -170,11 +184,11 @@ class LiveScoreTeamAttendance extends Component {
                             <Select
                                 className="year-select"
                                 style={{ display: "flex", alignItems: "flex-start" }}
-                                onChange={(selectStatus) => this.setState({ selectStatus })}
+                                onChange={(selectStatus) => this.onchangeOption(selectStatus)}
                                 value={this.state.selectStatus} >
-                                <Option value={"11A"}>{'Borrowed Player'}</Option>
-                                <Option value={"11B"}>{'Did Not Play'}</Option>
-                                <Option value={"11C"}>{'Played'}</Option>
+                                <Option value={"Borrowed"}>{'Borrowed Player'}</Option>
+                                <Option value={"Did not play"}>{'Did Not Play'}</Option>
+                                <Option value={"Played"}>{'Played'}</Option>
                             </Select>
 
                             <div className="col-sm"
@@ -245,7 +259,7 @@ class LiveScoreTeamAttendance extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"14"} />
                 <Layout>
                     {this.headerView()}

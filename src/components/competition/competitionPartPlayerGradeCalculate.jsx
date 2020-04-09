@@ -12,7 +12,8 @@ import { getYearAndCompetitionParticipateAction } from "../../store/actions/appA
 import {
     getCompPartPlayerGradingSummaryAction,
     onchangeCompPartPlayerGradingSummaryData,
-    saveCompPartPlayerGradingSummaryAction
+    saveCompPartPlayerGradingSummaryAction,
+    playerSummaryCommentAction
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import {
     setParticipatingYear,
@@ -20,6 +21,7 @@ import {
     setParticipating_competition,
     getParticipating_competition,
 } from "../../util/sessionStorage"
+import CommentModal from "../../customComponents/commentModal"
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
@@ -76,8 +78,8 @@ const columns = [
         dataIndex: 'comments',
         key: 'comments',
         width: 110,
-        render: comments =>
-            <div style={{ display: "flex", justifyContent: "center" }}>
+        render: (comments, record) =>
+            <div style={{ display: "flex", justifyContent: "center" }} onClick={() => this_Obj.onClickComment(record)}>
                 <img src={comments !== null && comments.length > 0 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
             </div>
     },
@@ -97,6 +99,10 @@ class CompetitionPartPlayerGradeCalculate extends Component {
             firstTimeCompId: "",
             getDataLoading: false,
             saveLoad: false,
+            visible: false,
+            comment: null,
+            divisionId: null,
+            playerGradingorgId: null
         }
         this_Obj = this;
     }
@@ -197,6 +203,35 @@ class CompetitionPartPlayerGradeCalculate extends Component {
         this.setState({ getDataLoading: true, firstTimeCompId: competitionId })
     }
 
+    onClickComment(record) {
+        this.setState({
+            visible: true, comment: record.comments,
+            divisionId: record.competitionMembershipProductDivisionId,
+            playerGradingorgId: record.playerGradingOrganisationId
+        })
+    }
+
+    handleOk = e => {
+        this.props.playerSummaryCommentAction(this.state.yearRefId, this.state.firstTimeCompId,
+            this.state.divisionId, this.state.playerGradingorgId, this.state.comment)
+        this.setState({
+            visible: false,
+            comment: "",
+            divisionId: null,
+            playerGradingorgId: null
+        });
+    };
+    // model cancel for dissapear a model
+    handleCancel = e => {
+        this.setState({
+            visible: false,
+            comment: "",
+            divisionId: null,
+            playerGradingorgId: null
+        });
+    };
+
+
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
@@ -272,6 +307,15 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                         loading={this.props.partPlayerGradingState.onLoad == true && true}
                     />
                 </div>
+                <CommentModal
+                    visible={this.state.visible}
+                    modalTitle={AppConstants.add_edit_comment}
+                    onOK={this.handleOk}
+                    onCancel={this.handleCancel}
+                    placeholder={AppConstants.addYourComment}
+                    onChange={(e) => this.setState({ comment: e.target.value })}
+                    value={this.state.comment}
+                />
             </div>
         )
     }
@@ -327,7 +371,8 @@ function mapDispatchToProps(dispatch) {
         getYearAndCompetitionParticipateAction,
         getCompPartPlayerGradingSummaryAction,
         onchangeCompPartPlayerGradingSummaryData,
-        saveCompPartPlayerGradingSummaryAction
+        saveCompPartPlayerGradingSummaryAction,
+        playerSummaryCommentAction
     }, dispatch)
 }
 

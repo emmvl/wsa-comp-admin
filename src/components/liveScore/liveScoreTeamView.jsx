@@ -12,7 +12,7 @@ import { getTeamViewPlayerList, liveScoreDeleteTeam } from '../../store/actions/
 import moment from "moment";
 import Loader from '../../customComponents/loader'
 import { isArrayNotEmpty } from '../../util/helpers'
-
+import history from "../../util/history";
 const { Content } = Layout;
 const { confirm } = Modal;
 
@@ -60,14 +60,21 @@ const columns = [
 class LiveScoreTeamView extends Component {
     constructor(props) {
         super(props);
+        // this.state = {
+        //     data: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord : null : null,
+        //     // teamId: props.location.state ? props.location.state.teamId : null,
+        //     teamId: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord.id : null : null,
+        //     screenName: this.props.location.state ? this.props.location.state.screenName : null,
+        //     key: props.location.state ? props.location.state.key ? props.location.state.key : null : null,
+        // }
+
         this.state = {
             data: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord : null : null,
             // teamId: props.location.state ? props.location.state.teamId : null,
-            teamId: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord.id : null : null,
+            teamId: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord.id?props.location.state.tableRecord.id : props.location.state.tableRecord.team?props.location.state.tableRecord.team.id:null : null : null,
             screenName: this.props.location.state ? this.props.location.state.screenName : null,
             key: props.location.state ? props.location.state.key ? props.location.state.key : null : null,
         }
-
         _this = this
     }
 
@@ -290,7 +297,7 @@ class LiveScoreTeamView extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.screenName == 'fromMatchList' ? '2' : "3"} />
                 <Loader visible={this.props.liveScoreTeamState.onLoad} />
                 <Layout className="live-score-player-profile-layout">

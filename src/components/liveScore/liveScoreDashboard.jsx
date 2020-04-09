@@ -63,7 +63,7 @@ const columnActiveNews = [
         key: 'news_expire_date',
         sorter: (a, b) => tableSort(a, b, "news_expire_date"),
         render: (news_expire_date) =>
-            <span>{liveScore_formateDate(news_expire_date)}</span>
+            <span>{news_expire_date && liveScore_formateDate(news_expire_date)}</span>
 
     },
     {
@@ -513,7 +513,7 @@ class LiveScoreDashboard extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc", paddingBottom: 10 }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"1"} />
                 <Layout>
                     <Content >

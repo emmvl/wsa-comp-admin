@@ -5,10 +5,10 @@ var abandonObject = {
     startTime: "",
     endDate: "",
     endTime: "",
-    venueId: [],
+    venueId: null,
     courtId: [],
-    roundId: "",
-    resultType: ""
+    roundId: null,
+    resultType: null
 
 }
 
@@ -17,7 +17,7 @@ var pushBackObject = {
     startTime: "",
     endDate: "",
     endTime: "",
-    venueId: "",
+    venueId: null,
     courtId: [],
     hours: "",
     minutes: "",
@@ -31,7 +31,7 @@ var bringForwardObject = {
     startTime: "",
     endDate: "",
     endTime: "",
-    venueId: '',
+    venueId: null,
     courtId: [],
     hours: "",
     minutes: "",
@@ -46,7 +46,7 @@ var endMatchObject = {
     startTime: "",
     endDate: "",
     endTime: "",
-    venueId: '',
+    venueId: null,
     courtId: [],
 }
 
@@ -81,7 +81,8 @@ const initialState = {
     start_Time: "",
     end_Date: "",
     end_Time: "",
-    matchResult: []
+    matchResult: [],
+    bulkRadioBtn: 'fixedDuration'
 
 };
 
@@ -196,14 +197,49 @@ function LiveScoreBulkMatchState(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_UPDATE_BULK:
 
             if (action.key == 'selectedOption') {
+                state.bulkRadioBtn = 'fixedDuration'
+
+                state.pushBackData['courtId'] = []
+                state.bringForwardData['courtId'] = []
+                state.endMatchData['courtId'] = []
+                state.abandonData['courtId'] = []
+
+                state.pushCourtData = []
+                state.abandonCourtData = []
+                state.endCourtData = []
+                state.bringCourtData = []
+
+                state.pushBackData['venueId'] = null
+                state.pushBackData['hours'] = ""
+                state.pushBackData['minutes'] = ""
+                state.pushBackData['seconds'] = ""
+                state.pushBackData['optionalDate'] = ""
+                state.pushBackData['optionalTime'] = ""
+
+                state.abandonData['venueId'] = null
+                state.abandonData['resultType'] = null
+                state.abandonData['startTime'] = ""
+                state.abandonData['endTime'] = ""
+
+                state.bringForwardData['venueId'] = null
+                state.bringForwardData['hours'] = ""
+                state.bringForwardData['minutes'] = ""
+                state.bringForwardData['seconds'] = ""
+                state.bringForwardData['optionalDate'] = ""
+                state.bringForwardData['optionalTime'] = ""
+
+                state.endMatchData['venueId'] = null
+
+
                 state.selectedOption = action.data
                 let new_object = state.selected_Option
                 new_object[action.key] = action.data
                 state.selected_Option = new_object
 
+            } else if (action.key == 'bulkRadioBtn') {
+                state.bulkRadioBtn = action.data
             } else if (state.selectedOption == 'pushBack') {
-                state.pushBackData['courtId'] = []
-                state.pushBackData = pushBackObject
+
                 let new_object = state.pushBackData
                 if (action.key == "venueCourtId") {
                     new_object['courtId'] = action.data
@@ -230,8 +266,6 @@ function LiveScoreBulkMatchState(state = initialState, action) {
                 }
                 state.pushBackData = new_object
             } else if (state.selectedOption == 'bringForward') {
-                state.bringForwardData['courtId'] = []
-                state.bringForwardData = bringForwardObject
                 let new_object = state.bringForwardData
 
                 if (action.key == "venueId") {
@@ -248,7 +282,7 @@ function LiveScoreBulkMatchState(state = initialState, action) {
 
 
             } else if (state.selectedOption == 'endMatch') {
-                state.endMatchData['courtId'] = []
+
                 state.endMatchData = endMatchObject
                 let new_object = state.endMatchData
                 if (action.key == "venueId") {
@@ -263,8 +297,7 @@ function LiveScoreBulkMatchState(state = initialState, action) {
                 }
                 state.endMatchData = new_object
             } else if (state.selectedOption == 'abandonMatch') {
-                state.abandonData['courtId'] = []
-                state.abandonData = abandonObject
+                // state.abandonData = abandonObject
                 let new_object = state.abandonData
                 new_object[action.key] = action.data
                 if (action.key == "venueId") {

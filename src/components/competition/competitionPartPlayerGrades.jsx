@@ -10,7 +10,8 @@ import { getYearAndCompetitionParticipateAction } from "../../store/actions/appA
 import { getDivisionsListAction, clearReducerDataAction } from "../../store/actions/registrationAction/registration";
 import {
     getCompPartPlayerGradingAction, clearReducerCompPartPlayerGradingAction,
-    addNewTeamAction, onDragPlayerAction, onSameTeamDragAction
+    addNewTeamAction, onDragPlayerAction, onSameTeamDragAction,
+    playerGradingComment
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import {
     setParticipatingYear,
@@ -23,6 +24,8 @@ import AppImages from "../../themes/appImages";
 import Loader from '../../customComponents/loader';
 import InputWithHead from "../../customComponents/InputWithHead";
 import ColorsArray from "../../util/colorsArray";
+import CommentModal from "../../customComponents/commentModal";
+
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -39,6 +42,10 @@ class CompetitionPartPlayerGrades extends Component {
             getDataLoading: false,
             newTeam: "",
             visible: false,
+            modalVisible: false,
+            comment: null,
+            playerId: null,
+            teamID: null
         }
         this.onDragEnd = this.onDragEnd.bind(this);
         this.props.clearReducerCompPartPlayerGradingAction("partPlayerGradingListData")
@@ -382,8 +389,9 @@ class CompetitionPartPlayerGrades extends Component {
                                                                         </Tag>
 
                                                                         <img className="comp-player-table-img" src={
-                                                                            // playerItem.comments !== null ? AppImages.commentFilled :
-                                                                            AppImages.commentEmpty} alt="" height="20" width="20" />
+                                                                            (playerItem.comments !== null && playerItem.comments !== "") ? AppImages.commentFilled :
+                                                                                AppImages.commentEmpty} alt="" height="20" width="20"
+                                                                            onClick={() => this.onClickComment(playerItem, teamIndex)} />
                                                                         {/* </div> */}
                                                                     </div>
                                                                 </div>
@@ -404,10 +412,47 @@ class CompetitionPartPlayerGrades extends Component {
                         </Droppable>
                     ))
                 }
+                <CommentModal
+                    visible={this.state.modalVisible}
+                    modalTitle={AppConstants.add_edit_comment}
+                    onOK={this.handleModalOk}
+                    onCancel={this.handleModalCancel}
+                    placeholder={AppConstants.addYourComment}
+                    onChange={(e) => this.setState({ comment: e.target.value })}
+                    value={this.state.comment}
+                />
+
             </div>
 
         )
     }
+    onClickComment(player, teamID) {
+        this.setState({
+            modalVisible: true, comment: player.comments, playerId: player.playerId,
+            teamID
+        })
+    }
+
+    ///modal ok for hitting Api and close modal
+    handleModalOk = e => {
+        this.props.playerGradingComment(this.state.firstTimeCompId, this.state.divisionId, this.state.comment, this.state.playerId, this.state.teamID)
+        this.setState({
+            modalVisible: false,
+            comment: "",
+            playerId: null,
+            teamID: null
+        });
+    };
+    // model cancel for dissapear a model
+    handleModalCancel = e => {
+        this.setState({
+            modalVisible: false,
+            comment: "",
+            playerId: null,
+            teamID: null
+        });
+    };
+
 
 
     ////////for the unassigned teams on the right side of the view port
@@ -482,8 +527,11 @@ class CompetitionPartPlayerGrades extends Component {
                                                             </Tag>
                                                         }
                                                         <img className="comp-player-table-img" src={
-                                                            // playerItem.comments !== null ? AppImages.commentFilled :
-                                                            AppImages.commentEmpty} alt="" height="20" width="20" />
+
+                                                            (playerItem.comments !== null && playerItem.comments !== "") ? AppImages.commentFilled :
+                                                                AppImages.commentEmpty} alt="" height="20" width="20"
+                                                            onClick={() => this.onClickComment(playerItem, null)}
+                                                        />
                                                         {/* </div> */}
                                                     </div>
                                                 </div>
@@ -518,6 +566,16 @@ class CompetitionPartPlayerGrades extends Component {
                     />
 
                 </Modal>
+                <CommentModal
+                    visible={this.state.modalVisible}
+                    modalTitle={AppConstants.add_edit_comment}
+                    onOK={this.handleModalOk}
+                    onCancel={this.handleModalCancel}
+                    placeholder={AppConstants.addYourComment}
+                    onChange={(e) => this.setState({ comment: e.target.value })}
+                    value={this.state.comment}
+                />
+
             </div>
         )
     }
@@ -597,7 +655,8 @@ function mapDispatchToProps(dispatch) {
         clearReducerCompPartPlayerGradingAction,
         addNewTeamAction,
         onDragPlayerAction,
-        onSameTeamDragAction
+        onSameTeamDragAction,
+        playerGradingComment
     }, dispatch)
 }
 

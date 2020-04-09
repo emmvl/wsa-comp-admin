@@ -3,6 +3,8 @@ import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 import ApiConstants from '../../../themes/apiConstants';
 import { message } from "antd";
 import history from "../../../util/history";
+import userHttpApi from "../../http/userHttp/userAxiosApi"
+
 function* failSaga(result) {
     yield put({ type: ApiConstants.API_LIVE_SCORE_SCORER_LIST_FAIL });
     setTimeout(() => {
@@ -127,6 +129,27 @@ export function* liveScoreUnAssignMatcheSaga(action) {
                 scorerKey: action.scorerKey
             });
             message.success('Match unassign successfully.')
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+// Scorer search api saga
+
+export function* liveScoreScorerSearchSaga(action) {
+console.log(action)
+    try {
+        const result = yield call(userHttpApi.scorerSearchApi, action.roleId, action.entityTypeId, action.competitionId, action.searchText)
+        if (result.status == 1) {
+            yield put({
+                type: ApiConstants.API_LIVESCORE_SCORER_SEARCH_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+            // message.success('Match unassign successfully.')
         } else {
             yield call(failSaga, result)
         }

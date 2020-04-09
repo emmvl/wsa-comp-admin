@@ -10,7 +10,8 @@ import { getYearAndCompetitionOwnAction } from "../../store/actions/appAction";
 import { getDivisionsListAction, clearReducerDataAction } from "../../store/actions/registrationAction/registration";
 import {
     getCompPartPlayerGradingAction, clearReducerCompPartPlayerGradingAction,
-    addNewTeamAction, onDragPlayerAction, onSameTeamDragAction
+    addNewTeamAction, onDragPlayerAction, onSameTeamDragAction,
+    playerGradingComment
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import {
     setOwnCompetitionYear,
@@ -23,6 +24,8 @@ import AppImages from "../../themes/appImages";
 import Loader from '../../customComponents/loader';
 import InputWithHead from "../../customComponents/InputWithHead";
 import ColorsArray from "../../util/colorsArray";
+import CommentModal from "../../customComponents/commentModal";
+
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -39,6 +42,10 @@ class CompetitionPlayerGrades extends Component {
             getDataLoading: false,
             newTeam: "",
             visible: false,
+            modalVisible: false,
+            comment: '',
+            playerId: null,
+            teamID: null
         }
         this.onDragEnd = this.onDragEnd.bind(this);
         this.props.clearReducerCompPartPlayerGradingAction("partPlayerGradingListData")
@@ -183,7 +190,7 @@ class CompetitionPlayerGrades extends Component {
     handleCancel = e => {
         this.setState({
             visible: false,
-            newTeam:""
+            newTeam: ""
         });
     };
 
@@ -402,16 +409,21 @@ class CompetitionPlayerGrades extends Component {
                                                                         })}
                                                                     </div>
                                                                     <div>
-                                                                        <Tag className="comp-player-table-tag" style={{ background: playerIndex < 37 ? ColorsArray[playerIndex + 1] : '#ee3346', color: "#ffffff" }} key={playerItem.position1}>
-                                                                            {playerItem.position1}
-                                                                        </Tag>
-                                                                        <Tag className="comp-player-table-tag" style={{ background: playerIndex < 36 ? ColorsArray[(playerIndex + 2)] : '#1658ef', color: "#ffffff" }} key={playerItem.position2}>
-                                                                            {playerItem.position2}
-                                                                        </Tag>
-
+                                                                        {playerItem.position1 &&
+                                                                            <Tag className="comp-player-table-tag" style={{ background: playerIndex < 37 ? ColorsArray[playerIndex + 1] : '#ee3346', color: "#ffffff" }} key={playerItem.position1}>
+                                                                                {playerItem.position1}
+                                                                            </Tag>
+                                                                        }
+                                                                        {playerItem.position2 &&
+                                                                            <Tag className="comp-player-table-tag" style={{ background: playerIndex < 36 ? ColorsArray[(playerIndex + 2)] : '#1658ef', color: "#ffffff" }} key={playerItem.position2}>
+                                                                                {playerItem.position2}
+                                                                            </Tag>
+                                                                        }
                                                                         <img className="comp-player-table-img" src={
-                                                                            // playerItem.comments !== null ? AppImages.commentFilled :
-                                                                            AppImages.commentEmpty} alt="" height="20" width="20" />
+                                                                            (playerItem.comments !== null && playerItem.comments !== "") ? AppImages.commentFilled :
+                                                                                AppImages.commentEmpty} alt="" height="20" width="20"
+                                                                            onClick={() => this.onClickComment(playerItem, teamIndex)}
+                                                                        />
                                                                         {/* </div> */}
                                                                     </div>
                                                                 </div>
@@ -432,10 +444,47 @@ class CompetitionPlayerGrades extends Component {
                         </Droppable>
                     ))
                 }
+                <CommentModal
+                    visible={this.state.modalVisible}
+                    modalTitle={AppConstants.add_edit_comment}
+                    onOK={this.handleModalOk}
+                    onCancel={this.handleModalCancel}
+                    placeholder={AppConstants.addYourComment}
+                    onChange={(e) => this.setState({ comment: e.target.value })}
+                    value={this.state.comment}
+                />
+
             </div>
 
         )
     }
+
+    onClickComment(player, teamID) {
+        this.setState({
+            modalVisible: true, comment: player.comments, playerId: player.playerId,
+            teamID
+        })
+    }
+
+    ///modal ok for hitting Api and close modal
+    handleModalOk = e => {
+        this.props.playerGradingComment(this.state.firstTimeCompId, this.state.divisionId, this.state.comment, this.state.playerId, this.state.teamID)
+        this.setState({
+            modalVisible: false,
+            comment: "",
+            playerId: null,
+            teamID: null
+        });
+    };
+    // model cancel for dissapear a model
+    handleModalCancel = e => {
+        this.setState({
+            modalVisible: false,
+            comment: "",
+            playerId: null,
+            teamID: null
+        });
+    };
 
 
     ////////for the unassigned teams on the right side of the view port
@@ -510,8 +559,10 @@ class CompetitionPlayerGrades extends Component {
                                                             </Tag>
                                                         }
                                                         <img className="comp-player-table-img" src={
-                                                            // playerItem.comments !== null ? AppImages.commentFilled :
-                                                            AppImages.commentEmpty} alt="" height="20" width="20" />
+                                                            (playerItem.comments !== null && playerItem.comments !== "") ? AppImages.commentFilled :
+                                                                AppImages.commentEmpty} alt="" height="20" width="20"
+                                                            onClick={() => this.onClickComment(playerItem, null)}
+                                                        />
                                                         {/* </div> */}
                                                     </div>
                                                 </div>
@@ -520,8 +571,6 @@ class CompetitionPlayerGrades extends Component {
                                     )}
 
                                 </Draggable>
-
-
                             ))}
                             {/* </Draggable> */}
                             {/* ))} */}
@@ -546,6 +595,15 @@ class CompetitionPlayerGrades extends Component {
                     />
 
                 </Modal>
+                <CommentModal
+                    visible={this.state.modalVisible}
+                    modalTitle={AppConstants.add_edit_comment}
+                    onOK={this.handleModalOk}
+                    onCancel={this.handleModalCancel}
+                    placeholder={AppConstants.addYourComment}
+                    onChange={(e) => this.setState({ comment: e.target.value })}
+                    value={this.state.comment}
+                />
             </div>
         )
     }
@@ -625,7 +683,8 @@ function mapDispatchToProps(dispatch) {
         clearReducerCompPartPlayerGradingAction,
         addNewTeamAction,
         onDragPlayerAction,
-        onSameTeamDragAction
+        onSameTeamDragAction,
+        playerGradingComment,
     }, dispatch)
 }
 

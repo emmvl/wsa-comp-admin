@@ -10,6 +10,7 @@ import { liveScoreNewsListAction } from '../../store/actions/LiveScoreAction/liv
 import { liveScore_formateDate } from '../../themes/dateformate'
 import AppImages from "../../themes/appImages";
 import moment from "moment";
+import history from "../../util/history";
 const { Content } = Layout;
 
 ////columens data
@@ -239,7 +240,7 @@ class LiveScoreNewsList extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"21"} />
                 <Layout>
                     {this.headerView()}

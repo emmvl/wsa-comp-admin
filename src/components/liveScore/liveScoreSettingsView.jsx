@@ -26,7 +26,7 @@ import {
     getCompetitonVenuesList
 } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
 import ImageLoader from '../../customComponents/ImageLoader'
-
+import history from "../../util/history";
 const { Header, Footer } = Layout;
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -566,7 +566,7 @@ class LiveScoreSettingsView extends Component {
         let local_Id = getLiveScoreCompetiton()
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
                 {local_Id &&
                     <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"18"} />
                 }
