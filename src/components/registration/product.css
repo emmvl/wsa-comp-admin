@@ -81,6 +81,16 @@
   font-weight: 500;
   font-family: inter-medium;
 }
+.setting-heading {
+  display: flex;
+  align-content: flex-start;
+  text-align: center;
+  font-size: 18px;
+  color: var(--app-1b1b34);
+  padding-bottom: 7.5px;
+  font-weight: 500;
+  font-family: inter-medium;
+}
 
 .payment-view {
   padding-left: 40px;
@@ -544,6 +554,12 @@ input[type=number] {
   font-weight: 600;
   font-family: inter-semi-bold;
   font-size: 16px;
+}
+
+.division-age-select .ant-select-selection {
+  height: 44px;
+  min-height: 44px;
+  padding-right: 10px
 }
 
 @media (max-width: 767px) {

@@ -110,7 +110,7 @@ class LiveScoreTeamAttendance extends Component {
         this.state = {
             year: "2020",
             teamSelection: "WSA 1",
-            selectStatus: "Borrowed"
+            selectStatus: "Select Status"
         }
     }
 
@@ -125,7 +125,7 @@ class LiveScoreTeamAttendance extends Component {
         }
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
-            this.props.liveScoreTeamAttendanceListAction(id, paginationBody, "Borrowed")
+            this.props.liveScoreTeamAttendanceListAction(id, paginationBody)
             // this.handleTablePagination(page, competitionId,paginationBody)
         } else {
             history.pushState('/')
@@ -144,25 +144,11 @@ class LiveScoreTeamAttendance extends Component {
         }
         let { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
-            this.props.liveScoreTeamAttendanceListAction(id, paginationBody,  "")
+            this.props.liveScoreTeamAttendanceListAction(id, paginationBody)
         } else {
             history.pushState('/')
         }
     }
-
-    onchangeOption(option){
-        const paginationBody = {
-            "paging": {
-                "limit": 10,
-                "offset": 0
-            },
-        }
-        this.setState({selectStatus : option})
-        let { id } = JSON.parse(getLiveScoreCompetiton())
-        this.props.liveScoreTeamAttendanceListAction(id, paginationBody, option)
-    }
-
-
     ///////view for breadcrumb
     headerView = () => {
         return (
@@ -184,11 +170,11 @@ class LiveScoreTeamAttendance extends Component {
                             <Select
                                 className="year-select"
                                 style={{ display: "flex", alignItems: "flex-start" }}
-                                onChange={(selectStatus) => this.onchangeOption(selectStatus)}
+                                onChange={(selectStatus) => this.setState({ selectStatus })}
                                 value={this.state.selectStatus} >
-                                <Option value={"Borrowed"}>{'Borrowed Player'}</Option>
-                                <Option value={"Did not play"}>{'Did Not Play'}</Option>
-                                <Option value={"Played"}>{'Played'}</Option>
+                                <Option value={"11A"}>{'Borrowed Player'}</Option>
+                                <Option value={"11B"}>{'Did Not Play'}</Option>
+                                <Option value={"11C"}>{'Played'}</Option>
                             </Select>
 
                             <div className="col-sm"

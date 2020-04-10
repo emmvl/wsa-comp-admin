@@ -80,7 +80,7 @@ const columns = [
         key: 'comments',
         width: 110,
         render: (comments, record) =>
-            <div style={{ display: "flex", justifyContent: "center" }} onClick={() => this_Obj.onClickComment(record)}>
+            <div style={{ display: "flex", justifyContent: "center", cursor: "pointer" }} onClick={() => this_Obj.onClickComment(record)}>
                 <img src={comments !== null && comments.length > 0 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
             </div>
     },
@@ -257,7 +257,7 @@ class CompetitionPlayerGradeCalculate extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-4" style={{ display: "flex", justifyContent: "flex-end" }} >
+                        <div className="col-sm-4" style={{ display: "flex", justifyContent: "flex-end", alignItems: 'center' }} >
                             <NavLink to="/competitionPlayerGrades" >
                                 <span className='year-select-heading'>{AppConstants.playerGradingToggle}</span>
                             </NavLink>

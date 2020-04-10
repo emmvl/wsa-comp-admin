@@ -391,6 +391,7 @@ class CompetitionPartPlayerGrades extends Component {
                                                                         <img className="comp-player-table-img" src={
                                                                             (playerItem.comments !== null && playerItem.comments !== "") ? AppImages.commentFilled :
                                                                                 AppImages.commentEmpty} alt="" height="20" width="20"
+                                                                            style={{ cursor: "pointer" }}
                                                                             onClick={() => this.onClickComment(playerItem, teamIndex)} />
                                                                         {/* </div> */}
                                                                     </div>
@@ -530,6 +531,7 @@ class CompetitionPartPlayerGrades extends Component {
 
                                                             (playerItem.comments !== null && playerItem.comments !== "") ? AppImages.commentFilled :
                                                                 AppImages.commentEmpty} alt="" height="20" width="20"
+                                                            style={{ cursor: "pointer" }}
                                                             onClick={() => this.onClickComment(playerItem, null)}
                                                         />
                                                         {/* </div> */}

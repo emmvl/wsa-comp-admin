@@ -134,6 +134,14 @@ function venueDeleteAction(payload) {
     return action;
 }
 
+function getGenderAction() {
+    const action = {
+        type: ApiConstants.API_GET_GENDER_LOAD,
+
+    };
+    return action
+}
+
 export {
     timeSlotInit,
     getCommonRefData,
@@ -150,5 +158,6 @@ export {
     searchVenueList,
     clearFilter,
     venuesListAction,
-    venueDeleteAction
+    venueDeleteAction,
+    getGenderAction
 }

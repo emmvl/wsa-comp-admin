@@ -49,3 +49,16 @@ export const clearLiveScoreSetting = () => {
 
     }
 }
+export const searchVenueList = (data) => {
+    return {
+        type: ApiConstants.LIVESCORE_SEARCH__SETTING,
+        payload: data
+
+    }
+}
+export const clearFilter = () => {
+    return {
+        type: ApiConstants.CLEAR_FILTER_SEARCH,
+
+    }
+}

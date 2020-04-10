@@ -17,7 +17,8 @@ const initialState = {
         attendanceRecordingPeriod: '',
         timerType: '',
         allVenue: [],
-        venueData: []
+        venueData: [],
+        mainVenueList: []
 
     }
 }
@@ -125,7 +126,8 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
 
             return {
                 ...state,
-                venueData: payload
+                venueData: payload,
+                mainVenueList: payload
             }
         case ApiConstants.LiveScore_CLEAR_SETTING:
             console.log('cleared')
@@ -150,6 +152,18 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
 
                 }
             }
+
+        case ApiConstants.LIVESCORE_SEARCH__SETTING:
+            console.log(payload, 'LIVESCORE_SEARCH__SETTING', state.mainVenueList)
+            return { ...state, venueData: payload }
+
+        case ApiConstants.CLEAR_FILTER_SEARCH:
+            console.log(state.venueData, '*#^#^#', state.mainVenueList)
+            return {
+                ...state,
+                venueData: [...state.mainVenueList],
+            }
+
         default: return state
     }
 }

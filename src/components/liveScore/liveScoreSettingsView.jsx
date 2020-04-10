@@ -18,7 +18,14 @@ import AppConstants from "../../themes/appConstants";
 import ValidationConstants from "../../themes/validationConstant";
 import { connect } from 'react-redux';
 import AppImages from "../../themes/appImages";
-import { getLiveScoreSettingInitiate, onChangeSettingForm, settingDataPostInititae, clearLiveScoreSetting } from '../../store/actions/LiveScoreAction/LiveScoreSettingAction'
+import {
+    getLiveScoreSettingInitiate,
+    onChangeSettingForm,
+    settingDataPostInititae,
+    clearLiveScoreSetting,
+    searchVenueList,
+    clearFilter
+} from '../../store/actions/LiveScoreAction/LiveScoreSettingAction'
 import Loader from '../../customComponents/loader';
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import {
@@ -252,7 +259,6 @@ class LiveScoreSettingsView extends Component {
         });
     };
 
-
     ///////view for breadcrumb
     headerView = () => {
         return (
@@ -273,6 +279,15 @@ class LiveScoreSettingsView extends Component {
                 </Header>
             </div>
         );
+    };
+
+    handleSearch = (value, data) => {
+        console.log(value, data)
+        const filteredData = data.filter(memo => {
+            return memo.venueName.indexOf(value) > -1
+        })
+        this.props.searchVenueList(filteredData)
+
     };
 
     ////////form content view
@@ -394,8 +409,13 @@ class LiveScoreSettingsView extends Component {
                                 mode="multiple"
                                 placeholder={AppConstants.selectVenue}
                                 style={{ width: "100%", }}
-                                onChange={e => this.teamChange(e)}
+                                onChange={value => {
+                                    this.props.onChangeSettingForm({ key: 'venue', data: value })
+                                    this.props.clearFilter()
+                                }}
+                                filterOption={false}
                                 // value={this.state.team === [] ? AppConstants.selectTeam : this.state.team}
+                                onSearch={(value) => { this.handleSearch(value, this.props.liveScoreSetting.mainVenueList) }}
                                 value={"261"}
                             >
                                 {this.props.venueList.venueData ? this.props.liveScoreSetting.venueData.map((item) => {
@@ -591,4 +611,4 @@ function mapStatetoProps(state) {
         venueList: state.LiveScoreMatchState
     }
 }
-export default connect(mapStatetoProps, { clearLiveScoreSetting, getLiveScoreSettingInitiate, onChangeSettingForm, getCompetitonVenuesList, settingDataPostInititae })((Form.create()(LiveScoreSettingsView)));
+export default connect(mapStatetoProps, { clearLiveScoreSetting, getLiveScoreSettingInitiate, onChangeSettingForm, getCompetitonVenuesList, settingDataPostInititae, searchVenueList, clearFilter })((Form.create()(LiveScoreSettingsView)));

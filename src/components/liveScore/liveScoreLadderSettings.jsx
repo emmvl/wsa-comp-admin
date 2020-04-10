@@ -16,88 +16,65 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import ValidationConstants from "../../themes/validationConstant";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import {
+    ladderSettingGetMatchResultAction,
+    ladderSettingGetDATA,
+    updateLadderSetting,
+    ladderSettingPostDATA
+} from '../../store/actions/LiveScoreAction/liveScoreLadderSettingAction'
+import { isArrayNotEmpty } from "../../util/helpers";
+import { getLiveScoreCompetiton } from '../../util/sessionStorage';
+import Loader from '../../customComponents/loader'
 import history from "../../util/history";
+
 const { Header, Footer } = Layout;
 const { Option } = Select;
+
+let _this = ""
 
 const columns = [
     {
         title: 'Result type/Byes',
-        dataIndex: 'resultType',
-        key: 'resultType',
+        dataIndex: 'resultTypeId',
+        key: 'resultTypeId',
     },
     {
         title: 'Points',
         dataIndex: 'points',
         key: 'points',
-        render: points => <Input className="input-inside-table-fees" value={points} />,
+        render: (points, record, index) => <Input className="input-inside-table-fees" onChange={(e) => _this.props.updateLadderSetting(e.target.value, record, index)} value={points} />,
         width: "10%"
     },
 ];
 
-const data = [
-    {
-        key: '1',
-        resultType: "Won",
-        points: "3",
-    },
-    {
-        key: '2',
-        resultType: "Lost",
-        points: "1",
-    },
 
-    {
-        key: '3',
-        resultType: "Abandoned (no match)",
-        points: "0",
-    },
-    {
-        key: '4',
-        resultType: "Abandoned (incomplete)",
-        points: "3",
-    },
-    {
-        key: '5',
-        resultType: "Won on Forefeit",
-        points: "3",
-
-    },
-    {
-        key: '6',
-        resultType: "Loss on Forefeit",
-        points: "0",
-
-    },
-    {
-        key: '7',
-        resultType: "Double Forefeit",
-        points: "0",
-
-    },
-    {
-        key: '8',
-        resultType: "Bye",
-        points: "3",
-    },
-
-];
 class LiveScoreLadderSettings extends Component {
     constructor(props) {
         super(props);
         this.state = {
             venueData: []
         };
+        _this = this
+    }
+
+    componentDidMount() {
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        this.props.ladderSettingGetMatchResultAction()
+        this.props.ladderSettingGetDATA(id)
     }
 
     contentView = () => {
+        const { matchResult } = this.props.ladderSettingState
+        let matchResultData = isArrayNotEmpty(matchResult) ? matchResult : []
         return (
             <div className="content-view pt-4">
                 {/* ladder setting view */}
 
                 <div className="inside-container-view" >
                     <div className="table-responsive">
-                        <Table className="fees-table" columns={columns} dataSource={data} pagination={false} Divider=" false" />
+                        <Table loading={this.props.ladderSettingState.onLoad} className="fees-table" columns={columns} dataSource={matchResultData} pagination={false} Divider=" false" />
                     </div>
                 </div>
             </div>
@@ -129,6 +106,8 @@ class LiveScoreLadderSettings extends Component {
     };
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
+        const { postData } = this.props.ladderSettingState
+
         return (
             <div className="fluid-width">
                 <div className="footer-view">
@@ -143,7 +122,9 @@ class LiveScoreLadderSettings extends Component {
                                 {/* <Button className="save-draft-text" type="save-draft-text">
                                     {AppConstants.saveAsDraft}
                                 </Button> */}
-                                <Button onClick={this.handleSubmit} className="publish-button" type="primary">
+                                <Button
+                                    onClick={() => this.onSaveClick()}
+                                    className="publish-button" type="primary">
                                     {this.state.competitionTabKey == 6 ? AppConstants.publish : AppConstants.save}
                                 </Button>
                             </div>
@@ -155,14 +136,17 @@ class LiveScoreLadderSettings extends Component {
 
     };
 
+    onSaveClick() {
+        const { postData } = this.props.ladderSettingState
+        this.props.ladderSettingPostDATA(postData)
+    }
 
     render() {
         return (
-
-
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"19"} />
+                <Loader visible={this.props.ladderSettingState.loader} />
                 <Layout>
                     {this.headerView()}
                     {/* <Content> */}
@@ -178,4 +162,19 @@ class LiveScoreLadderSettings extends Component {
     }
 }
 
-export default LiveScoreLadderSettings
+function mapDispatchtoprops(dispatch) {
+    return bindActionCreators({
+        ladderSettingGetMatchResultAction,
+        ladderSettingGetDATA,
+        updateLadderSetting,
+        ladderSettingPostDATA
+    }, dispatch)
+
+}
+
+function mapStatetoProps(state) {
+    return {
+        ladderSettingState: state.LadderSettingState
+    }
+}
+export default connect(mapStatetoProps, mapDispatchtoprops)((LiveScoreLadderSettings));

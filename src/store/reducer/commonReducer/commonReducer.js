@@ -30,6 +30,7 @@ const initialState = {
     venuesList: [],
     venuesListPage: 1,
     venuesListTotalCount: 1,
+    genderData: []
 };
 
 function commonReducerState(state = initialState, action) {
@@ -65,12 +66,11 @@ function commonReducerState(state = initialState, action) {
 
         case ApiConstants.API_ADD_VENUE_SUCCESS:
             console.log(action, 'VenueResult')
-            if(action.result!= null)
-            {
+            if (action.result != null) {
                 state.venueList.push(action.result)
                 state.searchVenueList.push(action.result)
             }
-        
+
             return {
                 ...state,
                 mainVenueList: action.result,
@@ -228,6 +228,20 @@ function commonReducerState(state = initialState, action) {
                 status: action.status,
                 onLoad: false,
             };
+
+        case ApiConstants.API_GET_GENDER_LOAD:
+            return {
+                ...state,
+                onLoad: true
+            }
+
+        case ApiConstants.API_GET_GENDER_SUCCESS:
+            return {
+                ...state,
+                onLoad: true,
+                genderData: action.result,
+                status: action.status
+            }
 
         default:
             return state;

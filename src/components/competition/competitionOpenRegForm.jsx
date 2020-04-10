@@ -13,7 +13,8 @@ import {
     Tabs,
     Form,
     Modal,
-    message
+    message,
+    Tooltip
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -70,7 +71,11 @@ import {
     getOwn_competition
 } from "../../util/sessionStorage";
 import Loader from '../../customComponents/loader';
+import { venueListAction, getCommonRefData, } from '../../store/actions/commonAction/commonAction'
 import { getUserId, getOrganisationData } from "../../util/sessionStorage"
+import {
+    getGenderAction
+} from "../../store/actions/commonAction/commonAction"
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -85,8 +90,50 @@ const divisionTable = [
         dataIndex: "divisionName",
         key: "divisionName",
         render: (divisionName, record, index) => (
-            <Input className="input-inside-table-fees" value={divisionName} onChange={e => this_Obj.divisionTableDataOnchange(e.target.value, record, index, "divisionName")} />
+            <Input className="input-inside-table-fees"
+                value={divisionName}
+                onChange={e => this_Obj.divisionTableDataOnchange(e.target.value, record, index, "divisionName")}
+                disabled={this_Obj.state.permissionState.divisionsDisable} />
         )
+    },
+    {
+        title: "Gender Restriction",
+        dataIndex: "genderRestriction",
+        key: "genderRestriction",
+        render: (genderRestriction, record, index) => (
+            <Checkbox
+                className="single-checkbox mt-1"
+                disabled={this_Obj.state.permissionState.divisionsDisable}
+                checked={genderRestriction}
+                onChange={e => this_Obj.divisionTableDataOnchange(e.target.checked, record, index, "genderRestriction")}
+            ></Checkbox>
+        )
+    },
+    {
+        dataIndex: "genderRefId",
+        key: "genderRefId",
+        // width:  ? "20%" : null,
+        render: (genderRefId, record, index) => {
+            return (
+                record.genderRestriction &&
+                <Select
+                    className='division-age-select'
+                    style={{ width: "100%", minWidth: 120, }}
+                    onChange={genderRefId => this_Obj.divisionTableDataOnchange(genderRefId, record, index, "genderRefId")}
+                    value={genderRefId}
+                    placeholder={"Select"}
+                    disabled={this_Obj.state.permissionState.divisionsDisable}
+                >
+                    {this_Obj.props.commonReducerState.genderData.map(item => {
+                        return (
+                            <Option key={item.id} value={item.id}>
+                                {item.description}
+                            </Option>
+                        );
+                    })}
+                </Select>
+            )
+        }
     },
 
     {
@@ -99,6 +146,7 @@ const divisionTable = [
                 className="single-checkbox mt-1"
                 checked={ageRestriction}
                 onChange={e => this_Obj.divisionTableDataOnchange(e.target.checked, record, index, "ageRestriction")}
+                disabled={this_Obj.state.permissionState.divisionsDisable}
             ></Checkbox>
         )
     },
@@ -150,13 +198,12 @@ const divisionTable = [
                     alt=""
                     width="16"
                     height="16"
-                    onClick={() => this_Obj.addRemoveDivision(index, record, "remove")}
+                    onClick={() => !this_Obj.state.permissionState.divisionsDisable ? this_Obj.addRemoveDivision(index, record, "remove") : null}
                 />
             </span>
         )
     }
 ];
-
 
 const playerSeasoTable = [
     {
@@ -260,6 +307,19 @@ const playercasualTable = [
     }
 ];
 
+
+const permissionObject = {
+    compDetailDisable: false,
+    regInviteesDisable: false,
+    membershipDisable: false,
+    divisionsDisable: false,
+    feesTableDisable: false,
+    paymentsDisable: false,
+    discountsDisable: false,
+    allDisable: false,
+    isPublished: false
+}
+
 class CompetitionOpenRegForm extends Component {
     constructor(props) {
         super(props);
@@ -298,14 +358,22 @@ class CompetitionOpenRegForm extends Component {
             competitionIsUsed: false,
             firstTimeCompId: "",
             organisationTypeRefId: 0,
+            isCreatorEdit: false, //////// user is owner of the competition than isCreatorEdit will be false 
+            isPublished: false,
+            isRegClosed: false,
             roundsArray: [{ id: 4, value: 4 },
-            { id: 6, value: 6 }, { id: 8, value: 8 }, { id: 10, value: 10 }, { id: 12, value: 12 }, { id: 14, value: 14 }, { id: 16, value: 16 }, { id: 18, value: 18 }]
+            { id: 6, value: 6 }, { id: 8, value: 8 }, { id: 10, value: 10 }, { id: 12, value: 12 }, { id: 14, value: 14 }, { id: 16, value: 16 }, { id: 18, value: 18 }],
+            permissionState: permissionObject,
+            tooltipVisibleDelete: false,
+            tooltipVisibleDraft: false,
+            tooltipVisiblePublish: false,
         };
         this_Obj = this;
         // let competitionId = null
         // competitionId = this.props.location.state ? this.props.location.state.id : null
         // competitionId !== null && this.props.clearCompReducerDataAction("all")
         this.props.clearCompReducerDataAction("all")
+        this.props.getGenderAction()
 
     }
     componentDidUpdate(nextProps) {
@@ -314,8 +382,7 @@ class CompetitionOpenRegForm extends Component {
             this.setState({ loading: false })
             if (!competitionFeesState.error) {
                 this.setState({
-                    // loading: false,
-                    competitionTabKey: JSON.stringify(JSON.parse(this.state.competitionTabKey) + 2),
+                    competitionTabKey: JSON.stringify(JSON.parse(this.state.competitionTabKey) + 1),
                     logoSetDefault: false,
                     image: null
                 })
@@ -326,10 +393,25 @@ class CompetitionOpenRegForm extends Component {
         }
         if (nextProps.competitionFeesState !== competitionFeesState) {
             if (competitionFeesState.getCompAllDataOnLoad === false && this.state.getDataLoading == true) {
+                let isPublished = competitionFeesState.competitionDetailData.statusRefId == 2 ? true : false
+
+                let registrationCloseDate = competitionFeesState.competitionDetailData.registrationCloseDate
+                    && moment(competitionFeesState.competitionDetailData.registrationCloseDate)
+                let isRegClosed = registrationCloseDate ? !registrationCloseDate.isSameOrAfter(moment()) : false;
+
+                let creatorId = competitionFeesState.competitionCreator
+                let userId = getUserId();
+                let isCreatorEdit = creatorId == userId ? false : true;
+
+                this.setPermissionFields(isPublished, isRegClosed, isCreatorEdit)
+
                 this.setState({
                     getDataLoading: false,
                     profileImage: competitionFeesState.competitionDetailData.competitionLogoUrl,
-                    competitionIsUsed: competitionFeesState.competitionDetailData.isUsed
+                    competitionIsUsed: competitionFeesState.competitionDetailData.isUsed,
+                    isPublished,
+                    isRegClosed,
+                    isCreatorEdit
                 })
                 this.setDetailsFieldValue()
             }
@@ -347,6 +429,70 @@ class CompetitionOpenRegForm extends Component {
         }
     }
 
+    ////disable or enable particular fields
+    setPermissionFields = (isPublished, isRegClosed, isCreatorEdit) => {
+        let invitees = this.props.competitionFeesState.competitionDetailData.invitees
+        let hasRegistration = invitees.length > 0 ? true : false
+        if (isPublished) {
+            if (isRegClosed || hasRegistration) {
+                let permissionObject = {
+                    compDetailDisable: true,
+                    regInviteesDisable: true,
+                    membershipDisable: true,
+                    divisionsDisable: true,
+                    feesTableDisable: true,
+                    paymentsDisable: true,
+                    discountsDisable: true,
+                    allDisable: true,
+                    isPublished: true
+                }
+                this.setState({ permissionState: permissionObject })
+                return
+            }
+            if (isCreatorEdit) {
+                let permissionObject = {
+                    compDetailDisable: true,
+                    regInviteesDisable: true,
+                    membershipDisable: true,
+                    divisionsDisable: true,
+                    feesTableDisable: true,
+                    paymentsDisable: true,
+                    discountsDisable: true,
+                    allDisable: false,
+                    isPublished: true
+                }
+                this.setState({ permissionState: permissionObject })
+            }
+            else {
+                let permissionObject = {
+                    compDetailDisable: false,
+                    regInviteesDisable: true,
+                    membershipDisable: true,
+                    divisionsDisable: true,
+                    feesTableDisable: true,
+                    paymentsDisable: false,
+                    discountsDisable: true,
+                    allDisable: false,
+                    isPublished: true
+                }
+                this.setState({ permissionState: permissionObject })
+            }
+        }
+        else {
+            let permissionObject = {
+                compDetailDisable: false,
+                regInviteesDisable: false,
+                membershipDisable: false,
+                divisionsDisable: false,
+                feesTableDisable: false,
+                paymentsDisable: false,
+                discountsDisable: false,
+                allDisable: false,
+                isPublished: false
+            }
+            this.setState({ permissionState: permissionObject })
+        }
+    }
 
     componentDidMount() {
         let orgData = getOrganisationData()
@@ -394,12 +540,15 @@ class CompetitionOpenRegForm extends Component {
         this.props.paymentSeasonalFee()
         this.props.getCommonDiscountTypeTypeAction()
         this.props.getVenuesTypeAction();
+        this.props.venueListAction();
         if (competitionId !== null) {
-            this.props.getAllCompetitionFeesDeatilsAction(competitionId)
+            let hasRegistration = 0
+            this.props.getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration)
             this.setState({ getDataLoading: true })
         }
         else {
-            this.props.getDefaultCompFeesMembershipProductTabAction()
+            let hasRegistration = 0
+            this.props.getDefaultCompFeesMembershipProductTabAction(hasRegistration)
             this.props.getDefaultCharity()
         }
     }
@@ -461,6 +610,7 @@ class CompetitionOpenRegForm extends Component {
             yearRefId: compFeesState.competitionDetailData.yearRefId,
             competitionTypeRefId: compFeesState.competitionDetailData.competitionTypeRefId,
             competitionFormatRefId: compFeesState.competitionDetailData.competitionFormatRefId,
+            selectedVenues: compFeesState.selectedVenues
         })
         let data = this.props.competitionFeesState.competionDiscountValue
         let discountData = data && data.competitionDiscounts !== null ? data.competitionDiscounts[0].discounts : []
@@ -507,10 +657,11 @@ class CompetitionOpenRegForm extends Component {
                         if (postData.maximumPlayers !== null && postData.maximumPlayers !== '') formData.append("maximumPlayers", postData.maximumPlayers);
                         formData.append("venues", venue);
                         formData.append("registrationCloseDate", postData.registrationCloseDate);
-                        formData.append("statusRefId", this.state.statusRefId);
+                        formData.append("statusRefId", this.state.isPublished ? 2 : this.state.statusRefId);
                         formData.append("nonPlayingDates", nonPlayingDate);
                         formData.append("invitees", invitees);
                         formData.append("logoSetAsDefault", this.state.logoSetDefault)
+                        formData.append("hasRegistration", 0);
                         if (this.state.logoSetDefault) {
                             formData.append("organisationLogoId", compFeesState.defaultCompFeesOrgLogoData.id)
                         }
@@ -536,70 +687,74 @@ class CompetitionOpenRegForm extends Component {
                         message.error(ValidationConstants.competitionLogoIsRequired)
                     }
                 }
+                // else if (tabKey == "2") {
+                //     let finalmembershipProductTypes = JSON.parse(JSON.stringify(this.props.competitionFeesState.defaultCompFeesMembershipProduct))
+                //     let tempProductsArray = finalmembershipProductTypes.filter(
+                //         data => data.isProductSelected === true
+                //     )
+                //     finalmembershipProductTypes = tempProductsArray
+                //     for (let i in finalmembershipProductTypes) {
+                //         var filterArray = finalmembershipProductTypes[i].membershipProductTypes.filter(
+                //             data => data.isTypeSelected === true,
+                //         );
+                //         finalmembershipProductTypes[i].membershipProductTypes = filterArray
+                //         if (finalmembershipProductTypes[i].membershipProductTypes.length == 0) {
+                //             finalmembershipProductTypes.splice(i, 1)
+                //         }
+                //     }
+                //     let payload =
+                //     {
+                //         "membershipProducts": finalmembershipProductTypes
+
+                //     }
+                //     this.props.saveCompetitionFeesMembershipTabAction(payload, competitionId)
+                //     this.setState({ loading: true })
+
+                // }
                 else if (tabKey == "2") {
-                    let finalmembershipProductTypes = JSON.parse(JSON.stringify(this.props.competitionFeesState.defaultCompFeesMembershipProduct))
-                    let tempProductsArray = finalmembershipProductTypes.filter(
-                        data => data.isProductSelected === true
-                    )
-                    finalmembershipProductTypes = tempProductsArray
-                    for (let i in finalmembershipProductTypes) {
-                        var filterArray = finalmembershipProductTypes[i].membershipProductTypes.filter(
-                            data => data.isTypeSelected === true,
-                        );
-                        finalmembershipProductTypes[i].membershipProductTypes = filterArray
-                        if (finalmembershipProductTypes[i].membershipProductTypes.length == 0) {
-                            finalmembershipProductTypes.splice(i, 1)
-                        }
-                    }
-                    let payload =
-                    {
-                        "membershipProducts": finalmembershipProductTypes
-
-                    }
-                    this.props.saveCompetitionFeesMembershipTabAction(payload, competitionId)
-                    this.setState({ loading: true })
-
-                }
-                else if (tabKey == "3") {
                     let divisionArrayData = compFeesState.competitionDivisionsData
                     let finalDivisionArray = []
                     for (let i in divisionArrayData) {
                         finalDivisionArray = [...finalDivisionArray, ...divisionArrayData[i].divisions]
                     }
                     let payload = finalDivisionArray
-                    this.props.saveCompetitionFeesDivisionAction(payload, competitionId)
-                    this.setState({ loading: true })
-                }
-                else if (tabKey == "4") {
-                    let finalPostData = []
-                    let fee_data = compFeesState.competitionFeesData
-                    let feeSeasonalData = []
-                    let feeCasualData = []
-                    let finalpostarray = []
-                    for (let i in fee_data) {
-                        if (fee_data[i].isAllType == "allDivisions") {
-                            feeSeasonalData = fee_data[i].seasonal.allType
-                            feeCasualData = fee_data[i].casual.allType
-                            finalPostData = [...feeSeasonalData, ...feeCasualData]
-                        } else {
-                            feeSeasonalData = fee_data[i].seasonal.perType
-                            feeCasualData = fee_data[i].casual.perType
-                            finalPostData = [...feeSeasonalData, ...feeCasualData]
-                        }
-                        let modifyArr = [...finalpostarray, ...finalPostData]
-                        finalpostarray = modifyArr
+                    let finalDivisionPayload = {
+                        statusRefId: this.state.statusRefId,
+                        divisions: payload
                     }
-                    this.props.saveCompetitionFeeSection(finalpostarray, competitionId)
+                    this.props.saveCompetitionFeesDivisionAction(finalDivisionPayload, competitionId)
                     this.setState({ loading: true })
                 }
-                else if (tabKey == "5") {
-                    this.paymentApiCall(competitionId)
-                    this.setState({ loading: true })
-                }
-                else if (tabKey == "6") {
-                    this.discountApiCall(competitionId)
-                    this.setState({ loading: true })
-                }
+                // else if (tabKey == "4") {
+                //     let finalPostData = []
+                //     let fee_data = compFeesState.competitionFeesData
+                //     let feeSeasonalData = []
+                //     let feeCasualData = []
+                //     let finalpostarray = []
+                //     for (let i in fee_data) {
+                //         if (fee_data[i].isAllType == "allDivisions") {
+                //             feeSeasonalData = fee_data[i].seasonal.allType
+                //             feeCasualData = fee_data[i].casual.allType
+                //             finalPostData = [...feeSeasonalData, ...feeCasualData]
+                //         } else {
+                //             feeSeasonalData = fee_data[i].seasonal.perType
+                //             feeCasualData = fee_data[i].casual.perType
+                //             finalPostData = [...feeSeasonalData, ...feeCasualData]
+                //         }
+                //         let modifyArr = [...finalpostarray, ...finalPostData]
+                //         finalpostarray = modifyArr
+                //     }
+                //     this.props.saveCompetitionFeeSection(finalpostarray, competitionId)
+                //     this.setState({ loading: true })
+                // }
+                // else if (tabKey == "5") {
+                //     this.paymentApiCall(competitionId)
+                //     this.setState({ loading: true })
+                // }
+                // else if (tabKey == "6") {
+                //     this.discountApiCall(competitionId)
+                //     this.setState({ loading: true })
+                // }
 
             }
         });
@@ -899,6 +1054,7 @@ class CompetitionOpenRegForm extends Component {
 
     // Non playing dates view
     nonPlayingDateView(item, index) {
+        let compDetailDisable = this.state.permissionState.compDetailDisable
         return (
             <div className="fluid-width mt-3">
                 <div className="row">
@@ -907,6 +1063,8 @@ class CompetitionOpenRegForm extends Component {
                             placeholder={AppConstants.name}
                             value={item.name}
                             onChange={(e) => this.updateNonPlayingNames(e.target.value, index, "name")}
+                            disabled={compDetailDisable}
+
                         />
                     </div>
                     <div className="col-sm">
@@ -918,9 +1076,11 @@ class CompetitionOpenRegForm extends Component {
                             format={"DD-MM-YYYY"}
                             showTime={false}
                             value={item.nonPlayingDate && moment(item.nonPlayingDate, "YYYY-MM-DD")}
+                            disabled={compDetailDisable}
+
                         />
                     </div>
-                    <div className="col-sm-2 transfer-image-view" onClick={() => this.props.add_editcompetitionFeeDeatils(index, "nonPlayingDataRemove")}>
+                    <div className="col-sm-2 transfer-image-view" onClick={() => !compDetailDisable ? this.props.add_editcompetitionFeeDeatils(index, "nonPlayingDataRemove") : null}>
                         <a className="transfer-image-view">
                             <span className="user-remove-btn">
                                 <i className="fa fa-trash-o" aria-hidden="true"></i>
@@ -932,6 +1092,7 @@ class CompetitionOpenRegForm extends Component {
             </div>
         )
     }
+
 
     //On selection of venue
     onSelectValues(item, detailsData) {
@@ -971,100 +1132,12 @@ class CompetitionOpenRegForm extends Component {
     }
 
 
-    // //// On change Invitees
-    // onInviteesChange(value) {
-    //     let regInviteesselectedData = this.props.competitionFeesState.selectedInvitees
-    //     let upcomingData = [...value]
-    //     let orgLevelId = JSON.stringify(this.state.organisationTypeRefId)
-    //     if (orgLevelId == "1" || orgLevelId == "2") {
-    //         let index = upcomingData.findIndex(x => x == "1")
-    //         if (index > -1) {
-    //             upcomingData.splice(index, 1)
-    //             let clubIndex = upcomingData.findIndex(x => x == "3")
-
-    //             if (clubIndex > -1) {
-    //                 upcomingData.splice(clubIndex, 1)
-    //             }
-
-    //         }
-    //     }
-    //     let associationIndex = regInviteesselectedData.findIndex(x => x == "2")
-    //     if (associationIndex > -1) {
-    //         let index = upcomingData.findIndex(x => x == "2")
-    //         if (index > -1) {
-    //             upcomingData.splice(index, 1)
-    //         }
-    //         let mainIndex = upcomingData.findIndex(x => x == "1")
-    //         if (mainIndex > -1) {
-    //             upcomingData.splice(mainIndex, 1)
-    //         }
-    //     }
-    //     let clubIndex = regInviteesselectedData.findIndex(x => x == "3")
-    //     if (clubIndex > -1) {
-    //         let index = upcomingData.findIndex(x => x == "3")
-    //         if (index > -1) {
-    //             upcomingData.splice(index, 1)
-    //         }
-    //         let mainIndex = upcomingData.findIndex(x => x == "1")
-    //         if (mainIndex > -1) {
-    //             upcomingData.splice(mainIndex, 1)
-    //         }
-    //     }
-    //     let directIndex = regInviteesselectedData.findIndex(x => x == "5")
-    //     if (directIndex > -1) {
-    //         let index = upcomingData.findIndex(x => x == "5")
-    //         if (index > -1) {
-    //             upcomingData.splice(index, 1)
-    //         }
-    //         let mainIndex = upcomingData.findIndex(x => x == "1")
-    //         if (mainIndex > -1) {
-    //             upcomingData.splice(mainIndex, 1)
-    //         }
-    //     }
-    //     let notApplIndex = regInviteesselectedData.findIndex(x => x == "6")
-    //     if (notApplIndex > -1) {
-    //         let index = upcomingData.findIndex(x => x == "6")
-    //         if (index > -1) {
-    //             upcomingData.splice(index, 1)
-    //         }
-    //         let mainIndex = upcomingData.findIndex(x => x == "1")
-    //         if (mainIndex > -1) {
-    //             upcomingData.splice(mainIndex, 1)
-    //         }
-    //     }
-    //     this.props.add_editcompetitionFeeDeatils(upcomingData, "invitees")
-    // }
-
 
     //// On change Invitees
     onInviteesChange(value) {
         let regInviteesselectedData = this.props.competitionFeesState.selectedInvitees
         console.log("value" + value);
         let arr = [value]
-        // let upcomingData = [...value]
-        // let associationIndex = regInviteesselectedData.findIndex(x => x == "2")
-        // if (associationIndex > -1) {
-        //     let index = upcomingData.findIndex(x => x == "2")
-        //     if (index > -1) {
-        //         upcomingData.splice(index, 1)
-        //     }
-        //     let mainIndex = upcomingData.findIndex(x => x == "1")
-        //     if (mainIndex > -1) {
-        //         upcomingData.splice(mainIndex, 1)
-        //     }
-        // }
-        // let clubIndex = regInviteesselectedData.findIndex(x => x == "3")
-        // if (clubIndex > -1) {
-        //     let index = upcomingData.findIndex(x => x == "3")
-        //     if (index > -1) {
-        //         upcomingData.splice(index, 1)
-        //     }
-        //     let mainIndex = upcomingData.findIndex(x => x == "1")
-        //     if (mainIndex > -1) {
-        //         upcomingData.splice(mainIndex, 1)
-        //     }
-        // }
-        // this.props.add_editcompetitionFeeDeatils(upcomingData, "invitees")
         this.props.add_editcompetitionFeeDeatils(arr, "invitees")
     }
 
@@ -1094,11 +1167,13 @@ class CompetitionOpenRegForm extends Component {
     };
 
 
-    ////////form content view - fee details
+    ///////form content view - fee details
     contentView = (getFieldDecorator) => {
         let appState = this.props.appState
+        const { venueList, mainVenueList } = this.props.commonReducerState
         let detailsData = this.props.competitionFeesState
         let defaultCompFeesOrgLogo = detailsData.defaultCompFeesOrgLogo
+        let compDetailDisable = this.state.permissionState.compDetailDisable
         return (
             <div className="content-view pt-4">
                 <Form.Item >
@@ -1108,8 +1183,10 @@ class CompetitionOpenRegForm extends Component {
                                 required={"required-field pb-0 "}
                                 heading={AppConstants.competition_name}
                                 placeholder={AppConstants.competition_name}
+                                // setFieldsValue={}
                                 // value={detailsData.competitionDetailData.competitionName}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionName")}
+                                disabled={compDetailDisable}
                             />
                         )}
                 </Form.Item>
@@ -1134,6 +1211,7 @@ class CompetitionOpenRegForm extends Component {
                                 </label>
                             </div>
                             <input
+                                disabled={compDetailDisable}
                                 type="file"
                                 id="user-pic"
                                 style={{ display: 'none' }}
@@ -1153,6 +1231,7 @@ class CompetitionOpenRegForm extends Component {
                                 onChange={e =>
                                     this.logoIsDefaultOnchange(e.target.checked, "logoIsDefault")
                                 }
+                                disabled={compDetailDisable}
                             >
                                 {AppConstants.useDefault}
                             </Checkbox>}
@@ -1162,8 +1241,8 @@ class CompetitionOpenRegForm extends Component {
                                 checked={this.state.logoSetDefault}
                                 onChange={e =>
                                     this.logoSaveAsDefaultOnchange(e.target.checked, "logoIsDefault")
-
                                 }
+                                disabled={compDetailDisable}
                             >
                                 {AppConstants.useAffiliateLogo}
                             </Checkbox>}
@@ -1179,34 +1258,39 @@ class CompetitionOpenRegForm extends Component {
                     allowClear
                     value={detailsData.competitionDetailData.description}
                     onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "description")}
+                    disabled={compDetailDisable}
                 />
 
-
-                <div style={{ marginTop: 15 }}>
+                <div style={{ marginTop: 15 }} >
                     <InputWithHead required={"required-field pb-0 "} heading={AppConstants.venue} />
-                    <Select
-                        mode="multiple"
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        onChange={venueSelection => this.onSelectValues(venueSelection, detailsData)}
-                        value={detailsData.selectedVenues}
-                        placeholder={AppConstants.selectVenue}
-                        filterOption={false}
-                        onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
+                    <Form.Item  >
+                        {getFieldDecorator('selectedVenues', { rules: [{ required: true, message: ValidationConstants.pleaseSelectvenue }] })(
+                            <Select
+                                mode="multiple"
+                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                onChange={venueSelection => {
+                                    this.onSelectValues(venueSelection, detailsData)
 
+                                }}
 
-                    >
-                        {appState.venueList.length > 0 && appState.venueList.map((item) => {
-                            return (
-                                <Option
-                                    key={item.id}
-                                    value={item.id}>
-                                    {item.name}</Option>
-                            )
-                        })}
-
-                    </Select>
+                                // value={detailsData.selectedVenues}
+                                placeholder={AppConstants.selectVenue}
+                                filterOption={false}
+                                onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
+                                disabled={compDetailDisable}
+                            >
+                                {appState.venueList.length > 0 && appState.venueList.map((item) => {
+                                    return (
+                                        <Option
+                                            key={item.id}
+                                            value={item.id}>
+                                            {item.name}</Option>
+                                    )
+                                })}
+                            </Select>
+                        )}
+                    </Form.Item>
                 </div>
-
                 <NavLink
                     to={{ pathname: `/competitionVenueAndTimesAdd`, state: { key: AppConstants.competitionDetails } }}
                 >
@@ -1220,6 +1304,8 @@ class CompetitionOpenRegForm extends Component {
                             className="reg-competition-radio"
                             onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionTypeRefId")}
                             setFieldsValue={detailsData.competitionTypeRefId}
+                            disabled={compDetailDisable}
+
                         >
                             {appState.typesOfCompetition.length > 0 && appState.typesOfCompetition.map(item => {
                                 return (
@@ -1239,6 +1325,8 @@ class CompetitionOpenRegForm extends Component {
                             onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionFormatRefId")}
                             // setFieldsValue={1}
                             setFieldsValue={detailsData.competitionFormatRefId}
+                            disabled={compDetailDisable}
+
                         >
                             {appState.competitionFormatTypes.length > 0 && appState.competitionFormatTypes.map(item => {
                                 return (
@@ -1248,8 +1336,8 @@ class CompetitionOpenRegForm extends Component {
                         </Radio.Group>
                     )}
                 </Form.Item>
-                <div className="fluid-width">
-                    <div className="row">
+                {/* <div className="fluid-width"> */}
+                {/* <div className="row">
                         <div className="col-sm">
                             <InputWithHead heading={AppConstants.startDate} />
 
@@ -1260,41 +1348,41 @@ class CompetitionOpenRegForm extends Component {
                                 format={"DD-MM-YYYY"}
                                 showTime={false}
                                 value={detailsData.competitionDetailData.startDate && moment(detailsData.competitionDetailData.startDate, "YYYY-MM-DD")}
+                                disabled={compDetailDisable}
+
                             />
 
-                        </div>
-                        <div className="col-sm">
-                            {detailsData.competitionDetailData.competitionFormatRefId == 4 &&
-                                <div>
-                                    <InputWithHead heading={AppConstants.numberOfRounds} />
-                                    <Form.Item >
-                                        {getFieldDecorator('numberOfRounds',
-                                            { rules: [{ required: true, message: ValidationConstants.numberOfRoundsNameIsRequired }] })(
+                        </div> */}
+                {/* <div className="col-sm"> */}
+                {detailsData.competitionDetailData.competitionFormatRefId == 4 &&
+                    <div>
+                        <InputWithHead heading={AppConstants.numberOfRounds} />
+                        <Form.Item >
+                            {getFieldDecorator('numberOfRounds',
+                                { rules: [{ required: true, message: ValidationConstants.numberOfRoundsNameIsRequired }] })(
 
-                                                <Select
-                                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                                    placeholder={AppConstants.selectRound}
-                                                    onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, "noOfRounds")}
-                                                    value={detailsData.competitionDetailData.noOfRounds}
-                                                // disabled={isCreatorEdit}
-                                                >
-                                                    {this.state.roundsArray.map(item => {
-                                                        console.log(item)
-                                                        return (
-                                                            <Option key={item.id} value={item.id}>{item.value}</Option>
-                                                        );
-                                                    })}
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        placeholder={AppConstants.selectRound}
+                                        onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, "noOfRounds")}
+                                        value={detailsData.competitionDetailData.noOfRounds}
+                                        disabled={compDetailDisable}
+                                    >
+                                        {this.state.roundsArray.map(item => {
+                                            console.log(item)
+                                            return (
+                                                <Option key={item.id} value={item.id}>{item.value}</Option>
+                                            );
+                                        })}
+                                    </Select>
 
-
-                                                </Select>
-
-                                            )}
-                                    </Form.Item>
-                                </div>
-                            }
-                        </div>
+                                )}
+                        </Form.Item>
                     </div>
-                </div>
+                }
+                {/* </div> */}
+                {/* </div> */}
+                {/* </div> */}
                 <InputWithHead heading={AppConstants.timeBetweenRounds} />
                 <div className="fluid-width">
                     <div className="row">
@@ -1303,6 +1391,8 @@ class CompetitionOpenRegForm extends Component {
                                 placeholder={AppConstants.days}
                                 value={detailsData.competitionDetailData.roundInDays}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInDays")}
+                                disabled={compDetailDisable}
+
                             />
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
@@ -1310,6 +1400,8 @@ class CompetitionOpenRegForm extends Component {
                                 placeholder={AppConstants.hours}
                                 value={detailsData.competitionDetailData.roundInHours}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInHours")}
+                                disabled={compDetailDisable}
+
                             />
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
@@ -1317,11 +1409,13 @@ class CompetitionOpenRegForm extends Component {
                                 placeholder={AppConstants.mins}
                                 value={detailsData.competitionDetailData.roundInMins}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInMins")}
+                                disabled={compDetailDisable}
+
                             />
                         </div>
                     </div>
                 </div>
-                <InputWithHead heading={AppConstants.registration_close} />
+                {/* <InputWithHead heading={AppConstants.registration_close} />
                 <DatePicker
                     size="large"
                     style={{ width: "100%" }}
@@ -1329,14 +1423,16 @@ class CompetitionOpenRegForm extends Component {
                     format={"DD-MM-YYYY"}
                     showTime={false}
                     value={detailsData.competitionDetailData.registrationCloseDate && moment(detailsData.competitionDetailData.registrationCloseDate)}
-                />
+                    disabled={compDetailDisable}
+
+                /> */}
                 <div className="inside-container-view pt-4">
                     <InputWithHead heading={AppConstants.nonPlayingDates} />
                     {detailsData.competitionDetailData.nonPlayingDates && detailsData.competitionDetailData.nonPlayingDates.map((item, index) =>
                         this.nonPlayingDateView(item, index))
                     }
                     <a>
-                        <span onClick={() => this.addNonPlayingDate()} className="input-heading-add-another">
+                        <span onClick={() => !compDetailDisable ? this.addNonPlayingDate() : null} className="input-heading-add-another">
                             + {AppConstants.addAnotherNonPlayingDate}
                         </span>
                     </a>
@@ -1349,6 +1445,8 @@ class CompetitionOpenRegForm extends Component {
                                 placeholder={AppConstants.minNumber}
                                 value={detailsData.competitionDetailData.minimunPlayers}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "minimunPlayers")}
+                                disabled={compDetailDisable}
+
                             />
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
@@ -1356,6 +1454,8 @@ class CompetitionOpenRegForm extends Component {
                                 placeholder={AppConstants.maxNumber}
                                 value={detailsData.competitionDetailData.maximumPlayers}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "maximumPlayers")}
+                                disabled={compDetailDisable}
+
                             />
                         </div>
                     </div>
@@ -1377,83 +1477,83 @@ class CompetitionOpenRegForm extends Component {
     }
 
 
-    membershipProductView = () => {
-        let membershipProductData = this.props.competitionFeesState.defaultCompFeesMembershipProduct
-        console.log("defaultCompFeesMembershipProduct", membershipProductData)
-        let membershipProductArray = membershipProductData !== null ? membershipProductData : []
-        return (
-            <div className="fees-view pt-5">
-                <span className="form-heading">{AppConstants.membershipProduct}</span>
-                {membershipProductArray.map((item, index) => (
-                    <div style={{
-                        display: "-ms-flexbox",
-                        flexDirection: "column",
-                        justifyContent: "center"
-                    }}>
-                        <Checkbox
-                            className="single-checkbox pt-3"
-                            checked={item.isProductSelected}
-                            onChange={e => this.membershipProductSelected(e.target.checked, index, item.membershipProductUniqueKey)}
-                            key={index}
-                        >
-                            {item.membershipProductName}
-                        </Checkbox>
-                    </div>
-                ))}
-            </div>
-        );
-    };
+    // membershipProductView = () => {
+    //     let membershipProductData = this.props.competitionFeesState.defaultCompFeesMembershipProduct
+    //     console.log("defaultCompFeesMembershipProduct", membershipProductData)
+    //     let membershipProductArray = membershipProductData !== null ? membershipProductData : []
+    //     return (
+    //         <div className="fees-view pt-5">
+    //             <span className="form-heading">{AppConstants.membershipProduct}</span>
+    //             {membershipProductArray.map((item, index) => (
+    //                 <div style={{
+    //                     display: "-ms-flexbox",
+    //                     flexDirection: "column",
+    //                     justifyContent: "center"
+    //                 }}>
+    //                     <Checkbox
+    //                         className="single-checkbox pt-3"
+    //                         checked={item.isProductSelected}
+    //                         onChange={e => this.membershipProductSelected(e.target.checked, index, item.membershipProductUniqueKey)}
+    //                         key={index}
+    //                     >
+    //                         {item.membershipProductName}
+    //                     </Checkbox>
+    //                 </div>
+    //             ))}
+    //         </div>
+    //     );
+    // };
 
 
-    membershipTypeInnerView = (item, index) => {
-        let typeData = isArrayNotEmpty(item.membershipProductTypes) ? item.membershipProductTypes : []
-        return (
-            <div  >
-                {typeData.map((typeItem, typeIndex) =>
-                    <div style={{ display: "-ms-flexbox", flexDirection: "column", justifyContent: "center" }} >
-                        <Checkbox
-                            className="single-checkbox pt-3"
-                            checked={typeItem.isTypeSelected}
-                            onChange={e => this.membershipTypeSelected(e.target.checked, index, typeIndex)}
-                            key={typeIndex}
-                        >
-                            {typeItem.membershipProductTypeName}
-                        </Checkbox>
-                    </div>
-                )}
-            </div>
-        )
-    }
+    // membershipTypeInnerView = (item, index) => {
+    //     let typeData = isArrayNotEmpty(item.membershipProductTypes) ? item.membershipProductTypes : []
+    //     return (
+    //         <div  >
+    //             {typeData.map((typeItem, typeIndex) =>
+    //                 <div style={{ display: "-ms-flexbox", flexDirection: "column", justifyContent: "center" }} >
+    //                     <Checkbox
+    //                         className="single-checkbox pt-3"
+    //                         checked={typeItem.isTypeSelected}
+    //                         onChange={e => this.membershipTypeSelected(e.target.checked, index, typeIndex)}
+    //                         key={typeIndex}
+    //                     >
+    //                         {typeItem.membershipProductTypeName}
+    //                     </Checkbox>
+    //                 </div>
+    //             )}
+    //         </div>
+    //     )
+    // }
 
 
 
-    membershipTypeView = () => {
-        let membershipTypesData = this.props.competitionFeesState.defaultCompFeesMembershipProduct
-        console.log("membershipTypesData", membershipTypesData)
-        let membershipProductArray = membershipTypesData !== null ? membershipTypesData : []
-        return (
-            <div className="fees-view pt-5">
-                <span className="form-heading">{AppConstants.membershipTYpe}</span>
-                {membershipProductArray.length == 0 && (
-                    <span className="applicable-to-heading pt-0">
-                        {AppConstants.please_Sel_mem_pro}
-                    </span>
-                )}
+    // membershipTypeView = () => {
+    //     let membershipTypesData = this.props.competitionFeesState.defaultCompFeesMembershipProduct
+    //     console.log("membershipTypesData", membershipTypesData)
+    //     let membershipProductArray = membershipTypesData !== null ? membershipTypesData : []
+    //     return (
+    //         <div className="fees-view pt-5">
+    //             <span className="form-heading">{AppConstants.membershipTYpe}</span>
+    //             {membershipProductArray.length == 0 && (
+    //                 <span className="applicable-to-heading pt-0">
+    //                     {AppConstants.please_Sel_mem_pro}
+    //                 </span>
+    //             )}
 
-                {membershipProductArray.map((item, index) => (
-                    item.isProductSelected ?
-                        <div className="prod-reg-inside-container-view" >
-                            <span className="applicable-to-heading">
-                                {item.membershipProductName}
-                            </span>
-                            {this.membershipTypeInnerView(item, index)}
+    //             {membershipProductArray.map((item, index) => (
+    //                 item.isProductSelected ?
+    //                     <div className="prod-reg-inside-container-view" >
+    //                         <span className="applicable-to-heading">
+    //                             {item.membershipProductName}
+    //                         </span>
+    //                         {this.membershipTypeInnerView(item, index)}
 
-                        </div> : null
-                ))}
-            </div>
+    //                     </div> : null
+    //             ))}
+    //         </div>
 
-        )
-    }
+    //     )
+    // }
 
     //////add or remove another division inthe divsision tab
     addRemoveDivision = (index, item, keyword) => {
@@ -1464,13 +1564,14 @@ class CompetitionOpenRegForm extends Component {
 
 
 
+
     divisionsView = () => {
         let divisionData = this.props.competitionFeesState.competitionDivisionsData
-        console.log("divisionData", divisionData)
         let divisionArray = divisionData !== null ? divisionData : []
+        let divisionsDisable = this.state.permissionState.divisionsDisable
         return (
             <div className="fees-view pt-5">
-                <span className="form-heading required-field">{AppConstants.divisions}</span>
+                <span className="form-heading required-field" >{AppConstants.divisions}</span>
                 {divisionArray.length == 0 && (
                     <span className="applicable-to-heading pt-0">
                         {AppConstants.please_Sel_mem_pro}
@@ -1478,7 +1579,6 @@ class CompetitionOpenRegForm extends Component {
                 )}
                 {divisionArray.map((item, index) =>
                     <div>
-
                         <div className="inside-container-view">
                             <span className="form-heading pt-2 pl-2">
                                 {item.membershipProductName}
@@ -1493,15 +1593,15 @@ class CompetitionOpenRegForm extends Component {
                                 />
                             </div>
                             <a>
-                                <span className="input-heading-add-another" onClick={() => this.addRemoveDivision(index, item, "add")}>+ {AppConstants.addDivision}</span>
+                                <span className="input-heading-add-another" onClick={() => !divisionsDisable ? this.addRemoveDivision(index, item, "add") : null}>+ {AppConstants.addDivision}</span>
                             </a>
                         </div>
                     </div>
                 )}
-
-            </div>
+``            </div>
         );
     };
+
 
     ////// Edit fee details
     onChangeDetails(value, tableIndex, item, key, arrayKey) {
@@ -1510,110 +1610,110 @@ class CompetitionOpenRegForm extends Component {
     }
 
 
-    feesView = () => {
-        let allStates = this.props.competitionFeesState
-        let feeDetails = allStates.competitionFeesData
-        return (
-            <div className="fees-view pt-5">
-                <span className="form-heading">{AppConstants.fees}</span>
-                {feeDetails == null || feeDetails.length == 0 && (
-                    <span className="applicable-to-heading pt-0">
-                        {AppConstants.please_Sel_mem_pro}
-                    </span>
-                )}
+    // feesView = () => {
+    //     let allStates = this.props.competitionFeesState
+    //     let feeDetails = allStates.competitionFeesData
+    //     return (
+    //         <div className="fees-view pt-5">
+    //             <span className="form-heading">{AppConstants.fees}</span>
+    //             {feeDetails == null || feeDetails.length == 0 && (
+    //                 <span className="applicable-to-heading pt-0">
+    //                     {AppConstants.please_Sel_mem_pro}
+    //                 </span>
+    //             )}
 
-                {feeDetails && feeDetails.map((item, index) => {
-                    return (
-                        <div className="inside-container-view">
-                            <span className="form-heading pt-2 pl-2">
-                                {item.membershipProductName}
-                            </span>
-                            <Radio.Group
-                                className="reg-competition-radio"
-                                onChange={e => this.props.checkUncheckcompetitionFeeSction(e.target.value, index, "isAllType")}
-                                value={item.isAllType}
-                            // defaultValue={"allDivisions"}
-                            >
-                                <div className="fluid-width">
-                                    <div className="row">
-                                        <div className="col-sm-2">
-                                            <Radio value={"allDivisions"}>{AppConstants.allDivisions}</Radio>
-                                        </div>
-                                        <div
-                                            className="col-sm-2"
-                                            style={{ display: "flex", alignItems: "center" }}
-                                        >
-                                            <Radio value={"perDivision"}>{AppConstants.perDivision}</Radio>
-                                        </div>
-                                    </div>
-                                </div>
-                            </Radio.Group>
-                            <div style={{ marginTop: 5 }}>
-                                <div style={{ marginTop: 5 }}>
-                                    <Checkbox
-                                        checked={item.isSeasonal}
-                                        className="single-checkbox"
-                                        onChange={e => {
-                                            this.props.checkUncheckcompetitionFeeSction(e.target.checked, index, "isSeasonal")
-                                        }
-                                            // this.setState({
-                                            //     SeasonalFeeSelected: !this.state.SeasonalFeeSelected
-                                            // })
-                                        }
-                                    >
-                                        {AppConstants.seasonalFee}
-                                    </Checkbox>
-                                </div>
-                                {item.isSeasonal == true && (
-                                    <div className="table-responsive mt-2">
-                                        <Table
-                                            className="fees-table"
-                                            columns={playerSeasoTable}
-                                            dataSource={
-                                                item.isAllType != "allDivisions"
-                                                    ? item.seasonal.perType
-                                                    : item.seasonal.allType
-                                            }
-                                            pagination={false}
-                                            Divider="false"
-                                        />
-                                    </div>
-                                )}
+    //             {feeDetails && feeDetails.map((item, index) => {
+    //                 return (
+    //                     <div className="inside-container-view">
+    //                         <span className="form-heading pt-2 pl-2">
+    //                             {item.membershipProductName}
+    //                         </span>
+    //                         <Radio.Group
+    //                             className="reg-competition-radio"
+    //                             onChange={e => this.props.checkUncheckcompetitionFeeSction(e.target.value, index, "isAllType")}
+    //                             value={item.isAllType}
+    //                         // defaultValue={"allDivisions"}
+    //                         >
+    //                             <div className="fluid-width">
+    //                                 <div className="row">
+    //                                     <div className="col-sm-2">
+    //                                         <Radio value={"allDivisions"}>{AppConstants.allDivisions}</Radio>
+    //                                     </div>
+    //                                     <div
+    //                                         className="col-sm-2"
+    //                                         style={{ display: "flex", alignItems: "center" }}
+    //                                     >
+    //                                         <Radio value={"perDivision"}>{AppConstants.perDivision}</Radio>
+    //                                     </div>
+    //                                 </div>
+    //                             </div>
+    //                         </Radio.Group>
+    //                         <div style={{ marginTop: 5 }}>
+    //                             <div style={{ marginTop: 5 }}>
+    //                                 <Checkbox
+    //                                     checked={item.isSeasonal}
+    //                                     className="single-checkbox"
+    //                                     onChange={e => {
+    //                                         this.props.checkUncheckcompetitionFeeSction(e.target.checked, index, "isSeasonal")
+    //                                     }
+    //                                         // this.setState({
+    //                                         //     SeasonalFeeSelected: !this.state.SeasonalFeeSelected
+    //                                         // })
+    //                                     }
+    //                                 >
+    //                                     {AppConstants.seasonalFee}
+    //                                 </Checkbox>
+    //                             </div>
+    //                             {item.isSeasonal == true && (
+    //                                 <div className="table-responsive mt-2">
+    //                                     <Table
+    //                                         className="fees-table"
+    //                                         columns={playerSeasoTable}
+    //                                         dataSource={
+    //                                             item.isAllType != "allDivisions"
+    //                                                 ? item.seasonal.perType
+    //                                                 : item.seasonal.allType
+    //                                         }
+    //                                         pagination={false}
+    //                                         Divider="false"
+    //                                     />
+    //                                 </div>
+    //                             )}
 
-                                <div style={{ marginTop: 5 }}>
-                                    <Checkbox
-                                        checked={item.isCasual}
-                                        className="single-checkbox"
-                                        onChange={e =>
-                                            this.props.checkUncheckcompetitionFeeSction(e.target.checked, index, "isCasual")
-                                        }
-                                    >
-                                        {AppConstants.casualFee}
-                                    </Checkbox>
-                                </div>
+    //                             <div style={{ marginTop: 5 }}>
+    //                                 <Checkbox
+    //                                     checked={item.isCasual}
+    //                                     className="single-checkbox"
+    //                                     onChange={e =>
+    //                                         this.props.checkUncheckcompetitionFeeSction(e.target.checked, index, "isCasual")
+    //                                     }
+    //                                 >
+    //                                     {AppConstants.casualFee}
+    //                                 </Checkbox>
+    //                             </div>
 
-                                {item.isCasual == true && (
-                                    <div className="table-responsive mt-2">
-                                        <Table
-                                            className="fees-table"
-                                            columns={playercasualTable}
-                                            dataSource={
-                                                item.isAllType != "allDivisions"
-                                                    ? item.casual.perType
-                                                    : item.casual.allType
-                                            }
-                                            pagination={false}
-                                            Divider="false"
-                                        />
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )
-                })}
-            </div>
-        );
-    };
+    //                             {item.isCasual == true && (
+    //                                 <div className="table-responsive mt-2">
+    //                                     <Table
+    //                                         className="fees-table"
+    //                                         columns={playercasualTable}
+    //                                         dataSource={
+    //                                             item.isAllType != "allDivisions"
+    //                                                 ? item.casual.perType
+    //                                                 : item.casual.allType
+    //                                         }
+    //                                         pagination={false}
+    //                                         Divider="false"
+    //                                     />
+    //                                 </div>
+    //                             )}
+    //                         </div>
+    //                     </div>
+    //                 )
+    //             })}
+    //         </div>
+    //     );
+    // };
 
 
     // regInviteesView = () => {
@@ -1639,54 +1739,54 @@ class CompetitionOpenRegForm extends Component {
     //     );
     // };
 
-    regInviteesView = () => {
+    // regInviteesView = () => {
 
-        let invitees = this.props.appState.registrationInvitees.length > 0 ? this.props.appState.registrationInvitees : [];
-        console.log("invitees" + JSON.stringify(invitees));
-        let detailsData = this.props.competitionFeesState
-        console.log("********" + JSON.stringify(detailsData.selectedInvitees));
-        let isCreatorEdit = this.state.isCreatorEdit;
-        let seletedInvitee = detailsData.selectedInvitees.find(x => x);
-        return (
-            <div className="fees-view pt-5">
-                <span className="form-heading">{AppConstants.registrationInvitees}</span>
-                <div>
-                    <Radio.Group
-                        className="reg-competition-radio"
-                        onChange={(e) => this.onInviteesChange(e.target.value)}
-                        value={seletedInvitee}>
-                        {(invitees || []).map((item, index) =>
-                            (
-                                <div>
-                                    {item.subReferences.length == 0 ?
-                                        <Radio key={item.id} value={item.id}>{item.description}</Radio>
-                                        : <div>
-                                            <div class="applicable-to-heading invitees-main">{item.description}</div>
-                                            {(item.subReferences).map((subItem, subIndex) => (
-                                                <div style={{ marginLeft: '20px' }}>
-                                                    <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    }
-                                </div>
-                            ))
-                        }
-                    </Radio.Group>
-                    {/* <Tree
-                        className="tree-government-rebate"
-                        style={{ flexDirection: 'column' }}
-                        checkable
-                        checkedKeys={[...detailsData.selectedInvitees]}
-                        onCheck={(e) => this.onInviteesChange(e)}
-                        disabled={isCreatorEdit}
-                    >
-                        {this.AffiliatesLevel(invitees)}
-                    </Tree> */}
-                </div>
-            </div>
-        );
-    };
+    //     let invitees = this.props.appState.registrationInvitees.length > 0 ? this.props.appState.registrationInvitees : [];
+    //     console.log("invitees" + JSON.stringify(invitees));
+    //     let detailsData = this.props.competitionFeesState
+    //     console.log("********" + JSON.stringify(detailsData.selectedInvitees));
+    //     let isCreatorEdit = this.state.isCreatorEdit;
+    //     let seletedInvitee = detailsData.selectedInvitees.find(x => x);
+    //     return (
+    //         <div className="fees-view pt-5">
+    //             <span className="form-heading">{AppConstants.registrationInvitees}</span>
+    //             <div>
+    //                 <Radio.Group
+    //                     className="reg-competition-radio"
+    //                     onChange={(e) => this.onInviteesChange(e.target.value)}
+    //                     value={seletedInvitee}>
+    //                     {(invitees || []).map((item, index) =>
+    //                         (
+    //                             <div>
+    //                                 {item.subReferences.length == 0 ?
+    //                                     <Radio key={item.id} value={item.id}>{item.description}</Radio>
+    //                                     : <div>
+    //                                         <div class="applicable-to-heading invitees-main">{item.description}</div>
+    //                                         {(item.subReferences).map((subItem, subIndex) => (
+    //                                             <div style={{ marginLeft: '20px' }}>
+    //                                                 <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
+    //                                             </div>
+    //                                         ))}
+    //                                     </div>
+    //                                 }
+    //                             </div>
+    //                         ))
+    //                     }
+    //                 </Radio.Group>
+    //                 {/* <Tree
+    //                     className="tree-government-rebate"
+    //                     style={{ flexDirection: 'column' }}
+    //                     checkable
+    //                     checkedKeys={[...detailsData.selectedInvitees]}
+    //                     onCheck={(e) => this.onInviteesChange(e)}
+    //                     disabled={isCreatorEdit}
+    //                 >
+    //                     {this.AffiliatesLevel(invitees)}
+    //                 </Tree> */}
+    //             </div>
+    //         </div>
+    //     );
+    // };
 
 
     //on change of casual fee payment option
@@ -1726,94 +1826,94 @@ class CompetitionOpenRegForm extends Component {
 
 
     //payment Option View in tab 5
-    paymentOptionsView = () => {
-        let allStates = this.props.competitionFeesState
-        let feeDetails = allStates.competitionFeesData
-        let isSeasonal = this.checkIsSeasonal(feeDetails)
-        let isCasual = this.checkIsCasual(feeDetails)
-        let casualPayment = this.props.competitionFeesState.casualPaymentDefault
-        let seasonalPayment = this.props.competitionFeesState.seasonalPaymentDefault
-        let paymentData = this.props.competitionFeesState.competitionPaymentsData
-        let selectedSeasonalFeeKey = this.props.competitionFeesState.SelectedSeasonalFeeKey
-        let selectedCasualFeeKey = this.props.competitionFeesState.selectedCasualFeeKey
-        return (
-            <div className="fees-view pt-5">
-                <span className="form-heading">{AppConstants.paymentOptions}</span>
-                {(isSeasonal == false && isCasual == false) &&
-                    <span className="applicable-to-heading pt-0">
-                        {AppConstants.please_Sel_Fee}
-                    </span>
-                }
-                {isSeasonal == true &&
-                    <div className="inside-container-view">
-                        <span className="form-heading">{AppConstants.seasonalFee}</span>
-                        <Tree
-                            style={{ flexDirection: 'column' }}
-                            className="tree-government-rebate"
-                            checkable
-                            defaultExpandedKeys={[]}
-                            defaultCheckedKeys={[]}
-                            checkedKeys={selectedSeasonalFeeKey}
-                            onCheck={(e) => this.onChangeSeasonalFee(e, paymentData)}
-                            disabled={this.state.isCreatorEdit}
-                        >
-                            {this.seasonalDataTree(seasonalPayment)}
-                        </Tree>
-                    </div>
-                }
-                {isCasual == true &&
-                    <div className="inside-container-view">
-                        <span className="form-heading">{AppConstants.casualFee}</span>
-                        <Tree
-                            style={{ flexDirection: 'column' }}
-                            className="tree-government-rebate"
-                            checkable
-                            defaultExpandedKeys={[]}
-                            defaultCheckedKeys={[]}
-                            checkedKeys={selectedCasualFeeKey}
-                            onCheck={(e) => this.onChangeCasualFee(e, paymentData)}
-                            disabled={this.state.isCreatorEdit}
-                        >
-                            {this.casualDataTree(casualPayment)}
-                        </Tree>
-                    </div>
-                }
-                <div>
-                </div>
-            </div >
-        );
-    };
+    // paymentOptionsView = () => {
+    //     let allStates = this.props.competitionFeesState
+    //     let feeDetails = allStates.competitionFeesData
+    //     let isSeasonal = this.checkIsSeasonal(feeDetails)
+    //     let isCasual = this.checkIsCasual(feeDetails)
+    //     let casualPayment = this.props.competitionFeesState.casualPaymentDefault
+    //     let seasonalPayment = this.props.competitionFeesState.seasonalPaymentDefault
+    //     let paymentData = this.props.competitionFeesState.competitionPaymentsData
+    //     let selectedSeasonalFeeKey = this.props.competitionFeesState.SelectedSeasonalFeeKey
+    //     let selectedCasualFeeKey = this.props.competitionFeesState.selectedCasualFeeKey
+    //     return (
+    //         <div className="fees-view pt-5">
+    //             <span className="form-heading">{AppConstants.paymentOptions}</span>
+    //             {(isSeasonal == false && isCasual == false) &&
+    //                 <span className="applicable-to-heading pt-0">
+    //                     {AppConstants.please_Sel_Fee}
+    //                 </span>
+    //             }
+    //             {isSeasonal == true &&
+    //                 <div className="inside-container-view">
+    //                     <span className="form-heading">{AppConstants.seasonalFee}</span>
+    //                     <Tree
+    //                         style={{ flexDirection: 'column' }}
+    //                         className="tree-government-rebate"
+    //                         checkable
+    //                         defaultExpandedKeys={[]}
+    //                         defaultCheckedKeys={[]}
+    //                         checkedKeys={selectedSeasonalFeeKey}
+    //                         onCheck={(e) => this.onChangeSeasonalFee(e, paymentData)}
+    //                         disabled={this.state.isCreatorEdit}
+    //                     >
+    //                         {this.seasonalDataTree(seasonalPayment)}
+    //                     </Tree>
+    //                 </div>
+    //             }
+    //             {isCasual == true &&
+    //                 <div className="inside-container-view">
+    //                     <span className="form-heading">{AppConstants.casualFee}</span>
+    //                     <Tree
+    //                         style={{ flexDirection: 'column' }}
+    //                         className="tree-government-rebate"
+    //                         checkable
+    //                         defaultExpandedKeys={[]}
+    //                         defaultCheckedKeys={[]}
+    //                         checkedKeys={selectedCasualFeeKey}
+    //                         onCheck={(e) => this.onChangeCasualFee(e, paymentData)}
+    //                         disabled={this.state.isCreatorEdit}
+    //                     >
+    //                         {this.casualDataTree(casualPayment)}
+    //                     </Tree>
+    //                 </div>
+    //             }
+    //             <div>
+    //             </div>
+    //         </div >
+    //     );
+    // };
 
 
     //////charity voucher view
-    charityVoucherView = () => {
-        let charityRoundUp = this.props.competitionFeesState.charityRoundUp
-        console.log(charityRoundUp, "console.log")
-        let paymentData = this.props.competitionFeesState.competitionPaymentsData
-        return (
-            <div className="advanced-setting-view pt-5">
-                <span className="form-heading">{AppConstants.charityRoundUp}</span>
-                <div className="inside-container-view">
-                    {charityRoundUp.map((item, index) => {
-                        return (
-                            <div className="row">
-                                <Checkbox
-                                    className="single-checkbox mt-3"
-                                    checked={item.isSelected}
-                                    onChange={(e) => this.onChangeCharity(e.target.checked, index, "charityRoundUp")}
-                                >
-                                    {item.description}
-                                </Checkbox>
+    // charityVoucherView = () => {
+    //     let charityRoundUp = this.props.competitionFeesState.charityRoundUp
+    //     console.log(charityRoundUp, "console.log")
+    //     let paymentData = this.props.competitionFeesState.competitionPaymentsData
+    //     return (
+    //         <div className="advanced-setting-view pt-5">
+    //             <span className="form-heading">{AppConstants.charityRoundUp}</span>
+    //             <div className="inside-container-view">
+    //                 {charityRoundUp.map((item, index) => {
+    //                     return (
+    //                         <div className="row">
+    //                             <Checkbox
+    //                                 className="single-checkbox mt-3"
+    //                                 checked={item.isSelected}
+    //                                 onChange={(e) => this.onChangeCharity(e.target.checked, index, "charityRoundUp")}
+    //                             >
+    //                                 {item.description}
+    //                             </Checkbox>
 
-                            </div>
+    //                         </div>
 
-                        )
-                    })}
+    //                     )
+    //                 })}
 
-                </div>
-            </div >
-        );
-    };
+    //             </div>
+    //         </div >
+    //     );
+    // };
 
 
 
@@ -1824,31 +1924,31 @@ class CompetitionOpenRegForm extends Component {
 
 
     ////governement voucher view
-    voucherView = () => {
-        let govtVoucher = this.props.competitionFeesState.govtVoucher
-        console.log(govtVoucher, "console.log")
-        return (
-            <div className="advanced-setting-view pt-5">
-                <span className="form-heading">{AppConstants.governmentVouchers}</span>
-                <div className="inside-container-view">
-                    {govtVoucher.length > 0 && govtVoucher.map((item, index) => {
-                        return (
-                            <div className="row">
-                                <Checkbox
-                                    className="single-checkbox mt-3"
-                                    checked={item.isSelected}
-                                    onChange={(e) => this.onChangeCharity(e.target.checked, index, "govermentVouchers")}
-                                >
-                                    {item.description}
-                                </Checkbox>
-                            </div>
-                        )
-                    })
-                    }
-                </div>
-            </div>
-        );
-    };
+    // voucherView = () => {
+    //     let govtVoucher = this.props.competitionFeesState.govtVoucher
+    //     console.log(govtVoucher, "console.log")
+    //     return (
+    //         <div className="advanced-setting-view pt-5">
+    //             <span className="form-heading">{AppConstants.governmentVouchers}</span>
+    //             <div className="inside-container-view">
+    //                 {govtVoucher.length > 0 && govtVoucher.map((item, index) => {
+    //                     return (
+    //                         <div className="row">
+    //                             <Checkbox
+    //                                 className="single-checkbox mt-3"
+    //                                 checked={item.isSelected}
+    //                                 onChange={(e) => this.onChangeCharity(e.target.checked, index, "govermentVouchers")}
+    //                             >
+    //                                 {item.description}
+    //                             </Checkbox>
+    //                         </div>
+    //                     )
+    //                 })
+    //                 }
+    //             </div>
+    //         </div>
+    //     );
+    // };
 
     //onChange membership type  discount
     onChangeMembershipTypeDiscount = (discountMembershipType, index) => {
@@ -1869,272 +1969,272 @@ class CompetitionOpenRegForm extends Component {
         this.props.updatedDiscountDataAction(discountData)
     }
 
-    discountViewChange = (item, index) => {
-        let childDiscounts = item.childDiscounts !== null && item.childDiscounts.length > 0 ? item.childDiscounts : []
-        switch (item.competitionTypeDiscountTypeRefId) {
+    // discountViewChange = (item, index) => {
+    //     let childDiscounts = item.childDiscounts !== null && item.childDiscounts.length > 0 ? item.childDiscounts : []
+    //     switch (item.competitionTypeDiscountTypeRefId) {
 
-            case 1:
-                return <div>
-                    <InputWithHead heading={"Discount Type"} />
-                    <Select
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
-                        placeholder="Select"
-                        value={item.discountTypeRefId}
-                    >
-                        {this.props.appState.commonDiscountTypes.map(item => {
-                            return (
-                                <Option key={"discountType" + item.id} value={item.id}>
-                                    {item.description}
-                                </Option>
-                            );
-                        })}
-                    </Select>
-                    <div className="row">
-                        <div className="col-sm">
-                            <InputWithHead
-                                heading={AppConstants.percentageOff_FixedAmount}
-                                placeholder={AppConstants.percentageOff_FixedAmount}
-                                onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
-                                value={item.amount}
-                            />
-                        </div>
-                        <div className="col-sm">
-                            <InputWithHead
-                                heading={AppConstants.description}
-                                placeholder={AppConstants.gernalDiscount}
-                                onChange={(e) => this.onChangeDescription(e.target.value, index)}
-                                value={item.description}
-                            />
-                        </div>
-                    </div>
-                    <div className="fluid-width">
-                        <div className="row">
-                            <div className="col-sm">
-                                <InputWithHead heading={AppConstants.availableFrom} />
-                                <DatePicker
-                                    size="large"
-                                    style={{ width: "100%" }}
-                                    onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
-                                    format={"DD-MM-YYYY"}
-                                    showTime={false}
-                                    value={item.availableFrom !== null && moment(item.availableFrom)}
-                                />
-                            </div>
-                            <div className="col-sm">
-                                <InputWithHead heading={AppConstants.availableTo} />
-                                <DatePicker
-                                    size="large"
-                                    style={{ width: "100%" }}
-                                    disabledDate={this.disabledDate}
-                                    disabledTime={this.disabledTime}
-                                    onChange={date => this.onChangeDiscountAvailableTo(date, index)}
-                                    format={"DD-MM-YYYY"}
-                                    showTime={false}
-                                    value={item.availableTo !== null && moment(item.availableTo)}
+    //         case 1:
+    //             return <div>
+    //                 <InputWithHead heading={"Discount Type"} />
+    //                 <Select
+    //                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+    //                     onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
+    //                     placeholder="Select"
+    //                     value={item.discountTypeRefId}
+    //                 >
+    //                     {this.props.appState.commonDiscountTypes.map(item => {
+    //                         return (
+    //                             <Option key={"discountType" + item.id} value={item.id}>
+    //                                 {item.description}
+    //                             </Option>
+    //                         );
+    //                     })}
+    //                 </Select>
+    //                 <div className="row">
+    //                     <div className="col-sm">
+    //                         <InputWithHead
+    //                             heading={AppConstants.percentageOff_FixedAmount}
+    //                             placeholder={AppConstants.percentageOff_FixedAmount}
+    //                             onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
+    //                             value={item.amount}
+    //                         />
+    //                     </div>
+    //                     <div className="col-sm">
+    //                         <InputWithHead
+    //                             heading={AppConstants.description}
+    //                             placeholder={AppConstants.gernalDiscount}
+    //                             onChange={(e) => this.onChangeDescription(e.target.value, index)}
+    //                             value={item.description}
+    //                         />
+    //                     </div>
+    //                 </div>
+    //                 <div className="fluid-width">
+    //                     <div className="row">
+    //                         <div className="col-sm">
+    //                             <InputWithHead heading={AppConstants.availableFrom} />
+    //                             <DatePicker
+    //                                 size="large"
+    //                                 style={{ width: "100%" }}
+    //                                 onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
+    //                                 format={"DD-MM-YYYY"}
+    //                                 showTime={false}
+    //                                 value={item.availableFrom !== null && moment(item.availableFrom)}
+    //                             />
+    //                         </div>
+    //                         <div className="col-sm">
+    //                             <InputWithHead heading={AppConstants.availableTo} />
+    //                             <DatePicker
+    //                                 size="large"
+    //                                 style={{ width: "100%" }}
+    //                                 disabledDate={this.disabledDate}
+    //                                 disabledTime={this.disabledTime}
+    //                                 onChange={date => this.onChangeDiscountAvailableTo(date, index)}
+    //                                 format={"DD-MM-YYYY"}
+    //                                 showTime={false}
+    //                                 value={item.availableTo !== null && moment(item.availableTo)}
 
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-            case 2:
-                return <div>
-                    <InputWithHead heading={"Discount Type"} />
-                    <Select
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
-                        placeholder="Select"
-                        value={item.discountTypeRefId}
-                    >
-                        {this.props.appState.commonDiscountTypes.map(item => {
-                            return (
-                                <Option key={"discountType" + item.id} value={item.id}>
-                                    {item.description}
-                                </Option>
-                            );
-                        })}
-                    </Select>
-                    <InputWithHead
-                        heading={AppConstants.code}
-                        placeholder={AppConstants.code}
-                        onChange={(e) => this.onChangeDiscountCode(e.target.value, index)}
-                        value={item.discountCode}
-                    />
-                    <div className="row">
-                        <div className="col-sm">
-                            <InputWithHead
-                                heading={AppConstants.percentageOff_FixedAmount}
-                                placeholder={AppConstants.percentageOff_FixedAmount}
-                                onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
-                                value={item.amount}
-                            />
-                        </div>
-                        <div className="col-sm">
-                            <InputWithHead
-                                heading={AppConstants.description}
-                                placeholder={AppConstants.gernalDiscount}
-                                onChange={(e) => this.onChangeDescription(e.target.value, index)}
-                                value={item.description}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="fluid-width">
-                        <div className="row">
-                            <div className="col-sm">
-                                <InputWithHead heading={AppConstants.availableFrom} />
-                                <DatePicker
-                                    size="large"
-                                    style={{ width: "100%" }}
-                                    onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
-                                    format={"DD-MM-YYYY"}
-                                    showTime={false}
-                                    value={item.availableFrom !== null ? moment(item.availableFrom) : null}
-                                />
-                            </div>
-                            <div className="col-sm">
-                                <InputWithHead heading={AppConstants.availableTo} />
-                                <DatePicker
-                                    size="large"
-                                    style={{ width: "100%" }}
-                                    disabledDate={this.disabledDate}
-                                    disabledTime={this.disabledTime}
-                                    onChange={date => this.onChangeDiscountAvailableTo(date, index)}
-                                    format={"DD-MM-YYYY"}
-                                    showTime={false}
-                                    value={item.availableTo !== null ? moment(item.availableTo) : null}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    //                             />
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //             </div>
 
 
-            case 3:
-                return <div>
-                    {childDiscounts.map((childItem, childindex) => (
-                        <div className="row">
-                            <div className="col-sm-10">
-                                <InputWithHead
-                                    heading={`Child ${childindex + 1}%`}
-                                    placeholder={`Child ${childindex + 1}%`}
-                                    onChange={(e) => this.onChangeChildPercent(e.target.value, index, childindex, childItem)}
-                                    value={childItem.percentageValue}
-                                />
-                            </div>
-                            <div className="col-sm-2 delete-image-view pb-4" onClick={() => this.addRemoveChildDiscount(index, "delete", childindex)}>
-                                <span className="user-remove-btn">
-                                    <i className="fa fa-trash-o" aria-hidden="true"></i>
-                                </span>
-                                <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
-                            </div>
-                        </div>
-                    ))}
-                    <span className="input-heading-add-another" onClick={() => this.addRemoveChildDiscount(index, "add", -1)}>
-                        + {AppConstants.addChild}
-                    </span>
-                </div>
+    //         case 2:
+    //             return <div>
+    //                 <InputWithHead heading={"Discount Type"} />
+    //                 <Select
+    //                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+    //                     onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
+    //                     placeholder="Select"
+    //                     value={item.discountTypeRefId}
+    //                 >
+    //                     {this.props.appState.commonDiscountTypes.map(item => {
+    //                         return (
+    //                             <Option key={"discountType" + item.id} value={item.id}>
+    //                                 {item.description}
+    //                             </Option>
+    //                         );
+    //                     })}
+    //                 </Select>
+    //                 <InputWithHead
+    //                     heading={AppConstants.code}
+    //                     placeholder={AppConstants.code}
+    //                     onChange={(e) => this.onChangeDiscountCode(e.target.value, index)}
+    //                     value={item.discountCode}
+    //                 />
+    //                 <div className="row">
+    //                     <div className="col-sm">
+    //                         <InputWithHead
+    //                             heading={AppConstants.percentageOff_FixedAmount}
+    //                             placeholder={AppConstants.percentageOff_FixedAmount}
+    //                             onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
+    //                             value={item.amount}
+    //                         />
+    //                     </div>
+    //                     <div className="col-sm">
+    //                         <InputWithHead
+    //                             heading={AppConstants.description}
+    //                             placeholder={AppConstants.gernalDiscount}
+    //                             onChange={(e) => this.onChangeDescription(e.target.value, index)}
+    //                             value={item.description}
+    //                         />
+    //                     </div>
+    //                 </div>
 
-            case 4:
-                return <div>
-                    <InputWithHead heading={"Discount Type"} />
-                    <Select
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
-                        placeholder="Select"
-                        value={item.discountTypeRefId}
-                    >
-                        {this.props.appState.commonDiscountTypes.map(item => {
-                            return (
-                                <Option key={"discountType" + item.id} value={item.id}>
-                                    {item.description}
-                                </Option>
-                            );
-                        })}
-                    </Select>
-                    <div className="row">
-                        <div className="col-sm">
-                            <InputWithHead
-                                heading={AppConstants.percentageOff_FixedAmount}
-                                placeholder={AppConstants.percentageOff_FixedAmount}
-                                onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
-                                value={item.amount}
-                            />
-                        </div>
-                        <div className="col-sm">
-                            <InputWithHead
-                                heading={AppConstants.description}
-                                placeholder={AppConstants.gernalDiscount}
-                                onChange={(e) => this.onChangeDescription(e.target.value, index)}
-                                value={item.description}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="fluid-width">
-                        <div className="row">
-                            <div className="col-sm">
-                                <InputWithHead heading={AppConstants.availableFrom} />
-                                <DatePicker
-                                    size="large"
-                                    style={{ width: "100%" }}
-                                    onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
-                                    format={"DD-MM-YYYY"}
-                                    showTime={false}
-                                    value={item.availableFrom !== null && moment(item.availableFrom)}
-
-                                />
-                            </div>
-                            <div className="col-sm">
-                                <InputWithHead heading={AppConstants.availableTo} />
-                                <DatePicker
-                                    size="large"
-                                    style={{ width: "100%" }}
-                                    disabledDate={this.disabledDate}
-                                    disabledTime={this.disabledTime}
-                                    onChange={date => this.onChangeDiscountAvailableTo(date, index)}
-                                    format={"DD-MM-YYYY"}
-                                    showTime={false}
-                                    value={item.availableTo !== null && moment(item.availableTo)}
-
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    //                 <div className="fluid-width">
+    //                     <div className="row">
+    //                         <div className="col-sm">
+    //                             <InputWithHead heading={AppConstants.availableFrom} />
+    //                             <DatePicker
+    //                                 size="large"
+    //                                 style={{ width: "100%" }}
+    //                                 onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
+    //                                 format={"DD-MM-YYYY"}
+    //                                 showTime={false}
+    //                                 value={item.availableFrom !== null ? moment(item.availableFrom) : null}
+    //                             />
+    //                         </div>
+    //                         <div className="col-sm">
+    //                             <InputWithHead heading={AppConstants.availableTo} />
+    //                             <DatePicker
+    //                                 size="large"
+    //                                 style={{ width: "100%" }}
+    //                                 disabledDate={this.disabledDate}
+    //                                 disabledTime={this.disabledTime}
+    //                                 onChange={date => this.onChangeDiscountAvailableTo(date, index)}
+    //                                 format={"DD-MM-YYYY"}
+    //                                 showTime={false}
+    //                                 value={item.availableTo !== null ? moment(item.availableTo) : null}
+    //                             />
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //             </div>
 
 
-            case 5:
-                return <div>
-                    <InputWithHead
-                        heading={AppConstants.description}
-                        placeholder={AppConstants.description}
-                        onChange={(e) => this.onChangeDescription(e.target.value, index)}
-                        value={item.description}
-                    />
-                    <InputWithHead
-                        heading={AppConstants.question}
-                        placeholder={AppConstants.question}
-                        onChange={(e) => this.onChangeQuestion(e.target.value, index)}
-                        value={item.question}
-                    />
-                    <InputWithHead heading={"Apply Discount if Answer is Yes"} />
-                    <Radio.Group
-                        className="reg-competition-radio"
-                        onChange={e => this.applyDiscountQuestionCheck(e.target.value, index)}
-                        value={item.applyDiscount}
-                    >
-                        <Radio value={"1"}>{AppConstants.yes}</Radio>
-                        <Radio value={"0"}>{AppConstants.no}</Radio>
-                    </Radio.Group>
-                </div>;
-            default:
-                return <div></div>;
-        }
-    }
+    //         case 3:
+    //             return <div>
+    //                 {childDiscounts.map((childItem, childindex) => (
+    //                     <div className="row">
+    //                         <div className="col-sm-10">
+    //                             <InputWithHead
+    //                                 heading={`Child ${childindex + 1}%`}
+    //                                 placeholder={`Child ${childindex + 1}%`}
+    //                                 onChange={(e) => this.onChangeChildPercent(e.target.value, index, childindex, childItem)}
+    //                                 value={childItem.percentageValue}
+    //                             />
+    //                         </div>
+    //                         <div className="col-sm-2 delete-image-view pb-4" onClick={() => this.addRemoveChildDiscount(index, "delete", childindex)}>
+    //                             <span className="user-remove-btn">
+    //                                 <i className="fa fa-trash-o" aria-hidden="true"></i>
+    //                             </span>
+    //                             <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+    //                         </div>
+    //                     </div>
+    //                 ))}
+    //                 <span className="input-heading-add-another" onClick={() => this.addRemoveChildDiscount(index, "add", -1)}>
+    //                     + {AppConstants.addChild}
+    //                 </span>
+    //             </div>
+
+    //         case 4:
+    //             return <div>
+    //                 <InputWithHead heading={"Discount Type"} />
+    //                 <Select
+    //                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+    //                     onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
+    //                     placeholder="Select"
+    //                     value={item.discountTypeRefId}
+    //                 >
+    //                     {this.props.appState.commonDiscountTypes.map(item => {
+    //                         return (
+    //                             <Option key={"discountType" + item.id} value={item.id}>
+    //                                 {item.description}
+    //                             </Option>
+    //                         );
+    //                     })}
+    //                 </Select>
+    //                 <div className="row">
+    //                     <div className="col-sm">
+    //                         <InputWithHead
+    //                             heading={AppConstants.percentageOff_FixedAmount}
+    //                             placeholder={AppConstants.percentageOff_FixedAmount}
+    //                             onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
+    //                             value={item.amount}
+    //                         />
+    //                     </div>
+    //                     <div className="col-sm">
+    //                         <InputWithHead
+    //                             heading={AppConstants.description}
+    //                             placeholder={AppConstants.gernalDiscount}
+    //                             onChange={(e) => this.onChangeDescription(e.target.value, index)}
+    //                             value={item.description}
+    //                         />
+    //                     </div>
+    //                 </div>
+
+    //                 <div className="fluid-width">
+    //                     <div className="row">
+    //                         <div className="col-sm">
+    //                             <InputWithHead heading={AppConstants.availableFrom} />
+    //                             <DatePicker
+    //                                 size="large"
+    //                                 style={{ width: "100%" }}
+    //                                 onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
+    //                                 format={"DD-MM-YYYY"}
+    //                                 showTime={false}
+    //                                 value={item.availableFrom !== null && moment(item.availableFrom)}
+
+    //                             />
+    //                         </div>
+    //                         <div className="col-sm">
+    //                             <InputWithHead heading={AppConstants.availableTo} />
+    //                             <DatePicker
+    //                                 size="large"
+    //                                 style={{ width: "100%" }}
+    //                                 disabledDate={this.disabledDate}
+    //                                 disabledTime={this.disabledTime}
+    //                                 onChange={date => this.onChangeDiscountAvailableTo(date, index)}
+    //                                 format={"DD-MM-YYYY"}
+    //                                 showTime={false}
+    //                                 value={item.availableTo !== null && moment(item.availableTo)}
+
+    //                             />
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //             </div>
+
+
+    //         case 5:
+    //             return <div>
+    //                 <InputWithHead
+    //                     heading={AppConstants.description}
+    //                     placeholder={AppConstants.description}
+    //                     onChange={(e) => this.onChangeDescription(e.target.value, index)}
+    //                     value={item.description}
+    //                 />
+    //                 <InputWithHead
+    //                     heading={AppConstants.question}
+    //                     placeholder={AppConstants.question}
+    //                     onChange={(e) => this.onChangeQuestion(e.target.value, index)}
+    //                     value={item.question}
+    //                 />
+    //                 <InputWithHead heading={"Apply Discount if Answer is Yes"} />
+    //                 <Radio.Group
+    //                     className="reg-competition-radio"
+    //                     onChange={e => this.applyDiscountQuestionCheck(e.target.value, index)}
+    //                     value={item.applyDiscount}
+    //                 >
+    //                     <Radio value={"1"}>{AppConstants.yes}</Radio>
+    //                     <Radio value={"0"}>{AppConstants.no}</Radio>
+    //                 </Radio.Group>
+    //             </div>;
+    //         default:
+    //             return <div></div>;
+    //     }
+    // }
     addRemoveChildDiscount = (index, keyWord, childindex) => {
         let discountData = this.props.competitionFeesState.competionDiscountValue.competitionDiscounts[0].discounts
         let childDisObject = {
@@ -2225,101 +2325,101 @@ class CompetitionOpenRegForm extends Component {
 
 
     ////discount view inside the content
-    discountView = (getFieldDecorator) => {
-        let data = this.props.competitionFeesState.competionDiscountValue
-        let discountData = data && data.competitionDiscounts !== null ? data.competitionDiscounts[0].discounts : []
-        let membershipPrdArr = this.props.competitionFeesState.competitionMembershipProductData !== null ? this.props.competitionFeesState.competitionMembershipProductData : []
-        return (
-            <div className="discount-view pt-5">
-                <span className="form-heading">{AppConstants.discounts}</span>
-                {discountData.length > 0 && discountData.map((item, index) => (
-                    <div className="prod-reg-inside-container-view">
-                        <div className="transfer-image-view pt-2" onClick={() => this.addRemoveDiscount("remove", index)}>
-                            <span className="user-remove-btn">
-                                <i className="fa fa-trash-o" aria-hidden="true"></i>
-                            </span>
-                            <span className="user-remove-text mr-0">{AppConstants.remove}</span>
-                        </div>
-                        <div className="row">
-                            <div className="col-sm">
-                                <InputWithHead required="pt-0" heading={"Discount Type"} />
-                                <Select
-                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                    onChange={discountTypeItem => this.onChangeMembershipProductDisType(discountTypeItem, index)}
-                                    placeholder="Select"
-                                    value={item.competitionTypeDiscountTypeRefId !== 0 && item.competitionTypeDiscountTypeRefId}
-                                >
-                                    {this.props.competitionFeesState.defaultDiscountType.map((discountTypeItem, discountTypeIndex) => {
-                                        return (
-                                            <Option key={"disType" + discountTypeItem.id} value={discountTypeItem.id}>
-                                                {discountTypeItem.description}
-                                            </Option>
-                                        );
-                                    })}
-                                </Select>
-                            </div>
-                            <div className="col-sm">
-                                <InputWithHead
-                                    required="pt-0"
-                                    heading={AppConstants.membershipProduct}
-                                />
-                                <Form.Item  >
-                                    {getFieldDecorator(`membershipProductUniqueKey${index}`,
-                                        { rules: [{ required: true, message: ValidationConstants.pleaseSelectMembershipProduct }] })(
-                                            <Select
-                                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                                placeholder={"Select"}
-                                                // value={item.membershipProductUniqueKey}
-                                                onChange={item => this.onChangeMembershipProduct(item, index)}
-                                            >
-                                                {membershipPrdArr && membershipPrdArr.membershipProducts && membershipPrdArr.membershipProducts.map(item => {
-                                                    return (
-                                                        <Option key={item.membershipProductUniqueKey} value={item.membershipProductUniqueKey}>
-                                                            {item.membershipProductName}
-                                                        </Option>
-                                                    );
-                                                })}
-                                            </Select>
-                                        )}
-                                </Form.Item>
-                            </div>
-                        </div>
-                        <div >
-                            <InputWithHead
-                                heading={AppConstants.membershipTypes}
-                            />
-                            <Form.Item  >
-                                {getFieldDecorator(`competitionMembershipProductTypeId${index}`,
-                                    { rules: [{ required: true, message: ValidationConstants.pleaseSelectMembershipTypes }] })(
-                                        <Select
-                                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                            onChange={discountMembershipType =>
-                                                this.onChangeMembershipTypeDiscount(discountMembershipType, index)
-                                            }
-                                            placeholder={"Select"}
-                                        // value={item.competitionMembershipProductTypeId}
-                                        >
-                                            {item.membershipProductTypes.map(item => {
-                                                return (
-                                                    <Option key={item.competitionMembershipProductTypeId} value={item.competitionMembershipProductTypeId}>
-                                                        {item.membershipProductTypeName}
-                                                    </Option>
-                                                );
-                                            })}
-                                        </Select>
-                                    )}
-                            </Form.Item>
-                        </div>
-                        {this.discountViewChange(item, index)}
-                    </div>
-                ))}
+    // discountView = (getFieldDecorator) => {
+    //     let data = this.props.competitionFeesState.competionDiscountValue
+    //     let discountData = data && data.competitionDiscounts !== null ? data.competitionDiscounts[0].discounts : []
+    //     let membershipPrdArr = this.props.competitionFeesState.competitionMembershipProductData !== null ? this.props.competitionFeesState.competitionMembershipProductData : []
+    //     return (
+    //         <div className="discount-view pt-5">
+    //             <span className="form-heading">{AppConstants.discounts}</span>
+    //             {discountData.length > 0 && discountData.map((item, index) => (
+    //                 <div className="prod-reg-inside-container-view">
+    //                     <div className="transfer-image-view pt-2" onClick={() => this.addRemoveDiscount("remove", index)}>
+    //                         <span className="user-remove-btn">
+    //                             <i className="fa fa-trash-o" aria-hidden="true"></i>
+    //                         </span>
+    //                         <span className="user-remove-text mr-0">{AppConstants.remove}</span>
+    //                     </div>
+    //                     <div className="row">
+    //                         <div className="col-sm">
+    //                             <InputWithHead required="pt-0" heading={"Discount Type"} />
+    //                             <Select
+    //                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+    //                                 onChange={discountTypeItem => this.onChangeMembershipProductDisType(discountTypeItem, index)}
+    //                                 placeholder="Select"
+    //                                 value={item.competitionTypeDiscountTypeRefId !== 0 && item.competitionTypeDiscountTypeRefId}
+    //                             >
+    //                                 {this.props.competitionFeesState.defaultDiscountType.map((discountTypeItem, discountTypeIndex) => {
+    //                                     return (
+    //                                         <Option key={"disType" + discountTypeItem.id} value={discountTypeItem.id}>
+    //                                             {discountTypeItem.description}
+    //                                         </Option>
+    //                                     );
+    //                                 })}
+    //                             </Select>
+    //                         </div>
+    //                         <div className="col-sm">
+    //                             <InputWithHead
+    //                                 required="pt-0"
+    //                                 heading={AppConstants.membershipProduct}
+    //                             />
+    //                             <Form.Item  >
+    //                                 {getFieldDecorator(`membershipProductUniqueKey${index}`,
+    //                                     { rules: [{ required: true, message: ValidationConstants.pleaseSelectMembershipProduct }] })(
+    //                                         <Select
+    //                                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+    //                                             placeholder={"Select"}
+    //                                             // value={item.membershipProductUniqueKey}
+    //                                             onChange={item => this.onChangeMembershipProduct(item, index)}
+    //                                         >
+    //                                             {membershipPrdArr && membershipPrdArr.membershipProducts && membershipPrdArr.membershipProducts.map(item => {
+    //                                                 return (
+    //                                                     <Option key={item.membershipProductUniqueKey} value={item.membershipProductUniqueKey}>
+    //                                                         {item.membershipProductName}
+    //                                                     </Option>
+    //                                                 );
+    //                                             })}
+    //                                         </Select>
+    //                                     )}
+    //                             </Form.Item>
+    //                         </div>
+    //                     </div>
+    //                     <div >
+    //                         <InputWithHead
+    //                             heading={AppConstants.membershipTypes}
+    //                         />
+    //                         <Form.Item  >
+    //                             {getFieldDecorator(`competitionMembershipProductTypeId${index}`,
+    //                                 { rules: [{ required: true, message: ValidationConstants.pleaseSelectMembershipTypes }] })(
+    //                                     <Select
+    //                                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+    //                                         onChange={discountMembershipType =>
+    //                                             this.onChangeMembershipTypeDiscount(discountMembershipType, index)
+    //                                         }
+    //                                         placeholder={"Select"}
+    //                                     // value={item.competitionMembershipProductTypeId}
+    //                                     >
+    //                                         {item.membershipProductTypes.map(item => {
+    //                                             return (
+    //                                                 <Option key={item.competitionMembershipProductTypeId} value={item.competitionMembershipProductTypeId}>
+    //                                                     {item.membershipProductTypeName}
+    //                                                 </Option>
+    //                                             );
+    //                                         })}
+    //                                     </Select>
+    //                                 )}
+    //                         </Form.Item>
+    //                     </div>
+    //                     {this.discountViewChange(item, index)}
+    //                 </div>
+    //             ))}
 
-                < span className="input-heading-add-another" onClick={() => this.addRemoveDiscount("add", -1)}>
-                    + {AppConstants.addDiscount}
-                </span>
-            </div >
-        );
-    };
+    //             < span className="input-heading-add-another" onClick={() => this.addRemoveDiscount("add", -1)}>
+    //                 + {AppConstants.addDiscount}
+    //             </span>
+    //         </div >
+    //     );
+    // };
 
 
 
@@ -2357,34 +2457,56 @@ class CompetitionOpenRegForm extends Component {
         let competitionId = this.props.competitionFeesState.competitionId
         let statusRefId = this.props.competitionFeesState.competitionDetailData.statusRefId ?
             this.props.competitionFeesState.competitionDetailData.statusRefId : 1
-        console.log("statusRefId", statusRefId)
+        let isPublished = this.state.permissionState.isPublished
+        let allDisable = this.state.permissionState.allDisable
         return (
             <div className="fluid-width">
-                {statusRefId == 1 &&
-                    <div className="footer-view">
-                        <div className="row">
-                            <div className="col-sm">
-                                <div className="reg-add-save-button">
-                                    <Button type="cancel-button" onClick={() => history.push('/competitionDashboard')} >{AppConstants.cancel}</Button>
-                                </div>
+                {/* {statusRefId == 1 && */}
+                <div className="footer-view">
+                    <div className="row">
+                        <div className="col-sm">
+                            <div className="reg-add-save-button">
+                                <Button type="cancel-button" onClick={() => history.push('/competitionDashboard')} >{AppConstants.cancel}</Button>
                             </div>
-                            <div className="col-sm">
-                                <div className="comp-buttons-view">
+                        </div>
+                        <div className="col-sm">
+                            <div className="comp-buttons-view">
+                                <Tooltip
+                                    style={{ height: "100%" }}
+                                    onMouseEnter={() =>
+                                        this.setState({ tooltipVisiblePublish: (isPublished) && (tabKey === "2") ? true : allDisable })}
+                                    onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
+                                    visible={this.state.tooltipVisiblePublish}
+                                    title={ValidationConstants.compIsPublished}>
                                     <Button className="publish-button" type="primary"
+                                        disabled={tabKey === "1" ? allDisable : isPublished}
                                         htmlType="submit" onClick={() => this.setState({
-                                            statusRefId: tabKey == "3" ? 2 : 1,
-                                            buttonPressed: tabKey == "3" ? "publish" : "next"
+                                            statusRefId: tabKey == "2" ? 2 : 1,
+                                            buttonPressed: tabKey == "2" ? "publish" : "next"
                                         })}
+                                        style={{ height: 48, width: 92.5 }}
                                     >
-                                        {tabKey === "3"
+                                        {tabKey === "2"
                                             ? AppConstants.save
                                             : AppConstants.next}
                                     </Button>
-                                </div>
+                                </Tooltip>
+
+                                {/* <Button className="publish-button" type="primary"
+                                        htmlType="submit" onClick={() => this.setState({
+                                            statusRefId: tabKey == "2" ? 2 : 1,
+                                            buttonPressed: tabKey == "2" ? "publish" : "next"
+                                        })}
+                                    >
+                                        {tabKey === "2"
+                                            ? AppConstants.save
+                                            : AppConstants.next}
+                                    </Button> */}
                             </div>
                         </div>
                     </div>
-                }
+                </div>
+                {/* } */}
             </div>
         );
 
@@ -2422,13 +2544,13 @@ class CompetitionOpenRegForm extends Component {
                                 <Tabs activeKey={this.state.competitionTabKey} onChange={this.tabCallBack}>
                                     <TabPane tab={AppConstants.details} key="1">
                                         <div className="tab-formView mt-5">{this.contentView(getFieldDecorator)}</div>
-                                        <div className="tab-formView mt-5">{this.regInviteesView(getFieldDecorator)}</div>
+                                        {/* <div className="tab-formView mt-5">{this.regInviteesView(getFieldDecorator)}</div> */}
                                     </TabPane>
                                     {/* <TabPane tab={AppConstants.membership} key="2">
                                         <div className="tab-formView mt-5">{this.membershipProductView(getFieldDecorator)}</div>
                                         <div className="tab-formView mt-5">{this.membershipTypeView(getFieldDecorator)}</div>
                                     </TabPane> */}
-                                    <TabPane tab={AppConstants.divisions} key={"3"}>
+                                    <TabPane tab={AppConstants.divisions} key={"2"}>
                                         <div className="tab-formView">{this.divisionsView(getFieldDecorator)}</div>
                                     </TabPane>
                                     {/* <TabPane tab={AppConstants.fees} key={"4"}>
@@ -2493,7 +2615,9 @@ function mapDispatchToProps(dispatch) {
         getDefaultCompFeesLogoAction,
         getYearAndCompetitionOwnAction,
         searchVenueList,
-        clearFilter
+        venueListAction,
+        clearFilter,
+        getGenderAction
     }, dispatch)
 }
 
@@ -2501,6 +2625,7 @@ function mapStatetoProps(state) {
     return {
         competitionFeesState: state.CompetitionFeesState,
         appState: state.AppState,
+        commonReducerState: state.CommonReducerState
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionOpenRegForm));

@@ -282,7 +282,7 @@ class CompetitionVenueAndTimesAdd extends Component {
         else if (this.state.screenNavigationKey == AppConstants.dashboard) {
             setTimeout(() => {
                 this.props.clearVenueDataAction("venue");
-                history.push('/registrationCompetitionForm')
+                history.push('/registrationCompetitionForm', { venueScreen: true, id: this.props.location.state ? this.props.location.state.id : null })
             }, 800);
             this.setState({ saveContraintLoad: false })
         }

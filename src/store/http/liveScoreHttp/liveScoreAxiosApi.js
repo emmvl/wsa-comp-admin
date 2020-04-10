@@ -546,8 +546,8 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
-    liveScoreAttendanceList(competitionId, body, status) {
-        let url = `/players/activity?competitionId=${competitionId}&status=${status}`
+    liveScoreAttendanceList(competitionId, body) {
+        let url = `/players/activity?competitionId=${competitionId}`
         return Method.dataPost(url, token, body)
     },
     liveScoreGetTeamData(teamId) {
@@ -646,7 +646,32 @@ let LiveScoreAxiosApi = {
         return Method.dataDelete(url, token)
     },
 
-    
+    // Match club list
+    liveScoreClubList(competitionId) {
+        var url = `/clubs?competitionId=${competitionId}`
+        return Method.dataGet(url, token)
+    },
+    ladderSettingMatchResult() {
+        var url = `/ref/matchResult`
+        return Method.dataGet(url, token)
+    },
+
+    laddersSettingGetData(competitionId) {
+
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        var url = `/competitions/ladderSettings?competitionId=${id}`
+        return Method.dataGet(url, token)
+    },
+
+    laddersSettingPostData(data) {
+        console.log(data, 'laddersSettingPostData')
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+
+        let body = data
+
+        var url = `/competitions/ladderSettings?competitionId=${id}`
+        return Method.dataPost(url, token, body)
+    }
 };
 
 

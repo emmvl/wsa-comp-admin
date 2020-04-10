@@ -109,6 +109,10 @@ let AxiosApi = {
         var url = "/common/references";
         return Method.dataPost(url, token, body);
     },
+    getGender() {
+        var url = '/common/reference/gender';
+        return Method.dataGet(url, token)
+    },
 
     ////Add Venue Api
     async  addVenue(venuData) {

@@ -60,7 +60,7 @@ import {
 
 ////**************************Live Score***************************Start
 // import { liveScorePlayerSaga } from "./liveScoreSaga/liveScorePlayerSaga";
-import { liveScoreMatchListSaga, liveScoreAddMatchSaga, liveScoreCreateMatchSaga, liveScoreDeleteMatchSaga, liveScoreCompetitionVenuesList, liveScoreMatchImportSaga, liveScoreMatchSaga } from './liveScoreSaga/liveScoreMatchSaga';
+import { liveScoreMatchListSaga, liveScoreAddMatchSaga, liveScoreCreateMatchSaga, liveScoreDeleteMatchSaga, liveScoreCompetitionVenuesList, liveScoreMatchImportSaga, liveScoreMatchSaga, liveScoreClubListSaga } from './liveScoreSaga/liveScoreMatchSaga';
 
 import { liveScoreDivisionSaga, getLiveScoreScorerSaga } from "./liveScoreSaga/liveScoreSaga";
 import {
@@ -103,7 +103,8 @@ import {
   venueListSaga, gradesReferenceListSaga, countryReferenceSaga,
   registrationOtherInfoReferenceSaga, firebirdPlayerReferenceSaga, favouriteTeamReferenceSaga,
   nationalityReferenceSaga, heardByReferenceSaga, playerPositionReferenceSaga, venuesListSaga,
-  venueByIdSaga, venueDeleteSaga
+  venueByIdSaga, venueDeleteSaga,
+  getGenderSaga
 } from "./commonSaga/commonSaga";
 ////Venue constraints
 import { venueTimeSaga, venueConstraintPostSaga } from './competitionManagementSaga/venueTimeSaga'
@@ -129,7 +130,6 @@ import {
   partProposedTeamGradingComment
 } from './competitionManagementSaga/competitionTeamGradingSaga';
 
-import { regDashboardListSaga } from '../saga/registrationSaga/registrationDashboardSaga'
 // UserSaga
 import * as userSaga from '../saga/userSaga/userSaga';
 
@@ -140,6 +140,7 @@ import {
   getCompetitionVenues, updateCourtTimingsDrawsAction
 } from './competitionManagementSaga/competitionDrawsSaga';
 
+import { regDashboardListSaga } from "./registrationSaga/registrationDashboardSaga"
 ////Competition Dashboard Saga
 import { competitionDashboardSaga } from './competitionManagementSaga/competitionDashboardSaga';
 // import { liveScoreAddEditManagerSaga } from './liveScoreSaga/liveScoreManagerSaga';
@@ -155,6 +156,7 @@ import { liveScoreUmpiresSaga } from './liveScoreSaga/liveScoreUmpiresSaga'
 
 import { liveScoreTeamAttendanceListSaga } from './liveScoreSaga/liveScoreTeamAttendanceSaga'
 
+import { laddersSettingGetMatchResult, laddersSettingGetData, laddersSettingPostData } from './liveScoreSaga/liveScoreLadderSettingSaga'
 
 export default function* root_saga() {
   yield takeEvery(ApiConstants.API_LOGIN_LOAD, loginApiSaga);
@@ -547,7 +549,19 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_PART_TEAM_GRADING_COMMENT_LOAD, partProposedTeamGradingComment)
 
   yield takeEvery(ApiConstants.API_REG_DASHBOARD_LIST_LOAD, regDashboardListSaga)
+  yield takeEvery(ApiConstants.API_GET_GENDER_LOAD, getGenderSaga)
 
   //Search Scorer saga 
-  yield takeEvery(ApiConstants.API_LIVESCORE_SCORER_SEARCH_LOAD,liveScoreScorerSearchSaga)
+  yield takeEvery(ApiConstants.API_LIVESCORE_SCORER_SEARCH_LOAD, liveScoreScorerSearchSaga)
+
+
+  //Club List Saga
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_CLUB_LIST_LOAD, liveScoreClubListSaga)
+
+  //// Ladder Setting Saga
+  yield takeEvery(ApiConstants.API_LADDER_SETTING_MATCH_RESULT_LOAD, laddersSettingGetMatchResult)
+
+  yield takeEvery(ApiConstants.API_LADDER_SETTING_GET_DATA_LOAD, laddersSettingGetData)
+
+  yield takeEvery(ApiConstants.API_LADDER_SETTING_POST_DATA_LOAD, laddersSettingPostData)
 }

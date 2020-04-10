@@ -163,11 +163,11 @@ const initialState = {
     team2Players: [],
     divisionList: [],
     teamResult: [],
-    roundList: []
+    roundList: [],
+    clubListData:[]
 };
 
 function setMatchData(data) {
-
     let matchObject = {
         "id": data.id ? data.id : 0,
         "startTime": data.startTime,
@@ -219,7 +219,7 @@ function liveScoreMatchReducer(state = initialState, action) {
             const result = getMatchListSettings(action.result.matches)
 
             // state.liveScoreMatchListData = result
-            // console.log(result)
+            console.log(result,"mact")
             return {
                 ...state,
                 onLoad: false,
@@ -483,6 +483,19 @@ function liveScoreMatchReducer(state = initialState, action) {
                 roundList: action.result,
                 status: action.status
             };
+
+        case ApiConstants.API_LIVE_SCORE_CLUB_LIST_LOAD:
+                return{
+                    ...state,
+                    onLoad:true
+                }
+        case ApiConstants.API_LIVE_SCORE_CLUB_LIST_SUCCESS:
+            console.log(action.result,"ClubcompetitionId")
+            return{
+                ...state,
+                onLoad:false,
+                clubListData:action.result
+            }
     };
 
 }

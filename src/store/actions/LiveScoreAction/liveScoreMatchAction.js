@@ -88,6 +88,13 @@ function liveScoreGetMatchDetailInitiate(data) {
         payload: data
     }
 }
+
+function liveScoreClubListAction(competitionId){
+    return{
+        type: ApiConstants.API_LIVE_SCORE_CLUB_LIST_LOAD,
+        competitionId
+    }
+}
 export {
     liveScoreMatchListAction,
     liveScoreAddEditMatchAction,
@@ -98,5 +105,6 @@ export {
     liveScoreDeleteMatch,
     getCompetitonVenuesList,
     liveScoreMatchImportAction,
-    liveScoreGetMatchDetailInitiate
+    liveScoreGetMatchDetailInitiate,
+    liveScoreClubListAction
 };

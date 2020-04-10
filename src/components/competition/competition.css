@@ -420,6 +420,10 @@ a.collapsed i {
   .form-heading {
     font-size: 18px;
   }
+  .setting-heading{
+    font-size: 15px;
+  }
+  
   .comp-grading-final-text {
     margin-left: 15px;
   }

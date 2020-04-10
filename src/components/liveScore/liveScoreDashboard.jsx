@@ -315,35 +315,6 @@ const columnsTodaysIncient = [
     },
 ];
 
-const dataParticipate = [
-    // {
-    //     key: '1',
-    //     date: "12:30 12/12/12",
-    //     matchId: "3123",
-    //     team: "WSA1",
-    //     firstName: "Sam",
-    //     lastName: "oBrien",
-    //     description: "description",
-    //     association: "MWNA",
-    //     clam: "Yes",
-    //     club: "Peninsula 10"
-    // },
-];
-
-const dataAddMatch = [
-    {
-        key: '1',
-        title: "Change of Court",
-        author: "Sam OBrien",
-        expiry: "18:00 2/2/20",
-        recipients: "Managers",
-        published: "yes",
-        publishDate: "18:00 1/2/20",
-        notification: "Yes",
-
-    },
-
-];
 
 class LiveScoreDashboard extends Component {
     constructor(props) {
@@ -513,7 +484,7 @@ class LiveScoreDashboard extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc", paddingBottom: 10 }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"1"} />
                 <Layout>
                     <Content >

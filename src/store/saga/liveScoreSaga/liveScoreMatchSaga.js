@@ -166,3 +166,20 @@ export function* liveScoreMatchSaga({ payload }) {
 
     }
 }
+export function* liveScoreClubListSaga(action) {
+    try {
+        const result = yield call(LiveScoreAxiosApi.liveScoreClubList, action.competitionId);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_LIVE_SCORE_CLUB_LIST_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

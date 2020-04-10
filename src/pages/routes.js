@@ -56,6 +56,7 @@ import AppRegistrationForm from "../components/registration/appRegistrationForm"
 import NotFound from "./404";
 import RegistrationMembershipList from "../components/registration/registrationMembershipList";
 import RegistrationCompetitionList from "../components/registration/registrationCompetitionList";
+import RegistrationFormList from "../components/registration/registrationFormList"
 
 /////
 import LiveScoreDashboard from "../components/liveScore/liveScoreDashboard"
@@ -535,13 +536,14 @@ class Routes extends React.Component {
           path="/liveScoreVenueChange"
           component={lazyLoad(LiveScoreVenueChange)}
         />
-
+        <PrivateRoute path="/registrationFormList" component={lazyLoad(RegistrationFormList)} />
         <PrivateRoute
           path="/liveScoreIncidentImport"
           component={lazyLoad(LiveScoreIncidentImport)}
         />
 
         <Route path="/" component={lazyLoad(NotFound)} />
+
         <Redirect from="*" to="/404" />
       </Switch>
     );

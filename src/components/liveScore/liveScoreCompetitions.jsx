@@ -161,8 +161,15 @@ class LiveScoreCompetitions extends Component {
     }
 
     componentDidMount() {
-        this.props.getOnlyYearListAction(this.props.liveScoreCompetition.yearList)
-        this.setState({onLoad:true})
+        if(isArrayNotEmpty(this.props.liveScoreCompetition.yearList)){
+            let selectedYear = this.props.liveScoreCompetition.yearList[0].id
+            this.competitionListApi(selectedYear)
+            this.setState({year: selectedYear})
+        }else{
+            this.props.getOnlyYearListAction(this.props.liveScoreCompetition.yearList)
+            this.setState({onLoad:true})
+        }
+       
 
         // this.props.liveScoreCompetionActioninitiate(body)
         // setTimeout(() => { console.log('uhhhhh', this.props.liveScoreCompetition) }, 5000)
@@ -173,18 +180,23 @@ class LiveScoreCompetitions extends Component {
     componentDidUpdate(nextProps){
         if(nextProps.liveScoreCompetition.yearList !== this.props.liveScoreCompetition.yearList){
             if(this.props.liveScoreCompetition.loader == false && this.state.onLoad == true){
-                const body = {
-                    "paging": {
-                        "limit": 10,
-                        "offset": 0
-                    }
-                }
-               let selectedYear = this.props.liveScoreCompetition.yearList[0].id
-                 this.props.liveScoreCompetionActioninitiate(body, selectedYear)
-                 this.setState({onLoad:false, year: selectedYear })
+                let selectedYear = this.props.liveScoreCompetition.yearList[0].id
+                this.competitionListApi(selectedYear)
+                this.setState({onLoad:false, year: selectedYear })
             }
         }
     }
+
+    competitionListApi(selectedYear){
+        const body = {
+            "paging": {
+                "limit": 10,
+                "offset": 0
+            }
+        }
+         this.props.liveScoreCompetionActioninitiate(body, selectedYear)
+        
+    } 
 
 
 
