@@ -114,6 +114,7 @@ import {
   getCompPartPlayerGradingSaga,
   addNewTeamPartPlayerGradingSaga,
   dragTeamPartPlayerSaga,
+  importCompetitionPlayer,
   partPLayerCommentSaga,
   partPlayerSummaryCommentSaga
 } from './competitionManagementSaga/competitionPartPlayerGradingSaga';
@@ -451,6 +452,8 @@ export default function* root_saga() {
 
 
   yield takeEvery(ApiConstants.API_DRAG_NEW_TEAM_LOAD, dragTeamPartPlayerSaga)
+
+  yield takeEvery(ApiConstants.API_COMPETITION_PLAYER_IMPORT_LOAD, importCompetitionPlayer);
 
   yield takeEvery(ApiConstants.API_MATCH_RESULT_LOAD, liveScoreMatchResult)
 
