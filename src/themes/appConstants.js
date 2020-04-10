@@ -607,7 +607,7 @@ const AppConstants = {
   aboutScorer: "About Scorer",
   importMatch: "Import Match",
   fileInput: "File input",
-  invalidPlayers: "Invalid Redords",
+  invalidPlayers: "Invalid Records",
   importTeam: "Import Team",
   importPlayer: "Import Player",
   exampleBlock: "Example block-level help text here.",
