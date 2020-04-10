@@ -22,6 +22,7 @@ import AppImages from "../../themes/appImages";
 import { liveScoreUpdateIncident, liveScoreClearIncident } from '../../store/actions/LiveScoreAction/liveScoreIncidentAction'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import history from "../../util/history";
 const { Footer, Content, Header } = Layout;
 const { TextArea } = Input;
 class LiveScoreAddIncident extends Component {
@@ -300,7 +301,7 @@ class LiveScoreAddIncident extends Component {
         // const { getFieldDecorator } = this.props.form
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"17"} />
 
                 <Layout>

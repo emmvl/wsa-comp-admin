@@ -640,11 +640,10 @@ class LiveScoreAddNews extends Component {
     /////main render method
     render() {
         const { getFieldDecorator } = this.props.form;
-        console.log(this.props.liveScoreNewsState)
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <Loader visible={this.props.liveScoreNewsState.onLoad_2} />
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.key == 'dashboard' ? '1' : "21"} />
                 <Layout>
                     {this.headerView()}

@@ -373,6 +373,10 @@ class UserModulePersonalDetail extends Component{
             let userId = this.props.location.state.userId;
             this.setState({ userId: userId});
             this.apiCalls(userId);
+            if(this.state.tabKey == "1")
+            {
+                this.hanleActivityTableList(1, userId, this.state.competition, "parent");
+            }
             
         }
     }

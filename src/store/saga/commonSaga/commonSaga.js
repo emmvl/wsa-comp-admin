@@ -151,7 +151,7 @@ export function* gradesReferenceListSaga(action) {
 // Get the favourite Team
 export function* favouriteTeamReferenceSaga(action) {
     try {
-        const result = yield call(CommonAxiosApi.getCommonReference,AppConstants.favouriteTeamReference);
+        const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.favouriteTeamReference);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_FAVOURITE_TEAM_REFERENCE_SUCCESS,
@@ -169,7 +169,7 @@ export function* favouriteTeamReferenceSaga(action) {
 // Get the Firebird Player List
 export function* firebirdPlayerReferenceSaga(action) {
     try {
-        const result = yield call(CommonAxiosApi.getCommonReference,AppConstants.firebirdPlayer);
+        const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.firebirdPlayer);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_FIREBIRD_PLAYER_REFERENCE_SUCCESS,
@@ -187,7 +187,7 @@ export function* firebirdPlayerReferenceSaga(action) {
 // Get the Registration Other Info List
 export function* registrationOtherInfoReferenceSaga(action) {
     try {
-        const result = yield call(CommonAxiosApi.getCommonReference,AppConstants.registrationOtherInfo);
+        const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.registrationOtherInfo);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_REGISTRATION_OTHER_INFO_REFERENCE_SUCCESS,
@@ -205,7 +205,7 @@ export function* registrationOtherInfoReferenceSaga(action) {
 // Get the Country List
 export function* countryReferenceSaga(action) {
     try {
-        const result = yield call(CommonAxiosApi.getCommonReference,AppConstants.countryReference);
+        const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.countryReference);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_COUNTRY_REFERENCE_SUCCESS,
@@ -223,7 +223,7 @@ export function* countryReferenceSaga(action) {
 // Get the Nationality Reference List
 export function* nationalityReferenceSaga(action) {
     try {
-        const result = yield call(CommonAxiosApi.getCommonReference,AppConstants.nationalityReference);
+        const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.nationalityReference);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_NATIONALITY_REFERENCE_SUCCESS,
@@ -241,7 +241,7 @@ export function* nationalityReferenceSaga(action) {
 // Get the HeardBy Reference List
 export function* heardByReferenceSaga(action) {
     try {
-        const result = yield call(CommonAxiosApi.getCommonReference,AppConstants.heardByReference);
+        const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.heardByReference);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_HEARDBY_REFERENCE_SUCCESS,
@@ -259,7 +259,7 @@ export function* heardByReferenceSaga(action) {
 // Get the Player Position Saga
 export function* playerPositionReferenceSaga(action) {
     try {
-        const result = yield call(CommonAxiosApi.getCommonReference,AppConstants.playerPosition);
+        const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.playerPosition);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_PLAYER_POSITION_REFERENCE_SUCCESS,
@@ -329,6 +329,31 @@ export function* venueDeleteSaga(action) {
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_VENUE_DELETE_SUCCESS,
+                result: result.result.data,
+                status: result.result.status
+            });
+        } else {
+            yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
+            setTimeout(() => {
+                alert(result.data.message);
+            }, 800);
+        }
+    } catch (error) {
+        yield put({
+            type: ApiConstants.API_COMMON_SAGA_ERROR,
+            error: error,
+            status: error.status
+        });
+    }
+}
+
+
+export function* getGenderSaga(action) {
+    try {
+        const result = yield call(CommonAxiosApi.getGender);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_GENDER_SUCCESS,
                 result: result.result.data,
                 status: result.result.status
             });

@@ -240,8 +240,7 @@ class CompetitionDashboard extends Component {
                 //     to={{ pathname: `/registrationCompetitionForm`, state: { id: null } }}
                 // />
                 // ]
-
-                this_.onRegistrationScreen()
+                this_.onRegistrationCompScreen()
 
             },
             onCancel() {
@@ -254,8 +253,8 @@ class CompetitionDashboard extends Component {
         history.push("/registrationCompetitionForm", { id: null })
     }
 
-    onRegistrationScreen = () => {
-        history.push("/registrationForm")
+    onRegistrationCompScreen = () => {
+        history.push("/registrationCompetitionFee", { id: null })
     }
 
 
@@ -334,7 +333,9 @@ class CompetitionDashboard extends Component {
                         pagination={false}
                         onRow={(record) => ({
                             onClick: () =>
-                                history.push("/registrationCompetitionForm", { id: record.competitionId })
+                                record.hasRegistration == 0 ?
+                                    history.push("/registrationCompetitionForm", { id: record.competitionId })
+                                    : history.push("/registrationCompetitionFee", { id: record.competitionId })
                         })}
                     />
 
@@ -356,7 +357,9 @@ class CompetitionDashboard extends Component {
                         pagination={false}
                         onRow={(record) => ({
                             onClick: () =>
-                                history.push("/registrationCompetitionForm", { id: record.competitionId })
+                                record.hasRegistration == 0 ?
+                                    history.push("/registrationCompetitionForm", { id: record.competitionId })
+                                    : history.push("/registrationCompetitionFee", { id: record.competitionId })
                         })}
                     />
                 </div>

@@ -26,7 +26,8 @@ import {
     liveScoreUpdateMatchAction,
     liveScoreCreateMatchAction,
     clearMatchAction,
-    getCompetitonVenuesList
+    getCompetitonVenuesList,
+    liveScoreClubListAction
 } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
 import { liveScoreScorerListAction } from '../../store/actions/LiveScoreAction/liveScoreScorerAction';
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -73,6 +74,7 @@ class LiveScoreAddMatch extends Component {
             this.props.getLiveScoreDivisionList(id)
             this.props.getliveScoreScorerList(id, 4)
             this.props.liveScoreRoundListAction(id)
+            this.props.liveScoreClubListAction(id)
             this.setState({ loadvalue: true })
         } else {
             history.push('/')
@@ -304,13 +306,19 @@ class LiveScoreAddMatch extends Component {
         // this.props.getliveScoreDivisions(id)
         this.props.getliveScoreTeams(id, divisionId)
     }
+    setUmpireClub(clubId) {
+        console.log(clubId, 'umpireClubId')
+        this.props.liveScoreUpdateMatchAction(clubId, 'umpireClubId')
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        // this.props.getliveScoreDivisions(id)
+    }
 
     //// Form View
     contentView = (getFieldDecorator) => {
         let { addEditMatch, start_date, start_time, divisionList, roundList } = this.props.liveScoreMatchState
         const { teamResult } = this.props.liveScoreTeamState
         let { liveScoreState } = this.props
-        let { venueData } = this.props.liveScoreMatchState
+        let { venueData,clubListData } = this.props.liveScoreMatchState
         const { scorerListResult } = this.props.liveScoreState
         const { scoringType } = JSON.parse(getLiveScoreCompetiton())
 
@@ -332,8 +340,6 @@ class LiveScoreAddMatch extends Component {
                                     showTime={false}
                                     name={'registrationOepn'}
                                     placeholder='Select Date'
-
-
                                 />
                             )}
                         </Form.Item>
@@ -548,21 +554,27 @@ class LiveScoreAddMatch extends Component {
                         <InputWithHead heading={AppConstants.umpire1Club} />
                         <Select
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                            onChange={(umpire1Club) => this.setState({ umpire1Club })}
-
+                            onChange={(umpire1Club) => this.setUmpireClub( umpire1Club )}
                             placeholder={'Select Umpire 1 Club'}
                         >
                             {/* <Option value={"player"}>Test</Option>
                             <Option value={"netsetgo"}>WSA</Option> */}
+                             {isArrayNotEmpty(clubListData) && clubListData.map((item) => (
+                                        <Option key={item.id} value={item.id} > {item.name}</Option>
+                                    ))
+                                    }
                         </Select>
                     </div>
                     <div className="col-sm" >
                         <InputWithHead heading={AppConstants.umpire2Club} />
                         <Select
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                            onChange={(umpire2Club) => this.setState({ umpire2Club })}
+                            onChange={(umpire2Club) => this.setUmpireClub( umpire2Club )}
                             placeholder={'Select Umpire 2 Club'}
                         >
+                          {isArrayNotEmpty(clubListData) && clubListData.map((item) =>(
+                              <option key={item.id} value={item.id}>{item.name}</option>
+                          ))}
                         </Select>
                     </div>
                 </div>
@@ -740,7 +752,7 @@ class LiveScoreAddMatch extends Component {
         const { getFieldDecorator } = this.props.form
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.key == 'dashboard' ? '1' : "2"} />
                 <Loader visible={this.props.liveScoreMatchState.onLoad} />
                 <Layout>
@@ -780,7 +792,8 @@ function mapDispatchToProps(dispatch) {
         getCompetitonVenuesList,
         getliveScoreScorerList,
         getLiveScoreDivisionList,
-        liveScoreRoundListAction
+        liveScoreRoundListAction,
+        liveScoreClubListAction
     }, dispatch)
 }
 

@@ -12,7 +12,8 @@ import { getYearAndCompetitionOwnAction, getCompetitionFormatTypesAction } from 
 import {
     getCompPartPlayerGradingSummaryAction,
     onchangeCompPartPlayerGradingSummaryData,
-    saveCompPartPlayerGradingSummaryAction
+    saveCompPartPlayerGradingSummaryAction,
+    playerSummaryCommentAction
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import {
     setOwnCompetitionYear,
@@ -20,6 +21,8 @@ import {
     setOwn_competition,
     getOwn_competition
 } from "../../util/sessionStorage"
+import CommentModal from "../../customComponents/commentModal";
+
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
@@ -76,8 +79,8 @@ const columns = [
         dataIndex: 'comments',
         key: 'comments',
         width: 110,
-        render: comments =>
-            <div style={{ display: "flex", justifyContent: "center" }}>
+        render: (comments, record) =>
+            <div style={{ display: "flex", justifyContent: "center", cursor: "pointer" }} onClick={() => this_Obj.onClickComment(record)}>
                 <img src={comments !== null && comments.length > 0 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
             </div>
     },
@@ -97,6 +100,12 @@ class CompetitionPlayerGradeCalculate extends Component {
             firstTimeCompId: "",
             getDataLoading: false,
             saveLoad: false,
+            visible: false,
+            comment: null,
+            divisionId: null,
+            playerGradingorgId: null
+
+
         }
         this_Obj = this;
     }
@@ -248,7 +257,7 @@ class CompetitionPlayerGradeCalculate extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-4" style={{ display: "flex", justifyContent: "flex-end" }} >
+                        <div className="col-sm-4" style={{ display: "flex", justifyContent: "flex-end", alignItems: 'center' }} >
                             <NavLink to="/competitionPlayerGrades" >
                                 <span className='year-select-heading'>{AppConstants.playerGradingToggle}</span>
                             </NavLink>
@@ -258,6 +267,34 @@ class CompetitionPlayerGradeCalculate extends Component {
             </div>
         )
     }
+
+    onClickComment(record) {
+        this.setState({
+            visible: true, comment: record.comments,
+            divisionId: record.competitionMembershipProductDivisionId,
+            playerGradingorgId: record.playerGradingOrganisationId
+        })
+    }
+
+    handleOk = e => {
+        this.props.playerSummaryCommentAction(this.state.yearRefId, this.state.firstTimeCompId,
+            this.state.divisionId, this.state.playerGradingorgId, this.state.comment)
+        this.setState({
+            visible: false,
+            comment: "",
+            divisionId: null,
+            playerGradingorgId: null
+        });
+    };
+    // model cancel for dissapear a model
+    handleCancel = e => {
+        this.setState({
+            visible: false,
+            comment: "",
+            divisionId: null,
+            playerGradingorgId: null
+        });
+    };
 
 
     ////////form content view
@@ -273,6 +310,15 @@ class CompetitionPlayerGradeCalculate extends Component {
                         loading={this.props.partPlayerGradingState.onLoad == true && true}
                     />
                 </div>
+                <CommentModal
+                    visible={this.state.visible}
+                    modalTitle={AppConstants.add_edit_comment}
+                    onOK={this.handleOk}
+                    onCancel={this.handleCancel}
+                    placeholder={AppConstants.addYourComment}
+                    onChange={(e) => this.setState({ comment: e.target.value })}
+                    value={this.state.comment}
+                />
             </div>
         )
     }
@@ -328,7 +374,8 @@ function mapDispatchToProps(dispatch) {
         getYearAndCompetitionOwnAction,
         getCompPartPlayerGradingSummaryAction,
         onchangeCompPartPlayerGradingSummaryData,
-        saveCompPartPlayerGradingSummaryAction
+        saveCompPartPlayerGradingSummaryAction,
+        playerSummaryCommentAction
     }, dispatch)
 }
 

@@ -310,6 +310,82 @@ let CompetitionAxiosApi = {
         var url = `/api/generatedraw?userId=${userId}`;
         return Method.dataPost(url, token, payload);
     },
+    async importCompetitionPlayer(payload) {
+        let body = new FormData();
+        // body.append('file', new File([data.csvFile], { type: 'text/csv' }));
+        body.append("file", payload.csvFile, payload.csvFile.name);
+        body.append("competitionUniqueKey", payload.competitionUniqueKey);
+        body.append("organisationId", payload.organisationUniqueKey);
+        body.append("competitionMembershipProductDivisionId", payload.competitionMembershipProductDivisionId);
+        body.append("isProceed",payload.isProceed);
+        var url = `/api/create/player`;
+        return Method.dataPost(url, token, body)
+    },
+
+    //player grading comment 
+    async playerGradingComment(competitionId, divisionId, comment, playerId) {
+        let userId = await getUserId()
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        let body = {
+            organisationId: organisationUniqueKey,
+            competitionUniqueKey: competitionId,
+            competitionMembershipProductDivisionId: divisionId,
+            comments: comment,
+            playerId: playerId
+        }
+        var url = `api/playergrading/comment?userId=${userId}`;
+        return Method.dataPost(url, token, body);
+    },
+
+    //player grading comment 
+    async playerGradingSummaryComment(year, competitionId, divisionId, gradingOrgId, comment) {
+        let userId = await getUserId()
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        let body = {
+            organisationId: organisationUniqueKey,
+            yearRefId: year,
+            competitionUniqueKey: competitionId,
+            competitionMembershipProductDivisionId: divisionId,
+            playerGradingOrganisationId: gradingOrgId,
+            comments: comment,
+        }
+        var url = `api/playergrading/summary/comment?userId=${userId}`;
+        return Method.dataPost(url, token, body);
+    },
+    //team grading comment
+    async teamGradingComment(year, competitionId, divisionId, gradeRefId, teamId, comment) {
+        let userId = await getUserId()
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        let body = {
+            yearRefId: year,
+            competitionUniqueKey: competitionId,
+            competitionMembershipProductDivisionId: divisionId,
+            gradeRefId: gradeRefId,
+            teamId: teamId,
+            responseComments: comment,
+        }
+        var url = `/api/teamgrading/comment?userId=${userId}`;
+        return Method.dataPost(url, token, body);
+    },
+
+    //part proposed team grading comment
+
+    async partTeamGradingComment(competitionId, divisionId, teamId, comment) {
+        let userId = await getUserId()
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        let body = {
+            competitionUniqueKey: competitionId,
+            competitionMembershipProductDivisionId: divisionId,
+            teamId: teamId,
+            comments: comment,
+        }
+        var url = `/api/proposedteamgrading/comment?userId=${userId}`;
+        return Method.dataPost(url, token, body);
+    },
 
 };
 

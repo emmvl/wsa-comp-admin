@@ -206,6 +206,12 @@ function checkDivision(divisionArray, membershipProductUniqueKey) {
                     else {
                         tempDivisionArray[j]["ageRestriction"] = false;
                     }
+                    if (tempDivisionArray[j].genderRefId !== null) {
+                        tempDivisionArray[j]['genderRestriction'] = true
+                    }
+                    else {
+                        tempDivisionArray[j]['genderRestriction'] = false
+                    }
                 }
                 divisions = tempDivisionArray
                 break
@@ -779,7 +785,7 @@ function getTotalFees(feesOwner, data, mFees) {
 function checkFeeType(feeArray) {
 
     for (let i in feeArray) {
-        if (feeArray[i].fee && feeArray[i].gst) {
+        if (feeArray[i].fee !== null && feeArray[i].gst !== null) {
             return true
         } else {
             return false
@@ -871,10 +877,10 @@ function createProductFeeArr(data) {
                     "competitionMembershipProductFeeId": 0,
                     "competitionMembershipProductTypeId": memberShipProductType[j].competitionMembershipProductTypeId,
                     "competitionMembershipProductDivisionId": null,
-                    "fee": "",
-                    "gst": "",
-                    "affiliateFee": "",
-                    "affiliateGst": "",
+                    "fee": 0,
+                    "gst": 0,
+                    "affiliateFee": 0,
+                    "affiliateGst": 0,
                     "feeTypeRefId": 1,
                     "membershipProductTypeName": memberShipProductType[j].membershipProductTypeName,
                     "membershipProductUniqueKey": divisions[i].membershipProductUniqueKey,
@@ -910,10 +916,10 @@ function createProductFeeArr(data) {
                     "competitionMembershipProductFeeId": 0,
                     "competitionMembershipProductTypeId": memberShipProductType[j].competitionMembershipProductTypeId,
                     "competitionMembershipProductDivisionId": null,
-                    "fee": "",
-                    "gst": "",
-                    "affiliateFee": "",
-                    "affiliateGst": "",
+                    "fee": 0,
+                    "gst": 0,
+                    "affiliateFee": 0,
+                    "affiliateGst": 0,
                     "feeTypeRefId": 2,
                     "membershipProductTypeName": memberShipProductType[j].membershipProductTypeName,
                     "membershipProductUniqueKey": divisions[i].membershipProductUniqueKey,
@@ -965,10 +971,10 @@ function createProductFeeArr(data) {
                         "competitionMembershipProductFeeId": 0,
                         "competitionMembershipProductTypeId": memberShipProductType[k].competitionMembershipProductTypeId,
                         "competitionMembershipProductDivisionId": divisionProductType[j].competitionMembershipProductDivisionId,
-                        "fee": "",
-                        "gst": "",
-                        "affiliateFee": "",
-                        "affiliateGst": "",
+                        "fee": 0,
+                        "gst": 0,
+                        "affiliateFee": 0,
+                        "affiliateGst": 0,
                         "feeTypeRefId": 1,
                         "membershipProductTypeName": memberShipProductType[k].membershipProductTypeName,
                         "divisionName": divisionProductType[j].divisionName,
@@ -1005,10 +1011,10 @@ function createProductFeeArr(data) {
                         "competitionMembershipProductFeeId": 0,
                         "competitionMembershipProductTypeId": memberShipProductType[k].competitionMembershipProductTypeId,
                         "competitionMembershipProductDivisionId": divisionProductType[j].competitionMembershipProductDivisionId,
-                        "fee": "",
-                        "gst": "",
-                        "affiliateFee": "",
-                        "affiliateGst": "",
+                        "fee": 0,
+                        "gst": 0,
+                        "affiliateFee": 0,
+                        "affiliateGst": 0,
                         "feeTypeRefId": 2,
                         "membershipProductTypeName": memberShipProductType[k].membershipProductTypeName,
                         "divisionName": divisionProductType[j].divisionName,
@@ -1343,6 +1349,11 @@ function competitionFees(state = initialState, action) {
                     state.competitionDivisionsData[onChangeDivisionIndex].divisions[action.index]["toDate"] = null
                 }
             }
+            if (action.keyword == "genderRestriction") {
+                if (action.checked == false) {
+                    state.competitionDivisionsData[onChangeDivisionIndex].divisions[action.index]["genderRefId"] = null
+                }
+            }
             return {
                 ...state,
                 onLoad: false,
@@ -1358,10 +1369,12 @@ function competitionFees(state = initialState, action) {
                     toDate: null,
                     fromDate: null,
                     divisionName: "",
+                    genderRefId: null,
                     membershipProductUniqueKey: action.item.membershipProductUniqueKey,
                     competitionMembershipProductId: action.item.competitionMembershipProductId,
                     competitionMembershipProductDivisionId: 0,
                     ageRestriction: false,
+                    genderRestriction: false,
                 }
                 state.competitionDivisionsData[action.index].divisions.push(defaultDivisionObject)
             }
@@ -1392,7 +1405,8 @@ function competitionFees(state = initialState, action) {
             state.defaultCompFeesOrgLogo = detailsSuccessData.competitiondetail.organisationLogo ?
                 detailsSuccessData.competitiondetail.organisationLogo.logoUrl : null
             state.postInvitees = detailsSuccessData.competitiondetail.invitees
-
+            let divisionGetSucces_Data = getDivisionTableData(detailsSuccessData)
+            state.competitionDivisionsData = divisionGetSucces_Data
             return {
                 ...state,
                 onLoad: false,
@@ -1737,8 +1751,7 @@ function competitionFees(state = initialState, action) {
         case ApiConstants.API_ADD_VENUE_SUCCESS:
             console.log(state.selectedVenues)
             let venueSuccess = action.result
-            if(venueSuccess!= null)
-            {
+            if (venueSuccess != null) {
                 let updatedVenue = JSON.parse(JSON.stringify(state.newVenueObj))
                 updatedVenue["id"] = venueSuccess.venueId
                 updatedVenue['name'] = venueSuccess.name
@@ -1753,7 +1766,7 @@ function competitionFees(state = initialState, action) {
                 state.selectedVenuesAdd = "Add"
                 state.selectedVenues.push(venueSuccess.venueId)
             }
-           
+
             console.log(state.selectedVenues)
             return { ...state }
 

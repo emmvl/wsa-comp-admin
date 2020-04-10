@@ -126,10 +126,9 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
             let finalTeamGradingData = action.result
             let teamGradingData = isArrayNotEmpty(finalTeamGradingData.teamGradings) ? finalTeamGradingData.teamGradings : [];
             let registrationInvitees = isArrayNotEmpty(finalTeamGradingData.registrationInvitees) ? finalTeamGradingData.registrationInvitees : [];
-            if(isArrayNotEmpty(teamGradingData))
-            {
+            if (isArrayNotEmpty(teamGradingData)) {
                 teamGradingData.map((item, index) => {
-                    item["isDirectRegistration"] = registrationInvitees.length > 0 ? 1: 0;
+                    item["isDirectRegistration"] = registrationInvitees.length > 0 ? 1 : 0;
                 });
             }
             return {
@@ -143,17 +142,17 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
         ////////competition own final team grading data on Change table 
         case ApiConstants.ONCHANGE_COMPETITION_OWN_PROPOSED_TEAM_GRADING_DATA:
             let finalGradingOnChangeData = JSON.parse(JSON.stringify(state.getCompOwnProposedTeamGradingData));
-            let finalGrades =  state.compFinalTeamGradingFinalGradesData;
+            let finalGrades = state.compFinalTeamGradingFinalGradesData;
             //console.log("finalGrades::" + JSON.stringify(finalGrades));
-          //  console.log("Index" + action.index + "Value" + action.value);
-            let obj = finalGrades.find(x=>x.gradeRefId == action.value);
+            //  console.log("Index" + action.index + "Value" + action.value);
+            let obj = finalGrades.find(x => x.gradeRefId == action.value);
             finalGradingOnChangeData[action.index][action.key] = action.value
             if (action.key == "finalGradeId") {
                 finalGradingOnChangeData[action.index]["finalGradeName"] = obj.name;
-               
+
             }
             state.getCompOwnProposedTeamGradingData = finalGradingOnChangeData
-            
+
             return {
                 ...state,
                 onLoad: false,
@@ -317,6 +316,31 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
                 onLoad: false,
                 error: null
             }
+
+        case ApiConstants.API_TEAM_GRADING_COMMENT_LOAD:
+            return { ...state, onLoad: true, error: null }
+
+        case ApiConstants.API_TEAM_GRADING_COMMENT_SUCCESS:
+            let gradingIndex = state.getCompOwnProposedTeamGradingData.findIndex(x => x.teamId == action.teamId)
+            if (gradingIndex > -1) {
+                state.getCompOwnProposedTeamGradingData[gradingIndex].comments = action.comment
+            }
+            return {
+                ...state,
+                onLoad: false,
+            }
+
+        case ApiConstants.API_PART_TEAM_GRADING_COMMENT_LOAD:
+            return { ...state, onLoad: true }
+
+        case ApiConstants.API_PART_TEAM_GRADING_COMMENT_SUCCESS:
+            let partTeamIndex = state.getPartProposedTeamGradingData.findIndex(x => x.teamId == action.teamId)
+            if (partTeamIndex > -1) {
+                state.getPartProposedTeamGradingData[partTeamIndex].comments = action.comment
+            }
+            return { ...state, onLoad: false }
+
+
         default:
             return state;
     }

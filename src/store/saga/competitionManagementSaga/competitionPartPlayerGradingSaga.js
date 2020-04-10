@@ -118,3 +118,70 @@ export function* dragTeamPartPlayerSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+
+// 
+export function* importCompetitionPlayer(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.importCompetitionPlayer, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_COMPETITION_PLAYER_IMPORT_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+// competition  part player grading add  team
+
+export function* partPLayerCommentSaga(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.playerGradingComment, action.competitionId, action.divisionId, action.comment, action.playerId);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_PLAYER_GRADING_COMMENT_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+                comment: action.comment,
+                playerId: action.playerId,
+                teamIndex: action.teamId
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+
+// / competition  part player grading add  team
+
+export function* partPlayerSummaryCommentSaga(action) {
+    console.log(action)
+    try {
+        const result = yield call(CompetitionAxiosApi.playerGradingSummaryComment, action.year, action.competitionId,
+            action.divisionId, action.gradingOrgId, action.comment);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_PLAYER_GRADING_SUMMARY_COMMENT_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+                comment: action.comment,
+                divisionId: action.divisionId
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+

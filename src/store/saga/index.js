@@ -60,7 +60,7 @@ import {
 
 ////**************************Live Score***************************Start
 // import { liveScorePlayerSaga } from "./liveScoreSaga/liveScorePlayerSaga";
-import { liveScoreMatchListSaga, liveScoreAddMatchSaga, liveScoreCreateMatchSaga, liveScoreDeleteMatchSaga, liveScoreCompetitionVenuesList, liveScoreMatchImportSaga, liveScoreMatchSaga } from './liveScoreSaga/liveScoreMatchSaga';
+import { liveScoreMatchListSaga, liveScoreAddMatchSaga, liveScoreCreateMatchSaga, liveScoreDeleteMatchSaga, liveScoreCompetitionVenuesList, liveScoreMatchImportSaga, liveScoreMatchSaga, liveScoreClubListSaga } from './liveScoreSaga/liveScoreMatchSaga';
 
 import { liveScoreDivisionSaga, getLiveScoreScorerSaga } from "./liveScoreSaga/liveScoreSaga";
 import {
@@ -80,7 +80,7 @@ import { liveScoreNewsListSaga, liveScoreAddNewsSaga, liveScoreNewsNotificationS
 import { liveScoreBannerSaga, liveScoreAddBannerSaga, liveScoreRemoveBannerSaga } from './liveScoreSaga/liveScoreBannerSaga';
 import { liveScoreGoalSaga } from './liveScoreSaga/liveScoreGoalSaga'
 import { liveScoreManagerListSaga, liveScoreAddEditManagerSaga, liveScoreManagerSearch } from './liveScoreSaga/liveScoreManagerSaga';
-import { liveScoreScorerListSaga, liveScorerSearchUserSaga, liveScoreAssigneMatches, liveScoreChangeAssignStatus, liveScoreAddEditScorerSaga, liveScoreUnAssignMatcheSaga } from '../saga/liveScoreSaga/liveScoreScorerSaga';
+import { liveScoreScorerListSaga, liveScorerSearchUserSaga, liveScoreAssigneMatches, liveScoreChangeAssignStatus, liveScoreAddEditScorerSaga, liveScoreUnAssignMatcheSaga, liveScoreScorerSearchSaga } from '../saga/liveScoreSaga/liveScoreScorerSaga';
 import { liveScoreBulkPushBack, liveScoreBulkBringForwardSaga, liveScoreMatchResult, liveScoreEndMatchesSaga, liveScoreDoubleHeaderSaga, liveScoreAbandonMatchSaga } from './liveScoreSaga/liveScoreBulkMatchSaga';
 
 
@@ -103,7 +103,8 @@ import {
   venueListSaga, gradesReferenceListSaga, countryReferenceSaga,
   registrationOtherInfoReferenceSaga, firebirdPlayerReferenceSaga, favouriteTeamReferenceSaga,
   nationalityReferenceSaga, heardByReferenceSaga, playerPositionReferenceSaga, venuesListSaga,
-  venueByIdSaga, venueDeleteSaga
+  venueByIdSaga, venueDeleteSaga,
+  getGenderSaga
 } from "./commonSaga/commonSaga";
 ////Venue constraints
 import { venueTimeSaga, venueConstraintPostSaga } from './competitionManagementSaga/venueTimeSaga'
@@ -112,7 +113,10 @@ import {
   saveCompPartPlayerGradingSummarySaga,
   getCompPartPlayerGradingSaga,
   addNewTeamPartPlayerGradingSaga,
-  dragTeamPartPlayerSaga
+  dragTeamPartPlayerSaga,
+  importCompetitionPlayer,
+  partPLayerCommentSaga,
+  partPlayerSummaryCommentSaga
 } from './competitionManagementSaga/competitionPartPlayerGradingSaga';
 import {
   getCompOwnProposedTeamGradingSaga,
@@ -122,7 +126,9 @@ import {
   getTeamGradingSummarySaga,
   saveUpdatedGradeTeamSummarySaga,
   publishGradeTeamSummarySaga,
-  getCompFinalGradesListSaga
+  getCompFinalGradesListSaga,
+  proposedTeamGradingComment,
+  partProposedTeamGradingComment
 } from './competitionManagementSaga/competitionTeamGradingSaga';
 
 // UserSaga
@@ -135,6 +141,7 @@ import {
   getCompetitionVenues, updateCourtTimingsDrawsAction
 } from './competitionManagementSaga/competitionDrawsSaga';
 
+import { regDashboardListSaga } from "./registrationSaga/registrationDashboardSaga"
 ////Competition Dashboard Saga
 import { competitionDashboardSaga } from './competitionManagementSaga/competitionDashboardSaga';
 // import { liveScoreAddEditManagerSaga } from './liveScoreSaga/liveScoreManagerSaga';
@@ -150,6 +157,7 @@ import { liveScoreUmpiresSaga } from './liveScoreSaga/liveScoreUmpiresSaga'
 
 import { liveScoreTeamAttendanceListSaga } from './liveScoreSaga/liveScoreTeamAttendanceSaga'
 
+import { laddersSettingGetMatchResult, laddersSettingGetData, laddersSettingPostData } from './liveScoreSaga/liveScoreLadderSettingSaga'
 
 export default function* root_saga() {
   yield takeEvery(ApiConstants.API_LOGIN_LOAD, loginApiSaga);
@@ -445,6 +453,8 @@ export default function* root_saga() {
 
   yield takeEvery(ApiConstants.API_DRAG_NEW_TEAM_LOAD, dragTeamPartPlayerSaga)
 
+  yield takeEvery(ApiConstants.API_COMPETITION_PLAYER_IMPORT_LOAD, importCompetitionPlayer);
+
   yield takeEvery(ApiConstants.API_MATCH_RESULT_LOAD, liveScoreMatchResult)
 
   //umpires saga
@@ -524,10 +534,37 @@ export default function* root_saga() {
   //// Manager search saga
   yield takeEvery(ApiConstants.API_LIVESCORE_MANAGER_SEARCH_LOAD, liveScoreManagerSearch)
 
-  yield takeEvery(ApiConstants.API_LIVESCORE_UNASSIGN_STATUS_LOAD , liveScoreUnAssignMatcheSaga)
+  yield takeEvery(ApiConstants.API_LIVESCORE_UNASSIGN_STATUS_LOAD, liveScoreUnAssignMatcheSaga)
 
   yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_EDIT_SCORER_LOAD, liveScoreAddEditScorerSaga)
 
   //// Round List Saga
   yield takeEvery(ApiConstants.API_LIVE_SCORE_ROUND_LIST_LOAD, liveScoreRoundListSaga)
+
+  //player grading comment
+  yield takeEvery(ApiConstants.API_PLAYER_GRADING_COMMENT_LOAD, partPLayerCommentSaga)
+  //player grading summary comment
+  yield takeEvery(ApiConstants.API_PLAYER_GRADING_SUMMARY_COMMENT_LOAD, partPlayerSummaryCommentSaga)
+
+  yield takeEvery(ApiConstants.API_TEAM_GRADING_COMMENT_LOAD, proposedTeamGradingComment)
+
+  //part proposed team grading comment 
+  yield takeEvery(ApiConstants.API_PART_TEAM_GRADING_COMMENT_LOAD, partProposedTeamGradingComment)
+
+  yield takeEvery(ApiConstants.API_REG_DASHBOARD_LIST_LOAD, regDashboardListSaga)
+  yield takeEvery(ApiConstants.API_GET_GENDER_LOAD, getGenderSaga)
+
+  //Search Scorer saga 
+  yield takeEvery(ApiConstants.API_LIVESCORE_SCORER_SEARCH_LOAD, liveScoreScorerSearchSaga)
+
+
+  //Club List Saga
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_CLUB_LIST_LOAD, liveScoreClubListSaga)
+
+  //// Ladder Setting Saga
+  yield takeEvery(ApiConstants.API_LADDER_SETTING_MATCH_RESULT_LOAD, laddersSettingGetMatchResult)
+
+  yield takeEvery(ApiConstants.API_LADDER_SETTING_GET_DATA_LOAD, laddersSettingGetData)
+
+  yield takeEvery(ApiConstants.API_LADDER_SETTING_POST_DATA_LOAD, laddersSettingPostData)
 }

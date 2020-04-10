@@ -63,7 +63,7 @@ const columnActiveNews = [
         key: 'news_expire_date',
         sorter: (a, b) => tableSort(a, b, "news_expire_date"),
         render: (news_expire_date) =>
-            <span>{liveScore_formateDate(news_expire_date)}</span>
+            <span>{news_expire_date && liveScore_formateDate(news_expire_date)}</span>
 
     },
     {
@@ -315,35 +315,6 @@ const columnsTodaysIncient = [
     },
 ];
 
-const dataParticipate = [
-    // {
-    //     key: '1',
-    //     date: "12:30 12/12/12",
-    //     matchId: "3123",
-    //     team: "WSA1",
-    //     firstName: "Sam",
-    //     lastName: "oBrien",
-    //     description: "description",
-    //     association: "MWNA",
-    //     clam: "Yes",
-    //     club: "Peninsula 10"
-    // },
-];
-
-const dataAddMatch = [
-    {
-        key: '1',
-        title: "Change of Court",
-        author: "Sam OBrien",
-        expiry: "18:00 2/2/20",
-        recipients: "Managers",
-        published: "yes",
-        publishDate: "18:00 1/2/20",
-        notification: "Yes",
-
-    },
-
-];
 
 class LiveScoreDashboard extends Component {
     constructor(props) {

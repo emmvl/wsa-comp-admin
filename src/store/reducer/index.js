@@ -44,8 +44,9 @@ import LiveScoreGameTimeStatisticsState from './liveScoreReducer/liveScoreGameTi
 import LiveScoreSetting from './liveScoreReducer/liveScoreSettingReducer';
 import LiveScoreUmpiresState from './liveScoreReducer/liveScoreUmpiresReducer'
 import LiveScoreTeamAttendanceState from './liveScoreReducer/liveScoreTeamAttendanceReducer';
-import LiveScoreVenueChangeState from './liveScoreReducer/liveScoreVenueChangeReducer'
-
+import LiveScoreVenueChangeState from './liveScoreReducer/liveScoreVenueChangeReducer';
+import RegistrationDashboardState from "./registrationReducer/registrationDashboardReducer"
+import LadderSettingState from './liveScoreReducer/liveScoreLadderSettingReducer'
 
 const rootReducer = combineReducers({
   LoginState,
@@ -88,7 +89,9 @@ const rootReducer = combineReducers({
   LiveScoreSetting,
   LiveScoreUmpiresState,
   LiveScoreTeamAttendanceState,
-  LiveScoreVenueChangeState
+  LiveScoreVenueChangeState,
+  RegistrationDashboardState,
+  LadderSettingState
 });
 
 export default rootReducer;

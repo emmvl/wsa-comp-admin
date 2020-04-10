@@ -40,14 +40,14 @@ class LiveScoreAddManager extends Component {
             isEdit: this.props.location.state ? this.props.location.state.isEdit : null,
             loader: false,
             showOption: false,
-            competition_id : null
+            competition_id: null
         }
 
     }
 
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.props.liveScoreManagerListAction(3, 1, id)
+        this.props.liveScoreManagerListAction(5, 1, id)
        
         if (id !== null) {
             this.props.getliveScoreTeams(id)
@@ -61,7 +61,7 @@ class LiveScoreAddManager extends Component {
         } else {
             this.props.liveScoreUpdateManagerDataAction('', 'isAddManager')
         }
-        this.setState({ load: true, competition_id : id })
+        this.setState({ load: true, competition_id: id })
     }
 
     componentDidUpdate(nextProps) {
@@ -149,7 +149,7 @@ class LiveScoreAddManager extends Component {
         const { selectedItems } = this.state;
         const filteredOptions = OPTIONS.filter(o => !selectedItems.includes(o));
         let teamData = isArrayNotEmpty(this.props.liveScoreMangerState.teamResult) ? this.props.liveScoreMangerState.teamResult : []
-      
+
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -175,7 +175,7 @@ class LiveScoreAddManager extends Component {
                                     notFoundContent={onLoadSearch == true ? <Spin size="small" /> : null}
 
                                     onSearch={(value) => {
-                                        
+
                                         value ?
                                             this.props.liveScoreManagerSearch(value, this.state.competition_id)
                                             :
@@ -210,7 +210,7 @@ class LiveScoreAddManager extends Component {
                                 <Select
                                     // loading={this.props.liveScoreState.onLoad == true && true}
                                     mode="multiple"
-                                    showSearch={true}
+                                    // showSearch={true}
                                     placeholder={AppConstants.selectTeam}
                                     style={{ width: "100%", }}
                                     onChange={(teamId) => this.props.liveScoreUpdateManagerDataAction(teamId, 'teamId')}
@@ -461,7 +461,7 @@ class LiveScoreAddManager extends Component {
 
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")} />
                 <Loader visible={this.props.liveScoreMangerState.loading} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"4"} />
                 <Layout>

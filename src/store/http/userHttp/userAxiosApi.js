@@ -128,7 +128,19 @@ let userHttpApi = {
       return Method.dataGet(url, token);
     }
 
-  }
+  },
+
+  // Search scorer 
+  scorerSearchApi(functionId, entityTypeId, competitionId, searchText) {
+    
+    if(searchText && searchText.length>0){
+      var url = `users/byFunction?functionId=${functionId}&entityTypeId=${entityTypeId}&entityId=${competitionId}&userName=${searchText}`
+ 
+      return Method.dataGet(url, token)
+    }
+   
+}
+
 }
 
 let Method = {

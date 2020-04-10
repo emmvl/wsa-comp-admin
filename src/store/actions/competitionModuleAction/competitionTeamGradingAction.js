@@ -124,6 +124,30 @@ function getCompFinalGradesListAction(yearRefId, competitionId, divisionId) {
     return action;
 }
 
+function teamGradingCommentAction(year, competitionId, divisionId, gradeRefId, teamId, comment) {
+    const action = {
+        type: ApiConstants.API_TEAM_GRADING_COMMENT_LOAD,
+        year,
+        competitionId,
+        divisionId,
+        gradeRefId,
+        teamId,
+        comment
+    }
+    return action
+}
+
+function partProposedSummaryComment(competitionId, divisionId, teamId, comment) {
+    const action = {
+        type: ApiConstants.API_PART_TEAM_GRADING_COMMENT_LOAD,
+        competitionId,
+        divisionId,
+        teamId,
+        comment
+    }
+    return action
+}
+
 export {
     getCompOwnProposedTeamGradingAction,
     onchangeCompOwnFinalTeamGradingData,
@@ -136,5 +160,7 @@ export {
     saveUpdatedGradeTeamSummaryAction,
     publishGradeTeamSummaryAction,
     onchangeTeamGradingSummaryData,
-    getCompFinalGradesListAction
+    getCompFinalGradesListAction,
+    teamGradingCommentAction,
+    partProposedSummaryComment
 }                   

@@ -21,10 +21,11 @@ function regCompetitionListDeleteAction(competitionId) {
 }
 
 /////get the competition fees all the data in one API
-function getAllCompetitionFeesDeatilsAction(competitionId, ) {
+function getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration) {
     const action = {
         type: ApiConstants.API_GET_COMPETITION_FEES_DETAILS_LOAD,
         competitionId: competitionId,
+        hasRegistration
     };
     return action;
 }
@@ -52,9 +53,10 @@ function saveCompetitionFeesMembershipTabAction(payload, competitionId) {
 }
 
 ////get default competition membershipproduct tab details
-function getDefaultCompFeesMembershipProductTabAction() {
+function getDefaultCompFeesMembershipProductTabAction(hasRegistration) {
     const action = {
         type: ApiConstants.API_GET_DEFAULT_COMPETITION_FEES_MEMBERHSIP_PRODUCT_LOAD,
+        hasRegistration
     };
     return action;
 }

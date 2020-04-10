@@ -12,7 +12,7 @@ import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage';
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 import { NavLink } from 'react-router-dom';
-import { liveScoreScorerUpdate, liveScoreAddEditScorer } from '../../store/actions/LiveScoreAction/liveScoreScorerAction'
+import { liveScoreScorerUpdate, liveScoreAddEditScorer, liveScoreScorerSearch } from '../../store/actions/LiveScoreAction/liveScoreScorerAction'
 import Loader from '../../customComponents/loader'
 import { isArrayNotEmpty } from "../../util/helpers";
 import { liveScoreManagerSearch, liveScoreClear, liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
@@ -32,7 +32,7 @@ class LiveScoreAddScorer extends Component {
             isEdit: this.props.location.state ? this.props.location.state.isEdit : null,
             loader: false,
             load: false,
-            competition_id : null
+            competition_id: null
         }
 
     }
@@ -45,8 +45,8 @@ class LiveScoreAddScorer extends Component {
 
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.props.liveScoreManagerListAction(5, 1, id)
-      
+        // this.props.liveScoreScorerSearch(8, 1, id)
+
         if (id !== null) {
             // this.props.getliveScoreDivisions(id)
             this.props.getliveScoreTeams(id)
@@ -62,36 +62,31 @@ class LiveScoreAddScorer extends Component {
         } else {
             this.props.liveScoreScorerUpdate("", "isAddScorer")
         }
-        this.setState({ load: true, competition_id : id })
+        this.setState({ load: true, competition_id: id })
     }
 
     componentDidUpdate(nextProps) {
 
-        // if(this.props.liveScoreScorerState.scorerData !== this.props.liveScoreScorerState.scorerData){
-        // if (this.state.load == true && this.props.liveScoreScorerState.onLoad == false) {
-        if (this.state.isEdit == true) {
-            // this.setInitalFiledValue()
-        }
-        // this.setState({ load: false, loader: false })
+        // // if(this.props.liveScoreScorerState.scorerData !== this.props.liveScoreScorerState.scorerData){
+        // // if (this.state.load == true && this.props.liveScoreScorerState.onLoad == false) {
+        // if (this.state.isEdit == true) {
+        //     // this.setInitalFiledValue()
         // }
-        // }
+        // // this.setState({ load: false, loader: false })
+        // // }
+        // // }
 
 
     }
 
     setInitalFiledValue(scorerData) {
-        console.log(scorerData)
+       
         let teamsArray = []
         for (let i in scorerData.teams) {
             teamsArray.push(scorerData.teams[i].id)
         }
 
         this.props.form.setFieldsValue({
-            // 'First Name': managerData.firstName,
-            // 'Last Name': managerData.lastName,
-            // 'Email Address': managerData.email,
-            // 'Contact no': managerData.mobileNumber,
-            // 'Select Team': teamId
 
             'First Name': scorerData.firstName,
             'Last Name': scorerData.lastName,
@@ -134,13 +129,9 @@ class LiveScoreAddScorer extends Component {
     }
 
     scorerExistingRadioButton(getFieldDecorator) {
-        const { managerListResult, MainManagerListResult, onLoadSearch, managerSearchResult } = this.props.liveScoreMangerState
-        let managerList = isArrayNotEmpty(managerListResult) ? managerListResult : []
-        console.log(managerList, "managerList")
-        // let teamData = this.props.liveScoreState.teamResult ? this.props.liveScoreState.teamResult : []
-        const { teamId } = this.props.liveScoreMangerState
-        const { teamResult } = this.props.liveScoreScorerState
-        let teamData = isArrayNotEmpty(teamResult) ? teamResult : []
+    
+        const {searchScorer, onLoadSearch } = this.props.liveScoreScorerState
+        let scorer_list = isArrayNotEmpty(searchScorer) ? searchScorer : []
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -166,13 +157,14 @@ class LiveScoreAddScorer extends Component {
                                     }
                                     notFoundContent={onLoadSearch == true ? <Spin size="small" /> : null}
                                     onSearch={(value) => {
-                                        value ?
-                                            this.props.liveScoreManagerSearch(value, this.state.competition_id)
-                                            :
-                                            this.props.liveScoreManagerListAction(3, 1, this.state.competition_id)
+                                       
+                                        this.props.liveScoreScorerSearch(8, 1,this.state.competition_id, value)
+                                            // this.props.liveScoreManagerSearch(value, this.state.competition_id)
+                                            // :
+                                            // this.props.liveScoreManagerListAction(3, 1, this.state.competition_id)
                                     }}
 
-                                >{managerList.map((item) => {
+                                >{scorer_list.map((item) => {
                                     return <Option key={item.id} value={item.firstName + " " + item.lastName}>
                                         {item.firstName + " " + item.lastName}
                                     </Option>
@@ -182,7 +174,7 @@ class LiveScoreAddScorer extends Component {
                         </Form.Item>
                     </div>
                 </div>
-                <div className="row" >
+                {/* <div className="row" >
                     <div className="col-sm" >
                         <Form.Item className="slct-in-add-manager-livescore">
                             <InputWithHead
@@ -212,7 +204,7 @@ class LiveScoreAddScorer extends Component {
                         </Form.Item>
                     </div>
 
-                </div>
+                </div> */}
             </div>
         )
 
@@ -290,7 +282,7 @@ class LiveScoreAddScorer extends Component {
                     </div>
                 </div>
 
-                <div className="row" >
+                {/* <div className="row" >
                     <div className="col-sm" >
                         <InputWithHead heading={AppConstants.team}
                             required={"required-field pb-0 pt-3"} />
@@ -314,7 +306,7 @@ class LiveScoreAddScorer extends Component {
                             )}
                         </Form.Item>
                     </div>
-                </div>
+                </div> */}
             </div>
         )
     }
@@ -442,7 +434,7 @@ class LiveScoreAddScorer extends Component {
         const { getFieldDecorator } = this.props.form;
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"5"} />
                 <Loader visible={this.props.liveScoreScorerState.onLoad} />
                 <Layout>
@@ -471,7 +463,8 @@ function mapDispatchToProps(dispatch) {
         liveScoreManagerSearch,
         getliveScoreDivisions,
         liveScoreClear,
-        liveScoreManagerListAction
+        liveScoreManagerListAction,
+        liveScoreScorerSearch
     }, dispatch)
 }
 

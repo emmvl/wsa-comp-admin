@@ -943,7 +943,7 @@ class RegistrationForm extends Component {
             <div className="discount-view pt-5">
                 <span className="form-heading">{AppConstants.additionalQuestions}</span>
                 <div className="inside-container-view">
-                    <span className="form-heading">{AppConstants.demographicQuestions}</span>
+                    <span className="setting-heading">{AppConstants.demographicQuestions}</span>
                     <Tree
                         className="tree-government-rebate"
                         style={{ flexDirection: 'column' }}
@@ -958,7 +958,7 @@ class RegistrationForm extends Component {
                     </Tree>
                 </div>
                 <div className="inside-container-view">
-                    <span className="form-heading">{AppConstants.netballQuestions}</span>
+                    <span className="setting-heading">{AppConstants.netballQuestions}</span>
                     <Tree
                         className="tree-government-rebate"
                         style={{ flexDirection: 'column' }}
@@ -973,7 +973,7 @@ class RegistrationForm extends Component {
                     </Tree>
                 </div>
                 <div className="inside-container-view">
-                    <span className="form-heading">{AppConstants.otherQuestions}</span>
+                    <span className="setting-heading">{AppConstants.otherQuestions}</span>
                     <Tree
                         className="tree-government-rebate"
                         style={{ flexDirection: 'column' }}

@@ -207,6 +207,7 @@ class LiveScoreAddPlayer extends Component {
                             showTime={false}
                             name={'date'}
                             value={playerData.dateOfBirth && moment(playerData.dateOfBirth, "DD-MM-YYYY")}
+                        // value={playerData.dateOfBirth}
                         />
                     </div>
                     <div className="col-sm" >
@@ -380,7 +381,7 @@ class LiveScoreAddPlayer extends Component {
 
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
                 <Loader visible={this.props.liveScorePlayerState.onLoad} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.screenName == 'fromTeamList' ? '3' : this.state.screenName == 'fromMatchList' ? '2' : "7"} />
                 <Layout>

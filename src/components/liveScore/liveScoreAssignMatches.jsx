@@ -31,7 +31,8 @@ function tableSort(a, b, key) {
 function checkScorerMatch(data){
     let scorerID = this_obj.props.location.state ? this_obj.props.location.state.record.id : null
     console.log(scorerID, data)
-    if(data && data.id == scorerID){
+    // if(data && data.id == scorerID){
+    if(data){
         return "Unassign"
     }else{
         return "Assign"
@@ -225,7 +226,12 @@ class LiveScoreAssignMatch extends Component {
         if (!isScorer) {
             this.props.changeAssignStatus(index, data, 4, this.state.teamID, scorerKey, teamKey,scorerID)
         } else {
-            this.props.unAssignMatcheStatus(index, isScorer, scorerKey, teamKey, scorerID)
+            // if(isScorer.id == scorerID){
+                this.props.unAssignMatcheStatus(index, isScorer, scorerKey, teamKey, scorerID)
+            // }else{
+            //     this.props.changeAssignStatus(index, data, 4, this.state.teamID, scorerKey, teamKey,scorerID)
+            // }
+           
         }
 
     }
@@ -359,7 +365,7 @@ class LiveScoreAssignMatch extends Component {
 
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"5"} />
                 <Layout>
                     {this.headerView()}

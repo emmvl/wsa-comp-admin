@@ -85,6 +85,39 @@ function onSameTeamDragAction(source, destination) {
 
 }
 
+
+function competitionPlayerImportAction(data) {
+    return {
+        type: ApiConstants.API_COMPETITION_PLAYER_IMPORT_LOAD,
+        payload: data
+    }
+}
+
+//player grading comment
+function playerGradingComment(competitionId, divisionId, comment, playerId, teamId) {
+    const action = {
+        type: ApiConstants.API_PLAYER_GRADING_COMMENT_LOAD,
+        competitionId,
+        divisionId,
+        comment,
+        playerId,
+        teamId,
+    }
+    return action
+}
+
+function playerSummaryCommentAction(year, competitionId, divisionId, gradingOrgId, comment) {
+    const action = {
+        type: ApiConstants.API_PLAYER_GRADING_SUMMARY_COMMENT_LOAD,
+        year,
+        competitionId,
+        divisionId,
+        gradingOrgId,
+        comment,
+    }
+    return action
+}
+
 export {
     getCompPartPlayerGradingSummaryAction,
     onchangeCompPartPlayerGradingSummaryData,
@@ -93,5 +126,8 @@ export {
     clearReducerCompPartPlayerGradingAction,
     addNewTeamAction,
     onDragPlayerAction,
-    onSameTeamDragAction
+    onSameTeamDragAction,
+    competitionPlayerImportAction,
+    playerGradingComment,
+    playerSummaryCommentAction
 }

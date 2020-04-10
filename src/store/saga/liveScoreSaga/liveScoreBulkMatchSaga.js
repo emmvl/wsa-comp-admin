@@ -31,7 +31,9 @@ export function* liveScoreBulkPushBack(action) {
             action.pushBackData,
             action.start_Date,
             action.end_Date,
-            action.competitionId);
+            action.bulkRadioBtn,
+            action.formatedNewDate
+        );
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_BULK_PUSH_BACK_SUCCESS,
@@ -54,7 +56,9 @@ export function* liveScoreBulkBringForwardSaga(action) {
             action.competitionID,
             action.data,
             action.start_Date,
-            action.end_Date
+            action.end_Date,
+            action.bulkRadioBtn,
+            action.formatedNewDate
         );
         if (result.status === 1) {
             yield put({

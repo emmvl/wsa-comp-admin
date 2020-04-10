@@ -10,6 +10,7 @@ import InputWithHead from "../../customComponents/InputWithHead";
 import { liveScoreUpdateDivisionAction, createDivisionAction } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage';
 
 import Loader from '../../customComponents/loader'
@@ -181,7 +182,7 @@ class LiveScoreAddDivision extends Component {
         const { getFieldDecorator } = this.props.form
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.addDivision} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.addDivision} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"9"} />
                 <Layout>
                     <Loader visible={this.props.liveScoreDivisionState.onLoad} />
