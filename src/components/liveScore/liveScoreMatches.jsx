@@ -242,7 +242,6 @@ class LiveScoreMatchesList extends Component {
     tableView = () => {
         const { liveScoreMatchListState } = this.props;
         let DATA = liveScoreMatchListState ? liveScoreMatchListState.liveScoreMatchListData : []
-        // let competitionID = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
         let total = liveScoreMatchListState.liveScoreMatchListTotalCount;
 

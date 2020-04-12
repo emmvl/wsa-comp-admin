@@ -650,16 +650,6 @@ class LiveScoreAddMatch extends Component {
                 let { addEditMatch, matchData, start_date, start_time, start_post_date } = this.props.liveScoreMatchState
 
 
-
-                // let startDate = moment(start_date).format("YYYY-MMM-DD")
-                // let startDate = moment(start_post_date).format("YYYY-MMM-DD")
-                // let start = moment.utc(start_time).format("HH:mm")
-
-                // let postDate = startDate + " " + start + " " + "UTC"
-
-                // let formatedDate = new Date(postDate).toISOString()
-                // matchData.startTime = formatedDate
-
                 let startDate = moment(start_post_date).format("YYYY-MMM-DD")
                 let start = moment(start_time).format("HH:mm")
 
@@ -669,9 +659,7 @@ class LiveScoreAddMatch extends Component {
 
                 matchData.startTime = formated__Date
 
-                // let competitionId = getCompetitonId();
                 const { id } = JSON.parse(getLiveScoreCompetiton())
-                // console.log(matchData)
                 this.props.liveScoreCreateMatchAction(matchData, id, this.state.key)
             }
         });

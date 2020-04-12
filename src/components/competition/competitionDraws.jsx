@@ -223,6 +223,7 @@ class CompetitionDraws extends Component {
       drawsId: targetObject.drawsId,
       homeTeamId: sourceObejct.homeTeamId,
       awayTeamId: sourceObejct.awayTeamId,
+      competitionDivisionGradeId: sourceObejct.competitionDivisionGradeId,
       isLocked: 1
     };
     let customTargetObject = {
@@ -232,6 +233,7 @@ class CompetitionDraws extends Component {
       awayTeamId: targetObject.awayTeamId,
       // homeTeamId: 268,
       // awayTeamId: 262,
+      competitionDivisionGradeId: targetObject.competitionDivisionGradeId,
       isLocked: 1
     };
     let postObject = {

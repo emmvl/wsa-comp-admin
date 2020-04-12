@@ -82,6 +82,22 @@ function ownTeamGradingSummaryFunction(ownTeamGradingSummaryData, sortOrderArray
     return ownTeamGradingSummaryData
 }
 
+function getUpdatedHistoryData(data) {
+    if (data.length > 0) {
+        for (let i in data) {
+            let historyData = data[i].playerHistory
+            for (let j in historyData) {
+                historyData[j]["hoverVisible"] = false
+            }
+        }
+        console.log(data)
+        return data
+    }
+    else {
+        return data
+    }
+}
+
 
 function sortOrderArray(ownTeamGradingSummaryData) {
     let sortOrderArray = []
@@ -131,9 +147,11 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
                     item["isDirectRegistration"] = registrationInvitees.length > 0 ? 1 : 0;
                 });
             }
+            let teamGradingDataArr = isArrayNotEmpty(finalTeamGradingData.teamGradings) ? finalTeamGradingData.teamGradings : []
+            let updatedTeamGradingData = getUpdatedHistoryData(teamGradingDataArr)
             return {
                 ...state,
-                getCompOwnProposedTeamGradingData: isArrayNotEmpty(finalTeamGradingData.teamGradings) ? finalTeamGradingData.teamGradings : [],
+                getCompOwnProposedTeamGradingData: updatedTeamGradingData,
                 compFinalTeamGradingFinalGradesData: isArrayNotEmpty(finalTeamGradingData.finalGrades) ? finalTeamGradingData.finalGrades : [],
                 onLoad: false,
                 error: null
@@ -339,6 +357,10 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
                 state.getPartProposedTeamGradingData[partTeamIndex].comments = action.comment
             }
             return { ...state, onLoad: false }
+
+        case ApiConstants.changeHoverProposedTeamGrading:
+            state.getCompOwnProposedTeamGradingData[action.tableIndex].playerHistory[action.historyIndex].hoverVisible = action.key
+            return { ...state }
 
 
         default:

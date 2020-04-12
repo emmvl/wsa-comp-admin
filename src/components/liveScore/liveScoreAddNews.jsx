@@ -570,11 +570,7 @@ class LiveScoreAddNews extends Component {
 
                 if (data.newExpiryDate && data.expire_time) {
                     let experyDate = moment(data.newExpiryDate).format("YYYY-MM-DD")
-
                     let expiryTime = moment.utc(data.expire_time).format("HH:mm")
-
-
-
                     let postDate = experyDate + " " + expiryTime + " " + "UTC"
                     let formatedDate = new Date(postDate).toISOString()
                     liveScoreNewsState.addEditNews.news_expire_date = formatedDate

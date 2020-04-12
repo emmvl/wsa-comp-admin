@@ -138,9 +138,9 @@ class LiveScoreAddTeam extends Component {
     }
 
 
-    onRadioSwitch(e){
+    onRadioSwitch(e) {
         this.props.liveScoreAddTeamform({ key: 'managerType', data: e.target.value })
-        this.setState({load : true})
+        this.setState({ load: true })
     }
 
 
@@ -399,7 +399,7 @@ class LiveScoreAddTeam extends Component {
                                 {/* {this.state.showOption ?  */}
                                 {managerListResult.map((item) => {
                                     return <Option key={item.id} value={JSON.stringify(item.id)}>
-                                        {item.firstName + item.lastName}
+                                        {item.firstName +" "+ item.lastName}
                                     </Option>
                                 })
                                 }
@@ -532,6 +532,7 @@ class LiveScoreAddTeam extends Component {
     };
 
     handleSubmit = e => {
+        console.log(this.props.liveScoreTeamState.teamManagerData, ' this.props.liveScoreTeamState.teamManagerData')
         const { id } = JSON.parse(getLiveScoreCompetiton())
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -551,10 +552,12 @@ class LiveScoreAddTeam extends Component {
                 } = this.props.liveScoreTeamState.teamManagerData
                 let isCheked = this.props.liveScoreTeamState
 
+                let usersArray = JSON.stringify(userIds)
+
                 if (this.props.liveScoreTeamState.managerType === 'existing') {
                     const formData = new FormData();
 
-                    let usersArray = JSON.stringify(userIds)
+
 
                     if (this.state.teamId !== null) {
                         formData.append('id', this.state.teamId)
@@ -574,6 +577,14 @@ class LiveScoreAddTeam extends Component {
                     formData.append('divisionId', divisionId)
                     formData.append('userIds', usersArray)
 
+                    if (firstName && lastName && mobileNumber && email) {
+                        formData.append('firstName', firstName)
+                        formData.append('lastName', lastName)
+                        formData.append('mobileNumber', mobileNumber)
+                        formData.append('email', email)
+
+                    }
+
                     this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key)
                 }
                 else if (this.props.liveScoreTeamState.managerType === 'new') {
@@ -585,7 +596,7 @@ class LiveScoreAddTeam extends Component {
 
                     formData.append('name', name)
                     formData.append('alias', alias)
-            
+
                     if (this.state.image) {
                         formData.append('logo', this.state.image)
                     } else if (this.props.liveScoreTeamState.teamLogo) {
@@ -599,6 +610,10 @@ class LiveScoreAddTeam extends Component {
                     formData.append('lastName', lastName)
                     formData.append('mobileNumber', mobileNumber)
                     formData.append('email', email)
+                    if (userIds.length > 0) {
+                        console.log(userIds, 'userIds$$$$')
+                        formData.append('userIds', usersArray)
+                    }
 
                     this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key)
                 }
@@ -635,7 +650,7 @@ class LiveScoreAddTeam extends Component {
         const { getFieldDecorator } = this.props.form;
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"3"} />
                 <Loader visible={this.props.liveScoreTeamState.onLoad} />
                 <Layout>

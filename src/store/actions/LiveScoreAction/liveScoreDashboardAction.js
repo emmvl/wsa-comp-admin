@@ -1,6 +1,6 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-function liveScorePlayerListAction(competitionID, startDay, currentTime) {
+function liveScoreDashboardListAction(competitionID, startDay, currentTime) {
     const action = {
         type: ApiConstants.API_LIVE_SCORE_DASHBOARD_LOAD,
         competitionID: competitionID,
@@ -12,5 +12,5 @@ function liveScorePlayerListAction(competitionID, startDay, currentTime) {
 }
 
 export {
-    liveScorePlayerListAction
+    liveScoreDashboardListAction
 }

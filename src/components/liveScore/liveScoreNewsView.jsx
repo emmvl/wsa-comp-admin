@@ -200,13 +200,13 @@ class LiveScoreNewsView extends Component {
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                {this.state.id !== null &&
+                                {!newsDataArr.published_at &&
                                     <Button className="open-reg-button mr-5" type="primary" onClick={() => this.onSubmitNewsPublish(newsDataArr, false)}   >{AppConstants.publish}</Button>
                                 }
                                 < Button className="open-reg-button" type="primary"
                                     onClick={() => this.onSubmitNewsPublish(newsDataArr, true)}
                                 >
-                                    {this.state.id !== null ? AppConstants.publish_notify
+                                    {!newsDataArr.published_at ? AppConstants.publish_notify
                                         : (newsDataArr.isActive == 1 && newsDataArr.isNotification == 1) ?
                                             AppConstants.notifyAgain : AppConstants.notify
 

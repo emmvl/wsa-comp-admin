@@ -148,6 +148,17 @@ function partProposedSummaryComment(competitionId, divisionId, teamId, comment) 
     return action
 }
 
+
+function changeHistoryHover(data, tableIndex, historyIndex, key) {
+    const action = {
+        type: ApiConstants.changeHoverProposedTeamGrading,
+        data,
+        tableIndex,
+        historyIndex, key
+    }
+    return action
+}
+
 export {
     getCompOwnProposedTeamGradingAction,
     onchangeCompOwnFinalTeamGradingData,
@@ -162,5 +173,6 @@ export {
     onchangeTeamGradingSummaryData,
     getCompFinalGradesListAction,
     teamGradingCommentAction,
-    partProposedSummaryComment
+    partProposedSummaryComment,
+    changeHistoryHover
 }                   

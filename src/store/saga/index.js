@@ -71,7 +71,8 @@ import {
   liveScoreAffilateSaga,
   addTeamLiveScoreSaga,
   liveScoreTeamImportSaga,
-  liveScoreGetTeamSaga
+  liveScoreGetTeamSaga,
+  liveScoreTeamPaggingSaga
 } from './liveScoreSaga/liveScoreTeamSaga';
 import { liveScoreLaddersDivisionsaga, liveScoreLaddersListSaga } from './liveScoreSaga/liveScoreLadderSaga';
 import { liveScoreIncidentListSaga } from './liveScoreSaga/liveScoreIncidentSaga';
@@ -84,7 +85,7 @@ import { liveScoreScorerListSaga, liveScorerSearchUserSaga, liveScoreAssigneMatc
 import { liveScoreBulkPushBack, liveScoreBulkBringForwardSaga, liveScoreMatchResult, liveScoreEndMatchesSaga, liveScoreDoubleHeaderSaga, liveScoreAbandonMatchSaga } from './liveScoreSaga/liveScoreBulkMatchSaga';
 
 
-import { liveScorePlayerSaga, liveScoreAddEditPlayerSaga, liveScorePlayerImportSaga } from "./liveScoreSaga/liveScorePlayerSaga";
+import { liveScorePlayerSaga, liveScoreAddEditPlayerSaga, liveScorePlayerImportSaga , getPlayerListPagginationSaga} from "./liveScoreSaga/liveScorePlayerSaga";
 import { liveScoreDashboardSaga } from './liveScoreSaga/liveScoreDashboardSaga';
 import { liveScoreCompetitionSaga, liveScoreCompetitionDelete } from './liveScoreSaga/liveScoreCompetionSaga'
 import { liveScoreDivisionsaga, liveScoreDeleteDivisionSaga, liveScoreCreateDivisionsaga, liveScoreDivisionImportSaga } from './liveScoreSaga/liveScoreDivisionSaga';
@@ -114,7 +115,6 @@ import {
   getCompPartPlayerGradingSaga,
   addNewTeamPartPlayerGradingSaga,
   dragTeamPartPlayerSaga,
-  importCompetitionPlayer,
   partPLayerCommentSaga,
   partPlayerSummaryCommentSaga
 } from './competitionManagementSaga/competitionPartPlayerGradingSaga';
@@ -453,8 +453,6 @@ export default function* root_saga() {
 
   yield takeEvery(ApiConstants.API_DRAG_NEW_TEAM_LOAD, dragTeamPartPlayerSaga)
 
-  yield takeEvery(ApiConstants.API_COMPETITION_PLAYER_IMPORT_LOAD, importCompetitionPlayer);
-
   yield takeEvery(ApiConstants.API_MATCH_RESULT_LOAD, liveScoreMatchResult)
 
   //umpires saga
@@ -567,4 +565,10 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_LADDER_SETTING_GET_DATA_LOAD, laddersSettingGetData)
 
   yield takeEvery(ApiConstants.API_LADDER_SETTING_POST_DATA_LOAD, laddersSettingPostData)
+
+  // Tema list with paggination
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_TEAM_WITH_PAGGING_LOAD, liveScoreTeamPaggingSaga);
+
+  //Player list with paggination
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_LOAD, getPlayerListPagginationSaga);
 }

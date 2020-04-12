@@ -200,7 +200,7 @@ let LiveScoreAxiosApi = {
         // var url = `/banners?&competitionIds=${competitionID}&pageType=${1}`;
         // let competitionId = localStorage.getItem("competitionId");
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-        var url = `/banners?&competitionIds=${id}`;
+        var url = `/banners?competitionIds=${id}`;
         return Method.dataGet(url, token)
     },
 
@@ -231,7 +231,7 @@ let LiveScoreAxiosApi = {
         let competitionID = localStorage.getItem("competitionId");
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
         // var url = `/news?&competitionIds=${competitionId}`;
-        var url = `/news/admin?&entityId=${id}&entityTypeId=1`;
+        var url = `/news/admin?entityId=${id}&entityTypeId=1`;
         return Method.dataGet(url, token)
     },
     liveScoreAddNews(data, imageData, newsId) {
@@ -263,18 +263,18 @@ let LiveScoreAxiosApi = {
         if (goaltype === "By Match") {
             let competitionID = localStorage.getItem("competitionId");
             let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-            var url = `/stats/scoringByPlayer?&competitionId=${id}&aggregate=MATCH`
+            var url = `/stats/scoringByPlayer?competitionId=${id}&aggregate=MATCH`
             return Method.dataGet(url, token)
         }
         if (goaltype === "Total") {
             let competitionID = localStorage.getItem("competitionId");
             let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-            var url = `/stats/scoringByPlayer?&competitionId=${id}&aggregate=ALL`
+            var url = `/stats/scoringByPlayer?competitionId=${id}&aggregate=ALL`
             return Method.dataGet(url, token)
         }
         let competitionID = localStorage.getItem("competitionId");
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-        var url = `/stats/scoringByPlayer?&competitionId=${id}`;
+        var url = `/stats/scoringByPlayer?competitionId=${id}`;
 
     },
     liveScoreManagerList(roleId, entityTypeId, entityId) {
@@ -546,8 +546,8 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
-    liveScoreAttendanceList(competitionId, body) {
-        let url = `/players/activity?competitionId=${competitionId}`
+    liveScoreAttendanceList(competitionId, body, select_status) {
+        let url = `/players/activity?competitionId=${competitionId}&status=${select_status}`
         return Method.dataPost(url, token, body)
     },
     liveScoreGetTeamData(teamId) {
@@ -604,7 +604,7 @@ let LiveScoreAxiosApi = {
 
         }
         console.log(body)
-        var url = `/users/member?&competitionId=${id}`;
+        var url = `/users/member?competitionId=${id}`;
         return Method.dataPost(url, token, body)
     },
 
@@ -664,14 +664,38 @@ let LiveScoreAxiosApi = {
     },
 
     laddersSettingPostData(data) {
-        console.log(data, 'laddersSettingPostData')
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
 
         let body = data
 
         var url = `/competitions/ladderSettings?competitionId=${id}`
         return Method.dataPost(url, token, body)
-    }
+    },
+
+
+    // Get Teams with paggination
+    getTeamWithPagging(competitionID, offset, limit, search){
+        var url = null
+        if(search && search.length >0 ){
+            url = `/teams/list?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=${search}`;
+        }else{
+             url = `/teams/list?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=`;
+        }
+       
+        return Method.dataGet(url, localStorage.token)
+    },
+
+    /// Get Player list with pagging
+    getPlayerWithPaggination(competitionID, offset, limit, search) {
+        var url = null
+        if(search && search.length >0 ){
+            url = `/players/admin?competitionId=${competitionID}&offset=${offset}&limit=${limit}&name=${search}`;
+        }else{
+            url = `/players/admin?competitionId=${competitionID}&offset=${offset}&limit=${limit}&name=`;
+        }
+       
+        return Method.dataGet(url, localStorage.token);
+    },
 };
 
 

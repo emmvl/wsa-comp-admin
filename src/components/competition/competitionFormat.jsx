@@ -88,7 +88,6 @@ class CompetitionFormat extends Component {
                     this.setState({
                         getDataLoading: false,
                     })
-                    this.setFormFieldValue();
                 }
             }
             if (nextProps.appState !== this.props.appState) {
@@ -197,20 +196,6 @@ class CompetitionFormat extends Component {
         }
         this.props.getCompetitionFormatAction(payload);
         this.setState({ getDataLoading: true, firstTimeCompId: competitionId })
-    }
-
-    setFormFieldValue = () => {
-        console.log("setFormFieldValue");
-        let formatList = Object.assign(this.props.competitionFormatState.competitionFormatList);
-        let competitionFormatDivision = formatList.competionFormatDivisions;
-        (competitionFormatDivision || []).map((item, index) => {
-            this.props.form.setFieldsValue({
-                [`matchDuration${index}`]: item.matchDuration,
-                [`mainBreak${index}`]: item.mainBreak,
-                [`qtrBreak${index}`]: item.qtrBreak,
-                [`timeBetweenGames${index}`]: item.timeBetweenGames,
-            });
-        })
     }
 
     onChange(e, competitionFormatDivisions, index) {
@@ -415,73 +400,62 @@ class CompetitionFormat extends Component {
     }
 
 
-    saveCompetitionFormats = (e) => {
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            console.log("err::" + err);
-            if(!err)
+    saveCompetitionFormats = () => {
+        this.setState({buttonPressed: "save"});
+        let formatList = Object.assign(this.props.competitionFormatState.competitionFormatList);
+        let competitionFormatDivision = formatList.competionFormatDivisions;
+        formatList.organisationId = this.state.organisationId;
+
+        if(formatList.isDefault == null)
+            formatList.isDefault = 0;
+
+        for(let item in competitionFormatDivision)
+        {
+            console.log("item.isFinal::" + JSON.stringify(competitionFormatDivision[item]["isFinal"]));
+            let isFinal = competitionFormatDivision[item]["isFinal"];
+            if(isFinal)
             {
-                this.setState({buttonPressed: "save"});
-                let formatList = Object.assign(this.props.competitionFormatState.competitionFormatList);
-                let competitionFormatDivision = formatList.competionFormatDivisions;
-                formatList.organisationId = this.state.organisationId;
+                console.log("***********************");
+                this.setState({isFinalAvailable: true});
+            }
 
-                if(formatList.isDefault == null)
-                    formatList.isDefault = 0;
+            let competitionFormatTemplateId =  competitionFormatDivision[item].competitionFormatTemplateId;
+            if(competitionFormatTemplateId < 0)
+                competitionFormatDivision[item].competitionFormatTemplateId = 0;
 
-                for(let item in competitionFormatDivision)
+            const selectedDivisions = competitionFormatDivision[item].selectedDivisions;
+            let divisions = competitionFormatDivision[item].divisions;
+            let divArr = [];
+
+            for(let j in selectedDivisions)
+            {
+                let matchDivisions = divisions.
+                    find(x=>x.competitionMembershipProductDivisionId === selectedDivisions[j]);
+                if(matchDivisions!= "")
                 {
-                    console.log("item.isFinal::" + JSON.stringify(competitionFormatDivision[item]["isFinal"]));
-                    let isFinal = competitionFormatDivision[item]["isFinal"];
-                    if(isFinal)
-                    {
-                        console.log("***********************");
-                        this.setState({isFinalAvailable: true});
+                    let obj = {
+                        competitionFormatDivisionId: 0,
+                        competitionMembershipProductDivisionId: 0
                     }
-
-                    let competitionFormatTemplateId =  competitionFormatDivision[item].competitionFormatTemplateId;
-                    if(competitionFormatTemplateId < 0)
-                        competitionFormatDivision[item].competitionFormatTemplateId = 0;
-
-                    const selectedDivisions = competitionFormatDivision[item].selectedDivisions;
-                    let divisions = competitionFormatDivision[item].divisions;
-                    let divArr = [];
-
-                    for(let j in selectedDivisions)
-                    {
-                        let matchDivisions = divisions.
-                            find(x=>x.competitionMembershipProductDivisionId === selectedDivisions[j]);
-                        if(matchDivisions!= "")
-                        {
-                            let obj = {
-                                competitionFormatDivisionId: 0,
-                                competitionMembershipProductDivisionId: 0
-                            }
-                            obj.competitionFormatDivisionId = matchDivisions.competitionFormatDivisionId;
-                            obj.competitionMembershipProductDivisionId = matchDivisions.competitionMembershipProductDivisionId;
-                            divArr.push(obj);  
-                        }
-                    }
-
-                    competitionFormatDivision[item].divisions = divArr;
+                    obj.competitionFormatDivisionId = matchDivisions.competitionFormatDivisionId;
+                    obj.competitionMembershipProductDivisionId = matchDivisions.competitionMembershipProductDivisionId;
+                    divArr.push(obj);  
                 }
-
-                // let payload = {
-                //     yearRefId: this.state.yearRefId, 
-                //     competitionUniqueKey: this.state.firstTimeCompId,
-                //     organisationId: this.state.organisationId
-                // }
-                // this.props.generateDrawAction(payload);
-
-                this.props.saveCompetitionFormatAction(formatList);
-                this.setState({ loading: true });
-                console.log("SAVE Format::" + JSON.stringify(formatList));
             }
-            else{
-                message.error(ValidationConstants.requiredMessage);
-            }
-        });
-        
+
+            competitionFormatDivision[item].divisions = divArr;
+        }
+
+        // let payload = {
+        //     yearRefId: this.state.yearRefId, 
+        //     competitionUniqueKey: this.state.firstTimeCompId,
+        //     organisationId: this.state.organisationId
+        // }
+        // this.props.generateDrawAction(payload);
+
+        this.props.saveCompetitionFormatAction(formatList);
+        this.setState({ loading: true });
+       console.log("SAVE Format::" + JSON.stringify(formatList));
     }
 
 
@@ -559,7 +533,7 @@ class CompetitionFormat extends Component {
     }
 
     ////////form content view
-    contentView = (getFieldDecorator) => {
+    contentView = () => {
         let data = this.props.competitionFormatState.competitionFormatList;
        // console.log("!!!!!!!!!!!!" + JSON.stringify(data.competitionName));
         let appState = this.props.appState;
@@ -699,59 +673,27 @@ class CompetitionFormat extends Component {
                         <div className="fluid-width" >
                             <div className="row" >
                                 <div className="col-sm" >
-                                <Form.Item >
-                                    {getFieldDecorator(`matchDuration${index}`, {
-                                        rules: [{ required: true, message: ValidationConstants.matchDuration }]
-                                    })(
                                     <InputWithHead heading={AppConstants.matchDuration} 
-                                        required={"required-field"}
-                                        placeholder={AppConstants.mins} 
-                                        setFieldsValue={item.matchDuration}
+                                        placeholder={AppConstants.mins} value={item.matchDuration}
                                         onChange={(e)=>this.onChangeSetCompFormatDivisionValue(e.target.value, 'matchDuration',
                                         data.competionFormatDivisions, index)}></InputWithHead>
-                                    )}
-                                    </Form.Item>
                                 </div>
                                 <div className="col-sm" >
-                                    <Form.Item >
-                                    {getFieldDecorator(`mainBreak${index}`, {
-                                        rules: [{ required: true, message: ValidationConstants.mainBreak }]
-                                    })(
-                                        <InputWithHead heading={AppConstants.mainBreak} 
-                                        required={"required-field"}
-                                        placeholder={AppConstants.mins} 
-                                        setFieldsValue={item.mainBreak}
-                                        onChange={(e)=>this.onChangeSetCompFormatDivisionValue(e.target.value, 'mainBreak',
-                                            data.competionFormatDivisions, index)}></InputWithHead>
-                                    )}
-                                    </Form.Item>
+                                    <InputWithHead heading={AppConstants.mainBreak} 
+                                    placeholder={AppConstants.mins} value={item.mainBreak}
+                                    onChange={(e)=>this.onChangeSetCompFormatDivisionValue(e.target.value, 'mainBreak',
+                                        data.competionFormatDivisions, index)}></InputWithHead>
 
                                 </div>
                                 <div className="col-sm" >
-                                    <Form.Item >
-                                    {getFieldDecorator(`qtrBreak${index}`, {
-                                        rules: [{ required: true, message: ValidationConstants.qtrBreak }]
-                                    })(
-                                        <InputWithHead heading={AppConstants.qtrBreak} placeholder={AppConstants.mins} 
-                                        required={"required-field"}
-                                        setFieldsValue={item.qtrBreak} 
-                                        onChange={(e)=>this.onChangeSetCompFormatDivisionValue(e.target.value, 'qtrBreak',
+                                    <InputWithHead heading={AppConstants.qtrBreak} placeholder={AppConstants.mins} 
+                                        value={item.qtrBreak} onChange={(e)=>this.onChangeSetCompFormatDivisionValue(e.target.value, 'qtrBreak',
                                         data.competionFormatDivisions, index)}></InputWithHead>
-                                    )}
-                                    </Form.Item>
                                 </div>
                                 <div className="col-sm" >
-                                    <Form.Item >
-                                        {getFieldDecorator(`timeBetweenGames${index}`, {
-                                            rules: [{ required: true, message: ValidationConstants.timeBetweenGames }]
-                                        })(
-                                        <InputWithHead heading={AppConstants.timeBetweenMatches} placeholder={AppConstants.mins} 
-                                        required={"required-field"}
-                                        setFieldsValue={item.timeBetweenGames} 
-                                        onChange={(e)=>this.onChangeSetCompFormatDivisionValue(e.target.value, 'timeBetweenGames',
+                                    <InputWithHead heading={AppConstants.timeBetweenMatches} placeholder={AppConstants.mins} 
+                                        value={item.timeBetweenGames} onChange={(e)=>this.onChangeSetCompFormatDivisionValue(e.target.value, 'timeBetweenGames',
                                         data.competionFormatDivisions, index)}></InputWithHead>
-                                    )}
-                                    </Form.Item>
                                 </div>
                             </div>
                         </div>
@@ -797,7 +739,7 @@ class CompetitionFormat extends Component {
     }
 
     //////footer view containing all the buttons like submit and cancel
-    footerView = (isSubmitting) => {
+    footerView = () => {
         return (
             <div className="fluid-width" >
                 <div className="footer-view">
@@ -809,8 +751,8 @@ class CompetitionFormat extends Component {
                             <div className="comp-finals-button-view">
                                 {/* <Button className="save-draft-text" type="save-draft-text"
                                     onClick={()=> this.saveCompetitionFormats()}>{AppConstants.saveDraft}</Button> */}
-                                <Button className="open-reg-button" type="primary" htmlType="submit" disabled={isSubmitting}
-                                  >{AppConstants.createDraftDraw}</Button>
+                                <Button className="open-reg-button" type="primary"
+                                    onClick={()=> this.saveCompetitionFormats()}>{AppConstants.createDraftDraw}</Button>
                             </div>
                         </div>
                     </div>
@@ -820,28 +762,23 @@ class CompetitionFormat extends Component {
     }
 
     render() {
-        const { getFieldDecorator } = this.props.form;
+  
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
                 <InnerHorizontalMenu menu={"competition"} compSelectedKey={"9"} />
                 <Layout>
                     {this.headerView()}
-                    <Form
-                        autocomplete="off"
-                        onSubmit={this.saveCompetitionFormats}
-                        noValidate="noValidate">
-                        <Content>
-                            {this.dropdownView()}
-                            <div className="formView">
-                                {this.contentView(getFieldDecorator)}
-                            </div>
-                            <Loader visible={this.state.loading} />
-                        </Content>
-                        <Footer>
-                            {this.footerView()}
-                        </Footer>
-                    </Form>
+                    <Content>
+                        {this.dropdownView()}
+                        <div className="formView">
+                            {this.contentView()}
+                        </div>
+                        <Loader visible={this.state.loading} />
+                    </Content>
+                    <Footer>
+                        {this.footerView()}
+                    </Footer>
                 </Layout>
             </div>
 

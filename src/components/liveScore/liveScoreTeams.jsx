@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Breadcrumb, Pagination } from "antd";
+import {Input,Icon, Layout, Button, Table, Breadcrumb, Pagination } from "antd";
 
 import { NavLink } from "react-router-dom";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
+import { getTeamsWithPagging } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
@@ -115,49 +115,58 @@ const columns = [
     },
 ];
 
-////Array data
-const data = [
-    {
-        key: '1',
-        team: "WAS 1",
-        division: "11 A",
-        player: "2",
-        manager: "test score",
-        number: "9646097979",
-        email: "amit.webethics@gmail.com",
-        image: null
-    },
-    {
-        key: '2',
-        team: "WSA 2",
-        division: "11 B",
-        player: "6",
-        manager: "Darren Geros",
-        number: "0414753444",
-        email: "darren.geros@oracle.com",
-        image: null
-    },
-
-];
 
 class LiveScoreTeam extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            conpetitionId : null,
+            searchText:""
         };
     }
 
     componentDidMount() {
-        // let competitionId = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
+        this.setState({conpetitionId : id})
         if (id !== null) {
-            this.props.getliveScoreTeams(id)
+            this.props.getTeamsWithPagging(id, 1, 10)
         } else {
             history.push("/")
         }
 
     }
 
+    /// Handle Page change
+    handlePageChnage(page) {
+        let offset = page ? 10 * (page - 1) : 0;
+        this.props.getTeamsWithPagging(this.state.conpetitionId,offset, 10)
+
+    }
+
+      // on change search text
+      onChangeSearchText = (e) => {
+        this.setState({ searchText: e.target.value })
+        if (e.target.value == null || e.target.value == "") {
+            this.props.getTeamsWithPagging(this.state.conpetitionId,0, 10,e.target.value )
+        }
+    }
+
+     // search key 
+     onKeyEnterSearchText = (e) => {
+        var code = e.keyCode || e.which;
+        if (code === 13) { //13 is the enter keycode
+            this.props.getTeamsWithPagging(this.state.conpetitionId,0, 10, this.state.searchText)
+        }
+    }
+
+  // on click of search icon
+  onClickSearchIcon = () => {
+    if (this.state.searchText == null || this.state.searchText == "") {
+    }
+    else {
+        this.props.getTeamsWithPagging(this.state.conpetitionId,0, 10, this.state.searchText)
+    }
+}
     ///////view for breadcrumb
     headerView = () => {
         return (
@@ -171,6 +180,19 @@ class LiveScoreTeam extends Component {
 
                     <div className="col-sm" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
                         <div className="row">
+                        <div style={{ marginRight: "25px", display: "flex", alignItems: 'center' }} >
+                            <div className="comp-product-search-inp-width" >
+                                <Input className="product-reg-search-input"
+                                    onChange={(e) => this.onChangeSearchText(e)}
+                                    placeholder="Search..."
+                                    onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                    prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                        onClick={() => this.onClickSearchIcon()}
+                                    />}
+                                    allowClear
+                                />
+                            </div>
+                        </div>
                             <div className="col-sm">
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
@@ -189,6 +211,7 @@ class LiveScoreTeam extends Component {
                                     </NavLink>
                                 </div>
                             </div>
+                         
                             <div className="col-sm">
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
@@ -250,10 +273,12 @@ class LiveScoreTeam extends Component {
         )
     }
 
+
     ////////tableView view for Team list
     tableView = () => {
         const teamResult = this.props.liveScoreTeamState;
         const teamData = teamResult.teamResult;
+        let total = teamResult.totalTeams
         // console.log(teamResult.teamResult, "teamResult")
         return (
             <div className="comp-dash-table-view mt-4">
@@ -270,8 +295,8 @@ class LiveScoreTeam extends Component {
                     <Pagination
                         className="antd-pagination"
                         defaultCurrent={1}
-                        total={8}
-                    // onChange={this.handleTableChange}
+                        total={total}
+                        onChange={(page) =>this.handlePageChnage(page)}
                     />
                 </div>
             </div>
@@ -297,7 +322,7 @@ class LiveScoreTeam extends Component {
 // export default LiveScoreTeam;
 
 function mapDispatchtoprops(dispatch) {
-    return bindActionCreators({ getliveScoreTeams }, dispatch)
+    return bindActionCreators({ getTeamsWithPagging }, dispatch)
 }
 
 function mapStatetoProps(state) {

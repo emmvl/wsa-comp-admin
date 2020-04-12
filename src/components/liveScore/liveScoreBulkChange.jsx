@@ -1169,8 +1169,7 @@ class LiveScoreBulkChange extends Component {
             bulkRadioBtn
         } = this.props.liveScoreBulkMatchState
 
-        console.log(pushBackData.startDate, pushBackData.startTime, 'pushBackData')
-
+    
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {

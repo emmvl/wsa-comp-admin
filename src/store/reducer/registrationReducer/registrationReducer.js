@@ -618,6 +618,7 @@ function registration(state = initialState, action) {
       return { ...state, onLoad: true, error: null };
 
     case ApiConstants.API_REG_FORM_SUCCESS:
+      state.registrationFormData = [action.payload]
       return {
         ...state,
         onLoad: false,

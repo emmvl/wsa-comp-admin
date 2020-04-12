@@ -66,7 +66,8 @@ import { getUserId, getOrganisationData } from "../../util/sessionStorage"
 import ReactDOM from 'react-dom';
 import {
     getGenderAction
-} from "../../store/actions/commonAction/commonAction"
+} from "../../store/actions/commonAction/commonAction";
+import { getAffiliateToOrganisationAction } from "../../store/actions/userAction/userAction";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -908,7 +909,7 @@ class RegistrationCompetitionFee extends Component {
         this.setState({ organisationTypeRefId: orgData.organisationTypeRefId })
         let competitionId = null
         competitionId = this.props.location.state ? this.props.location.state.id : null
-        this.apiCalls(competitionId)
+        this.apiCalls(competitionId, orgData.organisationUniqueKey)
         this.setDetailsFieldValue()
         let checkVenueScreen = this.props.location.state ? this.props.location.state.venueScreen ?
             this.props.location.state.venueScreen : null : null
@@ -916,7 +917,8 @@ class RegistrationCompetitionFee extends Component {
     }
 
     ////alll the api calls
-    apiCalls = (competitionId) => {
+    apiCalls = (competitionId, organisationId) => {
+        this.props.getAffiliateToOrganisationAction(organisationId);
         this.props.getOnlyYearListAction(this.props.appState.yearList)
         this.props.getDefaultCompFeesLogoAction()
         this.props.competitionDiscountTypesAction()
@@ -1130,7 +1132,6 @@ class RegistrationCompetitionFee extends Component {
             if (!err) {
                 let nonPlayingDate = JSON.stringify(postData.nonPlayingDates)
                 let venue = JSON.stringify(compFeesState.postVenues)
-                // let invitees = JSON.stringify(compFeesState.postInvitees)
                 let invitees = compFeesState.postInvitees
                 if (tabKey == "1") {
                     if (compFeesState.competitionDetailData.competitionLogoUrl !== null && invitees.length > 0) {
@@ -2183,12 +2184,90 @@ class RegistrationCompetitionFee extends Component {
     }
 
 
+    affiliateSearchOnchange = (affiliateOrgKey) => {
+        this.props.add_editcompetitionFeeDeatils(affiliateOrgKey, "affiliateOrgKey")
+
+    }
+
+
+    ////////reg invitees search view for any organisation
+    affiliatesSearchInvitee = (subItem) => {
+        let detailsData = this.props.competitionFeesState
+        console.log("detailsData", detailsData.competitionDetailData.invitees)
+        let seletedInvitee = detailsData.selectedInvitees.find(x => x);
+        let associationAffilites = detailsData.associationAffilites
+        let clubAffilites = detailsData.clubAffilites
+        let regInviteesDisable = this.state.permissionState.regInviteesDisable
+        if (subItem.id == 7 && seletedInvitee == 7) {
+            return (
+                < div >
+                    <Select
+                        mode="multiple"
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        onChange={associationAffilite => {
+                            // this.onSelectValues(venueSelection, detailsData)
+                            this.affiliateSearchOnchange(associationAffilite)
+                        }}
+                        value={detailsData.affiliateOrgSelected}
+                        placeholder={AppConstants.selectVenue}
+                        filterOption={false}
+                        // onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
+                        disabled={regInviteesDisable}
+                    >
+                        {associationAffilites.map((item) => {
+                            return (
+                                <Option
+                                    key={item.organisationId}
+                                    value={item.organisationId}>
+                                    {item.name}</Option>
+                            )
+                        })}
+                    </Select>
+                </div>
+            )
+        }
+        else if (subItem.id == 8 && seletedInvitee == 8) {
+            return (
+
+                < div >
+                    <Select
+                        mode="multiple"
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        onChange={clubAffilite => {
+                            // this.onSelectValues(venueSelection, detailsData)
+                            this.affiliateSearchOnchange(clubAffilite)
+                        }}
+
+                        value={detailsData.affiliateOrgSelected}
+                        placeholder={AppConstants.selectVenue}
+                        filterOption={false}
+                        // onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
+                        disabled={regInviteesDisable}
+                    >
+                        {clubAffilites.map((item) => {
+                            return (
+                                <Option
+                                    key={item.organisationId}
+                                    value={item.organisationId}>
+                                    {item.name}</Option>
+                            )
+                        })}
+                    </Select>
+                </div>
+            )
+        }
+
+    }
+
+
+
     regInviteesView = () => {
         let invitees = this.props.appState.registrationInvitees.length > 0 ? this.props.appState.registrationInvitees : [];
         let detailsData = this.props.competitionFeesState
         let seletedInvitee = detailsData.selectedInvitees.find(x => x);
         let orgLevelId = JSON.stringify(this.state.organisationTypeRefId)
         let regInviteesDisable = this.state.permissionState.regInviteesDisable
+        console.log(this.props.competitionFeesState.postInvitees)
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading required-field">{AppConstants.registrationInvitees}</span>
@@ -2210,7 +2289,9 @@ class RegistrationCompetitionFee extends Component {
                                                     {this.disableInvitee(subItem) &&
                                                         <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
                                                     }
+                                                    {this.affiliatesSearchInvitee(subItem)}
                                                 </div>
+
                                             ))}
                                         </div>
                                     }
@@ -2219,7 +2300,7 @@ class RegistrationCompetitionFee extends Component {
                         }
                     </Radio.Group>
                 </div>
-            </div>
+            </div >
         );
     };
 
@@ -3123,7 +3204,8 @@ function mapDispatchToProps(dispatch) {
         searchVenueList,
         clearFilter,
         clearCompReducerDataAction,
-        getGenderAction
+        getGenderAction,
+        getAffiliateToOrganisationAction
     }, dispatch)
 }
 

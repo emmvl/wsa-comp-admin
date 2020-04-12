@@ -12,7 +12,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage';
-
 import Loader from '../../customComponents/loader'
 
 const { Footer, Content, Header } = Layout;

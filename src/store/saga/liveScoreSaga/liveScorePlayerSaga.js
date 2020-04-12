@@ -36,7 +36,6 @@ export function* liveScorePlayerSaga(action) {
                 type: ApiConstants.API_LIVE_SCORE_PLAYER_LIST_SUCCESS,
                 result: result.result.data,
                 status: result.status,
-                navigation: action.navigation
             });
         } else {
 
@@ -49,7 +48,6 @@ export function* liveScorePlayerSaga(action) {
 ////Add/Edit player saga
 export function* liveScoreAddEditPlayerSaga(action) {
     try {
-        console.log('^^^^^', action)
         const result = yield call(LiveScoreAxiosApi.liveScoreAddEditPlayer, action.data);
         if (result.status === 1) {
             yield put({
@@ -82,6 +80,26 @@ export function* liveScorePlayerImportSaga(action) {
             });
             history.push('/liveScorePlayerList')
             message.success('Player Imported Successfully.')
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+//// Player list pagginaion
+
+////player list saga
+export function* getPlayerListPagginationSaga(action) {
+    try {
+        const result = yield call(LiveScoreAxiosApi.getPlayerWithPaggination, action.competitionID, action.offset, action.limit, action.search);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
         } else {
             yield call(failSaga, result)
         }

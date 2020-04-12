@@ -114,11 +114,11 @@ const columns = [
 ];
 
 
-class LiveScoreLadderList extends Component {
+class LiveScorePublicLadder extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            division: "11A",
+            division: "",
             loadding:false
         }
     }
@@ -139,17 +139,12 @@ class LiveScoreLadderList extends Component {
     }
 
     componentDidMount() {
-        // let competitionID = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
-
+        this.setState({loadding : true})
         if (id !== null) {
-            // this.props.getliveScoreDivisions(competitionID);
-            // this.props.getliveScoreDivisions(id);
-            this.setState({loadding : true})
             this.props.getLiveScoreDivisionList(id)
-            
-        } else {
-            history.push('/')
+        } else{
+            this.props.getLiveScoreDivisionList(1)
         }
     }
 
@@ -168,17 +163,12 @@ class LiveScoreLadderList extends Component {
 
 
     divisionChange = (value) => {
-
-        // let competitionID = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        // this.props.liveScoreLaddersListAction(competitionID, value.division)
         this.props.liveScoreLaddersListAction(id, value.division)
     }
     ///dropdown view containing dropdown
     dropdownView = () => {
         const { liveScoreLadderState } = this.props;
-        console.log(liveScoreLadderState)
-        // let grade = liveScoreLadderState.liveScoreLadderDivisionData !== [] ? liveScoreLadderState.liveScoreLadderDivisionData : []
         let grade = isArrayNotEmpty(liveScoreLadderState.liveScoreLadderDivisionData) ? liveScoreLadderState.liveScoreLadderDivisionData : []
     
         return (
@@ -211,14 +201,6 @@ class LiveScoreLadderList extends Component {
                     <Table loading={this.props.liveScoreLadderState.onLoad == true ? true : false} className="home-dashboard-table" columns={columns} dataSource={DATA} pagination={false}
                     />
                 </div>
-                {/* <div className="d-flex justify-content-end">
-                    <Pagination
-                        className="antd-pagination"
-                        defaultCurrent={1}
-                        total={8}
-                    // onChange={this.handleTableChange}
-                    />
-                </div> */}
             </div>
         )
     }
@@ -226,7 +208,7 @@ class LiveScoreLadderList extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"11"} />
                 <Layout>
                     {this.headerView()}
@@ -250,4 +232,4 @@ function mapStatetoProps(state) {
         liveScoreLadderState: state.LiveScoreLadderState
     }
 }
-export default connect(mapStatetoProps, mapDispatchtoprops)((LiveScoreLadderList));
+export default connect(mapStatetoProps, mapDispatchtoprops)((LiveScorePublicLadder));

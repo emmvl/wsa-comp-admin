@@ -36,6 +36,7 @@ import moment from "moment";
 import ValidationConstants from "../../themes/validationConstant";
 import { isArrayNotEmpty } from "../../util/helpers";
 import Loader from '../../customComponents/loader';
+import history from "../../util/history";
 
 
 const { Header, Footer, Content } = Layout;
@@ -124,14 +125,23 @@ class RegistrationForm extends Component {
             isPublished: false
         };
         this_Obj = this;
+        this.props.clearReducerDataAction("getRegistrationFormDetails")
+        this.getRefernce();
 
     }
 
     componentDidMount() {
-        let yearId = null
-        this.props.clearReducerDataAction("getRegistrationFormDetails")
-        this.props.getYearAndCompetitionAction(this.props.appState.yearList, yearId)
-        this.getRefernce();
+        let competitionId = this.props.location.state ? this.props.location.state.id : null
+        let year = this.props.location.state ? this.props.location.state.year : null
+        if (competitionId !== null && year !== null) {
+            this.props.getRegistrationForm(year, competitionId)
+            this.setState({ onRegistrationLoad: true, yearRefId: year, firstTimeCompId: competitionId })
+        }
+        else {
+            history.push("/registrationFormList")
+        }
+        // this.props.getYearAndCompetitionAction(this.props.appState.yearList, null)
+
 
     }
 
@@ -146,7 +156,6 @@ class RegistrationForm extends Component {
 
     componentDidUpdate(nextProps) {
         let registrationState = this.props.registrationState
-        let competitionList = this.props.appState.competitionList
         if (nextProps.registrationState.registrationFormData !== registrationState.registrationFormData) {
             if (this.state.onRegistrationLoad == true && registrationState.onLoad == false) {
                 this.setFieldDecoratorValues()
@@ -157,15 +166,15 @@ class RegistrationForm extends Component {
             }
         }
 
-        if (nextProps.appState !== this.props.appState) {
-            if (nextProps.appState.competitionList !== competitionList) {
-                if (competitionList.length > 0) {
-                    let competitionId = competitionList[0].competitionId
-                    this.props.getRegistrationForm(this.state.yearRefId, competitionId)
-                    this.setState({ firstTimeCompId: competitionId, onRegistrationLoad: true })
-                }
-            }
-        }
+        // if (nextProps.appState !== this.props.appState) {
+        //     if (nextProps.appState.competitionList !== competitionList) {
+        //         if (competitionList.length > 0) {
+        //             let competitionId = competitionList[0].competitionId
+
+
+        //         }
+        //     }
+        // }
     }
 
     // year change and get competition lost
@@ -194,7 +203,6 @@ class RegistrationForm extends Component {
             registrationCloseDate: registrationFormData.registrationCloseDate !== '' ? moment(registrationFormData.registrationCloseDate, "YYYY-MM-DD") : null,
         });
         disclaimerData.map((item, index) => {
-            console.log(index, item)
             let disclaimerText = `disclaimerText${index}`
             let disclaimerLink = `disclaimerLink${index}`
             this.props.form.setFieldsValue({
@@ -287,8 +295,6 @@ class RegistrationForm extends Component {
 
     ///for change table productType and Division selection 
     getSelectionofProduct(value, record, key) {
-        console.log(record)
-        console.log(this.props.registrationState.selectedMemberShipType, "this.props.registrationState.selectedMemberShipType")
         let allMemberProductArr = this.props.registrationState.selectedMemberShipType
         let matchIndexValue = allMemberProductArr.findIndex(x => x.membershipProductId == record.membershipProductId)
         if (matchIndexValue > -1) {
@@ -300,8 +306,6 @@ class RegistrationForm extends Component {
 
     //
     getRegistrationLock(value, record, key) {
-        console.log(record)
-        console.log(this.props.registrationState.selectedMemberShipType, "this.props.registrationState.selectedMemberShipType")
         let allMemberProductArr = this.props.registrationState.selectedMemberShipType
         let matchIndexValue = allMemberProductArr.findIndex(x => x.membershipProductId == record.membershipProductId)
         if (matchIndexValue > -1) {
@@ -834,7 +838,6 @@ class RegistrationForm extends Component {
 
     // for change and update tree props
     onTreeSelected(itemValue, selectedInvitees) {
-        console.log(itemValue)
         // let selectedInvitees = this.props.registrationState.selectedInvitees
         let upcomingData = [...itemValue]
         let mainValueIndex = upcomingData.findIndex(x => x == "1")
@@ -939,6 +942,9 @@ class RegistrationForm extends Component {
         let otherQuestionsSetting = this.props.appState.otherQuestionsSetting !== 0 ? this.props.appState.otherQuestionsSetting : []
         const { selectedInvitees, selectedDemographic, SelectedOtherQuestions, selectedNetballQuestions } = this.props.registrationState
         let isPublished = this.state.isPublished
+        let inviteesExpend = (selectedInvitees.includes("2") || selectedInvitees.includes("3") || selectedInvitees.includes("4")) ? "1" : null
+        let netballExpend = (selectedNetballQuestions.includes("7")) ? "5" : null
+        console.log(inviteesExpend)
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading">{AppConstants.additionalQuestions}</span>
@@ -960,9 +966,10 @@ class RegistrationForm extends Component {
                 <div className="inside-container-view">
                     <span className="setting-heading">{AppConstants.netballQuestions}</span>
                     <Tree
-                        className="tree-government-rebate"
+                        className="tree-government-rebate tree-selection-icon"
                         style={{ flexDirection: 'column' }}
                         checkable
+                        expandedKeys={[netballExpend]}
                         defaultExpandParent={true}
                         disabled={isPublished}
                         defaultCheckedKeys={[]}
@@ -994,10 +1001,10 @@ class RegistrationForm extends Component {
                 <span className="form-heading pt-5">{AppConstants.advancedSettings}</span>
                 <div className="inside-container-view">
                     <Tree
-                        className="tree-government-rebate"
+                        className="tree-government-rebate tree-selection-icon"
                         style={{ flexDirection: 'column' }}
                         checkable
-                        defaultExpandParent={true}
+                        expandedKeys={[inviteesExpend]}
                         disabled={isPublished}
                         defaultCheckedKeys={[]}
                         checkedKeys={[...selectedInvitees]}
@@ -1006,7 +1013,7 @@ class RegistrationForm extends Component {
                         {this.ShowAdvancedSettingSettingTree(registrationAdvanceSetting)}
                     </Tree>
                 </div>
-            </div>
+            </div >
         );
     };
     ShowAdvancedSettingSettingTree = tree => {
@@ -1122,7 +1129,6 @@ class RegistrationForm extends Component {
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         let registrationData = this.props.registrationState.registrationFormData.length > 0 ? this.props.registrationState.registrationFormData[0] : [];
-        console.log("registrationData", registrationData.statusRefId)
         let statusRefId = registrationData.statusRefId
         return (
             <div className="fluid-width">
@@ -1223,9 +1229,9 @@ class RegistrationForm extends Component {
                     <Form onSubmit={this.registrationSubmit}
                         noValidate="noValidate"
                     >
-                        {this.dropdownView(
+                        {/* {this.dropdownView(
                             getFieldDecorator
-                        )}
+                        )} */}
                         <Content>
                             {this.userRegisrationLinkView()}
                             <div className="formView">
