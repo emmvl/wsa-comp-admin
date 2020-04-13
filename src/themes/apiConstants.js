@@ -1115,10 +1115,19 @@ const ApiConstants = {
   API_LIVE_SCORE_TEAM_WITH_PAGGING_SUCCESS: "API_LIVE_SCORE_TEAM_WITH_PAGGING_SUCCESS",
 
   ///// Player list with pagging
-  
+
   API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_LOAD: "API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_LOAD",
   API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_SUCCESS: "API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_SUCCESS",
-  changeHoverProposedTeamGrading: "changeHoverProposedTeamGrading"
+  changeHoverProposedTeamGrading: "changeHoverProposedTeamGrading",
+
+
+  API_USERCOUNT_LOAD: "API_USERCOUNT_LOAD",
+  API_USERCOUNT_SUCCESS: "API_USERCOUNT_SUCCESS",
+  API_USERCOUNT_FAIL: "API_USERCOUNT_FAIL",
+  API_USERCOUNT_ERROR: "API_USERCOUNT_ERROR",
+
+  clearHomeDashboardData: "clearHomeDashboardData",
+  changeHoverPartProposedTeamGrading: "changeHoverPartProposedTeamGrading"
 };
 
 

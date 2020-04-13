@@ -85,7 +85,7 @@ import { liveScoreScorerListSaga, liveScorerSearchUserSaga, liveScoreAssigneMatc
 import { liveScoreBulkPushBack, liveScoreBulkBringForwardSaga, liveScoreMatchResult, liveScoreEndMatchesSaga, liveScoreDoubleHeaderSaga, liveScoreAbandonMatchSaga } from './liveScoreSaga/liveScoreBulkMatchSaga';
 
 
-import { liveScorePlayerSaga, liveScoreAddEditPlayerSaga, liveScorePlayerImportSaga , getPlayerListPagginationSaga} from "./liveScoreSaga/liveScorePlayerSaga";
+import { liveScorePlayerSaga, liveScoreAddEditPlayerSaga, liveScorePlayerImportSaga, getPlayerListPagginationSaga } from "./liveScoreSaga/liveScorePlayerSaga";
 import { liveScoreDashboardSaga } from './liveScoreSaga/liveScoreDashboardSaga';
 import { liveScoreCompetitionSaga, liveScoreCompetitionDelete } from './liveScoreSaga/liveScoreCompetionSaga'
 import { liveScoreDivisionsaga, liveScoreDeleteDivisionSaga, liveScoreCreateDivisionsaga, liveScoreDivisionImportSaga } from './liveScoreSaga/liveScoreDivisionSaga';
@@ -133,6 +133,7 @@ import {
 
 // UserSaga
 import * as userSaga from '../saga/userSaga/userSaga';
+import { homeDashboardSaga } from "./homeDashboardSaga/homeDashboardSaga"
 
 ////////competition draws 
 import {
@@ -571,4 +572,6 @@ export default function* root_saga() {
 
   //Player list with paggination
   yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_LOAD, getPlayerListPagginationSaga);
+
+  yield takeEvery(ApiConstants.API_USERCOUNT_LOAD, homeDashboardSaga)
 }

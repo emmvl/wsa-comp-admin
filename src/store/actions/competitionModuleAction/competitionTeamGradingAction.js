@@ -159,6 +159,16 @@ function changeHistoryHover(data, tableIndex, historyIndex, key) {
     return action
 }
 
+function changeProposedHistoryHover(data, tableIndex, historyIndex, key) {
+    const action = {
+        type: ApiConstants.changeHoverPartProposedTeamGrading,
+        data,
+        tableIndex,
+        historyIndex, key
+    }
+    return action
+}
+
 export {
     getCompOwnProposedTeamGradingAction,
     onchangeCompOwnFinalTeamGradingData,
@@ -174,5 +184,6 @@ export {
     getCompFinalGradesListAction,
     teamGradingCommentAction,
     partProposedSummaryComment,
-    changeHistoryHover
+    changeHistoryHover,
+    changeProposedHistoryHover
 }                   

@@ -2209,7 +2209,7 @@ class RegistrationCompetitionFee extends Component {
                             this.affiliateSearchOnchange(associationAffilite)
                         }}
                         value={detailsData.affiliateOrgSelected}
-                        placeholder={AppConstants.selectVenue}
+                        placeholder={AppConstants.selectOrganisation}
                         filterOption={false}
                         // onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
                         disabled={regInviteesDisable}
@@ -2239,7 +2239,7 @@ class RegistrationCompetitionFee extends Component {
                         }}
 
                         value={detailsData.affiliateOrgSelected}
-                        placeholder={AppConstants.selectVenue}
+                        placeholder={AppConstants.selectOrganisation}
                         filterOption={false}
                         // onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
                         disabled={regInviteesDisable}
@@ -2350,6 +2350,11 @@ class RegistrationCompetitionFee extends Component {
         let selectedSeasonalFeeKey = this.props.competitionFeesState.SelectedSeasonalFeeKey
         let selectedCasualFeeKey = this.props.competitionFeesState.selectedCasualFeeKey
         let paymentsDisable = this.state.permissionState.paymentsDisable
+        let seasonalExpendeKey = (selectedSeasonalFeeKey.includes("6") || selectedSeasonalFeeKey.includes("7") || selectedSeasonalFeeKey.includes("8")
+            || selectedSeasonalFeeKey.includes(6) || selectedSeasonalFeeKey.includes(7) || selectedSeasonalFeeKey.includes(8)) ? "5" : null
+        let casuallExpendeKey = (selectedCasualFeeKey.includes("6") || selectedCasualFeeKey.includes("7") || selectedCasualFeeKey.includes("8")
+            || selectedCasualFeeKey.includes(6) || selectedCasualFeeKey.includes(7) || selectedCasualFeeKey.includes(8)) ? "5" : null
+        console.log(seasonalExpendeKey)
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.paymentOptions}</span>
@@ -2363,9 +2368,9 @@ class RegistrationCompetitionFee extends Component {
                         <span className="form-heading">{AppConstants.seasonalFee}</span>
                         <Tree
                             style={{ flexDirection: 'column' }}
-                            className="tree-government-rebate"
+                            className="tree-government-rebate tree-selection-icon"
                             checkable
-                            defaultExpandedKeys={[]}
+                            expandedKeys={[seasonalExpendeKey]}
                             defaultCheckedKeys={[]}
                             checkedKeys={selectedSeasonalFeeKey}
                             onCheck={(e) => this.onChangeSeasonalFee(e, paymentData)}
@@ -2379,10 +2384,11 @@ class RegistrationCompetitionFee extends Component {
                     <span className="form-heading">{AppConstants.casualFee}</span>
                     <Tree
                         style={{ flexDirection: 'column' }}
-                        className="tree-government-rebate"
+                        className="tree-government-rebate tree-selection-icon"
                         checkable
                         defaultExpandedKeys={[]}
                         defaultCheckedKeys={[]}
+                        expandedKeys={[casuallExpendeKey]}
                         checkedKeys={selectedCasualFeeKey}
                         onCheck={(e) => this.onChangeCasualFee(e, paymentData)}
                         disabled={paymentsDisable}

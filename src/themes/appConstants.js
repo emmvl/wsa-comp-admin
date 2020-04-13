@@ -917,7 +917,13 @@ const AppConstants = {
   add_edit_comment: "Add/Edit Comment",
   addYourComment: "Please add your comment.",
   fixedDuration: "Fixed Duration",
-  specificTime: "Specific Time"
+  specificTime: "Specific Time",
+  selectOrganisation: "Select Organisation",
+
+
+  goalExport: "/stats/export/scoringByPlayer?competitionId=",
+  gameTimeExport: "/stats/export/gametime?competitionId=",
+  teamAttendaneExport: "/players/export/teamattendance?competitionId="
 };
 
 export default AppConstants;

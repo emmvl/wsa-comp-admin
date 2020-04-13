@@ -7,7 +7,7 @@ import { NavLink } from "react-router-dom";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { liveScoreNewsListAction } from '../../store/actions/LiveScoreAction/liveScoreNewsAction'
-import { liveScore_formateDate } from '../../themes/dateformate'
+import { liveScore_formateDate, liveScore_MatchFormate } from '../../themes/dateformate'
 import AppImages from "../../themes/appImages";
 import moment from "moment";
 import history from "../../util/history";
@@ -77,7 +77,7 @@ const columns = [
         key: 'news_expire_date',
         sorter: (a, b) => checkSorting(a, b, 'news_expire_date'),
         render: (news_expire_date) =>
-            <span >{news_expire_date ? liveScore_formateDate(news_expire_date) : ""}</span>
+            <span >{news_expire_date ? liveScore_MatchFormate(news_expire_date) : ""}</span>
     },
     {
         title: 'Recipients',

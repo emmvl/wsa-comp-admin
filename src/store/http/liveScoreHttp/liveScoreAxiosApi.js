@@ -74,8 +74,9 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, null)
     },
     liveScoreGetDivision(data) {
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-        const url = `/division?competitionId=${id}`
+       
+        // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        const url = `/division?competitionId=${data}`
         return Method.dataGet(url, null)
     },
     liveScoreGetAffilate(data) {

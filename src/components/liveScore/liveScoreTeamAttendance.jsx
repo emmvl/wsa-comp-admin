@@ -110,7 +110,8 @@ class LiveScoreTeamAttendance extends Component {
         this.state = {
             year: "2020",
             teamSelection: "WSA 1",
-            selectStatus: "Borrowed"
+            selectStatus: "Borrowed",
+            competitionId : null
         }
     }
 
@@ -124,6 +125,7 @@ class LiveScoreTeamAttendance extends Component {
             },
         }
         const { id } = JSON.parse(getLiveScoreCompetiton())
+        this.setState({competitionId : id})
         if (id !== null) {
             this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus)
         } else {
@@ -201,7 +203,7 @@ class LiveScoreTeamAttendance extends Component {
                                         alignSelf: 'center',
                                     }}
                                 >
-                                    <Button className="primary-add-comp-form" type="primary">
+                                    <Button href={AppConstants.teamAttendaneExport +this.state.competitionId +`&aggregate=${this.state.selectStatus}`} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img

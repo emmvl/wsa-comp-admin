@@ -12,7 +12,7 @@ import { bindActionCreators } from 'redux';
 import { liveScoreMatchListAction } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
 import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
-import { liveScore_formateDateTime, formatDateTime, liveScore_MatchFormate } from '../../themes/dateformate'
+import {  liveScore_MatchFormate } from '../../themes/dateformate'
 
 /////function to sort table column
 function tableSort(a, b, key) {

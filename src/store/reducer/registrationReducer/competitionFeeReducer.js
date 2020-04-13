@@ -772,18 +772,20 @@ function getMemberShipProductTypes(key, productsArr) {
 
 
 function checkFeeDivisionType(data, uniqueKey) {
+    console.log("data, uniqueKey", data, uniqueKey)
     let array = []
     for (let i in data) {
         if (data[i].membershipProductUniqueKey == uniqueKey) {
             array = data[i].fees
         }
     }
+    console.log("array", array)
     return array
 }
 
 
 function checkStatus(getCompetitionFeeArray, item, divisionId, feeTypeRefId) {
-
+    console.log("getCompetitionFeeArray, item, divisionId, feeTypeRefId", getCompetitionFeeArray, item, divisionId, feeTypeRefId)
     let object = {
         status: false,
         result: []
@@ -944,7 +946,7 @@ function createProductFeeArr(data) {
 
             let type_Object_casual = null
             let type_Object_seasonal = null
-
+            console.log("statusCasual, statusSeasonal", statusCasual, statusSeasonal)
             ////// CASUAL OBJECT
             if (statusCasual.status == true) {
                 let mFeesCasual = Number(memberShipProductType[j].mCasualFee) + Number(memberShipProductType[j].mCasualGst)

@@ -113,6 +113,21 @@ function sortOrderArray(ownTeamGradingSummaryData) {
     return sortOrderArray
 }
 
+function getProposedTeamGradingData(data) {
+    if (data.length > 0) {
+        for (let i in data) {
+            let playerDataHistory = data[i].playerHistory
+            for (let j in playerDataHistory) {
+                playerDataHistory[j]['hoverVisible'] = false
+            }
+        }
+        return data
+    }
+    else {
+        return data
+    }
+}
+
 function CompetitionOwnTeamGrading(state = initialState, action) {
 
     switch (action.type) {
@@ -218,9 +233,11 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
 
         case ApiConstants.API_GET_COMPETITION_PART_PROPOSED_TEAM_GRADING_LIST_SUCCESS:
             let partProposedTeamGradingData = action.result
+            let getpartProposedTeamData = isArrayNotEmpty(partProposedTeamGradingData) ? partProposedTeamGradingData : []
+            let proposedTeamGradingData = getProposedTeamGradingData(getpartProposedTeamData)
             return {
                 ...state,
-                getPartProposedTeamGradingData: isArrayNotEmpty(partProposedTeamGradingData) ? partProposedTeamGradingData : [],
+                getPartProposedTeamGradingData: proposedTeamGradingData,
                 onLoad: false,
                 error: null
             }
@@ -362,6 +379,9 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
             state.getCompOwnProposedTeamGradingData[action.tableIndex].playerHistory[action.historyIndex].hoverVisible = action.key
             return { ...state }
 
+        case ApiConstants.changeHoverPartProposedTeamGrading:
+            state.getPartProposedTeamGradingData[action.tableIndex].playerHistory[action.historyIndex].hoverVisible = action.key
+            return { ...state }
 
         default:
             return state;

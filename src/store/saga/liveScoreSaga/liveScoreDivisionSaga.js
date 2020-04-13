@@ -30,7 +30,6 @@ function* errorSaga(error) {
 export function* liveScoreDivisionsaga(action) {
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreGetDivision, action.competitionID);
-        console.log(result)
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_SUCCESS,

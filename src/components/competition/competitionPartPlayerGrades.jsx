@@ -385,13 +385,16 @@ class CompetitionPartPlayerGrades extends Component {
                                                                         })}
                                                                     </div>
                                                                     <div>
-                                                                        <Tag className="comp-player-table-tag" style={{ background: playerIndex < 38 ? ColorsArray[playerIndex] : '#ee3346', color: "#ffffff" }} key={playerItem.position1}>
-                                                                            {playerItem.position1}
-                                                                        </Tag>
+                                                                        {playerItem.position1 &&
+                                                                            <Tag className="comp-player-table-tag" style={{ background: playerIndex < 38 ? ColorsArray[playerIndex] : '#ee3346', color: "#ffffff" }} key={playerItem.position1}>
+                                                                                {playerItem.position1}
+                                                                            </Tag>
+                                                                        }
+                                                                        {playerItem.position2 &&
                                                                         <Tag className="comp-player-table-tag" style={{ background: playerIndex < 36 ? ColorsArray[(playerIndex + 2)] : '#1658ef', color: "#ffffff" }} key={playerItem.position2}>
                                                                             {playerItem.position2}
                                                                         </Tag>
-
+                                                                        }
                                                                         <img className="comp-player-table-img" src={
                                                                             (playerItem.comments !== null && playerItem.comments !== "") ? AppImages.commentFilled :
                                                                                 AppImages.commentEmpty} alt="" height="20" width="20"

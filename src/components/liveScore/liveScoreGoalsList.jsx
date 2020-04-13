@@ -20,14 +20,6 @@ function checkSorting(a, b, key) {
     }
 }
 
-// function checkSorting(a, b, key) {
-//     if (a[0] === b[0]) {
-//         return 0;
-//     }
-//     else {
-//         return (a[0] < b[0]) ? -1 : 1;
-//     }
-// }
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -100,11 +92,17 @@ class LiveScoreGoalList extends Component {
 
                 },
                 {
-                    title: 'Attempts',
-                    dataIndex: 'attempts',
-                    key: 'attempts',
-                    sorter: (a, b) => checkSorting(a, b, "attempts"),
+                    title: 'Misses',
+                    dataIndex: 'miss',
+                    key: 'miss',
+                    sorter: (a, b) => checkSorting(a, b, "miss"),
                 },
+                // {
+                //     title: 'Attempts',
+                //     dataIndex: 'attempts',
+                //     key: 'attempts',
+                //     sorter: (a, b) => checkSorting(a, b, "attempts"),
+                // },
                 {
                     title: 'Goals',
                     dataIndex: 'goal',
@@ -159,11 +157,17 @@ class LiveScoreGoalList extends Component {
                     sorter: (a, b) => checkSorting(a, b, "gamePositionName"),
                 },
                 {
-                    title: 'Attempts',
-                    dataIndex: 'attempts',
-                    key: 'attempts',
-                    sorter: (a, b) => checkSorting(a, b, "attempts"),
+                    title: 'Misses',
+                    dataIndex: 'miss',
+                    key: 'miss',
+                    sorter: (a, b) => checkSorting(a, b, "miss"),
                 },
+                // {
+                //     title: 'Attempts',
+                //     dataIndex: 'attempts',
+                //     key: 'attempts',
+                //     sorter: (a, b) => checkSorting(a, b, "attempts"),
+                // },
                 {
                     title: 'Goals',
                     dataIndex: 'goal',
@@ -177,6 +181,7 @@ class LiveScoreGoalList extends Component {
                     sorter: (a, b) => checkSorting(a, b, "goal_percent"),
                 },
             ],
+            competitionId : null
         }
         this_Obj = this
     }
@@ -184,6 +189,7 @@ class LiveScoreGoalList extends Component {
     componentDidMount() {
         // let competitionId = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
+        this.setState({competitionId:id})
         if (id !== null) {
             this.props.liveScoreGoalListAction(1, "By Match")
         } else {
@@ -233,7 +239,7 @@ class LiveScoreGoalList extends Component {
                                         alignItems: "flex-end",
                                         justifyContent: "flex-end"
                                     }} >
-                                    <Button className="primary-add-comp-form" type="primary">
+                                    <Button href={AppConstants.goalExport +this.state.competitionId +`&aggregate=${this.state.filter}`} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img

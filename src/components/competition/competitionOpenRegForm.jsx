@@ -434,7 +434,23 @@ class CompetitionOpenRegForm extends Component {
         let invitees = this.props.competitionFeesState.competitionDetailData.invitees
         let hasRegistration = invitees.length > 0 ? true : false
         if (isPublished) {
-            if (isRegClosed || hasRegistration) {
+            console.log("isRegClosed", isRegClosed)
+            if (isRegClosed && hasRegistration) {
+                let permissionObject = {
+                    compDetailDisable: false,
+                    regInviteesDisable: true,
+                    membershipDisable: true,
+                    divisionsDisable: false,
+                    feesTableDisable: true,
+                    paymentsDisable: true,
+                    discountsDisable: true,
+                    allDisable: false,
+                    isPublished: true
+                }
+                this.setState({ permissionState: permissionObject })
+                return
+            }
+            if (!isRegClosed && hasRegistration) {
                 let permissionObject = {
                     compDetailDisable: true,
                     regInviteesDisable: true,
@@ -468,7 +484,7 @@ class CompetitionOpenRegForm extends Component {
                     compDetailDisable: false,
                     regInviteesDisable: true,
                     membershipDisable: true,
-                    divisionsDisable: true,
+                    divisionsDisable: false,
                     feesTableDisable: true,
                     paymentsDisable: false,
                     discountsDisable: true,
@@ -2474,12 +2490,12 @@ class CompetitionOpenRegForm extends Component {
                                 <Tooltip
                                     style={{ height: "100%" }}
                                     onMouseEnter={() =>
-                                        this.setState({ tooltipVisiblePublish: (isPublished) && (tabKey === "2") ? true : allDisable })}
+                                        this.setState({ tooltipVisiblePublish: allDisable })}
                                     onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
                                     visible={this.state.tooltipVisiblePublish}
                                     title={ValidationConstants.compIsPublished}>
                                     <Button className="publish-button" type="primary"
-                                        disabled={tabKey === "1" ? allDisable : isPublished}
+                                        disabled={tabKey === "1" || tabKey === "2" ? allDisable : isPublished}
                                         htmlType="submit" onClick={() => this.setState({
                                             statusRefId: tabKey == "2" ? 2 : 1,
                                             buttonPressed: tabKey == "2" ? "publish" : "next"

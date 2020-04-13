@@ -219,7 +219,7 @@ function liveScoreMatchReducer(state = initialState, action) {
             const result = getMatchListSettings(action.result.matches)
 
             // state.liveScoreMatchListData = result
-            console.log(result,"mact")
+
             return {
                 ...state,
                 onLoad: false,
@@ -469,6 +469,8 @@ function liveScoreMatchReducer(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
             
+            console.log(action.result)
+            state.teamResult =  action.result
             return {
                 ...state,
                 onLoad: false,

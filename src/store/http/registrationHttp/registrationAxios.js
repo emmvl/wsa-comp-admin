@@ -384,6 +384,19 @@ let AxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
+    async homeDashboardApi(yearRefId) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem.organisationUniqueKey
+        let userId = await getUserId()
+        let body = {
+            organisationUniqueKey: organisationUniqueKey,
+            yearRefId: yearRefId,
+            userId: userId
+        }
+        var url = `api/homedashboard/usercount`;
+        return Method.dataPost(url, token, body);
+    }
+
 
 };
 

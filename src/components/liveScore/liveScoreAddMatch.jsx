@@ -300,14 +300,13 @@ class LiveScoreAddMatch extends Component {
     };
 
     selectDivision(divisionId) {
-        console.log(divisionId, 'divisionId')
         this.props.liveScoreUpdateMatchAction(divisionId, 'divisionId')
         const { id } = JSON.parse(getLiveScoreCompetiton())
         // this.props.getliveScoreDivisions(id)
         this.props.getliveScoreTeams(id, divisionId)
     }
     setUmpireClub(clubId) {
-        console.log(clubId, 'umpireClubId')
+    
         this.props.liveScoreUpdateMatchAction(clubId, 'umpireClubId')
         const { id } = JSON.parse(getLiveScoreCompetiton())
         // this.props.getliveScoreDivisions(id)
@@ -315,13 +314,11 @@ class LiveScoreAddMatch extends Component {
 
     //// Form View
     contentView = (getFieldDecorator) => {
-        let { addEditMatch, start_date, start_time, divisionList, roundList } = this.props.liveScoreMatchState
-        const { teamResult } = this.props.liveScoreTeamState
-        let { liveScoreState } = this.props
+        let { addEditMatch, start_date, start_time, divisionList, roundList, teamResult } = this.props.liveScoreMatchState
+        // let { liveScoreState } = this.props
         let { venueData,clubListData } = this.props.liveScoreMatchState
         const { scorerListResult } = this.props.liveScoreState
         const { scoringType } = JSON.parse(getLiveScoreCompetiton())
-
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -649,8 +646,12 @@ class LiveScoreAddMatch extends Component {
             if (!err) {
                 let { addEditMatch, matchData, start_date, start_time, start_post_date } = this.props.liveScoreMatchState
 
+                
 
-                let startDate = moment(start_post_date).format("YYYY-MMM-DD")
+
+                let match_date_ = moment(start_date, "DD-MM-YYYY")
+                // console.log( moment(match_date_).format("YYYY-MMM-DD"))
+                let startDate = moment(match_date_).format("YYYY-MMM-DD")
                 let start = moment(start_time).format("HH:mm")
 
 

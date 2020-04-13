@@ -1410,7 +1410,6 @@ class RegistrationCompetitionForm extends Component {
                                         disabled={compDetailDisable}
                                     >
                                         {this.state.roundsArray.map(item => {
-                                            console.log(item)
                                             return (
                                                 <Option key={item.id} value={item.id}>{item.value}</Option>
                                             );
@@ -1514,7 +1513,6 @@ class RegistrationCompetitionForm extends Component {
     ////membership types in competition fees onchhange function
     membershipTypeSelected = (checked, membershipIndex, typeIndex) => {
         this.props.membershipTypeSelectedAction(checked, membershipIndex, typeIndex)
-        console.log("checked, membershipIndex, typeIndex", checked, membershipIndex, typeIndex)
     }
 
 
@@ -1842,18 +1840,14 @@ class RegistrationCompetitionForm extends Component {
 
     checkIsSeasonal = (feeDetails) => {
         let isSeasonalValue = false
-
         for (let i in feeDetails) {
             if (feeDetails[i].isSeasonal == true) {
                 console.log(feeDetails[i].isSeasonal)
                 isSeasonalValue = true
                 break
             }
-
         }
         return isSeasonalValue
-
-
 
     }
     checkIsCasual = (feeDetails) => {
