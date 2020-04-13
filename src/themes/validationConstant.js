@@ -107,7 +107,12 @@ const ValidationConstants = {
 
     specificTime: "Please select Specific Time.",
 
-    selectReason: 'Reason is required.'
+    selectReason: 'Reason is required.',
+    pleaseSelectCompetition:"Please select competition",
+    matchDuration: "Please enter a match duration",
+    mainBreak: "Please enter a main break",
+    qtrBreak: "Please enter a qtr break",
+    timeBetweenGames: "Please enter a time between games"
 };
 
 export default ValidationConstants;
