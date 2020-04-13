@@ -11,6 +11,7 @@ const AppConstants = {
   venueAndCourts: "Venues & Courts",
   graphicalDashboard: "Graphical Display",
   textualDashboard: "Textual Display",
+  userProfile: "User Profile",
   affiliates: "Affiliates",
   affiliateApproveReject: "Affiliate - Approve / Reject",
   current: "Current",

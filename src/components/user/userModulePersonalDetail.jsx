@@ -505,7 +505,7 @@ class UserModulePersonalDetail extends Component{
             <div className="fluid-width mt-2" >
 
             <div className='profile-image-view mr-5' >
-                <span className="user-contact-heading">{AppConstants.playerProfile}</span>
+                {/* <span className="user-contact-heading">{AppConstants.playerProfile}</span> */}
                 {
                     personal.photoUrl ?
                         <img className="live-score-user-image" src={personal.photoUrl} alt="" height="80" width="80" />
@@ -815,11 +815,11 @@ class UserModulePersonalDetail extends Component{
                     alignItems: "center",
                 }} >
                     <Breadcrumb separator=" > ">
-                        <NavLink to="/userGraphicalDashboard" >
+                        {/* <NavLink to="/userGraphicalDashboard" >
                             <Breadcrumb.Item separator=">" className="breadcrumb-product">{AppConstants.user}</Breadcrumb.Item>
-                        </NavLink>
+                        </NavLink> */}
                         <NavLink to="/userTextualDashboard" >
-                            <Breadcrumb.Item separator=">" className="breadcrumb-product">{AppConstants.textualDashboard}</Breadcrumb.Item>
+                            <div className="breadcrumb-product">{AppConstants.userProfile}</div>
                         </NavLink>
                     </Breadcrumb>
                 </Header >
