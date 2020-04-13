@@ -398,7 +398,7 @@ class InnerHorizontalMenu extends React.Component {
                         </Menu.Item>
                         <Menu.Item key="5">
                             <NavLink to="/userTextualDashboard" >
-                                <span >{AppConstants.textualDashboard}</span>
+                                <span >{AppConstants.userProfile}</span>
                             </NavLink>
                         </Menu.Item>
                     </SubMenu>
