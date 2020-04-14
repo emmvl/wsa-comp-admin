@@ -54,7 +54,8 @@ import {
   postCompetitonDiscountSaga,
   defaultCompetitionDiscountSaga,
   defaultCharity_voucherSaga,
-  getDefaultCompFeesLogoSaga
+  getDefaultCompFeesLogoSaga,
+  inviteeSearchSaga
 } from './registrationSaga/competitionFeeSaga';
 
 
@@ -574,4 +575,8 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_LOAD, getPlayerListPagginationSaga);
 
   yield takeEvery(ApiConstants.API_USERCOUNT_LOAD, homeDashboardSaga)
+
+
+  //// Invitee Search SAGA
+  yield takeEvery(ApiConstants.API_COMPETITION_FEE_INVITEES_SEARCH_LOAD,inviteeSearchSaga)
 }

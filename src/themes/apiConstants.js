@@ -1127,7 +1127,13 @@ const ApiConstants = {
   API_USERCOUNT_ERROR: "API_USERCOUNT_ERROR",
 
   clearHomeDashboardData: "clearHomeDashboardData",
-  changeHoverPartProposedTeamGrading: "changeHoverPartProposedTeamGrading"
+  changeHoverPartProposedTeamGrading: "changeHoverPartProposedTeamGrading",
+
+
+
+  ///// On Affiliate serach 
+  API_COMPETITION_FEE_INVITEES_SEARCH_LOAD : "API_COMPETITION_FEE_INVITEES_SEARCH_LOAD",
+  API_COMPETITION_FEE_INVITEES_SEARCH_SUCCESS : "API_COMPETITION_FEE_INVITEES_SEARCH_SUCCESS"
 };
 
 

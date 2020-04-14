@@ -374,5 +374,24 @@ export function* getDefaultCompFeesLogoSaga(action) {
     }
 }
 
+/////Invitee Search Saga 
+export function* inviteeSearchSaga(action) {
+    try {
+        const result = yield call(AxiosApi.onInviteeSearch, action);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_COMPETITION_FEE_INVITEES_SEARCH_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+                inviteesType : action.inviteesType
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
 
 

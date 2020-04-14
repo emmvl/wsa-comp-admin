@@ -8,6 +8,7 @@ const initialState = {
     result: null,
     status: 0,
     userCount: null,
+    registrationCount: null,
 
 };
 
@@ -23,6 +24,7 @@ function homeReducer(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 userCount: action.result.count,
+                registrationCount: action.result.registrationCount,
                 status: action.status
             }
 
@@ -30,6 +32,7 @@ function homeReducer(state = initialState, action) {
         case ApiConstants.clearHomeDashboardData:
             if (action.key == "user") {
                 state.userCount = null
+                state.registrationCount = null
             }
             return {
                 ...state

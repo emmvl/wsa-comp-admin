@@ -50,7 +50,8 @@ import {
     regCompetitionListDeleteAction,
     getDefaultCharity,
     getDefaultCompFeesLogoAction,
-    clearCompReducerDataAction
+    clearCompReducerDataAction,
+    onInviteesSearchAction
 } from "../../store/actions/registrationAction/competitionFeeAction";
 import {
     competitionFeeInit, getVenuesTypeAction, clearFilter, searchVenueList,
@@ -2178,6 +2179,15 @@ class RegistrationCompetitionFee extends Component {
         if (inItem.id == "2" && orgLevelId == "4") {
             return false
         }
+        if (inItem.id == "7" && orgLevelId == "3") {
+            return false
+        }
+        if (inItem.id == "8" && orgLevelId == "4") {
+            return false
+        }
+        if (inItem.id == "7" && orgLevelId == "4") {
+            return false
+        }
         else {
             return true
         }
@@ -2187,6 +2197,12 @@ class RegistrationCompetitionFee extends Component {
     affiliateSearchOnchange = (affiliateOrgKey) => {
         this.props.add_editcompetitionFeeDeatils(affiliateOrgKey, "affiliateOrgKey")
 
+    }
+
+
+    onInviteeSearch = (value, inviteesType) => {
+        console.log(value, "**** value")
+        this.props.onInviteesSearchAction(value, inviteesType)
     }
 
 
@@ -2211,8 +2227,11 @@ class RegistrationCompetitionFee extends Component {
                         value={detailsData.affiliateOrgSelected}
                         placeholder={AppConstants.selectOrganisation}
                         filterOption={false}
-                        // onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
+                        onSearch={(value) => { this.onInviteeSearch(value, 3) }}
                         disabled={regInviteesDisable}
+                        showSearch={true}
+                        onBlur={() => this.onInviteeSearch("", 3)}
+                    // loading={detailsData.serachLoad}
                     >
                         {associationAffilites.map((item) => {
                             return (
@@ -2242,7 +2261,10 @@ class RegistrationCompetitionFee extends Component {
                         placeholder={AppConstants.selectOrganisation}
                         filterOption={false}
                         // onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
+                        onSearch={(value) => { this.onInviteeSearch(value, 4) }}
                         disabled={regInviteesDisable}
+                        onBlur={() => this.onInviteeSearch("", 4)}
+                    // loading={detailsData.serachLoad}
                     >
                         {clubAffilites.map((item) => {
                             return (
@@ -2954,6 +2976,7 @@ class RegistrationCompetitionFee extends Component {
                                             placeholder={"Select"}
                                             // value={item.competitionMembershipProductTypeId}
                                             disabled={discountsDisable}
+
                                         >
                                             {item.membershipProductTypes.map(item => {
                                                 return (
@@ -3211,7 +3234,8 @@ function mapDispatchToProps(dispatch) {
         clearFilter,
         clearCompReducerDataAction,
         getGenderAction,
-        getAffiliateToOrganisationAction
+        getAffiliateToOrganisationAction,
+        onInviteesSearchAction
     }, dispatch)
 }
 

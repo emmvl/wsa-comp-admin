@@ -190,7 +190,6 @@ class RegistrationMembershipFee extends Component {
         e.preventDefault();
         let productId = this.props.registrationState.membershipProductId
         this.props.form.validateFields((err, values) => {
-            console.log("values", values)
             if (!err) {
                 if (this.state.membershipTabKey == "1") {
                     const { yearRefId, membershipProductName, validityRefId } = values;
@@ -383,7 +382,9 @@ class RegistrationMembershipFee extends Component {
             "dobFrom": null,
             "membershipProductTypeRefId": 0,
             "membershipProductTypeRefName": this.state.newNameMembershipType,
-            "membershipProductTypeMappingId": 0
+            "membershipProductTypeMappingId": 0,
+            "isDefault": 0,
+            "isPlaying": 0,
         }
         this.props.addNewMembershipTypeAction(newObj)
         this.setState({
@@ -459,7 +460,21 @@ class RegistrationMembershipFee extends Component {
                         </div>
                         {
                             item.isMemebershipType && (
+
                                 <div className="reg-membership-fee-mandate-check-view">
+                                    <div className="colsm-">
+                                        {item.isDefault == 0 && (
+                                            <Checkbox
+                                                className="single-checkbox"
+                                                checked={item.isPlaying}
+                                                onChange={e =>
+                                                    this.membershipTypesAndAgeSelected(e.target.checked, index, "isPlaying")
+                                                }
+                                            >
+                                                {AppConstants.playerConst}
+                                            </Checkbox>
+                                        )}
+                                    </div>
                                     <Checkbox
                                         className="single-checkbox"
                                         checked={item.isMandate}
@@ -469,6 +484,7 @@ class RegistrationMembershipFee extends Component {
                                     >
                                         {`Mandate ${item.membershipProductTypeRefName} Age Restrictions`}
                                     </Checkbox>
+
                                     {item.isMandate && (
                                         <div className="fluid-width">
                                             <div className="row">
@@ -529,7 +545,8 @@ class RegistrationMembershipFee extends Component {
                             )
                         }
                     </div>
-                ))}
+                ))
+                }
                 <span className="input-heading-add-another" onClick={this.addAnothermembershipType}>
                     + {AppConstants.addMembershipType}
                 </span>
@@ -549,7 +566,7 @@ class RegistrationMembershipFee extends Component {
                     />
 
                 </Modal>
-            </div>
+            </div >
         )
     }
 

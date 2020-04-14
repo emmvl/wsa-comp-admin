@@ -78,7 +78,6 @@ function ownTeamGradingSummaryFunction(ownTeamGradingSummaryData, sortOrderArray
         }
 
     }
-    console.log(ownTeamGradingSummaryData)
     return ownTeamGradingSummaryData
 }
 
@@ -90,7 +89,6 @@ function getUpdatedHistoryData(data) {
                 historyData[j]["hoverVisible"] = false
             }
         }
-        console.log(data)
         return data
     }
     else {
@@ -205,7 +203,6 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
             }
 
         //////// /clear competition  team grading reducer data
-
         case ApiConstants.OWN_COMP_TEAM_GRADING_CLEARING_PARTICULAR_REDUCER_DATA:
             console.log(action)
             if (action.key == "finalTeamGrading") {
@@ -219,7 +216,6 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
                 state.ownTeamGradingSummaryGetData = []
                 state.finalsortOrderArray = []
             }
-
             return {
                 ...state,
                 onLoad: false,

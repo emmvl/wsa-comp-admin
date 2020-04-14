@@ -404,7 +404,7 @@ class HomeDashboard extends Component {
 
     /////competition Overview 
     compOverview = () => {
-        const { userCount } = this.props.homeDashboardState
+        const { userCount, registrationCount } = this.props.homeDashboardState
         return (
             <div>
                 {this.compOverviewHeading()}
@@ -441,7 +441,7 @@ class HomeDashboard extends Component {
                                     </div>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
-                                    <span className="reg-payment-price-text">84,294</span>
+                                    <span className="reg-payment-price-text">{registrationCount !== null ? registrationCount : "-"}</span>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
                                     <span className="reg-payment-paid-reg-text">{AppConstants.totalRegistrations}</span>

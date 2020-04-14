@@ -3,6 +3,7 @@ import history from "../../../util/history";
 import { getRegistrationSetting } from "../../objectModel/getRegSettingObject";
 import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
 import { getUserId } from "../../../util/sessionStorage"
+import { stat } from "fs";
 
 // dummy object of competition detail
 const competitionDetailObject = {
@@ -114,8 +115,8 @@ const initialState = {
     competitionCreator: null,
     associationAffilites: [],
     clubAffilites: [],
-    affiliateOrgSelected: []
-
+    affiliateOrgSelected: [],
+    serachLoad: false
 };
 
 /////function to append isselected values in default membership types array
@@ -1896,6 +1897,29 @@ function competitionFees(state = initialState, action) {
                 onLoad: false,
                 error: null,
             };
+
+
+        ///// Inviteee Search Reducer 
+
+        case ApiConstants.API_COMPETITION_FEE_INVITEES_SEARCH_LOAD:
+
+            return {
+                ...state,
+                serachLoad: true
+            }
+
+        case ApiConstants.API_COMPETITION_FEE_INVITEES_SEARCH_SUCCESS:
+            console.log(action)
+            if (action.inviteesType == 3) {
+                state.associationAffilites = action.result
+            } else {
+                state.clubAffilites = action.result
+            }
+
+            return {
+                ...state,
+                serachLoad: false
+            }
 
 
         default:

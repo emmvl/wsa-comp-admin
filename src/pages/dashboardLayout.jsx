@@ -266,13 +266,13 @@ class DashboardLayout extends React.Component {
                   <li>
                     <div className="site-menu">
                       <div className="dropdown">
-                        <button
+                        {this.props.isManuNotVisible !== true && <button
                           className="dropdown-toggle"
                           type="button"
                           data-toggle="dropdown"
                         >
                           <img src={this.menuImageChange(menuName)} alt="" />
-                        </button>
+                        </button>}
                         <ul className="dropdown-menu">
                           <li
                             className={

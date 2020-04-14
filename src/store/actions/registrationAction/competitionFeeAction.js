@@ -1,4 +1,5 @@
 import ApiConstants from "../../../themes/apiConstants";
+import { func } from "prop-types";
 
 // get the competition fees list in registration
 function regCompetitionListAction(offset, yearRefId, searchText) {
@@ -287,6 +288,16 @@ function getDefaultCompFeesLogoAction() {
 }
 
 
+///// On invitees serach action 
+function onInviteesSearchAction(value, inviteesType){
+    const action = {
+        type :  ApiConstants.API_COMPETITION_FEE_INVITEES_SEARCH_LOAD,
+        value : value,
+        inviteesType: inviteesType
+    }
+    return action
+}
+
 export {
     regCompetitionListAction,
     regCompetitionListDeleteAction,
@@ -316,5 +327,5 @@ export {
     clearCompReducerDataAction,
     getDefaultCharity,
     getDefaultCompFeesLogoAction,
-
+    onInviteesSearchAction
 };

@@ -1025,6 +1025,14 @@ function registration(state = initialState, action) {
       if (action.keyword == "isMemebershipType") {
         state.getDefaultMembershipProductTypes[action.index].isMemebershipType = action.checkedValue
       }
+      if (action.keyword == "isPlaying") {
+        if (action.checkedValue == true) {
+          state.getDefaultMembershipProductTypes[action.index].isPlaying = 1
+        }
+        else {
+          state.getDefaultMembershipProductTypes[action.index].isPlaying = 0
+        }
+      }
 
       return {
         ...state,

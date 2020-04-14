@@ -10,7 +10,7 @@ import { liveScoreLaddersListAction } from '../../store/actions/LiveScoreAction/
 import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { isArrayNotEmpty } from '../../util/helpers'
-import { getLiveScoreDivisionList, liveScoreDeleteDivision } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction'
+import { getLiveScoreDivisionList } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction'
 const { Content } = Layout;
 const { Option } = Select;
 
@@ -216,7 +216,11 @@ class LiveScorePublicLadder extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <DashboardLayout 
+                    menuHeading={AppConstants.liveScores} 
+                    isManuNotVisible = {true}
+                // menuName={AppConstants.liveScores}
+                 />
                 {/* <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"11"} /> */}
                 <Layout>
                     {this.headerView()}
