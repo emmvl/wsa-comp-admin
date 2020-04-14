@@ -110,6 +110,15 @@ function playerSummaryCommentAction(year, competitionId, divisionId, gradingOrgI
     return action
 }
 
+
+function competitionPlayerImportAction(data) {
+    return {
+        type: ApiConstants.API_COMPETITION_PLAYER_IMPORT_LOAD,
+        payload: data
+    }
+}
+
+
 export {
     getCompPartPlayerGradingSummaryAction,
     onchangeCompPartPlayerGradingSummaryData,
@@ -120,5 +129,6 @@ export {
     onDragPlayerAction,
     onSameTeamDragAction,
     playerGradingComment,
-    playerSummaryCommentAction
+    playerSummaryCommentAction,
+    competitionPlayerImportAction
 }

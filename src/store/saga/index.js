@@ -117,7 +117,8 @@ import {
   addNewTeamPartPlayerGradingSaga,
   dragTeamPartPlayerSaga,
   partPLayerCommentSaga,
-  partPlayerSummaryCommentSaga
+  partPlayerSummaryCommentSaga,
+  importCompetitionPlayer
 } from './competitionManagementSaga/competitionPartPlayerGradingSaga';
 import {
   getCompOwnProposedTeamGradingSaga,
@@ -579,4 +580,7 @@ export default function* root_saga() {
 
   //// Invitee Search SAGA
   yield takeEvery(ApiConstants.API_COMPETITION_FEE_INVITEES_SEARCH_LOAD,inviteeSearchSaga)
+
+  yield takeEvery(ApiConstants.API_COMPETITION_PLAYER_IMPORT_LOAD, importCompetitionPlayer);
+
 }

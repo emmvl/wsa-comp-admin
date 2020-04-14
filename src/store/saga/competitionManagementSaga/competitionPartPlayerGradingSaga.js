@@ -166,4 +166,23 @@ export function* partPlayerSummaryCommentSaga(action) {
     }
 }
 
+// 
+export function* importCompetitionPlayer(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.importCompetitionPlayer, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_COMPETITION_PLAYER_IMPORT_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+
 

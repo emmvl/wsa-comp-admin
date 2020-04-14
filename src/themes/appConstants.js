@@ -924,7 +924,10 @@ const AppConstants = {
 
   goalExport: "/stats/export/scoringByPlayer?competitionId=",
   gameTimeExport: "/stats/export/gametime?competitionId=",
-  teamAttendaneExport: "/players/export/teamattendance?competitionId="
+  teamAttendaneExport: "/players/export/teamattendance?competitionId=",
+  proceed: "Skip and Proceed",
+  invalidPlayers: "Invalid Records",
+  importPlayer: "Import Player",
 };
 
 export default AppConstants;
