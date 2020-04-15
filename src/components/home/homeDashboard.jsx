@@ -275,8 +275,7 @@ class HomeDashboard extends Component {
         super(props);
         this.state = {
             yearRefId: 1,
-            loading: false
-
+            loading: false,
         }
 
     }
@@ -285,18 +284,34 @@ class HomeDashboard extends Component {
     componentDidMount() {
         this.props.getRoleAction()
         this.props.getUreAction()
-        this.props.getOnlyYearListAction(this.props.appState.yearList)
         this.setState({ loading: true })
         // this.props.getUserCount(1)
     }
 
     componentDidUpdate(nextProps) {
         const { yearList } = this.props.appState
+        let userOrganisation = this.props.userState.getUserOrganisation
         if (this.state.loading == true && this.props.appState.onLoad == false) {
             if (yearList.length > 0) {
                 let yearRefId = yearList[0].id
-                this.props.getUserCount(yearRefId)
-                this.setState({ loading: false, yearRefId })
+                if (this.props.homeDashboardState.userCount == null) {
+                    this.props.getUserCount(this.state.yearRefId)
+                    this.setState({ yearRefId })
+                }
+                this.setState({ loading: false,  })
+            }
+        }
+        if (nextProps.userOrganisation !== userOrganisation) {
+            if (userOrganisation.length > 0) {
+                if (this.props.appState.yearList.length == 0) {
+                    this.props.getOnlyYearListAction(this.props.appState.yearList)
+                }
+
+                else {
+                    if (this.props.homeDashboardState.userCount == null) {
+                        this.props.getUserCount(this.state.yearRefId)
+                    }
+                }
             }
         }
     }
@@ -550,6 +565,7 @@ function mapStatetoProps(state) {
     return {
         appState: state.AppState,
         homeDashboardState: state.HomeDashboardState,
+        userState: state.UserState
 
     }
 }

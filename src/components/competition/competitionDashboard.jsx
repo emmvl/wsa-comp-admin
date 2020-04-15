@@ -250,10 +250,12 @@ class CompetitionDashboard extends Component {
     }
 
     onCompetitionScreen = () => {
+        this.props.clearCompReducerDataAction("all")
         history.push("/registrationCompetitionForm", { id: null })
     }
 
     onRegistrationCompScreen = () => {
+        this.props.clearCompReducerDataAction("all")
         history.push("/registrationCompetitionFee", { id: null })
     }
 

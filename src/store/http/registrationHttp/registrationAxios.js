@@ -385,9 +385,9 @@ let AxiosApi = {
     },
 
     async homeDashboardApi(yearRefId) {
+        let userId = await getUserId()
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem.organisationUniqueKey
-        let userId = await getUserId()
         let body = {
             organisationUniqueKey: organisationUniqueKey,
             yearRefId: yearRefId,
@@ -398,14 +398,14 @@ let AxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-//// Search Invitee
-    async onInviteeSearch(action){
+    //// Search Invitee
+    async onInviteeSearch(action) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem.organisationUniqueKey
         let body = {
-          organisationId: organisationUniqueKey,
+            organisationId: organisationUniqueKey,
             invitorId: action.inviteesType,
-            search:action.value
+            search: action.value
         }
         var url = `api/affiliates/affiliatedOrganisation`;
         return Method.dataPost(url, token, body);

@@ -942,9 +942,9 @@ class RegistrationForm extends Component {
         let otherQuestionsSetting = this.props.appState.otherQuestionsSetting !== 0 ? this.props.appState.otherQuestionsSetting : []
         const { selectedInvitees, selectedDemographic, SelectedOtherQuestions, selectedNetballQuestions } = this.props.registrationState
         let isPublished = this.state.isPublished
-        let inviteesExpend = (selectedInvitees.includes("2") || selectedInvitees.includes("3") || selectedInvitees.includes("4")) ? "1" : null
-        let netballExpend = (selectedNetballQuestions.includes("7")) ? "5" : null
-        console.log(inviteesExpend)
+        let inviteesExpend = (selectedInvitees.includes("2") || selectedInvitees.includes("3") || selectedInvitees.includes("4") || selectedInvitees.includes(2) || selectedInvitees.includes(3) || selectedInvitees.includes(4)) ? "1" : null
+        let netballExpend = (selectedNetballQuestions.includes("7") || selectedNetballQuestions.includes(7)) ? "5" : null
+
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading">{AppConstants.additionalQuestions}</span>

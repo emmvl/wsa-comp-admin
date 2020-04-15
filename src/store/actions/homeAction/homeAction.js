@@ -4,7 +4,7 @@ import ApiConstants from "../../../themes/apiConstants";
 function getUserCount(year) {
     const action = {
         type: ApiConstants.API_USERCOUNT_LOAD,
-        year
+        year,
     };
     return action;
 }
