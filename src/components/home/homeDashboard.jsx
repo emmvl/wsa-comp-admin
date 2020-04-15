@@ -8,6 +8,8 @@ import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getUreAction, getRoleAction } from '../../store/actions/userAction/userAction'
+import { getUserCount, clearHomeDashboardData } from "../../store/actions/homeAction/homeAction"
+import { getOnlyYearListAction } from '../../store/actions/appAction'
 
 
 const { Footer, Content } = Layout;
@@ -272,7 +274,8 @@ class HomeDashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            year: "2019",
+            yearRefId: 1,
+            loading: false
 
         }
 
@@ -282,6 +285,26 @@ class HomeDashboard extends Component {
     componentDidMount() {
         this.props.getRoleAction()
         this.props.getUreAction()
+        this.props.getOnlyYearListAction(this.props.appState.yearList)
+        this.setState({ loading: true })
+        // this.props.getUserCount(1)
+    }
+
+    componentDidUpdate(nextProps) {
+        const { yearList } = this.props.appState
+        if (this.state.loading == true && this.props.appState.onLoad == false) {
+            if (yearList.length > 0) {
+                let yearRefId = yearList[0].id
+                this.props.getUserCount(yearRefId)
+                this.setState({ loading: false, yearRefId })
+            }
+        }
+    }
+
+    onYearChange = (yearRefId) => {
+        this.setState({ yearRefId: yearRefId, })
+        this.props.clearHomeDashboardData("user")
+        this.props.getUserCount(yearRefId)
     }
 
 
@@ -359,13 +382,18 @@ class HomeDashboard extends Component {
                     }} >
                         <span className='year-select-heading'>{AppConstants.year}:</span>
                         <Select
+                            name={"yearRefId"}
                             className="year-select"
-                            onChange={(year) => this.setState({ year })}
-                            value={this.state.year}
+                            onChange={yearRefId => this.onYearChange(yearRefId)}
+                            value={this.state.yearRefId}
                         >
-                            <Option value={"2019"}>2019</Option>
-                            <Option value={"2018"}>2018</Option>
-                            <Option value={"2017"}>2017</Option>
+                            {this.props.appState.yearList.map(item => {
+                                return (
+                                    <Option key={"yearRefId" + item.id} value={item.id}>
+                                        {item.description}
+                                    </Option>
+                                );
+                            })}
                         </Select>
                     </div>
                 </div>
@@ -376,6 +404,7 @@ class HomeDashboard extends Component {
 
     /////competition Overview 
     compOverview = () => {
+        const { userCount, registrationCount } = this.props.homeDashboardState
         return (
             <div>
                 {this.compOverviewHeading()}
@@ -389,7 +418,7 @@ class HomeDashboard extends Component {
                                     </div>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
-                                    <span className="reg-payment-price-text">791,016</span>
+                                    <span className="reg-payment-price-text">{userCount !== null ? userCount : "-"}</span>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
                                     <span className="reg-payment-paid-reg-text">{AppConstants.totalUsers}</span>
@@ -412,7 +441,7 @@ class HomeDashboard extends Component {
                                     </div>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
-                                    <span className="reg-payment-price-text">84,294</span>
+                                    <span className="reg-payment-price-text">{registrationCount !== null ? registrationCount : "-"}</span>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
                                     <span className="reg-payment-paid-reg-text">{AppConstants.totalRegistrations}</span>
@@ -487,6 +516,7 @@ class HomeDashboard extends Component {
 
 
     render() {
+
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.home} menuName={AppConstants.home} />
@@ -510,12 +540,17 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getRoleAction,
         getUreAction,
+        getUserCount,
+        getOnlyYearListAction,
+        clearHomeDashboardData
     }, dispatch)
 }
 
 function mapStatetoProps(state) {
     return {
-        appState: state.AppState
+        appState: state.AppState,
+        homeDashboardState: state.HomeDashboardState,
+
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)((HomeDashboard));

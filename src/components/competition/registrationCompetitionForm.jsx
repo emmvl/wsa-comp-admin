@@ -499,7 +499,7 @@ class RegistrationCompetitionForm extends Component {
                     compDetailDisable: false,
                     regInviteesDisable: true,
                     membershipDisable: true,
-                    divisionsDisable: true,
+                    divisionsDisable: false,
                     feesTableDisable: true,
                     paymentsDisable: false,
                     discountsDisable: true,
@@ -1410,7 +1410,6 @@ class RegistrationCompetitionForm extends Component {
                                         disabled={compDetailDisable}
                                     >
                                         {this.state.roundsArray.map(item => {
-                                            console.log(item)
                                             return (
                                                 <Option key={item.id} value={item.id}>{item.value}</Option>
                                             );
@@ -1514,7 +1513,6 @@ class RegistrationCompetitionForm extends Component {
     ////membership types in competition fees onchhange function
     membershipTypeSelected = (checked, membershipIndex, typeIndex) => {
         this.props.membershipTypeSelectedAction(checked, membershipIndex, typeIndex)
-        console.log("checked, membershipIndex, typeIndex", checked, membershipIndex, typeIndex)
     }
 
 
@@ -1842,18 +1840,14 @@ class RegistrationCompetitionForm extends Component {
 
     checkIsSeasonal = (feeDetails) => {
         let isSeasonalValue = false
-
         for (let i in feeDetails) {
             if (feeDetails[i].isSeasonal == true) {
                 console.log(feeDetails[i].isSeasonal)
                 isSeasonalValue = true
                 break
             }
-
         }
         return isSeasonalValue
-
-
 
     }
     checkIsCasual = (feeDetails) => {
@@ -2555,12 +2549,12 @@ class RegistrationCompetitionForm extends Component {
                                 <Tooltip
                                     style={{ height: "100%" }}
                                     onMouseEnter={() =>
-                                        this.setState({ tooltipVisiblePublish: (isPublished) && (tabKey === "2") ? true : allDisable })}
+                                        this.setState({ tooltipVisiblePublish: allDisable })}
                                     onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
                                     visible={this.state.tooltipVisiblePublish}
                                     title={ValidationConstants.compIsPublished}>
                                     <Button className="publish-button" type="primary"
-                                        disabled={tabKey === "1" ? allDisable : isPublished}
+                                        disabled={tabKey === "1" || tabKey === "2" ? allDisable : isPublished}
                                         htmlType="submit" onClick={() => this.setState({
                                             statusRefId: tabKey == "2" ? 2 : 1,
                                             buttonPressed: tabKey == "2" ? "publish" : "next"

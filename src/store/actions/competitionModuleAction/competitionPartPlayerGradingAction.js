@@ -85,14 +85,6 @@ function onSameTeamDragAction(source, destination) {
 
 }
 
-
-function competitionPlayerImportAction(data) {
-    return {
-        type: ApiConstants.API_COMPETITION_PLAYER_IMPORT_LOAD,
-        payload: data
-    }
-}
-
 //player grading comment
 function playerGradingComment(competitionId, divisionId, comment, playerId, teamId) {
     const action = {
@@ -118,6 +110,15 @@ function playerSummaryCommentAction(year, competitionId, divisionId, gradingOrgI
     return action
 }
 
+
+function competitionPlayerImportAction(data) {
+    return {
+        type: ApiConstants.API_COMPETITION_PLAYER_IMPORT_LOAD,
+        payload: data
+    }
+}
+
+
 export {
     getCompPartPlayerGradingSummaryAction,
     onchangeCompPartPlayerGradingSummaryData,
@@ -127,7 +128,7 @@ export {
     addNewTeamAction,
     onDragPlayerAction,
     onSameTeamDragAction,
-    competitionPlayerImportAction,
     playerGradingComment,
-    playerSummaryCommentAction
+    playerSummaryCommentAction,
+    competitionPlayerImportAction
 }

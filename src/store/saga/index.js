@@ -54,7 +54,8 @@ import {
   postCompetitonDiscountSaga,
   defaultCompetitionDiscountSaga,
   defaultCharity_voucherSaga,
-  getDefaultCompFeesLogoSaga
+  getDefaultCompFeesLogoSaga,
+  inviteeSearchSaga
 } from './registrationSaga/competitionFeeSaga';
 
 
@@ -71,7 +72,8 @@ import {
   liveScoreAffilateSaga,
   addTeamLiveScoreSaga,
   liveScoreTeamImportSaga,
-  liveScoreGetTeamSaga
+  liveScoreGetTeamSaga,
+  liveScoreTeamPaggingSaga
 } from './liveScoreSaga/liveScoreTeamSaga';
 import { liveScoreLaddersDivisionsaga, liveScoreLaddersListSaga } from './liveScoreSaga/liveScoreLadderSaga';
 import { liveScoreIncidentListSaga } from './liveScoreSaga/liveScoreIncidentSaga';
@@ -84,7 +86,7 @@ import { liveScoreScorerListSaga, liveScorerSearchUserSaga, liveScoreAssigneMatc
 import { liveScoreBulkPushBack, liveScoreBulkBringForwardSaga, liveScoreMatchResult, liveScoreEndMatchesSaga, liveScoreDoubleHeaderSaga, liveScoreAbandonMatchSaga } from './liveScoreSaga/liveScoreBulkMatchSaga';
 
 
-import { liveScorePlayerSaga, liveScoreAddEditPlayerSaga, liveScorePlayerImportSaga } from "./liveScoreSaga/liveScorePlayerSaga";
+import { liveScorePlayerSaga, liveScoreAddEditPlayerSaga, liveScorePlayerImportSaga, getPlayerListPagginationSaga } from "./liveScoreSaga/liveScorePlayerSaga";
 import { liveScoreDashboardSaga } from './liveScoreSaga/liveScoreDashboardSaga';
 import { liveScoreCompetitionSaga, liveScoreCompetitionDelete } from './liveScoreSaga/liveScoreCompetionSaga'
 import { liveScoreDivisionsaga, liveScoreDeleteDivisionSaga, liveScoreCreateDivisionsaga, liveScoreDivisionImportSaga } from './liveScoreSaga/liveScoreDivisionSaga';
@@ -114,9 +116,9 @@ import {
   getCompPartPlayerGradingSaga,
   addNewTeamPartPlayerGradingSaga,
   dragTeamPartPlayerSaga,
-  importCompetitionPlayer,
   partPLayerCommentSaga,
-  partPlayerSummaryCommentSaga
+  partPlayerSummaryCommentSaga,
+  importCompetitionPlayer
 } from './competitionManagementSaga/competitionPartPlayerGradingSaga';
 import {
   getCompOwnProposedTeamGradingSaga,
@@ -133,6 +135,7 @@ import {
 
 // UserSaga
 import * as userSaga from '../saga/userSaga/userSaga';
+import { homeDashboardSaga } from "./homeDashboardSaga/homeDashboardSaga"
 
 ////////competition draws 
 import {
@@ -453,8 +456,6 @@ export default function* root_saga() {
 
   yield takeEvery(ApiConstants.API_DRAG_NEW_TEAM_LOAD, dragTeamPartPlayerSaga)
 
-  yield takeEvery(ApiConstants.API_COMPETITION_PLAYER_IMPORT_LOAD, importCompetitionPlayer);
-
   yield takeEvery(ApiConstants.API_MATCH_RESULT_LOAD, liveScoreMatchResult)
 
   //umpires saga
@@ -567,4 +568,19 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_LADDER_SETTING_GET_DATA_LOAD, laddersSettingGetData)
 
   yield takeEvery(ApiConstants.API_LADDER_SETTING_POST_DATA_LOAD, laddersSettingPostData)
+
+  // Tema list with paggination
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_TEAM_WITH_PAGGING_LOAD, liveScoreTeamPaggingSaga);
+
+  //Player list with paggination
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_LOAD, getPlayerListPagginationSaga);
+
+  yield takeEvery(ApiConstants.API_USERCOUNT_LOAD, homeDashboardSaga)
+
+
+  //// Invitee Search SAGA
+  yield takeEvery(ApiConstants.API_COMPETITION_FEE_INVITEES_SEARCH_LOAD,inviteeSearchSaga)
+
+  yield takeEvery(ApiConstants.API_COMPETITION_PLAYER_IMPORT_LOAD, importCompetitionPlayer);
+
 }

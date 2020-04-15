@@ -415,10 +415,12 @@ class CompetitionCourtAndTimesAssign extends Component {
                     />
                 </div>
                 <div className="col-sm-2 delete-image-view pb-4" onClick={() => this.addTimeManualPerVenue(index, item, "competitionVenueTimeslotsDayTimedelete")}>
-                    <span className="user-remove-btn">
-                        <i className="fa fa-trash-o" aria-hidden="true"></i>
-                    </span>
-                    <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                    <a className="transfer-image-view">
+                        <span className="user-remove-btn">
+                            <i className="fa fa-trash-o" aria-hidden="true"></i>
+                        </span>
+                        <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                    </a>
                 </div>
             </div>
         )
@@ -814,10 +816,12 @@ class CompetitionCourtAndTimesAssign extends Component {
                     </div>
 
                     <div className="col-sm-2 delete-image-timeSlot-view" onClick={() => this.addTimeManualPerVenue(index, venueIndex, "competitionTimeslotManualAllVenuedelete")}>
-                        <span className="user-remove-btn">
-                            <i className="fa fa-trash-o" aria-hidden="true"></i>
-                        </span>
-                        <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                        <a className="transfer-image-view">
+                            <span className="user-remove-btn">
+                                <i className="fa fa-trash-o" aria-hidden="true"></i>
+                            </span>
+                            <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                        </a>
                     </div>
                 </div>
             </div >
@@ -861,10 +865,12 @@ class CompetitionCourtAndTimesAssign extends Component {
                     )}
                 </Form.Item>
                 <div className="col-sm-2 delete-image-timeSlot-view pt-3" onClick={() => this.addTimeManualPerVenue(index, item, "competitionTimeslotsEntitydelete")}>
-                    <span className="user-remove-btn">
-                        <i className="fa fa-trash-o" aria-hidden="true"></i>
-                    </span>
-                    <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                    <a className="transfer-image-view">
+                        <span className="user-remove-btn">
+                            <i className="fa fa-trash-o" aria-hidden="true"></i>
+                        </span>
+                        <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                    </a>
                 </div>
             </div>
         )
@@ -917,10 +923,12 @@ class CompetitionCourtAndTimesAssign extends Component {
                     )}
                 </Form.Item>
                 <div className="col-sm-2 delete-image-timeSlot-view pt-2" onClick={() => this.addTimeManualPerVenue(index, item, "competitionTimeslotsEntitydelete")}>
-                    <span className="user-remove-btn">
-                        <i className="fa fa-trash-o" aria-hidden="true"></i>
-                    </span>
-                    <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                    <a className="transfer-image-view">
+                        <span className="user-remove-btn">
+                            <i className="fa fa-trash-o" aria-hidden="true"></i>
+                        </span>
+                        <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                    </a>
                 </div>
             </div>
         )
@@ -1078,10 +1086,12 @@ class CompetitionCourtAndTimesAssign extends Component {
                     <span className='input-heading-add-another' onClick={() => this.addTimeManualPerVenue(index, null, "addTimeSlotManual")} > + {AppConstants.add_TimeSlot}</span>
                 </div>
                 <div className="col-sm-2 delete-image-timeSlot-view" onClick={() => this.addTimeManualPerVenue(index, item, "competitionTimeslotManualdelete")}>
-                    <span className="user-remove-btn">
-                        <i className="fa fa-trash-o" aria-hidden="true"></i>
-                    </span>
-                    <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                    <a className="transfer-image-view">
+                        <span className="user-remove-btn">
+                            <i className="fa fa-trash-o" aria-hidden="true"></i>
+                        </span>
+                        <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                    </a>
                 </div>
 
             </div >

@@ -50,7 +50,8 @@ import {
     regCompetitionListDeleteAction,
     getDefaultCharity,
     getDefaultCompFeesLogoAction,
-    clearCompReducerDataAction
+    clearCompReducerDataAction,
+    onInviteesSearchAction
 } from "../../store/actions/registrationAction/competitionFeeAction";
 import {
     competitionFeeInit, getVenuesTypeAction, clearFilter, searchVenueList,
@@ -66,7 +67,8 @@ import { getUserId, getOrganisationData } from "../../util/sessionStorage"
 import ReactDOM from 'react-dom';
 import {
     getGenderAction
-} from "../../store/actions/commonAction/commonAction"
+} from "../../store/actions/commonAction/commonAction";
+import { getAffiliateToOrganisationAction } from "../../store/actions/userAction/userAction";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -908,7 +910,7 @@ class RegistrationCompetitionFee extends Component {
         this.setState({ organisationTypeRefId: orgData.organisationTypeRefId })
         let competitionId = null
         competitionId = this.props.location.state ? this.props.location.state.id : null
-        this.apiCalls(competitionId)
+        this.apiCalls(competitionId, orgData.organisationUniqueKey)
         this.setDetailsFieldValue()
         let checkVenueScreen = this.props.location.state ? this.props.location.state.venueScreen ?
             this.props.location.state.venueScreen : null : null
@@ -916,7 +918,8 @@ class RegistrationCompetitionFee extends Component {
     }
 
     ////alll the api calls
-    apiCalls = (competitionId) => {
+    apiCalls = (competitionId, organisationId) => {
+        this.props.getAffiliateToOrganisationAction(organisationId);
         this.props.getOnlyYearListAction(this.props.appState.yearList)
         this.props.getDefaultCompFeesLogoAction()
         this.props.competitionDiscountTypesAction()
@@ -1130,7 +1133,6 @@ class RegistrationCompetitionFee extends Component {
             if (!err) {
                 let nonPlayingDate = JSON.stringify(postData.nonPlayingDates)
                 let venue = JSON.stringify(compFeesState.postVenues)
-                // let invitees = JSON.stringify(compFeesState.postInvitees)
                 let invitees = compFeesState.postInvitees
                 if (tabKey == "1") {
                     if (compFeesState.competitionDetailData.competitionLogoUrl !== null && invitees.length > 0) {
@@ -2177,10 +2179,108 @@ class RegistrationCompetitionFee extends Component {
         if (inItem.id == "2" && orgLevelId == "4") {
             return false
         }
+        if (inItem.id == "7" && orgLevelId == "3") {
+            return false
+        }
+        if (inItem.id == "8" && orgLevelId == "4") {
+            return false
+        }
+        if (inItem.id == "7" && orgLevelId == "4") {
+            return false
+        }
         else {
             return true
         }
     }
+
+
+    affiliateSearchOnchange = (affiliateOrgKey) => {
+        this.props.add_editcompetitionFeeDeatils(affiliateOrgKey, "affiliateOrgKey")
+
+    }
+
+
+    onInviteeSearch = (value, inviteesType) => {
+        console.log(value, "**** value")
+        this.props.onInviteesSearchAction(value, inviteesType)
+    }
+
+
+    ////////reg invitees search view for any organisation
+    affiliatesSearchInvitee = (subItem) => {
+        let detailsData = this.props.competitionFeesState
+        console.log("detailsData", detailsData.competitionDetailData.invitees)
+        let seletedInvitee = detailsData.selectedInvitees.find(x => x);
+        let associationAffilites = detailsData.associationAffilites
+        let clubAffilites = detailsData.clubAffilites
+        let regInviteesDisable = this.state.permissionState.regInviteesDisable
+        if (subItem.id == 7 && seletedInvitee == 7) {
+            return (
+                < div >
+                    <Select
+                        mode="multiple"
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        onChange={associationAffilite => {
+                            // this.onSelectValues(venueSelection, detailsData)
+                            this.affiliateSearchOnchange(associationAffilite)
+                        }}
+                        value={detailsData.affiliateOrgSelected}
+                        placeholder={AppConstants.selectOrganisation}
+                        filterOption={false}
+                        onSearch={(value) => { this.onInviteeSearch(value, 3) }}
+                        disabled={regInviteesDisable}
+                        showSearch={true}
+                        onBlur={() => this.onInviteeSearch("", 3)}
+                    // loading={detailsData.serachLoad}
+                    >
+                        {associationAffilites.map((item) => {
+                            return (
+                                <Option
+                                    key={item.organisationId}
+                                    value={item.organisationId}>
+                                    {item.name}</Option>
+                            )
+                        })}
+                    </Select>
+                </div>
+            )
+        }
+        else if (subItem.id == 8 && seletedInvitee == 8) {
+            return (
+
+                < div >
+                    <Select
+                        mode="multiple"
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        onChange={clubAffilite => {
+                            // this.onSelectValues(venueSelection, detailsData)
+                            this.affiliateSearchOnchange(clubAffilite)
+                        }}
+
+                        value={detailsData.affiliateOrgSelected}
+                        placeholder={AppConstants.selectOrganisation}
+                        filterOption={false}
+                        // onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
+                        onSearch={(value) => { this.onInviteeSearch(value, 4) }}
+                        disabled={regInviteesDisable}
+                        onBlur={() => this.onInviteeSearch("", 4)}
+                    // loading={detailsData.serachLoad}
+                    >
+                        {clubAffilites.map((item) => {
+                            return (
+                                <Option
+                                    key={item.organisationId}
+                                    value={item.organisationId}>
+                                    {item.name}</Option>
+                            )
+                        })}
+                    </Select>
+                </div>
+            )
+        }
+
+    }
+
 
 
     regInviteesView = () => {
@@ -2189,6 +2289,7 @@ class RegistrationCompetitionFee extends Component {
         let seletedInvitee = detailsData.selectedInvitees.find(x => x);
         let orgLevelId = JSON.stringify(this.state.organisationTypeRefId)
         let regInviteesDisable = this.state.permissionState.regInviteesDisable
+        console.log(this.props.competitionFeesState.postInvitees)
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading required-field">{AppConstants.registrationInvitees}</span>
@@ -2210,7 +2311,9 @@ class RegistrationCompetitionFee extends Component {
                                                     {this.disableInvitee(subItem) &&
                                                         <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
                                                     }
+                                                    {this.affiliatesSearchInvitee(subItem)}
                                                 </div>
+
                                             ))}
                                         </div>
                                     }
@@ -2219,7 +2322,7 @@ class RegistrationCompetitionFee extends Component {
                         }
                     </Radio.Group>
                 </div>
-            </div>
+            </div >
         );
     };
 
@@ -2269,6 +2372,11 @@ class RegistrationCompetitionFee extends Component {
         let selectedSeasonalFeeKey = this.props.competitionFeesState.SelectedSeasonalFeeKey
         let selectedCasualFeeKey = this.props.competitionFeesState.selectedCasualFeeKey
         let paymentsDisable = this.state.permissionState.paymentsDisable
+        let seasonalExpendeKey = (selectedSeasonalFeeKey.includes("6") || selectedSeasonalFeeKey.includes("7") || selectedSeasonalFeeKey.includes("8")
+            || selectedSeasonalFeeKey.includes(6) || selectedSeasonalFeeKey.includes(7) || selectedSeasonalFeeKey.includes(8)) ? "5" : null
+        let casuallExpendeKey = (selectedCasualFeeKey.includes("6") || selectedCasualFeeKey.includes("7") || selectedCasualFeeKey.includes("8")
+            || selectedCasualFeeKey.includes(6) || selectedCasualFeeKey.includes(7) || selectedCasualFeeKey.includes(8)) ? "5" : null
+        console.log(seasonalExpendeKey)
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.paymentOptions}</span>
@@ -2282,9 +2390,9 @@ class RegistrationCompetitionFee extends Component {
                         <span className="form-heading">{AppConstants.seasonalFee}</span>
                         <Tree
                             style={{ flexDirection: 'column' }}
-                            className="tree-government-rebate"
+                            className="tree-government-rebate tree-selection-icon"
                             checkable
-                            defaultExpandedKeys={[]}
+                            expandedKeys={[seasonalExpendeKey]}
                             defaultCheckedKeys={[]}
                             checkedKeys={selectedSeasonalFeeKey}
                             onCheck={(e) => this.onChangeSeasonalFee(e, paymentData)}
@@ -2298,10 +2406,11 @@ class RegistrationCompetitionFee extends Component {
                     <span className="form-heading">{AppConstants.casualFee}</span>
                     <Tree
                         style={{ flexDirection: 'column' }}
-                        className="tree-government-rebate"
+                        className="tree-government-rebate tree-selection-icon"
                         checkable
                         defaultExpandedKeys={[]}
                         defaultCheckedKeys={[]}
+                        expandedKeys={[casuallExpendeKey]}
                         checkedKeys={selectedCasualFeeKey}
                         onCheck={(e) => this.onChangeCasualFee(e, paymentData)}
                         disabled={paymentsDisable}
@@ -2867,6 +2976,7 @@ class RegistrationCompetitionFee extends Component {
                                             placeholder={"Select"}
                                             // value={item.competitionMembershipProductTypeId}
                                             disabled={discountsDisable}
+
                                         >
                                             {item.membershipProductTypes.map(item => {
                                                 return (
@@ -3123,7 +3233,9 @@ function mapDispatchToProps(dispatch) {
         searchVenueList,
         clearFilter,
         clearCompReducerDataAction,
-        getGenderAction
+        getGenderAction,
+        getAffiliateToOrganisationAction,
+        onInviteesSearchAction
     }, dispatch)
 }
 

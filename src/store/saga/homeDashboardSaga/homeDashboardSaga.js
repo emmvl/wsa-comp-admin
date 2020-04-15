@@ -1,10 +1,11 @@
-import { put, call } from 'redux-saga/effects';
-import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
-import ApiConstants from '../../../themes/apiConstants';
+import { put, call } from "redux-saga/effects";
+import ApiConstants from "../../../themes/apiConstants";
+import AxiosApi from "../../http/registrationHttp/registrationAxios";
 import { message } from "antd";
+
 function* failSaga(result) {
     yield put({
-        type: ApiConstants.API_LIVE_SCORE_TEAM_ATTENDANCE_FAIL,
+        type: ApiConstants.API_USERCOUNT_FAIL,
         error: result,
         status: result.status
     });
@@ -15,26 +16,27 @@ function* failSaga(result) {
 
 function* errorSaga(error) {
     yield put({
-        type: ApiConstants.API_LIVE_SCORE_TEAM_ATTENDANCE_ERROR,
+        type: ApiConstants.API_USERCOUNT_ERROR,
         error: error,
         status: error.status
     });
+
     setTimeout(() => {
+        // message.error(error.result.data.message);
         message.error("Something went wrong.");
     }, 800);
 }
 
-export function* liveScoreTeamAttendanceListSaga(action) {
+//////get the membership fee list in registration
+export function* homeDashboardSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreAttendanceList, action.competitionId, action.body, action.select_status);
-
+        const result = yield call(AxiosApi.homeDashboardApi, action.year);
         if (result.status === 1) {
             yield put({
-                type: ApiConstants.API_LIVE_SCORE_TEAM_ATTENDANCE_LIST_SUCCESS,
+                type: ApiConstants.API_USERCOUNT_SUCCESS,
                 result: result.result.data,
-                status: result.status,
+                status: result.status
             });
-
         } else {
             yield call(failSaga, result)
         }
@@ -42,3 +44,4 @@ export function* liveScoreTeamAttendanceListSaga(action) {
         yield call(errorSaga, error)
     }
 }
+

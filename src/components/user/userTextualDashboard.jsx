@@ -186,7 +186,7 @@ class UserTextualDashboard extends Component{
                 <div className="row" >
                     <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
                         <Breadcrumb separator=" > ">
-                            < Breadcrumb.Item className="breadcrumb-add">{AppConstants.textualDashboard}</Breadcrumb.Item>
+                            < Breadcrumb.Item className="breadcrumb-add">{AppConstants.userProfile}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                 </div>

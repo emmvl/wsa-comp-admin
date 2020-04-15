@@ -9,6 +9,14 @@ const initialState = {
     liveScoreLadderListData: [],
 };
 
+function createLadderRank(array){
+    for(let i in array){
+        array[i]["rank"] = JSON.parse(i)+1   
+    }
+    return array
+}
+
+
 function liveScoreLaddersReducer(state = initialState, action) {
 
     switch (action.type) {
@@ -49,10 +57,12 @@ function liveScoreLaddersReducer(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_LADDERS_LIST_LOAD:
             return { ...state, onLoad: true };
         case ApiConstants.API_LIVE_SCORE_LADDERS_LIST_SUCCESS:
+           
+            let ladder_List = createLadderRank(action.result)
             return {
                 ...state,
                 onLoad: false,
-                liveScoreLadderListData: action.result
+                liveScoreLadderListData:ladder_List
             };
 
         case ApiConstants.API_LIVE_SCORE_LADDERS_LIST_FAIL:

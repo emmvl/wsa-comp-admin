@@ -702,7 +702,7 @@ function CompetitionDraws(state = initialState, action) {
       };
 
     case ApiConstants.cleardrawsData:
-      state.getDrawsData = []
+      state.getStaticDrawsData = []
       state.dateArray = []
       if (action.key == "round") {
         state.competitionVenues = []

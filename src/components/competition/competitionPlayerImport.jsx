@@ -163,6 +163,9 @@ class CompetitionPlayerImport extends Component {
                                 {AppConstants.upload}
                             </Button>
                         </div>
+                        {/* <div className="reg-add-save-button">
+                            <Link to="/templates/wsa_import_player.csv" target="_blank" download>Download</Link>
+                        </div> */}
                     </div>
                 </div>
             </div>

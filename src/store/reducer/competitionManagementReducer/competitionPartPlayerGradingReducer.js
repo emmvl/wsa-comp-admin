@@ -48,6 +48,16 @@ function unassignedListDataFormation(data, ) {
 
 
 function updatedAssignData(assignArr, source, destination) {
+    let match_Index = assignArr.findIndex(x => x.teamId == null)
+    if (match_Index == -1) {
+        let unassignedPartPlayerGradingList = {
+            teamId: null,
+            teamName: "Unassigned",
+            playerCount: 0,
+            players: []
+        }
+        assignArr.push(unassignedPartPlayerGradingList)
+    }
     let sourceTeam = source.droppableId == 0 ? null : JSON.parse(source.droppableId)
     let destinationTeam = destination.droppableId == 0 ? null : JSON.parse(destination.droppableId)
     let swapPlayer
@@ -227,17 +237,6 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             state.assignedPartPlayerGradingListData = assignedPLayerSameTeam.updatedplayerAssignData.assignedPartPlayerGradingListData
             return { ...state }
 
-        case ApiConstants.API_COMPETITION_PLAYER_IMPORT_LOAD:
-            return { ...state, onLoad: true };
-
-        case ApiConstants.API_COMPETITION_PLAYER_IMPORT_SUCCESS:
-            let res = action.result;
-            console.log("*****" + JSON.stringify(res))
-            return {
-                ...state,
-                playerImportData: res.data,
-                onLoad: false,
-            }
 
         case ApiConstants.API_PLAYER_GRADING_COMMENT_LOAD:
             return {
@@ -278,7 +277,18 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             return {
                 ...state,
             }
+        case ApiConstants.API_COMPETITION_PLAYER_IMPORT_LOAD:
+            return { ...state, onLoad: true };
 
+        case ApiConstants.API_COMPETITION_PLAYER_IMPORT_SUCCESS:
+            let res = action.result;
+            console.log("*****" + JSON.stringify(res))
+            return {
+                ...state,
+                playerImportData: res.data,
+                onLoad: false,
+            }
+    
         default:
             return state;
     }

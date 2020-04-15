@@ -11,6 +11,7 @@ const AppConstants = {
   venueAndCourts: "Venues & Courts",
   graphicalDashboard: "Graphical Display",
   textualDashboard: "Textual Display",
+  userProfile: "User Profile",
   affiliates: "Affiliates",
   affiliateApproveReject: "Affiliate - Approve / Reject",
   current: "Current",
@@ -593,7 +594,6 @@ const AppConstants = {
   addManager: "Add Manager",
   importManager: "Import Manager",
   upload: "Upload",
-  proceed: "Skip and Proceed",
   aboutManager: "About Manager",
   managerProfile: "Manager Profile",
   emailAddress: "email@gmail.com",
@@ -607,9 +607,7 @@ const AppConstants = {
   aboutScorer: "About Scorer",
   importMatch: "Import Match",
   fileInput: "File input",
-  invalidPlayers: "Invalid Records",
   importTeam: "Import Team",
-  importPlayer: "Import Player",
   exampleBlock: "Example block-level help text here.",
   noImage: "No Image",
   homeTeamFinalScore: "Home Team Final Score",
@@ -920,7 +918,16 @@ const AppConstants = {
   add_edit_comment: "Add/Edit Comment",
   addYourComment: "Please add your comment.",
   fixedDuration: "Fixed Duration",
-  specificTime: "Specific Time"
+  specificTime: "Specific Time",
+  selectOrganisation: "Select Organisation",
+
+
+  goalExport: "/stats/export/scoringByPlayer?competitionId=",
+  gameTimeExport: "/stats/export/gametime?competitionId=",
+  teamAttendaneExport: "/players/export/teamattendance?competitionId=",
+  proceed: "Skip and Proceed",
+  invalidPlayers: "Invalid Records",
+  importPlayer: "Import Player",
 };
 
 export default AppConstants;

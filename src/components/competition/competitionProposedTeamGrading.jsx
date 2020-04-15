@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Form, Button, Table, Select, Tag, Input, message } from 'antd';
+import { Layout, Breadcrumb, Form, Button, Table, Select, Tag, Input, message, Tooltip } from 'antd';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import CommentModal from "../../customComponents/commentModal";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -17,7 +17,8 @@ import {
     saveOwnFinalTeamGradingDataAction,
     clearTeamGradingReducerDataAction,
     getCompFinalGradesListAction,
-    teamGradingCommentAction
+    teamGradingCommentAction,
+    changeHistoryHover
 } from "../../store/actions/competitionModuleAction/competitionTeamGradingAction";
 import { gradesReferenceListAction } from "../../store/actions/commonAction/commonAction";
 import {
@@ -27,6 +28,7 @@ import {
     getOwn_competition
 } from "../../util/sessionStorage"
 import ValidationConstants from "../../themes/validationConstant";
+import { Record } from "immutable";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -90,13 +92,27 @@ const columns = [
         title: 'History',
         dataIndex: 'playerHistory',
         key: 'playerHistory',
-        render: playerHistory => (
+        render: (playerHistory, record, key) => (
             <span>
-                {playerHistory.map(item => (
+                {playerHistory.map((item, index) => (
                     // item.teamText ?
-                    <Tag className="comp-player-table-tag" key={"playerHistory" + item.historyTeamId}>
-                        {item.teamText}
-                    </Tag>
+                    <Tooltip
+                        className="comp-player-table-tag2"
+                        style={{ height: "100%" }}
+                        onMouseEnter={() => this_obj.changeHover(item, key, index, true)}
+                        onMouseLeave={() => this_obj.changeHover(item, key, index, false)}
+                        visible={item.hoverVisible}
+
+                        title={item.playerName}>
+                        <NavLink to={{ pathname: `/userPersonal`, state: { userId: item.userId } }}
+                        >
+                            <Tag className="comp-player-table-tag" style={{ cursor: "pointer" }} key={item.historyTeamId}
+                            >
+                                {item.teamText}
+                            </Tag>
+                        </NavLink>
+                    </Tooltip>
+                    // </a>
                     // : null
                 ))}
             </span>
@@ -138,7 +154,7 @@ const columns = [
         key: 'comments',
         width: 110,
         render: (comments, record) =>
-            <div style={{ display: "flex", justifyContent: "center" ,cursor: "pointer"}} onClick={() => this_obj.onClickComment(record)}>
+            <div style={{ display: "flex", justifyContent: "center", cursor: "pointer" }} onClick={() => this_obj.onClickComment(record)}>
                 <img src={comments !== null && comments.length > 0 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
             </div>,
     },
@@ -159,6 +175,7 @@ class CompetitionProposedTeamGrading extends Component {
             visible: false,
             comment: null,
             teamId: null,
+            tooltipVisibleDraft: false
         }
         this_obj = this
         this.props.clearTeamGradingReducerDataAction("finalTeamGrading")
@@ -168,6 +185,11 @@ class CompetitionProposedTeamGrading extends Component {
 
     onClickComment(record) {
         this.setState({ visible: true, comment: record.comments, teamId: record.teamId })
+    }
+
+    changeHover(record, index, historyIndex, key) {
+        this.props.changeHistoryHover(record, index, historyIndex, key)
+
     }
 
     handleOk = e => {
@@ -386,7 +408,7 @@ class CompetitionProposedTeamGrading extends Component {
                                 <Select
                                     style={{ minWidth: 160 }}
                                     className="year-select"
-                                    
+
                                     onChange={competitionId => this.onCompetitionChange(competitionId)}
                                     value={this.state.firstTimeCompId}
                                 >
@@ -546,7 +568,8 @@ function mapDispatchToProps(dispatch) {
         clearReducerDataAction,
         clearYearCompetitionAction,
         getCompFinalGradesListAction,
-        teamGradingCommentAction
+        teamGradingCommentAction,
+        changeHistoryHover
     }, dispatch)
 }
 

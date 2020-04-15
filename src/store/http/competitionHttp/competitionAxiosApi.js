@@ -310,17 +310,6 @@ let CompetitionAxiosApi = {
         var url = `/api/generatedraw?userId=${userId}`;
         return Method.dataPost(url, token, payload);
     },
-    async importCompetitionPlayer(payload) {
-        let body = new FormData();
-        // body.append('file', new File([data.csvFile], { type: 'text/csv' }));
-        body.append("file", payload.csvFile, payload.csvFile.name);
-        body.append("competitionUniqueKey", payload.competitionUniqueKey);
-        body.append("organisationId", payload.organisationUniqueKey);
-        body.append("competitionMembershipProductDivisionId", payload.competitionMembershipProductDivisionId);
-        body.append("isProceed",payload.isProceed);
-        var url = `/api/create/player`;
-        return Method.dataPost(url, token, body)
-    },
 
     //player grading comment 
     async playerGradingComment(competitionId, divisionId, comment, playerId) {
@@ -386,6 +375,19 @@ let CompetitionAxiosApi = {
         var url = `/api/proposedteamgrading/comment?userId=${userId}`;
         return Method.dataPost(url, token, body);
     },
+
+    async importCompetitionPlayer(payload) {
+        let body = new FormData();
+        // body.append('file', new File([data.csvFile], { type: 'text/csv' }));
+        body.append("file", payload.csvFile, payload.csvFile.name);
+        body.append("competitionUniqueKey", payload.competitionUniqueKey);
+        body.append("organisationId", payload.organisationUniqueKey);
+        body.append("competitionMembershipProductDivisionId", payload.competitionMembershipProductDivisionId);
+        body.append("isProceed",payload.isProceed);
+        var url = `/api/create/player`;
+        return Method.dataPost(url, token, body)
+    },
+
 
 };
 

@@ -10,7 +10,7 @@ import { liveScoreLaddersListAction } from '../../store/actions/LiveScoreAction/
 import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { isArrayNotEmpty } from '../../util/helpers'
-import { getLiveScoreDivisionList, liveScoreDeleteDivision } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction'
+import { getLiveScoreDivisionList } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction'
 const { Content } = Layout;
 const { Option } = Select;
 
@@ -31,13 +31,13 @@ const columns = [
         title: 'Rank',
         dataIndex: 'rank',
         key: 'rank',
-        sorter: (a, b) => tableSort(a,b, "rank"),
+        sorter: (a, b) => tableSort(a, b, "rank"),
     },
     {
         title: 'Team',
         dataIndex: 'name',
         key: 'name',
-        sorter: (a, b) => tableSort(a,b, "name"),
+        sorter: (a, b) => tableSort(a, b, "name"),
 
     },
 
@@ -45,14 +45,14 @@ const columns = [
         title: 'P',
         dataIndex: 'P',
         key: 'P',
-        sorter: (a, b) => tableSort(a,b, "P"),
+        sorter: (a, b) => tableSort(a, b, "P"),
 
     },
     {
         title: 'W',
         dataIndex: 'W',
         key: 'W',
-        sorter: (a, b) => tableSort(a,b, "W"),
+        sorter: (a, b) => tableSort(a, b, "W"),
 
 
     },
@@ -60,13 +60,13 @@ const columns = [
         title: 'L',
         dataIndex: 'L',
         key: 'L',
-        sorter: (a, b) => tableSort(a,b, "L"),
+        sorter: (a, b) => tableSort(a, b, "L"),
     },
     {
         title: 'D',
         dataIndex: 'D',
         key: 'D',
-        sorter: (a, b) => tableSort(a,b, "D"),
+        sorter: (a, b) => tableSort(a, b, "D"),
 
 
     },
@@ -74,27 +74,27 @@ const columns = [
         title: 'FW',
         dataIndex: 'FW',
         key: 'FW',
-        sorter: (a, b) => tableSort(a,b, "FW"),
+        sorter: (a, b) => tableSort(a, b, "FW"),
 
     },
     {
         title: 'FL',
         dataIndex: 'FL',
         key: 'FL',
-        sorter: (a, b) => tableSort(a,b, "FL"),
+        sorter: (a, b) => tableSort(a, b, "FL"),
 
     },
     {
         title: 'F',
         dataIndex: 'F',
         key: 'F',
-        sorter: (a, b) => tableSort(a,b, "F"),
+        sorter: (a, b) => tableSort(a, b, "F"),
     },
     {
         title: 'A',
         dataIndex: 'A',
         key: 'A',
-        sorter: (a, b) => tableSort(a,b, "A"),
+        sorter: (a, b) => tableSort(a, b, "A"),
 
 
     },
@@ -102,24 +102,25 @@ const columns = [
         title: 'PTS',
         dataIndex: 'PTS',
         key: 'PTS',
-        sorter: (a, b) => tableSort(a,b, "PTS"),
+        sorter: (a, b) => tableSort(a, b, "PTS"),
     },
     {
         title: '%',
         dataIndex: 'SMR',
         key: 'SMR',
-        sorter: (a, b) => tableSort(a,b, "SMR"),
+        sorter: (a, b) => tableSort(a, b, "SMR"),
         render: (SMR) => <span>{(JSON.parse(SMR) * 100).toFixed(2) + "%"}</span>
     },
 ];
 
 
-class LiveScoreLadderList extends Component {
+class LiveScorePublicLadder extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            division: "11A",
-            loadding:false
+            division: "",
+            loadding: false,
+            competitionId: null
         }
     }
 
@@ -139,28 +140,31 @@ class LiveScoreLadderList extends Component {
     }
 
     componentDidMount() {
-        // let competitionID = getCompetitonId()
-        const { id } = JSON.parse(getLiveScoreCompetiton())
+        this.setState({ loadding: true })
+        this.getCompDetails().then((res) => {
+           
+            let resp = res? JSON.parse(res) : null
+     
+            let compId = resp ? resp.id : 1
+            this.setState({ competitionId: compId })
+            this.props.getLiveScoreDivisionList(compId)
+           
+        })
 
-        if (id !== null) {
-            // this.props.getliveScoreDivisions(competitionID);
-            // this.props.getliveScoreDivisions(id);
-            this.setState({loadding : true})
-            this.props.getLiveScoreDivisionList(id)
-            
-        } else {
-            history.push('/')
-        }
     }
 
-    componentDidUpdate(nextProps){
-        if(nextProps.liveScoreLadderState.liveScoreLadderDivisionData !== this.props.liveScoreLadderState.liveScoreLadderDivisionData){
-            if(this.state.loadding == true && this.props.liveScoreLadderState.onLoad == false){
-                const { id } = JSON.parse(getLiveScoreCompetiton())
+    async getCompDetails() {
+        let compDetails = await getLiveScoreCompetiton()
+        return compDetails
+    }
+
+    componentDidUpdate(nextProps) {
+        if (nextProps.liveScoreLadderState.liveScoreLadderDivisionData !== this.props.liveScoreLadderState.liveScoreLadderDivisionData) {
+            if (this.state.loadding == true && this.props.liveScoreLadderState.onLoad == false) {
                 let divisionArray = this.props.liveScoreLadderState.liveScoreLadderDivisionData
-                let divisionId  = isArrayNotEmpty(divisionArray)? divisionArray[0].id : null
-                this.props.liveScoreLaddersListAction(id, divisionId)
-                this.setState({loadding : false})
+                let divisionId = isArrayNotEmpty(divisionArray) ? divisionArray[0].id : null
+                this.props.liveScoreLaddersListAction(this.state.competitionId, divisionId)
+                this.setState({ loadding: false })
             }
         }
     }
@@ -168,19 +172,13 @@ class LiveScoreLadderList extends Component {
 
 
     divisionChange = (value) => {
-
-        // let competitionID = getCompetitonId()
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        // this.props.liveScoreLaddersListAction(competitionID, value.division)
-        this.props.liveScoreLaddersListAction(id, value.division)
+        this.props.liveScoreLaddersListAction(this.state.competitionId, value.division)
     }
     ///dropdown view containing dropdown
     dropdownView = () => {
         const { liveScoreLadderState } = this.props;
-        console.log(liveScoreLadderState)
-        // let grade = liveScoreLadderState.liveScoreLadderDivisionData !== [] ? liveScoreLadderState.liveScoreLadderDivisionData : []
         let grade = isArrayNotEmpty(liveScoreLadderState.liveScoreLadderDivisionData) ? liveScoreLadderState.liveScoreLadderDivisionData : []
-    
+
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <span className='year-select-heading'>{AppConstants.filterByDivision}:</span>
@@ -211,14 +209,6 @@ class LiveScoreLadderList extends Component {
                     <Table loading={this.props.liveScoreLadderState.onLoad == true ? true : false} className="home-dashboard-table" columns={columns} dataSource={DATA} pagination={false}
                     />
                 </div>
-                {/* <div className="d-flex justify-content-end">
-                    <Pagination
-                        className="antd-pagination"
-                        defaultCurrent={1}
-                        total={8}
-                    // onChange={this.handleTableChange}
-                    />
-                </div> */}
             </div>
         )
     }
@@ -226,8 +216,12 @@ class LiveScoreLadderList extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"11"} />
+                <DashboardLayout 
+                    menuHeading={AppConstants.liveScores} 
+                    isManuNotVisible = {true}
+                // menuName={AppConstants.liveScores}
+                 />
+                {/* <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"11"} /> */}
                 <Layout>
                     {this.headerView()}
                     <Content>
@@ -250,4 +244,4 @@ function mapStatetoProps(state) {
         liveScoreLadderState: state.LiveScoreLadderState
     }
 }
-export default connect(mapStatetoProps, mapDispatchtoprops)((LiveScoreLadderList));
+export default connect(mapStatetoProps, mapDispatchtoprops)((LiveScorePublicLadder));

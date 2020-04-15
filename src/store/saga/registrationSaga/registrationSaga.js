@@ -2,6 +2,7 @@ import { put, call } from "redux-saga/effects";
 import ApiConstants from "../../../themes/apiConstants";
 import AxiosApi from "../../http/registrationHttp/registrationAxios";
 import { message } from "antd";
+import history from "../../../util/history";
 
 function* failSaga(result) {
   yield put({
@@ -230,6 +231,7 @@ export function* regSaveRegistrationForm(action) {
         status: result.status,
         payload: action.payload
       });
+      history.push("/registrationFormList")
       message.success(result.result.data.message);
     } else {
       yield call(failSaga, result)

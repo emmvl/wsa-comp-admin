@@ -20,24 +20,25 @@ const initialState = {
     result: [],
     status: 0,
     playerData: playerObj,
-    playerDataArr: []
+    playerDataArr: [],
+    totalCount:null
 };
 function LiveScorePlayerState(state = initialState, action) {
     switch (action.type) {
         ////live score player list
-        case ApiConstants.API_LIVE_SCORE_PLAYER_LIST_LOAD:
-            return { ...state, onLoad: true };
+        // case ApiConstants.API_LIVE_SCORE_PLAYER_LIST_LOAD:
+        //     return { ...state, onLoad: true };
 
-        case ApiConstants.API_LIVE_SCORE_PLAYER_LIST_SUCCESS:
+        // case ApiConstants.API_LIVE_SCORE_PLAYER_LIST_SUCCESS:
 
-            var playerListResult = liveScoreModal.getPlayerListData(action.result)
+        //     var playerListResult = liveScoreModal.getPlayerListData(action.result)
 
-            return {
-                ...state,
-                onLoad: false,
-                result: playerListResult,
-                status: action.status
-            };
+        //     return {
+        //         ...state,
+        //         onLoad: false,
+        //         result: playerListResult,
+        //         status: action.status
+        //     };
 
         //// Update player data
         case ApiConstants.API_LIVE_SCORE_UPDATE_PLAYER:
@@ -101,6 +102,19 @@ function LiveScorePlayerState(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 error: action.error,
+                status: action.status
+            };
+
+        case ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_SUCCESS:
+            var playerListResult = liveScoreModal.getPlayerListData(action.result.players)
+            state.totalCount = action.result.page.totalCount
+            return {
+                ...state,
+                onLoad: false,
+                result: playerListResult,
                 status: action.status
             };
 

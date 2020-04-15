@@ -56,7 +56,7 @@ import AppRegistrationForm from "../components/registration/appRegistrationForm"
 import NotFound from "./404";
 import RegistrationMembershipList from "../components/registration/registrationMembershipList";
 import RegistrationCompetitionList from "../components/registration/registrationCompetitionList";
-import RegistrationFormList from "../components/registration/registrationFormList";
+import RegistrationFormList from "../components/registration/registrationFormList"
 import CompetitionPlayerImport from "../components/competition/competitionPlayerImport";
 
 /////
@@ -104,6 +104,7 @@ import userModuleMedical from "../components/user/userModuleMedical";
 import LiveScoreAssignMatch from "../components/liveScore/liveScoreAssignMatches"
 import LiveScoreVenueChange from '../components/liveScore/liveScoreVenueChange'
 import LiveScoreIncidentImport from '../components/liveScore/liveScoreIncidentImport'
+import LiveScorePublicLadder from '../components/liveScore/liveScorePublicLadder'
 
 const lazyLoad = Component => {
   const lazy = props => {
@@ -537,13 +538,20 @@ class Routes extends React.Component {
           path="/liveScoreVenueChange"
           component={lazyLoad(LiveScoreVenueChange)}
         />
-        <PrivateRoute path="/registrationFormList" component={lazyLoad(RegistrationFormList)} />
+        <PrivateRoute
+          path="/registrationFormList"
+          component={lazyLoad(RegistrationFormList)} />
+
         <PrivateRoute
           path="/liveScoreIncidentImport"
           component={lazyLoad(LiveScoreIncidentImport)}
         />
 
         <PrivateRoute
+          path="/liveScorePublicLadder"
+          component={lazyLoad(LiveScorePublicLadder)}
+        />
+                <PrivateRoute
           path="/competitionPlayerImport"
           component={lazyLoad(CompetitionPlayerImport)}
         />

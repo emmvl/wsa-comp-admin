@@ -618,6 +618,7 @@ function registration(state = initialState, action) {
       return { ...state, onLoad: true, error: null };
 
     case ApiConstants.API_REG_FORM_SUCCESS:
+      state.registrationFormData = [action.payload]
       return {
         ...state,
         onLoad: false,
@@ -1023,6 +1024,14 @@ function registration(state = initialState, action) {
       }
       if (action.keyword == "isMemebershipType") {
         state.getDefaultMembershipProductTypes[action.index].isMemebershipType = action.checkedValue
+      }
+      if (action.keyword == "isPlaying") {
+        if (action.checkedValue == true) {
+          state.getDefaultMembershipProductTypes[action.index].isPlaying = 1
+        }
+        else {
+          state.getDefaultMembershipProductTypes[action.index].isPlaying = 0
+        }
       }
 
       return {

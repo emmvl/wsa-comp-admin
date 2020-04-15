@@ -167,3 +167,23 @@ export function* liveScoreGetTeamSaga(action) {
         yield call(errorSaga, error)
     }
 }
+/// Team list with pagging
+
+export function* liveScoreTeamPaggingSaga(action) {
+    try {
+        const result = yield call(LiveScoreAxiosApi.getTeamWithPagging, action.competitionID, action.offset, action.limit, action.search);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_LIVE_SCORE_TEAM_WITH_PAGGING_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+

@@ -61,8 +61,8 @@ const initialState = {
     selectedManager: [],
     teamLogo: null,
     managerList: [],
-    isCheked: false
-
+    isCheked: false,
+    totalTeams: null
 };
 
 function getManagerId(managerData) {
@@ -106,20 +106,20 @@ function LiveScoreTeamState(state = initialState, action) {
                 onLoad_2: false,
             };
 
-        case ApiConstants.API_LIVE_SCORE_TEAM_LOAD:
-            return { ...state, onLoad: true };
+        // case ApiConstants.API_LIVE_SCORE_TEAM_LOAD:
+        //     return { ...state, onLoad: true };
 
-        case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
+        // case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
 
-            const result = action.result
+        //     const result = action.result
 
-            return {
-                ...state,
-                onLoad: false,
-                teamResult: result,
-                status: action.status
+        //     return {
+        //         ...state,
+        //         onLoad: false,
+        //         teamResult: result,
+        //         status: action.status
 
-            }
+        //     }
 
         case ApiConstants.API_LIVE_SCORE_TEAM_FAIL:
             return {
@@ -159,6 +159,21 @@ function LiveScoreTeamState(state = initialState, action) {
                 state.teamLogo = null
                 state.managerType = null
                 state.teamManagerData['alias'] = ""
+
+                let obj = {
+                    name: "",
+                    alias: "",
+                    logoUrl: null,
+                    divisionId: null,
+                    organisationId: null,
+                    userIds: [],
+                    firstName: '',
+                    lastName: '',
+                    mobileNumber: "",
+                    email: '',
+                }
+
+                state.teamManagerData = obj
             } else if (key == "logoUrl") {
 
                 state.teamManagerData['logoUrl'] = data
@@ -270,6 +285,21 @@ function LiveScoreTeamState(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
+            }
+
+        case ApiConstants.API_LIVE_SCORE_TEAM_WITH_PAGGING_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_LIVE_SCORE_TEAM_WITH_PAGGING_SUCCESS:
+
+            const result = action.result.teams
+            state.totalTeams = action.result.page.page.totalCount
+            return {
+                ...state,
+                onLoad: false,
+                teamResult: result,
+                status: action.status
+
             }
 
         default:

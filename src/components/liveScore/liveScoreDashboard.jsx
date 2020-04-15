@@ -6,7 +6,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { liveScorePlayerListAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
+import { liveScoreDashboardListAction } from '../../store/actions/LiveScoreAction/liveScoreDashboardAction'
 import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { liveScore_formateDate } from '../../themes/dateformate'
@@ -332,7 +332,7 @@ class LiveScoreDashboard extends Component {
        
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
-            this.props.liveScorePlayerListAction(id, startDay, currentTime)
+            this.props.liveScoreDashboardListAction(id, startDay, currentTime)
         } else {
             history.push('/')
         }
@@ -498,7 +498,7 @@ class LiveScoreDashboard extends Component {
     }
 }
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScorePlayerListAction }, dispatch)
+    return bindActionCreators({ liveScoreDashboardListAction }, dispatch)
 }
 
 function mapStateToProps(state) {

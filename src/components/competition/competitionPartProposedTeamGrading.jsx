@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Input, Button, Table, Select, Tag, Form } from 'antd';
+import { Layout, Breadcrumb, Input, Button, Table, Select, Tag, Form, Tooltip } from 'antd';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -13,8 +13,10 @@ import {
     savePartProposedTeamGradingDataAction,
     clearTeamGradingReducerDataAction,
     onchangeCompPartProposedTeamGradingData,
-    partProposedSummaryComment
+    partProposedSummaryComment,
+    changeProposedHistoryHover
 } from "../../store/actions/competitionModuleAction/competitionTeamGradingAction";
+import { NavLink } from 'react-router-dom';
 import { gradesReferenceListAction } from "../../store/actions/commonAction/commonAction";
 import {
     setParticipatingYear,
@@ -60,14 +62,24 @@ const columns = [
         title: 'History',
         dataIndex: 'playerHistory',
         key: 'playerHistory',
-        render: playerHistory => (
+        render: (playerHistory, record, key) => (
             <span>
-                {playerHistory.map(item => (
-                    // item.teamText ?
-                    <Tag className="comp-player-table-tag" key={item}>
-                        {item.teamText}
-                    </Tag>
-                    // : null
+                {playerHistory.map((item, index) => (
+                    <Tooltip
+                        className="comp-player-table-tag2"
+                        style={{ height: "100%" }}
+                        onMouseEnter={() => this_obj.changeHover(item, key, index, true)}
+                        onMouseLeave={() => this_obj.changeHover(item, key, index, false)}
+                        visible={item.hoverVisible}
+
+                        title={item.playerName}>
+                        <NavLink to={{ pathname: `/userPersonal`, state: { userId: item.userId } }}
+                        >
+                            <Tag className="comp-player-table-tag" style={{ cursor: "pointer" }} key={item}>
+                                {item.teamText}
+                            </Tag>
+                        </NavLink>
+                    </Tooltip>
                 ))}
             </span>
         ),
@@ -101,7 +113,7 @@ const columns = [
         key: 'comments',
         width: 110,
         render: (comments, record) =>
-            <div style={{ display: "flex", justifyContent: "center",cursor: "pointer" }} onClick={() => this_obj.onClickComment(record)}>
+            <div style={{ display: "flex", justifyContent: "center", cursor: "pointer" }} onClick={() => this_obj.onClickComment(record)}>
                 <img src={comments !== null && comments.length > 0 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
             </div>,
     },
@@ -151,6 +163,12 @@ class CompetitionPartProposedTeamGrading extends Component {
             this.props.getCompPartProposedTeamGradingAction(this.state.yearRefId, this.state.firstTimeCompId, this.state.divisionId)
             this.setState({ saveLoad: false })
         }
+
+    }
+
+
+    changeHover(record, index, historyIndex, key) {
+        this.props.changeProposedHistoryHover(record, index, historyIndex, key)
 
     }
 
@@ -432,7 +450,8 @@ function mapDispatchToProps(dispatch) {
         clearTeamGradingReducerDataAction,
         clearReducerDataAction,
         onchangeCompPartProposedTeamGradingData,
-        partProposedSummaryComment
+        partProposedSummaryComment,
+        changeProposedHistoryHover
     }, dispatch)
 }
 

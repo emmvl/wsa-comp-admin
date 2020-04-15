@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Pagination, Spin, Alert } from 'antd';
+import { Input, Icon, Layout, Button, Table, Pagination, Spin, Alert } from 'antd';
 import './liveScore.css';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import { liveScorePlayerListAction } from "../../store/actions/LiveScoreAction/liveScorePlayerAction"
+import { playerListWithPagginationAction } from "../../store/actions/LiveScoreAction/liveScorePlayerAction"
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment'
@@ -85,11 +85,11 @@ const columns = [
         key: 'team',
         sorter: (a, b) => a.team.length - b.team.length,
         render: (team, record) =>
-        <NavLink to={{
-            pathname: "/liveScoreTeamView",
-            state: { tableRecord: record, screenName: 'fromPlayerList' }
-        }} > 
-            <span class="input-heading-add-another pt-0" >{team.name}</span>
+            <NavLink to={{
+                pathname: "/liveScoreTeamView",
+                state: { tableRecord: record, screenName: 'fromPlayerList' }
+            }} >
+                <span class="input-heading-add-another pt-0" >{team.name}</span>
             </NavLink>
     },
     {
@@ -105,23 +105,34 @@ const columns = [
 class LiveScorePlayerList extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            competitionid: null,
+            searchText:""
+        }
     }
 
     componentDidMount() {
-        // let competitionId = 
         const { id } = JSON.parse(getLiveScoreCompetiton())
+        this.setState({ competitionid: id })
         if (id !== null) {
-            this.props.liveScorePlayerListAction(id)
+            this.props.playerListWithPagginationAction(id, 0, 10)
         } else {
             history.push('/')
         }
 
     }
 
+
+    /// Handle Page change
+    handlePageChnage(page) {
+        let offset = page ? 10 * (page - 1) : 0;
+        this.props.playerListWithPagginationAction(this.state.competitionid, offset, 10)
+
+    }
+
     ////////form content view
     contentView = () => {
-        let { result } = this.props.liveScorePlayerState
-
+        let { result, totalCount } = this.props.liveScorePlayerState
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
@@ -141,9 +152,9 @@ class LiveScorePlayerList extends Component {
                     <div className="d-flex justify-content-end">
                         <Pagination
                             className="antd-pagination"
-                            defaultCurrent={3}
-                            total={8}
-                        // onChange={this.handleTableChange}
+                            defaultCurrent={1}
+                            total={totalCount}
+                            onChange={(page) => this.handlePageChnage(page)}
                         />
                     </div>
                 </div>
@@ -151,6 +162,30 @@ class LiveScorePlayerList extends Component {
         )
     }
 
+    // on change search text
+    onChangeSearchText = (e) => {
+        this.setState({ searchText: e.target.value })
+        if (e.target.value == null || e.target.value == "") {
+            this.props.playerListWithPagginationAction(this.state.competitionid, 0, 10,  e.target.value)
+        }
+    }
+
+    // search key 
+    onKeyEnterSearchText = (e) => {
+        var code = e.keyCode || e.which;
+        if (code === 13) { //13 is the enter keycode
+            this.props.playerListWithPagginationAction(this.state.competitionid, 0, 10,  this.state.searchText)
+        }
+    }
+
+    // on click of search icon
+    onClickSearchIcon = () => {
+        if (this.state.searchText == null || this.state.searchText == "") {
+        }
+        else {
+            this.props.playerListWithPagginationAction(this.state.competitionid, 0, 10,  this.state.searchText)
+        }
+    }
     ///////view for breadcrumb
     headerView = () => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
@@ -172,6 +207,19 @@ class LiveScorePlayerList extends Component {
                                 justifyContent: "flex-end"
                             }}>
                             <div className="row">
+                                <div style={{ marginRight: "25px", display: "flex", alignItems: 'center' }} >
+                                    <div className="comp-product-search-inp-width" >
+                                        <Input className="product-reg-search-input"
+                                            onChange={(e) => this.onChangeSearchText(e)}
+                                            placeholder="Search..."
+                                            onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                            prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                                onClick={() => this.onClickSearchIcon()}
+                                            />}
+                                            allowClear
+                                        />
+                                    </div>
+                                </div>
                                 <div className="col-sm">
                                     <div
                                         className="comp-dashboard-botton-view-mobile"
@@ -265,7 +313,7 @@ class LiveScorePlayerList extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"7"} />
                 <Layout>
                     {this.headerView()}
@@ -279,7 +327,7 @@ class LiveScorePlayerList extends Component {
     }
 }
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScorePlayerListAction }, dispatch)
+    return bindActionCreators({ playerListWithPagginationAction }, dispatch)
 }
 
 function mapStatetoProps(state) {

@@ -387,12 +387,9 @@ class LiveScoreAddNews extends Component {
     contentView = (getFieldDecorator) => {
         const { liveScoreNewsState } = this.props;
         let editData = liveScoreNewsState.addEditNews;
-        let expiryDate = liveScoreNewsState.expire_date
+        let expiryDate = liveScoreNewsState.news_expire_date
         let expiryTime = liveScoreNewsState.expire_time
-
         let expiryTime_formate = expiryTime ? moment(expiryTime).format("HH:mm") : null;
-
-
         return (
             <div className="content-view pt-4">
                 <Form.Item >
@@ -504,10 +501,8 @@ class LiveScoreAddNews extends Component {
                         <DatePicker
                             size="large"
                             style={{ width: "100%" }}
-                            // onChange={(date) => this.props.liveScoreUpdateNewsAction(moment(date).format('MM/DD/YYYY'), "expire_date")}
                             onChange={(date) => this.props.liveScoreUpdateNewsAction(date, "expire_date")}
                             format={"DD-MM-YYYY"}
-                            // value={editData.news_expire_date ? moment(editData.news_expire_date) : editData.expire_date}
                             value={expiryDate ? moment(expiryDate) : ''}
                             showTime={false}
                             placeholder='Select Date'
@@ -521,17 +516,10 @@ class LiveScoreAddNews extends Component {
                             className="comp-venue-time-timepicker"
                             style={{ width: "100%" }}
                             format={"HH:mm"}
-                            // onChange={(time) => time !== null && this.props.liveScoreUpdateNewsAction(time.format('HH:mm'), "expire_time")}
                             value={expiryTime_formate !== null && moment(expiryTime_formate, "HH:mm")}
-
-
                             onChange={(time) => this.props.liveScoreUpdateNewsAction(time, "expire_time")}
-
-                            // value={editData.news_expire_date ? moment(editData.news_expire_date, 'HH:mm') : editData.expire_time}
-
-                            // minuteStep={15}
                             placeholder='Select Time'
-                        // use12Hours={true}
+                        
                         />
                     </div>
                 </div>
@@ -541,7 +529,6 @@ class LiveScoreAddNews extends Component {
 
     onSaveButton = (e) => {
         let newsId = this.props.location.state ? this.props.location.state.item ? this.props.location.state.item.id ? this.props.location.state.item.id : null : null : null
-        // let newsId = null
         let mediaArry = []
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -564,23 +551,29 @@ class LiveScoreAddNews extends Component {
                 }
                 const { liveScoreNewsState } = this.props;
 
-
+                
 
                 let data = liveScoreNewsState
 
+                
                 if (data.newExpiryDate && data.expire_time) {
+
+                    let expiry__Date =  data.news_expire_date
+
+
+
                     let experyDate = moment(data.newExpiryDate).format("YYYY-MM-DD")
+                    let expiryTime = moment(data.expire_time).format("HH:mm")
 
-                    let expiryTime = moment.utc(data.expire_time).format("HH:mm")
+                    let postDate = moment(expiry__Date + " " + expiryTime);
 
-
-
-                    let postDate = experyDate + " " + expiryTime + " " + "UTC"
+                    // let postDate = experyDate + " " + expiryTime + " " + "UTC"
                     let formatedDate = new Date(postDate).toISOString()
                     liveScoreNewsState.addEditNews.news_expire_date = formatedDate
 
                 }
 
+              
 
 
                 if (data.newsBody) {
@@ -596,10 +589,6 @@ class LiveScoreAddNews extends Component {
                 }
 
                 let editData = liveScoreNewsState.addEditNews;
-
-
-                // console.log(editData)
-
 
                 this.props.liveScoreAddNewsAction(editData, mediaArry, newsId, this.state.key)
                 this.setState({ getDataLoading: true })

@@ -87,20 +87,14 @@ function liveScoreNewsState(state = initialState, action) {
          
             state.addEditNews = news_data
             state.addEditNews["author"] = authorData.longName
-            // state.expire_date = moment(news_data.news_expire_date).format('DD-MM-YYYY')
-            // state.expire_date = news_data.news_expire_date
-            // state.expire_time = news_data.news_expire_date !== null ? moment(news_data.news_expire_date, 'HH:mm') : null
-
+         
+            state.news_expire_date = moment(news_data.news_expire_date).format("YYYY-MM-DD")
             state.expire_date = moment(news_data.news_expire_date,"YYYY-MM-DD")
             state.newExpiryDate = moment(news_data.news_expire_date, "YYYY-MM-DD")
             state.expire_time = news_data.news_expire_date
             state.newExpiryTime = news_data.news_expire_date
            
-       
-            // state.expire_time = news_data.news_expire_date !== null ? moment(news_data.news_expire_date, 'HH:mm') : null
-            // state.newExpiryDate = moment(news_data.news_expire_date, "YYYY-MM-DD")
-
-
+    
             return {
                 ...state,
                 onLoad: false,
@@ -113,7 +107,7 @@ function liveScoreNewsState(state = initialState, action) {
             state.addEditNews['recipients'] = []
             state.expire_date = null
             state.expire_time = null
-
+            state.news_expire_date = null
 
             return {
                 ...state,
@@ -129,6 +123,7 @@ function liveScoreNewsState(state = initialState, action) {
             if (action.key === "expire_date") {
                 state[action.key] = action.data
                 state.newExpiryDate =  moment(action.data , "YYYY-MM-DD")
+                state.news_expire_date  = moment(action.data).format("YYYY-MM-DD")
                 // state.addEditNews['news_expire_date'] = action.data + " " + state['expire_time']
 
                 // if (state.expire_time) {

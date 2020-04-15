@@ -1169,7 +1169,6 @@ class LiveScoreBulkChange extends Component {
             bulkRadioBtn
         } = this.props.liveScoreBulkMatchState
 
-        console.log(pushBackData.startDate, pushBackData.startTime, 'pushBackData')
 
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -1178,14 +1177,19 @@ class LiveScoreBulkChange extends Component {
                     // let formatedStartDate = formatDateTime(pushBackData.startDate, pushBackData.startTime)
                     // let formatedEndDate = formatDateTime(pushBackData.endDate, pushBackData.endTime)
 
+                    // let startDate = moment(pushBackData.startDate).format("YYYY-MMM-DD")
+                    // let startTime = moment.utc(pushBackData.startTime).format("HH:mm")
+                    // let postStartDate = startDate + " " + startTime + " " + "UTC"
+                    // let formatedStartDate = new Date(postStartDate).toISOString()
+
                     let startDate = moment(pushBackData.startDate).format("YYYY-MMM-DD")
-                    let startTime = moment.utc(pushBackData.startTime).format("HH:mm")
-                    let postStartDate = startDate + " " + startTime + " " + "UTC"
+                    let startTime = moment(pushBackData.startTime).format("HH:mm")
+                    let postStartDate = moment(startDate + " " + startTime);
                     let formatedStartDate = new Date(postStartDate).toISOString()
 
                     let endDate = moment(pushBackData.endDate).format("YYYY-MMM-DD")
-                    let endTime = moment.utc(pushBackData.endTime).format("HH:mm")
-                    let postEndDate = endDate + " " + endTime + " " + "UTC"
+                    let endTime = moment(pushBackData.endTime).format("HH:mm")
+                    let postEndDate = moment(endDate + " " + endTime);
                     let formatedEndDate = new Date(postEndDate).toISOString()
 
                     let formatedNewDate = ''
@@ -1204,8 +1208,8 @@ class LiveScoreBulkChange extends Component {
                             message.error(ValidationConstants.specificTime)
                         } else {
                             let newDate = moment(pushBackData.optionalDate).format("YYYY-MMM-DD")
-                            let newTime = moment.utc(pushBackData.optionalTime).format("HH:mm")
-                            let postNewDate = newDate + " " + newTime + " " + "UTC"
+                            let newTime = moment(pushBackData.optionalTime).format("HH:mm")
+                            let postNewDate = moment(newDate + " " + newTime);
                             formatedNewDate = new Date(postNewDate).toISOString()
                             this.props.BulkMatchPushBackAction(pushBackData, formatedStartDate, formatedEndDate, bulkRadioBtn, formatedNewDate)
                             this.setState({ loading: true })
@@ -1218,13 +1222,13 @@ class LiveScoreBulkChange extends Component {
                 } else if (selectedOption == 'bringForward') {
 
                     let startDate = moment(bringForwardData.startDate).format("YYYY-MMM-DD")
-                    let startTime = moment.utc(bringForwardData.startTime).format("HH:mm")
-                    let postStartDate = startDate + " " + startTime + " " + "UTC"
+                    let startTime = moment(bringForwardData.startTime).format("HH:mm")
+                    let postStartDate = moment(startDate + " " + startTime);
                     let formatedStartDate = new Date(postStartDate).toISOString()
 
                     let endDate = moment(bringForwardData.endDate).format("YYYY-MMM-DD")
-                    let endTime = moment.utc(bringForwardData.endTime).format("HH:mm")
-                    let postEndDate = endDate + " " + endTime + " " + "UTC"
+                    let endTime = moment(bringForwardData.endTime).format("HH:mm")
+                    let postEndDate = moment(endDate + " " + endTime);
                     let formatedEndDate = new Date(postEndDate).toISOString()
 
                     let formatedNewDate = ''
@@ -1244,8 +1248,8 @@ class LiveScoreBulkChange extends Component {
                             message.error(ValidationConstants.specificTime)
                         } else {
                             let newDate = moment(bringForwardData.optionalDate).format("YYYY-MMM-DD")
-                            let newTime = moment.utc(bringForwardData.optionalTime).format("HH:mm")
-                            let postNewDate = newDate + " " + newTime + " " + "UTC"
+                            let newTime = moment(bringForwardData.optionalTime).format("HH:mm")
+                            let postNewDate = moment(newDate + " " + newTime);
                             formatedNewDate = new Date(postNewDate).toISOString()
 
                             this.props.liveScoreBringForwardAction(null, bringForwardData, formatedStartDate, formatedEndDate, bulkRadioBtn, formatedNewDate)
@@ -1259,13 +1263,13 @@ class LiveScoreBulkChange extends Component {
                 } else if (selectedOption == 'endMatch') {
 
                     let startDate = moment(endMatchData.startDate).format("YYYY-MMM-DD")
-                    let startTime = moment.utc(endMatchData.startTime).format("HH:mm")
-                    let postStartDate = startDate + " " + startTime + " " + "UTC"
+                    let startTime = moment(endMatchData.startTime).format("HH:mm")
+                    let postStartDate = moment(startDate + " " + startTime);
                     let formatedStartDate = new Date(postStartDate).toISOString()
 
                     let endDate = moment(endMatchData.endDate).format("YYYY-MMM-DD")
-                    let endTime = moment.utc(endMatchData.endTime).format("HH:mm")
-                    let postEndDate = endDate + " " + endTime + " " + "UTC"
+                    let endTime = moment(endMatchData.endTime).format("HH:mm")
+                    let postEndDate = moment(endDate + " " + endTime);
                     let formatedEndDate = new Date(postEndDate).toISOString()
 
 
@@ -1281,13 +1285,13 @@ class LiveScoreBulkChange extends Component {
                     // let formatedEndDate = formatDateTime(abandonData.endDate, abandonData.endTime)
 
                     let startDate = moment(abandonData.startDate).format("YYYY-MMM-DD")
-                    let startTime = moment.utc(abandonData.startTime).format("HH:mm")
-                    let postStartDate = startDate + " " + startTime + " " + "UTC"
+                    let startTime = moment(abandonData.startTime).format("HH:mm")
+                    let postStartDate = moment(startDate + " " + startTime);
                     let formatedStartDate = new Date(postStartDate).toISOString()
 
                     let endDate = moment(abandonData.endDate).format("YYYY-MMM-DD")
-                    let endTime = moment.utc(abandonData.endTime).format("HH:mm")
-                    let postEndDate = endDate + " " + endTime + " " + "UTC"
+                    let endTime = moment(abandonData.endTime).format("HH:mm")
+                    let postEndDate = moment(endDate + " " + endTime);
                     let formatedEndDate = new Date(postEndDate).toISOString()
 
                     this.props.liveScoreAbandonMatchAction(abandonData, formatedStartDate, formatedEndDate)
@@ -1332,7 +1336,7 @@ class LiveScoreBulkChange extends Component {
         return (
             <div className="fluid-width">
                 <Loader visible={this.props.liveScoreBulkMatchState.onLoad} />
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"12"} />
                 <Layout>
                     {this.headerView()}

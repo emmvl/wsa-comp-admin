@@ -120,24 +120,6 @@ export function* dragTeamPartPlayerSaga(action) {
 }
 
 
-// 
-export function* importCompetitionPlayer(action) {
-    try {
-        const result = yield call(CompetitionAxiosApi.importCompetitionPlayer, action.payload);
-        if (result.status === 1) {
-            yield put({
-                type: ApiConstants.API_COMPETITION_PLAYER_IMPORT_SUCCESS,
-                result: result.result.data,
-                status: result.status,
-            });
-        } else {
-            yield call(failSaga, result)
-        }
-    } catch (error) {
-        yield call(errorSaga, error)
-    }
-}
-
 // competition  part player grading add  team
 
 export function* partPLayerCommentSaga(action) {
@@ -183,5 +165,24 @@ export function* partPlayerSummaryCommentSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+// 
+export function* importCompetitionPlayer(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.importCompetitionPlayer, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_COMPETITION_PLAYER_IMPORT_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
 
 

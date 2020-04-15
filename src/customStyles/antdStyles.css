@@ -465,6 +465,9 @@ textarea.ant-input {
 .ant-spin {
   color: var(--app-color);
 }
+.tree-selection-icon .anticon svg{
+  display: none
+}
 
 @media (max-width: 767px) {
   .ant-tabs-nav .ant-tabs-tab {

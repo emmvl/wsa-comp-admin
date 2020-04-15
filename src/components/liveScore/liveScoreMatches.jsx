@@ -12,7 +12,7 @@ import { bindActionCreators } from 'redux';
 import { liveScoreMatchListAction } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
 import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
-import { liveScore_formateDateTime, formatDateTime, liveScore_MatchFormate } from '../../themes/dateformate'
+import {  liveScore_MatchFormate } from '../../themes/dateformate'
 
 /////function to sort table column
 function tableSort(a, b, key) {
@@ -242,7 +242,6 @@ class LiveScoreMatchesList extends Component {
     tableView = () => {
         const { liveScoreMatchListState } = this.props;
         let DATA = liveScoreMatchListState ? liveScoreMatchListState.liveScoreMatchListData : []
-        // let competitionID = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
         let total = liveScoreMatchListState.liveScoreMatchListTotalCount;
 

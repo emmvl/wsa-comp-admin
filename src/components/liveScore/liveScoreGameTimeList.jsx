@@ -66,15 +66,7 @@ function checkPlayTime(record) {
             let time_value =  hDisplay + mDisplay + sDisplay; 
 
             return time_value
-            console.log(time_value)
-            // if (record.playTime == 1) {
-             
-            // } else if (record.playTime > 60) {
-            
-
-            // } else {
-
-            // }
+           
         } else {
             if (record.playTime == 0) {
                 return record.playTime + " Periods"
@@ -192,7 +184,8 @@ class LiveScoreGameTimeList extends Component {
         super(props);
         this.state = {
             selectStatus: "Select Status",
-            filter: "Period"
+            filter: "Period",
+            competitionId:null
         };
         this_obj = this
     }
@@ -200,6 +193,7 @@ class LiveScoreGameTimeList extends Component {
     componentDidMount() {
         // let competitionId = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
+        this.setState({competitionId : id})
         if (id !== null) {
             this.handleGameTimeTableList(1, id, this.state.filter)
         } else {
@@ -216,7 +210,6 @@ class LiveScoreGameTimeList extends Component {
 
     setFilterValue = (data) => {
         var dataFilter = data.filter
-        // let competitionId = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
         let offset = 1 ? 10 * (1 - 1) : 0
         this.setState({ filter: data.filter })
@@ -264,7 +257,7 @@ class LiveScoreGameTimeList extends Component {
                                         justifyContent: "flex-end",
                                         alignSelf: 'center',
                                     }}>
-                                    <Button className="primary-add-comp-form" type="primary">
+                                    <Button href={AppConstants.gameTimeExport +this.state.competitionId +`&aggregate=${this.state.filter}`} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img

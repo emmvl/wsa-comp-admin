@@ -76,6 +76,22 @@ function liveScoreGetTeamDataAction(teamId) {
     }
 }
 
+
+/// Team list with paggination
+
+function getTeamsWithPagging(competitionID, offset, limit, search) {
+
+    const action = {
+        type: ApiConstants.API_LIVE_SCORE_TEAM_WITH_PAGGING_LOAD,
+        competitionID,
+        offset,
+        limit,
+        search
+    };
+
+    return action;
+}
+
 export {
     getliveScoreTeams,
     getTeamViewPlayerList,
@@ -85,5 +101,6 @@ export {
     liveScoreGetaffilate,
     liveAddNewTeam,
     liveScoreTeamImportAction,
-    liveScoreGetTeamDataAction
+    liveScoreGetTeamDataAction,
+    getTeamsWithPagging
 };

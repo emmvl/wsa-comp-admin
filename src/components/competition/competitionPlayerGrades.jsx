@@ -392,7 +392,11 @@ class CompetitionPlayerGrades extends Component {
                                                         >
                                                             <div className="row" >
                                                                 <div className="col-sm d-flex align-items-center"  >
-                                                                    <span className="player-grading-haeding-player-name-text">{playerItem.playerName}</span>
+                                                                    <NavLink to={{ pathname: `/userPersonal`, state: { userId: playerItem.userId } }}
+                                                                    >
+                                                                        <span style={{ cursor: "pointer" }}
+                                                                            className="player-grading-haeding-player-name-text">{playerItem.playerName}</span>
+                                                                    </NavLink>
                                                                 </div>
                                                                 <div
                                                                     className="col-sm d-flex justify-content-end "
@@ -531,15 +535,17 @@ class CompetitionPlayerGrades extends Component {
 
                                             <div className="row" >
                                                 <div className="col-sm d-flex align-items-center"  >
-                                                    <span className="player-grading-haeding-player-name-text">{playerItem.playerName}</span>
+                                                    <NavLink to={{ pathname: `/userPersonal`, state: { userId: playerItem.userId } }}
+                                                    >
+                                                        <span style={{ cursor: "pointer" }}
+                                                            className="player-grading-haeding-player-name-text">{playerItem.playerName}</span>
+                                                    </NavLink>
                                                 </div>
                                                 <div
                                                     className="col-sm d-flex justify-content-end "
                                                     style={{ flexFlow: 'wrap' }}>
                                                     <div className="col-sm">
                                                         {playerItem.playerHistory.map((item, index) => {
-                                                            colorPosition1 =
-                                                                colorPosition2 = index <= 36 ? ColorsArray[index + 2] : ColorsArray[index - 3]
                                                             return (
                                                                 <Tag className="comp-player-table-tag" key={item.teamId}>
                                                                     {item.teamText}

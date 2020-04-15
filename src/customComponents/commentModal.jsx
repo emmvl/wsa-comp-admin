@@ -1,6 +1,6 @@
 import React from 'react';
-import { Input, Modal } from 'antd';
-
+import { Input, Modal, } from 'antd';
+const { TextArea } = Input;
 class CommentModal extends React.Component {
     render() {
         const { heading, placeholder, name, handleBlur, onChange, type, value, modalTitle, visible, onOK, onCancel } = this.props
@@ -15,9 +15,10 @@ class CommentModal extends React.Component {
                     onCancel={onCancel}
                 >
                     <span className={`input-heading`}>{heading}</span>
-                    <Input
-                        className="input"
+                    <TextArea
+                        className="textAreaInput"
                         placeholder={placeholder}
+                        allowClear
                         name={name}
                         // handleChange={(name) => alert(name)}
                         onBlur={handleBlur}

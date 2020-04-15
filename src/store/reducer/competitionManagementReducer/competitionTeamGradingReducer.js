@@ -78,8 +78,22 @@ function ownTeamGradingSummaryFunction(ownTeamGradingSummaryData, sortOrderArray
         }
 
     }
-    console.log(ownTeamGradingSummaryData)
     return ownTeamGradingSummaryData
+}
+
+function getUpdatedHistoryData(data) {
+    if (data.length > 0) {
+        for (let i in data) {
+            let historyData = data[i].playerHistory
+            for (let j in historyData) {
+                historyData[j]["hoverVisible"] = false
+            }
+        }
+        return data
+    }
+    else {
+        return data
+    }
 }
 
 
@@ -95,6 +109,21 @@ function sortOrderArray(ownTeamGradingSummaryData) {
         })
     }
     return sortOrderArray
+}
+
+function getProposedTeamGradingData(data) {
+    if (data.length > 0) {
+        for (let i in data) {
+            let playerDataHistory = data[i].playerHistory
+            for (let j in playerDataHistory) {
+                playerDataHistory[j]['hoverVisible'] = false
+            }
+        }
+        return data
+    }
+    else {
+        return data
+    }
 }
 
 function CompetitionOwnTeamGrading(state = initialState, action) {
@@ -131,9 +160,11 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
                     item["isDirectRegistration"] = registrationInvitees.length > 0 ? 1 : 0;
                 });
             }
+            let teamGradingDataArr = isArrayNotEmpty(finalTeamGradingData.teamGradings) ? finalTeamGradingData.teamGradings : []
+            let updatedTeamGradingData = getUpdatedHistoryData(teamGradingDataArr)
             return {
                 ...state,
-                getCompOwnProposedTeamGradingData: isArrayNotEmpty(finalTeamGradingData.teamGradings) ? finalTeamGradingData.teamGradings : [],
+                getCompOwnProposedTeamGradingData: updatedTeamGradingData,
                 compFinalTeamGradingFinalGradesData: isArrayNotEmpty(finalTeamGradingData.finalGrades) ? finalTeamGradingData.finalGrades : [],
                 onLoad: false,
                 error: null
@@ -172,7 +203,6 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
             }
 
         //////// /clear competition  team grading reducer data
-
         case ApiConstants.OWN_COMP_TEAM_GRADING_CLEARING_PARTICULAR_REDUCER_DATA:
             console.log(action)
             if (action.key == "finalTeamGrading") {
@@ -186,7 +216,6 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
                 state.ownTeamGradingSummaryGetData = []
                 state.finalsortOrderArray = []
             }
-
             return {
                 ...state,
                 onLoad: false,
@@ -200,9 +229,11 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
 
         case ApiConstants.API_GET_COMPETITION_PART_PROPOSED_TEAM_GRADING_LIST_SUCCESS:
             let partProposedTeamGradingData = action.result
+            let getpartProposedTeamData = isArrayNotEmpty(partProposedTeamGradingData) ? partProposedTeamGradingData : []
+            let proposedTeamGradingData = getProposedTeamGradingData(getpartProposedTeamData)
             return {
                 ...state,
-                getPartProposedTeamGradingData: isArrayNotEmpty(partProposedTeamGradingData) ? partProposedTeamGradingData : [],
+                getPartProposedTeamGradingData: proposedTeamGradingData,
                 onLoad: false,
                 error: null
             }
@@ -340,6 +371,13 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
             }
             return { ...state, onLoad: false }
 
+        case ApiConstants.changeHoverProposedTeamGrading:
+            state.getCompOwnProposedTeamGradingData[action.tableIndex].playerHistory[action.historyIndex].hoverVisible = action.key
+            return { ...state }
+
+        case ApiConstants.changeHoverPartProposedTeamGrading:
+            state.getPartProposedTeamGradingData[action.tableIndex].playerHistory[action.historyIndex].hoverVisible = action.key
+            return { ...state }
 
         default:
             return state;
