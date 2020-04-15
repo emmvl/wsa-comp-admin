@@ -784,10 +784,15 @@ function registration(state = initialState, action) {
         status: action.status, error: null
       };
 
+    case ApiConstants.API_GET_REG_FORM_LOAD:
+      return { ...state, onLoad: true, error: null };
+
     case ApiConstants.API_GET_REG_FORM_SUCCESS:
+      console.log(state)
       let productList = action.MembershipProductList.id ? action.MembershipProductList.id : [];
       let objValue = JSON.parse(JSON.stringify([newObjvalue]))
       let formData = action.result.length > 0 ? action.result : objValue
+      console.log(state)
       state.defaultRegistrationSettings = formData[0].registrationSettings !== null ? formData[0].registrationSettings : []
       state.defaultRegistrationMethod = formData[0].registerMethods !== null ? JSON.parse(JSON.stringify(formData[0].registerMethods)) : []
       let selected_Method = checkSlectedMethod(JSON.parse(JSON.stringify(formData[0].registerMethods)))
@@ -798,21 +803,27 @@ function registration(state = initialState, action) {
       state.selectedDemographic = selectedInvitees.selectedDemographic
       state.SelectedOtherQuestions = selectedInvitees.SelectedOtherQuestions
       state.selectedNetballQuestions = selectedInvitees.selectedNetballQuestions
+
+
       let productListValue = getProductArr(
         productList,
         formData[0].membershipProductTypes
       );
+      console.log(productListValue)
       let SelectedProduct = getFillteredData(
         formData,
         productListValue,
         state.selectedMemberShipType
       );
+      console.log("SelectedProduct", SelectedProduct)
       let trainingSelection = getSelectedCheck(
         regFormChecked, formData
       )
+      console.log("trainingSelection", trainingSelection)
       state.defaultChecked = trainingSelection
       newObjvalue.competitionUniqueKeyId = state.defaultCompetitionID
       state.sendRegistrationFormData = JSON.parse(JSON.stringify([newObjvalue]))
+      console.log("state")
       return {
         ...state,
         onLoad: false,

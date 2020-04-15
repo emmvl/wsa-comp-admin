@@ -169,12 +169,14 @@ let AxiosApi = {
     },
 
     // get registration form  data
-    getRegistrationForm(year, CompetitionId) {
+    async   getRegistrationForm(year, CompetitionId) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
             yearRefId: year,
             competitionUniqueKey: CompetitionId
         };
-        var url = "/api/orgregistration/details";
+        var url = `/api/orgregistration/details?organisationUniqueKey=${organisationUniqueKey}`;
         return Method.dataPost(url, token, body);
     },
     ///////////get the default membership  product types in registartion membership fees
