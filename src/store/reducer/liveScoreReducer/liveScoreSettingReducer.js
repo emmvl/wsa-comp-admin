@@ -13,8 +13,8 @@ const initialState = {
         ladderSetting: [],
         record1: [],
         record2: [],
-        attendanceRecordingType: '',
-        attendanceRecordingPeriod: '',
+        attendanceRecordingType: null,
+        attendanceRecordingPeriod: null,
         timerType: '',
         allVenue: [],
         venueData: [],
@@ -34,7 +34,6 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
 
             const arraymaped = [{ ...payload }]
             const record1 = arraymaped.reduce((memo, data) => {
-                console.log(data)
                 if (data.recordUmpire === 1) {
                     memo.push('recordUmpire')
                 }
@@ -130,7 +129,6 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 mainVenueList: payload
             }
         case ApiConstants.LiveScore_CLEAR_SETTING:
-            console.log('cleared')
             return {
                 ...state,
                 form: {
@@ -144,9 +142,9 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     ladderSetting: [],
                     record1: [],
                     record2: [],
-                    attendanceRecordingType: '',
-                    attendanceRecordingPeriod: '',
-                    timerType: '',
+                    attendanceRecordingType: [],
+                    attendanceRecordingPeriod: [],
+                    timerType: [],
                     allVenue: [],
                     // venueData: []
 
@@ -154,11 +152,11 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
             }
 
         case ApiConstants.LIVESCORE_SEARCH__SETTING:
-            console.log(payload, 'LIVESCORE_SEARCH__SETTING', state.mainVenueList)
+         
             return { ...state, venueData: payload }
 
         case ApiConstants.CLEAR_FILTER_SEARCH:
-            console.log(state.venueData, '*#^#^#', state.mainVenueList)
+           
             return {
                 ...state,
                 venueData: [...state.mainVenueList],

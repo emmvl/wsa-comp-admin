@@ -198,13 +198,14 @@
 }
 
 .input-heading-add-another {
-  display: flex;
+  display: inline-flex;
   align-content: flex-start;
   padding-top: 22px;
   font-size: 15px;
   color: var(--app-color);
   font-weight: 500;
   font-family: inter-medium;
+  cursor: pointer;
 }
 
 .inside-container-view {

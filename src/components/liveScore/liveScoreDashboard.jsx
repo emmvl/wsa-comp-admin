@@ -327,9 +327,9 @@ class LiveScoreDashboard extends Component {
     componentDidMount() {
         let competitionID = getCompetitonId()
         let startDay = this.getStartofDay()
-    
+
         let currentTime = moment.utc().format()
-       
+
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
             this.props.liveScoreDashboardListAction(id, startDay, currentTime)
@@ -364,27 +364,109 @@ class LiveScoreDashboard extends Component {
         )
     }
 
+    // matchHeading = () => {
+    //     return (
+    //         <div className="row text-view">
+    //             <div className="col-sm" >
+    //                 <span className='home-dash-left-text'>{AppConstants.todaysMatch}</span>
+    //             </div>
+
+    //             <div className="col-sm text-right" >
+    //                 <NavLink to={{
+    //                     pathname: '/liveScoreAddMatch',
+    //                     state: { key: 'dashboard' }
+    //                 }}>
+    //                     <Button className='primary-add-comp-form' type='primary'>+ {AppConstants.addNew}</Button>
+    //                 </NavLink>
+    //             </div>
+    //         </div>
+    //     )
+    // }
+
+
     matchHeading = () => {
         return (
             <div className="row text-view">
+
                 <div className="col-sm" >
                     <span className='home-dash-left-text'>{AppConstants.todaysMatch}</span>
                 </div>
+
                 <div className="col-sm text-right" >
-                    <NavLink to={{
-                        pathname: '/liveScoreAddMatch',
-                        state: { key: 'dashboard' }
-                    }}>
-                        <Button className='primary-add-comp-form' type='primary'>+ {AppConstants.addNew}</Button>
-                    </NavLink>
+                    <div className="row">
+                        <div className="col-sm">
+                            <div
+                                className="comp-dashboard-botton-view-mobile"
+                                style={{
+                                    width: "100%",
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    justifyContent: "flex-end",
+                                }}
+                            >
+                                <NavLink to="/liveScoreBulkChange">
+                                    <Button className="primary-add-comp-form" type="primary">
+                                        {AppConstants.bulkMatchChange}
+                                    </Button>
+                                </NavLink>
+                            </div>
+                        </div>
+                        <div className="col-sm">
+                            <div
+                                className="comp-dashboard-botton-view-mobile"
+                                style={{
+                                    width: "100%",
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    justifyContent: "flex-end"
+                                }}
+                            >
+                                <NavLink to={{
+                                    pathname: '/liveScoreVenueChange',
+                                    state: { key: 'dashboard' }
+                                }}>
+                                    <Button className="primary-add-comp-form" type="primary">
+                                        {AppConstants.courtChange}
+                                    </Button>
+                                </NavLink>
+
+
+                            </div>
+                        </div>
+                        <div className="col-sm">
+                            <div
+                                className="comp-dashboard-botton-view-mobile"
+                                style={{
+                                    width: "100%",
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    justifyContent: "flex-end"
+                                }}
+                            >
+                                <NavLink to={{
+                                    pathname: '/liveScoreAddMatch',
+                                    state: { key: 'dashboard' }
+                                }}>
+                                    <Button className='primary-add-comp-form' type='primary'>+ {AppConstants.addNew}</Button>
+                                </NavLink>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
         )
     }
+
+
+
+
     ////////ownedView view for competition
     matchView = () => {
         const { dashboardMatchList } = this.props.liveScoreDashboardState
-        console.log('yup***************', dashboardMatchList)
         return (
             <div className="comp-dash-table-view mt-4">
                 {this.matchHeading()}

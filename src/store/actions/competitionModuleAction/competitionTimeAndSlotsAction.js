@@ -2,13 +2,12 @@ import ApiConstants from "../../../themes/apiConstants";
 
 
 // get competition with time slots
-function getCompetitionWithTimeSlots(year, competitionId, organisationId, userId) {
+function getCompetitionWithTimeSlots(year, competitionId, alldata) {
     const action = {
         type: ApiConstants.API_GET_COMPETITION_WITH_TIME_SLOTS_LOAD,
         year: year,
         competitionId: competitionId,
-        organisationId: organisationId,
-        userId: userId
+        alldata: alldata
     }
     return action;
 }
@@ -62,10 +61,11 @@ function addTimeSlotDataPost(payload) {
     return action
 }
 
+
 export {
     getCompetitionWithTimeSlots,
     addRemoveTimeSlot,
     UpdateTimeSlotsData,
     UpdateTimeSlotsDataManual,
-    addTimeSlotDataPost
+    addTimeSlotDataPost,
 }

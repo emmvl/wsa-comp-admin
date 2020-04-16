@@ -401,7 +401,6 @@ function checkDefaultProduct(checkProduct, defaultProductArr) {
   }
   for (let i in defaultProductArr) {
     if (defaultProductArr[i].id == checkProduct) {
-      console.log(defaultProductArr[i])
       prd_obj = {
         status: true,
         result: defaultProductArr[i]

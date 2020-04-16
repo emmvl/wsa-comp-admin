@@ -40,6 +40,7 @@ const initialState = {
     getcompetitionTimeSlotData: postTimeSlot,
     applyVenue: [],
     timeSlotRotation: [],
+    allrefernceData: [],
     timeSlotGeneration: [],
     weekDays: [],
     manaualTimeSlotObj: {
@@ -272,7 +273,7 @@ function getTimeSlotEntityObj(selectedEntityArray, value, mainId, index, ) {
         let timeSlotEntityObject = null
         if (matchTimeSlot.status == true) {
             timeSlotEntityObject = {
-                "competitionVenueTimeslotEntityId": matchTimeSlot.result.competitionVenueTimeslotEntityId,
+                "competitionVenueTimeslotEntityId": 0,
                 "venuePreferenceTypeRefId": matchTimeSlot.result.venuePreferenceTypeRefId,
                 "venuePreferenceEntityId": mainId == 4 ? 1 : 2
             }
@@ -299,7 +300,7 @@ function updateManualTimeSlotEntity(data, value, mainId, index) {
         let timeSlotEntityManualObject = null
         if (matchTimeSlotManual.status == true) {
             timeSlotEntityManualObject = {
-                "competitionVenueTimeslotEntityId": matchTimeSlotManual.result.competitionVenueTimeslotEntityId,
+                "competitionVenueTimeslotEntityId": 0,
                 "venuePreferenceTypeRefId": matchTimeSlotManual.result.venuePreferenceTypeRefId,
                 "venuePreferenceEntityId": mainId == 4 ? 1 : 2
             }
@@ -320,6 +321,7 @@ function updateManualTimeSlotEntity(data, value, mainId, index) {
 function getSelectedTimeRotation(defaultData, data) {
     let parentId
     let subParentId
+    console.log(defaultData)
     for (let i in defaultData) {
         console.log(defaultData)
         if (defaultData[i].id !== data.timeslotRotationRefId) {
@@ -536,6 +538,15 @@ function CompetitionTimeSlots(state = initialState, action) {
         case ApiConstants.API_GET_COMPETITION_WITH_TIME_SLOTS_LOAD:
             return { ...state, onLoad: true, onGetTimeSlotLoad: true, error: null };
         case ApiConstants.API_GET_COMPETITION_WITH_TIME_SLOTS_SUCCESS:
+            let refData = action.refResult
+            state.allrefernceData = action.result
+            let venueData = getVenueData(refData.ApplyToVenue)
+            let timeSlotGeneration = getVenueData(refData.TimeslotGeneration)
+            // let rotationData = getRotationData(action.result.TimeslotRotation)
+            state.applyVenue = venueData
+            state.timeSlotRotation = refData.TimeslotRotation
+            state.timeSlotGeneration = timeSlotGeneration
+            state.weekDays = refData.Day
             let resultData = JSON.parse(JSON.stringify(action.result))
             let selectedTimeGeneration = getSelectedTimeGeneration(state.timeSlotGeneration, action.result)
             let SelectedTimeRotationData = getSelectedTimeRotation(state.timeSlotRotation, action.result)
@@ -637,15 +648,18 @@ function CompetitionTimeSlots(state = initialState, action) {
             return { ...state }
 
 
-        case ApiConstants.API_TIME_SLOT_INIT_SUCCESS:
-            let venueData = getVenueData(action.result.ApplyToVenue)
-            let timeSlotGeneration = getVenueData(action.result.TimeslotGeneration)
-            let rotationData = getRotationData(action.result.TimeslotRotation)
-            state.applyVenue = venueData
-            state.timeSlotRotation = rotationData
-            state.timeSlotGeneration = timeSlotGeneration
-            state.weekDays = action.result.Day
-            return { ...state }
+        // case ApiConstants.API_TIME_SLOT_INIT_SUCCESS:
+
+        //     console.log('refernce called')
+        //     state.allrefernceData = action.result
+        //     let venueData = getVenueData(action.result.ApplyToVenue)
+        //     let timeSlotGeneration = getVenueData(action.result.TimeslotGeneration)
+        //     // let rotationData = getRotationData(action.result.TimeslotRotation)
+        //     state.applyVenue = venueData
+        //     state.timeSlotRotation = action.result.TimeslotRotation
+        //     state.timeSlotGeneration = timeSlotGeneration
+        //     state.weekDays = action.result.Day
+        //     return { ...state }
 
         case ApiConstants.Api_ADD_REMOVE_TIME_SLOT_TABLE:
             if (action.key == "addTimeSlotManual") {

@@ -922,12 +922,16 @@ const AppConstants = {
   selectOrganisation: "Select Organisation",
 
 
-  goalExport: "/stats/export/scoringByPlayer?competitionId=",
-  gameTimeExport: "/stats/export/gametime?competitionId=",
-  teamAttendaneExport: "/players/export/teamattendance?competitionId=",
+  goalExport: "https://livescores-api-dev.worldsportaction.com/stats/export/scoringByPlayer?competitionId=",
+  gameTimeExport: "https://livescores-api-dev.worldsportaction.com/stats/export/gametime?competitionId=",
+  teamAttendaneExport: "https://livescores-api-dev.worldsportaction.com/players/export/teamattendance?competitionId=",
   proceed: "Skip and Proceed",
   invalidPlayers: "Invalid Records",
   importPlayer: "Import Player",
+  matchExport:`https://livescores-api-dev.worldsportaction.com/matches/export?competitionId=`,
+  courtChange : "Court Change",
+
+  publicLadderUrl:`https://netball-comp-admin-dev.worldsportaction.com/liveScorePublicLadder?competitionId=20b91f98-3f12-41c1-aeeb-70c9d6f4fa3d`
 };
 
 export default AppConstants;
