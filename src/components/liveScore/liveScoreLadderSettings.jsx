@@ -74,7 +74,12 @@ class LiveScoreLadderSettings extends Component {
 
                 <div className="inside-container-view" >
                     <div className="table-responsive">
-                        <Table loading={this.props.ladderSettingState.onLoad} className="fees-table" columns={columns} dataSource={matchResultData} pagination={false} Divider=" false" />
+                        <Table 
+                        loading={this.props.ladderSettingState.onLoad} 
+                        className="fees-table" 
+                        columns={columns} 
+                        dataSource={matchResultData} 
+                        pagination={false} Divider=" false" />
                     </div>
                 </div>
             </div>

@@ -43,8 +43,8 @@ class CompetitionCourtAndTimesAssign extends Component {
             firstTimeCompId: "",
             getDataLoading: false,
         }
+        // this.props.timeSlotInit()
         this.props.clearYearCompetitionAction()
-        this.props.timeSlotInit()
         this.props.getVenuesTypeAction()
     }
 
@@ -61,7 +61,9 @@ class CompetitionCourtAndTimesAssign extends Component {
                 firstTimeCompId: storedCompetitionId,
                 getDataLoading: true
             })
+            // if (this.props.competitionTimeSlots.allrefernceData.length > 0) {
             this.props.getCompetitionWithTimeSlots(yearId, storedCompetitionId);
+            // }
         }
         else if (yearId) {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
@@ -99,7 +101,6 @@ class CompetitionCourtAndTimesAssign extends Component {
 
                 }
             }
-
         }
     }
 
@@ -226,14 +227,19 @@ class CompetitionCourtAndTimesAssign extends Component {
                         for (let j in getTimeSlot) {
                             getStartTime = getTimeSlot[j].startTime
                             for (let k in getStartTime) {
-                                manualperVenueObj =
-                                    {
-                                        "competitionVenueTimeslotsDayTimeId": 0,
-                                        "dayRefId": getTimeSlot[j].dayRefId,
-                                        "startTime": getStartTime[k].startTime,
-                                        "sortOrder": JSON.parse(k),
-                                        "competitionTimeslotsEntity": timeSlotData.mainTimeRotationID == 8 ? getStartTime[k].competitionTimeslotsEntity : [],
-                                    }
+                                let manualcompetitionTimeslotsEntityOBj = getStartTime[k].competitionTimeslotsEntity
+                                for (let l in manualcompetitionTimeslotsEntityOBj) {
+                                    manualcompetitionTimeslotsEntityOBj[l].competitionVenueTimeslotEntityId = 0
+                                    manualperVenueObj =
+                                        {
+                                            "competitionVenueTimeslotsDayTimeId": 0,
+                                            "dayRefId": getTimeSlot[j].dayRefId,
+                                            "startTime": getStartTime[k].startTime,
+                                            "sortOrder": JSON.parse(k),
+                                            "competitionTimeslotsEntity": timeSlotData.mainTimeRotationID == 8 ? manualcompetitionTimeslotsEntityOBj : [],
+                                        }
+                                }
+
                                 timeSlotManualAllVenueArray.push(manualperVenueObj)
                             }
                         }
@@ -264,14 +270,18 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 delete timeSloltdataArr[j]["timeSlotEntityGradeKey"]
                                 manualStartTime = timeSloltdataArr[j].startTime
                                 for (let k in manualStartTime) {
-                                    manualAllVenueObj =
-                                        {
-                                            "competitionVenueTimeslotsDayTimeId": 0,
-                                            "dayRefId": timeSloltdataArr[j].dayRefId,
-                                            "startTime": manualStartTime[k].startTime,
-                                            "sortOrder": JSON.parse(k),
-                                            "competitionTimeslotsEntity": timeSlotData.mainTimeRotationID !== 8 ? [] : manualStartTime[k].competitionTimeslotsEntity,
-                                        }
+                                    let competitionTimeslotsEntityObj = manualStartTime[k].competitionTimeslotsEntity
+                                    for (let l in competitionTimeslotsEntityObj) {
+                                        competitionTimeslotsEntityObj[l].competitionVenueTimeslotEntityId = 0
+                                        manualAllVenueObj =
+                                            {
+                                                "competitionVenueTimeslotsDayTimeId": 0,
+                                                "dayRefId": timeSloltdataArr[j].dayRefId,
+                                                "startTime": manualStartTime[k].startTime,
+                                                "sortOrder": JSON.parse(k),
+                                                "competitionTimeslotsEntity": timeSlotData.mainTimeRotationID !== 8 ? [] : competitionTimeslotsEntityObj,
+                                            }
+                                    }
                                     timeSlotManualperVenueArray.push(manualAllVenueObj)
                                 }
                             }
@@ -293,6 +303,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                     message.error(ValidationConstants.pleaseSelectCompetition)
                 }
                 else {
+                    console.log(timeSlotData)
                     this.props.addTimeSlotDataPost(timeSlotData)
                 }
             }
@@ -358,7 +369,7 @@ class CompetitionCourtAndTimesAssign extends Component {
     }
 
     //////add or remove another division inthe divsision tab
-    addDataTimeSlot(item, index, getFieldDecorator) {
+    addDataTimeSlot(item, index, getFieldDecorator, data) {
         let daysList = this.props.competitionTimeSlots
         return (
             <div className="row">
@@ -414,15 +425,18 @@ class CompetitionCourtAndTimesAssign extends Component {
                         minuteStep={15}
                     />
                 </div>
-                <div className="col-sm-2 delete-image-view pb-4" onClick={() => this.addTimeManualPerVenue(index, item, "competitionVenueTimeslotsDayTimedelete")}>
-                    <a className="transfer-image-view">
-                        <span className="user-remove-btn">
-                            <i className="fa fa-trash-o" aria-hidden="true"></i>
-                        </span>
-                        <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
-                    </a>
-                </div>
-            </div>
+                {data.length > 1 &&
+                    < div className="col-sm-2 delete-image-view pb-4" onClick={() => this.addTimeManualPerVenue(index, item, "competitionVenueTimeslotsDayTimedelete")}>
+                        <a className="transfer-image-view">
+                            <span className="user-remove-btn">
+                                <i className="fa fa-trash-o" aria-hidden="true"></i>
+                            </span>
+                            <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                        </a>
+                    </div>
+                }
+
+            </div >
         )
     }
 
@@ -527,7 +541,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                         <Radio key={item.id} value={item.id}> {item.description}</Radio>
                                         {isArrayNotEmpty(item.subReferences) && <div>
                                             <Form.Item  >
-                                                {getFieldDecorator('timeslotRotationRefId', { rules: [{ required: true, message: "Please select time slot preference" }] })(
+                                                {getFieldDecorator('timeslotRotationRefId', { rules: [{ required: false, message: "Please select time slot preference" }] })(
                                                     <Radio.Group
                                                         className="reg-competition-radio pl-5"
                                                         onChange={e => {
@@ -565,7 +579,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                 <div>
                                                     <div className="fluid-width">
                                                         {timeSlotData.competitionVenueTimeslotsDayTime.map((item, index) => {
-                                                            return this.addDataTimeSlot(item, index, getFieldDecorator)
+                                                            return this.addDataTimeSlot(item, index, getFieldDecorator, timeSlotData.competitionVenueTimeslotsDayTime)
                                                         })}
                                                     </div>
                                                     <span className='input-heading-add-another' onClick={() => this.addAnotherTimeSlot(null, null, "competitionVenueTimeslotsDayTime")} > + {AppConstants.addAnotherDay}</span>
@@ -580,14 +594,14 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                         </span>
                                                         }
                                                         {timeSlotData.timeslotRotationRefId == 4 && timeSlotData.competitionTimeslotsEntity.map((item, index) => {
-                                                            return this.addTimeSlotDivision(item, index, getFieldDecorator, timeSlotData.mainTimeRotationID, timeSlotData.timeslotRotationRefId)
+                                                            return this.addTimeSlotDivision(item, index, getFieldDecorator, timeSlotData.mainTimeRotationID, timeSlotData.timeslotRotationRefId, timeSlotData.competitionTimeslotsEntity)
                                                         })}
                                                         {timeSlotData.timeslotRotationRefId == 5 && <span className="applicable-to-heading">
                                                             {AppConstants.grades}
                                                         </span>
                                                         }
                                                         {timeSlotData.timeslotRotationRefId == 5 && timeSlotData.competitionTimeslotsEntity.map((item, index) => {
-                                                            return this.addTimeSlotGrades(item, index, getFieldDecorator, timeSlotData.mainTimeRotationID, timeSlotData.timeslotRotationRefId)
+                                                            return this.addTimeSlotGrades(item, index, getFieldDecorator, timeSlotData.mainTimeRotationID, timeSlotData.timeslotRotationRefId, timeSlotData.competitionTimeslotsEntity)
                                                         })}
                                                     </div>
 
@@ -626,7 +640,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                         <div>
                             <div className="fluid-width">
                                 {timeSlotManual.length > 0 && timeSlotManual[0].timeslots.map((item, index) => {
-                                    return (this.addDataTimeSlotManual(item, index, getFieldDecorator, timeSlotData.timeslotRotationRefId, timeSlotData.mainTimeRotationID))
+                                    return (this.addDataTimeSlotManual(item, index, getFieldDecorator, timeSlotData.timeslotRotationRefId, timeSlotData.mainTimeRotationID, timeSlotManual[0].timeslots))
                                 })}
                             </div>
                             <span className='input-heading-add-another' onClick={() => this.addTimeManualPerVenue(null, null, "competitionTimeslotManual")} > + {AppConstants.addAnotherDay}</span>
@@ -644,7 +658,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                 {
                                                     item.timeslots.map((slotsItem, slotIndex) => {
                                                         return (
-                                                            this.addDataTimeSlotManualPerVenues(slotsItem, venueIndex, slotIndex, getFieldDecorator, timeSlotData.timeslotRotationRefId, timeSlotData.mainTimeRotationID)
+                                                            this.addDataTimeSlotManualPerVenues(slotsItem, venueIndex, slotIndex, getFieldDecorator, timeSlotData.timeslotRotationRefId, timeSlotData.mainTimeRotationID, item.timeslots)
 
                                                         )
                                                     })}
@@ -663,7 +677,7 @@ class CompetitionCourtAndTimesAssign extends Component {
     }
 
 
-    addDataTimeSlotManualPerVenues(item, venueIndex, index, getFieldDecorator, id, mainId) {
+    addDataTimeSlotManualPerVenues(item, venueIndex, index, getFieldDecorator, id, mainId, data) {
         let daysList = this.props.competitionTimeSlots
         let division = this.props.competitionTimeSlots.getcompetitionTimeSlotData
         return (
@@ -805,24 +819,20 @@ class CompetitionCourtAndTimesAssign extends Component {
 
 
                                 </div>
-
-
                             )
-
-                        }
-                        )
-                        }
+                        })}
                         <span className='input-heading-add-another' onClick={() => this.addTimeManualPerVenue(index, null, "addTimeSlotManualperVenue", venueIndex)} > + {AppConstants.add_TimeSlot}</span>
                     </div>
-
-                    <div className="col-sm-2 delete-image-timeSlot-view" onClick={() => this.addTimeManualPerVenue(index, venueIndex, "competitionTimeslotManualAllVenuedelete")}>
-                        <a className="transfer-image-view">
-                            <span className="user-remove-btn">
-                                <i className="fa fa-trash-o" aria-hidden="true"></i>
-                            </span>
-                            <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
-                        </a>
-                    </div>
+                    {data.length > 1 &&
+                        <div className="col-sm-2 delete-image-timeSlot-view" onClick={() => this.addTimeManualPerVenue(index, venueIndex, "competitionTimeslotManualAllVenuedelete")}>
+                            <a className="transfer-image-view">
+                                <span className="user-remove-btn">
+                                    <i className="fa fa-trash-o" aria-hidden="true"></i>
+                                </span>
+                                <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                            </a>
+                        </div>
+                    }
                 </div>
             </div >
         )
@@ -830,7 +840,7 @@ class CompetitionCourtAndTimesAssign extends Component {
     }
 
     // add data on click of division
-    addTimeSlotDivision(item, index, getFieldDecorator, mainId, id) {
+    addTimeSlotDivision(item, index, getFieldDecorator, mainId, id, data) {
         let division = this.props.competitionTimeSlots.getcompetitionTimeSlotData
         let timeSlotEntityKey = this.props.competitionTimeSlots
         return (
@@ -864,14 +874,16 @@ class CompetitionCourtAndTimesAssign extends Component {
                         </Select >
                     )}
                 </Form.Item>
-                <div className="col-sm-2 delete-image-timeSlot-view pt-3" onClick={() => this.addTimeManualPerVenue(index, item, "competitionTimeslotsEntitydelete")}>
-                    <a className="transfer-image-view">
-                        <span className="user-remove-btn">
-                            <i className="fa fa-trash-o" aria-hidden="true"></i>
-                        </span>
-                        <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
-                    </a>
-                </div>
+                {data.length > 1 &&
+                    <div className="col-sm-2 delete-image-timeSlot-view pt-3" onClick={() => this.addTimeManualPerVenue(index, item, "competitionTimeslotsEntitydelete")}>
+                        <a className="transfer-image-view">
+                            <span className="user-remove-btn">
+                                <i className="fa fa-trash-o" aria-hidden="true"></i>
+                            </span>
+                            <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                        </a>
+                    </div>
+                }
             </div>
         )
     }
@@ -892,7 +904,7 @@ class CompetitionCourtAndTimesAssign extends Component {
     addDivisionOrGrade = (index, item, keyword) => {
         this.props.addRemoveTimeSlot(index, item, keyword)
     }
-    addTimeSlotGrades(item, index, getFieldDecorator, mainId, id) {
+    addTimeSlotGrades(item, index, getFieldDecorator, mainId, id, data) {
         let grades = this.props.competitionTimeSlots.getcompetitionTimeSlotData
         let timeSlotEntityKey = this.props.competitionTimeSlots
         return (
@@ -922,14 +934,16 @@ class CompetitionCourtAndTimesAssign extends Component {
                         </Select >
                     )}
                 </Form.Item>
-                <div className="col-sm-2 delete-image-timeSlot-view pt-2" onClick={() => this.addTimeManualPerVenue(index, item, "competitionTimeslotsEntitydelete")}>
-                    <a className="transfer-image-view">
-                        <span className="user-remove-btn">
-                            <i className="fa fa-trash-o" aria-hidden="true"></i>
-                        </span>
-                        <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
-                    </a>
-                </div>
+                {data.length > 1 &&
+                    <div className="col-sm-2 delete-image-timeSlot-view pt-2" onClick={() => this.addTimeManualPerVenue(index, item, "competitionTimeslotsEntitydelete")}>
+                        <a className="transfer-image-view">
+                            <span className="user-remove-btn">
+                                <i className="fa fa-trash-o" aria-hidden="true"></i>
+                            </span>
+                            <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                        </a>
+                    </div>
+                }
             </div>
         )
     }
@@ -940,7 +954,7 @@ class CompetitionCourtAndTimesAssign extends Component {
     }
 
     //addd time slot data on indvidual Venues
-    addDataTimeSlotManual(item, index, getFieldDecorator, id, mainId) {
+    addDataTimeSlotManual(item, index, getFieldDecorator, id, mainId, data) {
         let daysList = this.props.competitionTimeSlots
         let division = this.props.competitionTimeSlots.getcompetitionTimeSlotData
         return (
@@ -1045,7 +1059,7 @@ class CompetitionCourtAndTimesAssign extends Component {
 
                                             <Form.Item>
                                                 {getFieldDecorator(
-                                                    `timeSlotEntityGradeKey${index}`,
+                                                    `timeSlotEntityGradeKey${index}${timeIndex}`,
                                                     {
                                                         rules: [
                                                             {
@@ -1085,14 +1099,16 @@ class CompetitionCourtAndTimesAssign extends Component {
                     }
                     <span className='input-heading-add-another' onClick={() => this.addTimeManualPerVenue(index, null, "addTimeSlotManual")} > + {AppConstants.add_TimeSlot}</span>
                 </div>
-                <div className="col-sm-2 delete-image-timeSlot-view" onClick={() => this.addTimeManualPerVenue(index, item, "competitionTimeslotManualdelete")}>
-                    <a className="transfer-image-view">
-                        <span className="user-remove-btn">
-                            <i className="fa fa-trash-o" aria-hidden="true"></i>
-                        </span>
-                        <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
-                    </a>
-                </div>
+                {data.length > 1 &&
+                    <div className="col-sm-2 delete-image-timeSlot-view" onClick={() => this.addTimeManualPerVenue(index, item, "competitionTimeslotManualdelete")}>
+                        <a className="transfer-image-view">
+                            <span className="user-remove-btn">
+                                <i className="fa fa-trash-o" aria-hidden="true"></i>
+                            </span>
+                            <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                        </a>
+                    </div>
+                }
 
             </div >
         )

@@ -391,9 +391,9 @@ class CompetitionPartPlayerGrades extends Component {
                                                                             </Tag>
                                                                         }
                                                                         {playerItem.position2 &&
-                                                                        <Tag className="comp-player-table-tag" style={{ background: playerIndex < 36 ? ColorsArray[(playerIndex + 2)] : '#1658ef', color: "#ffffff" }} key={playerItem.position2}>
-                                                                            {playerItem.position2}
-                                                                        </Tag>
+                                                                            <Tag className="comp-player-table-tag" style={{ background: playerIndex < 36 ? ColorsArray[(playerIndex + 2)] : '#1658ef', color: "#ffffff" }} key={playerItem.position2}>
+                                                                                {playerItem.position2}
+                                                                            </Tag>
                                                                         }
                                                                         <img className="comp-player-table-img" src={
                                                                             (playerItem.comments !== null && playerItem.comments !== "") ? AppImages.commentFilled :

@@ -170,8 +170,6 @@ class LiveScoreAddTeam extends Component {
     radioBtnGroup(e) {
         const { selectedManager } = this.props.liveScoreTeamState
         this.props.liveScoreAddTeamform({ key: 'managerType', data: e.target.value })
-
-        console.log(selectedManager, 'selectedManager&&')
         this.props.form.setFieldsValue({
             'managerId': selectedManager
         })
@@ -180,9 +178,7 @@ class LiveScoreAddTeam extends Component {
 
     ////////form content view
     contentView = (getFieldDecorator) => {
-
         const { teamManagerData, affilateList, divisionList, managerType } = this.props.liveScoreTeamState
-        console.log(teamManagerData, 'teamManagerData')
         return (
             <div className="content-view pt-4">
                 <Form.Item>
@@ -255,7 +251,6 @@ class LiveScoreAddTeam extends Component {
                                 // defaultChecked={false}
                                 checked={this.props.liveScoreTeamState.isCheked}
                                 onChange={(value) => {
-                                    console.log(value.target.checked)
                                     this.props.liveScoreAddTeamform({ key: 'checkBox', data: value.target.checked })
                                     this.setState({ image: null })
                                 }}
@@ -362,7 +357,6 @@ class LiveScoreAddTeam extends Component {
     managerExistingRadioBtnView(getFieldDecorator) {
         let grade = this.state.managerData
         const { selectedManager } = this.props.liveScoreTeamState
-        console.log(this.props.liveScoreTeamState, 'this.props.liveScoreTeamState$^')
         const { managerListResult } = this.props.liveScoreMangerState
         return (
             <div >
@@ -374,7 +368,6 @@ class LiveScoreAddTeam extends Component {
                             rules: [{ required: true, message: ValidationConstants.searchManager }]
                         })(
                             <Select
-                                // hori
                                 mode="multiple"
                                 placeholder={AppConstants.searchManager}
                                 style={{ width: "100%", }}
@@ -532,7 +525,6 @@ class LiveScoreAddTeam extends Component {
     };
 
     handleSubmit = e => {
-        console.log(this.props.liveScoreTeamState.teamManagerData, ' this.props.liveScoreTeamState.teamManagerData')
         const { id } = JSON.parse(getLiveScoreCompetiton())
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -611,7 +603,6 @@ class LiveScoreAddTeam extends Component {
                     formData.append('mobileNumber', mobileNumber)
                     formData.append('email', email)
                     if (userIds.length > 0) {
-                        console.log(userIds, 'userIds$$$$')
                         formData.append('userIds', usersArray)
                     }
 

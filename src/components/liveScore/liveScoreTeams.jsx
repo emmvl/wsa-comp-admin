@@ -129,7 +129,7 @@ class LiveScoreTeam extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({conpetitionId : id})
         if (id !== null) {
-            this.props.getTeamsWithPagging(id, 1, 10)
+            this.props.getTeamsWithPagging(id, 0, 10,this.state.searchText)
         } else {
             history.push("/")
         }
@@ -161,6 +161,7 @@ class LiveScoreTeam extends Component {
 
   // on click of search icon
   onClickSearchIcon = () => {
+  
     if (this.state.searchText == null || this.state.searchText == "") {
     }
     else {

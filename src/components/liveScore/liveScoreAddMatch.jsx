@@ -44,6 +44,7 @@ import { getLiveScoreDivisionList } from '../../store/actions/LiveScoreAction/li
 const { Footer, Content, Header } = Layout;
 const { Option } = Select;
 
+
 class LiveScoreAddMatch extends Component {
     constructor(props) {
         super(props);
@@ -57,13 +58,9 @@ class LiveScoreAddMatch extends Component {
             createMatch: false,
             key: props.location.state ? props.location.state.key ? props.location.state.key : null : null,
             roundLoad: false,
+            selectedDivision:null
         }
-        // this.props.getVenuesTypeAction()
-
         this.props.clearMatchAction()
-
-
-        // this.props.liveScoreUpdateMatchAction(this.state.matchId, "id")
     }
 
     componentDidMount() {
@@ -79,13 +76,10 @@ class LiveScoreAddMatch extends Component {
         } else {
             history.push('/')
         }
-
-        // this.setState({  loadvalue: true })
         if (this.state.isEdit == true) {
-            // let { addEditMatch } = this.props.liveScoreMatchState
             this.props.liveScoreAddEditMatchAction(this.state.matchId)
         } else {
-            // this.props.liveScoreAddMatchAction()
+    
         }
     }
 
@@ -120,8 +114,7 @@ class LiveScoreAddMatch extends Component {
     setInitalFiledValue(data, start_date, start_time, displayTime) {
         let formated_date = moment(start_date).format("DD-MM-YYYY")
         let time_formate = moment(displayTime).format("HH:mm");
-        // let time_value = datee.toLocaleTimeString()
-
+    
         this.props.form.setFieldsValue({
             'date': moment(start_date, "DD-MM-YYYY"),
             'time': moment(time_formate, "HH:mm"),
@@ -169,7 +162,6 @@ class LiveScoreAddMatch extends Component {
         let divisionID = addEditMatch.divisionId
 
         this.props.liveScoreCreateRoundAction(this.state.createRound, sequence, id, divisionID)
-        // this.setInitalFiledValue(addEditMatch, start_date, start_time)
         this.setState({ visible: false, createRound: '', roundLoad: true })
     }
 
@@ -301,21 +293,21 @@ class LiveScoreAddMatch extends Component {
 
     selectDivision(divisionId) {
         this.props.liveScoreUpdateMatchAction(divisionId, 'divisionId')
+        this.setState({selectedDivision: divisionId})
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        // this.props.getliveScoreDivisions(id)
         this.props.getliveScoreTeams(id, divisionId)
     }
+    
     setUmpireClub(clubId) {
     
         this.props.liveScoreUpdateMatchAction(clubId, 'umpireClubId')
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        // this.props.getliveScoreDivisions(id)
     }
+
 
     //// Form View
     contentView = (getFieldDecorator) => {
         let { addEditMatch, start_date, start_time, divisionList, roundList, teamResult } = this.props.liveScoreMatchState
-        // let { liveScoreState } = this.props
         let { venueData,clubListData } = this.props.liveScoreMatchState
         const { scorerListResult } = this.props.liveScoreState
         const { scoringType } = JSON.parse(getLiveScoreCompetiton())
@@ -369,7 +361,6 @@ class LiveScoreAddMatch extends Component {
                                 rules: [{ required: true, message: ValidationConstants.divisionField }]
                             })(
                                 <Select
-                                    // loading={(!addEditMatch.division.name && liveScoreState.divisionList.length == 0) && true}
                                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                     onChange={(divisionName) => this.selectDivision(divisionName)}
                                     value={addEditMatch.divisionId}
@@ -430,7 +421,6 @@ class LiveScoreAddMatch extends Component {
                                     rules: [{ required: true, message: ValidationConstants.homeField }]
                                 })(
                                     <Select
-                                        // mode="multiple"
                                         className="reg-form-multple-select"
                                         placeholder='Select Home Team'
                                         style={{ width: "100%" }}

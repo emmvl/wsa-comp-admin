@@ -73,10 +73,16 @@ let LiveScoreAxiosApi = {
         const url = `/matches/admin/${data}`
         return Method.dataGet(url, null)
     },
-    liveScoreGetDivision(data) {
+    liveScoreGetDivision(data, compKey) {
+    
+        var url = null
+        if(compKey){
+            url =  `/division?competitionKey=${compKey}`
+        }else{
+            url =  `/division?competitionId=${data}`
+        }
+
        
-        // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-        const url = `/division?competitionId=${data}`
         return Method.dataGet(url, null)
     },
     liveScoreGetAffilate(data) {
@@ -121,8 +127,14 @@ let LiveScoreAxiosApi = {
     //     return Method.dataGet(url, token)
     // },
 
-    liveScoreLadderList(divisionId, competitionID) {
-        var url = `/teams/ladder?divisionIds=${divisionId}&competitionIds=${competitionID}`;
+    liveScoreLadderList(divisionId, competitionID, compKey) {
+        var url = null
+        if(compKey){
+             url = `/teams/ladder?divisionIds=${divisionId}&competitionKey=${compKey}`;
+        }else{
+             url = `/teams/ladder?divisionIds=${divisionId}&competitionIds=${competitionID}`;
+        }
+       
         return Method.dataGet(url, localStorage.token)
     },
 
@@ -676,11 +688,12 @@ let LiveScoreAxiosApi = {
 
     // Get Teams with paggination
     getTeamWithPagging(competitionID, offset, limit, search){
+        console.log(search)
         var url = null
         if(search && search.length >0 ){
             url = `/teams/list?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=${search}`;
         }else{
-             url = `/teams/list?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=`;
+             url = `/teams/list?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=${search}`;
         }
        
         return Method.dataGet(url, localStorage.token)

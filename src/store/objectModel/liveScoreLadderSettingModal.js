@@ -21,7 +21,6 @@ function getLadderData(data) {
 }
 
 function getLadderSettingObject(data) {
-    console.log(data, 'getLadderSettingObject')
     return {
         "id": data.id,
         "resultTypeId": data.code,
@@ -30,7 +29,7 @@ function getLadderSettingObject(data) {
 }
 
 function getObject(data) {
-    console.log(data, 'getObject')
+  
     let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
     return {
         "competitionId": id,

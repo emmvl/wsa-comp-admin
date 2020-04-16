@@ -87,8 +87,9 @@ function liveScoreNewsState(state = initialState, action) {
          
             state.addEditNews = news_data
             state.addEditNews["author"] = authorData.longName
-         
-            state.news_expire_date = moment(news_data.news_expire_date).format("YYYY-MM-DD")
+            
+            state.news_expire_date = news_data.news_expire_date ? moment(news_data.news_expire_date).format("YYYY-MM-DD") : ""
+            // state.news_expire_date = moment(news_data.news_expire_date).format("YYYY-MM-DD")
             state.expire_date = moment(news_data.news_expire_date,"YYYY-MM-DD")
             state.newExpiryDate = moment(news_data.news_expire_date, "YYYY-MM-DD")
             state.expire_time = news_data.news_expire_date

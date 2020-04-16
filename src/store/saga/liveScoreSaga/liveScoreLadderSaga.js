@@ -74,7 +74,7 @@ export function* liveScoreLaddersDivisionsaga(action) {
 export function* liveScoreLaddersListSaga(action) {
     try {
 
-        const result = yield call(LiveScoreAxiosApi.liveScoreLadderList, action.divisionID, action.competitionID);
+        const result = yield call(LiveScoreAxiosApi.liveScoreLadderList, action.divisionID, action.competitionID, action.compKey);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_LADDERS_LIST_SUCCESS,
