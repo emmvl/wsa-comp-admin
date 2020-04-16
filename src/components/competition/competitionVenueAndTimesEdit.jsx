@@ -716,16 +716,19 @@ class CompetitionVenueAndTimesEdit extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const { venuData } = this.props.venueTimeState
-                if (venuData.venueCourts.length > 0) {
-                    this.props.addVenueAction(venuData)
-                    this.setState({ saveContraintLoad: true })
+                message.config({
+                    duration: 3.5,
+                    maxCount: 1,
+                });
+                if (venuData.venueCourts.length == 0) {
+                    message.error(ValidationConstants.emptyAddCourtValidation);
+                }
+                else if(venuData.gameDays.length == 0){
+                    message.error(ValidationConstants.emptyGameDaysValidation);
                 }
                 else {
-                    message.config({
-                        duration: 1.5,
-                        maxCount: 1,
-                    });
-                    message.error(ValidationConstants.emptyAddCourtValidation)
+                    this.props.addVenueAction(venuData)
+                    this.setState({ saveContraintLoad: true });
                 }
             }
         })

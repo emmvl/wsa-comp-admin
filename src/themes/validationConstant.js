@@ -80,6 +80,7 @@ const ValidationConstants = {
 
     //venue court
     emptyAddCourtValidation: "Please add court to add venue.",
+    emptyGameDaysValidation: "Please add game days to venue",
 
 
     //Add/edit Division
