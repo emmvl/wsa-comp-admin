@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Layout, Breadcrumb, Button, Table, Select, Menu, Pagination, Modal } from "antd";
 //import './liveScore.css';
+import { NavLink } from "react-router-dom";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -163,9 +164,13 @@ class CompetitionPlayerImport extends Component {
                                 {AppConstants.upload}
                             </Button>
                         </div>
-                        {/* <div className="reg-add-save-button">
-                            <Link to="/templates/wsa_import_player.csv" target="_blank" download>Download</Link>
-                        </div> */}
+                        <div className="reg-add-save-button" style={{marginLeft: '20px'}}>
+                            <NavLink to="/templates/wsa-import-player.csv" target="_blank" download>
+                                <Button className="primary-add-comp-form" type="primary">
+                                    {AppConstants.export}
+                                </Button>
+                            </NavLink>
+                        </div>
                     </div>
                 </div>
             </div>
