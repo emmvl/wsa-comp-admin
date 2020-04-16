@@ -34,20 +34,20 @@ const columns = [
         key: 'competitionName',
         sorter: (a, b) => tableSort(a, b, "competitionName")
     },
-    {
-        title: 'Membership Product(s)',
-        dataIndex: 'membershipProductName',
-        key: 'membershipProductName',
-        sorter: (a, b) => tableSort(a, b, "membershipProductName")
-    },
-    {
-        title: 'Division',
-        dataIndex: 'divisionName',
-        key: 'divisionName',
-        sorter: (a, b) => tableSort(a, b, "divisionName")
+    // {
+    //     title: 'Membership Product(s)',
+    //     dataIndex: 'membershipProductName',
+    //     key: 'membershipProductName',
+    //     sorter: (a, b) => tableSort(a, b, "membershipProductName")
+    // },
+    // {
+    //     title: 'Division',
+    //     dataIndex: 'divisionName',
+    //     key: 'divisionName',
+    //     sorter: (a, b) => tableSort(a, b, "divisionName")
 
 
-    },
+    // },
     {
         title: 'Registration Open',
         dataIndex: 'registrationOpenDate',
@@ -105,7 +105,7 @@ const columns = [
                     }
                 >
                     <Menu.Item key="1">
-                        <NavLink to={{ pathname: `/registrationForm`, state: { id: record.competitionId, year: record.yearId } }}
+                        <NavLink to={{ pathname: `/registrationForm`, state: { id: record.competitionId, year: record.yearId, orgRegId: record.orgRegId } }}
                         >
                             {/*  */}
                             <span>Edit</span>

@@ -122,7 +122,8 @@ class RegistrationForm extends Component {
             selectedInvitees: [],
             tooltipVisibleDraft: false,
             tooltipVisiblePublish: false,
-            isPublished: false
+            isPublished: false,
+            orgRegId: 0
         };
         this_Obj = this;
         this.props.clearReducerDataAction("getRegistrationFormDetails")
@@ -133,6 +134,9 @@ class RegistrationForm extends Component {
     componentDidMount() {
         let competitionId = this.props.location.state ? this.props.location.state.id : null
         let year = this.props.location.state ? this.props.location.state.year : null
+        let orgRegId = this.props.location.state ? this.props.location.state.orgRegId : 0
+        this.setState({ orgRegId })
+
         if (competitionId !== null && year !== null) {
             this.props.getRegistrationForm(year, competitionId)
             this.setState({ onRegistrationLoad: true, yearRefId: year, firstTimeCompId: competitionId })
@@ -284,6 +288,9 @@ class RegistrationForm extends Component {
                         registration_settings.push(reg_QuestionsSetting[i])
                     }
                     SelectedProduct['registrationSettings'] = registration_settings
+                    SelectedProduct["orgRegistrationId"] = SelectedProduct.orgRegistrationId == 0 || SelectedProduct.orgRegistrationId == null ? this.state.orgRegId : SelectedProduct.orgRegistrationId
+                    console.log(this.state.orgRegId, "SelectedProduct", SelectedProduct)
+
                     this.props.regSaveRegistrationForm(SelectedProduct, this.state.statusRefId)
                 }
                 else {
@@ -942,9 +949,9 @@ class RegistrationForm extends Component {
         let otherQuestionsSetting = this.props.appState.otherQuestionsSetting !== 0 ? this.props.appState.otherQuestionsSetting : []
         const { selectedInvitees, selectedDemographic, SelectedOtherQuestions, selectedNetballQuestions } = this.props.registrationState
         let isPublished = this.state.isPublished
-        let inviteesExpend = (selectedInvitees.includes("2") || selectedInvitees.includes("3") || selectedInvitees.includes("4")) ? "1" : null
-        let netballExpend = (selectedNetballQuestions.includes("7")) ? "5" : null
-        console.log(inviteesExpend)
+        let inviteesExpend = (selectedInvitees.includes("2") || selectedInvitees.includes("3") || selectedInvitees.includes("4") || selectedInvitees.includes(2) || selectedInvitees.includes(3) || selectedInvitees.includes(4)) ? "1" : null
+        let netballExpend = (selectedNetballQuestions.includes("7") || selectedNetballQuestions.includes(7)) ? "5" : null
+
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading">{AppConstants.additionalQuestions}</span>

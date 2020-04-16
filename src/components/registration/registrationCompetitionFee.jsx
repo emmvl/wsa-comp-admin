@@ -2179,15 +2179,15 @@ class RegistrationCompetitionFee extends Component {
         if (inItem.id == "2" && orgLevelId == "4") {
             return false
         }
-        if (inItem.id == "7" && orgLevelId == "3") {
-            return false
-        }
-        if (inItem.id == "8" && orgLevelId == "4") {
-            return false
-        }
-        if (inItem.id == "7" && orgLevelId == "4") {
-            return false
-        }
+        // if (inItem.id == "7" && orgLevelId == "3") {
+        //     return false
+        // }
+        // if (inItem.id == "8" && orgLevelId == "4") {
+        //     return false
+        // }
+        // if (inItem.id == "7" && orgLevelId == "4") {
+        //     return false
+        // }
         else {
             return true
         }
@@ -2305,7 +2305,7 @@ class RegistrationCompetitionFee extends Component {
                                     {item.subReferences.length == 0 ?
                                         <Radio value={item.id}>{item.description}</Radio>
                                         : <div>
-                                            <div class="applicable-to-heading invitees-main">{orgLevelId == "4" ? "" : item.description}</div>
+                                            <div class="applicable-to-heading invitees-main">{orgLevelId == "4" && item.id == 1 ? "" : item.description}</div>
                                             {(item.subReferences).map((subItem, subIndex) => (
                                                 <div style={{ marginLeft: '20px' }}>
                                                     {this.disableInvitee(subItem) &&
@@ -2313,7 +2313,6 @@ class RegistrationCompetitionFee extends Component {
                                                     }
                                                     {this.affiliatesSearchInvitee(subItem)}
                                                 </div>
-
                                             ))}
                                         </div>
                                     }
