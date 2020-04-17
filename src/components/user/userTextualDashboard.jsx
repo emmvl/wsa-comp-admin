@@ -307,7 +307,7 @@ class UserTextualDashboard extends Component{
                     columns={columns}
                     dataSource={userDashboardTextualList} 
                     pagination={false}
-                    loading={this.props.userState.onLoad == true && true}
+                    loading={this.props.userState.onTextualLoad == true && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
