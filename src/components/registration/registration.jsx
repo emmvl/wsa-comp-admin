@@ -34,14 +34,14 @@ const columns = [
 
 
     },
-    {
-        title: 'Division',
-        dataIndex: 'divisionName',
-        key: 'divisionName',
-        sorter: (a, b) => tableSort(a, b, "divisionName")
+    // {
+    //     title: 'Division',
+    //     dataIndex: 'divisionName',
+    //     key: 'divisionName',
+    //     sorter: (a, b) => tableSort(a, b, "divisionName")
 
 
-    },
+    // },
     {
         title: 'Discounts',
         dataIndex: 'discounts',

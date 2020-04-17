@@ -44,6 +44,7 @@ const initialState = {
     affiliateOnLoad: false,
     affiliateToOnLoad: false,
     affiliateOurOrgOnLoad: false,
+    onTextualLoad: false,
     error: null,
     result: [],
     status: 0,
@@ -282,14 +283,14 @@ function userReducer(state = initialState, action) {
             };
 
         case ApiConstants.API_USER_DASHBOARD_TEXTUAL_LOAD:
-            return { ...state, onLoad: true };
+            return { ...state, onTextualLoad: true };
 
         case ApiConstants.API_USER_DASHBOARD_TEXTUAL_SUCCESS:
             let textualData = action.result;
 
             return {
                 ...state,
-                onLoad: false,
+                onTextualLoad: false,
                 userDashboardTextualList: textualData.users,
                 userDashboardTextualPage: textualData.page ? textualData.page.currentPage : 1,
                 userDashboardTextualTotalCount: textualData.page.totalCount,

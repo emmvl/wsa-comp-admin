@@ -161,7 +161,7 @@ class RegistrationPayments extends Component {
                                     <span className="reg-payment-paid-reg-text">Paid Registrations 100</span>
                                 </div>
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }} >
-                                    <a class="view-more-btn" href="javascript:void(0)"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                                    <a className="view-more-btn" ><i className="fa fa-angle-right" aria-hidden="true"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -183,7 +183,7 @@ class RegistrationPayments extends Component {
                                     <span className="reg-payment-paid-reg-text">Outstanding Payments 50</span>
                                 </div>
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }} >
-                                    <a class="view-more-btn" href="javascript:void(0)"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                                    <a className="view-more-btn" ><i className="fa fa-angle-right" aria-hidden="true"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -207,7 +207,7 @@ class RegistrationPayments extends Component {
                                     <span className="reg-payment-paid-reg-text">Cash Payments 30</span>
                                 </div>
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }} >
-                                    <a class="view-more-btn" href="javascript:void(0)"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                                    <a className="view-more-btn" ><i className="fa fa-angle-right" aria-hidden="true"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -229,7 +229,7 @@ class RegistrationPayments extends Component {
                                     <span className="reg-payment-paid-reg-text">Pending Payments 30</span>
                                 </div>
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }} >
-                                    <a class="view-more-btn" href="javascript:void(0)"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                                    <a className="view-more-btn" ><i className="fa fa-angle-right" aria-hidden="true"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -255,7 +255,7 @@ class RegistrationPayments extends Component {
                                     <span className="reg-payment-paid-reg-text">Refunds / Reimbursements 100</span>
                                 </div>
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }} >
-                                    <a class="view-more-btn" href="javascript:void(0)"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
+                                    <a className="view-more-btn" ><i className="fa fa-angle-right" aria-hidden="true"></i></a>
 
                                 </div>
                             </div>

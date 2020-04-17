@@ -1,7 +1,7 @@
 import ApiConstants from '../../../themes/apiConstants'
 import liveScoreLadderSettingModal from '../../objectModel/liveScoreLadderSettingModal'
 import { stat } from 'fs';
-
+import { getLiveScoreCompetiton } from '../../../util/sessionStorage';
 const initialState = {
     onLoad: false,
     error: null,
@@ -24,24 +24,51 @@ function getResultValues(data, matchData) {
     return matchData
 }
 
-function setPostData(selectedData, matcheResults) {
-    let postArray = []
-    for (let i in matcheResults) {
-        for (let j in selectedData) {
-            if (matcheResults[i].id == selectedData[j].resultTypeId) {
-                let object = {
-                    competitionId: selectedData[j].competitionId,
-                    resultTypeId: selectedData[j].resultTypeId,
-                    points: selectedData[j].points,
-                }
-                postArray.push(object)
-                break
-            }
 
-        }
+function matchPostArray(id, data){
 
+    let object = {
+        status:false,
+        result:null,
     }
 
+    for(let i in data){
+        if(data[i].resultTypeId == id){
+            object = {
+                status:true,
+                result:data[i],
+            }
+            break
+        }
+       
+    }
+
+    return object
+}
+
+
+function setPostData(selectedData, matcheResults, compId) {
+    let postArray = []
+    let object = null
+    for (let i in matcheResults) {
+            let postResultObject= matchPostArray(matcheResults[i].id, selectedData)
+            if(postResultObject.status == true){
+                 object = {
+                    competitionId: postResultObject.result.competitionId,
+                    resultTypeId:  postResultObject.result.resultTypeId,
+                    points:  postResultObject.result.points,
+                }
+            }else{
+                 object = {
+                    competitionId: compId,
+                    resultTypeId:  matcheResults[i].id,
+                    points:  0,
+                }
+
+            }
+            postArray.push(object)
+    }
+ 
     return postArray
 }
 
@@ -71,8 +98,9 @@ function liveScoreLadderSettingReducer(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LADDER_SETTING_GET_DATA_SUCCESS:
+            const { id } = JSON.parse(getLiveScoreCompetiton())
             let data = getResultValues(action.result, state.matchResult)
-            let post_Array = setPostData(action.result, state.matchResult)
+            let post_Array = setPostData(action.result, state.matchResult, id)
             state.postData = post_Array
             return {
                 ...state,
@@ -83,7 +111,7 @@ function liveScoreLadderSettingReducer(state = initialState, action) {
         //// Update Ladder Setting
         case ApiConstants.UPDATE_LADDER_SETTING:
             state.matchResult[action.index]['points'] = action.data
-            state.postData[action.index]['points'] = JSON.parse(action.data)
+            state.postData[action.index]['points'] = action.data
             return {
                 ...state,
             };

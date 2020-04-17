@@ -562,7 +562,10 @@ class CompetitionVenueAndTimesEdit extends Component {
         const { gameDays } = this.props.venueTimeState.venuData
         return (
             <div className="fees-view pt-5">
-                <span className="form-heading">{AppConstants.game_Days}</span>
+                <span className="form-heading">
+                    {AppConstants.game_Days}
+                    <span className="required-field" style={{fontSize:"14px"}}></span>
+                </span>
                 <div className="fluid-width">
                     {/* {this.gameData()} */}
                     {(gameDays || []).map((item, index) => {
@@ -665,7 +668,9 @@ class CompetitionVenueAndTimesEdit extends Component {
         return (
             <div className="fees-view pt-5">
                 <div style={{display:'flex'}}>
-                    <span className="form-heading">{AppConstants.courts}</span>
+                    <span className="form-heading">{AppConstants.courts}
+                    <span className="required-field" style={{fontSize:"14px", paddingTop: '5px'}}></span>
+                    </span>
                     {!this.state.isUsed  ? 
                     <Button className="primary-add-comp-form" type="primary" style={{marginLeft:'auto'}}> 
                         <div className="row">
@@ -716,16 +721,19 @@ class CompetitionVenueAndTimesEdit extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const { venuData } = this.props.venueTimeState
-                if (venuData.venueCourts.length > 0) {
-                    this.props.addVenueAction(venuData)
-                    this.setState({ saveContraintLoad: true })
+                message.config({
+                    duration: 3.5,
+                    maxCount: 1,
+                });
+                if (venuData.venueCourts.length == 0) {
+                    message.error(ValidationConstants.emptyAddCourtValidation);
+                }
+                else if(venuData.gameDays.length == 0){
+                    message.error(ValidationConstants.emptyGameDaysValidation);
                 }
                 else {
-                    message.config({
-                        duration: 1.5,
-                        maxCount: 1,
-                    });
-                    message.error(ValidationConstants.emptyAddCourtValidation)
+                    this.props.addVenueAction(venuData)
+                    this.setState({ saveContraintLoad: true });
                 }
             }
         })

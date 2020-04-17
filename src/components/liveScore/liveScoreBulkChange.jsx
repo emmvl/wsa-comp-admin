@@ -48,6 +48,7 @@ class LiveScoreBulkChange extends Component {
             loading: false,
         };
         this.props.matchResult()
+        this.props.liveScoreUpdateBulkAction("selectedOption", "selectedOption")
     }
 
     componentDidMount() {

@@ -29,7 +29,7 @@ function* errorSaga(error) {
 //////get the competition fee list in registration
 export function* liveScoreDivisionsaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreGetDivision, action.competitionID);
+        const result = yield call(LiveScoreAxiosApi.liveScoreGetDivision, action.competitionID, action.compKey);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_SUCCESS,

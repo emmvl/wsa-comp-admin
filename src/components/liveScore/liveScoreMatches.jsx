@@ -124,13 +124,14 @@ class LiveScoreMatchesList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            competitionId:null
         }
     }
 
     componentDidMount() {
         // let competitionID = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
+        this.setState({competitionId : id})
         if (id !== null) {
             this.handleMatchTableList(1, id)
         } else {
@@ -188,7 +189,7 @@ class LiveScoreMatchesList extends Component {
                                     }}
                                 >
 
-                                    <Button className="primary-add-comp-form" type="primary">
+                                    <Button href={AppConstants.matchExport +this.state.competitionId }  className="primary-add-comp-form" type="primary">
 
                                         <div className="row">
                                             <div className="col-sm">

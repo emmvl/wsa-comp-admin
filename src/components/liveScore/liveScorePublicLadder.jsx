@@ -120,7 +120,8 @@ class LiveScorePublicLadder extends Component {
         this.state = {
             division: "",
             loadding: false,
-            competitionId: null
+            competitionId: null,
+            competitionUniqueKey : null
         }
     }
 
@@ -140,16 +141,21 @@ class LiveScorePublicLadder extends Component {
     }
 
     componentDidMount() {
-        this.setState({ loadding: true })
-        this.getCompDetails().then((res) => {
+        let compParams =  this.props.location.search.split("?competitionId=")
+        let compKey  = compParams[1]
+        this.setState({ loadding: true , competitionId: 1 , competitionUniqueKey :compKey})
+        this.props.getLiveScoreDivisionList(1, compKey)
+      
+        // this.getCompDetails().then((res) => {
+        // //    let params = url.split("?");;
+          
+        //     let resp = res? JSON.parse(res) : null
+        //     // let compKey = resp && resp.uniqueKey ? resp.uniqueKey :"20b91f98-3f12-41c1-aeeb-70c9d6f4fa3d"
+        //     let compId = resp ? resp.id : 1
+        //     this.setState({ competitionId: compId , competitionUniqueKey :compKey})
+        //     this.props.getLiveScoreDivisionList(compId, compKey)
            
-            let resp = res? JSON.parse(res) : null
-     
-            let compId = resp ? resp.id : 1
-            this.setState({ competitionId: compId })
-            this.props.getLiveScoreDivisionList(compId)
-           
-        })
+        // })
 
     }
 
@@ -163,7 +169,7 @@ class LiveScorePublicLadder extends Component {
             if (this.state.loadding == true && this.props.liveScoreLadderState.onLoad == false) {
                 let divisionArray = this.props.liveScoreLadderState.liveScoreLadderDivisionData
                 let divisionId = isArrayNotEmpty(divisionArray) ? divisionArray[0].id : null
-                this.props.liveScoreLaddersListAction(this.state.competitionId, divisionId)
+                this.props.liveScoreLaddersListAction(this.state.competitionId, divisionId, this.state.competitionUniqueKey)
                 this.setState({ loadding: false })
             }
         }
@@ -172,7 +178,7 @@ class LiveScorePublicLadder extends Component {
 
 
     divisionChange = (value) => {
-        this.props.liveScoreLaddersListAction(this.state.competitionId, value.division)
+        this.props.liveScoreLaddersListAction(this.state.competitionId, value.division, this.state.competitionUniqueKey)
     }
     ///dropdown view containing dropdown
     dropdownView = () => {

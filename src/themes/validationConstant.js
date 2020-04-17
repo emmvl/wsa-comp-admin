@@ -70,7 +70,7 @@ const ValidationConstants = {
     registrationCloseDateIsRequired: 'Registration close date is required.',
 
     //time slot 
-    timeSlotPreference: "Please select time slot preference",
+    timeSlotPreference: "At least one timeslot must be entered",
     timeSlotVenue: "Please select venueId",
     gradeField: 'Grade field is required.',
 
@@ -80,6 +80,7 @@ const ValidationConstants = {
 
     //venue court
     emptyAddCourtValidation: "Please add court to add venue.",
+    emptyGameDaysValidation: "Please add game days to venue",
 
 
     //Add/edit Division
@@ -108,7 +109,7 @@ const ValidationConstants = {
     specificTime: "Please select Specific Time.",
 
     selectReason: 'Reason is required.',
-    pleaseSelectCompetition:"Please select competition",
+    pleaseSelectCompetition: "Please select competition",
     matchDuration: "Please enter a match duration",
     mainBreak: "Please enter a main break",
     qtrBreak: "Please enter a qtr break",

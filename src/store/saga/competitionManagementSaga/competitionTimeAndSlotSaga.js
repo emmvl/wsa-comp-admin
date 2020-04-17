@@ -2,6 +2,8 @@ import { put, call } from 'redux-saga/effects'
 import ApiConstants from "../../../themes/apiConstants";
 import CompetitionAxiosApi from "../../http/competitionHttp/competitionAxiosApi";
 import { message } from 'antd'
+import CommonAxiosApi from "../../http/commonHttp/commonAxios";
+
 
 function* failSaga(result) {
     yield put({ type: ApiConstants.API_COMPETITION_TIMESLOT_FAIL });
@@ -27,15 +29,23 @@ function* errorSaga(error) {
 // competition time slot get api
 export function* competitonWithTimeSlots(action) {
     try {
-        const result = yield call(CompetitionAxiosApi.getTimeSlotData, action.year, action.competitionId, action.organisationId, action.userId);
-        if (result.status === 1) {
-            yield put({
-                type: ApiConstants.API_GET_COMPETITION_WITH_TIME_SLOTS_SUCCESS,
-                result: result.result.data,
-                status: result.status,
-            });
-        } else {
-            yield call(failSaga, result)
+        const refResult = yield call(CommonAxiosApi.getCommonTimeSlotInit)
+        if (refResult.status == 1) {
+            const result = yield call(CompetitionAxiosApi.getTimeSlotData, action.year, action.competitionId);
+            if (result.status === 1) {
+                yield put({
+                    type: ApiConstants.API_GET_COMPETITION_WITH_TIME_SLOTS_SUCCESS,
+                    result: result.result.data,
+                    refResult: refResult.result.data,
+                    status: result.status,
+                });
+            }
+            else {
+                yield call(failSaga, result)
+            }
+        }
+        else {
+            yield call(failSaga, refResult)
         }
     } catch (error) {
         yield call(errorSaga, error)

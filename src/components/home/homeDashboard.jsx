@@ -298,7 +298,7 @@ class HomeDashboard extends Component {
                     this.props.getUserCount(this.state.yearRefId)
                     this.setState({ yearRefId })
                 }
-                this.setState({ loading: false,  })
+                this.setState({ loading: false, })
             }
         }
         if (nextProps.userOrganisation !== userOrganisation) {
@@ -439,7 +439,7 @@ class HomeDashboard extends Component {
                                     <span className="reg-payment-paid-reg-text">{AppConstants.totalUsers}</span>
                                 </div>
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }} >
-                                    <a className="view-more-btn" href="javascript:void(0)"><i className="fa fa-angle-right" aria-hidden="true"></i></a>
+                                    <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -463,7 +463,7 @@ class HomeDashboard extends Component {
                                 </div>
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }} >
 
-                                    <a className="view-more-btn" href="javascript:void(0)"><i className="fa fa-angle-right" aria-hidden="true"></i></a>
+                                    <a className="view-more-btn" ><i className="fa fa-angle-right" aria-hidden="true"></i></a>
 
                                 </div>
                             </div>

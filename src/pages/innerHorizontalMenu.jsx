@@ -86,11 +86,11 @@ class InnerHorizontalMenu extends React.Component {
                                 <span >Venues</span>
                             </NavLink>
                         </Menu.Item>
-                        {/* <Menu.Item key="8">
+                        <Menu.Item key="8">
                             <NavLink to="/competitionLadder" >
                                 <span >Ladder</span>
                             </NavLink>
-                        </Menu.Item> */}
+                        </Menu.Item>
                         <Menu.Item key="9">
                             <NavLink to="/competitionFormat" >
                                 <span >Competition Format</span>
