@@ -443,8 +443,10 @@ class RegistrationCompetitionForm extends Component {
                 let isRegClosed = registrationCloseDate ? !registrationCloseDate.isSameOrAfter(moment()) : false;
 
                 let creatorId = competitionFeesState.competitionCreator
-                let userId = getUserId();
-                let isCreatorEdit = creatorId == userId ? false : true;
+                let orgData = getOrganisationData()
+                let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0
+                // let userId = getUserId();
+                let isCreatorEdit = creatorId == organisationUniqueKey ? false : true;
 
                 this.setPermissionFields(isPublished, isRegClosed, isCreatorEdit)
 
@@ -548,7 +550,7 @@ class RegistrationCompetitionForm extends Component {
         this.props.paymentSeasonalFee()
         this.props.getCommonDiscountTypeTypeAction()
         this.props.getVenuesTypeAction();
-        this.props.venueListAction();
+        // this.props.venueListAction();
         if (competitionId !== null) {
             let hasRegistration = 0
             this.props.getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration)

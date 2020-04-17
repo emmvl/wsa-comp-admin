@@ -95,6 +95,18 @@ function liveScoreClubListAction(competitionId){
         competitionId
     }
 }
+
+function searchFilterAction(search, key){
+    const action = {
+        type : ApiConstants.API_LIVE_MATCH_LOCAL_SEARCH,
+        search : search,
+        key : key
+    }
+    return action
+}
+
+
+
 export {
     liveScoreMatchListAction,
     liveScoreAddEditMatchAction,
@@ -106,5 +118,6 @@ export {
     getCompetitonVenuesList,
     liveScoreMatchImportAction,
     liveScoreGetMatchDetailInitiate,
-    liveScoreClubListAction
+    liveScoreClubListAction,
+    searchFilterAction
 };

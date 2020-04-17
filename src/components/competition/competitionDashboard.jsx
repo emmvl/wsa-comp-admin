@@ -11,6 +11,7 @@ import { competitionDashboardAction } from '../../store/actions/competitionModul
 import history from "../../util/history";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 import { isArrayNotEmpty, isNullOrEmptyString } from "../../util/helpers";
+import moment from "moment";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -211,8 +212,8 @@ class CompetitionDashboard extends Component {
                                     onChange={yearId => this.onYearClick(yearId)}
                                     value={selectedYearId}
                                 >
-                                    {yearList.length > 0 && yearList.map((item) => (
-                                        < Option value={item.id} > {item.name}</Option>
+                                    {yearList.length > 0 && yearList.map((item, yearIndex) => (
+                                        < Option  key={"yearlist"+ yearIndex}value={item.id} > {item.name}</Option>
                                     ))
                                     }
                                 </Select>
@@ -322,6 +323,19 @@ class CompetitionDashboard extends Component {
         );
     };
 
+
+    compScreenDeciderCheck = (record) => {
+        let registrationCloseDate = record.registrationCloseDate && moment(record.registrationCloseDate)
+        let isRegClosed = registrationCloseDate ? !registrationCloseDate.isSameOrAfter(moment()) : false;
+
+        if (record.hasRegistration == 1 && isRegClosed == false) {
+            history.push("/registrationCompetitionFee", { id: record.competitionId })
+        }
+        else {
+            history.push("/registrationCompetitionForm", { id: record.competitionId })
+        }
+    }
+
     ////////participatedView view for competition
     participatedView = () => {
         return (
@@ -335,9 +349,7 @@ class CompetitionDashboard extends Component {
                         pagination={false}
                         onRow={(record) => ({
                             onClick: () =>
-                                record.hasRegistration == 0 ?
-                                    history.push("/registrationCompetitionForm", { id: record.competitionId })
-                                    : history.push("/registrationCompetitionFee", { id: record.competitionId })
+                                this.compScreenDeciderCheck(record)
                         })}
                     />
 
@@ -359,9 +371,7 @@ class CompetitionDashboard extends Component {
                         pagination={false}
                         onRow={(record) => ({
                             onClick: () =>
-                                record.hasRegistration == 0 ?
-                                    history.push("/registrationCompetitionForm", { id: record.competitionId })
-                                    : history.push("/registrationCompetitionFee", { id: record.competitionId })
+                                this.compScreenDeciderCheck(record)
                         })}
                     />
                 </div>

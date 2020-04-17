@@ -58,6 +58,7 @@ const columns = [
                 checked={record.isSelected}
                 disabled={this_Obj.state.isPublished}
                 onChange={e => this_Obj.getSelectionofProduct(e.target.checked, record, index)}
+                key={"division" + index}
             ></Checkbox>
         )
     },
@@ -550,7 +551,7 @@ class RegistrationForm extends Component {
                     })}
                 </Select>
                 {this.props.registrationState.selectedMemberShipType.length > 0 &&
-                    this.props.registrationState.selectedMemberShipType.map((item, ) =>
+                    this.props.registrationState.selectedMemberShipType.map((item, index) =>
                         (
                             <div className="inside-container-view">
                                 <span className="form-heading pt-2 pl-2">
@@ -558,12 +559,14 @@ class RegistrationForm extends Component {
                                 </span>
                                 <div className="table-responsive">
                                     <Table
+                                        rowKey={item => item.id}
                                         showHeader={true}
                                         className="fees-table"
                                         columns={columns}
                                         dataSource={item.membershipProductTypes}
                                         pagination={false}
                                         Divider="false"
+
                                     />
                                 </div>
                             </div>
@@ -832,7 +835,9 @@ class RegistrationForm extends Component {
                             name='registerMethods'
                             checked={this.onChangeRegistrationMethod(item, index)}
                             onChange={(e) => this.methodSelection(e, item, formDataValue)
+
                             }
+                            key={"methods" + index}
                             disabled={isPublished}
                         >
                             {item.description}

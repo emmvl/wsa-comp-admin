@@ -82,7 +82,8 @@ const initialState = {
     end_Date: "",
     end_Time: "",
     matchResult: [],
-    bulkRadioBtn: 'fixedDuration'
+    bulkRadioBtn: 'fixedDuration',
+    mainCourtList: []
 
 };
 
@@ -259,6 +260,7 @@ function LiveScoreBulkMatchState(state = initialState, action) {
                     if (index > -1) {
                         let courts = state.venueData[index].venueCourts
                         state.pushCourtData = courts
+                        state.mainCourtList = courts
                     }
                 } else {
                     console.log(action, 'action')
@@ -274,6 +276,7 @@ function LiveScoreBulkMatchState(state = initialState, action) {
                     if (index > -1) {
                         let courts = state.venueData[index].venueCourts
                         state.bringCourtData = courts
+                        state.mainCourtList = courts
                     }
                 } else {
                     new_object[action.key] = action.data
@@ -291,6 +294,7 @@ function LiveScoreBulkMatchState(state = initialState, action) {
                     if (index > -1) {
                         let courts = state.venueData[index].venueCourts
                         state.endCourtData = courts
+                        state.mainCourtList = courts
                     }
                 } else {
                     new_object[action.key] = action.data
@@ -305,6 +309,7 @@ function LiveScoreBulkMatchState(state = initialState, action) {
                     if (index > -1) {
                         let courts = state.venueData[index].venueCourts
                         state.abandonCourtData = courts
+                        state.mainCourtList = courts
                     }
                 }
                 state.abandonData = new_object
@@ -374,6 +379,27 @@ function LiveScoreBulkMatchState(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
+            }
+
+        //// Search Court Data
+        case ApiConstants.API_SEARCH_COURT_LIST:
+            console.log(action)
+            return {
+                ...state,
+                pushCourtData: action.data,
+                bringCourtData: action.data,
+                abandonCourtData: action.data,
+                endCourtData: action.data,
+            }
+
+        case ApiConstants.CLEAR_FILTER_SEARCH:
+
+            return {
+                ...state,
+                pushCourtData: state.mainCourtList,
+                bringCourtData: state.mainCourtList,
+                abandonCourtData: state.mainCourtList,
+                endCourtData: state.mainCourtList,
             }
 
         default:

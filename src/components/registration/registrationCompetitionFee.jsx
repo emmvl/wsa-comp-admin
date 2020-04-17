@@ -272,7 +272,7 @@ const playerSeasoTable = [
         title: "Total",
         dataIndex: "total",
         key: "total",
-        render: total => <Input prefix="$" className="input-inside-table-fees" value={total} disabled={true} />
+        render: total => <Input style={{ width: 95 }} prefix="$" className="input-inside-table-fees" value={total} disabled={true} />
     }
 ];
 
@@ -350,7 +350,7 @@ const playercasualTable = [
         title: "Total",
         dataIndex: "total",
         key: "total",
-        render: total => <Input prefix="$" className="input-inside-table-fees" value={total} disabled={true} />
+        render: total => <Input style={{ width: 95 }} prefix="$" className="input-inside-table-fees" value={total} disabled={true} />
     }
 ];
 
@@ -444,7 +444,7 @@ const playerSeasonalTableAssociation = [
         title: "Total",
         dataIndex: "total",
         key: "total",
-        render: total => <Input prefix="$" className="input-inside-table-fees" value={total} disabled={true} />
+        render: total => <Input style={{ width: 95 }} prefix="$" className="input-inside-table-fees" value={total} disabled={true} />
     }
 ];
 
@@ -538,7 +538,7 @@ const playercasualTableAssociation = [
         title: "Total",
         dataIndex: "total",
         key: "total",
-        render: total => <Input prefix="$" className="input-inside-table-fees" value={total} disabled={true} />
+        render: total => <Input style={{ width: 95 }} prefix="$" className="input-inside-table-fees" value={total} disabled={true} />
     }
 ];
 
@@ -631,7 +631,7 @@ const playerSeasonalTableClub = [
         title: "Total",
         dataIndex: "total",
         key: "total",
-        render: total => <Input prefix="$" className="input-inside-table-fees" value={total} disabled={true} />
+        render: total => <Input style={{ width: 95 }} prefix="$" className="input-inside-table-fees" value={total} disabled={true} />
     }
 ];
 
@@ -726,7 +726,7 @@ const playercasualTableClub = [
         title: "Total",
         dataIndex: "total",
         key: "total",
-        render: total => <Input prefix="$" className="input-inside-table-fees" value={total} disabled={true} />
+        render: total => <Input style={{ width: 95 }} prefix="$" className="input-inside-table-fees" value={total} disabled={true} />
     }
 ];
 
@@ -823,8 +823,10 @@ class RegistrationCompetitionFee extends Component {
                 let isRegClosed = registrationCloseDate ? !registrationCloseDate.isSameOrAfter(moment()) : false;
 
                 let creatorId = competitionFeesState.competitionCreator
-                let userId = getUserId();
-                let isCreatorEdit = creatorId == userId ? false : true;
+                let orgData = getOrganisationData()
+                let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0
+                // let userId = getUserId();
+                let isCreatorEdit = creatorId == organisationUniqueKey ? false : true;
 
                 this.setPermissionFields(isPublished, isRegClosed, isCreatorEdit)
 
@@ -2445,12 +2447,9 @@ class RegistrationCompetitionFee extends Component {
                                 >
                                     {item.description}
                                 </Checkbox>
-
                             </div>
-
                         )
                     })}
-
                 </div>
             </div >
         );
@@ -2486,7 +2485,6 @@ class RegistrationCompetitionFee extends Component {
                             </div>
                         )
                     })
-
                     }
                 </div>
             </div>
