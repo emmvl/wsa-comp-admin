@@ -523,7 +523,10 @@ class CompetitionVenueAndTimesAdd extends Component {
         const { gameDays } = this.props.venueTimeState.venuData
         return (
             <div className="fees-view pt-5">
-                <span className="form-heading">{AppConstants.game_Days}</span>
+                <span className="form-heading">
+                    {AppConstants.game_Days}
+                    <span className="required-field" style={{fontSize:"14px"}}></span>
+                </span>
                 <div className="fluid-width">
                     {/* {this.gameData()} */}
                     {gameDays.map((item, index) => {
@@ -611,7 +614,9 @@ class CompetitionVenueAndTimesAdd extends Component {
         return (
             <div className="fees-view pt-5">
                 <div style={{ display: 'flex' }}>
-                    <span className="form-heading">{AppConstants.courts}</span>
+                    <span className="form-heading">
+                        {AppConstants.courts} <span className="required-field" style={{fontSize:"14px", paddingTop: '5px'}}></span>
+                    </span>
                     <Button className="primary-add-comp-form" type="primary" style={{ marginLeft: 'auto' }}>
                         <div className="row">
                             <div className="col-sm">
