@@ -2,7 +2,7 @@ import ApiConstants from "../../../themes/apiConstants";
 import history from "../../../util/history";
 import { getRegistrationSetting } from "../../objectModel/getRegSettingObject";
 import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
-import { getUserId } from "../../../util/sessionStorage"
+import { getUserId, getOrganisationData } from "../../../util/sessionStorage"
 import { stat } from "fs";
 
 // dummy object of competition detail
@@ -913,9 +913,12 @@ function checkIsDivisionAllType(productArray) {
 function createProductFeeArr(data) {
     var getFeeData = isArrayNotEmpty(data.competitionfees) ? data.competitionfees : []
 
-    let creatorId = data.competitiondetail.competitionCreator
-    let userId = getUserId();
-    let feesOwner = creatorId !== JSON.parse(userId) ? false : true
+    // let creatorId = data.competitiondetail.competitionCreator
+    // let userId = getUserId();
+    let creatorId = data.competitiondetail.competitionCreatorOrgUniqueKey
+    let orgData = getOrganisationData()
+    let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0
+    let feesOwner = creatorId !== (organisationUniqueKey) ? false : true
     if (!feesOwner) {
         let childFeesMappedArray = isArrayNotEmpty(data.competitionfees) ? childFeesMapping(data.competitionfees) : []
         getFeeData = childFeesMappedArray
@@ -1296,7 +1299,7 @@ function competitionFees(state = initialState, action) {
         case ApiConstants.API_GET_COMPETITION_FEES_DETAILS_SUCCESS:
             let allData = action.result.data
             console.log("allData", allData)
-            state.competitionCreator = allData.competitiondetail.competitionCreator
+            state.competitionCreator = allData.competitiondetail.competitionCreatorOrgUniqueKey
             // state.competitionCreator = 6
             let selectedInvitees = checkSlectedInvitees(allData.competitiondetail.invitees)
             let selectedVenues = checkSelectedVenue(allData.competitiondetail.venues, state.venueList)

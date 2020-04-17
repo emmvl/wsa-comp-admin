@@ -115,13 +115,17 @@ class CompetitionPlayerGrades extends Component {
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.playerGrading}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                    <div className="col-sm" style={{ display: "flex", flexDirection: 'row', alignItems: "center", 
-                                    justifyContent: "flex-end", width: "100%", marginRight: '2.8%' }}>
+                    <div className="col-sm" style={{
+                        display: "flex", flexDirection: 'row', alignItems: "center",
+                        justifyContent: "flex-end", width: "100%", marginRight: '2.8%'
+                    }}>
                         <div className="row">
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile">
-                                    <NavLink  to={{ pathname: `/competitionPlayerImport`, 
-                                            state: {divisionId: this.state.divisionId, competitionId: this.state.firstTimeCompId} }}>
+                                    <NavLink to={{
+                                        pathname: `/competitionPlayerImport`,
+                                        state: { divisionId: this.state.divisionId, competitionId: this.state.firstTimeCompId }
+                                    }}>
                                         <Button className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">
@@ -353,7 +357,7 @@ class CompetitionPlayerGrades extends Component {
             <div className="d-flex flex-column">
                 {assignedData.map((teamItem, teamIndex) =>
                     (
-                        <Droppable droppableId={`${teamItem.teamId}`} >
+                        <Droppable droppableId={`${teamItem.teamId}`} key={`${teamItem.teamId}`} >
                             {(provided, snapshot) => (
                                 <div
                                     ref={provided.innerRef}
@@ -370,12 +374,12 @@ class CompetitionPlayerGrades extends Component {
                                                 className="col-sm d-flex justify-content-end "
                                             >
                                                 <a className="view-more-btn collapsed" data-toggle="collapse" href={`#${teamIndex}`} role="button" aria-expanded="false" aria-controls={teamIndex}>
-                                                    <i class="fa fa-angle-down" style={{ color: "#ff8237", }} aria-hidden="true" ></i>
+                                                    <i className="fa fa-angle-down" style={{ color: "#ff8237", }} aria-hidden="true" ></i>
                                                 </a>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="collapse" id={teamIndex}>
+                                    <div className="collapse" id={teamIndex}>
                                         {teamItem.players.length > 0 && teamItem.players.map((playerItem, playerIndex) => {
 
                                             return (

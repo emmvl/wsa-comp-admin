@@ -164,7 +164,8 @@ const initialState = {
     divisionList: [],
     teamResult: [],
     roundList: [],
-    clubListData:[]
+    clubListData:[],
+    courList : []
 };
 
 function setMatchData(data) {
@@ -348,8 +349,8 @@ function liveScoreMatchReducer(state = initialState, action) {
 
 
             let venueCourts = generateCourtsArray(action.venues)
-
             state.venueData = venueCourts
+            state.courList = venueCourts
             return {
                 ...state,
                 onLoad: false,
@@ -493,11 +494,32 @@ function liveScoreMatchReducer(state = initialState, action) {
                 }
         case ApiConstants.API_LIVE_SCORE_CLUB_LIST_SUCCESS:
             console.log(action.result,"ClubcompetitionId")
+          
             return{
                 ...state,
                 onLoad:false,
                 clubListData:action.result
             }
+
+        //// Local serach 
+        
+        case ApiConstants.API_LIVE_MATCH_LOCAL_SEARCH:
+           
+            if(action.key == "courts"){
+                if(action.search.length > 0){
+                    const filteredData = state.venueData.filter(item => {
+                        return item.name.indexOf(action.search) > -1
+                    })
+                    state.venueData = filteredData
+                }else{
+                    state.venueData = state.courList 
+                }
+              
+            }
+        return{
+                ...state
+            }
+
     };
 
 }

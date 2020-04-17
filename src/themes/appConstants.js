@@ -928,10 +928,13 @@ const AppConstants = {
   proceed: "Skip and Proceed",
   invalidPlayers: "Invalid Records",
   importPlayer: "Import Player",
-  matchExport:`https://livescores-api-dev.worldsportaction.com/matches/export?competitionId=`,
-  courtChange : "Court Change",
+  matchExport: `https://livescores-api-dev.worldsportaction.com/matches/export?competitionId=`,
+  courtChange: "Court Change",
 
-  publicLadderUrl:`https://netball-comp-admin-dev.worldsportaction.com/liveScorePublicLadder?competitionId=20b91f98-3f12-41c1-aeeb-70c9d6f4fa3d`
+  publicLadderUrl: `https://netball-comp-admin-dev.worldsportaction.com/liveScorePublicLadder?competitionId=20b91f98-3f12-41c1-aeeb-70c9d6f4fa3d`,
+  totalCompetitions: "Total Competitions",
+  livescoreCompetitions: "Live score competitions",
+
 };
 
 export default AppConstants;

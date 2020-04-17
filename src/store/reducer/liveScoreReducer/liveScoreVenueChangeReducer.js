@@ -22,6 +22,7 @@ const initialState = {
     venueData: "",
     courtData: "",
     courtDataForChange: "",
+    mainCourtList: []
 };
 
 function LiveScoreVenueChange(state = initialState, action) {
@@ -38,6 +39,7 @@ function LiveScoreVenueChange(state = initialState, action) {
                 if (index > -1) {
                     let courts = state.venueData[index].venueCourts
                     state.courtData = courts
+                    state.mainCourtList = courts
 
                 }
             } if (action.key == "changeToVenueId") {
@@ -48,6 +50,7 @@ function LiveScoreVenueChange(state = initialState, action) {
                 if (index > -1) {
                     let courts = state.venueData[index].venueCourts
                     state.courtDataForChange = courts
+                    state.mainCourtList = courts
 
                 }
             } else {
@@ -67,6 +70,25 @@ function LiveScoreVenueChange(state = initialState, action) {
                 error: action.error,
                 status: action.status
             };
+
+        //// Search Court Data
+        case ApiConstants.API_SEARCH_COURT_LIST:
+            console.log(action)
+            return {
+                ...state,
+                courtData: action.key == 'court_1' && action.data,
+                courtDataForChange: action.key == 'court_2' && action.data,
+            }
+
+        case ApiConstants.CLEAR_FILTER_SEARCH:
+
+            return {
+                ...state,
+                courtData: action.key == 'court_1' && state.mainCourtList,
+                courtDataForChange: action.key == 'court_2' && state.mainCourtList,
+            }
+
+
         default:
             return state;
     }

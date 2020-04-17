@@ -108,7 +108,6 @@ export function* addVenueSaga(action) {
 export function* venueListSaga(action) {
     try {
         const result = yield call(CommonAxiosApi.getVenueList, action.data);
-        console.log(result, 'VenieListSaga')
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_VENUE_LIST_SUCCESS,

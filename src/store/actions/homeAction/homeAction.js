@@ -16,11 +16,21 @@ function clearHomeDashboardData(key) {
     return action;
 }
 
+function setHomeDashboardYear(year) {
+    const action = {
+
+        type: ApiConstants.setHomeDashboardYearKey,
+        year
+    }
+    return action
+}
+
 
 
 
 export {
     getUserCount,
-    clearHomeDashboardData
+    clearHomeDashboardData,
+    setHomeDashboardYear
 
 }
