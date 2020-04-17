@@ -29,8 +29,19 @@ function updateCompetitionFinalsAction(data, key, index) {
     return action;
   }
 
+  
+/* getTemplateDownloadAction */
+function getTemplateDownloadAction(payload) {
+    const action = {
+        type: ApiConstants.API_GET_TEMPLATE_DOWNLOAD_LOAD,
+        payload: payload
+    };
+    return action;
+}
+
 export {
     getCompetitionFinalsAction,
     saveCompetitionFinalsAction,
-    updateCompetitionFinalsAction
+    updateCompetitionFinalsAction,
+    getTemplateDownloadAction
 }

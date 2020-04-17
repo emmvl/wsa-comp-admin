@@ -261,6 +261,7 @@ export default function* root_saga() {
   /* Competition Finals  */
   yield takeEvery(ApiConstants.API_GET_COMPETITION_FINALS_LOAD, competitionFinalSaga.getCompetitionFinalsSaga)
   yield takeEvery(ApiConstants.API_SAVE_COMPETITION_FINALS_LOAD, competitionFinalSaga.saveCompetitionFinalsSaga)
+  yield takeEvery(ApiConstants.API_GET_TEMPLATE_DOWNLOAD_LOAD, competitionFinalSaga.getDownloadTemplateSaga)
 
   /* Ladder Format */
   yield takeEvery(ApiConstants.API_GET_LADDER_FORMAT_LOAD, ladderFormatSaga.getLadderFormatSaga)

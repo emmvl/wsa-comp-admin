@@ -56,3 +56,22 @@ export function* saveCompetitionFinalsSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+
+/* getDownloadTemplateSaga*/
+export function* getDownloadTemplateSaga(action) {
+    try {
+        const result = yield call(CompManagementAxiosApi.getTemplateDownload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_TEMPLATE_DOWNLOAD_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

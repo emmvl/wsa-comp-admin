@@ -5,7 +5,8 @@ import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
-import {getCompetitionFinalsAction, saveCompetitionFinalsAction, updateCompetitionFinalsAction} from 
+import {getCompetitionFinalsAction, saveCompetitionFinalsAction, updateCompetitionFinalsAction,
+    getTemplateDownloadAction} from 
                 "../../store/actions/competitionModuleAction/competitionFinalsAction";
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
@@ -14,6 +15,7 @@ import { getMatchTypesAction,getYearAndCompetitionOwnAction, clearYearCompetitio
 import Loader from '../../customComponents/loader';
 import {generateDrawAction} from "../../store/actions/competitionModuleAction/competitionModuleAction";
 import ValidationConstants from "../../themes/validationConstant";
+import AppImages from "../../themes/appImages";
 
 import {getOrganisationData,  setOwnCompetitionYear,
     getOwnCompetitionYear,
@@ -188,6 +190,11 @@ class CompetitionFinals extends Component {
       this.setState({ loading: true });
     }
 
+    downloadTemplate = () => {
+        console.log("downloadTemplate");
+        this.props.getTemplateDownloadAction(null);
+    }
+
 
     ///////view for breadcrumb
     headerView = () => {
@@ -199,6 +206,22 @@ class CompetitionFinals extends Component {
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.finals}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
+                    {/* <form> */}
+                    <div className="comp-dashboard-botton-view-mobile">
+                        <Button className="primary-add-comp-form" type="primary" onClick={() => this.downloadTemplate()}>
+                            <div className="row">
+                                <div className="col-sm">
+                                    <img
+                                        src={AppImages.import}
+                                        alt=""
+                                        className="export-image"
+                                    />
+                                    {AppConstants.import}
+                                </div>
+                            </div>
+                        </Button>
+                    </div>
+                {/* </form> */}
                 </div>
             </Header >
         )
@@ -441,7 +464,8 @@ function mapDispatchToProps(dispatch)
         updateCompetitionFinalsAction,
         getYearAndCompetitionOwnAction,
         generateDrawAction,
-        clearYearCompetitionAction
+        clearYearCompetitionAction,
+        getTemplateDownloadAction
     }, dispatch);
 
 }

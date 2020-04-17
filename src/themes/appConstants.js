@@ -931,7 +931,10 @@ const AppConstants = {
   matchExport:`https://livescores-api-dev.worldsportaction.com/matches/export?competitionId=`,
   courtChange : "Court Change",
 
-  publicLadderUrl:`https://netball-comp-admin-dev.worldsportaction.com/liveScorePublicLadder?competitionId=20b91f98-3f12-41c1-aeeb-70c9d6f4fa3d`
+  publicLadderUrl:`https://netball-comp-admin-dev.worldsportaction.com/liveScorePublicLadder?competitionId=20b91f98-3f12-41c1-aeeb-70c9d6f4fa3d`,
+
+  friends: "Friends",
+  referFriends: "Referred Friends"
 };
 
 export default AppConstants;
