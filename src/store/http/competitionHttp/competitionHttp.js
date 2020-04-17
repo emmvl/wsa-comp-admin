@@ -6,6 +6,8 @@ const competitionHttp = axios.create({
     baseURL: "https://competition-api-dev.worldsportaction.com"
 });
 
+competitionHttp.defaults.timeout = 180000;
+
 competitionHttp.interceptors.request.use(function (config) {
     const token = localStorage.token;
     if (token) {
