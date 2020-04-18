@@ -213,7 +213,7 @@ class CompetitionDashboard extends Component {
                                     value={selectedYearId}
                                 >
                                     {yearList.length > 0 && yearList.map((item, yearIndex) => (
-                                        < Option  key={"yearlist"+ yearIndex}value={item.id} > {item.name}</Option>
+                                        < Option key={"yearlist" + yearIndex} value={item.id} > {item.name}</Option>
                                     ))
                                     }
                                 </Select>
@@ -328,12 +328,12 @@ class CompetitionDashboard extends Component {
         let registrationCloseDate = record.registrationCloseDate && moment(record.registrationCloseDate)
         let isRegClosed = registrationCloseDate ? !registrationCloseDate.isSameOrAfter(moment()) : false;
 
-        if (record.hasRegistration == 1 && isRegClosed == false) {
-            history.push("/registrationCompetitionFee", { id: record.competitionId })
-        }
-        else {
-            history.push("/registrationCompetitionForm", { id: record.competitionId })
-        }
+        // if (record.hasRegistration == 1 && isRegClosed == false) {
+        //     history.push("/registrationCompetitionFee", { id: record.competitionId })
+        // }
+        // else {
+        history.push("/registrationCompetitionForm", { id: record.competitionId })
+        // }
     }
 
     ////////participatedView view for competition

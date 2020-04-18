@@ -141,17 +141,18 @@ let AxiosApi = {
     },
 
     ////own Competition venue list
-    getVenueList(competitionID) {
+    getVenueList(competitionID, search) {
+        console.log(search, "searchValue_2")
         var url = ""
         if (competitionID) {
-            url = `/api/venue/competitionmgmnt?competitionId=${competitionID}`;
+            url = `/api/venue/competitionmgmnt?search=${search}&competitionId=${competitionID}`;
         } else {
             url = `/api/venue/competitionmgmnt`;
         }
 
         return Method.dataGet(url, token);
     },
-
+    // <common server baseurl>/api/venue/competitionmgmnt?search=asma&competitionId=1
     /////////get the grades reference data 
     gradesReferenceList() {
         let url = `common/reference/grade`;
@@ -178,6 +179,19 @@ let AxiosApi = {
         let userId = await getUserId()
         let url = `/api/venue/delete?userId=${userId}`;
         return Method.dataPost(url, token, payload);
+    },
+
+    //// Get Org Venue list
+    async getOrgVenue(search){
+        let userId = await getUserId()
+        let url = null
+        if(search.length > 0){
+            url = `/api/venue/organisationVenue?organisationUniquekey=b6eb9c7b-6c74-4657-bc6d-e2222b23c965&search=${search}`
+        }else{
+             url = `/api/venue/organisationVenue?organisationUniquekey=b6eb9c7b-6c74-4657-bc6d-e2222b23c965&search=`;
+        }
+        console.log("colled ", url)
+        return Method.dataGet(url, token);
     }
 
 };

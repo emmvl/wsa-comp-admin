@@ -9,9 +9,13 @@ function* failSaga(result) {
         error: result,
         status: result.status
     });
-    setTimeout(() => {
-        message.error(result.result.data.message);
-    }, 800);
+    if (result.result.data.message) {
+        setTimeout(() => {
+            message.error(result.result.data.message);
+        }, 800);
+    } else {
+        message.error("Something went wrong.");
+    }
 }
 
 function* errorSaga(error) {

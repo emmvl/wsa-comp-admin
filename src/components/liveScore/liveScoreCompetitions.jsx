@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Select, Tag, Menu, Modal, Pagination } from 'antd';
+import { Layout, Button, Table, Select, Tag, Menu, Modal, Pagination, PageHeader } from 'antd';
 import './liveScore.css';
 import ColorsArray from '../../util/colorsArray'
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { NavLink } from "react-router-dom";
-import { getCompetitonId } from '../../util/sessionStorage'
+import {getOrganisationData } from "../../util/sessionStorage"
 import { connect } from 'react-redux';
 import { liveScoreCompetionActioninitiate, liveScoreCompetitionDeleteInitate } from '../../store/actions/LiveScoreAction/liveScoreCompetitionAction';
 import Loader from '../../customComponents/loader'
@@ -158,10 +158,14 @@ class LiveScoreCompetitions extends Component {
             onLoad : false
         }
         this_Obj = this
+        // this.orgKey = getOrganisationData().organisationUniqueKey
     }
+ 
 
     componentDidMount() {
+        // console.log( this.orgKey , "****")
         if(isArrayNotEmpty(this.props.liveScoreCompetition.yearList)){
+       
             let selectedYear = this.props.liveScoreCompetition.yearList[0].id
             this.competitionListApi(selectedYear)
             this.setState({year: selectedYear})

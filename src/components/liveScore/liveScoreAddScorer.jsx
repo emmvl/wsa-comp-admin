@@ -132,6 +132,7 @@ class LiveScoreAddScorer extends Component {
     
         const {searchScorer, onLoadSearch } = this.props.liveScoreScorerState
         let scorer_list = isArrayNotEmpty(searchScorer) ? searchScorer : []
+      
         return (
             <div className="content-view pt-4">
                 <div className="row" >

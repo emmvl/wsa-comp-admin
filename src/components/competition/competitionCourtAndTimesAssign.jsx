@@ -304,7 +304,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                 }
                 else {
                     console.log(timeSlotData)
-                    this.props.addTimeSlotDataPost(timeSlotData)
+                    // this.props.addTimeSlotDataPost(timeSlotData)
                 }
             }
         })
@@ -410,7 +410,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                         value={item.startTime != null && moment(item.startTime, "HH:mm")}
                         format={"HH:mm"}
                         defaultValue={moment()}
-                        minuteStep={15}
+                    // minuteStep={15}
                     />
                 </div>
                 <div className="col-sm">
@@ -422,7 +422,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                         value={item.endTime != null && moment(item.endTime, "HH:mm")}
                         format={"HH:mm"}
                         onChange={(time) => time != null && this.changeTime(time, "endTime", index)}
-                        minuteStep={15}
+                    // minuteStep={15}
                     />
                 </div>
                 {data.length > 1 &&
@@ -727,7 +727,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                             onChange={(startTime) => startTime != null && this.props.UpdateTimeSlotsDataManual(startTime.format("HH:mm"), "startTime", "competitionTimeslotManualperVenueTime", timeIndex, null, index, venueIndex)}
                                             value={timeItem.startTime != null && moment(timeItem.startTime, "HH:mm")}
                                             format={"HH:mm"}
-                                            minuteStep={15}
+                                        // minuteStep={15}
                                         />
                                         {item.startTime.length > 1 &&
                                             <span className='user-remove-btn pl-2'
@@ -1003,7 +1003,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                         onChange={(startTime) => startTime != null && this.props.UpdateTimeSlotsDataManual(startTime.format("HH:mm"), "startTime", "competitionTimeslotManualTime", timeIndex, null, index)}
                                         value={timeItem.startTime != null && moment(timeItem.startTime, "HH:mm")}
                                         format={"HH:mm"}
-                                        minuteStep={15}
+                                    // minuteStep={15}
                                     />
                                     {item.startTime.length > 1 &&
                                         <span className='user-remove-btn pl-2'

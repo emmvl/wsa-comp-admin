@@ -12,6 +12,8 @@ import {
   setOrganisationData,
   getOrganisationData
 } from "../util/sessionStorage";
+import { clearHomeDashboardData, } from "../store/actions/homeAction/homeAction"
+
 
 const { Option } = Select;
 
@@ -105,6 +107,7 @@ class DashboardLayout extends React.Component {
   onOrganisationChange = (organisationData) => {
     this.props.onOrganisationChangeAction(organisationData, "organisationChange")
     setOrganisationData(organisationData)
+    this.props.clearHomeDashboardData("user")
     history.push("./")
   }
 
@@ -193,7 +196,7 @@ class DashboardLayout extends React.Component {
                 <NavLink to="/" className="site-brand">
                   <img src={AppImages.netballLogo1} alt="" />
                 </NavLink>
-                <div className="col-sm dashboard-layout-menu-heading-view" onClick = {this.props.onMenuHeadingClick}>
+                <div className="col-sm dashboard-layout-menu-heading-view" onClick={this.props.onMenuHeadingClick}>
                   <span className="dashboard-layout-menu-heading">
                     {this.props.menuHeading}
                   </span>
@@ -440,7 +443,8 @@ class DashboardLayout extends React.Component {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     getUserOrganisationAction,
-    onOrganisationChangeAction
+    onOrganisationChangeAction,
+    clearHomeDashboardData
   }, dispatch)
 }
 

@@ -10,6 +10,7 @@ import { bindActionCreators } from 'redux';
 import { getUreAction, getRoleAction } from '../../store/actions/userAction/userAction'
 import { getUserCount, clearHomeDashboardData, setHomeDashboardYear } from "../../store/actions/homeAction/homeAction"
 import { getOnlyYearListAction } from '../../store/actions/appAction'
+import Loader from '../../customComponents/loader';
 import history from "../../util/history";
 
 const { Footer, Content } = Layout;
@@ -222,7 +223,8 @@ class HomeDashboard extends Component {
         super(props);
         this.state = {
             yearRefId: null,
-            loading: false,
+            loading: true,
+            userCountLoading: false
         }
 
     }
@@ -232,37 +234,37 @@ class HomeDashboard extends Component {
         this.props.getRoleAction()
         this.props.getUreAction()
         // this.props.getOnlyYearListAction(this.props.appState.yearList)
-        this.setState({ loading: true })
         // this.props.getUserCount(1)
     }
 
     componentDidUpdate(nextProps) {
         const { yearList } = this.props.appState
         let userOrganisation = this.props.userState.getUserOrganisation
-        if (this.state.loading == true && this.props.appState.onLoad == false) {
+        if (this.state.userCountLoading == true && this.props.appState.onLoad == false) {
             if (yearList.length > 0) {
                 let yearRefId = yearList[0].id
 
                 if (this.props.homeDashboardState.userCount == null) {
                     this.props.getUserCount(yearRefId)
                     this.props.setHomeDashboardYear(yearRefId)
-
-                    // } else {
-                    //     this.setState({ loading: false, })
                 }
-                this.setState({ loading: false })
+                this.setState({ userCountLoading: false })
             }
         }
-        if (nextProps.userOrganisation !== userOrganisation) {
-            if (userOrganisation.length > 0) {
-                if (this.props.appState.yearList.length == 0) {
-                    this.props.getOnlyYearListAction(this.props.appState.yearList)
-                }
+        if (this.state.loading == true && this.props.userState.onOrgLoad == false) {
+            if (nextProps.userOrganisation !== userOrganisation) {
+                if (userOrganisation.length > 0) {
+                    if (this.props.appState.yearList == 0) {
+                        this.props.getOnlyYearListAction(this.props.appState.yearList)
+                        this.setState({ userCountLoading: true, loading: false })
+                    }
 
-                else {
-                    let yearRefId = yearList[0].id
-                    if (this.props.homeDashboardState.userCount == null) {
-                        this.props.getUserCount(yearRefId)
+                    else {
+                        let yearRefId = yearList[0].id
+                        if (this.props.homeDashboardState.userCount == null) {
+                            this.props.getUserCount(yearRefId)
+                            this.setState({ loading: false })
+                        }
                     }
                 }
             }
@@ -272,7 +274,7 @@ class HomeDashboard extends Component {
     onYearChange = (yearRefId) => {
         this.props.setHomeDashboardYear(yearRefId)
         // this.setState({ yearRefId: yearRefId, })
-        this.props.clearHomeDashboardData("user")
+        this.props.clearHomeDashboardData("yearChange")
         this.props.getUserCount(yearRefId)
     }
 
@@ -316,8 +318,8 @@ class HomeDashboard extends Component {
         const { yearRefId } = this.props.homeDashboardState
         return (
             <div className="row text-view">
-                <div className="col-sm" >
-                    <span className='home-dash-left-text'>{AppConstants.competitionsOverview}</span>
+                <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }} >
+                    <span className='home-dash-left-text' >{AppConstants.competitionsOverview}</span>
                 </div>
                 <div className="col-sm text-right" >
                     <div style={{
@@ -343,7 +345,7 @@ class HomeDashboard extends Component {
                         </Select>
                     </div>
                 </div>
-            </div>
+            </div >
         )
     }
 
@@ -364,7 +366,7 @@ class HomeDashboard extends Component {
                                     </div>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
-                                    <span className="reg-payment-price-text">{userCount !== null ? userCount : "-"}</span>
+                                    <span className="reg-payment-price-text">{(userCount !== null && userCount !== "") ? userCount : "-"}</span>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
                                     <span className="reg-payment-paid-reg-text">{AppConstants.totalUsers}</span>
@@ -388,7 +390,8 @@ class HomeDashboard extends Component {
                                     </div>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
-                                    <span className="reg-payment-price-text">{registrationCount !== null ? registrationCount : "-"}</span>
+                                    <span className="reg-payment-price-text">{(registrationCount !== null && registrationCount !== "")
+                                        ? registrationCount : "-"}</span>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
                                     <span className="reg-payment-paid-reg-text">{AppConstants.totalRegistrations}</span>
@@ -413,7 +416,7 @@ class HomeDashboard extends Component {
                                     </div>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
-                                    <span className="reg-payment-price-text">{registrationCompetitionCount !== null ? registrationCompetitionCount : "-"}</span>
+                                    <span className="reg-payment-price-text">{(registrationCompetitionCount !== null && registrationCompetitionCount !== "") ? registrationCompetitionCount : "-"}</span>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
                                     <span className="reg-payment-paid-reg-text">{AppConstants.totalCompetitions}</span>
@@ -437,7 +440,7 @@ class HomeDashboard extends Component {
                                     </div>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
-                                    <span className="reg-payment-price-text">{liveScoreCompetitionCount !== null ? liveScoreCompetitionCount : "-"}</span>
+                                    <span className="reg-payment-price-text">{(liveScoreCompetitionCount !== null && liveScoreCompetitionCount !== "") ? liveScoreCompetitionCount : "-"}</span>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
                                     <span className="reg-payment-paid-reg-text">{AppConstants.livescoreCompetitions}</span>
@@ -525,6 +528,8 @@ class HomeDashboard extends Component {
                         {/* {this.ownedView()}
                         {this.participatedView()} */}
                     </Content>
+                    <Loader
+                        visible={this.props.homeDashboardState.onLoad || this.props.appState.onLoad} />
                     <Footer></Footer>
                 </Layout>
             </div>

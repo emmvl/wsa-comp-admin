@@ -1,6 +1,6 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-function liveScoreMatchListAction(competitionID, start,offset) {
+function liveScoreMatchListAction(competitionID, start, offset) {
     const action = {
         type: ApiConstants.API_LIVE_SCORE_MATCH_LIST_LOAD,
         competitionID,
@@ -62,12 +62,15 @@ function liveScoreDeleteMatch(matchId) {
 }
 
 
-function getCompetitonVenuesList(competitionID) {
+function getCompetitonVenuesList(competitionID, searchValue) {
     const action = {
         type: ApiConstants.API_LIVE_SCORE_COMPETITION_VENUES_LIST_LOAD,
-        competitionID: competitionID
+        competitionID,
+        searchValue
     }
+    console.log(action, "action")
     return action
+
 }
 
 function liveScoreMatchImportAction(competitionID, csvFile) {
@@ -89,18 +92,18 @@ function liveScoreGetMatchDetailInitiate(data) {
     }
 }
 
-function liveScoreClubListAction(competitionId){
-    return{
+function liveScoreClubListAction(competitionId) {
+    return {
         type: ApiConstants.API_LIVE_SCORE_CLUB_LIST_LOAD,
         competitionId
     }
 }
 
-function searchFilterAction(search, key){
+function searchFilterAction(search, key) {
     const action = {
-        type : ApiConstants.API_LIVE_MATCH_LOCAL_SEARCH,
-        search : search,
-        key : key
+        type: ApiConstants.API_LIVE_MATCH_LOCAL_SEARCH,
+        search: search,
+        key: key
     }
     return action
 }
