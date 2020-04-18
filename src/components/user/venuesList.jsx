@@ -313,7 +313,7 @@ class VenuesList extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
-                <InnerHorizontalMenu menu={"user"} userSelectedKey={"4"} />
+                <InnerHorizontalMenu menu={"home"} userSelectedKey={"2"} />
                 <Layout>
                     {this.headerView()}
                     <Content>

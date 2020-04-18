@@ -81,6 +81,21 @@ function matchResult() {
     return action
 }
 
+function searchCourtList(data) {
+    const action = {
+        type: ApiConstants.API_SEARCH_COURT_LIST,
+        data
+    }
+    return action
+}
+
+function clearFilter() {
+    const action = {
+        type: ApiConstants.CLEAR_FILTER_SEARCH,
+    }
+    return action
+}
+
 export {
     BulkMatchPushBackAction,
     liveScoreBringForwardAction,
@@ -89,5 +104,7 @@ export {
     liveScoreUpdateBulkAction,
     liveScoreDoubleHeaderAction,
     liveScoreAbandonMatchAction,
-    matchResult
+    matchResult,
+    searchCourtList,
+    clearFilter
 };

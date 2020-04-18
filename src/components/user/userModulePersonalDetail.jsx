@@ -352,6 +352,33 @@ const columnsPersonalEmergency = [
     }
 ];
 
+const columnsFriends = [
+    {
+        title: 'First Name',
+        dataIndex: 'firstName',
+        key: 'firstName',
+        sorter: (a, b) => a.firstName.localeCompare(b.firstName),
+    },
+    {
+        title: 'Last Name',
+        dataIndex: 'lastName',
+        key: 'lastName',
+        sorter: (a, b) => a.lastName.localeCompare(b.lastName),
+    },
+    {
+        title: 'Email',
+        dataIndex: 'email',
+        key: 'email',
+        sorter: (a, b) => a.email.localeCompare(b.email),
+    },
+    {
+        title: 'Phone Number',
+        dataIndex: 'mobileNumber',
+        key: 'mobileNumber',
+        sorter: (a, b) => a.mobileNumber.localeCompare(b.mobileNumber),
+    },
+];
+
 class UserModulePersonalDetail extends Component{
     constructor(props) {
         super(props);
@@ -454,6 +481,7 @@ class UserModulePersonalDetail extends Component{
         let filter = 
         {
             competitionId: competition.competitionId,
+            organisationId: getOrganisationData().organisationUniqueKey,
             userId: userId,
             paging : {
                 limit : 10,
@@ -701,6 +729,8 @@ class UserModulePersonalDetail extends Component{
         let personal = userState.personalData;
         let personalByCompData = userState.personalByCompData!= null ? userState.personalByCompData : [];
         let primaryContacts = personalByCompData.length > 0 ? personalByCompData[0].primaryContacts : [];
+        let friends = personalByCompData.length > 0 ? personalByCompData[0].friends : [];
+        let referFriends = personalByCompData.length > 0 ? personalByCompData[0].referFriends : [];
         return(
             <div className="comp-dash-table-view mt-2">
                 <div className="user-module-row-heading">{AppConstants.address}</div>
@@ -729,6 +759,22 @@ class UserModulePersonalDetail extends Component{
                     pagination={false}
                     />
                 </div>
+                {/* <div className="user-module-row-heading"  style={{marginTop: '30px'}}>{AppConstants.friends}</div>
+                <div className="table-responsive home-dash-table-view">
+                    <Table className="home-dashboard-table"
+                    columns={columnsFriends}
+                    dataSource={friends} 
+                    pagination={false}
+                    />
+                </div>
+                <div className="user-module-row-heading"  style={{marginTop: '30px'}}>{AppConstants.referFriends}</div>
+                <div className="table-responsive home-dash-table-view">
+                    <Table className="home-dashboard-table"
+                    columns={columnsFriends}
+                    dataSource={referFriends} 
+                    pagination={false}
+                    />
+                </div> */}
                 <div className="user-module-row-heading" style={{marginTop: '30px'}}>{AppConstants.otherInformation}</div>
                 <div className="table-responsive home-dash-table-view" style={{display: 'flex', flexDirection: 'column'}}>
                     <div className="other-info-row" style={{paddingTop: '10px'}}>
@@ -805,6 +851,34 @@ class UserModulePersonalDetail extends Component{
             </div>
         )
     }
+
+    friendsView = () => {
+        let userState = this.props.userState;
+        let personalByCompData = userState.personalByCompData!= null ? userState.personalByCompData : [];
+        let friends = personalByCompData.length > 0 ? personalByCompData[0].friends : [];
+        let referFriends = personalByCompData.length > 0 ? personalByCompData[0].referFriends : [];
+        return(
+            <div className="comp-dash-table-view mt-2">
+                <div className="user-module-row-heading">{AppConstants.address}</div>
+                <div className="table-responsive home-dash-table-view">
+                    <Table className="home-dashboard-table"
+                    columns={columnsFriends}
+                    dataSource={friends} 
+                    pagination={false}
+                    />
+                </div>
+                <div className="user-module-row-heading">{AppConstants.address}</div>
+                <div className="table-responsive home-dash-table-view">
+                    <Table className="home-dashboard-table"
+                    columns={columnsFriends}
+                    dataSource={referFriends} 
+                    pagination={false}
+                    />
+                </div>
+            </div>
+        )
+    }
+    
 
     headerView = () => {
         return (

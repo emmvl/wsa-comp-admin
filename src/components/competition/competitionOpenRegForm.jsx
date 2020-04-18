@@ -400,8 +400,10 @@ class CompetitionOpenRegForm extends Component {
                 let isRegClosed = registrationCloseDate ? !registrationCloseDate.isSameOrAfter(moment()) : false;
 
                 let creatorId = competitionFeesState.competitionCreator
-                let userId = getUserId();
-                let isCreatorEdit = creatorId == userId ? false : true;
+                let orgData = getOrganisationData()
+                let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0
+                // let userId = getUserId();
+                let isCreatorEdit = creatorId == organisationUniqueKey ? false : true;
 
                 this.setPermissionFields(isPublished, isRegClosed, isCreatorEdit)
 
@@ -432,15 +434,14 @@ class CompetitionOpenRegForm extends Component {
     ////disable or enable particular fields
     setPermissionFields = (isPublished, isRegClosed, isCreatorEdit) => {
         let invitees = this.props.competitionFeesState.competitionDetailData.invitees
-        let hasRegistration = invitees.length > 0 ? true : false
+        let hasRegistration = this.props.competitionFeesState.competitionDetailData.hasRegistration
         if (isPublished) {
-            console.log("isRegClosed", isRegClosed)
-            if (isRegClosed && hasRegistration) {
+            if (isRegClosed) {
                 let permissionObject = {
                     compDetailDisable: false,
                     regInviteesDisable: true,
                     membershipDisable: true,
-                    divisionsDisable: false,
+                    divisionsDisable: true,
                     feesTableDisable: true,
                     paymentsDisable: true,
                     discountsDisable: true,
@@ -450,21 +451,7 @@ class CompetitionOpenRegForm extends Component {
                 this.setState({ permissionState: permissionObject })
                 return
             }
-            if (!isRegClosed && hasRegistration) {
-                let permissionObject = {
-                    compDetailDisable: true,
-                    regInviteesDisable: true,
-                    membershipDisable: true,
-                    divisionsDisable: true,
-                    feesTableDisable: true,
-                    paymentsDisable: true,
-                    discountsDisable: true,
-                    allDisable: true,
-                    isPublished: true
-                }
-                this.setState({ permissionState: permissionObject })
-                return
-            }
+
             if (isCreatorEdit) {
                 let permissionObject = {
                     compDetailDisable: true,
@@ -484,7 +471,7 @@ class CompetitionOpenRegForm extends Component {
                     compDetailDisable: false,
                     regInviteesDisable: true,
                     membershipDisable: true,
-                    divisionsDisable: false,
+                    divisionsDisable: hasRegistration == 1 ? true : false,
                     feesTableDisable: true,
                     paymentsDisable: false,
                     discountsDisable: true,
@@ -556,7 +543,7 @@ class CompetitionOpenRegForm extends Component {
         this.props.paymentSeasonalFee()
         this.props.getCommonDiscountTypeTypeAction()
         this.props.getVenuesTypeAction();
-        this.props.venueListAction();
+        // this.props.venueListAction();
         if (competitionId !== null) {
             let hasRegistration = 0
             this.props.getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration)
@@ -1352,8 +1339,8 @@ class CompetitionOpenRegForm extends Component {
                         </Radio.Group>
                     )}
                 </Form.Item>
-                {/* <div className="fluid-width"> */}
-                {/* <div className="row">
+                <div className="fluid-width">
+                    <div className="row">
                         <div className="col-sm">
                             <InputWithHead heading={AppConstants.startDate} />
 
@@ -1365,40 +1352,36 @@ class CompetitionOpenRegForm extends Component {
                                 showTime={false}
                                 value={detailsData.competitionDetailData.startDate && moment(detailsData.competitionDetailData.startDate, "YYYY-MM-DD")}
                                 disabled={compDetailDisable}
-
                             />
 
-                        </div> */}
-                {/* <div className="col-sm"> */}
-                {detailsData.competitionDetailData.competitionFormatRefId == 4 &&
-                    <div>
-                        <InputWithHead heading={AppConstants.numberOfRounds} />
-                        <Form.Item >
-                            {getFieldDecorator('numberOfRounds',
-                                { rules: [{ required: true, message: ValidationConstants.numberOfRoundsNameIsRequired }] })(
-
-                                    <Select
-                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                        placeholder={AppConstants.selectRound}
-                                        onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, "noOfRounds")}
-                                        value={detailsData.competitionDetailData.noOfRounds}
-                                        disabled={compDetailDisable}
-                                    >
-                                        {this.state.roundsArray.map(item => {
-                                            console.log(item)
-                                            return (
-                                                <Option key={item.id} value={item.id}>{item.value}</Option>
-                                            );
-                                        })}
-                                    </Select>
-
-                                )}
-                        </Form.Item>
+                        </div>
+                        <div className="col-sm">
+                            {detailsData.competitionDetailData.competitionFormatRefId == 4 &&
+                                <div>
+                                    <InputWithHead heading={AppConstants.numberOfRounds} required={"required-field"} />
+                                    <Form.Item >
+                                        {getFieldDecorator('numberOfRounds',
+                                            { rules: [{ required: true, message: ValidationConstants.numberOfRoundsNameIsRequired }] })(
+                                                <Select
+                                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                                    placeholder={AppConstants.selectRound}
+                                                    onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, "noOfRounds")}
+                                                    value={detailsData.competitionDetailData.noOfRounds}
+                                                    disabled={compDetailDisable}
+                                                >
+                                                    {this.state.roundsArray.map(item => {
+                                                        return (
+                                                            <Option key={item.id} value={item.id}>{item.value}</Option>
+                                                        );
+                                                    })}
+                                                </Select>
+                                            )}
+                                    </Form.Item>
+                                </div>
+                            }
+                        </div>
                     </div>
-                }
-                {/* </div> */}
-                {/* </div> */}
-                {/* </div> */}
+                </div>
                 <InputWithHead heading={AppConstants.timeBetweenRounds} />
                 <div className="fluid-width">
                     <div className="row">

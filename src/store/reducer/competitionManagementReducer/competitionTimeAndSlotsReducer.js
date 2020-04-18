@@ -233,11 +233,16 @@ function getTimeSlotEntity(data, id) {
         data[i]["timeSlotEntityGradeKeyArr"] = []
         let entityInfoArr = data[i].competitionTimeslotsEntityInfo
         for (let j in entityInfoArr) {
-            if (id == 4) {
+            if ((id == 4 && entityInfoArr[j].venuePreferenceEntityId == 1)) {
                 data[i]["timeSlotEntityManualkeyArr"].push(entityInfoArr[j].venuePreferenceTypeRefId)
-            } else {
+            } else if ((id == 5 && entityInfoArr[j].venuePreferenceEntityId == 2)) {
                 data[i]["timeSlotEntityGradeKeyArr"].push(entityInfoArr[j].venuePreferenceTypeRefId)
             }
+            // if (id == 4) {
+            //     data[i]["timeSlotEntityManualkeyArr"].push(entityInfoArr[j].venuePreferenceTypeRefId)
+            // } else {
+            //     data[i]["timeSlotEntityGradeKeyArr"].push(entityInfoArr[j].venuePreferenceTypeRefId)
+            // }
         }
     }
     if (data.length > 0) {
@@ -432,7 +437,7 @@ function checkPerVenueManual(data, rotaionId) {
         'venueId': 0,
         "timeslots": [{
             "competitionVenueTimeslotsDayTimeId": 0,
-            "dayRefId": 1,
+            "dayRefId": null,
             "startTime": [{
                 "startTime": "00:00",
                 "sortOrder": 0,
@@ -484,7 +489,7 @@ function checkSelectedVenueDetails(allVenues, selectedVenues, rotationId) {
                 "venueId": allVenues[i].id,
                 "timeslots": [{
                     "competitionVenueTimeslotsDayTimeId": 0,
-                    "dayRefId": 1,
+                    "dayRefId": null,
                     "startTime": [{
                         "startTime": "00:00",
                         "sortOrder": 0,
@@ -513,7 +518,7 @@ function updatedTimeslotsDayTime(result) {
     let initalTimeSlotDaytime =
     {
         "competitionVenueTimeslotsDayTimeId": 0,
-        "dayRefId": 1,
+        "dayRefId": null,
         "startTime": "00:00",
         "endTime": "00:00",
         "sortOrder": null

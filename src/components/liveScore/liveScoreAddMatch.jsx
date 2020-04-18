@@ -27,7 +27,8 @@ import {
     liveScoreCreateMatchAction,
     clearMatchAction,
     getCompetitonVenuesList,
-    liveScoreClubListAction
+    liveScoreClubListAction,
+    searchFilterAction
 } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
 import { liveScoreScorerListAction } from '../../store/actions/LiveScoreAction/liveScoreScorerAction';
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -67,7 +68,7 @@ class LiveScoreAddMatch extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
 
         if (id !== null) {
-            this.props.getCompetitonVenuesList(id);
+            this.props.getCompetitonVenuesList(id,"");
             this.props.getLiveScoreDivisionList(id)
             this.props.getliveScoreScorerList(id, 4)
             this.props.liveScoreRoundListAction(id)
@@ -304,6 +305,11 @@ class LiveScoreAddMatch extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
     }
 
+    ///// On Court Seatch
+    onSearchCourts(value, key){
+        this.props.searchFilterAction(value, key)
+    }
+
 
     //// Form View
     contentView = (getFieldDecorator) => {
@@ -311,6 +317,7 @@ class LiveScoreAddMatch extends Component {
         let { venueData,clubListData } = this.props.liveScoreMatchState
         const { scorerListResult } = this.props.liveScoreState
         const { scoringType } = JSON.parse(getLiveScoreCompetiton())
+        console.log(venueData)
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -442,7 +449,7 @@ class LiveScoreAddMatch extends Component {
                                     rules: [{ required: true, message: ValidationConstants.awayField }]
                                 })(
                                     <Select
-                                        // mode="multiple"
+                                    
                                         className="reg-form-multple-select"
                                         placeholder={'Select Away Team'}
                                         style={{ width: "100%", }}
@@ -467,12 +474,14 @@ class LiveScoreAddMatch extends Component {
                                 rules: [{ required: true, message: ValidationConstants.venueField }]
                             })(
                                 <Select
-                                    // mode="tag"
+                                    showSearch
                                     className="reg-form-multple-select"
                                     placeholder={AppConstants.selectVenue}
                                     style={{ width: "100%", }}
                                     onChange={(venueId) => this.props.liveScoreUpdateMatchAction(venueId, "venueId")}
                                     value={addEditMatch.venueCourtId}
+                                    onSearch={(e)=>this.onSearchCourts(e, "courts")}
+                                    optionFilterProp="children"
                                 >
                                     {venueData && venueData.map((item) => {
                                         return (
@@ -772,7 +781,8 @@ function mapDispatchToProps(dispatch) {
         getliveScoreScorerList,
         getLiveScoreDivisionList,
         liveScoreRoundListAction,
-        liveScoreClubListAction
+        liveScoreClubListAction,
+        searchFilterAction
     }, dispatch)
 }
 

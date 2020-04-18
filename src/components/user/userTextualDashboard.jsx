@@ -144,7 +144,9 @@ class UserTextualDashboard extends Component{
             deleteLoading: false,
         }
         this_Obj = this;
+    }
 
+    componentDidMount(){
         this.handleTextualTableList(1, this.state.organisationId, -1,'-1',-1,-1,-1,'-1')
     }
 
@@ -326,7 +328,7 @@ class UserTextualDashboard extends Component{
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
-                <InnerHorizontalMenu menu={"user"} userSelectedKey={"5"} />
+                <InnerHorizontalMenu menu={"user"} userSelectedKey={"4"} />
                 <Layout>
                     {this.headerView()}
                     <Content>

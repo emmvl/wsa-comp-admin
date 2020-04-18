@@ -5,7 +5,8 @@ import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
-import {getCompetitionFinalsAction, saveCompetitionFinalsAction, updateCompetitionFinalsAction} from 
+import {getCompetitionFinalsAction, saveCompetitionFinalsAction, updateCompetitionFinalsAction,
+    getTemplateDownloadAction} from 
                 "../../store/actions/competitionModuleAction/competitionFinalsAction";
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
@@ -14,6 +15,7 @@ import { getMatchTypesAction,getYearAndCompetitionOwnAction, clearYearCompetitio
 import Loader from '../../customComponents/loader';
 import {generateDrawAction} from "../../store/actions/competitionModuleAction/competitionModuleAction";
 import ValidationConstants from "../../themes/validationConstant";
+import AppImages from "../../themes/appImages";
 
 import {getOrganisationData,  setOwnCompetitionYear,
     getOwnCompetitionYear,
@@ -186,6 +188,11 @@ class CompetitionFinals extends Component {
 
       this.props.saveCompetitionFinalsAction(payload);
       this.setState({ loading: true });
+    }
+
+    downloadTemplate = () => {
+        console.log("downloadTemplate");
+        this.props.getTemplateDownloadAction(null);
     }
 
 
@@ -441,7 +448,8 @@ function mapDispatchToProps(dispatch)
         updateCompetitionFinalsAction,
         getYearAndCompetitionOwnAction,
         generateDrawAction,
-        clearYearCompetitionAction
+        clearYearCompetitionAction,
+        getTemplateDownloadAction
     }, dispatch);
 
 }

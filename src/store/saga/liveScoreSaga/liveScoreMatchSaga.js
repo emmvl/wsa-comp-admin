@@ -17,14 +17,14 @@ function* failSaga(result) {
 }
 
 function* errorSaga(error) {
-   
+
     yield put({
         type: ApiConstants.API_LIVE_SCORE_CREATE_MATCH_ERROR,
         error: error,
         status: error.status
     });
     setTimeout(() => {
-      
+
         message.error(error ? error.error ? error.error : "Something went wrong." : "Something went wrong.");
         // message.error("Something went wrong.");
     }, 800);
@@ -72,7 +72,7 @@ export function* liveScoreAddMatchSaga(action) {
 
 ////Add Match
 export function* liveScoreCreateMatchSaga(action) {
-    
+
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreCreateMatch, action.data, action.competitionId);
         if (result.status === 1) {
@@ -114,9 +114,11 @@ export function* liveScoreDeleteMatchSaga(action) {
 
 ////Delete Match
 export function* liveScoreCompetitionVenuesList(action) {
+    console.log(action, "search")
     try {
-        const result = yield call(CommonAxiosApi.getVenueList, action.competitionID);
+        const result = yield call(CommonAxiosApi.getVenueList, action.competitionID, action.searchValue);
         if (result.status === 1) {
+            console.log(result, "status")
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_COMPETITION_VENUES_LIST_SUCCESS,
                 status: result.status,

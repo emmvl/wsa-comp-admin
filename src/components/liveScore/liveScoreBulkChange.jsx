@@ -29,6 +29,8 @@ import {
     liveScoreDoubleHeaderAction,
     liveScoreAbandonMatchAction,
     matchResult,
+    searchCourtList,
+    clearFilter
 } from '../../store/actions/LiveScoreAction/liveScoreBulkMatchAction';
 import { getCompetitonVenuesList, } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
 import { getliveScoreDivisions } from '../../store/actions/LiveScoreAction/liveScoreActions'
@@ -46,6 +48,7 @@ class LiveScoreBulkChange extends Component {
         super(props);
         this.state = {
             loading: false,
+            search: '',
         };
         this.props.matchResult()
         this.props.liveScoreUpdateBulkAction("selectedOption", "selectedOption")
@@ -55,7 +58,7 @@ class LiveScoreBulkChange extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.props.liveScoreBulkMatchAction()
         if (id !== null) {
-            this.props.getCompetitonVenuesList(id);
+            this.props.getCompetitonVenuesList(id, this.state.search);
             this.props.liveScoreRoundListAction(id)
             // this.props.getliveScoreDivisions(id)
         } else {
@@ -336,11 +339,25 @@ class LiveScoreBulkChange extends Component {
         )
     }
 
+    handleSearch = (value, data) => {
+        console.log(value, data)
+        const filteredData = data.filter(memo => {
+            return memo.name.indexOf(value) > -1
+        })
+        this.props.searchCourtList(filteredData)
 
+    };
+
+    onSearchVenue(searchValue) {
+        console.log(searchValue)
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        this.setState({ search: searchValue })
+        this.props.getCompetitonVenuesList(id, searchValue);
+    }
 
     ////this method called after slecting Push Back option from drop down
     pushBackView(getFieldDecorator) {
-        const { pushBackData, venueData, pushCourtData, bulkRadioBtn } = this.props.liveScoreBulkMatchState
+        const { pushBackData, venueData, pushCourtData, bulkRadioBtn, mainCourtList } = this.props.liveScoreBulkMatchState
         console.log(this.props.liveScoreBulkMatchState, 'this.props.liveScoreBulkMatchState')
         return (
             <div>
@@ -442,11 +459,14 @@ class LiveScoreBulkChange extends Component {
                             rules: [{ required: true, message: ValidationConstants.venueField }],
                         })( */}
                     <Select
+                        showSearch
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         className="reg-form-multple-select"
                         onChange={(venue) => this.onVenueSelection(venue, 'venueId')}
                         value={pushBackData.venueId ? pushBackData.venueId : []}
                         placeholder={AppConstants.selectVenue}
+                        optionFilterProp="children"
+                        onSearch={(e) => this.onSearchVenue(e)}
                     >
                         {
                             venueData && venueData.map((item) => {
@@ -477,11 +497,17 @@ class LiveScoreBulkChange extends Component {
                     <Select
                         mode='multiple'
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        onChange={(court) => this.props.liveScoreUpdateBulkAction(court, "venueCourtId")}
+                        onChange={(court) => {
+                            this.props.liveScoreUpdateBulkAction(court, "venueCourtId")
+                            this.props.clearFilter()
+                        }}
                         value={pushBackData.courtId}
                         placeholder={AppConstants.selectCourt}
+                        onSearch={(value) => { this.handleSearch(value, mainCourtList) }}
+                        filterOption={false}
                     >
                         {pushCourtData && pushCourtData.map((item) => {
+                            console.log(item)
                             return (
                                 <Option key={'court' + item.venueCourtId}
                                     value={item.venueCourtId}>
@@ -514,7 +540,7 @@ class LiveScoreBulkChange extends Component {
 
     ////this method called slecting Bring Forward option from drop down
     bringForwardView(getFieldDecorator) {
-        const { bringForwardData, venueData, bringCourtData, bulkRadioBtn } = this.props.liveScoreBulkMatchState
+        const { bringForwardData, venueData, bringCourtData, bulkRadioBtn, mainCourtList } = this.props.liveScoreBulkMatchState
         console.log(bringForwardData, 'bringForwardData@#$%')
         return (
             <div>
@@ -615,11 +641,14 @@ class LiveScoreBulkChange extends Component {
                             rules: [{ required: true, message: ValidationConstants.venueField }],
                         })( */}
                     <Select
+                        showSearch
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         className="reg-form-multple-select"
                         onChange={(venue) => this.onVenueSelection(venue, 'venueId')}
                         value={bringForwardData.venueId ? bringForwardData.venueId : []}
-                        placeholder={AppConstants.selectVenue} >
+                        placeholder={AppConstants.selectVenue}
+                        optionFilterProp="children"
+                        onSearch={(e) => this.onSearchVenue(e)} >
                         {venueData && venueData.map((item) => {
                             return (
                                 <Option key={'venue' + item.venueId}
@@ -646,9 +675,14 @@ class LiveScoreBulkChange extends Component {
                     <Select
                         mode='multiple'
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        onChange={(courtId) => this.props.liveScoreUpdateBulkAction(courtId, "courtId")}
+                        onChange={(courtId) => {
+                            this.props.liveScoreUpdateBulkAction(courtId, "courtId")
+                            this.props.clearFilter()
+                        }}
                         value={bringForwardData.courtId}
-                        placeholder={AppConstants.selectCourt}>
+                        placeholder={AppConstants.selectCourt}
+                        onSearch={(value) => { this.handleSearch(value, mainCourtList) }}
+                        filterOption={false}>
                         {bringCourtData && bringCourtData.map((item) => {
                             return (
                                 <Option key={'court' + item.venueCourtId}
@@ -681,7 +715,7 @@ class LiveScoreBulkChange extends Component {
 
     ////this method called after slecting End Matches option from drop down
     endMatchedView(getFieldDecorator) {
-        const { endMatchData, venueData, endCourtData } = this.props.liveScoreBulkMatchState
+        const { endMatchData, venueData, endCourtData, mainCourtList } = this.props.liveScoreBulkMatchState
         const { roundList } = this.props.liveScoreRoundState
         let roundResult = isArrayNotEmpty(roundList) ? roundList : []
         return (
@@ -782,10 +816,13 @@ class LiveScoreBulkChange extends Component {
                             rules: [{ required: true, message: ValidationConstants.venueField }],
                         })( */}
                     <Select
+                        showSearch
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         onChange={(venueId) => this.onVenueSelection(venueId, "venueId")}
                         value={endMatchData.venueId ? endMatchData.venueId : []}
-                        placeholder={AppConstants.selectVenue}>
+                        placeholder={AppConstants.selectVenue}
+                        optionFilterProp="children"
+                        onSearch={(e) => this.onSearchVenue(e)}>
 
                         {venueData && venueData.map((item) => {
                             return (
@@ -815,9 +852,14 @@ class LiveScoreBulkChange extends Component {
                     <Select
                         mode='multiple'
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        onChange={(courtId) => this.props.liveScoreUpdateBulkAction(courtId, "courtId")}
+                        onChange={(courtId) => {
+                            this.props.liveScoreUpdateBulkAction(courtId, "courtId")
+                            this.props.clearFilter()
+                        }}
                         value={endMatchData.courtId}
                         placeholder={AppConstants.selectCourt}
+                        onSearch={(value) => { this.handleSearch(value, mainCourtList) }}
+                        filterOption={false}
                     >
                         {endCourtData && endCourtData.map((item) => {
                             return (
@@ -863,7 +905,6 @@ class LiveScoreBulkChange extends Component {
                         </Form.Item> */}
                     </div>
                 </div>
-
             </div>
         )
     }
@@ -942,7 +983,7 @@ class LiveScoreBulkChange extends Component {
         const { roundList } = this.props.liveScoreRoundState
         let roundResult = isArrayNotEmpty(roundList) ? roundList : []
 
-        const { abandonData, venueData, abandonCourtData, matchResult } = this.props.liveScoreBulkMatchState
+        const { abandonData, venueData, abandonCourtData, matchResult, mainCourtList } = this.props.liveScoreBulkMatchState
         console.log(abandonData, 'abandonData')
         return (
             <div>
@@ -1005,7 +1046,6 @@ class LiveScoreBulkChange extends Component {
                                             name={'registrationOepn'}
                                             onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "endDate")}
                                             value={abandonData.endDate}
-
                                         />
                                     )}
                                 </Form.Item>
@@ -1034,11 +1074,15 @@ class LiveScoreBulkChange extends Component {
                                 rules: [{ required: true, message: ValidationConstants.venueField }],
                             })( */}
                         <Select
+                            showSearch
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                             className="reg-form-multple-select"
                             onChange={(venueId) => this.onVenueSelection(venueId, "venueId")}
                             placeholder={AppConstants.selectVenue}
-                            value={abandonData.venueId ? abandonData.venueId : []} >
+                            value={abandonData.venueId ? abandonData.venueId : []}
+                            optionFilterProp="children"
+                            onSearch={(e) => this.onSearchVenue(e)}
+                        >
                             {venueData && venueData.map((item) => {
                                 return (
                                     <Option key={'venue' + item.venueId}
@@ -1066,10 +1110,15 @@ class LiveScoreBulkChange extends Component {
                         <Select
                             mode='multiple'
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                            onChange={(courtId) => this.props.liveScoreUpdateBulkAction(courtId, "courtId")}
+                            onChange={(courtId) => {
+                                this.props.liveScoreUpdateBulkAction(courtId, "courtId")
+                                this.props.clearFilter()
+                            }}
                             value={abandonData.courtId}
                             placeholder={AppConstants.selectCourt}
-                            value={abandonData.courtId} >
+                            value={abandonData.courtId}
+                            onSearch={(value) => { this.handleSearch(value, mainCourtList) }}
+                            filterOption={false} >
 
                             {abandonCourtData && abandonCourtData.map((item) => {
                                 return (
@@ -1177,7 +1226,6 @@ class LiveScoreBulkChange extends Component {
                 if (selectedOption == 'pushBack') {
                     // let formatedStartDate = formatDateTime(pushBackData.startDate, pushBackData.startTime)
                     // let formatedEndDate = formatDateTime(pushBackData.endDate, pushBackData.endTime)
-
                     // let startDate = moment(pushBackData.startDate).format("YYYY-MMM-DD")
                     // let startTime = moment.utc(pushBackData.startTime).format("HH:mm")
                     // let postStartDate = startDate + " " + startTime + " " + "UTC"
@@ -1366,7 +1414,9 @@ function mapDispatchToProps(dispatch) {
         getliveScoreDivisions,
         liveScoreAbandonMatchAction,
         matchResult,
-        liveScoreRoundListAction
+        liveScoreRoundListAction,
+        searchCourtList,
+        clearFilter
     }, dispatch)
 }
 

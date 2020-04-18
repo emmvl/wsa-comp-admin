@@ -18,7 +18,7 @@ import moment from "moment";
 import ValidationConstants from '../../themes/validationConstant'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { liveScoreUpdateVenueChange } from '../../store/actions/LiveScoreAction/liveScoreVenueChamgeAction'
+import { liveScoreUpdateVenueChange, searchCourtList, clearFilter } from '../../store/actions/LiveScoreAction/liveScoreVenueChamgeAction'
 import { isArrayNotEmpty } from '../../util/helpers'
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { getCompetitonVenuesList, } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
@@ -32,14 +32,14 @@ class LiveScoreVenueChange extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            search: ''
         };
     }
 
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
-            this.props.getCompetitonVenuesList(id);
+            this.props.getCompetitonVenuesList(id, this.state.search);
         } else {
             history.push('/')
         }
@@ -82,14 +82,28 @@ class LiveScoreVenueChange extends Component {
         );
     };
 
+    handleSearch = (value, data, key) => {
+        console.log(value, data)
+        const filteredData = data.filter(memo => {
+            return memo.name.indexOf(value) > -1
+        })
+        this.props.searchCourtList(filteredData, key)
 
+    };
+
+    onSearchVenue(searchValue) {
+        console.log(searchValue, 'searchValue_1')
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        this.setState({ search: searchValue })
+        this.props.getCompetitonVenuesList(id, searchValue);
+    }
 
     ////this method called after slecting Venue Change option from drop down
     venueChangeView() {
-        const { venueChangeData, venueData, courtData } = this.props.liveScoreVenueChangeState
+        const { venueChangeData, venueData, courtData, mainCourtList } = this.props.liveScoreVenueChangeState
         let venueList = isArrayNotEmpty(venueData) ? venueData : []
         let courtList = isArrayNotEmpty(courtData) ? courtData : []
-
+        console.log(venueList, "venueList", courtList, "courtList")
         return (
             <div>
                 {/* start time date and time picker row */}
@@ -161,10 +175,13 @@ class LiveScoreVenueChange extends Component {
                 <InputWithHead heading={AppConstants.venue} />
                 <div>
                     <Select
+                        showSearch
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         placeholder={AppConstants.selectVenue}
                         onChange={(venueId) => this.props.liveScoreUpdateVenueChange(venueId, "venueId")}
-                        value={venueChangeData.venueId}>
+                        value={venueChangeData.venueId}
+                        optionFilterProp="children"
+                        onSearch={(e) => this.onSearchVenue(e)}>
 
                         {venueList.map((item) => {
                             return (
@@ -187,8 +204,13 @@ class LiveScoreVenueChange extends Component {
                         mode='multiple'
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         placeholder={AppConstants.selectCourt}
-                        onChange={(courtId) => this.props.liveScoreUpdateVenueChange(courtId, "courtId")}
+                        onChange={(courtId) => {
+                            this.props.liveScoreUpdateVenueChange(courtId, "courtId")
+                            this.props.clearFilter('court_1')
+                        }}
                         value={venueChangeData.courtId}
+                        onSearch={(value) => { this.handleSearch(value, mainCourtList, 'court_1') }}
+                        filterOption={false}
                     >
                         {courtList.map((item) => {
                             return (
@@ -207,7 +229,7 @@ class LiveScoreVenueChange extends Component {
     }
 
     changeToView() {
-        const { venueChangeData, venueData, courtDataForChange } = this.props.liveScoreVenueChangeState
+        const { venueChangeData, venueData, courtDataForChange, mainCourtList } = this.props.liveScoreVenueChangeState
         let venueList = isArrayNotEmpty(venueData) ? venueData : []
         let courtList = isArrayNotEmpty(courtDataForChange) ? courtDataForChange : []
 
@@ -219,11 +241,13 @@ class LiveScoreVenueChange extends Component {
                 <InputWithHead heading={AppConstants.venue} />
                 <div>
                     <Select
+                        showSearch
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         placeholder={AppConstants.selectVenue}
                         onChange={(venueId) => this.props.liveScoreUpdateVenueChange(venueId, "changeToVenueId")}
-                        value={venueChangeData.changeToVenueId}>
-
+                        value={venueChangeData.changeToVenueId}
+                        optionFilterProp="children"
+                        onSearch={(e) => this.onSearchVenue(e)}>
                         {venueList.map((item) => {
                             return (
                                 <Option key={'venue' + item.id}
@@ -242,11 +266,16 @@ class LiveScoreVenueChange extends Component {
                 <InputWithHead heading={AppConstants.court} />
                 <div>
                     <Select
-                        mode='multiple'
+                        mode='mult  iple'
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         placeholder={AppConstants.selectCourt}
-                        onChange={(courtId) => this.props.liveScoreUpdateVenueChange(courtId, "changeToCourtId")}
+                        onChange={(courtId) => {
+                            this.props.liveScoreUpdateVenueChange(courtId, "changeToCourtId")
+                            this.props.clearFilter('court_2')
+                        }}
                         value={venueChangeData.changeToCourtId}
+                        onSearch={(value) => { this.handleSearch(value, mainCourtList, 'court_2') }}
+                        filterOption={false}
                     >
                         {courtList.map((item) => {
                             return (
@@ -298,7 +327,7 @@ class LiveScoreVenueChange extends Component {
 
         return (
             <div className="fluid-width">
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"13"} />
                 <Layout>
                     {this.headerView()}
@@ -321,7 +350,9 @@ class LiveScoreVenueChange extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         liveScoreUpdateVenueChange,
-        getCompetitonVenuesList
+        getCompetitonVenuesList,
+        searchCourtList,
+        clearFilter
     }, dispatch)
 }
 function mapStatetoProps(state) {

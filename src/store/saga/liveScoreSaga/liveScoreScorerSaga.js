@@ -140,7 +140,7 @@ export function* liveScoreUnAssignMatcheSaga(action) {
 // Scorer search api saga
 
 export function* liveScoreScorerSearchSaga(action) {
-console.log(action)
+
     try {
         const result = yield call(userHttpApi.scorerSearchApi, action.roleId, action.entityTypeId, action.competitionId, action.searchText)
         if (result.status == 1) {

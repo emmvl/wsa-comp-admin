@@ -647,9 +647,9 @@ class RegistrationMembershipFee extends Component {
                             onChange={e => this.membershipFeeApplyRadio(e.target.value, index)}
                             defaultValue={item.membershipProductFeesTypeRefId}
                         >
-                            {this.props.appState.membershipProductFeesTypes.map(item => {
+                            {this.props.appState.membershipProductFeesTypes.map((item, typeindex) => {
                                 return (
-                                    <Radio key={"validityRefId" + item.id} value={item.id}> {item.description}</Radio>
+                                    <Radio key={"validityRefId" + typeindex} value={item.id}> {item.description}</Radio>
                                 );
                             })}
                         </Radio.Group>

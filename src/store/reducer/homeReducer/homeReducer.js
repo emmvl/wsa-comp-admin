@@ -9,6 +9,9 @@ const initialState = {
     status: 0,
     userCount: null,
     registrationCount: null,
+    liveScoreCompetitionCount: null,
+    registrationCompetitionCount: null,
+    yearRefId: 1
 
 };
 
@@ -25,6 +28,8 @@ function homeReducer(state = initialState, action) {
                 onLoad: false,
                 userCount: action.result.count,
                 registrationCount: action.result.registrationCount,
+                liveScoreCompetitionCount: action.result.liveScoreCompetitionCount,
+                registrationCompetitionCount: action.result.registrationCompetitionCount,
                 status: action.status
             }
 
@@ -33,6 +38,14 @@ function homeReducer(state = initialState, action) {
             if (action.key == "user") {
                 state.userCount = null
                 state.registrationCount = null
+                state.liveScoreCompetitionCount = null
+                state.registrationCompetitionCount = null
+            }
+            if (action.key == 'yearChange') {
+                state.userCount = ""
+                state.registrationCount = ""
+                state.liveScoreCompetitionCount = ""
+                state.registrationCompetitionCount = ""
             }
             return {
                 ...state
@@ -54,6 +67,12 @@ function homeReducer(state = initialState, action) {
                 error: action.error,
                 status: action.status
             };
+
+        case ApiConstants.setHomeDashboardYearKey:
+            return {
+                ...state,
+                yearRefId: action.year
+            }
 
 
 
