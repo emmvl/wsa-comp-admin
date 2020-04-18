@@ -382,28 +382,39 @@ class InnerHorizontalMenu extends React.Component {
                 </Menu>
                 }
 
-                {this.props.menu === "user" && <Menu
+                {this.props.menu === "user" && 
+                <Menu
                     theme="light"
                     mode="horizontal"
                     defaultSelectedKeys={['1']}
                     style={{ lineHeight: '64px' }}
                     selectedKeys={[this.props.userSelectedKey]}>
-                    <SubMenu
-                        key="sub3"
-                        title={<span>{AppConstants.dashboard}</span>}>
-                        <Menu.Item key="1">
+                    <Menu.Item key="1">
                             <NavLink to="/userGraphicalDashboard" >
-                                <span >{AppConstants.graphicalDashboard}</span>
+                                <span >{AppConstants.dashboard}</span>
+                            </NavLink>
+                    </Menu.Item>
+                    <SubMenu
+                        key="sub2"
+                        title={<span>{AppConstants.users}</span>}>
+                        <Menu.Item key="4">
+                            <NavLink to="/userTextualDashboard" >
+                                <span >{AppConstants.users}</span>
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="5">
-                            <NavLink to="/userTextualDashboard" >
-                                <span >{AppConstants.userProfile}</span>
+                            <NavLink to="/playWithFriend" >
+                                <span >{AppConstants.playWithAFriend}</span>
+                            </NavLink>
+                        </Menu.Item>
+                        <Menu.Item key="6">
+                            <NavLink to="/referFriend" >
+                                <span >{AppConstants.referaFriend}</span>
                             </NavLink>
                         </Menu.Item>
                     </SubMenu>
 
-                    <SubMenu
+                    {/* <SubMenu
                         key="sub2"
                         title={<span>{AppConstants.maintain}</span>}>
                         <Menu.Item key="4">
@@ -411,7 +422,7 @@ class InnerHorizontalMenu extends React.Component {
                                 <span >{AppConstants.venueAndCourts}</span>
                             </NavLink>
                         </Menu.Item>
-                    </SubMenu>
+                    </SubMenu> */}
                     <SubMenu
                         key="sub1"
                         title={
@@ -437,40 +448,31 @@ class InnerHorizontalMenu extends React.Component {
 
                 </Menu>
                 }
-                {this.props.menu === "userModule" && <Menu
+
+                {this.props.menu === "home" && 
+                <Menu
                     theme="light"
                     mode="horizontal"
                     defaultSelectedKeys={['1']}
                     style={{ lineHeight: '64px' }}
-                    selectedKeys={[this.props.userModuleSelectedKey]}>
-                    <Menu.Item key="1">
-                        <NavLink to="/userActivity" >
-                            <span >{AppConstants.activity}</span>
-                        </NavLink>
-                    </Menu.Item>
-                    <Menu.Item key="2">
-                        <NavLink to="/userStatistics" >
-                            <span >{AppConstants.statistics}</span>
-                        </NavLink>
-                    </Menu.Item>
-                    <Menu.Item key="3">
-                        <NavLink to="/userPersonal" >
-                            <span >{AppConstants.personalDetails}</span>
-                        </NavLink>
-                    </Menu.Item>
-                    <Menu.Item key="4">
-                        <NavLink to="/userMedical" >
-                            <span >{AppConstants.medical}</span>
-                        </NavLink>
-                    </Menu.Item>
-                    <Menu.Item key="5">
-                        <NavLink to="/userRegistration" >
-                            <span >{AppConstants.registration}</span>
-                        </NavLink>
-                    </Menu.Item>
-
+                    selectedKeys={[this.props.userSelectedKey]}>
+                    <SubMenu
+                        key="sub1"
+                        title={<span>{AppConstants.dashboard}</span>}>
+                         <Menu.Item key="1">
+                            <NavLink to="/homeDashboard" >
+                                <span >{AppConstants.home}</span>
+                            </NavLink>
+                        </Menu.Item>
+                        <Menu.Item key="2">
+                            <NavLink to="/venuesList" >
+                                <span >{AppConstants.venueAndCourts}</span>
+                            </NavLink>
+                        </Menu.Item>
+                    </SubMenu>
                 </Menu>
                 }
+               
             </div>
 
         );

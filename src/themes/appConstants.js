@@ -938,8 +938,9 @@ const AppConstants = {
   registrationArea: "registration area",
 
 
-  friends: "Friends",
-  referFriends: "Referred Friends"
+  referaFriend: "Refer a Friend",
+  playWithAFriend: "Play with a Friend",
+  
 };
 
 export default AppConstants;

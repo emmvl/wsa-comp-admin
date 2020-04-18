@@ -328,7 +328,7 @@ class UserTextualDashboard extends Component{
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
-                <InnerHorizontalMenu menu={"user"} userSelectedKey={"5"} />
+                <InnerHorizontalMenu menu={"user"} userSelectedKey={"4"} />
                 <Layout>
                     {this.headerView()}
                     <Content>
