@@ -63,6 +63,7 @@ const Method = {
     return await new Promise((resolve, reject) => {
       competitionManagementHttp
         .post(url, body, {
+          timeout: 180000,
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
@@ -137,6 +138,7 @@ const Method = {
     return await new Promise((resolve, reject) => {
       competitionManagementHttp
         .get(url, {
+          timeout: 180000,
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",

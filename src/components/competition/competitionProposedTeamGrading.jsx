@@ -62,11 +62,17 @@ const columns = [
             record.isDirectRegistration == 0 ? (
                 <span >{sortOrder}</span>
             ) : (
-                    <Input className="input-inside-team-grades-table" style={{ width: '50px' }}
-                        onChange={e => this_obj.props.onchangeCompOwnFinalTeamGradingData(e.target.value, index, "sortOrder")}
-                        placeholder={"Team"}
-                        value={sortOrder}
-                    />
+                <Select className="select-inside-team-grades-table"
+                value={sortOrder}
+                onChange={(e) => this_obj.props.onchangeCompOwnFinalTeamGradingData(e, index, "sortOrder")}
+                >
+                {this_obj.props.ownTeamGradingState.teamRanks.map((item) => {
+                    return <Option key={"rank" + item.id} value={item.id}>
+                        {item.id}
+                    </Option>
+                })}
+                </Select>
+                   
                 )
         )
 

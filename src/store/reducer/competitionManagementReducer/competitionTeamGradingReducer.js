@@ -13,7 +13,8 @@ const initialState = {
     getPartProposedTeamGradingData: [],
     ownTeamGradingSummaryGetData: [],
     finalsortOrderArray: [],
-    getFinalGradesListData: []
+    getFinalGradesListData: [],
+    teamRanks: []
 
 };
 
@@ -96,6 +97,19 @@ function getUpdatedHistoryData(data) {
     }
 }
 
+function compare(a, b) {
+    const bandA = a.sortOrder;
+    const bandB = b.sortOrder;
+  
+    let comparison = 0;
+    if (bandA > bandB) {
+      comparison = 1;
+    } else if (bandA < bandB) {
+      comparison = -1;
+    }
+    return comparison;
+  }
+
 
 function sortOrderArray(ownTeamGradingSummaryData) {
     let sortOrderArray = []
@@ -162,10 +176,12 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
             }
             let teamGradingDataArr = isArrayNotEmpty(finalTeamGradingData.teamGradings) ? finalTeamGradingData.teamGradings : []
             let updatedTeamGradingData = getUpdatedHistoryData(teamGradingDataArr)
+            
             return {
                 ...state,
                 getCompOwnProposedTeamGradingData: updatedTeamGradingData,
                 compFinalTeamGradingFinalGradesData: isArrayNotEmpty(finalTeamGradingData.finalGrades) ? finalTeamGradingData.finalGrades : [],
+                teamRanks: isArrayNotEmpty(finalTeamGradingData.teamRanks) ? finalTeamGradingData.teamRanks : [],
                 onLoad: false,
                 error: null
             }
@@ -182,6 +198,7 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
                 finalGradingOnChangeData[action.index]["finalGradeName"] = obj.name;
 
             }
+            finalGradingOnChangeData.sort(compare);
             state.getCompOwnProposedTeamGradingData = finalGradingOnChangeData
 
             return {
