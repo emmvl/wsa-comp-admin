@@ -193,12 +193,21 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
             //console.log("finalGrades::" + JSON.stringify(finalGrades));
             //  console.log("Index" + action.index + "Value" + action.value);
             let obj = finalGrades.find(x => x.gradeRefId == action.value);
-            finalGradingOnChangeData[action.index][action.key] = action.value
-            if (action.key == "finalGradeId") {
-                finalGradingOnChangeData[action.index]["finalGradeName"] = obj.name;
-
+            if(action.key == "sortOrder")
+            {
+                finalGradingOnChangeData[action.index][action.key] = action.value + 1;
+                finalGradingOnChangeData.sort(compare);
+                finalGradingOnChangeData.map((x, index) => {
+                    x.sortOrder = index + 1;
+                })
             }
-            finalGradingOnChangeData.sort(compare);
+            else{
+                finalGradingOnChangeData[action.index][action.key] = action.value
+                if (action.key == "finalGradeId") {
+                    finalGradingOnChangeData[action.index]["finalGradeName"] = obj.name;
+                }
+            }
+           
             state.getCompOwnProposedTeamGradingData = finalGradingOnChangeData
 
             return {
