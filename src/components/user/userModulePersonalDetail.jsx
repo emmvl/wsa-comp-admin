@@ -481,6 +481,7 @@ class UserModulePersonalDetail extends Component{
         let filter = 
         {
             competitionId: competition.competitionId,
+            organisationId: getOrganisationData().organisationUniqueKey,
             userId: userId,
             paging : {
                 limit : 10,
