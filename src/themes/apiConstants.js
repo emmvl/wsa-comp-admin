@@ -1144,7 +1144,12 @@ const ApiConstants = {
   API_LIVE_MATCH_LOCAL_SEARCH: "API_LIVE_MATCH_LOCAL_SEARCH",
 
 
-  setHomeDashboardYearKey: "setHomeDashboardYearKey"
+  setHomeDashboardYearKey: "setHomeDashboardYearKey",
+
+
+  /// Organisation Venue list
+  API_COMPETION_ORG_VENUE_LOAD : "API_COMPETION_ORG_VENUE_LOAD",
+  API_COMPETION_ORG_VENUE_SUCCESS : "API_COMPETION_ORG_VENUE_SUCCESS"
 };
 
 

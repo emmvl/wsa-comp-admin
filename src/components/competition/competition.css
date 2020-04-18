@@ -357,6 +357,30 @@ a.collapsed i {
   cursor: pointer;
 }
 
+.registation-screen-nav-text{
+  display: flex;
+    align-content: flex-start;
+    padding-top: 20px;
+    font-size: 13px;
+    color: var(--app-4c4c6d);
+    font-weight: 500;
+    font-family: inter-medium;
+}
+
+.registation-screen-nav-text-appColor{
+  display: flex;
+    align-content: flex-start;
+    padding-top: 20px;
+    font-size: 13px;
+    color: var(--app-color);
+    font-weight: 500;
+    font-family: inter-medium;
+}
+
+.row-view-text{
+  display: flex;
+  flex-direction: row;
+}
 @media (max-width: 991px) {
   .comp-buttons-view .open-reg-button {
     margin-top: 20px;

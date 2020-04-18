@@ -68,7 +68,7 @@ class LiveScoreAddMatch extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
 
         if (id !== null) {
-            this.props.getCompetitonVenuesList(id);
+            this.props.getCompetitonVenuesList(id,"");
             this.props.getLiveScoreDivisionList(id)
             this.props.getliveScoreScorerList(id, 4)
             this.props.liveScoreRoundListAction(id)

@@ -255,9 +255,9 @@ class InnerHorizontalMenu extends React.Component {
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="8">
-                            {/* <NavLink to=""> */}
+                            <NavLink to="/userAffiliatesList">
                             <span>Affiliates</span>
-                            {/* </NavLink> */}
+                            </NavLink>
                         </Menu.Item>
                         <Menu.Item key="9">
                             <NavLink to="/liveScoreDivisionList">

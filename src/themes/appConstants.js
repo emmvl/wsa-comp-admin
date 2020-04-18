@@ -934,6 +934,8 @@ const AppConstants = {
   publicLadderUrl: `https://netball-comp-admin-dev.worldsportaction.com/liveScorePublicLadder?competitionId=20b91f98-3f12-41c1-aeeb-70c9d6f4fa3d`,
   totalCompetitions: "Total Competitions",
   livescoreCompetitions: "Live score competitions",
+  toEditRegistrationDeatils: "To edit registration details, please go to",
+  registrationArea: "registration area",
 
 };
 

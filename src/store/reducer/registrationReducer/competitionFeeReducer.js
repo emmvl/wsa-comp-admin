@@ -28,7 +28,7 @@ const competitionDetailObject = {
     logoIsDefault: false,
     yearRefId: 1,
     statusRefId: 1,
-
+    hasRegistration: 0
 }
 
 
@@ -871,6 +871,7 @@ function getTotalFees(feesOwner, data, mFees) {
         totalFees = (dataFees + dataGst + mFees)
         return totalFees.toFixed(2)
     }
+
 }
 
 
@@ -1822,7 +1823,9 @@ function competitionFees(state = initialState, action) {
                     invitees: [],
                     selectedVenuesIds: [],
                     logoIsDefault: false,
-                    yearRefId: 1
+                    yearRefId: 1,
+                    statusRefId: 1,
+                    hasRegistration: 0
                 }
                 state.competitionDetailData = defaultDetailObj
                 state.competitionId = ""

@@ -48,6 +48,7 @@ class LiveScoreBulkChange extends Component {
         super(props);
         this.state = {
             loading: false,
+            search: '',
         };
         this.props.matchResult()
         this.props.liveScoreUpdateBulkAction("selectedOption", "selectedOption")
@@ -57,7 +58,7 @@ class LiveScoreBulkChange extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.props.liveScoreBulkMatchAction()
         if (id !== null) {
-            this.props.getCompetitonVenuesList(id);
+            this.props.getCompetitonVenuesList(id, this.state.search);
             this.props.liveScoreRoundListAction(id)
             // this.props.getliveScoreDivisions(id)
         } else {
@@ -347,7 +348,12 @@ class LiveScoreBulkChange extends Component {
 
     };
 
-
+    onSearchVenue(searchValue) {
+        console.log(searchValue)
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        this.setState({ search: searchValue })
+        this.props.getCompetitonVenuesList(id, searchValue);
+    }
 
     ////this method called after slecting Push Back option from drop down
     pushBackView(getFieldDecorator) {
@@ -453,11 +459,14 @@ class LiveScoreBulkChange extends Component {
                             rules: [{ required: true, message: ValidationConstants.venueField }],
                         })( */}
                     <Select
+                        showSearch
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         className="reg-form-multple-select"
                         onChange={(venue) => this.onVenueSelection(venue, 'venueId')}
                         value={pushBackData.venueId ? pushBackData.venueId : []}
                         placeholder={AppConstants.selectVenue}
+                        optionFilterProp="children"
+                        onSearch={(e) => this.onSearchVenue(e)}
                     >
                         {
                             venueData && venueData.map((item) => {
@@ -632,11 +641,14 @@ class LiveScoreBulkChange extends Component {
                             rules: [{ required: true, message: ValidationConstants.venueField }],
                         })( */}
                     <Select
+                        showSearch
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         className="reg-form-multple-select"
                         onChange={(venue) => this.onVenueSelection(venue, 'venueId')}
                         value={bringForwardData.venueId ? bringForwardData.venueId : []}
-                        placeholder={AppConstants.selectVenue} >
+                        placeholder={AppConstants.selectVenue}
+                        optionFilterProp="children"
+                        onSearch={(e) => this.onSearchVenue(e)} >
                         {venueData && venueData.map((item) => {
                             return (
                                 <Option key={'venue' + item.venueId}
@@ -804,10 +816,13 @@ class LiveScoreBulkChange extends Component {
                             rules: [{ required: true, message: ValidationConstants.venueField }],
                         })( */}
                     <Select
+                        showSearch
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         onChange={(venueId) => this.onVenueSelection(venueId, "venueId")}
                         value={endMatchData.venueId ? endMatchData.venueId : []}
-                        placeholder={AppConstants.selectVenue}>
+                        placeholder={AppConstants.selectVenue}
+                        optionFilterProp="children"
+                        onSearch={(e) => this.onSearchVenue(e)}>
 
                         {venueData && venueData.map((item) => {
                             return (
@@ -890,7 +905,6 @@ class LiveScoreBulkChange extends Component {
                         </Form.Item> */}
                     </div>
                 </div>
-
             </div>
         )
     }
@@ -1032,7 +1046,6 @@ class LiveScoreBulkChange extends Component {
                                             name={'registrationOepn'}
                                             onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "endDate")}
                                             value={abandonData.endDate}
-
                                         />
                                     )}
                                 </Form.Item>
@@ -1061,11 +1074,15 @@ class LiveScoreBulkChange extends Component {
                                 rules: [{ required: true, message: ValidationConstants.venueField }],
                             })( */}
                         <Select
+                            showSearch
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                             className="reg-form-multple-select"
                             onChange={(venueId) => this.onVenueSelection(venueId, "venueId")}
                             placeholder={AppConstants.selectVenue}
-                            value={abandonData.venueId ? abandonData.venueId : []} >
+                            value={abandonData.venueId ? abandonData.venueId : []}
+                            optionFilterProp="children"
+                            onSearch={(e) => this.onSearchVenue(e)}
+                        >
                             {venueData && venueData.map((item) => {
                                 return (
                                     <Option key={'venue' + item.venueId}
@@ -1209,7 +1226,6 @@ class LiveScoreBulkChange extends Component {
                 if (selectedOption == 'pushBack') {
                     // let formatedStartDate = formatDateTime(pushBackData.startDate, pushBackData.startTime)
                     // let formatedEndDate = formatDateTime(pushBackData.endDate, pushBackData.endTime)
-
                     // let startDate = moment(pushBackData.startDate).format("YYYY-MMM-DD")
                     // let startTime = moment.utc(pushBackData.startTime).format("HH:mm")
                     // let postStartDate = startDate + " " + startTime + " " + "UTC"

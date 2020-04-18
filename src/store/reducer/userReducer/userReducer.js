@@ -86,8 +86,8 @@ const initialState = {
     activityManagerOnLoad: false,
     activityManagerList: [],
     activityManagerPage: 1,
-    activityManagerTotalCount: 1
-
+    activityManagerTotalCount: 1,
+    onOrgLoad: false
 };
 
 function userReducer(state = initialState, action) {
@@ -253,12 +253,12 @@ function userReducer(state = initialState, action) {
 
         /////get particular user organisation 
         case ApiConstants.API_GET_USER_ORGANISATION_LOAD:
-            return { ...state, onLoad: true, error: null }
+            return { ...state, onLoad: true, error: null, onOrgLoad: true }
 
         case ApiConstants.API_GET_USER_ORGANISATION_SUCCESS:
             state.allUserOrganisationData = isArrayNotEmpty(action.result) ? action.result : []
             state.getUserOrganisation = isArrayNotEmpty(action.result) ? action.result : []
-
+            state.onOrgLoad = false
             return {
                 ...state,
                 onLoad: false,
@@ -302,7 +302,7 @@ function userReducer(state = initialState, action) {
         case ApiConstants.API_USER_MODULE_PERSONAL_DETAIL_SUCCESS:
             let personalData = action.result;
             let arr = [];
-            if(personalData!= null){
+            if (personalData != null) {
                 let obj = {
                     emergencyContactName: personalData.emergencyContactName,
                     emergencyContactNumber: personalData.emergencyContactNumber

@@ -109,7 +109,8 @@ let LiveScoreAxiosApi = {
         return Method.dataDelete(url, localStorage.token)
     },
     liveScoreCompetition(data) {
-        const url = '/competitions/admin';
+        const url = `/competitions/admin`;
+        // const url = `/competitions/admin?organisationid=${81}`;
         return Method.dataPost(url, null, data)
     },
     liveScorePlayerList(competitionID) {
