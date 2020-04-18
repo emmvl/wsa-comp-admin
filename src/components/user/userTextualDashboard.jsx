@@ -144,7 +144,9 @@ class UserTextualDashboard extends Component{
             deleteLoading: false,
         }
         this_Obj = this;
+    }
 
+    componentDidMount(){
         this.handleTextualTableList(1, this.state.organisationId, -1,'-1',-1,-1,-1,'-1')
     }
 

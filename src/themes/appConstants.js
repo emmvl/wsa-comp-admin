@@ -937,6 +937,9 @@ const AppConstants = {
   toEditRegistrationDeatils: "To edit registration details, please go to",
   registrationArea: "registration area",
 
+
+  friends: "Friends",
+  referFriends: "Referred Friends"
 };
 
 export default AppConstants;

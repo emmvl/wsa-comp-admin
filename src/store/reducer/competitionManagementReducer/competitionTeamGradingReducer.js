@@ -13,7 +13,8 @@ const initialState = {
     getPartProposedTeamGradingData: [],
     ownTeamGradingSummaryGetData: [],
     finalsortOrderArray: [],
-    getFinalGradesListData: []
+    getFinalGradesListData: [],
+    teamRanks: []
 
 };
 
@@ -96,6 +97,19 @@ function getUpdatedHistoryData(data) {
     }
 }
 
+function compare(a, b) {
+    const bandA = a.sortOrder;
+    const bandB = b.sortOrder;
+  
+    let comparison = 0;
+    if (bandA > bandB) {
+      comparison = 1;
+    } else if (bandA < bandB) {
+      comparison = -1;
+    }
+    return comparison;
+  }
+
 
 function sortOrderArray(ownTeamGradingSummaryData) {
     let sortOrderArray = []
@@ -162,10 +176,12 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
             }
             let teamGradingDataArr = isArrayNotEmpty(finalTeamGradingData.teamGradings) ? finalTeamGradingData.teamGradings : []
             let updatedTeamGradingData = getUpdatedHistoryData(teamGradingDataArr)
+            
             return {
                 ...state,
                 getCompOwnProposedTeamGradingData: updatedTeamGradingData,
                 compFinalTeamGradingFinalGradesData: isArrayNotEmpty(finalTeamGradingData.finalGrades) ? finalTeamGradingData.finalGrades : [],
+                teamRanks: isArrayNotEmpty(finalTeamGradingData.teamRanks) ? finalTeamGradingData.teamRanks : [],
                 onLoad: false,
                 error: null
             }
@@ -177,11 +193,21 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
             //console.log("finalGrades::" + JSON.stringify(finalGrades));
             //  console.log("Index" + action.index + "Value" + action.value);
             let obj = finalGrades.find(x => x.gradeRefId == action.value);
-            finalGradingOnChangeData[action.index][action.key] = action.value
-            if (action.key == "finalGradeId") {
-                finalGradingOnChangeData[action.index]["finalGradeName"] = obj.name;
-
+            if(action.key == "sortOrder")
+            {
+                finalGradingOnChangeData[action.index][action.key] = action.value + 1;
+                finalGradingOnChangeData.sort(compare);
+                finalGradingOnChangeData.map((x, index) => {
+                    x.sortOrder = index + 1;
+                })
             }
+            else{
+                finalGradingOnChangeData[action.index][action.key] = action.value
+                if (action.key == "finalGradeId") {
+                    finalGradingOnChangeData[action.index]["finalGradeName"] = obj.name;
+                }
+            }
+           
             state.getCompOwnProposedTeamGradingData = finalGradingOnChangeData
 
             return {
