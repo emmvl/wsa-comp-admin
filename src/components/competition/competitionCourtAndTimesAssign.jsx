@@ -187,7 +187,6 @@ class CompetitionCourtAndTimesAssign extends Component {
                 let timeSlotData = JSON.parse(JSON.stringify(this.props.competitionTimeSlots.getcompetitionTimeSlotData))
                 timeSlotData["competitionUniqueKey"] = this.state.firstTimeCompId
                 timeSlotData["organisationId"] = 1
-
                 ///for fillter  timeslotdata on the basis of generation key 
                 if (timeSlotData.timeslotGenerationRefId == 1) {
                     timeSlotData.competitionTimeslotManual = []
@@ -228,16 +227,28 @@ class CompetitionCourtAndTimesAssign extends Component {
                             getStartTime = getTimeSlot[j].startTime
                             for (let k in getStartTime) {
                                 let manualcompetitionTimeslotsEntityOBj = getStartTime[k].competitionTimeslotsEntity
-                                for (let l in manualcompetitionTimeslotsEntityOBj) {
-                                    manualcompetitionTimeslotsEntityOBj[l].competitionVenueTimeslotEntityId = 0
-                                    manualperVenueObj =
-                                    {
-                                        "competitionVenueTimeslotsDayTimeId": 0,
-                                        "dayRefId": getTimeSlot[j].dayRefId,
-                                        "startTime": getStartTime[k].startTime,
-                                        "sortOrder": JSON.parse(k),
-                                        "competitionTimeslotsEntity": timeSlotData.mainTimeRotationID == 8 ? manualcompetitionTimeslotsEntityOBj : [],
+                                if (timeSlotData.mainTimeRotationID == 8) {
+                                    for (let l in manualcompetitionTimeslotsEntityOBj) {
+                                        manualcompetitionTimeslotsEntityOBj[l].competitionVenueTimeslotEntityId = 0
+                                        manualperVenueObj =
+                                            {
+                                                "competitionVenueTimeslotsDayTimeId": 0,
+                                                "dayRefId": getTimeSlot[j].dayRefId,
+                                                "startTime": getStartTime[k].startTime,
+                                                "sortOrder": JSON.parse(k),
+                                                "competitionTimeslotsEntity": timeSlotData.mainTimeRotationID == 8 ? manualcompetitionTimeslotsEntityOBj : [],
+                                            }
                                     }
+                                }
+                                else {
+                                    manualperVenueObj =
+                                        {
+                                            "competitionVenueTimeslotsDayTimeId": 0,
+                                            "dayRefId": getTimeSlot[j].dayRefId,
+                                            "startTime": getStartTime[k].startTime,
+                                            "sortOrder": JSON.parse(k),
+                                            "competitionTimeslotsEntity": timeSlotData.mainTimeRotationID == 8 ? manualcompetitionTimeslotsEntityOBj : [],
+                                        }
                                 }
 
                                 timeSlotManualAllVenueArray.push(manualperVenueObj)
@@ -271,17 +282,32 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 manualStartTime = timeSloltdataArr[j].startTime
                                 for (let k in manualStartTime) {
                                     let competitionTimeslotsEntityObj = manualStartTime[k].competitionTimeslotsEntity
-                                    for (let l in competitionTimeslotsEntityObj) {
-                                        competitionTimeslotsEntityObj[l].competitionVenueTimeslotEntityId = 0
-                                        manualAllVenueObj =
-                                        {
-                                            "competitionVenueTimeslotsDayTimeId": 0,
-                                            "dayRefId": timeSloltdataArr[j].dayRefId,
-                                            "startTime": manualStartTime[k].startTime,
-                                            "sortOrder": JSON.parse(k),
-                                            "competitionTimeslotsEntity": timeSlotData.mainTimeRotationID !== 8 ? [] : competitionTimeslotsEntityObj,
+                                    if (timeSlotData.mainTimeRotationID == 8) {
+                                        for (let l in competitionTimeslotsEntityObj) {
+                                            competitionTimeslotsEntityObj[l].competitionVenueTimeslotEntityId = 0
+
+                                            manualAllVenueObj =
+                                                {
+                                                    "competitionVenueTimeslotsDayTimeId": 0,
+                                                    "dayRefId": timeSloltdataArr[j].dayRefId,
+                                                    "startTime": manualStartTime[k].startTime,
+                                                    "sortOrder": JSON.parse(k),
+                                                    "competitionTimeslotsEntity": timeSlotData.mainTimeRotationID !== 8 ? [] : competitionTimeslotsEntityObj,
+                                                }
                                         }
                                     }
+                                    else {
+                                        manualAllVenueObj =
+                                            {
+                                                "competitionVenueTimeslotsDayTimeId": 0,
+                                                "dayRefId": timeSloltdataArr[j].dayRefId,
+                                                "startTime": manualStartTime[k].startTime,
+                                                "sortOrder": JSON.parse(k),
+                                                "competitionTimeslotsEntity": timeSlotData.mainTimeRotationID !== 8 ? [] : competitionTimeslotsEntityObj,
+                                            }
+
+                                    }
+                                    console.log(manualAllVenueObj)
                                     timeSlotManualperVenueArray.push(manualAllVenueObj)
                                 }
                             }
@@ -303,7 +329,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                     message.error(ValidationConstants.pleaseSelectCompetition)
                 }
                 else {
-                    console.log(timeSlotData)
+                    // console.log(timeSlotData)
                     this.props.addTimeSlotDataPost(timeSlotData)
                 }
             }
