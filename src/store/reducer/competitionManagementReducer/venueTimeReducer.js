@@ -445,7 +445,7 @@ function VenueTimeState(state = initialState, action) {
 
         case ApiConstants.API_UPDATE_VENUE_TIME_DATA:
             if (action.key == "remove") {
-                let expandedRowKeyRemove = action.index + 1
+                let expandedRowKeyRemove = action.index + 1;
                 state.venuData['venueCourts'].splice(action.index, 1)
                 let matchKey = state.venuData.expandedRowKeys.findIndex(x => x == expandedRowKeyRemove.toString())
                 if (matchKey != -1)
@@ -533,7 +533,23 @@ function VenueTimeState(state = initialState, action) {
                 }
             }
             else if (action.key == 'overideSlot') {
+               // console.log("venueCourts::" + JSON.stringify(state.venuData.venueCourts));
+                console.log("&&&&&&&&&&&&&" +  state.venuData.venueCourts[action.index]["availabilities"]);
                 let changeData = state.venuData.venueCourts
+                if(changeData[action.index]["availabilities"].length == 0)
+                {
+                    let timSlotObj = {
+                        venueCourtAvailabilityId: "",
+                        dayRefId: 1,
+                        startTime: '00:00',
+                        endTime: '00:00',
+                        isDisabled: false
+                    }
+                    changeData[action.index]["availabilities"].push(timSlotObj)
+                }
+
+              //  console.log("venueCourts@@@@@::" + JSON.stringify(changeData));
+
                 changeData[action.index][action.key] = action.data
                 state.venuData.venueCourts = changeData
                 let expandedRowKey = changeData[action.index]['key'];
@@ -542,7 +558,8 @@ function VenueTimeState(state = initialState, action) {
                     state.venuData.expandedRowKeys.push(expandedRowKey.toString())
                 } else {
                     let sortArray = state.venuData.expandedRowKeys.findIndex(x => x == expandedRowKey.toString())
-                    state.venuData.expandedRowKeys.splice(sortArray, 1)
+                    state.venuData.expandedRowKeys.splice(sortArray, 1);
+                    changeData[action.index]["availabilities"] = [];
                 }
             } else if (action.contentType == 'gameTimeslot') {
                 let changeGameData = state.venuData.gameDays
@@ -882,6 +899,7 @@ function VenueTimeState(state = initialState, action) {
                         let availabilities = courts[i].availabilities;
                         if (isArrayNotEmpty(availabilities)) {
                             courts[i]["overideSlot"] = true;
+                            venueDataByIdRes.expandedRowKeys.push(key.toString())
                         }
                         else {
                             courts[i]["overideSlot"] = false;
@@ -890,8 +908,6 @@ function VenueTimeState(state = initialState, action) {
                         for (let j in courts[i].availabilities) {
                             courts[i].availabilities[j]["isDisabled"] =  state.venueIsUsed;
                         }
-
-                        venueDataByIdRes.expandedRowKeys.push(key.toString())
                     }
                 }
                 let gameDays = venueDataByIdRes.gameDays;

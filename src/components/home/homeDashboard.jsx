@@ -3,6 +3,7 @@ import { Layout, Button, Table, Select } from 'antd';
 import './home.css';
 import { NavLink } from 'react-router-dom';
 import DashboardLayout from "../../pages/dashboardLayout";
+import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
@@ -520,6 +521,7 @@ class HomeDashboard extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.home} menuName={AppConstants.home} />
+                <InnerHorizontalMenu menu={"home"} userSelectedKey={"1"} />
                 <Layout>
                     {/* <Content className="container"> */}
                     <Content className="comp-dash-table-view">

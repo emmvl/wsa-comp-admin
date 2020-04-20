@@ -944,6 +944,9 @@ const AppConstants = {
   logoImageSize: "Selected file must be less then 250 KB",
   logoType: "Selected file must be PNG, GIF or JPEG formate",
   logo_size:250000,
+  referaFriend: "Refer a Friend",
+  playWithAFriend: "Play with a Friend",
+  
 };
 
 export default AppConstants;

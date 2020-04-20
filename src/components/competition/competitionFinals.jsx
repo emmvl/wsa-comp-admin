@@ -206,22 +206,6 @@ class CompetitionFinals extends Component {
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.finals}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                    {/* <form> */}
-                    <div className="comp-dashboard-botton-view-mobile">
-                        <Button className="primary-add-comp-form" type="primary" onClick={() => this.downloadTemplate()}>
-                            <div className="row">
-                                <div className="col-sm">
-                                    <img
-                                        src={AppImages.import}
-                                        alt=""
-                                        className="export-image"
-                                    />
-                                    {AppConstants.import}
-                                </div>
-                            </div>
-                        </Button>
-                    </div>
-                {/* </form> */}
                 </div>
             </Header >
         )

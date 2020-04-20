@@ -759,7 +759,7 @@ class UserModulePersonalDetail extends Component{
                     pagination={false}
                     />
                 </div>
-                <div className="user-module-row-heading"  style={{marginTop: '30px'}}>{AppConstants.friends}</div>
+                {/* <div className="user-module-row-heading"  style={{marginTop: '30px'}}>{AppConstants.friends}</div>
                 <div className="table-responsive home-dash-table-view">
                     <Table className="home-dashboard-table"
                     columns={columnsFriends}
@@ -774,7 +774,7 @@ class UserModulePersonalDetail extends Component{
                     dataSource={referFriends} 
                     pagination={false}
                     />
-                </div>
+                </div> */}
                 <div className="user-module-row-heading" style={{marginTop: '30px'}}>{AppConstants.otherInformation}</div>
                 <div className="table-responsive home-dash-table-view" style={{display: 'flex', flexDirection: 'column'}}>
                     <div className="other-info-row" style={{paddingTop: '10px'}}>
