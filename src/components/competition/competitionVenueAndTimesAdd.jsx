@@ -189,7 +189,7 @@ class CompetitionVenueAndTimesAdd extends Component {
     componentDidMount() {
         window.scroll(0, 0);
         // this.myRef.current.scrollTo(0, 0);
-        let screenNavigationKey = this.props.location.state.key;
+        let screenNavigationKey =this.props.location.state ? this.props.location.state.key:'';
         this.setState({
             screenNavigationKey: screenNavigationKey
         })
