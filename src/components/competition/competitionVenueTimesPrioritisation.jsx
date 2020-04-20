@@ -582,6 +582,14 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
     };
 
+    //On selection of venue
+    onSelectValues(venueId) {
+        this.props.updateVenueConstraintsData(venueId, null, 'venues', 'venueListSection')
+        this.props.clearFilter()
+    }
+
+
+
     selectAddVenueView() {
         const { venueList, mainVenueList } = this.props.commonReducerState
         const { selectedVenueId } = this.props.venueTimeState
@@ -593,8 +601,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                             mode="multiple"
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                             onChange={venueId => {
-                                this.props.updateVenueConstraintsData(venueId, null, 'venues', 'venueListSection')
-                                this.props.clearFilter()
+                                this.onSelectValues(venueId)
                             }}
                             value={selectedVenueId}
                             placeholder={'Select Venue'}

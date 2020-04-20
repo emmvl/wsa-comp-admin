@@ -222,6 +222,13 @@ class LiveScoreSettingsView extends Component {
 
     };
 
+
+    //On selection of venue
+    onSelectValues(value) {
+        this.props.onChangeSettingForm({ key: 'venue', data: value })
+        this.props.clearFilter()
+    }
+
     ////////form content view
     contentView = (getFieldDecorator) => {
         const { competitionName, competitionLogo, scoring } = this.props.liveScoreSetting.form
@@ -342,8 +349,8 @@ class LiveScoreSettingsView extends Component {
                                 placeholder={AppConstants.selectVenue}
                                 style={{ width: "100%", }}
                                 onChange={value => {
-                                    this.props.onChangeSettingForm({ key: 'venue', data: value })
-                                    this.props.clearFilter()
+                                    this.onSelectValues(value)
+
                                 }}
                                 filterOption={false}
                                 // value={this.state.team === [] ? AppConstants.selectTeam : this.state.team}

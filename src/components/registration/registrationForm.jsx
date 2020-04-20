@@ -1155,12 +1155,12 @@ class RegistrationForm extends Component {
             <div className="fluid-width">
                 <div className="footer-view">
                     <div className="row">
-                        <div className="col-sm">
+                        <div className="col-sm-3">
                             <div className="reg-add-save-button">
                                 {/* <Button type="cancel-button">{AppConstants.delete}</Button> */}
                             </div>
                         </div>
-                        <div className="col-sm">
+                        <div className="col-sm-9">
                             <div className="comp-buttons-view">
                                 <Tooltip style={{ height: "100%" }}
                                     onMouseEnter={() => this.setState({ tooltipVisibleDraft: statusRefId == 2 ? true : false })}

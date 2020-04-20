@@ -152,14 +152,14 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
             }
 
         case ApiConstants.LIVESCORE_SEARCH__SETTING:
-         
+
             return { ...state, venueData: payload }
 
         case ApiConstants.CLEAR_FILTER_SEARCH:
-           
+            state.venueData = state.mainVenueList
             return {
-                ...state,
-                venueData: [...state.mainVenueList],
+                ...state
+
             }
 
         default: return state

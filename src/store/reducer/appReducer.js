@@ -363,11 +363,9 @@ function appState(state = initialState, action) {
       };
 
     case ApiConstants.CLEAR_FILTER_SEARCH_VENUE:
-      console.log('Called clear Filter', state.mainVenueList)
-      // state.venueList= [...state.mainVenueList]
+      state.venueList = state.mainVenueList
       return {
         ...state,
-        venueList: [...state.mainVenueList],
       }
 
     case ApiConstants.API_ADD_VENUE_SUCCESS:
