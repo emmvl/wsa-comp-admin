@@ -7,7 +7,6 @@ import {
     Button,
     Radio,
     Tabs,
-    Table,
     Input,
     Form
 } from "antd";
@@ -36,73 +35,6 @@ import ImageLoader from '../../customComponents/ImageLoader'
 import history from "../../util/history";
 const { Header, Footer } = Layout;
 const { Option } = Select;
-const { TabPane } = Tabs;
-
-const columns = [
-    {
-        title: 'Result type/Byes',
-        dataIndex: 'resultType',
-        key: 'resultType',
-    },
-    {
-        title: 'Points',
-        dataIndex: 'points',
-        key: 'points',
-        render: points => <Input className="input-inside-table-fees" value={points} />,
-        width: "10%"
-    },
-
-];
-const data = [
-    {
-        key: '1',
-        resultType: "Won",
-        points: "3",
-
-    },
-    {
-        key: '2',
-        resultType: "Lost",
-        points: "1",
-
-    },
-
-    {
-        key: '3',
-        resultType: "Abandoned (no match)",
-        points: "0",
-
-    },
-    {
-        key: '4',
-        resultType: "Abandoned (incomplete)",
-        points: "3",
-    },
-    {
-        key: '5',
-        resultType: "Won on Forefeit",
-        points: "3",
-
-    },
-    {
-        key: '6',
-        resultType: "Loss on Forefeit",
-        points: "0",
-
-    },
-    {
-        key: '7',
-        resultType: "Double Forefeit",
-        points: "0",
-
-    },
-    {
-        key: '8',
-        resultType: "Bye",
-        points: "3",
-    },
-
-];
 
 class LiveScoreSettingsView extends Component {
     constructor(props) {
@@ -586,7 +518,7 @@ class LiveScoreSettingsView extends Component {
         let local_Id = getLiveScoreCompetiton()
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 {local_Id &&
                     <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"18"} />
                 }

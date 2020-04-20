@@ -34,20 +34,6 @@ const columns = [
         key: 'competitionName',
         sorter: (a, b) => tableSort(a, b, "competitionName")
     },
-    // {
-    //     title: 'Membership Product(s)',
-    //     dataIndex: 'membershipProductName',
-    //     key: 'membershipProductName',
-    //     sorter: (a, b) => tableSort(a, b, "membershipProductName")
-    // },
-    // {
-    //     title: 'Division',
-    //     dataIndex: 'divisionName',
-    //     key: 'divisionName',
-    //     sorter: (a, b) => tableSort(a, b, "divisionName")
-
-
-    // },
     {
         title: 'Registration Open',
         dataIndex: 'registrationOpenDate',
@@ -105,7 +91,13 @@ const columns = [
                     }
                 >
                     <Menu.Item key="1">
-                        <NavLink to={{ pathname: `/registrationForm`, state: { id: record.competitionId, year: record.yearId, orgRegId: record.orgRegId } }}
+                        <NavLink to={{
+                            pathname: `/registrationForm`, state: {
+                                id: record.competitionId,
+                                year: record.yearId,
+                                orgRegId: record.orgRegId, compCloseDate: record.compRegCloseDate
+                            }
+                        }}
                         >
                             {/*  */}
                             <span>Edit</span>
@@ -119,29 +111,6 @@ const columns = [
 
 ];
 
-const data = [
-    {
-        key: '1',
-        competitionName: "Social Competition",
-        membershipProduct: "Player",
-        division: "Junior",
-        registrationOpen: "01-04-2020",
-        registrationClose: "01-06-2020",
-        status: "Draft",
-        Action: "Once/year"
-    },
-    {
-        key: '2',
-        competitionName: "Winter 2020",
-        membershipProduct: "Player",
-        division: "Senior",
-        registrationOpen: "01-03-2020",
-        registrationClose: "31-03-2020",
-        status: "Published",
-        Action: "Recurring"
-
-    },
-];
 
 class RegistrationFormList extends Component {
     constructor(props) {
@@ -230,7 +199,7 @@ class RegistrationFormList extends Component {
                         columns={columns}
                         dataSource={dashboardState.regDashboardListData}
                         pagination={false}
-                        loading={this.props.dashboardState.onLoad == true && true}
+                        loading={this.props.dashboardState.onLoad === true && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">

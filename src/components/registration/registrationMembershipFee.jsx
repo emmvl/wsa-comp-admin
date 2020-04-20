@@ -624,7 +624,7 @@ class RegistrationMembershipFee extends Component {
     ////fees view inside the content
     feesView = (getFieldDecorator) => {
         let data = this.props.registrationState.membershipProductFeesTableData
-        let feesData = data ? data.membershipFees : []
+        let feesData = data ? data.membershipFees.length > 0 ? data.membershipFees : [] : []
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.membershipFees}</span>

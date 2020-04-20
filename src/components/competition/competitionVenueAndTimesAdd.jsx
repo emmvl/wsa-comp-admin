@@ -12,7 +12,6 @@ import {
     Form
 } from "antd";
 import "./competition.css";
-import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import InputWithHead from "../../customComponents/InputWithHead";
 import moment from "moment";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -26,7 +25,6 @@ import {
 import { getYearAndCompetitionAction } from '../../store/actions/appAction'
 import { getCommonRefData, addVenueAction } from '../../store/actions/commonAction/commonAction'
 import { getOrganisationAction } from "../../store/actions/userAction/userAction"
-import Loader from '../../customComponents/loader'
 import history from '../../util/history'
 import ValidationConstants from "../../themes/validationConstant";
 import AppImages from "../../themes/appImages";
@@ -35,7 +33,7 @@ import CSVReader from 'react-csv-reader'
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
-let this_Obj = null;
+
 
 const papaparseOptions = {
     header: true,
@@ -175,7 +173,6 @@ class CompetitionVenueAndTimesAdd extends Component {
 
         };
         this.myRef = React.createRef()
-        this_Obj = this;
         this.props.getCommonRefData()
         this.props.getOrganisationAction()
 
@@ -202,20 +199,19 @@ class CompetitionVenueAndTimesAdd extends Component {
 
     setHeaderValue = (screenNavigationKey) => {
 
-        if (screenNavigationKey == AppConstants.venues)
+        if (screenNavigationKey === AppConstants.venues)
             this.setState({ screenHeader: AppConstants.competitions });
-        else if ((screenNavigationKey == AppConstants.competitionFees) ||
-            (screenNavigationKey == AppConstants.competitionDetails) ||
-            (screenNavigationKey == AppConstants.dashboard))
+        else if ((screenNavigationKey === AppConstants.competitionFees) ||
+            (screenNavigationKey === AppConstants.competitionDetails) ||
+            (screenNavigationKey === AppConstants.dashboard))
             this.setState({ screenHeader: AppConstants.registration });
-        else if (screenNavigationKey == AppConstants.venuesList)
+        else if (screenNavigationKey === AppConstants.venuesList)
             this.setState({ screenHeader: AppConstants.user });
 
     }
 
     componentDidUpdate(nextProps) {
-        let competitionList = this.props.appState.competitionList
-        if (this.state.saveContraintLoad == true && this.props.venueTimeState.onLoad == false) {
+        if (this.state.saveContraintLoad === true && this.props.venueTimeState.onLoad === false) {
             this.navigateTo();
         }
 
@@ -525,7 +521,7 @@ class CompetitionVenueAndTimesAdd extends Component {
             <div className="fees-view pt-5">
                 <span className="form-heading">
                     {AppConstants.game_Days}
-                    <span className="required-field" style={{fontSize:"14px"}}></span>
+                    <span className="required-field" style={{ fontSize: "14px" }}></span>
                 </span>
                 <div className="fluid-width">
                     {/* {this.gameData()} */}
@@ -615,7 +611,7 @@ class CompetitionVenueAndTimesAdd extends Component {
             <div className="fees-view pt-5">
                 <div style={{ display: 'flex' }}>
                     <span className="form-heading">
-                        {AppConstants.courts} <span className="required-field" style={{fontSize:"14px", paddingTop: '5px'}}></span>
+                        {AppConstants.courts} <span className="required-field" style={{ fontSize: "14px", paddingTop: '5px' }}></span>
                     </span>
                     <Button className="primary-add-comp-form" type="primary" style={{ marginLeft: 'auto' }}>
                         <div className="row">
@@ -669,7 +665,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                 if (venuData.venueCourts.length == 0) {
                     message.error(ValidationConstants.emptyAddCourtValidation);
                 }
-                else if(venuData.gameDays.length == 0){
+                else if (venuData.gameDays.length == 0) {
                     message.error(ValidationConstants.emptyGameDaysValidation);
                 }
                 else {

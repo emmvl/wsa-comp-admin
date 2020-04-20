@@ -126,7 +126,7 @@ export function* getRegistrationFormSaga(action) {
         type: ApiConstants.API_GET_REG_FORM_SUCCESS,
         result: result.result.data,
         MembershipProductList:
-          resultMembershipProduct.result.status == 200
+          resultMembershipProduct.result.status === 200
             ? resultMembershipProduct.result.data
             : [],
         status: result.status

@@ -104,7 +104,6 @@ const ValidationConstants = {
     pleaseSelectRegInvitees: "Please select Registration Invitee.",
     compIsPublished: "Competition is Published.",
 
-    pleaseSelectCompetition: "Please select competition",
 
     specificTime: "Please select Specific Time.",
 

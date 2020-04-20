@@ -11,7 +11,7 @@ import { getliveScoreDivisions } from '../../store/actions/LiveScoreAction/liveS
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import history from "../../util/history";
-import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import {
     liveScoreUpdateManagerDataAction,
     liveScoreAddEditManager,
@@ -48,14 +48,14 @@ class LiveScoreAddManager extends Component {
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.props.liveScoreManagerListAction(5, 1, id)
-       
+
         if (id !== null) {
             this.props.getliveScoreTeams(id)
         } else {
             history.push('/')
         }
 
-        if (this.state.isEdit == true) {
+        if (this.state.isEdit === true) {
             this.props.liveScoreUpdateManagerDataAction(this.state.tableRecord, 'isEditManager')
             this.setState({ loader: true })
         } else {
@@ -68,9 +68,9 @@ class LiveScoreAddManager extends Component {
 
         if (this.props.liveScoreMangerState.managerListResult !== nextProps.liveScoreMangerState.managerListResult) {
 
-            if (this.state.load == true && this.props.liveScoreMangerState.onLoad == false) {
+            if (this.state.load === true && this.props.liveScoreMangerState.onLoad === false) {
                 this.filterManagerList()
-                if (this.state.isEdit == true) {
+                if (this.state.isEdit === true) {
                     this.setInitalFiledValue()
                 }
                 this.setState({ load: false, loader: false })
@@ -461,7 +461,7 @@ class LiveScoreAddManager extends Component {
 
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <Loader visible={this.props.liveScoreMangerState.loading} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"4"} />
                 <Layout>

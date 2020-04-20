@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { liveScoreAddBanner, liveScoreAddBannerUpdate, clearEditBannerAction } from '../../store/actions/LiveScoreAction/liveScoreBannerAction'
 import history from "../../util/history";
-import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage';
+import { getLiveScoreCompetiton } from '../../util/sessionStorage';
 import Loader from '../../customComponents/loader'
 import ImageLoader from '../../customComponents/ImageLoader'
 
@@ -38,7 +38,7 @@ class LiveScoreEditBanners extends Component {
     }
 
     componentDidMount() {
-        if (this.state.isEdit == true) {
+        if (this.state.isEdit === true) {
             this.props.liveScoreAddBannerUpdate(this.state.tableRecord, "isEditBanner")
         } else {
             this.props.liveScoreAddBannerUpdate('', "isAddBanner")
@@ -46,7 +46,7 @@ class LiveScoreEditBanners extends Component {
     }
 
     componentDidUpdate() {
-        if (this.state.load == true && this.props.liveScoreBannerState.onLoad == false) {
+        if (this.state.load === true && this.props.liveScoreBannerState.onLoad === false) {
 
             history.push('/liveScoreBanners')
             this.setState({ load: false })
@@ -74,7 +74,7 @@ class LiveScoreEditBanners extends Component {
 
     setImage = (data) => {
         if (data.files[0] !== undefined) {
-            if (this.state.isEdit == true) {
+            if (this.state.isEdit === true) {
                 this.props.location.state.tableRecord.bannerUrl = null
             }
 
@@ -122,11 +122,11 @@ class LiveScoreEditBanners extends Component {
 
         // let competitionId = getCompetitonId();
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        let showOnhome = showOnHome == true ? 1 : 0
-        let showOndraws = showOnDraws == true ? 1 : 0
-        let showOnladder = showOnLadder == true ? 1 : 0
+        let showOnhome = showOnHome === true ? 1 : 0
+        let showOndraws = showOnDraws === true ? 1 : 0
+        let showOnladder = showOnLadder === true ? 1 : 0
         if (id !== null) {
-            let bannerId = this.state.isEdit == true ? editBannerId : 0
+            let bannerId = this.state.isEdit === true ? editBannerId : 0
 
             this.props.liveScoreAddBanner(id, this.state.bannerImgSend, showOnhome, showOndraws, showOnladder, bannerLink, bannerId)
         }
@@ -211,10 +211,7 @@ class LiveScoreEditBanners extends Component {
         )
     }
 
-    onChangeCheckBox = (index) => {
 
-
-    }
 
     //check box
     chekboxes = (getFieldDecorator) => {
@@ -270,7 +267,7 @@ class LiveScoreEditBanners extends Component {
                     <div className="row" >
                         <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
                             <Breadcrumb separator=" > ">
-                                <Breadcrumb.Item className="breadcrumb-add">{this.state.isEdit == true ? AppConstants.editBanners : AppConstants.addBanners}</Breadcrumb.Item>
+                                <Breadcrumb.Item className="breadcrumb-add">{this.state.isEdit === true ? AppConstants.editBanners : AppConstants.addBanners}</Breadcrumb.Item>
                             </Breadcrumb>
                         </div>
                     </div>
@@ -340,7 +337,7 @@ class LiveScoreEditBanners extends Component {
         const { getFieldDecorator } = this.props.form
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc", paddingBottom: 10 }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <Loader visible={this.props.liveScoreBannerState.onLoad} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"20"} />
                 <Layout>

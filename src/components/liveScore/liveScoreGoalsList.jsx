@@ -9,10 +9,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { liveScoreGoalListAction } from '../../store/actions/LiveScoreAction/liveScoreGoalsAction'
 import history from "../../util/history";
-import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
-import ApiConstants from "../../themes/apiConstants";
+import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { liveScore_formateDateTime } from '../../themes/dateformate'
-
+import { exportFilesAction } from "../../store/actions/appAction"
 let this_Obj = null
 function checkSorting(a, b, key) {
     if (a[key] && b[key]) {
@@ -181,21 +180,27 @@ class LiveScoreGoalList extends Component {
                     sorter: (a, b) => checkSorting(a, b, "goal_percent"),
                 },
             ],
-            competitionId : null
+            competitionId: null
         }
-        this_Obj = this
     }
 
     componentDidMount() {
         // let competitionId = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({competitionId:id})
+        this.setState({ competitionId: id })
         if (id !== null) {
             this.props.liveScoreGoalListAction(1, "By Match")
         } else {
             history.push('/')
         }
     }
+
+
+    onExport() {
+        let url = AppConstants.goalExport + this.state.competitionId + `&aggregate=${this.state.filter}`
+        this.props.exportFilesAction(url)
+    }
+
 
     ///////view for breadcrumb
     headerView = () => {
@@ -239,7 +244,7 @@ class LiveScoreGoalList extends Component {
                                         alignItems: "flex-end",
                                         justifyContent: "flex-end"
                                     }} >
-                                    <Button href={AppConstants.goalExport +this.state.competitionId +`&aggregate=${this.state.filter}`} className="primary-add-comp-form" type="primary">
+                                    <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img
@@ -266,7 +271,7 @@ class LiveScoreGoalList extends Component {
         const { liveScoreGoalState } = this.props;
         // let DATA = liveScoreMatchListState ? liveScoreMatchListState.liveScoreMatchListData : []
         let goalList = liveScoreGoalState ? liveScoreGoalState.result : [];
-       
+
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
@@ -289,7 +294,7 @@ class LiveScoreGoalList extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.shootingStats} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.shootingStats} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"16"} />
                 <Layout>
                     {this.headerView()}
@@ -302,7 +307,7 @@ class LiveScoreGoalList extends Component {
     }
 }
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScoreGoalListAction }, dispatch)
+    return bindActionCreators({ liveScoreGoalListAction, exportFilesAction }, dispatch)
 }
 
 function mapStateToProps(state) {

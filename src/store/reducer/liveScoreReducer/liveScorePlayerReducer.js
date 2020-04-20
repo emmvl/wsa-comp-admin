@@ -21,7 +21,7 @@ const initialState = {
     status: 0,
     playerData: playerObj,
     playerDataArr: [],
-    totalCount:null
+    totalCount: null
 };
 function LiveScorePlayerState(state = initialState, action) {
     switch (action.type) {
@@ -39,6 +39,19 @@ function LiveScorePlayerState(state = initialState, action) {
         //         result: playerListResult,
         //         status: action.status
         //     };
+
+        case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
+
+            const result = action.result
+
+            return {
+                ...state,
+                onLoad: false,
+                teamResult: result,
+                status: action.status
+
+            }
+
 
         //// Update player data
         case ApiConstants.API_LIVE_SCORE_UPDATE_PLAYER:

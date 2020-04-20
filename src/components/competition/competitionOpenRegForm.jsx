@@ -1027,9 +1027,23 @@ class CompetitionOpenRegForm extends Component {
 
     setImage = (data) => {
         if (data.files[0] !== undefined) {
-            this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]), isSetDefaul: true })
-            this.props.add_editcompetitionFeeDeatils(URL.createObjectURL(data.files[0]), "competitionLogoUrl")
-            this.props.add_editcompetitionFeeDeatils(false, "logoIsDefault")
+            let files_ = data.files[0].type.split("image/")
+            let fileType = files_[1]
+
+            if (data.files[0].size > AppConstants.logo_size) {
+                message.error(AppConstants.logoImageSize);
+                return
+            }
+
+            if (fileType == `jpeg` || fileType == `png` || fileType == `gif`) {
+                this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]), isSetDefaul: true })
+                this.props.add_editcompetitionFeeDeatils(URL.createObjectURL(data.files[0]), "competitionLogoUrl")
+                this.props.add_editcompetitionFeeDeatils(false, "logoIsDefault")
+
+            } else {
+                message.error(AppConstants.logoType);
+                return
+            }
         }
     };
 

@@ -7,7 +7,6 @@ import {
     DatePicker,
     TimePicker,
     Form,
-    message
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -15,7 +14,6 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import './liveScore.css';
 import moment from "moment";
-import ValidationConstants from '../../themes/validationConstant'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { liveScoreUpdateVenueChange, searchCourtList, clearFilter } from '../../store/actions/LiveScoreAction/liveScoreVenueChamgeAction'

@@ -198,10 +198,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
-        const { own_YearArr, own_CompetitionArr, selectedCompetition, selectedYear } = this.props.appState
-        const { competitionUniqueKey, yearId } = this.props.venueTimeState
-        let competitionId = getOwn_competition();
-        let year_id = yearId ? JSON.parse(yearId) : 1
+        const { own_YearArr, own_CompetitionArr, } = this.props.appState
+        const { yearId } = this.props.venueTimeState
         return (
             <div className="comp-venue-courts-dropdown-view mt-0">
                 <div className="fluid-width">
@@ -307,7 +305,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
     }
 
     nonPlayingDatesContainer(getFieldDecorator) {
-        const { selectedVenue, venueConstrainstData, venueConstrainstListData, nonPlayingDates } = this.props.venueTimeState
+        const { venueConstrainstData, } = this.props.venueTimeState
         let nonPlayingDatesList = venueConstrainstData ? venueConstrainstData.nonPlayingDates : []
         return (
             <div className="inside-container-view pt-3">
@@ -327,7 +325,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
     }
 
     divisionView(item, index, entityType, getFieldDecorator) {
-        const { venueConstrainstListData, courtArray, venueConstrainstData, courtId, divisionList, gradeList } = this.props.venueTimeState
+        const { courtArray, divisionList, gradeList } = this.props.venueTimeState
         let divisionsList = isArrayNotEmpty(divisionList) ? divisionList : []
         let courtList = isArrayNotEmpty(courtArray) ? courtArray : []
         let gradesList = isArrayNotEmpty(gradeList) ? gradeList : []
@@ -403,7 +401,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
     }
 
     gradeView() {
-        const { venueConstrainstListData, courtArray, venueConstrainstData, gradeList } = this.props.venueTimeState
+        const { courtArray, gradeList } = this.props.venueTimeState
         let gradesList = isArrayNotEmpty(gradeList) ? gradeList : []
         return (
             // <div className="fluid-width">
@@ -439,7 +437,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
     }
 
     courtPrefnceView(getFieldDecorator) {
-        const { venueConstrainstListData, venueConstrainstData, evenRotation } = this.props.venueTimeState
+        const { venueConstrainstData, evenRotation } = this.props.venueTimeState
         // let courtRotationId = venueConstrainstData && venueConstrainstData.courtRotationRefId
         let courtRotationId = evenRotation
         let courtPreferencesList = isArrayNotEmpty(venueConstrainstData.courtPreferences) ? venueConstrainstData.courtPreferences : []
@@ -466,7 +464,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
     }
 
     homeTeamRotationView() {
-        const { radioButton, homeRotation, venueConstrainstData, homeTeamRotation } = this.props.venueTimeState
+        const { venueConstrainstData, homeTeamRotation } = this.props.venueTimeState
         let homeTeamRotationList = isArrayNotEmpty(homeTeamRotation) ? homeTeamRotation : []
 
         return (
@@ -496,11 +494,10 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
 
     anyGradePrefenceView() {
-        const { radioButton, courtRotation, evenRotation, venueConstrainstData, selectedRadioBtn } = this.props.venueTimeState
+        const { courtRotation, evenRotation, venueConstrainstData, selectedRadioBtn } = this.props.venueTimeState
         let courtRotationList = isArrayNotEmpty(courtRotation) ? courtRotation : []
         let evenRotaionList = isArrayNotEmpty(courtRotation) ? courtRotation[0].subReferences : []
         let allocateSameCourtList = isArrayNotEmpty(courtRotation) ? courtRotation[1].subReferences : []
-        let courtRotationId = venueConstrainstData && venueConstrainstData.courtRotationRefId
         return (
             <div>
                 <span className="applicable-to-heading">
@@ -587,7 +584,6 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
     selectAddVenueView() {
         const { venueList, mainVenueList } = this.props.commonReducerState
-        const { searchVenueList } = this.props.commonReducerState
         const { selectedVenueId } = this.props.venueTimeState
         return (
             <div className="fluid-width">
@@ -610,7 +606,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                             ))
                             }
                         </Select>
-                        <div  onClick={() => this.props.clearVenueDataAction("venue") }>
+                        <div onClick={() => this.props.clearVenueDataAction("venue")}>
                             <NavLink
                                 to={{ pathname: `/competitionVenueAndTimesAdd`, state: { key: AppConstants.venues } }}
                             >
@@ -626,7 +622,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
     ////////form content view
     contentView = (getFieldDecorator) => {
-        const { venueConstrainstData, radioButton, selectedRadioBtn } = this.props.venueTimeState
+        const { selectedRadioBtn } = this.props.venueTimeState
         return (
             <div className="content-view">
                 {this.selectAddVenueView()}
@@ -635,7 +631,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
                 {this.anyGradePrefenceView()}
 
-                {selectedRadioBtn == 5 && this.courtPrefnceView(getFieldDecorator)}
+                {selectedRadioBtn === 5 && this.courtPrefnceView(getFieldDecorator)}
 
                 {this.homeTeamRotationView()}
 
@@ -645,7 +641,6 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
-        const { venueConstrainstData } = this.props.venueTimeState
         return (
             <div className="fluid-width">
                 <div className="footer-view">

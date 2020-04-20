@@ -922,9 +922,9 @@ const AppConstants = {
   selectOrganisation: "Select Organisation",
 
 
-  goalExport: "https://livescores-api-dev.worldsportaction.com/stats/export/scoringByPlayer?competitionId=",
-  gameTimeExport: "https://livescores-api-dev.worldsportaction.com/stats/export/gametime?competitionId=",
-  teamAttendaneExport: "https://livescores-api-dev.worldsportaction.com/players/export/teamattendance?competitionId=",
+  goalExport: "/stats/export/scoringByPlayer?competitionId=",
+  gameTimeExport: "/stats/export/gametime?competitionId=",
+  teamAttendaneExport: "/players/export/teamattendance?competitionId=",
   proceed: "Skip and Proceed",
   invalidPlayers: "Invalid Records",
   importPlayer: "Import Player",
@@ -939,7 +939,11 @@ const AppConstants = {
 
 
   friends: "Friends",
-  referFriends: "Referred Friends"
+  referFriends: "Referred Friends",
+
+  logoImageSize: "Selected file must be less then 250 KB",
+  logoType: "Selected file must be PNG, GIF or JPEG formate",
+  logo_size:250000,
 };
 
 export default AppConstants;

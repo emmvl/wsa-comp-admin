@@ -8,11 +8,11 @@ import AppImages from "../../themes/appImages";
 import { liveScoreTeamAttendanceListAction } from '../../store/actions/LiveScoreAction/liveScoreTeamAttendanceAction'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { liveScore_formateDateTime } from '../../themes/dateformate'
 import history from "../../util/history";
 import { isArrayNotEmpty } from '../../util/helpers'
-
+import { exportFilesAction } from "../../store/actions/appAction"
 
 /////function to sort table column
 function tableSort(a, b, key) {
@@ -111,7 +111,7 @@ class LiveScoreTeamAttendance extends Component {
             year: "2020",
             teamSelection: "WSA 1",
             selectStatus: "Borrowed",
-            competitionId : null
+            competitionId: null
         }
     }
 
@@ -125,7 +125,7 @@ class LiveScoreTeamAttendance extends Component {
             },
         }
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({competitionId : id})
+        this.setState({ competitionId: id })
         if (id !== null) {
             this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus)
         } else {
@@ -136,7 +136,7 @@ class LiveScoreTeamAttendance extends Component {
 
     handleTablePagination(page) {
         let offset = page ? 10 * (page - 1) : 0;
-      
+
         const paginationBody = {
             "paging": {
                 "limit": 10,
@@ -151,8 +151,8 @@ class LiveScoreTeamAttendance extends Component {
         }
     }
 
-    onChnageStatus(status){
-        this.setState({selectStatus : status})
+    onChnageStatus(status) {
+        this.setState({ selectStatus: status })
         const paginationBody = {
             "paging": {
                 "limit": 10,
@@ -162,6 +162,13 @@ class LiveScoreTeamAttendance extends Component {
         let { id } = JSON.parse(getLiveScoreCompetiton())
         this.props.liveScoreTeamAttendanceListAction(id, paginationBody, status)
     }
+
+    onExport() {
+        let url = AppConstants.teamAttendaneExport + this.state.competitionId + `&aggregate=${this.state.selectStatus}`
+        this.props.exportFilesAction(url)
+    }
+
+
     ///////view for breadcrumb
     headerView = () => {
         return (
@@ -203,7 +210,7 @@ class LiveScoreTeamAttendance extends Component {
                                         alignSelf: 'center',
                                     }}
                                 >
-                                    <Button href={AppConstants.teamAttendaneExport +this.state.competitionId +`&aggregate=${this.state.selectStatus}`} className="primary-add-comp-form" type="primary">
+                                    <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img
@@ -258,7 +265,7 @@ class LiveScoreTeamAttendance extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"14"} />
                 <Layout>
                     {this.headerView()}
@@ -273,6 +280,7 @@ class LiveScoreTeamAttendance extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         liveScoreTeamAttendanceListAction,
+        exportFilesAction
     }, dispatch)
 }
 function mapStateToProps(state) {
