@@ -7,9 +7,6 @@ import {
     Button,
     Radio,
     Form,
-    AutoComplete,
-    message,
-    Spin
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -73,7 +70,6 @@ class LiveScoreAddTeam extends Component {
     }
 
     componentDidMount() {
-
         if (this.state.isEdit == true) {
             this.props.liveScoreGetTeamDataAction(this.state.teamId)
             this.setState({ load: true })
@@ -392,7 +388,7 @@ class LiveScoreAddTeam extends Component {
                                 {/* {this.state.showOption ?  */}
                                 {managerListResult.map((item) => {
                                     return <Option key={item.id} value={JSON.stringify(item.id)}>
-                                        {item.firstName +" "+ item.lastName}
+                                        {item.firstName + " " + item.lastName}
                                     </Option>
                                 })
                                 }

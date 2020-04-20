@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Input,Icon, Layout, Button, Table, Breadcrumb, Pagination } from "antd";
+import { Input, Icon, Layout, Button, Table, Breadcrumb, Pagination } from "antd";
 
 import { NavLink } from "react-router-dom";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -9,7 +9,7 @@ import AppImages from "../../themes/appImages";
 import { getTeamsWithPagging } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import history from "../../util/history";
 import { isArrayNotEmpty } from "../../util/helpers";
 const { Content } = Layout;
@@ -36,11 +36,11 @@ const columns = [
         key: 'name',
         sorter: (a, b) => tableSort(a, b, "name"),
         render: (name, record) =>
-       
+
             <NavLink to={{
                 pathname: "/liveScoreTeamView",
                 state: { tableRecord: record, screenName: 'fromTeamList' }
-            }} > 
+            }} >
                 <span className="input-heading-add-another pt-0">{name}</span>
             </NavLink>,
     },
@@ -48,15 +48,15 @@ const columns = [
         title: 'Team Alias Name',
         dataIndex: 'alias',
         key: 'alias',
-        sorter: (a, b) =>tableSort(a, b, "alias"),
+        sorter: (a, b) => tableSort(a, b, "alias"),
         render: (alias) => <span>{alias}</span>
     },
     {
         title: 'Affiliate',
         dataIndex: 'organisation',
         key: 'organisation',
-        sorter: (a, b) =>tableSort(a, b, "organisation"),
-        render: (organisation) => <span>{organisation?organisation.name:""}</span>
+        sorter: (a, b) => tableSort(a, b, "organisation"),
+        render: (organisation) => <span>{organisation ? organisation.name : ""}</span>
     },
 
     // Affiliate
@@ -64,54 +64,54 @@ const columns = [
         title: 'Division',
         dataIndex: 'division',
         key: 'division',
-        sorter: (a, b) =>tableSort(a, b, "division"),
-        render: (division) => <span>{division? division.name:""}</span>
+        sorter: (a, b) => tableSort(a, b, "division"),
+        render: (division) => <span>{division ? division.name : ""}</span>
     },
     {
         title: '#Players',
         dataIndex: 'playersCount',
         key: 'playersCount',
-        sorter: (a, b) =>tableSort(a, b, "playersCount"),
+        sorter: (a, b) => tableSort(a, b, "playersCount"),
         render: (playersCount) => <span>{playersCount}</span>
     },
     {
         title: 'Manager',
         dataIndex: 'managers',
         key: 'managers',
-        sorter: (a, b) =>tableSort(a, b, "managers"),
+        sorter: (a, b) => tableSort(a, b, "managers"),
         render: (managers, record) => <span >
-      
-      {isArrayNotEmpty(managers) && managers.map((item) => (
+
+            {isArrayNotEmpty(managers) && managers.map((item) => (
                 <span className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
             ))
             }
-            </span>
+        </span>
     },
     {
         title: 'Contact',
         dataIndex: 'managers',
         key: 'managers',
-        sorter: (a, b) =>tableSort(a, b, "managers"),
-      
-        render: (managers, record) =><span>
-                {isArrayNotEmpty(managers) && managers.map((item) => (
-                    <span className="live-score-desc-text side-bar-profile-data" >{item.mobileNumber}</span>
-                ))
-                }
-            </span>
+        sorter: (a, b) => tableSort(a, b, "managers"),
+
+        render: (managers, record) => <span>
+            {isArrayNotEmpty(managers) && managers.map((item) => (
+                <span className="live-score-desc-text side-bar-profile-data" >{item.mobileNumber}</span>
+            ))
+            }
+        </span>
     },
 
     {
         title: 'Email',
         dataIndex: 'managers',
         key: 'managers',
-        sorter: (a, b) =>tableSort(a, b, "managers"),
-        render: (managers, record) =><span>
-                {isArrayNotEmpty(managers) && managers.map((item) => (
-                    <span className="live-score-desc-text side-bar-profile-data" >{item.email}</span>
-                ))
-                }
-                </span>
+        sorter: (a, b) => tableSort(a, b, "managers"),
+        render: (managers, record) => <span>
+            {isArrayNotEmpty(managers) && managers.map((item) => (
+                <span className="live-score-desc-text side-bar-profile-data" >{item.email}</span>
+            ))
+            }
+        </span>
     },
 ];
 
@@ -120,16 +120,16 @@ class LiveScoreTeam extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            conpetitionId : null,
-            searchText:""
+            conpetitionId: null,
+            searchText: ""
         };
     }
 
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({conpetitionId : id})
+        this.setState({ conpetitionId: id })
         if (id !== null) {
-            this.props.getTeamsWithPagging(id, 0, 10,this.state.searchText)
+            this.props.getTeamsWithPagging(id, 0, 10, this.state.searchText)
         } else {
             history.push("/")
         }
@@ -139,35 +139,35 @@ class LiveScoreTeam extends Component {
     /// Handle Page change
     handlePageChnage(page) {
         let offset = page ? 10 * (page - 1) : 0;
-        this.props.getTeamsWithPagging(this.state.conpetitionId,offset, 10)
+        this.props.getTeamsWithPagging(this.state.conpetitionId, offset, 10)
 
     }
 
-      // on change search text
-      onChangeSearchText = (e) => {
+    // on change search text
+    onChangeSearchText = (e) => {
         this.setState({ searchText: e.target.value })
         if (e.target.value == null || e.target.value == "") {
-            this.props.getTeamsWithPagging(this.state.conpetitionId,0, 10,e.target.value )
+            this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, e.target.value)
         }
     }
 
-     // search key 
-     onKeyEnterSearchText = (e) => {
+    // search key 
+    onKeyEnterSearchText = (e) => {
         var code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
-            this.props.getTeamsWithPagging(this.state.conpetitionId,0, 10, this.state.searchText)
+            this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, this.state.searchText)
         }
     }
 
-  // on click of search icon
-  onClickSearchIcon = () => {
-  
-    if (this.state.searchText == null || this.state.searchText == "") {
+    // on click of search icon
+    onClickSearchIcon = () => {
+
+        if (this.state.searchText == null || this.state.searchText == "") {
+        }
+        else {
+            this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, this.state.searchText)
+        }
     }
-    else {
-        this.props.getTeamsWithPagging(this.state.conpetitionId,0, 10, this.state.searchText)
-    }
-}
     ///////view for breadcrumb
     headerView = () => {
         return (
@@ -181,19 +181,19 @@ class LiveScoreTeam extends Component {
 
                     <div className="col-sm" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
                         <div className="row">
-                        <div style={{ marginRight: "25px", display: "flex", alignItems: 'center' }} >
-                            <div className="comp-product-search-inp-width" >
-                                <Input className="product-reg-search-input"
-                                    onChange={(e) => this.onChangeSearchText(e)}
-                                    placeholder="Search..."
-                                    onKeyPress={(e) => this.onKeyEnterSearchText(e)}
-                                    prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                        onClick={() => this.onClickSearchIcon()}
-                                    />}
-                                    allowClear
-                                />
+                            <div style={{ marginRight: "25px", display: "flex", alignItems: 'center' }} >
+                                <div className="comp-product-search-inp-width" >
+                                    <Input className="product-reg-search-input"
+                                        onChange={(e) => this.onChangeSearchText(e)}
+                                        placeholder="Search..."
+                                        onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                        prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                            onClick={() => this.onClickSearchIcon()}
+                                        />}
+                                        allowClear
+                                    />
+                                </div>
                             </div>
-                        </div>
                             <div className="col-sm">
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
@@ -212,7 +212,7 @@ class LiveScoreTeam extends Component {
                                     </NavLink>
                                 </div>
                             </div>
-                         
+
                             <div className="col-sm">
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
@@ -297,7 +297,7 @@ class LiveScoreTeam extends Component {
                         className="antd-pagination"
                         defaultCurrent={1}
                         total={total}
-                        onChange={(page) =>this.handlePageChnage(page)}
+                        onChange={(page) => this.handlePageChnage(page)}
                     />
                 </div>
             </div>
@@ -308,7 +308,7 @@ class LiveScoreTeam extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"3"} />
                 <Layout>
                     {this.headerView()}

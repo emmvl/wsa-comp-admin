@@ -9,7 +9,6 @@ import { bindActionCreators } from 'redux';
 import { liveScoreNewsListAction } from '../../store/actions/LiveScoreAction/liveScoreNewsAction'
 import { liveScore_formateDate, liveScore_MatchFormate } from '../../themes/dateformate'
 import AppImages from "../../themes/appImages";
-import moment from "moment";
 import history from "../../util/history";
 const { Content } = Layout;
 
@@ -36,14 +35,14 @@ function checkDate(expiryDate, publishedDate) {
     let currentDate = new Date()
     if (expiryDate && publishedDate) {
         let expiryFormate = new Date(expiryDate)
-        if (expiryFormate > currentDate || expiryFormate == currentDate) {
+        if (expiryFormate > currentDate || expiryFormate === currentDate) {
             return 'green'
         } else return 'grey'
     } else if (publishedDate) {
         return 'green'
     } else if (expiryDate) {
         let expiryFormate = new Date(expiryDate)
-        if (expiryFormate > currentDate || expiryFormate == currentDate) {
+        if (expiryFormate > currentDate || expiryFormate === currentDate) {
             return 'green'
         } else if (expiryFormate < currentDate) {
             return 'grey'
@@ -240,7 +239,7 @@ class LiveScoreNewsList extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"21"} />
                 <Layout>
                     {this.headerView()}

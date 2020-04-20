@@ -66,6 +66,7 @@ function setPostData(selectedData, matcheResults, compId) {
                 }
 
             }
+
             postArray.push(object)
     }
  

@@ -10,7 +10,6 @@ import {
     Form,
     Modal,
     Spin,
-    Skeleton
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -32,11 +31,10 @@ import ValidationConstants from "../../themes/validationConstant";
 import history from '../../util/history'
 import Loader from '../../customComponents/loader';
 import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, ContentState, convertFromHTML, convertFromRaw, convertToRaw } from 'draft-js';
+import { EditorState, ContentState, convertFromHTML, } from 'draft-js';
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import ApiConstants from "../../themes/apiConstants";
-import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage';
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../util/helpers";
+import { getLiveScoreCompetiton } from '../../util/sessionStorage';
+import { isArrayNotEmpty, } from "../../util/helpers";
 import { liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 // import LoaderImg from 'react-loader-spinner'
 import ImageLoader from '../../customComponents/ImageLoader'
@@ -44,7 +42,6 @@ import ImageLoader from '../../customComponents/ImageLoader'
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
-const { TextArea } = Input;
 
 
 class LiveScoreAddNews extends Component {
@@ -97,7 +94,7 @@ class LiveScoreAddNews extends Component {
         this.props.form.setFieldsValue({
             'author': addEditNews.author ? addEditNews.author : name
         })
-        if (this.state.isEdit == true) {
+        if (this.state.isEdit === true) {
             this.props.setDefaultImageVideoNewAction({ newsImage: this.props.location.state.item.newsImage, newsVideo: this.props.location.state.item.newsVideo, author: name })
             this.props.liveScoreAddNewsDetailsAction(this.props.location.state.item)
             this.setInitalFiledValue(this.props.location.state.item, name)
@@ -116,7 +113,6 @@ class LiveScoreAddNews extends Component {
 
     EditorView = () => {
         const { liveScoreNewsState } = this.props;
-        let editData = liveScoreNewsState.addEditNews;
         const { editorState } = this.state;
         return (
             <div className="fluid-width mt-3" style={{ border: "1px solid rgb(212, 212, 212)", }}>
@@ -149,7 +145,6 @@ class LiveScoreAddNews extends Component {
 
 
     setInitalFiledValue(data, author) {
-        const { addEditNews } = this.props.liveScoreNewsState;
         const authorData = JSON.parse(getLiveScoreCompetiton())
         console.log(authorData, 'authorDataauthorData')
         this.props.form.setFieldsValue({
@@ -165,10 +160,10 @@ class LiveScoreAddNews extends Component {
         let newsState = this.props.liveScoreNewsState.addNewsResult
         let onLoad_2Data = this.props.liveScoreNewsState
         if (nextProps.newsState !== newsState) {
-            if (onLoad_2Data.onLoad_2 == false && this.state.getDataLoading == true) {
+            if (onLoad_2Data.onLoad_2 === false && this.state.getDataLoading === true) {
                 // debugger
                 const appendData = this.props.liveScoreNewsState.addNewsResult
-                if (this.state.isEdit == true) {
+                if (this.state.isEdit === true) {
                     if (!appendData.hasOwnProperty('newsVideo')) {
                         appendData['newsVideo'] = this.props.location.state.item.newsVideo
                     }
@@ -519,7 +514,7 @@ class LiveScoreAddNews extends Component {
                             value={expiryTime_formate !== null && moment(expiryTime_formate, "HH:mm")}
                             onChange={(time) => this.props.liveScoreUpdateNewsAction(time, "expire_time")}
                             placeholder='Select Time'
-                        
+
                         />
                     </div>
                 </div>
@@ -551,14 +546,14 @@ class LiveScoreAddNews extends Component {
                 }
                 const { liveScoreNewsState } = this.props;
 
-                
+
 
                 let data = liveScoreNewsState
 
-                
+
                 if (data.newExpiryDate && data.expire_time) {
 
-                    let expiry__Date =  data.news_expire_date
+                    let expiry__Date = data.news_expire_date
 
 
 
@@ -573,7 +568,7 @@ class LiveScoreAddNews extends Component {
 
                 }
 
-              
+
 
 
                 if (data.newsBody) {
@@ -632,7 +627,7 @@ class LiveScoreAddNews extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <Loader visible={this.props.liveScoreNewsState.onLoad_2} />
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.key == 'dashboard' ? '1' : "21"} />
                 <Layout>
                     {this.headerView()}

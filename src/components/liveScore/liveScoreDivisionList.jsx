@@ -97,7 +97,7 @@ class LiveScoreDivisionList extends Component {
                     <Table className="home-dashboard-table"
                         columns={columns} dataSource={divisionList}
                         pagination={false}
-                        loading={this.props.liveScoreDivisionState.onLoad == true && true}
+                        loading={this.props.liveScoreDivisionState.onLoad === true && true}
                     />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
@@ -218,7 +218,7 @@ class LiveScoreDivisionList extends Component {
 
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"9"} />
                 <Layout>
                     {this.headerView()}

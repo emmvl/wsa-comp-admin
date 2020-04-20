@@ -66,7 +66,7 @@ class LiveScoreLadderSettings extends Component {
     }
 
     contentView = () => {
-        const { matchResult } = this.props.ladderSettingState
+        const { matchResult} = this.props.ladderSettingState
         let matchResultData = isArrayNotEmpty(matchResult) ? matchResult : []
         return (
             <div className="content-view pt-4">

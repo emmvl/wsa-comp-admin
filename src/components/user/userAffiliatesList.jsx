@@ -6,14 +6,15 @@ import { NavLink } from "react-router-dom";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
-import {getAffiliatesListingAction, getUreAction, getAffiliateToOrganisationAction,
-    affiliateDeleteAction} from 
-                "../../store/actions/userAction/userAction";
+import {
+    getAffiliatesListingAction, getUreAction, getAffiliateToOrganisationAction,
+    affiliateDeleteAction
+} from
+    "../../store/actions/userAction/userAction";
 import { bindActionCreators } from "redux";
-import { JsonWebTokenError } from "jsonwebtoken";
 import AppImages from "../../themes/appImages";
 import { getOrganisationData } from "../../util/sessionStorage";
-const { Footer, Content } = Layout;
+const { Content } = Layout;
 const { Option } = Select;
 const { confirm } = Modal;
 const { SubMenu } = Menu;
@@ -62,7 +63,7 @@ const columns = [
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, e) => (
-            isUsed == false ? <Menu
+            isUsed === false ? <Menu
                 className="action-triple-dot-submenu"
                 theme="light"
                 mode="horizontal"
@@ -81,7 +82,7 @@ const columns = [
                     }
                 >
                     <Menu.Item key="1">
-                        <NavLink to={{ pathname: `/userEditAffiliates`, state: {affiliateOrgId: e.affiliateOrgId, orgTypeRefId: e.organisationTypeRefId} }} >
+                        <NavLink to={{ pathname: `/userEditAffiliates`, state: { affiliateOrgId: e.affiliateOrgId, orgTypeRefId: e.organisationTypeRefId } }} >
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
@@ -99,24 +100,24 @@ class UserAffiliatesList extends Component {
         super(props);
         this.state = {
             organisationId: getOrganisationData().organisationUniqueKey,
-            affiliatedToOrgId:-1,
-            organisationTypeRefId:-1,
-            statusRefId:-1,
+            affiliatedToOrgId: -1,
+            organisationTypeRefId: -1,
+            statusRefId: -1,
             deleteLoading: false,
         }
         this_Obj = this;
-       // this.props.getUreAction();
+        // this.props.getUreAction();
         this.referenceCalls(this.state.organisationId);
-        this.handleAffiliateTableList(1, this.state.organisationId, -1,-1,-1)
+        this.handleAffiliateTableList(1, this.state.organisationId, -1, -1, -1)
     }
 
-    componentDidMount(){
+    componentDidMount() {
         console.log("Component Did mount");
     }
 
-    componentDidUpdate(nextProps){
+    componentDidUpdate(nextProps) {
         console.log("Component componentDidUpdate");
-       let userState = this.props.userState;
+        let userState = this.props.userState;
         if (userState.onLoad === false && this.state.loading === true) {
             if (!userState.error) {
                 this.setState({
@@ -130,7 +131,7 @@ class UserAffiliatesList extends Component {
                 this.setState({
                     deleteLoading: false,
                 });
-                this.handleAffiliateTableList(1, this.state.organisationId, -1,-1,-1)
+                this.handleAffiliateTableList(1, this.state.organisationId, -1, -1, -1)
             }
         }
     }
@@ -139,37 +140,37 @@ class UserAffiliatesList extends Component {
         this.props.getAffiliateToOrganisationAction(organisationId);
     }
 
-    handleAffiliateTableList = (page, organisationId,affiliatedToOrgId, organisationTypeRefId, statusRefId) => {
-        let filter = 
+    handleAffiliateTableList = (page, organisationId, affiliatedToOrgId, organisationTypeRefId, statusRefId) => {
+        let filter =
         {
             organisationId: organisationId,
-            affiliatedToOrgId:affiliatedToOrgId,
-            organisationTypeRefId:organisationTypeRefId,
+            affiliatedToOrgId: affiliatedToOrgId,
+            organisationTypeRefId: organisationTypeRefId,
             statusRefId: statusRefId,
-            paging : {
-                limit : 10,
-                offset: (page ? (10 * (page -1)) : 0)
+            paging: {
+                limit: 10,
+                offset: (page ? (10 * (page - 1)) : 0)
             }
         }
         this.props.getAffiliatesListingAction(filter);
     };
 
     naviageToAffiliate = (e) => {
-        this.props.history.push("/userEditAffiliates", {affiliateOrgId: e.affiliateOrgId, orgTypeRefId: e.organisationTypeRefId})
+        this.props.history.push("/userEditAffiliates", { affiliateOrgId: e.affiliateOrgId, orgTypeRefId: e.organisationTypeRefId })
     }
 
-    onChangeOrganisationTypes = (e) =>{
-        this.setState({organisationTypeRefId: e})
+    onChangeOrganisationTypes = (e) => {
+        this.setState({ organisationTypeRefId: e })
         this.handleAffiliateTableList(1, this.state.organisationId, this.state.affiliatedToOrgId, e, this.state.statusRefId);
     }
 
     onChangeAffiliateTo = (e) => {
-        this.setState({affiliatedToOrgId: e})
+        this.setState({ affiliatedToOrgId: e })
         this.handleAffiliateTableList(1, this.state.organisationId, e, this.state.organisationTypeRefId, this.state.statusRefId);
     }
 
     onChangeStatusRefId = (e) => {
-        this.setState({statusRefId: e})
+        this.setState({ statusRefId: e })
         this.handleAffiliateTableList(1, this.state.organisationId, this.state.affiliatedToOrgId, this.state.organisationTypeRefId, e);
     }
 
@@ -215,16 +216,16 @@ class UserAffiliatesList extends Component {
     dropdownView = () => {
         let affiliateToData = this.props.userState.affiliateTo;
         let uniqueValues = [];
-        if(affiliateToData.affiliatedTo!= undefined){
-            uniqueValues = [...new Map( affiliateToData.affiliatedTo.map(obj => [obj["affiliatedToOrgId"], obj])).values() ];
+        if (affiliateToData.affiliatedTo != undefined) {
+            uniqueValues = [...new Map(affiliateToData.affiliatedTo.map(obj => [obj["affiliatedToOrgId"], obj])).values()];
         }
-        
+
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
                 <div className="fluid-width" >
                     <div className="row" >
                         <div className="col-sm-3" >
-                            <div style={{width: "100%", display: "flex",flexDirection: "row",alignItems: "center" }} >
+                            <div style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center" }} >
                                 <span className='year-select-heading'>{AppConstants.affiliatedTo}</span>
                                 <Select
                                     style={{ minWidth: 100 }}
@@ -239,10 +240,10 @@ class UserAffiliatesList extends Component {
                             </div>
                         </div>
                         <div className="col-sm-3" >
-                            <div style={{width: "fit-content", display: "flex",flexDirection: "row",alignItems: "center" }} >
+                            <div style={{ width: "fit-content", display: "flex", flexDirection: "row", alignItems: "center" }} >
                                 <span className='year-select-heading'>{AppConstants.organisationType}</span>
                                 <Select
-                                     style={{ minWidth: 100 }}
+                                    style={{ minWidth: 100 }}
                                     className="year-select"
                                     onChange={(e) => this.onChangeOrganisationTypes(e)}
                                     value={this.state.organisationTypeRefId}>
@@ -255,7 +256,7 @@ class UserAffiliatesList extends Component {
                             </div>
                         </div>
                         <div className="col-sm-2" >
-                            <div style={{width: "fit-content", display: "flex",flexDirection: "row",alignItems: "center" }} >
+                            <div style={{ width: "fit-content", display: "flex", flexDirection: "row", alignItems: "center" }} >
                                 <span className='year-select-heading'>{AppConstants.status}</span>
                                 <Select
                                     className="year-select"
@@ -272,12 +273,12 @@ class UserAffiliatesList extends Component {
                         <div className="col-sm-2 add-affiliate-btn">
                             {
                                 affiliateToData.isEligibleToAddAffiliate ?
-                                <div className="d-flex flex-row-reverse">
-                                    <NavLink to={"/userAddAffiliates"}>
-                                        <Button className='primary-add-product' type='primary'>+ {AppConstants.addAffiliate}</Button>
-                                    </NavLink>
-                                </div>
-                                : null
+                                    <div className="d-flex flex-row-reverse">
+                                        <NavLink to={"/userAddAffiliates"}>
+                                            <Button className='primary-add-product' type='primary'>+ {AppConstants.addAffiliate}</Button>
+                                        </NavLink>
+                                    </div>
+                                    : null
                             }
                         </div>
                     </div>
@@ -297,11 +298,11 @@ class UserAffiliatesList extends Component {
                     {/* <Table className="home-dashboard-table" columns={columns} dataSource={affiliates} pagination={false}
                         onRow={(r) => ({onClick: () => this.naviageToAffiliate(r, this.state.organisationId)})}
                     /> */}
-                     <Table className="home-dashboard-table" 
-                     columns={columns}
-                      dataSource={affiliates} 
-                      pagination={false}
-                      loading={this.props.userState.onLoad == true && true}
+                    <Table className="home-dashboard-table"
+                        columns={columns}
+                        dataSource={affiliates}
+                        pagination={false}
+                        loading={this.props.userState.onLoad === true && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
@@ -322,13 +323,13 @@ class UserAffiliatesList extends Component {
         return (
             <div>
                 {
-                affiliateToData.isEligibleToAddAffiliate ?
-                    <div className="d-flex flex-row-reverse">
-                        <NavLink to={"/userAddAffiliates"}>
-                            <Button className='primary-add-product' type='primary'>+ {AppConstants.addAffiliate}</Button>
-                        </NavLink>
-                    </div>
-                    : null
+                    affiliateToData.isEligibleToAddAffiliate ?
+                        <div className="d-flex flex-row-reverse">
+                            <NavLink to={"/userAddAffiliates"}>
+                                <Button className='primary-add-product' type='primary'>+ {AppConstants.addAffiliate}</Button>
+                            </NavLink>
+                        </div>
+                        : null
                 }
             </div>
         )
@@ -356,8 +357,7 @@ class UserAffiliatesList extends Component {
 }
 
 
-function mapDispatchToProps(dispatch)
-{
+function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getAffiliatesListingAction,
         getUreAction,
@@ -367,10 +367,10 @@ function mapDispatchToProps(dispatch)
 
 }
 
-function mapStatetoProps(state){
+function mapStatetoProps(state) {
     return {
         userState: state.UserState
     }
 }
 
-export default connect(mapStatetoProps,mapDispatchToProps)((UserAffiliatesList));
+export default connect(mapStatetoProps, mapDispatchToProps)((UserAffiliatesList));

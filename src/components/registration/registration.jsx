@@ -9,12 +9,7 @@ import AppImages from "../../themes/appImages";
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
-/////function to sort table column
-function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
-}
+
 
 const columns = [
 
@@ -46,7 +41,7 @@ const columns = [
         title: 'Discounts',
         dataIndex: 'discounts',
         key: 'discounts',
-        render: discounts => <span>{discounts == true ? "Yes" : "No"}</span>,
+        render: discounts => <span>{discounts === true ? "Yes" : "No"}</span>,
         sorter: (a, b) => a.discounts.length - b.discounts.length,
     },
     {

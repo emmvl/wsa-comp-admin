@@ -12,7 +12,6 @@ import AppImages from "../../themes/appImages";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { checkUserRole } from "../../util/permissions";
 import { currencyFormat } from "../../util/currencyFormat";
-import { getUserId } from "../../util/sessionStorage"
 import { stringTONumber } from "../../util/helpers"
 
 const { confirm } = Modal;
@@ -104,7 +103,7 @@ const columns = [
         dataIndex: "organiser",
         key: "organiser",
         render: organiser => (
-            <span>{organiser == null || organiser == "" ? "N/A" : organiser}</span>
+            <span>{organiser === null || organiser === "" ? "N/A" : organiser}</span>
         ),
         sorter: (a, b) => tableSort(a, b, "organiser")
     },
@@ -113,7 +112,7 @@ const columns = [
         dataIndex: "affiliateName",
         key: "affiliateName",
         render: affiliateName => (
-            <span>{affiliateName == null || affiliateName == "" ? "N/A" : affiliateName}</span>
+            <span>{affiliateName === null || affiliateName === "" ? "N/A" : affiliateName}</span>
         ),
         sorter: (a, b) => tableSort(a, b, "affiliateName")
     },
@@ -134,7 +133,7 @@ const columns = [
         dataIndex: "divisionName",
         key: "divisionName",
         render: divisionName => (
-            <span>{divisionName == null || divisionName == "" ? "N/A" : divisionName}</span>
+            <span>{divisionName === null || divisionName === "" ? "N/A" : divisionName}</span>
         ),
         sorter: (a, b) => tableSort(a, b, "divisionName")
     },
@@ -181,7 +180,7 @@ const columns = [
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
-                    <Menu.Item key="2" onClick={() => this_Obj.showDeleteConfirm(record.competitionUniqueKey)}>
+                    <Menu.Item key="2" disabled={record.statusRefId == 2 ? true : false} onClick={() => this_Obj.showDeleteConfirm(record.competitionUniqueKey)}>
                         <span>Delete</span>
                     </Menu.Item>
                 </SubMenu>
@@ -206,7 +205,7 @@ class RegistrationCompetitionList extends Component {
 
 
     componentDidUpdate(nextProps) {
-        if (this.props.competitionFeesState.onLoad === false && this.state.deleteLoading == true) {
+        if (this.props.competitionFeesState.onLoad === false && this.state.deleteLoading === true) {
             this.setState({
                 deleteLoading: false,
             })

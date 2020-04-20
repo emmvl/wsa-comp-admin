@@ -9,8 +9,8 @@ import { liveScoreUmpiresListAction } from '../../store/actions/LiveScoreAction/
 import history from "../../util/history";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
-import { getTime, formateTime, liveScore_formateDate } from '../../themes/dateformate'
+import { getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { getTime, liveScore_formateDate } from '../../themes/dateformate'
 const { Content } = Layout;
 
 
@@ -29,7 +29,7 @@ const columns = [
         title: 'Date',
         dataIndex: 'match',
         key: 'match',
-        sorter: (a, b) => tableSort(a,b,"match"),
+        sorter: (a, b) => tableSort(a, b, "match"),
         render: (match) =>
             <span  >{match ? liveScore_formateDate(match.startTime) : ""}</span>
     },
@@ -37,7 +37,7 @@ const columns = [
         title: 'Time',
         dataIndex: 'match',
         key: 'match',
-        sorter: (a, b) => tableSort(a,b,"match"),
+        sorter: (a, b) => tableSort(a, b, "match"),
         render: (match) =>
             <span  >{match ? getTime(match.startTime) : ""}</span>
     },
@@ -45,7 +45,7 @@ const columns = [
         title: 'Match',
         dataIndex: 'match',
         key: 'match',
-        sorter: (a, b) => tableSort(a,b,"match"),
+        sorter: (a, b) => tableSort(a, b, "match"),
         render: (match, record) =>
             <NavLink to={{
                 pathname: "/liveScoreMatchDetails",
@@ -58,7 +58,7 @@ const columns = [
         title: 'First Umpire Name',
         dataIndex: 'umpire1FullName',
         key: 'umpire1FullName',
-        sorter: (a, b) => tableSort(a,b,"umpire1FullName"),
+        sorter: (a, b) => tableSort(a, b, "umpire1FullName"),
         key: 'umpire1FullName',
         render: (umpire1FullName) => <NavLink to={{
             // pathname: "/liveScoreMatchDetails",
@@ -72,7 +72,7 @@ const columns = [
         title: 'First Umpire Club',
         dataIndex: 'umpire1Club',
         key: 'umpire1Club',
-        sorter: (a, b) => tableSort(a,b,"umpire1Club"),
+        sorter: (a, b) => tableSort(a, b, "umpire1Club"),
         render: (umpire1Club) =>
             <span>{umpire1Club ? umpire1Club.name : ""}</span>
     },
@@ -80,7 +80,7 @@ const columns = [
         title: 'Second Umpire Name',
         dataIndex: 'umpire2FullName',
         key: 'umpire2FullName',
-        sorter: (a, b) => tableSort(a,b,"umpire2FullName"),
+        sorter: (a, b) => tableSort(a, b, "umpire2FullName"),
         render: (umpire2FullName) => <NavLink to={{
             // pathname: "/liveScoreMatchDetails",
             // state: { tableRecord: record }
@@ -92,9 +92,9 @@ const columns = [
         title: 'Second Umpire Club',
         dataIndex: 'umpire2Club',
         key: 'umpire2Club',
-        sorter: (a, b) => tableSort(a,b,"umpire2Club"),
+        sorter: (a, b) => tableSort(a, b, "umpire2Club"),
         render: (umpire2Club) =>
-            <span>{umpire2Club? umpire2Club.name:""}</span>
+            <span>{umpire2Club ? umpire2Club.name : ""}</span>
     },
 ];
 
@@ -220,7 +220,7 @@ class LiveScoreUmpireList extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"6"} />
                 <Layout>
                     {this.headerView()}

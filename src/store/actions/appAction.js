@@ -181,7 +181,13 @@ function getEnhancedRoundRobinAction() {
   return action;
 }
 
-
+function exportFilesAction(URL){
+  const action = {
+    type: ApiConstants.API_EXPORT_FILES_LOAD,
+    URL : URL
+  };
+  return action;
+}
 
 export {
   getYearListAction,
@@ -203,5 +209,6 @@ export {
   getYearAndCompetitionParticipateAction,
   searchVenueList,
   clearFilter,
-  getEnhancedRoundRobinAction
+  getEnhancedRoundRobinAction,
+  exportFilesAction
 };

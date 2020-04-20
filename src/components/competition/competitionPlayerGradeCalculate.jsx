@@ -8,7 +8,7 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getYearAndCompetitionOwnAction, getCompetitionFormatTypesAction } from "../../store/actions/appAction";
+import { getYearAndCompetitionOwnAction } from "../../store/actions/appAction";
 import {
     getCompPartPlayerGradingSummaryAction,
     onchangeCompPartPlayerGradingSummaryData,

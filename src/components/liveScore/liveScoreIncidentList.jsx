@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux';
 import { liveScoreIncidentList } from '../../store/actions/LiveScoreAction/liveScoreIncidentAction'
 import { liveScore_formateDate } from '../../themes/dateformate'
 import history from "../../util/history";
-import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 
 function getIncidentPlayer(incidentPlayers) {
     let playerId = incidentPlayers.length > 0 ? incidentPlayers[0].playerId : ""
@@ -239,7 +239,7 @@ class LiveScoreIncidentList extends Component {
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.liveScoreIncidentState.onLoad == true && true} className="home-dashboard-table"
+                        loading={this.props.liveScoreIncidentState.onLoad == true ? true : false} className="home-dashboard-table"
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={DATA}
@@ -274,7 +274,7 @@ class LiveScoreIncidentList extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"17"} />
                 <Layout>
                     {this.headerView()}

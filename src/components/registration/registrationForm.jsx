@@ -124,7 +124,8 @@ class RegistrationForm extends Component {
             tooltipVisibleDraft: false,
             tooltipVisiblePublish: false,
             isPublished: false,
-            orgRegId: 0
+            orgRegId: 0,
+            compCloseDate: null
         };
         this_Obj = this;
         this.props.clearReducerDataAction("getRegistrationFormDetails")
@@ -136,7 +137,9 @@ class RegistrationForm extends Component {
         let competitionId = this.props.location.state ? this.props.location.state.id : null
         let year = this.props.location.state ? this.props.location.state.year : null
         let orgRegId = this.props.location.state ? this.props.location.state.orgRegId : 0
-        this.setState({ orgRegId })
+        let compCloseDate = this.props.location.state ? this.props.location.state.compCloseDate : null
+        console.log(compCloseDate)
+        this.setState({ orgRegId, compCloseDate })
 
         if (competitionId !== null && year !== null) {
             this.props.getRegistrationForm(year, competitionId)
@@ -162,7 +165,7 @@ class RegistrationForm extends Component {
     componentDidUpdate(nextProps) {
         let registrationState = this.props.registrationState
         if (nextProps.registrationState.registrationFormData !== registrationState.registrationFormData) {
-            if (this.state.onRegistrationLoad == true && registrationState.onLoad == false) {
+            if (this.state.onRegistrationLoad === true && registrationState.onLoad === false) {
                 this.setFieldDecoratorValues()
                 this.setState({
                     onRegistrationLoad: false,
@@ -443,6 +446,7 @@ class RegistrationForm extends Component {
         if (this.props.registrationState.registrationFormData.length > 0) {
             let formDataValue = this.props.registrationState.registrationFormData[0]
             let openDate = formDataValue.registrationOpenDate
+            moment(openDate).format("DD-MM-YYYY")
             return openDate
         }
     }
@@ -480,13 +484,16 @@ class RegistrationForm extends Component {
         let venueList =
             this.props.appState.venueList.length !== 0 ? this.props.appState.venueList : [];
         let dateOpen = this.regOpenDate()
-        let closeDate = this.regCloseDate()
+        let closeDate = moment(this.state.compCloseDate).format("YYYY-MM-DD")
+        let compCLoseDate = moment(this.state.compCloseDate).format("DD-MM-YYYY")
         let defaultChecked = this.props.registrationState.defaultChecked
         let isPublished = this.state.isPublished
         return (
             <div className="content-view pt-4">
+                <span className="userRegLink">{`Competition Registrations close on ${compCLoseDate}`}</span>
                 <div className="row">
                     <div className="col-sm">
+
                         <InputWithHead heading={AppConstants.registrationOpen} />
                         <Form.Item >
                             {getFieldDecorator('registrationOpenDate',
@@ -522,6 +529,9 @@ class RegistrationForm extends Component {
                                         disabledTime={this.disabledTime}
                                         format={"DD-MM-YYYY"}
                                         showTime={false}
+                                        disabledDate={d => !d || d.isAfter(closeDate)
+                                            // || d.isSameOrBefore(dateOpen)
+                                        }
                                     // value={closeDate ? moment(closeDate, "YYYY-MM-DD") : ""}
                                     />
                                 )}
@@ -675,7 +685,6 @@ class RegistrationForm extends Component {
     ) => {
         let defaultChecked = this.props.registrationState.defaultChecked
         let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
-        let isPublished = this.state.isPublished
         return (
             <div className="fees-view">
                 <Checkbox
@@ -685,7 +694,7 @@ class RegistrationForm extends Component {
                 >
                     {AppConstants.replyToContactDetails}
                 </Checkbox>
-                {defaultChecked.replyContactVisible == true && (
+                {defaultChecked.replyContactVisible === true && (
                     <div className="comp-open-reg-check-inpt-view">
                         <div className="fluid-width" style={{ marginTop: 15 }}>
                             <div className="row" style={{ height: 56 }}>
@@ -700,7 +709,7 @@ class RegistrationForm extends Component {
                                         {AppConstants.name}
                                     </Checkbox>
                                 </div>
-                                {defaultChecked.replyName == true && (
+                                {defaultChecked.replyName === true && (
                                     <div className="col-sm">
                                         <InputWithHead
                                             placeholder={"Name"}
@@ -727,7 +736,7 @@ class RegistrationForm extends Component {
                                         {AppConstants.role}
                                     </Checkbox>
                                 </div>
-                                {defaultChecked.replyRole == true && (
+                                {defaultChecked.replyRole === true && (
                                     <div className="col-sm">
                                         <InputWithHead
                                             placeholder={AppConstants.role}
@@ -753,7 +762,7 @@ class RegistrationForm extends Component {
                                         {AppConstants.email}
                                     </Checkbox>
                                 </div>
-                                {defaultChecked.replyEmail == true && (
+                                {defaultChecked.replyEmail === true && (
                                     <div className="col-sm">
                                         <InputWithHead
                                             placeholder={AppConstants.email}
@@ -780,7 +789,7 @@ class RegistrationForm extends Component {
                                         {AppConstants.phone}
                                     </Checkbox>
                                 </div>
-                                {defaultChecked.replyPhone == true && (
+                                {defaultChecked.replyPhone === true && (
                                     <div className="col-sm">
                                         <InputWithHead
                                             placeholder={AppConstants.phone}

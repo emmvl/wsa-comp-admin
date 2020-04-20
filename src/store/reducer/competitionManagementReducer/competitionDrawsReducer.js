@@ -1,8 +1,7 @@
 import ApiConstants from '../../../themes/apiConstants';
 import { isArrayNotEmpty, isNullOrEmptyString } from '../../../util/helpers';
 import { isDateSame, sortArrayByDate } from './../../../themes/dateformate';
-import ColorsArray from "../../../util/colorsArray";
-
+import ColorsArray from '../../../util/colorsArray';
 
 const initialState = {
   onLoad: false,
@@ -14,11 +13,12 @@ const initialState = {
   dateArray: [],
   getDrawsRoundsData: [],
   competitionVenues: [],
-  updateLoad: false
+  updateLoad: false,
+  gradeColorArray: [],
 };
+var gradeColorArray = [];
 const colorsArray = ColorsArray;
 const lightGray = '#999999';
-
 
 function structureDrawsData(data) {
   let mainCourtNumberArray = [];
@@ -27,7 +27,7 @@ function structureDrawsData(data) {
   let sortedDateArray = [];
   if (data.draws) {
     if (isArrayNotEmpty(data.draws)) {
-      data.draws.map(object => {
+      data.draws.map((object) => {
         if (checkDateNotInArray(dateArray, object.matchDate)) {
           dateArray.push(object.matchDate);
         }
@@ -41,7 +41,7 @@ function structureDrawsData(data) {
         if (!courtNumberResponse.status) {
           mainCourtNumberArray.push({
             venueCourtNumber: object.venueCourtNumber,
-            slotsArray: []
+            slotsArray: [],
           });
         }
       });
@@ -80,42 +80,40 @@ function mapSlotObjectsWithTimeSlots(
   return mainCourtNumberArray;
 }
 
-function getSlotFromDate(
-  drawsArray,
-  venueCourtNumber,
-  matchDate,
-  gradeArray,
-) {
-  let startTime
-  let endTime
+function getSlotFromDate(drawsArray, venueCourtNumber, matchDate, gradeArray) {
+  let startTime;
+  let endTime;
   for (let i in drawsArray) {
-    startTime = drawsArray[i].startTime
-    endTime = drawsArray[i].endTime
+    startTime = drawsArray[i].startTime;
+    endTime = drawsArray[i].endTime;
     if (
       drawsArray[i].venueCourtNumber === venueCourtNumber &&
       isDateSame(drawsArray[i].matchDate, matchDate)
     ) {
-      let gradeIndex = gradeArray.indexOf(
-        drawsArray[i].competitionDivisionGradeId
-      );
-      if (gradeIndex === -1) {
-        drawsArray[i].colorCode = '#999999';
-      } else {
-        if (gradeIndex < 39) {
-          drawsArray[i].colorCode = colorsArray[gradeIndex];
-        } else {
-          drawsArray[i].colorCode = '#999999';
-        }
-      }
+      // let gradeIndex = gradeArray.indexOf(
+      //   drawsArray[i].competitionDivisionGradeId
+      // );
+
+      let gradeColour = getGradeColor(drawsArray[i].competitionDivisionGradeId);
+
+      // if (gradeIndex === -1) {
+      drawsArray[i].colorCode = gradeColour;
+      // } else {
+      //   if (gradeIndex < 39) {
+      //     drawsArray[i].colorCode = colorsArray[gradeIndex];
+      //   } else {
+      //     drawsArray[i].colorCode = '#999999';
+      //   }
+      // }
       drawsArray[i].teamArray = [
         {
           teamName: drawsArray[i].homeTeamName,
-          teamId: drawsArray[i].homeTeamId
+          teamId: drawsArray[i].homeTeamId,
         },
         {
           teamName: drawsArray[i].awayTeamName,
-          teamId: drawsArray[i].awayTeamId
-        }
+          teamId: drawsArray[i].awayTeamId,
+        },
       ];
 
       return drawsArray[i];
@@ -124,12 +122,12 @@ function getSlotFromDate(
   let teamArray = [
     {
       teamName: null,
-      teamId: null
+      teamId: null,
     },
     {
       teamName: null,
-      teamId: null
-    }
+      teamId: null,
+    },
   ];
   return {
     drawsId: null,
@@ -145,8 +143,30 @@ function getSlotFromDate(
     competitionDivisionGradeId: null,
     isLocked: 0,
     colorCode: '#999999',
-    teamArray: teamArray
+    teamArray: teamArray,
   };
+}
+
+function getGradeColor(gradeId) {
+  let gradeColorTempArray = JSON.parse(JSON.stringify(gradeColorArray));
+  let index = gradeColorTempArray.findIndex((x) => x.gradeId === gradeId);
+
+  var color = lightGray;
+  if (index !== -1) {
+    color = gradeColorTempArray[index].colorCode;
+  } else {
+    for (var i in colorsArray) {
+      let colorIndex = gradeColorTempArray.findIndex(
+        (x) => x.colorCode === colorsArray[i]
+      );
+      if (colorIndex === -1) {
+        gradeColorArray.push({ gradeId: gradeId, colorCode: colorsArray[i] });
+        color = colorsArray[i];
+        break;
+      }
+    }
+  }
+  return color;
 }
 
 function checkVenueCourtNumber(mainCourtNumberArray, object) {
@@ -194,14 +214,22 @@ function swapedDrawsArrayFunc(
   sourceYIndex,
   targetYIndex
 ) {
-  let sourceArray = JSON.parse(JSON.stringify(drawsArray))
-  let targetArray = JSON.parse(JSON.stringify(drawsArray))
-  let source = JSON.parse(JSON.stringify(sourceArray[sourtXIndex].slotsArray[sourceYIndex]));
-  let target = JSON.parse(JSON.stringify(targetArray[targetXIndex].slotsArray[targetYIndex]));
-  let sourceCopy = JSON.parse(JSON.stringify(sourceArray[sourtXIndex].slotsArray[sourceYIndex]));
-  let targetCopy = JSON.parse(JSON.stringify(targetArray[targetXIndex].slotsArray[targetYIndex]));
-  sourceCopy.drawsId = target.drawsId
-  targetCopy.drawsId = source.drawsId
+  let sourceArray = JSON.parse(JSON.stringify(drawsArray));
+  let targetArray = JSON.parse(JSON.stringify(drawsArray));
+  let source = JSON.parse(
+    JSON.stringify(sourceArray[sourtXIndex].slotsArray[sourceYIndex])
+  );
+  let target = JSON.parse(
+    JSON.stringify(targetArray[targetXIndex].slotsArray[targetYIndex])
+  );
+  let sourceCopy = JSON.parse(
+    JSON.stringify(sourceArray[sourtXIndex].slotsArray[sourceYIndex])
+  );
+  let targetCopy = JSON.parse(
+    JSON.stringify(targetArray[targetXIndex].slotsArray[targetYIndex])
+  );
+  sourceCopy.drawsId = target.drawsId;
+  targetCopy.drawsId = source.drawsId;
   if (source.drawsId === null) {
     drawsArray[sourtXIndex].slotsArray[sourceYIndex] = target;
     drawsArray[targetXIndex].slotsArray[targetYIndex] = source;
@@ -213,10 +241,9 @@ function swapedDrawsArrayFunc(
     drawsArray[targetXIndex].slotsArray[targetYIndex] = sourceCopy;
   }
 
-  console.log("Source", source)
-  console.log("Target", target)
-  console.log("Draws", drawsArray)
-
+  console.log('Source', source);
+  console.log('Target', target);
+  console.log('Draws', drawsArray);
 
   /*
   var source = drawsArray[sourtXIndex].slotsArray[sourceYIndex];
@@ -294,10 +321,9 @@ function swapedDrawsArrayFunc(
   return drawsArray;
 }
 
-
-
 ///  Swipe Array object - Edit
-function swapedDrawsEditArrayFunc(drawsArray,
+function swapedDrawsEditArrayFunc(
+  drawsArray,
   sourceXIndex,
   targetXIndex,
   sourceYIndex,
@@ -305,71 +331,119 @@ function swapedDrawsEditArrayFunc(drawsArray,
   sourceZIndex,
   targetZIndex
 ) {
-  var sourceArray = JSON.parse(JSON.stringify(drawsArray))
-  var targetArray = JSON.parse(JSON.stringify(drawsArray))
-  var sourceItem = sourceArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[sourceZIndex];
-  var targetItem = targetArray[targetXIndex].slotsArray[targetYIndex].teamArray[targetZIndex];
+  var sourceArray = JSON.parse(JSON.stringify(drawsArray));
+  var targetArray = JSON.parse(JSON.stringify(drawsArray));
+  var sourceItem =
+    sourceArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[sourceZIndex];
+  var targetItem =
+    targetArray[targetXIndex].slotsArray[targetYIndex].teamArray[targetZIndex];
 
   var source = sourceArray[sourceXIndex].slotsArray[sourceYIndex];
   var target = targetArray[targetXIndex].slotsArray[targetYIndex];
-  console.error("SourceXYZ", sourceXIndex, ":", sourceYIndex, ":", sourceZIndex)
-  console.error("TargetXYZ", targetXIndex, ":", targetYIndex, ":", targetZIndex)
-  if (sourceZIndex === "0") {
-    if (targetZIndex === "0") {
-      drawsArray[sourceXIndex].slotsArray[sourceYIndex].homeTeamId = target.homeTeamId
-      drawsArray[sourceXIndex].slotsArray[sourceYIndex].homeTeamName = target.homeTeamName
-      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[0].teamId = target.homeTeamId
-      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[0].teamName = target.homeTeamName
+  console.error(
+    'SourceXYZ',
+    sourceXIndex,
+    ':',
+    sourceYIndex,
+    ':',
+    sourceZIndex
+  );
+  console.error(
+    'TargetXYZ',
+    targetXIndex,
+    ':',
+    targetYIndex,
+    ':',
+    targetZIndex
+  );
+  if (sourceZIndex === '0') {
+    if (targetZIndex === '0') {
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].homeTeamId =
+        target.homeTeamId;
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].homeTeamName =
+        target.homeTeamName;
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[0].teamId =
+        target.homeTeamId;
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[0].teamName =
+        target.homeTeamName;
     } else {
-      console.error("Called123")
-      drawsArray[sourceXIndex].slotsArray[sourceYIndex].homeTeamId = target.awayTeamId
-      drawsArray[sourceXIndex].slotsArray[sourceYIndex].homeTeamName = target.awayTeamName
-      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[0].teamId = target.awayTeamId
-      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[0].teamName = target.awayTeamName
+      console.error('Called123');
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].homeTeamId =
+        target.awayTeamId;
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].homeTeamName =
+        target.awayTeamName;
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[0].teamId =
+        target.awayTeamId;
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[0].teamName =
+        target.awayTeamName;
     }
   } else {
-    if (targetZIndex === "0") {
-      drawsArray[sourceXIndex].slotsArray[sourceYIndex].awayTeamId = target.homeTeamId
-      drawsArray[sourceXIndex].slotsArray[sourceYIndex].awayTeamName = target.homeTeamName
-      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[1].teamId = target.homeTeamId
-      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[1].teamName = target.homeTeamName
+    if (targetZIndex === '0') {
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].awayTeamId =
+        target.homeTeamId;
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].awayTeamName =
+        target.homeTeamName;
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[1].teamId =
+        target.homeTeamId;
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[1].teamName =
+        target.homeTeamName;
     } else {
-      drawsArray[sourceXIndex].slotsArray[sourceYIndex].awayTeamId = target.awayTeamId
-      drawsArray[sourceXIndex].slotsArray[sourceYIndex].awayTeamName = target.awayTeamName
-      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[1].teamId = target.awayTeamId
-      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[1].teamName = target.awayTeamName
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].awayTeamId =
+        target.awayTeamId;
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].awayTeamName =
+        target.awayTeamName;
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[1].teamId =
+        target.awayTeamId;
+      drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[1].teamName =
+        target.awayTeamName;
     }
   }
 
-  if (targetZIndex === "0") {
-    if (sourceZIndex === "0") {
-      drawsArray[targetXIndex].slotsArray[targetYIndex].homeTeamId = source.homeTeamId
-      drawsArray[targetXIndex].slotsArray[targetYIndex].homeTeamName = source.homeTeamName
-      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[0].teamId = source.homeTeamId
-      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[0].teamName = source.homeTeamName
+  if (targetZIndex === '0') {
+    if (sourceZIndex === '0') {
+      drawsArray[targetXIndex].slotsArray[targetYIndex].homeTeamId =
+        source.homeTeamId;
+      drawsArray[targetXIndex].slotsArray[targetYIndex].homeTeamName =
+        source.homeTeamName;
+      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[0].teamId =
+        source.homeTeamId;
+      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[0].teamName =
+        source.homeTeamName;
     } else {
-      drawsArray[targetXIndex].slotsArray[targetYIndex].homeTeamId = source.awayTeamId
-      drawsArray[targetXIndex].slotsArray[targetYIndex].homeTeamName = source.awayTeamName
-      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[0].teamId = source.awayTeamId
-      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[0].teamName = source.awayTeamName
+      drawsArray[targetXIndex].slotsArray[targetYIndex].homeTeamId =
+        source.awayTeamId;
+      drawsArray[targetXIndex].slotsArray[targetYIndex].homeTeamName =
+        source.awayTeamName;
+      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[0].teamId =
+        source.awayTeamId;
+      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[0].teamName =
+        source.awayTeamName;
     }
   } else {
-    if (sourceZIndex === "0") {
-      drawsArray[targetXIndex].slotsArray[targetYIndex].awayTeamId = source.homeTeamId
-      drawsArray[targetXIndex].slotsArray[targetYIndex].awayTeamName = source.homeTeamName
-      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[1].teamId = source.homeTeamId
-      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[1].teamName = source.homeTeamName
+    if (sourceZIndex === '0') {
+      drawsArray[targetXIndex].slotsArray[targetYIndex].awayTeamId =
+        source.homeTeamId;
+      drawsArray[targetXIndex].slotsArray[targetYIndex].awayTeamName =
+        source.homeTeamName;
+      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[1].teamId =
+        source.homeTeamId;
+      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[1].teamName =
+        source.homeTeamName;
     } else {
-      drawsArray[targetXIndex].slotsArray[targetYIndex].awayTeamId = source.awayTeamId
-      drawsArray[targetXIndex].slotsArray[targetYIndex].awayTeamName = source.awayTeamName
-      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[1].teamId = source.awayTeamId
-      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[1].teamName = source.awayTeamName
+      drawsArray[targetXIndex].slotsArray[targetYIndex].awayTeamId =
+        source.awayTeamId;
+      drawsArray[targetXIndex].slotsArray[targetYIndex].awayTeamName =
+        source.awayTeamName;
+      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[1].teamId =
+        source.awayTeamId;
+      drawsArray[targetXIndex].slotsArray[targetYIndex].teamArray[1].teamName =
+        source.awayTeamName;
     }
   }
 
-  console.log("Source", source)
-  console.log("Target", target)
-  console.log("Draws Data**", drawsArray)
+  console.log('Source', source);
+  console.log('Target', target);
+  console.log('Draws Data**', drawsArray);
 
   // let sourceObject = null
   // let targetObject = null
@@ -532,7 +606,6 @@ function swapedDrawsEditArrayFunc(drawsArray,
   //   }
   // }
 
-
   // drawsArray[sourtXIndex].slotsArray[sourceYIndex] = targetObject;
   // drawsArray[targetXIndex].slotsArray[targetYIndex] = sourceObject;
 
@@ -547,7 +620,7 @@ function CompetitionDraws(state = initialState, action) {
         onLoad: false,
         error: action.error,
         status: action.status,
-        updateLoad: false
+        updateLoad: false,
       };
 
     case ApiConstants.API_COMPETITION_DRAWS_ERROR:
@@ -556,7 +629,7 @@ function CompetitionDraws(state = initialState, action) {
         onLoad: false,
         error: action.error,
         status: action.status,
-        updateLoad: false
+        updateLoad: false,
       };
 
     //competition part player grade calculate player grading summmary get API
@@ -569,10 +642,12 @@ function CompetitionDraws(state = initialState, action) {
       return {
         ...state,
         getDrawsData: resultData.mainCourtNumberArray,
-        getStaticDrawsData: JSON.parse(JSON.stringify(resultData.mainCourtNumberArray)),
+        getStaticDrawsData: JSON.parse(
+          JSON.stringify(resultData.mainCourtNumberArray)
+        ),
         dateArray: resultData.sortedDateArray,
         onLoad: false,
-        error: null
+        error: null,
       };
 
     /////get rounds in the competition draws
@@ -580,22 +655,21 @@ function CompetitionDraws(state = initialState, action) {
       return { ...state, onLoad: true, updateLoad: true, error: null };
 
     case ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_SUCCESS:
-      state.updateLoad = false
+      state.updateLoad = false;
       return {
         ...state,
         getDrawsRoundsData: action.result,
         competitionVenues: action.Venue_Result,
         onLoad: false,
-        error: null
+        error: null,
       };
 
     /// Update draws reducer ceses
     case ApiConstants.API_UPDATE_COMPETITION_DRAWS_LOAD:
       return {
         ...state,
-        updateLoad: true
-      }
-
+        updateLoad: true,
+      };
 
     case ApiConstants.API_UPDATE_COMPETITION_DRAWS_SUCCESS:
       let sourceXIndex = action.sourceArray[0];
@@ -603,8 +677,8 @@ function CompetitionDraws(state = initialState, action) {
       let targetXIndex = action.targetArray[0];
       let targetYIndex = action.targetArray[1];
       let drawData = state.getDrawsData;
-      let swapedDrawsArray = state.getStaticDrawsData
-      if (action.actionType == "add") {
+      let swapedDrawsArray = state.getStaticDrawsData;
+      if (action.actionType == 'add') {
         swapedDrawsArray = swapedDrawsArrayFunc(
           state.getStaticDrawsData,
           sourceXIndex,
@@ -624,12 +698,12 @@ function CompetitionDraws(state = initialState, action) {
         );
       }
       // state.getDrawsData = swapedDrawsArray;
-      state.getStaticDrawsData = swapedDrawsArray
+      state.getStaticDrawsData = swapedDrawsArray;
       return {
         ...state,
         onLoad: false,
         error: null,
-        updateLoad: false
+        updateLoad: false,
       };
 
     /// Save Draws Success
@@ -637,34 +711,31 @@ function CompetitionDraws(state = initialState, action) {
       return {
         ...state,
         onLoad: false,
-        error: null
+        error: null,
       };
 
     case ApiConstants.API_GET_COMPETITION_VENUES_LOAD:
       return {
-        ...state, onLoad: true
-      }
+        ...state,
+        onLoad: true,
+      };
 
     //// Competition venues
     case ApiConstants.API_GET_COMPETITION_VENUES_SUCCESS:
-
       return {
         ...state,
         onLoad: false,
-        competitionVenues: action.result
-      }
-
+        competitionVenues: action.result,
+      };
 
     ///////update draws court timing where N/A(null) is there
     case ApiConstants.API_UPDATE_COMPETITION_DRAWS_COURT_TIMINGS_LOAD:
       return {
         ...state,
-        updateLoad: true
-      }
-
+        updateLoad: true,
+      };
 
     case ApiConstants.API_UPDATE_COMPETITION_DRAWS_COURT_TIMINGS_SUCCESS:
-
       let sourceXNullCaseIndex = action.sourceArray[0];
       let sourceYNullCaseIndex = action.sourceArray[1];
       let targetXNullCaseIndex = action.targetArray[0];
@@ -672,8 +743,8 @@ function CompetitionDraws(state = initialState, action) {
 
       let drawDataNullCase = state.getStaticDrawsData;
 
-      let swapedDrawsArrayNullCase = state.getStaticDrawsData
-      if (action.actionType == "add") {
+      let swapedDrawsArrayNullCase = state.getStaticDrawsData;
+      if (action.actionType == 'add') {
         swapedDrawsArrayNullCase = swapedDrawsArrayFunc(
           drawDataNullCase,
           sourceXNullCaseIndex,
@@ -691,24 +762,23 @@ function CompetitionDraws(state = initialState, action) {
           action.sourceArray[2],
           action.targetArray[2]
         );
-
       }
       state.getStaticDrawsData = swapedDrawsArrayNullCase;
       return {
         ...state,
         onLoad: false,
         error: null,
-        updateLoad: false
+        updateLoad: false,
       };
 
     case ApiConstants.cleardrawsData:
-      state.getStaticDrawsData = []
-      state.dateArray = []
-      if (action.key == "round") {
-        state.competitionVenues = []
-        state.getDrawsRoundsData = []
+      state.getStaticDrawsData = [];
+      state.dateArray = [];
+      if (action.key == 'round') {
+        state.competitionVenues = [];
+        state.getDrawsRoundsData = [];
       }
-      return { ...state }
+      return { ...state };
 
     default:
       return state;

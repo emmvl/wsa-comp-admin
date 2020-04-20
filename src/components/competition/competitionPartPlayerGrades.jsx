@@ -156,7 +156,8 @@ class CompetitionPartPlayerGrades extends Component {
         this.props.addNewTeamAction(this.state.firstTimeCompId, this.state.divisionId, this.state.newTeam)
         this.setState({
             visible: false,
-            newNameMembershipType: ""
+            newNameMembershipType: "",
+            newTeam: ""
         });
     };
 
@@ -164,6 +165,7 @@ class CompetitionPartPlayerGrades extends Component {
     handleCancel = e => {
         this.setState({
             visible: false,
+            newTeam: ""
         });
     };
 

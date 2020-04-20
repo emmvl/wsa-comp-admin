@@ -11,7 +11,6 @@ async function logout() {
 }
 
 let token = getAuthToken();
-let user_Id = getUserId();
 // let organisationUniqueKey = "sd-gdf45df-09486-sdg5sfd-546sdf"
 let AxiosApi = {
     // /login Api call
@@ -53,29 +52,35 @@ let AxiosApi = {
     },
 
     ////registrationMembershipFeeList in membership table in the registration tab
-    registrationMembershipFeeList(offset, yearRefId) {
+    async registrationMembershipFeeList(offset, yearRefId) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
             paging: {
                 offset: offset,
                 limit: 10
             }
         };
-        var url = `/api/membershipproductfee/${yearRefId}`;
+        var url = `/api/membershipproductfee/${yearRefId}?organisationUniqueKey=${organisationUniqueKey}`;
         return Method.dataPost(url, token, body);
     },
 
 
 
     ///registration Competition fee list product delete
-    registrationCompetitionFeeListDelete(competitionId) {
-        var url = `/api/competitionfee/${competitionId}`;
+    async  registrationCompetitionFeeListDelete(competitionId) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        var url = `/api/competitionfee/${competitionId}?organisationUniqueKey=${organisationUniqueKey}`;
         return Method.dataDelete(url, token);
     },
 
     ///registration membership fee list product delete
-    registrationMembershipFeeListDelete(payload) {
+    async registrationMembershipFeeListDelete(payload) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let productId = payload.productId;
-        var url = `/api/membershipproduct/${productId}`;
+        var url = `/api/membershipproduct/${productId}?organisationUniqueKey=${organisationUniqueKey}`;
         return Method.dataDelete(url, token);
     },
 
@@ -88,9 +93,11 @@ let AxiosApi = {
 
 
     //////get the membership  product details
-    regGetMembershipProductDetails(payload) {
+    async regGetMembershipProductDetails(payload) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let productId = payload.productId
-        var url = `api/membershipproduct/details/${productId}`;
+        var url = `api/membershipproduct/details/${productId}?organisationUniqueKey=${organisationUniqueKey}`;
         return Method.dataGet(url, token);
     },
 

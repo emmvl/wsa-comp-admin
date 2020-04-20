@@ -8,9 +8,9 @@ import AppImages from "../../themes/appImages";
 import history from "../../util/history";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
-import { parseTwoDigitYear } from "moment";
+import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { NavLink } from 'react-router-dom';
+import { exportFilesAction } from "../../store/actions/appAction"
 const { Content } = Layout;
 const { Option } = Select;
 
@@ -31,14 +31,14 @@ function checkPlay(record) {
     let playTimeTeamMatches = JSON.parse(record.playTimeTeamMatches)
     let playTime = record.playTime ? JSON.parse(record.playTime) : 0
 
-    if(playTimeTeamMatches == 0 || playTimeTeamMatches == null){
+    if (playTimeTeamMatches === 0 || playTimeTeamMatches === null) {
         return ""
-    }else{
-       let result = 100 * (playTime / playTimeTeamMatches)
+    } else {
+        let result = 100 * (playTime / playTimeTeamMatches)
         return result.toFixed(2) + "%"
-    } 
+    }
 
-   
+
 
 }
 
@@ -59,14 +59,14 @@ function checkPlayTime(record) {
             var h = Math.floor(d / 3600);
             var m = Math.floor(d % 3600 / 60);
             var s = Math.floor(d % 3600 % 60);
-        
+
             var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
             var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
             var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
-            let time_value =  hDisplay + mDisplay + sDisplay; 
+            let time_value = hDisplay + mDisplay + sDisplay;
 
             return time_value
-           
+
         } else {
             if (record.playTime == 0) {
                 return record.playTime + " Periods"
@@ -86,67 +86,67 @@ const columns = [
         title: 'Player Id',
         dataIndex: 'player',
         key: 'player',
-        sorter: (a, b) => tableSort(a,b,"player"),
+        sorter: (a, b) => tableSort(a, b, "player"),
 
-        render: (player,record) => <NavLink to={{
-                pathname: '/liveScorePlayerView',
-                state: { tableRecord: player }
-            }} >
-               <span class="input-heading-add-another pt-0" >{player.mnbPlayerId ? player.mnbPlayerId : player.id}</span>
-            </NavLink>
-          
-            // sorter: (a, b) => tableSort(a, b, "id"),
-            // render: (id) => <NavLink to={{
-            //     pathname: '/liveScoreMatchDetails',
-            //     state: { matchId: id }
-            // }} >
-            //     <span class="input-heading-add-another pt-0" >{id}</span>
-            // </NavLink>
+        render: (player, record) => <NavLink to={{
+            pathname: '/liveScorePlayerView',
+            state: { tableRecord: player }
+        }} >
+            <span class="input-heading-add-another pt-0" >{player.mnbPlayerId ? player.mnbPlayerId : player.id}</span>
+        </NavLink>
+
+        // sorter: (a, b) => tableSort(a, b, "id"),
+        // render: (id) => <NavLink to={{
+        //     pathname: '/liveScoreMatchDetails',
+        //     state: { matchId: id }
+        // }} >
+        //     <span class="input-heading-add-another pt-0" >{id}</span>
+        // </NavLink>
     },
     {
         title: 'First name',
         dataIndex: 'firstName',
         key: 'firstName',
-        sorter: (a, b) => tableSort(a,b,"firstName"),          
+        sorter: (a, b) => tableSort(a, b, "firstName"),
 
-            render: (firstName,player) => <NavLink to={{
-                pathname: '/liveScorePlayerView',
-                state: { tableRecord: player }
-            }} >
-               <span class="input-heading-add-another pt-0" >{firstName}</span>
-            </NavLink>
+        render: (firstName, player) => <NavLink to={{
+            pathname: '/liveScorePlayerView',
+            state: { tableRecord: player }
+        }} >
+            <span class="input-heading-add-another pt-0" >{firstName}</span>
+        </NavLink>
     },
     {
         title: 'Last Name',
         dataIndex: 'lastName',
         key: 'lastName',
-        sorter: (a, b) => tableSort(a,b,"lastName"),
-    
-            render: (lastName,player) => <NavLink to={{
-                pathname: '/liveScorePlayerView',
-                state: { tableRecord: player }
-            }} >
-              <span class="input-heading-add-another pt-0" >{lastName}</span>
-            </NavLink>
+        sorter: (a, b) => tableSort(a, b, "lastName"),
+
+        render: (lastName, player) => <NavLink to={{
+            pathname: '/liveScorePlayerView',
+            state: { tableRecord: player }
+        }} >
+            <span class="input-heading-add-another pt-0" >{lastName}</span>
+        </NavLink>
     },
     {
         title: 'Team',
         dataIndex: 'team',
         key: 'team',
-        sorter: (a, b) =>  tableSort(a,b,"team"),
-            render: (team) => 
+        sorter: (a, b) => tableSort(a, b, "team"),
+        render: (team) =>
             <NavLink to={{
                 pathname: '/liveScoreTeamView',
                 state: { tableRecord: team, screenName: 'fromGameTimeList' }
             }} >
-              <span class="input-heading-add-another pt-0" >{team.name}</span>
+                <span class="input-heading-add-another pt-0" >{team.name}</span>
             </NavLink>
     },
     {
         title: 'DIV',
         dataIndex: 'division',
         key: 'division',
-        sorter: (a, b) => tableSort(a,b,"division"),
+        sorter: (a, b) => tableSort(a, b, "division"),
         render: (division) =>
             <span >{division ? division.name : ""}</span>
     },
@@ -185,7 +185,7 @@ class LiveScoreGameTimeList extends Component {
         this.state = {
             selectStatus: "Select Status",
             filter: "Period",
-            competitionId:null
+            competitionId: null
         };
         this_obj = this
     }
@@ -193,7 +193,7 @@ class LiveScoreGameTimeList extends Component {
     componentDidMount() {
         // let competitionId = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({competitionId : id})
+        this.setState({ competitionId: id })
         if (id !== null) {
             this.handleGameTimeTableList(1, id, this.state.filter)
         } else {
@@ -215,6 +215,12 @@ class LiveScoreGameTimeList extends Component {
         this.setState({ filter: data.filter })
         this.props.gameTimeStatisticsListAction(id, data.filter, offset)
     }
+
+    onExport() {
+        let url = AppConstants.gameTimeExport + this.state.competitionId + `&aggregate=${this.state.filter}`
+        this.props.exportFilesAction(url)
+    }
+
 
     ///////view for breadcrumb
     headerView = () => {
@@ -257,7 +263,7 @@ class LiveScoreGameTimeList extends Component {
                                         justifyContent: "flex-end",
                                         alignSelf: 'center',
                                     }}>
-                                    <Button href={AppConstants.gameTimeExport +this.state.competitionId +`&aggregate=${this.state.filter}`} className="primary-add-comp-form" type="primary">
+                                    <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img
@@ -287,7 +293,7 @@ class LiveScoreGameTimeList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         let dataSource = gameTimeStatisticsListResult ? gameTimeStatisticsListResult.stats : []
         let total = this.props.liveScoreGameTimeStatisticsState.gameTimeStatisticstotalCount
-     
+
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
@@ -329,7 +335,7 @@ class LiveScoreGameTimeList extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"15"} />
                 <Layout>
                     {this.headerView()}
@@ -344,7 +350,7 @@ class LiveScoreGameTimeList extends Component {
 // export default LiveScoreGameTimeList;
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ gameTimeStatisticsListAction }, dispatch)
+    return bindActionCreators({ gameTimeStatisticsListAction, exportFilesAction }, dispatch)
 }
 
 function mapStateToProps(state) {

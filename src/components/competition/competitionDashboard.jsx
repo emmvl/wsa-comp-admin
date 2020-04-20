@@ -10,7 +10,7 @@ import { clearCompReducerDataAction } from "../../store/actions/registrationActi
 import { competitionDashboardAction } from '../../store/actions/competitionModuleAction/competitionDashboardAction';
 import history from "../../util/history";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../util/helpers";
+import { isArrayNotEmpty } from "../../util/helpers";
 import moment from "moment";
 
 const { Content } = Layout;

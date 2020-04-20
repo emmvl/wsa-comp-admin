@@ -36,7 +36,8 @@ import {
   getOnlyYearAndCompetitionListSaga,
   getParticipateYearAndCompetitionListSaga,
   getOwnYearAndCompetitionListSaga,
-  getEnhancedRoundRobinTypesSaga
+  getEnhancedRoundRobinTypesSaga,
+  exportFilesSaga
 } from "./appSaga";
 
 import {
@@ -584,4 +585,5 @@ export default function* root_saga() {
 
   yield takeEvery(ApiConstants.API_COMPETITION_PLAYER_IMPORT_LOAD, importCompetitionPlayer);
 
+  yield takeEvery(ApiConstants.API_EXPORT_FILES_LOAD, exportFilesSaga)
 }

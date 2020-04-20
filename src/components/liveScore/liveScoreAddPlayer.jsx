@@ -149,10 +149,10 @@ class LiveScoreAddPlayer extends Component {
     ////////form content view
     contentView = (getFieldDecorator) => {
         // let teamData = this.props.liveScoreState.teamResult ? this.props.liveScoreState.teamResult : []
-        const { playerData } = this.props.liveScorePlayerState
-        const teamResult = this.props.liveScoreTeamState;
+        const { playerData, teamResult } = this.props.liveScorePlayerState
+        // const teamResult = this.props.liveScoreTeamState;
         // const teamData = teamResult.teamResult;
-        let teamData = isArrayNotEmpty(teamResult.teamResult) ? teamResult.teamResult : []
+        let teamData = isArrayNotEmpty(teamResult) ?teamResult : []
 
         return (
             <div className="content-view pt-0">
