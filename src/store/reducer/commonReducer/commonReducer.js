@@ -202,9 +202,9 @@ function commonReducerState(state = initialState, action) {
             return { ...state, venueList: action.filterData }
 
         case ApiConstants.CLEAR_FILTER_SEARCH:
+            state.venueList = state.mainVenueList
             return {
-                ...state,
-                venueList: [...state.mainVenueList],
+                ...state
             }
         ////Venue List for User Module
         case ApiConstants.API_VENUES_LIST_LOAD:

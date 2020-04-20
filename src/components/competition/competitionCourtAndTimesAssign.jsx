@@ -307,7 +307,6 @@ class CompetitionCourtAndTimesAssign extends Component {
                                             }
 
                                     }
-                                    console.log(manualAllVenueObj)
                                     timeSlotManualperVenueArray.push(manualAllVenueObj)
                                 }
                             }
