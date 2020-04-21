@@ -13,6 +13,7 @@ import { liveScoreMatchListAction } from '../../store/actions/LiveScoreAction/li
 import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
 import {  liveScore_MatchFormate } from '../../themes/dateformate'
+import { exportFilesAction } from "../../store/actions/appAction"
 
 /////function to sort table column
 function tableSort(a, b, key) {
@@ -78,7 +79,7 @@ const columns = [
         dataIndex: 'venueCourt',
         key: 'venueCourt',
         sorter: (a, b) => tableSort(a, b, "venueCourt"),
-        render: (venueCourt) => <span>{venueCourt.venue.name}</span>
+        render: (venueCourt, record) => <span>{venueCourt.name}</span>
     },
     {
         title: 'Division',
@@ -146,6 +147,12 @@ class LiveScoreMatchesList extends Component {
 
     }
 
+    onExport() {
+        let url = AppConstants.matchExport +this.state.competitionId
+        this.props.exportFilesAction(url)
+    }
+
+
     ///////view for breadcrumb
     headerView = () => {
         return (
@@ -189,7 +196,7 @@ class LiveScoreMatchesList extends Component {
                                     }}
                                 >
 
-                                    <Button href={AppConstants.matchExport +this.state.competitionId }  className="primary-add-comp-form" type="primary">
+                                    <Button onClick = {()=>this.onExport()}  className="primary-add-comp-form" type="primary">
 
                                         <div className="row">
                                             <div className="col-sm">
@@ -286,7 +293,7 @@ class LiveScoreMatchesList extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScoreMatchListAction }, dispatch)
+    return bindActionCreators({ liveScoreMatchListAction,exportFilesAction }, dispatch)
 }
 
 function mapStateToProps(state) {

@@ -155,7 +155,8 @@ class LiveScoreCompetitions extends Component {
         super(props);
         this.state = {
             year: "2019",
-            onLoad : false
+            onLoad : false,
+            orgKey :getOrganisationData() ? getOrganisationData().organisationId :null
         }
         this_Obj = this
         // this.orgKey = getOrganisationData().organisationUniqueKey
@@ -198,7 +199,7 @@ class LiveScoreCompetitions extends Component {
                 "offset": 0
             }
         }
-         this.props.liveScoreCompetionActioninitiate(body, selectedYear)
+         this.props.liveScoreCompetionActioninitiate(body, selectedYear, this.state.orgKey)
         
     } 
 
@@ -237,7 +238,7 @@ class LiveScoreCompetitions extends Component {
             }
         }
 
-        this.props.liveScoreCompetionActioninitiate(body, this.state.year)
+        this.props.liveScoreCompetionActioninitiate(body, this.state.year, this.state.orgKey)
     }
 
     onChnageYear=(evt)=>{

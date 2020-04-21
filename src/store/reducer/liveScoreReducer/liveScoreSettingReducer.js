@@ -95,7 +95,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 // error: payload
             }
         case ApiConstants.LiveScore_SETTING_CHANGE_FORM:
-            console.log(payload)
+          
             const keys = payload.key
             const Data = payload.data
             return {

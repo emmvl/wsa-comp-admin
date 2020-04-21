@@ -3,11 +3,10 @@ import { message } from "antd";
 import ApiConstants from "../../../themes/apiConstants";
 import LiveScoreAxiosApi from '../../http/liveScoreHttp/liveScoreAxiosApi';
 
-export function* liveScoreCompetitionSaga({ payload }) {
+export function* liveScoreCompetitionSaga({ payload, year, orgKey }) {
     // yield console.log('%%%%', action)
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreCompetition, payload)
-        console.log(result)
+        const result = yield call(LiveScoreAxiosApi.liveScoreCompetition, payload, year, orgKey)
         if (result.status === 1) {
             yield put({ type: ApiConstants.API_LIVESCORE_COMPETITION_SUCCESS, payload: result.result.data })
         } else {

@@ -114,6 +114,34 @@ class CompetitionPartPlayerGrades extends Component {
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.playerGrading}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
+                    <div className="col-sm" style={{
+                        display: "flex", flexDirection: 'row', alignItems: "center",
+                        justifyContent: "flex-end", width: "100%", marginRight: '2.8%'
+                    }}>
+                        <div className="row">
+                            <div className="col-sm">
+                                <div className="comp-dashboard-botton-view-mobile">
+                                    <NavLink to={{
+                                        pathname: `/competitionPlayerImport`,
+                                        state: { divisionId: this.state.divisionId, competitionId: this.state.firstTimeCompId, screenNavigationKey: 'ProposedPlayerGrading' }
+                                    }}>
+                                        <Button className="primary-add-comp-form" type="primary">
+                                            <div className="row">
+                                                <div className="col-sm">
+                                                    <img
+                                                        src={AppImages.import}
+                                                        alt=""
+                                                        className="export-image"
+                                                    />
+                                                    {AppConstants.import}
+                                                </div>
+                                            </div>
+                                        </Button>
+                                    </NavLink>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div >
         )

@@ -139,8 +139,7 @@ class LiveScoreTeam extends Component {
     /// Handle Page change
     handlePageChnage(page) {
         let offset = page ? 10 * (page - 1) : 0;
-        this.props.getTeamsWithPagging(this.state.conpetitionId, offset, 10)
-
+        this.props.getTeamsWithPagging(this.state.conpetitionId, offset, 10, this.state.searchText)
     }
 
     // on change search text

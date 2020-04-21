@@ -1212,7 +1212,7 @@ class RegistrationForm extends Component {
     userRegisrationLinkView = () => {
         let formDataValue = this.props.registrationState.registrationFormData !== 0 ?
             this.props.registrationState.registrationFormData[0] : [];
-        let statusRefId = formDataValue.statusRefId
+             let statusRefId = formDataValue.statusRefId
         return (
             <div>
                 {statusRefId == 2 ?

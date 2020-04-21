@@ -42,7 +42,8 @@ class CompetitionFormat extends Component {
             getDataLoading: false,
             buttonPressed: "",
             loading: false,
-            isFinalAvailable: false
+            isFinalAvailable: false,
+            matchTypeRefStateId: 0
         }
 
         this.referenceApiCalls();
@@ -330,11 +331,16 @@ class CompetitionFormat extends Component {
            // this.props.updateCompetitionFormatAction(fixtureTemplateId, "fixtureTemplateId");
            } 
         }
+        else if(fieldName == "matchTypeRefId")
+        {
+            this.setFormFieldValue();
+            //this.setState({matchTypeRefStateId: id})
+        }
         
         this.props.updateCompetitionFormatAction(id, fieldName);
     }
     onChangeSetCompFormatDivisionValue = (id, fieldName, competitionFormatDivisions, index) =>{
-        console.log("fieldName::" + fieldName);
+        console.log("fieldName::" + fieldName + ":::" + id);
         if(fieldName == "matchDuration")
         {
             competitionFormatDivisions[index].matchDuration = id;
@@ -701,7 +707,8 @@ class CompetitionFormat extends Component {
                                 <div className="col-sm" >
                                 <Form.Item >
                                     {getFieldDecorator(`matchDuration${index}`, {
-                                        rules: [{ required: true, message: ValidationConstants.matchDuration }]
+                                        rules: [{ required: true,   pattern: new RegExp("^[1-9][0-9]*$"),
+                                            message: ValidationConstants.matchDuration }]
                                     })(
                                     <InputWithHead heading={AppConstants.matchDuration} 
                                         required={"required-field"}
@@ -715,10 +722,10 @@ class CompetitionFormat extends Component {
                                 <div className="col-sm" >
                                     <Form.Item >
                                     {getFieldDecorator(`mainBreak${index}`, {
-                                        rules: [{ required: true, message: ValidationConstants.mainBreak }]
+                                        rules: [{ required: ((data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? true : false), message: ValidationConstants.mainBreak }]
                                     })(
                                         <InputWithHead heading={AppConstants.mainBreak} 
-                                        required={"required-field"}
+                                        required={(data.matchTypeRefId == 2 || data.matchTypeRefId == 3 ) ? "required-field": null}
                                         placeholder={AppConstants.mins} 
                                         setFieldsValue={item.mainBreak}
                                         onChange={(e)=>this.onChangeSetCompFormatDivisionValue(e.target.value, 'mainBreak',
@@ -730,10 +737,10 @@ class CompetitionFormat extends Component {
                                 <div className="col-sm" >
                                     <Form.Item >
                                     {getFieldDecorator(`qtrBreak${index}`, {
-                                        rules: [{ required: true, message: ValidationConstants.qtrBreak }]
+                                        rules: [{ required: ( data.matchTypeRefId == 3 ? true : false ), message: ValidationConstants.qtrBreak }]
                                     })(
                                         <InputWithHead heading={AppConstants.qtrBreak} placeholder={AppConstants.mins} 
-                                        required={"required-field"}
+                                        required={(data.matchTypeRefId == 3) ? "required-field": null}
                                         setFieldsValue={item.qtrBreak} 
                                         onChange={(e)=>this.onChangeSetCompFormatDivisionValue(e.target.value, 'qtrBreak',
                                         data.competionFormatDivisions, index)}></InputWithHead>
