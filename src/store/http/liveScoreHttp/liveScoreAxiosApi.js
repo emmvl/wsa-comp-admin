@@ -108,8 +108,14 @@ let LiveScoreAxiosApi = {
         const url = `/competitions/id/${data}`
         return Method.dataDelete(url, localStorage.token)
     },
-    liveScoreCompetition(data) {
-        const url = `/competitions/admin`;
+    liveScoreCompetition(data, year, orgKey) {
+        var url = null;
+        if(orgKey){
+            url = `/competitions/admin?organisationId=${orgKey}`;
+        }else{
+             url = `/competitions/admin`;
+        }
+       
         // const url = `/competitions/admin?organisationid=${81}`;
         return Method.dataPost(url, null, data)
     },
@@ -184,8 +190,6 @@ let LiveScoreAxiosApi = {
 
     liveScoreCreateMatch(data, competitionId) {
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-
-        console.log(data, 'liveScoreCreateMatch')
 
         let body = {
             "id": data.id ? data.id : 0,
@@ -712,9 +716,21 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token);
     },
 
+
+    //// Export Files 
+
      exportFiles(url){
         console.log("url", url);
         return Method.dataGetDownload(url, localStorage.token);
+    },
+
+    //// venue Change 
+    venueChangeApi(competitionId , details, start, end){
+        let courtArray = JSON.stringify(details.courtId)
+        console.log(courtArray)
+        let url = `/matches/bulk/courts?competitionId=${competitionId}&startTime=${start}&endTime=${end}&fromCourtIds=${courtArray}&toCourtId=${details.changeToCourtId}`
+        let body = null
+        return Method.dataPost(url, localStorage.token, body);
     }
 
 };

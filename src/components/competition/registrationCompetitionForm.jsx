@@ -621,7 +621,8 @@ class RegistrationCompetitionForm extends Component {
             yearRefId: compFeesState.competitionDetailData.yearRefId,
             competitionTypeRefId: compFeesState.competitionDetailData.competitionTypeRefId,
             competitionFormatRefId: compFeesState.competitionDetailData.competitionFormatRefId,
-            selectedVenues: compFeesState.selectedVenues
+            selectedVenues: compFeesState.selectedVenues,
+            startDate: compFeesState.competitionDetailData.startDate && moment(compFeesState.competitionDetailData.startDate),
         })
         let data = this.props.competitionFeesState.competionDiscountValue
         let discountData = data && data.competitionDiscounts !== null ? data.competitionDiscounts[0].discounts : []
@@ -1427,15 +1428,20 @@ class RegistrationCompetitionForm extends Component {
                         <div className="col-sm">
                             <InputWithHead heading={AppConstants.startDate} />
 
-                            <DatePicker
-                                size="large"
-                                style={{ width: "100%" }}
-                                onChange={date => this.dateOnChangeFrom(date, "startDate")}
-                                format={"DD-MM-YYYY"}
-                                showTime={false}
-                                value={detailsData.competitionDetailData.startDate && moment(detailsData.competitionDetailData.startDate, "YYYY-MM-DD")}
-                                disabled={compDetailDisable}
-                            />
+                            <Form.Item >
+                                {getFieldDecorator('startDate',
+                                    { rules: [{ required: true, message: ValidationConstants.startDateIsRequired }] })(
+                                        <DatePicker
+                                            size="large"
+                                            style={{ width: "100%" }}
+                                            onChange={date => this.dateOnChangeFrom(date, "startDate")}
+                                            format={"DD-MM-YYYY"}
+                                            showTime={false}
+                                            // value={detailsData.competitionDetailData.startDate && moment(detailsData.competitionDetailData.startDate, "YYYY-MM-DD")}
+                                            disabled={compDetailDisable}
+                                        />
+                                    )}
+                            </Form.Item>
 
                         </div>
                         <div className="col-sm">

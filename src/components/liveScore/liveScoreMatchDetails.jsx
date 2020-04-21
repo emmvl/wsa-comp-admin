@@ -15,12 +15,24 @@ import { getLiveScoreCompetiton } from '../../util/sessionStorage';
 import history from "../../util/history";
 const { Content } = Layout;
 const { confirm } = Modal;
+
+
+/////function to sort table column
+function tableSort(a, b, key) {
+    let stringA = JSON.stringify(a[key])
+    let stringB = JSON.stringify(b[key])
+    return stringA.localeCompare(stringB)
+}
+
+
+
+
 const columns = [
     {
         title: 'Profile Picture',
         dataIndex: 'photoUrl',
         key: 'photoUrl',
-        sorter: (a, b) => a.photoUrl.length - b.photoUrl.length,
+        sorter: (a, b) => tableSort(a,b, "photoUrl"),
         render: (photoUrl) =>
             // <img className="live-score-user-image" src={AppImages.playerDp} alt="" height="70" width="70" />
             photoUrl ?
@@ -32,7 +44,7 @@ const columns = [
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
-        sorter: (a, b) => a.name.length - b.name.length,
+        sorter: (a, b) => tableSort(a,b, "name"),
         // render: (record, name) => console.log(record, 'record')
         // <NavLink to={{
         //     pathname: '/liveScorePlayerProfile',
@@ -46,14 +58,14 @@ const columns = [
         title: 'Team',
         dataIndex: 'team',
         key: 'team',
-        sorter: (a, b) => a.team.length - b.team.length,
+        sorter: (a, b) => tableSort(a,b, "team"),
         // render: (record) => <span class="input-heading-add-another pt-0" >{record.team.name}</span>
     },
     {
         title: 'Played?',
         dataIndex: 'attended',
         key: 'attended',
-        sorter: (a, b) => a.attended.length - b.attended.length,
+        sorter: (a, b) => tableSort(a,b, "attended"),
         render: attended =>
             <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
                 <img className="dot-image"

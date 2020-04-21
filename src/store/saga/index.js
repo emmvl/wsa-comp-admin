@@ -163,6 +163,8 @@ import { liveScoreTeamAttendanceListSaga } from './liveScoreSaga/liveScoreTeamAt
 
 import { laddersSettingGetMatchResult, laddersSettingGetData, laddersSettingPostData } from './liveScoreSaga/liveScoreLadderSettingSaga'
 
+import {liveScoreChangeVenueSaga} from "./liveScoreSaga/liveScoreVenueChangeSaga"
+
 export default function* root_saga() {
   yield takeEvery(ApiConstants.API_LOGIN_LOAD, loginApiSaga);
   yield takeEvery(ApiConstants.API_ROLE_LOAD, userSaga.getRoleSaga);
@@ -586,4 +588,6 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_COMPETITION_PLAYER_IMPORT_LOAD, importCompetitionPlayer);
 
   yield takeEvery(ApiConstants.API_EXPORT_FILES_LOAD, exportFilesSaga)
+
+  yield takeEvery(ApiConstants.API_SAVE_VENUE_CHANGE_LOAD,liveScoreChangeVenueSaga)
 }

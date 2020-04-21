@@ -13,10 +13,14 @@ import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { liveScore_formateDateTime } from '../../themes/dateformate'
 import { exportFilesAction } from "../../store/actions/appAction"
 let this_Obj = null
-function checkSorting(a, b, key) {
-    if (a[key] && b[key]) {
-        return a[key].length - b[key].length
-    }
+
+
+
+/////function to sort table column
+function tableSort(a, b, key) {
+    let stringA = JSON.stringify(a[key])
+    let stringB = JSON.stringify(b[key])
+    return stringA.localeCompare(stringB)
 }
 
 
@@ -39,7 +43,7 @@ class LiveScoreGoalList extends Component {
                     title: 'Match Id',
                     dataIndex: 'matchId',
                     key: 'matchId',
-                    sorter: (a, b) => checkSorting(a, b, "matchId"),
+                    sorter: (a, b) => tableSort(a, b, "matchId"),
 
 
                 },
@@ -47,7 +51,7 @@ class LiveScoreGoalList extends Component {
                     title: 'Date',
                     dataIndex: 'startTime',
                     key: 'startTime',
-                    sorter: (a, b) => checkSorting(a, b, "startTime"),
+                    sorter: (a, b) => tableSort(a, b, "startTime"),
                     render: (startTime) => <span  >{liveScore_formateDateTime(startTime)}</span>
 
                 },
@@ -55,13 +59,13 @@ class LiveScoreGoalList extends Component {
                     title: 'Team',
                     dataIndex: 'teamName',
                     key: 'teamName',
-                    sorter: (a, b) => checkSorting(a, b, "teamName"),
+                    sorter: (a, b) => tableSort(a, b, "teamName"),
                 },
                 {
                     title: 'First Name',
                     dataIndex: 'firstName',
                     key: 'firstName',
-                    sorter: (a, b) => checkSorting(a, b, "firstName"),
+                    sorter: (a, b) => tableSort(a, b, "firstName"),
                     render: (firstName, record) =>
                         <NavLink to={{
                             pathname: '/liveScorePlayerView',
@@ -74,7 +78,7 @@ class LiveScoreGoalList extends Component {
                     title: 'Last Name',
                     dataIndex: 'lastName',
                     key: 'lastName',
-                    sorter: (a, b) => checkSorting(a, b, 'lastName'),
+                    sorter: (a, b) => tableSort(a, b, 'lastName'),
                     render: (lastName, record) =>
                         <NavLink to={{
                             pathname: '/liveScorePlayerView',
@@ -87,14 +91,14 @@ class LiveScoreGoalList extends Component {
                     title: 'Position',
                     dataIndex: 'gamePositionName',
                     key: 'gamePositionName',
-                    sorter: (a, b) => checkSorting(a, b, "gamePositionName"),
+                    sorter: (a, b) => tableSort(a, b, "gamePositionName"),
 
                 },
                 {
                     title: 'Misses',
                     dataIndex: 'miss',
                     key: 'miss',
-                    sorter: (a, b) => checkSorting(a, b, "miss"),
+                    sorter: (a, b) => tableSort(a, b, "miss"),
                 },
                 // {
                 //     title: 'Attempts',
@@ -106,14 +110,14 @@ class LiveScoreGoalList extends Component {
                     title: 'Goals',
                     dataIndex: 'goal',
                     key: 'goal',
-                    sorter: (a, b) => checkSorting(a, b, "goal"),
+                    sorter: (a, b) => tableSort(a, b, "goal"),
 
                 },
                 {
                     title: 'Goals%',
                     dataIndex: 'goal_percent',
                     key: 'goal_percent',
-                    sorter: (a, b) => checkSorting(a, b, "goal_percent"),
+                    sorter: (a, b) => tableSort(a, b, "goal_percent"),
                 },
             ],
             columns2: [
@@ -121,13 +125,13 @@ class LiveScoreGoalList extends Component {
                     title: 'Team',
                     dataIndex: 'teamName',
                     key: 'teamName',
-                    sorter: (a, b) => checkSorting(a, b, "teamName"),
+                    sorter: (a, b) => tableSort(a, b, "teamName"),
                 },
                 {
                     title: 'First Name',
                     dataIndex: 'firstName',
                     key: 'firstName',
-                    sorter: (a, b) => checkSorting(a, b, "firstName"),
+                    sorter: (a, b) => tableSort(a, b, "firstName"),
                     render: (firstName, record) =>
                         <NavLink to={{
                             pathname: '/liveScorePlayerView',
@@ -140,7 +144,7 @@ class LiveScoreGoalList extends Component {
                     title: 'Last Name',
                     dataIndex: 'lastName',
                     key: 'lastName',
-                    sorter: (a, b) => checkSorting(a, b, 'lastName'),
+                    sorter: (a, b) => tableSort(a, b, 'lastName'),
                     render: (lastName, record) =>
                         <NavLink to={{
                             pathname: '/liveScorePlayerView',
@@ -153,13 +157,13 @@ class LiveScoreGoalList extends Component {
                     title: 'Position',
                     dataIndex: 'gamePositionName',
                     key: 'gamePositionName',
-                    sorter: (a, b) => checkSorting(a, b, "gamePositionName"),
+                    sorter: (a, b) => tableSort(a, b, "gamePositionName"),
                 },
                 {
                     title: 'Misses',
                     dataIndex: 'miss',
                     key: 'miss',
-                    sorter: (a, b) => checkSorting(a, b, "miss"),
+                    sorter: (a, b) => tableSort(a, b, "miss"),
                 },
                 // {
                 //     title: 'Attempts',
@@ -171,13 +175,13 @@ class LiveScoreGoalList extends Component {
                     title: 'Goals',
                     dataIndex: 'goal',
                     key: 'goal',
-                    sorter: (a, b) => checkSorting(a, b, "goal"),
+                    sorter: (a, b) => tableSort(a, b, "goal"),
                 },
                 {
                     title: 'Goals%',
                     dataIndex: 'goal_percent',
                     key: 'goal_percent',
-                    sorter: (a, b) => checkSorting(a, b, "goal_percent"),
+                    sorter: (a, b) => tableSort(a, b, "goal_percent"),
                 },
             ],
             competitionId: null

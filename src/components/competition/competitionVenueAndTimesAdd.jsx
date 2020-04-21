@@ -669,7 +669,6 @@ class CompetitionVenueAndTimesAdd extends Component {
                     message.error(ValidationConstants.emptyGameDaysValidation);
                 }
                 else {
-                    venuData['screenHeader'] = this.state.screenHeader;
                     this.props.addVenueAction(venuData)
                     this.setState({ saveContraintLoad: true });
                 }

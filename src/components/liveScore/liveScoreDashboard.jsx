@@ -91,10 +91,11 @@ const columnActiveNews = [
         title: "Published Date",
         dataIndex: 'published_at',
         key: 'published_at',
+          sorter: (a, b) => tableSort(a, b, 'published_at'),
         render: (published_at) =>
             <span>{published_at && liveScore_formateDate(published_at)}</span>
 
-        // sorter: (a, b) => tableSort(a, b, 'Published_date'),
+      
 
     },
     {
@@ -175,7 +176,7 @@ const columnsTodaysMatch = [
         dataIndex: 'division',
         key: 'division',
         //sorter: (a, b) => a.division.name.length - b.division.name.length,
-        sorter: (a, b, division) => tableSort(a, b, division.name),
+        // sorter: (a, b, division) => tableSort(a, b, division.name),
         render: (division) =>
             <span >{division.name}</span>
     },
@@ -183,7 +184,7 @@ const columnsTodaysMatch = [
         title: "Score",
         dataIndex: 'score',
         key: 'score',
-        sorter: (a, b, records) => tableSort(a, b, records.team1Score, records.team2Score),
+        // sorter: (a, b, records) => tableSort(a, b, records.team1Score, records.team2Score),
         render: (score, records) =>
             <NavLink to={{
                 pathname: '/liveScoreMatchDetails',
@@ -194,7 +195,7 @@ const columnsTodaysMatch = [
         dataIndex: 'competition',
         key: 'competition',
         //sorter: (a, b) => a.competition.recordUmpire.length - b.competition.recordUmpire.length,
-        sorter: (a, b, competition) => tableSort(a, b, competition.recordUmpire),
+        // sorter: (a, b, competition) => tableSort(a, b, competition.recordUmpire),
         render: (competition) =>
             <span class="input-heading-add-another pt-0" onClick={() => { console.log('hello clcicked ') }} >{competition.recordUmpire}</span>
     }, {
@@ -213,22 +214,7 @@ const columnsTodaysMatch = [
 
 
 ];
-const matchData = [
-    {
-        key: '1',
-        matchId: "121",
-        startTime: "27/1/2020 1:30PM",
-        home: "Peninsula 8",
-        away: "Peninsula 8",
-        venue: "Court 1",
-        status: "PTR",
-        div: "AH1",
-        score: "H-10 A-10",
-        umpire: "Sam",
-        scorer: "Sam"
-    },
 
-];
 
 const columnsTodaysIncient = [
     {

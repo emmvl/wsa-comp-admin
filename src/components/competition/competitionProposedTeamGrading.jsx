@@ -59,23 +59,10 @@ const columns = [
         key: 'sortOrder',
         sorter: (a, b) => tableSort(a, b, "sortOrder"),
         render: (sortOrder, record, index) => (
-            // record.isDirectRegistration == 0 ? (
-            //     <span >{sortOrder}</span>
-            // ) : (
-            //     <Select className="select-inside-team-grades-table"
-            //     value={sortOrder}
-            //     onChange={(e) => this_obj.props.onchangeCompOwnFinalTeamGradingData(e, index, "sortOrder")}
-            //     >
-            //     {this_obj.props.ownTeamGradingState.teamRanks.map((item) => {
-            //         return <Option key={"rank" + item.id} value={item.id}>
-            //             {item.id}
-            //         </Option>
-            //     })}
-            //     </Select>
-                   
-            //     )
-
-            <Select className="select-inside-team-grades-table"
+            record.isDirectRegistration == 0 ? (
+                <span >{sortOrder}</span>
+            ) : (
+                <Select className="select-inside-team-grades-table"
                 value={sortOrder}
                 onChange={(e) => this_obj.props.onchangeCompOwnFinalTeamGradingData(e, index, "sortOrder")}
                 >
@@ -85,6 +72,8 @@ const columns = [
                     </Option>
                 })}
                 </Select>
+                   
+                )
         )
 
     },
@@ -94,21 +83,15 @@ const columns = [
         key: 'teamName',
         sorter: (a, b) => tableSort(a, b, "teamName"),
         render: (teamName, record, index) => (
-            // record.isDirectRegistration == 0 ? (
-            //     <span >{teamName}</span>
-            // ) : (
-            //         <Input className="input-inside-team-grades-table" style={{ width: '230px' }}
-            //             onChange={e => this_obj.props.onchangeCompOwnFinalTeamGradingData(e.target.value, index, "teamName")}
-            //             placeholder={"Team Name"}
-            //             value={teamName}
-            //         />
-            //     )
-
-            <Input className="input-inside-team-grades-table" style={{ width: '230px' }}
-            onChange={e => this_obj.props.onchangeCompOwnFinalTeamGradingData(e.target.value, index, "teamName")}
-            placeholder={"Team Name"}
-            value={teamName}
-            />
+            record.isDirectRegistration == 0 ? (
+                <span >{teamName}</span>
+            ) : (
+                    <Input className="input-inside-team-grades-table" style={{ width: '230px' }}
+                        onChange={e => this_obj.props.onchangeCompOwnFinalTeamGradingData(e.target.value, index, "teamName")}
+                        placeholder={"Team Name"}
+                        value={teamName}
+                    />
+                )
         )
     },
     {
