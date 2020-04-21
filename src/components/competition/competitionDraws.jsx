@@ -591,7 +591,10 @@ class CompetitionDraws extends Component {
                         className={
                           'box purple-bg'
                         }
-                        style={{ backgroundColor: slotObject.colorCode, left: leftMargin, top: topMargin }}
+                        style={{
+                          backgroundColor: slotObject.colorCode, left: leftMargin, top: topMargin, overflow: "hidden",
+                          whiteSpace: "nowrap",
+                        }}
                       >
                         <Swappable
                           id={index.toString() + ':' + slotIndex.toString()}

@@ -214,7 +214,7 @@ class LiveScoreSettingsView extends Component {
     };
 
     handleSearch = (value, data) => {
-        console.log(value, data)
+
         const filteredData = data.filter(memo => {
             return memo.venueName.indexOf(value) > -1
         })
@@ -236,7 +236,7 @@ class LiveScoreSettingsView extends Component {
         let grade = this.state.venueData
         const applyTo1 = [{ label: 'Record Umpire', value: "recordUmpire" }, { label: ' Game Time Tracking', value: "gameTimeTracking" }, { label: 'Position Tracking', value: "positionTracking" }];
         const applyTo2 = [{ label: 'Record Goal Attempts', value: "recordGoalAttempts" }, { label: 'Centre Pass Enabled', value: "centrePassEnabled" }, { label: 'Incidents Enabled', value: "incidentsEnabled" }];
-        console.log(this.props.venueList, 'this.props.venueList')
+
         return (
             <div className="content-view pt-4">
                 <Form.Item>
@@ -250,7 +250,6 @@ class LiveScoreSettingsView extends Component {
                             name="competitionName"
                             // value="xyz"
                             onChange={(e) => {
-                                console.log(e.target.name, e.target.value)
                                 this.props.onChangeSettingForm({ key: e.target.name, data: e.target.value })
                             }}
                         />
@@ -268,7 +267,6 @@ class LiveScoreSettingsView extends Component {
                             name="shortName"
                             // value="xyz"
                             onChange={(e) => {
-                                console.log(e.target.name, e.target.value)
                                 this.props.onChangeSettingForm({ key: e.target.name, data: e.target.value })
                             }}
                         />

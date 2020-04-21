@@ -53,9 +53,7 @@ const columns = [
         key: 'teamName',
         sorter: (a, b) => tableSort(a, b, 'teamName'),
         render: (teamName) =>
-
             <span className="input-heading-add-another pt-0">{teamName}</span>
-
 
     },
     {
@@ -164,7 +162,7 @@ class LiveScoreTeamAttendance extends Component {
     }
 
     onExport() {
-        let url = AppConstants.teamAttendaneExport + this.state.competitionId + `&aggregate=${this.state.selectStatus}`
+        let url = AppConstants.teamAttendaneExport + this.state.competitionId + `&status=${this.state.selectStatus}`
         this.props.exportFilesAction(url)
     }
 

@@ -63,7 +63,7 @@ function timeSlotEntity(entityId, SelectedEntity) {
     }
 
     for (let i in SelectedEntity) {
-        if (SelectedEntity[i].venuePreferenceTypeRefId == entityId) {
+        if (SelectedEntity[i].venuePreferenceEntityId == entityId) {
             object = {
                 status: true,
                 result: SelectedEntity[i]
@@ -187,11 +187,11 @@ function getTimeSlotPerVenueEntity(timeSlotArr, rotationId) {
             timeSlotArr[i]["timeSlotEntityManualkey"] = []
             timeSlotArr[i]["timeSlotEntityGradeKey"] = []
             for (let k in perVenueEntity) {
-                if (rotationId == 4) {
-                    timeSlotArr[i]["timeSlotEntityManualkey"].push(perVenueEntity[k].venuePreferenceTypeRefId)
+                if (rotationId == 4 && perVenueEntity[k].venuePreferenceTypeRefId == 1) {
+                    timeSlotArr[i]["timeSlotEntityManualkey"].push(perVenueEntity[k].venuePreferenceEntityId)
                 }
-                else {
-                    timeSlotArr[i]["timeSlotEntityGradeKey"].push(perVenueEntity[k].venuePreferenceTypeRefId)
+                else if ((rotationId == 5 && perVenueEntity[k].venuePreferenceTypeRefId == 2)) {
+                    timeSlotArr[i]["timeSlotEntityGradeKey"].push(perVenueEntity[k].venuePreferenceEntityId)
                 }
             }
         }
@@ -209,13 +209,11 @@ function getTimeSlotManualEntity(timeSlotsArr, rotationId) {
             timeSlotsArr[i]["timeSlotEntityManualkey"] = []
             timeSlotsArr[i]["timeSlotEntityGradeKey"] = []
             for (let k in entitiyArr) {
-                if (rotationId == 4) {
-                    timeSlotsArr[i]["timeSlotEntityManualkey"].push(entitiyArr[k].venuePreferenceTypeRefId)
+                if (rotationId == 4 && entitiyArr[k].venuePreferenceTypeRefId == 1) {
+                    timeSlotsArr[i]["timeSlotEntityManualkey"].push(entitiyArr[k].venuePreferenceEntityId)
                 }
-                else {
-                    timeSlotsArr[i]["timeSlotEntityGradeKey"].push(entitiyArr[k].venuePreferenceTypeRefId)
-
-
+                else if (rotationId == 5 && entitiyArr[k].venuePreferenceTypeRefId == 2) {
+                    timeSlotsArr[i]["timeSlotEntityGradeKey"].push(entitiyArr[k].venuePreferenceEntityId)
                 }
             }
         }
@@ -233,10 +231,10 @@ function getTimeSlotEntity(data, id) {
         data[i]["timeSlotEntityGradeKeyArr"] = []
         let entityInfoArr = data[i].competitionTimeslotsEntityInfo
         for (let j in entityInfoArr) {
-            if ((id == 4 && entityInfoArr[j].venuePreferenceEntityId == 1)) {
-                data[i]["timeSlotEntityManualkeyArr"].push(entityInfoArr[j].venuePreferenceTypeRefId)
-            } else if ((id == 5 && entityInfoArr[j].venuePreferenceEntityId == 2)) {
-                data[i]["timeSlotEntityGradeKeyArr"].push(entityInfoArr[j].venuePreferenceTypeRefId)
+            if ((id == 4 && entityInfoArr[j].venuePreferenceTypeRefId == 1)) {
+                data[i]["timeSlotEntityManualkeyArr"].push(entityInfoArr[j].venuePreferenceEntityId)
+            } else if ((id == 5 && entityInfoArr[j].venuePreferenceTypeRefId == 2)) {
+                data[i]["timeSlotEntityGradeKeyArr"].push(entityInfoArr[j].venuePreferenceEntityId)
             }
             // if (id == 4) {
             //     data[i]["timeSlotEntityManualkeyArr"].push(entityInfoArr[j].venuePreferenceTypeRefId)
@@ -254,8 +252,8 @@ function getTimeSlotEntity(data, id) {
             "competitionTimeslotsEntityInfo": [
                 {
                     "competitionVenueTimeslotEntityId": 0,
-                    "venuePreferenceTypeRefId": 0,
-                    "venuePreferenceEntityId": 0
+                    "venuePreferenceTypeRefId": "",
+                    "venuePreferenceEntityId": ""
                 }
             ],
             "timeSlotEntityManualkeyArr": [],
@@ -279,16 +277,16 @@ function getTimeSlotEntityObj(selectedEntityArray, value, mainId, index, ) {
         if (matchTimeSlot.status == true) {
             timeSlotEntityObject = {
                 "competitionVenueTimeslotEntityId": 0,
-                "venuePreferenceTypeRefId": matchTimeSlot.result.venuePreferenceTypeRefId,
-                "venuePreferenceEntityId": mainId == 4 ? 1 : 2
+                "venuePreferenceTypeRefId": mainId == 4 ? 1 : 2,
+                "venuePreferenceEntityId": matchTimeSlot.result.venuePreferenceEntityId
             }
         }
         else {
             timeSlotEntityObject =
                 {
                     "competitionVenueTimeslotEntityId": 0,
-                    "venuePreferenceTypeRefId": value[j],
-                    "venuePreferenceEntityId": mainId == 4 ? 1 : 2
+                    "venuePreferenceTypeRefId": mainId == 4 ? 1 : 2,
+                    "venuePreferenceEntityId": value[j]
                 }
         }
         modifiedEntityArray.push(timeSlotEntityObject)
@@ -306,14 +304,14 @@ function updateManualTimeSlotEntity(data, value, mainId, index) {
         if (matchTimeSlotManual.status == true) {
             timeSlotEntityManualObject = {
                 "competitionVenueTimeslotEntityId": 0,
-                "venuePreferenceTypeRefId": matchTimeSlotManual.result.venuePreferenceTypeRefId,
-                "venuePreferenceEntityId": mainId == 4 ? 1 : 2
+                "venuePreferenceTypeRefId": mainId == 4 ? 1 : 2,
+                "venuePreferenceEntityId": matchTimeSlotManual.result.venuePreferenceEntityId
             }
         } else {
             timeSlotEntityManualObject = {
                 "competitionVenueTimeslotEntityId": 0,
-                "venuePreferenceTypeRefId": value[i],
-                "venuePreferenceEntityId": mainId == 4 ? 1 : 2
+                "venuePreferenceTypeRefId": mainId == 4 ? 1 : 2,
+                "venuePreferenceEntityId": value[i]
             }
         }
         modifiedManualEntityArray.push(timeSlotEntityManualObject)
@@ -723,8 +721,8 @@ function CompetitionTimeSlots(state = initialState, action) {
                     "competitionTimeslotsEntityInfo": [
                         {
                             "competitionVenueTimeslotEntityId": 0,
-                            "venuePreferenceTypeRefId": 0,
-                            "venuePreferenceEntityId": 0
+                            "venuePreferenceTypeRefId": "",
+                            "venuePreferenceEntityId": ""
                         }
                     ],
                     "timeSlotEntityManualkeyArr": [],

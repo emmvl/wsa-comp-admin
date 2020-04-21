@@ -364,7 +364,7 @@ class CompetitionDashboard extends Component {
             <div className="comp-dash-table-view">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.competitionDashboardState.onLoad == true && true}
+                        loading={this.props.competitionDashboardState.onLoad === true && true}
                         className="home-dashboard-table"
                         columns={columnsOwned}
                         dataSource={this.props.competitionDashboardState.ownedCompetitions}

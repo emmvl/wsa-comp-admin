@@ -112,7 +112,8 @@ const ValidationConstants = {
     matchDuration: "Please enter a match duration",
     mainBreak: "Please enter a main break",
     qtrBreak: "Please enter a qtr break",
-    timeBetweenGames: "Please enter a time between games"
+    timeBetweenGames: "Please enter a time between games",
+    startDateIsRequired: 'Start date is required.',
 };
 
 export default ValidationConstants;

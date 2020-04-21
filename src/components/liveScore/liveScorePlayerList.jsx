@@ -16,13 +16,23 @@ import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStora
 
 const { Content } = Layout;
 
+
+/////function to sort table column
+function tableSort(a, b, key) {
+    let stringA = JSON.stringify(a[key])
+    let stringB = JSON.stringify(b[key])
+    return stringA.localeCompare(stringB)
+}
+
+
+
 const columns = [
 
     {
         title: 'Profile Picture',
         dataIndex: 'profilePicture',
         key: 'profilePicture',
-        sorter: (a, b) => a.profilePicture.length - b.profilePicture.length,
+        sorter: (a, b) => tableSort(a,b, "profilePicture"),
         render: (profilePicture) => {
             return (
                 profilePicture ? <img className="live-score-user-image" src={profilePicture} alt="" height="70" width="70" /> : <span>{AppConstants.noImage}</span>
@@ -34,14 +44,14 @@ const columns = [
         title: 'Player Id',
         dataIndex: 'playerId',
         key: 'playerId',
-        sorter: (a, b) => a.playerId.length - b.playerId.length,
+        sorter: (a, b) => tableSort(a,b, "playerId"),
 
     },
     {
         title: 'First Name',
         dataIndex: 'firstName',
         key: 'firstsName',
-        sorter: (a, b) => a.firstName.length - b.firstName.length,
+        sorter: (a, b) => tableSort(a,b, "firstName"),
         render: (firstName, record) =>
             <NavLink to={{
                 pathname: '/liveScorePlayerView',
@@ -54,7 +64,7 @@ const columns = [
         title: 'Last Name',
         dataIndex: 'lastName',
         key: 'lastName',
-        sorter: (a, b) => a.lastName.length - b.lastName.length,
+        sorter: (a, b) => tableSort(a,b, "lastName"),
         render: (lastName, record) =>
             <NavLink to={{
                 pathname: '/liveScorePlayerView',
@@ -67,7 +77,7 @@ const columns = [
         title: 'DOB',
         dataIndex: 'dob',
         key: 'dob',
-        // sorter: (a, b) => a.dob.length - b.dob.length,
+        sorter: (a, b) => tableSort(a,b, "dob"),
         render: (dob) =>
             <span  >{dob ? liveScore_formateDate(dob) : ""}</span>
     },
@@ -75,7 +85,7 @@ const columns = [
         title: 'Division',
         dataIndex: 'division',
         key: 'division',
-        sorter: (a, b) => a.division.length - b.division.length,
+        sorter: (a, b) => tableSort(a,b, "division"),
         render: (division) =>
             <span  >{division.name}</span>
     },
@@ -83,7 +93,7 @@ const columns = [
         title: 'Team',
         dataIndex: 'team',
         key: 'team',
-        sorter: (a, b) => a.team.length - b.team.length,
+        sorter: (a, b) =>  tableSort(a,b, "team"),
         render: (team, record) =>
             <NavLink to={{
                 pathname: "/liveScoreTeamView",
@@ -96,7 +106,7 @@ const columns = [
         title: 'Contact No',
         dataIndex: 'phoneNumber',
         key: 'phoneNumber',
-        // sorter: (a, b) => a.phoneNumber.length - b.phoneNumber.length,
+        sorter: (a, b) =>  tableSort(a,b, "phoneNumber"),
     },
 
 ];

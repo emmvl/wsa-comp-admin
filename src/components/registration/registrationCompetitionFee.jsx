@@ -1000,7 +1000,8 @@ class RegistrationCompetitionFee extends Component {
             competitionTypeRefId: compFeesState.competitionDetailData.competitionTypeRefId,
             competitionFormatRefId: compFeesState.competitionDetailData.competitionFormatRefId,
             registrationCloseDate: compFeesState.competitionDetailData.registrationCloseDate && moment(compFeesState.competitionDetailData.registrationCloseDate),
-            selectedVenues: compFeesState.selectedVenues
+            selectedVenues: compFeesState.selectedVenues,
+            startDate: compFeesState.competitionDetailData.startDate && moment(compFeesState.competitionDetailData.startDate),
         })
         let data = this.props.competitionFeesState.competionDiscountValue
         let discountData = data && data.competitionDiscounts !== null ? data.competitionDiscounts[0].discounts : []
@@ -1447,7 +1448,7 @@ class RegistrationCompetitionFee extends Component {
         if (data.files[0] !== undefined) {
             let files_ = data.files[0].type.split("image/")
             let fileType = files_[1]
-        
+
             if (data.files[0].size > AppConstants.logo_size) {
                 message.error(AppConstants.logoImageSize);
                 return
@@ -1620,7 +1621,7 @@ class RegistrationCompetitionFee extends Component {
                                 <label>
                                     <img
                                         src={detailsData.competitionDetailData.competitionLogoUrl == null ? AppImages.circleImage : detailsData.competitionDetailData.competitionLogoUrl}
-                                        alt=""
+                                        // alt="animated"
                                         height="120"
                                         width="120"
                                         style={{ borderRadius: 60 }}
@@ -1692,7 +1693,6 @@ class RegistrationCompetitionFee extends Component {
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 onChange={venueSelection => {
                                     this.onSelectValues(venueSelection, detailsData)
-
                                 }}
 
                                 // value={detailsData.selectedVenues}
@@ -1769,16 +1769,20 @@ class RegistrationCompetitionFee extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <InputWithHead heading={AppConstants.startDate} />
-
-                            <DatePicker
-                                size="large"
-                                style={{ width: "100%" }}
-                                onChange={date => this.dateOnChangeFrom(date, "startDate")}
-                                format={"DD-MM-YYYY"}
-                                showTime={false}
-                                value={detailsData.competitionDetailData.startDate && moment(detailsData.competitionDetailData.startDate, "YYYY-MM-DD")}
-                                disabled={compDetailDisable}
-                            />
+                            <Form.Item >
+                                {getFieldDecorator('startDate',
+                                    { rules: [{ required: true, message: ValidationConstants.startDateIsRequired }] })(
+                                        <DatePicker
+                                            size="large"
+                                            style={{ width: "100%" }}
+                                            onChange={date => this.dateOnChangeFrom(date, "startDate")}
+                                            format={"DD-MM-YYYY"}
+                                            showTime={false}
+                                            // value={detailsData.competitionDetailData.startDate && moment(detailsData.competitionDetailData.startDate, "YYYY-MM-DD")}
+                                            disabled={compDetailDisable}
+                                        />
+                                    )}
+                            </Form.Item>
 
                         </div>
                         <div className="col-sm">

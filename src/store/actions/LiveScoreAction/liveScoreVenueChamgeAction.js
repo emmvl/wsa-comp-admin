@@ -26,8 +26,22 @@ function clearFilter(key) {
     }
     return action
 }
+
+function onChangeVenueSaveAction(data, start, end, compId){
+    const action = {
+        type: ApiConstants.API_SAVE_VENUE_CHANGE_LOAD,
+        data,
+        start,
+        end,
+        compId
+    }
+    return action
+}
+
+
 export {
     liveScoreUpdateVenueChange,
     searchCourtList,
-    clearFilter
+    clearFilter,
+    onChangeVenueSaveAction,
 }

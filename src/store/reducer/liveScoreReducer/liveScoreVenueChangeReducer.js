@@ -18,11 +18,10 @@ const initialState = {
     result: [],
     status: 0,
     venueChangeData: venueChangeObj,
-
     venueData: "",
     courtData: "",
     courtDataForChange: "",
-    mainCourtList: []
+    mainCourtList: [],
 };
 
 function LiveScoreVenueChange(state = initialState, action) {
@@ -30,8 +29,6 @@ function LiveScoreVenueChange(state = initialState, action) {
     switch (action.type) {
 
         case ApiConstants.API_LIVE_SCORE_UPDATE_VENUE_CHANGE:
-
-
             if (action.key == "venueId") {
                 state.venueChangeData[action.key] = action.data
                 state.venueChangeData['courtId'] = []
@@ -42,7 +39,8 @@ function LiveScoreVenueChange(state = initialState, action) {
                     state.mainCourtList = courts
 
                 }
-            } if (action.key == "changeToVenueId") {
+            }
+            else if (action.key == "changeToVenueId") {
                 state.venueChangeData[action.key] = action.data
                 state.venueChangeData['changeToCourtId'] = []
 
@@ -73,7 +71,7 @@ function LiveScoreVenueChange(state = initialState, action) {
 
         //// Search Court Data
         case ApiConstants.API_SEARCH_COURT_LIST:
-            console.log(action)
+
             return {
                 ...state,
                 courtData: action.key == 'court_1' && action.data,
@@ -88,6 +86,47 @@ function LiveScoreVenueChange(state = initialState, action) {
                 courtDataForChange: action.key == 'court_2' && state.mainCourtList,
             }
 
+        case ApiConstants.API_SAVE_VENUE_CHANGE_LOAD:
+            console.log(action)
+            return {
+                ...state,
+                onLoad: true
+            }
+
+        case ApiConstants.API_SAVE_VENUE_CHANGE_SUCCESS:
+            // let emptyObject  = {
+            //     startDate: "",
+            //     startTime: "",
+            //     endDate: "",
+            //     endTime: "",
+            //     venueId: [],
+            //     courtId: [],
+            //     changeToVenueId: [],
+            //     changeToCourtId: []
+            // }
+            console.log("iscolled")
+
+        // state.venueChangeData = emptyObject
+
+        case ApiConstants.API_SAVE_VENUE_CHANGE_FAIL:
+
+            return {
+                ...state,
+                onLoad: false
+            }
+
+        case ApiConstants.API_SAVE_VENUE_CHANGE_ERROR:
+
+            return {
+                ...state,
+                onLoad: false
+            }
+
+
+            return {
+                ...state,
+                onLoad: false
+            }
 
         default:
             return state;

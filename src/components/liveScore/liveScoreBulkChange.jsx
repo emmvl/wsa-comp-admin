@@ -1224,12 +1224,7 @@ class LiveScoreBulkChange extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 if (selectedOption == 'pushBack') {
-                    // let formatedStartDate = formatDateTime(pushBackData.startDate, pushBackData.startTime)
-                    // let formatedEndDate = formatDateTime(pushBackData.endDate, pushBackData.endTime)
-                    // let startDate = moment(pushBackData.startDate).format("YYYY-MMM-DD")
-                    // let startTime = moment.utc(pushBackData.startTime).format("HH:mm")
-                    // let postStartDate = startDate + " " + startTime + " " + "UTC"
-                    // let formatedStartDate = new Date(postStartDate).toISOString()
+                
 
                     let startDate = moment(pushBackData.startDate).format("YYYY-MMM-DD")
                     let startTime = moment(pushBackData.startTime).format("HH:mm")

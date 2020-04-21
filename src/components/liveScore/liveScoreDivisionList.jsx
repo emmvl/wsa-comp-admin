@@ -17,26 +17,35 @@ const { SubMenu } = Menu;
 const { confirm } = Modal;
 let this_Obj = null;
 //// table columns
+/////function to sort table column
+function tableSort(a, b, key) {
+    let stringA = JSON.stringify(a[key])
+    let stringB = JSON.stringify(b[key])
+    return stringA.localeCompare(stringB)
+}
+
+
+
 
 const columns = [
     {
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
-        sorter: (a, b) => a.name.length - b.name.length,
+        sorter: (a, b) => tableSort(a,b, "name")
     },
 
     {
         title: 'Division',
         dataIndex: 'divisionName',
         key: 'divisionName',
-        sorter: (a, b) => a.name.length - b.name.length,
+        sorter: (a, b) => tableSort(a,b, "divisionName")
     },
     {
         title: 'Grade',
         dataIndex: 'grade',
         key: 'grade',
-        sorter: (a, b) => a.grade.length - b.grade.length,
+        sorter: (a, b) => tableSort(a,b, "grade")
     },
     {
         title: 'Action',
