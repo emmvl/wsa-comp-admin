@@ -456,14 +456,14 @@ class InnerHorizontalMenu extends React.Component {
                     defaultSelectedKeys={['1']}
                     style={{ lineHeight: '64px' }}
                     selectedKeys={[this.props.userSelectedKey]}>
+                     <Menu.Item key="1">
+                        <NavLink to="/homeDashboard" >
+                            <span >{AppConstants.dashboard}</span>
+                        </NavLink>
+                    </Menu.Item>
                     <SubMenu
-                        key="sub1"
-                        title={<span>{AppConstants.dashboard}</span>}>
-                         <Menu.Item key="1">
-                            <NavLink to="/homeDashboard" >
-                                <span >{AppConstants.home}</span>
-                            </NavLink>
-                        </Menu.Item>
+                        key="sub2"
+                        title={<span>{AppConstants.maintain}</span>}>
                         <Menu.Item key="2">
                             <NavLink to="/venuesList" >
                                 <span >{AppConstants.venueAndCourts}</span>
