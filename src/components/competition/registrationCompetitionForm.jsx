@@ -1426,7 +1426,7 @@ class RegistrationCompetitionForm extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
-                            <InputWithHead heading={AppConstants.startDate} />
+                            <InputWithHead heading={AppConstants.startDate} required={"required-field"} />
 
                             <Form.Item >
                                 {getFieldDecorator('startDate',

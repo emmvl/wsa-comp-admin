@@ -630,7 +630,7 @@ class CompetitionDrawEdit extends Component {
                                                             left: leftMargin
                                                         }}
                                                     >
-                                                        <span>{slotObject.gradeName}</span>
+                                                        <span>{slotObject.divisionName+ " - " +slotObject.gradeName}</span>
                                                     </div>
                                                     <span
                                                         className={'border'}

@@ -124,7 +124,7 @@ class CompetitionPlayerGrades extends Component {
                                 <div className="comp-dashboard-botton-view-mobile">
                                     <NavLink to={{
                                         pathname: `/competitionPlayerImport`,
-                                        state: { divisionId: this.state.divisionId, competitionId: this.state.firstTimeCompId, screenNavigationKey: 'PlayerGrading'  }
+                                        state: { divisionId: this.state.divisionId, competitionId: this.state.firstTimeCompId }
                                     }}>
                                         <Button className="primary-add-comp-form" type="primary">
                                             <div className="row">

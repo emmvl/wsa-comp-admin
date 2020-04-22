@@ -52,18 +52,16 @@ class CompetitionPlayerImport extends Component {
             competitionId: "",
             buttonPressed: "",
             loading: false,
-            isProceed: 0,
-            screenNavigationKey: ""
+            isProceed: 0
         }
     }
 
     componentDidMount(){
      let divisionId =   this.props.location.state.divisionId;
      let competitionId = this.props.location.state.competitionId;
-     let screenNavigationKey = this.props.location.state.screenNavigationKey;
      console.log("divisionId::" + divisionId);
      console.log("competitionId" + competitionId);
-     this.setState({divisionId: divisionId, competitionId: competitionId, screenNavigationKey: screenNavigationKey})
+     this.setState({divisionId: divisionId, competitionId: competitionId})
     }
 
     componentDidUpdate(nextProps)
@@ -80,12 +78,7 @@ class CompetitionPlayerImport extends Component {
                     {
                         if(assignedPlayerData.length == 0)
                         {
-                            if(this.state.screenNavigationKey == "ProposedPlayerGrading"){
-                                history.push('/competitionPartPlayerGrades');
-                            }
-                            else if(this.state.screenNavigationKey == "PlayerGrading"){
-                                history.push('/competitionPlayerGrades');
-                            }
+                            history.push('/competitionPlayerGrades');
                         }
                         else{
                             this.setState({isProceed: 1});
@@ -213,7 +206,7 @@ class CompetitionPlayerImport extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
-                <InnerHorizontalMenu menu={"competition"} compSelectedKey={ this.state.screenNavigationKey == "PlayerGrading"?"4" : "14"} />
+                <InnerHorizontalMenu menu={"competition"} compSelectedKey={"4"} />
                 <Loader visible={this.props.partPlayerGradingState.onLoad} />
                 <Layout>
                     {this.headerView()}

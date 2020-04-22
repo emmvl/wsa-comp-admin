@@ -1734,7 +1734,6 @@ class RegistrationCompetitionFee extends Component {
                             onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionTypeRefId")}
                             setFieldsValue={detailsData.competitionTypeRefId}
                             disabled={compDetailDisable}
-
                         >
                             {appState.typesOfCompetition.length > 0 && appState.typesOfCompetition.map(item => {
                                 return (
@@ -1755,7 +1754,6 @@ class RegistrationCompetitionFee extends Component {
                             // setFieldsValue={1}
                             setFieldsValue={detailsData.competitionFormatRefId}
                             disabled={compDetailDisable}
-
                         >
                             {appState.competitionFormatTypes.length > 0 && appState.competitionFormatTypes.map(item => {
                                 return (
@@ -1768,7 +1766,7 @@ class RegistrationCompetitionFee extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
-                            <InputWithHead heading={AppConstants.startDate} />
+                            <InputWithHead heading={AppConstants.startDate} required={"required-field"} />
                             <Form.Item >
                                 {getFieldDecorator('startDate',
                                     { rules: [{ required: true, message: ValidationConstants.startDateIsRequired }] })(
