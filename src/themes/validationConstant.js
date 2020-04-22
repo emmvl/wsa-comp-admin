@@ -58,7 +58,7 @@ const ValidationConstants = {
     suburbField: ["Suburb is required."],
     stateField: ['State field is required.'],
     dayField: ['Day field is required.'],
-    courtField: ["Court number field is required.", "Longitude field is required.", "Latitude field is required.", "Court field is required."],
+    courtField: ["Court number field is required.", "Longitude field is required.", "Latitude field is required.", "Court field is required.", "Division filed is required.", "Grade filed is required."],
     postCodeField: ["Postcode is required"],
 
     //////comp fees
@@ -114,6 +114,7 @@ const ValidationConstants = {
     qtrBreak: "Please enter a qtr break",
     timeBetweenGames: "Please enter a time between games",
     startDateIsRequired: 'Start date is required.',
+
 };
 
 export default ValidationConstants;

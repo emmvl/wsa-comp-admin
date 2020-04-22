@@ -20,7 +20,9 @@ import ValidationConstants from '../../themes/validationConstant'
 import history from "../../util/history";
 import {
     liveScoreManagerListAction,
-    liveScoreManagerFilter
+    liveScoreManagerFilter,
+    liveScoreClear,
+    liveScoreManagerSearch
 } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 import {
     liveScoreAddTeamform,
@@ -83,7 +85,7 @@ class LiveScoreAddTeam extends Component {
         // this.props.getliveScoreDivisions(1)
         this.props.liveScoreGetDivision(id)
         this.props.liveScoreGetaffilate({ id: id, name: '' })
-        this.props.liveScoreManagerListAction(3, 1, id)
+        this.props.liveScoreManagerListAction(5, 1, id)
     }
     componentDidUpdate(nextProps) {
         let { teamManagerData } = this.props.liveScoreTeamState
@@ -266,6 +268,8 @@ class LiveScoreAddTeam extends Component {
                                 rules: [{ required: true, message: ValidationConstants.divisionField }],
                             })(
                                 <Select
+                                    showSearch
+                                    optionFilterProp="children"
                                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                     onChange={divisionSelection => {
                                         this.props.liveScoreAddTeamform({ key: 'divisionId', data: divisionSelection })
@@ -357,20 +361,31 @@ class LiveScoreAddTeam extends Component {
         return (
             <div >
                 <InputWithHead heading={AppConstants.managerSearch}
-                    required={"required-field"} />
+                    required={"required-field pb-0"} />
                 <div>
                     <Form.Item>
                         {getFieldDecorator("managerId", {
                             rules: [{ required: true, message: ValidationConstants.searchManager }]
                         })(
                             <Select
+                                showSearch
                                 mode="multiple"
                                 placeholder={AppConstants.searchManager}
                                 style={{ width: "100%", }}
                                 onChange={(e) => {
                                     this.props.liveScoreAddTeamform({ key: 'userIds', data: e })
+                                    this.props.liveScoreClear()
                                     // this.setState({ showOption: false })
                                 }}
+                                onSearch={(value) => {
+                                    value ?
+                                        this.props.liveScoreManagerSearch(value, this.state.loaclCompetitionID)
+                                        :
+                                        this.props.liveScoreManagerListAction(5, 1, this.state.loaclCompetitionID)
+                                }}
+                                onBlur={()=> this.props.liveScoreManagerListAction(5, 1, this.state.loaclCompetitionID)}
+                                optionFilterProp="children"
+
                                 // onSearch={(value) => {
 
                                 //     this.setState({ showOption: true })
@@ -666,7 +681,9 @@ function mapDispatchToProps(dispatch) {
         liveAddNewTeam,
         liveScoreManagerListAction,
         liveScoreGetTeamDataAction,
-        liveScoreManagerFilter
+        liveScoreManagerFilter,
+        liveScoreClear,
+        liveScoreManagerSearch
     }, dispatch)
 }
 

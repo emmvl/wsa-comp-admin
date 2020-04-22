@@ -47,7 +47,27 @@ class LiveScoreVenueChange extends Component {
 
     }
 
+    componentDidUpdate(nextProps){
+        if(this.props.liveScoreVenueChangeState !== nextProps.liveScoreVenueChangeState){
+            if(this.props.liveScoreVenueChangeState.onLoad == false && this.state.saveLoad == true){  
+                this.setState({saveLoad : false})
+                 this.setInitialValues()
+            }
+        }
+    }
 
+    setInitialValues(){
+        this.props.form.setFieldsValue({
+            'changeMatchDate':"",
+            'startTime':"",
+            'endDate':"",
+            'endTime':"",
+            'venues':[],
+            'courts':[],
+            'courtTo':[],
+            'venueTo':[]
+        })
+    }
 
 
     ///////view for breadcrumb
@@ -97,6 +117,22 @@ class LiveScoreVenueChange extends Component {
         this.setState({ search: searchValue })
         this.props.getCompetitonVenuesList(id, searchValue);
     }
+
+    onChangeVenue(venueId)
+    {
+        this.props.liveScoreUpdateVenueChange(venueId, "venueId")
+        this.props.form.setFieldsValue({
+            'courts':[],
+        })
+    }
+  
+    onChangeToVenue(venueId){
+        this.props.liveScoreUpdateVenueChange(venueId, "changeToVenueId")
+        this.props.form.setFieldsValue({
+            'courtTo':[],
+        })
+    }
+
 
     ////this method called after slecting Venue Change option from drop down
     venueChangeView(getFieldDecorator) {
@@ -204,7 +240,7 @@ class LiveScoreVenueChange extends Component {
                                 showSearch
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 placeholder={AppConstants.selectVenue}
-                                onChange={(venueId) => this.props.liveScoreUpdateVenueChange(venueId, "venueId")}
+                                onChange={(venueId) =>this.onChangeVenue(venueId)}
                                 value={venueChangeData.venueId}
                                 optionFilterProp="children"
                                 onSearch={(e) => this.onSearchVenue(e)}>
@@ -279,7 +315,7 @@ class LiveScoreVenueChange extends Component {
                         showSearch
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         placeholder={AppConstants.selectVenue}
-                        onChange={(venueId) => this.props.liveScoreUpdateVenueChange(venueId, "changeToVenueId")}
+                        onChange={(venueId) => this.onChangeToVenue(venueId)}
                         value={venueChangeData.changeToVenueId}
                         optionFilterProp="children"
                         onSearch={(e) => this.onSearchVenue(e)}>
@@ -306,7 +342,7 @@ class LiveScoreVenueChange extends Component {
                             rules: [{ required: true, message: ValidationConstants.court }],
                         })(
                     <Select
-                        mode='mult  iple'
+                        // mode='multiple'
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         placeholder={AppConstants.selectCourt}
                         onChange={(courtId) => {

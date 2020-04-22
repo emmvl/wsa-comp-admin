@@ -142,10 +142,14 @@ let AxiosApi = {
 
     ////own Competition venue list
     getVenueList(competitionID, search) {
-        console.log(search, "searchValue_2")
         var url = ""
         if (competitionID) {
-            url = `/api/venue/competitionmgmnt?search=${search}&competitionId=${competitionID}`;
+            if(search){
+                url = `/api/venue/competitionmgmnt?search=${search}&competitionId=${competitionID}`;
+            }else{
+                url = `/api/venue/competitionmgmnt?competitionId=${competitionID}`;
+            }
+           
         } else {
             url = `/api/venue/competitionmgmnt`;
         }

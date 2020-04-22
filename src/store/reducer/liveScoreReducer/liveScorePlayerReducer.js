@@ -55,7 +55,7 @@ function LiveScorePlayerState(state = initialState, action) {
 
         //// Update player data
         case ApiConstants.API_LIVE_SCORE_UPDATE_PLAYER:
-            console.log(action)
+
             if (action.key == 'addplayerScreen') {
                 state.playerData = playerObj
             } else if (action.key == 'editplayerScreen') {
@@ -66,9 +66,9 @@ function LiveScorePlayerState(state = initialState, action) {
                         dateOfBirth: moment(action.data.dob).format('DD-MM-YYYY'),
                         phoneNumber: action.data.phoneNumber,
                         mnbPlayerId: action.data.playerId,
-                        teamId: action.data.team.id,
-                        competitionId: action.data.division.competitionId,
-                        photoUrl: action.data.profilePicture
+                        teamId: action.data.team? action.data.team.id :action.data.id,
+                        competitionId: action.data.division? action.data.division.competitionId : action.data.competitionId,
+                        photoUrl: action.data.profilePicture? action.data.profilePicture:action.data.photoUrl
                     }
                     state.playerData = editPlayerObj
                 }

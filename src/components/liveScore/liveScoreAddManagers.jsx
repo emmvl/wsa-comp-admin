@@ -179,7 +179,7 @@ class LiveScoreAddManager extends Component {
                                         value ?
                                             this.props.liveScoreManagerSearch(value, this.state.competition_id)
                                             :
-                                            this.props.liveScoreManagerListAction(3, 1, this.state.competition_id)
+                                            this.props.liveScoreManagerListAction(5, 1, this.state.competition_id)
 
                                     }}
 
@@ -210,14 +210,15 @@ class LiveScoreAddManager extends Component {
                                 <Select
                                     // loading={this.props.liveScoreState.onLoad == true && true}
                                     mode="multiple"
-                                    // showSearch={true}
+                                    showSearch
                                     placeholder={AppConstants.selectTeam}
                                     style={{ width: "100%", }}
                                     onChange={(teamId) => this.props.liveScoreUpdateManagerDataAction(teamId, 'teamId')}
                                     value={teamId}
+                                    optionFilterProp="children"
                                 >
                                     {teamData.map((item) => (
-                                        < Option value={item.id} > {item.name}</Option>
+                                        < Option value={item.id} >{item.name}</Option>
                                     ))
                                     }
                                 </Select>
@@ -232,7 +233,6 @@ class LiveScoreAddManager extends Component {
 
     managerNewRadioBtnView(getFieldDecorator) {
         // let teamData = this.props.liveScoreState.teamResult ? this.props.liveScoreState.teamResult : []
-        console.log(this.props.liveScoreMangerState)
         const { managerData, teamId, teamResult } = this.props.liveScoreMangerState
         let teamData = isArrayNotEmpty(this.props.liveScoreMangerState.teamResult) ? this.props.liveScoreMangerState.teamResult : []
         return (
@@ -322,7 +322,9 @@ class LiveScoreAddManager extends Component {
                                     style={{ width: "100%" }}
                                     onChange={(teamId) => this.props.liveScoreUpdateManagerDataAction(teamId, 'teamId')}
                                     value={teamId}
-
+                                    showSearch
+                                    optionFilterProp="children"
+                                    
                                 >
                                     {teamData.map((item) => (
                                         < Option value={item.id} > {item.name}</Option>

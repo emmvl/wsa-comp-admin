@@ -32,6 +32,23 @@ function tableSort(a, b, key) {
 // compare dates
 
 function checkDate(expiryDate, publishedDate) {
+    // let currentDate = new Date()
+    // if (expiryDate && publishedDate) {
+    //     let expiryFormate = new Date(expiryDate)
+    //     if (expiryFormate > currentDate || expiryFormate === currentDate) {
+    //         return 'green'
+    //     } else return 'grey'
+    // } else if (publishedDate) {
+    //     return 'green'
+    // } else if (expiryDate) {
+    //     let expiryFormate = new Date(expiryDate)
+    //     if (expiryFormate > currentDate || expiryFormate === currentDate) {
+    //         return 'green'
+    //     } else if (expiryFormate < currentDate) {
+    //         return 'grey'
+    //     } else return 'red'
+    // } else return 'red'
+
     let currentDate = new Date()
     if (expiryDate && publishedDate) {
         let expiryFormate = new Date(expiryDate)
@@ -39,15 +56,20 @@ function checkDate(expiryDate, publishedDate) {
             return 'green'
         } else return 'grey'
     } else if (publishedDate) {
-        return 'green'
-    } else if (expiryDate) {
-        let expiryFormate = new Date(expiryDate)
-        if (expiryFormate > currentDate || expiryFormate === currentDate) {
+        if (expiryDate) {
+            let expiryFormate = new Date(expiryDate)
+            if (expiryFormate > currentDate || expiryFormate === currentDate) {
+                return 'green'
+            } else {
+                return 'grey'
+            }
+        } else {
             return 'green'
-        } else if (expiryFormate < currentDate) {
-            return 'grey'
-        } else return 'red'
-    } else return 'red'
+        }
+
+    } else {
+        return 'red'
+    }
 
 }
 
