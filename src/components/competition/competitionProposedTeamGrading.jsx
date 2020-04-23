@@ -59,23 +59,33 @@ const columns = [
         key: 'sortOrder',
         sorter: (a, b) => tableSort(a, b, "sortOrder"),
         render: (sortOrder, record, index) => (
-            record.isDirectRegistration == 0 ? (
-                <span >{sortOrder}</span>
-            ) : (
-                <Select className="select-inside-team-grades-table"
-                value={sortOrder}
-                onChange={(e) => this_obj.props.onchangeCompOwnFinalTeamGradingData(e, index, "sortOrder")}
-                >
-                {this_obj.props.ownTeamGradingState.teamRanks.map((item) => {
-                    return <Option key={"rank" + item.id} value={item.id}>
-                        {item.id}
-                    </Option>
-                })}
-                </Select>
+            // record.isDirectRegistration == 0 ? (
+            //     <span >{sortOrder}</span>
+            // ) : (
+            //     <Select className="select-inside-team-grades-table"
+            //     value={sortOrder}
+            //     onChange={(e) => this_obj.props.onchangeCompOwnFinalTeamGradingData(e, index, "sortOrder")}
+            //     >
+            //     {this_obj.props.ownTeamGradingState.teamRanks.map((item) => {
+            //         return <Option key={"rank" + item.id} value={item.id}>
+            //             {item.id}
+            //         </Option>
+            //     })}
+            //     </Select>
                    
-                )
-        )
+            //     )
 
+            <Select className="select-inside-team-grades-table"
+            value={sortOrder}
+            onChange={(e) => this_obj.props.onchangeCompOwnFinalTeamGradingData(e, index, "sortOrder")}
+            >
+            {this_obj.props.ownTeamGradingState.teamRanks.map((item) => {
+                return <Option key={"rank" + item.id} value={item.id}>
+                    {item.id}
+                </Option>
+            })}
+            </Select>
+        )
     },
     {
         title: 'Team Name',
