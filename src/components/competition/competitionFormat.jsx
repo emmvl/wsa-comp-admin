@@ -204,6 +204,12 @@ class CompetitionFormat extends Component {
         console.log("setFormFieldValue");
         let formatList = Object.assign(this.props.competitionFormatState.competitionFormatList);
         let competitionFormatDivision = formatList.competionFormatDivisions;
+
+        this.props.form.setFieldsValue({
+            [`competitionFormatRefId`]: formatList.competitionFormatRefId,
+            [`matchTypeRefId`]: formatList.matchTypeRefId
+        });
+
         (competitionFormatDivision || []).map((item, index) => {
             this.props.form.setFieldsValue({
                 [`matchDuration${index}`]: item.matchDuration,
@@ -423,7 +429,7 @@ class CompetitionFormat extends Component {
 
     saveCompetitionFormats = (e) => {
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFieldsAndScroll((err, values) => {
             console.log("err::" + err);
             if(!err)
             {
@@ -575,20 +581,27 @@ class CompetitionFormat extends Component {
                 <InputWithHead heading={AppConstants.competition_name} placeholder={AppConstants.competition_name}
                     value={data.competitionName} onChange={(e)=>this.onChangeSetValue(e.target.value, 'competitionName')}  ></InputWithHead>
                 <div style={{ marginTop: 15 }}>
-                    <Radio.Group className="reg-competition-radio" onChange={ (e) => this.onChangeSetValue(e.target.value, 'competitionFormatRefId')}  
-                                value={data.competitionFormatRefId}>
-                        <div className="fluid-width" >
-                            <div className="row" >
-                                {(appState.competitionFormatTypes || []).map(item => {
-                                return (
-                                <div className="col-sm" >
-                                    <Radio key={item.id} value={item.id}> {item.description}</Radio>
+                    <InputWithHead heading={AppConstants.competitionFormat}  required={"required-field"} />
+                    <Form.Item >
+                    {getFieldDecorator('competitionFormatRefId', {
+                        rules: [{ required: true, message: ValidationConstants.pleaseSelectCompetitionFormat }],
+                    })(
+                        <Radio.Group className="reg-competition-radio" onChange={ (e) => this.onChangeSetValue(e.target.value, 'competitionFormatRefId')}  
+                            setFieldsValue={data.competitionFormatRefId}>
+                            <div className="fluid-width" >
+                                <div className="row" >
+                                    {(appState.competitionFormatTypes || []).map(item => {
+                                    return (
+                                    <div className="col-sm" >
+                                        <Radio key={item.id} value={item.id}> {item.description}</Radio>
+                                    </div>
+                                        );
+                                    })}
                                 </div>
-                                    );
-                                })}
                             </div>
-                        </div>
-                    </Radio.Group>
+                        </Radio.Group>
+                     )}
+                     </Form.Item>
                 </div>
                 {/* <Checkbox className="single-checkbox pt-3" defaultChecked={false} onChange={(e) => this.onChange(e)}>{AppConstants.use_default_competitionFormat}</Checkbox> */}
                 {/* <InputWithHead heading={AppConstants.fixture_template} />
@@ -602,15 +615,21 @@ class CompetitionFormat extends Component {
                     ))}
                 </Select> */}
 
-                <InputWithHead heading={"Match Type"} />
-                <Select
-                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                    onChange={(matchType) => this.onChangeSetValue(matchType, 'matchTypeRefId')}
-                    value={data.matchTypeRefId}>
-                    {(appState.matchTypes || []).map((item, index) => (
-                        <Option key={item.id} value={item.id}>{item.description}</Option>
-                    ))}
-                </Select>
+                <InputWithHead heading={AppConstants.matchType} required={"required-field"}/>
+                <Form.Item >
+                    {getFieldDecorator('matchTypeRefId', {
+                        rules: [{ required: true, message: ValidationConstants.matchTypeRequired }],
+                    })(
+                    <Select
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        onChange={(matchType) => this.onChangeSetValue(matchType, 'matchTypeRefId')}
+                        value={data.matchTypeRefId}>
+                        {(appState.matchTypes || []).map((item, index) => (
+                            <Option key={item.id} value={item.id}>{item.description}</Option>
+                        ))}
+                    </Select>
+                    )}
+                </Form.Item>
                 {data.competitionFormatRefId == 4 ?   
                     <div>
                          <InputWithHead heading={AppConstants.numberOfRounds} />
@@ -704,7 +723,7 @@ class CompetitionFormat extends Component {
 
                         <div className="fluid-width" >
                             <div className="row" >
-                                <div className="col-sm" >
+                                <div className="col-sm-3" >
                                 <Form.Item >
                                     {getFieldDecorator(`matchDuration${index}`, {
                                         rules: [{ required: true,   pattern: new RegExp("^[1-9][0-9]*$"),
@@ -719,7 +738,8 @@ class CompetitionFormat extends Component {
                                     )}
                                     </Form.Item>
                                 </div>
-                                <div className="col-sm" >
+                                {(data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? 
+                                <div className="col-sm-3" >
                                     <Form.Item >
                                     {getFieldDecorator(`mainBreak${index}`, {
                                         rules: [{ required: ((data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? true : false), message: ValidationConstants.mainBreak }]
@@ -734,7 +754,9 @@ class CompetitionFormat extends Component {
                                     </Form.Item>
 
                                 </div>
-                                <div className="col-sm" >
+                                : null}
+                                {data.matchTypeRefId == 3 ? 
+                                <div className="col-sm-3" >
                                     <Form.Item >
                                     {getFieldDecorator(`qtrBreak${index}`, {
                                         rules: [{ required: ( data.matchTypeRefId == 3 ? true : false ), message: ValidationConstants.qtrBreak }]
@@ -747,7 +769,9 @@ class CompetitionFormat extends Component {
                                     )}
                                     </Form.Item>
                                 </div>
-                                <div className="col-sm" >
+                                : null}
+                                {data.timeslotGenerationRefId !=2 ? 
+                                <div className="col-sm-3" >
                                     <Form.Item >
                                         {getFieldDecorator(`timeBetweenGames${index}`, {
                                             rules: [{ required: true, message: ValidationConstants.timeBetweenGames }]
@@ -760,6 +784,7 @@ class CompetitionFormat extends Component {
                                     )}
                                     </Form.Item>
                                 </div>
+                                : null}
                             </div>
                         </div>
                         <Checkbox className="single-checkbox pt-2" checked={item.isFinal} onChange={(e) => this.onChangeFinal(e, data.competionFormatDivisions,index)}>{AppConstants.applyFinalFormat}</Checkbox>
