@@ -757,7 +757,7 @@ const AppConstants = {
   addressOne: "Address Line 1",
   addressTwo: "Address Line 2",
   suburb: "Suburb",
-  state: "State",
+  stateHeading: "State",
   postcode: "Postcode",
 
 
@@ -904,7 +904,6 @@ const AppConstants = {
 
   short_Name: "Short Name",
   backToScorer: "Back to all Scorers",
-  State: "State",
   endDate: "End Date",
   otherInformation: "Other Information",
   countryOfBirth: "Country of Birth",
