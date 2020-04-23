@@ -72,6 +72,16 @@
   font-weight: 500;
   font-family: inter-medium;
 }
+.comment-heading {
+  display: contents;
+  align-content: flex-start;
+  padding-top: 20px;
+  padding-bottom: 11px;
+  font-size: 13px;
+  color: var(--app-4c4c6d);
+  font-weight: 500;
+  font-family: inter-medium;
+}
 
 .form-err {
   margin-top: 1%;

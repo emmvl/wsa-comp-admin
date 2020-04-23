@@ -25,6 +25,7 @@ import {
     getParticipating_competition,
 } from "../../util/sessionStorage"
 import CommentModal from "../../customComponents/commentModal"
+import moment from "moment"
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -132,7 +133,15 @@ class CompetitionPartProposedTeamGrading extends Component {
             saveLoad: false,
             visible: false,
             comment: null,
-            teamId: null
+            teamId: null,
+            responseCommentsCreatedBy: null,
+            responseCommentsCreatedOn: null,
+            responseComments: null,
+            comments: null,
+            commentsCreatedOn: null,
+            commentsCreatedBy: null,
+            finalGradeId: 0,
+            proposedGradeID: 0,
         }
         this_obj = this;
         this.props.clearTeamGradingReducerDataAction("getPartProposedTeamGradingData")
@@ -203,23 +212,45 @@ class CompetitionPartProposedTeamGrading extends Component {
 
 
     onClickComment(record) {
-        this.setState({ visible: true, comment: record.comments, teamId: record.teamId })
+        this.setState({
+            visible: true, comment: record.comments,
+            teamId: record.teamId,
+            responseComments: record.responseComments, responseCommentsCreatedBy: record.responseCommentsCreatedBy,
+            responseCommentsCreatedOn: moment(record.responseCommentsCreatedOn).format("DD-MM-YYYY"),
+            comments: record.comments, commentsCreatedOn: moment(record.commentsCreatedOn).format("DD-MM-YYYY"), commentsCreatedBy: record.commentsCreatedBy,
+            finalGradeId: record.proposedGradeRefId,
+            proposedGradeID: record.proposedGradeRefId
+        })
     }
 
     handleOk = e => {
-        this.props.partProposedSummaryComment(this.state.firstTimeCompId, this.state.divisionId, this.state.teamId, this.state.comment)
+        if (this.state.finalGradeId == null) {
+            this.props.partProposedSummaryComment(this.state.firstTimeCompId, this.state.divisionId, this.state.teamId, this.state.comment)
+        }
         this.setState({
             visible: false,
             comment: "",
             teamId: null,
-
+            responseComments: null,
+            responseCommentsCreatedBy: null,
+            responseCommentsCreatedOn: null,
+            comments: null,
+            commentsCreatedOn: null,
+            commentsCreatedBy: null,
+            finalGradeId: null,
         });
     };
     // model cancel for dissapear a model
     handleCancel = e => {
         this.setState({
             visible: false,
-            comment: "",
+            responseComments: null,
+            responseCommentsCreatedBy: null,
+            responseCommentsCreatedOn: null,
+            comments: null,
+            commentsCreatedOn: null,
+            commentsCreatedBy: null,
+            finalGradeId: null,
             teamId: null,
         });
     };
@@ -389,6 +420,14 @@ class CompetitionPartProposedTeamGrading extends Component {
                     placeholder={AppConstants.addYourComment}
                     onChange={(e) => this.setState({ comment: e.target.value })}
                     value={this.state.comment}
+                    owner={this.state.commentsCreatedBy}
+                    OwnCreatedComment={this.state.commentsCreatedOn}
+                    ownnerComment={this.state.comments}
+                    affilate={this.state.responseCommentsCreatedBy}
+                    affilateCreatedComment={this.state.responseCommentsCreatedOn}
+                    affilateComment={this.state.responseComments}
+                    finalGradeId={this.state.finalGradeId}
+                    proposedGradeID={this.state.proposedGradeID}
                 />
             </div>
         )

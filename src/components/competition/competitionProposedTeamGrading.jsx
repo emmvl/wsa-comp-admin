@@ -28,8 +28,7 @@ import {
     getOwn_competition
 } from "../../util/sessionStorage"
 import ValidationConstants from "../../themes/validationConstant";
-import { Record } from "immutable";
-
+import moment from "moment"
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 let this_obj = null;
@@ -165,13 +164,13 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "finalGradeId")
     },
     {
-        title: 'Comments',
-        dataIndex: 'comments',
-        key: 'comments',
+        title: 'responseComments',
+        dataIndex: 'responseComments',
+        key: 'responseComments',
         width: 110,
-        render: (comments, record) =>
+        render: (responseComments, record) =>
             <div style={{ display: "flex", justifyContent: "center", cursor: "pointer" }} onClick={() => this_obj.onClickComment(record)}>
-                <img src={comments !== null && comments.length > 0 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
+                <img src={responseComments !== null && responseComments.length > 0 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
             </div>,
     },
 
@@ -191,7 +190,16 @@ class CompetitionProposedTeamGrading extends Component {
             visible: false,
             comment: null,
             teamId: null,
-            tooltipVisibleDraft: false
+            responseCommentsCreatedBy: null,
+            responseCommentsCreatedOn: null,
+            responseComments: null,
+            comments: null,
+            commentsCreatedOn: null,
+            commentsCreatedBy: null,
+            finalGradeId: 0,
+            proposedGradeID: 0,
+
+
         }
         this_obj = this
         this.props.clearTeamGradingReducerDataAction("finalTeamGrading")
@@ -200,7 +208,15 @@ class CompetitionProposedTeamGrading extends Component {
 
 
     onClickComment(record) {
-        this.setState({ visible: true, comment: record.comments, teamId: record.teamId })
+        this.setState({
+            visible: true, teamId: record.teamId,
+            responseComments: record.responseComments, responseCommentsCreatedBy: record.responseCommentsCreatedBy,
+            responseCommentsCreatedOn: moment(record.responseCommentsCreatedOn).format("DD-MM-YYYY"),
+            comments: record.comments, commentsCreatedOn: moment(record.commentsCreatedOn).format("DD-MM-YYYY"), commentsCreatedBy: record.commentsCreatedBy,
+            finalGradeId: record.finalGradeId, proposedGradeID: record.finalGradeId,
+            comment: record.responseComments,
+
+        })
     }
 
     changeHover(record, index, historyIndex, key) {
@@ -209,20 +225,37 @@ class CompetitionProposedTeamGrading extends Component {
     }
 
     handleOk = e => {
-        this.props.teamGradingCommentAction(this.state.yearRefId, this.state.firstTimeCompId, this.state.divisionId, this.state.gradeRefId, this.state.teamId, this.state.comment)
+        {
+            this.state.finalGradeId == null &&
+                this.props.teamGradingCommentAction(this.state.yearRefId, this.state.firstTimeCompId, this.state.divisionId, this.state.gradeRefId, this.state.teamId, this.state.comment)
+        }
         this.setState({
             visible: false,
-            comment: "",
+            responseComments: null,
+            responseCommentsCreatedBy: null,
+            responseCommentsCreatedOn: null,
+            comments: null,
+            commentsCreatedOn: null,
+            commentsCreatedBy: null,
+            finalGradeId: null,
+            comment: null,
             teamId: null,
-
+            proposedGradeID: null,
         });
     };
     // model cancel for dissapear a model
     handleCancel = e => {
         this.setState({
             visible: false,
-            comment: "",
+            responseComments: null,
+            responseCommentsCreatedBy: null,
+            responseCommentsCreatedOn: null,
+            comments: null,
+            commentsCreatedOn: null,
+            commentsCreatedBy: null,
+            finalGradeId: 0,
             teamId: null,
+            proposedGradeID: null,
         });
     };
 
@@ -519,6 +552,17 @@ class CompetitionProposedTeamGrading extends Component {
                     placeholder={AppConstants.addYourComment}
                     onChange={(e) => this.setState({ comment: e.target.value })}
                     value={this.state.comment}
+                    affilate={this.state.responseCommentsCreatedBy}
+                    affilateCreatedComment={this.state.responseCommentsCreatedOn}
+                    affilateComment={this.state.responseComments}
+                    owner={this.state.commentsCreatedBy}
+                    OwnCreatedComment={this.state.commentsCreatedOn}
+                    ownnerComment={this.state.comments}
+                    finalGradeId={this.state.finalGradeId}
+                    proposedGradeID={this.state.proposedGradeID}
+
+
+
                 />
             </div>
         )
