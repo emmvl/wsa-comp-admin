@@ -1,5 +1,5 @@
 import ApiConstants from "../../../themes/apiConstants";
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
+import { isArrayNotEmpty, isNullOrEmptyString, deepCopyFunction } from "../../../util/helpers";
 ////Venue Constraints List Object /////////////Start
 
 
@@ -446,7 +446,8 @@ function VenueTimeState(state = initialState, action) {
         case ApiConstants.API_UPDATE_VENUE_TIME_DATA:
             if (action.key == "remove") {
                 let expandedRowKeyRemove = action.index + 1;
-                state.venuData['venueCourts'].splice(action.index, 1)
+                state.venuData['venueCourts'].splice(action.index, 1);
+                state.venuData.venueCourts = [...state.venuData.venueCourts];
                 let matchKey = state.venuData.expandedRowKeys.findIndex(x => x == expandedRowKeyRemove.toString())
                 if (matchKey != -1)
                     state.venuData.expandedRowKeys.splice(matchKey, 1);
@@ -462,6 +463,7 @@ function VenueTimeState(state = initialState, action) {
                         keyIndex++;
                     }
                 }
+                state.venuData.venueCourts = [...venueCourts];
                 if (isArrayNotEmpty(state.venuData.expandedRowKeys)) {
                     let keyIndex = 1;
                     let expandedRowKeys = state.venuData.expandedRowKeys;
@@ -469,7 +471,11 @@ function VenueTimeState(state = initialState, action) {
                         expandedRowKeys[j] = keyIndex.toString();
                         keyIndex++;
                     }
+
+                    state.venuData.expandedRowKeys = [...expandedRowKeys];
                 }
+
+               
             }
             if (action.index == 'Venue') {
                 let upDateData = state.venuData

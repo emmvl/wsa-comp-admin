@@ -945,7 +945,8 @@ const AppConstants = {
   logo_size:250000,
   referaFriend: "Refer a Friend",
   playWithAFriend: "Play with a Friend",
-  
+  types: 'Types',
+  payment: "Payment"
 };
 
 export default AppConstants;

@@ -392,3 +392,39 @@ export function* getUserModuleActivityManagerSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+/* Get the User  Friend List */
+export function* getUserFriendListSaga(action) {
+    try {
+        const result = yield call(userHttpApi.getUserFriendList, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_USER_FRIEND_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+/* Get the User Refer Friend List  */
+export function* getUserReferFriendListSaga(action) {
+    try {
+        const result = yield call(userHttpApi.getUserReferFriendList, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_USER_REFER_FRIEND_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

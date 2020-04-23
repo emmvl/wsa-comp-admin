@@ -4,9 +4,9 @@ import AxiosApi from "../../http/registrationHttp/registrationAxios";
 import { message } from "antd";
 
 
-function* failSaga(result) {
+function* failSaga(result, type) {
     yield put({
-      type: ApiConstants.API_END_USER_REGISTRATION_FAIL,
+      type: type,
       error: result,
       status: result.status
     });
@@ -15,9 +15,9 @@ function* failSaga(result) {
     }, 800);
   }
   
-  function* errorSaga(error) {
+  function* errorSaga(error, type) {
     yield put({
-      type: ApiConstants.API_END_USER_REGISTRATION_ERROR,
+      type: type,
       error: error,
       status: error.status
     });
@@ -41,10 +41,10 @@ export function* endUserRegistrationSaveSaga(action) {
           status: result.status
         });
       } else {
-        yield call(failSaga, result)
+        yield call(failSaga, result, ApiConstants.API_END_USER_REGISTRATION_FAIL)
       }
     } catch (error) {
-      yield call(errorSaga, error)
+      yield call(errorSaga, error, ApiConstants.API_END_USER_REGISTRATION_ERROR)
     }
   }
 
@@ -60,10 +60,10 @@ export function* orgRegistrationRegistrationSettings(action) {
           status: result.status
         });
       } else {
-        yield call(failSaga, result)
+        yield call(failSaga, result, ApiConstants.API_END_USER_REGISTRATION_FAIL)
       }
     } catch (error) {
-      yield call(errorSaga, error)
+      yield call(errorSaga, error, ApiConstants.API_END_USER_REGISTRATION_ERROR)
     }
   }
 
@@ -79,9 +79,27 @@ export function* endUserRegistrationMembershipProducts(action) {
           status: result.status
         });
       } else {
-        yield call(failSaga, result)
+        yield call(failSaga, result, ApiConstants.API_END_USER_REGISTRATION_FAIL)
       }
     } catch (error) {
-      yield call(errorSaga, error)
+      yield call(errorSaga, error, ApiConstants.API_END_USER_REGISTRATION_ERROR)
+    }
+  }
+
+  export function* endUserRegDashboardListSaga(action) {
+    try {
+      const result = yield call(AxiosApi.endUserRegDashboardList, 
+            action.payload);
+      if (result.status === 1) {
+        yield put({
+          type: ApiConstants.API_USER_REG_DASHBOARD_LIST_SUCCESS,
+          result: result.result.data,
+          status: result.status
+        });
+      } else {
+        yield call(failSaga, result, ApiConstants.API_USER_REG_DASHBOARD_LIST_FAIL)
+      }
+    } catch (error) {
+      yield call(errorSaga, error, ApiConstants.API_USER_REG_DASHBOARD_LIST_ERROR)
     }
   }

@@ -127,7 +127,6 @@ let userHttpApi = {
       var url = `users/byRole?roleId=5&entityTypeId=1&entityId=${competition_Id}&userName=${data}`;
       return Method.dataGet(url, token);
     }
-
   },
 
   // Search scorer 
@@ -138,9 +137,16 @@ let userHttpApi = {
  
       return Method.dataGet(url, token)
     }
-   
-}
+},
+getUserFriendList(payload) {
+  var url = `api/user/dashboard/friend`;
+  return Method.dataPost(url, token, payload);
+},
 
+getUserReferFriendList(payload) {
+  var url = `api/user/dashboard/referfriend`;
+  return Method.dataPost(url, token, payload);
+}
 }
 
 let Method = {

@@ -87,7 +87,13 @@ const initialState = {
     activityManagerList: [],
     activityManagerPage: 1,
     activityManagerTotalCount: 1,
-    onOrgLoad: false
+    onOrgLoad: false,
+    friendList: [],
+    friendPage: 1,
+    friendTotalCount: 1,
+    referFriendList: [],
+    referFriendPage: 1,
+    referFriendTotalCount: 1
 };
 
 function userReducer(state = initialState, action) {
@@ -409,6 +415,34 @@ function userReducer(state = initialState, action) {
                 activityManagerList: activityManagerData.activityManager,
                 activityManagerPage: activityManagerData.page ? activityManagerData.page.currentPage : 1,
                 activityManagerTotalCount: activityManagerData.page.totalCount,
+                status: action.status
+            };
+
+        case ApiConstants.API_USER_FRIEND_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_USER_FRIEND_SUCCESS:
+            let friendData = action.result;
+            return {
+                ...state,
+                onLoad: false,
+                friendList: friendData.friends,
+                friendPage: friendData.page ? friendData.page.currentPage : 1,
+                friendTotalCount: friendData.page.totalCount,
+                status: action.status
+            };
+
+        case ApiConstants.API_USER_REFER_FRIEND_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_USER_REFER_FRIEND_SUCCESS:
+            let referFriendData = action.result;
+            return {
+                ...state,
+                onLoad: false,
+                referFriendList: referFriendData.referFriends,
+                referFriendPage: referFriendData.page ? referFriendData.page.currentPage : 1,
+                referFriendTotalCount: referFriendData.page.totalCount,
                 status: action.status
             };
 

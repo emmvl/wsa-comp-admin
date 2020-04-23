@@ -58,7 +58,8 @@ import RegistrationMembershipList from "../components/registration/registrationM
 import RegistrationCompetitionList from "../components/registration/registrationCompetitionList";
 import RegistrationFormList from "../components/registration/registrationFormList"
 import CompetitionPlayerImport from "../components/competition/competitionPlayerImport";
-
+import PlayWithFriend from "../components/user/playWithFriend";
+import ReferFriend from "../components/user/referFriend";
 /////
 import LiveScoreDashboard from "../components/liveScore/liveScoreDashboard"
 import LiveScoreMatches from "../components/liveScore/liveScoreMatches";
@@ -551,9 +552,18 @@ class Routes extends React.Component {
           path="/liveScorePublicLadder"
           component={lazyLoad(LiveScorePublicLadder)}
         />
-                <PrivateRoute
+        <PrivateRoute
           path="/competitionPlayerImport"
           component={lazyLoad(CompetitionPlayerImport)}
+        />
+
+        <PrivateRoute
+          path="/playWithFriend"
+          component={lazyLoad(PlayWithFriend)}
+        />
+        <PrivateRoute
+          path="/referFriend"
+          component={lazyLoad(ReferFriend)}
         />
 
         <Route path="/" component={lazyLoad(NotFound)} />
