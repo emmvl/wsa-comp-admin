@@ -55,7 +55,7 @@ import {
 import {
     competitionFeeInit, getVenuesTypeAction,
     getCommonDiscountTypeTypeAction, getOnlyYearListAction,
-    clearFilter, searchVenueList,
+    clearFilter, searchVenueList, CLEAR_OWN_COMPETITION_DATA
 } from "../../store/actions/appAction";
 import moment from "moment";
 import history from "../../util/history";
@@ -413,6 +413,7 @@ class RegistrationCompetitionForm extends Component {
             tooltipVisiblePublish: false,
         };
         this_Obj = this;
+        this.props.CLEAR_OWN_COMPETITION_DATA()
         this.props.clearCompReducerDataAction("all")
         this.props.getGenderAction()
     }
@@ -1684,7 +1685,7 @@ class RegistrationCompetitionForm extends Component {
                         </div>
                     </div>
                 )}
-``            </div>
+                ``            </div>
         );
     };
 
@@ -2777,7 +2778,8 @@ function mapDispatchToProps(dispatch) {
         searchVenueList,
         venueListAction,
         clearFilter,
-        getGenderAction
+        getGenderAction,
+        CLEAR_OWN_COMPETITION_DATA
     }, dispatch)
 }
 

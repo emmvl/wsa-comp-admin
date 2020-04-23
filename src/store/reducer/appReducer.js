@@ -1,6 +1,7 @@
 import ApiConstants from "../../themes/apiConstants";
 import history from "../../util/history";
 import { getRegistrationSetting } from "../objectModel/getRegSettingObject";
+import { getUserId, getOrganisationData } from "../../util/sessionStorage"
 const initialState = {
   onLoad: false,
   error: null,
@@ -45,6 +46,20 @@ function arraymove(arr, fromIndex, toIndex) {
   arr.splice(fromIndex, 1);
   arr.splice(toIndex, 0, element);
   return arr
+}
+
+
+function sortfunction(a, b) {
+  const bandA = a.competitionName;
+  const bandB = b.competitionName;
+
+  let comparison = 0;
+  if (bandA > bandB) {
+    comparison = 1;
+  } else if (bandA < bandB) {
+    comparison = -1;
+  }
+  return comparison;
 }
 
 function filteredSettingArray(result) {
@@ -361,6 +376,61 @@ function appState(state = initialState, action) {
         own_YearArr: action.yearList,
         status: action.status,
       };
+
+
+    // case ApiConstants.API_POST_COMPETITION_FEE_DISCOUNT_SUCCESS:
+    //   if (state.own_CompetitionArr.length > 0) {
+    //     if (action.result.data.competitiondetail.statusRefId == 2) {
+    //       let resultdata = action.result.data.competitiondetail
+    //       let matchCompetitionArr = state.own_CompetitionArr.findIndex(x => x.competitionId == action.result.data.competitiondetail.competitionCreatorOrgUniqueKey)
+    //       if (matchCompetitionArr == -1) {
+    //         let manualObj = {
+    //           id: '',
+    //           competitionName: resultdata.competitionName,
+    //           competitionId: resultdata.competitionUniqueKey
+    //         }
+
+    //         state.own_CompetitionArr.push(manualObj)
+    //         state.own_CompetitionArr.sort(sortfunction)
+    //       }
+    //     }
+    //   }
+    //   return {
+    //     ...state,
+    //   }
+
+    // case ApiConstants.API_SAVE_COMPETITION_FEES_DIVISION_TAB_SUCCESS:
+    //   if (state.own_CompetitionArr.length > 0) {
+    //     if (action.result.data.competitiondetail.statusRefId == 2) {
+    //       let resultdata2 = action.result.data.competitiondetail
+    //       let matchCompetitionArr2 = state.own_CompetitionArr.findIndex(x => x.competitionId == action.result.data.competitiondetail.competitionCreatorOrgUniqueKey)
+    //       if (matchCompetitionArr2 == -1) {
+    //         let manualObj2 = {
+    //           id: '',
+    //           competitionName: resultdata2.competitionName,
+    //           competitionId: resultdata2.competitionUniqueKey
+    //         }
+
+    //         let creatorId = resultdata2.competitionCreator
+    //         let orgData = getOrganisationData()
+    //         let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0
+    //         // let userId = getUserId();
+    //         let isCreatorEdit = creatorId == organisationUniqueKey ? false : true;
+    //         if (isCreatorEdit == true) {
+    //           state.own_CompetitionArr.push(manualObj2)
+    //           state.own_CompetitionArr.sort(sortfunction)
+    //         }
+    //       }
+    //     }
+    //   }
+    //   return {
+    //     ...state
+    //   }
+
+
+    case ApiConstants.CLEAR_OWN_COMPETITION_DATA:
+      state.own_CompetitionArr = []
+      return { ...state }
 
     case ApiConstants.CLEAR_FILTER_SEARCH_VENUE:
       state.venueList = state.mainVenueList

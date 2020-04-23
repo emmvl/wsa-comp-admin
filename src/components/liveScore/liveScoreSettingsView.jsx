@@ -216,7 +216,7 @@ class LiveScoreSettingsView extends Component {
     handleSearch = (value, data) => {
 
         const filteredData = data.filter(memo => {
-            return memo.venueName.indexOf(value) > -1
+            return memo.venueName.toLowerCase().indexOf(value.toLowerCase()) > -1
         })
         this.props.searchVenueList(filteredData)
 

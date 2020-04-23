@@ -1673,7 +1673,6 @@ function competitionFees(state = initialState, action) {
         case ApiConstants.API_POST_COMPETITION_FEE_DISCOUNT_LOAD:
             return { ...state, onLoad: true, }
         case ApiConstants.API_POST_COMPETITION_FEE_DISCOUNT_SUCCESS:
-
             return {
                 ...state,
                 onLoad: false,
