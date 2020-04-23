@@ -122,7 +122,7 @@ class ReferFriend extends Component {
                 <div className="row" >
                     <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
                         <Breadcrumb separator=" > ">
-                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.dashboard}</Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.referaFriend}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                 </div>
@@ -188,18 +188,6 @@ class ReferFriend extends Component {
         )
     }
 
-
-    //////footer view containing all the buttons like submit and cancel
-    footerView = () => {
-        return (
-            <div className="d-flex flex-row-reverse">
-                <NavLink to={`/productAddRegistration`} className="text-decoration-none">
-                    <Button className='primary-add-product' type='primary'>+ {AppConstants.addAFee}</Button>
-                </NavLink>
-            </div>
-        )
-    }
-
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
@@ -211,9 +199,6 @@ class ReferFriend extends Component {
                         {this.dropdownView()}
                         {this.contentView()}
                     </Content>
-                    <Footer>
-                        {this.footerView()}
-                    </Footer>
                 </Layout>
             </div>
         );
