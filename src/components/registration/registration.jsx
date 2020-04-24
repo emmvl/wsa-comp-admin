@@ -385,7 +385,7 @@ class Registration extends Component {
                     columns={columns}
                     dataSource={userRegDashboardList}
                     pagination={false}
-                    loading={this.props.onUserRegDashboardLoad === true && true}
+                    loading={userRegistrationState.onUserRegDashboardLoad === true && true}
                 />
             </div>
             <div className="d-flex justify-content-end">
