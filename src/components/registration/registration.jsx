@@ -400,18 +400,6 @@ class Registration extends Component {
         )
     }
 
-
-    //////footer view containing all the buttons like submit and cancel
-    footerView = () => {
-        return (
-            <div className="d-flex flex-row-reverse">
-                <NavLink to={`/productAddRegistration`} className="text-decoration-none">
-                    <Button className='primary-add-product' type='primary'>+ {AppConstants.addAFee}</Button>
-                </NavLink>
-            </div>
-        )
-    }
-
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
@@ -423,9 +411,6 @@ class Registration extends Component {
                         {this.dropdownView()}
                         {this.contentView()}
                     </Content>
-                    <Footer>
-                        {this.footerView()}
-                    </Footer>
                 </Layout>
             </div>
         );
