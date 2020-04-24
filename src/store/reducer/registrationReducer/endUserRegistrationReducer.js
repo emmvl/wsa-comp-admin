@@ -28,12 +28,19 @@ let membershipProdInfoObj = {
 
 const initialState = {
     onLoad: false,
+    onUserRegDashboardLoad: false,
     error: null,
     result: null,
     status: 0,
     registrationDetail: registrationObj,
     registrationSettings: [],
-    membershipProductInfo: membershipProdInfoObj
+    membershipProductInfo: membershipProdInfoObj,
+    userRegDashboardListData: [], 
+    userRegDashboardListPage: 1,
+    userRegDashboardListTotalCount: 1,
+    competitions:[],
+    membershipProductTypes: [],
+    membershipProducts:[]
 }
 
 
@@ -96,6 +103,42 @@ function  endUserRegistrationReducer(state = initialState, action)
                 onLoad: false,
                 status: action.status,
                 registrationSettings: orgData
+            };
+
+        case ApiConstants.API_USER_REG_DASHBOARD_LIST_LOAD:
+            return { ...state, onUserRegDashboardLoad: true, error: null };
+
+        case ApiConstants.API_USER_REG_DASHBOARD_LIST_SUCCESS:
+            let dashboardListData = action.result;
+            return {
+                ...state,
+                onUserRegDashboardLoad: false,
+                userRegDashboardListData: dashboardListData.registrations,
+                userRegDashboardListTotalCount: dashboardListData.page.totalCount,
+                userRegDashboardListPage: dashboardListData.page
+                    ? dashboardListData.page.currentPage
+                    : 1,
+                competitions: dashboardListData.competitions,
+                membershipProductTypes: dashboardListData.membershipProductTypes,
+                membershipProducts: dashboardListData.membershipProducts,
+                status: action.status,
+                error: null
+            };
+
+            case ApiConstants.API_USER_REG_DASHBOARD_LIST_FAIL:
+            return {
+                ...state,
+                onLoad: false,
+                error: action.error,
+                status: action.status
+            };
+
+        case ApiConstants.API_USER_REG_DASHBOARD_LIST_ERROR:
+            return {
+                ...state,
+                onLoad: false,
+                error: action.error,
+                status: action.status
             };
 
         default:

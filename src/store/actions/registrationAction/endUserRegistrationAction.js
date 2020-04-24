@@ -38,9 +38,19 @@ function membershipProductEndUserRegistrationAction(payload) {
     return action;
 }
 
+/////end user registration Dashboard List
+function endUserRegDashboardListAction(payload) {
+    const action = {
+        type: ApiConstants.API_USER_REG_DASHBOARD_LIST_LOAD,
+        payload: payload
+    };
+    return action;
+}
+
 export {
     saveEndUserRegistrationAction,
     updateEndUserRegisrationAction,
     orgRegistrationRegSettingsEndUserRegAction,
-    membershipProductEndUserRegistrationAction
+    membershipProductEndUserRegistrationAction,
+    endUserRegDashboardListAction
 }
