@@ -946,6 +946,8 @@ const AppConstants = {
   referaFriend: "Refer a Friend",
   playWithAFriend: "Play with a Friend",
   
+  seasonFixture : "Season Fixture",
+  season:"Season"
 };
 
 export default AppConstants;

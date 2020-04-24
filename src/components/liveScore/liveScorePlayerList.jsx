@@ -203,21 +203,12 @@ class LiveScorePlayerList extends Component {
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm">
+                        <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
                             <span className="form-heading">
                                 {AppConstants.palyerList}
                             </span>
                         </div>
-                        <div className="col-sm"
-                            style={{
-                                width: "100%",
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                justifyContent: "flex-end"
-                            }}>
-                            <div className="row">
-                                <div style={{ marginRight: "25px", display: "flex", alignItems: 'center' }} >
+                        <div className="col-sm pt-1" style={{  display: "flex", justifyContent: 'flex-end' }} >
                                     <div className="comp-product-search-inp-width" >
                                         <Input className="product-reg-search-input"
                                             onChange={(e) => this.onChangeSearchText(e)}
@@ -230,7 +221,10 @@ class LiveScorePlayerList extends Component {
                                         />
                                     </div>
                                 </div>
-                                <div className="col-sm">
+                        <div className="col-sm-3" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
+                            <div className="row">
+                              
+                                <div className="col-sm pt-1">
                                     <div
                                         className="comp-dashboard-botton-view-mobile"
                                         style={{
@@ -248,7 +242,7 @@ class LiveScorePlayerList extends Component {
                                         </NavLink>
                                     </div>
                                 </div>
-                                <div className="col-sm">
+                                <div className="col-sm pt-1">
                                     <div
                                         className="comp-dashboard-botton-view-mobile"
                                         style={{
@@ -273,7 +267,7 @@ class LiveScorePlayerList extends Component {
                                         </Button>
                                     </div>
                                 </div>
-                                <div className="col-sm">
+                                <div className="col-sm pt-1">
                                     <div
                                         className="comp-dashboard-botton-view-mobile"
                                         style={{
