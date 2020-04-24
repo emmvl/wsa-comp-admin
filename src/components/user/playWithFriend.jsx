@@ -163,7 +163,7 @@ class PlayWithFriend extends Component {
     ////////form content view
     contentView = () => {
         let userState = this.props.userState;
-        let friendList = userState.userRegDashboardListData;
+        let friendList = userState.friendList;
         let total = userState.friendTotalCount;
         return (
             <div className="comp-dash-table-view mt-2">
@@ -191,7 +191,7 @@ class PlayWithFriend extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
-                <InnerHorizontalMenu  menu={"user"} regSelectedKey={"5"} />
+                <InnerHorizontalMenu  menu={"user"} userSelectedKey={"5"} />
                 <Layout>
                     {this.headerView()}
                     <Content>

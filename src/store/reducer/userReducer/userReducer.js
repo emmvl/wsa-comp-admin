@@ -426,9 +426,9 @@ function userReducer(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
-                friendList: friendData.friends,
-                friendPage: friendData.page ? friendData.page.currentPage : 1,
-                friendTotalCount: friendData.page.totalCount,
+                friendList: friendData? friendData.friends : [],
+                friendPage: (friendData && friendData.page) ? friendData.page.currentPage : 1,
+                friendTotalCount: (friendData && friendData.page) ?  friendData.page.totalCount : 1,
                 status: action.status
             };
 
@@ -440,9 +440,9 @@ function userReducer(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
-                referFriendList: referFriendData.referFriends,
-                referFriendPage: referFriendData.page ? referFriendData.page.currentPage : 1,
-                referFriendTotalCount: referFriendData.page.totalCount,
+                referFriendList: referFriendData ? referFriendData.referFriends : [],
+                referFriendPage: (referFriendData && referFriendData.page) ? referFriendData.page.currentPage : 1,
+                referFriendTotalCount: (referFriendData && referFriendData.page) ? referFriendData.page.totalCount : 1,
                 status: action.status
             };
 

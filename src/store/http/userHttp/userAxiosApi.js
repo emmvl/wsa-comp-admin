@@ -139,12 +139,12 @@ let userHttpApi = {
     }
 },
 getUserFriendList(payload) {
-  var url = `api/user/dashboard/friend`;
+  var url = `users/dashboard/friend`;
   return Method.dataPost(url, token, payload);
 },
 
 getUserReferFriendList(payload) {
-  var url = `api/user/dashboard/referfriend`;
+  var url = `users/dashboard/referfriend`;
   return Method.dataPost(url, token, payload);
 }
 }

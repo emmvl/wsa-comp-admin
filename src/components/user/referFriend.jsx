@@ -164,8 +164,8 @@ class ReferFriend extends Component {
     ////////form content view
     contentView = () => {
         let userState = this.props.userState;
-        let friendList = userState.userRegDashboardListData;
-        let total = userState.friendTotalCount;
+        let friendList = userState.referFriendList;
+        let total = userState.referFriendTotalCount;
         return (
             <div className="comp-dash-table-view mt-2">
             <div className="table-responsive home-dash-table-view">
@@ -179,7 +179,7 @@ class ReferFriend extends Component {
             <div className="d-flex justify-content-end">
                 <Pagination
                     className="antd-pagination"
-                    current={userState.friendPage}
+                    current={userState.referFriendPage}
                     total={total}
                     onChange={(page) => this.handleFriendTableList(page)}
                 />
@@ -192,7 +192,7 @@ class ReferFriend extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
-                <InnerHorizontalMenu  menu={"user"} regSelectedKey={"6"} />
+                <InnerHorizontalMenu  menu={"user"} userSelectedKey={"6"} />
                 <Layout>
                     {this.headerView()}
                     <Content>
