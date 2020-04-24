@@ -203,6 +203,24 @@ function getUserModuleActivityManagerAction(userId){
   return action;
 }
 
+
+function getUserFriendAction(payload){
+  const action = {
+    type: ApiConstants.API_USER_FRIEND_LOAD,
+    payload: payload
+  };
+  return action;
+}
+
+
+function getUserReferFriendAction(payload){
+  const action = {
+    type: ApiConstants.API_USER_REFER_FRIEND_LOAD,
+    payload: payload
+  };
+  return action;
+}
+
 export {
   getRoleAction,
   getUreAction,
@@ -226,5 +244,7 @@ export {
   getUserModuleActivityPlayerAction,
   getUserModuleActivityParentAction,
   getUserModuleActivityScorerAction,
-  getUserModuleActivityManagerAction
+  getUserModuleActivityManagerAction,
+  getUserFriendAction,
+  getUserReferFriendAction
 }

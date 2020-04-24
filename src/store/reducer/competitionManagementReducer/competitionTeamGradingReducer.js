@@ -100,15 +100,15 @@ function getUpdatedHistoryData(data) {
 function compare(a, b) {
     const bandA = a.sortOrder;
     const bandB = b.sortOrder;
-  
+
     let comparison = 0;
     if (bandA > bandB) {
-      comparison = 1;
+        comparison = 1;
     } else if (bandA < bandB) {
-      comparison = -1;
+        comparison = -1;
     }
     return comparison;
-  }
+}
 
 
 function sortOrderArray(ownTeamGradingSummaryData) {
@@ -176,7 +176,7 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
             }
             let teamGradingDataArr = isArrayNotEmpty(finalTeamGradingData.teamGradings) ? finalTeamGradingData.teamGradings : []
             let updatedTeamGradingData = getUpdatedHistoryData(teamGradingDataArr)
-            
+
             return {
                 ...state,
                 getCompOwnProposedTeamGradingData: updatedTeamGradingData,
@@ -191,10 +191,9 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
             let finalGradingOnChangeData = JSON.parse(JSON.stringify(state.getCompOwnProposedTeamGradingData));
             let finalGrades = state.compFinalTeamGradingFinalGradesData;
             //console.log("finalGrades::" + JSON.stringify(finalGrades));
-              console.log("Index" + action.index + "Value" + action.value);
+            console.log("Index" + action.index + "Value" + action.value);
             let obj = finalGrades.find(x => x.gradeRefId == action.value);
-            if(action.key == "sortOrder")
-            {
+            if (action.key == "sortOrder") {
                 //finalGradingOnChangeData[action.index][action.key] = action.value == 1 ? action.value - 1 : action.value + 1;
                 let oldval = finalGradingOnChangeData[action.index][action.key];
                 finalGradingOnChangeData[action.index][action.key] = (oldval > action.value) ? action.value - 1 : action.value + 1;
@@ -203,13 +202,13 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
                     x.sortOrder = index + 1;
                 })
             }
-            else{
+            else {
                 finalGradingOnChangeData[action.index][action.key] = action.value
                 if (action.key == "finalGradeId") {
                     finalGradingOnChangeData[action.index]["finalGradeName"] = obj.name;
                 }
             }
-           
+
             state.getCompOwnProposedTeamGradingData = finalGradingOnChangeData
 
             return {
@@ -382,7 +381,10 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
         case ApiConstants.API_TEAM_GRADING_COMMENT_SUCCESS:
             let gradingIndex = state.getCompOwnProposedTeamGradingData.findIndex(x => x.teamId == action.teamId)
             if (gradingIndex > -1) {
-                state.getCompOwnProposedTeamGradingData[gradingIndex].comments = action.comment
+                state.getCompOwnProposedTeamGradingData[gradingIndex].responseComments = action.comment
+                state.getCompOwnProposedTeamGradingData[gradingIndex].responseCommentsCreatedBy = action.result.message.responseCommentsCreatedBy
+                state.getCompOwnProposedTeamGradingData[gradingIndex].responseCommentsCreatedOn = action.result.message.responseCommentsCreatedOn
+
             }
             return {
                 ...state,
@@ -396,6 +398,8 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
             let partTeamIndex = state.getPartProposedTeamGradingData.findIndex(x => x.teamId == action.teamId)
             if (partTeamIndex > -1) {
                 state.getPartProposedTeamGradingData[partTeamIndex].comments = action.comment
+                state.getPartProposedTeamGradingData[partTeamIndex].commentsCreatedBy = action.result.message.commentsCreatedBy
+                state.getPartProposedTeamGradingData[partTeamIndex].commentsCreatedOn = action.result.message.commentsCreatedOn
             }
             return { ...state, onLoad: false }
 

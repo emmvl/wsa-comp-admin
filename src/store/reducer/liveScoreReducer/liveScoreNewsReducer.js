@@ -109,6 +109,9 @@ function liveScoreNewsState(state = initialState, action) {
             state.expire_date = null
             state.expire_time = null
             state.news_expire_date = null
+            state.addEditNews['title'] = null
+            state.addEditNews['body'] = null
+            state.addEditNews['news_expire_date'] = null
 
             return {
                 ...state,

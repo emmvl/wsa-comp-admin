@@ -291,7 +291,6 @@ class LiveScoreAddNews extends Component {
     ///////view for breadcrumb
     headerView = () => {
         let isEdit = this.props.location.state ? this.props.location.state.isEdit : null
-        console.log(this.state.key)
         return (
             <div className="header-view">
                 <Header
@@ -316,7 +315,7 @@ class LiveScoreAddNews extends Component {
     scorerView = () => {
         const { scorerListResult } = this.props.liveScoreState
         let scorerList = isArrayNotEmpty(scorerListResult) ? scorerListResult : []
-        console.log(scorerListResult, 'scorerList****')
+     
         return (
             <div className="row" >
                 <div className="col-sm" >
@@ -554,8 +553,6 @@ class LiveScoreAddNews extends Component {
                 if (data.newExpiryDate && data.expire_time) {
 
                     let expiry__Date = data.news_expire_date
-
-
 
                     let experyDate = moment(data.newExpiryDate).format("YYYY-MM-DD")
                     let expiryTime = moment(data.expire_time).format("HH:mm")

@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { regCompetitionListAction, clearCompReducerDataAction, regCompetitionListDeleteAction } from "../../store/actions/registrationAction/competitionFeeAction";
 import AppImages from "../../themes/appImages";
-import { getOnlyYearListAction } from "../../store/actions/appAction";
+import { getOnlyYearListAction,CLEAR_OWN_COMPETITION_DATA } from "../../store/actions/appAction";
 import { checkUserRole } from "../../util/permissions";
 import { currencyFormat } from "../../util/currencyFormat";
 import { stringTONumber } from "../../util/helpers"
@@ -200,6 +200,7 @@ class RegistrationCompetitionList extends Component {
             searchText: '',
         };
         this_Obj = this;
+        this.props.CLEAR_OWN_COMPETITION_DATA()
         this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
 
@@ -407,7 +408,8 @@ class RegistrationCompetitionList extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         regCompetitionListAction, getOnlyYearListAction,
-        clearCompReducerDataAction, regCompetitionListDeleteAction
+        clearCompReducerDataAction, regCompetitionListDeleteAction,
+        CLEAR_OWN_COMPETITION_DATA
     }, dispatch)
 }
 

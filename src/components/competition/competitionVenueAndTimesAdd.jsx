@@ -29,6 +29,7 @@ import history from '../../util/history'
 import ValidationConstants from "../../themes/validationConstant";
 import AppImages from "../../themes/appImages";
 import CSVReader from 'react-csv-reader'
+import { deepCopyFunction} from '../../util/helpers';
 
 
 const { Header, Footer, Content } = Layout;
@@ -298,6 +299,19 @@ class CompetitionVenueAndTimesAdd extends Component {
         }
     }
 
+    getDisabledHours = (startTime) => {
+        var hours = [];
+        let startHour = startTime.split(':')[0];
+        for(var i = 0; i < Number(startHour); i++){
+            hours.push(i);
+        }
+        return hours;
+    }
+
+    onChangeGameTimePicker = (time, value, index, key1, key2) => {
+        if(time!= null)
+            this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, key1, key2)
+    }
 
     ///////view for breadcrumb
     headerView = () => {
@@ -382,7 +396,7 @@ class CompetitionVenueAndTimesAdd extends Component {
 
                 <InputWithHead
                     required={"required-field"}
-                    heading={AppConstants.State}
+                    heading={AppConstants.stateHeading}
                 />
 
                 <Form.Item >
@@ -484,7 +498,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                         key={"startTime"}
                         className="comp-venue-time-timepicker"
                         style={{ width: "100%" }}
-                        onChange={(time) => time !== null && this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, 'startTime', "gameTimeslot")}
+                        onChange={(time) => this.onChangeGameTimePicker(time, time.format("HH:mm"), index, 'startTime', "gameTimeslot") }
                         value={moment(item.startTime, "HH:mm")}
                         format={"HH:mm "}
                         minuteStep={15}
@@ -495,9 +509,10 @@ class CompetitionVenueAndTimesAdd extends Component {
                     <InputWithHead heading={AppConstants.endTime} />
                     <TimePicker
                         key={"endTime"}
+                        disabledHours={()=>this.getDisabledHours(item.startTime)}
                         className="comp-venue-time-timepicker"
                         style={{ width: "100%" }}
-                        onChange={(time) => time !== null && this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, 'endTime', "gameTimeslot")}
+                        onChange={(time) => this.onChangeGameTimePicker(time, time.format("HH:mm"), index, 'endTime', "gameTimeslot") }
                         value={moment(item.endTime, "HH:mm")}
                         format={"HH:mm "}
                         minuteStep={15}
@@ -572,6 +587,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                     <TimePicker
                         className="comp-venue-time-timepicker"
                         style={{ width: "100%" }}
+                        disabledHours={()=>this.getDisabledHours(item.startTime)}
                         onChange={(time) => time !== null && this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, 'endTime', "addTimeSlotField", tableIndex)}
                         value={moment(item.endTime, "HH:mm")}
                         format={"HH:mm "}
@@ -606,7 +622,8 @@ class CompetitionVenueAndTimesAdd extends Component {
 
     //////court day view
     courtView = (getFieldDecorator) => {
-        const { venueCourts } = this.props.venueTimeState.venuData
+        let venueCourts = [...this.props.venueTimeState.venuData.venueCourts];
+        console.log("venueCourts" + JSON.stringify(venueCourts));
         return (
             <div className="fees-view pt-5">
                 <div style={{ display: 'flex' }}>

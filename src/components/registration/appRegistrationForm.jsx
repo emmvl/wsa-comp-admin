@@ -1042,7 +1042,7 @@ class AppRegistrationForm extends Component {
                     )}
                 </Form.Item>
 
-                <InputWithHead heading={AppConstants.state}   required={"required-field"}/>
+                <InputWithHead heading={AppConstants.stateHeading}   required={"required-field"}/>
                 <Form.Item >
                     {getFieldDecorator(`participantStateRefId${index}`, {
                         rules: [{ required: true, message: ValidationConstants.stateField[0] }],
@@ -1216,7 +1216,7 @@ class AppRegistrationForm extends Component {
                                 )}
                             </Form.Item> 
                            
-                            <InputWithHead heading={AppConstants.state}  required={"required-field"}/>
+                            <InputWithHead heading={AppConstants.stateHeading}  required={"required-field"}/>
                             <Form.Item>
                                 {getFieldDecorator(`parentStateRefId${index}`, {
                                     rules: [{ required: true, message: ValidationConstants.stateField[0] }],

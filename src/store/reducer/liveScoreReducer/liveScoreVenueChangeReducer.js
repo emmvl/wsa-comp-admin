@@ -94,19 +94,23 @@ function LiveScoreVenueChange(state = initialState, action) {
             }
 
         case ApiConstants.API_SAVE_VENUE_CHANGE_SUCCESS:
-            // let emptyObject  = {
-            //     startDate: "",
-            //     startTime: "",
-            //     endDate: "",
-            //     endTime: "",
-            //     venueId: [],
-            //     courtId: [],
-            //     changeToVenueId: [],
-            //     changeToCourtId: []
-            // }
-            console.log("iscolled")
+        //     let emptyObject  = {
+        //         startDate: "",
+        //         startTime: "",
+        //         endDate: "",
+        //         endTime: "",
+        //         venueId: [],
+        //         courtId: [],
+        //         changeToVenueId: [],
+        //         changeToCourtId: []
+        //     }
+
 
         // state.venueChangeData = emptyObject
+        return{
+            ...state,
+            onLoad: false
+        }
 
         case ApiConstants.API_SAVE_VENUE_CHANGE_FAIL:
 

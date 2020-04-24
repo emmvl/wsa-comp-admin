@@ -340,9 +340,8 @@ class LiveScoreBulkChange extends Component {
     }
 
     handleSearch = (value, data) => {
-        console.log(value, data)
         const filteredData = data.filter(memo => {
-            return memo.name.indexOf(value) > -1
+            return memo.name.toLowerCase().indexOf(value.toLowerCase()) > -1
         })
         this.props.searchCourtList(filteredData)
 
@@ -889,6 +888,8 @@ class LiveScoreBulkChange extends Component {
                             onChange={(round_1) => this.props.liveScoreUpdateBulkAction(round_1, "resultType")}
                             value={endMatchData.resultType ? endMatchData.resultType : []}
                             placeholder={AppConstants.selectRound}
+                            showSearch
+                            optionFilterProp="children"
                         >
                             {
                                 roundResult.map((item) => {
@@ -916,7 +917,7 @@ class LiveScoreBulkChange extends Component {
         let roundResult = isArrayNotEmpty(roundList) ? roundList : []
 
         const { doubleHeaderResult } = this.props.liveScoreBulkMatchState
-        console.log(doubleHeaderResult, "roundResult")
+    
         return (
             <div>
                 {/* round 1 drop down view */}
@@ -928,6 +929,8 @@ class LiveScoreBulkChange extends Component {
                             rules: [{ required: true, message: ValidationConstants.roundField }],
                         })(
                             <Select
+                                showSearch
+                                optionFilterProp="children"
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 onChange={(round_1) => this.props.liveScoreUpdateBulkAction(round_1, "round_1")}
                                 value={doubleHeaderResult.round_1}
@@ -961,6 +964,10 @@ class LiveScoreBulkChange extends Component {
                                 onChange={(round_2) => this.props.liveScoreUpdateBulkAction(round_2, "round_2")}
                                 value={doubleHeaderResult.round_2}
                                 placeholder={AppConstants.selectRoundOne}
+                                showSearch
+                                optionFilterProp="children"
+                                showSearch
+                                optionFilterProp="children"
                             >
                                 {roundResult.map((item) => {
                                     return (
@@ -984,7 +991,7 @@ class LiveScoreBulkChange extends Component {
         let roundResult = isArrayNotEmpty(roundList) ? roundList : []
 
         const { abandonData, venueData, abandonCourtData, matchResult, mainCourtList } = this.props.liveScoreBulkMatchState
-        console.log(abandonData, 'abandonData')
+     
         return (
             <div>
                 <div>
@@ -1150,6 +1157,8 @@ class LiveScoreBulkChange extends Component {
                                 onChange={(roundId) => this.props.liveScoreUpdateBulkAction(roundId, "roundId")}
                                 placeholder={AppConstants.selectRoundOne}
                                 value={abandonData.roundId ? abandonData.roundId : []}
+                                showSearch
+                                optionFilterProp="children"
                             >
                                 {
                                     roundResult.map((item) => {

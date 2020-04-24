@@ -181,12 +181,20 @@ function getEnhancedRoundRobinAction() {
   return action;
 }
 
-function exportFilesAction(URL){
+function exportFilesAction(URL) {
   const action = {
     type: ApiConstants.API_EXPORT_FILES_LOAD,
-    URL : URL
+    URL: URL
   };
   return action;
+}
+
+
+function CLEAR_OWN_COMPETITION_DATA() {
+  const action = {
+    type: ApiConstants.CLEAR_OWN_COMPETITION_DATA
+  }
+  return action
 }
 
 export {
@@ -210,5 +218,6 @@ export {
   searchVenueList,
   clearFilter,
   getEnhancedRoundRobinAction,
-  exportFilesAction
+  exportFilesAction,
+  CLEAR_OWN_COMPETITION_DATA
 };

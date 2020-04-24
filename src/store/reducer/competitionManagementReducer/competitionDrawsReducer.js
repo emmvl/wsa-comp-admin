@@ -141,6 +141,7 @@ function getSlotFromDate(drawsArray, venueCourtNumber, matchDate, gradeArray) {
     awayTeamName: null,
     gradeName: null,
     competitionDivisionGradeId: null,
+    divisionName: null,
     isLocked: 0,
     colorCode: '#999999',
     teamArray: teamArray,

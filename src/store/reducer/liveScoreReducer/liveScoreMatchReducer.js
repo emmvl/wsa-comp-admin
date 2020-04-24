@@ -508,7 +508,7 @@ function liveScoreMatchReducer(state = initialState, action) {
             if(action.key == "courts"){
                 if(action.search.length > 0){
                     const filteredData = state.venueData.filter(item => {
-                        return item.name.indexOf(action.search) > -1
+                        return item.name.toLowerCase().indexOf(action.search.toLowerCase()) > -1
                     })
                     state.venueData = filteredData
                 }else{

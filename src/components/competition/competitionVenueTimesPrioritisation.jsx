@@ -153,8 +153,12 @@ class CompetitionVenueTimesPrioritisation extends Component {
         allData.courtPreferences.length > 0 && allData.courtPreferences.map((item, index) => {
             console.log("item, index", item, index)
             let courtIDS = `courtIDS${index}`
+            let entitiesDivisionId = `entitiesDivisionId${index}`
+            let entitiesGradeId = `entitiesGradeId${index}`
             this.props.form.setFieldsValue({
                 [courtIDS]: item.venueCourtId,
+                [entitiesDivisionId]: item.entitiesDivisionId,
+                [entitiesGradeId]: item.entitiesGradeId
             })
         })
     }
@@ -324,6 +328,14 @@ class CompetitionVenueTimesPrioritisation extends Component {
         )
     }
 
+    removePrefencesObjectAction = (index, item) => {
+        this.props.removePrefencesObjectAction(index, item, 'courtPreferences')
+        setTimeout(() => {
+            this.setDetailsFieldValue()
+        }, 500);
+    }
+
+
     divisionView(item, index, entityType, getFieldDecorator) {
         const { courtArray, divisionList, gradeList } = this.props.venueTimeState
         let divisionsList = isArrayNotEmpty(divisionList) ? divisionList : []
@@ -355,39 +367,53 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     </div>
                     {entityType == "6" ? <div className="col-sm">
                         <InputWithHead heading={'Division'} />
-                        <Select
-                            mode={'multiple'}
-                            style={{ width: "100%", minWidth: 182, display: "grid", alignItems: 'center' }}
-                            placeholder={'Select Division'}
-                            onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "entitiesDivision", "courtPreferences")}
-                            value={item.entitiesDivisionId}
-                        >
-                            {divisionsList.map((item) => (
-                                < Option value={item.competitionMembershipProductDivision} > {item.divisionName}</Option>
-                            ))
-                            }
-                        </Select>
+                        <Form.Item>
+                            {getFieldDecorator(`entitiesDivisionId${index}`,
+                                {
+                                    rules: [{ required: true, message: ValidationConstant.courtField[4] }]
+                                })(
+                                    <Select
+                                        mode={'multiple'}
+                                        style={{ width: "100%", minWidth: 182, display: "grid", alignItems: 'center' }}
+                                        placeholder={'Select Division'}
+                                        onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "entitiesDivision", "courtPreferences")}
+                                    // value={item.entitiesDivisionId}
+                                    >
+                                        {divisionsList.map((item) => (
+                                            < Option value={item.competitionMembershipProductDivision} > {item.divisionName}</Option>
+                                        ))
+                                        }
+                                    </Select>
+                                )}
+                        </Form.Item>
                     </div> :
                         <div className="col-sm">
                             <InputWithHead heading={'Grade'} />
-                            <Select
-                                mode="multiple"
-                                style={{ width: "100%", minWidth: 182, display: "grid", alignItems: 'center' }}
-                                placeholder={'Select Grade'}
-                                value={item.entitiesGradeId}
-                                onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "entitiesGrade", "courtPreferences")}
-                            >
-                                {
-                                    gradesList.map((item) => (
-                                        <Option value={item.competitionDivisionGradeId} > {item.gradeName}</Option>
-                                    ))
-                                }
-                            </Select>
+                            <Form.Item>
+                                {getFieldDecorator(`entitiesGradeId${index}`,
+                                    {
+                                        rules: [{ required: true, message: ValidationConstant.courtField[5] }]
+                                    })(
+                                        <Select
+                                            mode="multiple"
+                                            style={{ width: "100%", minWidth: 182, display: "grid", alignItems: 'center' }}
+                                            placeholder={'Select Grade'}
+                                            // value={item.entitiesGradeId}
+                                            onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "entitiesGrade", "courtPreferences")}
+                                        >
+                                            {
+                                                gradesList.map((item) => (
+                                                    <Option value={item.competitionDivisionGradeId} > {item.gradeName}</Option>
+                                                ))
+                                            }
+                                        </Select>
+                                    )}
+                            </Form.Item>
                         </div>
 
 
                     }
-                    <div className="col-sm-2 delete-image-view pb-4" onClick={() => this.props.removePrefencesObjectAction(index, item, 'courtPreferences')}>
+                    <div className="col-sm-2 delete-image-view pb-4" onClick={() => this.removePrefencesObjectAction(index, item)}>
                         <span className="user-remove-btn">
                             <i className="fa fa-trash-o" aria-hidden="true"></i>
                         </span>
@@ -677,7 +703,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
         let postObject = {
             "competitionUniqueKey": competitionUniqueKey,
-            "yearRefId": yearRefId,
+            "yearRefId": this.state.yearRefId,
             "organisationId": 1,
             "venues": venueConstarintsDetails.venuePost,
             "nonPlayingDates": venueConstrainstData.nonPlayingDates,

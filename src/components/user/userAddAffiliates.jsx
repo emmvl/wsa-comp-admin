@@ -348,7 +348,7 @@ class UserAddAffiliates extends Component {
 
                 <InputWithHead
                     required={"required-field"}
-                    heading={AppConstants.state}
+                    heading={AppConstants.stateHeading}
                 />
 
                 <Form.Item >

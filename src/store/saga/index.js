@@ -589,5 +589,15 @@ export default function* root_saga() {
 
   yield takeEvery(ApiConstants.API_EXPORT_FILES_LOAD, exportFilesSaga)
 
-  yield takeEvery(ApiConstants.API_SAVE_VENUE_CHANGE_LOAD,liveScoreChangeVenueSaga)
+  yield takeEvery(ApiConstants.API_SAVE_VENUE_CHANGE_LOAD,liveScoreChangeVenueSaga);
+
+  //EndUserRegistrationDashboard List
+  yield takeEvery(ApiConstants.API_USER_REG_DASHBOARD_LIST_LOAD, endUserRegSaga.endUserRegDashboardListSaga)
+
+  // User Friend List
+  yield takeEvery(ApiConstants.API_USER_FRIEND_LOAD, userSaga.getUserFriendListSaga)
+
+  // User Refer Friend List
+  yield takeEvery(ApiConstants.API_USER_REFER_FRIEND_LOAD, userSaga.getUserReferFriendListSaga)
+
 }

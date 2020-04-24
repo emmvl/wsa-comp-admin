@@ -418,7 +418,12 @@ let AxiosApi = {
         }
         var url = `api/affiliates/affiliatedOrganisation`;
         return Method.dataPost(url, token, body);
-    }
+    },
+    endUserRegDashboardList(payload) {
+        var url = `/api/registration/dashboard`;
+        return Method.dataPost(url, token, payload);
+    },
+
 };
 
 const Method = {

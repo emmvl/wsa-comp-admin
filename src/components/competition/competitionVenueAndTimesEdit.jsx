@@ -327,6 +327,15 @@ class CompetitionVenueAndTimesEdit extends Component {
         e.value = null;
       };
 
+      getDisabledHours = (startTime) => {
+        var hours = [];
+        let startHour = startTime.split(':')[0];
+        for(var i = 0; i < Number(startHour); i++){
+            hours.push(i);
+        }
+        return hours;
+    }
+
     ///////view for breadcrumb
     headerView = () => {
         return (
@@ -414,7 +423,7 @@ class CompetitionVenueAndTimesEdit extends Component {
 
                 <InputWithHead
                     required={"required-field"}
-                    heading={AppConstants.state}
+                    heading={AppConstants.stateHeading}
                 />
 
                 <Form.Item >
@@ -536,6 +545,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     <TimePicker
                         disabled={item.isDisabled}
                         key={"endTime"}
+                        disabledHours={()=>this.getDisabledHours(item.startTime)}
                         className="comp-venue-time-timepicker"
                         style={{ width: "100%" }}
                         onChange={(time) => time !== null && this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, 'endTime', "gameTimeslot")}
@@ -620,6 +630,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     <TimePicker
                         disabled={item.isDisabled}
                         className="comp-venue-time-timepicker"
+                        disabledHours={()=>this.getDisabledHours(item.startTime)}
                         style={{ width: "100%" }}
                         onChange={(time) => time !== null && this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, 'endTime', "addTimeSlotField", tableIndex)}
                         value={moment(item.endTime, "HH:mm")}
