@@ -98,11 +98,11 @@ const columns = [
                     }
                 >
                     <Menu.Item key="1">
-                        <NavLink to={{ pathname: `/userEditAffiliates`, state: { affiliateOrgId: e.affiliateOrgId, orgTypeRefId: e.organisationTypeRefId } }} >
+                        <NavLink to={{ pathname: `/` }} >
                             <span>View</span>
                         </NavLink>
                     </Menu.Item>
-                    <Menu.Item key="2" onClick={() => this.showDeleteConfirm(e.affiliateId)}>
+                    <Menu.Item key="2">
                         <span>Refund</span>
                     </Menu.Item>
                 </SubMenu>
