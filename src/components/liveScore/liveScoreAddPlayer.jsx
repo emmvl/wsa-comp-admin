@@ -314,10 +314,6 @@ class LiveScoreAddPlayer extends Component {
             photoUrl } = this.props.liveScorePlayerState.playerData
 
 
-
-        console.log(this.props.liveScorePlayerState.playerData, 'liveScoreAddEditPlayerAction')
-
-
         let playerId = this.state.playerData ? this.state.playerData.playerId : ''
         e.preventDefault();
         this.props.form.validateFields((err, values) => {

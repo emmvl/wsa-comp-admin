@@ -76,127 +76,6 @@ const { TabPane } = Tabs;
 const { confirm } = Modal;
 let this_Obj = null;
 
-const divisionTable = [
-    {
-        title: "Division Name",
-        dataIndex: "divisionName",
-        key: "divisionName",
-        render: (divisionName, record, index) => (
-            <Input className="input-inside-table-fees"
-                value={divisionName}
-                onChange={e => this_Obj.divisionTableDataOnchange(e.target.value, record, index, "divisionName")}
-                disabled={this_Obj.state.permissionState.divisionsDisable} />
-        )
-    },
-    {
-        title: "Gender Restriction",
-        dataIndex: "genderRestriction",
-        key: "genderRestriction",
-        render: (genderRestriction, record, index) => (
-            <Checkbox
-                className="single-checkbox mt-1"
-                disabled={this_Obj.state.permissionState.divisionsDisable}
-                checked={genderRestriction}
-                onChange={e => this_Obj.divisionTableDataOnchange(e.target.checked, record, index, "genderRestriction")}
-            ></Checkbox>
-        )
-    },
-    {
-        dataIndex: "genderRefId",
-        key: "genderRefId",
-        // width:  ? "20%" : null,
-        render: (genderRefId, record, index) => {
-            return (
-                record.genderRestriction &&
-                <Select
-                    className='division-age-select'
-                    style={{ width: "100%", minWidth: 120, }}
-                    onChange={genderRefId => this_Obj.divisionTableDataOnchange(genderRefId, record, index, "genderRefId")}
-                    value={genderRefId}
-                    placeholder={"Select"}
-                    disabled={this_Obj.state.permissionState.divisionsDisable}
-                >
-                    {this_Obj.props.commonReducerState.genderData.map(item => {
-                        return (
-                            <Option key={item.id} value={item.id}>
-                                {item.description}
-                            </Option>
-                        );
-                    })}
-                </Select>
-            )
-        }
-    },
-
-    {
-        title: "Age Restriction",
-        dataIndex: "ageRestriction",
-        key: "ageRestriction",
-
-        render: (ageRestriction, record, index) => (
-            <Checkbox
-                className="single-checkbox mt-1"
-                checked={ageRestriction}
-                onChange={e => this_Obj.divisionTableDataOnchange(e.target.checked, record, index, "ageRestriction")}
-                disabled={this_Obj.state.permissionState.divisionsDisable}
-            ></Checkbox>
-        )
-    },
-    {
-        title: "DOB From",
-        dataIndex: "fromDate",
-        key: "fromDate",
-        width: "25%",
-        render: (fromDate, record, index) => (
-            <DatePicker
-                size="large"
-                className="comp-venue-time-datepicker"
-                style={{ width: "100%", minWidth: 135 }}
-                onChange={date => this_Obj.divisionTableDataOnchange(moment(date).format("YYYY-MM-DD"), record, index, "fromDate")}
-                format={"DD-MM-YYYY"}
-                showTime={false}
-                disabled={!record.ageRestriction}
-                value={fromDate !== null && moment(fromDate)}
-            />
-        )
-    },
-    {
-        title: "DOB To",
-        dataIndex: "toDate",
-        width: "25%",
-        key: "toDate",
-        render: (toDate, record, index) => (
-            <DatePicker
-                size="large"
-                className="comp-venue-time-datepicker"
-                style={{ width: "100%", minWidth: 135 }}
-                onChange={date => this_Obj.divisionTableDataOnchange(moment(date).format("YYYY-MM-DD"), record, index, "toDate")}
-                format={"DD-MM-YYYY"}
-                showTime={false}
-                disabled={!record.ageRestriction}
-                value={toDate !== null && moment(toDate)}
-            />
-        )
-    },
-    {
-        title: "",
-        dataIndex: "clear",
-        key: "clear",
-        render: (clear, record, index) => (
-            <span style={{ display: "flex", justifyContent: "center", width: "100%", cursor: "pointer" }}>
-                <img
-                    className="dot-image"
-                    src={AppImages.redCross}
-                    alt=""
-                    width="16"
-                    height="16"
-                    onClick={() => !this_Obj.state.permissionState.divisionsDisable ? this_Obj.addRemoveDivision(index, record, "remove") : null}
-                />
-            </span>
-        )
-    }
-];
-
 
 
 const playerSeasoTable = [
@@ -411,6 +290,160 @@ class RegistrationCompetitionForm extends Component {
             tooltipVisibleDelete: false,
             tooltipVisibleDraft: false,
             tooltipVisiblePublish: false,
+            divisionTable: [
+                {
+                    title: "Division Name",
+                    dataIndex: "divisionName",
+                    key: "divisionName",
+                    render: (divisionName, record, index) => {
+                        const { getFieldDecorator } = this.props.form;
+                        return (
+
+                            <Form.Item >
+                                {getFieldDecorator(`divisionName${record.parentIndex}${index}`, {
+                                    rules: [{ required: true, message: ValidationConstants.divisionName }],
+                                })(
+                                    <Input className="input-inside-table-fees"
+                                        required={"required-field pt-0 pb-0"}
+                                        setFieldsValue={divisionName}
+                                        onChange={e => this.divisionTableDataOnchange(e.target.value, record, index, "divisionName")}
+                                        disabled={this.state.permissionState.divisionsDisable} />
+                                )}
+                            </Form.Item>
+                        )
+                    }
+                },
+                {
+                    title: "Gender Restriction",
+                    dataIndex: "genderRestriction",
+                    key: "genderRestriction",
+                    render: (genderRestriction, record, index) => (
+                        <Checkbox
+                            className="single-checkbox mt-1"
+                            disabled={this.state.permissionState.divisionsDisable}
+                            checked={genderRestriction}
+                            onChange={e => this.divisionTableDataOnchange(e.target.checked, record, index, "genderRestriction")}
+                        ></Checkbox>
+                    )
+                },
+                {
+                    dataIndex: "genderRefId",
+                    key: "genderRefId",
+                    // width:  ? "20%" : null,
+                    render: (genderRefId, record, index) => {
+                        const { getFieldDecorator } = this.props.form;
+                        return (
+                            record.genderRestriction &&
+                            <Form.Item >
+                                {getFieldDecorator(`genderRefId${record.parentIndex}${index}`,
+                                    { rules: [{ required: true, message: ValidationConstants.genderRestriction }] })(
+                                        <Select
+                                            className='division-age-select'
+                                            style={{ width: "100%", minWidth: 120, }}
+                                            onChange={genderRefId => this.divisionTableDataOnchange(genderRefId, record, index, "genderRefId")}
+                                            setFieldsValue={genderRefId}
+                                            placeholder={"Select"}
+                                            disabled={this.state.permissionState.divisionsDisable}
+                                        >
+                                            {this.props.commonReducerState.genderData.map(item => {
+                                                return (
+                                                    <Option key={item.id} value={item.id}>
+                                                        {item.description}
+                                                    </Option>
+                                                );
+                                            })}
+                                        </Select>
+                                    )}
+                            </Form.Item>
+                        )
+                    }
+                },
+
+                {
+                    title: "Age Restriction",
+                    dataIndex: "ageRestriction",
+                    key: "ageRestriction",
+
+                    render: (ageRestriction, record, index) => (
+                        <Checkbox
+                            className="single-checkbox mt-1"
+                            checked={ageRestriction}
+                            onChange={e => this.divisionTableDataOnchange(e.target.checked, record, index, "ageRestriction")}
+                            disabled={this.state.permissionState.divisionsDisable}
+                        ></Checkbox>
+                    )
+                },
+                {
+                    title: "DOB From",
+                    dataIndex: "fromDate",
+                    key: "fromDate",
+                    width: "25%",
+                    render: (fromDate, record, index) => {
+                        const { getFieldDecorator } = this.props.form;
+                        return (
+                            <Form.Item >
+                                {getFieldDecorator(`fromDate${record.parentIndex}${index}`,
+                                    { rules: [{ required: record.ageRestriction, message: ValidationConstants.pleaseSelectDOBFrom }] })(
+                                        <DatePicker
+                                            size="large"
+                                            className="comp-venue-time-datepicker"
+                                            style={{ width: "100%", minWidth: 135 }}
+                                            onChange={date => this.divisionTableDataOnchange(moment(date).format("YYYY-MM-DD"), record, index, "fromDate")}
+                                            format={"DD-MM-YYYY"}
+                                            showTime={false}
+                                            disabled={!record.ageRestriction || this.state.permissionState.divisionsDisable}
+                                            setFieldsValue={fromDate !== null && moment(fromDate)}
+                                        />
+                                    )}
+                            </Form.Item>
+                        )
+                    }
+                },
+                {
+                    title: "DOB To",
+                    dataIndex: "toDate",
+                    width: "25%",
+                    key: "toDate",
+                    render: (toDate, record, index) => {
+                        const { getFieldDecorator } = this.props.form;
+                        return (
+                            <Form.Item >
+                                {getFieldDecorator(`toDate${record.parentIndex}${index}`,
+                                    { rules: [{ required: record.ageRestriction, message: ValidationConstants.PleaseSelectDOBTo }] })(
+                                        <DatePicker
+                                            size="large"
+                                            className="comp-venue-time-datepicker"
+                                            style={{ width: "100%", minWidth: 135 }}
+                                            onChange={date => this.divisionTableDataOnchange(moment(date).format("YYYY-MM-DD"), record, index, "toDate")}
+                                            format={"DD-MM-YYYY"}
+                                            showTime={false}
+                                            disabled={!record.ageRestriction || this.state.permissionState.divisionsDisable}
+                                            setFieldsValue={toDate !== null && moment(toDate)}
+                                        />
+                                    )}
+                            </Form.Item>
+                        )
+                    }
+                },
+                {
+                    title: "",
+                    dataIndex: "clear",
+                    key: "clear",
+                    render: (clear, record, index) => (
+                        <span style={{ display: "flex", justifyContent: "center", width: "100%", cursor: "pointer" }}>
+                            <img
+                                className="dot-image"
+                                src={AppImages.redCross}
+                                alt=""
+                                width="16"
+                                height="16"
+                                onClick={() => !this.state.permissionState.divisionsDisable ? this.addRemoveDivision(index, record, "remove") : null}
+                            />
+                        </span>
+                    )
+                }
+            ],
+            divisionState: false
         };
         this_Obj = this;
         this.props.CLEAR_OWN_COMPETITION_DATA()
@@ -461,6 +494,10 @@ class RegistrationCompetitionForm extends Component {
                 })
                 this.setDetailsFieldValue()
             }
+        }
+        if (this.state.divisionState === true) {
+            this.setState({ divisionState: false })
+            this.setDetailsFieldValue()
         }
 
     }
@@ -633,6 +670,22 @@ class RegistrationCompetitionForm extends Component {
             this.props.form.setFieldsValue({
                 [competitionMembershipProductTypeId]: item.competitionMembershipProductTypeId,
                 [membershipProductUniqueKey]: item.membershipProductUniqueKey,
+            })
+        })
+        let divisionData = this.props.competitionFeesState.competitionDivisionsData
+        let divisionArray = divisionData !== null ? divisionData : []
+        divisionArray.map((item, index) => {
+            item.divisions.map((divItem, divIndex) => {
+                let divisionName = `divisionName${index}${divIndex}`
+                let genderRefId = `genderRefId${index}${divIndex}`
+                let fromDate = `fromDate${index}${divIndex}`
+                let toDate = `toDate${index}${divIndex}`
+                this.props.form.setFieldsValue({
+                    [divisionName]: divItem.divisionName,
+                    [genderRefId]: divItem.genderRefId ? divItem.genderRefId : [],
+                    [fromDate]: divItem.fromDate && moment(divItem.fromDate),
+                    [toDate]: divItem.toDate && moment(divItem.toDate),
+                });
             })
         })
     }
@@ -870,8 +923,8 @@ class RegistrationCompetitionForm extends Component {
     }
 
     divisionTableDataOnchange(checked, record, index, keyword) {
-        console.log("checked, record", "index", checked, record, index, keyword)
         this.props.divisionTableDataOnchangeAction(checked, record, index, keyword)
+        this.setState({ divisionState: true })
     }
 
     dateOnChangeFrom = (date, key) => {
@@ -1673,10 +1726,12 @@ class RegistrationCompetitionForm extends Component {
                             <div className="table-responsive">
                                 <Table
                                     className="fees-table"
-                                    columns={divisionTable}
+                                    columns={this.state.divisionTable}
                                     dataSource={item.divisions}
                                     pagination={false}
                                     Divider="false"
+                                    key={index}
+
                                 />
                             </div>
                             <a>
@@ -2669,7 +2724,7 @@ class RegistrationCompetitionForm extends Component {
     tabCallBack = (key) => {
         let competitionId = this.props.competitionFeesState.competitionId
         if (competitionId !== null && competitionId.length > 0) {
-            this.setState({ competitionTabKey: key })
+            this.setState({ competitionTabKey: key, divisionState: key == "2" ? true : false })
         }
         this.setDetailsFieldValue()
     }

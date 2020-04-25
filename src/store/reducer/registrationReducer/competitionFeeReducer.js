@@ -194,9 +194,10 @@ function checkMembershipProductData(product, apiSelectedData) {
 }
 
 
-function checkDivision(divisionArray, membershipProductUniqueKey) {
+function checkDivision(divisionArray, membershipProductUniqueKey, parentIndex) {
     let divisions = []
     for (let i in divisionArray) {
+
         if (membershipProductUniqueKey === divisionArray[i].membershipProductUniqueKey) {
             if (!isArrayNotEmpty(divisionArray[i].divisions)) {
                 divisions = []
@@ -204,6 +205,7 @@ function checkDivision(divisionArray, membershipProductUniqueKey) {
             } else {
                 let tempDivisionArray = divisionArray[i].divisions
                 for (let j in tempDivisionArray) {
+                    tempDivisionArray[j]["parentIndex"] = parentIndex
                     if (isNullOrEmptyString(tempDivisionArray[j].fromDate) && isNullOrEmptyString(tempDivisionArray[j].toDate)) {
                         tempDivisionArray[j]["ageRestriction"] = true;
                     }
@@ -218,10 +220,13 @@ function checkDivision(divisionArray, membershipProductUniqueKey) {
                     }
                 }
                 divisions = tempDivisionArray
+
                 break
             }
         }
+
     }
+
     return divisions
 }
 
@@ -233,7 +238,7 @@ function getDivisionTableData(data) {
     if (selectedMebershipProductArray) {
         for (let i in selectedMebershipProductArray) {
             compDivisionTempArray.push({
-                divisions: checkDivision(compDivisionArray, selectedMebershipProductArray[i].membershipProductUniqueKey),
+                divisions: checkDivision(compDivisionArray, selectedMebershipProductArray[i].membershipProductUniqueKey, i),
                 membershipProductName: selectedMebershipProductArray[i].membershipProductName,
                 membershipProductUniqueKey: selectedMebershipProductArray[i].membershipProductUniqueKey,
                 competitionMembershipProductId: selectedMebershipProductArray[i].competitionMembershipProductId
@@ -1445,7 +1450,7 @@ function competitionFees(state = initialState, action) {
                 data => data.membershipProductUniqueKey == action.record.membershipProductUniqueKey
             );
             state.competitionDivisionsData[onChangeDivisionIndex].divisions[action.index][action.keyword] = action.checked
-
+            // state.competitionDivisionsData[onChangeDivisionIndex].divisions[action.index]["parentIndex"] = onChangeDivisionIndex
             if (action.keyword == "ageRestriction") {
                 if (action.checked == false) {
                     state.competitionDivisionsData[onChangeDivisionIndex].divisions[action.index]["fromDate"] = null
@@ -1478,8 +1483,11 @@ function competitionFees(state = initialState, action) {
                     competitionMembershipProductDivisionId: 0,
                     ageRestriction: false,
                     genderRestriction: false,
+                    parentIndex: action.index
                 }
+                console.log(defaultDivisionObject)
                 state.competitionDivisionsData[action.index].divisions.push(defaultDivisionObject)
+
             }
             if (action.keyword == "remove") {
                 let removeDivisionIndex = state.competitionDivisionsData.findIndex(x => x.membershipProductUniqueKey == action.item.membershipProductUniqueKey)
