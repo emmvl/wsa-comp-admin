@@ -262,11 +262,11 @@ class Registration extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-3" >
+                        <div className="col-sm-3" style={{display:'flex'}}>
                             <div style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center" }} >
-                                <span className='year-select-heading'>{AppConstants.dobFrom}</span>
+                                <span className='year-select-heading' style={{width: '100px'}}>{AppConstants.dobFrom}</span>
                                 <DatePicker
-                                    size="default"
+                                    size="large"
                                     style={{ width: "100%" }}
                                     onChange={e => this.onChangeDropDownValue(e, 'dobFrom')}
                                     format={"DD-MM-YYYY"}
@@ -275,11 +275,11 @@ class Registration extends Component {
                                 />
                             </div>
                         </div>
-                        <div className="col-sm-3" >
+                        <div className="col-sm-3" style={{display:'flex'}}>
                             <div style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center" }} >
-                                <span className='year-select-heading'>{AppConstants.dobTo}</span>
+                                <span className='year-select-heading'  style={{width: '100px'}}>{AppConstants.dobTo}</span>
                                 <DatePicker
-                                    size="default"
+                                    size="large"
                                     style={{ width: "100%" }}
                                     onChange={e => this.onChangeDropDownValue(e, 'dobTo')}
                                     //onChange={e => this.setState({dobTo: moment(e, "YYYY-MM-DD")}) }
