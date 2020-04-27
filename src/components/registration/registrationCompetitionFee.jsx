@@ -850,6 +850,10 @@ class RegistrationCompetitionFee extends Component {
         }
         if (nextProps.competitionFeesState !== competitionFeesState) {
             if (competitionFeesState.getCompAllDataOnLoad === false && this.state.getDataLoading == true) {
+                let registrationInviteesRefId = isArrayNotEmpty(competitionFeesState.competitionDetailData.invitees) ?
+                    competitionFeesState.competitionDetailData.invitees[0].registrationInviteesRefId : null
+                console.log("registrationInviteesRefId", registrationInviteesRefId)
+                this.callAnyorgSearchApi(registrationInviteesRefId)
                 let isPublished = competitionFeesState.competitionDetailData.statusRefId == 2 ? true : false
 
                 let registrationCloseDate = competitionFeesState.competitionDetailData.registrationCloseDate
@@ -881,6 +885,19 @@ class RegistrationCompetitionFee extends Component {
             this.setState({ divisionState: false })
             this.setDetailsFieldValue()
         }
+    }
+
+
+
+    callAnyorgSearchApi = (registrationInviteesRefId) => {
+        if (registrationInviteesRefId == 7) {
+            this.props.onInviteesSearchAction("", 3)
+        }
+        if (registrationInviteesRefId == 8) {
+            this.props.onInviteesSearchAction("", 4)
+        }
+
+
     }
 
 
@@ -2100,11 +2117,14 @@ class RegistrationCompetitionFee extends Component {
     getOrgLevelForFeesTable = () => {
         const registrationInviteesRefIdObject = {
             [AppConstants.association]: 2,
-            [AppConstants.club]: 3
+            [AppConstants.club]: 3,
+            [AppConstants.anyAssociation]: 7,
+            [AppConstants.anyClub]: 8,
         }
         let detailData = this.props.competitionFeesState.competitionDetailData
         let inviteesArray = detailData.invitees
-        let inviteeFilter = inviteesArray.filter((x => x.registrationInviteesRefId == 2 || x.registrationInviteesRefId == 3))
+        let inviteeFilter = inviteesArray.filter((x => x.registrationInviteesRefId == 2 || x.registrationInviteesRefId == 3 || x.registrationInviteesRefId == 7 || x.registrationInviteesRefId == 8))
+        console.log("inviteeFilter", inviteeFilter)
         let orgLevel = ""
         if (isArrayNotEmpty(inviteeFilter)) {
             let registrationInviteesRefId = inviteeFilter[0].registrationInviteesRefId
@@ -2116,10 +2136,17 @@ class RegistrationCompetitionFee extends Component {
     seasonalFeesOnOrgLevel() {
         let isCreatorEdit = this.state.isCreatorEdit
         let orgLevel = this.getOrgLevelForFeesTable()
+        console.log("orgLevel", orgLevel)
         if (isCreatorEdit && orgLevel == AppConstants.association) {
             return playerSeasonalTableAssociation
         }
         else if (isCreatorEdit && orgLevel == AppConstants.club) {
+            return playerSeasonalTableClub
+        }
+        else if (isCreatorEdit && orgLevel == AppConstants.anyAssociation) {
+            return playerSeasonalTableAssociation
+        }
+        else if (isCreatorEdit && orgLevel == AppConstants.anyClub) {
             return playerSeasonalTableClub
         }
         else {
@@ -2134,6 +2161,12 @@ class RegistrationCompetitionFee extends Component {
             return playercasualTableAssociation
         }
         else if (isCreatorEdit && orgLevel == AppConstants.club) {
+            return playercasualTableClub
+        }
+        else if (isCreatorEdit && orgLevel == AppConstants.anyAssociation) {
+            return playercasualTableAssociation
+        }
+        else if (isCreatorEdit && orgLevel == AppConstants.anyClub) {
             return playercasualTableClub
         }
         else {
@@ -2299,7 +2332,6 @@ class RegistrationCompetitionFee extends Component {
                         mode="multiple"
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         onChange={associationAffilite => {
-                            // this.onSelectValues(venueSelection, detailsData)
                             this.affiliateSearchOnchange(associationAffilite)
                         }}
                         value={detailsData.affiliateOrgSelected}

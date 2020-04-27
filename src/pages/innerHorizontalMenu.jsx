@@ -256,7 +256,7 @@ class InnerHorizontalMenu extends React.Component {
                         </Menu.Item>
                         <Menu.Item key="8">
                             <NavLink to="/userAffiliatesList">
-                            <span>Affiliates</span>
+                                <span>Affiliates</span>
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="9">
@@ -456,14 +456,15 @@ class InnerHorizontalMenu extends React.Component {
                     defaultSelectedKeys={['1']}
                     style={{ lineHeight: '64px' }}
                     selectedKeys={[this.props.userSelectedKey]}>
-                    <SubMenu
-                        key="sub1"
-                        title={<span>{AppConstants.dashboard}</span>}>
-                         <Menu.Item key="1">
+                        <Menu.Item key="1">
                             <NavLink to="/homeDashboard" >
                                 <span >{AppConstants.home}</span>
                             </NavLink>
                         </Menu.Item>
+                        <SubMenu
+                            key="sub1"
+                            title={<span>{AppConstants.maintain}</span>}>
+
                         <Menu.Item key="2">
                             <NavLink to="/venuesList" >
                                 <span >{AppConstants.venueAndCourts}</span>
@@ -472,8 +473,7 @@ class InnerHorizontalMenu extends React.Component {
                     </SubMenu>
                 </Menu>
                 }
-               
-            </div>
+                </div>
 
         );
     }

@@ -953,7 +953,9 @@ const AppConstants = {
   seasonFixture: "Season Fixture",
   season: "Season",
   types: 'Types',
-  payment: "Payment"
+  payment: "Payment",
+  anyAssociation: "anyAssociation",
+  anyClub: "anyClub",
 };
 
 export default AppConstants;
