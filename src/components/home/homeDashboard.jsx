@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Select } from 'antd';
+import { Layout, Button, Table, Select, Spin } from 'antd';
 import './home.css';
 import { NavLink } from 'react-router-dom';
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -363,11 +363,16 @@ class HomeDashboard extends Component {
                             <div className="row" >
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center" }}>
                                     <div className="reg-payment-regist-view">
+
                                         <img src={AppImages.activeRegist} alt="" height="25" width="25" />
                                     </div>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
-                                    <span className="reg-payment-price-text">{(userCount !== null && userCount !== "") ? userCount : "-"}</span>
+                                    <Spin size="small"
+                                        spinning={this.props.homeDashboardState.onLoad} />
+                                    {this.props.homeDashboardState.onLoad == false &&
+                                        <span className="reg-payment-price-text">{(userCount !== null && userCount !== "") ? userCount : "-"}</span>
+                                    }
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
                                     <span className="reg-payment-paid-reg-text">{AppConstants.totalUsers}</span>
@@ -391,8 +396,12 @@ class HomeDashboard extends Component {
                                     </div>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
-                                    <span className="reg-payment-price-text">{(registrationCount !== null && registrationCount !== "")
-                                        ? registrationCount : "-"}</span>
+                                    <Spin size="small"
+                                        spinning={this.props.homeDashboardState.onLoad} />
+                                    {this.props.homeDashboardState.onLoad == false &&
+                                        <span className="reg-payment-price-text">{(registrationCount !== null && registrationCount !== "")
+                                            ? registrationCount : "-"}</span>
+                                    }
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
                                     <span className="reg-payment-paid-reg-text">{AppConstants.totalRegistrations}</span>
@@ -417,7 +426,11 @@ class HomeDashboard extends Component {
                                     </div>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
-                                    <span className="reg-payment-price-text">{(registrationCompetitionCount !== null && registrationCompetitionCount !== "") ? registrationCompetitionCount : "-"}</span>
+                                    <Spin size="small"
+                                        spinning={this.props.homeDashboardState.onLoad} />
+                                    {this.props.homeDashboardState.onLoad == false &&
+                                        <span className="reg-payment-price-text">{(registrationCompetitionCount !== null && registrationCompetitionCount !== "") ? registrationCompetitionCount : "-"}</span>
+                                    }
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
                                     <span className="reg-payment-paid-reg-text">{AppConstants.totalCompetitions}</span>
@@ -441,7 +454,11 @@ class HomeDashboard extends Component {
                                     </div>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
-                                    <span className="reg-payment-price-text">{(liveScoreCompetitionCount !== null && liveScoreCompetitionCount !== "") ? liveScoreCompetitionCount : "-"}</span>
+                                    <Spin size="small"
+                                        spinning={this.props.homeDashboardState.onLoad} />
+                                    {this.props.homeDashboardState.onLoad == false &&
+                                        <span className="reg-payment-price-text">{(liveScoreCompetitionCount !== null && liveScoreCompetitionCount !== "") ? liveScoreCompetitionCount : "-"}</span>
+                                    }
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
                                     <span className="reg-payment-paid-reg-text">{AppConstants.livescoreCompetitions}</span>
@@ -531,7 +548,7 @@ class HomeDashboard extends Component {
                         {this.participatedView()} */}
                     </Content>
                     <Loader
-                        visible={this.props.homeDashboardState.onLoad || this.props.appState.onLoad} />
+                        visible={this.props.appState.onLoad} />
                     <Footer></Footer>
                 </Layout>
             </div>

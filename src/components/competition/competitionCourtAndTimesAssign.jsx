@@ -435,6 +435,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                         value={item.startTime != null && moment(item.startTime, "HH:mm")}
                         format={"HH:mm"}
                         defaultValue={moment()}
+
+                    // disabledDate={d => !d || d.isAfter(closeDate)
                     // minuteStep={15}
                     />
                 </div>
@@ -448,6 +450,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                         format={"HH:mm"}
                         onChange={(time) => time != null && this.changeTime(time, "endTime", index)}
                     // minuteStep={15}
+                    // disabledHours={() => this.getDisabledHours(item.startTime)}
                     />
                 </div>
                 {data.length > 1 &&
@@ -464,6 +467,17 @@ class CompetitionCourtAndTimesAssign extends Component {
             </div >
         )
     }
+
+    // getDisabledHours = (time) => {
+    //     let startTime = moment.duration(time)
+    //     let hours = []
+    //     if (startTime.hours()) {
+    //         for (var i = 0; i < startTime.hours(); i++) {
+    //             hours.push(i);
+    //         }
+    //     }
+    //     return hours;
+    // }
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
@@ -576,7 +590,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                     >
                                                         {timeSlotData.mainTimeRotationID == item.id && item.subReferences.map((subArr) => {
                                                             return (
-                                                                <Radio key={subArr.id} value={subArr.id}> {subArr.description}</Radio>
+                                                                <Radio key={"data" + subArr.id} value={subArr.id}> {subArr.description}</Radio>
                                                             )
                                                         })}
                                                     </Radio.Group>
@@ -615,14 +629,14 @@ class CompetitionCourtAndTimesAssign extends Component {
 
                                                     <div className="fluid-width">
                                                         {timeSlotData.timeslotRotationRefId == 4 && <span className="applicable-to-heading">
-                                                            {AppConstants.divisions}
+                                                            {AppConstants.divisionsTimeSlot}
                                                         </span>
                                                         }
                                                         {timeSlotData.timeslotRotationRefId == 4 && timeSlotData.competitionTimeslotsEntity.map((item, index) => {
                                                             return this.addTimeSlotDivision(item, index, getFieldDecorator, timeSlotData.mainTimeRotationID, timeSlotData.timeslotRotationRefId, timeSlotData.competitionTimeslotsEntity)
                                                         })}
                                                         {timeSlotData.timeslotRotationRefId == 5 && <span className="applicable-to-heading">
-                                                            {AppConstants.grades}
+                                                            {AppConstants.gradesTimeSlot}
                                                         </span>
                                                         }
                                                         {timeSlotData.timeslotRotationRefId == 5 && timeSlotData.competitionTimeslotsEntity.map((item, index) => {
