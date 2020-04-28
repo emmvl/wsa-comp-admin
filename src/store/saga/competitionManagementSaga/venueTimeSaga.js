@@ -2,18 +2,34 @@ import { put, call } from 'redux-saga/effects'
 import ApiConstants from "../../../themes/apiConstants";
 import CompetitionAxiosApi from "../../http/competitionHttp/competitionAxiosApi";
 import { message } from "antd";
+import CommonAxiosApi from "../../http/commonHttp/commonAxios";
+
 
 export function* venueTimeSaga(action) {
     try {
-        const result = yield call(CompetitionAxiosApi.venueConstraintList, action.yearRefId, action.competitionUniqueKey, action.organisationId);
-        console.log(result)
-        if (result.status === 1) {
-            yield put({
-                type: ApiConstants.API_VENUE_CONSTRAINTS_LIST_SUCCESS,
-                result: result.result.data,
-                status: result.status,
-            });
-        } else {
+        const commResult = yield call(CommonAxiosApi.getCommonData)
+        if (commResult.status === 1) {
+
+            const result = yield call(CompetitionAxiosApi.venueConstraintList, action.yearRefId, action.competitionUniqueKey, action.organisationId);
+            console.log(result)
+            if (result.status === 1) {
+                yield put({
+                    type: ApiConstants.API_VENUE_CONSTRAINTS_LIST_SUCCESS,
+                    commResult: commResult.result.data,
+                    result: result.result.data,
+                    status: result.status,
+                });
+            }
+            else {
+                yield put({
+                    type: ApiConstants.API_VENUE_CONSTRAINTS_LIST_SUCCESS,
+                    commResult: commResult.result.data,
+                    result: [],
+                    status: result.status,
+                });
+            }
+        }
+        else {
             yield put({ type: ApiConstants.API_VENUE_CONSTRAINTS_LIST_FAIL });
             setTimeout(() => {
                 // alert(result.data.message);

@@ -128,7 +128,12 @@ class UserOurOragnization extends Component {
         {
             this.addContact();
         }
-        this.updateContactFormFields(contacts);
+
+        if(contacts!= null && contacts!= undefined)
+        {
+            this.updateContactFormFields(contacts);
+        }
+        
         // (contacts || []).map((item, index) => {
         //     this.props.form.setFieldsValue({
         //         [`firstName${index}`]: item.firstName,
@@ -161,9 +166,11 @@ class UserOurOragnization extends Component {
             isSameUser: true,
             permissions: []
         }
-        contacts.push(obj);
-        this.props.updateOrgAffiliateAction(contacts,"contacts");
-
+        if(contacts!=undefined && contacts!= null)
+        {
+            contacts.push(obj);
+            this.props.updateOrgAffiliateAction(contacts,"contacts");
+        }
     }
 
     deleteContact = (index) =>{
@@ -183,9 +190,12 @@ class UserOurOragnization extends Component {
     removeContact = (index) => {
         let affiliate =  this.props.userState.affiliateOurOrg;
         let contacts = affiliate.contacts;
-        contacts.splice(index,1);
-        this.updateContactFormFields(contacts);
-        this.props.updateOrgAffiliateAction(contacts,"contacts");
+        if(contacts!= null && contacts!= undefined)
+        {
+            contacts.splice(index,1);
+            this.updateContactFormFields(contacts);
+            this.props.updateOrgAffiliateAction(contacts,"contacts");
+        }
     }
 
     updateContactFormFields = (contacts) => {

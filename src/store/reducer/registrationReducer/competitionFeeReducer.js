@@ -876,7 +876,6 @@ function getTotalFees(feesOwner, data, mFees) {
         totalFees = (dataFees + dataGst + mFees)
         return totalFees.toFixed(2)
     }
-
 }
 
 
@@ -884,7 +883,6 @@ function getTotalFees(feesOwner, data, mFees) {
 ///// check Fee Type ---- 
 
 function checkFeeType(feeArray) {
-
     for (let i in feeArray) {
         if (feeArray[i].fee !== null && feeArray[i].gst !== null) {
             return true
@@ -892,7 +890,6 @@ function checkFeeType(feeArray) {
             return false
         }
     }
-
 }
 
 
@@ -903,13 +900,10 @@ function checkIsDivisionAllType(productArray) {
     for (let i in productArray) {
         if (productArray[i].competitionMembershipProductDivisionId == null) {
             return null
-
         } else {
             return productArray[i].competitionMembershipProductDivisionId
         }
-
     }
-
 }
 
 
@@ -918,7 +912,6 @@ function checkIsDivisionAllType(productArray) {
 
 function createProductFeeArr(data) {
     var getFeeData = isArrayNotEmpty(data.competitionfees) ? data.competitionfees : []
-
     // let creatorId = data.competitiondetail.competitionCreator
     // let userId = getUserId();
     let creatorId = data.competitiondetail.competitionCreatorOrgUniqueKey
@@ -1048,8 +1041,6 @@ function createProductFeeArr(data) {
                 let type_Object_casual = null
                 let type_Object_seasonal = null
 
-
-
                 ///// CASUAL TYPE -  DIVIVSION
                 if (statusCasual.status == true) {
                     let mFeesCasualPer = Number(memberShipProductType[k].mCasualFee) + Number(memberShipProductType[k].mCasualGst)
@@ -1063,7 +1054,7 @@ function createProductFeeArr(data) {
                         "affiliateGst": statusCasual.result.affiliateGst ? statusCasual.result.affiliateGst : 0,
                         "feeTypeRefId": 1,
                         "membershipProductTypeName": memberShipProductType[k].membershipProductTypeName,
-                        "divisionName": divisionProductType[j].divisionName,
+                        "divisionName": memberShipProductType[k].isPlaying == 1 ? divisionProductType[j].divisionName : "N/A",
                         "membershipProductUniqueKey": divisions[i].membershipProductUniqueKey,
                         "total": getTotalFees(feesOwner, statusCasual.result, mFeesCasualPer),
                         "mFees": mFeesCasualPer,
@@ -1081,7 +1072,7 @@ function createProductFeeArr(data) {
                         "affiliateGst": 0,
                         "feeTypeRefId": 1,
                         "membershipProductTypeName": memberShipProductType[k].membershipProductTypeName,
-                        "divisionName": divisionProductType[j].divisionName,
+                        "divisionName": memberShipProductType[k].isPlaying == 1 ? divisionProductType[j].divisionName : "N/A",
                         "membershipProductUniqueKey": divisions[i].membershipProductUniqueKey,
                         "total": null,
                         "mFees": Number(memberShipProductType[k].mCasualFee) + Number(memberShipProductType[k].mCasualGst),
@@ -1092,7 +1083,7 @@ function createProductFeeArr(data) {
 
                 if (statusSeasonal.status == true) {
                     let mFeesCasualPer = Number(memberShipProductType[k].mSeasonalFee) + Number(memberShipProductType[k].mSeasonalGst)
-
+                    console.log(memberShipProductType[k])
                     type_Object_seasonal = {
                         "competitionMembershipProductFeeId": statusSeasonal.result.competitionMembershipProductFeeId,
                         "competitionMembershipProductTypeId": memberShipProductType[k].competitionMembershipProductTypeId,
@@ -1103,7 +1094,7 @@ function createProductFeeArr(data) {
                         "affiliateGst": statusSeasonal.result.affiliateGst ? statusSeasonal.result.affiliateGst : 0,
                         "feeTypeRefId": 2,
                         "membershipProductTypeName": memberShipProductType[k].membershipProductTypeName,
-                        "divisionName": divisionProductType[j].divisionName,
+                        "divisionName": memberShipProductType[k].isPlaying == 1 ? divisionProductType[j].divisionName : "N/A",
                         "membershipProductUniqueKey": divisions[i].membershipProductUniqueKey,
                         "total": getTotalFees(feesOwner, statusSeasonal.result, mFeesCasualPer),
                         "mFees": mFeesCasualPer,
@@ -1121,7 +1112,7 @@ function createProductFeeArr(data) {
                         "affiliateGst": 0,
                         "feeTypeRefId": 2,
                         "membershipProductTypeName": memberShipProductType[k].membershipProductTypeName,
-                        "divisionName": divisionProductType[j].divisionName,
+                        "divisionName": memberShipProductType[k].isPlaying == 1 ? divisionProductType[j].divisionName : "N/A",
                         "membershipProductUniqueKey": divisions[i].membershipProductUniqueKey,
                         "total": null,
                         "mFees": Number(memberShipProductType[k].mSeasonalFee) + Number(memberShipProductType[k].mSeasonalGst),
@@ -1129,8 +1120,19 @@ function createProductFeeArr(data) {
                         "membershipGst": memberShipProductType[k].mSeasonalGst
                     }
                 }
-                perTypeArrayCasual.push(type_Object_casual)
-                perTypeArraySeasonal.push(type_Object_seasonal)
+
+                if (memberShipProductType[k].isPlaying == 1) {
+                    perTypeArrayCasual.push(type_Object_casual)
+                    perTypeArraySeasonal.push(type_Object_seasonal)
+                } else {
+                    if (j == 0) {
+                        perTypeArrayCasual.push(type_Object_casual)
+                        perTypeArraySeasonal.push(type_Object_seasonal)
+                    }
+                }
+
+
+
             }
 
         }
@@ -1180,7 +1182,6 @@ function competitionMembershipProduct_Id(array, key) {
     if (index > -1) {
         keyValue = array[index].competitionMembershipProductId
     }
-
     return keyValue
 }
 

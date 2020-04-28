@@ -40,6 +40,7 @@ import {
     setOwn_competition,
     getOwn_competition
 } from "../../util/sessionStorage"
+import Loader from '../../customComponents/loader'
 
 
 const { Header, Footer, Content } = Layout;
@@ -59,7 +60,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
         };
         // this.props.clearYearCompetitionAction()
-        this.props.getCommonRefData()
+        // this.props.getCommonRefData()
     }
 
     componentDidMount() {
@@ -524,6 +525,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
         let courtRotationList = isArrayNotEmpty(courtRotation) ? courtRotation : []
         let evenRotaionList = isArrayNotEmpty(courtRotation) ? courtRotation[0].subReferences : []
         let allocateSameCourtList = isArrayNotEmpty(courtRotation) ? courtRotation[1].subReferences : []
+        console.log(evenRotation, "list", allocateSameCourtList)
         return (
             <div>
                 <span className="applicable-to-heading">
@@ -733,6 +735,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     menuName={AppConstants.competitions}
                 />
                 <InnerHorizontalMenu menu={"competition"} compSelectedKey={"7"} />
+                <Loader visible={this.props.venueTimeState.onLoad} />
                 <Layout>
                     {this.headerView()}
                     {this.dropdownView()}

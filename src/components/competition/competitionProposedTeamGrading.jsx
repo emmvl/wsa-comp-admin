@@ -71,18 +71,18 @@ const columns = [
             //         </Option>
             //     })}
             //     </Select>
-                   
+
             //     )
 
             <Select className="select-inside-team-grades-table"
-            value={sortOrder}
-            onChange={(e) => this_obj.props.onchangeCompOwnFinalTeamGradingData(e, index, "sortOrder")}
+                value={sortOrder}
+                onChange={(e) => this_obj.props.onchangeCompOwnFinalTeamGradingData(e, index, "sortOrder")}
             >
-            {this_obj.props.ownTeamGradingState.teamRanks.map((item) => {
-                return <Option key={"rank" + item.id} value={item.id}>
-                    {item.id}
-                </Option>
-            })}
+                {this_obj.props.ownTeamGradingState.teamRanks.map((item) => {
+                    return <Option key={"rank" + item.id} value={item.id}>
+                        {item.id}
+                    </Option>
+                })}
             </Select>
         )
     },
@@ -164,7 +164,7 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "finalGradeId")
     },
     {
-        title: 'responseComments',
+        title: 'Comments',
         dataIndex: 'responseComments',
         key: 'responseComments',
         width: 110,

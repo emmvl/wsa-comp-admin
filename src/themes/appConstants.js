@@ -942,14 +942,20 @@ const AppConstants = {
 
   logoImageSize: "Selected file must be less then 250 KB",
   logoType: "Selected file must be PNG, GIF or JPEG formate",
-  logo_size:250000,
+  logo_size: 250000,
   referaFriend: "Refer a Friend",
   playWithAFriend: "Play with a Friend",
-  
-  seasonFixture : "Season Fixture",
-  season:"Season",
+
+  divisionsTimeSlot: "Add Divisions (in timeslot order - first to last)",
+  gradesTimeSlot: "Add Grades (in timeslot order - first to last)",
+
+
+  seasonFixture: "Season Fixture",
+  season: "Season",
   types: 'Types',
-  payment: "Payment"
+  payment: "Payment",
+  anyAssociation: "anyAssociation",
+  anyClub: "anyClub",
 };
 
 export default AppConstants;
