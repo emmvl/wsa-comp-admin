@@ -656,11 +656,17 @@ function CompetitionDraws(state = initialState, action) {
       return { ...state, onLoad: true, updateLoad: true, error: null };
 
     case ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_SUCCESS:
+      state.competitionVenues = JSON.parse(JSON.stringify(action.Venue_Result))
+      let venueObject = {
+        name: "All Venues",
+        id: 0
+      }
+      state.competitionVenues.unshift(venueObject)
       state.updateLoad = false;
       return {
         ...state,
         getDrawsRoundsData: action.result,
-        competitionVenues: action.Venue_Result,
+        // competitionVenues: action.Venue_Result,
         onLoad: false,
         error: null,
       };
