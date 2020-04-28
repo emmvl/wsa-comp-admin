@@ -104,6 +104,17 @@ const columns = [
         )
     },
     {
+        title: 'Affiliate Name',
+        dataIndex: 'affiliateName',
+        key: 'affiliateName',
+        sorter: (a, b) => tableSort(a, b, "affiliateName"),
+        render: (affiliateName, record, index) => (
+            record.isDirectRegistration == 0 ? (
+                <span >{affiliateName}</span>
+            ) : null
+        )
+    },
+    {
         title: 'History',
         dataIndex: 'playerHistory',
         key: 'playerHistory',
@@ -495,7 +506,7 @@ class CompetitionProposedTeamGrading extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-2" >
+                        <div className="col-sm" >
                             <div style={{
                                 width: "100%", display: "flex",
                                 flexDirection: "row",
@@ -503,7 +514,7 @@ class CompetitionProposedTeamGrading extends Component {
                             }} >
                                 <span className='year-select-heading'>{AppConstants.grade}:</span>
                                 <Select
-                                    className="year-select"
+                                    className="year-select" style={{width: '70px'}}
                                     onChange={(gradeRefId) => this.onGradeChange(gradeRefId)}
                                     value={JSON.parse(JSON.stringify(this.state.gradeRefId))}
                                 >
