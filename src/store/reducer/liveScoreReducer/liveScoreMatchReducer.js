@@ -164,8 +164,9 @@ const initialState = {
     divisionList: [],
     teamResult: [],
     roundList: [],
-    clubListData:[],
-    courList : []
+    clubListData: [],
+    courList: [],
+    rounLoad: false
 };
 
 function setMatchData(data) {
@@ -359,14 +360,6 @@ function liveScoreMatchReducer(state = initialState, action) {
             };
 
 
-        // case ApiConstants.API_REG_FORM_VENUE_SUCCESS:
-
-        //     state.venueData = action.result
-        //     return {
-        //         ...state,
-        //         onLoad: false,
-        //     };
-
         //// Competition venues
 
 
@@ -377,6 +370,13 @@ function liveScoreMatchReducer(state = initialState, action) {
                 ...state
             }
 
+        case ApiConstants.API_LIVE_SCORE_CREATE_ROUND_LOAD:
+
+            return {
+                ...state,
+                rounLoad: true,
+            }
+
         case ApiConstants.API_LIVE_SCORE_CREATE_ROUND_SUCCESS:
             state.roundList.push(action.result)
             state.matchData.roundId = action.result.id
@@ -384,7 +384,7 @@ function liveScoreMatchReducer(state = initialState, action) {
             state.addEditMatch.round = action.result
             return {
                 ...state,
-                onLoad: false,
+                rounLoad: false,
 
             };
 
@@ -469,9 +469,8 @@ function liveScoreMatchReducer(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
-            
-            console.log(action.result)
-            state.teamResult =  action.result
+
+            state.teamResult = action.result
             return {
                 ...state,
                 onLoad: false,
@@ -479,46 +478,64 @@ function liveScoreMatchReducer(state = initialState, action) {
                 status: action.status
 
             }
+
+        case ApiConstants.API_LIVE_SCORE_ROUND_LIST_LOAD:
+                return { ...state,  rounLoad:true };
+    
+
         case ApiConstants.API_LIVE_SCORE_ROUND_LIST_SUCCESS:
+
             return {
                 ...state,
                 onLoad: false,
                 roundList: action.result,
-                status: action.status
+                status: action.status,
+                rounLoad:false
             };
 
         case ApiConstants.API_LIVE_SCORE_CLUB_LIST_LOAD:
-                return{
-                    ...state,
-                    onLoad:true
-                }
-        case ApiConstants.API_LIVE_SCORE_CLUB_LIST_SUCCESS:
-            console.log(action.result,"ClubcompetitionId")
-          
-            return{
+            return {
                 ...state,
-                onLoad:false,
-                clubListData:action.result
+                onLoad: true
+            }
+        case ApiConstants.API_LIVE_SCORE_CLUB_LIST_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                clubListData: action.result
             }
 
         //// Local serach 
-        
+
         case ApiConstants.API_LIVE_MATCH_LOCAL_SEARCH:
-           
-            if(action.key == "courts"){
-                if(action.search.length > 0){
+
+            if (action.key == "courts") {
+                if (action.search.length > 0) {
                     const filteredData = state.venueData.filter(item => {
                         return item.name.toLowerCase().indexOf(action.search.toLowerCase()) > -1
                     })
                     state.venueData = filteredData
-                }else{
-                    state.venueData = state.courList 
+                } else {
+                    state.venueData = state.courList
                 }
-              
+
             }
-        return{
+            return {
                 ...state
             }
+
+            case ApiConstants.API_CLEAR_ROUND_DATA:
+                    if (action.key == 'all') {
+                        state.roundList = []
+                        state.divisionList = []
+                    }
+                    else {
+                        state.roundList = []
+                    }
+        
+                    return {
+                        ...state,
+                    }
 
     };
 

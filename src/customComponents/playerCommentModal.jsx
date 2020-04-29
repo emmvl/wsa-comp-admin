@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input, Modal, } from 'antd';
 const { TextArea } = Input;
-class CommentModal extends React.Component {
+class PlayerCommentModal extends React.Component {
     render() {
         const { heading, placeholder, name, handleBlur, finalGradeId, owner, proposedGradeID, OwnCreatedComment, affilateCreatedComment, affilate, onChange, type, value, modalTitle, visible, onOK, onCancel, ownnerComment, affilateComment } = this.props
         return (
@@ -13,11 +13,10 @@ class CommentModal extends React.Component {
                     visible={this.props.visible}
                     onOk={onOK}
                     onCancel={onCancel}
-                    cancelButtonProps={{ style: { display: finalGradeId !== null && 'none' } }}
+                // cancelButtonProps={{ style: { display: finalGradeId !== null && 'none' } }}
                 >
 
-                    {finalGradeId !== null &&
-                        owner
+                    {owner
                         &&
                         <div>
                             <div className="col-sm pl-0 pb-2">
@@ -37,7 +36,7 @@ class CommentModal extends React.Component {
                             </div>
                         </div>
                     }
-                    {proposedGradeID !== null &&
+                    {/* {proposedGradeID !== null &&
                         affilate
                         &&
                         <div className="col-sm pl-0 pb-2">
@@ -51,22 +50,22 @@ class CommentModal extends React.Component {
                                 < span className={`comment-heading`}>{affilateComment}</span>
                             }
                         </div>
-                    }
-                    {finalGradeId == null &&
-                        <TextArea
-                            className="textAreaInput"
-                            placeholder={placeholder}
-                            allowClear
-                            name={name}
-                            // handleChange={(name) => alert(name)}
-                            onBlur={handleBlur}
-                            onChange={onChange}
-                            type={type}
-                            value={value}
-                            // defaultValue="xyz"
-                            {...this.props}
-                        />
-                    }
+                    } */}
+
+                    <TextArea
+                        className="textAreaInput"
+                        placeholder={placeholder}
+                        allowClear
+                        name={name}
+                        // handleChange={(name) => alert(name)}
+                        onBlur={handleBlur}
+                        onChange={onChange}
+                        type={type}
+                        value={value}
+                        // defaultValue="xyz"
+                        {...this.props}
+                    />
+
                 </Modal >
             </div >
         )
@@ -74,4 +73,4 @@ class CommentModal extends React.Component {
 }
 
 
-export default CommentModal;
+export default PlayerCommentModal;

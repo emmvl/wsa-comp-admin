@@ -17,7 +17,7 @@ function liveScoreRound(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_CREATE_ROUND_SUCCESS:
-            
+
             return {
                 ...state,
                 onLoad: false,
@@ -52,6 +52,18 @@ function liveScoreRound(state = initialState, action) {
                 status: action.status
             };
 
+        case ApiConstants.API_CLEAR_ROUND_DATA:
+            if (action.key == 'all') {
+                state.roundList = []
+                state.divisionList = []
+            }
+            else {
+                state.roundList = []
+            }
+
+            return {
+                ...state,
+            }
 
         default:
             return state;

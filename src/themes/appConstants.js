@@ -954,6 +954,9 @@ const AppConstants = {
   season: "Season",
   types: 'Types',
   payment: "Payment",
+
+
+  SeasonFixtureUrl: `https://netball-comp-admin-dev.worldsportaction.com/liveScoreSeasonFixture?organisationKey=0b3ae01e-885d-40ef-9a07-a94c870133e1`,
   anyAssociation: "anyAssociation",
   anyClub: "anyClub",
 

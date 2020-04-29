@@ -252,6 +252,9 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
                 console.log(matchIndex)
                 if (matchIndex > -1) {
                     state.unassignedPartPlayerGradingListData["players"][matchIndex].comments = action.comment
+                    state.unassignedPartPlayerGradingListData["players"][matchIndex].commentsCreatedBy = action.result.message.commentsCreatedBy
+                    state.unassignedPartPlayerGradingListData["players"][matchIndex].commentsCreatedOn = action.result.message.commentsCreatedOn
+
                 }
             }
             else {
@@ -269,9 +272,13 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             return { ...state, onLoad: true, error: null }
 
         case ApiConstants.API_PLAYER_GRADING_SUMMARY_COMMENT_SUCCESS:
+            console.log(action)
             let matchindexData = state.getCompPartPlayerGradingSummaryData.findIndex(x => x.competitionMembershipProductDivisionId == action.divisionId)
             if (matchindexData > -1) {
                 state.getCompPartPlayerGradingSummaryData[matchindexData].comments = action.comment
+                state.getCompPartPlayerGradingSummaryData[matchindexData].commentsCreatedBy = action.result.message.commentsCreatedBy
+                state.getCompPartPlayerGradingSummaryData[matchindexData].commentsCreatedOn = action.result.message.commentsCreatedOn
+
             }
             state.onLoad = false
             return {
@@ -282,13 +289,12 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
 
         case ApiConstants.API_COMPETITION_PLAYER_IMPORT_SUCCESS:
             let res = action.result;
-            console.log("*****" + JSON.stringify(res))
             return {
                 ...state,
                 playerImportData: res.data,
                 onLoad: false,
             }
-    
+
         default:
             return state;
     }

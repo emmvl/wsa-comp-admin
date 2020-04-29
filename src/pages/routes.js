@@ -108,6 +108,7 @@ import LiveScoreIncidentImport from '../components/liveScore/liveScoreIncidentIm
 import LiveScorePublicLadder from '../components/liveScore/liveScorePublicLadder'
 
 import LiveScoreSeasonFixture from "../components/liveScore/liveScoreSeasonFixture"
+import RegistrationInvoice from "../components/registration/registrationInvoice"
 
 const lazyLoad = Component => {
   const lazy = props => {
@@ -571,6 +572,11 @@ class Routes extends React.Component {
         <PrivateRoute
           path="/referFriend"
           component={lazyLoad(ReferFriend)}
+        />
+
+        <PrivateRoute
+          path="/invoice"
+          component={lazyLoad(RegistrationInvoice)}
         />
 
         <Route path="/" component={lazyLoad(NotFound)} />
