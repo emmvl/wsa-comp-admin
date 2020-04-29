@@ -956,6 +956,12 @@ const AppConstants = {
   payment: "Payment",
   anyAssociation: "anyAssociation",
   anyClub: "anyClub",
+
+  firstlevelAffiliate: "Affiliates - 1nd level Affiliates - Association/Leagues",
+  secondlevelAffiliate: "Affiliates - 2nd level Affiliates - Club/ School",
+  anyOrgAssociation: "Any organisation - Association/Leagues",
+  anyOrgClub: "Any organisation - Clubs/ Schools",
+  NoRegistrations: "No Registrations",
 };
 
 export default AppConstants;

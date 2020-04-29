@@ -58,7 +58,7 @@ const ValidationConstants = {
     suburbField: ["Suburb is required."],
     stateField: ['State field is required.'],
     dayField: ['Day field is required.'],
-    courtField: ["Court number field is required.", "Longitude field is required.", "Latitude field is required.", "Court field is required.", "Division filed is required.", "Grade filed is required."],
+    courtField: ["Court number field is required.", "Longitude field is required.", "Latitude field is required.", "Court field is required.", "Division field is required.", "Grade field is required."],
     postCodeField: ["Postcode is required"],
 
     //////comp fees
