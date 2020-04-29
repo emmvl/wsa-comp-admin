@@ -483,6 +483,12 @@ function VenueTimeState(state = initialState, action) {
             }
             if (action.index == 'Venue') {
                 let upDateData = state.venuData
+                if(action.key == "affiliate"){
+                    if(action.data == false)
+                        upDateData["affiliateData"] = [];
+                        upDateData["organisations"] = [];
+                }
+               
                 upDateData[action.key] = action.data
                 state.venuData = upDateData
 
