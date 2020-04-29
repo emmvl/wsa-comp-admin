@@ -117,7 +117,7 @@ let AxiosApi = {
     ////Add Venue Api
     async  addVenue(venuData) {
         let userId = await getUserId()
-        let organisationId = await getOrganisationData()..organisationUniqueKey;
+        let organisationId = await getOrganisationData().organisationUniqueKey;
         console.log(venuData, 'venuData_FetchApi')
         let body = {
             "competitionUniqueKey": venuData.competitionUniqueKey,
