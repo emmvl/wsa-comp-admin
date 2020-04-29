@@ -383,10 +383,19 @@ let CompetitionAxiosApi = {
         body.append("competitionUniqueKey", payload.competitionUniqueKey);
         body.append("organisationId", payload.organisationUniqueKey);
         body.append("competitionMembershipProductDivisionId", payload.competitionMembershipProductDivisionId);
-        body.append("isProceed",payload.isProceed);
+        body.append("isProceed", payload.isProceed);
         var url = `/api/create/player`;
         return Method.dataPost(url, token, body)
     },
+
+    async getDivisionGradeNameList(competitionId) {
+        let userId = await getUserId()
+        let body = {
+            competitionUniqueKey: competitionId,
+        };
+        var url = `/api/division/grades?userId=${userId}`
+        return Method.dataPost(url, token, body);
+    }
 
 
 };

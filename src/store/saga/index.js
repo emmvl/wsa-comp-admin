@@ -142,7 +142,8 @@ import { homeDashboardSaga } from "./homeDashboardSaga/homeDashboardSaga"
 import {
   getCompetitionDrawsSaga, getDrawsRoundsSaga,
   updateCompetitionDraws, saveDrawsSaga,
-  getCompetitionVenues, updateCourtTimingsDrawsAction
+  getCompetitionVenues, updateCourtTimingsDrawsAction,
+  getDivisionGradeNameListSaga
 } from './competitionManagementSaga/competitionDrawsSaga';
 
 import { regDashboardListSaga } from "./registrationSaga/registrationDashboardSaga"
@@ -163,7 +164,7 @@ import { liveScoreTeamAttendanceListSaga } from './liveScoreSaga/liveScoreTeamAt
 
 import { laddersSettingGetMatchResult, laddersSettingGetData, laddersSettingPostData } from './liveScoreSaga/liveScoreLadderSettingSaga'
 
-import {liveScoreChangeVenueSaga} from "./liveScoreSaga/liveScoreVenueChangeSaga"
+import { liveScoreChangeVenueSaga } from "./liveScoreSaga/liveScoreVenueChangeSaga"
 
 export default function* root_saga() {
   yield takeEvery(ApiConstants.API_LOGIN_LOAD, loginApiSaga);
@@ -583,13 +584,13 @@ export default function* root_saga() {
 
 
   //// Invitee Search SAGA
-  yield takeEvery(ApiConstants.API_COMPETITION_FEE_INVITEES_SEARCH_LOAD,inviteeSearchSaga)
+  yield takeEvery(ApiConstants.API_COMPETITION_FEE_INVITEES_SEARCH_LOAD, inviteeSearchSaga)
 
   yield takeEvery(ApiConstants.API_COMPETITION_PLAYER_IMPORT_LOAD, importCompetitionPlayer);
 
   yield takeEvery(ApiConstants.API_EXPORT_FILES_LOAD, exportFilesSaga)
 
-  yield takeEvery(ApiConstants.API_SAVE_VENUE_CHANGE_LOAD,liveScoreChangeVenueSaga);
+  yield takeEvery(ApiConstants.API_SAVE_VENUE_CHANGE_LOAD, liveScoreChangeVenueSaga);
 
   //EndUserRegistrationDashboard List
   yield takeEvery(ApiConstants.API_USER_REG_DASHBOARD_LIST_LOAD, endUserRegSaga.endUserRegDashboardListSaga)
@@ -599,5 +600,8 @@ export default function* root_saga() {
 
   // User Refer Friend List
   yield takeEvery(ApiConstants.API_USER_REFER_FRIEND_LOAD, userSaga.getUserReferFriendListSaga)
+
+  //////////////////draws division grade names list
+  yield takeEvery(ApiConstants.API_DRAWS_DIVISION_GRADE_NAME_LIST_LOAD, getDivisionGradeNameListSaga)
 
 }

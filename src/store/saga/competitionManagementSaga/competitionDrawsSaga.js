@@ -47,20 +47,32 @@ export function* getDrawsRoundsSaga(action) {
             action.yearRefId, action.competitionId);
         if (result.status === 1) {
             const VenueResult = yield call(RegstrartionAxiosApi.getCompetitionVenue, action.competitionId);
-            console.log(VenueResult)
             if (VenueResult.status === 1) {
-                yield put({
-                    type: ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_SUCCESS,
-                    result: result.result.data,
-                    Venue_Result:  VenueResult.result.data ,
-                    status: result.status,
-                });
+                const division_Result = yield call(CompetitionAxiosApi.getDivisionGradeNameList, action.competitionId);
+                if (division_Result.status === 1) {
+                    yield put({
+                        type: ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_SUCCESS,
+                        result: result.result.data,
+                        Venue_Result: VenueResult.result.data,
+                        division_Result: division_Result.result.data,
+                        status: result.status,
+                    });
+                } else {
+                    yield put({
+                        type: ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_SUCCESS,
+                        result: result.result.data,
+                        Venue_Result: VenueResult.result.data,
+                        division_Result: [],
+                        status: result.status,
+                    });
+                }
             }
             else {
                 yield put({
                     type: ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_SUCCESS,
                     result: result.result.data,
                     Venue_Result: [],
+                    division_Result: [],
                     status: result.status,
                 });
             }
@@ -176,4 +188,28 @@ export function* updateCourtTimingsDrawsAction(action) {
 
 
 
+}
+
+
+////draws division grade names list
+
+export function* getDivisionGradeNameListSaga(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.getDivisionGradeNameList, action.competitionId);
+
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_DRAWS_DIVISION_GRADE_NAME_LIST_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+
+            });
+
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+
+    }
 }

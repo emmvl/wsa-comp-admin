@@ -83,6 +83,15 @@ function clearDraws(key) {
     return action
 }
 
+////draws division grade names list
+function getDivisionGradeNameLisAction(competitionId) {
+    const action = {
+        type: ApiConstants.API_DRAWS_DIVISION_GRADE_NAME_LIST_LOAD,
+        competitionId: competitionId
+    }
+    return action
+}
+
 export {
     getCompetitionDrawsAction,
     getDrawsRoundsAction,
@@ -91,5 +100,6 @@ export {
     getCompetitionVenue,
     updateCourtTimingsDrawsAction,
     dateSelectionRounds,
-    clearDraws
+    clearDraws,
+    getDivisionGradeNameLisAction,
 }

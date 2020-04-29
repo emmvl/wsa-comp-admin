@@ -35,6 +35,8 @@ import {
     getDraws_round,
     setDraws_roundTime,
     getDraws_roundTime,
+    setDraws_division_grade,
+    getDraws_division_grade,
 } from "../../util/sessionStorage"
 import moment from "moment"
 const { Header, Footer, Content } = Layout;
@@ -49,13 +51,15 @@ class CompetitionDrawEdit extends Component {
             venueId: '',
             roundId: '',
             venueLoad: false,
-            roundTime: null
+            roundTime: null,
+            competitionDivisionGradeId: "",
         };
     }
 
     componentDidUpdate(nextProps) {
         let drawsRoundData = this.props.drawsState.getDrawsRoundsData;
         let venueData = this.props.drawsState.competitionVenues;
+        let divisionGradeNameList = this.props.drawsState.divisionGradeNameList;
 
         if (nextProps.appState !== this.props.appState) {
             let competitionList = this.props.appState.own_CompetitionArr;
@@ -95,6 +99,11 @@ class CompetitionDrawEdit extends Component {
                             })
                         }
                     }
+                    if (divisionGradeNameList.length > 0) {
+                        let competitionDivisionGradeId = divisionGradeNameList[0].competitionDivisionGradeId;
+                        setDraws_division_grade(competitionDivisionGradeId)
+                        this.setState({ competitionDivisionGradeId })
+                    }
                 }
             }
         }
@@ -116,6 +125,7 @@ class CompetitionDrawEdit extends Component {
         let roundTime = getDraws_roundTime()
         let roundData = this.props.drawsState.getDrawsRoundsData.length > 0 ? this.props.drawsState.getDrawsRoundsData : undefined
         let venueData = this.props.drawsState.competitionVenues.length > 0 ? this.props.drawsState.competitionVenues : undefined
+        let competitionDivisionGradeId = getDraws_division_grade()
         if (storedCompetitionId && yearId && propsData && compData) {
             this.setState({
                 yearRefId: JSON.parse(yearId),
@@ -133,6 +143,7 @@ class CompetitionDrawEdit extends Component {
                     venueId: JSON.parse(venueId),
                     roundId: JSON.parse(roundId),
                     roundTime,
+                    competitionDivisionGradeId: JSON.parse(competitionDivisionGradeId),
                     venueLoad: false
                 })
             }
@@ -340,7 +351,7 @@ class CompetitionDrawEdit extends Component {
         this.props.clearDraws("rounds")
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
-        this.setState({ firstTimeCompId: null, yearRefId: yearId, roundId: null, roundTime: null, venueId: null });
+        this.setState({ firstTimeCompId: null, yearRefId: yearId, roundId: null, roundTime: null, venueId: null, competitionDivisionGradeId: null });
         this.props.getYearAndCompetitionOwnAction(
             this.props.appState.own_YearArr,
             yearId,
@@ -353,8 +364,14 @@ class CompetitionDrawEdit extends Component {
     onCompetitionChange(competitionId) {
         this.props.clearDraws("rounds")
         setOwn_competition(competitionId)
-        this.setState({ firstTimeCompId: competitionId, roundId: null, venueId: null, roundTime: null, venueLoad: true });
+        this.setState({ firstTimeCompId: competitionId, roundId: null, venueId: null, roundTime: null, venueLoad: true, competitionDivisionGradeId: null });
         this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId);
+    }
+
+    // on DivisionGradeNameChange
+    onDivisionGradeNameChange(competitionDivisionGradeId) {
+        setDraws_division_grade(competitionDivisionGradeId)
+        this.setState({ competitionDivisionGradeId });
     }
 
     ///dropdown view containing all the dropdown of header
@@ -380,7 +397,7 @@ class CompetitionDrawEdit extends Component {
                         </Select>
                     </div>
                 </div>
-                <div className="col-sm-9">
+                <div className="col-sm-4">
                     <div
                         style={{
                             width: '100%',
@@ -409,6 +426,41 @@ class CompetitionDrawEdit extends Component {
                                         value={item.competitionId}
                                     >
                                         {item.competitionName}
+                                    </Option>
+                                );
+                            })}
+                        </Select>
+                    </div>
+                </div>
+                <div className="col-sm-5">
+                    <div
+                        style={{
+                            width: '100%',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            marginRight: 50
+                        }}
+                    >
+                        <span className="year-select-heading">
+                            {AppConstants.division}:
+            </span>
+                        <Select
+                            style={{ minWidth: 160 }}
+                            name={'competition'}
+                            className="year-select"
+                            onChange={competitionDivisionGradeId =>
+                                this.onDivisionGradeNameChange(competitionDivisionGradeId)
+                            }
+                            value={JSON.parse(JSON.stringify(this.state.competitionDivisionGradeId))}
+                        >
+                            {this.props.drawsState.divisionGradeNameList.map(item => {
+                                return (
+                                    <Option
+                                        key={'divisionGradeNameList' + item.competitionDivisionGradeId}
+                                        value={item.competitionDivisionGradeId}
+                                    >
+                                        {item.name}
                                     </Option>
                                 );
                             })}
@@ -630,7 +682,7 @@ class CompetitionDrawEdit extends Component {
                                                             left: leftMargin
                                                         }}
                                                     >
-                                                        <span>{slotObject.divisionName+ " - " +slotObject.gradeName}</span>
+                                                        <span>{slotObject.divisionName + " - " + slotObject.gradeName}</span>
                                                     </div>
                                                     <span
                                                         className={'border'}
@@ -766,7 +818,7 @@ function mapDispatchToProps(dispatch) {
             updateCompetitionDraws,
             saveDraws,
             getCompetitionVenue,
-            clearDraws
+            clearDraws,
         },
         dispatch
     );
