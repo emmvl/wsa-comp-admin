@@ -145,15 +145,16 @@ let AxiosApi = {
     ////own Competition venue list
     getVenueList(competitionID, search) {
         var url = ""
+        let organisationId = await getOrganisationData().organisationUniqueKey;
         if (competitionID) {
             if(search){
-                url = `/api/venue/competitionmgmnt?search=${search}&competitionId=${competitionID}`;
+                url = `/api/venue/competitionmgmnt?search=${search}&competitionId=${competitionID}&organisationUniqueKey=${organisationId}`;
             }else{
-                url = `/api/venue/competitionmgmnt?competitionId=${competitionID}`;
+                url = `/api/venue/competitionmgmnt?competitionId=${competitionID}&organisationUniqueKey=${organisationId}`;
             }
            
         } else {
-            url = `/api/venue/competitionmgmnt`;
+            url = `/api/venue/competitionmgmnt?organisationUniqueKey=${organisationId}`;
         }
 
         return Method.dataGet(url, token);
