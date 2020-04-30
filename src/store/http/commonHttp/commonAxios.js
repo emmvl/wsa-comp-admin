@@ -143,7 +143,7 @@ let AxiosApi = {
     },
 
     ////own Competition venue list
-    getVenueList(competitionID, search) {
+  async  getVenueList(competitionID, search) {
         var url = ""
         let organisationId = await getOrganisationData().organisationUniqueKey;
         if (competitionID) {
