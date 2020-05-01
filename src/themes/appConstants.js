@@ -956,7 +956,7 @@ const AppConstants = {
   payment: "Payment",
 
 
-  SeasonFixtureUrl: `https://netball-comp-admin-dev.worldsportaction.com/liveScoreSeasonFixture?organisationKey=0b3ae01e-885d-40ef-9a07-a94c870133e1`,
+  SeasonFixtureUrl: `https://netball-comp-admin-dev.worldsportaction.com/liveScoreSeasonFixture?organisationId=3`,
   anyAssociation: "anyAssociation",
   anyClub: "anyClub",
 
@@ -965,6 +965,9 @@ const AppConstants = {
   anyOrgAssociation: "Any organisation - Association/Leagues",
   anyOrgClub: "Any organisation - Clubs/ Schools",
   NoRegistrations: "No Registrations",
+  disput_description:"Result in dispute",
+  draft_description:"Final result entered and unconfirmed",
+  final_description:"Final result entered and confirmed"
 };
 
 export default AppConstants;

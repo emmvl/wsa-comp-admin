@@ -479,7 +479,7 @@ class CompetitionPlayerGrades extends Component {
     onClickComment(player, teamID) {
         this.setState({
             modalVisible: true, comment: player.comments, comments: player.comments, playerId: player.playerId,
-            commentsCreatedBy: player.comments == "" ? null : player.commentsCreatedBy, commentsCreatedOn: player.comments == "" ? null : moment(player.commentsCreatedOn).format("DD-MM-YYYY"),
+            commentsCreatedBy: player.comments == "" ? null : player.commentsCreatedBy, commentsCreatedOn: player.comments == "" ? null : moment(player.commentsCreatedOn).format("DD-MM-YYYY HH:mm"),
             teamID
         })
     }

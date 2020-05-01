@@ -279,7 +279,7 @@ class CompetitionPlayerGradeCalculate extends Component {
             divisionId: record.competitionMembershipProductDivisionId,
             playerGradingorgId: record.playerGradingOrganisationId,
             commentsCreatedBy: record.comments == "" ? null : record.commentsCreatedBy,
-            commentsCreatedOn: record.comments == "" ? null : moment(record.commentsCreatedOn).format("DD-MM-YYYY"),
+            commentsCreatedOn: record.comments == "" ? null : moment(record.commentsCreatedOn).format("DD-MM-YYYY HH:mm"),
             comments: record.comments
         })
     }

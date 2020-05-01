@@ -1,26 +1,38 @@
-import { Breadcrumb, Button, Layout, Select, Form, Table } from 'antd';
+import { Breadcrumb, Layout, Select, Form, Table } from 'antd';
 import React, { Component } from "react";
-import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
-import InputWithHead from "../../customComponents/InputWithHead";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { NavLink } from "react-router-dom";
 import { liveScore_MatchFormate } from '../../themes/dateformate'
-import moment, { utc } from "moment";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getLiveScoreDivisionList } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction'
 import { liveScoreRoundListAction, clearRoundData } from '../../store/actions/LiveScoreAction/liveScoreRoundAction'
-import { liveScoreCompetionActioninitiate } from '../../store/actions/LiveScoreAction/liveScoreCompetitionAction';
 import Loader from '../../customComponents/loader'
-import {getOrganisationData } from "../../util/sessionStorage"
-const { Header, Footer, Content } = Layout;
+import { getOrganisationData } from "../../util/sessionStorage"
+import AppImages from "../../themes/appImages";
+import { fixtureCompetitionListAction } from "../../store/actions/LiveScoreAction/LiveScoreFixtureAction"
+const {  Content } = Layout;
 const { Option } = Select;
 
 function tableSort(a, b, key) {
     let stringA = JSON.stringify(a[key])
     let stringB = JSON.stringify(b[key])
     return stringA.localeCompare(stringB)
+}
+
+
+function matchResultImag(result) {
+    if (result == "Final") {
+        return AppImages.greenDot
+    } else if (result == "Draft") {
+        return AppImages.purpleDot
+    } else if (result == "In Dispute") {
+        return AppImages.redDot
+    } else {
+        return AppImages.greenDot
+    }
+
 }
 
 
@@ -153,12 +165,13 @@ const columns2 = [
             }
         }
     },
+
     {
         title: 'Match Result',
-        dataIndex: 'ms',
-        key: 'ms',
-        sorter: (a, b) => tableSort(a, b, "ms"),
-        render: (venueCourt, record) => {
+        dataIndex: 'resultStatus',
+        key: 'resultStatus',
+        sorter: (a, b) => tableSort(a, b, "resultStatus"),
+        render: (resultStatus, record) => {
             if (record.isRoundChnage) {
                 return (
                     <div className="table-live-score-table-fixture-style-main">
@@ -174,7 +187,37 @@ const columns2 = [
             } else {
 
                 return (
-                    <span>{""}</span>
+                    <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
+                        <img className="dot-image"
+                            src={matchResultImag(resultStatus)}
+                            alt="" width="12" height="12" />
+                    </span>
+                )
+            }
+        }
+    },
+    {
+        title: 'Match Status',
+        dataIndex: 'matchStatus',
+        key: 'matchStatus',
+        sorter: (a, b) => tableSort(a, b, "matchStatus"),
+        render: (matchStatus, record) => {
+            if (record.isRoundChnage) {
+                return (
+                    <div className="table-live-score-table-fixture-style-main">
+                        <div className="table-live-score-table-fixture-style" style={{ borderBottom: " 1px solid #e8e8e8" }}>
+
+                        </div>
+                        <div className="table-live-score-table-fixture-style"  >
+                            {/* <span >{venueCourt ? venueCourt.name : ""}</span> */}
+                        </div>
+                    </div >
+
+                )
+            } else {
+
+                return (
+                    <span>{matchStatus ? matchStatus : ""}</span>
                 )
             }
         }
@@ -202,24 +245,18 @@ class LiveScoreSeasonFixture extends Component {
         }
     }
     componentDidMount() {
-        // this.props.liveScoreCompetionActioninitiate(body, selectedYear, this.state.orgKey)
-        const body = {
-            "paging": {
-                "limit": 10,
-                "offset": 0
-            }
-        }
+
         this.setState({ onCompLoad: true })
-        let orgParam =  this.props.location.search.split("?organisationKey=")
-        let orgKey  = orgParam[1]
-        // let  orgKey  = getOrganisationData() ? getOrganisationData().organisationId :null
-        this.props.liveScoreCompetionActioninitiate(body, 1, orgKey)
+        // let orgParam =  this.props.location.search.split("?organisationId=")
+        // let orgKey  =  orgParam[1]
+        let orgKey = getOrganisationData() ? getOrganisationData().organisationId : null
+        this.props.fixtureCompetitionListAction(orgKey)
     }
 
     componentDidUpdate(nextProps) {
-        if (nextProps.liveScoreCompetition !== this.props.liveScoreCompetition) {
-            if (this.state.onCompLoad == true && this.props.liveScoreCompetition.loader == false) {
-                let firstComp = this.props.liveScoreCompetition.List && this.props.liveScoreCompetition.List.competitions[0].id
+        if (nextProps.liveScoreFixturCompState !== this.props.liveScoreFixturCompState) {
+            if (this.state.onCompLoad == true && this.props.liveScoreFixturCompState.onLoad == false) {
+                let firstComp = this.props.liveScoreFixturCompState.comptitionList && this.props.liveScoreFixturCompState.comptitionList[0].id
                 this.props.getLiveScoreDivisionList(firstComp)
                 this.setState({ selectedComp: firstComp, onCompLoad: false, onDivisionLoad: true })
             }
@@ -272,15 +309,14 @@ class LiveScoreSeasonFixture extends Component {
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
-        let competition = this.props.liveScoreCompetition.List ? this.props.liveScoreCompetition.List.competitions : []
+        let competition = this.props.liveScoreFixturCompState.comptitionList ? this.props.liveScoreFixturCompState.comptitionList : []
         let division = this.props.liveScoreMatchState.divisionList ? this.props.liveScoreMatchState.divisionList : []
-        console.log(division)
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="row" >
                     <div className="col-sm-4" >
                         <div className="com-year-select-heading-view" >
-                            <span className='year-select-heading'>{AppConstants.season}:</span>
+                            <span className='year-select-heading'>{AppConstants.competition}:</span>
                             <Select
                                 className="year-select"
                                 style={{ minWidth: 160 }}
@@ -288,7 +324,7 @@ class LiveScoreSeasonFixture extends Component {
                                 value={this.state.selectedComp}
                             >{
                                     competition.map((item) => {
-                                        return <Option value={item.id}>{item.name}</Option>
+                                        return <Option value={item.id}>{item.longName}</Option>
                                     })
                                 }
 
@@ -301,10 +337,10 @@ class LiveScoreSeasonFixture extends Component {
                             flexDirection: "row",
                             alignItems: "center", marginRight: 50
                         }} >
-                            <span className='year-select-heading'>{AppConstants.grade}:</span>
+                            <span className='year-select-heading'>{AppConstants.division}:</span>
                             <Select
                                 className="year-select"
-                                // style={{ width: 140 }}
+                                style={{ minWidth: 100 }}
                                 onChange={(division) => this.changeDivision({ division })}
                                 value={this.state.division}
                             >{
@@ -355,62 +391,68 @@ class LiveScoreSeasonFixture extends Component {
                         pagination={false}
                         loading={this.props.liveScoreMatchState.rounLoad}
                     />
-                 
+
                 </div>
             </div>
         )
     }
 
+detailsContainer = (icon, description) => {
+    return (
+        <div className='pt-2'>
+            <img src={icon} alt="" width="15" height="15" />
+            <span style={{ marginLeft: 10 }} >{description}</span>
+        </div >
+    )
+}
 
+footerView(){
+    return (
 
-    //////footer view containing all the buttons like submit and cancel
-    footerView = () => {
-        return (
-            <div className="fluid-width" >
-                <div className="footer-view">
-                    <div className="row" >
-                        <div className="col-sm" >
-                            <div style={{ display: 'flex', justifyContent: "flex-end" }}>
-                                <Button className="save-draft-text" type="save-draft-text">{AppConstants.preview}</Button>
-                                <Button className="open-reg-button" type="primary">{AppConstants.print}</Button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div className="comp-player-grades-header-drop-down-view pt-0">
+            <span className="applicable-to-heading">{AppConstants.matchStatus}</span>
+            <div className="reg-competition-radio">
+                {this.detailsContainer(AppImages.greenDot ,AppConstants.final_description)}
+                {this.detailsContainer(AppImages.purpleDot ,AppConstants.draft_description)}
+                {this.detailsContainer(AppImages.redDot ,AppConstants.disput_description)}
             </div>
-        )
-    }
+        </div>
+
+    )
+}
 
 
-    render() {
-        console.log(this.props.liveScoreCompetition)
-        return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
-                <Loader visible={this.props.liveScoreCompetition.loader || this.props.liveScoreMatchState.onLoad} />
-                <Layout>
-                    {this.headerView()}
-                    <Content>
-                        {this.dropdownView()}
-                        {this.contentView()}
-                    </Content>
-                </Layout>
-            </div>
-        );
-    }
+
+render() {
+    return (
+        <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+            <Loader visible={this.props.liveScoreFixturCompState.onLoad || this.props.liveScoreMatchState.onLoad} />
+            <Layout>
+                {this.headerView()}
+                <Content>
+                    {this.dropdownView()}
+                    {this.contentView()}
+                    {this.footerView()}
+                </Content>
+            </Layout>
+        </div>
+    );
+}
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getLiveScoreDivisionList,
         liveScoreRoundListAction,
-        liveScoreCompetionActioninitiate,
-        clearRoundData
+        clearRoundData,
+        fixtureCompetitionListAction
     }, dispatch)
 }
 
 function mapStatetoProps(state) {
     return {
+        liveScoreFixturCompState: state.LiveScoreFixturCompState,
         liveScoreMatchState: state.LiveScoreMatchState,
         liveScoreCompetition: state.liveScoreCompetition
     }

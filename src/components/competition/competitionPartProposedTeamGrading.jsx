@@ -216,8 +216,8 @@ class CompetitionPartProposedTeamGrading extends Component {
             visible: true, comment: record.comments,
             teamId: record.teamId,
             responseComments: record.responseComments, responseCommentsCreatedBy: record.responseCommentsCreatedBy,
-            responseCommentsCreatedOn: moment(record.responseCommentsCreatedOn).format("DD-MM-YYYY"),
-            comments: record.comments, commentsCreatedOn: moment(record.commentsCreatedOn).format("DD-MM-YYYY"), commentsCreatedBy: record.commentsCreatedBy,
+            responseCommentsCreatedOn: moment(record.responseCommentsCreatedOn).format("DD-MM-YYYY HH:mm"),
+            comments: record.comments, commentsCreatedOn: moment(record.commentsCreatedOn).format("DD-MM-YYYY HH:mm"), commentsCreatedBy: record.commentsCreatedBy,
             finalGradeId: record.proposedGradeRefId,
             proposedGradeID: record.proposedGradeRefId
         })
