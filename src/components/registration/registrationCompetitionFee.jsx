@@ -1655,7 +1655,7 @@ class RegistrationCompetitionFee extends Component {
     // search venue  
     handleSearch = (value, data) => {
         const filteredData = data.filter(memo => {
-            return memo.name.indexOf(value) > -1
+            return memo.name.toLowerCase().indexOf(value.toLowerCase()) > -1
         })
         this.props.searchVenueList(filteredData)
     };

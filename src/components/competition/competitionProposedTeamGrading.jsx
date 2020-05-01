@@ -271,8 +271,8 @@ class CompetitionProposedTeamGrading extends Component {
         this.setState({
             visible: true, teamId: record.teamId,
             responseComments: record.responseComments, responseCommentsCreatedBy: record.responseCommentsCreatedBy,
-            responseCommentsCreatedOn: moment(record.responseCommentsCreatedOn).format("DD-MM-YYYY"),
-            comments: record.comments, commentsCreatedOn: moment(record.commentsCreatedOn).format("DD-MM-YYYY"), commentsCreatedBy: record.commentsCreatedBy,
+            responseCommentsCreatedOn: moment(record.responseCommentsCreatedOn).format("DD-MM-YYYY HH:mm"),
+            comments: record.comments, commentsCreatedOn: moment(record.commentsCreatedOn).format("DD-MM-YYYY HH:mm"), commentsCreatedBy: record.commentsCreatedBy,
             finalGradeId: record.finalGradeId, proposedGradeID: record.finalGradeId,
             comment: record.responseComments,
 

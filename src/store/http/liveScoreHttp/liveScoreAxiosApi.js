@@ -727,12 +727,16 @@ let LiveScoreAxiosApi = {
     //// venue Change 
     venueChangeApi(competitionId , details, start, end){
         let courtArray = JSON.stringify(details.courtId)
-        console.log(courtArray)
         let url = `/matches/bulk/courts?competitionId=${competitionId}&startTime=${start}&endTime=${end}&fromCourtIds=${courtArray}&toCourtId=${details.changeToCourtId}`
         let body = null
         return Method.dataPost(url, localStorage.token, body);
-    }
+    },
 
+    //Get Fixture Competition List
+    getFixtureCompList(orgId){
+        let url = `/competitions/list?organisationId=${orgId}`
+        return Method.dataGet(url, localStorage.token);
+    }
 };
 
 

@@ -29,7 +29,7 @@ import history from '../../util/history'
 import ValidationConstants from "../../themes/validationConstant";
 import AppImages from "../../themes/appImages";
 import CSVReader from 'react-csv-reader'
-import { deepCopyFunction} from '../../util/helpers';
+import { deepCopyFunction } from '../../util/helpers';
 
 
 const { Header, Footer, Content } = Layout;
@@ -190,7 +190,7 @@ class CompetitionVenueAndTimesAdd extends Component {
     componentDidMount() {
         window.scroll(0, 0);
         // this.myRef.current.scrollTo(0, 0);
-        let screenNavigationKey =this.props.location.state ? this.props.location.state.key:'';
+        let screenNavigationKey = this.props.location.state ? this.props.location.state.key : '';
         this.setState({
             screenNavigationKey: screenNavigationKey
         })
@@ -302,14 +302,14 @@ class CompetitionVenueAndTimesAdd extends Component {
     getDisabledHours = (startTime) => {
         var hours = [];
         let startHour = startTime.split(':')[0];
-        for(var i = 0; i < Number(startHour); i++){
+        for (var i = 0; i < Number(startHour); i++) {
             hours.push(i);
         }
         return hours;
     }
 
     onChangeGameTimePicker = (time, value, index, key1, key2) => {
-        if(time!= null)
+        if (time != null)
             this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, key1, key2)
     }
 
@@ -498,7 +498,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                         key={"startTime"}
                         className="comp-venue-time-timepicker"
                         style={{ width: "100%" }}
-                        onChange={(time) => this.onChangeGameTimePicker(time, time.format("HH:mm"), index, 'startTime', "gameTimeslot") }
+                        onChange={(time) => this.onChangeGameTimePicker(time, time.format("HH:mm"), index, 'startTime', "gameTimeslot")}
                         value={moment(item.startTime, "HH:mm")}
                         format={"HH:mm "}
                         minuteStep={15}
@@ -509,10 +509,10 @@ class CompetitionVenueAndTimesAdd extends Component {
                     <InputWithHead heading={AppConstants.endTime} />
                     <TimePicker
                         key={"endTime"}
-                        disabledHours={()=>this.getDisabledHours(item.startTime)}
+                        disabledHours={() => this.getDisabledHours(item.startTime)}
                         className="comp-venue-time-timepicker"
                         style={{ width: "100%" }}
-                        onChange={(time) => this.onChangeGameTimePicker(time, time.format("HH:mm"), index, 'endTime', "gameTimeslot") }
+                        onChange={(time) => this.onChangeGameTimePicker(time, time.format("HH:mm"), index, 'endTime', "gameTimeslot")}
                         value={moment(item.endTime, "HH:mm")}
                         format={"HH:mm "}
                         minuteStep={15}
@@ -587,7 +587,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                     <TimePicker
                         className="comp-venue-time-timepicker"
                         style={{ width: "100%" }}
-                        disabledHours={()=>this.getDisabledHours(item.startTime)}
+                        disabledHours={() => this.getDisabledHours(item.startTime)}
                         onChange={(time) => time !== null && this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, 'endTime', "addTimeSlotField", tableIndex)}
                         value={moment(item.endTime, "HH:mm")}
                         format={"HH:mm "}
@@ -679,10 +679,11 @@ class CompetitionVenueAndTimesAdd extends Component {
                     duration: 3.5,
                     maxCount: 1,
                 });
-                if (venuData.venueCourts.length == 0) {
-                    message.error(ValidationConstants.emptyAddCourtValidation);
-                }
-                else if (venuData.gameDays.length == 0) {
+                // if (venuData.venueCourts.length == 0) {
+                //     message.error(ValidationConstants.emptyAddCourtValidation);
+                // }
+                // else
+                if (venuData.gameDays.length == 0) {
                     message.error(ValidationConstants.emptyGameDaysValidation);
                 }
                 else {
