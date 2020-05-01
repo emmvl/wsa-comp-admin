@@ -169,6 +169,14 @@ function changeProposedHistoryHover(data, tableIndex, historyIndex, key) {
     return action
 }
 
+
+function deleteTeamActionAction(data){
+    return {
+        type: ApiConstants.API_COMPETITION_TEAM_DELETE_ACTION_LOAD,
+        payload: data
+    }
+}
+
 export {
     getCompOwnProposedTeamGradingAction,
     onchangeCompOwnFinalTeamGradingData,
@@ -185,5 +193,6 @@ export {
     teamGradingCommentAction,
     partProposedSummaryComment,
     changeHistoryHover,
-    changeProposedHistoryHover
+    changeProposedHistoryHover,
+    deleteTeamActionAction
 }                   

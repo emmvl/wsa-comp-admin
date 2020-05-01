@@ -965,6 +965,7 @@ const AppConstants = {
   anyOrgAssociation: "Any organisation - Association/Leagues",
   anyOrgClub: "Any organisation - Clubs/ Schools",
   NoRegistrations: "No Registrations",
+  deleteTeam: "Delete Team"
 };
 
 export default AppConstants;

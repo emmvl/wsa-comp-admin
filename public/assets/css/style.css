@@ -1447,3 +1447,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 input[type="date"]::-webkit-clear-button {
   margin-right: 10px;
 }
+
+.team-delete-link{
+  position: absolute;
+  right: 68px;
+  top: 24%;
+  text-align: center; 
+}
+
+.disabled-row{
+  pointer-events: none;
+}
+.disabled-row >td{
+    background-color: var(--app-dcdcdc) !important;
+}

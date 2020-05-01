@@ -184,5 +184,22 @@ export function* importCompetitionPlayer(action) {
     }
 }
 
+export function* deleteTeamSaga(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.deleteTeam, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_COMPETITION_TEAM_DELETE_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
 
 

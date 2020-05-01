@@ -119,7 +119,8 @@ import {
   dragTeamPartPlayerSaga,
   partPLayerCommentSaga,
   partPlayerSummaryCommentSaga,
-  importCompetitionPlayer
+  importCompetitionPlayer,
+  deleteTeamSaga
 } from './competitionManagementSaga/competitionPartPlayerGradingSaga';
 import {
   getCompOwnProposedTeamGradingSaga,
@@ -131,7 +132,8 @@ import {
   publishGradeTeamSummarySaga,
   getCompFinalGradesListSaga,
   proposedTeamGradingComment,
-  partProposedTeamGradingComment
+  partProposedTeamGradingComment,
+  deleteTeamActionSaga
 } from './competitionManagementSaga/competitionTeamGradingSaga';
 
 // UserSaga
@@ -603,5 +605,11 @@ export default function* root_saga() {
 
   //////////////////draws division grade names list
   yield takeEvery(ApiConstants.API_DRAWS_DIVISION_GRADE_NAME_LIST_LOAD, getDivisionGradeNameListSaga)
+
+    //part proposed team grading comment 
+    yield takeEvery(ApiConstants.API_COMPETITION_TEAM_DELETE_LOAD, deleteTeamSaga)
+
+      //part proposed team grading comment 
+  yield takeEvery(ApiConstants.API_COMPETITION_TEAM_DELETE_ACTION_LOAD, deleteTeamActionSaga)
 
 }

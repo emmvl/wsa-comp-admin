@@ -35,8 +35,8 @@ const AppImages = {
   yellowDot: require("../images/yellow_dot.png"),
   squareImage: require("../images/squareImage.png"),
   netballImages: require("../images/imagesNetball.png"),
-  netballLogoMain: require("../images/netball.png")
-
+  netballLogoMain: require("../images/netball.png"),
+  deleteImage: require("../images/delete.png")
 };
 
 export default AppImages;
