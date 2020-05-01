@@ -155,8 +155,9 @@ let AxiosApi = {
 
 
     // get venue for registration form
-    getVenue() {
-        var url = `/api/venue/all`;
+    async getVenue() {
+        let organisationId = await getOrganisationData().organisationUniqueKey;
+        var url = `/api/venue/all?organisationUniqueKey=${organisationId}`;
         return Method.dataGet(url, token);
     },
     // get reg form settings
