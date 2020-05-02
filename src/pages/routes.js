@@ -109,6 +109,8 @@ import LiveScorePublicLadder from '../components/liveScore/liveScorePublicLadder
 
 import LiveScoreSeasonFixture from "../components/liveScore/liveScoreSeasonFixture"
 import RegistrationInvoice from "../components/registration/registrationInvoice"
+import Stripe from "../components/stripe/stripe";
+
 
 const lazyLoad = Component => {
   const lazy = props => {
@@ -579,6 +581,10 @@ class Routes extends React.Component {
           component={lazyLoad(RegistrationInvoice)}
         />
 
+        <PrivateRoute
+          path="/stripe"
+          component={lazyLoad(Stripe)}
+        />
         <Route path="/" component={lazyLoad(NotFound)} />
 
         <Redirect from="*" to="/404" />

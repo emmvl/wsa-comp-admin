@@ -143,7 +143,7 @@ import {
   getCompetitionDrawsSaga, getDrawsRoundsSaga,
   updateCompetitionDraws, saveDrawsSaga,
   getCompetitionVenues, updateCourtTimingsDrawsAction,
-  getDivisionGradeNameListSaga
+  getDivisionGradeNameListSaga, publishDraws
 } from './competitionManagementSaga/competitionDrawsSaga';
 
 import { regDashboardListSaga } from "./registrationSaga/registrationDashboardSaga"
@@ -164,8 +164,9 @@ import { liveScoreTeamAttendanceListSaga } from './liveScoreSaga/liveScoreTeamAt
 
 import { laddersSettingGetMatchResult, laddersSettingGetData, laddersSettingPostData } from './liveScoreSaga/liveScoreLadderSettingSaga'
 
-import {liveScoreChangeVenueSaga} from "./liveScoreSaga/liveScoreVenueChangeSaga"
-import {getLiveScoreFixtureCompSaga} from "./liveScoreSaga/liveScoreFixtureCompSaga"
+import { liveScoreChangeVenueSaga } from "./liveScoreSaga/liveScoreVenueChangeSaga"
+import { getLiveScoreFixtureCompSaga } from "./liveScoreSaga/liveScoreFixtureCompSaga";
+import * as stripeSaga from "../saga/stripeSaga/stripeSaga"
 
 
 export default function* root_saga() {
@@ -602,9 +603,16 @@ export default function* root_saga() {
 
   // User Refer Friend List
   yield takeEvery(ApiConstants.API_USER_REFER_FRIEND_LOAD, userSaga.getUserReferFriendListSaga)
-  yield takeEvery(ApiConstants.API_LIVE_SCORE_GET_FIXTURE_COMP_LOAD,getLiveScoreFixtureCompSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_GET_FIXTURE_COMP_LOAD, getLiveScoreFixtureCompSaga)
 
   //////////////////draws division grade names list
   yield takeEvery(ApiConstants.API_DRAWS_DIVISION_GRADE_NAME_LIST_LOAD, getDivisionGradeNameListSaga)
+
+  //////////stripe payment account balance API
+  yield takeEvery(ApiConstants.API_STRIPE_ACCOUNT_BALANCE_API_LOAD, stripeSaga.accountBalanceSaga)
+
+  ///////For stripe charging payment API
+  yield takeEvery(ApiConstants.API_STRIPE_CHARGING_PAYMENT_API_LOAD, stripeSaga.chargingPaymentSaga)
+  yield takeEvery(ApiConstants.API_DRAW_PUBLISH_LOAD, publishDraws)
 
 }

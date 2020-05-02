@@ -12,7 +12,8 @@ import Loader from '../../customComponents/loader'
 import { getOrganisationData } from "../../util/sessionStorage"
 import AppImages from "../../themes/appImages";
 import { fixtureCompetitionListAction } from "../../store/actions/LiveScoreAction/LiveScoreFixtureAction"
-const {  Content } = Layout;
+import { isArrayNotEmpty } from "../../util/helpers";
+const { Content } = Layout;
 const { Option } = Select;
 
 function tableSort(a, b, key) {
@@ -247,10 +248,10 @@ class LiveScoreSeasonFixture extends Component {
     componentDidMount() {
 
         this.setState({ onCompLoad: true })
-        // let orgParam =  this.props.location.search.split("?organisationId=")
-        // let orgKey  =  orgParam[1]
-        let orgKey = getOrganisationData() ? getOrganisationData().organisationId : null
-        this.props.fixtureCompetitionListAction(orgKey)
+        let orgParam =  this.props.location.search.split("?organisationId=")
+        let orgId  =  orgParam[1]
+        // let orgKey = getOrganisationData() ? getOrganisationData().organisationId : null
+        this.props.fixtureCompetitionListAction(orgId)
     }
 
     componentDidUpdate(nextProps) {
@@ -356,19 +357,22 @@ class LiveScoreSeasonFixture extends Component {
             </div>
         )
     }
-    createRequiredArray(array) {
+    createRoundsArray(array) {
         let finalArray = []
-        for (let i in array) {
-            let matcheArray = array[i].matches
-            for (let j in matcheArray) {
-                if (j == 0) {
-                    matcheArray[j]["isRoundChnage"] = true
+        if (isArrayNotEmpty(array)) {
+            for (let i in array) {
+                let matcheArray = array[i].matches
+                for (let j in matcheArray) {
+                    if (j == 0) {
+                        matcheArray[j]["isRoundChnage"] = true
+                    }
+                    matcheArray[j]["roundName"] = array[i].name
+                    matcheArray[j]["roundId"] = array[i].id
+                    finalArray.push(matcheArray[j])
                 }
-                matcheArray[j]["roundName"] = array[i].name
-                matcheArray[j]["roundId"] = array[i].id
-                finalArray.push(matcheArray[j])
             }
         }
+
         return finalArray
     }
 
@@ -378,7 +382,7 @@ class LiveScoreSeasonFixture extends Component {
     contentView = () => {
 
         let roundsArray = this.props.liveScoreMatchState.roundList
-        let newArray = this.createRequiredArray(roundsArray)
+        let newArray = this.createRoundsArray(roundsArray)
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
@@ -397,48 +401,48 @@ class LiveScoreSeasonFixture extends Component {
         )
     }
 
-detailsContainer = (icon, description) => {
-    return (
-        <div className='pt-2'>
-            <img src={icon} alt="" width="15" height="15" />
-            <span style={{ marginLeft: 10 }} >{description}</span>
-        </div >
-    )
-}
+    detailsContainer = (icon, description) => {
+        return (
+            <div className='pt-2'>
+                <img src={icon} alt="" width="15" height="15" />
+                <span style={{ marginLeft: 10 }} >{description}</span>
+            </div >
+        )
+    }
 
-footerView(){
-    return (
+    footerView() {
+        return (
 
-        <div className="comp-player-grades-header-drop-down-view pt-0">
-            <span className="applicable-to-heading">{AppConstants.matchStatus}</span>
-            <div className="reg-competition-radio">
-                {this.detailsContainer(AppImages.greenDot ,AppConstants.final_description)}
-                {this.detailsContainer(AppImages.purpleDot ,AppConstants.draft_description)}
-                {this.detailsContainer(AppImages.redDot ,AppConstants.disput_description)}
+            <div className="comp-player-grades-header-drop-down-view pt-0">
+                <span className="applicable-to-heading">{AppConstants.matchStatus}</span>
+                <div className="reg-competition-radio">
+                    {this.detailsContainer(AppImages.greenDot, AppConstants.final_description)}
+                    {this.detailsContainer(AppImages.purpleDot, AppConstants.draft_description)}
+                    {this.detailsContainer(AppImages.redDot, AppConstants.disput_description)}
+                </div>
             </div>
-        </div>
 
-    )
-}
-
+        )
+    }
 
 
-render() {
-    return (
-        <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-            <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
-            <Loader visible={this.props.liveScoreFixturCompState.onLoad || this.props.liveScoreMatchState.onLoad} />
-            <Layout>
-                {this.headerView()}
-                <Content>
-                    {this.dropdownView()}
-                    {this.contentView()}
-                    {this.footerView()}
-                </Content>
-            </Layout>
-        </div>
-    );
-}
+
+    render() {
+        return (
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
+                <Loader visible={this.props.liveScoreFixturCompState.onLoad || this.props.liveScoreMatchState.onLoad} />
+                <Layout>
+                    {this.headerView()}
+                    <Content>
+                        {this.dropdownView()}
+                        {this.contentView()}
+                        {this.footerView()}
+                    </Content>
+                </Layout>
+            </div>
+        );
+    }
 }
 
 function mapDispatchToProps(dispatch) {

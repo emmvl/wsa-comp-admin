@@ -1,12 +1,17 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Select, DatePicker } from 'antd';
+import { Layout, Breadcrumb, Select, DatePicker, Button } from 'antd';
 import './product.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import InputWithHead from "../../customComponents/InputWithHead";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import {
+    accountBalanceAction
+} from "../../store/actions/stripeAction/stripeAction";
+import { getOrganisationData } from "../../util/sessionStorage";
 
 const { Header, Content } = Layout;
 const { Option } = Select;
@@ -23,6 +28,11 @@ class RegistrationPayments extends Component {
         }
     }
 
+    componentDidMount() {
+        if (this.stripeConnected()) {
+            this.props.accountBalanceAction()
+        }
+    }
 
     onChange = e => {
         console.log('radio checked', e.target.value);
@@ -137,11 +147,58 @@ class RegistrationPayments extends Component {
         console.log(date)
     }
 
+    stripeConnected = () => {
+        let orgData = getOrganisationData()
+        let stripeAccountID = orgData ? orgData.stripeAccountID : null
+        console.log(orgData)
+        if (stripeAccountID !== null) {
+            return true
+        }
+        else {
+            return false
+        }
+    }
 
+    stripeView = () => {
+        let stripeConnected = this.stripeConnected()
+        let accountBalance = this.props.stripeState.accountBalance ? this.props.stripeState.accountBalance : "N/A"
+        let stripeConnectURL = "https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=ca_GoE4DQeJGNAvRzAq6MJOmZ8xmFTeLgan&state={STATE_VALUE}&stripe_user[email]=samir@deftsoft.com&redirect_uri=https://netball-comp-admin-dev.worldsportaction.com/registrationPayments"
+        return (
+            <div className="pb-5">
+                <div className="row">
+                    <div className="col-sm">
+                        <span className="reg-payment-price-text">{stripeConnected ? accountBalance : null}</span>
+                    </div>
+                    <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end" }}>
+                        {stripeConnected ?
+                            <Button
+                                className="open-reg-button"
+                                type="primary"
+                            >
+                                {AppConstants.goToStripeDashboard}
+                            </Button>
+                            :
+                            <Button
+                                className="open-reg-button"
+                                type="primary"
+                            >
+                                <a href={stripeConnectURL} class="stripe-connect">
+                                    <span>
+                                        {AppConstants.connectToStripe}
+                                    </span>
+                                </a>
+                            </Button>
+                        }
+                    </div>
+                </div>
+            </div>
+        )
+    }
 
 
     ////////form content view
     contentView = () => {
+        console.log("stripeState", this.props.stripeState)
         return (
             <div >
                 {this.dropdownView()}
@@ -279,6 +336,7 @@ class RegistrationPayments extends Component {
                 <InnerHorizontalMenu menu={"registration"} regSelectedKey={"4"} />
                 <Layout className="reg-payment-layuot-view">
                     {this.headerView()}
+                    {this.stripeView()}
                     <Content>
                         {this.contentView()}
                     </Content>
@@ -288,4 +346,17 @@ class RegistrationPayments extends Component {
         );
     }
 }
-export default RegistrationPayments;
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        accountBalanceAction
+    }, dispatch)
+}
+
+function mapStatetoProps(state) {
+    return {
+        stripeState: state.StripeState,
+
+    }
+}
+
+export default connect(mapStatetoProps, mapDispatchToProps)((RegistrationPayments));

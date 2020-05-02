@@ -92,6 +92,15 @@ function getDivisionGradeNameLisAction(competitionId) {
     return action
 }
 
+function publishDraws(competitionId) {
+    const action = {
+        type: ApiConstants.API_DRAW_PUBLISH_LOAD,
+        competitionId: competitionId
+    }
+    console.log('called')
+    return action
+}
+
 export {
     getCompetitionDrawsAction,
     getDrawsRoundsAction,
@@ -102,4 +111,5 @@ export {
     dateSelectionRounds,
     clearDraws,
     getDivisionGradeNameLisAction,
+    publishDraws
 }

@@ -395,6 +395,11 @@ let CompetitionAxiosApi = {
         };
         var url = `/api/division/grades?userId=${userId}`
         return Method.dataPost(url, token, body);
+    },
+
+    publishDrawsApi(competitionId) {
+        var url = `/api/draws/publish?competitionUniquekey=${competitionId}`
+        return Method.dataPost(url, token);
     }
 
 

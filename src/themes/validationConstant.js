@@ -119,6 +119,9 @@ const ValidationConstants = {
     genderRestriction: "Please select gender.",
     matchTypeRequired: "Please select match type",
 
+    pleaseSelectVenue: "Please select Venue",
+    pleaseSelectRound: "Please select round",
+
 };
 
 export default ValidationConstants;
