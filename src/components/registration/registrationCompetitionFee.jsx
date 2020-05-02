@@ -978,7 +978,7 @@ class RegistrationCompetitionFee extends Component {
 
     ////alll the api calls
     apiCalls = (competitionId, organisationId) => {
-        this.props.getAffiliateToOrganisationAction(organisationId);
+        // this.props.getAffiliateToOrganisationAction(organisationId);
         this.props.getOnlyYearListAction(this.props.appState.yearList)
         this.props.getDefaultCompFeesLogoAction()
         this.props.competitionDiscountTypesAction()
@@ -1642,9 +1642,16 @@ class RegistrationCompetitionFee extends Component {
 
     //// On change Invitees
     onInviteesChange(value) {
+        console.log(value, 'value')
         let regInviteesselectedData = this.props.competitionFeesState.selectedInvitees
         let arr = [value]
         this.props.add_editcompetitionFeeDeatils(arr, "invitees")
+        if (value == 7) {
+            this.onInviteeSearch("", 3)
+        }
+        else if (value == 8) {
+            this.onInviteeSearch("", 4)
+        }
     }
 
     /////on change logo isdefault
@@ -2320,7 +2327,6 @@ class RegistrationCompetitionFee extends Component {
     ////////reg invitees search view for any organisation
     affiliatesSearchInvitee = (subItem) => {
         let detailsData = this.props.competitionFeesState
-        console.log("detailsData", detailsData.competitionDetailData.invitees)
         let seletedInvitee = detailsData.selectedInvitees.find(x => x);
         let associationAffilites = detailsData.associationAffilites
         let clubAffilites = detailsData.clubAffilites
@@ -2356,6 +2362,7 @@ class RegistrationCompetitionFee extends Component {
             )
         }
         else if (subItem.id == 8 && seletedInvitee == 8) {
+
             return (
 
                 < div >

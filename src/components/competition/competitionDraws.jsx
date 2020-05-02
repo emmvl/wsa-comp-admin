@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Breadcrumb, Select, Button, Form } from 'antd';
+import { Layout, Breadcrumb, Select, Button, Form, message } from 'antd';
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
 import { NavLink } from 'react-router-dom';
 import loadjs from 'loadjs';
@@ -15,6 +15,7 @@ import {
   getCompetitionVenue,
   updateCourtTimingsDrawsAction,
   clearDraws,
+  publishDraws
 } from '../../store/actions/competitionModuleAction/competitionDrawsAction';
 import Swappable from '../../customComponents/SwappableComponent';
 import { getDayName, getTime } from '../../themes/dateformate';
@@ -37,6 +38,7 @@ import {
   setDraws_division_grade,
   getDraws_division_grade,
 } from "../../util/sessionStorage"
+import ValidationConstants from "../../themes/validationConstant"
 import moment from "moment"
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -259,6 +261,27 @@ class CompetitionDraws extends Component {
     );
   }
 
+  saveAPIsActionCall = (e) => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log(this.state)
+        if (this.state.firstTimeCompId == null || this.state.firstTimeCompId == "") {
+          message.error(ValidationConstants.pleaseSelectCompetition)
+        }
+        else if (this.state.venueId == null && this.state.venueId == "") {
+          message.error(ValidationConstants.pleaseSelectVenue)
+        }
+        else if (this.state.roundId == null || this.state.roundId == "") {
+          message.error(ValidationConstants.pleaseSelectRound)
+        }
+        else {
+          console.log("timeSlotData")
+          this.props.publishDraws(this.state.firstTimeCompId)
+        }
+      }
+    })
+  }
 
 
 
@@ -483,9 +506,9 @@ class CompetitionDraws extends Component {
   };
 
   ////// Publish draws
-  publishDraws() {
-    this.props.saveDraws(this.state.yearRefId, this.state.firstTimeCompId, 1);
-  }
+  // publishDraws() {
+  //   this.props.saveDraws(this.state.yearRefId, this.state.firstTimeCompId, 1);
+  // }
 
   ////////form content view
   contentView = () => {
@@ -679,6 +702,7 @@ class CompetitionDraws extends Component {
   };
   //////footer view containing all the buttons like submit and cancel
   footerView = () => {
+    let publishStatus = this.props.drawsState.publishStatus
     return (
       <div className="fluid-width">
         <div className="row">
@@ -691,6 +715,8 @@ class CompetitionDraws extends Component {
               <Button
                 className="open-reg-button"
                 type="primary"
+                htmlType="submit"
+                disabled={publishStatus == 0 ? false : true}
               >
                 {AppConstants.publish}
               </Button>
@@ -711,12 +737,18 @@ class CompetitionDraws extends Component {
         />
         <InnerHorizontalMenu menu={'competition'} compSelectedKey={'18'} />
         <Layout className="comp-dash-table-view">
-          {/* <Loader visible={this.props.drawsState.updateLoad} /> */}
-          {this.headerView()}
-          {this.dropdownView()}
-          <Content>{this.contentView()}</Content>
-          <Footer>{this.footerView()}</Footer>
+          <Form
+            onSubmit={this.saveAPIsActionCall}
+            noValidate="noValidate"
+          >
+            {/* <Loader visible={this.props.drawsState.updateLoad} /> */}
+            {this.headerView()}
+            {this.dropdownView()}
+            <Content>{this.contentView()}</Content>
+            <Footer>{this.footerView()}</Footer>
+          </Form>
         </Layout>
+
       </div>
     );
   }
@@ -733,6 +765,7 @@ function mapDispatchToProps(dispatch) {
       getCompetitionVenue,
       updateCourtTimingsDrawsAction,
       clearDraws,
+      publishDraws,
     },
     dispatch
   );

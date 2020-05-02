@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Breadcrumb, Select, Button, Form } from 'antd';
+import { Layout, Breadcrumb, Select, Button, Form, message } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
@@ -22,6 +22,7 @@ import {
     saveDraws,
     getCompetitionVenue,
     clearDraws,
+    publishDraws
 } from '../../store/actions/competitionModuleAction/competitionDrawsAction';
 import Loader from '../../customComponents/loader'
 import {
@@ -39,6 +40,8 @@ import {
     getDraws_division_grade,
 } from "../../util/sessionStorage"
 import moment from "moment"
+import ValidationConstants from "../../themes/validationConstant"
+
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
@@ -317,6 +320,26 @@ class CompetitionDrawEdit extends Component {
 
     }
 
+    saveAPIsActionCall = (e) => {
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                console.log(this.state)
+                if (this.state.firstTimeCompId == null || this.state.firstTimeCompId == "") {
+                    message.error(ValidationConstants.pleaseSelectCompetition)
+                }
+                else if (this.state.venueId == null && this.state.venueId == "") {
+                    message.error(ValidationConstants.pleaseSelectVenue)
+                }
+                else if (this.state.roundId == null || this.state.roundId == "") {
+                    message.error(ValidationConstants.pleaseSelectRound)
+                }
+                else {
+                    this.props.publishDraws(this.state.firstTimeCompId)
+                }
+            }
+        })
+    }
 
     ///////view for breadcrumb
     headerView = () => {
@@ -762,6 +785,7 @@ class CompetitionDrawEdit extends Component {
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
+        let publishStatus = this.props.drawsState.publishStatus
         return (
             <div className="fluid-width">
                 {/* <div className="footer-view"> */}
@@ -775,7 +799,7 @@ class CompetitionDrawEdit extends Component {
                     <div className="col-sm-9">
                         <div className="comp-buttons-view">
                             <NavLink to="/competitionDraws">
-                                <Button className="open-reg-button" type="primary">
+                                <Button className="open-reg-button" type="primary" htmlType="submit" disabled={publishStatus == 0 ? false : true} >
                                     {AppConstants.save_publish}
                                 </Button>
                             </NavLink>
@@ -796,13 +820,18 @@ class CompetitionDrawEdit extends Component {
                 <InnerHorizontalMenu menu={'competition'} compSelectedKey={'18'} />
                 {/* <Layout className="container"> */}
                 <Layout className="comp-dash-table-view">
-                    {/* <Loader visible={this.props.drawsState.updateLoad} /> */}
-                    {/* <div className="comp-draw-head-content-view"> */}
-                    {this.headerView()}
-                    {this.dropdownView()}
-                    <Content>{this.contentView()}</Content>
-                    {/* </div> */}
-                    <Footer>{this.footerView()}</Footer>
+                    <Form
+                        onSubmit={this.saveAPIsActionCall}
+                        noValidate="noValidate"
+                    >
+                        {/* <Loader visible={this.props.drawsState.updateLoad} /> */}
+                        {/* <div className="comp-draw-head-content-view"> */}
+                        {this.headerView()}
+                        {this.dropdownView()}
+                        <Content>{this.contentView()}</Content>
+                        {/* </div> */}
+                        <Footer>{this.footerView()}</Footer>
+                    </Form>
                 </Layout>
             </div>
         );
@@ -819,6 +848,7 @@ function mapDispatchToProps(dispatch) {
             saveDraws,
             getCompetitionVenue,
             clearDraws,
+            publishDraws
         },
         dispatch
     );

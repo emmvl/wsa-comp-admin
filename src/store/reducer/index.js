@@ -48,7 +48,9 @@ import LiveScoreVenueChangeState from './liveScoreReducer/liveScoreVenueChangeRe
 import RegistrationDashboardState from "./registrationReducer/registrationDashboardReducer"
 import LadderSettingState from './liveScoreReducer/liveScoreLadderSettingReducer'
 import HomeDashboardState from './homeReducer/homeReducer'
-import LiveScoreFixturCompState from './liveScoreReducer/liveScoreFixtureCompetitionReducer'
+import LiveScoreFixturCompState from './liveScoreReducer/liveScoreFixtureCompetitionReducer';
+import StripeState from "./stripeReducer/stripeReducer";
+
 const rootReducer = combineReducers({
   LoginState,
   MenuNavigationState,
@@ -94,7 +96,8 @@ const rootReducer = combineReducers({
   RegistrationDashboardState,
   LadderSettingState,
   HomeDashboardState,
-  LiveScoreFixturCompState
+  LiveScoreFixturCompState,
+  StripeState,
 });
 
 export default rootReducer;

@@ -400,6 +400,12 @@ let CompetitionAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
+    publishDrawsApi(competitionId) {
+        var url = `/api/draws/publish?competitionUniquekey=${competitionId}`
+        return Method.dataPost(url, token);
+    },
+
+
     async deleteTeam(payload) {
         let organisationId = await getOrganisationData().organisationUniqueKey;
         payload.organisationId = organisationId;

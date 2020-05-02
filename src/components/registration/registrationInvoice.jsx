@@ -13,6 +13,31 @@ const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { TextArea } = Input
 
+let data =
+    [
+        {
+            "id": 1585,
+            "firstName": "Stella",
+            "middleName": "",
+            "lastName": "L",
+            "suburb": "Wynne",
+            "street1": "135 County 646 Rd",
+            "street2": "",
+            "mCasualFee": "0.00",
+            "mCasualGst": "0.00",
+            "mSeasonalFee": "0.00",
+            "mSeasonalGst": "0.00",
+            "cSeasonalFees": "15.00",
+            "cSeasonalGST": "1.50",
+            "cCasualFees": "14.00",
+            "cCasualGST": "1.40",
+            "aSeasonalFees": "14.00",
+            "aSeasonalGST": "1.40",
+            "aCasualFees": "13.00",
+            "aCasualGST": "1.30"
+        }
+    ]
+
 class RegistrationInvoice extends Component {
     constructor(props) {
         super(props);
@@ -43,121 +68,8 @@ class RegistrationInvoice extends Component {
 
 
 
-    compititionChart = () => {
-        const compititionsChartRef = this.chartRefCompititions.current.getContext("2d");
-        new Chart(compititionsChartRef, {
-            type: 'doughnut',
-            data: {
-                labels: ["Sapphire Series", "Queensland Premier League", "Junior Queensland", "Walking Netball"],
-                datasets: [
-                    {
-                        data: [2199, 4849, 5255, 1221],
-                        backgroundColor: ["#9966ff", "#ad85ff", "#c2a3ff", "#d6c2ff"]
-                    },
-
-                ]
-
-            },
-            options: {
-                legend: {
-                    position: 'right'
-                }
-            }
-        })
-    }
-
-    genderChart = () => {
-        const genderChartRef = this.chartRefGender.current.getContext("2d");
-        new Chart(genderChartRef, {
-            type: 'doughnut',
-            data: {
-                labels: ["Female", "Male", "Unspecified"],
-                datasets: [
-                    {
-                        data: [2199, 4849, 5255],
-                        backgroundColor: ["#ffa1b5", "#86c7f3"]
-                    },
-
-                ]
-
-            },
-            options: {
-                legend: {
-                    position: 'right'
-                }
-            }
-        })
-    }
 
 
-    roleChart = () => {
-        const roleChartRef = this.chartRef2.current.getContext("2d");
-        new Chart(roleChartRef, {
-            type: 'doughnut',
-            data: {
-                labels: ["Players", "Officals", "Coaches"],
-                datasets: [
-                    {
-                        data: [2199, 4849, 5255],
-                        backgroundColor: ["#ffcd56", "#37afff", "#5dc6c6"]
-                    },
-                ]
-            },
-            options: {
-                legend: {
-                    position: 'right'
-                },
-                // title: {
-                //     text: "Ages",
-                //     display: true,
-                //     lineHeight: 2
-                //     // position: 'chartArea'
-                // },
-                // tooltips: {
-                //     titleAlign: "left",
-                //     backgroundColor: "red",
-                // }
-            }
-        })
-    }
-
-    ////age bar graph
-    ageBarChart = () => {
-        const myChartRef = this.chartRef.current.getContext("2d");
-        new Chart(myChartRef, {
-            type: "horizontalBar",
-
-            data: {
-                //Bring in data
-                labels: ["0-17", "18-24", "25-34", "35-44", "45-54", "55-64", "65+"],
-                datasets: [
-                    {
-                        label: "Ages",
-                        data: [2199, 4849, 5255, 1231, 3223, 1262, 2363],
-                        backgroundColor: ["#ff9f40", "#ffa853", "#ffb266", "#ffbc79", "#ffc58c", "#ffcf9f", "#ffd9b3",],
-
-                    },
-                ]
-            },
-            options: {
-                scales: {
-                    xAxes: [{
-                        gridLines: {
-                            display: false,
-                        }
-                    }],
-                    yAxes: [{
-                        gridLines: {
-                            display: false,
-                        }
-                    }]
-                },
-                legend: {
-                    position: "top"
-                },
-            }
-        });
-    }
 
     ///////view for breadcrumb
     headerView = () => {
@@ -165,9 +77,7 @@ class RegistrationInvoice extends Component {
             <Header className="comp-player-grades-header-view container mb-n3" >
                 <div className="row" >
                     <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
-                        {/* <Breadcrumb separator=" > ">
-                            < Breadcrumb.Item className="breadcrumb-add">{AppConstants.users}</Breadcrumb.Item>
-                        </Breadcrumb> */}
+
                     </div>
                 </div>
             </Header >
@@ -198,10 +108,16 @@ class RegistrationInvoice extends Component {
                             heading={"Receipt No.1234497"}
                         />
                         <Descriptions >
-                            <Descriptions.Item label="Bill To">
-                                Sam O'Brien Unit 6/5 LIvingstone Place NewPort 2106 NSW
-                         </Descriptions.Item>
+                            <Descriptions.Item className="pb-0" label="Bill To">
+                                {data[0].firstName}{' '}{data[0].middleName}{' '}{data[0].lastName}
+                            </Descriptions.Item>
                         </Descriptions>
+                        <Descriptions >
+                            <Descriptions.Item >
+                                {data[0].suburb} {" "} {data[0].street1} {' '}{data[0].street2}
+                            </Descriptions.Item>
+                        </Descriptions>
+
                         {/* </div> */}
                     </div>
                     <div className="col-sm pt-5">
@@ -217,6 +133,7 @@ class RegistrationInvoice extends Component {
 
     ////////form content view
     contentView = () => {
+
         return (
             <div className="content-view pt-0 pb-0">
                 <div className="row" >
@@ -267,7 +184,7 @@ class RegistrationInvoice extends Component {
                         </div>
                         <div className="col-sm-3" >
                             <InputWithHead
-                                heading={"$60"}
+                                heading={data[0].mCasualFee.length > 0 ? data[0].mCasualFee : "-"}
                             />
                         </div>
                         <div className="col-sm-3" >
@@ -277,7 +194,7 @@ class RegistrationInvoice extends Component {
                         </div>
                         <div className="col-sm-3" >
                             <InputWithHead
-                                heading={"$66"}
+                                heading={data[0].mCasualGst.length > 0 ? data[0].mCasualGst : "-"}
                             />
                         </div>
                     </div>
@@ -352,17 +269,17 @@ class RegistrationInvoice extends Component {
                         </div>
                         <div className="col-sm-3" >
                             <InputWithHead
-                                heading={"$150"}
+                                heading={data[0].mCasualFee.length > 0 ? data[0].mCasualFee : "-"}
                             />
                         </div>
                         <div className="col-sm-3" >
                             <InputWithHead
-                                heading={"$15"}
+                                heading={data[0].mCasualGst.length > 0 ? data[0].mCasualGst : "-"}
                             />
                         </div>
                         <div className="col-sm-3" >
                             <InputWithHead
-                                heading={"$165"}
+                                heading={data[0].mCasualFee.length > 0 ? data[0].mCasualFee : "-"}
                             />
                         </div>
                     </div>
