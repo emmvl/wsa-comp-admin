@@ -5,6 +5,7 @@ import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
 
 const initialState = {
     onLoad: false,
+    onTeamDeleteLoad: false,
     error: null,
     result: [],
     status: 0,
@@ -295,6 +296,16 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
                 onLoad: false,
             }
 
+        case ApiConstants.API_COMPETITION_TEAM_DELETE_LOAD:
+            return { ...state, onTeamDeleteLoad: true };
+
+        case ApiConstants.API_COMPETITION_TEAM_DELETE_SUCCESS:
+            return {
+                ...state,
+                onTeamDeleteLoad: false,
+                error: null
+            }
+    
         default:
             return state;
     }

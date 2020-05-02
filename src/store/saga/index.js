@@ -119,7 +119,8 @@ import {
   dragTeamPartPlayerSaga,
   partPLayerCommentSaga,
   partPlayerSummaryCommentSaga,
-  importCompetitionPlayer
+  importCompetitionPlayer,
+  deleteTeamSaga
 } from './competitionManagementSaga/competitionPartPlayerGradingSaga';
 import {
   getCompOwnProposedTeamGradingSaga,
@@ -131,7 +132,8 @@ import {
   publishGradeTeamSummarySaga,
   getCompFinalGradesListSaga,
   proposedTeamGradingComment,
-  partProposedTeamGradingComment
+  partProposedTeamGradingComment,
+  deleteTeamActionSaga
 } from './competitionManagementSaga/competitionTeamGradingSaga';
 
 // UserSaga
@@ -614,5 +616,10 @@ export default function* root_saga() {
   ///////For stripe charging payment API
   yield takeEvery(ApiConstants.API_STRIPE_CHARGING_PAYMENT_API_LOAD, stripeSaga.chargingPaymentSaga)
   yield takeEvery(ApiConstants.API_DRAW_PUBLISH_LOAD, publishDraws)
+    //part proposed team grading comment 
+    yield takeEvery(ApiConstants.API_COMPETITION_TEAM_DELETE_LOAD, deleteTeamSaga)
+
+      //part proposed team grading comment 
+  yield takeEvery(ApiConstants.API_COMPETITION_TEAM_DELETE_ACTION_LOAD, deleteTeamActionSaga)
 
 }

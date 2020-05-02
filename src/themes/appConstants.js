@@ -965,12 +965,13 @@ const AppConstants = {
   anyOrgAssociation: "Any organisation - Association/Leagues",
   anyOrgClub: "Any organisation - Clubs/ Schools",
   NoRegistrations: "No Registrations",
-  disput_description: "Result in dispute",
-  draft_description: "Final result entered and unconfirmed",
-  final_description: "Final result entered and confirmed",
   submitPayment: "Submit Payment",
   connectToStripe: "Connect to Stripe",
   goToStripeDashboard: "Go to Stripe Dashboard",
+  disput_description:"Result in dispute",
+  draft_description:"Final result entered and unconfirmed",
+  final_description:"Final result entered and confirmed",
+  deleteTeam: "Delete Team"
 };
 
 export default AppConstants;

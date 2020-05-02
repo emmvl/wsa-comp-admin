@@ -11,7 +11,7 @@ import { getDivisionsListAction, clearReducerDataAction } from "../../store/acti
 import {
     getCompPartPlayerGradingAction, clearReducerCompPartPlayerGradingAction,
     addNewTeamAction, onDragPlayerAction, onSameTeamDragAction,
-    playerGradingComment
+    playerGradingComment, deleteTeamAction
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import {
     setParticipatingYear,
@@ -49,7 +49,9 @@ class CompetitionPartPlayerGrades extends Component {
             teamID: null,
             commentsCreatedBy: null,
             commentsCreatedOn: null,
-            comments: null
+            comments: null,
+            deleteModalVisible: false,
+            loading:false
         }
         this.onDragEnd = this.onDragEnd.bind(this);
         this.props.clearReducerCompPartPlayerGradingAction("partPlayerGradingListData")
@@ -73,6 +75,13 @@ class CompetitionPartPlayerGrades extends Component {
                 let divisionId = allDivisionsData[0].competitionMembershipProductDivisionId
                 this.props.getCompPartPlayerGradingAction(this.state.yearRefId, this.state.firstTimeCompId, divisionId)
                 this.setState({ divisionId, getDataLoading: true })
+            }
+        }
+
+        if(nextProps.partPlayerGradingState != this.props.partPlayerGradingState){
+            if(this.props.partPlayerGradingState.onTeamDeleteLoad == false && this.state.loading === true){
+                this.setState({loading : false});
+                this.props.getCompPartPlayerGradingAction(this.state.yearRefId, this.state.firstTimeCompId, this.state.divisionId)
             }
         }
 
@@ -372,9 +381,12 @@ class CompetitionPartPlayerGrades extends Component {
                                                 <span className="player-grading-haeding-player-count-text ml-2">
                                                     {teamItem.players.length > 1 ? teamItem.players.length + " Players" : teamItem.players.length + " Player"} </span>
                                             </div>
-                                            <div
-                                                className="col-sm d-flex justify-content-end "
-                                            >
+                                            <div className="col-sm d-flex justify-content-end ">
+                                            <img className="comp-player-table-img team-delete-link" src={AppImages.deleteImage} 
+                                                        alt="" height="20" width="20"
+                                                    style={{ cursor: "pointer" }}
+                                                    onClick={() => this.onClickDeleteTeam(teamItem, teamIndex)}
+                                                />
                                                 <a className="view-more-btn collapsed" data-toggle="collapse" href={`#${teamIndex}`} role="button" aria-expanded="false" aria-controls={teamIndex}>
                                                     <i class="fa fa-angle-down" style={{ color: "#ff8237", }} aria-hidden="true" ></i>
                                                 </a>
@@ -466,7 +478,16 @@ class CompetitionPartPlayerGrades extends Component {
                     OwnCreatedComment={this.state.commentsCreatedOn}
                     ownnerComment={this.state.comments}
                 />
-
+            
+             <Modal
+                    className="add-membership-type-modal"
+                    title={AppConstants.deleteTeam}
+                    visible={this.state.deleteModalVisible}
+                    onOk={this.handleDeleteTeamOk}
+                    onCancel={this.handleDeleteTeamCancel}
+                >
+                     <p>Are you sure you want to delete?</p>
+                </Modal>
             </div>
 
         )
@@ -477,6 +498,27 @@ class CompetitionPartPlayerGrades extends Component {
             commentsCreatedBy: player.comments == "" ? null : player.commentsCreatedBy, commentsCreatedOn: player.comments == "" ? null : moment(player.commentsCreatedOn).format("DD-MM-YYYY HH:mm"),
             teamID
         })
+    }
+
+    
+    handleDeleteTeamOk = () => {
+        this.setState({deleteModalVisible: false});
+        let payload = {
+            competitionUniqueKey: this.state.firstTimeCompId,
+            organisationId: '',
+            teamId: this.state.teamID,
+            competitionMembershipProductDivisionId: this.state.divisionId
+        }
+      this.props.deleteTeamAction(payload);
+      this.setState({loading: true});
+    }
+
+    handleDeleteTeamCancel = () => {
+        this.setState({deleteModalVisible: false});
+    }
+
+    onClickDeleteTeam = async (teamItem, teamIndex) =>{
+      await  this.setState({teamID: teamItem.teamId, deleteModalVisible: true});
     }
 
     ///modal ok for hitting Api and close modal
@@ -714,7 +756,8 @@ function mapDispatchToProps(dispatch) {
         addNewTeamAction,
         onDragPlayerAction,
         onSameTeamDragAction,
-        playerGradingComment
+        playerGradingComment,
+        deleteTeamAction
     }, dispatch)
 }
 

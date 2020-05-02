@@ -74,6 +74,9 @@ let CompetitionAxiosApi = {
     ////save the own competition final grading api
     async  saveOwnFinalTeamGradingData(payload) {
         let userId = await getUserId()
+        let organisationId = await getOrganisationData().organisationUniqueKey;
+        payload['organisationId'] = organisationId;
+
         var url = `/api/teamgrading/save?userId=${userId}`;
         return Method.dataPost(url, token, payload);
     },
@@ -400,9 +403,21 @@ let CompetitionAxiosApi = {
     publishDrawsApi(competitionId) {
         var url = `/api/draws/publish?competitionUniquekey=${competitionId}`
         return Method.dataPost(url, token);
-    }
+    },
 
 
+    async deleteTeam(payload) {
+        let organisationId = await getOrganisationData().organisationUniqueKey;
+        payload.organisationId = organisationId;
+        var url = `/api/team/delete`
+        return Method.dataPost(url, token, payload);
+    },
+    async deleteTeamAction(payload) {
+        let organisationId = await getOrganisationData().organisationUniqueKey;
+        payload.organisationId = organisationId;
+        var url = `/api/team/action`
+        return Method.dataPost(url, token, payload);
+    },
 };
 
 const Method = {
