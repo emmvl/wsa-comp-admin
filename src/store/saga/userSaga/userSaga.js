@@ -428,3 +428,57 @@ export function* getUserReferFriendListSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+/* Get the Org Photos List  */
+export function* getOrgPhotosListSaga(action) {
+    try {
+        const result = yield call(userHttpApi.getOrgPhotosList, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_ORG_PHOTO_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+/* Save the Org Photos   */
+export function* saveOrgPhotosSaga(action) {
+    try {
+        const result = yield call(userHttpApi.saveOrgPhoto, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_SAVE_ORG_PHOTO_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+/* Delete the Org Photos   */
+export function* deleteOrgPhotosSaga(action) {
+    try {
+        const result = yield call(userHttpApi.deleteOrgPhoto, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_DELETE_ORG_PHOTO_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

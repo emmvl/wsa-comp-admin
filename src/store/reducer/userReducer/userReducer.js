@@ -93,7 +93,8 @@ const initialState = {
     friendTotalCount: 1,
     referFriendList: [],
     referFriendPage: 1,
-    referFriendTotalCount: 1
+    referFriendTotalCount: 1,
+    orgPhotosList: []
 };
 
 function userReducer(state = initialState, action) {
@@ -446,7 +447,39 @@ function userReducer(state = initialState, action) {
                 status: action.status
             };
 
+        case ApiConstants.API_GET_ORG_PHOTO_LOAD:
+            return { ...state, onLoad: true };
 
+        case ApiConstants.API_GET_ORG_PHOTO_SUCCESS:
+            let orgPhotoData = action.result;
+            return {
+                ...state,
+                onLoad: false,
+                orgPhotosList: orgPhotoData ? orgPhotoData : [],
+                status: action.status
+            };
+
+        case ApiConstants.API_SAVE_ORG_PHOTO_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_SAVE_ORG_PHOTO_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
+
+        case ApiConstants.API_DELETE_ORG_PHOTO_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_DELETE_ORG_PHOTO_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
         default:
             return state;
     }

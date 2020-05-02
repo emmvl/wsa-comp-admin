@@ -118,7 +118,8 @@ const ValidationConstants = {
     divisionName: "Division Name field is required.",
     genderRestriction: "Please select gender.",
     matchTypeRequired: "Please select match type",
-
+    organisationPhotoRequired: 'Organisation photo is required',
+    photoTypeRequired: "Photo type is required"
 };
 
 export default ValidationConstants;

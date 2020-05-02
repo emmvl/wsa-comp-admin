@@ -137,16 +137,31 @@ let userHttpApi = {
  
       return Method.dataGet(url, token)
     }
-},
-getUserFriendList(payload) {
-  var url = `users/dashboard/friend`;
-  return Method.dataPost(url, token, payload);
-},
+  },
+  getUserFriendList(payload) {
+    var url = `users/dashboard/friend`;
+    return Method.dataPost(url, token, payload);
+  },
 
-getUserReferFriendList(payload) {
-  var url = `users/dashboard/referfriend`;
-  return Method.dataPost(url, token, payload);
-}
+  getUserReferFriendList(payload) {
+    var url = `users/dashboard/referfriend`;
+    return Method.dataPost(url, token, payload);
+  },
+  async getOrgPhotosList(payload) {
+    let organisationUniqueKey = await getOrganisationData().organisationUniqueKey;
+    var url = `api/organisationphoto/list?organisationUniqueKey=${organisationUniqueKey}`;
+    return Method.dataGet(url, token, payload);
+  },
+  saveOrgPhoto(payload) {
+   // let organisationUniqueKey = await getOrganisationData().organisationUniqueKey;
+    var url = `api/organisationphoto/save`;
+    return Method.dataPost(url, token, payload);
+  },
+  deleteOrgPhoto(payload) {
+    // let organisationUniqueKey = await getOrganisationData().organisationUniqueKey;
+     var url = `api/organisationphoto/delete/${payload.id}`;
+     return Method.dataDelete(url, token);
+   },
 }
 
 let Method = {

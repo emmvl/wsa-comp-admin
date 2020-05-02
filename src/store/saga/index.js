@@ -107,7 +107,7 @@ import {
   registrationOtherInfoReferenceSaga, firebirdPlayerReferenceSaga, favouriteTeamReferenceSaga,
   nationalityReferenceSaga, heardByReferenceSaga, playerPositionReferenceSaga, venuesListSaga,
   venueByIdSaga, venueDeleteSaga,
-  getGenderSaga
+  getGenderSaga, getPhotoTypeSaga
 } from "./commonSaga/commonSaga";
 ////Venue constraints
 import { venueTimeSaga, venueConstraintPostSaga } from './competitionManagementSaga/venueTimeSaga'
@@ -563,6 +563,8 @@ export default function* root_saga() {
 
   yield takeEvery(ApiConstants.API_REG_DASHBOARD_LIST_LOAD, regDashboardListSaga)
   yield takeEvery(ApiConstants.API_GET_GENDER_LOAD, getGenderSaga)
+  yield takeEvery(ApiConstants.API_GET_PHOTO_TYPE_LOAD, getPhotoTypeSaga)
+  
 
   //Search Scorer saga 
   yield takeEvery(ApiConstants.API_LIVESCORE_SCORER_SEARCH_LOAD, liveScoreScorerSearchSaga)
@@ -614,5 +616,15 @@ export default function* root_saga() {
 
       //part proposed team grading comment 
   yield takeEvery(ApiConstants.API_COMPETITION_TEAM_DELETE_ACTION_LOAD, deleteTeamActionSaga)
+
+  // Organisation Photos List
+  yield takeEvery(ApiConstants.API_GET_ORG_PHOTO_LOAD, userSaga.getOrgPhotosListSaga)
+
+  // Organisation Photos Save
+  yield takeEvery(ApiConstants.API_SAVE_ORG_PHOTO_LOAD, userSaga.saveOrgPhotosSaga)
+
+    // Organisation Photos Delete
+    yield takeEvery(ApiConstants.API_DELETE_ORG_PHOTO_LOAD, userSaga.deleteOrgPhotosSaga)
+
 
 }

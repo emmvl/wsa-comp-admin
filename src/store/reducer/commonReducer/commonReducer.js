@@ -30,7 +30,8 @@ const initialState = {
     venuesList: [],
     venuesListPage: 1,
     venuesListTotalCount: 1,
-    genderData: []
+    genderData: [],
+    photoTypeData: []
 };
 
 function commonReducerState(state = initialState, action) {
@@ -240,6 +241,20 @@ function commonReducerState(state = initialState, action) {
                 ...state,
                 onLoad: true,
                 genderData: action.result,
+                status: action.status
+            }
+
+        case ApiConstants.API_GET_PHOTO_TYPE_LOAD:
+            return {
+                ...state,
+                onLoad: true
+            }
+
+        case ApiConstants.API_GET_PHOTO_TYPE_SUCCESS:
+            return {
+                ...state,
+                onLoad: true,
+                photoTypeData: action.result,
                 status: action.status
             }
 
