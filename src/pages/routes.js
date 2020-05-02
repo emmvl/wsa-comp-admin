@@ -582,7 +582,7 @@ class Routes extends React.Component {
         />
 
         <PrivateRoute
-          path="/stripe"
+          path="/checkoutPayment"
           component={lazyLoad(Stripe)}
         />
         <Route path="/" component={lazyLoad(NotFound)} />

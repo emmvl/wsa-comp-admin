@@ -616,10 +616,12 @@ export default function* root_saga() {
   ///////For stripe charging payment API
   yield takeEvery(ApiConstants.API_STRIPE_CHARGING_PAYMENT_API_LOAD, stripeSaga.chargingPaymentSaga)
   yield takeEvery(ApiConstants.API_DRAW_PUBLISH_LOAD, publishDraws)
-    //part proposed team grading comment 
-    yield takeEvery(ApiConstants.API_COMPETITION_TEAM_DELETE_LOAD, deleteTeamSaga)
+  //part proposed team grading comment 
+  yield takeEvery(ApiConstants.API_COMPETITION_TEAM_DELETE_LOAD, deleteTeamSaga)
 
-      //part proposed team grading comment 
+  //part proposed team grading comment 
   yield takeEvery(ApiConstants.API_COMPETITION_TEAM_DELETE_ACTION_LOAD, deleteTeamActionSaga)
 
+  //////////stripe payment account balance API
+  yield takeEvery(ApiConstants.API_SAVE_STRIPE_ACCOUNT_API_LOAD, stripeSaga.saveStripeAccountSaga)
 }

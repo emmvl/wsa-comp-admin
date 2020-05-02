@@ -71,6 +71,24 @@ export function* chargingPaymentSaga(action) {
     }
 }
 
+/////////save stripe account
+export function* saveStripeAccountSaga(action) {
+    try {
+        const result = yield call(AxiosApi.saveStripeAccount, action.code);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_SAVE_STRIPE_ACCOUNT_API_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
 
 
 

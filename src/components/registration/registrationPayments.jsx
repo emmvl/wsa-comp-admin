@@ -9,9 +9,11 @@ import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
-    accountBalanceAction
+    accountBalanceAction, saveStripeAccountAction
 } from "../../store/actions/stripeAction/stripeAction";
 import { getOrganisationData } from "../../util/sessionStorage";
+import { currencyFormat } from "../../util/currencyFormat";
+import Loader from '../../customComponents/loader';
 
 const { Header, Content } = Layout;
 const { Option } = Select;
@@ -24,13 +26,29 @@ class RegistrationPayments extends Component {
             year: "2017",
             competition: "all",
             paymentFor: "all",
-
+            loadingSave: false,
         }
     }
 
+
+    componentDidUpdate() {
+        if (this.props.stripeState.onLoad === false && this.state.loadingSave === true) {
+            this.setState({ loadingSave: false })
+            this.props.accountBalanceAction()
+        }
+    }
+
+
     componentDidMount() {
+        let urlSplit = this.props.location.search.split("?code=")
         if (this.stripeConnected()) {
             this.props.accountBalanceAction()
+        }
+        else if (urlSplit[1]) {
+            let codeSplit = urlSplit[1].split("&state=")
+            let code = codeSplit[0]
+            this.props.saveStripeAccountAction(code)
+            this.setState({ loadingSave: true })
         }
     }
 
@@ -150,24 +168,20 @@ class RegistrationPayments extends Component {
     stripeConnected = () => {
         let orgData = getOrganisationData()
         let stripeAccountID = orgData ? orgData.stripeAccountID : null
-        console.log(orgData)
-        if (stripeAccountID !== null) {
-            return true
-        }
-        else {
-            return false
-        }
+        return stripeAccountID
     }
 
     stripeView = () => {
         let stripeConnected = this.stripeConnected()
-        let accountBalance = this.props.stripeState.accountBalance ? this.props.stripeState.accountBalance : "N/A"
+        let accountBalance = this.props.stripeState.accountBalance ? this.props.stripeState.accountBalance.available : "N/A"
         let stripeConnectURL = "https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=ca_GoE4DQeJGNAvRzAq6MJOmZ8xmFTeLgan&state={STATE_VALUE}&stripe_user[email]=samir@deftsoft.com&redirect_uri=https://netball-comp-admin-dev.worldsportaction.com/registrationPayments"
+        let stripeDashboardUrl = `https://dashboard.stripe.com/${stripeConnected}/test/dashboard`
+        console.log(stripeDashboardUrl)
         return (
             <div className="pb-5">
                 <div className="row">
                     <div className="col-sm">
-                        <span className="reg-payment-price-text">{stripeConnected ? accountBalance : null}</span>
+                        <span className="reg-payment-price-text">{stripeConnected ? currencyFormat(accountBalance) : null}</span>
                     </div>
                     <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end" }}>
                         {stripeConnected ?
@@ -175,7 +189,9 @@ class RegistrationPayments extends Component {
                                 className="open-reg-button"
                                 type="primary"
                             >
-                                {AppConstants.goToStripeDashboard}
+                                <a href={stripeDashboardUrl} class="stripe-connect">
+                                    {AppConstants.goToStripeDashboard}
+                                </a>
                             </Button>
                             :
                             <Button
@@ -339,6 +355,7 @@ class RegistrationPayments extends Component {
                     {this.stripeView()}
                     <Content>
                         {this.contentView()}
+                        <Loader visible={this.props.stripeState.onLoad || this.state.loadingSave} />
                     </Content>
                 </Layout>
             </div>
@@ -348,7 +365,8 @@ class RegistrationPayments extends Component {
 }
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        accountBalanceAction
+        accountBalanceAction,
+        saveStripeAccountAction,
     }, dispatch)
 }
 

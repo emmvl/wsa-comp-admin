@@ -1,7 +1,6 @@
 import ApiConstants from "../../../themes/apiConstants";
 import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
-
-
+import { setOrganisationData, getOrganisationData } from "../../../util/sessionStorage";
 
 const initialState = {
     onLoad: false,
@@ -52,6 +51,20 @@ function stripe(state = initialState, action) {
             return { ...state, onLoad: true, error: null };
 
         case ApiConstants.API_STRIPE_CHARGING_PAYMENT_API_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
+
+        ///////save stripe account
+        case ApiConstants.API_SAVE_STRIPE_ACCOUNT_API_LOAD:
+            return { ...state, onLoad: true, error: null };
+
+        case ApiConstants.API_SAVE_STRIPE_ACCOUNT_API_SUCCESS:
+            let orgData = isArrayNotEmpty(action.result.organisationId) ? action.result.organisationId[0] : getOrganisationData()
+            setOrganisationData(orgData)
             return {
                 ...state,
                 onLoad: false,

@@ -17,7 +17,7 @@ let AxiosApi = {
     async accountBalance() {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-        var url = `/api/payments/balance?organisationUniqueKey==${organisationUniqueKey}`;
+        var url = `/api/payments/balance?organisationUniqueKey=${organisationUniqueKey}`;
         return Method.dataGet(url, token);
     },
 
@@ -31,6 +31,18 @@ let AxiosApi = {
             }
         };
         var url = `/api/payments/calculateFee?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`;
+        return Method.dataPost(url, token, body);
+    },
+
+    /////////save stripe account
+    async saveStripeAccount(code) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        let body = {
+            code: code,
+            organisationUniqueKey: organisationUniqueKey
+        };
+        var url = `/api/payments/save`;
         return Method.dataPost(url, token, body);
     },
 
