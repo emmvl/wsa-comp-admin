@@ -145,7 +145,7 @@ import {
   getCompetitionDrawsSaga, getDrawsRoundsSaga,
   updateCompetitionDraws, saveDrawsSaga,
   getCompetitionVenues, updateCourtTimingsDrawsAction,
-  getDivisionGradeNameListSaga, publishDraws
+  getDivisionGradeNameListSaga, publishDraws, drawsMatchesListExportSaga
 } from './competitionManagementSaga/competitionDrawsSaga';
 
 import { regDashboardListSaga } from "./registrationSaga/registrationDashboardSaga"
@@ -635,6 +635,9 @@ export default function* root_saga() {
 
     // Organisation Photos Delete
     yield takeEvery(ApiConstants.API_DELETE_ORG_PHOTO_LOAD, userSaga.deleteOrgPhotosSaga)
+
+    //Draws Matches List Export
+    yield takeEvery(ApiConstants.API_DRAW_MATCHES_LIST_LOAD, drawsMatchesListExportSaga)
 
 
 }

@@ -6,6 +6,7 @@ import loadjs from 'loadjs';
 import DashboardLayout from '../../pages/dashboardLayout';
 import AppConstants from '../../themes/appConstants';
 import { connect } from 'react-redux';
+import AppImages from "../../themes/appImages";
 import { bindActionCreators } from 'redux';
 import {
   getCompetitionDrawsAction,
@@ -15,7 +16,7 @@ import {
   getCompetitionVenue,
   updateCourtTimingsDrawsAction,
   clearDraws,
-  publishDraws
+  publishDraws, matchesListDrawsAction
 } from '../../store/actions/competitionModuleAction/competitionDrawsAction';
 import Swappable from '../../customComponents/SwappableComponent';
 import { getDayName, getTime } from '../../themes/dateformate';
@@ -282,9 +283,6 @@ class CompetitionDraws extends Component {
       }
     })
   }
-
-
-
   onSwap(source, target) {
     let sourceIndexArray = source.split(':');
     let targetIndexArray = target.split(':');
@@ -320,6 +318,11 @@ class CompetitionDraws extends Component {
       )
     }
   }
+
+  onMatchesList = () => {
+    this.props.matchesListDrawsAction(this.state.firstTimeCompId);
+  }
+
   ///////view for breadcrumb
   headerView = () => {
     return (
@@ -344,6 +347,18 @@ class CompetitionDraws extends Component {
             </Breadcrumb>
           </div>
         </div>
+        <div className="col-sm" style={{alignSelf: 'center'}}>
+            <div className="comp-dashboard-botton-view-mobile" style={{width: "100%",display: "flex",justifyContent: "flex-end"}}>
+              <Button onClick={() => this.onMatchesList()} className="primary-add-comp-form" type="primary">
+                <div className="row">
+                  <div className="col-sm">
+                    <img  src={AppImages.export} alt="" className="export-image" />
+                    {AppConstants.matchesList}
+                  </div>
+                </div>
+              </Button>
+            </div>
+          </div>
       </Header>
     );
   };
@@ -766,6 +781,7 @@ function mapDispatchToProps(dispatch) {
       updateCourtTimingsDrawsAction,
       clearDraws,
       publishDraws,
+      matchesListDrawsAction
     },
     dispatch
   );

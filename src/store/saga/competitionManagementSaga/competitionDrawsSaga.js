@@ -214,9 +214,6 @@ export function* getDivisionGradeNameListSaga(action) {
     }
 }
 
-
-
-
 export function* publishDraws(action) {
     try {
         const result = yield call(CompetitionAxiosApi.publishDrawsApi, action.competitionId);
@@ -237,3 +234,22 @@ export function* publishDraws(action) {
     }
 }
 
+export function* drawsMatchesListExportSaga(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.drawsMatchesListApi, action.competitionId);
+        console.log("(*****" + result.status);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_DRAW_MATCHES_LIST_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+
+    }
+}

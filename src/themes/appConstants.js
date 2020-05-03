@@ -974,7 +974,8 @@ const AppConstants = {
   deleteTeam: "Delete Team",
   addPhoto: "Add Photo",
   editPhoto: "Edit Photo",
-  photoType: "PhotoType"
+  photoType: "PhotoType",
+  matchesList: "Matches List"
 };
 
 export default AppConstants;
