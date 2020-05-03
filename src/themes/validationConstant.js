@@ -1,5 +1,5 @@
 const ValidationConstants = {
-    nameField: ["Name is required.", "Last name is required.", "Name is required."],
+    nameField: ["Name is required.", "Last name is required.", "Name is required.", "Short name is required"],
     teamName: "Team name is required.",
     firstName: 'Name is required.',
     dateField: 'Date is required.',

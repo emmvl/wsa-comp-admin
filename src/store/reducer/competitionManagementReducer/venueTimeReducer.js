@@ -25,6 +25,7 @@ var venueDataObj = {
     competitionMembershipProductDivisionId: 1,
     venueId: 0,
     name: "",
+    shortName:"",
     street1: "",
     street2: "",
     suburb: "",

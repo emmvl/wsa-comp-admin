@@ -127,6 +127,7 @@ let AxiosApi = {
             "competitionMembershipProductDivisionId": venuData.competitionMembershipProductDivisionId,
             "venueId": venuData.venueId,
             "name": venuData.name,
+            "shortName": venuData.shortName,
             "street1": venuData.street1,
             "street2": venuData.street2,
             "suburb": venuData.suburb,
