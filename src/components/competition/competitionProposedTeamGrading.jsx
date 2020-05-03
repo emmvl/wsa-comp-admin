@@ -684,9 +684,13 @@ class CompetitionProposedTeamGrading extends Component {
                             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
                                 {/* <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button> */}
                                 {/* <NavLink to="/competitionPartTeamGradeCalculate" > */}
-                                <Button className="open-reg-button" style={{ marginRight: '20px' }}
+                                <Button type="cancel-button"  style={{ marginRight: '20px' }}
                                     onClick={() => this.cancelCall()}
-                                    type="primary">{AppConstants.cancel}
+                                    >{AppConstants.cancel}
+                                </Button>
+                                <Button className="open-reg-button" style={{marginRight: '20px'}}
+                                    onClick={() => this.submitApiCall("save")}
+                                    type="primary">{AppConstants.save}
                                 </Button>
                                 {/* {this.state.gradeRefId != -1 ?  */}
                                 <Button className="open-reg-button"
