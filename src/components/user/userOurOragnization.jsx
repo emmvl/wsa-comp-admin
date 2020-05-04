@@ -1102,9 +1102,11 @@ class UserOurOragnization extends Component {
                                         </div>
                                     </TabPane>
                                     <TabPane tab={AppConstants.photos} key="2">
+                                        <div>{AppConstants.orgPhotosText}</div>
                                         <div className="tab-formView mt-5" >
                                            {!this.state.isEditView ? 
                                                 <div>
+                                                    
                                                     {this.photosHeaderView()}
                                                     {this.photosListView()} 
                                                 </div> :

@@ -975,7 +975,8 @@ const AppConstants = {
   addPhoto: "Add Photo",
   editPhoto: "Edit Photo",
   photoType: "PhotoType",
-  matchesList: "Matches List"
+  matchesList: "Matches List",
+  orgPhotosText: "These photos will display on the User Registration Form"
 };
 
 export default AppConstants;
