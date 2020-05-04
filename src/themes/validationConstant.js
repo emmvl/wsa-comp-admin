@@ -1,5 +1,5 @@
 const ValidationConstants = {
-    nameField: ["Name is required.", "Last name is required.", "Name is required."],
+    nameField: ["Name is required.", "Last name is required.", "Name is required.", "Short name is required"],
     teamName: "Team name is required.",
     firstName: 'Name is required.',
     dateField: 'Date is required.',
@@ -58,7 +58,7 @@ const ValidationConstants = {
     suburbField: ["Suburb is required."],
     stateField: ['State field is required.'],
     dayField: ['Day field is required.'],
-    courtField: ["Court number field is required.", "Longitude field is required.", "Latitude field is required.", "Court field is required.", "Division filed is required.", "Grade filed is required."],
+    courtField: ["Court number field is required.", "Longitude field is required.", "Latitude field is required.", "Court field is required.", "Division field is required.", "Grade field is required."],
     postCodeField: ["Postcode is required"],
 
     //////comp fees
@@ -118,6 +118,10 @@ const ValidationConstants = {
     divisionName: "Division Name field is required.",
     genderRestriction: "Please select gender.",
     matchTypeRequired: "Please select match type",
+    organisationPhotoRequired: 'Organisation photo is required',
+    photoTypeRequired: "Photo type is required",
+    pleaseSelectVenue: "Please select Venue",
+    pleaseSelectRound: "Please select round",
 
 };
 

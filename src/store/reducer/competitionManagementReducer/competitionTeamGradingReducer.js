@@ -4,6 +4,7 @@ import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
 
 const initialState = {
     onLoad: false,
+    onTeamDeleteLoad: false,
     updateGradeOnLoad: false,
     error: null,
     result: [],
@@ -201,6 +202,23 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
                 finalGradingOnChangeData.map((x, index) => {
                     x.sortOrder = index + 1;
                 })
+            }
+            else if(action.key == "actionType"){
+                if(action.value == "IsActive"){
+                    finalGradingOnChangeData[action.index][action.key] = action.value;
+                    finalGradingOnChangeData[action.index]["isActive"] = 0;
+                    finalGradingOnChangeData[action.index]["delIndicationMsg"] = "Marked as deleted";
+                    finalGradingOnChangeData[action.index]["sortOrder"] = finalGradingOnChangeData.length + 1;
+                    finalGradingOnChangeData.sort(compare);
+                    finalGradingOnChangeData.map((x, index) => {
+                        x.sortOrder = index + 1;
+                    })
+                }
+                else{
+                    finalGradingOnChangeData[action.index][action.key] = action.value;
+                    finalGradingOnChangeData[action.index]["isActive"] = 1;
+                    finalGradingOnChangeData[action.index]["delIndicationMsg"] = "";
+                }
             }
             else {
                 finalGradingOnChangeData[action.index][action.key] = action.value
@@ -410,6 +428,16 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
         case ApiConstants.changeHoverPartProposedTeamGrading:
             state.getPartProposedTeamGradingData[action.tableIndex].playerHistory[action.historyIndex].hoverVisible = action.key
             return { ...state }
+
+        case ApiConstants.API_COMPETITION_TEAM_DELETE_ACTION_LOAD:
+        return { ...state, onTeamDeleteLoad: true };
+
+        case ApiConstants.API_COMPETITION_TEAM_DELETE_ACTION_SUCCESS:
+            return {
+                ...state,
+                onTeamDeleteLoad: false,
+                error: null
+            }
 
         default:
             return state;

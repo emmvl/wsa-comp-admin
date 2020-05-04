@@ -83,6 +83,33 @@ function clearDraws(key) {
     return action
 }
 
+////draws division grade names list
+function getDivisionGradeNameLisAction(competitionId) {
+    const action = {
+        type: ApiConstants.API_DRAWS_DIVISION_GRADE_NAME_LIST_LOAD,
+        competitionId: competitionId
+    }
+    return action
+}
+
+function publishDraws(competitionId) {
+    const action = {
+        type: ApiConstants.API_DRAW_PUBLISH_LOAD,
+        competitionId: competitionId
+    }
+    console.log('called')
+    return action
+}
+
+function matchesListDrawsAction(competitionId) {
+    const action = {
+        type: ApiConstants.API_DRAW_MATCHES_LIST_LOAD,
+        competitionId: competitionId
+    }
+    console.log('called')
+    return action
+}
+
 export {
     getCompetitionDrawsAction,
     getDrawsRoundsAction,
@@ -91,5 +118,8 @@ export {
     getCompetitionVenue,
     updateCourtTimingsDrawsAction,
     dateSelectionRounds,
-    clearDraws
+    clearDraws,
+    getDivisionGradeNameLisAction,
+    publishDraws,
+    matchesListDrawsAction
 }

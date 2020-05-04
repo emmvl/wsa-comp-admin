@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Select, Form, Modal ,Checkbox, message} from 'antd';
+import { Layout, Breadcrumb, Button, Select, Form, Modal ,Checkbox, message, Tabs,Table} from 'antd';
 import './user.css';
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -11,16 +11,38 @@ import { bindActionCreators } from "redux";
 import history from "../../util/history";
 import { connect } from 'react-redux';
 import {getAffiliateToOrganisationAction,saveAffiliateAction,updateOrgAffiliateAction,
-    getUreAction, getRoleAction, getAffiliateOurOrganisationIdAction} from 
+    getUreAction, getRoleAction, getAffiliateOurOrganisationIdAction,
+    getOrganiationPhotoAction, saveOrganiationPhotoAction, deleteOrganiationPhotoAction} from 
                 "../../store/actions/userAction/userAction";
 import ValidationConstants from "../../themes/validationConstant";
-import { getCommonRefData } from '../../store/actions/commonAction/commonAction';
+import { getCommonRefData, getPhotoTypeAction } from '../../store/actions/commonAction/commonAction';
 import { getUserId, getOrganisationData } from "../../util/sessionStorage";
 import Loader from '../../customComponents/loader';
+import ImageLoader from '../../customComponents/ImageLoader'
+
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
+const { TabPane } = Tabs;
 const phoneRegExp = /^((\\+[1,9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+
+var _this = null
+const columns = [
+
+    {
+        dataIndex: 'photoUrl',
+        key: 'photoUrl',
+        render: (photoUrl, record) => {
+
+            return (
+                <div>
+                    {_this.photosRemoveBtnView(record)}
+                    {_this.photosImageView(photoUrl, record)}
+                </div>
+            )
+        }
+    },
+]
 
 class UserOurOragnization extends Component {
     constructor(props) {
@@ -35,9 +57,17 @@ class UserOurOragnization extends Component {
             currentIndex: 0,
             image: null,
             isSameUserEmailId: "",
-            isSameUserEmailChanged: false
-
+            isSameUserEmailChanged: false,
+            organisationTabKey: "1",
+            timeout: null,
+            orgPhotosImg: null,
+            orgPhotosImgSend: null,
+            imageError: "",
+            tableRecord: null,
+            isEditView: false,
+            orgPhotoModalVisible: false
         }
+        _this = this;
         this.props.getCommonRefData();
         this.props.getRoleAction();
         //this.props.getUreAction();
@@ -51,9 +81,11 @@ class UserOurOragnization extends Component {
         this.referenceCalls(this.state.organisationId);
         this.apiCalls(this.state.organisationId);
     }
+
     componentDidUpdate(nextProps){
         console.log("Component componentDidUpdate");
        let userState = this.props.userState;
+       let commonState = this.props.commonReducerState;
        let affiliateTo = this.props.userState.affiliateTo;
         if (userState.onLoad === false && this.state.loading === true) {
             if (!userState.error) {
@@ -69,10 +101,19 @@ class UserOurOragnization extends Component {
                     history.push('/userAffiliatesList');
                 }
             }
+            if (userState.status == 1 && this.state.buttonPressed == "savePhotos") {
+               this.setState({isEditView: false, orgPhotosImg: null, orgPhotosImgSend: null});
+               this.props.getOrganiationPhotoAction();
+            }
+            if (userState.status == 1 && this.state.buttonPressed == "deletePhotos") {
+                this.setState({isEditView: false, orgPhotosImg: null, orgPhotosImgSend: null});
+                this.props.getOrganiationPhotoAction();
+             }
         }
         if (this.state.buttonPressed == "cancel") {
             history.push('/userAffiliatesList');
         }
+        
 
         if(nextProps.userState.affiliateTo != affiliateTo)
         {
@@ -96,6 +137,8 @@ class UserOurOragnization extends Component {
                 this.setFormFieldValue();
             }
         }
+
+        
     }
 
     logout = async () => {
@@ -104,6 +147,7 @@ class UserOurOragnization extends Component {
       };
  
     referenceCalls = (organisationId) => {
+        this.props.getPhotoTypeAction();
         this.props.getAffiliateToOrganisationAction(organisationId);
     }
 
@@ -262,57 +306,75 @@ class UserOurOragnization extends Component {
     
     saveAffiliate = (e) => {
         e.preventDefault();
+        let tabKey = this.state.organisationTabKey;
         this.props.form.validateFields((err, values) => {
             console.log("err::" + err);
             if(!err)
             {
-                console.log("**" + JSON.stringify(this.state.image));
-                let affiliate = this.props.userState.affiliateOurOrg;
-                
-                if(affiliate.contacts == null || affiliate.contacts == undefined || affiliate.contacts.length == 0)
-                {
-                    message.error(ValidationConstants.affiliateContactRequired[0]);
-                }
-                else{
-
-                    let data = affiliate.contacts.find(x=>x.permissions.find(y=> y.roleId == 2));
-                    if(data == undefined || data == null || data == "")
+                if(tabKey == "1"){
+                    console.log("**" + JSON.stringify(this.state.image));
+                    let affiliate = this.props.userState.affiliateOurOrg;
+                    
+                    if(affiliate.contacts == null || affiliate.contacts == undefined || affiliate.contacts.length == 0)
                     {
                         message.error(ValidationConstants.affiliateContactRequired[0]);
                     }
-                    else
-                    {
-                        let contacts = JSON.stringify(affiliate.contacts);
-
-                        let formData = new FormData();
-                        
-                        if(this.state.image != null){
-                            affiliate.organisationLogo = this.state.image;
-                            affiliate.organisationLogoId = 0;
+                    else{
+    
+                        let data = affiliate.contacts.find(x=>x.permissions.find(y=> y.roleId == 2));
+                        if(data == undefined || data == null || data == "")
+                        {
+                            message.error(ValidationConstants.affiliateContactRequired[0]);
                         }
-                        formData.append("organisationLogo", this.state.image);
-                        formData.append("organisationLogoId", affiliate.organisationLogoId);
-                        formData.append("affiliateId", affiliate.affiliateId);
-                        formData.append("affiliateOrgId", affiliate.affiliateOrgId)
-                        formData.append("organisationTypeRefId", affiliate.organisationTypeRefId)
-                        formData.append("affiliatedToOrgId", affiliate.affiliatedToOrgId);
-                        formData.append("organisationId", getOrganisationData().organisationUniqueKey);
-                        formData.append("name", affiliate.name);
-                        formData.append("street1", affiliate.street1);
-                        formData.append("street2", affiliate.street2);
-                        formData.append("suburb", affiliate.suburb);
-                        formData.append("phoneNo", affiliate.phoneNo);
-                        formData.append("city", affiliate.city);
-                        formData.append("postalCode", affiliate.postalCode);
-                        formData.append("stateRefId", affiliate.stateRefId);
-                        formData.append("whatIsTheLowestOrgThatCanAddChild", affiliate.whatIsTheLowestOrgThatCanAddChild);
-                        formData.append("contacts", contacts);
-                        console.log("Req Body ::" + JSON.stringify(affiliate));
-                        this.setState({ loading: true });
-                        //this.props.saveAffiliateAction(affiliate);
-                        this.props.saveAffiliateAction(formData);
+                        else
+                        {
+                            let contacts = JSON.stringify(affiliate.contacts);
+    
+                            let formData = new FormData();
+                            
+                            if(this.state.image != null){
+                                affiliate.organisationLogo = this.state.image;
+                                affiliate.organisationLogoId = 0;
+                            }
+                            formData.append("organisationLogo", this.state.image);
+                            formData.append("organisationLogoId", affiliate.organisationLogoId);
+                            formData.append("affiliateId", affiliate.affiliateId);
+                            formData.append("affiliateOrgId", affiliate.affiliateOrgId)
+                            formData.append("organisationTypeRefId", affiliate.organisationTypeRefId)
+                            formData.append("affiliatedToOrgId", affiliate.affiliatedToOrgId);
+                            formData.append("organisationId", getOrganisationData().organisationUniqueKey);
+                            formData.append("name", affiliate.name);
+                            formData.append("street1", affiliate.street1);
+                            formData.append("street2", affiliate.street2);
+                            formData.append("suburb", affiliate.suburb);
+                            formData.append("phoneNo", affiliate.phoneNo);
+                            formData.append("city", affiliate.city);
+                            formData.append("postalCode", affiliate.postalCode);
+                            formData.append("stateRefId", affiliate.stateRefId);
+                            formData.append("whatIsTheLowestOrgThatCanAddChild", affiliate.whatIsTheLowestOrgThatCanAddChild);
+                            formData.append("contacts", contacts);
+                            console.log("Req Body ::" + JSON.stringify(affiliate));
+                            this.setState({ loading: true });
+                            //this.props.saveAffiliateAction(affiliate);
+                            this.props.saveAffiliateAction(formData);
+                        }
                     }
                 }
+                else if (tabKey == "2"){
+                    let tableRowData = this.state.tableRecord;
+                    let formData = new FormData();
+                    formData.append("organisationPhoto", this.state.orgPhotosImgSend);
+                    formData.append("organisationPhotoId", tableRowData.id);
+                    formData.append("photoTypeRefId", tableRowData.photoTypeRefId);
+                    formData.append("photoUrl", tableRowData.photoUrl);
+                    formData.append("organisationId",  getOrganisationData().organisationUniqueKey);
+
+                    console.log("&&&&&&& 2222222" + JSON.stringify(tableRowData));
+                    console.log("&&&&&&& 2222222" + this.state.orgPhotosImgSend);
+                     this.setState({ loading: true });
+                     this.props.saveOrganiationPhotoAction(formData);
+                }
+               
             }
             else{
                 message.error(ValidationConstants.requiredMessage);
@@ -344,6 +406,88 @@ class UserOurOragnization extends Component {
         this.props.updateOrgAffiliateAction(value, key);
     }
 
+    onSelectPhotos = (data) => {
+        const fileInput = document.getElementById('photos-pic');
+        fileInput.setAttribute("type", "file");
+        fileInput.setAttribute("accept", "image/*");
+        if (!!fileInput) {
+            fileInput.click();
+        }
+       
+    }
+
+    setPhotosImage = (data) => {
+        if (data.files[0] !== undefined) {
+            let tableRow = this.state.tableRecord;
+            tableRow.photoUrl = null;
+            this.setState({tableRecord: tableRow, orgPhotosImgSend: data.files[0], orgPhotosImg: URL.createObjectURL(data.files[0]) })
+        }
+    };
+
+    tabCallBack = (key) => {
+        this.setState({ organisationTabKey: key})
+        if(key == "2"){
+            this.setState({isEditView: false});
+            this.props.getOrganiationPhotoAction();
+        }
+    }
+
+    editPhotos = async(record) =>{
+        await this.setState({ tableRecord: record, isEditView: true  });
+
+        this.props.form.setFieldsValue({
+            photoTypeRefId: record.photoTypeRefId
+        })
+    }
+
+    removePhoto = () => {
+        let obj = this.state.tableRecord;
+        obj.photoUrl = null;
+        this.setState({ orgPhotosImg: null, orgPhotosImgSend: null, tableRecord: obj })
+    }
+
+    deletePhotos = async (record) =>{
+        await this.setState({ tableRecord: record, orgPhotoModalVisible: true});
+    }
+
+    addPhoto =() =>{
+        let obj = {
+            id: 0,
+            photoTypeRefId: null,
+            photoUrl:null
+        }
+        this.setState({isEditView: true, tableRecord: obj, orgPhotosImg: null, orgPhotosImgSend: null});
+    }
+
+    cancelEditView = () =>{
+        let obj = {
+            id: 0,
+            photoTypeRefId: null,
+            photoUrl:null
+        }
+
+        this.setState({isEditView: false, tableRecord: obj, 
+            orgPhotosImg: null, orgPhotosImgSend: null});
+    }
+
+    setOrgPhotoValue = (e)=>{
+        let obj = this.state.tableRecord;
+        obj.photoTypeRefId = e;
+        this.setState({tableRecord: obj});
+    }
+
+    deleteOrgPhotoModalHandle = (key) => {
+        if(key == "ok"){
+           let payload = {
+               id: this.state.tableRecord.id
+           }
+           this.setState({ loading: true, buttonPressed: "deletePhotos" });
+           this.props.deleteOrganiationPhotoAction(payload);
+        }
+        
+        this.setState({orgPhotoModalVisible: false});
+    }
+
     ///////view for breadcrumb
     headerView = () => {
         return (
@@ -365,7 +509,6 @@ class UserOurOragnization extends Component {
             </div>
         )
     }
-
 
     ////////form content view
     contentView = (getFieldDecorator) => {
@@ -554,7 +697,6 @@ class UserOurOragnization extends Component {
         )
     }
 
-
     contacts = (getFieldDecorator) => {
         let userState = this.props.userState;
         let affiliate = this.props.userState.affiliateOurOrg;
@@ -684,6 +826,229 @@ class UserOurOragnization extends Component {
          );
    }
 
+   ////// Photos//////
+    photosHeaderView = () => {
+        return (
+            <Header className="comp-venue-courts-header-view" style={{paddingLeft: '4%', paddingRight: '4%', paddingTop: '3%' }} >
+                <div className="row" >
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+                        <Breadcrumb separator=" > ">
+                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.photos}</Breadcrumb.Item>
+                        </Breadcrumb>
+                    </div>
+                        <div className="col-sm live-form-view-button-container" style={{ display: "flex", justifyContent: "flex-end" }} >
+                            <Button className="primary-add-comp-form " type="primary" onClick={() => this.addPhoto()}>{"+" + AppConstants.addPhoto}</Button>
+                        </div>
+                </div>
+            </Header >
+        )
+    }
+
+    photosEditHeaderView = () => {
+        const id = this.state.tableRecord.id;
+        return (
+            <Header className="comp-venue-courts-header-view" style={{paddingLeft: '4%', paddingRight: '4%', paddingTop: '3%' }} >
+                <div className="row" >
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+                        <Breadcrumb separator=" > ">
+                            <Breadcrumb.Item className="breadcrumb-add">{id!= 0? AppConstants.editPhoto : AppConstants.addPhoto}</Breadcrumb.Item>
+                        </Breadcrumb>
+                    </div>
+                </div>
+            </Header >
+        )
+    }
+
+    photosListView = () =>{
+            let { orgPhotosList } = this.props.userState;
+            return (
+                <div className="content-view">
+                    <Table
+                        className="home-dashboard-table"
+                       // loading={this.props.userState.onLoad == true && true}
+                        columns={columns}
+                        dataSource={orgPhotosList}
+                        showHeader={false}
+                        pagination={false} />
+                </div>
+            )
+    }
+
+    photosRemoveBtnView = (record) => {
+    return (
+        <div className="mb-3">
+            {/* <div className="col-sm"> */}
+            <div
+                className="comp-dashboard-botton-view-mobile"
+                style={{
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "flex-end",
+                }}
+            >
+                <Button onClick={() => this.editPhotos(record)} className="primary-add-comp-form ml-5" type="primary">
+                        {AppConstants.edit}
+                </Button>
+                <Button onClick={() => this.deletePhotos(record)} className="primary-add-comp-form ml-5" type="primary">
+                    {AppConstants.remove}
+                </Button>
+            </div>
+        </div>
+        // </div>
+        );
+    };
+
+    photosImageView(photosUrl, record) {
+        return (
+            <div>
+                <div>
+                    <ImageLoader
+                        className="banner-image"
+                        height
+                        width
+                        borderRadius
+                        timeout={this.state.timeout}
+                        src={photosUrl} />
+                </div>
+                <div className="row">
+                    <div className="col-sm pt-1">
+                        <InputWithHead heading={AppConstants.category}/>
+                        <span>{record.photoType}</span>
+                    </div>
+                </div>
+            </div>
+        )
+    };
+
+    photosAddEditView = (getFieldDecorator) => {
+        const photoUrl = this.state.tableRecord!= null ?  this.state.tableRecord.photoUrl : null;
+        const {photoTypeData} = this.props.commonReducerState;
+        return (
+            <div className="content-view pt-2">
+                <ImageLoader
+                    className="banner-image"
+                    height
+                    width
+                    borderRadius
+                    timeout={this.state.timeout}
+                    src={photoUrl ? photoUrl : this.state.orgPhotosImg} />
+                <div>
+                    <div className="row">
+                        <div className="col-sm" >
+                            <span className="user-contact-heading required-field">{AppConstants.uploadImage}</span>
+                            <div onClick={this.onSelectPhotos}>
+                            </div>
+                            <Form.Item>
+                                {getFieldDecorator('photosImage', {
+                                    rules: [{ required: photoUrl ? false : true, message: ValidationConstants.organisationPhotoRequired }]
+                                })(
+                                    <input
+                                        required={"pb-0"}
+                                        type="file"
+                                        id="photos-pic"
+                                        onChange={(evt) => {
+                                            this.setPhotosImage(evt.target)
+                                            this.setState({ timeout: 1000 })
+                                            setTimeout(() => {
+                                                this.setState({ timeout: null })
+                                            }, 1000);
+                                        }} />
+                                )}
+                            </Form.Item>
+                            <span className="form-err">{this.state.imageError}</span>
+                        </div>
+                        <div className="col-sm pt-1">
+                            <InputWithHead  heading={AppConstants.category}  required={"required-field"}/>
+                            <Form.Item>
+                                {getFieldDecorator('photoTypeRefId', {
+                                    rules: [{ required: true, message: ValidationConstants.photoTypeRequired }]
+                                })(
+                                    <Select
+                                    style={{ width: "100%", paddingRight: 1 }}
+                                    onChange={(e) => this.setOrgPhotoValue(e)}
+                                    setFieldsValue={this.state.tableRecord.photoTypeRefId}
+                                    >
+                                    {(photoTypeData || []).map((photo, index) => (
+                                    <Option key={photo.id} value={photo.id}>{photo.description}</Option>
+                                    ))}
+                                </Select>
+                                )}
+                            </Form.Item>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    photosEditViewRemoveBtnView = () => {
+        return (
+            <div className="comp-player-grades-header-drop-down-view">
+                <div className="col-sm">
+                    <div
+                        className="comp-dashboard-botton-view-mobile"
+                        style={{
+                            width: "100%",
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "flex-end"
+                        }}
+                    >
+                        <Button onClick={() => this.removePhoto()} className="primary-add-comp-form ml-5" type="primary">
+                            {AppConstants.remove}
+                        </Button>
+
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    photosEditViewFooterView = (isSubmitting) => {
+        let tableRecord = this.state.tableRecord;
+        return (
+            <div className="fluid-width">
+                <div className="footer-view" style={{paddingLeft: '0px', paddingRight: '0px'}}>
+                    <div className="row">
+                        <div className="col-sm">
+                            <div className="reg-add-save-button">
+                                <Button type="cancel-button" 
+                                onClick={() => this.cancelEditView()}>
+                                    {AppConstants.cancel}</Button>
+                            </div>
+                        </div>
+                        <div className="col-sm">
+                            <div className="comp-buttons-view">
+                                <Button className="user-approval-button" type="primary" htmlType="submit" disabled={isSubmitting}
+                                onClick={() => this.setState({ buttonPressed: "savePhotos" })}>
+                                    {tableRecord.id == 0 ? AppConstants.add : AppConstants.updateAffiliates}
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    orgPhotoDeleteConfirmModalView = () => {
+        return (
+           <div>
+             <Modal
+               title="Organisation Photos"
+               visible={this.state.orgPhotoModalVisible}
+               onOk={() => this.deleteOrgPhotoModalHandle("ok")}
+               onCancel={() => this.deleteOrgPhotoModalHandle("cancel")}>
+                 <p>Are you sure you want to remove the organisation photo?</p>
+             </Modal>
+           </div>
+         );
+   }
+
+    //////////////End Photos ///////////////////
     ///footer view containing all the buttons like submit and cancel
     footerView = (isSubmitting) => {
         return (
@@ -714,6 +1079,7 @@ class UserOurOragnization extends Component {
     render() {
         let userState = this.props.userState;
         const { getFieldDecorator } = this.props.form;
+        const photoUrl = this.state.tableRecord!= null ?  this.state.tableRecord.photoUrl : null;
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
@@ -725,15 +1091,43 @@ class UserOurOragnization extends Component {
                         onSubmit={this.saveAffiliate}
                         noValidate="noValidate">
                         <Content>
-                            <div className="formView" >
-                                {this.contentView(getFieldDecorator)}
-                            </div>
-                            <div className="formView" >
-                                {this.contacts(getFieldDecorator)}
+                            <div className="tab-view">
+                            <Tabs activeKey={this.state.organisationTabKey} onChange={this.tabCallBack}>
+                                    <TabPane tab={AppConstants.general} key="1">
+                                        <div className="tab-formView mt-5" >
+                                            {this.contentView(getFieldDecorator)}
+                                        </div>
+                                        <div className="tab-formView mt-5" >
+                                            {this.contacts(getFieldDecorator)}
+                                        </div>
+                                    </TabPane>
+                                    <TabPane tab={AppConstants.photos} key="2">
+                                        <div className="tab-formView mt-5" >
+                                           {!this.state.isEditView ? 
+                                                <div>
+                                                    {this.photosHeaderView()}
+                                                    {this.photosListView()} 
+                                                </div> :
+                                                <div>
+                                                    {this.photosEditHeaderView()}
+                                                    {(photoUrl || this.state.orgPhotosImg) && this.photosEditViewRemoveBtnView()}
+                                                    {this.photosAddEditView(getFieldDecorator)}
+                                                </div>
+                                            }
+                                        </div>
+                                        {this.state.isEditView ? 
+                                            <div>{this.photosEditViewFooterView()}</div> : null
+                                        }
+                                        {this.orgPhotoDeleteConfirmModalView()}
+                                    </TabPane>
+                                </Tabs>
                             </div>
                             <Loader visible={userState.onLoad} />
                         </Content>
-                        <Footer>{this.footerView()}</Footer>
+                        {this.state.organisationTabKey == "1" ? 
+                            <Footer>{this.footerView()}</Footer>
+                            : null 
+                        }
                     </Form>
                 </Layout>
             </div>
@@ -750,7 +1144,11 @@ function mapDispatchToProps(dispatch)
         getAffiliateOurOrganisationIdAction,
         getCommonRefData,
         getUreAction,
-        getRoleAction
+        getRoleAction,
+        getPhotoTypeAction,
+        getOrganiationPhotoAction,
+        saveOrganiationPhotoAction,
+        deleteOrganiationPhotoAction
     }, dispatch);
 
 }

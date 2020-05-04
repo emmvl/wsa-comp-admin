@@ -15,6 +15,8 @@ const initialState = {
   competitionVenues: [],
   updateLoad: false,
   gradeColorArray: [],
+  divisionGradeNameList: [],
+  publishStatus: 0
 };
 var gradeColorArray = [];
 const colorsArray = ColorsArray;
@@ -640,6 +642,7 @@ function CompetitionDraws(state = initialState, action) {
     case ApiConstants.API_GET_COMPETITION_DRAWS_SUCCESS:
       let drawsResultData = action.result[0];
       let resultData = structureDrawsData(drawsResultData);
+      state.publishStatus = action.result[0].drawsPublish
       return {
         ...state,
         getDrawsData: resultData.mainCourtNumberArray,
@@ -656,11 +659,22 @@ function CompetitionDraws(state = initialState, action) {
       return { ...state, onLoad: true, updateLoad: true, error: null };
 
     case ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_SUCCESS:
+      state.competitionVenues = JSON.parse(JSON.stringify(action.Venue_Result))
+      state.divisionGradeNameList = JSON.parse(JSON.stringify(action.division_Result))
+      let venueObject = {
+        name: "All Venues",
+        id: 0
+      }
+      let divisionNameObject = {
+        name: "All Division",
+        competitionDivisionGradeId: 0
+      }
+      state.competitionVenues.unshift(venueObject)
+      state.divisionGradeNameList.unshift(divisionNameObject)
       state.updateLoad = false;
       return {
         ...state,
         getDrawsRoundsData: action.result,
-        competitionVenues: action.Venue_Result,
         onLoad: false,
         error: null,
       };
@@ -778,8 +792,46 @@ function CompetitionDraws(state = initialState, action) {
       if (action.key == 'round') {
         state.competitionVenues = [];
         state.getDrawsRoundsData = [];
+        state.divisionGradeNameList = [];
       }
       return { ...state };
+
+    ///draws division grade names list
+    case ApiConstants.API_DRAWS_DIVISION_GRADE_NAME_LIST_LOAD:
+      return {
+        ...state,
+        onLoad: true,
+      };
+
+    case ApiConstants.API_DRAWS_DIVISION_GRADE_NAME_LIST_SUCCESS:
+      return {
+        ...state,
+        onLoad: false,
+        divisionGradeNameList: isArrayNotEmpty(action.result) ? action.result : [],
+      };
+
+    case ApiConstants.API_DRAW_PUBLISH_LOAD:
+      return { ...state, onLoad: true, updateLoad: true }
+
+    case ApiConstants.API_DRAW_PUBLISH_SUCCESS:
+      state.publishStatus = 1
+      state.updateLoad = false
+      return {
+        ...state,
+        onLoad: false,
+        error: null,
+      }
+
+    case ApiConstants.API_DRAW_MATCHES_LIST_LOAD:
+    return { ...state, onLoad: true, onLoad: true }
+
+    case ApiConstants.API_DRAW_MATCHES_LIST_SUCCESS:
+      return {
+        ...state,
+        onLoad: false,
+        error: null,
+      }
+
 
     default:
       return state;

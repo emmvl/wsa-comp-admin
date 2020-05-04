@@ -218,3 +218,21 @@ export function* partProposedTeamGradingComment(action) {
         yield call(errorSaga, error)
     }
 }
+
+
+export function* deleteTeamActionSaga(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.deleteTeamAction, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_COMPETITION_TEAM_DELETE_ACTION_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

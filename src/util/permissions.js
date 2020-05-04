@@ -52,4 +52,21 @@ async function routePermissionForOrgLevel(orgLevel1, orgLevel2) {
 }
 
 
-export { checkOrganisationLevel, checkUserRole, routePermissionForOrgLevel }
+const registrationsInviteesObject = {
+    [AppConstants.firstlevelAffiliate]: 2,
+    [AppConstants.secondlevelAffiliate]: 3,
+    [AppConstants.anyOrgAssociation]: 7,
+    [AppConstants.anyOrgClub]: 8,
+    [AppConstants.direct]: 5,
+    [AppConstants.notApplicable]: 6,
+    [AppConstants.NoRegistrations]: 0,
+
+}
+
+function checkRegistrationType(registrationInviteesRefId) {
+    let registrationType = Object.keys(registrationsInviteesObject).find(key => registrationsInviteesObject[key] === registrationInviteesRefId);
+    return registrationType
+}
+
+
+export { checkOrganisationLevel, checkUserRole, routePermissionForOrgLevel, checkRegistrationType }

@@ -591,23 +591,10 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
 
     handleSearch = (value, data) => {
-        console.log(value, data)
-        // console.log('hello', 'value->', value, data)
-        // let filtered
-        // if (value !== "") {
-        //     filtered = data.filter(dataVenue => {
-        //         return dataVenue.venueName.toLowerCase().indexOf(value.toLowerCase()) > -1
-        //     })
-        //     this.props.searchVenueList(filtered)
-        // }
-        // else {
-        //     this.props.searchVenueList(data)
-        // }
         const filteredData = data.filter(memo => {
-            return memo.venueName.indexOf(value) > -1
+            return memo.venueName.toLowerCase().indexOf(value.toLowerCase()) > -1
         })
         this.props.searchVenueList(filteredData)
-
     };
 
     //On selection of venue

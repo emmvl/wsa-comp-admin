@@ -4,7 +4,6 @@ const { TextArea } = Input;
 class CommentModal extends React.Component {
     render() {
         const { heading, placeholder, name, handleBlur, finalGradeId, owner, proposedGradeID, OwnCreatedComment, affilateCreatedComment, affilate, onChange, type, value, modalTitle, visible, onOK, onCancel, ownnerComment, affilateComment } = this.props
-        console.log(this.props)
         return (
             <div style={{ backgroundColor: "red" }}>
                 <Modal

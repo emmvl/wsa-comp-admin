@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Layout, Breadcrumb, Select, Button, Form } from 'antd';
+import { Layout, Breadcrumb, Select, Button, Form, message } from 'antd';
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
 import { NavLink } from 'react-router-dom';
 import loadjs from 'loadjs';
 import DashboardLayout from '../../pages/dashboardLayout';
 import AppConstants from '../../themes/appConstants';
 import { connect } from 'react-redux';
+import AppImages from "../../themes/appImages";
 import { bindActionCreators } from 'redux';
 import {
   getCompetitionDrawsAction,
@@ -15,6 +16,7 @@ import {
   getCompetitionVenue,
   updateCourtTimingsDrawsAction,
   clearDraws,
+  publishDraws, matchesListDrawsAction
 } from '../../store/actions/competitionModuleAction/competitionDrawsAction';
 import Swappable from '../../customComponents/SwappableComponent';
 import { getDayName, getTime } from '../../themes/dateformate';
@@ -34,7 +36,10 @@ import {
   getDraws_venue,
   getDraws_round,
   getDraws_roundTime,
+  setDraws_division_grade,
+  getDraws_division_grade,
 } from "../../util/sessionStorage"
+import ValidationConstants from "../../themes/validationConstant"
 import moment from "moment"
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -48,13 +53,15 @@ class CompetitionDraws extends Component {
       venueId: '',
       roundId: '',
       venueLoad: false,
-      roundTime: null
+      roundTime: null,
+      competitionDivisionGradeId: "",
     };
   }
 
   componentDidUpdate(nextProps) {
     let drawsRoundData = this.props.drawsState.getDrawsRoundsData;
     let venueData = this.props.drawsState.competitionVenues;
+    let divisionGradeNameList = this.props.drawsState.divisionGradeNameList;
 
     if (this.state.venueLoad == true && this.props.drawsState.updateLoad == false) {
       if (nextProps.drawsState.getDrawsRoundsData !== drawsRoundData) {
@@ -76,6 +83,7 @@ class CompetitionDraws extends Component {
               roundId, roundTime, venueId,
               venueLoad: false,
             });
+
           }
           else {
             this.setState({
@@ -83,6 +91,11 @@ class CompetitionDraws extends Component {
               venueLoad: false,
             })
           }
+        }
+        if (divisionGradeNameList.length > 0) {
+          let competitionDivisionGradeId = divisionGradeNameList[0].competitionDivisionGradeId;
+          setDraws_division_grade(competitionDivisionGradeId)
+          this.setState({ competitionDivisionGradeId })
         }
       }
     }
@@ -97,9 +110,8 @@ class CompetitionDraws extends Component {
         }
       }
     }
-
-
   }
+
   componentDidMount() {
     loadjs('assets/js/custom.js');
     this.apiCalls();
@@ -116,6 +128,7 @@ class CompetitionDraws extends Component {
     let roundTime = getDraws_roundTime()
     let roundData = this.props.drawsState.getDrawsRoundsData.length > 0 ? this.props.drawsState.getDrawsRoundsData : undefined
     let venueData = this.props.drawsState.competitionVenues.length > 0 ? this.props.drawsState.competitionVenues : undefined
+    let competitionDivisionGradeId = getDraws_division_grade()
     if (storedCompetitionId && yearId && propsData && compData) {
       this.setState({
         yearRefId: JSON.parse(yearId),
@@ -134,6 +147,7 @@ class CompetitionDraws extends Component {
           venueId: JSON.parse(venueId),
           roundId: JSON.parse(roundId),
           roundTime,
+          competitionDivisionGradeId: JSON.parse(competitionDivisionGradeId),
           venueLoad: false
         })
       }
@@ -248,9 +262,27 @@ class CompetitionDraws extends Component {
     );
   }
 
-
-
-
+  saveAPIsActionCall = (e) => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log(this.state)
+        if (this.state.firstTimeCompId == null || this.state.firstTimeCompId == "") {
+          message.error(ValidationConstants.pleaseSelectCompetition)
+        }
+        else if (this.state.venueId == null && this.state.venueId == "") {
+          message.error(ValidationConstants.pleaseSelectVenue)
+        }
+        else if (this.state.roundId == null || this.state.roundId == "") {
+          message.error(ValidationConstants.pleaseSelectRound)
+        }
+        else {
+          console.log("timeSlotData")
+          this.props.publishDraws(this.state.firstTimeCompId)
+        }
+      }
+    })
+  }
   onSwap(source, target) {
     let sourceIndexArray = source.split(':');
     let targetIndexArray = target.split(':');
@@ -286,6 +318,11 @@ class CompetitionDraws extends Component {
       )
     }
   }
+
+  onMatchesList = () => {
+    this.props.matchesListDrawsAction(this.state.firstTimeCompId);
+  }
+
   ///////view for breadcrumb
   headerView = () => {
     return (
@@ -310,6 +347,18 @@ class CompetitionDraws extends Component {
             </Breadcrumb>
           </div>
         </div>
+        <div className="col-sm" style={{alignSelf: 'center'}}>
+            <div className="comp-dashboard-botton-view-mobile" style={{width: "100%",display: "flex",justifyContent: "flex-end"}}>
+              <Button onClick={() => this.onMatchesList()} className="primary-add-comp-form" type="primary">
+                <div className="row">
+                  <div className="col-sm">
+                    <img  src={AppImages.export} alt="" className="export-image" />
+                    {AppConstants.matchesList}
+                  </div>
+                </div>
+              </Button>
+            </div>
+          </div>
       </Header>
     );
   };
@@ -319,7 +368,7 @@ class CompetitionDraws extends Component {
     this.props.clearDraws("rounds")
     setOwnCompetitionYear(yearId)
     setOwn_competition(undefined)
-    this.setState({ firstTimeCompId: null, yearRefId: yearId, roundId: null, roundTime: null, venueId: null });
+    this.setState({ firstTimeCompId: null, yearRefId: yearId, roundId: null, roundTime: null, venueId: null, competitionDivisionGradeId: null });
     this.props.getYearAndCompetitionOwnAction(
       this.props.appState.own_YearArr,
       yearId,
@@ -331,13 +380,20 @@ class CompetitionDraws extends Component {
   onCompetitionChange(competitionId) {
     setOwn_competition(competitionId)
     this.props.clearDraws("rounds")
-    this.setState({ firstTimeCompId: competitionId, roundId: null, venueId: null, roundTime: null, venueLoad: true });
+    this.setState({ firstTimeCompId: competitionId, roundId: null, venueId: null, roundTime: null, venueLoad: true, competitionDivisionGradeId: null });
     // this.props.getCompetitionVenue(competitionId);
     this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId);
   }
 
+  // on DivisionGradeNameChange
+  onDivisionGradeNameChange(competitionDivisionGradeId) {
+    setDraws_division_grade(competitionDivisionGradeId)
+    this.setState({ competitionDivisionGradeId });
+  }
+
   ///dropdown view containing all the dropdown of header
   dropdownView = () => {
+    console.log("this.props.drawsState.divisionGradeNameList", this.props.drawsState.divisionGradeNameList)
     return (
       <div className="row">
         <div className="col-sm-3">
@@ -359,7 +415,7 @@ class CompetitionDraws extends Component {
             </Select>
           </div>
         </div>
-        <div className="col-sm-9">
+        <div className="col-sm-4">
           <div
             style={{
               width: '100%',
@@ -388,6 +444,41 @@ class CompetitionDraws extends Component {
                     value={item.competitionId}
                   >
                     {item.competitionName}
+                  </Option>
+                );
+              })}
+            </Select>
+          </div>
+        </div>
+        <div className="col-sm-5">
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginRight: 50
+            }}
+          >
+            <span className="year-select-heading">
+              {AppConstants.division}:
+            </span>
+            <Select
+              style={{ minWidth: 160 }}
+              name={'competition'}
+              className="year-select"
+              onChange={competitionDivisionGradeId =>
+                this.onDivisionGradeNameChange(competitionDivisionGradeId)
+              }
+              value={JSON.parse(JSON.stringify(this.state.competitionDivisionGradeId))}
+            >
+              {this.props.drawsState.divisionGradeNameList.map(item => {
+                return (
+                  <Option
+                    key={'divisionGradeNameList' + item.competitionDivisionGradeId}
+                    value={item.competitionDivisionGradeId}
+                  >
+                    {item.name}
                   </Option>
                 );
               })}
@@ -430,9 +521,9 @@ class CompetitionDraws extends Component {
   };
 
   ////// Publish draws
-  publishDraws() {
-    this.props.saveDraws(this.state.yearRefId, this.state.firstTimeCompId, 1);
-  }
+  // publishDraws() {
+  //   this.props.saveDraws(this.state.yearRefId, this.state.firstTimeCompId, 1);
+  // }
 
   ////////form content view
   contentView = () => {
@@ -626,6 +717,7 @@ class CompetitionDraws extends Component {
   };
   //////footer view containing all the buttons like submit and cancel
   footerView = () => {
+    let publishStatus = this.props.drawsState.publishStatus
     return (
       <div className="fluid-width">
         <div className="row">
@@ -638,6 +730,8 @@ class CompetitionDraws extends Component {
               <Button
                 className="open-reg-button"
                 type="primary"
+                htmlType="submit"
+                disabled={publishStatus == 0 ? false : true}
               >
                 {AppConstants.publish}
               </Button>
@@ -658,12 +752,18 @@ class CompetitionDraws extends Component {
         />
         <InnerHorizontalMenu menu={'competition'} compSelectedKey={'18'} />
         <Layout className="comp-dash-table-view">
-          {/* <Loader visible={this.props.drawsState.updateLoad} /> */}
-          {this.headerView()}
-          {this.dropdownView()}
-          <Content>{this.contentView()}</Content>
-          <Footer>{this.footerView()}</Footer>
+          <Form
+            onSubmit={this.saveAPIsActionCall}
+            noValidate="noValidate"
+          >
+            {/* <Loader visible={this.props.drawsState.updateLoad} /> */}
+            {this.headerView()}
+            {this.dropdownView()}
+            <Content>{this.contentView()}</Content>
+            <Footer>{this.footerView()}</Footer>
+          </Form>
         </Layout>
+
       </div>
     );
   }
@@ -679,7 +779,9 @@ function mapDispatchToProps(dispatch) {
       saveDraws,
       getCompetitionVenue,
       updateCourtTimingsDrawsAction,
-      clearDraws
+      clearDraws,
+      publishDraws,
+      matchesListDrawsAction
     },
     dispatch
   );

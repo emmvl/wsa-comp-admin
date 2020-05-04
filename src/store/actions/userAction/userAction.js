@@ -221,6 +221,29 @@ function getUserReferFriendAction(payload){
   return action;
 }
 
+function getOrganiationPhotoAction(payload){
+  const action = {
+    type: ApiConstants.API_GET_ORG_PHOTO_LOAD,
+    payload: payload
+  };
+  return action;
+}
+function saveOrganiationPhotoAction(payload){
+  const action = {
+    type: ApiConstants.API_SAVE_ORG_PHOTO_LOAD,
+    payload: payload
+  };
+  return action;
+}
+
+function deleteOrganiationPhotoAction(payload){
+  const action = {
+    type: ApiConstants.API_DELETE_ORG_PHOTO_LOAD,
+    payload: payload
+  };
+  return action;
+}
+
 export {
   getRoleAction,
   getUreAction,
@@ -246,5 +269,8 @@ export {
   getUserModuleActivityScorerAction,
   getUserModuleActivityManagerAction,
   getUserFriendAction,
-  getUserReferFriendAction
+  getUserReferFriendAction,
+  getOrganiationPhotoAction,
+  saveOrganiationPhotoAction,
+  deleteOrganiationPhotoAction
 }

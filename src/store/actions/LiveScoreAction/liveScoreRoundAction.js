@@ -20,7 +20,15 @@ function liveScoreCreateRoundAction(roundName, sequence, competitionID, division
     return action;
 }
 
+function clearRoundData() {
+    const action = {
+        type: ApiConstants.API_CLEAR_ROUND_DATA
+    }
+    return action
+}
+
 export {
     liveScoreRoundListAction,
-    liveScoreCreateRoundAction
+    liveScoreCreateRoundAction,
+    clearRoundData
 } 

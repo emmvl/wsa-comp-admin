@@ -143,6 +143,14 @@ function getGenderAction() {
 }
 
 
+function getPhotoTypeAction() {
+    const action = {
+        type: ApiConstants.API_GET_PHOTO_TYPE_LOAD,
+
+    };
+    return action
+}
+
 export {
     timeSlotInit,
     getCommonRefData,
@@ -160,5 +168,6 @@ export {
     clearFilter,
     venuesListAction,
     venueDeleteAction,
-    getGenderAction
+    getGenderAction,
+    getPhotoTypeAction
 }

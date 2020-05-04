@@ -21,7 +21,8 @@ import {
     setParticipating_competition,
     getParticipating_competition,
 } from "../../util/sessionStorage"
-import CommentModal from "../../customComponents/commentModal"
+import PlayerCommentModal from "../../customComponents/playerCommentModal"
+import moment from "moment"
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
@@ -102,7 +103,10 @@ class CompetitionPartPlayerGradeCalculate extends Component {
             visible: false,
             comment: null,
             divisionId: null,
-            playerGradingorgId: null
+            playerGradingorgId: null,
+            commentsCreatedBy: null,
+            commentsCreatedOn: null,
+            comments: null
         }
         this_Obj = this;
     }
@@ -207,7 +211,10 @@ class CompetitionPartPlayerGradeCalculate extends Component {
         this.setState({
             visible: true, comment: record.comments,
             divisionId: record.competitionMembershipProductDivisionId,
-            playerGradingorgId: record.playerGradingOrganisationId
+            playerGradingorgId: record.playerGradingOrganisationId,
+            commentsCreatedBy: record.comments == "" ? null : record.commentsCreatedBy,
+            commentsCreatedOn: record.comments == "" ? null : moment(record.commentsCreatedOn).format("DD-MM-YYYY HH:mm"),
+            comments: record.comments
         })
     }
 
@@ -218,7 +225,10 @@ class CompetitionPartPlayerGradeCalculate extends Component {
             visible: false,
             comment: "",
             divisionId: null,
-            playerGradingorgId: null
+            playerGradingorgId: null,
+            commentCreatedBy: null,
+            commentsCreatedOn: null,
+            comments: null
         });
     };
     // model cancel for dissapear a model
@@ -227,7 +237,10 @@ class CompetitionPartPlayerGradeCalculate extends Component {
             visible: false,
             comment: "",
             divisionId: null,
-            playerGradingorgId: null
+            playerGradingorgId: null,
+            commentCreatedBy: null,
+            commentsCreatedOn: null,
+            comments: null
         });
     };
 
@@ -307,7 +320,7 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                         loading={this.props.partPlayerGradingState.onLoad == true && true}
                     />
                 </div>
-                <CommentModal
+                <PlayerCommentModal
                     visible={this.state.visible}
                     modalTitle={AppConstants.add_edit_comment}
                     onOK={this.handleOk}
@@ -315,6 +328,9 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                     placeholder={AppConstants.addYourComment}
                     onChange={(e) => this.setState({ comment: e.target.value })}
                     value={this.state.comment}
+                    owner={this.state.commentsCreatedBy}
+                    OwnCreatedComment={this.state.commentsCreatedOn}
+                    ownnerComment={this.state.comments}
                 />
             </div>
         )

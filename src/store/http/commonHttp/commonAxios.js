@@ -55,8 +55,9 @@ let AxiosApi = {
         return Method.dataGet(url, token);
     },
 
-    getVenue() {
-        var url = `/api/venue/all`;
+    async getVenue() {
+        let organisationId = await getOrganisationData().organisationUniqueKey;
+        var url = `/api/venue/all?organisationUniqueKey=${organisationId}`;
         return Method.dataGet(url, token);
     },
     getRegFormSetting() {
@@ -117,13 +118,16 @@ let AxiosApi = {
     ////Add Venue Api
     async  addVenue(venuData) {
         let userId = await getUserId()
+        let organisationId = await getOrganisationData().organisationUniqueKey;
         console.log(venuData, 'venuData_FetchApi')
         let body = {
             "competitionUniqueKey": venuData.competitionUniqueKey,
+            "organisationId":organisationId,
             "yearRefId": venuData.yearRefId,
             "competitionMembershipProductDivisionId": venuData.competitionMembershipProductDivisionId,
             "venueId": venuData.venueId,
             "name": venuData.name,
+            "shortName": venuData.shortName,
             "street1": venuData.street1,
             "street2": venuData.street2,
             "suburb": venuData.suburb,
@@ -141,17 +145,18 @@ let AxiosApi = {
     },
 
     ////own Competition venue list
-    getVenueList(competitionID, search) {
+  async  getVenueList(competitionID, search) {
         var url = ""
+        let organisationId = await getOrganisationData().organisationUniqueKey;
         if (competitionID) {
             if(search){
-                url = `/api/venue/competitionmgmnt?search=${search}&competitionId=${competitionID}`;
+                url = `/api/venue/competitionmgmnt?search=${search}&competitionId=${competitionID}&organisationUniqueKey=${organisationId}`;
             }else{
-                url = `/api/venue/competitionmgmnt?competitionId=${competitionID}`;
+                url = `/api/venue/competitionmgmnt?competitionId=${competitionID}&organisationUniqueKey=${organisationId}`;
             }
            
         } else {
-            url = `/api/venue/competitionmgmnt`;
+            url = `/api/venue/competitionmgmnt?organisationUniqueKey=${organisationId}`;
         }
 
         return Method.dataGet(url, token);

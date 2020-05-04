@@ -107,7 +107,7 @@ import {
   registrationOtherInfoReferenceSaga, firebirdPlayerReferenceSaga, favouriteTeamReferenceSaga,
   nationalityReferenceSaga, heardByReferenceSaga, playerPositionReferenceSaga, venuesListSaga,
   venueByIdSaga, venueDeleteSaga,
-  getGenderSaga
+  getGenderSaga, getPhotoTypeSaga
 } from "./commonSaga/commonSaga";
 ////Venue constraints
 import { venueTimeSaga, venueConstraintPostSaga } from './competitionManagementSaga/venueTimeSaga'
@@ -119,7 +119,8 @@ import {
   dragTeamPartPlayerSaga,
   partPLayerCommentSaga,
   partPlayerSummaryCommentSaga,
-  importCompetitionPlayer
+  importCompetitionPlayer,
+  deleteTeamSaga
 } from './competitionManagementSaga/competitionPartPlayerGradingSaga';
 import {
   getCompOwnProposedTeamGradingSaga,
@@ -131,7 +132,8 @@ import {
   publishGradeTeamSummarySaga,
   getCompFinalGradesListSaga,
   proposedTeamGradingComment,
-  partProposedTeamGradingComment
+  partProposedTeamGradingComment,
+  deleteTeamActionSaga
 } from './competitionManagementSaga/competitionTeamGradingSaga';
 
 // UserSaga
@@ -142,7 +144,8 @@ import { homeDashboardSaga } from "./homeDashboardSaga/homeDashboardSaga"
 import {
   getCompetitionDrawsSaga, getDrawsRoundsSaga,
   updateCompetitionDraws, saveDrawsSaga,
-  getCompetitionVenues, updateCourtTimingsDrawsAction
+  getCompetitionVenues, updateCourtTimingsDrawsAction,
+  getDivisionGradeNameListSaga, publishDraws, drawsMatchesListExportSaga
 } from './competitionManagementSaga/competitionDrawsSaga';
 
 import { regDashboardListSaga } from "./registrationSaga/registrationDashboardSaga"
@@ -163,7 +166,10 @@ import { liveScoreTeamAttendanceListSaga } from './liveScoreSaga/liveScoreTeamAt
 
 import { laddersSettingGetMatchResult, laddersSettingGetData, laddersSettingPostData } from './liveScoreSaga/liveScoreLadderSettingSaga'
 
-import {liveScoreChangeVenueSaga} from "./liveScoreSaga/liveScoreVenueChangeSaga"
+import { liveScoreChangeVenueSaga } from "./liveScoreSaga/liveScoreVenueChangeSaga"
+import { getLiveScoreFixtureCompSaga } from "./liveScoreSaga/liveScoreFixtureCompSaga";
+import * as stripeSaga from "../saga/stripeSaga/stripeSaga"
+
 
 export default function* root_saga() {
   yield takeEvery(ApiConstants.API_LOGIN_LOAD, loginApiSaga);
@@ -558,6 +564,8 @@ export default function* root_saga() {
 
   yield takeEvery(ApiConstants.API_REG_DASHBOARD_LIST_LOAD, regDashboardListSaga)
   yield takeEvery(ApiConstants.API_GET_GENDER_LOAD, getGenderSaga)
+  yield takeEvery(ApiConstants.API_GET_PHOTO_TYPE_LOAD, getPhotoTypeSaga)
+  
 
   //Search Scorer saga 
   yield takeEvery(ApiConstants.API_LIVESCORE_SCORER_SEARCH_LOAD, liveScoreScorerSearchSaga)
@@ -583,13 +591,13 @@ export default function* root_saga() {
 
 
   //// Invitee Search SAGA
-  yield takeEvery(ApiConstants.API_COMPETITION_FEE_INVITEES_SEARCH_LOAD,inviteeSearchSaga)
+  yield takeEvery(ApiConstants.API_COMPETITION_FEE_INVITEES_SEARCH_LOAD, inviteeSearchSaga)
 
   yield takeEvery(ApiConstants.API_COMPETITION_PLAYER_IMPORT_LOAD, importCompetitionPlayer);
 
   yield takeEvery(ApiConstants.API_EXPORT_FILES_LOAD, exportFilesSaga)
 
-  yield takeEvery(ApiConstants.API_SAVE_VENUE_CHANGE_LOAD,liveScoreChangeVenueSaga);
+  yield takeEvery(ApiConstants.API_SAVE_VENUE_CHANGE_LOAD, liveScoreChangeVenueSaga);
 
   //EndUserRegistrationDashboard List
   yield takeEvery(ApiConstants.API_USER_REG_DASHBOARD_LIST_LOAD, endUserRegSaga.endUserRegDashboardListSaga)
@@ -599,5 +607,37 @@ export default function* root_saga() {
 
   // User Refer Friend List
   yield takeEvery(ApiConstants.API_USER_REFER_FRIEND_LOAD, userSaga.getUserReferFriendListSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_GET_FIXTURE_COMP_LOAD, getLiveScoreFixtureCompSaga)
+
+  //////////////////draws division grade names list
+  yield takeEvery(ApiConstants.API_DRAWS_DIVISION_GRADE_NAME_LIST_LOAD, getDivisionGradeNameListSaga)
+
+  //////////stripe payment account balance API
+  yield takeEvery(ApiConstants.API_STRIPE_ACCOUNT_BALANCE_API_LOAD, stripeSaga.accountBalanceSaga)
+
+  ///////For stripe charging payment API
+  yield takeEvery(ApiConstants.API_STRIPE_CHARGING_PAYMENT_API_LOAD, stripeSaga.chargingPaymentSaga)
+  yield takeEvery(ApiConstants.API_DRAW_PUBLISH_LOAD, publishDraws)
+  //part proposed team grading comment 
+  yield takeEvery(ApiConstants.API_COMPETITION_TEAM_DELETE_LOAD, deleteTeamSaga)
+
+  //part proposed team grading comment 
+  yield takeEvery(ApiConstants.API_COMPETITION_TEAM_DELETE_ACTION_LOAD, deleteTeamActionSaga)
+
+  //////////stripe payment account balance API
+  yield takeEvery(ApiConstants.API_SAVE_STRIPE_ACCOUNT_API_LOAD, stripeSaga.saveStripeAccountSaga)
+
+  // Organisation Photos List
+  yield takeEvery(ApiConstants.API_GET_ORG_PHOTO_LOAD, userSaga.getOrgPhotosListSaga)
+
+  // Organisation Photos Save
+  yield takeEvery(ApiConstants.API_SAVE_ORG_PHOTO_LOAD, userSaga.saveOrgPhotosSaga)
+
+    // Organisation Photos Delete
+    yield takeEvery(ApiConstants.API_DELETE_ORG_PHOTO_LOAD, userSaga.deleteOrgPhotosSaga)
+
+    //Draws Matches List Export
+    yield takeEvery(ApiConstants.API_DRAW_MATCHES_LIST_LOAD, drawsMatchesListExportSaga)
+
 
 }

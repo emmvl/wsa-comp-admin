@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Form, Button, Table, Select, Tag, Input, message, Tooltip } from 'antd';
+import { Layout, Breadcrumb, Form, Button, Table, Select, Tag, Input, message, Tooltip, Menu, Modal } from 'antd';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import CommentModal from "../../customComponents/commentModal";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -18,7 +18,7 @@ import {
     clearTeamGradingReducerDataAction,
     getCompFinalGradesListAction,
     teamGradingCommentAction,
-    changeHistoryHover
+    changeHistoryHover, deleteTeamActionAction
 } from "../../store/actions/competitionModuleAction/competitionTeamGradingAction";
 import { gradesReferenceListAction } from "../../store/actions/commonAction/commonAction";
 import {
@@ -32,6 +32,7 @@ import moment from "moment"
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 let this_obj = null;
+const { SubMenu } = Menu;
 
 /////for displying  grade name on the basis of graderefid
 function gradeName(proposedGradeRefId) {
@@ -73,17 +74,19 @@ const columns = [
             //     </Select>
 
             //     )
-
-            <Select className="select-inside-team-grades-table"
-                value={sortOrder}
-                onChange={(e) => this_obj.props.onchangeCompOwnFinalTeamGradingData(e, index, "sortOrder")}
-            >
-                {this_obj.props.ownTeamGradingState.teamRanks.map((item) => {
-                    return <Option key={"rank" + item.id} value={item.id}>
-                        {item.id}
-                    </Option>
-                })}
-            </Select>
+            <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row": null}>
+                <Select className="select-inside-team-grades-table" 
+                    value={sortOrder}
+                    onChange={(e) => this_obj.props.onchangeCompOwnFinalTeamGradingData(e, index, "sortOrder")}
+                >
+                    {this_obj.props.ownTeamGradingState.teamRanks.map((item) => {
+                        return <Option key={"rank" + item.id} value={item.id}>
+                            {item.id}
+                        </Option>
+                    })}
+                </Select>
+            </span>
+            
         )
     },
     {
@@ -93,14 +96,27 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "teamName"),
         render: (teamName, record, index) => (
             record.isDirectRegistration == 0 ? (
-                <span >{teamName}</span>
+                <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>{teamName}</span>
             ) : (
-                    <Input className="input-inside-team-grades-table" style={{ width: '230px' }}
-                        onChange={e => this_obj.props.onchangeCompOwnFinalTeamGradingData(e.target.value, index, "teamName")}
-                        placeholder={"Team Name"}
-                        value={teamName}
-                    />
+                    <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>
+                        <Input className="input-inside-team-grades-table" style={{ width: '230px' }}
+                            onChange={e => this_obj.props.onchangeCompOwnFinalTeamGradingData(e.target.value, index, "teamName")}
+                            placeholder={"Team Name"}
+                            value={teamName}
+                        />
+                    </span>
                 )
+        )
+    },
+    {
+        title: 'Affiliate Name',
+        dataIndex: 'affiliateName',
+        key: 'affiliateName',
+        sorter: (a, b) => tableSort(a, b, "affiliateName"),
+        render: (affiliateName, record, index) => (
+            record.isDirectRegistration == 0 ? (
+                <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>{affiliateName}</span>
+            ) : null
         )
     },
     {
@@ -108,7 +124,7 @@ const columns = [
         dataIndex: 'playerHistory',
         key: 'playerHistory',
         render: (playerHistory, record, key) => (
-            <span>
+            <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>
                 {playerHistory.map((item, index) => (
                     // item.teamText ?
                     <Tooltip
@@ -140,7 +156,7 @@ const columns = [
         key: 'proposedGradeRefId',
         render: (proposedGradeRefId, record) => (
             record.isDirectRegistration == 0 ?
-                <span >{gradeName(proposedGradeRefId)}</span> : ""
+                <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>{gradeName(proposedGradeRefId)}</span> : ""
         ),
         sorter: (a, b) => tableSort(a, b, "proposedGradeRefId")
 
@@ -151,16 +167,23 @@ const columns = [
         dataIndex: 'finalGradeId',
         key: 'finalGradeId',
         render: (finalGradeId, record, index) =>
-            <Select className="select-inside-team-grades-table"
-                value={finalGradeId}
-                onChange={(finalGradeId) => this_obj.props.onchangeCompOwnFinalTeamGradingData(finalGradeId, index, "finalGradeId")}
-            >
-                {this_obj.props.ownTeamGradingState.compFinalTeamGradingFinalGradesData.map((item) => {
-                    return <Option key={"finalGradeId" + item.gradeRefId} value={item.gradeRefId}>
-                        {item.name}
-                    </Option>
-                })}
-            </Select>,
+            <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>
+                {(record.delIndicationMsg == ''|| record.delIndicationMsg == null || 
+                    record.delIndicationMsg == undefined) ? 
+                <Select className="select-inside-team-grades-table"
+                    value={finalGradeId}
+                    onChange={(finalGradeId) => this_obj.props.onchangeCompOwnFinalTeamGradingData(finalGradeId, index, "finalGradeId")}
+                >
+                    {this_obj.props.ownTeamGradingState.compFinalTeamGradingFinalGradesData.map((item) => {
+                        return <Option key={"finalGradeId" + item.gradeRefId} value={item.gradeRefId}>
+                            {item.name}
+                        </Option>
+                    })}
+                </Select>
+                : <span>{record.delIndicationMsg}</span>
+                }
+            </span>
+            ,
         sorter: (a, b) => tableSort(a, b, "finalGradeId")
     },
     {
@@ -169,11 +192,46 @@ const columns = [
         key: 'responseComments',
         width: 110,
         render: (responseComments, record) =>
-            <div style={{ display: "flex", justifyContent: "center", cursor: "pointer" }} onClick={() => this_obj.onClickComment(record)}>
+            <div className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}
+                style={{ display: "flex", justifyContent: "center", cursor: "pointer", backgroundColor: "none" }} 
+                onClick={() => this_obj.onClickComment(record)}>
                 <img src={responseComments !== null && responseComments.length > 0 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
             </div>,
     },
-
+    {
+        title: "Action",
+        dataIndex: "isUsed",
+        key: "isUsed",
+        render: (isUsed, e, index) => (
+            <Menu
+                className="action-triple-dot-submenu"
+                theme="light"
+                mode="horizontal"
+                style={{ lineHeight: "25px" }}
+            >
+                <SubMenu
+                    key="sub1"
+                    title={
+                        <img
+                            className="dot-image"
+                            src={AppImages.moreTripleDot}
+                            alt=""
+                            width="16"
+                            height="16"
+                        />
+                    }>
+                    {e.isActive == 1 ? 
+                    <Menu.Item key="1" onClick={() => this_obj.showDeleteConfirm(e, "IsActive", index)}>
+                        <span>Delete</span>
+                    </Menu.Item> :
+                    <Menu.Item key="2"  onClick={() => this_obj.showDeleteConfirm(e, "Undelete", index)}>
+                        <span>Undelete</span>
+                    </Menu.Item>
+                    }
+                </SubMenu>
+            </Menu>
+        )
+    }
 ];
 
 
@@ -198,8 +256,10 @@ class CompetitionProposedTeamGrading extends Component {
             commentsCreatedBy: null,
             finalGradeId: 0,
             proposedGradeID: 0,
-
-
+            isDeleteModalVisible: false,
+            actionType: '',
+            loading: false,
+            rowIndex: 0
         }
         this_obj = this
         this.props.clearTeamGradingReducerDataAction("finalTeamGrading")
@@ -211,8 +271,8 @@ class CompetitionProposedTeamGrading extends Component {
         this.setState({
             visible: true, teamId: record.teamId,
             responseComments: record.responseComments, responseCommentsCreatedBy: record.responseCommentsCreatedBy,
-            responseCommentsCreatedOn: moment(record.responseCommentsCreatedOn).format("DD-MM-YYYY"),
-            comments: record.comments, commentsCreatedOn: moment(record.commentsCreatedOn).format("DD-MM-YYYY"), commentsCreatedBy: record.commentsCreatedBy,
+            responseCommentsCreatedOn: moment(record.responseCommentsCreatedOn).format("DD-MM-YYYY HH:mm"),
+            comments: record.comments, commentsCreatedOn: moment(record.commentsCreatedOn).format("DD-MM-YYYY HH:mm"), commentsCreatedBy: record.commentsCreatedBy,
             finalGradeId: record.finalGradeId, proposedGradeID: record.finalGradeId,
             comment: record.responseComments,
 
@@ -258,6 +318,31 @@ class CompetitionProposedTeamGrading extends Component {
             proposedGradeID: null,
         });
     };
+
+    showDeleteConfirm = async (e, actionType, index) => {
+      await  this.setState({teamId: e.teamId, actionType: actionType, 
+        deleteModalVisible: true, rowIndex: index});
+    }
+
+    handleDeleteTeamOk = () => {
+        this.setState({deleteModalVisible: false});
+        let payload = {
+            competitionUniqueKey: this.state.firstTimeCompId,
+            organisationId: '',
+            teamId: this.state.teamId,
+            competitionMembershipProductDivisionId: this.state.divisionId,
+            actionType: this.state.actionType
+        }
+      //this.props.deleteTeamActionAction(payload);
+      //this.setState({loading: true});
+
+      this_obj.props.onchangeCompOwnFinalTeamGradingData(this.state.actionType, this.state.rowIndex, "actionType");
+      
+    }
+
+    handleDeleteTeamCancel = () => {
+        this.setState({deleteModalVisible: false});
+    }
 
     componentDidMount() {
         let divisionId = this.props.location.state ? this.props.location.state.id : null;
@@ -327,28 +412,40 @@ class CompetitionProposedTeamGrading extends Component {
             this.setState({ saveLoad: false })
             history.push('/competitionPartTeamGradeCalculate');
         }
+
+        if(nextProps.ownTeamGradingState != this.props.ownTeamGradingState){
+            if(this.props.ownTeamGradingState.onTeamDeleteLoad == false && this.state.loading === true){
+                this.setState({loading : false});
+                history.push('/competitionPartTeamGradeCalculate');
+            }
+        }
+
+
     }
 
 
 
     ////save the final team grading data
-    submitApiCall = () => {
+    submitApiCall = (buttonClicked) => {
         let finalTeamGradingData = this.props.ownTeamGradingState.getCompOwnProposedTeamGradingData
         let finalGrades = this.props.ownTeamGradingState.compFinalTeamGradingFinalGradesData;
         let isError = false;
 
-        finalTeamGradingData.map((item) => {
-            if (item.finalGradeId == 0 || item.finalGradeId == null || item.finalGradeId == "" ||
-                item.finalGradeId == undefined) {
-                isError = true
-            }
-        })
+        if(buttonClicked == "submit"){
+            finalTeamGradingData.map((item) => {
+                if ((item.finalGradeId == 0 || item.finalGradeId == null || item.finalGradeId == "" ||
+                    item.finalGradeId == undefined) && item.actionType!= "IsActive") {
+                    isError = true
+                }
+            })
+        }
+       
 
         if (!isError) {
             finalTeamGradingData.map((item) => {
                 let obj = finalGrades.find(x => x.gradeRefId == item.finalGradeId);
-                item['finalGradeRefId'] = obj.id
-                item["gradeRefId"] = obj.gradeRefId
+                item['finalGradeRefId'] = obj!= undefined ? obj.id : null
+                item["gradeRefId"] = obj!= undefined ? obj.gradeRefId : null
                 delete item['finalGradeId']
                 return item
             })
@@ -359,6 +456,7 @@ class CompetitionProposedTeamGrading extends Component {
                 "gradeRefId": this.state.gradeRefId,
                 "teams": finalTeamGradingData
             }
+            console.log("&&&&&&&&&&&&&&" + JSON.stringify(payload));
             this.props.saveOwnFinalTeamGradingDataAction(payload)
             this.setState({ saveLoad: true })
         }
@@ -495,7 +593,7 @@ class CompetitionProposedTeamGrading extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-2" >
+                        <div className="col-sm" >
                             <div style={{
                                 width: "100%", display: "flex",
                                 flexDirection: "row",
@@ -503,7 +601,7 @@ class CompetitionProposedTeamGrading extends Component {
                             }} >
                                 <span className='year-select-heading'>{AppConstants.grade}:</span>
                                 <Select
-                                    className="year-select"
+                                    className="year-select" style={{width: '70px'}}
                                     onChange={(gradeRefId) => this.onGradeChange(gradeRefId)}
                                     value={JSON.parse(JSON.stringify(this.state.gradeRefId))}
                                 >
@@ -514,9 +612,9 @@ class CompetitionProposedTeamGrading extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm" style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }} >
+                        {/* <div className="col-sm" style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }} >
                             <span className='comp-grading-final-text ml-1' >{AppConstants.final}</span>
-                        </div>
+                        </div> */}
                         <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }} >
                             <Button className="primary-add-comp-form" type="primary"
                             // onClick={this.addNewGrade}
@@ -537,11 +635,13 @@ class CompetitionProposedTeamGrading extends Component {
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        className="home-dashboard-table"
+                        //className={record => record.isActive == 0 ? "disabled-row" : "home-dashboard-table"} 
+                        className="home-dashboard-table" 
                         columns={columns}
                         dataSource={proposedTeamGradingData}
                         pagination={false}
                         loading={this.props.ownTeamGradingState.onLoad == true && true}
+                        rowClassName={record => !record.isActive && record.delIndicationMsg!= undefined && "disabled-row"}
                     />
                 </div>
                 <CommentModal
@@ -560,10 +660,16 @@ class CompetitionProposedTeamGrading extends Component {
                     ownnerComment={this.state.comments}
                     finalGradeId={this.state.finalGradeId}
                     proposedGradeID={this.state.proposedGradeID}
-
-
-
                 />
+
+                <Modal
+                    className="add-membership-type-modal"
+                    title={AppConstants.deleteTeam}
+                    visible={this.state.deleteModalVisible}
+                    onOk={this.handleDeleteTeamOk}
+                    onCancel={this.handleDeleteTeamCancel}>
+                     <p>Are you sure you want to {this.state.actionType == 'IsActive' ? 'delete': 'Undelete'}?</p>
+                </Modal>
             </div>
         )
     }
@@ -578,14 +684,20 @@ class CompetitionProposedTeamGrading extends Component {
                             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
                                 {/* <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button> */}
                                 {/* <NavLink to="/competitionPartTeamGradeCalculate" > */}
-                                <Button className="open-reg-button" style={{ marginRight: '20px' }}
+                                <Button type="cancel-button"  style={{ marginRight: '20px' }}
                                     onClick={() => this.cancelCall()}
-                                    type="primary">{AppConstants.cancel}
+                                    >{AppConstants.cancel}
                                 </Button>
+                                <Button className="open-reg-button" style={{marginRight: '20px'}}
+                                    onClick={() => this.submitApiCall("save")}
+                                    type="primary">{AppConstants.save}
+                                </Button>
+                                {/* {this.state.gradeRefId != -1 ?  */}
                                 <Button className="open-reg-button"
-                                    onClick={() => this.submitApiCall()}
+                                    onClick={() => this.submitApiCall("submit")}
                                     type="primary">{AppConstants.submit}
                                 </Button>
+                                {/* : null } */}
 
                                 {/* </NavLink> */}
                             </div>
@@ -629,7 +741,8 @@ function mapDispatchToProps(dispatch) {
         clearYearCompetitionAction,
         getCompFinalGradesListAction,
         teamGradingCommentAction,
-        changeHistoryHover
+        changeHistoryHover,
+        deleteTeamActionAction
     }, dispatch)
 }
 

@@ -118,6 +118,13 @@ function competitionPlayerImportAction(data) {
     }
 }
 
+function deleteTeamAction(data){
+    return {
+        type: ApiConstants.API_COMPETITION_TEAM_DELETE_LOAD,
+        payload: data
+    }
+}
+
 
 export {
     getCompPartPlayerGradingSummaryAction,
@@ -130,5 +137,6 @@ export {
     onSameTeamDragAction,
     playerGradingComment,
     playerSummaryCommentAction,
-    competitionPlayerImportAction
+    competitionPlayerImportAction,
+    deleteTeamAction
 }

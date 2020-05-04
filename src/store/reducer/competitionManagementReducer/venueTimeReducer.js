@@ -25,6 +25,7 @@ var venueDataObj = {
     competitionMembershipProductDivisionId: 1,
     venueId: 0,
     name: "",
+    shortName:"",
     street1: "",
     street2: "",
     suburb: "",
@@ -483,6 +484,12 @@ function VenueTimeState(state = initialState, action) {
             }
             if (action.index == 'Venue') {
                 let upDateData = state.venuData
+                if(action.key == "affiliate"){
+                    if(action.data == false)
+                        upDateData["affiliateData"] = [];
+                        upDateData["organisations"] = [];
+                }
+               
                 upDateData[action.key] = action.data
                 state.venuData = upDateData
 

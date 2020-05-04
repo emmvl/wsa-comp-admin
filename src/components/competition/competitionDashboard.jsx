@@ -12,6 +12,7 @@ import history from "../../util/history";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 import { isArrayNotEmpty } from "../../util/helpers";
 import moment from "moment";
+import { checkRegistrationType } from "../../util/permissions";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -140,7 +141,22 @@ const columnsOwned = [
         key: "statusName",
         sorter: (a, b) => tableSort(a, b, "statusName")
 
-    }
+    },
+    {
+        title: "Registration Type",
+        dataIndex: "invitees",
+        key: "invitees",
+        render: invitees => {
+            let inviteesRegType = isArrayNotEmpty(invitees) ? invitees : []
+            let registrationInviteesRefId = isArrayNotEmpty(inviteesRegType) ? inviteesRegType[0].registrationInviteesRefId : 0
+            return (
+                < span >
+                    {checkRegistrationType(registrationInviteesRefId)}
+                </span >
+            )
+        },
+        sorter: (a, b) => tableSort(a, b, "invitees")
+    },
 ];
 
 class CompetitionDashboard extends Component {

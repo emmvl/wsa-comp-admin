@@ -97,6 +97,14 @@ const getDraws_roundTime = () => {
     return localStorage.draws_roundTime
 }
 
+const setDraws_division_grade = draws_division_grade => {
+    localStorage.setItem("draws_division_grade", draws_division_grade)
+}
+
+const getDraws_division_grade = () => {
+    return localStorage.draws_division_grade
+}
+
 
 
 module.exports = {
@@ -119,5 +127,7 @@ module.exports = {
     setDraws_round,
     getDraws_round,
     setDraws_roundTime,
-    getDraws_roundTime
+    getDraws_roundTime,
+    setDraws_division_grade,
+    getDraws_division_grade,
 }
