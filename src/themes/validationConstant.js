@@ -114,6 +114,7 @@ const ValidationConstants = {
     qtrBreak: "Please enter a qtr break",
     timeBetweenGames: "Please enter a time between games",
     startDateIsRequired: 'Start date is required.',
+    endDateIsRequired: 'End date is required',
 
     divisionName: "Division Name field is required.",
     genderRestriction: "Please select gender.",

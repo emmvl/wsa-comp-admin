@@ -1849,22 +1849,40 @@ class RegistrationCompetitionFee extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
-                            <InputWithHead heading={AppConstants.startDate} required={"required-field"} />
-                            <Form.Item >
-                                {getFieldDecorator('startDate',
-                                    { rules: [{ required: true, message: ValidationConstants.startDateIsRequired }] })(
-                                        <DatePicker
-                                            size="large"
-                                            style={{ width: "100%" }}
-                                            onChange={date => this.dateOnChangeFrom(date, "startDate")}
-                                            format={"DD-MM-YYYY"}
-                                            showTime={false}
-                                            // value={detailsData.competitionDetailData.startDate && moment(detailsData.competitionDetailData.startDate, "YYYY-MM-DD")}
-                                            disabled={compDetailDisable}
-                                        />
-                                    )}
-                            </Form.Item>
-
+                            <div>
+                                <InputWithHead heading={AppConstants.startDate} required={"required-field"} />
+                                <Form.Item >
+                                    {getFieldDecorator('startDate',
+                                        { rules: [{ required: true, message: ValidationConstants.startDateIsRequired }] })(
+                                            <DatePicker
+                                                size="large"
+                                                style={{ width: "100%" }}
+                                                onChange={date => this.dateOnChangeFrom(date, "startDate")}
+                                                format={"DD-MM-YYYY"}
+                                                showTime={false}
+                                                // value={detailsData.competitionDetailData.startDate && moment(detailsData.competitionDetailData.startDate, "YYYY-MM-DD")}
+                                                disabled={compDetailDisable}
+                                            />
+                                        )}
+                                </Form.Item>
+                            </div>
+                            <div>
+                                <InputWithHead heading={AppConstants.endDate} required={"required-field"} />
+                                <Form.Item >
+                                    {getFieldDecorator('endDate',
+                                        { rules: [{ required: true, message: ValidationConstants.endDateIsRequired }] })(
+                                            <DatePicker
+                                                size="large"
+                                                style={{ width: "100%" }}
+                                                onChange={date => this.dateOnChangeFrom(date, "endDate")}
+                                                format={"DD-MM-YYYY"}
+                                                showTime={false}
+                                                // value={detailsData.competitionDetailData.startDate && moment(detailsData.competitionDetailData.startDate, "YYYY-MM-DD")}
+                                                disabled={compDetailDisable}
+                                            />
+                                        )}
+                                </Form.Item>
+                            </div>
                         </div>
                         <div className="col-sm">
                             {detailsData.competitionDetailData.competitionFormatRefId == 4 &&
