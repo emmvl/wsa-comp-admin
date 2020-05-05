@@ -107,7 +107,7 @@ import {
   registrationOtherInfoReferenceSaga, firebirdPlayerReferenceSaga, favouriteTeamReferenceSaga,
   nationalityReferenceSaga, heardByReferenceSaga, playerPositionReferenceSaga, venuesListSaga,
   venueByIdSaga, venueDeleteSaga,
-  getGenderSaga
+  getGenderSaga, getInvoiceSaga
 } from "./commonSaga/commonSaga";
 ////Venue constraints
 import { venueTimeSaga, venueConstraintPostSaga } from './competitionManagementSaga/venueTimeSaga'
@@ -621,6 +621,8 @@ export default function* root_saga() {
 
   //part proposed team grading comment 
   yield takeEvery(ApiConstants.API_COMPETITION_TEAM_DELETE_ACTION_LOAD, deleteTeamActionSaga)
+
+  yield takeEvery(ApiConstants.API_GET_INVOICE_LOAD, getInvoiceSaga)
 
   //////////stripe payment account balance API
   yield takeEvery(ApiConstants.API_SAVE_STRIPE_ACCOUNT_API_LOAD, stripeSaga.saveStripeAccountSaga)

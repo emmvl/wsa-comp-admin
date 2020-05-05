@@ -1,10 +1,10 @@
 import { put, call } from 'redux-saga/effects'
 import ApiConstants from "../../../themes/apiConstants";
 import CommonAxiosApi from "../../http/commonHttp/commonAxios";
-import CompetitionAxiosApi from "../../http/competitionHttp/competitionAxiosApi";
 import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
 import { message } from "antd";
 import AppConstants from "../../../themes/appConstants";
+import AxiosApi from '../../http/registrationHttp/registrationAxios';
 
 function* failSaga(result) {
     yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
@@ -353,6 +353,31 @@ export function* getGenderSaga(action) {
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_GET_GENDER_SUCCESS,
+                result: result.result.data,
+                status: result.result.status
+            });
+        } else {
+            yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
+            setTimeout(() => {
+                alert(result.data.message);
+            }, 800);
+        }
+    } catch (error) {
+        yield put({
+            type: ApiConstants.API_COMMON_SAGA_ERROR,
+            error: error,
+            status: error.status
+        });
+    }
+}
+
+//get invoice saga
+export function* getInvoiceSaga(action) {
+    try {
+        const result = yield call(AxiosApi.getInvoice, action.competitionId, action.orgnaistationID, action.registrationid);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_INVOICE_SUCCESS,
                 result: result.result.data,
                 status: result.result.status
             });

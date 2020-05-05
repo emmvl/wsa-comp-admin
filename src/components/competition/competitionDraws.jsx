@@ -276,7 +276,6 @@ class CompetitionDraws extends Component {
           message.error(ValidationConstants.pleaseSelectRound)
         }
         else {
-          console.log("timeSlotData")
           this.props.publishDraws(this.state.firstTimeCompId)
         }
       }
@@ -382,7 +381,13 @@ class CompetitionDraws extends Component {
     return (
       <div className="row">
         <div className="col-sm-3">
-          <div className="year-select-heading-view">
+          <div style={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginRight: 50
+          }}>
             <span className="year-select-heading">{AppConstants.draws}:</span>
             <Select
               name={'yearRefId'}
@@ -442,7 +447,7 @@ class CompetitionDraws extends Component {
               display: 'flex',
               flexDirection: 'row',
               alignItems: 'center',
-              marginRight: 50
+              // marginRight: 50
             }}
           >
             <span className="year-select-heading">
@@ -533,7 +538,7 @@ class CompetitionDraws extends Component {
                   <Select
                     className="year-select"
                     placeholder="Select"
-                    style={{ minWidth: 120, whiteSpace: 'nowrap' }}
+                    style={{ minWidth: 120, maxWidth: 270, whiteSpace: 'nowrap' }}
                     onChange={venueId => this.onVenueChange(venueId)}
                     value={JSON.parse(JSON.stringify(this.state.venueId))}
                   >
@@ -562,7 +567,7 @@ class CompetitionDraws extends Component {
                   </span>
                   <Select
                     className="year-select"
-                    style={{ minWidth: 100 }}
+                    style={{ minWidth: 100, maxWidth: 130 }}
                     onChange={roundId => this.onRoundsChange(roundId)}
                     value={this.state.roundId}
                   >
@@ -609,6 +614,7 @@ class CompetitionDraws extends Component {
     var dateMargin = 25;
     var dayMargin = 25;
     let topMargin = 0;
+    console.log(this.props.drawsState)
     return (
       <div className="draggable-wrap draw-data-table">
         <div className="scroll-bar pb-4">
@@ -655,6 +661,7 @@ class CompetitionDraws extends Component {
                   if (slotIndex !== 0) {
                     leftMargin += 110;
                   }
+                  console.log()
                   return (
                     <div>
                       <span
@@ -668,14 +675,15 @@ class CompetitionDraws extends Component {
                           'box purple-bg'
                         }
                         style={{
-                          backgroundColor: slotObject.colorCode, left: leftMargin, top: topMargin, overflow: "hidden",
+                          backgroundColor: slotObject.competitionDivisionGradeId == this.state.competitionDivisionGradeId || this.state.competitionDivisionGradeId == 0 ? slotObject.colorCode : "#999999",
+                          left: leftMargin, top: topMargin, overflow: "hidden",
                           whiteSpace: "nowrap",
                         }}
                       >
                         <Swappable
                           id={index.toString() + ':' + slotIndex.toString()}
                           content={1}
-                          swappable={true}
+                          swappable={slotObject.competitionDivisionGradeId == this.state.competitionDivisionGradeId || this.state.competitionDivisionGradeId == 0 ? true : false}
                           onSwap={(source, target) =>
                             this.onSwap(source, target)
                           }
@@ -737,13 +745,14 @@ class CompetitionDraws extends Component {
         />
         <InnerHorizontalMenu menu={'competition'} compSelectedKey={'18'} />
         <Layout className="comp-dash-table-view">
+          {this.headerView()}
+          {this.dropdownView()}
           <Form
             onSubmit={this.saveAPIsActionCall}
-            noValidate="noValidate"
           >
             {/* <Loader visible={this.props.drawsState.updateLoad} /> */}
-            {this.headerView()}
-            {this.dropdownView()}
+
+
             <Content>{this.contentView()}</Content>
             <Footer>{this.footerView()}</Footer>
           </Form>

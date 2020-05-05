@@ -143,6 +143,17 @@ function getGenderAction() {
 }
 
 
+function getInvoice(competitionId, orgnaistationID, registrationid) {
+    const action = {
+        type: ApiConstants.API_GET_INVOICE_LOAD,
+        competitionId,
+        orgnaistationID,
+        registrationid
+    }
+    console.log(action)
+    return action
+}
+
 export {
     timeSlotInit,
     getCommonRefData,
@@ -160,5 +171,6 @@ export {
     clearFilter,
     venuesListAction,
     venueDeleteAction,
-    getGenderAction
+    getGenderAction,
+    getInvoice
 }

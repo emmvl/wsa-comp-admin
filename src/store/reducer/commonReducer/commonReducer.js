@@ -30,8 +30,12 @@ const initialState = {
     venuesList: [],
     venuesListPage: 1,
     venuesListTotalCount: 1,
-    genderData: []
+    genderData: [],
+    getInvoicedata: []
 };
+
+
+
 
 function commonReducerState(state = initialState, action) {
     switch (action.type) {
@@ -241,6 +245,21 @@ function commonReducerState(state = initialState, action) {
                 onLoad: true,
                 genderData: action.result,
                 status: action.status
+            }
+
+        case ApiConstants.API_GET_INVOICE_LOAD:
+            return {
+                ...state,
+                onLoad: true,
+                error: null,
+
+            }
+
+        case ApiConstants.API_GET_INVOICE_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                getInvoicedata: action.result
             }
 
         default:

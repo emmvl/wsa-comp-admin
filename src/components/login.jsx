@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import history from "../util/history";
 import AppConstants from "../themes/appConstants";
+import AppImages from "../themes/appImages";
 
 const { Header, Content } = Layout;
 const loginFormSchema = Yup.object().shape({
@@ -91,9 +92,8 @@ class Login extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <Layout >
-
+            <div className="fluid-width"  >
+                <Layout className="login-bg">
                     <Content className="container">
                         {this.headerView()}
                         <Formik

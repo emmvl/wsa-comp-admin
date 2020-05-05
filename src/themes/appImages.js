@@ -32,12 +32,13 @@ const AppImages = {
   commentEmpty: require("../images/chat-empty.png"),
   commentFilled: require("../images/chat-filled.png"),
   defaultUser: require("../images/default_user.png"),
-  yellowDot : require("../images/yellow_dot.png"),
+  yellowDot: require("../images/yellow_dot.png"),
   purpleDot: require("../images/PurpleDot.png"),
   squareImage: require("../images/squareImage.png"),
   netballImages: require("../images/imagesNetball.png"),
   netballLogoMain: require("../images/netball.png"),
-  deleteImage: require("../images/delete.png")
+  deleteImage: require("../images/delete.png"),
+  loginImage: require("../images/sign_in.jpg"),
 };
 
 export default AppImages;

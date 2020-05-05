@@ -154,3 +154,19 @@
   font-size: 13px;
   color: var(--app-color);
 }
+
+.login-bg{
+  background-image: url(../../images/sign_in.jpg);
+  -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover; 
+    animation: increase 60s linear 10ms infinite;
+    -webkit-transition: all 5.2s ease-in-out;
+    -moz-transition: all 5.2s ease-in-out;
+    -ms-transition: all 5.2s ease-in-out;
+    -o-transition: all 5.2s ease-in-out;
+    transition: all 5.2s ease-in-out;
+  height: 100vh;
+  width: 100%;
+}

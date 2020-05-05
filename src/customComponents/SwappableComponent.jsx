@@ -31,7 +31,11 @@ class Swappable extends Component {
   }
 
   drop(ev, dragableId, dropzoneId, customFunc = null, swappable = true) {
+    if(swappable == false){
+      return
+    }
     ev.preventDefault();
+
     let src = document.getElementById(ev.dataTransfer.getData('src'));
     let srcParent = src.parentNode;
 
@@ -82,7 +86,9 @@ class Swappable extends Component {
     return (
       <div
         id={dropzoneId}
+
         onDrop={event =>
+
           this.drop(event, dragableId, dropzoneId, customFunc, swappable)
         }
         onDragOver={event => this.allowDrop(event)}
@@ -90,7 +96,7 @@ class Swappable extends Component {
       >
         <div
           id={dragableId}
-          draggable="true"
+          draggable={swappable}
           onDragStart={event => this.drag(event)}
           onDragEnd={event => this.dragEnd(event, customFunc)}
           className="dragableId"

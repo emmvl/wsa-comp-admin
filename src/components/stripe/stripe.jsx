@@ -15,6 +15,9 @@ import {
 import AppConstants from "../../themes/appConstants";
 import DashboardLayout from "../../pages/dashboardLayout";
 import StripeKeys from "./stripeKeys";
+import { getOrganisationData } from "../../util/sessionStorage";
+import Loader from '../../customComponents/loader';
+import { message } from "antd";
 
 const { Header, Content } = Layout;
 // Custom styling can be passed to options when creating an Element.
@@ -77,11 +80,10 @@ const footerView = () => {
     )
 }
 
-const CheckoutForm = () => {
+const CheckoutForm = (props) => {
     const [error, setError] = useState(null);
     const stripe = useStripe();
     const elements = useElements();
-
     // Handle real-time validation errors from the card Element.
     const handleChange = (event) => {
         if (event.error) {
@@ -96,13 +98,15 @@ const CheckoutForm = () => {
         event.preventDefault();
         const card = elements.getElement(CardElement);
         const result = await stripe.createToken(card)
+        props.onLoad(true)
         if (result.error) {
             // Inform the user if there was an error.
             setError(result.error.message);
+            props.onLoad(false)
         } else {
             setError(null);
             // Send the token to your server.
-            stripeTokenHandler(result.token);
+            stripeTokenHandler(result.token, props);
         }
     };
 
@@ -130,6 +134,7 @@ const CheckoutForm = () => {
 const stripePromise = loadStripe(StripeKeys.publicKey);
 
 const Stripe = () => {
+    const [loading, setLoading] = useState(false);
     return (
         <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
             <DashboardLayout
@@ -141,8 +146,9 @@ const Stripe = () => {
                     {headerView()}
                     <div className="login-formView">
                         <Elements stripe={stripePromise}>
-                            <CheckoutForm />
+                            <CheckoutForm onLoad={(status) => setLoading(status)} />
                         </Elements>
+                        <Loader visible={loading} />
                     </div>
                     {footerView()}
                 </Content>
@@ -152,15 +158,22 @@ const Stripe = () => {
 }
 
 // POST the token ID to your backend.
-async function stripeTokenHandler(token) {
-    const response = await fetch('/charge', {
+async function stripeTokenHandler(token, props) {
+    let competitionId = "ce51511c-a66e-4bf6-a399-586d3d295231"
+    let organisationUniqueKey = "c96e6712-e57c-4035-9816-9a1a64ebabfd";
+    const response = await fetch(`http:192.168.31.141:5000/api/payments/calculateFee?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            "Authorization": localStorage.token,
         },
-        body: JSON.stringify({ token: token.id })
+        body: JSON.stringify({ token: { id: token.id } })
     });
-
-    return response.json();
+    return response.json().then(res => {
+        props.onLoad(false)
+        if (res) {
+            message.success(res.message);
+        }
+    });
 }
 export default Stripe

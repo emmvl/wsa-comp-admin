@@ -171,10 +171,17 @@ class RegistrationPayments extends Component {
         return stripeAccountID
     }
 
+    userEmail = () => {
+        let orgData = getOrganisationData()
+        let email = orgData ? orgData.email : ""
+        return email
+    }
+
     stripeView = () => {
         let stripeConnected = this.stripeConnected()
-        let accountBalance = this.props.stripeState.accountBalance ? this.props.stripeState.accountBalance.available : "N/A"
-        let stripeConnectURL = "https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=ca_GoE4DQeJGNAvRzAq6MJOmZ8xmFTeLgan&state={STATE_VALUE}&stripe_user[email]=samir@deftsoft.com&redirect_uri=https://netball-comp-admin-dev.worldsportaction.com/registrationPayments"
+        let accountBalance = this.props.stripeState.accountBalance ? this.props.stripeState.accountBalance.pending : "N/A"
+        let userEmail = this.userEmail()
+        let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=ca_GoE4DQeJGNAvRzAq6MJOmZ8xmFTeLgan&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=https://netball-comp-admin-dev.worldsportaction.com/registrationPayments`
         let stripeDashboardUrl = `https://dashboard.stripe.com/${stripeConnected}/test/dashboard`
         console.log(stripeDashboardUrl)
         return (

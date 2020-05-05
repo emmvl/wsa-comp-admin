@@ -515,9 +515,6 @@ class LiveScoreSettingsView extends Component {
 
     };
 
-
-
-
     render() {
         const { getFieldDecorator } = this.props.form
         let local_Id = getLiveScoreCompetiton()
