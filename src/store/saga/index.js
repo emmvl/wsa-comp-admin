@@ -120,6 +120,7 @@ import {
   partPLayerCommentSaga,
   partPlayerSummaryCommentSaga,
   importCompetitionPlayer,
+  importCompetitionTeams,
   deleteTeamSaga
 } from './competitionManagementSaga/competitionPartPlayerGradingSaga';
 import {
@@ -594,6 +595,8 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_COMPETITION_FEE_INVITEES_SEARCH_LOAD, inviteeSearchSaga)
 
   yield takeEvery(ApiConstants.API_COMPETITION_PLAYER_IMPORT_LOAD, importCompetitionPlayer);
+  yield takeEvery(ApiConstants.API_COMPETITION_TEAMS_IMPORT_LOAD, importCompetitionTeams);
+
 
   yield takeEvery(ApiConstants.API_EXPORT_FILES_LOAD, exportFilesSaga)
 

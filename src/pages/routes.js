@@ -58,6 +58,7 @@ import RegistrationMembershipList from "../components/registration/registrationM
 import RegistrationCompetitionList from "../components/registration/registrationCompetitionList";
 import RegistrationFormList from "../components/registration/registrationFormList"
 import CompetitionPlayerImport from "../components/competition/competitionPlayerImport";
+import CompetitionTeamImport from "../components/competition/competitionTeamImport";
 import PlayWithFriend from "../components/user/playWithFriend";
 import ReferFriend from "../components/user/referFriend";
 /////
@@ -561,6 +562,11 @@ class Routes extends React.Component {
         <PrivateRoute
           path="/competitionPlayerImport"
           component={lazyLoad(CompetitionPlayerImport)}
+        />
+
+        <PrivateRoute
+          path="/competitionTeamsImport"
+          component={lazyLoad(CompetitionTeamImport)}
         />
 
         <PrivateRoute

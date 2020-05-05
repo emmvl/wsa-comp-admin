@@ -733,7 +733,16 @@ class CompetitionDraws extends Component {
             <div className="reg-add-save-button">
             </div>
           </div>
-          <div className="col-sm-9">
+          <div className="col-sm">
+            <div className="comp-buttons-view">
+              <NavLink to="/competitionFormat">
+                <Button className="open-reg-button" type="primary">
+                    {AppConstants.regenerateDraw}
+                </Button>
+              </NavLink>
+            </div>
+          </div>
+          <div>
             <div className="comp-buttons-view">
               <Button
                 className="open-reg-button"

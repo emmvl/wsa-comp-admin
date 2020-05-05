@@ -225,6 +225,7 @@ const AppConstants = {
   qtrBreak: "Qtr Break",
   betweenGames: "Between Games",
   assignManually: "Assign Manually",
+  regenerateDraw: "Regenerate",
 
   ///*****Competition Finals */
   rounds4Top16: "4 Rounds-Top 16",
@@ -976,7 +977,8 @@ const AppConstants = {
   editPhoto: "Edit Photo",
   photoType: "PhotoType",
   matchesList: "Matches List",
-  orgPhotosText: "These photos will display on the User Registration Form"
+  orgPhotosText: "These photos will display on the User Registration Form",
+  importTeams: "Import Teams"
 };
 
 export default AppConstants;
