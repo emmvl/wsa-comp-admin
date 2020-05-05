@@ -174,6 +174,9 @@ async function stripeTokenHandler(token, props) {
         if (res) {
             message.success(res.message);
         }
-    });
+    })
+        .catch(err => {
+            message.error("Something went wrong.")
+        })
 }
 export default Stripe

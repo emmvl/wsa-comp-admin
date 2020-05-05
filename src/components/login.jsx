@@ -93,8 +93,10 @@ class Login extends Component {
     render() {
         return (
             <div className="fluid-width"  >
-                <Layout className="login-bg">
-                    <Content className="container">
+                <img src={AppImages.loginImage} className="bg" />
+                {/* <Layout className="login-bg"> */}
+                <Layout >
+                    <Content className="container" style={{ zIndex: 15 }}>
                         {this.headerView()}
                         <Formik
                             enableReinitialize
@@ -126,7 +128,7 @@ class Login extends Component {
                                 setFieldValue
                             }) => (
                                     <Form onSubmit={handleSubmit}>
-                                        <div className="login-formView">
+                                        <div className="login-formView" style={{ zIndex: 15 }} >
                                             {this.contentView(values, errors, setFieldValue, touched, handleChange, handleBlur)}
                                         </div>
                                         {this.footerView(isSubmitting)}
