@@ -356,6 +356,20 @@ class CompetitionVenueAndTimesAdd extends Component {
                         />
                     )}
                 </Form.Item>
+                <Form.Item >
+                    {getFieldDecorator('shortName', {
+                        rules: [{ required: true, message: ValidationConstants.nameField[3] }],
+                    })(
+                        <InputWithHead
+                            required={"required-field"}
+                            heading={AppConstants.short_Name}
+                            disabled={this.state.isUsed}
+                            placeholder={AppConstants.short_Name}
+                            onChange={(name) => this.props.updateVenuAndTimeDataAction(name.target.value, 'Venue', 'shortName')}
+                            setFieldsValue={venuData.shortName}
+                        />
+                    )}
+                </Form.Item>
 
                 <Form.Item >
                     {getFieldDecorator('addressOne', {
@@ -672,7 +686,7 @@ class CompetitionVenueAndTimesAdd extends Component {
 
     onAddVenue = (e) => {
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 const { venuData } = this.props.venueTimeState
                 message.config({

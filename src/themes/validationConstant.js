@@ -1,5 +1,5 @@
 const ValidationConstants = {
-    nameField: ["Name is required.", "Last name is required.", "Name is required."],
+    nameField: ["Name is required.", "Last name is required.", "Name is required.", "Short name is required"],
     teamName: "Team name is required.",
     firstName: 'Name is required.',
     dateField: 'Date is required.',
@@ -114,11 +114,13 @@ const ValidationConstants = {
     qtrBreak: "Please enter a qtr break",
     timeBetweenGames: "Please enter a time between games",
     startDateIsRequired: 'Start date is required.',
+    endDateIsRequired: 'End date is required',
 
     divisionName: "Division Name field is required.",
     genderRestriction: "Please select gender.",
     matchTypeRequired: "Please select match type",
-
+    organisationPhotoRequired: 'Organisation photo is required',
+    photoTypeRequired: "Photo type is required",
     pleaseSelectVenue: "Please select Venue",
     pleaseSelectRound: "Please select round",
 

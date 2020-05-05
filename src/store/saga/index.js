@@ -107,7 +107,7 @@ import {
   registrationOtherInfoReferenceSaga, firebirdPlayerReferenceSaga, favouriteTeamReferenceSaga,
   nationalityReferenceSaga, heardByReferenceSaga, playerPositionReferenceSaga, venuesListSaga,
   venueByIdSaga, venueDeleteSaga,
-  getGenderSaga, getInvoiceSaga
+  getGenderSaga, getPhotoTypeSaga, getInvoiceSaga
 } from "./commonSaga/commonSaga";
 ////Venue constraints
 import { venueTimeSaga, venueConstraintPostSaga } from './competitionManagementSaga/venueTimeSaga'
@@ -145,7 +145,7 @@ import {
   getCompetitionDrawsSaga, getDrawsRoundsSaga,
   updateCompetitionDraws, saveDrawsSaga,
   getCompetitionVenues, updateCourtTimingsDrawsAction,
-  getDivisionGradeNameListSaga, publishDraws
+  getDivisionGradeNameListSaga, publishDraws, drawsMatchesListExportSaga
 } from './competitionManagementSaga/competitionDrawsSaga';
 
 import { regDashboardListSaga } from "./registrationSaga/registrationDashboardSaga"
@@ -564,6 +564,8 @@ export default function* root_saga() {
 
   yield takeEvery(ApiConstants.API_REG_DASHBOARD_LIST_LOAD, regDashboardListSaga)
   yield takeEvery(ApiConstants.API_GET_GENDER_LOAD, getGenderSaga)
+  yield takeEvery(ApiConstants.API_GET_PHOTO_TYPE_LOAD, getPhotoTypeSaga)
+  
 
   //Search Scorer saga 
   yield takeEvery(ApiConstants.API_LIVESCORE_SCORER_SEARCH_LOAD, liveScoreScorerSearchSaga)
@@ -626,4 +628,18 @@ export default function* root_saga() {
 
   //////////stripe payment account balance API
   yield takeEvery(ApiConstants.API_SAVE_STRIPE_ACCOUNT_API_LOAD, stripeSaga.saveStripeAccountSaga)
+
+  // Organisation Photos List
+  yield takeEvery(ApiConstants.API_GET_ORG_PHOTO_LOAD, userSaga.getOrgPhotosListSaga)
+
+  // Organisation Photos Save
+  yield takeEvery(ApiConstants.API_SAVE_ORG_PHOTO_LOAD, userSaga.saveOrgPhotosSaga)
+
+    // Organisation Photos Delete
+    yield takeEvery(ApiConstants.API_DELETE_ORG_PHOTO_LOAD, userSaga.deleteOrgPhotosSaga)
+
+    //Draws Matches List Export
+    yield takeEvery(ApiConstants.API_DRAW_MATCHES_LIST_LOAD, drawsMatchesListExportSaga)
+
+
 }

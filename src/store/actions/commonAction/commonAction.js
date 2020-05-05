@@ -142,6 +142,13 @@ function getGenderAction() {
     return action
 }
 
+function getPhotoTypeAction() {
+    const action = {
+        type: ApiConstants.API_GET_PHOTO_TYPE_LOAD,
+
+    };
+    return action
+}
 
 function getInvoice(competitionId, orgnaistationID, registrationid) {
     const action = {
@@ -172,5 +179,6 @@ export {
     venuesListAction,
     venueDeleteAction,
     getGenderAction,
-    getInvoice
+    getInvoice,
+    getPhotoTypeAction
 }

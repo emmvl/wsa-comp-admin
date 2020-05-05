@@ -405,7 +405,6 @@ let CompetitionAxiosApi = {
         return Method.dataPost(url, token);
     },
 
-
     async deleteTeam(payload) {
         let organisationId = await getOrganisationData().organisationUniqueKey;
         payload.organisationId = organisationId;
@@ -417,6 +416,10 @@ let CompetitionAxiosApi = {
         payload.organisationId = organisationId;
         var url = `/api/team/action`
         return Method.dataPost(url, token, payload);
+    },
+    drawsMatchesListApi(competitionId) {
+        var url = `/api/draws/matches/export?competitionUniqueKey=${competitionId}`
+        return Method.dataGetDownload(url, token, "MatchesList");
     },
 };
 
@@ -567,6 +570,85 @@ const Method = {
                 });
         });
     },
+
+    async dataGetDownload(newurl, authorization, fileName) {
+        const url = newurl;
+        return await new Promise((resolve, reject) => {
+            competitionHttp
+            .get(url, {
+              responseType: 'arraybuffer',
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/csv",
+                Authorization: "BWSA " + authorization,
+                "Access-Control-Allow-Origin": "*"
+              }
+            })
+    
+            .then(result => {
+              if (result.status === 200) {
+                console.log("*************" + JSON.stringify(result.data));
+                const url = window.URL.createObjectURL(new Blob([result.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', fileName+'.csv'); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+                return resolve({
+                  status: 1,
+                  result: result
+                });
+              }
+              else if (result.status == 212) {
+                return resolve({
+                  status: 4,
+                  result: result
+                });
+              }
+              else {
+                if (result) {
+                  return reject({
+                    status: 3,
+                    error: result.data.message,
+                  });
+                } else {
+                  return reject({
+                    status: 4,
+                    error: "Something went wrong."
+                  });
+                }
+              }
+            })
+            .catch(err => {
+              console.log(err.response)
+              if (err.response) {
+                if (err.response.status !== null && err.response.status !== undefined) {
+                  if (err.response.status == 401) {
+                    let unauthorizedStatus = err.response.status
+                    if (unauthorizedStatus == 401) {
+                      logout()
+                      message.error(ValidationConstants.messageStatus401)
+                    }
+                  }
+                  else {
+                    return reject({
+                      status: 5,
+                      error: err
+                    })
+    
+                  }
+                }
+              }
+              else {
+                return reject({
+                  status: 5,
+                  error: err
+                });
+    
+              }
+            });
+        });
+      },
 
     async dataDelete(newurl, authorization) {
         const url = newurl;

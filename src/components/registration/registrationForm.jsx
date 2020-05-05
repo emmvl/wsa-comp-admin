@@ -31,6 +31,7 @@ import {
     getRegistrationMethod,
 } from "../../store/actions/appAction";
 import { connect } from "react-redux";
+import AppImages from "../../themes/appImages";
 import { bindActionCreators } from "redux";
 import moment from "moment";
 import ValidationConstants from "../../themes/validationConstant";
@@ -529,7 +530,7 @@ class RegistrationForm extends Component {
                                         disabledTime={this.disabledTime}
                                         format={"DD-MM-YYYY"}
                                         showTime={false}
-                                        disabledDate={d => !d || d.isBefore(closeDate)
+                                        disabledDate={d => !d || d.isAfter(closeDate)
                                             // || d.isSameOrBefore(dateOpen)
                                         }
                                     // value={closeDate ? moment(closeDate, "YYYY-MM-DD") : ""}
@@ -662,6 +663,22 @@ class RegistrationForm extends Component {
                     onChange={(specialNote) => this.props.updateRegistrationForm(specialNote.target.value, "specialNote")}
                     value={formDataValue ? formDataValue.specialNote : null}
                 />
+
+                <InputWithHead heading={AppConstants.photos}/>
+                <div className="org-photos">
+                    {((formDataValue.organisationPhotos) || [] )
+                    .map((ph, phIndex) => (
+                        <div key={ph.organisationPhotoId}>
+                            <div>
+                                <img src={ph.photoUrl} alt=""height= {125} width={125}
+                                    style={{ borderRadius:0, marginLeft: 0 }} name={'image'}
+                                        onError={ev => {ev.target.src = AppImages.circleImage;}}
+                                />
+                            </div>
+                            <div className="photo-type">{ph.photoType}</div>
+                        </div>
+                    ))}
+                </div>
 
             </div >
         );

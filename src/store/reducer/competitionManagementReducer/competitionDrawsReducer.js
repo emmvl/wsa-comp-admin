@@ -822,6 +822,17 @@ function CompetitionDraws(state = initialState, action) {
         error: null,
       }
 
+    case ApiConstants.API_DRAW_MATCHES_LIST_LOAD:
+    return { ...state, onLoad: true, onLoad: true }
+
+    case ApiConstants.API_DRAW_MATCHES_LIST_SUCCESS:
+      return {
+        ...state,
+        onLoad: false,
+        error: null,
+      }
+
+
     default:
       return state;
   }

@@ -263,6 +263,7 @@ class CompetitionVenueAndTimesEdit extends Component {
 
         this.props.form.setFieldsValue({
             name: venueData.venueName,
+            shortName: venueData.shortName,
             addressOne: venueData.street1,
             suburb: venueData.suburb,
             stateRefId: venueData.stateRefId,
@@ -377,6 +378,20 @@ class CompetitionVenueAndTimesEdit extends Component {
                             placeholder={AppConstants.name}
                             onChange={(name) => this.props.updateVenuAndTimeDataAction(name.target.value, 'Venue', 'name')}
                             setFieldsValue={venuData.name}
+                        />
+                    )}
+                </Form.Item>
+                <Form.Item >
+                    {getFieldDecorator('shortName', {
+                        rules: [{ required: true, message: ValidationConstants.nameField[3] }],
+                    })(
+                        <InputWithHead
+                            required={"required-field"}
+                            heading={AppConstants.short_Name}
+                            disabled={this.state.isUsed}
+                            placeholder={AppConstants.short_Name}
+                            onChange={(name) => this.props.updateVenuAndTimeDataAction(name.target.value, 'Venue', 'shortName')}
+                            setFieldsValue={venuData.shortName}
                         />
                     )}
                 </Form.Item>
@@ -729,7 +744,7 @@ class CompetitionVenueAndTimesEdit extends Component {
 
     onAddVenue = (e) => {
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 const { venuData } = this.props.venueTimeState
                 message.config({
@@ -743,6 +758,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     message.error(ValidationConstants.emptyGameDaysValidation);
                 }
                 else {
+                    console.log("venuData" + JSON.stringify(venuData));
                     this.props.addVenueAction(venuData)
                     this.setState({ saveContraintLoad: true });
                 }

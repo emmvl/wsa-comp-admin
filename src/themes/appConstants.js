@@ -971,7 +971,12 @@ const AppConstants = {
   disput_description:"Result in dispute",
   draft_description:"Final result entered and unconfirmed",
   final_description:"Final result entered and confirmed",
-  deleteTeam: "Delete Team"
+  deleteTeam: "Delete Team",
+  addPhoto: "Add Photo",
+  editPhoto: "Edit Photo",
+  photoType: "PhotoType",
+  matchesList: "Matches List",
+  orgPhotosText: "These photos will display on the User Registration Form"
 };
 
 export default AppConstants;

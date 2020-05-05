@@ -101,6 +101,15 @@ function publishDraws(competitionId) {
     return action
 }
 
+function matchesListDrawsAction(competitionId) {
+    const action = {
+        type: ApiConstants.API_DRAW_MATCHES_LIST_LOAD,
+        competitionId: competitionId
+    }
+    console.log('called')
+    return action
+}
+
 export {
     getCompetitionDrawsAction,
     getDrawsRoundsAction,
@@ -111,5 +120,6 @@ export {
     dateSelectionRounds,
     clearDraws,
     getDivisionGradeNameLisAction,
-    publishDraws
+    publishDraws,
+    matchesListDrawsAction
 }
