@@ -46,6 +46,24 @@ let AxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
+    /////////////stripe login link
+    async getStripeLoginLink() {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        var url = `api/payments/login?organisationUniqueKey=${organisationUniqueKey}`;
+        return Method.dataGet(url, token);
+    },
+
+    /////////////stripe payments transfer list
+    async getStripeTransferList() {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        var url = `api/payments/list/transfer?organisationUniqueKey=${organisationUniqueKey}`;
+        return Method.dataGet(url, token);
+    },
+
+
+
 };
 
 const Method = {

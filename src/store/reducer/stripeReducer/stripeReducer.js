@@ -7,7 +7,9 @@ const initialState = {
     error: null,
     result: null,
     status: 0,
-    accountBalance: null
+    accountBalance: null,
+    stripeLoginLink: null,
+    stripeTransferList: [],
 }
 
 
@@ -67,6 +69,33 @@ function stripe(state = initialState, action) {
             setOrganisationData(orgData)
             return {
                 ...state,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
+
+        //////stripe login link
+        case ApiConstants.API_GET_STRIPE_LOGIN_LINK_API_LOAD:
+            return { ...state, onLoad: true, error: null };
+
+        case ApiConstants.API_GET_STRIPE_LOGIN_LINK_API_SUCCESS:
+            return {
+                ...state,
+                stripeLoginLink: action.result,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
+
+        /////stripe payments transfer list
+        case ApiConstants.API_GET_STRIPE_PAYMENTS_TRANSFER_LIST_API_LOAD:
+            return { ...state, onLoad: true, error: null };
+
+        case ApiConstants.API_GET_STRIPE_PAYMENTS_TRANSFER_LIST_API_SUCCESS:
+            console.log("action.result", action.result)
+            return {
+                ...state,
+                stripeTransferList: isArrayNotEmpty(action.result) ? action.result : [],
                 onLoad: false,
                 status: action.status,
                 error: null

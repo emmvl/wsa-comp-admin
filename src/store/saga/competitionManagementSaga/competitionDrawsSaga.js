@@ -3,6 +3,8 @@ import ApiConstants from "../../../themes/apiConstants";
 import CompetitionAxiosApi from "../../http/competitionHttp/competitionAxiosApi";
 import RegstrartionAxiosApi from "../../http/registrationHttp/registrationAxios";
 import { message } from "antd";
+import history from "../../../util/history";
+
 
 function* failSaga(result) {
     yield put({ type: ApiConstants.API_COMPETITION_DRAWS_FAIL });
@@ -224,6 +226,9 @@ export function* publishDraws(action) {
                 result: result.result.data,
                 status: result.status,
             });
+            if (action.key == "edit") {
+                history.push('/competitionDraws')
+            }
 
         } else {
             yield call(failSaga, result)

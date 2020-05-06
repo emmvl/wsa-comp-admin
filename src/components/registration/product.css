@@ -457,8 +457,8 @@
   margin: auto;
   background-color: white;
   border-radius: 10px;
-  width: 70%;
-  margin-top: 5%;
+  width: 50%;
+  margin-top: 7%;
   margin-bottom: 3%;
 }
 
@@ -563,6 +563,7 @@ input[type=number] {
   padding-right: 10px
 }
 
+
 @media (max-width: 767px) {
   .reg-add-save-button {
     display: flex;
@@ -586,6 +587,10 @@ input[type=number] {
     width: 87%;
     margin: auto;
   }
+
+.login-formView {
+  width: 100%;
+}
 }
 
 .another-competition{
