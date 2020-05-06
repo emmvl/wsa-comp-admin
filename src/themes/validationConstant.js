@@ -123,8 +123,17 @@ const ValidationConstants = {
     photoTypeRequired: "Photo type is required",
     pleaseSelectVenue: "Please select Venue",
     pleaseSelectRound: "Please select round",
-    homeTeamRotationRequired: "Home Team Rotation is required",
-    courtRotationRequired: "Court Rotation is required"
+    homeTeamRotationRequired: "Home team rotation is required",
+    courtRotationRequired: "Court rotation is required",
+    finalsStartDateRequired: "Finals start date is required",
+    extraTimeMatchTypeRequired: "Please select extra time type",
+    extraTimeDurationRequired: "Please enter extra time duration",
+    extraTimeMainBreakRequired: "Please enter extra time main break",
+    extraTimeBreakRequired: "Please enter extra time break",
+    beforeExtraTimeRequired: "Please enter before extra time",
+    finalFixtureTemplateRequired: "Please select final fixture template",
+    extraTimeDrawRequired: "Please select extra time draw",
+    applyToRequired: "Please select apply to"
 
 };
 

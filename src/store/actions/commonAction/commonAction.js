@@ -161,6 +161,31 @@ function getInvoice(competitionId, orgnaistationID, registrationid) {
     return action
 }
 
+
+function getApplyToAction() {
+    const action = {
+        type: ApiConstants.API_GET_APPY_TO_LOAD,
+
+    };
+    return action
+}
+
+function getExtraTimeDrawAction() {
+    const action = {
+        type: ApiConstants.API_GET_EXTRA_TIME_DRAW_LOAD,
+
+    };
+    return action
+}
+
+function getFinalFixtureTemplateAction() {
+    const action = {
+        type: ApiConstants.API_GET_FINAL_FIXTURE_TEMPLATE_LOAD,
+
+    };
+    return action
+}
+
 export {
     timeSlotInit,
     getCommonRefData,
@@ -180,5 +205,8 @@ export {
     venueDeleteAction,
     getGenderAction,
     getInvoice,
-    getPhotoTypeAction
+    getPhotoTypeAction,
+    getApplyToAction,
+    getExtraTimeDrawAction,
+    getFinalFixtureTemplateAction
 }
