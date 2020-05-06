@@ -794,11 +794,20 @@ class CompetitionDrawEdit extends Component {
                                 {AppConstants.back}</Button>
                         </div>
                     </div>
-                    <div className="col-sm-9">
+                    {/* <div className="col-sm-9">
                         <div className="comp-buttons-view">
                             <Button className="open-reg-button" type="primary" onClick={() => this.saveAPIsActionCall()} disabled={publishStatus == 0 ? false : true} >
                                 {AppConstants.save_publish}
                             </Button>
+                        </div>
+                    </div> */}
+                    <div className="col-sm-9">
+                        <div className="comp-buttons-view">
+                            <NavLink to="/competitionFormat">
+                                <Button className="open-reg-button" type="primary">
+                                    {AppConstants.regenerateDraw}
+                                </Button>
+                            </NavLink>
                         </div>
                     </div>
                 </div>

@@ -678,6 +678,10 @@ class RegistrationForm extends Component {
                             <div className="photo-type">{ph.photoType}</div>
                         </div>
                     ))}
+                    {(formDataValue.organisationPhotos == null || 
+                        formDataValue.organisationPhotos == undefined || 
+                        formDataValue.organisationPhotos.length == 0) ? 
+                            <span>{AppConstants.noPhotosAvailable}</span> : null}
                 </div>
 
             </div >

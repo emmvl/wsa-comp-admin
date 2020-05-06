@@ -391,6 +391,16 @@ let CompetitionAxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
+    async importCompetitionTeams(payload) {
+        let body = new FormData();
+        // body.append('file', new File([data.csvFile], { type: 'text/csv' }));
+        body.append("file", payload.csvFile, payload.csvFile.name);
+        body.append("competitionUniqueKey", payload.competitionUniqueKey);
+        body.append("organisationId", payload.organisationUniqueKey);
+        var url = `/api/import/teams`;
+        return Method.dataPost(url, token, body)
+    },
+
     async getDivisionGradeNameList(competitionId) {
         let userId = await getUserId()
         let body = {

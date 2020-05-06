@@ -155,6 +155,27 @@ class CompetitionPlayerGrades extends Component {
                                     </NavLink>
                                 </div>
                             </div>
+                            <div  className="col-sm">
+                                <div className="comp-dashboard-botton-view-mobile">
+                                    <NavLink to={{
+                                        pathname: `/competitionTeamsImport`,
+                                        state: { competitionId: this.state.firstTimeCompId, screenNavigationKey: 'PlayerGrading' }
+                                    }}>
+                                        <Button className="primary-add-comp-form" type="primary">
+                                            <div className="row">
+                                                <div className="col-sm">
+                                                    <img
+                                                        src={AppImages.import}
+                                                        alt=""
+                                                        className="export-image"
+                                                    />
+                                                    {AppConstants.importTeams}
+                                                </div>
+                                            </div>
+                                        </Button>
+                                    </NavLink>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

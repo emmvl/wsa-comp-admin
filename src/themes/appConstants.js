@@ -225,6 +225,7 @@ const AppConstants = {
   qtrBreak: "Qtr Break",
   betweenGames: "Between Games",
   assignManually: "Assign Manually",
+  regenerateDraw: "Regenerate",
 
   ///*****Competition Finals */
   rounds4Top16: "4 Rounds-Top 16",
@@ -978,7 +979,10 @@ const AppConstants = {
   matchesList: "Matches List",
   orgPhotosText: "These photos will display on the User Registration Form",
   compStartDate: "Competition Start Date",
-  compCloseDate: "Competition End Date"
+  compCloseDate: "Competition End Date",
+  importTeams: "Import Teams",
+  noPhotosAvailable: "No photos available",
+  downloadTemplate: "Download Template"
 };
 
 export default AppConstants;

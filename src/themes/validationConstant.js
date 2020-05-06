@@ -123,6 +123,8 @@ const ValidationConstants = {
     photoTypeRequired: "Photo type is required",
     pleaseSelectVenue: "Please select Venue",
     pleaseSelectRound: "Please select round",
+    homeTeamRotationRequired: "Home Team Rotation is required",
+    courtRotationRequired: "Court Rotation is required"
 
 };
 
