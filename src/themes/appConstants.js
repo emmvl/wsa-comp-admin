@@ -979,7 +979,8 @@ const AppConstants = {
   matchesList: "Matches List",
   orgPhotosText: "These photos will display on the User Registration Form",
   importTeams: "Import Teams",
-  noPhotosAvailable: "No photos available"
+  noPhotosAvailable: "No photos available",
+  downloadTemplate: "Download Template"
 };
 
 export default AppConstants;

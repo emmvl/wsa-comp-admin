@@ -426,7 +426,8 @@ function VenueTimeState(state = initialState, action) {
             // let selectedVenues = checkSelectedVenuesList(state.venueConstrainstData.venues, venueSelectedData)
             // state.venuePost = selectedVenues
 
-            let courtRotationRefId = action.result.courtRotationRefId
+            let courtRotationRefId = action.result.courtRotationRefId;
+            console.log("courtRotationRefId" + courtRotationRefId);
             state.evenRotation = action.result.courtRotationRefId
             if (courtRotationRefId == 2 || courtRotationRefId == 3 || courtRotationRefId == 4) {
                 state.courtRotation[0].selectedPrefrence = 1
@@ -434,9 +435,12 @@ function VenueTimeState(state = initialState, action) {
             } else if (courtRotationRefId == 6 || courtRotationRefId == 7) {
                 state.courtRotation[1].selectedPrefrence = 5
                 state.selectedRadioBtn = 5
-            } else {
+            } else if(courtRotationRefId == 8){
                 state.courtRotation[2].selectedPrefrence = 8;
                 state.selectedRadioBtn = 8;
+            }
+            else{
+                state.selectedRadioBtn = 0;
             }
             //  state.venueConstrainstData['courtRotationRefId'] = state.selectedRadioBtn;
             state.onLoad = false

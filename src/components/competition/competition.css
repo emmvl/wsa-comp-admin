@@ -469,6 +469,8 @@ a.collapsed i {
   .comp-player-table-img{
     margin-top: 5px
   }
+}
 
-  
+.venue-cons-err{
+  color: var(--app-f5222d);
 }

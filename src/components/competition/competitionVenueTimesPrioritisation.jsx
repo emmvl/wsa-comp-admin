@@ -57,6 +57,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
             saveContraintLoad: false,
             yearRefId: 1,
             firstTimeCompId: "",
+            evenRotationFlag: false,
+            homeTeamRotationFlag: false
 
         };
         // this.props.clearYearCompetitionAction()
@@ -496,13 +498,13 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
         return (
             <div>
-                <span className="applicable-to-heading">
+                <span className="applicable-to-heading required-field">
                     {AppConstants.homeTeamRotation}
                 </span>
 
                 <Radio.Group
                     className="reg-competition-radio"
-                    onChange={(e) => this.props.updateVenueConstraintsData(e.target.value, null, "", "homeRotationValue")}
+                    onChange={(e) =>{ this.setState({homeTeamRotationFlag: false}); this.props.updateVenueConstraintsData(e.target.value, null, "", "homeRotationValue")}}
                     value={venueConstrainstData && venueConstrainstData.homeTeamRotationRefId}
                 // value={homeRotation}
                 // defaultValue={homeRotation}
@@ -515,6 +517,9 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     }
                     )}
                 </Radio.Group>
+                {this.state.homeTeamRotationFlag == true  ? 
+                    <div className="venue-cons-err">{ValidationConstant.homeTeamRotationRequired}</div> : null
+                }
             </div>
         )
     }
@@ -528,13 +533,13 @@ class CompetitionVenueTimesPrioritisation extends Component {
         console.log(evenRotation, "list", allocateSameCourtList)
         return (
             <div>
-                <span className="applicable-to-heading">
+                <span className="applicable-to-heading required-field">
                     {AppConstants.anyGradePreference2}
                 </span>
 
                 <Radio.Group
                     className="reg-competition-radio"
-                    onChange={(e) => this.props.updateVenueConstraintsData(e.target.value, null, "courtPreferences", "courtParentSelection")}
+                    onChange={(e) => { this.setState({evenRotationFlag: false}); this.props.updateVenueConstraintsData(e.target.value, null, "courtPreferences", "courtParentSelection")}}
                     value={selectedRadioBtn}
                 >
 
@@ -584,6 +589,9 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     }
                     )}
                 </Radio.Group>
+                {this.state.evenRotationFlag == true  ? 
+                    <div className="venue-cons-err">{ValidationConstant.courtRotationRequired}</div> : null
+                }
             </div>
         )
     }
@@ -689,25 +697,46 @@ class CompetitionVenueTimesPrioritisation extends Component {
     onSaveConstraints = (e) => {
         let venueConstarintsDetails = this.props.venueTimeState
         const { venueConstrainstData, competitionUniqueKey, yearRefId, courtPreferencesPost } = venueConstarintsDetails
-
-        let postObject = {
-            "competitionUniqueKey": competitionUniqueKey,
-            "yearRefId": this.state.yearRefId,
-            "organisationId": 1,
-            "venues": venueConstarintsDetails.venuePost,
-            "nonPlayingDates": venueConstrainstData.nonPlayingDates,
-            "venueConstraintId": venueConstrainstData.venueConstraintId,
-            "courtRotationRefId": venueConstrainstData.courtRotationRefId,
-            "homeTeamRotationRefId": venueConstrainstData.homeTeamRotationRefId,
-            "courtPreferences": courtPreferencesPost
-        }
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                this.setState({ saveContraintLoad: true })
-                this.props.venueConstraintPostAction(postObject)
+        
+        if(venueConstrainstData.courtRotationRefId == 0){
+            this.setState({evenRotationFlag: true});
+        }
+        else{
+            this.setState({evenRotationFlag: false});  
+        }
+        if(venueConstrainstData.homeTeamRotationRefId == 0)
+        {
+            this.setState({homeTeamRotationFlag: true});
+        }
+        else{
+            this.setState({homeTeamRotationFlag: false});
+        }
+
+        if(venueConstrainstData.courtRotationRefId != 0 && 
+            venueConstrainstData.homeTeamRotationRefId != 0){
+            let postObject = {
+                "competitionUniqueKey": competitionUniqueKey,
+                "yearRefId": this.state.yearRefId,
+                "organisationId": 1,
+                "venues": venueConstarintsDetails.venuePost,
+                "nonPlayingDates": venueConstrainstData.nonPlayingDates,
+                "venueConstraintId": venueConstrainstData.venueConstraintId,
+                "courtRotationRefId": venueConstrainstData.courtRotationRefId,
+                "homeTeamRotationRefId": venueConstrainstData.homeTeamRotationRefId,
+                "courtPreferences": courtPreferencesPost
             }
-        })
+            
+            this.props.form.validateFields((err, values) => {
+                if (!err) {
+                    this.setState({ saveContraintLoad: true })
+                    this.props.venueConstraintPostAction(postObject)
+                }
+            })
+        }
+
+        
+        
     }
 
 

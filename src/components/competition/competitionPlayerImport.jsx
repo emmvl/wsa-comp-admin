@@ -178,7 +178,7 @@ class CompetitionPlayerImport extends Component {
                         <div className="reg-add-save-button" style={{marginLeft: '20px'}}>
                             <NavLink to="/templates/wsa-import-player.csv" target="_blank" download>
                                 <Button className="primary-add-comp-form" type="primary">
-                                    {AppConstants.export}
+                                    {AppConstants.downloadTemplate}
                                 </Button>
                             </NavLink>
                         </div>
