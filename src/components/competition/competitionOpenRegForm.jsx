@@ -1413,7 +1413,7 @@ class CompetitionOpenRegForm extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
-                            <InputWithHead heading={AppConstants.startDate} required={"required-field"} />
+                            <InputWithHead heading={AppConstants.compStartDate} required={"required-field"} />
                             <Form.Item >
                                 {getFieldDecorator('startDate',
                                     { rules: [{ required: true, message: ValidationConstants.startDateIsRequired }] })(
@@ -1430,7 +1430,7 @@ class CompetitionOpenRegForm extends Component {
                             </Form.Item>
                         </div>
                         <div className="col-sm">
-                            <InputWithHead heading={AppConstants.endDate} required={"required-field"} />
+                            <InputWithHead heading={AppConstants.compCloseDate} required={"required-field"} />
                             <Form.Item >
                                 {getFieldDecorator('endDate',
                                     { rules: [{ required: true, message: ValidationConstants.endDateIsRequired }] })(
@@ -1446,34 +1446,34 @@ class CompetitionOpenRegForm extends Component {
                                     )}
                             </Form.Item>
                         </div>
-                        
+
                     </div>
                 </div>
-                <div className="col-sm">
-                    {detailsData.competitionDetailData.competitionFormatRefId == 4 &&
-                        <div>
-                            <InputWithHead heading={AppConstants.numberOfRounds} required={"required-field"} />
-                            <Form.Item >
-                                {getFieldDecorator('numberOfRounds',
-                                    { rules: [{ required: true, message: ValidationConstants.numberOfRoundsNameIsRequired }] })(
-                                        <Select
-                                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                            placeholder={AppConstants.selectRound}
-                                            onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, "noOfRounds")}
-                                            value={detailsData.competitionDetailData.noOfRounds}
-                                            disabled={compDetailDisable}
-                                        >
-                                            {this.state.roundsArray.map(item => {
-                                                return (
-                                                    <Option key={item.id} value={item.id}>{item.value}</Option>
-                                                );
-                                            })}
-                                        </Select>
-                                    )}
-                            </Form.Item>
-                        </div>
-                    }
-                </div>
+                {/* <div className="col-sm"> */}
+                {detailsData.competitionDetailData.competitionFormatRefId == 4 &&
+                    <div>
+                        <InputWithHead heading={AppConstants.numberOfRounds} required={"required-field"} />
+                        <Form.Item >
+                            {getFieldDecorator('numberOfRounds',
+                                { rules: [{ required: true, message: ValidationConstants.numberOfRoundsNameIsRequired }] })(
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        placeholder={AppConstants.selectRound}
+                                        onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, "noOfRounds")}
+                                        value={detailsData.competitionDetailData.noOfRounds}
+                                        disabled={compDetailDisable}
+                                    >
+                                        {this.state.roundsArray.map(item => {
+                                            return (
+                                                <Option key={item.id} value={item.id}>{item.value}</Option>
+                                            );
+                                        })}
+                                    </Select>
+                                )}
+                        </Form.Item>
+                    </div>
+                }
+                {/* </div> */}
                 <InputWithHead heading={AppConstants.timeBetweenRounds} />
                 <div className="fluid-width">
                     <div className="row">

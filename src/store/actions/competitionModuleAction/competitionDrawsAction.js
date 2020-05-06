@@ -92,12 +92,12 @@ function getDivisionGradeNameLisAction(competitionId) {
     return action
 }
 
-function publishDraws(competitionId) {
+function publishDraws(competitionId, key) {
     const action = {
         type: ApiConstants.API_DRAW_PUBLISH_LOAD,
-        competitionId: competitionId
+        competitionId: competitionId,
+        key: key
     }
-    console.log('called')
     return action
 }
 
@@ -106,7 +106,6 @@ function matchesListDrawsAction(competitionId) {
         type: ApiConstants.API_DRAW_MATCHES_LIST_LOAD,
         competitionId: competitionId
     }
-    console.log('called')
     return action
 }
 

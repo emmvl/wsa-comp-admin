@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Breadcrumb, Select, Button, Form, message } from 'antd';
+import { Layout, Breadcrumb, Select, Button, Form, message, Modal } from 'antd';
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
 import { NavLink } from 'react-router-dom';
 import loadjs from 'loadjs';
@@ -43,7 +43,7 @@ import ValidationConstants from "../../themes/validationConstant"
 import moment from "moment"
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
-
+const { confirm } = Modal;
 class CompetitionDraws extends Component {
   constructor(props) {
     super(props);
@@ -262,25 +262,57 @@ class CompetitionDraws extends Component {
     );
   }
 
+
+  check = () => {
+    if (this.state.firstTimeCompId == null || this.state.firstTimeCompId == "") {
+      message.config({ duration: 0.9, maxCount: 1 })
+      message.error(ValidationConstants.pleaseSelectCompetition)
+    }
+    else if (this.state.venueId == null && this.state.venueId == "") {
+      message.config({ duration: 0.9, maxCount: 1 })
+      message.error(ValidationConstants.pleaseSelectVenue)
+    }
+    else if (this.state.roundId == null || this.state.roundId == "") {
+      message.config({ duration: 0.9, maxCount: 1 })
+      message.error(ValidationConstants.pleaseSelectRound)
+    }
+    else {
+      this.props.publishDraws(this.state.firstTimeCompId)
+    }
+  }
+
+
+
+  openModel = (props, e) => {
+    let this_ = this
+    confirm({
+      title: 'You have teams ‘Not in Draw’. Would you still like to proceed?',
+      // content: 'Some descriptions',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+
+        this_.check()
+
+      },
+      onCancel() {
+        console.log("cancel")
+        // this_.onCompetitionScreen()
+      },
+    });
+  }
+
+
+
   saveAPIsActionCall = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log(this.state)
-        if (this.state.firstTimeCompId == null || this.state.firstTimeCompId == "") {
-          message.error(ValidationConstants.pleaseSelectCompetition)
-        }
-        else if (this.state.venueId == null && this.state.venueId == "") {
-          message.error(ValidationConstants.pleaseSelectVenue)
-        }
-        else if (this.state.roundId == null || this.state.roundId == "") {
-          message.error(ValidationConstants.pleaseSelectRound)
-        }
-        else {
-          this.props.publishDraws(this.state.firstTimeCompId)
-        }
-      }
-    })
+    let isTeamNotInDraws = this.props.drawsState.isTeamInDraw
+    if (isTeamNotInDraws == 1) {
+      this.openModel(this.props, e)
+    }
+    else if (isTeamNotInDraws == 0) {
+      this.check(e)
+    }
   }
   onSwap(source, target) {
     let sourceIndexArray = source.split(':');
@@ -346,18 +378,18 @@ class CompetitionDraws extends Component {
             </Breadcrumb>
           </div>
         </div>
-        <div className="col-sm" style={{alignSelf: 'center'}}>
-            <div className="comp-dashboard-botton-view-mobile" style={{width: "100%",display: "flex",justifyContent: "flex-end"}}>
-              <Button onClick={() => this.onMatchesList()} className="primary-add-comp-form" type="primary">
-                <div className="row">
-                  <div className="col-sm">
-                    <img  src={AppImages.export} alt="" className="export-image" />
-                    {AppConstants.matchesList}
-                  </div>
+        <div className="col-sm" style={{ alignSelf: 'center' }}>
+          <div className="comp-dashboard-botton-view-mobile" style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+            <Button onClick={() => this.onMatchesList()} className="primary-add-comp-form" type="primary">
+              <div className="row">
+                <div className="col-sm">
+                  <img src={AppImages.export} alt="" className="export-image" />
+                  {AppConstants.matchesList}
                 </div>
-              </Button>
-            </div>
+              </div>
+            </Button>
           </div>
+        </div>
       </Header>
     );
   };
@@ -726,6 +758,7 @@ class CompetitionDraws extends Component {
   //////footer view containing all the buttons like submit and cancel
   footerView = () => {
     let publishStatus = this.props.drawsState.publishStatus
+    let isTeamNotInDraws = this.props.drawsState.isTeamInDraw
     return (
       <div className="fluid-width">
         <div className="row">
@@ -748,6 +781,7 @@ class CompetitionDraws extends Component {
                 className="open-reg-button"
                 type="primary"
                 htmlType="submit"
+                onClick={() => isTeamNotInDraws == 1 ? this.openModel(this.props) : this.check()}
                 disabled={publishStatus == 0 ? false : true}
               >
                 {AppConstants.publish}
@@ -756,7 +790,7 @@ class CompetitionDraws extends Component {
           </div>
           {/* </div> */}
         </div>
-      </div>
+      </div >
     );
   };
 
@@ -771,15 +805,15 @@ class CompetitionDraws extends Component {
         <Layout className="comp-dash-table-view">
           {this.headerView()}
           {this.dropdownView()}
-          <Form
+          {/* <Form
             onSubmit={this.saveAPIsActionCall}
-          >
-            {/* <Loader visible={this.props.drawsState.updateLoad} /> */}
+          > */}
+          {/* <Loader visible={this.props.drawsState.updateLoad} /> */}
 
 
-            <Content>{this.contentView()}</Content>
-            <Footer>{this.footerView()}</Footer>
-          </Form>
+          <Content>{this.contentView()}</Content>
+          <Footer>{this.footerView()}</Footer>
+          {/* </Form> */}
         </Layout>
 
       </div>

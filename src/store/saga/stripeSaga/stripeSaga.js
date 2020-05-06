@@ -90,7 +90,41 @@ export function* saveStripeAccountSaga(action) {
 }
 
 
+///////stripe login link
+export function* getStripeLoginLinkSaga(action) {
+    try {
+        const result = yield call(AxiosApi.getStripeLoginLink, action);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_STRIPE_LOGIN_LINK_API_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
 
 
 
+///stripe payments transfer list
+export function* getStripeTransferListSaga(action) {
+    try {
+        const result = yield call(AxiosApi.getStripeTransferList, action);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_STRIPE_PAYMENTS_TRANSFER_LIST_API_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
 

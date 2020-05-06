@@ -16,7 +16,9 @@ const initialState = {
   updateLoad: false,
   gradeColorArray: [],
   divisionGradeNameList: [],
-  publishStatus: 0
+  publishStatus: 0,
+  isTeamInDraw: null
+
 };
 var gradeColorArray = [];
 const colorsArray = ColorsArray;
@@ -643,6 +645,7 @@ function CompetitionDraws(state = initialState, action) {
       let drawsResultData = action.result[0];
       let resultData = structureDrawsData(drawsResultData);
       state.publishStatus = action.result[0].drawsPublish
+      state.isTeamInDraw = action.result[0].isTeamNotInDraws
       return {
         ...state,
         getDrawsData: resultData.mainCourtNumberArray,
@@ -787,6 +790,8 @@ function CompetitionDraws(state = initialState, action) {
       };
 
     case ApiConstants.cleardrawsData:
+      state.isTeamInDraw = null
+      state.publishStatus = 0
       state.getStaticDrawsData = [];
       state.dateArray = [];
       if (action.key == 'round') {
@@ -815,6 +820,7 @@ function CompetitionDraws(state = initialState, action) {
 
     case ApiConstants.API_DRAW_PUBLISH_SUCCESS:
       state.publishStatus = 1
+      state.isTeamInDraw = null
       state.updateLoad = false
       return {
         ...state,
@@ -823,7 +829,7 @@ function CompetitionDraws(state = initialState, action) {
       }
 
     case ApiConstants.API_DRAW_MATCHES_LIST_LOAD:
-    return { ...state, onLoad: true, onLoad: true }
+      return { ...state, onLoad: true, onLoad: true }
 
     case ApiConstants.API_DRAW_MATCHES_LIST_SUCCESS:
       return {

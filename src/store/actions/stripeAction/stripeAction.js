@@ -27,8 +27,26 @@ function saveStripeAccountAction(code) {
     return action;
 }
 
+////stripe login link
+function getStripeLoginLinkAction() {
+    const action = {
+        type: ApiConstants.API_GET_STRIPE_LOGIN_LINK_API_LOAD,
+    };
+    return action;
+}
+
+////stripe payments transfer list
+function getStripeTransferListAction() {
+    const action = {
+        type: ApiConstants.API_GET_STRIPE_PAYMENTS_TRANSFER_LIST_API_LOAD,
+    };
+    return action;
+}
+
 export {
     accountBalanceAction,
     chargingPaymentAction,
     saveStripeAccountAction,
+    getStripeLoginLinkAction,
+    getStripeTransferListAction,
 }

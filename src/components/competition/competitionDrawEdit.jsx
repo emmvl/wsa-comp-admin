@@ -255,9 +255,9 @@ class CompetitionDrawEdit extends Component {
                 } else {
                     customTargetObject = {
                         drawsId: targetObject.drawsId,
-                        roundId: this.state.roundId,
+                        // roundId: this.state.roundId,
                         homeTeamId: sourceObejct.awayTeamId,
-                        awayTeamId: targetObject.homeTeamId,
+                        awayTeamId: targetObject.awayTeamId,
                         isLocked: 1
                     }
                 }
@@ -320,25 +320,23 @@ class CompetitionDrawEdit extends Component {
 
     }
 
-    saveAPIsActionCall = (e) => {
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                console.log(this.state)
-                if (this.state.firstTimeCompId == null || this.state.firstTimeCompId == "") {
-                    message.error(ValidationConstants.pleaseSelectCompetition)
-                }
-                else if (this.state.venueId == null && this.state.venueId == "") {
-                    message.error(ValidationConstants.pleaseSelectVenue)
-                }
-                else if (this.state.roundId == null || this.state.roundId == "") {
-                    message.error(ValidationConstants.pleaseSelectRound)
-                }
-                else {
-                    this.props.publishDraws(this.state.firstTimeCompId)
-                }
-            }
-        })
+    saveAPIsActionCall() {
+        console.log('called')
+        if (this.state.firstTimeCompId == null || this.state.firstTimeCompId == "") {
+            message.config({ duration: 0.9, maxCount: 1 })
+            message.error(ValidationConstants.pleaseSelectCompetition)
+        }
+        else if (this.state.venueId == null && this.state.venueId == "") {
+            message.config({ duration: 0.9, maxCount: 1 })
+            message.error(ValidationConstants.pleaseSelectVenue)
+        }
+        else if (this.state.roundId == null || this.state.roundId == "") {
+            message.config({ duration: 0.9, maxCount: 1 })
+            message.error(ValidationConstants.pleaseSelectRound)
+        }
+        else {
+            this.props.publishDraws(this.state.firstTimeCompId, 'edit')
+        }
     }
 
     ///////view for breadcrumb
@@ -798,11 +796,9 @@ class CompetitionDrawEdit extends Component {
                     </div>
                     {/* <div className="col-sm-9">
                         <div className="comp-buttons-view">
-                            <NavLink to="/competitionDraws">
-                                <Button className="open-reg-button" type="primary" htmlType="submit" disabled={publishStatus == 0 ? false : true} >
-                                    {AppConstants.save_publish}
-                                </Button>
-                            </NavLink>
+                            <Button className="open-reg-button" type="primary" onClick={() => this.saveAPIsActionCall()} disabled={publishStatus == 0 ? false : true} >
+                                {AppConstants.save_publish}
+                            </Button>
                         </div>
                     </div> */}
                     <div className="col-sm-9">
@@ -829,18 +825,18 @@ class CompetitionDrawEdit extends Component {
                 <InnerHorizontalMenu menu={'competition'} compSelectedKey={'18'} />
                 {/* <Layout className="container"> */}
                 <Layout className="comp-dash-table-view">
-                    <Form
+                    {/* <Form
                         onSubmit={this.saveAPIsActionCall}
                         noValidate="noValidate"
-                    >
-                        {/* <Loader visible={this.props.drawsState.updateLoad} /> */}
-                        {/* <div className="comp-draw-head-content-view"> */}
-                        {this.headerView()}
-                        {this.dropdownView()}
-                        <Content>{this.contentView()}</Content>
-                        {/* </div> */}
-                        <Footer>{this.footerView()}</Footer>
-                    </Form>
+                    > */}
+                    {/* <Loader visible={this.props.drawsState.updateLoad} /> */}
+                    {/* <div className="comp-draw-head-content-view"> */}
+                    {this.headerView()}
+                    {this.dropdownView()}
+                    <Content>{this.contentView()}</Content>
+                    {/* </div> */}
+                    <Footer>{this.footerView()}</Footer>
+                    {/* </Form> */}
                 </Layout>
             </div>
         );
