@@ -982,7 +982,12 @@ const AppConstants = {
   compCloseDate: "Competition End Date",
   importTeams: "Import Teams",
   noPhotosAvailable: "No photos available",
-  downloadTemplate: "Download Template"
+  downloadTemplate: "Download Template",
+  finalsStartDate: "Finals Start Date",
+  extraTimeMatchType: "Extra Time Type",
+  applyToRef: "ApplyToFinals",
+  extraTimeDrawRef: "ExtraTimeDraw",
+  finalsFixtureTemplateRef: "FinalsFixtureTemplate"
 };
 
 export default AppConstants;

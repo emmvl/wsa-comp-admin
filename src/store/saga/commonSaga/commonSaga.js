@@ -419,3 +419,75 @@ export function* getPhotoTypeSaga(action) {
         });
     }
 }
+
+export function* getAppyToSaga(action) {
+    try {
+        const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.applyToRef)
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_APPY_TO_SUCCESS,
+                result: result.result.data,
+                status: result.result.status
+            });
+        } else {
+            yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
+            setTimeout(() => {
+                alert(result.data.message);
+            }, 800);
+        }
+    } catch (error) {
+        yield put({
+            type: ApiConstants.API_COMMON_SAGA_ERROR,
+            error: error,
+            status: error.status
+        });
+    }
+}
+
+export function* getExtraTimeDrawSaga(action) {
+    try {
+        const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.extraTimeDrawRef)
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_EXTRA_TIME_DRAW_SUCCESS,
+                result: result.result.data,
+                status: result.result.status
+            });
+        } else {
+            yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
+            setTimeout(() => {
+                alert(result.data.message);
+            }, 800);
+        }
+    } catch (error) {
+        yield put({
+            type: ApiConstants.API_COMMON_SAGA_ERROR,
+            error: error,
+            status: error.status
+        });
+    }
+}
+
+export function* getFinalsFixtureTemplateSaga(action) {
+    try {
+        const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.finalsFixtureTemplateRef)
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_FINAL_FIXTURE_TEMPLATE_SUCCESS,
+                result: result.result.data,
+                status: result.result.status
+            });
+        } else {
+            yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
+            setTimeout(() => {
+                alert(result.data.message);
+            }, 800);
+        }
+    } catch (error) {
+        yield put({
+            type: ApiConstants.API_COMMON_SAGA_ERROR,
+            error: error,
+            status: error.status
+        });
+    }
+}

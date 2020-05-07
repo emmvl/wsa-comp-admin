@@ -32,7 +32,10 @@ const initialState = {
     venuesListTotalCount: 1,
     genderData: [],
     getInvoicedata: [],
-    photoTypeData: []
+    photoTypeData: [],
+    applyToData: [],
+    extraTimeDrawData: [],
+    finalFixtureTemplateData: []
 };
 
 
@@ -274,6 +277,48 @@ function commonReducerState(state = initialState, action) {
                 ...state,
                 onLoad: true,
                 photoTypeData: action.result,
+                status: action.status
+            }
+
+        case ApiConstants.API_GET_APPY_TO_LOAD:
+            return {
+                ...state,
+                onLoad: true
+            }
+
+        case ApiConstants.API_GET_APPY_TO_SUCCESS:
+            return {
+                ...state,
+                onLoad: true,
+                applyToData: action.result,
+                status: action.status
+            }
+
+        case ApiConstants.API_GET_EXTRA_TIME_DRAW_LOAD:
+            return {
+                ...state,
+                onLoad: true
+            }
+
+        case ApiConstants.API_GET_EXTRA_TIME_DRAW_SUCCESS:
+            return {
+                ...state,
+                onLoad: true,
+                extraTimeDrawData: action.result,
+                status: action.status
+            }
+            
+        case ApiConstants.API_GET_FINAL_FIXTURE_TEMPLATE_LOAD:
+            return {
+                ...state,
+                onLoad: true
+            }
+
+        case ApiConstants.API_GET_FINAL_FIXTURE_TEMPLATE_SUCCESS:
+            return {
+                ...state,
+                onLoad: true,
+                finalFixtureTemplateData: action.result,
                 status: action.status
             }
 
