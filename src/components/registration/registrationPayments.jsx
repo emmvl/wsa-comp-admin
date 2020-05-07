@@ -36,6 +36,12 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "balance_transaction")
     },
     {
+        title: "Description",
+        dataIndex: 'description',
+        key: 'description',
+        sorter: (a, b) => tableSort(a, b, "description")
+    },
+    {
         title: "Date",
         dataIndex: 'created',
         key: 'created',

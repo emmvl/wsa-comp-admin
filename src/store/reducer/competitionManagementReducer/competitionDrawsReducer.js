@@ -43,8 +43,11 @@ function structureDrawsData(data) {
           object
         );
         if (!courtNumberResponse.status) {
+          console.log(object)
           mainCourtNumberArray.push({
             venueCourtNumber: object.venueCourtNumber,
+            venueCourtName: object.venueCourtName,
+            venueShortName: object.venueShortName,
             slotsArray: [],
           });
         }
@@ -136,6 +139,8 @@ function getSlotFromDate(drawsArray, venueCourtNumber, matchDate, gradeArray) {
   return {
     drawsId: null,
     venueCourtNumber: venueCourtNumber,
+    venueCourtName: null,
+    venueShortName: null,
     matchDate: matchDate,
     startTime: startTime,
     endTime: endTime,

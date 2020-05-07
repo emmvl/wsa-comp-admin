@@ -455,11 +455,14 @@
 
 .login-formView {
   margin: auto;
-  background-color: white;
+  /* background-color: white; */
   border-radius: 10px;
-  width: 50%;
-  margin-top: 7%;
-  margin-bottom: 3%;
+  width: 47%;
+  margin-top: 20vh;
+  background-color: transparent;
+  box-shadow: 0px 10px 22px 0px rgba(0,0,0,0.3);
+  border-top-left-radius: 30px;
+  border-bottom-right-radius: 30px;
 }
 
 .login-footer-view {
