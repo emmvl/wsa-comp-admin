@@ -65,9 +65,7 @@ import { NavLink } from "react-router-dom";
 import Loader from '../../customComponents/loader';
 import { venueListAction, getCommonRefData, } from '../../store/actions/commonAction/commonAction'
 import { getUserId, getOrganisationData } from "../../util/sessionStorage"
-import {
-    getGenderAction
-} from "../../store/actions/commonAction/commonAction"
+
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -448,7 +446,6 @@ class RegistrationCompetitionForm extends Component {
         this_Obj = this;
         this.props.CLEAR_OWN_COMPETITION_DATA()
         this.props.clearCompReducerDataAction("all")
-        this.props.getGenderAction()
     }
 
     componentDidUpdate(nextProps) {
@@ -2850,7 +2847,6 @@ function mapDispatchToProps(dispatch) {
         searchVenueList,
         venueListAction,
         clearFilter,
-        getGenderAction,
         CLEAR_OWN_COMPETITION_DATA
     }, dispatch)
 }

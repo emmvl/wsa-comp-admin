@@ -30,7 +30,17 @@ const initialState = {
     venuesList: [],
     venuesListPage: 1,
     venuesListTotalCount: 1,
-    genderData: [],
+    genderData: [{
+        description: "Male",
+        id: 2,
+        name: "male",
+    },
+    {
+        description: "Female",
+        id: 1,
+        name: "female",
+    }
+    ],
     getInvoicedata: [],
     photoTypeData: [],
     applyToData: [],
@@ -307,7 +317,7 @@ function commonReducerState(state = initialState, action) {
                 extraTimeDrawData: action.result,
                 status: action.status
             }
-            
+
         case ApiConstants.API_GET_FINAL_FIXTURE_TEMPLATE_LOAD:
             return {
                 ...state,

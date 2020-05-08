@@ -565,7 +565,11 @@ input[type=number] {
   min-height: 44px;
   padding-right: 10px
 }
-
+.invoice
+{
+  font-weight: 900;
+  /* justify-content: center */
+}
 
 @media (max-width: 767px) {
   .reg-add-save-button {

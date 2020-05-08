@@ -664,7 +664,7 @@ class CompetitionDraws extends Component {
                   dateMargin += 110;
                 }
                 if (index == 0) {
-                  dateMargin = 80
+                  dateMargin = 40
                 }
                 return (
                   <span style={{ left: dateMargin }} >
@@ -681,7 +681,7 @@ class CompetitionDraws extends Component {
                   dayMargin += 110;
                 }
                 if (index == 0) {
-                  dayMargin = 80;
+                  dayMargin = 40;
                 }
                 return (
                   <span style={{ left: dayMargin }}>{getTime(date)}</span>
@@ -699,14 +699,14 @@ class CompetitionDraws extends Component {
             }
             return (
               <div>
-                <div className="sr-no">{courtData.venueCourtName+ "-" + courtData.venueShortName}</div>
+                <div className="sr-no">{courtData.venueShortName + "-" + courtData.venueCourtName}</div>
                 {
                   courtData.slotsArray.map((slotObject, slotIndex) => {
                     if (slotIndex !== 0) {
                       leftMargin += 110;
                     }
                     if (slotIndex == 0) {
-                      leftMargin = 80
+                      leftMargin = 40
                     }
                     return (
                       <div>
