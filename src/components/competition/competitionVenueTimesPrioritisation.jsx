@@ -139,13 +139,22 @@ class CompetitionVenueTimesPrioritisation extends Component {
             this.setState({ loading: false, getDataLoading: true })
         }
 
-        if(nextProps.venueTimeState != this.props.venueTimeState){
+        if(nextProps.venueTimeState != this.props.venueTimeState)
+        {
             if(venueConstrainstData.isMPDeleteHappened!= undefined && 
                 venueConstrainstData.isMPDeleteHappened == true){
                     this.onChangeSetMPValue(false, 'isMPDeleteHappened', 0);
                     this.setFormFieldsMatchPreference();
                 }
+
+            if(this.props.venueTimeState.onLoad == false && this.state.saveContraintLoad == true){
+                this.setState({saveContraintLoad: false});
+                this.props.venueConstraintListAction(this.state.yearRefId, this.state.firstTimeCompId, 1);
+                this.setState({ loading: false, getDataLoading: true })
+            }
         }
+
+       
 
     }
 
