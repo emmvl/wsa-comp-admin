@@ -791,9 +791,145 @@ function VenueTimeState(state = initialState, action) {
                         state.courtRotation[i].selectedPrefrence = null
                     }
                 }
-
-
             }
+            else if(action.contentType == "matchPreference"){
+               // let matchPreference = state.venueConstrainstData.matchPreference;
+                if(action.key == "addMatchPreference"){
+                    let obj = {
+                        matchPreferenceId: 0,
+                        competitionMembershipProductDivisionId: null,
+                        competitionDivisionGradeId: null,
+                        team1Id: null,
+                        team2Id: null,
+                        venueId: null,
+                        courtId: null,
+                        matchDate: null,
+                        startTime: null,
+                        grades: [],
+                        teams: [],
+                        courts: []
+                    }
+                    state.venueConstrainstData[action.contentType].push(obj);
+                }
+                else if(action.key == "removeMatchPreference"){
+                    state.venueConstrainstData[action.contentType].splice(action.index, 1);
+                    state.venueConstrainstData["isMPDeleteHappened"] = true;
+                }
+                else if(action.key == "isMPDeleteHappened"){
+                    state.venueConstrainstData["isMPDeleteHappened"] = false;
+                }
+                else{
+                    if(action.key == "competitionMembershipProductDivisionId"){
+                       
+                       let division =  (state.venueConstrainstData.divisionGrades || []).find(x=>x.
+                            competitionMembershipProductDivisionId == action.data);
+                        if(division!= null && division!= undefined)
+                        {
+                            let grades = division.grades;
+                            state.venueConstrainstData[action.contentType][action.index]["grades"] = (grades == null ? [] : grades);
+                            state.venueConstrainstData[action.contentType][action.index]["competitionDivisionGradeId"] = null;
+                            state.venueConstrainstData[action.contentType][action.index]["team1Id"] = null;
+                            state.venueConstrainstData[action.contentType][action.index]["team2Id"] = null;
+                        }
+                    }
+                    else if(action.key == "competitionDivisionGradeId"){
+                        let grade = state.venueConstrainstData[action.contentType][action.index].grades.find(x=>x.gradeId == action.data);
+                        if(grade!= null && grade!= undefined){
+                            let teams = grade.teams;
+                            state.venueConstrainstData[action.contentType][action.index]["teams"] = (teams == null ? [] : teams);
+                            state.venueConstrainstData[action.contentType][action.index]["team1Id"] = null;
+                            state.venueConstrainstData[action.contentType][action.index]["team2Id"] = null;
+                        }
+                    }
+                    else if(action.key == "venueId"){
+                       let venue =  (state.venuePost || []).find(x=>x.venueId == action.data);
+                        if(venue!= null && venue!= undefined){
+                            let courts = venue.venueCourts;
+                            state.venueConstrainstData[action.contentType][action.index]["courts"] = (courts == null ? [] : courts);
+                            state.venueConstrainstData[action.contentType][action.index]["courtId"] = null;
+                        }
+                    }
+                    else if(action.key == "mpinitial"){
+                        let matchPreference = state.venueConstrainstData.matchPreference[action.index];
+                        let division =  (state.venueConstrainstData.divisionGrades || []).find(x=>x.
+                            competitionMembershipProductDivisionId == matchPreference.competitionMembershipProductDivisionId);
+                        
+                        if(division!= null && division!= undefined)
+                        {
+                            let grades = division.grades;
+                            state.venueConstrainstData[action.contentType][action.index]["grades"] = (grades == null ? [] : grades);
+                            
+                            let grade = (grades || [] ).find(x=>x.gradeId == matchPreference.competitionDivisionGradeId);
+                            if(grade!= null && grade!= undefined){
+                                let teams = grade.teams;
+                                state.venueConstrainstData[action.contentType][action.index]["teams"] = (teams == null ? [] : teams);
+                            }
+                        }
+                        let venue =  (state.venuePost || []).find(x=>x.venueId == matchPreference.venueId);
+                        if(venue!= null && venue!= undefined){
+                            let courts = venue.venueCourts;
+                            state.venueConstrainstData[action.contentType][action.index]["courts"] = (courts == null ? [] : courts);
+                        }
+                    }
+                    state.venueConstrainstData[action.contentType][action.index][action.key] = action.data;
+                }
+            }
+            else if(action.contentType == "lockedDraws"){
+                // let matchPreference = state.venueConstrainstData.matchPreference;
+                if(action.key == "competitionMembershipProductDivisionId"){
+                        
+                    let division =  (state.venueConstrainstData.divisionGrades || []).find(x=>x.
+                         competitionMembershipProductDivisionId == action.data).grades;
+                    if(division!= null && division!= undefined){
+                        let grades = division.grades;
+                        state.venueConstrainstData[action.contentType][action.index]["grades"] = (grades == null ? [] : grades);
+                        state.venueConstrainstData[action.contentType][action.index]["competitionDivisionGradeId"] = null;
+                        state.venueConstrainstData[action.contentType][action.index]["team1Id"] = null;
+                        state.venueConstrainstData[action.contentType][action.index]["team2Id"] = null;
+                    }
+                 }
+                 else if(action.key == "competitionDivisionGradeId"){
+                    let grades = state.venueConstrainstData[action.contentType][action.index].grades.find(x=>x.gradeId == action.data);
+                    if(grades != null && grades!= undefined){
+                        let teams = grades.teams;
+                        state.venueConstrainstData[action.contentType][action.index]["teams"] = (teams == null ? [] : teams);
+                        state.venueConstrainstData[action.contentType][action.index]["team1Id"] = null;
+                        state.venueConstrainstData[action.contentType][action.index]["team2Id"] = null;
+                    }
+                     
+                 }
+                 else if(action.key == "venueId"){
+                    let venue =  (state.venuePost || []).find(x=>x.venueId == action.data);
+                    if(venue!= null && venue!= undefined){
+                        let courts = venue.venueCourts;
+                        state.venueConstrainstData[action.contentType][action.index]["courts"] = (courts == null ? [] : courts);
+                        state.venueConstrainstData[action.contentType][action.index]["courtId"] = null;
+                    }
+                  
+                 }
+                 else if(action.key == "ldinitial"){
+                     let lockedDraw = state.venueConstrainstData.lockedDraws[action.index];
+                     let division =  (state.venueConstrainstData.divisionGrades || []).find(x=>x.
+                         competitionMembershipProductDivisionId == lockedDraw.competitionMembershipProductDivisionId);
+                    
+                    if(division!= null && division!= undefined){
+                        let grades = division.grades;
+
+                        state.venueConstrainstData[action.contentType][action.index]["grades"] = (grades == null ? [] : grades);
+                        let grade = (grades || [] ).find(x=>x.gradeId == lockedDraw.competitionDivisionGradeId);
+                        if(grade!= null && grade!= undefined){
+                            let teams = grade.teams;
+                            state.venueConstrainstData[action.contentType][action.index]["teams"] = (teams == null ? [] : teams);
+                        }
+                    }
+                    let venue =  (state.venuePost || []).find(x=>x.venueId == lockedDraw.venueId);
+                    if(venue!= null && venue!= undefined){
+                        let courts = venue.venueCourts;
+                        state.venueConstrainstData[action.contentType][action.index]["courts"] = (courts == null ? [] : courts);
+                    }
+                 }
+                 state.venueConstrainstData[action.contentType][action.index][action.key] = action.data;
+             }
 
             else {
                 let venueConstrainstDetails = state.venueConstrainstData
