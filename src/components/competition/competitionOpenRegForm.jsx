@@ -73,9 +73,7 @@ import {
 import Loader from '../../customComponents/loader';
 import { venueListAction, getCommonRefData, } from '../../store/actions/commonAction/commonAction'
 import { getUserId, getOrganisationData } from "../../util/sessionStorage"
-import {
-    getGenderAction
-} from "../../store/actions/commonAction/commonAction"
+
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -84,7 +82,18 @@ const { TabPane } = Tabs;
 const { confirm } = Modal;
 let this_Obj = null;
 
+const genderArray = [{
+    description: "Male",
+id: 2,
+name: "male",
+},
+{
+    description: "Female",
+id: 2,
+name: "female",
+}
 
+]
 
 const playerSeasoTable = [
     {
@@ -303,7 +312,7 @@ class CompetitionOpenRegForm extends Component {
                                             placeholder={"Select"}
                                             disabled={this.state.permissionState.divisionsDisable}
                                         >
-                                            {this.props.commonReducerState.genderData.map(item => {
+                                            {this.props.commonReducerState.genderArray.map(item => {
                                                 return (
                                                     <Option key={item.id} value={item.id}>
                                                         {item.description}
@@ -408,7 +417,6 @@ class CompetitionOpenRegForm extends Component {
         // competitionId = this.props.location.state ? this.props.location.state.id : null
         // competitionId !== null && this.props.clearCompReducerDataAction("all")
         this.props.clearCompReducerDataAction("all")
-        this.props.getGenderAction()
 
     }
     componentDidUpdate(nextProps) {
@@ -2710,7 +2718,6 @@ function mapDispatchToProps(dispatch) {
         searchVenueList,
         venueListAction,
         clearFilter,
-        getGenderAction
     }, dispatch)
 }
 

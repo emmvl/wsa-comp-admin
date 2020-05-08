@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Select, DatePicker, Button, Table } from 'antd';
+import { Layout, Breadcrumb, Select, DatePicker, Button, Table, Menu } from 'antd';
 import './product.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -20,7 +20,7 @@ import moment from 'moment'
 
 const { Header, Content } = Layout;
 const { Option } = Select;
-
+const { SubMenu } = Menu;
 /////function to sort table column
 function tableSort(a, b, key) {
     let stringA = JSON.stringify(a[key])
@@ -34,6 +34,19 @@ const columns = [
         dataIndex: 'balance_transaction',
         key: 'balance_transaction',
         sorter: (a, b) => tableSort(a, b, "balance_transaction")
+    },
+    {
+        title: "Description",
+        dataIndex: 'description',
+        key: 'description',
+        sorter: (a, b) => tableSort(a, b, "description"),
+        render: description => (
+           
+                    <span >{description ? description : "N/A"}</span>
+             
+            )
+        
+
     },
     {
         title: "Date",
@@ -56,6 +69,32 @@ const columns = [
             <span>{currencyFormat(amount)}</span>
         ),
         sorter: (a, b) => tableSort(a, b, "amount")
+    },
+    {
+        title: 'Action',
+        dataIndex: 'refund',
+        key: 'refund',
+        render: (refund, record) =>
+            <Menu
+                className="action-triple-dot-submenu"
+                theme="light"
+                mode="horizontal"
+                style={{ lineHeight: '25px' }}
+            >
+                <SubMenu
+                    key="sub1"
+                    title={
+                        <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
+                    }
+                >
+                    <Menu.Item key="1">
+                        <span >Full Refund</span>
+                    </Menu.Item>
+                    <Menu.Item key="2" >
+                        <span >Partial Refund</span>
+                    </Menu.Item>
+                </SubMenu>
+            </Menu>
     },
 
 ];

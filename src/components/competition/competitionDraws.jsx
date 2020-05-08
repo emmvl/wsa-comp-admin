@@ -287,33 +287,23 @@ class CompetitionDraws extends Component {
     let this_ = this
     confirm({
       title: 'You have teams ‘Not in Draw’. Would you still like to proceed?',
-      // content: 'Some descriptions',
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
+      maskClosable: true,
+      mask: true,
       onOk() {
-
         this_.check()
-
       },
       onCancel() {
         console.log("cancel")
-        // this_.onCompetitionScreen()
       },
     });
   }
 
 
 
-  saveAPIsActionCall = (e) => {
-    let isTeamNotInDraws = this.props.drawsState.isTeamInDraw
-    if (isTeamNotInDraws == 1) {
-      this.openModel(this.props, e)
-    }
-    else if (isTeamNotInDraws == 0) {
-      this.check(e)
-    }
-  }
+
   onSwap(source, target) {
     let sourceIndexArray = source.split(':');
     let targetIndexArray = target.split(':');
@@ -673,6 +663,9 @@ class CompetitionDraws extends Component {
                 if (index !== 0) {
                   dateMargin += 110;
                 }
+                if (index == 0) {
+                  dateMargin = 40
+                }
                 return (
                   <span style={{ left: dateMargin }} >
                     {getDayName(date)}
@@ -686,6 +679,9 @@ class CompetitionDraws extends Component {
               {this.props.drawsState.dateArray.map((date, index) => {
                 if (index !== 0) {
                   dayMargin += 110;
+                }
+                if (index == 0) {
+                  dayMargin = 40;
                 }
                 return (
                   <span style={{ left: dayMargin }}>{getTime(date)}</span>
@@ -703,51 +699,55 @@ class CompetitionDraws extends Component {
             }
             return (
               <div>
-                <div className="sr-no">{index + 1}</div>
-                {courtData.slotsArray.map((slotObject, slotIndex) => {
-                  if (slotIndex !== 0) {
-                    leftMargin += 110;
-                  }
-                  console.log()
-                  return (
-                    <div>
-                      <span
-                        style={{ left: leftMargin, top: topMargin }}
-                        className={
-                          'border'
-                        }
-                      ></span>
-                      <div
-                        className={
-                          'box purple-bg'
-                        }
-                        style={{
-                          backgroundColor: slotObject.competitionDivisionGradeId == this.state.competitionDivisionGradeId || this.state.competitionDivisionGradeId == 0 ? slotObject.colorCode : "#999999",
-                          left: leftMargin, top: topMargin, overflow: "hidden",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        <Swappable
-                          id={index.toString() + ':' + slotIndex.toString()}
-                          content={1}
-                          swappable={slotObject.competitionDivisionGradeId == this.state.competitionDivisionGradeId || this.state.competitionDivisionGradeId == 0 ? true : false}
-                          onSwap={(source, target) =>
-                            this.onSwap(source, target)
+                <div className="sr-no">{courtData.venueShortName + "-" + courtData.venueCourtName}</div>
+                {
+                  courtData.slotsArray.map((slotObject, slotIndex) => {
+                    if (slotIndex !== 0) {
+                      leftMargin += 110;
+                    }
+                    if (slotIndex == 0) {
+                      leftMargin = 40
+                    }
+                    return (
+                      <div>
+                        <span
+                          style={{ left: leftMargin, top: topMargin }}
+                          className={
+                            'border'
                           }
+                        ></span>
+                        <div
+                          className={
+                            'box purple-bg'
+                          }
+                          style={{
+                            backgroundColor: slotObject.competitionDivisionGradeId == this.state.competitionDivisionGradeId || this.state.competitionDivisionGradeId == 0 ? slotObject.colorCode : "#999999",
+                            left: leftMargin, top: topMargin, overflow: "hidden",
+                            whiteSpace: "nowrap",
+                          }}
                         >
-                          {slotObject.drawsId != null ? (
-                            <span>
-                              {slotObject.homeTeamName} <br />
-                              {slotObject.awayTeamName}
-                            </span>
-                          ) : (
-                              <span>N/A</span>
-                            )}
-                        </Swappable>
+                          <Swappable
+                            id={index.toString() + ':' + slotIndex.toString()}
+                            content={1}
+                            swappable={slotObject.competitionDivisionGradeId == this.state.competitionDivisionGradeId || this.state.competitionDivisionGradeId == 0 ? true : false}
+                            onSwap={(source, target) =>
+                              this.onSwap(source, target)
+                            }
+                          >
+                            {slotObject.drawsId != null ? (
+                              <span>
+                                {slotObject.homeTeamName} <br />
+                                {slotObject.awayTeamName}
+                              </span>
+                            ) : (
+                                <span>N/A</span>
+                              )}
+                          </Swappable>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })
+                }
               </div>
             );
           })}
@@ -770,7 +770,7 @@ class CompetitionDraws extends Component {
             <div className="comp-buttons-view">
               <NavLink to="/competitionFormat">
                 <Button className="open-reg-button" type="primary">
-                    {AppConstants.regenerateDraw}
+                  {AppConstants.regenerateDraw}
                 </Button>
               </NavLink>
             </div>

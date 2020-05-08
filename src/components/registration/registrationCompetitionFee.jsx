@@ -64,10 +64,6 @@ import ValidationConstants from "../../themes/validationConstant";
 import { NavLink } from "react-router-dom";
 import Loader from '../../customComponents/loader';
 import { getUserId, getOrganisationData } from "../../util/sessionStorage"
-import ReactDOM from 'react-dom';
-import {
-    getGenderAction
-} from "../../store/actions/commonAction/commonAction";
 import { getAffiliateToOrganisationAction } from "../../store/actions/userAction/userAction";
 
 const { Header, Footer, Content } = Layout;
@@ -76,7 +72,17 @@ const { TextArea } = Input;
 const { TabPane } = Tabs;
 const { confirm } = Modal;
 let this_Obj = null;
-
+const genderArray = [{
+    description: "Male",
+    id: 2,
+    name: "male",
+},
+{
+    description: "Female",
+    id: 2,
+    name: "female",
+}
+]
 
 
 const playerSeasoTable = [
@@ -829,7 +835,6 @@ class RegistrationCompetitionFee extends Component {
         let competitionId = null
         competitionId = this.props.location.state ? this.props.location.state.id : null
         competitionId !== null && this.props.clearCompReducerDataAction("all")
-        this.props.getGenderAction()
     }
 
     componentDidUpdate(nextProps) {
@@ -3364,7 +3369,6 @@ function mapDispatchToProps(dispatch) {
         searchVenueList,
         clearFilter,
         clearCompReducerDataAction,
-        getGenderAction,
         getAffiliateToOrganisationAction,
         onInviteesSearchAction
     }, dispatch)

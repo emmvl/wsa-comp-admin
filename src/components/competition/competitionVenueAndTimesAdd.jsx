@@ -365,6 +365,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                             heading={AppConstants.short_Name}
                             disabled={this.state.isUsed}
                             placeholder={AppConstants.short_Name}
+                            maxLength={4}
                             onChange={(name) => this.props.updateVenuAndTimeDataAction(name.target.value, 'Venue', 'shortName')}
                             setFieldsValue={venuData.shortName}
                         />
