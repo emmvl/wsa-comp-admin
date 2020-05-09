@@ -38,6 +38,7 @@ const ValidationConstants = {
     requiredMessage: ["Please fill all the required fields"],
     drawsMessage: ["Something went wrong with draws generation"],
     finalGrading: ["Please provide final grade for all the teams"],
+    proposedGrading: ["Please provide proposed grade for all the teams"],
 
     /////////////membership 
     membershipProductIsRequired: "Membership product name is required.",
