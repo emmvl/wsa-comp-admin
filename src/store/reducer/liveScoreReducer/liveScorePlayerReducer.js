@@ -60,15 +60,16 @@ function LiveScorePlayerState(state = initialState, action) {
                 state.playerData = playerObj
             } else if (action.key == 'editplayerScreen') {
                 if (action.data) {
+                    console.log(action.data, 'action.data*#*#*#')
                     var editPlayerObj = {
                         firstName: action.data.firstName,
                         lastName: action.data.lastName,
                         dateOfBirth: moment(action.data.dob).format('DD-MM-YYYY'),
                         phoneNumber: action.data.phoneNumber,
                         mnbPlayerId: action.data.playerId,
-                        teamId: action.data.team? action.data.team.id :action.data.id,
-                        competitionId: action.data.division? action.data.division.competitionId : action.data.competitionId,
-                        photoUrl: action.data.profilePicture? action.data.profilePicture:action.data.photoUrl
+                        teamId: action.data.team ? action.data.team.id : action.data.id,
+                        competitionId: action.data.division ? action.data.division.competitionId : action.data.competitionId,
+                        photoUrl: action.data.profilePicture ? action.data.profilePicture : action.data.photoUrl
                     }
                     state.playerData = editPlayerObj
                 }

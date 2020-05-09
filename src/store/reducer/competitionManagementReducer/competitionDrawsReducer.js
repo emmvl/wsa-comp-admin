@@ -17,21 +17,45 @@ const initialState = {
   gradeColorArray: [],
   divisionGradeNameList: [],
   publishStatus: 0,
-  isTeamInDraw: null
+  isTeamInDraw: null,
+  legandsArray: [],
 
 };
 var gradeColorArray = [];
 const colorsArray = ColorsArray;
 const lightGray = '#999999';
+var legandsArray = [];
+
+function createLagendsArray(drawsArray, currentLagends) {
+
+  let newArray = currentLagends
+  for (let i in drawsArray) {
+    let color = drawsArray[i].colorCode
+    let index = currentLagends.findIndex((x) => x.colorCode === color)
+    let object = {
+      "colorCode": color,
+      "gradeName": drawsArray[i].gradeName
+    }
+    if (index === -1) {
+      newArray.push(object)
+    }
+  }
+  console.log(newArray)
+  return newArray
+}
+
 
 function structureDrawsData(data) {
   let mainCourtNumberArray = [];
   let dateArray = [];
   let gradeArray = [];
   let sortedDateArray = [];
+  let legendArray = [];
+
   if (data.draws) {
     if (isArrayNotEmpty(data.draws)) {
       data.draws.map((object) => {
+        console.log("object", object)
         if (checkDateNotInArray(dateArray, object.matchDate)) {
           dateArray.push(object.matchDate);
         }
@@ -647,10 +671,15 @@ function CompetitionDraws(state = initialState, action) {
       return { ...state, onLoad: true, error: null };
 
     case ApiConstants.API_GET_COMPETITION_DRAWS_SUCCESS:
+
       let drawsResultData = action.result[0];
       let resultData = structureDrawsData(drawsResultData);
       state.publishStatus = action.result[0].drawsPublish
       state.isTeamInDraw = action.result[0].isTeamNotInDraws
+      let drawsSorted = resultData.mainCourtNumberArray
+      legandsArray = []
+      legandsArray = createLagendsArray(drawsSorted[0].slotsArray, legandsArray)
+      state.legandsArray = legandsArray
       return {
         ...state,
         getDrawsData: resultData.mainCourtNumberArray,
@@ -803,6 +832,7 @@ function CompetitionDraws(state = initialState, action) {
         state.competitionVenues = [];
         state.getDrawsRoundsData = [];
         state.divisionGradeNameList = [];
+        state.legandsArray = [];
       }
       return { ...state };
 

@@ -178,7 +178,7 @@ class LiveScoreTeam extends Component {
                         </Breadcrumb>
                     </div>
 
-                    <div className="col-sm pt-1" style={{  display: "flex", justifyContent: 'flex-end' }} >
+                    {/* <div className="col-sm pt-1" style={{  display: "flex", justifyContent: 'flex-end' }} >
                                 <div className="comp-product-search-inp-width" >
                                     <Input className="product-reg-search-input"
                                         onChange={(e) => this.onChangeSearchText(e)}
@@ -190,10 +190,10 @@ class LiveScoreTeam extends Component {
                                         allowClear
                                     />
                                 </div>
-                            </div>
+                            </div> */}
                     <div className="col-sm-3" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
                         <div className="row">
-                          
+
                             <div className="col-sm pt-1">
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
@@ -268,6 +268,24 @@ class LiveScoreTeam extends Component {
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+
+
+                </div>
+                {/* search box */}
+
+                <div className="col-sm pt-5 ml-3" style={{ display: "flex", justifyContent: 'flex-end' }} >
+                    <div className="comp-product-search-inp-width" >
+                        <Input className="product-reg-search-input"
+                            onChange={(e) => this.onChangeSearchText(e)}
+                            placeholder="Search..."
+                            onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                            prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                onClick={() => this.onClickSearchIcon()}
+                            />}
+                            allowClear
+                        />
                     </div>
                 </div>
             </div>

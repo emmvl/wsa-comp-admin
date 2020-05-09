@@ -636,6 +636,9 @@ class CompetitionDrawEdit extends Component {
                                 if (index !== 0) {
                                     dateMargin += 110;
                                 }
+                                if (index == 0) {
+                                    dateMargin = 50;
+                                }
                                 return (
                                     <span style={{ left: dateMargin }} >
                                         {getDayName(date)}
@@ -649,6 +652,9 @@ class CompetitionDrawEdit extends Component {
                             {this.props.drawsState.dateArray.map((date, index) => {
                                 if (index !== 0) {
                                     dayMargin += 110;
+                                }
+                                if (index == 0) {
+                                    dayMargin = 50;
                                 }
                                 return (
                                     <span style={{ left: dayMargin }}>{getTime(date)}</span>
@@ -669,12 +675,15 @@ class CompetitionDrawEdit extends Component {
                             return (
                                 <div>
                                     <div className="sr-no huge-sr">
-                                        {courtData.venueCourtNumber}
+                                        {courtData.venueShortName + "-" + courtData.venueCourtName}
                                     </div>
 
                                     {courtData.slotsArray.map((slotObject, slotIndex) => {
                                         if (slotIndex !== 0) {
                                             leftMargin += 110;
+                                        }
+                                        if (slotIndex == 0) {
+                                            leftMargin = 50;
                                         }
                                         return slotObject.drawsId === null ? (
                                             <div

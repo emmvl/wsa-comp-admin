@@ -41,12 +41,8 @@ const columns = [
         key: 'description',
         sorter: (a, b) => tableSort(a, b, "description"),
         render: description => (
-           
-                    <span >{description ? description : "N/A"}</span>
-             
-            )
-        
-
+            <span >{description ? description : "N/A"}</span>
+        )
     },
     {
         title: "Date",
@@ -104,7 +100,7 @@ class RegistrationPayments extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            year: "2017",
+            year: "2020",
             competition: "all",
             paymentFor: "all",
             loadingSave: false,
@@ -179,6 +175,7 @@ class RegistrationPayments extends Component {
                             onChange={(year) => this.setState({ year })}
                             value={this.state.year}
                         >
+                            <Option value={"2020"}>{AppConstants.year2020}</Option>
                             <Option value={"2019"}>{AppConstants.year2019}</Option>
                             <Option value={"2018"}>{AppConstants.year2018}</Option>
                             <Option value={"2017"}>{AppConstants.year2017}</Option>
@@ -195,6 +192,8 @@ class RegistrationPayments extends Component {
                             value={this.state.competition}
                         >
                             <Option value={"all"}>{AppConstants.all}</Option>
+                            <Option value={"2020"}>{AppConstants.year2020}</Option>
+                            <Option value={"2019"}>{AppConstants.year2019}</Option>
                             <Option value={"2018"}>{AppConstants.year2018}</Option>
                             <Option value={"2017"}>{AppConstants.year2017}</Option>
                             <Option value={"2016"}>{AppConstants.year2016}</Option>
@@ -209,6 +208,8 @@ class RegistrationPayments extends Component {
                             value={this.state.paymentFor}
                         >
                             <Option value={"all"}>{AppConstants.all}</Option>
+                            <Option value={"2020"}>{AppConstants.year2020}</Option>
+                            <Option value={"2019"}>{AppConstants.year2019}</Option>
                             <Option value={"2018"}>{AppConstants.year2018}</Option>
                             <Option value={"2017"}>{AppConstants.year2017}</Option>
                             <Option value={"2016"}>{AppConstants.year2016}</Option>
@@ -321,7 +322,7 @@ class RegistrationPayments extends Component {
         return (
             <div >
                 {this.dropdownView()}
-
+                {/* 
                 <div className="row" >
                     <div className="col-sm">
                         <div className="reg-payment-white-box-view" >
@@ -440,7 +441,7 @@ class RegistrationPayments extends Component {
                     </div>
                     <div className="col-sm" >
                     </div>
-                </div>
+                </div> */}
 
                 <div className="table-responsive home-dash-table-view mt-5 mb-5">
                     <Table

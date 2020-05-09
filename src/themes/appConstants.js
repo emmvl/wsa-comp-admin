@@ -991,7 +991,8 @@ const AppConstants = {
   matchPreference: "Match Preference",
   teamA: "Team A",
   teamB: "Team B",
-  lockedDraws: "Locked Draws"
+  lockedDraws: "Locked Draws",
+  year2020: "2020",
 };
 
 export default AppConstants;

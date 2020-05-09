@@ -28,7 +28,8 @@ function* errorSaga(error) {
 //// get manager list
 export function* liveScoreScorerListSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreScorerList, action.competitionId, action.roleId, action.body)
+        console.log('hello saga search ,', action)
+        const result = yield call(LiveScoreAxiosApi.liveScoreScorerList, action.competitionId, action.roleId, action.body, action.search)
         if (result.status == 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_SCORER_LIST_SUCCESS,
@@ -46,7 +47,7 @@ export function* liveScoreScorerListSaga(action) {
 //// Add/Edit Scorer Saga
 //// Add/Edit Scorer Saga
 export function* liveScoreAddEditScorerSaga(action) {
-  
+
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreAddEditScorer, action.body, action.teamId, action.existingScorerId)
         if (result.status == 1) {
@@ -56,12 +57,12 @@ export function* liveScoreAddEditScorerSaga(action) {
                 status: result.status,
             });
             message.success('Add Scorer - Successfully Added')
-            if(action.isEdit == true){
+            if (action.isEdit == true) {
                 history.push('/liveScorerList')
-            }else{
-                history.push('/liveScoreAssignMatch',{ record: result.result.data })
+            } else {
+                history.push('/liveScoreAssignMatch', { record: result.result.data })
             }
-           
+
 
 
         } else {

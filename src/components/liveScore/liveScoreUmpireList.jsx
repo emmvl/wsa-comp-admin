@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Breadcrumb, Pagination } from "antd";
+import { Layout, Button, Table, Breadcrumb, Pagination, Input, Icon } from "antd";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -134,6 +134,7 @@ class LiveScoreUmpireList extends Component {
                         </Breadcrumb>
                     </div>
 
+
                     <div className="col-sm" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
                         <div className="row">
 
@@ -148,6 +149,20 @@ class LiveScoreUmpireList extends Component {
                                         justifyContent: "flex-end"
                                     }}
                                 >
+                                    {/* search box */}
+                                    <div className="col-sm pt-0 " style={{ display: "flex", justifyContent: 'flex-end', }} >
+                                        <div className="comp-product-search-inp-width" >
+                                            <Input className="product-reg-search-input"
+                                                // onChange={(e) => this.onChangeSearchText(e)}
+                                                placeholder="Search..."
+                                                // onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                                prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                                // onClick={() => this.onClickSearchIcon()}
+                                                />}
+                                                allowClear
+                                            />
+                                        </div>
+                                    </div>
                                     <Button className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
