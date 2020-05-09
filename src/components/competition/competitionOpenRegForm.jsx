@@ -84,13 +84,13 @@ let this_Obj = null;
 
 const genderArray = [{
     description: "Male",
-id: 2,
-name: "male",
+    id: 2,
+    name: "male",
 },
 {
     description: "Female",
-id: 2,
-name: "female",
+    id: 2,
+    name: "female",
 }
 
 ]
@@ -312,7 +312,7 @@ class CompetitionOpenRegForm extends Component {
                                             placeholder={"Select"}
                                             disabled={this.state.permissionState.divisionsDisable}
                                         >
-                                            {this.props.commonReducerState.genderArray.map(item => {
+                                            {this.props.commonReducerState.genderData.map(item => {
                                                 return (
                                                     <Option key={item.id} value={item.id}>
                                                         {item.description}
