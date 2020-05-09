@@ -987,7 +987,11 @@ const AppConstants = {
   extraTimeMatchType: "Extra Time Type",
   applyToRef: "ApplyToFinals",
   extraTimeDrawRef: "ExtraTimeDraw",
-  finalsFixtureTemplateRef: "FinalsFixtureTemplate"
+  finalsFixtureTemplateRef: "FinalsFixtureTemplate",
+  matchPreference: "Match Preference",
+  teamA: "Team A",
+  teamB: "Team B",
+  lockedDraws: "Locked Draws"
 };
 
 export default AppConstants;

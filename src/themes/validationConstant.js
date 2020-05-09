@@ -133,7 +133,9 @@ const ValidationConstants = {
     beforeExtraTimeRequired: "Please enter before extra time",
     finalFixtureTemplateRequired: "Please select final fixture template",
     extraTimeDrawRequired: "Please select extra time draw",
-    applyToRequired: "Please select apply to"
+    applyToRequired: "Please select apply to",
+    gradeNameRequired: "Grade name is required",
+    startTime: "Start time is required"
 
 };
 
