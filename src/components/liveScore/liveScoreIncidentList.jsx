@@ -163,11 +163,11 @@ class LiveScoreIncidentList extends Component {
                                         justifyContent: "flex-end",
                                     }}
                                 >
-                                    {/* <NavLink to="/liveScoreAddIncident">
+                                    <NavLink to="/liveScoreAddIncident">
                                         <Button className="primary-add-comp-form" type="primary">
                                             + {AppConstants.addIncident}
                                         </Button>
-                                    </NavLink> */}
+                                    </NavLink>
                                 </div>
                             </div>
                             <div className="col-sm">

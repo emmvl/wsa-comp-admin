@@ -415,7 +415,7 @@ class RegistrationInvoice extends Component {
                                 <div className="invoice-total-Amount pr-0">
                                     <InputWithHead
                                         required="invoice"
-                                        heading={"AUD" + "150"}
+                                        heading={"AUD" + " " + "150"}
                                     />
                                 </div>
                                 {data.length - 1 !== participantIndex &&
@@ -507,10 +507,12 @@ class RegistrationInvoice extends Component {
                     >
 
                         <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end" }}>
-                            <InputWithHead
-                                required={"pr-4"}
-                                heading={"Subtotal"}
-                            />
+                            <div className="col-sm-8" style={{ display: "flex", justifyContent: "flex-end" }}>
+                                <InputWithHead
+                                    required={"pr-4"}
+                                    heading={"Subtotal"}
+                                />
+                            </div>
                             <InputWithHead
                                 style={{ display: "flex", justifyContent: 'flex-start' }}
                                 heading={subValue !== 0 ? subValue.toFixed(2) : '0'}
@@ -518,11 +520,12 @@ class RegistrationInvoice extends Component {
 
                         </div>
                         <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end" }}>
-
-                            <InputWithHead
-                                required={"pr-4 pt-0"}
-                                heading={"GST 10%"}
-                            />
+                            <div className="col-sm-8" style={{ display: "flex", justifyContent: "flex-end" }}>
+                                <InputWithHead
+                                    required={"pr-4 pt-0"}
+                                    heading={"GST 10%"}
+                                />
+                            </div>
                             <InputWithHead
                                 required={"pt-0"}
                                 style={{ display: "flex", justifyContent: 'flex-start' }}
@@ -555,7 +558,7 @@ class RegistrationInvoice extends Component {
 
                 </div>
                 <div className="row">
-                    <div className="col-sm pt-5">
+                    <div className="col-sm pt-5 invoiceImage">
                         <label>
                             <img
                                 src={AppImages.netballImages}
@@ -570,7 +573,7 @@ class RegistrationInvoice extends Component {
                             />
                         </label>
                     </div>
-                    <div className="col-sm pt-5 " style={{ display: "flex", justifyContent: "flex-end" }}>
+                    <div className="col-sm pt-5 invoiceImageMain ">
                         <label>
                             <img
                                 src={AppImages.netballLogoMain}

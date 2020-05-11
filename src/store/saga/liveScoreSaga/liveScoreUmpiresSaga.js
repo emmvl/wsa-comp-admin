@@ -20,9 +20,8 @@ function* errorSaga(error) {
 }
 
 export function* liveScoreUmpiresSaga(action) {
-    console.log(action.competitionId, action.offset, "headers")
     try {
-        const result = yield call(LiveScoreAxiosApi.umpiresList, action.competitionId, action.offset)
+        const result = yield call(LiveScoreAxiosApi.umpiresList, action.competitionId, action.body)
 
         if (result.status === 1) {
             yield put({

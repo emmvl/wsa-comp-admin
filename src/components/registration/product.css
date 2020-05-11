@@ -597,12 +597,12 @@ input[type=number] {
 }
 .invoice-total{
   display: flex;
-  width: 85%;
+  width: 87%;
   justify-content: flex-end
 }
 .invoice-total-Amount{
 display: flex;
-  width: 15%;
+  width: 13%;
   justify-content: flex-end
 }
 .drop-reverse{
@@ -611,9 +611,20 @@ display: flex;
     margin-right: -15px;
     margin-left: -15px;
 }
+.invoiceImageMain{
+  display: flex;
+  justify-content: flex-end
+}
 
 
 @media (max-width: 767px) {
+  .invoiceImage{
+    display: flex;
+    justify-content: center
+  }
+  .invoiceImageMain{
+    justify-content: center
+  }
   .invoice-total{
     display: flex;
   width: 70%;

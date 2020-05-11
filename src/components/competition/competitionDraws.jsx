@@ -650,6 +650,7 @@ class CompetitionDraws extends Component {
     );
   };
 
+
   //////the gragable content view inside the container
   draggableView = () => {
     var dateMargin = 25;

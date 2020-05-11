@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Table, Select, Pagination, Button,Tabs  } from 'antd';
+import { Layout, Breadcrumb, Table, Select, Pagination, Button, Tabs } from 'antd';
 import './user.css';
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -8,12 +8,14 @@ import { NavLink } from "react-router-dom";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
-import {getUserModulePersonalDetailsAction,
+import {
+    getUserModulePersonalDetailsAction,
     getUserModulePersonalByCompetitionAction, getUserModuleRegistrationAction,
     getUserModuleMedicalInfoAction, getUserModuleActivityPlayerAction,
-    getUserModuleActivityParentAction,getUserModuleActivityScorerAction,
-    getUserModuleActivityManagerAction} from "../../store/actions/userAction/userAction";
-import {getOrganisationData } from "../../util/sessionStorage";
+    getUserModuleActivityParentAction, getUserModuleActivityScorerAction,
+    getUserModuleActivityManagerAction
+} from "../../store/actions/userAction/userAction";
+import { getOrganisationData } from "../../util/sessionStorage";
 import moment from 'moment';
 import history from '../../util/history'
 import { liveScore_formateDate } from '../../themes/dateformate'
@@ -78,7 +80,7 @@ const columnsPlayer = [
         render: (stateDate, record, index) => {
             return (
                 <div>
-                   {stateDate!= null ? moment(stateDate).format("DD/MM/YYYY") : ""}
+                    {stateDate != null ? moment(stateDate).format("DD/MM/YYYY") : ""}
                 </div>
             )
         }
@@ -150,7 +152,7 @@ const columnsParent = [
         render: (dateOfBirth, record, index) => {
             return (
                 <div>
-                   {dateOfBirth!= null ? moment(dateOfBirth).format("DD/MM/YYYY") : ""}
+                    {dateOfBirth != null ? moment(dateOfBirth).format("DD/MM/YYYY") : ""}
                 </div>
             )
         }
@@ -184,7 +186,7 @@ const columnsScorer = [
         render: (startTime, record, index) => {
             return (
                 <div>
-                   {startTime!= null ? moment(startTime).format("DD/MM/YYYY") : ""}
+                    {startTime != null ? moment(startTime).format("DD/MM/YYYY") : ""}
                 </div>
             )
         }
@@ -236,7 +238,7 @@ const columnsManager = [
         render: (startTime, record, index) => {
             return (
                 <div>
-                   {startTime!= null ? moment(startTime).format("DD/MM/YYYY") : ""}
+                    {startTime != null ? moment(startTime).format("DD/MM/YYYY") : ""}
                 </div>
             )
         }
@@ -379,40 +381,40 @@ const columnsFriends = [
     },
 ];
 
-class UserModulePersonalDetail extends Component{
+class UserModulePersonalDetail extends Component {
     constructor(props) {
         super(props);
         this.state = {
             userId: 0,
             tabKey: "1",
             competition: {
-                team:{teamId: 0, teamName: ""},
-                divisionName: "",competitionId: null,
-                competitionName:"",year:0
+                team: { teamId: 0, teamName: "" },
+                divisionName: "", competitionId: null,
+                competitionName: "", year: 0
             },
+            screenKey:null,
             loading: false,
         }
     }
 
-    componentDidMount()
-    {
-        if(this.props.location.state != null && this.props.location.state!= undefined){
+    componentDidMount() {
+        if (this.props.location.state != null && this.props.location.state != undefined) {
             let userId = this.props.location.state.userId;
-            this.setState({ userId: userId});
+            let screenKey = this.props.location.state.screenKey;
+            this.setState({ userId: userId, screenKey: screenKey });
             this.apiCalls(userId);
-            if(this.state.tabKey == "1")
-            {
+            if (this.state.tabKey == "1") {
                 this.hanleActivityTableList(1, userId, this.state.competition, "parent");
             }
-            
+
         }
     }
 
-    componentDidUpdate(nextProps){
-        console.log("Component componentDidUpdate"); 
-       
-       let userState = this.props.userState;
-       let personal = userState.personalData;
+    componentDidUpdate(nextProps) {
+        console.log("Component componentDidUpdate");
+
+        let userState = this.props.userState;
+        let personal = userState.personalData;
         if (userState.onLoad === false && this.state.loading === true) {
             if (!userState.error) {
                 this.setState({
@@ -421,11 +423,10 @@ class UserModulePersonalDetail extends Component{
             }
         }
 
-        if(this.state.competition.competitionId == null && personal.competitions != undefined && 
-            personal.competitions.length > 0)
-        {
-            this.setState({competition: personal.competitions[0]})
-            this.tabApiCalls(this.state.tabKey,personal.competitions[0], this.state.userId );
+        if (this.state.competition.competitionId == null && personal.competitions != undefined &&
+            personal.competitions.length > 0) {
+            this.setState({ competition: personal.competitions[0] })
+            this.tabApiCalls(this.state.tabKey, personal.competitions[0], this.state.userId);
         }
     }
 
@@ -438,12 +439,12 @@ class UserModulePersonalDetail extends Component{
         this.props.getUserModulePersonalDetailsAction(payload);
     };
 
-    onChangeSetValue = (value) =>{
+    onChangeSetValue = (value) => {
         let userState = this.props.userState;
         let personal = userState.personalData;
 
-        let competition = personal.competitions.find(x=>x.competitionId === value);
-        this.setState({competition: competition});
+        let competition = personal.competitions.find(x => x.competitionId === value);
+        this.setState({ competition: competition });
         this.tabApiCalls(this.state.tabKey, competition, this.state.userId);
     }
 
@@ -458,60 +459,59 @@ class UserModulePersonalDetail extends Component{
             userId: userId,
             competitionId: competition.competitionId
         }
-        if(tabKey == "1")
-        {
+        if (tabKey == "1") {
             this.hanleActivityTableList(1, userId, competition, "player");
             this.hanleActivityTableList(1, userId, competition, "parent");
             this.hanleActivityTableList(1, userId, competition, "scorer");
             this.hanleActivityTableList(1, userId, competition, "manager");
         }
-        if(tabKey === "3"){
+        if (tabKey === "3") {
             this.props.getUserModulePersonalByCompetitionAction(payload)
         }
-        else if(tabKey === "4"){
+        else if (tabKey === "4") {
             this.props.getUserModuleMedicalInfoAction(payload)
         }
-        else if(tabKey === "5"){
+        else if (tabKey === "5") {
             this.handleRegistrationTableList(1, userId, competition);
-            
+
         }
     }
 
     hanleActivityTableList = (page, userId, competition, key) => {
-        let filter = 
+        let filter =
         {
             competitionId: competition.competitionId,
             organisationId: getOrganisationData().organisationUniqueKey,
             userId: userId,
-            paging : {
-                limit : 10,
-                offset: (page ? (10 * (page -1)) : 0)
+            paging: {
+                limit: 10,
+                offset: (page ? (10 * (page - 1)) : 0)
             }
         }
-        if(key == "player")
+        if (key == "player")
             this.props.getUserModuleActivityPlayerAction(filter);
-        if(key == "parent")
+        if (key == "parent")
             this.props.getUserModuleActivityParentAction(filter);
-        if(key == "scorer")
+        if (key == "scorer")
             this.props.getUserModuleActivityScorerAction(filter);
-        if(key == "manager")
+        if (key == "manager")
             this.props.getUserModuleActivityManagerAction(filter);
     }
 
     handleRegistrationTableList = (page, userId, competition) => {
-        let filter = 
+        let filter =
         {
             competitionId: competition.competitionId,
             userId: userId,
-            paging : {
-                limit : 10,
-                offset: (page ? (10 * (page -1)) : 0)
+            paging: {
+                limit: 10,
+                offset: (page ? (10 * (page - 1)) : 0)
             }
         }
         this.props.getUserModuleRegistrationAction(filter)
     };
 
-     headerView = () => {
+    headerView = () => {
         return (
             <Header className="comp-player-grades-header-view container mb-n3" >
                 <div className="row" >
@@ -528,50 +528,50 @@ class UserModulePersonalDetail extends Component{
     leftHandSideView = () => {
         let userState = this.props.userState;
         let personal = userState.personalData;
-       
+
         return (
             <div className="fluid-width mt-2" >
 
-            <div className='profile-image-view mr-5' >
-                {/* <span className="user-contact-heading">{AppConstants.playerProfile}</span> */}
-                {
-                    personal.photoUrl ?
-                        <img className="live-score-user-image" src={personal.photoUrl} alt="" height="80" width="80" />
-                        :
-                        <span className="user-contact-heading">{AppConstants.noImage}</span>
+                <div className='profile-image-view mr-5' >
+                    {/* <span className="user-contact-heading">{AppConstants.playerProfile}</span> */}
+                    {
+                        personal.photoUrl ?
+                            <img className="live-score-user-image" src={personal.photoUrl} alt="" height="80" width="80" />
+                            :
+                            <span className="user-contact-heading">{AppConstants.noImage}</span>
 
-                }
-                <span className="user-contact-heading">{personal.firstName + " " + personal.lastName}</span>
-                <span className="year-select-heading pt-0">{'#' + personal.userId}</span>
-            </div>
-
-
-            <div className="live-score-profile-img-view">
-                <div className="live-score-side-desc-view">
-                    <div className="live-score-title-icon-view">
-                        <div className="live-score-icon-view">
-                            <img src={AppImages.calendar} alt="" height="16" width="16" />
-                        </div>
-                        <span className='year-select-heading ml-3'>{AppConstants.dateOfBirth}</span>
-                    </div>
-                    <span className="live-score-desc-text side-bar-profile-data">{liveScore_formateDate(personal.dateOfBirth) == "Invalid date" ? "" : liveScore_formateDate(personal.dateOfBirth)}</span>
+                    }
+                    <span className="user-contact-heading">{personal.firstName + " " + personal.lastName}</span>
+                    <span className="year-select-heading pt-0">{'#' + personal.userId}</span>
                 </div>
-                <div className="live-score-side-desc-view">
-                    <div className="live-score-title-icon-view">
-                        <div className="live-score-icon-view">
-                            <img src={AppImages.callAnswer} alt="" height="16" width="16" />
+
+
+                <div className="live-score-profile-img-view">
+                    <div className="live-score-side-desc-view">
+                        <div className="live-score-title-icon-view">
+                            <div className="live-score-icon-view">
+                                <img src={AppImages.calendar} alt="" height="16" width="16" />
+                            </div>
+                            <span className='year-select-heading ml-3'>{AppConstants.dateOfBirth}</span>
                         </div>
-                        <span className='year-select-heading ml-3'>{AppConstants.contactNumber}</span>
+                        <span className="live-score-desc-text side-bar-profile-data">{liveScore_formateDate(personal.dateOfBirth) == "Invalid date" ? "" : liveScore_formateDate(personal.dateOfBirth)}</span>
                     </div>
-                    <span className="live-score-desc-text side-bar-profile-data">{personal.mobileNumber}</span>
-                </div>
-                <div className="live-score-side-desc-view">
-                    <div className="live-score-title-icon-view">
-                        <div className="live-score-icon-view">
-                            <img src={AppImages.circleOutline} alt="" height="16" width="16" />
+                    <div className="live-score-side-desc-view">
+                        <div className="live-score-title-icon-view">
+                            <div className="live-score-icon-view">
+                                <img src={AppImages.callAnswer} alt="" height="16" width="16" />
+                            </div>
+                            <span className='year-select-heading ml-3'>{AppConstants.contactNumber}</span>
                         </div>
-                        <span className='year-select-heading ml-3'>{AppConstants.competition}</span>
+                        <span className="live-score-desc-text side-bar-profile-data">{personal.mobileNumber}</span>
                     </div>
+                    <div className="live-score-side-desc-view">
+                        <div className="live-score-title-icon-view">
+                            <div className="live-score-icon-view">
+                                <img src={AppImages.circleOutline} alt="" height="16" width="16" />
+                            </div>
+                            <span className='year-select-heading ml-3'>{AppConstants.competition}</span>
+                        </div>
                         <Select
                             style={{ width: "100%", paddingRight: 1, paddingTop: '15px' }}
                             onChange={(e) => this.onChangeSetValue(e)}
@@ -580,31 +580,31 @@ class UserModulePersonalDetail extends Component{
                                 <Option key={comp.competitionId} value={comp.competitionId}>{comp.competitionName}</Option>
                             ))}
                         </Select>
-                </div>
-                <div className="live-score-side-desc-view">
-                    <div className="live-score-title-icon-view">
-                        <div className="live-score-icon-view">
-                            <img src={AppImages.group} height="16" width="16" alt="" />
-                        </div>
-                        <span className='year-select-heading ml-3'>{AppConstants.team}</span>
                     </div>
-                    {(this.state.competition.teams || []).map((item, index) => (
-                        <div key={item.teamId} className="live-score-desc-text side-bar-profile-data">{item.teamName}</div>
-                    ))}
-                    
-                </div>
-                <div className="live-score-side-desc-view">
-                    <div className="live-score-title-icon-view">
-                        <div className="live-score-icon-view">
-                            <img src={AppImages.circleOutline} alt="" height="16" width="16" />
+                    <div className="live-score-side-desc-view">
+                        <div className="live-score-title-icon-view">
+                            <div className="live-score-icon-view">
+                                <img src={AppImages.group} height="16" width="16" alt="" />
+                            </div>
+                            <span className='year-select-heading ml-3'>{AppConstants.team}</span>
                         </div>
-                        <span className='year-select-heading ml-3'>{AppConstants.division}</span>
+                        {(this.state.competition.teams || []).map((item, index) => (
+                            <div key={item.teamId} className="live-score-desc-text side-bar-profile-data">{item.teamName}</div>
+                        ))}
+
                     </div>
-                    <span className="live-score-desc-text side-bar-profile-data">{this.state.competition.divisionName}</span>
+                    <div className="live-score-side-desc-view">
+                        <div className="live-score-title-icon-view">
+                            <div className="live-score-icon-view">
+                                <img src={AppImages.circleOutline} alt="" height="16" width="16" />
+                            </div>
+                            <span className='year-select-heading ml-3'>{AppConstants.division}</span>
+                        </div>
+                        <span className="live-score-desc-text side-bar-profile-data">{this.state.competition.divisionName}</span>
+                    </div>
+
                 </div>
-               
             </div>
-        </div>
         )
     }
 
@@ -612,15 +612,15 @@ class UserModulePersonalDetail extends Component{
         let userState = this.props.userState;
         let activityPlayerList = userState.activityPlayerList;
         let total = userState.activityPlayerTotalCount;
-        return(
+        return (
             <div className="comp-dash-table-view mt-2" style={{ backgroundColor: "#f7fafc" }}>
                 <div className="user-module-row-heading">{AppConstants.playerHeading}</div>
                 <div className="table-responsive home-dash-table-view">
-                    <Table className="home-dashboard-table" 
-                    columns={columnsPlayer}
-                    dataSource={activityPlayerList} 
-                    pagination={false}
-                    loading={userState.activityPlayerOnLoad == true && true}
+                    <Table className="home-dashboard-table"
+                        columns={columnsPlayer}
+                        dataSource={activityPlayerList}
+                        pagination={false}
+                        loading={userState.activityPlayerOnLoad == true && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
@@ -639,13 +639,13 @@ class UserModulePersonalDetail extends Component{
         let userState = this.props.userState;
         let activityParentList = userState.activityParentList;
         let total = userState.activityParentTotalCount;
-        return(
+        return (
             <div className="comp-dash-table-view mt-2" style={{ backgroundColor: "#f7fafc" }}>
                 <div className="user-module-row-heading">{AppConstants.parentHeading}</div>
                 <div className="table-responsive home-dash-table-view">
                     <Table className="home-dashboard-table"
                         columns={columnsParent}
-                        dataSource={activityParentList} 
+                        dataSource={activityParentList}
                         pagination={false}
                         loading={userState.activityParentOnLoad == true && true}
                     />
@@ -666,15 +666,15 @@ class UserModulePersonalDetail extends Component{
         let userState = this.props.userState;
         let activityScorerList = userState.activityScorerList;
         let total = userState.activityScorerTotalCount;
-        return(
+        return (
             <div className="comp-dash-table-view mt-2" style={{ backgroundColor: "#f7fafc" }}>
                 <div className="user-module-row-heading">{AppConstants.scorerHeading}</div>
                 <div className="table-responsive home-dash-table-view">
                     <Table className="home-dashboard-table"
-                    columns={columnsScorer}
-                    dataSource={activityScorerList} 
-                    pagination={false}
-                    loading={userState.activityScorerOnLoad == true && true}
+                        columns={columnsScorer}
+                        dataSource={activityScorerList}
+                        pagination={false}
+                        loading={userState.activityScorerOnLoad == true && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
@@ -693,15 +693,15 @@ class UserModulePersonalDetail extends Component{
         let userState = this.props.userState;
         let activityManagerList = userState.activityManagerList;
         let total = userState.activityScorerTotalCount;
-        return(
+        return (
             <div className="comp-dash-table-view mt-2" style={{ backgroundColor: "#f7fafc" }}>
-                 <div className="user-module-row-heading">{AppConstants.managerHeading}</div>
+                <div className="user-module-row-heading">{AppConstants.managerHeading}</div>
                 <div className="table-responsive home-dash-table-view">
                     <Table className="home-dashboard-table"
-                    columns={columnsManager}
-                    dataSource={activityManagerList} 
-                    pagination={false}
-                    loading={userState.activityManagerOnLoad == true && true}
+                        columns={columnsManager}
+                        dataSource={activityManagerList}
+                        pagination={false}
+                        loading={userState.activityManagerOnLoad == true && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
@@ -727,36 +727,36 @@ class UserModulePersonalDetail extends Component{
     personalView = () => {
         let userState = this.props.userState;
         let personal = userState.personalData;
-        let personalByCompData = userState.personalByCompData!= null ? userState.personalByCompData : [];
+        let personalByCompData = userState.personalByCompData != null ? userState.personalByCompData : [];
         let primaryContacts = personalByCompData.length > 0 ? personalByCompData[0].primaryContacts : [];
         let friends = personalByCompData.length > 0 ? personalByCompData[0].friends : [];
         let referFriends = personalByCompData.length > 0 ? personalByCompData[0].referFriends : [];
-        return(
+        return (
             <div className="comp-dash-table-view mt-2">
                 <div className="user-module-row-heading">{AppConstants.address}</div>
                 <div className="table-responsive home-dash-table-view">
                     <Table className="home-dashboard-table"
-                    columns={columnsPersonalAddress}
-                    dataSource={personalByCompData} 
-                    pagination={false}
+                        columns={columnsPersonalAddress}
+                        dataSource={personalByCompData}
+                        pagination={false}
                     />
                 </div>
 
-                <div className="user-module-row-heading" style={{marginTop: '30px'}}>{AppConstants.primaryContact}</div>
+                <div className="user-module-row-heading" style={{ marginTop: '30px' }}>{AppConstants.primaryContact}</div>
                 <div className="table-responsive home-dash-table-view">
                     <Table className="home-dashboard-table"
-                    columns={columnsPersonalPrimaryContacts}
-                    dataSource={primaryContacts} 
-                    pagination={false}
+                        columns={columnsPersonalPrimaryContacts}
+                        dataSource={primaryContacts}
+                        pagination={false}
                     />
                 </div>
 
-                <div className="user-module-row-heading" style={{marginTop: '30px'}}>{AppConstants.emergencyContacts}</div>
+                <div className="user-module-row-heading" style={{ marginTop: '30px' }}>{AppConstants.emergencyContacts}</div>
                 <div className="table-responsive home-dash-table-view">
                     <Table className="home-dashboard-table"
-                    columns={columnsPersonalEmergency}
-                    dataSource={userState.personalEmergency} 
-                    pagination={false}
+                        columns={columnsPersonalEmergency}
+                        dataSource={userState.personalEmergency}
+                        pagination={false}
                     />
                 </div>
                 {/* <div className="user-module-row-heading"  style={{marginTop: '30px'}}>{AppConstants.friends}</div>
@@ -775,9 +775,9 @@ class UserModulePersonalDetail extends Component{
                     pagination={false}
                     />
                 </div> */}
-                <div className="user-module-row-heading" style={{marginTop: '30px'}}>{AppConstants.otherInformation}</div>
-                <div className="table-responsive home-dash-table-view" style={{display: 'flex', flexDirection: 'column'}}>
-                    <div className="other-info-row" style={{paddingTop: '10px'}}>
+                <div className="user-module-row-heading" style={{ marginTop: '30px' }}>{AppConstants.otherInformation}</div>
+                <div className="table-responsive home-dash-table-view" style={{ display: 'flex', flexDirection: 'column' }}>
+                    <div className="other-info-row" style={{ paddingTop: '10px' }}>
                         <div className="year-select-heading other-info-label" >{AppConstants.countryOfBirth}</div>
                         <div className="live-score-desc-text side-bar-profile-data other-info-font">{personal.countryName}</div>
                     </div>
@@ -790,8 +790,8 @@ class UserModulePersonalDetail extends Component{
                         <div className="live-score-desc-text side-bar-profile-data other-info-font">{personal.languages}</div>
                     </div>
                     <div className="other-info-row">
-                        <div className="year-select-heading other-info-label" style={{paddingBottom: '20px'}}>{AppConstants.disability}</div>
-                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personal.isDisability == 0 ? "No": "Yes"}</div>
+                        <div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.disability}</div>
+                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personal.isDisability == 0 ? "No" : "Yes"}</div>
                     </div>
                 </div>
             </div>
@@ -801,43 +801,43 @@ class UserModulePersonalDetail extends Component{
     medicalView = () => {
         let userState = this.props.userState;
         let medical = userState.medicalData;
-        return(
+        return (
             <div>
                 {
                     (medical || []).map((item, index) => (
                         <div key={item.id} className="table-responsive home-dash-table-view">
                             <div style={{ marginBottom: "1%", display: 'flex' }} >
                                 <div className="year-select-heading other-info-label col-sm-2">{AppConstants.existingMedConditions}</div>
-                                <div className="live-score-desc-text side-bar-profile-data other-info-font" style={{textAlign: 'left'}}>
+                                <div className="live-score-desc-text side-bar-profile-data other-info-font" style={{ textAlign: 'left' }}>
                                     {item.existingMedicalCondition}
                                 </div>
                             </div>
                             <div style={{ marginBottom: "3%", display: 'flex' }} >
                                 <div className="year-select-heading other-info-label col-sm-2">{AppConstants.redularMedicalConditions}</div>
-                                <div className="live-score-desc-text side-bar-profile-data other-info-font" style={{textAlign: 'left'}}>
+                                <div className="live-score-desc-text side-bar-profile-data other-info-font" style={{ textAlign: 'left' }}>
                                     {item.regularMedication}
                                 </div>
                             </div>
                         </div>
                     ))
                 }
-                
+
             </div>
         )
     }
 
     registrationView = () => {
         let userState = this.props.userState;
-        let userRegistrationList =  userState.userRegistrationList;
+        let userRegistrationList = userState.userRegistrationList;
         let total = userState.userRegistrationDataTotalCount;
-        return(
+        return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
-                    <Table className="home-dashboard-table" 
-                    columns={columns}
-                    dataSource={userRegistrationList} 
-                    pagination={false}
-                    loading={this.props.userState.userRegistrationOnLoad == true && true}
+                    <Table className="home-dashboard-table"
+                        columns={columns}
+                        dataSource={userRegistrationList}
+                        pagination={false}
+                        loading={this.props.userState.userRegistrationOnLoad == true && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
@@ -854,49 +854,58 @@ class UserModulePersonalDetail extends Component{
 
     friendsView = () => {
         let userState = this.props.userState;
-        let personalByCompData = userState.personalByCompData!= null ? userState.personalByCompData : [];
+        let personalByCompData = userState.personalByCompData != null ? userState.personalByCompData : [];
         let friends = personalByCompData.length > 0 ? personalByCompData[0].friends : [];
         let referFriends = personalByCompData.length > 0 ? personalByCompData[0].referFriends : [];
-        return(
+        return (
             <div className="comp-dash-table-view mt-2">
                 <div className="user-module-row-heading">{AppConstants.address}</div>
                 <div className="table-responsive home-dash-table-view">
                     <Table className="home-dashboard-table"
-                    columns={columnsFriends}
-                    dataSource={friends} 
-                    pagination={false}
+                        columns={columnsFriends}
+                        dataSource={friends}
+                        pagination={false}
                     />
                 </div>
                 <div className="user-module-row-heading">{AppConstants.address}</div>
                 <div className="table-responsive home-dash-table-view">
                     <Table className="home-dashboard-table"
-                    columns={columnsFriends}
-                    dataSource={referFriends} 
-                    pagination={false}
+                        columns={columnsFriends}
+                        dataSource={referFriends}
+                        pagination={false}
                     />
                 </div>
             </div>
         )
     }
-    
+
 
     headerView = () => {
         return (
-            <div>
-                <Header className="form-header-view" style={{
-                    backgroundColor: "transparent",
-                    display: "flex", paddingLeft: '0px',
-                    alignItems: "center",
-                }} >
-                    <Breadcrumb separator=" > ">
-                        {/* <NavLink to="/userGraphicalDashboard" >
+            <div className="row" >
+                <div className="col-sm">
+                    <Header className="form-header-view" style={{
+                        backgroundColor: "transparent",
+                        display: "flex", paddingLeft: '0px',
+                        alignItems: "center",
+                    }} >
+                        <Breadcrumb separator=" > ">
+                            {/* <NavLink to="/userGraphicalDashboard" >
                             <Breadcrumb.Item separator=">" className="breadcrumb-product">{AppConstants.user}</Breadcrumb.Item>
                         </NavLink> */}
-                        <NavLink to="/userTextualDashboard" >
-                            <div className="breadcrumb-product">{AppConstants.userProfile}</div>
-                        </NavLink>
-                    </Breadcrumb>
-                </Header >
+                            <NavLink to="/userTextualDashboard" >
+                                <div className="breadcrumb-product">{AppConstants.userProfile}</div>
+                            </NavLink>
+                        </Breadcrumb>
+                    </Header >
+                </div>
+             {this.state.screenKey == "livescore" &&  <div className="col-sm">
+                    <div className="comp-buttons-view mt-4" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+                        <Button onClick={()=>history.push("/liveScoreCompetitions")} className='primary-add-comp-form' type='primary'>
+                            {AppConstants.backToLiveScore}
+                        </Button>
+                    </div>
+                </div>}
             </div>
         )
     }
@@ -913,7 +922,7 @@ class UserModulePersonalDetail extends Component{
                                 <div className="col-sm-3 " style={{ marginBottom: "7%" }} >
                                     {this.leftHandSideView()}
                                 </div>
-                                
+
                                 <div className="col-sm-9" style={{ backgroundColor: "#f7fafc", }}>
                                     <div>{this.headerView()}</div>
                                     <div className="inside-table-view mt-4" >
@@ -950,8 +959,7 @@ class UserModulePersonalDetail extends Component{
 
 }
 
-function mapDispatchToProps(dispatch)
-{
+function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getUserModulePersonalDetailsAction,
         getUserModuleMedicalInfoAction,
@@ -966,10 +974,10 @@ function mapDispatchToProps(dispatch)
 
 }
 
-function mapStatetoProps(state){
+function mapStatetoProps(state) {
     return {
         userState: state.UserState
     }
 }
 
-export default connect(mapStatetoProps,mapDispatchToProps)(UserModulePersonalDetail);
+export default connect(mapStatetoProps, mapDispatchToProps)(UserModulePersonalDetail);

@@ -502,15 +502,9 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token)
     },
     /// get Game Time statistics api
-    umpiresList(competitionId, offset) {
-        let Body = {
-            "paging": {
-                "limit": 10,
-                "offset": `${offset}`
-            }
-        }
+    umpiresList(competitionId, body) {
         var url = `/matchUmpires/admin?competitionId=${competitionId}`;
-        return Method.dataPost(url, token, Body)
+        return Method.dataPost(url, token, body)
     },
 
 

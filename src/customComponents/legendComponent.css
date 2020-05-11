@@ -1,13 +1,15 @@
 @import "../themes/colorVariables.css";
 
 .legend-main-div{
-    /* background-color: aqua; */
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     white-space: initial;
-    word-wrap: break-word
+    word-wrap: break-word;
+    float: left; 
+    clear: both;
+    padding-right: 15px;
 }
 
 .legend-color-text-div{
@@ -33,13 +35,13 @@
     font-weight: 500;
     font-family: inter-medium;
     padding-left: 10px;
-    white-space: initial;
+    white-space: nowrap;
     word-wrap: break-word
 }
 
 .draws-legend-view{
-    /* background-color: burlywood; */
        display: flex;
        margin: 50px 20px 20px 50px;
        justify-content: center;
+       float: left; 
 }
