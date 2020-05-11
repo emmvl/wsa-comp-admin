@@ -312,7 +312,7 @@ class CompetitionOpenRegForm extends Component {
                                             placeholder={"Select"}
                                             disabled={this.state.permissionState.divisionsDisable}
                                         >
-                                            {this.props.commonReducerState.genderData.map(item => {
+                                            {this.props.commonReducerState.genderDataEnum.map(item => {
                                                 return (
                                                     <Option key={item.id} value={item.id}>
                                                         {item.description}

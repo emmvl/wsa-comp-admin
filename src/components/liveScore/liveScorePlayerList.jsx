@@ -32,7 +32,7 @@ const columns = [
         title: 'Profile Picture',
         dataIndex: 'profilePicture',
         key: 'profilePicture',
-        sorter: (a, b) => tableSort(a,b, "profilePicture"),
+        sorter: (a, b) => tableSort(a, b, "profilePicture"),
         render: (profilePicture) => {
             return (
                 profilePicture ? <img className="live-score-user-image" src={profilePicture} alt="" height="70" width="70" /> : <span>{AppConstants.noImage}</span>
@@ -44,14 +44,14 @@ const columns = [
         title: 'Player Id',
         dataIndex: 'playerId',
         key: 'playerId',
-        sorter: (a, b) => tableSort(a,b, "playerId"),
+        sorter: (a, b) => tableSort(a, b, "playerId"),
 
     },
     {
         title: 'First Name',
         dataIndex: 'firstName',
         key: 'firstsName',
-        sorter: (a, b) => tableSort(a,b, "firstName"),
+        sorter: (a, b) => tableSort(a, b, "firstName"),
         render: (firstName, record) =>
             <NavLink to={{
                 pathname: '/liveScorePlayerView',
@@ -64,7 +64,7 @@ const columns = [
         title: 'Last Name',
         dataIndex: 'lastName',
         key: 'lastName',
-        sorter: (a, b) => tableSort(a,b, "lastName"),
+        sorter: (a, b) => tableSort(a, b, "lastName"),
         render: (lastName, record) =>
             <NavLink to={{
                 pathname: '/liveScorePlayerView',
@@ -77,7 +77,7 @@ const columns = [
         title: 'DOB',
         dataIndex: 'dob',
         key: 'dob',
-        sorter: (a, b) => tableSort(a,b, "dob"),
+        sorter: (a, b) => tableSort(a, b, "dob"),
         render: (dob) =>
             <span  >{dob ? liveScore_formateDate(dob) : ""}</span>
     },
@@ -85,7 +85,7 @@ const columns = [
         title: 'Division',
         dataIndex: 'division',
         key: 'division',
-        sorter: (a, b) => tableSort(a,b, "division"),
+        sorter: (a, b) => tableSort(a, b, "division"),
         render: (division) =>
             <span  >{division.name}</span>
     },
@@ -93,7 +93,7 @@ const columns = [
         title: 'Team',
         dataIndex: 'team',
         key: 'team',
-        sorter: (a, b) =>  tableSort(a,b, "team"),
+        sorter: (a, b) => tableSort(a, b, "team"),
         render: (team, record) =>
             <NavLink to={{
                 pathname: "/liveScoreTeamView",
@@ -106,7 +106,7 @@ const columns = [
         title: 'Contact No',
         dataIndex: 'phoneNumber',
         key: 'phoneNumber',
-        sorter: (a, b) =>  tableSort(a,b, "phoneNumber"),
+        sorter: (a, b) => tableSort(a, b, "phoneNumber"),
     },
 
 ];
@@ -117,7 +117,7 @@ class LiveScorePlayerList extends Component {
         super(props);
         this.state = {
             competitionid: null,
-            searchText:""
+            searchText: ""
         }
     }
 
@@ -176,7 +176,7 @@ class LiveScorePlayerList extends Component {
     onChangeSearchText = (e) => {
         this.setState({ searchText: e.target.value })
         if (e.target.value == null || e.target.value == "") {
-            this.props.playerListWithPagginationAction(this.state.competitionid, 0, 10,  e.target.value)
+            this.props.playerListWithPagginationAction(this.state.competitionid, 0, 10, e.target.value)
         }
     }
 
@@ -184,7 +184,7 @@ class LiveScorePlayerList extends Component {
     onKeyEnterSearchText = (e) => {
         var code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
-            this.props.playerListWithPagginationAction(this.state.competitionid, 0, 10,  this.state.searchText)
+            this.props.playerListWithPagginationAction(this.state.competitionid, 0, 10, this.state.searchText)
         }
     }
 
@@ -193,7 +193,7 @@ class LiveScorePlayerList extends Component {
         if (this.state.searchText == null || this.state.searchText == "") {
         }
         else {
-            this.props.playerListWithPagginationAction(this.state.competitionid, 0, 10,  this.state.searchText)
+            this.props.playerListWithPagginationAction(this.state.competitionid, 0, 10, this.state.searchText)
         }
     }
     ///////view for breadcrumb
@@ -208,22 +208,10 @@ class LiveScorePlayerList extends Component {
                                 {AppConstants.palyerList}
                             </span>
                         </div>
-                        <div className="col-sm pt-1" style={{  display: "flex", justifyContent: 'flex-end' }} >
-                                    <div className="comp-product-search-inp-width" >
-                                        <Input className="product-reg-search-input"
-                                            onChange={(e) => this.onChangeSearchText(e)}
-                                            placeholder="Search..."
-                                            onKeyPress={(e) => this.onKeyEnterSearchText(e)}
-                                            prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                                onClick={() => this.onClickSearchIcon()}
-                                            />}
-                                            allowClear
-                                        />
-                                    </div>
-                                </div>
-                        <div className="col-sm-3" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
+
+                        <div className="col-sm" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
                             <div className="row">
-                              
+
                                 <div className="col-sm pt-1">
                                     <div
                                         className="comp-dashboard-botton-view-mobile"
@@ -295,6 +283,19 @@ class LiveScorePlayerList extends Component {
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div className="mt-5" style={{ display: "flex", justifyContent: 'flex-end' }} >
+                        <div className="comp-product-search-inp-width" >
+                            <Input className="product-reg-search-input"
+                                onChange={(e) => this.onChangeSearchText(e)}
+                                placeholder="Search..."
+                                onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                    onClick={() => this.onClickSearchIcon()}
+                                />}
+                                allowClear
+                            />
                         </div>
                     </div>
                 </div>

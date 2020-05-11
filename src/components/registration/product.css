@@ -71,6 +71,7 @@
   padding-bottom: 40px;
 }
 
+
 .form-heading {
   display: flex;
   align-content: flex-start;
@@ -571,7 +572,72 @@ input[type=number] {
   /* justify-content: center */
 }
 
+.invoice-row-view{
+ display: flex;
+ flex-wrap: wrap;
+ margin-right:-15px;
+ margin-left: -15px
+ 
+}
+.invoice-col-View{
+  flex-basis: 0;
+  flex-grow: 1;
+  max-width: 100%;
+  position: relative;
+  width: 100%
+}
+
+.invoice-col-View-30{
+  flex-basis: 0;
+  flex-grow: 1;
+  max-width: 100%;
+  position: relative;
+  width: 100%
+
+}
+.invoice-total{
+  display: flex;
+  width: 85%;
+  justify-content: flex-end
+}
+.invoice-total-Amount{
+display: flex;
+  width: 15%;
+  justify-content: flex-end
+}
+.drop-reverse{
+  display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+
 @media (max-width: 767px) {
+  .invoice-total{
+    display: flex;
+  width: 70%;
+  justify-content: flex-end
+  }
+  .drop-reverse{
+    display: flex;
+    flex-wrap: wrap-reverse;
+    margin-right: -15px;
+    margin-left: -15px;
+  }
+  .invoice-total-Amount{
+    display: flex;
+      width: 30%;
+      justify-content: center
+    }
+.invoice-col-View-30{
+  max-width: 30%;
+  width: 30%;
+  align-self: center;
+}
+.invoice{
+  justify-content: center
+}
   .reg-add-save-button {
     display: flex;
     justify-content: center;
@@ -598,6 +664,15 @@ input[type=number] {
 .login-formView {
   width: 100%;
 }
+.invoice-description{
+  display: none
+}
+.invoice-col-View{
+  position: relative;
+  width: 70%;
+  }
+
+  
 }
 
 .another-competition{

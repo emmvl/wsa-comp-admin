@@ -560,8 +560,6 @@ class LiveScoreAddTeam extends Component {
                 if (this.props.liveScoreTeamState.managerType === 'existing') {
                     const formData = new FormData();
 
-
-
                     if (this.state.teamId !== null) {
                         formData.append('id', this.state.teamId)
                     }
