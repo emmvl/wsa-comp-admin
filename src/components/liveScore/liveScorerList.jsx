@@ -14,11 +14,10 @@ import history from '../../util/history'
 
 
 function getName(item) {
-
     var name = item.name;
-    console.log(name, "itemmmm")
     return name;
 }
+
 const { Content, Footer } = Layout;
 const columns = [
 
@@ -110,7 +109,7 @@ const columns = [
 ];
 
 const { id } = 1
-// JSON.parse(getLiveScoreCompetiton())
+
 class LiveScorerList extends Component {
     constructor(props) {
         super(props);
@@ -122,7 +121,7 @@ class LiveScorerList extends Component {
     }
 
     componentDidMount() {
-        // let competitionId = getCompetitonId()
+     
         const body =
         {
             "paging": {

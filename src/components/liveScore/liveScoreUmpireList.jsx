@@ -103,14 +103,23 @@ class LiveScoreUmpireList extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            searchText: ""
         };
     }
 
     componentDidMount() {
-        // let competitionId = getCompetitonId()
+
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
-            this.handleUmpireTableList(1, id)
+            const body =
+            {
+                "paging": {
+                    "limit": 10,
+                    "offset": 0
+                },
+                "search": this.state.searchText
+            }
+            this.props.liveScoreUmpiresListAction(id, body)
         } else {
             history.push("/")
         }
@@ -119,8 +128,68 @@ class LiveScoreUmpireList extends Component {
     handleUmpireTableList(page, competitionId) {
 
         let offset = page ? 10 * (page - 1) : 0
-        this.props.liveScoreUmpiresListAction(competitionId, offset)
+        const body =
+        {
+            "paging": {
+                "limit": 10,
+                "offset": offset
+            },
+        }
 
+        this.props.liveScoreUmpiresListAction(competitionId, body)
+
+    }
+
+    // on change search text
+    onChangeSearchText = (e) => {
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        this.setState({ searchText: e.target.value })
+        if (e.target.value == null || e.target.value == "") {
+            const body =
+            {
+                "paging": {
+                    "limit": 10,
+                    "offset": 0
+                },
+                "search": e.target.value
+            }
+
+            this.props.liveScoreUmpiresListAction(id, body)
+        }
+    }
+
+    // search key 
+    onKeyEnterSearchText = (e) => {
+        var code = e.keyCode || e.which;
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        if (code === 13) { //13 is the enter keycode
+            const body =
+            {
+                "paging": {
+                    "limit": 10,
+                    "offset": 0
+                },
+                "search": e.target.value
+            }
+            this.props.liveScoreUmpiresListAction(id, body)
+        }
+    }
+    // on click of search icon
+    onClickSearchIcon = () => {
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        if (this.state.searchText == null || this.state.searchText == "") {
+        }
+        else {
+            const body =
+            {
+                "paging": {
+                    "limit": 10,
+                    "offset": 0
+                },
+                "search": this.state.searchText
+            }
+            this.props.liveScoreUmpiresListAction(id, body)
+        }
     }
 
     ///////view for breadcrumb
@@ -153,11 +222,11 @@ class LiveScoreUmpireList extends Component {
                                     <div className="col-sm pt-0 " style={{ display: "flex", justifyContent: 'flex-end', }} >
                                         <div className="comp-product-search-inp-width" >
                                             <Input className="product-reg-search-input"
-                                                // onChange={(e) => this.onChangeSearchText(e)}
+                                                onChange={(e) => this.onChangeSearchText(e)}
                                                 placeholder="Search..."
-                                                // onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                                onKeyPress={(e) => this.onKeyEnterSearchText(e)}
                                                 prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                                // onClick={() => this.onClickSearchIcon()}
+                                                onClick={() => this.onClickSearchIcon()}
                                                 />}
                                                 allowClear
                                             />
@@ -189,7 +258,6 @@ class LiveScoreUmpireList extends Component {
     ////////tableView view for Umpire list
     tableView = () => {
         const { umpiresListResult } = this.props.liveScoreUmpiresState
-        console.log(umpiresListResult, "umpiresListResult")
         const { id } = JSON.parse(getLiveScoreCompetiton())
 
         let dataSource = umpiresListResult ? umpiresListResult.matchUmpires : []

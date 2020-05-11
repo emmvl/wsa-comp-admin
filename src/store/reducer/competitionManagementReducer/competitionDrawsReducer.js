@@ -27,18 +27,20 @@ const lightGray = '#999999';
 var legandsArray = [];
 
 function createLagendsArray(drawsArray, currentLagends) {
-
   let newArray = currentLagends
   for (let i in drawsArray) {
-    let color = drawsArray[i].colorCode
-    let index = currentLagends.findIndex((x) => x.colorCode === color)
-    let object = {
-      "colorCode": color,
-      "gradeName": drawsArray[i].gradeName
+    for (let j in drawsArray[i].slotsArray) {
+      let color = drawsArray[i].slotsArray[j].colorCode
+      let index = currentLagends.findIndex((x) => x.colorCode === color)
+      let object = {
+        "colorCode": color,
+        "gradeName": color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName
+      }
+      if (index === -1) {
+        newArray.push(object)
+      }
     }
-    if (index === -1) {
-      newArray.push(object)
-    }
+
   }
   console.log(newArray)
   return newArray
@@ -678,7 +680,7 @@ function CompetitionDraws(state = initialState, action) {
       state.isTeamInDraw = action.result[0].isTeamNotInDraws
       let drawsSorted = resultData.mainCourtNumberArray
       legandsArray = []
-      legandsArray = createLagendsArray(drawsSorted[0].slotsArray, legandsArray)
+      legandsArray = createLagendsArray(drawsSorted, legandsArray)
       state.legandsArray = legandsArray
       return {
         ...state,

@@ -993,6 +993,7 @@ const AppConstants = {
   teamB: "Team B",
   lockedDraws: "Locked Draws",
   year2020: "2020",
+  backToLiveScore:"Back To Live Score"
 };
 
 export default AppConstants;

@@ -41,6 +41,8 @@ import {
 } from "../../util/sessionStorage"
 import moment from "moment"
 import ValidationConstants from "../../themes/validationConstant"
+import LegendComponent from '../../customComponents/legendComponent';
+import { isArrayNotEmpty } from "../../util/helpers";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -624,7 +626,7 @@ class CompetitionDrawEdit extends Component {
         let topMargin = 0;
         let topMarginHomeTeam = 36;
         let topMarginAwayTeam = 84;
-
+        let legendsData = isArrayNotEmpty(this.props.drawsState.legandsArray) ? this.props.drawsState.legandsArray : []
         return (
             <div className="draggable-wrap draw-data-table">
                 <div className="scroll-bar">
@@ -785,6 +787,10 @@ class CompetitionDrawEdit extends Component {
                             );
                         })}
                     </div>
+                </div>
+                <div className="draws-legend-view">
+                    {/* <LegendComponent legendArray={Array(10).fill(legendsData).flat()} /> */}
+                    <LegendComponent legendArray={legendsData} />
                 </div>
             </div>
         );

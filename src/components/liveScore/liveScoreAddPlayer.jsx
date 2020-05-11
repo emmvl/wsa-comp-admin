@@ -47,7 +47,7 @@ class LiveScoreAddPlayer extends Component {
             teamId: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord.id : null : null,
             timeout: null
         };
-        console.log(this.props.location, '^^^^^**')
+
     }
 
     componentDidMount() {
@@ -76,7 +76,7 @@ class LiveScoreAddPlayer extends Component {
             this.props.liveScoreUpdatePlayerDataAction('', 'addplayerScreen')
             let teamsId = this.state.teamId ? this.state.teamId : this.props.location.state ? this.props.location.state.teamId : null
             const { playerData } = this.props.liveScorePlayerState
-            console.log(teamsId, 'teamsId&$')
+         
             playerData.phoneNumber = ""
             playerData.dateOfBirth = ""
 
@@ -90,7 +90,6 @@ class LiveScoreAddPlayer extends Component {
 
     setInitalFiledValue() {
         const { playerData } = this.props.liveScorePlayerState
-        console.log(playerData, 'playerData##', this.state.teamId)
         this.props.form.setFieldsValue({
             'firstName': playerData.firstName,
             'lastName': playerData.lastName,
