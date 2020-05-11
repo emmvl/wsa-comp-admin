@@ -845,7 +845,7 @@ class UserModulePersonalDetail extends Component{
                         className="antd-pagination"
                         current={userState.userRegistrationDataPage}
                         total={total}
-                        onChange={(page) => this.handleRegistrationTableList(page)}
+                        onChange={(page) => this.handleRegistrationTableList(page,this.state.userId, this.state.competition)}
                     />
                 </div>
             </div>
