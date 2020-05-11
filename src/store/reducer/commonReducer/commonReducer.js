@@ -30,7 +30,7 @@ const initialState = {
     venuesList: [],
     venuesListPage: 1,
     venuesListTotalCount: 1,
-    genderData: [{
+    genderDataEnum: [{
         description: "Male",
         id: 2,
         name: "male",
@@ -41,6 +41,7 @@ const initialState = {
         name: "female",
     }
     ],
+    genderData: [],
     getInvoicedata: [],
     photoTypeData: [],
     applyToData: [],
