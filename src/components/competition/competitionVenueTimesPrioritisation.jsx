@@ -147,6 +147,12 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     this.setFormFieldsMatchPreference();
                 }
 
+            if(venueConstrainstData.isLDDeleteHappened!= undefined && 
+                venueConstrainstData.isLDDeleteHappened == true){
+                    this.onChangeSetLDValue(false, 'isLDDeleteHappened', 0);
+                    //this.setFormFieldsLockedDraws();
+                }
+
             if(this.props.venueTimeState.onLoad == false && this.state.saveContraintLoad == true){
                 this.setState({saveContraintLoad: false});
                 this.props.venueConstraintListAction(this.state.yearRefId, this.state.firstTimeCompId, 1);
@@ -712,16 +718,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
         this.props.updateVenueConstraintsData(null, null, 'addMatchPreference', 'matchPreference')
     }
 
-    removeDetail = (index, deleteModal) => {
-        let message = "";
-        if(deleteModal == "matchPreference"){
-            message = "Do you want to delete a match preference?"
-        }
-        else{
-            message = "Do you want to unlock the draw?"
-        }
-        this.setState({currentIndex: index, deleteModalVisible: true, modalMessage: message,
-                    currentModal: deleteModal});
+    removeDetail = (index, currentModal) => {
+        this.setState({currentIndex: index, deleteModalVisible: true, currentModal: currentModal});
     }
 
     onChangeSetMPValue = (val, key, index) =>{
@@ -957,7 +955,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                 </div>
                 ))}
                  <span className="input-heading-add-another" onClick={()=> this.addMatchPreference()}>
-                        + {AppConstants.addAnother}
+                        + {AppConstants.addPreference}
                     </span>
             </div>
         )
@@ -966,20 +964,22 @@ class CompetitionVenueTimesPrioritisation extends Component {
     lockedGradesView = (getFieldDecorator) =>{
         const { venueConstrainstData, venuePost } = this.props.venueTimeState;
         console.log("venueConstrainstData.lockedDraws" + JSON.stringify(venueConstrainstData.lockedDraws));
-        
+        let lockedDraws = venueConstrainstData.lockedDraws!= null ? venueConstrainstData.lockedDraws : [];
         return (
             <div className="content-view" style={{paddingTop: '30px'}}>
                 <span className="applicable-to-heading" style={{paddingTop: '0px', paddingBottom: '20px'}}>{AppConstants.lockedDraws}</span>
-                {(venueConstrainstData.lockedDraws || []).map((item, index) => (
+                {(lockedDraws || []).map((item, index) => (
+                <div>
+                {item.isLocked ? 
                 <div className="fluid-width comp-venue-time-inside-container-view" style={{marginBottom: '20px'}}>
-                    {item.isLocked ? 
+                    
                      <div className="col-sm delete-image-view pb-4" onClick={() => this.removeDetail(index, "lockedDraws")}>
                         <span className="user-remove-btn">
                             <i className="fa fa-trash-o" aria-hidden="true"></i>
                         </span>
                         <span style={{ cursor: 'pointer' }} className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
                     </div>
-                    : null }
+                   
                     <div className="row" >
                         <div className="col-sm-3" >
                             <InputWithHead heading={AppConstants.division}  required={"required-field"} />
@@ -1129,6 +1129,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         </div>
                     </div>
                 </div>
+                : null }
+                </div>
                 ))}
                  {/* <span className="input-heading-add-another" onClick={()=> this.addMatchPreference()}>
                         + {AppConstants.addAnother}
@@ -1153,11 +1155,11 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     {this.homeTeamRotationView()}
 
                     <Modal
-                        title="Venues"
+                        title={AppConstants.removeFixture}
                         visible={this.state.deleteModalVisible}
                         onOk={() => this.handleDeleteModal("ok")}
                         onCancel={() => this.handleDeleteModal("cancel")}>
-                        <p>{this.state.modalMessage}</p>
+                        <p>{AppConstants.venueConstraintModalMsg}</p>
                     </Modal>
                 </div >
         );

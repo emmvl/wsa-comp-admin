@@ -928,6 +928,12 @@ function VenueTimeState(state = initialState, action) {
                         state.venueConstrainstData[action.contentType][action.index]["courts"] = (courts == null ? [] : courts);
                     }
                  }
+                 else if(action.key == "isLocked"){
+                    state.venueConstrainstData["isLDDeleteHappened"] = true;
+                 }
+                 else if(action.key == "isLDDeleteHappened"){
+                    state.venueConstrainstData["isLDDeleteHappened"] = false;
+                } 
                  state.venueConstrainstData[action.contentType][action.index][action.key] = action.data;
              }
 
