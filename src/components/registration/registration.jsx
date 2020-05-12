@@ -244,6 +244,7 @@ class Registration extends Component {
                                 <Select
                                     name={"yearRefId"}
                                     className="year-select"
+                                    style={{ minWidth: 60 }}
                                     onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
                                     value={this.state.yearRefId}>
                                         <Option key={-1} value={-1}>{AppConstants.all}</Option>

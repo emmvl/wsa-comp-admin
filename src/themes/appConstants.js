@@ -996,7 +996,8 @@ const AppConstants = {
   backToLiveScore:"Back To Live Score",
   venueConstraintModalMsg: "Do you want to remove fixture?",
   removeFixture: "Remove Fixture",
-  addPreference: "Add Preference"
+  addPreference: "Add Preference",
+  logo: "Logo"
 };
 
 export default AppConstants;
