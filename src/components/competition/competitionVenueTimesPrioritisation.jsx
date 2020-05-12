@@ -1266,12 +1266,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                             <div className="formView" style={{marginTop: '20px'}}>
                                 {this.matchPreferenceView(getFieldDecorator)}
                             </div>
-                            {
-                                venueConstrainstData.matchPreference!= null && venueConstrainstData.matchPreference.length > 0 ? 
-                                <div className="formView" style={{marginTop: '20px'}}>
-                                    {this.matchPreferenceView(getFieldDecorator)}
-                                </div> : null
-                            }
+                          
                             {
                                 venueConstrainstData.lockedDraws!= null && venueConstrainstData.lockedDraws.length > 0 ? 
                                 <div className="formView" style={{marginTop: '20px'}}>
