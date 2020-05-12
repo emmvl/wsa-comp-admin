@@ -266,7 +266,12 @@ function appState(state = initialState, action) {
 
     case ApiConstants.API_REG_COMPETITION_FEE_INIT_SUCCESS:
       const invitees = getRegistrationSetting(action.inviteesResult)
-      // console.log()
+      let notApplicableIndex = invitees.findIndex(
+        x =>
+          x.name ==
+          "not_applicable"
+      );
+      invitees.splice(notApplicableIndex, 1)
       const casualPayment = getRegistrationSetting(action.paymentOptionResult)
       // const seasonalPayment = getRegistrationSetting(action.paymentOptionResult[1])
       return {
