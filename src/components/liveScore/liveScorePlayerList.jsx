@@ -209,7 +209,7 @@ class LiveScorePlayerList extends Component {
                             </span>
                         </div>
 
-                        <div className="col-sm" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
+                        <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
                             <div className="row">
 
                                 <div className="col-sm pt-1">

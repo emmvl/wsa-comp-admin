@@ -80,7 +80,6 @@ class LiveScorerView extends Component {
         this.state = {
             data:props.location.state? props.location.state.tableRecord:null
         }
-        console.log(this.state.data,'tableRecordView')
     }
 
     componentDidMount(){

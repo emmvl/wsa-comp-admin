@@ -26,8 +26,9 @@ const colorsArray = ColorsArray;
 const lightGray = '#999999';
 var legandsArray = [];
 
-function createLagendsArray(drawsArray, currentLagends) {
+function createLagendsArray(drawsArray, currentLagends, dateArray) {
   let newArray = currentLagends
+  console.log("drawsArray, currentLagends", drawsArray, currentLagends)
   for (let i in drawsArray) {
     for (let j in drawsArray[i].slotsArray) {
       let color = drawsArray[i].slotsArray[j].colorCode
@@ -42,8 +43,15 @@ function createLagendsArray(drawsArray, currentLagends) {
     }
 
   }
-  console.log(newArray)
-  return newArray
+  let dateArrayLength = isArrayNotEmpty(dateArray) ? dateArray.length : 1
+  let temparray = []
+  let finalLegendsChunkArray = []
+  for (let i = 0, j = newArray.length; i < j; i += dateArrayLength) {
+    temparray = newArray.slice(i, i + dateArrayLength);
+    finalLegendsChunkArray.push(temparray)
+  }
+  console.log(finalLegendsChunkArray)
+  return finalLegendsChunkArray
 }
 
 
@@ -680,7 +688,7 @@ function CompetitionDraws(state = initialState, action) {
       state.isTeamInDraw = action.result[0].isTeamNotInDraws
       let drawsSorted = resultData.mainCourtNumberArray
       legandsArray = []
-      legandsArray = createLagendsArray(drawsSorted, legandsArray)
+      legandsArray = createLagendsArray(drawsSorted, legandsArray, resultData.sortedDateArray)
       state.legandsArray = legandsArray
       return {
         ...state,
@@ -830,11 +838,14 @@ function CompetitionDraws(state = initialState, action) {
       state.publishStatus = 0
       state.getStaticDrawsData = [];
       state.dateArray = [];
+      state.legandsArray = [];
+      legandsArray = []
       if (action.key == 'round') {
         state.competitionVenues = [];
         state.getDrawsRoundsData = [];
         state.divisionGradeNameList = [];
         state.legandsArray = [];
+        legandsArray = []
       }
       return { ...state };
 

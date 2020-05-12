@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Table, Pagination, } from 'antd';
+import {Input, Layout, Breadcrumb, Button, Table, Pagination, } from 'antd';
 import './liveScore.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -164,8 +164,8 @@ class LiveScoreMatchesList extends Component {
                         </Breadcrumb>
                     </div>
 
-                    <div className="col-sm" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
-                        <div className="row">
+                    <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
+                            <div className="row">
                             <div className="col-sm">
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
@@ -242,6 +242,19 @@ class LiveScoreMatchesList extends Component {
                         </div>
                     </div>
                 </div>
+                <div className="mt-5" style={{ display: "flex", justifyContent: 'flex-end' }} >
+                        <div className="comp-product-search-inp-width" >
+                            <Input className="product-reg-search-input"
+                                // onChange={(e) => this.onChangeSearchText(e)}
+                                placeholder="Search..."
+                                // onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                // prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                //     onClick={() => this.onClickSearchIcon()}
+                                // />}
+                                allowClear
+                            />
+                        </div>
+                    </div>
             </div>
         )
     }

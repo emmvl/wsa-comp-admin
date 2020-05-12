@@ -901,7 +901,7 @@ class UserModulePersonalDetail extends Component {
                 </div>
              {this.state.screenKey == "livescore" &&  <div className="col-sm">
                     <div className="comp-buttons-view mt-4" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
-                        <Button onClick={()=>history.push("/liveScoreCompetitions")} className='primary-add-comp-form' type='primary'>
+                        <Button onClick={()=>history.push("/liveScoreManagerList")} className='primary-add-comp-form' type='primary'>
                             {AppConstants.backToLiveScore}
                         </Button>
                     </div>
