@@ -30,9 +30,27 @@ const initialState = {
     venuesList: [],
     venuesListPage: 1,
     venuesListTotalCount: 1,
+    genderDataEnum: [{
+        description: "Male",
+        id: 2,
+        name: "male",
+    },
+    {
+        description: "Female",
+        id: 1,
+        name: "female",
+    }
+    ],
     genderData: [],
-    photoTypeData: []
+    getInvoicedata: [],
+    photoTypeData: [],
+    applyToData: [],
+    extraTimeDrawData: [],
+    finalFixtureTemplateData: []
 };
+
+
+
 
 function commonReducerState(state = initialState, action) {
     switch (action.type) {
@@ -244,6 +262,21 @@ function commonReducerState(state = initialState, action) {
                 status: action.status
             }
 
+        case ApiConstants.API_GET_INVOICE_LOAD:
+            return {
+                ...state,
+                onLoad: true,
+                error: null,
+
+            }
+
+        case ApiConstants.API_GET_INVOICE_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                getInvoicedata: action.result
+            }
+
         case ApiConstants.API_GET_PHOTO_TYPE_LOAD:
             return {
                 ...state,
@@ -255,6 +288,48 @@ function commonReducerState(state = initialState, action) {
                 ...state,
                 onLoad: true,
                 photoTypeData: action.result,
+                status: action.status
+            }
+
+        case ApiConstants.API_GET_APPY_TO_LOAD:
+            return {
+                ...state,
+                onLoad: true
+            }
+
+        case ApiConstants.API_GET_APPY_TO_SUCCESS:
+            return {
+                ...state,
+                onLoad: true,
+                applyToData: action.result,
+                status: action.status
+            }
+
+        case ApiConstants.API_GET_EXTRA_TIME_DRAW_LOAD:
+            return {
+                ...state,
+                onLoad: true
+            }
+
+        case ApiConstants.API_GET_EXTRA_TIME_DRAW_SUCCESS:
+            return {
+                ...state,
+                onLoad: true,
+                extraTimeDrawData: action.result,
+                status: action.status
+            }
+
+        case ApiConstants.API_GET_FINAL_FIXTURE_TEMPLATE_LOAD:
+            return {
+                ...state,
+                onLoad: true
+            }
+
+        case ApiConstants.API_GET_FINAL_FIXTURE_TEMPLATE_SUCCESS:
+            return {
+                ...state,
+                onLoad: true,
+                finalFixtureTemplateData: action.result,
                 status: action.status
             }
 

@@ -74,15 +74,15 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, null)
     },
     liveScoreGetDivision(data, compKey) {
-    
+
         var url = null
-        if(compKey){
-            url =  `/division?competitionKey=${compKey}`
-        }else{
-            url =  `/division?competitionId=${data}`
+        if (compKey) {
+            url = `/division?competitionKey=${compKey}`
+        } else {
+            url = `/division?competitionId=${data}`
         }
 
-       
+
         return Method.dataGet(url, null)
     },
     liveScoreGetAffilate(data) {
@@ -110,12 +110,12 @@ let LiveScoreAxiosApi = {
     },
     liveScoreCompetition(data, year, orgKey) {
         var url = null;
-        if(orgKey){
+        if (orgKey) {
             url = `/competitions/admin?organisationId=${orgKey}`;
-        }else{
-             url = `/competitions/admin`;
+        } else {
+            url = `/competitions/admin`;
         }
-       
+
         // const url = `/competitions/admin?organisationid=${81}`;
         return Method.dataPost(url, null, data)
     },
@@ -136,12 +136,12 @@ let LiveScoreAxiosApi = {
 
     liveScoreLadderList(divisionId, competitionID, compKey) {
         var url = null
-        if(compKey){
-             url = `/teams/ladder?divisionIds=${divisionId}&competitionKey=${compKey}`;
-        }else{
-             url = `/teams/ladder?divisionIds=${divisionId}&competitionIds=${competitionID}`;
+        if (compKey) {
+            url = `/teams/ladder?divisionIds=${divisionId}&competitionKey=${compKey}`;
+        } else {
+            url = `/teams/ladder?divisionIds=${divisionId}&competitionIds=${competitionID}`;
         }
-       
+
         return Method.dataGet(url, localStorage.token)
     },
 
@@ -300,9 +300,11 @@ let LiveScoreAxiosApi = {
         var url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${id}`;
         return Method.dataGet(url, token)
     },
-    liveScoreScorerList(comID, roleId, body) {
+    liveScoreScorerList(comID, roleId, body, search) {
         let competitionID = localStorage.getItem("competitionId");
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        console.log('Hello search', search)
+
         var url = `/roster/admin?competitionId=${id}&roleId=${roleId}`;
         return Method.dataPost(url, token, body)
     },
@@ -500,15 +502,9 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token)
     },
     /// get Game Time statistics api
-    umpiresList(competitionId, offset) {
-        let Body = {
-            "paging": {
-                "limit": 10,
-                "offset": `${offset}`
-            }
-        }
+    umpiresList(competitionId, body) {
         var url = `/matchUmpires/admin?competitionId=${competitionId}`;
-        return Method.dataPost(url, token, Body)
+        return Method.dataPost(url, token, body)
     },
 
 
@@ -556,7 +552,6 @@ let LiveScoreAxiosApi = {
 
     liveScoreDivisionImport(data) {
         let body = new FormData();
-        // body.append('file', new File([data.csvFile], { type: 'text/csv' }));
         body.append("file", data.csvFile, data.csvFile.name);
 
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
@@ -692,40 +687,40 @@ let LiveScoreAxiosApi = {
 
 
     // Get Teams with paggination
-    getTeamWithPagging(competitionID, offset, limit, search){
+    getTeamWithPagging(competitionID, offset, limit, search) {
         console.log(search)
         var url = null
-        if(search && search.length >0 ){
+        if (search && search.length > 0) {
             url = `/teams/list?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=${search}`;
-        }else{
-             url = `/teams/list?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=${search}`;
+        } else {
+            url = `/teams/list?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=${search}`;
         }
-       
+
         return Method.dataGet(url, localStorage.token)
     },
 
     /// Get Player list with pagging
     getPlayerWithPaggination(competitionID, offset, limit, search) {
         var url = null
-        if(search && search.length >0 ){
+        if (search && search.length > 0) {
             url = `/players/admin?competitionId=${competitionID}&offset=${offset}&limit=${limit}&name=${search}`;
-        }else{
+        } else {
             url = `/players/admin?competitionId=${competitionID}&offset=${offset}&limit=${limit}&name=`;
         }
-       
+
         return Method.dataGet(url, localStorage.token);
     },
 
 
     //// Export Files 
 
-     exportFiles(url){
+    exportFiles(url) {
         console.log("url", url);
         return Method.dataGetDownload(url, localStorage.token);
     },
 
     //// venue Change 
-    venueChangeApi(competitionId , details, start, end){
+    venueChangeApi(competitionId, details, start, end) {
         let courtArray = JSON.stringify(details.courtId)
         let url = `/matches/bulk/courts?competitionId=${competitionId}&startTime=${start}&endTime=${end}&fromCourtIds=${courtArray}&toCourtId=${details.changeToCourtId}`
         let body = null
@@ -733,7 +728,7 @@ let LiveScoreAxiosApi = {
     },
 
     //Get Fixture Competition List
-    getFixtureCompList(orgId){
+    getFixtureCompList(orgId) {
         let url = `/competitions/list?organisationId=${orgId}`
         return Method.dataGet(url, localStorage.token);
     }
@@ -827,8 +822,6 @@ const Method = {
                 });
         });
     },
-
-
 
     // Method to GET response
 
@@ -962,79 +955,79 @@ const Method = {
         const url = newurl;
         return await new Promise((resolve, reject) => {
             http
-            .get(url, {
-              responseType: 'arraybuffer',
-              headers: {
-                "Content-Type": "application/json",
-                Accept: "application/csv",
-                Authorization: "BWSA " + authorization,
-                "Access-Control-Allow-Origin": "*"
-              }
-            })
-    
-            .then(result => {
-              if (result.status === 200) {
-                console.log("*************" + JSON.stringify(result.data));
-                const url = window.URL.createObjectURL(new Blob([result.data]));
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', 'filecsv.csv'); //or any other extension
-                document.body.appendChild(link);
-                link.click();
-                return resolve({
-                  status: 1,
-                  result: result
-                });
-              }
-              else if (result.status == 212) {
-                return resolve({
-                  status: 4,
-                  result: result
-                });
-              }
-              else {
-                if (result) {
-                  return reject({
-                    status: 3,
-                    error: result.data.message,
-                  });
-                } else {
-                  return reject({
-                    status: 4,
-                    error: "Something went wrong."
-                  });
-                }
-              }
-            })
-            .catch(err => {
-              console.log(err.response)
-              if (err.response) {
-                if (err.response.status !== null && err.response.status !== undefined) {
-                  if (err.response.status == 401) {
-                    let unauthorizedStatus = err.response.status
-                    if (unauthorizedStatus == 401) {
-                      logout()
-                      message.error(ValidationConstants.messageStatus401)
+                .get(url, {
+                    responseType: 'arraybuffer',
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/csv",
+                        Authorization: "BWSA " + authorization,
+                        "Access-Control-Allow-Origin": "*"
                     }
-                  }
-                  else {
-                    return reject({
-                      status: 5,
-                      error: err
-                    })
-    
-                  }
-                }
-              }
-              else {
-                return reject({
-                  status: 5,
-                  error: err
+                })
+
+                .then(result => {
+                    if (result.status === 200) {
+                        console.log("*************" + JSON.stringify(result.data));
+                        const url = window.URL.createObjectURL(new Blob([result.data]));
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', 'filecsv.csv'); //or any other extension
+                        document.body.appendChild(link);
+                        link.click();
+                        return resolve({
+                            status: 1,
+                            result: result
+                        });
+                    }
+                    else if (result.status == 212) {
+                        return resolve({
+                            status: 4,
+                            result: result
+                        });
+                    }
+                    else {
+                        if (result) {
+                            return reject({
+                                status: 3,
+                                error: result.data.message,
+                            });
+                        } else {
+                            return reject({
+                                status: 4,
+                                error: "Something went wrong."
+                            });
+                        }
+                    }
+                })
+                .catch(err => {
+                    console.log(err.response)
+                    if (err.response) {
+                        if (err.response.status !== null && err.response.status !== undefined) {
+                            if (err.response.status == 401) {
+                                let unauthorizedStatus = err.response.status
+                                if (unauthorizedStatus == 401) {
+                                    logout()
+                                    message.error(ValidationConstants.messageStatus401)
+                                }
+                            }
+                            else {
+                                return reject({
+                                    status: 5,
+                                    error: err
+                                })
+
+                            }
+                        }
+                    }
+                    else {
+                        return reject({
+                            status: 5,
+                            error: err
+                        });
+
+                    }
                 });
-    
-              }
-            });
         });
-      },
+    },
 };
 export default LiveScoreAxiosApi;

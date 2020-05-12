@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Table, Pagination, Menu } from 'antd';
+import { Layout, Breadcrumb, Button, Table, Pagination, Menu, Input, Icon } from 'antd';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -14,11 +14,10 @@ import history from '../../util/history'
 
 
 function getName(item) {
-
     var name = item.name;
-    console.log(name, "itemmmm")
     return name;
 }
+
 const { Content, Footer } = Layout;
 const columns = [
 
@@ -95,7 +94,7 @@ const columns = [
                 <Menu.Item key={'1'}>
                     <NavLink to={{
                         pathname: '/liveScoreAddScorer',
-                        state: {isEdit: true, tableRecord: record }
+                        state: { isEdit: true, tableRecord: record }
                     }}><span >Edit</span></NavLink>
                 </Menu.Item>
                 <Menu.Item key="2" >
@@ -110,18 +109,19 @@ const columns = [
 ];
 
 const { id } = 1
-// JSON.parse(getLiveScoreCompetiton())
+
 class LiveScorerList extends Component {
     constructor(props) {
         super(props);
         this.state = {
             year: "2020",
             scorerTableData: scorerData.scorerData,
+            searchtext: ''
         }
     }
 
     componentDidMount() {
-        // let competitionId = getCompetitonId()
+     
         const body =
         {
             "paging": {
@@ -213,10 +213,79 @@ class LiveScorerList extends Component {
                             </div>
                         </div>
                     </div>
+
                 </div >
+                {/* search box */}
+                <div className="col-sm pt-5 ml-3" style={{ display: "flex", justifyContent: 'flex-end', }} >
+                    <div className="comp-product-search-inp-width" >
+                        <Input className="product-reg-search-input"
+                            onChange={(e) => this.onChangeSearchText(e)}
+                            placeholder="Search..."
+                            onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                            prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                onClick={() => this.onClickSearchIcon()}
+                            />}
+                            allowClear
+                        />
+                    </div>
+                </div>
             </div >
         )
     }
+
+    // on change search text
+    onChangeSearchText = (e) => {
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        this.setState({ searchText: e.target.value })
+        if (e.target.value == null || e.target.value == "") {
+            const body =
+            {
+                "paging": {
+                    "limit": 10,
+                    "offset": 0
+                },
+                "search": e.target.value
+            }
+
+            this.props.liveScoreScorerListAction(id, 4, body, e.target.value)
+        }
+    }
+
+    // search key 
+    onKeyEnterSearchText = (e) => {
+        var code = e.keyCode || e.which;
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        if (code === 13) { //13 is the enter keycode
+            const body =
+            {
+                "paging": {
+                    "limit": 10,
+                    "offset": 0
+                },
+                "search": e.target.value
+            }
+            this.props.liveScoreScorerListAction(id, 4, body, this.state.searchText)
+        }
+    }
+
+    // on click of search icon
+    onClickSearchIcon = () => {
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        if (this.state.searchText == null || this.state.searchText == "") {
+        }
+        else {
+            const body =
+            {
+                "paging": {
+                    "limit": 10,
+                    "offset": 0
+                },
+                "search": this.state.searchText
+            }
+            this.props.liveScoreScorerListAction(id, 4, body, this.state.searchText)
+        }
+    }
+
     ////////form content view
     contentView = () => {
         let { liveScoreScorerState } = this.props;
@@ -251,7 +320,7 @@ class LiveScorerList extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"5"} />
                 <Layout>
                     {this.headerView()}

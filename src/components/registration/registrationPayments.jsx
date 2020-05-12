@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Select, DatePicker, Button } from 'antd';
+import { Layout, Breadcrumb, Select, DatePicker, Button, Table, Menu } from 'antd';
 import './product.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -9,24 +9,102 @@ import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
-    accountBalanceAction, saveStripeAccountAction
+    accountBalanceAction, saveStripeAccountAction,
+    getStripeLoginLinkAction, getStripeTransferListAction,
 } from "../../store/actions/stripeAction/stripeAction";
 import { getOrganisationData } from "../../util/sessionStorage";
 import { currencyFormat } from "../../util/currencyFormat";
 import Loader from '../../customComponents/loader';
+import { liveScore_formateDate } from './../../themes/dateformate';
+import moment from 'moment'
 
 const { Header, Content } = Layout;
 const { Option } = Select;
+const { SubMenu } = Menu;
+/////function to sort table column
+function tableSort(a, b, key) {
+    let stringA = JSON.stringify(a[key])
+    let stringB = JSON.stringify(b[key])
+    return stringA.localeCompare(stringB)
+}
+
+const columns = [
+    {
+        title: "Transaction Id",
+        dataIndex: 'balance_transaction',
+        key: 'balance_transaction',
+        sorter: (a, b) => tableSort(a, b, "balance_transaction")
+    },
+    {
+        title: "Description",
+        dataIndex: 'description',
+        key: 'description',
+        sorter: (a, b) => tableSort(a, b, "description"),
+        render: description => (
+            <span >{description ? description : "N/A"}</span>
+        )
+    },
+    {
+        title: "Date",
+        dataIndex: 'created',
+        key: 'created',
+        sorter: (a, b) => tableSort(a, b, "created"),
+        render: created => {
+            var date = new Date(created * 1000);
+            let finalDate = liveScore_formateDate(date)
+            return (
+                <span>{finalDate}</span>
+            )
+        },
+    },
+    {
+        title: 'Amount',
+        dataIndex: 'amount',
+        key: 'amount',
+        render: amount => (
+            <span>{currencyFormat(amount)}</span>
+        ),
+        sorter: (a, b) => tableSort(a, b, "amount")
+    },
+    {
+        title: 'Action',
+        dataIndex: 'refund',
+        key: 'refund',
+        render: (refund, record) =>
+            <Menu
+                className="action-triple-dot-submenu"
+                theme="light"
+                mode="horizontal"
+                style={{ lineHeight: '25px' }}
+            >
+                <SubMenu
+                    key="sub1"
+                    title={
+                        <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
+                    }
+                >
+                    <Menu.Item key="1">
+                        <span >Full Refund</span>
+                    </Menu.Item>
+                    <Menu.Item key="2" >
+                        <span >Partial Refund</span>
+                    </Menu.Item>
+                </SubMenu>
+            </Menu>
+    },
+
+];
 
 
 class RegistrationPayments extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            year: "2017",
+            year: "2020",
             competition: "all",
             paymentFor: "all",
             loadingSave: false,
+            stripeDashBoardLoad: false,
         }
     }
 
@@ -36,11 +114,19 @@ class RegistrationPayments extends Component {
             this.setState({ loadingSave: false })
             this.props.accountBalanceAction()
         }
+        if (this.props.stripeState.onLoad === false && this.state.stripeDashBoardLoad === true) {
+            this.setState({ stripeDashBoardLoad: false })
+            let stripeDashboardUrl = this.props.stripeState.stripeLoginLink
+            if (stripeDashboardUrl) {
+                window.open(stripeDashboardUrl, '_newtab');
+            }
+        }
     }
 
 
     componentDidMount() {
         let urlSplit = this.props.location.search.split("?code=")
+        this.props.getStripeTransferListAction()
         if (this.stripeConnected()) {
             this.props.accountBalanceAction()
         }
@@ -89,6 +175,7 @@ class RegistrationPayments extends Component {
                             onChange={(year) => this.setState({ year })}
                             value={this.state.year}
                         >
+                            <Option value={"2020"}>{AppConstants.year2020}</Option>
                             <Option value={"2019"}>{AppConstants.year2019}</Option>
                             <Option value={"2018"}>{AppConstants.year2018}</Option>
                             <Option value={"2017"}>{AppConstants.year2017}</Option>
@@ -105,6 +192,8 @@ class RegistrationPayments extends Component {
                             value={this.state.competition}
                         >
                             <Option value={"all"}>{AppConstants.all}</Option>
+                            <Option value={"2020"}>{AppConstants.year2020}</Option>
+                            <Option value={"2019"}>{AppConstants.year2019}</Option>
                             <Option value={"2018"}>{AppConstants.year2018}</Option>
                             <Option value={"2017"}>{AppConstants.year2017}</Option>
                             <Option value={"2016"}>{AppConstants.year2016}</Option>
@@ -119,6 +208,8 @@ class RegistrationPayments extends Component {
                             value={this.state.paymentFor}
                         >
                             <Option value={"all"}>{AppConstants.all}</Option>
+                            <Option value={"2020"}>{AppConstants.year2020}</Option>
+                            <Option value={"2019"}>{AppConstants.year2019}</Option>
                             <Option value={"2018"}>{AppConstants.year2018}</Option>
                             <Option value={"2017"}>{AppConstants.year2017}</Option>
                             <Option value={"2016"}>{AppConstants.year2016}</Option>
@@ -171,12 +262,23 @@ class RegistrationPayments extends Component {
         return stripeAccountID
     }
 
+    userEmail = () => {
+        let orgData = getOrganisationData()
+        let email = orgData ? orgData.email : ""
+        return email
+    }
+
+    stripeDashboardLoginUrl = () => {
+        this.setState({ stripeDashBoardLoad: true })
+        this.props.getStripeLoginLinkAction()
+    }
+
     stripeView = () => {
         let stripeConnected = this.stripeConnected()
-        let accountBalance = this.props.stripeState.accountBalance ? this.props.stripeState.accountBalance.available : "N/A"
-        let stripeConnectURL = "https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=ca_GoE4DQeJGNAvRzAq6MJOmZ8xmFTeLgan&state={STATE_VALUE}&stripe_user[email]=samir@deftsoft.com&redirect_uri=https://netball-comp-admin-dev.worldsportaction.com/registrationPayments"
+        let accountBalance = this.props.stripeState.accountBalance ? this.props.stripeState.accountBalance.pending : "N/A"
+        let userEmail = this.userEmail()
+        let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=ca_GoE4DQeJGNAvRzAq6MJOmZ8xmFTeLgan&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=https://netball-comp-admin-dev.worldsportaction.com/registrationPayments`
         let stripeDashboardUrl = `https://dashboard.stripe.com/${stripeConnected}/test/dashboard`
-        console.log(stripeDashboardUrl)
         return (
             <div className="pb-5">
                 <div className="row">
@@ -188,10 +290,11 @@ class RegistrationPayments extends Component {
                             <Button
                                 className="open-reg-button"
                                 type="primary"
+                                onClick={() => this.stripeDashboardLoginUrl()}
                             >
-                                <a href={stripeDashboardUrl} class="stripe-connect">
-                                    {AppConstants.goToStripeDashboard}
-                                </a>
+                                {/* <a href={stripeDashboardUrl} class="stripe-connect"> */}
+                                {AppConstants.goToStripeDashboard}
+                                {/* </a> */}
                             </Button>
                             :
                             <Button
@@ -215,9 +318,11 @@ class RegistrationPayments extends Component {
     ////////form content view
     contentView = () => {
         console.log("stripeState", this.props.stripeState)
+        let stripeTransferList = this.props.stripeState.stripeTransferList
         return (
             <div >
                 {this.dropdownView()}
+                {/* 
                 <div className="row" >
                     <div className="col-sm">
                         <div className="reg-payment-white-box-view" >
@@ -336,6 +441,16 @@ class RegistrationPayments extends Component {
                     </div>
                     <div className="col-sm" >
                     </div>
+                </div> */}
+
+                <div className="table-responsive home-dash-table-view mt-5 mb-5">
+                    <Table
+                        className="home-dashboard-table"
+                        columns={columns}
+                        dataSource={stripeTransferList}
+                        pagination={false}
+                        loading={this.props.stripeState.onLoad == true && true}
+                    />
                 </div>
             </div>
         )
@@ -367,6 +482,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         accountBalanceAction,
         saveStripeAccountAction,
+        getStripeLoginLinkAction,
+        getStripeTransferListAction,
     }, dispatch)
 }
 

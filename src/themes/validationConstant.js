@@ -38,6 +38,7 @@ const ValidationConstants = {
     requiredMessage: ["Please fill all the required fields"],
     drawsMessage: ["Something went wrong with draws generation"],
     finalGrading: ["Please provide final grade for all the teams"],
+    proposedGrading: ["Please provide proposed grade for all the teams"],
 
     /////////////membership 
     membershipProductIsRequired: "Membership product name is required.",
@@ -114,6 +115,7 @@ const ValidationConstants = {
     qtrBreak: "Please enter a qtr break",
     timeBetweenGames: "Please enter a time between games",
     startDateIsRequired: 'Start date is required.',
+    endDateIsRequired: 'End date is required',
 
     divisionName: "Division Name field is required.",
     genderRestriction: "Please select gender.",
@@ -122,6 +124,19 @@ const ValidationConstants = {
     photoTypeRequired: "Photo type is required",
     pleaseSelectVenue: "Please select Venue",
     pleaseSelectRound: "Please select round",
+    homeTeamRotationRequired: "Home team rotation is required",
+    courtRotationRequired: "Court rotation is required",
+    finalsStartDateRequired: "Finals start date is required",
+    extraTimeMatchTypeRequired: "Please select extra time type",
+    extraTimeDurationRequired: "Please enter extra time duration",
+    extraTimeMainBreakRequired: "Please enter extra time main break",
+    extraTimeBreakRequired: "Please enter extra time break",
+    beforeExtraTimeRequired: "Please enter before extra time",
+    finalFixtureTemplateRequired: "Please select final fixture template",
+    extraTimeDrawRequired: "Please select extra time draw",
+    applyToRequired: "Please select apply to",
+    gradeNameRequired: "Grade name is required",
+    startTime: "Start time is required"
 
 };
 

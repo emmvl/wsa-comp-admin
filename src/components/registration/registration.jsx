@@ -16,6 +16,7 @@ import { getCommonRefData, getGenderAction } from
         '../../store/actions/commonAction/commonAction';
 import { getAffiliateToOrganisationAction} from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
+import { isEmptyArray } from "formik";
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
@@ -146,8 +147,8 @@ class Registration extends Component {
             organisationUniqueKey: this.state.organisationId,
             yearRefId: this.state.yearRefId,
             competitionUniqueKey: this.state.competitionUniqueKey,
-            dobFrom: this.state.dobFrom,
-            dobTo: this.state.dobTo,
+            dobFrom: this.state.dobFrom!= '-1' ? moment(this.state.dobFrom).format('YYYY-MM-DD') : '-1',
+            dobTo: this.state.dobTo!= '-1' ? moment(this.state.dobTo).format('YYYY-MM-DD') : '-1',
             membershipProductTypeId: this.state.membershipProductTypeId,
             genderRefId: this.state.genderRefId,
             postalCode: this.state.postalCode,
@@ -173,10 +174,15 @@ class Registration extends Component {
           await this.setState({yearRefId: value});
         else if (key == "competitionId")
             await   this.setState({competitionUniqueKey: value});
-        else if (key == "dobFrom")
-            await this.setState({dobFrom: value});
-        else if (key == "dobTo")
-            await this.setState({dobTo: value});
+        else if (key == "dobFrom"){
+            let d = moment(value, 'YYYY-mm-dd');
+            console.log("DDDD" + d);
+            await this.setState({dobFrom: d});
+        }
+        else if (key == "dobTo"){
+            let d = moment(value, 'YYYY-mm-dd');
+            await this.setState({dobTo: d});
+        }
         else if (key == "membershipProductTypeId")
             await this.setState({membershipProductTypeId: value});
         else if (key == "genderRefId")
@@ -187,6 +193,10 @@ class Registration extends Component {
             await  this.setState({membershipProductId: value});
         else if (key == "paymentId")
             await  this.setState({paymentId: value});
+        else if(key == "postalCode"){
+            console.log("*************" + value);
+            await this.setState({postalCode: value});
+        }
 
         this.handleRegTableList(1);
     }
@@ -212,7 +222,15 @@ class Registration extends Component {
         let affiliateToData = this.props.userState.affiliateTo;
         let uniqueValues = [];
         if (affiliateToData.affiliatedTo != undefined) {
-            uniqueValues = [...new Map(affiliateToData.affiliatedTo.map(obj => [obj["affiliatedToOrgId"], obj])).values()];
+            let obj = {
+                organisationId: getOrganisationData().organisationUniqueKey,
+                name: getOrganisationData().name
+            }
+            uniqueValues.push(obj);
+            let arr  = [...new Map(affiliateToData.affiliatedTo.map(obj => [obj["organisationId"], obj])).values()];
+            if(isEmptyArray){
+                uniqueValues = [...uniqueValues, ...arr];
+            }
         }
         const {genderData} = this.props.commonReducerState;
         const {competitions, membershipProductTypes, membershipProducts} = this.props.userRegistrationState;
@@ -220,12 +238,13 @@ class Registration extends Component {
             <div className="comp-player-grades-header-drop-down-view mt-1">
                 <div className="fluid-width" >
                     <div className="row" >
-                        <div className="col-sm-2" >
+                        <div className="col-sm-3" >
                             <div className="com-year-select-heading-view" >
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
                                     name={"yearRefId"}
                                     className="year-select"
+                                    style={{ minWidth: 60 }}
                                     onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
                                     value={this.state.yearRefId}>
                                         <Option key={-1} value={-1}>{AppConstants.all}</Option>
@@ -289,7 +308,7 @@ class Registration extends Component {
                                 />
                             </div>
                         </div>
-                        <div className="col-sm-2" >
+                        <div className="col-sm-3" >
                             <div style={{ width: "fit-content", display: "flex", flexDirection: "row", alignItems: "center" }} >
                                 <span className='year-select-heading'>{AppConstants.types}</span>
                                 <Select
@@ -298,7 +317,7 @@ class Registration extends Component {
                                     className="year-select"
                                     style={{ minWidth: 100 }}
                                     onChange={(e) => this.onChangeDropDownValue(e, 'membershipProductTypeId')}
-                                    value={this.state.genderRefId}>
+                                    value={this.state.membershipProductTypeId}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(membershipProductTypes || []).map((g, index) => (
                                         <Option key={g.membershipProductTypeId} value={g.membershipProductTypeId}>{g.membershipProductTypeName}</Option>
@@ -306,7 +325,7 @@ class Registration extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-2" >
+                        <div className="col-sm-3" >
                             <div style={{ width: "fit-content", display: "flex", flexDirection: "row", alignItems: "center" }} >
                                 <span className='year-select-heading'>{AppConstants.gender}</span>
                                 <Select
@@ -323,6 +342,24 @@ class Registration extends Component {
                         </div>
                         <div className="col-sm-3" >
                             <div style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center" }} >
+                                <span className='year-select-heading'>{AppConstants.postCode}</span>
+                                <Select
+                                     mode="multiple"
+                                    style={{ minWidth: 100 }}
+                                    className="year-select"
+                                    onChange={(e) => this.onChangeDropDownValue(e, 'postalCode')}
+                                    value={this.state.postalCode}>
+                                    <Option key={'-1'} value={'-1'}>{AppConstants.all}</Option>
+                                    <Option key={"2000-5799"} value={"2000-5799"}>{"2000-5799"}</Option>
+                                    <Option key={"6000-6797"} value={"6000-6797"}>{"6000-6797"}</Option>
+                                    <Option key={"7000-7799"} value={"7000-7799"}>{"7000-7799"}</Option>
+                                    <Option key={"0800-0899"} value={"0800-0899"}>{"0800-0899"}</Option>
+                                    
+                                </Select>
+                            </div>
+                        </div>
+                        <div className="col-sm-3" >
+                            <div style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center" }} >
                                 <span className='year-select-heading'>{AppConstants.affiliates}</span>
                                 <Select
                                     showSearch
@@ -333,7 +370,7 @@ class Registration extends Component {
                                     value={this.state.affiliate}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(uniqueValues || []).map((org, index) => (
-                                        <Option key={org.affiliatedToOrgId} value={org.affiliatedToOrgId}>{org.affiliatedToOrgName}</Option>
+                                        <Option key={org.organisationId} value={org.organisationId}>{org.name}</Option>
                                     ))}
                                 </Select>
                             </div>
@@ -355,7 +392,7 @@ class Registration extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-2" >
+                        <div className="col-sm-3" >
                             <div style={{ width: "fit-content", display: "flex", flexDirection: "row", alignItems: "center" }} >
                                 <span className='year-select-heading'>{AppConstants.payment}</span>
                                 <Select
@@ -365,6 +402,32 @@ class Registration extends Component {
                                     value={this.state.paymentId}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                 </Select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    countView = () =>{
+        let userRegistrationState = this.props.userRegistrationState;
+        let userRegDashboardList = userRegistrationState.userRegDashboardListData;
+        let total = userRegistrationState.userRegDashboardListTotalCount;
+        return(
+            <div className="comp-dash-table-view mt-2">
+                <div>
+                    <div className="row">
+                        <div className="col-sm-6" >
+                            <div className="registration-count">
+                                <div className="reg-payment-paid-reg-text">No. of Registrations</div>
+                                <div className="reg-payment-price-text">{total}</div>
+                            </div>
+                        </div>
+                        <div className="col-sm-6" >
+                            <div className="registration-count">
+                                <div className="reg-payment-paid-reg-text">Value of Registrations</div>
+                                <div className="reg-payment-price-text">$0</div>
                             </div>
                         </div>
                     </div>
@@ -409,6 +472,7 @@ class Registration extends Component {
                     {this.headerView()}
                     <Content>
                         {this.dropdownView()}
+                        {this.countView()}
                         {this.contentView()}
                     </Content>
                 </Layout>

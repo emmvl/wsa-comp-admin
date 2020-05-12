@@ -277,7 +277,7 @@ class LiveScoreAddIncident extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <Button type="cancel-button">{AppConstants.cancel}</Button>
+                                <Button  onClick={() => history.push("/liveScoreIncidentList")} type="cancel-button">{AppConstants.cancel}</Button>
                             </div>
                         </div>
                         <div className="col-sm">

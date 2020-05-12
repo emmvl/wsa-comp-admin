@@ -73,9 +73,7 @@ import {
 import Loader from '../../customComponents/loader';
 import { venueListAction, getCommonRefData, } from '../../store/actions/commonAction/commonAction'
 import { getUserId, getOrganisationData } from "../../util/sessionStorage"
-import {
-    getGenderAction
-} from "../../store/actions/commonAction/commonAction"
+
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -84,7 +82,18 @@ const { TabPane } = Tabs;
 const { confirm } = Modal;
 let this_Obj = null;
 
+const genderArray = [{
+    description: "Male",
+    id: 2,
+    name: "male",
+},
+{
+    description: "Female",
+    id: 2,
+    name: "female",
+}
 
+]
 
 const playerSeasoTable = [
     {
@@ -303,7 +312,7 @@ class CompetitionOpenRegForm extends Component {
                                             placeholder={"Select"}
                                             disabled={this.state.permissionState.divisionsDisable}
                                         >
-                                            {this.props.commonReducerState.genderData.map(item => {
+                                            {this.props.commonReducerState.genderDataEnum.map(item => {
                                                 return (
                                                     <Option key={item.id} value={item.id}>
                                                         {item.description}
@@ -408,7 +417,6 @@ class CompetitionOpenRegForm extends Component {
         // competitionId = this.props.location.state ? this.props.location.state.id : null
         // competitionId !== null && this.props.clearCompReducerDataAction("all")
         this.props.clearCompReducerDataAction("all")
-        this.props.getGenderAction()
 
     }
     componentDidUpdate(nextProps) {
@@ -654,6 +662,7 @@ class CompetitionOpenRegForm extends Component {
             competitionFormatRefId: compFeesState.competitionDetailData.competitionFormatRefId,
             selectedVenues: compFeesState.selectedVenues,
             startDate: compFeesState.competitionDetailData.startDate && moment(compFeesState.competitionDetailData.startDate),
+            endDate: compFeesState.competitionDetailData.endDate && moment(compFeesState.competitionDetailData.endDate),
         })
         let data = this.props.competitionFeesState.competionDiscountValue
         let discountData = data && data.competitionDiscounts !== null ? data.competitionDiscounts[0].discounts : []
@@ -706,6 +715,7 @@ class CompetitionOpenRegForm extends Component {
                         formData.append("competitionTypeRefId", postData.competitionTypeRefId);
                         formData.append("competitionFormatRefId", postData.competitionFormatRefId);
                         formData.append("startDate", postData.startDate);
+                        formData.append("endDate", postData.endDate);
                         if (postData.competitionFormatRefId == 4) {
                             if (postData.noOfRounds !== null && postData.noOfRounds !== '') formData.append("noOfRounds", postData.noOfRounds);
                         }
@@ -1411,8 +1421,7 @@ class CompetitionOpenRegForm extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
-                            <InputWithHead heading={AppConstants.startDate} required={"required-field"} />
-
+                            <InputWithHead heading={AppConstants.compStartDate} required={"required-field"} />
                             <Form.Item >
                                 {getFieldDecorator('startDate',
                                     { rules: [{ required: true, message: ValidationConstants.startDateIsRequired }] })(
@@ -1427,35 +1436,52 @@ class CompetitionOpenRegForm extends Component {
                                         />
                                     )}
                             </Form.Item>
-
                         </div>
                         <div className="col-sm">
-                            {detailsData.competitionDetailData.competitionFormatRefId == 4 &&
-                                <div>
-                                    <InputWithHead heading={AppConstants.numberOfRounds} required={"required-field"} />
-                                    <Form.Item >
-                                        {getFieldDecorator('numberOfRounds',
-                                            { rules: [{ required: true, message: ValidationConstants.numberOfRoundsNameIsRequired }] })(
-                                                <Select
-                                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                                    placeholder={AppConstants.selectRound}
-                                                    onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, "noOfRounds")}
-                                                    value={detailsData.competitionDetailData.noOfRounds}
-                                                    disabled={compDetailDisable}
-                                                >
-                                                    {this.state.roundsArray.map(item => {
-                                                        return (
-                                                            <Option key={item.id} value={item.id}>{item.value}</Option>
-                                                        );
-                                                    })}
-                                                </Select>
-                                            )}
-                                    </Form.Item>
-                                </div>
-                            }
+                            <InputWithHead heading={AppConstants.compCloseDate} required={"required-field"} />
+                            <Form.Item >
+                                {getFieldDecorator('endDate',
+                                    { rules: [{ required: true, message: ValidationConstants.endDateIsRequired }] })(
+                                        <DatePicker
+                                            size="large"
+                                            style={{ width: "100%" }}
+                                            onChange={date => this.dateOnChangeFrom(date, "endDate")}
+                                            format={"DD-MM-YYYY"}
+                                            showTime={false}
+                                            disabledDate={d => !d || d.isBefore(detailsData.competitionDetailData.startDate)}
+                                            disabled={compDetailDisable}
+                                        />
+                                    )}
+                            </Form.Item>
                         </div>
+
                     </div>
                 </div>
+                {/* <div className="col-sm"> */}
+                {detailsData.competitionDetailData.competitionFormatRefId == 4 &&
+                    <div>
+                        <InputWithHead heading={AppConstants.numberOfRounds} required={"required-field"} />
+                        <Form.Item >
+                            {getFieldDecorator('numberOfRounds',
+                                { rules: [{ required: true, message: ValidationConstants.numberOfRoundsNameIsRequired }] })(
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        placeholder={AppConstants.selectRound}
+                                        onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, "noOfRounds")}
+                                        value={detailsData.competitionDetailData.noOfRounds}
+                                        disabled={compDetailDisable}
+                                    >
+                                        {this.state.roundsArray.map(item => {
+                                            return (
+                                                <Option key={item.id} value={item.id}>{item.value}</Option>
+                                            );
+                                        })}
+                                    </Select>
+                                )}
+                        </Form.Item>
+                    </div>
+                }
+                {/* </div> */}
                 <InputWithHead heading={AppConstants.timeBetweenRounds} />
                 <div className="fluid-width">
                     <div className="row">
@@ -2692,7 +2718,6 @@ function mapDispatchToProps(dispatch) {
         searchVenueList,
         venueListAction,
         clearFilter,
-        getGenderAction
     }, dispatch)
 }
 

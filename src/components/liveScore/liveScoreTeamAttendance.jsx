@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Table, Select, Pagination } from 'antd';
+import { Layout, Breadcrumb, Button, Table, Select, Pagination, Input, Icon } from 'antd';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -109,7 +109,8 @@ class LiveScoreTeamAttendance extends Component {
             year: "2020",
             teamSelection: "WSA 1",
             selectStatus: "Borrowed",
-            competitionId: null
+            competitionId: null,
+            searchText:""
         }
     }
 
@@ -166,6 +167,58 @@ class LiveScoreTeamAttendance extends Component {
         this.props.exportFilesAction(url)
     }
 
+      // on change search text
+      onChangeSearchText = (e) => {
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        this.setState({ searchText: e.target.value })
+        if (e.target.value == null || e.target.value == "") {
+            const body =
+            {
+                "paging": {
+                    "limit": 10,
+                    "offset": 0
+                },
+                "search": e.target.value
+            }
+
+            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
+        }
+    }
+
+     // search key 
+     onKeyEnterSearchText = (e) => {
+        var code = e.keyCode || e.which;
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        if (code === 13) { //13 is the enter keycode
+            const body =
+            {
+                "paging": {
+                    "limit": 10,
+                    "offset": 0
+                },
+                "search": e.target.value
+            }
+            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
+        }
+    }
+
+        // on click of search icon
+        onClickSearchIcon = () => {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            if (this.state.searchText == null || this.state.searchText == "") {
+            }
+            else {
+                const body =
+                {
+                    "paging": {
+                        "limit": 10,
+                        "offset": 0
+                    },
+                    "search": this.state.searchText
+                }
+                this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
+            }
+        }
 
     ///////view for breadcrumb
     headerView = () => {
@@ -178,6 +231,7 @@ class LiveScoreTeamAttendance extends Component {
                         </Breadcrumb>
                     </div>
 
+
                     <div className="col-sm" style={{
                         display: "flex",
                         flexDirection: 'row',
@@ -185,6 +239,9 @@ class LiveScoreTeamAttendance extends Component {
                         justifyContent: "flex-end",
                     }}>
                         <div className="row">
+
+
+
                             <Select
                                 className="year-select"
                                 style={{ display: "flex", alignItems: "flex-start" }}
@@ -226,7 +283,22 @@ class LiveScoreTeamAttendance extends Component {
                             </div>
                         </div>
                     </div>
+
                 </div >
+                {/* search box */}
+                <div className="col-sm pt-3 ml-3" style={{ display: "flex", justifyContent: 'flex-end', }} >
+                    <div className="comp-product-search-inp-width" >
+                        <Input className="product-reg-search-input"
+                            onChange={(e) => this.onChangeSearchText(e)}
+                            placeholder="Search..."
+                            onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                            prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                            onClick={() => this.onClickSearchIcon()}
+                            />}
+                            allowClear
+                        />
+                    </div>
+                </div>
             </div >
 
         )

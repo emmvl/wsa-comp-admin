@@ -142,10 +142,45 @@ function getGenderAction() {
     return action
 }
 
-
 function getPhotoTypeAction() {
     const action = {
         type: ApiConstants.API_GET_PHOTO_TYPE_LOAD,
+
+    };
+    return action
+}
+
+function getInvoice(competitionId, orgnaistationID, registrationid) {
+    const action = {
+        type: ApiConstants.API_GET_INVOICE_LOAD,
+        competitionId,
+        orgnaistationID,
+        registrationid
+    }
+    console.log(action)
+    return action
+}
+
+
+function getApplyToAction() {
+    const action = {
+        type: ApiConstants.API_GET_APPY_TO_LOAD,
+
+    };
+    return action
+}
+
+function getExtraTimeDrawAction() {
+    const action = {
+        type: ApiConstants.API_GET_EXTRA_TIME_DRAW_LOAD,
+
+    };
+    return action
+}
+
+function getFinalFixtureTemplateAction() {
+    const action = {
+        type: ApiConstants.API_GET_FINAL_FIXTURE_TEMPLATE_LOAD,
 
     };
     return action
@@ -169,5 +204,9 @@ export {
     venuesListAction,
     venueDeleteAction,
     getGenderAction,
-    getPhotoTypeAction
+    getInvoice,
+    getPhotoTypeAction,
+    getApplyToAction,
+    getExtraTimeDrawAction,
+    getFinalFixtureTemplateAction
 }

@@ -31,12 +31,14 @@ import {
     getRegistrationMethod,
 } from "../../store/actions/appAction";
 import { connect } from "react-redux";
+import AppImages from "../../themes/appImages";
 import { bindActionCreators } from "redux";
 import moment from "moment";
 import ValidationConstants from "../../themes/validationConstant";
 import { isArrayNotEmpty } from "../../util/helpers";
 import Loader from '../../customComponents/loader';
 import history from "../../util/history";
+import { getOrganisationData } from "../../util/sessionStorage";
 
 
 const { Header, Footer, Content } = Layout;
@@ -488,6 +490,7 @@ class RegistrationForm extends Component {
         let compCLoseDate = moment(this.state.compCloseDate).format("DD-MM-YYYY")
         let defaultChecked = this.props.registrationState.defaultChecked
         let isPublished = this.state.isPublished
+        console.log("****" + getOrganisationData.orgLogoUrl);
         return (
             <div className="content-view pt-4">
                 <span className="userRegLink">{`Competition Registrations close on ${compCLoseDate}`}</span>
@@ -663,6 +666,40 @@ class RegistrationForm extends Component {
                     value={formDataValue ? formDataValue.specialNote : null}
                 />
 
+                <InputWithHead heading={AppConstants.photos}/>
+                {((formDataValue.organisationPhotos == null ||  formDataValue.organisationPhotos.length == 0) && 
+                  (getOrganisationData().orgLogoUrl == null)) ? <span>{AppConstants.noPhotosAvailable}</span> :
+                <div className="org-photos">
+                    {
+                        getOrganisationData().orgLogoUrl == null ? null :
+                        <div>
+                            <div>
+                                <img src={getOrganisationData().orgLogoUrl} alt=""height= {125} width={125}
+                                    style={{ borderRadius:0, marginLeft: 0 }} name={'image'}
+                                        onError={ev => {ev.target.src = AppImages.circleImage;}}
+                                />
+                            </div>
+                            <div className="photo-type">{AppConstants.logo}</div>
+                        </div>
+                    }
+                    {((formDataValue.organisationPhotos) || [] )
+                    .map((ph, phIndex) => (
+                        <div key={ph.organisationPhotoId}>
+                            <div>
+                                <img src={ph.photoUrl} alt=""height= {125} width={125}
+                                    style={{ borderRadius:0, marginLeft: 0 }} name={'image'}
+                                        onError={ev => {ev.target.src = AppImages.circleImage;}}
+                                />
+                            </div>
+                            <div className="photo-type">{ph.photoType}</div>
+                        </div>
+                    ))}
+                    {/* {(formDataValue.organisationPhotos == null || 
+                        formDataValue.organisationPhotos == undefined || 
+                        formDataValue.organisationPhotos.length == 0) ? 
+                            <span>{AppConstants.noPhotosAvailable}</span> : null} */}
+                </div> 
+                }
             </div >
         );
     };

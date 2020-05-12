@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Table, Pagination, Select, Button } from 'antd';
+import { Layout, Breadcrumb, Table, Pagination, Select, Button, Input, Icon } from 'antd';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -223,6 +223,7 @@ class LiveScoreGoalList extends Component {
                         justifyContent: "flex-end",
                     }}>
                         <div className="row">
+
                             <div className="col-sm">
                                 <Select
                                     className="year-select"
@@ -267,6 +268,20 @@ class LiveScoreGoalList extends Component {
                         </div>
                     </div >
                 </div >
+                {/* search box */}
+                <div className="col-sm pt-3 ml-3 " style={{ display: "flex", justifyContent: 'flex-end', }} >
+                    <div className="comp-product-search-inp-width" >
+                        <Input className="product-reg-search-input"
+                            // onChange={(e) => this.onChangeSearchText(e)}
+                            placeholder="Search..."
+                            // onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                            prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                            // onClick={() => this.onClickSearchIcon()}
+                            />}
+                            allowClear
+                        />
+                    </div>
+                </div>
             </div>
         )
     }

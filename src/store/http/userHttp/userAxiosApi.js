@@ -64,9 +64,15 @@ let userHttpApi = {
     var url = `api/organisation?userId=${userId}`;
     return Method.dataGet(url, token)
   },
-  liveScoreManagerList(roleId, entityTypeId, entityId) {
+  liveScoreManagerList(roleId, entityTypeId, entityId, searchText) {
     let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-    var url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${id}`;
+
+    var url = ''
+    if (searchText) {
+      url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${id}&userName=${searchText}`;
+    } else {
+      url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${id}`;
+    }
     return Method.dataGet(url, token)
   },
 
@@ -131,10 +137,8 @@ let userHttpApi = {
 
   // Search scorer 
   scorerSearchApi(functionId, entityTypeId, competitionId, searchText) {
-    
     if(searchText && searchText.length>0){
       var url = `users/byFunction?functionId=${functionId}&entityTypeId=${entityTypeId}&entityId=${competitionId}&userName=${searchText}`
- 
       return Method.dataGet(url, token)
     }
   },

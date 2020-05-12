@@ -6,37 +6,40 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import InputWithHead from "../../customComponents/InputWithHead"
 import AppImages from "../../themes/appImages";
+import { getInvoice } from "../../store/actions/commonAction/commonAction"
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { TextArea } = Input
-
-let data =
-    [
-        {
-            "id": 1585,
-            "firstName": "Stella",
-            "middleName": "",
-            "lastName": "L",
-            "suburb": "Wynne",
-            "street1": "135 County 646 Rd",
-            "street2": "",
-            "mCasualFee": "0.00",
-            "mCasualGst": "0.00",
-            "mSeasonalFee": "0.00",
-            "mSeasonalGst": "0.00",
-            "cSeasonalFees": "15.00",
-            "cSeasonalGST": "1.50",
-            "cCasualFees": "14.00",
-            "cCasualGST": "1.40",
-            "aSeasonalFees": "14.00",
-            "aSeasonalGST": "1.40",
-            "aCasualFees": "13.00",
-            "aCasualGST": "1.30"
-        }
-    ]
+let totalArray = []
+// let data =
+//     [
+//         {
+//             "id": 1585,
+//             "firstName": "Stella",
+//             "middleName": "",
+//             "lastName": "L",
+//             "suburb": "Wynne",
+//             "street1": "135 County 646 Rd",
+//             "street2": "",
+//             "mCasualFee": "0.00",
+//             "mCasualGst": "0.00",
+//             "mSeasonalFee": "0.00",
+//             "mSeasonalGst": "0.00",
+//             "cSeasonalFees": "15.00",
+//             "cSeasonalGST": "1.50",
+//             "cCasualFees": "14.00",
+//             "cCasualGST": "1.40",
+//             "aSeasonalFees": "14.00",
+//             "aSeasonalGST": "1.40",
+//             "aCasualFees": "13.00",
+//             "aCasualGST": "1.30"
+//         }
+//     ]
 
 class RegistrationInvoice extends Component {
     constructor(props) {
@@ -61,12 +64,10 @@ class RegistrationInvoice extends Component {
     };
 
     componentDidMount() {
-
+        // let competitionId = localStorage.getItem("competitionId")
+        // let organisationId = localStorage.getItem('organisationId')
+        this.props.getInvoice('44d558da-7cbc-4afc-9fae-f0bb01fc5a8e', "b6eb9c7b-6c74-4657-bc6d-e2222b23c965", "397")
     }
-
-
-
-
 
 
 
@@ -85,13 +86,15 @@ class RegistrationInvoice extends Component {
     }
 
     ///dropdown view containing all the dropdown of header
-    dropdownView = () => {
+    dropdownView = (result) => {
+        let data = result.length > 0 ? result[0] : []
+        let userDetail = data.userDetail && data.userDetail
         return (
-            <div className="content-view pt-4 pb-0">
-                <div className="row" >
-                    <div className="col-sm"
+            <div className="content-view pt-4 pb-0 " >
+                <div className="drop-reverse" >
+                    <div className="col-sm "
                     >
-                        <label>
+                        <label className="invoice-description">
                             <img
                                 src={AppImages.squareImage}
                                 // alt="animated"
@@ -107,16 +110,28 @@ class RegistrationInvoice extends Component {
                         <InputWithHead
                             heading={"Receipt No.1234497"}
                         />
-                        <Descriptions >
-                            <Descriptions.Item className="pb-0" label="Bill To">
-                                {data[0].firstName}{' '}{data[0].middleName}{' '}{data[0].lastName}
-                            </Descriptions.Item>
-                        </Descriptions>
-                        <Descriptions >
-                            <Descriptions.Item >
-                                {data[0].suburb} {" "} {data[0].street1} {' '}{data[0].street2}
-                            </Descriptions.Item>
-                        </Descriptions>
+                        {userDetail && userDetail.firstName &&
+                            <Descriptions >
+                                <Descriptions.Item className="pb-0" label="Bill To">
+                                    {userDetail.firstName}{' '}{userDetail.middleName}{' '}{userDetail.lastName}
+                                </Descriptions.Item>
+                            </Descriptions>
+                        }
+                        {userDetail && (userDetail.suburb || userDetail.street1) &&
+                            < Descriptions >
+                                <Descriptions.Item className="pb-0"  >
+                                    {userDetail.suburb} {" "}
+                                    {userDetail.street1} {' '}{userDetail.street2}
+                                </Descriptions.Item>
+                            </Descriptions>
+                        }
+                        {userDetail && userDetail.postalCode &&
+                            < Descriptions >
+                                <Descriptions.Item >
+                                    {userDetail.postalCode} {" "}
+                                </Descriptions.Item>
+                            </Descriptions>
+                        }
 
                         {/* </div> */}
                     </div>
@@ -132,167 +147,357 @@ class RegistrationInvoice extends Component {
     }
 
     ////////form content view
-    contentView = () => {
-
+    contentView = (result) => {
+        let data = result.length > 0 ? result : []
         return (
             <div className="content-view pt-0 pb-0">
-                <div className="row" >
-                    <div className="col-sm pb-0" >
+                <div className="invoice-row-view" >
+                    <div className="invoice-col-View pb-0 pr-0 pl-0 " >
                         <InputWithHead
                             heading={"Description"}
                         />
                     </div>
-                    <div className="col-sm pb-0" >
-                        <div className="col-sm-3" >
-                            <InputWithHead
-                                heading={"Qty"}
-                            />
-                        </div>
-                        <div className="col-sm-3" >
-                            <InputWithHead
-                                heading={"Unit Price"}
-                            />
-                        </div>
-                        <div className="col-sm-3" >
-                            <InputWithHead
-                                heading={"GST"}
-                            />
-                        </div>
-                        <div className="col-sm-3" >
-                            <InputWithHead
-                                heading={"Total"}
-                            />
-                        </div>
-                    </div>
-                </div>
-                <Divider className="mt-0 mb-0" />
-                <div className="row" >
-                    <div className="col-sm" >
-                    </div>
-                </div>
-                <div className="row" >
-                    <div className="col-sm pb-0" >
-                        <InputWithHead
-                            heading={"Membership Product -State fee"}
-                        />
-                    </div>
-                    <div className="col-sm pb-0" >
-                        <div className="col-sm-3" >
-                            <InputWithHead
-                                heading={"1"}
-                            />
-                        </div>
-                        <div className="col-sm-3" >
-                            <InputWithHead
-                                heading={data[0].mCasualFee.length > 0 ? data[0].mCasualFee : "-"}
-                            />
-                        </div>
-                        <div className="col-sm-3" >
-                            <InputWithHead
-                                heading={"$6"}
-                            />
-                        </div>
-                        <div className="col-sm-3" >
-                            <InputWithHead
-                                heading={data[0].mCasualGst.length > 0 ? data[0].mCasualGst : "-"}
-                            />
+                    <div className="invoice-col-View-30 pb-0 pl-0 pr-0" >
+                        <div className="invoice-row-view " >
+                            <div className="col-sm invoice-description" >
+                                <InputWithHead
+                                    heading={"Quantity"}
+                                />
+                            </div>
+                            <div className="col-sm invoice-description" >
+                                <InputWithHead
+                                    heading={"Unit Price"}
+                                />
+                            </div>
+                            <div className="col-sm invoice-description" >
+                                <InputWithHead
+                                    heading={"Discount"}
+                                />
+                            </div>
+                            <div className="col-sm invoice-description" >
+                                <InputWithHead
+                                    heading={"GST"}
+                                />
+                            </div>
+                            <div className="col-sm" >
+                                <InputWithHead
+                                    heading={"Amount AUD"}
+                                />
+                            </div>
                         </div>
                     </div>
-                </div>
-                <Divider className="mt-0 mb-0" />
-                <div className="row" >
-                    <div className="col-sm" >
-                    </div>
-                </div>
-                <div className="row" >
-                    <div className="col-sm pb-0" >
-                        <Descriptions >
-                            <Descriptions.Item label="Registration- Pine Rivers Netball Association">
-                                Les hughes Sporting Complex
-                                119 Francis Rd, Lawton
-                                Lasnton QLD 4501
-
-                                ABN:65593930
-                                PH:4225 0909
-                                E:Info@prna.com.au
-                         </Descriptions.Item>
-
-
-                        </Descriptions>
-                    </div>
-                    <div className="col-sm pb-0" >
-                        <div className="col-sm-3" >
-                            <InputWithHead
-                                heading={"1"}
-                            />
-                        </div>
-                        <div className="col-sm-3" >
-                            <InputWithHead
-                                heading={"$150"}
-                            />
-                        </div>
-                        <div className="col-sm-3" >
-                            <InputWithHead
-                                heading={"$15"}
-                            />
-                        </div>
-                        <div className="col-sm-3" >
-                            <InputWithHead
-                                heading={"$165"}
-                            />
-                        </div>
-                    </div>
-                </div>
-                <Divider className="mt-0 mb-0" />
-                <div className="row" >
-                    <div className="col-sm" >
-                    </div>
-                </div>
-                <div className="row" >
-                    <div className="col-sm pb-0" >
-                        <Descriptions >
-                            <Descriptions.Item label="Registration- Bicela Netball Association">
-                                Les hughes Sporting Complex
-                                119 Francis Rd, Lawton
-                                Lasnton QLD 4501
-                                ABN:65593930
-                                PH:4225 0909
-                                E:Info@prna.com.au
-                         </Descriptions.Item>
-                        </Descriptions>
-                    </div>
-                    <div className="col-sm pb-0" >
-                        <div className="col-sm-3" >
-                            <InputWithHead
-                                heading={"1"}
-                            />
-                        </div>
-                        <div className="col-sm-3" >
-                            <InputWithHead
-                                heading={data[0].mCasualFee.length > 0 ? data[0].mCasualFee : "-"}
-                            />
-                        </div>
-                        <div className="col-sm-3" >
-                            <InputWithHead
-                                heading={data[0].mCasualGst.length > 0 ? data[0].mCasualGst : "-"}
-                            />
-                        </div>
-                        <div className="col-sm-3" >
-                            <InputWithHead
-                                heading={data[0].mCasualFee.length > 0 ? data[0].mCasualFee : "-"}
-                            />
-                        </div>
-                    </div>
+                    <Divider className="mt-0 mb-0" />
                 </div>
 
 
-            </div>
+                {/* {data.membership && data.membership.length > 0 && data.membership.map((membershipItem, membershipIndex) => {
+                    return ( */}
+                {data && data.length > 0 && data.map((participantItem, participantIndex) => {
+                    let competitionDetails = participantItem && participantItem.competitionOrganiser && participantItem.competitionOrganiser.details && participantItem.competitionOrganiser.details
+                    let competitionFees = participantItem && participantItem.competitionOrganiser && participantItem.competitionOrganiser.fees && participantItem.competitionOrganiser.fees
+                    let OrgDetails = participantItem && participantItem.affiliate && participantItem.affiliate.details && participantItem.affiliate.details
+                    let orgFees = participantItem && participantItem.affiliate && participantItem.affiliate.fees && participantItem.affiliate.fees
+                    let userDetail = participantItem.userDetail && participantItem.userDetail
+                    return (
+                        <div>
+                            < div className="invoice-row-view" >
+
+                                <div className="invoice-col-View pb-0 pl-0" >
+                                    <div className="invoice-col-View pb-0 pl-0 pr-0" >
+                                        {userDetail && userDetail.firstName &&
+                                            <InputWithHead
+                                                heading={"Registration - " + userDetail.firstName + " " + userDetail.lastName}
+                                            />
+                                        }
+                                    </div>
+
+                                    {/* {userDetail && userDetail.suburb &&
+                                        <Descriptions >
+                                            <Descriptions.Item className="pb-0 pt-0" >
+                                                {userDetail.suburb}
+                                            </Descriptions.Item>
+                                        </Descriptions>
+                                    }
+
+                                    {userDetail && userDetail.street1 &&
+                                        <Descriptions >
+                                            <Descriptions.Item className="pb-0" >
+                                                {userDetail.street1} {" "}{userDetail.street2}
+                                            </Descriptions.Item>
+                                        </Descriptions>
+                                    }
+                                    {userDetail && userDetail.PhoneNo &&
+                                        <Descriptions >
+                                            <Descriptions.Item className="pb-0" >
+                                                {userDetail.PhoneNo}
+                                            </Descriptions.Item>
+                                        </Descriptions>
+                                    }
+                                    {userDetail && userDetail.postalCode &&
+                                        <Descriptions >
+                                            <Descriptions.Item  >
+                                                {userDetail.postalCode}
+                                            </Descriptions.Item>
+                                        </Descriptions>
+                                    } */}
+                                </div>
+                                < Divider className="mt-0 mb-0" />
+                            </ div>
+                            {participantItem.membership && participantItem.membership.length > 0 && participantItem.membership.map((membershipItem, membershipIndex) => {
+                                return (
+                                    < div className="row" >
+                                        <div className="invoice-col-View pb-0 pr-0 pl-0" >
+                                            {membershipItem.membershipProductTypes.length > 0 && membershipItem.membershipProductTypes.map((mproductItem, mProductIndex) => {
+                                                if (Number(mproductItem.mCasualFee + mproductItem.mSeasonalFee) !== 0) {
+                                                    return (
+                                                        <InputWithHead
+                                                            heading={mproductItem.mTypeName}
+                                                        />
+                                                    )
+                                                }
+                                            }
+                                            )}
+                                        </div>
+
+                                        <div className="invoice-col-View-30 pb-0 pl-0 pr-0" >
+
+                                            {membershipItem.membershipProductTypes.length > 0 && membershipItem.membershipProductTypes.map((mFeeItem, mFeeIndex) => {
+                                                if (Number(mFeeItem.mCasualFee + mFeeItem.mSeasonalFee) !== 0) {
+                                                    return (
+                                                        <div>
+                                                            < div className="row" >
+                                                                <div className="col-sm invoice-description"  >
+                                                                    <InputWithHead
+                                                                        // required='justify-content-center'
+                                                                        heading={("1.00")}
+                                                                    />
+                                                                </div>
+                                                                <div className="col-sm invoice-description" >
+                                                                    <InputWithHead
+                                                                        heading={Number(mFeeItem.mCasualFee + mFeeItem.mSeasonalFee).toFixed(2)}
+                                                                    />
+                                                                </div>
+                                                                <div className="col-sm invoice-description" >
+                                                                    <InputWithHead
+                                                                        heading={'N/A'}
+                                                                    />
+                                                                </div>
+                                                                <div className="col-sm invoice-description" >
+                                                                    <InputWithHead
+                                                                        heading={Number(mFeeItem.mCasualGst + mFeeItem.mSeasonalGst).toFixed(2)}
+                                                                    />
+                                                                </div>
+                                                                <div className="col-sm " >
+                                                                    <InputWithHead
+                                                                        required="invoice"
+                                                                        heading={(Number(mFeeItem.mCasualFee + mFeeItem.mSeasonalFee) + Number(mFeeItem.mCasualGst + mFeeItem.mSeasonalGst))}
+                                                                    />
+                                                                </div>
+                                                            </ div>
+                                                        </div>
+
+                                                    )
+                                                }
+                                            })}
+                                        </div>
+                                        < Divider className="mt-0 mb-0" />
+                                    </div>
+                                )
+                            })
+                            }
+
+                            <div className="row" >
+                                <div className="invoice-col-View pr-0 pl-0" >
+                                    {competitionDetails && competitionDetails.compOrgName &&
+                                        <InputWithHead
+                                            heading={competitionDetails.compOrgName}
+                                        />
+                                    }
+                                </div>
+                                <div className="invoice-col-View-30 pb-0 pl-0 pr-0" >
+
+                                    {competitionFees && competitionFees.length > 0 && competitionFees.map((compFeeItem, compFeeIndex) => {
+                                        return (
+                                            <div>
+                                                <div className="row">
+                                                    <div className="col-sm invoice-description" >
+                                                        <InputWithHead
+                                                            heading={"1.00"}
+                                                        />
+                                                    </div>
+                                                    <div className="col-sm invoice-description" >
+                                                        <InputWithHead
+                                                            heading={Number(compFeeItem.cCasualFees + compFeeItem.cSeasonalFees).toFixed(2)}
+                                                        />
+                                                    </div>
+                                                    <div className="col-sm invoice-description" >
+                                                        <InputWithHead
+                                                            heading={'N/A'}
+                                                        />
+                                                    </div>
+                                                    <div className="col-sm invoice-description" >
+                                                        <InputWithHead
+                                                            heading={Number(compFeeItem.cCasualGST + compFeeItem.cSeasonalGST).toFixed(2)}
+                                                        />
+                                                    </div>
+                                                    <div className="col-sm" >
+                                                        <InputWithHead
+                                                            required="invoice"
+                                                            heading={(Number(compFeeItem.cCasualFees + compFeeItem.cSeasonalFees) + Number(compFeeItem.cCasualGST + compFeeItem.cSeasonalGST))}
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                                < Divider className="mt-0 mb-0" />
+                            </div>
+                            <div className="row" >
+                                <div className="invoice-col-View pb-0 pr-0 pl-0" >
+                                    {OrgDetails && OrgDetails.affOrgName &&
+                                        <InputWithHead
+                                            heading={OrgDetails.affOrgName}
+                                        />
+                                    }
+                                </div>
+                                <div className="invoice-col-View-30 pb-0 pl-0 pr-0" >
+
+                                    {orgFees && orgFees.length > 0 && orgFees.map((orgFeesItem, orgFeesIndex) => {
+                                        return (
+                                            <div>
+                                                <div className="row">
+                                                    <div className="col-sm invoice-description" >
+                                                        <InputWithHead
+                                                            heading={"1.00"}
+                                                        />
+                                                    </div>
+                                                    <div className="col-sm invoice-description" >
+                                                        <InputWithHead
+                                                            heading={Number(orgFeesItem.aCasualFees + orgFeesItem.aSeasonalFees).toFixed(2)}
+                                                        />
+                                                    </div>
+                                                    <div className="col-sm invoice-description" >
+                                                        <InputWithHead
+                                                            heading={'N/A'}
+                                                        />
+                                                    </div>
+                                                    <div className="col-sm invoice-description" >
+                                                        <InputWithHead
+                                                            heading={Number(orgFeesItem.aCasualGST + orgFeesItem.aSeasonalGST).toFixed(2)}
+                                                        />
+                                                    </div>
+                                                    <div className="col-sm" >
+                                                        <InputWithHead
+                                                            required="invoice"
+                                                            heading={(Number(orgFeesItem.aCasualFees + orgFeesItem.aSeasonalFees) + Number(orgFeesItem.aCasualGST + orgFeesItem.aSeasonalGST))}
+                                                        />
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+
+                                {/* {data.length - 1 !== participantIndex && */}
+                                < Divider className="mt-0 mb-0" />
+
+                                {/* } */}
+                            </div>
+                            <div className="d-flex row d-flex justify-content-end" >
+                                <div className="invoice-total justify-content-end">
+                                    <InputWithHead
+                                        heading={"Total"}
+                                    />
+                                </div>
+                                <div className="invoice-total-Amount pr-0">
+                                    <InputWithHead
+                                        required="invoice"
+                                        heading={"AUD" + " " + "150"}
+                                    />
+                                </div>
+                                {data.length - 1 !== participantIndex &&
+                                    < Divider className="mt-0 mb-0" />
+
+                                }
+                            </div>
+
+                        </div>
+                    )
+                }
+                )
+                }
+
+
+
+
+            </div >
         )
     }
-    totalInvoiceView = () => {
+
+    subTotal = (data) => {
+        let totalvalueArray = []
+        let totalValue = 0
+        if (data.length > 0) {
+            for (let a in data) {
+                let membership = data[a].membership
+                let competitionFees = data[a].competitionOrganiser.fees
+                let affilateFees = data[a].affiliate.fees
+                for (let i in membership) {
+                    let fees = membership[i].membershipProductTypes
+                    for (let j in fees) {
+                        totalvalueArray.push(Number(fees[j].mCasualFee + fees[j].mSeasonalFee))
+                    }
+                }
+                for (let k in competitionFees) {
+                    totalvalueArray.push(Number(competitionFees[k].cCasualFees + competitionFees[k].cSeasonalFees))
+                }
+                for (let l in affilateFees) {
+                    totalvalueArray.push(Number(affilateFees[l].aCasualFees + affilateFees[l].aSeasonalFees))
+                }
+            }
+            totalValue = totalvalueArray.reduce((a, b) => a + b, 0)
+            return totalValue
+        }
+        return totalValue
+    }
+
+    subGst = (data) => {
+        let totalGstArray = []
+        let totalGst = 0
+        if (data.length > 0) {
+            for (let a in data) {
+                let membership = data[a].membership
+                let competitionFees = data[a].competitionOrganiser.fees
+                let affilateFees = data[a].affiliate.fees
+                for (let i in membership) {
+                    let fees = membership[i].membershipProductTypes
+                    for (let j in fees) {
+                        totalGstArray.push(Number(fees[j].mCasualFee + fees[j].mSeasonalFee))
+                    }
+                }
+                for (let k in competitionFees) {
+                    totalGstArray.push(Number(competitionFees[k].cCasualFees + competitionFees[k].cSeasonalFees))
+                }
+                for (let l in affilateFees) {
+                    totalGstArray.push(Number(affilateFees[l].aCasualFees + affilateFees[l].aSeasonalFees))
+                }
+            }
+            totalGst = totalGstArray.reduce((a, b) => a + b, 0)
+            return totalGst
+        }
+        return totalGst
+
+    }
+
+    totalInvoiceView = (result) => {
+        let data = result.length > 0 ? result : []
+        let subValue = this.subTotal(data)
         return (
             <div className="content-view ">
-                <div className="row" >
+                <div className="drop-reverse" >
                     <div className="col-sm ">
                         <TextArea
                             placeholder="Text Area"
@@ -300,59 +505,60 @@ class RegistrationInvoice extends Component {
                     </div>
                     <div className="col-sm"
                     >
+
+                        <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end" }}>
+                            <div className="col-sm-8" style={{ display: "flex", justifyContent: "flex-end" }}>
+                                <InputWithHead
+                                    required={"pr-4"}
+                                    heading={"Subtotal"}
+                                />
+                            </div>
+                            <InputWithHead
+                                style={{ display: "flex", justifyContent: 'flex-start' }}
+                                heading={subValue !== 0 ? subValue.toFixed(2) : '0'}
+                            />
+
+                        </div>
+                        <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end" }}>
+                            <div className="col-sm-8" style={{ display: "flex", justifyContent: "flex-end" }}>
+                                <InputWithHead
+                                    required={"pr-4 pt-0"}
+                                    heading={"GST 10%"}
+                                />
+                            </div>
+                            <InputWithHead
+                                required={"pt-0"}
+                                style={{ display: "flex", justifyContent: 'flex-start' }}
+                                heading={subValue !== 0 ? (subValue / 10).toFixed(2) : '0'}
+                            />
+
+                        </div>
                         <div className="row" >
                             <div className="col-sm" />
                             <div className="col-sm"  >
-                                <div style={{ display: 'flex', height: "1px", justifyContent: "flex-end", backgroundColor: "black" }}
+                                <div style={{ display: 'flex', height: "1px", justifyContent: "flex-end", backgroundColor: "rgba(0, 0, 0, 0.65)" }}
                                 >
-
-
                                 </div>
                             </div>
 
                         </div>
                         <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end" }}>
-                            <InputWithHead
-                                required={"pr-4"}
-                                heading={"Subtotal"}
-                            />
-                            <InputWithHead
-                                style={{ display: "flex", justifyContent: 'flex-start' }}
-                                heading={"$360"}
-                            />
-
-                        </div>
-                        <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end" }}>
 
                             <InputWithHead
                                 required={"pr-4 pt-0"}
-                                heading={"GST 10%"}
+                                heading={"Amount Due"}
                             />
                             <InputWithHead
                                 required={"pt-0"}
                                 style={{ display: "flex", justifyContent: 'flex-start' }}
-                                heading={"$36"}
+                                heading={"AUD" + " " + Number(subValue + subValue / 10).toFixed(2)}
                             />
-
-                        </div>
-                        <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end" }}>
-
-                            <InputWithHead
-                                required={"pr-4 pt-0"}
-                                heading={"Total"}
-                            />
-                            <InputWithHead
-                                required={"pt-0"}
-                                style={{ display: "flex", justifyContent: 'flex-start' }}
-                                heading={"$396"}
-                            />
-
                         </div>
                     </div>
 
                 </div>
                 <div className="row">
-                    <div className="col-sm pt-5">
+                    <div className="col-sm pt-5 invoiceImage">
                         <label>
                             <img
                                 src={AppImages.netballImages}
@@ -367,7 +573,7 @@ class RegistrationInvoice extends Component {
                             />
                         </label>
                     </div>
-                    <div className="col-sm pt-5 " style={{ display: "flex", justifyContent: "flex-end" }}>
+                    <div className="col-sm pt-5 invoiceImageMain ">
                         <label>
                             <img
                                 src={AppImages.netballLogoMain}
@@ -404,6 +610,8 @@ class RegistrationInvoice extends Component {
 
 
     render() {
+        let result = this.props.commonState.getInvoicedata
+
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout
@@ -416,10 +624,10 @@ class RegistrationInvoice extends Component {
                     {this.headerView()}
                     <Content className="container">
                         <div className="formView">
-                            {this.dropdownView()}
+                            {this.dropdownView(result)}
 
-                            {this.contentView()}
-                            {this.totalInvoiceView()}
+                            {this.contentView(result)}
+                            {this.totalInvoiceView(result)}
                         </div>
                     </Content>
                     <Footer>
@@ -431,4 +639,17 @@ class RegistrationInvoice extends Component {
         );
     }
 }
-export default RegistrationInvoice;
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        getInvoice
+    }, dispatch)
+}
+
+function mapStatetoProps(state) {
+    return {
+        commonState: state.CommonReducerState,
+    }
+}
+export default connect(mapStatetoProps, mapDispatchToProps)(RegistrationInvoice);
+

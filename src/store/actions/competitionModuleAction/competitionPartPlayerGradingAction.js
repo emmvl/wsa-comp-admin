@@ -118,6 +118,20 @@ function competitionPlayerImportAction(data) {
     }
 }
 
+function competitionTeamsImportAction(data) {
+    return {
+        type: ApiConstants.API_COMPETITION_TEAMS_IMPORT_LOAD,
+        payload: data
+    }
+}
+
+function competitionImportDataCleanUpAction(data) {
+    return {
+        type: ApiConstants.API_COMPETITION_IMPORT_DATA_CLEANUP,
+        key: data
+    }
+}
+
 function deleteTeamAction(data){
     return {
         type: ApiConstants.API_COMPETITION_TEAM_DELETE_LOAD,
@@ -138,5 +152,7 @@ export {
     playerGradingComment,
     playerSummaryCommentAction,
     competitionPlayerImportAction,
-    deleteTeamAction
+    deleteTeamAction,
+    competitionTeamsImportAction,
+    competitionImportDataCleanUpAction
 }

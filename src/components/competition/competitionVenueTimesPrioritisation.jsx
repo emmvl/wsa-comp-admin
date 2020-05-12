@@ -7,7 +7,9 @@ import {
     Radio,
     DatePicker,
     message,
-    Form
+    Form,
+    TimePicker,
+    Modal
 } from "antd";
 import { NavLink } from "react-router-dom";
 import "./competition.css";
@@ -57,7 +59,11 @@ class CompetitionVenueTimesPrioritisation extends Component {
             saveContraintLoad: false,
             yearRefId: 1,
             firstTimeCompId: "",
-
+            evenRotationFlag: false,
+            homeTeamRotationFlag: false,
+            deleteModalVisible: false,
+            currentIndex: 0,
+            currentModal: ""
         };
         // this.props.clearYearCompetitionAction()
         // this.props.getCommonRefData()
@@ -94,7 +100,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
     componentDidUpdate(nextProps) {
         const { yearList } = this.props.appState
-        const { competitionUniqueKey, yearRefId } = this.props.venueTimeState
+        const { competitionUniqueKey, yearRefId, venueConstrainstData } = this.props.venueTimeState
         let storedCompetitionID = getOwn_competition();
         let storedYearID = getOwnCompetitionYear();
         if (nextProps.commonReducerState !== this.props.commonReducerState) {
@@ -133,6 +139,29 @@ class CompetitionVenueTimesPrioritisation extends Component {
             this.setState({ loading: false, getDataLoading: true })
         }
 
+        if(nextProps.venueTimeState != this.props.venueTimeState)
+        {
+            if(venueConstrainstData.isMPDeleteHappened!= undefined && 
+                venueConstrainstData.isMPDeleteHappened == true){
+                    this.onChangeSetMPValue(false, 'isMPDeleteHappened', 0);
+                    this.setFormFieldsMatchPreference();
+                }
+
+            if(venueConstrainstData.isLDDeleteHappened!= undefined && 
+                venueConstrainstData.isLDDeleteHappened == true){
+                    this.onChangeSetLDValue(false, 'isLDDeleteHappened', 0);
+                    //this.setFormFieldsLockedDraws();
+                }
+
+            if(this.props.venueTimeState.onLoad == false && this.state.saveContraintLoad == true){
+                this.setState({saveContraintLoad: false});
+                this.props.venueConstraintListAction(this.state.yearRefId, this.state.firstTimeCompId, 1);
+                this.setState({ loading: false, getDataLoading: true })
+            }
+        }
+
+       
+
     }
 
     // for set default values
@@ -162,6 +191,45 @@ class CompetitionVenueTimesPrioritisation extends Component {
                 [entitiesGradeId]: item.entitiesGradeId
             })
         })
+
+        this.setFormFieldsMatchPreference();
+        this.setFormFieldsLockedDraws();
+    }
+
+    setFormFieldsMatchPreference = () => {
+        let allData = this.props.venueTimeState.venueConstrainstData
+        console.log("*********" + JSON.stringify(allData.matchPreference));
+        (allData.matchPreference || []).map((mp, index)=>{
+            this.onChangeSetMPValue(null, 'mpinitial', index);
+            this.props.form.setFieldsValue({
+                [`mpDivisionId${index}`]: mp.competitionMembershipProductDivisionId,
+                [`mpGradeId${index}`]: mp.competitionDivisionGradeId,
+                [`mpTeamAId${index}`]: mp.team1Id,
+                [`mpTeamBId${index}`]: mp.team2Id,
+                [`mpVenueId${index}`]: mp.venueId,
+                [`mpCourtId${index}`]: mp.courtId,
+                [`mpMatchDate${index}`]: mp.matchDate!= null ? moment(mp.matchDate, "YYYY-MM-DD"): null,
+                [`mpStartTime${index}`]: moment(mp.startTime, "HH:mm")
+            })
+        });
+    }
+
+    setFormFieldsLockedDraws = () => {
+        let allData = this.props.venueTimeState.venueConstrainstData
+        console.log("*********" + JSON.stringify(allData.lockedDraws));
+        (allData.lockedDraws || []).map((ld, index)=>{
+            this.onChangeSetLDValue(null, 'ldinitial', index);
+            this.props.form.setFieldsValue({
+                [`ldDivisionId${index}`]: ld.competitionMembershipProductDivisionId,
+                [`ldGradeId${index}`]: ld.competitionDivisionGradeId,
+                [`ldTeamAId${index}`]: ld.team1Id,
+                [`ldTeamBId${index}`]: ld.team2Id,
+                [`ldVenueId${index}`]: ld.venueId,
+                [`ldCourtId${index}`]: ld.courtId,
+                [`ldMatchDate${index}`]: ld.matchDate!= null ? moment(ld.matchDate, "YYYY-MM-DD"): null,
+                [`ldStartTime${index}`]: moment(ld.startTime, "HH:mm")
+            })
+        });
     }
 
     ///////view for breadcrumb
@@ -496,13 +564,13 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
         return (
             <div>
-                <span className="applicable-to-heading">
+                <span className="applicable-to-heading required-field">
                     {AppConstants.homeTeamRotation}
                 </span>
 
                 <Radio.Group
                     className="reg-competition-radio"
-                    onChange={(e) => this.props.updateVenueConstraintsData(e.target.value, null, "", "homeRotationValue")}
+                    onChange={(e) =>{ this.setState({homeTeamRotationFlag: false}); this.props.updateVenueConstraintsData(e.target.value, null, "", "homeRotationValue")}}
                     value={venueConstrainstData && venueConstrainstData.homeTeamRotationRefId}
                 // value={homeRotation}
                 // defaultValue={homeRotation}
@@ -515,6 +583,9 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     }
                     )}
                 </Radio.Group>
+                {this.state.homeTeamRotationFlag == true  ? 
+                    <div className="venue-cons-err">{ValidationConstant.homeTeamRotationRequired}</div> : null
+                }
             </div>
         )
     }
@@ -528,13 +599,13 @@ class CompetitionVenueTimesPrioritisation extends Component {
         console.log(evenRotation, "list", allocateSameCourtList)
         return (
             <div>
-                <span className="applicable-to-heading">
+                <span className="applicable-to-heading required-field">
                     {AppConstants.anyGradePreference2}
                 </span>
 
                 <Radio.Group
                     className="reg-competition-radio"
-                    onChange={(e) => this.props.updateVenueConstraintsData(e.target.value, null, "courtPreferences", "courtParentSelection")}
+                    onChange={(e) => { this.setState({evenRotationFlag: false}); this.props.updateVenueConstraintsData(e.target.value, null, "courtPreferences", "courtParentSelection")}}
                     value={selectedRadioBtn}
                 >
 
@@ -584,6 +655,9 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     }
                     )}
                 </Radio.Group>
+                {this.state.evenRotationFlag == true  ? 
+                    <div className="venue-cons-err">{ValidationConstant.courtRotationRequired}</div> : null
+                }
             </div>
         )
     }
@@ -602,8 +676,6 @@ class CompetitionVenueTimesPrioritisation extends Component {
         this.props.updateVenueConstraintsData(venueId, null, 'venues', 'venueListSection')
         this.props.clearFilter()
     }
-
-
 
     selectAddVenueView() {
         const { venueList, mainVenueList } = this.props.commonReducerState
@@ -642,22 +714,454 @@ class CompetitionVenueTimesPrioritisation extends Component {
         )
     }
 
+    addMatchPreference = () =>{
+        this.props.updateVenueConstraintsData(null, null, 'addMatchPreference', 'matchPreference')
+    }
+
+    removeDetail = (index, currentModal) => {
+        this.setState({currentIndex: index, deleteModalVisible: true, currentModal: currentModal});
+    }
+
+    onChangeSetMPValue = (val, key, index) =>{
+        if(key == "matchDate"){
+            val = moment(val).format("YYYY-MM-DD");
+        }
+        if(key == "competitionMembershipProductDivisionId"){
+            this.props.form.setFieldsValue({
+                [`mpGradeId${index}`]: null,
+                [`mpTeamAId${index}`]: null,
+                [`mpTeamBId${index}`]: null,
+            })
+        }
+        else if(key == "competitionDivisionGradeId"){
+            this.props.form.setFieldsValue({
+                [`mpTeamAId${index}`]: null,
+                [`mpTeamBId${index}`]: null,
+            })
+        }
+        else if(key == "venueId"){
+            this.props.form.setFieldsValue({
+                [`mpCourtId${index}`]: null,
+            })
+        }
+        this.props.updateVenueConstraintsData(val, index, key, 'matchPreference')
+    }
+
+
+    onChangeSetLDValue = (val, key, index) =>{
+        if(key == "matchDate"){
+            val = moment(val).format("YYYY-MM-DD");
+        }
+        if(key == "competitionMembershipProductDivisionId"){
+            this.props.form.setFieldsValue({
+                [`ldGradeId${index}`]: null,
+                [`ldTeamAId${index}`]: null,
+                [`ldTeamBId${index}`]: null,
+            })
+        }
+        else if(key == "competitionDivisionGradeId"){
+            this.props.form.setFieldsValue({
+                [`ldTeamAId${index}`]: null,
+                [`ldTeamBId${index}`]: null,
+            })
+        }
+        else if(key == "venueId"){
+            this.props.form.setFieldsValue({
+                [`ldCourtId${index}`]: null,
+            })
+        }
+        this.props.updateVenueConstraintsData(val, index, key, 'lockedDraws')
+    }
+
+    handleDeleteModal(key)
+    {
+        this.setState({
+            deleteModalVisible: false
+        });
+        if(key == "ok"){
+            this.setState({deleteModalVisible: false});
+            if(this.state.currentModal == "matchPreference"){
+                this.props.updateVenueConstraintsData(null, this.state.currentIndex, 'removeMatchPreference', 'matchPreference')
+            }
+            else if(this.state.currentModal == "lockedDraws"){
+                this.onChangeSetLDValue(false, "isLocked",this.state.currentIndex);
+            }
+        }
+    }
+
+    matchPreferenceView = (getFieldDecorator) =>{
+        const { venueConstrainstData, venuePost } = this.props.venueTimeState;
+        console.log("venueConstrainstData.matchPreference" + JSON.stringify(venueConstrainstData.matchPreference));
+        
+        return (
+            <div className="content-view" style={{paddingTop: '30px'}}>
+                <span className="applicable-to-heading" style={{paddingTop: '0px', paddingBottom: '20px'}}>{AppConstants.matchPreference}</span>
+                {(venueConstrainstData.matchPreference || []).map((item, index) => (
+                <div className="fluid-width comp-venue-time-inside-container-view" style={{marginBottom: '20px'}}>
+                     <div className="col-sm delete-image-view pb-4" onClick={() => this.removeDetail(index, "matchPreference")}>
+                        <span className="user-remove-btn">
+                            <i className="fa fa-trash-o" aria-hidden="true"></i>
+                        </span>
+                        <span style={{ cursor: 'pointer' }} className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                    </div>
+                    <div className="row" >
+                        <div className="col-sm-3" >
+                            <InputWithHead heading={AppConstants.division}  required={"required-field"} />
+                            <Form.Item >
+                                {getFieldDecorator(`mpDivisionId${index}`, {
+                                    rules: [{ required: true, message: ValidationConstant.divisionName }]
+                                })(
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={(div) => this.onChangeSetMPValue(div, 'competitionMembershipProductDivisionId', index)}
+                                        setFieldsValue={item.competitionMembershipProductDivisionId}
+                                       >
+                                        {(venueConstrainstData.divisionGrades || []).map((div, divIndex) => (
+                                            <Option key={div.competitionMembershipProductDivisionId} value={div.competitionMembershipProductDivisionId}>{div.divisionName}</Option>
+                                        ))}
+                                    </Select>
+                                )}
+                            </Form.Item>
+                        </div>
+                        <div className="col-sm-3" >
+                            <InputWithHead heading={AppConstants.grade}  required={"required-field"} />
+                            <Form.Item >
+                                {getFieldDecorator(`mpGradeId${index}`, {
+                                    rules: [{ required: true, message: ValidationConstant.gradeNameRequired }]
+                                })(
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={(div) => this.onChangeSetMPValue(div, 'competitionDivisionGradeId', index)}
+                                        setFieldsValue={item.competitionDivisionGradeId}
+                                       >
+                                        {(item.grades || []).map((g, gIndex) => (
+                                            <Option key={g.gradeId} value={g.gradeId}>{g.gradeName}</Option>
+                                        ))}
+                                    </Select>
+                                )}
+                            </Form.Item>
+                        </div>
+                        <div className="col-sm-3" >
+                            <InputWithHead heading={AppConstants.teamA}  required={"required-field"} />
+                            <Form.Item >
+                                {getFieldDecorator(`mpTeamAId${index}`, {
+                                    rules: [{ required: true, message: ValidationConstant.teamName }]
+                                })(
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={(div) => this.onChangeSetMPValue(div, 'team1Id', index)}
+                                        setFieldsValue={item.team1Id}
+                                       >
+                                        {(item.teams || []).map((t, index) => (
+                                            <Option key={t.teamId} value={t.teamId}>{t.teamName}</Option>
+                                        ))}
+                                    </Select>
+                                )}
+                            </Form.Item>
+                        </div>
+                        <div className="col-sm-3" >
+                            <InputWithHead heading={AppConstants.teamB}  required={"required-field"} />
+                            <Form.Item >
+                                {getFieldDecorator(`mpTeamBId${index}`, {
+                                    rules: [{ required: true, message: ValidationConstant.teamName }]
+                                })(
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={(div) => this.onChangeSetMPValue(div, 'team2Id', index)}
+                                        setFieldsValue={item.team2Id}
+                                       >
+                                       {(item.teams || []).map((t1, tIndex) => (
+                                            <Option key={t1.teamId} value={t1.teamId}>{t1.teamName}</Option>
+                                        ))}
+                                    </Select>
+                                )}
+                            </Form.Item>
+                        </div>
+                    </div>
+                    <div className="row" >
+                        <div className="col-sm-3" >
+                            <InputWithHead heading={AppConstants.venue}  required={"required-field"} />
+                            <Form.Item >
+                                {getFieldDecorator(`mpVenueId${index}`, {
+                                    rules: [{ required: true, message: ValidationConstant.pleaseSelectvenue }]
+                                })(
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={(div) => this.onChangeSetMPValue(div, 'venueId', index)}
+                                        setFieldsValue={item.venueId}
+                                       >
+                                        {(venuePost || []).map((v, vIndex) => (
+                                            <Option key={v.venueId} value={v.venueId}>{v.venueName}</Option>
+                                        ))}
+                                    </Select>
+                                )}
+                            </Form.Item>
+                        </div>
+                        <div className="col-sm-3" >
+                            <InputWithHead heading={AppConstants.courts}  required={"required-field"} />
+                            <Form.Item >
+                                {getFieldDecorator(`mpCourtId${index}`, {
+                                    rules: [{ required: true, message: ValidationConstant.court }]
+                                })(
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={(div) => this.onChangeSetMPValue(div, 'courtId', index)}
+                                        setFieldsValue={item.courtId}
+                                       >
+                                        {(item.courts || []).map((c, cIndex) => (
+                                            <Option key={c.venueCourtId} value={c.venueCourtId}>{c.courtNumber}</Option>
+                                        ))}
+                                    </Select>
+                                )}
+                            </Form.Item>
+                        </div>
+                        <div className="col-sm-3" >
+                            <InputWithHead heading={AppConstants.date}  required={"required-field"} />
+                            <Form.Item >
+                                {getFieldDecorator(`mpMatchDate${index}`, {
+                                    rules: [{ required: true, message: ValidationConstant.dateField }]
+                                })(
+                                    <DatePicker
+                                        size="large"
+                                        placeholder={"Select Date"}
+                                        style={{ width: "100%" }}
+                                        onChange={(e) =>  this.onChangeSetMPValue(e, 'matchDate', index)}
+                                        name={"matchDate"}
+                                        format={"DD-MM-YYYY"}
+                                        showTime={false}
+                                    />
+                                )}
+                            </Form.Item>
+                        </div>
+                        <div className="col-sm-3" >
+                            <InputWithHead heading={AppConstants.startTime}  required={"required-field"} />
+                            <Form.Item >
+                                {getFieldDecorator(`mpStartTime${index}`, {
+                                    rules: [{ required: true, message: ValidationConstant.startTime }]
+                                })(
+                                    <TimePicker
+                                        className="comp-venue-time-timepicker"
+                                        style={{ width: "100%" }}
+                                        onChange={(time) => this.onChangeSetMPValue(time.format("HH:mm"), 'startTime', index)}
+                                        //value={moment(item.endTime, "HH:mm")}
+                                        format={"HH:mm "}
+                                        minuteStep={15}
+                                        use12Hours={false}
+                                    />
+                                )}
+                            </Form.Item>
+                        </div>
+                    </div>
+                </div>
+                ))}
+                 <span className="input-heading-add-another" onClick={()=> this.addMatchPreference()}>
+                        + {AppConstants.addPreference}
+                    </span>
+            </div>
+        )
+    } 
+
+    lockedGradesView = (getFieldDecorator) =>{
+        const { venueConstrainstData, venuePost } = this.props.venueTimeState;
+        console.log("venueConstrainstData.lockedDraws" + JSON.stringify(venueConstrainstData.lockedDraws));
+        let lockedDraws = venueConstrainstData.lockedDraws!= null ? venueConstrainstData.lockedDraws : [];
+        return (
+            <div className="content-view" style={{paddingTop: '30px'}}>
+                <span className="applicable-to-heading" style={{paddingTop: '0px', paddingBottom: '20px'}}>{AppConstants.lockedDraws}</span>
+                {(lockedDraws || []).map((item, index) => (
+                <div>
+                {item.isLocked ? 
+                <div className="fluid-width comp-venue-time-inside-container-view" style={{marginBottom: '20px'}}>
+                    
+                     <div className="col-sm delete-image-view pb-4" onClick={() => this.removeDetail(index, "lockedDraws")}>
+                        <span className="user-remove-btn">
+                            <i className="fa fa-trash-o" aria-hidden="true"></i>
+                        </span>
+                        <span style={{ cursor: 'pointer' }} className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                    </div>
+                   
+                    <div className="row" >
+                        <div className="col-sm-3" >
+                            <InputWithHead heading={AppConstants.division}  required={"required-field"} />
+                            <Form.Item >
+                                {getFieldDecorator(`ldDivisionId${index}`, {
+                                    rules: [{ required: true, message: ValidationConstant.divisionName }]
+                                })(
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={(div) => this.onChangeSetLDValue(div, 'competitionMembershipProductDivisionId', index)}
+                                        setFieldsValue={item.competitionMembershipProductDivisionId}
+                                       >
+                                        {(venueConstrainstData.divisionGrades || []).map((div, divIndex) => (
+                                            <Option key={div.competitionMembershipProductDivisionId} value={div.competitionMembershipProductDivisionId}>{div.divisionName}</Option>
+                                        ))}
+                                    </Select>
+                                )}
+                            </Form.Item>
+                        </div>
+                        <div className="col-sm-3" >
+                            <InputWithHead heading={AppConstants.grade}  required={"required-field"} />
+                            <Form.Item >
+                                {getFieldDecorator(`ldGradeId${index}`, {
+                                    rules: [{ required: true, message: ValidationConstant.gradeNameRequired }]
+                                })(
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={(div) => this.onChangeSetLDValue(div, 'competitionDivisionGradeId', index)}
+                                        setFieldsValue={item.competitionDivisionGradeId}
+                                       >
+                                        {(item.grades || []).map((g, gIndex) => (
+                                            <Option key={g.gradeId} value={g.gradeId}>{g.gradeName}</Option>
+                                        ))}
+                                    </Select>
+                                )}
+                            </Form.Item>
+                        </div>
+                        <div className="col-sm-3" >
+                            <InputWithHead heading={AppConstants.teamA}  required={"required-field"} />
+                            <Form.Item >
+                                {getFieldDecorator(`ldTeamAId${index}`, {
+                                    rules: [{ required: true, message: ValidationConstant.teamName }]
+                                })(
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={(div) => this.onChangeSetLDValue(div, 'team1Id', index)}
+                                        setFieldsValue={item.team1Id}
+                                       >
+                                        {(item.teams || []).map((t, index) => (
+                                            <Option key={t.teamId} value={t.teamId}>{t.teamName}</Option>
+                                        ))}
+                                    </Select>
+                                )}
+                            </Form.Item>
+                        </div>
+                        <div className="col-sm-3" >
+                            <InputWithHead heading={AppConstants.teamB}  required={"required-field"} />
+                            <Form.Item >
+                                {getFieldDecorator(`ldTeamBId${index}`, {
+                                    rules: [{ required: true, message: ValidationConstant.teamName }]
+                                })(
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={(div) => this.onChangeSetLDValue(div, 'team2Id', index)}
+                                        setFieldsValue={item.team2Id}
+                                       >
+                                       {(item.teams || []).map((t1, tIndex) => (
+                                            <Option key={t1.teamId} value={t1.teamId}>{t1.teamName}</Option>
+                                        ))}
+                                    </Select>
+                                )}
+                            </Form.Item>
+                        </div>
+                    </div>
+                    <div className="row" >
+                        <div className="col-sm-3" >
+                            <InputWithHead heading={AppConstants.venue}  required={"required-field"} />
+                            <Form.Item >
+                                {getFieldDecorator(`ldVenueId${index}`, {
+                                    rules: [{ required: true, message: ValidationConstant.pleaseSelectvenue }]
+                                })(
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={(div) => this.onChangeSetLDValue(div, 'venueId', index)}
+                                        setFieldsValue={item.venueId}
+                                       >
+                                        {(venuePost || []).map((v, vIndex) => (
+                                            <Option key={v.venueId} value={v.venueId}>{v.venueName}</Option>
+                                        ))}
+                                    </Select>
+                                )}
+                            </Form.Item>
+                        </div>
+                        <div className="col-sm-3" >
+                            <InputWithHead heading={AppConstants.courts}  required={"required-field"} />
+                            <Form.Item >
+                                {getFieldDecorator(`ldCourtId${index}`, {
+                                    rules: [{ required: true, message: ValidationConstant.court }]
+                                })(
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={(div) => this.onChangeSetLDValue(div, 'courtId', index)}
+                                        setFieldsValue={item.courtId}
+                                       >
+                                        {(item.courts || []).map((c, cIndex) => (
+                                            <Option key={c.venueCourtId} value={c.venueCourtId}>{c.courtNumber}</Option>
+                                        ))}
+                                    </Select>
+                                )}
+                            </Form.Item>
+                        </div>
+                        <div className="col-sm-3" >
+                            <InputWithHead heading={AppConstants.date}  required={"required-field"} />
+                            <Form.Item >
+                                {getFieldDecorator(`ldMatchDate${index}`, {
+                                    rules: [{ required: true, message: ValidationConstant.dateField }]
+                                })(
+                                    <DatePicker
+                                        size="large"
+                                        placeholder={"Select Date"}
+                                        style={{ width: "100%" }}
+                                        onChange={(e) =>  this.onChangeSetLDValue(e, 'matchDate', index)}
+                                        name={"matchDate"}
+                                        format={"DD-MM-YYYY"}
+                                        showTime={false}
+                                    />
+                                )}
+                            </Form.Item>
+                        </div>
+                        <div className="col-sm-3" >
+                            <InputWithHead heading={AppConstants.startTime}  required={"required-field"} />
+                            <Form.Item >
+                                {getFieldDecorator(`ldStartTime${index}`, {
+                                    rules: [{ required: true, message: ValidationConstant.startTime }]
+                                })(
+                                    <TimePicker
+                                        className="comp-venue-time-timepicker"
+                                        style={{ width: "100%" }}
+                                        onChange={(time) => this.onChangeSetLDValue(time.format("HH:mm"), 'startTime', index)}
+                                        //value={moment(item.endTime, "HH:mm")}
+                                        format={"HH:mm "}
+                                        minuteStep={15}
+                                        use12Hours={false}
+                                    />
+                                )}
+                            </Form.Item>
+                        </div>
+                    </div>
+                </div>
+                : null }
+                </div>
+                ))}
+                 {/* <span className="input-heading-add-another" onClick={()=> this.addMatchPreference()}>
+                        + {AppConstants.addAnother}
+                    </span> */}
+            </div>
+        )
+    }
+
     ////////form content view
     contentView = (getFieldDecorator) => {
         const { selectedRadioBtn } = this.props.venueTimeState
         return (
             <div className="content-view">
-                {this.selectAddVenueView()}
+                    {this.selectAddVenueView()}
 
-                {this.nonPlayingDatesContainer(getFieldDecorator)}
+                    {/* {this.nonPlayingDatesContainer(getFieldDecorator)} */}
 
-                {this.anyGradePrefenceView()}
+                    {this.anyGradePrefenceView()}
 
-                {selectedRadioBtn === 5 && this.courtPrefnceView(getFieldDecorator)}
+                    {selectedRadioBtn === 5 && this.courtPrefnceView(getFieldDecorator)}
 
-                {this.homeTeamRotationView()}
+                    {this.homeTeamRotationView()}
 
-            </div >
+                    <Modal
+                        title={AppConstants.removeFixture}
+                        visible={this.state.deleteModalVisible}
+                        onOk={() => this.handleDeleteModal("ok")}
+                        onCancel={() => this.handleDeleteModal("cancel")}>
+                        <p>{AppConstants.venueConstraintModalMsg}</p>
+                    </Modal>
+                </div >
         );
     };
 
@@ -689,25 +1193,50 @@ class CompetitionVenueTimesPrioritisation extends Component {
     onSaveConstraints = (e) => {
         let venueConstarintsDetails = this.props.venueTimeState
         const { venueConstrainstData, competitionUniqueKey, yearRefId, courtPreferencesPost } = venueConstarintsDetails
-
-        let postObject = {
-            "competitionUniqueKey": competitionUniqueKey,
-            "yearRefId": this.state.yearRefId,
-            "organisationId": 1,
-            "venues": venueConstarintsDetails.venuePost,
-            "nonPlayingDates": venueConstrainstData.nonPlayingDates,
-            "venueConstraintId": venueConstrainstData.venueConstraintId,
-            "courtRotationRefId": venueConstrainstData.courtRotationRefId,
-            "homeTeamRotationRefId": venueConstrainstData.homeTeamRotationRefId,
-            "courtPreferences": courtPreferencesPost
-        }
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                this.setState({ saveContraintLoad: true })
-                this.props.venueConstraintPostAction(postObject)
+        
+        if(venueConstrainstData.courtRotationRefId == 0){
+            this.setState({evenRotationFlag: true});
+        }
+        else{
+            this.setState({evenRotationFlag: false});  
+        }
+        if(venueConstrainstData.homeTeamRotationRefId == 0)
+        {
+            this.setState({homeTeamRotationFlag: true});
+        }
+        else{
+            this.setState({homeTeamRotationFlag: false});
+        }
+
+        if(venueConstrainstData.courtRotationRefId != 0 && 
+            venueConstrainstData.homeTeamRotationRefId != 0){
+            let postObject = {
+                "competitionUniqueKey": competitionUniqueKey,
+                "yearRefId": this.state.yearRefId,
+                "organisationId": 1,
+                "venues": venueConstarintsDetails.venuePost,
+                "nonPlayingDates": venueConstrainstData.nonPlayingDates,
+                "venueConstraintId": venueConstrainstData.venueConstraintId,
+                "courtRotationRefId": venueConstrainstData.courtRotationRefId,
+                "homeTeamRotationRefId": venueConstrainstData.homeTeamRotationRefId,
+                "courtPreferences": courtPreferencesPost,
+                "matchPreference": venueConstrainstData.matchPreference,
+                "lockedDraws": venueConstrainstData.lockedDraws
             }
-        })
+
+            console.log("postObject::" + JSON.stringify(postObject));
+            
+            this.props.form.validateFields((err, values) => {
+                if (!err) {
+                    this.setState({ saveContraintLoad: true })
+                    this.props.venueConstraintPostAction(postObject)
+                }
+            })
+        }
+
+        
+        
     }
 
 
@@ -715,9 +1244,10 @@ class CompetitionVenueTimesPrioritisation extends Component {
     render() {
         console.log(this.props.venueTimeState.courtRotation)
         const { getFieldDecorator } = this.props.form;
+        const { venueConstrainstData } = this.props.venueTimeState;
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout
+                <DashboardLayout 
                     menuHeading={AppConstants.competitions}
                     menuName={AppConstants.competitions}
                 />
@@ -731,8 +1261,24 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         noValidate="noValidate"
                     >
                         <Content>
-
                             <div className="formView">{this.contentView(getFieldDecorator)}</div>
+                            
+                            <div className="formView" style={{marginTop: '20px'}}>
+                                {this.matchPreferenceView(getFieldDecorator)}
+                            </div>
+                            {
+                                venueConstrainstData.matchPreference!= null && venueConstrainstData.matchPreference.length > 0 ? 
+                                <div className="formView" style={{marginTop: '20px'}}>
+                                    {this.matchPreferenceView(getFieldDecorator)}
+                                </div> : null
+                            }
+                            {
+                                venueConstrainstData.lockedDraws!= null && venueConstrainstData.lockedDraws.length > 0 ? 
+                                <div className="formView" style={{marginTop: '20px'}}>
+                                    {this.lockedGradesView(getFieldDecorator)}
+                                </div> : null
+                            }
+                           
                         </Content>
                         <Footer>{this.footerView()}</Footer>
                     </Form>

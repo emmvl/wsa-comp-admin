@@ -16,20 +16,56 @@ const initialState = {
   updateLoad: false,
   gradeColorArray: [],
   divisionGradeNameList: [],
-  publishStatus: 0
+  publishStatus: 0,
+  isTeamInDraw: null,
+  legandsArray: [],
+
 };
 var gradeColorArray = [];
 const colorsArray = ColorsArray;
 const lightGray = '#999999';
+var legandsArray = [];
+
+function createLagendsArray(drawsArray, currentLagends, dateArray) {
+  let newArray = currentLagends
+  console.log("drawsArray, currentLagends", drawsArray, currentLagends)
+  for (let i in drawsArray) {
+    for (let j in drawsArray[i].slotsArray) {
+      let color = drawsArray[i].slotsArray[j].colorCode
+      let index = currentLagends.findIndex((x) => x.colorCode === color)
+      let object = {
+        "colorCode": color,
+        "gradeName": color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName
+      }
+      if (index === -1) {
+        newArray.push(object)
+      }
+    }
+
+  }
+  let dateArrayLength = isArrayNotEmpty(dateArray) ? dateArray.length : 1
+  let temparray = []
+  let finalLegendsChunkArray = []
+  for (let i = 0, j = newArray.length; i < j; i += dateArrayLength) {
+    temparray = newArray.slice(i, i + dateArrayLength);
+    finalLegendsChunkArray.push(temparray)
+  }
+  console.log(finalLegendsChunkArray)
+  return finalLegendsChunkArray
+}
+
 
 function structureDrawsData(data) {
   let mainCourtNumberArray = [];
   let dateArray = [];
   let gradeArray = [];
   let sortedDateArray = [];
+  let legendArray = [];
+
   if (data.draws) {
     if (isArrayNotEmpty(data.draws)) {
       data.draws.map((object) => {
+        console.log("object", object)
         if (checkDateNotInArray(dateArray, object.matchDate)) {
           dateArray.push(object.matchDate);
         }
@@ -41,8 +77,11 @@ function structureDrawsData(data) {
           object
         );
         if (!courtNumberResponse.status) {
+          console.log(object)
           mainCourtNumberArray.push({
             venueCourtNumber: object.venueCourtNumber,
+            venueCourtName: object.venueCourtName,
+            venueShortName: object.venueShortName,
             slotsArray: [],
           });
         }
@@ -134,6 +173,8 @@ function getSlotFromDate(drawsArray, venueCourtNumber, matchDate, gradeArray) {
   return {
     drawsId: null,
     venueCourtNumber: venueCourtNumber,
+    venueCourtName: null,
+    venueShortName: null,
     matchDate: matchDate,
     startTime: startTime,
     endTime: endTime,
@@ -640,9 +681,15 @@ function CompetitionDraws(state = initialState, action) {
       return { ...state, onLoad: true, error: null };
 
     case ApiConstants.API_GET_COMPETITION_DRAWS_SUCCESS:
+
       let drawsResultData = action.result[0];
       let resultData = structureDrawsData(drawsResultData);
       state.publishStatus = action.result[0].drawsPublish
+      state.isTeamInDraw = action.result[0].isTeamNotInDraws
+      let drawsSorted = resultData.mainCourtNumberArray
+      legandsArray = []
+      legandsArray = createLagendsArray(drawsSorted, legandsArray, resultData.sortedDateArray)
+      state.legandsArray = legandsArray
       return {
         ...state,
         getDrawsData: resultData.mainCourtNumberArray,
@@ -787,12 +834,18 @@ function CompetitionDraws(state = initialState, action) {
       };
 
     case ApiConstants.cleardrawsData:
+      state.isTeamInDraw = null
+      state.publishStatus = 0
       state.getStaticDrawsData = [];
       state.dateArray = [];
+      state.legandsArray = [];
+      legandsArray = []
       if (action.key == 'round') {
         state.competitionVenues = [];
         state.getDrawsRoundsData = [];
         state.divisionGradeNameList = [];
+        state.legandsArray = [];
+        legandsArray = []
       }
       return { ...state };
 
@@ -815,6 +868,7 @@ function CompetitionDraws(state = initialState, action) {
 
     case ApiConstants.API_DRAW_PUBLISH_SUCCESS:
       state.publishStatus = 1
+      state.isTeamInDraw = null
       state.updateLoad = false
       return {
         ...state,
@@ -823,7 +877,7 @@ function CompetitionDraws(state = initialState, action) {
       }
 
     case ApiConstants.API_DRAW_MATCHES_LIST_LOAD:
-    return { ...state, onLoad: true, onLoad: true }
+      return { ...state, onLoad: true, onLoad: true }
 
     case ApiConstants.API_DRAW_MATCHES_LIST_SUCCESS:
       return {

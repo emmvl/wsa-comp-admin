@@ -107,7 +107,8 @@ import {
   registrationOtherInfoReferenceSaga, firebirdPlayerReferenceSaga, favouriteTeamReferenceSaga,
   nationalityReferenceSaga, heardByReferenceSaga, playerPositionReferenceSaga, venuesListSaga,
   venueByIdSaga, venueDeleteSaga,
-  getGenderSaga, getPhotoTypeSaga
+  getGenderSaga, getPhotoTypeSaga, getInvoiceSaga, getAppyToSaga, getExtraTimeDrawSaga,
+  getFinalsFixtureTemplateSaga
 } from "./commonSaga/commonSaga";
 ////Venue constraints
 import { venueTimeSaga, venueConstraintPostSaga } from './competitionManagementSaga/venueTimeSaga'
@@ -120,6 +121,7 @@ import {
   partPLayerCommentSaga,
   partPlayerSummaryCommentSaga,
   importCompetitionPlayer,
+  importCompetitionTeams,
   deleteTeamSaga
 } from './competitionManagementSaga/competitionPartPlayerGradingSaga';
 import {
@@ -565,7 +567,11 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_REG_DASHBOARD_LIST_LOAD, regDashboardListSaga)
   yield takeEvery(ApiConstants.API_GET_GENDER_LOAD, getGenderSaga)
   yield takeEvery(ApiConstants.API_GET_PHOTO_TYPE_LOAD, getPhotoTypeSaga)
+  yield takeEvery(ApiConstants.API_GET_APPY_TO_LOAD, getAppyToSaga)
+  yield takeEvery(ApiConstants.API_GET_EXTRA_TIME_DRAW_LOAD, getExtraTimeDrawSaga)
+  yield takeEvery(ApiConstants.API_GET_FINAL_FIXTURE_TEMPLATE_LOAD, getFinalsFixtureTemplateSaga)
   
+
 
   //Search Scorer saga 
   yield takeEvery(ApiConstants.API_LIVESCORE_SCORER_SEARCH_LOAD, liveScoreScorerSearchSaga)
@@ -594,6 +600,8 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_COMPETITION_FEE_INVITEES_SEARCH_LOAD, inviteeSearchSaga)
 
   yield takeEvery(ApiConstants.API_COMPETITION_PLAYER_IMPORT_LOAD, importCompetitionPlayer);
+  yield takeEvery(ApiConstants.API_COMPETITION_TEAMS_IMPORT_LOAD, importCompetitionTeams);
+
 
   yield takeEvery(ApiConstants.API_EXPORT_FILES_LOAD, exportFilesSaga)
 
@@ -624,6 +632,8 @@ export default function* root_saga() {
   //part proposed team grading comment 
   yield takeEvery(ApiConstants.API_COMPETITION_TEAM_DELETE_ACTION_LOAD, deleteTeamActionSaga)
 
+  yield takeEvery(ApiConstants.API_GET_INVOICE_LOAD, getInvoiceSaga)
+
   //////////stripe payment account balance API
   yield takeEvery(ApiConstants.API_SAVE_STRIPE_ACCOUNT_API_LOAD, stripeSaga.saveStripeAccountSaga)
 
@@ -633,11 +643,15 @@ export default function* root_saga() {
   // Organisation Photos Save
   yield takeEvery(ApiConstants.API_SAVE_ORG_PHOTO_LOAD, userSaga.saveOrgPhotosSaga)
 
-    // Organisation Photos Delete
-    yield takeEvery(ApiConstants.API_DELETE_ORG_PHOTO_LOAD, userSaga.deleteOrgPhotosSaga)
+  // Organisation Photos Delete
+  yield takeEvery(ApiConstants.API_DELETE_ORG_PHOTO_LOAD, userSaga.deleteOrgPhotosSaga)
 
-    //Draws Matches List Export
-    yield takeEvery(ApiConstants.API_DRAW_MATCHES_LIST_LOAD, drawsMatchesListExportSaga)
+  //Draws Matches List Export
+  yield takeEvery(ApiConstants.API_DRAW_MATCHES_LIST_LOAD, drawsMatchesListExportSaga)
 
+  //////////stripe login link
+  yield takeEvery(ApiConstants.API_GET_STRIPE_LOGIN_LINK_API_LOAD, stripeSaga.getStripeLoginLinkSaga)
 
+  /////stripe payments transfer list
+  yield takeEvery(ApiConstants.API_GET_STRIPE_PAYMENTS_TRANSFER_LIST_API_LOAD, stripeSaga.getStripeTransferListSaga)
 }

@@ -1,14 +1,16 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-function liveScoreScorerListAction(competitionId, roleId, data) {
+function liveScoreScorerListAction(competitionId, roleId, data, search) {
 
     const action = {
         type: ApiConstants.API_LIVE_SCORE_SCORER_LIST_LOAD,
         competitionId: competitionId,
         roleId: roleId,
-        body: data
+        body: data,
+        search
 
     }
+    console.log(action, 'liveScoreScorerListAction')
     return action
 }
 function liveScoreScorerUpdate(data, key) {
@@ -82,9 +84,9 @@ function unAssignMatcheStatus(index, records, scorerKey, teamkey) {
 
 
 // Scorer Search
-function liveScoreScorerSearch(roleId, entityTypeId, competitionId, searchText){
-    const action={
-        type : ApiConstants.API_LIVESCORE_SCORER_SEARCH_LOAD,
+function liveScoreScorerSearch(roleId, entityTypeId, competitionId, searchText) {
+    const action = {
+        type: ApiConstants.API_LIVESCORE_SCORER_SEARCH_LOAD,
         roleId,
         entityTypeId,
         competitionId,

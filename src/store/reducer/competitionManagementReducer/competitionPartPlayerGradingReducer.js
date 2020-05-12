@@ -19,7 +19,8 @@ const initialState = {
     },
     newTeam: [],
     AllPartPlayerGradingListData: [],
-    playerImportData: []
+    playerImportData: [],
+    teamsImportData: []
 };
 
 
@@ -295,7 +296,29 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
                 playerImportData: res.data,
                 onLoad: false,
             }
+        case ApiConstants.API_COMPETITION_TEAMS_IMPORT_LOAD:
+            return { ...state, onLoad: true };
 
+        case ApiConstants.API_COMPETITION_TEAMS_IMPORT_SUCCESS:
+            let resTeams = action.result;
+            return {
+                ...state,
+                teamsImportData: resTeams.data,
+                onLoad: false,
+            }
+
+        case ApiConstants.API_COMPETITION_IMPORT_DATA_CLEANUP:
+            if(action.key == "player"){
+                state.playerImportData = [];
+            }
+            else if(action.key == "team"){
+                state.teamsImportData = [];
+            }
+            return {
+                ...state
+            }
+
+                
         case ApiConstants.API_COMPETITION_TEAM_DELETE_LOAD:
             return { ...state, onTeamDeleteLoad: true };
 

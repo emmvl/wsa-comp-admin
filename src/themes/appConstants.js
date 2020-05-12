@@ -225,6 +225,7 @@ const AppConstants = {
   qtrBreak: "Qtr Break",
   betweenGames: "Between Games",
   assignManually: "Assign Manually",
+  regenerateDraw: "Regenerate",
 
   ///*****Competition Finals */
   rounds4Top16: "4 Rounds-Top 16",
@@ -968,14 +969,35 @@ const AppConstants = {
   submitPayment: "Submit Payment",
   connectToStripe: "Connect to Stripe",
   goToStripeDashboard: "Go to Stripe Dashboard",
-  disput_description:"Result in dispute",
-  draft_description:"Final result entered and unconfirmed",
-  final_description:"Final result entered and confirmed",
+  disput_description: "Result in dispute",
+  draft_description: "Final result entered and unconfirmed",
+  final_description: "Final result entered and confirmed",
   deleteTeam: "Delete Team",
   addPhoto: "Add Photo",
   editPhoto: "Edit Photo",
   photoType: "PhotoType",
-  matchesList: "Matches List"
+  matchesList: "Matches List",
+  orgPhotosText: "These photos will display on the User Registration Form",
+  compStartDate: "Competition Start Date",
+  compCloseDate: "Competition End Date",
+  importTeams: "Import Teams",
+  noPhotosAvailable: "No photos available",
+  downloadTemplate: "Download Template",
+  finalsStartDate: "Finals Start Date",
+  extraTimeMatchType: "Extra Time Type",
+  applyToRef: "ApplyToFinals",
+  extraTimeDrawRef: "ExtraTimeDraw",
+  finalsFixtureTemplateRef: "FinalsFixtureTemplate",
+  matchPreference: "Match Preference",
+  teamA: "Team A",
+  teamB: "Team B",
+  lockedDraws: "Specific Match Preference",
+  year2020: "2020",
+  backToLiveScore:"Back To Live Score",
+  venueConstraintModalMsg: "Do you want to remove fixture?",
+  removeFixture: "Remove Fixture",
+  addPreference: "Add Preference",
+  logo: "Logo"
 };
 
 export default AppConstants;

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Input, Button, Table, Select, Tag, Form, Tooltip } from 'antd';
+import { Layout, Breadcrumb, Input, Button, Table, Select, Tag, Form, Tooltip, message } from 'antd';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -26,6 +26,7 @@ import {
 } from "../../util/sessionStorage"
 import CommentModal from "../../customComponents/commentModal"
 import moment from "moment"
+import ValidationConstants from "../../themes/validationConstant";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -257,16 +258,32 @@ class CompetitionPartProposedTeamGrading extends Component {
 
 
     ////save the final team grading data
-    submitApiCall = () => {
+    submitApiCall = (buttonClicked) => {
         let proposedTeamGradingData = this.props.ownTeamGradingState.getPartProposedTeamGradingData
-        let payload = {
-            "competitionUniqueKey": this.state.firstTimeCompId,
-            "competitionMembershipProductDivisionId": this.state.divisionId,
-            "gradeRefId": this.state.gradeRefId,
-            "teams": proposedTeamGradingData
+        let isError = false;
+        if(buttonClicked == "submit"){
+            proposedTeamGradingData.map((item) => {
+                if ((item.proposedGradeRefId == 0 || item.proposedGradeRefId == null || item.proposedGradeRefId == "" ||
+                    item.proposedGradeRefId == undefined)) {
+                    isError = true
+                }
+            })
         }
-        this.props.savePartProposedTeamGradingDataAction(payload)
-        this.setState({ saveLoad: true })
+
+        if(!isError){
+            let payload = {
+                "competitionUniqueKey": this.state.firstTimeCompId,
+                "competitionMembershipProductDivisionId": this.state.divisionId,
+                "gradeRefId": this.state.gradeRefId,
+                "teams": proposedTeamGradingData
+            }
+            this.props.savePartProposedTeamGradingDataAction(payload)
+            this.setState({ saveLoad: true })
+        }
+        else{
+            message.error(ValidationConstants.proposedGrading[0])
+        }
+       
     }
 
 
@@ -444,10 +461,14 @@ class CompetitionPartProposedTeamGrading extends Component {
                         <div className="col-sm" >
                             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
                                 {/* <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button> */}
+                                <Button className="open-reg-button" style={{marginRight: '20px'}}
+                                    onClick={() => this.submitApiCall("save")}
+                                    type="primary">{AppConstants.save}
+                                </Button>
                                 <Button
                                     className="open-reg-button"
                                     type="primary"
-                                    onClick={() => this.submitApiCall()}>
+                                    onClick={() => this.submitApiCall("submit")}>
                                     {AppConstants.submit}</Button>
                             </div>
                         </div>

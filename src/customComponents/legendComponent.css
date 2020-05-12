@@ -1,0 +1,56 @@
+@import "../themes/colorVariables.css";
+
+.legend-main-div{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    white-space: initial;
+    word-wrap: break-word;
+    float: left; 
+    clear: both;
+    padding-right: 15px;
+    padding-left: 25px;
+}
+
+.legend-color-text-div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    white-space: initial;
+    word-wrap: break-word;
+    margin-top: 25px;
+    width:150px;
+
+}
+
+.legend-color-div{
+    height: 25px;
+    width:60px;
+    white-space: initial;
+    word-wrap: break-word
+}
+
+.legend-text{
+    font-size: 13px;
+    color: var(--app-4c4c6d);
+    font-weight: 500;
+    font-family: inter-medium;
+    padding-left: 10px;
+    white-space: nowrap;
+    word-wrap: break-word;
+}
+
+.draws-legend-view{
+       display: flex;
+       margin: 50px 50px 50px 50px;
+       justify-content: center;
+       float: left; 
+}
+
+.legend-text-div{
+    text-overflow: ellipsis; 
+overflow: hidden; 
+white-space: nowrap;
+padding-right: 10px;
+}

@@ -184,6 +184,23 @@ export function* importCompetitionPlayer(action) {
     }
 }
 
+export function* importCompetitionTeams(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.importCompetitionTeams, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_COMPETITION_TEAMS_IMPORT_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
 export function* deleteTeamSaga(action) {
     try {
         const result = yield call(CompetitionAxiosApi.deleteTeam, action.payload);

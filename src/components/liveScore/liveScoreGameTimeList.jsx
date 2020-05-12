@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Breadcrumb, Pagination, Select } from "antd";
+import { Layout, Button, Table, Breadcrumb, Pagination, Select, Input, Icon } from "antd";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -239,6 +239,7 @@ class LiveScoreGameTimeList extends Component {
                         alignItems: "center",
                         justifyContent: "flex-end",
                     }}>
+
                         <div className="row">
                             <Select
                                 className="year-select"
@@ -282,6 +283,20 @@ class LiveScoreGameTimeList extends Component {
                         </div>
                     </div>
                 </div >
+                {/* search box */}
+                <div className="col-sm pt-3 ml-3 " style={{ display: "flex", justifyContent: 'flex-end', }} >
+                    <div className="comp-product-search-inp-width" >
+                        <Input className="product-reg-search-input"
+                            // onChange={(e) => this.onChangeSearchText(e)}
+                            placeholder="Search..."
+                            // onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                            prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                            // onClick={() => this.onClickSearchIcon()}
+                            />}
+                            allowClear
+                        />
+                    </div>
+                </div>
             </div >
         )
     }

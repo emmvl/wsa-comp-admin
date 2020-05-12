@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Pagination } from 'antd';
+import { Layout, Button, Table, Pagination, Input, Icon } from 'antd';
 import './liveScore.css';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -27,7 +27,7 @@ const columns = [
                 // pathname: '/liveScoreManagerView',
                 // state: { tableRecord: record }
                 pathname: '/userPersonal',
-                state: { userId: record.id }
+                state: { userId: record.id, screenKey:"livescore" }
             }}>
                 <span class="input-heading-add-another pt-0" >{firstName}</span>
             </NavLink>
@@ -40,7 +40,7 @@ const columns = [
         render: (lastName, record) =>
             <NavLink to={{
                 pathname: '/userPersonal',
-                state: { userId: record.id }
+                state: { userId: record.id,screenKey:"livescore" }
                 // pathname: '/liveScoreManagerView',
                 // state: { tableRecord: record }
             }}>
@@ -70,7 +70,7 @@ const columns = [
                 // pathname: '/liveScoreManagerView',
                 // state: { tableRecord: record }
                 pathname: '/userPersonal',
-                state: { userId: record.id }
+                state: { userId: record.id,screenKey:"livescore" }
             }}>
                 {linkedEntity.length > 0 && linkedEntity.map((item) => (
                     <span class="input-heading-add-another pt-0" >{item.name}</span>
@@ -86,13 +86,14 @@ class LiveScoreManagerList extends Component {
         super(props);
         this.state = {
             year: "2020",
-            scorerTableData: scorerData.scorerData
+            scorerTableData: scorerData.scorerData,
+            searchText: ''
         }
     }
 
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.props.liveScoreManagerListAction(3, 1, id)
+        this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText)
     }
 
     ////////form content view
@@ -220,6 +221,22 @@ class LiveScoreManagerList extends Component {
                                     </div>
                                 </div> */}
                             </div>
+
+                        </div>
+
+                    </div>
+                    {/* search box */}
+                    <div className="col-sm pt-5 ml-3" style={{ display: "flex", justifyContent: 'flex-end', }} >
+                        <div className="comp-product-search-inp-width" >
+                            <Input className="product-reg-search-input"
+                                onChange={(e) => this.onChangeSearchText(e)}
+                                placeholder="Search..."
+                                onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                    onClick={() => this.onClickSearchIcon()}
+                                />}
+                                allowClear
+                            />
                         </div>
                     </div>
                 </div>
@@ -227,10 +244,42 @@ class LiveScoreManagerList extends Component {
         );
     };
 
+    // on change search text
+    onChangeSearchText = (e) => {
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        this.setState({ searchText: e.target.value })
+        if (e.target.value == null || e.target.value == "") {
+            // this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, e.target.value)
+
+            this.props.liveScoreManagerListAction(3, 1, id, e.target.value)
+        }
+    }
+
+    // search key 
+    onKeyEnterSearchText = (e) => {
+        var code = e.keyCode || e.which;
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        if (code === 13) { //13 is the enter keycode
+            // this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, this.state.searchText)
+            this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText)
+        }
+    }
+
+    // on click of search icon
+    onClickSearchIcon = () => {
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        if (this.state.searchText == null || this.state.searchText == "") {
+        }
+        else {
+            // this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, this.state.searchText)
+            this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText)
+        }
+    }
+
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"4"} />
                 <Layout>
                     {this.headerView()}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Breadcrumb, Select, Button, Form, message } from 'antd';
+import { Layout, Breadcrumb, Select, Button, Form, message, Modal } from 'antd';
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
 import { NavLink } from 'react-router-dom';
 import loadjs from 'loadjs';
@@ -38,12 +38,16 @@ import {
   getDraws_roundTime,
   setDraws_division_grade,
   getDraws_division_grade,
+  getOrganisationData
 } from "../../util/sessionStorage"
 import ValidationConstants from "../../themes/validationConstant"
-import moment from "moment"
+import moment from "moment";
+import LegendComponent from '../../customComponents/legendComponent';
+import { isArrayNotEmpty } from "../../util/helpers";
+import {generateDrawAction} from "../../store/actions/competitionModuleAction/competitionModuleAction";
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
-
+const { confirm } = Modal;
 class CompetitionDraws extends Component {
   constructor(props) {
     super(props);
@@ -59,6 +63,7 @@ class CompetitionDraws extends Component {
   }
 
   componentDidUpdate(nextProps) {
+    let competitionModuleState = this.props.competitionModuleState;
     let drawsRoundData = this.props.drawsState.getDrawsRoundsData;
     let venueData = this.props.drawsState.competitionVenues;
     let divisionGradeNameList = this.props.drawsState.divisionGradeNameList;
@@ -109,6 +114,24 @@ class CompetitionDraws extends Component {
           this.setState({ firstTimeCompId: competitionId, venueLoad: true })
         }
       }
+    }
+
+    if(nextProps.competitionModuleState != competitionModuleState)
+    {
+        if(competitionModuleState.drawGenerateLoad == false
+              && this.state.venueLoad === true){
+            this.setState({ venueLoad: false });
+
+            if(competitionModuleState.status == 5){
+              message.error(ValidationConstants.drawsMessage[0]);
+            }
+            else if(!competitionModuleState.error && competitionModuleState.status == 1){
+              this.props.clearDraws("rounds")
+              this.setState({ firstTimeCompId: this.state.firstTimeCompId, roundId: null, venueId: null, roundTime: null, venueLoad: true, competitionDivisionGradeId: null });
+              // this.props.getCompetitionVenue(competitionId);
+              this.props.getDrawsRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
+            }
+        }
     }
   }
 
@@ -262,27 +285,48 @@ class CompetitionDraws extends Component {
     );
   }
 
-  saveAPIsActionCall = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log(this.state)
-        if (this.state.firstTimeCompId == null || this.state.firstTimeCompId == "") {
-          message.error(ValidationConstants.pleaseSelectCompetition)
-        }
-        else if (this.state.venueId == null && this.state.venueId == "") {
-          message.error(ValidationConstants.pleaseSelectVenue)
-        }
-        else if (this.state.roundId == null || this.state.roundId == "") {
-          message.error(ValidationConstants.pleaseSelectRound)
-        }
-        else {
-          console.log("timeSlotData")
-          this.props.publishDraws(this.state.firstTimeCompId)
-        }
-      }
-    })
+
+  check = () => {
+    if (this.state.firstTimeCompId == null || this.state.firstTimeCompId == "") {
+      message.config({ duration: 0.9, maxCount: 1 })
+      message.error(ValidationConstants.pleaseSelectCompetition)
+    }
+    else if (this.state.venueId == null && this.state.venueId == "") {
+      message.config({ duration: 0.9, maxCount: 1 })
+      message.error(ValidationConstants.pleaseSelectVenue)
+    }
+    else if (this.state.roundId == null || this.state.roundId == "") {
+      message.config({ duration: 0.9, maxCount: 1 })
+      message.error(ValidationConstants.pleaseSelectRound)
+    }
+    else {
+      this.props.publishDraws(this.state.firstTimeCompId)
+    }
   }
+
+
+
+  openModel = (props, e) => {
+    let this_ = this
+    confirm({
+      title: 'You have teams ‘Not in Draw’. Would you still like to proceed?',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      maskClosable: true,
+      mask: true,
+      onOk() {
+        this_.check()
+      },
+      onCancel() {
+        console.log("cancel")
+      },
+    });
+  }
+
+
+
+
   onSwap(source, target) {
     let sourceIndexArray = source.split(':');
     let targetIndexArray = target.split(':');
@@ -347,18 +391,18 @@ class CompetitionDraws extends Component {
             </Breadcrumb>
           </div>
         </div>
-        <div className="col-sm" style={{alignSelf: 'center'}}>
-            <div className="comp-dashboard-botton-view-mobile" style={{width: "100%",display: "flex",justifyContent: "flex-end"}}>
-              <Button onClick={() => this.onMatchesList()} className="primary-add-comp-form" type="primary">
-                <div className="row">
-                  <div className="col-sm">
-                    <img  src={AppImages.export} alt="" className="export-image" />
-                    {AppConstants.matchesList}
-                  </div>
+        <div className="col-sm" style={{ alignSelf: 'center' }}>
+          <div className="comp-dashboard-botton-view-mobile" style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+            <Button onClick={() => this.onMatchesList()} className="primary-add-comp-form" type="primary">
+              <div className="row">
+                <div className="col-sm">
+                  <img src={AppImages.export} alt="" className="export-image" />
+                  {AppConstants.matchesList}
                 </div>
-              </Button>
-            </div>
+              </div>
+            </Button>
           </div>
+        </div>
       </Header>
     );
   };
@@ -397,7 +441,13 @@ class CompetitionDraws extends Component {
     return (
       <div className="row">
         <div className="col-sm-3">
-          <div className="year-select-heading-view">
+          <div style={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginRight: 50
+          }}>
             <span className="year-select-heading">{AppConstants.draws}:</span>
             <Select
               name={'yearRefId'}
@@ -457,7 +507,7 @@ class CompetitionDraws extends Component {
               display: 'flex',
               flexDirection: 'row',
               alignItems: 'center',
-              marginRight: 50
+              // marginRight: 50
             }}
           >
             <span className="year-select-heading">
@@ -520,6 +570,16 @@ class CompetitionDraws extends Component {
     );
   };
 
+  reGenerateDraw = () =>{
+    let payload = {
+      yearRefId: this.state.yearRefId, 
+      competitionUniqueKey: this.state.firstTimeCompId,
+      organisationId: getOrganisationData().organisationUniqueKey
+  }
+    this.props.generateDrawAction(payload);
+    this.setState({ venueLoad: true });
+  }
+
   ////// Publish draws
   // publishDraws() {
   //   this.props.saveDraws(this.state.yearRefId, this.state.firstTimeCompId, 1);
@@ -548,7 +608,7 @@ class CompetitionDraws extends Component {
                   <Select
                     className="year-select"
                     placeholder="Select"
-                    style={{ minWidth: 120, whiteSpace: 'nowrap' }}
+                    style={{ minWidth: 120, maxWidth: 270, whiteSpace: 'nowrap' }}
                     onChange={venueId => this.onVenueChange(venueId)}
                     value={JSON.parse(JSON.stringify(this.state.venueId))}
                   >
@@ -577,7 +637,7 @@ class CompetitionDraws extends Component {
                   </span>
                   <Select
                     className="year-select"
-                    style={{ minWidth: 100 }}
+                    style={{ minWidth: 100, maxWidth: 130 }}
                     onChange={roundId => this.onRoundsChange(roundId)}
                     value={this.state.roundId}
                   >
@@ -606,6 +666,7 @@ class CompetitionDraws extends Component {
               </Button>
             </NavLink>
           </div>
+
         </div>
         {/* {this.draggableView()} */}
         {
@@ -619,11 +680,14 @@ class CompetitionDraws extends Component {
     );
   };
 
+
   //////the gragable content view inside the container
   draggableView = () => {
     var dateMargin = 25;
     var dayMargin = 25;
     let topMargin = 0;
+    console.log(this.props.drawsState)
+    let legendsData = isArrayNotEmpty(this.props.drawsState.legandsArray) ? this.props.drawsState.legandsArray : []
     return (
       <div className="draggable-wrap draw-data-table">
         <div className="scroll-bar pb-4">
@@ -634,6 +698,9 @@ class CompetitionDraws extends Component {
               {this.props.drawsState.dateArray.map((date, index) => {
                 if (index !== 0) {
                   dateMargin += 110;
+                }
+                if (index == 0) {
+                  dateMargin = 50
                 }
                 return (
                   <span style={{ left: dateMargin }} >
@@ -648,6 +715,9 @@ class CompetitionDraws extends Component {
               {this.props.drawsState.dateArray.map((date, index) => {
                 if (index !== 0) {
                   dayMargin += 110;
+                }
+                if (index == 0) {
+                  dayMargin = 50;
                 }
                 return (
                   <span style={{ left: dayMargin }}>{getTime(date)}</span>
@@ -665,11 +735,15 @@ class CompetitionDraws extends Component {
             }
             return (
               <div>
-                <div className="sr-no">{index + 1}</div>
+                <div className="sr-no"> {courtData.venueShortName + "-" + courtData.venueCourtName}</div>
                 {courtData.slotsArray.map((slotObject, slotIndex) => {
                   if (slotIndex !== 0) {
                     leftMargin += 110;
                   }
+                  if (slotIndex == 0) {
+                    leftMargin = 50;
+                  }
+                  console.log()
                   return (
                     <div>
                       <span
@@ -683,14 +757,15 @@ class CompetitionDraws extends Component {
                           'box purple-bg'
                         }
                         style={{
-                          backgroundColor: slotObject.colorCode, left: leftMargin, top: topMargin, overflow: "hidden",
+                          backgroundColor: slotObject.competitionDivisionGradeId == this.state.competitionDivisionGradeId || this.state.competitionDivisionGradeId == 0 ? slotObject.colorCode : "#999999",
+                          left: leftMargin, top: topMargin, overflow: "hidden",
                           whiteSpace: "nowrap",
                         }}
                       >
                         <Swappable
                           id={index.toString() + ':' + slotIndex.toString()}
                           content={1}
-                          swappable={true}
+                          swappable={slotObject.competitionDivisionGradeId == this.state.competitionDivisionGradeId || this.state.competitionDivisionGradeId == 0 ? true : false}
                           onSwap={(source, target) =>
                             this.onSwap(source, target)
                           }
@@ -712,12 +787,17 @@ class CompetitionDraws extends Component {
             );
           })}
         </div>
+        <div className="draws-legend-view">
+          {/* <LegendComponent legendArray={Array(10).fill(legendsData).flat()} /> */}
+          <LegendComponent legendArray={legendsData} />
+        </div>
       </div>
     );
   };
   //////footer view containing all the buttons like submit and cancel
   footerView = () => {
     let publishStatus = this.props.drawsState.publishStatus
+    let isTeamNotInDraws = this.props.drawsState.isTeamInDraw
     return (
       <div className="fluid-width">
         <div className="row">
@@ -725,12 +805,24 @@ class CompetitionDraws extends Component {
             <div className="reg-add-save-button">
             </div>
           </div>
-          <div className="col-sm-9">
+          <div className="col-sm">
+            <div className="comp-buttons-view">
+              {/* <NavLink to="/competitionFormat"> */}
+                <Button className="open-reg-button" type="primary" onClick={() => this.reGenerateDraw()}>
+                  {AppConstants.regenerateDraw}
+                </Button>  
+                <div><Loader visible={this.props.competitionModuleState.drawGenerateLoad} />
+                </div>
+              {/* </NavLink> */}
+            </div>
+          </div>
+          <div>
             <div className="comp-buttons-view">
               <Button
                 className="open-reg-button"
                 type="primary"
                 htmlType="submit"
+                onClick={() => isTeamNotInDraws == 1 ? this.openModel(this.props) : this.check()}
                 disabled={publishStatus == 0 ? false : true}
               >
                 {AppConstants.publish}
@@ -739,7 +831,7 @@ class CompetitionDraws extends Component {
           </div>
           {/* </div> */}
         </div>
-      </div>
+      </div >
     );
   };
 
@@ -752,18 +844,16 @@ class CompetitionDraws extends Component {
         />
         <InnerHorizontalMenu menu={'competition'} compSelectedKey={'18'} />
         <Layout className="comp-dash-table-view">
-          <Form
+          {this.headerView()}
+          {this.dropdownView()}
+          {/* <Form
             onSubmit={this.saveAPIsActionCall}
-            noValidate="noValidate"
-          >
-            {/* <Loader visible={this.props.drawsState.updateLoad} /> */}
-            {this.headerView()}
-            {this.dropdownView()}
-            <Content>{this.contentView()}</Content>
-            <Footer>{this.footerView()}</Footer>
-          </Form>
+          > */}
+          {/* <Loader visible={this.props.drawsState.updateLoad} /> */}
+          <Content>{this.contentView()}</Content>
+          <Footer>{this.footerView()}</Footer>
+          {/* </Form> */}
         </Layout>
-
       </div>
     );
   }
@@ -781,7 +871,8 @@ function mapDispatchToProps(dispatch) {
       updateCourtTimingsDrawsAction,
       clearDraws,
       publishDraws,
-      matchesListDrawsAction
+      matchesListDrawsAction,
+      generateDrawAction
     },
     dispatch
   );
@@ -790,7 +881,8 @@ function mapDispatchToProps(dispatch) {
 function mapStatetoProps(state) {
   return {
     appState: state.AppState,
-    drawsState: state.CompetitionDrawsState
+    drawsState: state.CompetitionDrawsState,
+    competitionModuleState: state.CompetitionModuleState
   };
 }
 export default connect(
