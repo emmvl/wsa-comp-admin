@@ -991,9 +991,12 @@ const AppConstants = {
   matchPreference: "Match Preference",
   teamA: "Team A",
   teamB: "Team B",
-  lockedDraws: "Locked Draws",
+  lockedDraws: "Specific Match Preference",
   year2020: "2020",
-  backToLiveScore:"Back To Live Score"
+  backToLiveScore:"Back To Live Score",
+  venueConstraintModalMsg: "Do you want to remove fixture?",
+  removeFixture: "Remove Fixture",
+  addPreference: "Add Preference"
 };
 
 export default AppConstants;

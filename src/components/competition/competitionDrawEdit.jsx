@@ -816,7 +816,7 @@ class CompetitionDrawEdit extends Component {
                             </Button>
                         </div>
                     </div> */}
-                    <div className="col-sm-9">
+                    {/* <div className="col-sm-9">
                         <div className="comp-buttons-view">
                             <NavLink to="/competitionFormat">
                                 <Button className="open-reg-button" type="primary">
@@ -824,7 +824,7 @@ class CompetitionDrawEdit extends Component {
                                 </Button>
                             </NavLink>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 {/* </div> */}
             </div>
