@@ -1244,6 +1244,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
     render() {
         console.log(this.props.venueTimeState.courtRotation)
         const { getFieldDecorator } = this.props.form;
+        const { venueConstrainstData } = this.props.venueTimeState;
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout 
@@ -1261,12 +1262,22 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     >
                         <Content>
                             <div className="formView">{this.contentView(getFieldDecorator)}</div>
+                            
                             <div className="formView" style={{marginTop: '20px'}}>
                                 {this.matchPreferenceView(getFieldDecorator)}
                             </div>
-                            <div className="formView" style={{marginTop: '20px'}}>
-                                {this.lockedGradesView(getFieldDecorator)}
-                            </div>
+                            {
+                                venueConstrainstData.matchPreference!= null && venueConstrainstData.matchPreference.length > 0 ? 
+                                <div className="formView" style={{marginTop: '20px'}}>
+                                    {this.matchPreferenceView(getFieldDecorator)}
+                                </div> : null
+                            }
+                            {
+                                venueConstrainstData.lockedDraws!= null && venueConstrainstData.lockedDraws.length > 0 ? 
+                                <div className="formView" style={{marginTop: '20px'}}>
+                                    {this.lockedGradesView(getFieldDecorator)}
+                                </div> : null
+                            }
                            
                         </Content>
                         <Footer>{this.footerView()}</Footer>
