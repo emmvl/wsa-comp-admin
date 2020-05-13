@@ -997,7 +997,9 @@ const AppConstants = {
   venueConstraintModalMsg: "Do you want to remove fixture?",
   removeFixture: "Remove Fixture",
   addPreference: "Add Preference",
-  logo: "Logo"
+  logo: "Logo",
+  registrationFormQuestions: "Registration Form Questions",
+  noInformationProvided: "No information provided"
 };
 
 export default AppConstants;
