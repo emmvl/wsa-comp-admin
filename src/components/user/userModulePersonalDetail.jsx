@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Table, Select, Pagination, Button, Tabs } from 'antd';
+import { Layout, Breadcrumb, Table, Select, Pagination, Button, Tabs, Menu } from 'antd';
 import './user.css';
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -18,11 +18,14 @@ import {
 import { getOrganisationData } from "../../util/sessionStorage";
 import moment from 'moment';
 import history from '../../util/history'
-import { liveScore_formateDate } from '../../themes/dateformate'
+import { liveScore_formateDate } from '../../themes/dateformate';
+import InputWithHead from "../../customComponents/InputWithHead";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { TabPane } = Tabs;
+const { SubMenu } = Menu;
+let this_Obj = null;
 
 const columns = [
 
@@ -61,6 +64,26 @@ const columns = [
         dataIndex: 'shopPurchases',
         key: 'shopPurchases',
         sorter: (a, b) => a.shopPurchases.localeCompare(b.shopPurchases),
+    },
+    {
+        title: "Reg.Form",
+        dataIndex: "regForm",
+        key: "regForm",
+        render: (regForm, e) => (
+            <Menu className="action-triple-dot-submenu" theme="light"  mode="horizontal"
+                style={{ lineHeight: "25px" }}
+            >
+                <SubMenu
+                    key="sub1"
+                    title={ <img className="dot-image" src={AppImages.moreTripleDot}
+                            alt="" width="16" height="16" />
+                           }>
+                    <Menu.Item key="1" onClick={() => this_Obj.viewRegForm(e)}>
+                        <span>View</span>
+                    </Menu.Item>
+                </SubMenu>
+            </Menu>
+        )
     }
 ];
 
@@ -359,31 +382,78 @@ const columnsFriends = [
         title: 'First Name',
         dataIndex: 'firstName',
         key: 'firstName',
-        sorter: (a, b) => a.firstName.localeCompare(b.firstName),
     },
     {
         title: 'Last Name',
         dataIndex: 'lastName',
         key: 'lastName',
-        sorter: (a, b) => a.lastName.localeCompare(b.lastName),
     },
     {
         title: 'Email',
         dataIndex: 'email',
         key: 'email',
-        sorter: (a, b) => a.email.localeCompare(b.email),
     },
     {
         title: 'Phone Number',
         dataIndex: 'mobileNumber',
         key: 'mobileNumber',
-        sorter: (a, b) => a.mobileNumber.localeCompare(b.mobileNumber),
     },
 ];
+
+const columnsPlayedBefore = [
+    {
+        title: 'Played Before',
+        dataIndex: 'playedBefore',
+        key: 'playedBefore'
+    },
+    {
+        title: 'Played Club',
+        dataIndex: 'playedClub',
+        key: 'playedClub',
+    },
+    {
+        title: 'Played Grade',
+        dataIndex: 'playedGrade',
+        key: 'playedGrade',
+    },
+    {
+        title: 'Played Year',
+        dataIndex: 'playedYear',
+        key: 'playedYear',
+    },
+    {
+        title: 'Last Captain',
+        dataIndex: 'lastCaptainName',
+        key: 'lastCaptainName',
+    },
+];
+
+const columnsFav = [
+    {
+        title: 'Favourite Netball Team',
+        dataIndex: 'favouriteTeam',
+        key: 'favouriteTeam'
+    },
+    {
+        title: 'Who is your favourite Firebird?',
+        dataIndex: 'favouriteFireBird',
+        key: 'favouriteFireBird',
+    }
+];
+
+const columnsVol = [
+    {
+        title: 'Volunteers',
+        dataIndex: 'description',
+        key: 'description'
+    }
+];
+
 
 class UserModulePersonalDetail extends Component {
     constructor(props) {
         super(props);
+        this_Obj = this;
         this.state = {
             userId: 0,
             tabKey: "1",
@@ -394,10 +464,14 @@ class UserModulePersonalDetail extends Component {
             },
             screenKey:null,
             loading: false,
+            registrationForm: null,
+            isRegistrationForm: false
+
         }
     }
 
     componentDidMount() {
+   
         if (this.props.location.state != null && this.props.location.state != undefined) {
             let userId = this.props.location.state.userId;
             let screenKey = this.props.location.state.screenKey;
@@ -450,7 +524,7 @@ class UserModulePersonalDetail extends Component {
 
     onChangeTab = (key) => {
         console.log("onChangeTab::" + key);
-        this.setState({ tabKey: key });
+        this.setState({ tabKey: key, isRegistrationForm: false });
         this.tabApiCalls(key, this.state.competition, this.state.userId);
     };
 
@@ -510,6 +584,10 @@ class UserModulePersonalDetail extends Component {
         }
         this.props.getUserModuleRegistrationAction(filter)
     };
+
+    viewRegForm = async (item) => {
+        await this.setState({isRegistrationForm: true, registrationForm: item.registrationForm});
+    }
 
     headerView = () => {
         return (
@@ -852,33 +930,95 @@ class UserModulePersonalDetail extends Component {
         )
     }
 
-    friendsView = () => {
-        let userState = this.props.userState;
-        let personalByCompData = userState.personalByCompData != null ? userState.personalByCompData : [];
-        let friends = personalByCompData.length > 0 ? personalByCompData[0].friends : [];
-        let referFriends = personalByCompData.length > 0 ? personalByCompData[0].referFriends : [];
+    registrationFormView = () => {
+        let registrationForm = this.state.registrationForm == null ? [] : this.state.registrationForm;
+
         return (
             <div className="comp-dash-table-view mt-2">
-                <div className="user-module-row-heading">{AppConstants.address}</div>
-                <div className="table-responsive home-dash-table-view">
-                    <Table className="home-dashboard-table"
-                        columns={columnsFriends}
-                        dataSource={friends}
-                        pagination={false}
-                    />
-                </div>
-                <div className="user-module-row-heading">{AppConstants.address}</div>
-                <div className="table-responsive home-dash-table-view">
-                    <Table className="home-dashboard-table"
-                        columns={columnsFriends}
-                        dataSource={referFriends}
-                        pagination={false}
-                    />
+                 <div className="user-module-row-heading">{AppConstants.registrationFormQuestions}</div>
+                {(registrationForm || []).map((item, index) => (
+                    <div key={index} style={{marginBottom: '15px'}}>
+                        <InputWithHead heading={item.description}/>
+                            {
+                                (item.registrationSettingsRefId == 6 || item.registrationSettingsRefId == 11) ? 
+                                <div className="applicable-to-text">
+                                    {item.contentValue == null ? AppConstants.noInformationProvided : item.contentValue}
+                                </div> : null
+                            }
+                            {
+                                 (item.registrationSettingsRefId == 7) ? 
+                                 <div>
+                                     {item.contentValue == "No" ?
+                                      <div className="applicable-to-text">
+                                         {item.contentValue}
+                                     </div> : 
+                                     <div className="table-responsive home-dash-table-view">
+                                         <Table className="home-dashboard-table"
+                                             columns={columnsPlayedBefore}
+                                             dataSource={item.playedBefore}
+                                             pagination={false}
+                                         />
+                                     </div>
+                                     }
+                                 </div> : null
+                            }
+                            {
+                                (item.registrationSettingsRefId == 8) ? 
+                                <div className="table-responsive home-dash-table-view">
+                                         <Table className="home-dashboard-table"
+                                             columns={columnsFriends}
+                                             dataSource={item.friends}
+                                             pagination={false}
+                                         />
+                                     </div> : null
+                            }
+                            {
+                                (item.registrationSettingsRefId == 9) ? 
+                                <div className="table-responsive home-dash-table-view">
+                                         <Table className="home-dashboard-table"
+                                             columns={columnsFriends}
+                                             dataSource={item.referFriends}
+                                             pagination={false}
+                                         />
+                                     </div> : null
+                            }
+                            {
+                                (item.registrationSettingsRefId == 10) ? 
+                                <div className="table-responsive home-dash-table-view">
+                                         <Table className="home-dashboard-table"
+                                             columns={columnsFav}
+                                             dataSource={item.favourites}
+                                             pagination={false}
+                                         />
+                                     </div> : null
+                            }
+                            {
+                                (item.registrationSettingsRefId == 12) ? 
+                                <div className="table-responsive home-dash-table-view">
+                                         <Table className="home-dashboard-table"
+                                             columns={columnsVol}
+                                             dataSource={item.volunteers}
+                                             pagination={false}
+                                         />
+                                     </div> : null
+                            }
+                        </div>
+                    ))
+                }
+                {registrationForm.length == 0 ? 
+                    <div>{AppConstants.noInformationProvided}</div>: null
+                }
+                <div className="row" style={{marginTop: '50px'}}>
+                    <div className="col-sm-3">
+                        <div className="reg-add-save-button">
+                            <Button type="cancel-button" onClick={() => this.setState({isRegistrationForm: false})}>
+                                {AppConstants.back}</Button>
+                        </div>
+                    </div>
                 </div>
             </div>
         )
     }
-
 
     headerView = () => {
         return (
@@ -943,7 +1083,10 @@ class UserModulePersonalDetail extends Component {
                                                 {this.medicalView()}
                                             </TabPane>
                                             <TabPane tab={AppConstants.registration} key="5">
-                                                {this.registrationView()}
+                                                {!this.state.isRegistrationForm ? 
+                                                    this.registrationView() :
+                                                    this.registrationFormView() 
+                                                }
                                             </TabPane>
                                         </Tabs>
                                     </div>
