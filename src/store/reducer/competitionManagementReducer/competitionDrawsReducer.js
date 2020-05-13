@@ -35,7 +35,8 @@ function createLagendsArray(drawsArray, currentLagends, dateArray) {
       let index = currentLagends.findIndex((x) => x.colorCode === color)
       let object = {
         "colorCode": color,
-        "gradeName": color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName
+        "gradeName": color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
+        "divisionName": drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A"
       }
       if (index === -1) {
         newArray.push(object)

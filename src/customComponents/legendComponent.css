@@ -20,13 +20,14 @@
     white-space: initial;
     word-wrap: break-word;
     margin-top: 25px;
-    width:150px;
+    width:190px;
 
 }
 
 .legend-color-div{
     height: 25px;
-    width:60px;
+    width:25px;
+    border-radius: 12.5px;
     white-space: initial;
     word-wrap: break-word
 }

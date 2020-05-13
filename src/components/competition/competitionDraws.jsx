@@ -44,7 +44,7 @@ import ValidationConstants from "../../themes/validationConstant"
 import moment from "moment";
 import LegendComponent from '../../customComponents/legendComponent';
 import { isArrayNotEmpty } from "../../util/helpers";
-import {generateDrawAction} from "../../store/actions/competitionModuleAction/competitionModuleAction";
+import { generateDrawAction } from "../../store/actions/competitionModuleAction/competitionModuleAction";
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { confirm } = Modal;
@@ -116,22 +116,20 @@ class CompetitionDraws extends Component {
       }
     }
 
-    if(nextProps.competitionModuleState != competitionModuleState)
-    {
-        if(competitionModuleState.drawGenerateLoad == false
-              && this.state.venueLoad === true){
-            this.setState({ venueLoad: false });
-
-            if(competitionModuleState.status == 5){
-              message.error(ValidationConstants.drawsMessage[0]);
-            }
-            else if(!competitionModuleState.error && competitionModuleState.status == 1){
-              this.props.clearDraws("rounds")
-              this.setState({ firstTimeCompId: this.state.firstTimeCompId, roundId: null, venueId: null, roundTime: null, venueLoad: true, competitionDivisionGradeId: null });
-              // this.props.getCompetitionVenue(competitionId);
-              this.props.getDrawsRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
-            }
+    if (nextProps.competitionModuleState != competitionModuleState) {
+      if (competitionModuleState.drawGenerateLoad == false
+        && this.state.venueLoad === true) {
+        this.setState({ venueLoad: false });
+        if (competitionModuleState.status == 5) {
+          message.error(ValidationConstants.drawsMessage[0]);
         }
+        else if (!competitionModuleState.error && competitionModuleState.status == 1) {
+          this.props.clearDraws("rounds")
+          this.setState({ firstTimeCompId: this.state.firstTimeCompId, roundId: null, venueId: null, roundTime: null, venueLoad: true, competitionDivisionGradeId: null });
+          // this.props.getCompetitionVenue(competitionId);
+          this.props.getDrawsRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
+        }
+      }
     }
   }
 
@@ -570,12 +568,12 @@ class CompetitionDraws extends Component {
     );
   };
 
-  reGenerateDraw = () =>{
+  reGenerateDraw = () => {
     let payload = {
-      yearRefId: this.state.yearRefId, 
+      yearRefId: this.state.yearRefId,
       competitionUniqueKey: this.state.firstTimeCompId,
       organisationId: getOrganisationData().organisationUniqueKey
-  }
+    }
     this.props.generateDrawAction(payload);
     this.setState({ venueLoad: true });
   }
@@ -808,11 +806,11 @@ class CompetitionDraws extends Component {
           <div className="col-sm">
             <div className="comp-buttons-view">
               {/* <NavLink to="/competitionFormat"> */}
-                <Button className="open-reg-button" type="primary" onClick={() => this.reGenerateDraw()}>
-                  {AppConstants.regenerateDraw}
-                </Button>  
-                <div><Loader visible={this.props.competitionModuleState.drawGenerateLoad} />
-                </div>
+              <Button className="open-reg-button" type="primary" onClick={() => this.reGenerateDraw()}>
+                {AppConstants.regenerateDraw}
+              </Button>
+              <div><Loader visible={this.props.competitionModuleState.drawGenerateLoad} />
+              </div>
               {/* </NavLink> */}
             </div>
           </div>

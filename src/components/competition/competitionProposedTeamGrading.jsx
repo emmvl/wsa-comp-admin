@@ -74,8 +74,8 @@ const columns = [
             //     </Select>
 
             //     )
-            <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row": null}>
-                <Select className="select-inside-team-grades-table" 
+            <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>
+                <Select className="select-inside-team-grades-table"
                     value={sortOrder}
                     onChange={(e) => this_obj.props.onchangeCompOwnFinalTeamGradingData(e, index, "sortOrder")}
                 >
@@ -86,7 +86,7 @@ const columns = [
                     })}
                 </Select>
             </span>
-            
+
         )
     },
     {
@@ -168,22 +168,22 @@ const columns = [
         key: 'finalGradeId',
         render: (finalGradeId, record, index) =>
             <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>
-                {(record.delIndicationMsg == ''|| record.delIndicationMsg == null || 
-                    record.delIndicationMsg == undefined) ? 
-                <Select className="select-inside-team-grades-table"
-                    value={finalGradeId}
-                    onChange={(finalGradeId) => this_obj.props.onchangeCompOwnFinalTeamGradingData(finalGradeId, index, "finalGradeId")}
-                >
-                    {this_obj.props.ownTeamGradingState.compFinalTeamGradingFinalGradesData.map((item) => {
-                        return <Option key={"finalGradeId" + item.gradeRefId} value={item.gradeRefId}>
-                            {item.name}
-                        </Option>
-                    })}
-                </Select>
-                : <span>{record.delIndicationMsg}</span>
+                {(record.delIndicationMsg == '' || record.delIndicationMsg == null ||
+                    record.delIndicationMsg == undefined) ?
+                    <Select className="select-inside-team-grades-table"
+                        value={finalGradeId}
+                        onChange={(finalGradeId) => this_obj.props.onchangeCompOwnFinalTeamGradingData(finalGradeId, index, "finalGradeId")}
+                    >
+                        {this_obj.props.ownTeamGradingState.compFinalTeamGradingFinalGradesData.map((item) => {
+                            return <Option key={"finalGradeId" + item.gradeRefId} value={item.gradeRefId}>
+                                {item.name}
+                            </Option>
+                        })}
+                    </Select>
+                    : <span>{record.delIndicationMsg}</span>
                 }
             </span>
-            ,
+        ,
         sorter: (a, b) => tableSort(a, b, "finalGradeId")
     },
     {
@@ -193,7 +193,7 @@ const columns = [
         width: 110,
         render: (responseComments, record) =>
             <div className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}
-                style={{ display: "flex", justifyContent: "center", cursor: "pointer", backgroundColor: "none" }} 
+                style={{ display: "flex", justifyContent: "center", cursor: "pointer", backgroundColor: "none" }}
                 onClick={() => this_obj.onClickComment(record)}>
                 <img src={responseComments !== null && responseComments.length > 0 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
             </div>,
@@ -220,13 +220,13 @@ const columns = [
                             height="16"
                         />
                     }>
-                    {e.isActive == 1 ? 
-                    <Menu.Item key="1" onClick={() => this_obj.showDeleteConfirm(e, "IsActive", index)}>
-                        <span>Delete</span>
-                    </Menu.Item> :
-                    <Menu.Item key="2"  onClick={() => this_obj.showDeleteConfirm(e, "Undelete", index)}>
-                        <span>Undelete</span>
-                    </Menu.Item>
+                    {e.isActive == 1 ?
+                        <Menu.Item key="1" onClick={() => this_obj.showDeleteConfirm(e, "IsActive", index)}>
+                            <span>Delete</span>
+                        </Menu.Item> :
+                        <Menu.Item key="2" onClick={() => this_obj.showDeleteConfirm(e, "Undelete", index)}>
+                            <span>Undelete</span>
+                        </Menu.Item>
                     }
                 </SubMenu>
             </Menu>
@@ -320,12 +320,14 @@ class CompetitionProposedTeamGrading extends Component {
     };
 
     showDeleteConfirm = async (e, actionType, index) => {
-      await  this.setState({teamId: e.teamId, actionType: actionType, 
-        deleteModalVisible: true, rowIndex: index});
+        await this.setState({
+            teamId: e.teamId, actionType: actionType,
+            deleteModalVisible: true, rowIndex: index
+        });
     }
 
     handleDeleteTeamOk = () => {
-        this.setState({deleteModalVisible: false});
+        this.setState({ deleteModalVisible: false });
         let payload = {
             competitionUniqueKey: this.state.firstTimeCompId,
             organisationId: '',
@@ -333,15 +335,15 @@ class CompetitionProposedTeamGrading extends Component {
             competitionMembershipProductDivisionId: this.state.divisionId,
             actionType: this.state.actionType
         }
-      //this.props.deleteTeamActionAction(payload);
-      //this.setState({loading: true});
+        //this.props.deleteTeamActionAction(payload);
+        //this.setState({loading: true});
 
-      this_obj.props.onchangeCompOwnFinalTeamGradingData(this.state.actionType, this.state.rowIndex, "actionType");
-      
+        this_obj.props.onchangeCompOwnFinalTeamGradingData(this.state.actionType, this.state.rowIndex, "actionType");
+
     }
 
     handleDeleteTeamCancel = () => {
-        this.setState({deleteModalVisible: false});
+        this.setState({ deleteModalVisible: false });
     }
 
     componentDidMount() {
@@ -413,9 +415,9 @@ class CompetitionProposedTeamGrading extends Component {
             history.push('/competitionPartTeamGradeCalculate');
         }
 
-        if(nextProps.ownTeamGradingState != this.props.ownTeamGradingState){
-            if(this.props.ownTeamGradingState.onTeamDeleteLoad == false && this.state.loading === true){
-                this.setState({loading : false});
+        if (nextProps.ownTeamGradingState != this.props.ownTeamGradingState) {
+            if (this.props.ownTeamGradingState.onTeamDeleteLoad == false && this.state.loading === true) {
+                this.setState({ loading: false });
                 history.push('/competitionPartTeamGradeCalculate');
             }
         }
@@ -431,21 +433,21 @@ class CompetitionProposedTeamGrading extends Component {
         let finalGrades = this.props.ownTeamGradingState.compFinalTeamGradingFinalGradesData;
         let isError = false;
 
-        if(buttonClicked == "submit"){
+        if (buttonClicked == "submit") {
             finalTeamGradingData.map((item) => {
                 if ((item.finalGradeId == 0 || item.finalGradeId == null || item.finalGradeId == "" ||
-                    item.finalGradeId == undefined) && item.actionType!= "IsActive") {
+                    item.finalGradeId == undefined) && item.actionType != "IsActive") {
                     isError = true
                 }
             })
         }
-       
+
 
         if (!isError) {
             finalTeamGradingData.map((item) => {
                 let obj = finalGrades.find(x => x.gradeRefId == item.finalGradeId);
-                item['finalGradeRefId'] = obj!= undefined ? obj.id : null
-                item["gradeRefId"] = obj!= undefined ? obj.gradeRefId : null
+                item['finalGradeRefId'] = obj != undefined ? obj.id : null
+                item["gradeRefId"] = obj != undefined ? obj.gradeRefId : null
                 delete item['finalGradeId']
                 return item
             })
@@ -601,7 +603,7 @@ class CompetitionProposedTeamGrading extends Component {
                             }} >
                                 <span className='year-select-heading'>{AppConstants.grade}:</span>
                                 <Select
-                                    className="year-select" style={{width: '70px'}}
+                                    className="year-select" style={{ width: '70px' }}
                                     onChange={(gradeRefId) => this.onGradeChange(gradeRefId)}
                                     value={JSON.parse(JSON.stringify(this.state.gradeRefId))}
                                 >
@@ -615,13 +617,13 @@ class CompetitionProposedTeamGrading extends Component {
                         {/* <div className="col-sm" style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }} >
                             <span className='comp-grading-final-text ml-1' >{AppConstants.final}</span>
                         </div> */}
-                        <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }} >
+                        {/* <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }} >
                             <Button className="primary-add-comp-form" type="primary"
                             // onClick={this.addNewGrade}
                             >
                                 + {AppConstants.addgrade}
                             </Button>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
@@ -636,12 +638,12 @@ class CompetitionProposedTeamGrading extends Component {
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         //className={record => record.isActive == 0 ? "disabled-row" : "home-dashboard-table"} 
-                        className="home-dashboard-table" 
+                        className="home-dashboard-table"
                         columns={columns}
                         dataSource={proposedTeamGradingData}
                         pagination={false}
                         loading={this.props.ownTeamGradingState.onLoad == true && true}
-                        rowClassName={record => !record.isActive && record.delIndicationMsg!= undefined && "disabled-row"}
+                        rowClassName={record => !record.isActive && record.delIndicationMsg != undefined && "disabled-row"}
                     />
                 </div>
                 <CommentModal
@@ -668,7 +670,7 @@ class CompetitionProposedTeamGrading extends Component {
                     visible={this.state.deleteModalVisible}
                     onOk={this.handleDeleteTeamOk}
                     onCancel={this.handleDeleteTeamCancel}>
-                     <p>Are you sure you want to {this.state.actionType == 'IsActive' ? 'delete': 'Undelete'}?</p>
+                    <p>Are you sure you want to {this.state.actionType == 'IsActive' ? 'delete' : 'Undelete'}?</p>
                 </Modal>
             </div>
         )
@@ -684,11 +686,11 @@ class CompetitionProposedTeamGrading extends Component {
                             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
                                 {/* <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button> */}
                                 {/* <NavLink to="/competitionPartTeamGradeCalculate" > */}
-                                <Button type="cancel-button"  style={{ marginRight: '20px' }}
+                                <Button type="cancel-button" style={{ marginRight: '20px' }}
                                     onClick={() => this.cancelCall()}
-                                    >{AppConstants.cancel}
+                                >{AppConstants.cancel}
                                 </Button>
-                                <Button className="open-reg-button" style={{marginRight: '20px'}}
+                                <Button className="open-reg-button" style={{ marginRight: '20px' }}
                                     onClick={() => this.submitApiCall("save")}
                                     type="primary">{AppConstants.save}
                                 </Button>

@@ -18,7 +18,7 @@ class LegendComponent extends React.Component {
                                             </div>
                                         </div>
                                         <div className="legend-text-div">
-                                            <span className="legend-text">{subItem.gradeName}</span>
+                                            <span className="legend-text">{subItem.divisionName}-{subItem.gradeName}</span>
                                         </div>
                                     </div>
                                 )

@@ -718,7 +718,7 @@ const AppConstants = {
   addBanners: 'Add Banners',
   ////export URl
   // exportUrl: 'http://world-sport-action-socket.appspot.com/players/csv?competitionId=',
-  exportUrl: 'https://livescores-api-dev.worldsportaction.com/players/csv?competitionId=',
+  exportUrl: 'https://livescores-api-dev.worldsportaction.com/players/csv?',
 
   ////Registartion
   membershipTypeName: "Membership Type Name",
@@ -993,7 +993,8 @@ const AppConstants = {
   teamB: "Team B",
   lockedDraws: "Specific Match Preference",
   year2020: "2020",
-  backToLiveScore:"Back To Live Score",
+  addDay: "Add Day",
+  backToLiveScore: "Back To Live Score",
   venueConstraintModalMsg: "Do you want to remove fixture?",
   removeFixture: "Remove Fixture",
   addPreference: "Add Preference"

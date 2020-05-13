@@ -560,7 +560,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                     })}
                 </div>
                 <span style={{ cursor: 'pointer' }} onClick={() => this.props.updateVenuAndTimeDataAction(null, "addGameAndCourt", 'gameDays')} className="input-heading-add-another">
-                    + {AppConstants.addAnotherDay}
+                    + {AppConstants.addDay}
                 </span>
             </div>
         );
