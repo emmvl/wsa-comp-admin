@@ -998,6 +998,10 @@ const AppConstants = {
   venueConstraintModalMsg: "Do you want to remove fixture?",
   removeFixture: "Remove Fixture",
   addPreference: "Add Preference",
+  forgotResetPassword: "Forgot/ Reset Password",
+  returnToLogin: "Return to login",
+  sendEmail: "Send Email",
+  forgotPassword: "Forgot Password",
   logo: "Logo",
   registrationFormQuestions: "Registration Form Questions",
   noInformationProvided: "No information provided"

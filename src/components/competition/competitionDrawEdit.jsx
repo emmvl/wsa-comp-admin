@@ -626,7 +626,7 @@ class CompetitionDrawEdit extends Component {
         let topMargin = 0;
         let topMarginHomeTeam = 36;
         let topMarginAwayTeam = 84;
-        let legendsData = isArrayNotEmpty(this.props.drawsState.legandsArray) ? this.props.drawsState.legandsArray : []
+        let legendsData = isArrayNotEmpty(this.props.drawsState.legendsArray) ? this.props.drawsState.legendsArray : []
         return (
             <div className="draggable-wrap draw-data-table">
                 <div className="scroll-bar">
@@ -634,7 +634,7 @@ class CompetitionDrawEdit extends Component {
                         {/* Day name list */}
                         <div className="tablehead-row">
                             <div className="sr-no empty-bx"></div>
-                            {this.props.drawsState.dateArray.map((date, index) => {
+                            {this.props.drawsState.dateArray.map((item, index) => {
                                 if (index !== 0) {
                                     dateMargin += 110;
                                 }
@@ -643,7 +643,7 @@ class CompetitionDrawEdit extends Component {
                                 }
                                 return (
                                     <span style={{ left: dateMargin }} >
-                                        {getDayName(date)}
+                                        {item.notInDraw == false ? getDayName(item.date) : ""}
                                     </span>
                                 );
                             })}
@@ -651,7 +651,7 @@ class CompetitionDrawEdit extends Component {
                         {/* Times list */}
                         <div className="tablehead-row">
                             <div className="sr-no empty-bx"></div>
-                            {this.props.drawsState.dateArray.map((date, index) => {
+                            {this.props.drawsState.dateArray.map((item, index) => {
                                 if (index !== 0) {
                                     dayMargin += 110;
                                 }
@@ -659,7 +659,7 @@ class CompetitionDrawEdit extends Component {
                                     dayMargin = 50;
                                 }
                                 return (
-                                    <span style={{ left: dayMargin }}>{getTime(date)}</span>
+                                    <span style={{ left: dayMargin }}>{item.notInDraw == false ? getTime(item.date) : "Not in draw"}</span>
                                 );
                             })}
                         </div>

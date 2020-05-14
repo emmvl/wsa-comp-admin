@@ -15,9 +15,6 @@ export function* loginApiSaga(action) {
         status: result.status,
         loginData: action
       });
-      // setTimeout(() => {
-      //   message.success(result.result.data.message);
-      // }, 800);
     } else {
       yield put({ type: ApiConstants.API_LOGIN_FAIL });
       setTimeout(() => {
@@ -31,6 +28,41 @@ export function* loginApiSaga(action) {
       status: error.status
     });
     message.error(AppConstants.usernamePasswordIncorrect, 0.8);
-    // alert(error.result);
+  }
+}
+
+////forgot password
+export function* forgotPasswordSaga(action) {
+  try {
+    const result = yield call(userAxiosApi.forgotPassword, action.email);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_FORGOT_PASSWORD_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield put({ type: ApiConstants.API_LOGIN_FAIL });
+      setTimeout(() => {
+        message.config({
+          duration: 1.5,
+          maxCount: 1
+        })
+        message.error(result.result.data.message);
+      }, 800);
+    }
+  } catch (error) {
+    yield put({
+      type: ApiConstants.API_LOGIN_ERROR,
+      error: error,
+      status: error.status
+    });
+    setTimeout(() => {
+      message.config({
+        duration: 1.5,
+        maxCount: 1
+      })
+      message.error("Something went wrong.");
+    }, 800);
   }
 }

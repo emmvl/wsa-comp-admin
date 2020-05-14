@@ -111,14 +111,20 @@ class CompetitionQuickCompetition extends Component {
                     <div className="col-sm-9 comp-draw-edit-btn-view" >
                         <div className="row">
                             <div className="col-sm mt-1">
-                                <Button className="open-reg-button" type="primary">+ {AppConstants.add_TimeSlot}</Button>
+                                <NavLink to="/competitionCourtAndTimesAssign">
+
+                                    <Button className="open-reg-button" type="primary">+ {AppConstants.add_TimeSlot}</Button>
+                                </NavLink>
                                 {/* <div className="col-sm mt-1"> */}
                                 <Button className="open-reg-button mt-5" type="primary">+ {AppConstants.addDivisionsAndGrades}</Button>
                                 {/* </div> */}
 
                             </div>
                             <div className="col-sm mt-1">
-                                <Button className="open-reg-button" type="primary">+ {AppConstants.addCourt}</Button>
+                                <NavLink to="/competitionVenueTimesPrioritisation">
+
+                                    <Button className="open-reg-button" type="primary">+ {AppConstants.addCourt}</Button>
+                                </NavLink>
                             </div>
 
                         </div>
@@ -297,7 +303,7 @@ class CompetitionQuickCompetition extends Component {
     //     )
     // }
 
-    //////footer view containing all the buttons like submit and cancel
+    //////footer view containing all the buttons lik e submit and cancel
 
     dragableView = () => {
         var dateMargin = 25;
@@ -305,7 +311,7 @@ class CompetitionQuickCompetition extends Component {
         let topMargin = 0;
         let getStaticDrawsData = [{
             venueCourtNumber: 1, venueCourtName: "1", venueShortName: "Lots", slotsArray: [{
-                drawsId: null,
+                drawsId: 12,
                 venueCourtNumber: 1,
                 venueCourtName: null,
                 venueShortName: null,
@@ -314,13 +320,13 @@ class CompetitionQuickCompetition extends Component {
                 endTime: null,
                 homeTeamId: null,
                 awayTeamId: null,
-                homeTeamName: null,
+                homeTeamName: "3B",
                 awayTeamName: null,
                 gradeName: null,
                 competitionDivisionGradeId: null,
                 divisionName: null,
                 isLocked: 0,
-                colorCode: '#999999',
+                colorCode: '#25ab85',
                 teamArray: [
                     {
                         teamName: null,
@@ -332,22 +338,22 @@ class CompetitionQuickCompetition extends Component {
                     },
                 ],
             }, {
-                drawsId: null,
+                drawsId: 13,
                 venueCourtNumber: 1,
                 venueCourtName: null,
                 venueShortName: null,
                 matchDate: null,
                 startTime: null,
                 endTime: null,
-                homeTeamId: null,
+                homeTeamId: "11A",
                 awayTeamId: null,
-                homeTeamName: null,
+                homeTeamName: "11A",
                 awayTeamName: null,
                 gradeName: null,
                 competitionDivisionGradeId: null,
                 divisionName: null,
                 isLocked: 0,
-                colorCode: '#999999',
+                colorCode: 'pink',
                 teamArray: [
                     {
                         teamName: null,
@@ -359,7 +365,7 @@ class CompetitionQuickCompetition extends Component {
                     },
                 ],
             }, {
-                drawsId: null,
+                drawsId: 25,
                 venueCourtNumber: 1,
                 venueCourtName: null,
                 venueShortName: null,
@@ -368,13 +374,13 @@ class CompetitionQuickCompetition extends Component {
                 endTime: null,
                 homeTeamId: null,
                 awayTeamId: null,
-                homeTeamName: null,
+                homeTeamName: "15A",
                 awayTeamName: null,
                 gradeName: null,
                 competitionDivisionGradeId: null,
                 divisionName: null,
                 isLocked: 0,
-                colorCode: '#999999',
+                colorCode: 'blue',
                 teamArray: [
                     {
                         teamName: null,
@@ -386,7 +392,7 @@ class CompetitionQuickCompetition extends Component {
                     },
                 ],
             }, {
-                drawsId: null,
+                drawsId: 14,
                 venueCourtNumber: 1,
                 venueCourtName: null,
                 venueShortName: null,
@@ -395,13 +401,13 @@ class CompetitionQuickCompetition extends Component {
                 endTime: null,
                 homeTeamId: null,
                 awayTeamId: null,
-                homeTeamName: null,
+                homeTeamName: "16A",
                 awayTeamName: null,
                 gradeName: null,
                 competitionDivisionGradeId: null,
                 divisionName: null,
                 isLocked: 0,
-                colorCode: '#999999',
+                colorCode: 'orange',
                 teamArray: [
                     {
                         teamName: null,
@@ -415,7 +421,7 @@ class CompetitionQuickCompetition extends Component {
             }]
         }, {
             venueCourtNumber: 1, venueCourtName: "1", venueShortName: "Lots", slotsArray: [{
-                drawsId: null,
+                drawsId: 12,
                 venueCourtNumber: 1,
                 venueCourtName: null,
                 venueShortName: null,
@@ -424,13 +430,40 @@ class CompetitionQuickCompetition extends Component {
                 endTime: null,
                 homeTeamId: null,
                 awayTeamId: null,
-                homeTeamName: null,
+                homeTeamName: "17A",
                 awayTeamName: null,
                 gradeName: null,
                 competitionDivisionGradeId: null,
                 divisionName: null,
                 isLocked: 0,
-                colorCode: '#999999',
+                colorCode: '#282828',
+                teamArray: [
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                ],
+            }, {
+                drawsId: 26,
+                venueCourtNumber: 1,
+                venueCourtName: null,
+                venueShortName: null,
+                matchDate: null,
+                startTime: null,
+                endTime: null,
+                homeTeamId: null,
+                awayTeamId: null,
+                homeTeamName: "26L",
+                awayTeamName: null,
+                gradeName: null,
+                competitionDivisionGradeId: null,
+                divisionName: null,
+                isLocked: 0,
+                colorCode: '#875241',
                 teamArray: [
                     {
                         teamName: null,
@@ -469,7 +502,7 @@ class CompetitionQuickCompetition extends Component {
                     },
                 ],
             }, {
-                drawsId: null,
+                drawsId: 27,
                 venueCourtNumber: 1,
                 venueCourtName: null,
                 venueShortName: null,
@@ -478,40 +511,13 @@ class CompetitionQuickCompetition extends Component {
                 endTime: null,
                 homeTeamId: null,
                 awayTeamId: null,
-                homeTeamName: null,
+                homeTeamName: "25T",
                 awayTeamName: null,
                 gradeName: null,
                 competitionDivisionGradeId: null,
                 divisionName: null,
                 isLocked: 0,
-                colorCode: '#999999',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: null,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: null,
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#999999',
+                colorCode: '#279792',
                 teamArray: [
                     {
                         teamName: null,
@@ -525,7 +531,7 @@ class CompetitionQuickCompetition extends Component {
             }]
         }, {
             venueCourtNumber: 1, venueCourtName: "1", venueShortName: "Lots", slotsArray: [{
-                drawsId: null,
+                drawsId: 17,
                 venueCourtNumber: 1,
                 venueCourtName: null,
                 venueShortName: null,
@@ -534,13 +540,13 @@ class CompetitionQuickCompetition extends Component {
                 endTime: null,
                 homeTeamId: null,
                 awayTeamId: null,
-                homeTeamName: null,
+                homeTeamName: "17D",
                 awayTeamName: null,
                 gradeName: null,
                 competitionDivisionGradeId: null,
                 divisionName: null,
                 isLocked: 0,
-                colorCode: '#999999',
+                colorCode: 'red',
                 teamArray: [
                     {
                         teamName: null,
@@ -552,7 +558,7 @@ class CompetitionQuickCompetition extends Component {
                     },
                 ],
             }, {
-                drawsId: null,
+                drawsId: 59,
                 venueCourtNumber: 1,
                 venueCourtName: null,
                 venueShortName: null,
@@ -561,13 +567,13 @@ class CompetitionQuickCompetition extends Component {
                 endTime: null,
                 homeTeamId: null,
                 awayTeamId: null,
-                homeTeamName: null,
+                homeTeamName: "25A",
                 awayTeamName: null,
                 gradeName: null,
                 competitionDivisionGradeId: null,
                 divisionName: null,
                 isLocked: 0,
-                colorCode: '#999999',
+                colorCode: '#859642',
                 teamArray: [
                     {
                         teamName: null,
@@ -579,7 +585,7 @@ class CompetitionQuickCompetition extends Component {
                     },
                 ],
             }, {
-                drawsId: null,
+                drawsId: 84,
                 venueCourtNumber: 1,
                 venueCourtName: null,
                 venueShortName: null,
@@ -588,13 +594,13 @@ class CompetitionQuickCompetition extends Component {
                 endTime: null,
                 homeTeamId: null,
                 awayTeamId: null,
-                homeTeamName: null,
+                homeTeamName: "66A",
                 awayTeamName: null,
                 gradeName: null,
                 competitionDivisionGradeId: null,
                 divisionName: null,
                 isLocked: 0,
-                colorCode: '#999999',
+                colorCode: '#628549',
                 teamArray: [
                     {
                         teamName: null,
@@ -606,7 +612,7 @@ class CompetitionQuickCompetition extends Component {
                     },
                 ],
             }, {
-                drawsId: null,
+                drawsId: 65,
                 venueCourtNumber: 1,
                 venueCourtName: null,
                 venueShortName: null,
@@ -615,13 +621,13 @@ class CompetitionQuickCompetition extends Component {
                 endTime: null,
                 homeTeamId: null,
                 awayTeamId: null,
-                homeTeamName: null,
+                homeTeamName: "62F",
                 awayTeamName: null,
                 gradeName: null,
                 competitionDivisionGradeId: null,
                 divisionName: null,
                 isLocked: 0,
-                colorCode: '#999999',
+                colorCode: '#279792',
                 teamArray: [
                     {
                         teamName: null,
@@ -635,7 +641,7 @@ class CompetitionQuickCompetition extends Component {
             }]
         }, {
             venueCourtNumber: 1, venueCourtName: "1", venueShortName: "Lots", slotsArray: [{
-                drawsId: null,
+                drawsId: 20,
                 venueCourtNumber: 1,
                 venueCourtName: null,
                 venueShortName: null,
@@ -644,13 +650,13 @@ class CompetitionQuickCompetition extends Component {
                 endTime: null,
                 homeTeamId: null,
                 awayTeamId: null,
-                homeTeamName: null,
+                homeTeamName: "25S",
                 awayTeamName: null,
                 gradeName: null,
                 competitionDivisionGradeId: null,
                 divisionName: null,
                 isLocked: 0,
-                colorCode: '#999999',
+                colorCode: 'green',
                 teamArray: [
                     {
                         teamName: null,
@@ -725,7 +731,7 @@ class CompetitionQuickCompetition extends Component {
                 endTime: null,
                 homeTeamId: "A",
                 awayTeamId: null,
-                homeTeamName: "null",
+                homeTeamName: "PG8",
                 awayTeamName: null,
                 gradeName: null,
                 competitionDivisionGradeId: null,
@@ -743,448 +749,9 @@ class CompetitionQuickCompetition extends Component {
                     },
                 ],
             }]
-        }, {
-            venueCourtNumber: 1, venueCourtName: "1", venueShortName: "Lots", slotsArray: [{
-                drawsId: null,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: null,
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#999999',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: null,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: null,
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#999999',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: null,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: null,
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#999999',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: null,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: null,
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#999999',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }]
-        }, {
-            venueCourtNumber: 1, venueCourtName: "1", venueShortName: "Lots", slotsArray: [{
-                drawsId: null,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: null,
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#999999',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: null,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: null,
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#999999',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: null,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: null,
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#999999',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: null,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: null,
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#999999',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }]
-        }, {
-            venueCourtNumber: 1, venueCourtName: "1", venueShortName: "Lots", slotsArray: [{
-                drawsId: null,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: null,
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#999999',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: null,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: null,
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#999999',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: null,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: null,
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#999999',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: null,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: null,
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#999999',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }]
-        }, {
-            venueCourtNumber: 1, venueCourtName: "1", venueShortName: "Lots", slotsArray: [{
-                drawsId: null,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: null,
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#999999',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: null,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: null,
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#999999',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: null,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: null,
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#999999',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: 168,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: "A",
-                awayTeamId: null,
-                homeTeamName: "null",
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: 'red',
-                teamArray: [
-                    {
-                        teamName: "A",
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }]
-        }]
-        let dateArray = [{ time: "09:00" }, { time: "10:00" }, { time: "09:00" }, { time: "09:00" }]
+        },
+        ]
+        let dateArray = [{ time: "09:00" }, { time: "10:00" }, { time: "11:00" }, { time: "12:00" }]
         return (
             <div className="draggable-wrap draw-data-table">
                 <div className="scroll-bar pb-4">

@@ -685,7 +685,7 @@ class CompetitionDraws extends Component {
     var dayMargin = 25;
     let topMargin = 0;
     console.log(this.props.drawsState)
-    let legendsData = isArrayNotEmpty(this.props.drawsState.legandsArray) ? this.props.drawsState.legandsArray : []
+    let legendsData = isArrayNotEmpty(this.props.drawsState.legendsArray) ? this.props.drawsState.legendsArray : []
     return (
       <div className="draggable-wrap draw-data-table">
         <div className="scroll-bar pb-4">
@@ -693,7 +693,7 @@ class CompetitionDraws extends Component {
             {/* Day name list */}
             <div className="tablehead-row">
               <div className="sr-no empty-bx"></div>
-              {this.props.drawsState.dateArray.map((date, index) => {
+              {this.props.drawsState.dateArray.map((item, index) => {
                 if (index !== 0) {
                   dateMargin += 110;
                 }
@@ -702,7 +702,7 @@ class CompetitionDraws extends Component {
                 }
                 return (
                   <span style={{ left: dateMargin }} >
-                    {getDayName(date)}
+                    {item.notInDraw == false ? getDayName(item.date) : ""}
                   </span>
                 );
               })}
@@ -710,7 +710,7 @@ class CompetitionDraws extends Component {
             {/* Times list */}
             <div className="tablehead-row">
               <div className="sr-no empty-bx"></div>
-              {this.props.drawsState.dateArray.map((date, index) => {
+              {this.props.drawsState.dateArray.map((item, index) => {
                 if (index !== 0) {
                   dayMargin += 110;
                 }
@@ -718,7 +718,7 @@ class CompetitionDraws extends Component {
                   dayMargin = 50;
                 }
                 return (
-                  <span style={{ left: dayMargin }}>{getTime(date)}</span>
+                  <span style={{ left: dayMargin }}>{item.notInDraw == false ? getTime(item.date) : "Not in draw"}</span>
                 );
               })}
             </div>

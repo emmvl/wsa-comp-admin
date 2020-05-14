@@ -1,5 +1,5 @@
 import { takeEvery, takeLatest } from "redux-saga/effects";
-import { loginApiSaga } from "./authenticationSaga";
+import { loginApiSaga, forgotPasswordSaga } from "./authenticationSaga";
 
 import ApiConstants from "../../themes/apiConstants";
 import {
@@ -570,7 +570,7 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_GET_APPY_TO_LOAD, getAppyToSaga)
   yield takeEvery(ApiConstants.API_GET_EXTRA_TIME_DRAW_LOAD, getExtraTimeDrawSaga)
   yield takeEvery(ApiConstants.API_GET_FINAL_FIXTURE_TEMPLATE_LOAD, getFinalsFixtureTemplateSaga)
-  
+
 
 
   //Search Scorer saga 
@@ -654,4 +654,8 @@ export default function* root_saga() {
 
   /////stripe payments transfer list
   yield takeEvery(ApiConstants.API_GET_STRIPE_PAYMENTS_TRANSFER_LIST_API_LOAD, stripeSaga.getStripeTransferListSaga)
+
+  ///forgot password
+  yield takeEvery(ApiConstants.API_FORGOT_PASSWORD_LOAD, forgotPasswordSaga);
+
 }
