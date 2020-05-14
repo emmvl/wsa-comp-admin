@@ -125,7 +125,7 @@ class Registration extends Component {
             dobTo: '-1',
             membershipProductTypeId: -1,
             genderRefId: -1,
-            postalCode: '',
+            postalCode: null,
             affiliate: -1,
             membershipProductId: -1,
             paymentId: -1
@@ -259,7 +259,7 @@ class Registration extends Component {
                         </div>
                         <div className="reg-col" >
                             <div className="reg-filter-col-cont">
-                                <div className='year-select-heading'>{AppConstants.competition}:</div>
+                                <div className='year-select-heading'>{AppConstants.competition}</div>
                                 <Select
                                     showSearch
                                     optionFilterProp="children"
@@ -304,6 +304,8 @@ class Registration extends Component {
                                 />
                             </div>
                         </div>
+                    </div>
+                    <div className="row reg-filter-row" >
                         <div className="reg-col" >
                             <div  className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.types}</div>
@@ -367,6 +369,8 @@ class Registration extends Component {
                                 </Select>
                             </div>
                         </div>
+                    </div>
+                    <div className="row reg-filter-row" >
                         <div className="reg-col" >
                             <div className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.payment}</div>
