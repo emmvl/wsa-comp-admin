@@ -125,7 +125,7 @@ class Registration extends Component {
             dobTo: '-1',
             membershipProductTypeId: -1,
             genderRefId: -1,
-            postalCode: '-1',
+            postalCode: '',
             affiliate: -1,
             membershipProductId: -1,
             paymentId: -1
@@ -151,7 +151,7 @@ class Registration extends Component {
             dobTo: this.state.dobTo!= '-1' ? moment(this.state.dobTo).format('YYYY-MM-DD') : '-1',
             membershipProductTypeId: this.state.membershipProductTypeId,
             genderRefId: this.state.genderRefId,
-            postalCode: this.state.postalCode,
+            postalCode: (this.state.postalCode!= '' && this.state.postalCode!= null) ? this.state.postalCode.toString() : '-1',
             affiliate: this.state.affiliate,
             membershipProductId: this.state.membershipProductId,
             paymentId: this.state.paymentId,
@@ -233,18 +233,17 @@ class Registration extends Component {
             }
         }
         const {genderData} = this.props.commonReducerState;
-        const {competitions, membershipProductTypes, membershipProducts} = this.props.userRegistrationState;
+        const {competitions, membershipProductTypes, membershipProducts, postalCodes} = this.props.userRegistrationState;
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
                 <div className="fluid-width" >
-                    <div className="row" >
-                        <div className="col-sm-3" >
-                            <div className="com-year-select-heading-view" >
-                                <span className='year-select-heading'>{AppConstants.year}:</span>
+                    <div className="row reg-filter-row" >
+                        <div className="reg-col" >
+                            <div className="reg-filter-col-cont">
+                                <div className='year-select-heading'>{AppConstants.year}</div>
                                 <Select
                                     name={"yearRefId"}
-                                    className="year-select"
-                                    style={{ minWidth: 60 }}
+                                    className="year-select reg-filter-select"
                                     onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
                                     value={this.state.yearRefId}>
                                         <Option key={-1} value={-1}>{AppConstants.all}</Option>
@@ -258,16 +257,13 @@ class Registration extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-3" >
-                            <div style={{width: "100%", display: "flex",flexDirection: "row",
-                                alignItems: "center",
-                            }} >
-                                <span className='year-select-heading'>{AppConstants.competition}:</span>
+                        <div className="reg-col" >
+                            <div className="reg-filter-col-cont">
+                                <div className='year-select-heading'>{AppConstants.competition}:</div>
                                 <Select
                                     showSearch
                                     optionFilterProp="children"
-                                    style={{ minWidth: 160 }}
-                                    className="year-select"
+                                    className="year-select reg-filter-select1"
                                     onChange={competitionId => this.onChangeDropDownValue(competitionId, "competitionId")}
                                     value={this.state.competitionUniqueKey}>
                                         <Option key={-1} value={'-1'}>{AppConstants.all}</Option>
@@ -281,12 +277,12 @@ class Registration extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-3" style={{display:'flex'}}>
-                            <div style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center" }} >
-                                <span className='year-select-heading' style={{width: '100px'}}>{AppConstants.dobFrom}</span>
+                        <div className="reg-col">
+                            <div className="reg-filter-col-cont">
+                                <div className='year-select-heading'>{AppConstants.dobFrom}</div>
                                 <DatePicker
-                                    size="large"
-                                    style={{ width: "100%" }}
+                                    size="default"
+                                    className="year-select reg-filter-select"
                                     onChange={e => this.onChangeDropDownValue(e, 'dobFrom')}
                                     format={"DD-MM-YYYY"}
                                     showTime={false}
@@ -294,12 +290,12 @@ class Registration extends Component {
                                 />
                             </div>
                         </div>
-                        <div className="col-sm-3" style={{display:'flex'}}>
-                            <div style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center" }} >
-                                <span className='year-select-heading'  style={{width: '100px'}}>{AppConstants.dobTo}</span>
+                        <div className="reg-col">
+                            <div className="reg-filter-col-cont" >
+                                <div className='year-select-heading' style={{marginLeft: '25px'}}>{AppConstants.dobTo}</div>
                                 <DatePicker
                                     size="large"
-                                    style={{ width: "100%" }}
+                                    className="year-select reg-filter-select"
                                     onChange={e => this.onChangeDropDownValue(e, 'dobTo')}
                                     //onChange={e => this.setState({dobTo: moment(e, "YYYY-MM-DD")}) }
                                     format={"DD-MM-YYYY"}
@@ -308,13 +304,13 @@ class Registration extends Component {
                                 />
                             </div>
                         </div>
-                        <div className="col-sm-3" >
-                            <div style={{ width: "fit-content", display: "flex", flexDirection: "row", alignItems: "center" }} >
-                                <span className='year-select-heading'>{AppConstants.types}</span>
+                        <div className="reg-col" >
+                            <div  className="reg-filter-col-cont" >
+                                <div className='year-select-heading'>{AppConstants.types}</div>
                                 <Select
                                     showSearch
                                     optionFilterProp="children"
-                                    className="year-select"
+                                    className="year-select reg-filter-select"
                                     style={{ minWidth: 100 }}
                                     onChange={(e) => this.onChangeDropDownValue(e, 'membershipProductTypeId')}
                                     value={this.state.membershipProductTypeId}>
@@ -325,12 +321,11 @@ class Registration extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-3" >
-                            <div style={{ width: "fit-content", display: "flex", flexDirection: "row", alignItems: "center" }} >
-                                <span className='year-select-heading'>{AppConstants.gender}</span>
+                        <div className="reg-col1" >
+                            <div  className="reg-filter-col-cont" >
+                                <div className='year-select-heading'>{AppConstants.gender}</div>
                                 <Select
-                                    className="year-select"
-                                    style={{ minWidth: 100 }}
+                                    className="year-select reg-filter-select1"
                                     onChange={(e) => this.onChangeDropDownValue(e, 'genderRefId')}
                                     value={this.state.genderRefId}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
@@ -340,32 +335,13 @@ class Registration extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-3" >
-                            <div style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center" }} >
-                                <span className='year-select-heading'>{AppConstants.postCode}</span>
-                                <Select
-                                     mode="multiple"
-                                    style={{ minWidth: 100 }}
-                                    className="year-select"
-                                    onChange={(e) => this.onChangeDropDownValue(e, 'postalCode')}
-                                    value={this.state.postalCode}>
-                                    <Option key={'-1'} value={'-1'}>{AppConstants.all}</Option>
-                                    <Option key={"2000-5799"} value={"2000-5799"}>{"2000-5799"}</Option>
-                                    <Option key={"6000-6797"} value={"6000-6797"}>{"6000-6797"}</Option>
-                                    <Option key={"7000-7799"} value={"7000-7799"}>{"7000-7799"}</Option>
-                                    <Option key={"0800-0899"} value={"0800-0899"}>{"0800-0899"}</Option>
-                                    
-                                </Select>
-                            </div>
-                        </div>
-                        <div className="col-sm-3" >
-                            <div style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center" }} >
-                                <span className='year-select-heading'>{AppConstants.affiliates}</span>
+                        <div className="reg-col" >
+                            <div  className="reg-filter-col-cont" >
+                                <div className='year-select-heading'>{AppConstants.affiliates}</div>
                                 <Select
                                     showSearch
                                     optionFilterProp="children"
-                                    style={{ minWidth: 100 }}
-                                    className="year-select"
+                                    className="year-select reg-filter-select"
                                     onChange={(e) => this.onChangeDropDownValue(e, 'affiliate')}
                                     value={this.state.affiliate}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
@@ -375,14 +351,13 @@ class Registration extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-3" >
-                            <div style={{ width: "fit-content", display: "flex", flexDirection: "row", alignItems: "center" }} >
-                                <span className='year-select-heading'>{AppConstants.product}</span>
+                        <div className="reg-col" >
+                            <div  className="reg-filter-col-cont" >
+                                <div className='year-select-heading'>{AppConstants.product}</div>
                                 <Select
                                     showSearch
                                     optionFilterProp="children"
-                                    className="year-select"
-                                    style={{ minWidth: 100 }}
+                                    className="year-select reg-filter-select"
                                     onChange={(e) => this.onChangeDropDownValue(e, 'membershipProductId')}
                                     value={this.state.membershipProductId}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
@@ -392,15 +367,30 @@ class Registration extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-3" >
-                            <div style={{ width: "fit-content", display: "flex", flexDirection: "row", alignItems: "center" }} >
-                                <span className='year-select-heading'>{AppConstants.payment}</span>
+                        <div className="reg-col" >
+                            <div className="reg-filter-col-cont" >
+                                <div className='year-select-heading'>{AppConstants.payment}</div>
                                 <Select
-                                    className="year-select"
-                                    style={{ minWidth: 100 }}
+                                    className="year-select reg-filter-select"
                                     onChange={(e) => this.onChangeDropDownValue(e, 'paymentId')}
                                     value={this.state.paymentId}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                </Select>
+                            </div>
+                        </div>
+                        <div className="reg-col" >
+                            <div  className="reg-filter-col-cont" >
+                                <div className='year-select-heading'>{AppConstants.postCode}</div>
+                                <Select
+                                    showSearch
+                                     optionFilterProp="children"
+                                     mode="multiple"
+                                     className="year-select reg-filter-select1"
+                                    onChange={(e) => this.onChangeDropDownValue(e, 'postalCode')}
+                                    value={this.state.postalCode}>
+                                    {(postalCodes || []).map((post, index) => (
+                                        <Option key={post} value={post}>{post}</Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
