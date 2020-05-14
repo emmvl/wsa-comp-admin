@@ -136,7 +136,9 @@ const ValidationConstants = {
     extraTimeDrawRequired: "Please select extra time draw",
     applyToRequired: "Please select apply to",
     gradeNameRequired: "Grade name is required",
-    startTime: "Start time is required"
+    startTime: "Start time is required",
+
+    pleaseSelectDiscountType: "Please select discount type.",
 
 };
 

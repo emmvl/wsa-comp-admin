@@ -1630,7 +1630,7 @@ function competitionFees(state = initialState, action) {
                     "competitionMembershipProductTypeId": null,
                     "competitionTypeDiscountId": 0,
                     "membershipProductUniqueKey": null,
-                    "competitionTypeDiscountTypeRefId": 1,
+                    "competitionTypeDiscountTypeRefId": 0,
                     "amount": "",
                     "description": '',
                     "availableFrom": null,

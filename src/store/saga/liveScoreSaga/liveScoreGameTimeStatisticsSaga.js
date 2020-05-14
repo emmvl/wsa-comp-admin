@@ -23,7 +23,9 @@ export function* liveScoreGameTimeStatisticsSaga(action) {
     try {
         const result = yield call(LiveScoreAxiosApi.gameTimeStatistics, action.competitionId,
             action.aggregate,
-            action.offset)
+            action.offset,
+            action.searchText
+            )
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_GAME_TIME_STATISTICS_LIST_SUCCESS,

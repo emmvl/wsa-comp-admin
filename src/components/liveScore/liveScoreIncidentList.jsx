@@ -34,12 +34,6 @@ function checkSorting(a, b, key) {
 }
 
 
-// function checkSorting2(a, b, key) {
-//     if (a[key] && b[key]) {
-//         return a[key].length - b[key].length
-//     }
-// }
-
 const { Content } = Layout;
 ////columens data
 const columns = [
@@ -124,6 +118,7 @@ class LiveScoreIncidentList extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            searchText:""
         };
     }
 
@@ -131,11 +126,40 @@ class LiveScoreIncidentList extends Component {
 
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
-            this.props.liveScoreIncidentList(id);
+            this.props.liveScoreIncidentList(id, this.state.searchText);
         } else {
             history.push('/')
         }
     }
+
+      // on change search text
+      onChangeSearchText = (e) => {
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        this.setState({ searchText: e.target.value })
+        if (e.target.value == null || e.target.value == "") {
+            this.props.liveScoreIncidentList(id, e.target.value);
+        }
+    }
+
+    // search key 
+    onKeyEnterSearchText = (e) => {
+        var code = e.keyCode || e.which;
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        if (code === 13) { //13 is the enter keycode
+            this.props.liveScoreIncidentList(id, e.target.value);
+        }
+    }
+
+    // on click of search icon
+    onClickSearchIcon = () => {
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        if (this.state.searchText == null || this.state.searchText == "") {
+        }
+        else {
+            this.props.liveScoreIncidentList(id, this.state.searchText);
+        }
+    }
+
 
     ///////view for breadcrumb
     headerView = () => {
@@ -148,7 +172,7 @@ class LiveScoreIncidentList extends Component {
                         </Breadcrumb>
                     </div>
 
-                    <div className="col-sm" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
+                    <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
                         <div className="row">
 
 
@@ -232,11 +256,11 @@ class LiveScoreIncidentList extends Component {
                 <div className="col-sm pt-4 ml-3 " style={{ display: "flex", justifyContent: 'flex-end', }} >
                     <div className="comp-product-search-inp-width" >
                         <Input className="product-reg-search-input"
-                            // onChange={(e) => this.onChangeSearchText(e)}
+                            onChange={(e) => this.onChangeSearchText(e)}
                             placeholder="Search..."
-                            // onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                            onKeyPress={(e) => this.onKeyEnterSearchText(e)}
                             prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                            // onClick={() => this.onClickSearchIcon()}
+                            onClick={() => this.onClickSearchIcon()}
                             />}
                             allowClear
                         />

@@ -901,7 +901,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             // className="pt-3"
                             placeholder="Select"
                             // value={item.timeSlotEntityManualkeyArr}
-                            style={{ width: "30%", minWidth: 120 }}
+                            style={{ width: "100%", minWidth: 120, maxWidth: 180 }}
                             onChange={(divisions) => this.props.UpdateTimeSlotsData(divisions, 'venuePreferenceEntityId', 'competitionTimeslotsEntity', index, mainId, id)}
                         >
                             {division.divisions && division.divisions.map((item, divisonIndex) => {
@@ -963,7 +963,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                         < Select
                             mode='multiple'
                             placeholder="Select"
-                            style={{ width: "30%", minWidth: 120 }}
+                            style={{ width: "100%", minWidth: 120, maxWidth: 180 }}
                             onChange={(grades) => this.props.UpdateTimeSlotsData(grades, 'venuePreferenceEntityId', 'competitionTimeslotsEntity', index, mainId, id)}
                         >
                             {grades.grades && grades.grades.map((item, gradesIndex) => (

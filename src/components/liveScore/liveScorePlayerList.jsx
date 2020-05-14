@@ -13,7 +13,7 @@ import moment from 'moment'
 import { liveScore_formateDate } from '../../themes/dateformate'
 import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
-
+import { exportFilesAction } from "../../store/actions/appAction"
 const { Content } = Layout;
 
 
@@ -196,6 +196,13 @@ class LiveScorePlayerList extends Component {
             this.props.playerListWithPagginationAction(this.state.competitionid, 0, 10, this.state.searchText)
         }
     }
+
+    onExport() {
+        let url = AppConstants.exportUrl + `competitionId=${this.state.competitionid}`
+        this.props.exportFilesAction(url)
+    }
+
+
     ///////view for breadcrumb
     headerView = () => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
@@ -241,7 +248,7 @@ class LiveScorePlayerList extends Component {
                                             justifyContent: "flex-end"
                                         }}
                                     >
-                                        <Button href={AppConstants.exportUrl + id} className="primary-add-comp-form" type="primary">
+                                        <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">
                                                     <img
@@ -267,7 +274,7 @@ class LiveScorePlayerList extends Component {
                                         }}
                                     >
                                         <NavLink to={`/liveScorerPlayerImport`} className="text-decoration-none">
-                                            <Button className="primary-add-comp-form" type="primary">
+                                            <Button  className="primary-add-comp-form" type="primary">
                                                 <div className="row">
                                                     <div className="col-sm">
                                                         <img
@@ -307,9 +314,6 @@ class LiveScorePlayerList extends Component {
         return (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Spin size="small" tip="Loading..." />
-                {/* <Spin size="small" />
-                <Spin />
-                <Spin size="large" /> */}
             </div>
         )
     }
@@ -323,7 +327,6 @@ class LiveScorePlayerList extends Component {
                 <Layout>
                     {this.headerView()}
                     <Content>
-                        {/* {this.props.liveScorePlayerState.onLoad == true ? this.loaderView() : this.contentView()} */}
                         {this.contentView()}
                     </Content>
                 </Layout>
@@ -332,7 +335,7 @@ class LiveScorePlayerList extends Component {
     }
 }
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ playerListWithPagginationAction }, dispatch)
+    return bindActionCreators({ playerListWithPagginationAction, exportFilesAction }, dispatch)
 }
 
 function mapStatetoProps(state) {

@@ -183,8 +183,8 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token)
     },
 
-    liveScoreIncidentList(competitionID) {
-        var url = `/incident?competitionId=${competitionID}`;
+    liveScoreIncidentList(competitionID, search) {
+        var url = `/incident?competitionId=${competitionID}&search=${search}`;
         return Method.dataGet(url, token)
     },
 
@@ -277,24 +277,20 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
-    liveScoreGoalList(data, goaltype) {
+    liveScoreGoalList(compId, goaltype, search) {
+        let url = null
         if (goaltype === "By Match") {
-            let competitionID = localStorage.getItem("competitionId");
-            let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-            var url = `/stats/scoringByPlayer?competitionId=${id}&aggregate=MATCH`
-            return Method.dataGet(url, token)
+             url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}`
         }
-        if (goaltype === "Total") {
-            let competitionID = localStorage.getItem("competitionId");
-            let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-            var url = `/stats/scoringByPlayer?competitionId=${id}&aggregate=ALL`
-            return Method.dataGet(url, token)
-        }
-        let competitionID = localStorage.getItem("competitionId");
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-        var url = `/stats/scoringByPlayer?competitionId=${id}`;
+        else if (goaltype === "Total") {
+             url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=ALL&search=${search}`
 
+        }
+
+        return Method.dataGet(url, token)
+        
     },
+    
     liveScoreManagerList(roleId, entityTypeId, entityId) {
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
         var url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${id}`;
@@ -486,12 +482,13 @@ let LiveScoreAxiosApi = {
     },
 
     /// get Game Time statistics api
-    gameTimeStatistics(competitionId, aggregate, offset) {
+    gameTimeStatistics(competitionId, aggregate, offset, searchText) {
         let Body = {
             "paging": {
                 "limit": 10,
                 "offset": `${offset}`
-            }
+            },
+            "search":searchText
         }
         var url = `/stats/gametime?competitionId=${competitionId}&aggregate=${aggregate.toUpperCase()}`;
         return Method.dataPost(url, localStorage.token, Body)
