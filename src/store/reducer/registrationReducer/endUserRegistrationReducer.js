@@ -40,7 +40,8 @@ const initialState = {
     userRegDashboardListTotalCount: 1,
     competitions:[],
     membershipProductTypes: [],
-    membershipProducts:[]
+    membershipProducts:[],
+    postalCodes: []
 }
 
 
@@ -121,6 +122,7 @@ function  endUserRegistrationReducer(state = initialState, action)
                 competitions: dashboardListData.competitions,
                 membershipProductTypes: dashboardListData.membershipProductTypes,
                 membershipProducts: dashboardListData.membershipProducts,
+                postalCodes: dashboardListData.postalCodes,
                 status: action.status,
                 error: null
             };

@@ -449,6 +449,19 @@ const columnsVol = [
     }
 ];
 
+const columnsMedical = [
+    {
+        title: 'Disability Type',
+        dataIndex: 'disabilityType',
+        key: 'disabilityType'
+    },
+    {
+        title: 'Disability Care Number',
+        dataIndex: 'disabilityCareNumber',
+        key: 'disabilityCareNumber'
+    }
+];
+
 
 class UserModulePersonalDetail extends Component {
     constructor(props) {
@@ -807,8 +820,6 @@ class UserModulePersonalDetail extends Component {
         let personal = userState.personalData;
         let personalByCompData = userState.personalByCompData != null ? userState.personalByCompData : [];
         let primaryContacts = personalByCompData.length > 0 ? personalByCompData[0].primaryContacts : [];
-        let friends = personalByCompData.length > 0 ? personalByCompData[0].friends : [];
-        let referFriends = personalByCompData.length > 0 ? personalByCompData[0].referFriends : [];
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="user-module-row-heading">{AppConstants.address}</div>
@@ -837,40 +848,24 @@ class UserModulePersonalDetail extends Component {
                         pagination={false}
                     />
                 </div>
-                {/* <div className="user-module-row-heading"  style={{marginTop: '30px'}}>{AppConstants.friends}</div>
-                <div className="table-responsive home-dash-table-view">
-                    <Table className="home-dashboard-table"
-                    columns={columnsFriends}
-                    dataSource={friends} 
-                    pagination={false}
-                    />
-                </div>
-                <div className="user-module-row-heading"  style={{marginTop: '30px'}}>{AppConstants.referFriends}</div>
-                <div className="table-responsive home-dash-table-view">
-                    <Table className="home-dashboard-table"
-                    columns={columnsFriends}
-                    dataSource={referFriends} 
-                    pagination={false}
-                    />
-                </div> */}
                 <div className="user-module-row-heading" style={{ marginTop: '30px' }}>{AppConstants.otherInformation}</div>
                 <div className="table-responsive home-dash-table-view" style={{ display: 'flex', flexDirection: 'column' }}>
                     <div className="other-info-row" style={{ paddingTop: '10px' }}>
                         <div className="year-select-heading other-info-label" >{AppConstants.countryOfBirth}</div>
-                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personal.countryName}</div>
+                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData!= null && personalByCompData.length > 0 ? personalByCompData[0].countryName : null}</div>
                     </div>
                     <div className="other-info-row">
                         <div className="year-select-heading other-info-label">{AppConstants.nationalityReference}</div>
-                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personal.nationalityName}</div>
+                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData!= null  && personalByCompData.length > 0 ? personalByCompData[0].nationalityName: null}</div>
                     </div>
                     <div className="other-info-row">
-                        <div className="year-select-heading other-info-label">{AppConstants.childLangSpoken}</div>
-                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personal.languages}</div>
+                        <div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.childLangSpoken}</div>
+                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData!= null  && personalByCompData.length > 0 ? personalByCompData[0].languages: null}</div>
                     </div>
-                    <div className="other-info-row">
+                    {/* <div className="other-info-row">
                         <div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.disability}</div>
                         <div className="live-score-desc-text side-bar-profile-data other-info-font">{personal.isDisability == 0 ? "No" : "Yes"}</div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         )
@@ -896,6 +891,24 @@ class UserModulePersonalDetail extends Component {
                                     {item.regularMedication}
                                 </div>
                             </div>
+                            <div style={{ marginBottom: "3%", display: 'flex' }} >
+                                <div className="year-select-heading other-info-label col-sm-2">{AppConstants.disability}</div>
+                                <div className="live-score-desc-text side-bar-profile-data other-info-font" style={{ textAlign: 'left' }}>
+                                    {item.isDisability}
+                                </div>
+                            </div>
+                            {
+                                item.isDisability == 'Yes' ? 
+                                <div className="comp-dash-table-view mt-2" style={{paddingLeft: '0px'}}>
+                                <div className="table-responsive home-dash-table-view">
+                                    <Table className="home-dashboard-table"
+                                        columns={columnsMedical}
+                                        dataSource={item.disability}
+                                        pagination={false}
+                                    />
+                                </div> </div>: null
+                            }
+                            
                         </div>
                     ))
                 }
