@@ -4,6 +4,8 @@ import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
+import history from "../../util/history";
+
 
 const { Header, Footer, Content } = Layout;
 
@@ -105,7 +107,8 @@ class QuickCompetitionInvitations extends Component {
                     <div className="row" >
                         <div className="col-sm-3" >
                             <div className="reg-add-save-button">
-                                <Button type="cancel-button">{AppConstants.back}</Button>
+
+                                <Button type="cancel-button" htmlType="submit" onClick={() => this.cancelCall()} >{AppConstants.back}</Button>
                             </div>
                         </div>
                         <div className="col-sm-9" >
@@ -123,7 +126,9 @@ class QuickCompetitionInvitations extends Component {
         )
     }
 
-
+    cancelCall = () => {
+        history.push('/competitionQuickCompetition');
+    }
 
 
 

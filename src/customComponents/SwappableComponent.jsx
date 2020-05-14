@@ -31,12 +31,15 @@ class Swappable extends Component {
   }
 
   drop(ev, dragableId, dropzoneId, customFunc = null, swappable = true) {
-    if(swappable == false){
+    if (swappable == false) {
       return
     }
     ev.preventDefault();
 
     let src = document.getElementById(ev.dataTransfer.getData('src'));
+    if (src == null) {
+      return
+    }
     let srcParent = src.parentNode;
 
     let target = document.getElementById(dragableId);

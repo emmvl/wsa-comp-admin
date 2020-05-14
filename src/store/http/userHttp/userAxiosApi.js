@@ -137,7 +137,7 @@ let userHttpApi = {
 
   // Search scorer 
   scorerSearchApi(functionId, entityTypeId, competitionId, searchText) {
-    if(searchText && searchText.length>0){
+    if (searchText && searchText.length > 0) {
       var url = `users/byFunction?functionId=${functionId}&entityTypeId=${entityTypeId}&entityId=${competitionId}&userName=${searchText}`
       return Method.dataGet(url, token)
     }
@@ -157,15 +157,22 @@ let userHttpApi = {
     return Method.dataGet(url, token, payload);
   },
   saveOrgPhoto(payload) {
-   // let organisationUniqueKey = await getOrganisationData().organisationUniqueKey;
+    // let organisationUniqueKey = await getOrganisationData().organisationUniqueKey;
     var url = `api/organisationphoto/save`;
     return Method.dataPost(url, token, payload);
   },
   deleteOrgPhoto(payload) {
     // let organisationUniqueKey = await getOrganisationData().organisationUniqueKey;
-     var url = `api/organisationphoto/delete/${payload.id}`;
-     return Method.dataDelete(url, token);
-   },
+    var url = `api/organisationphoto/delete/${payload.id}`;
+    return Method.dataDelete(url, token);
+  },
+
+  ////forgot password
+  forgotPassword(email) {
+    var url = `password/forgot?email=${email}`;
+    return Method.dataGet(url, token);
+  },
+
 }
 
 let Method = {

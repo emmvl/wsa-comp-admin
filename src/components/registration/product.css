@@ -616,7 +616,23 @@ display: flex;
   justify-content: flex-end
 }
 
+.forgot-password-link-text{
+  font-size: 13px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  line-height: 3;
+  color: var(--app-color);
+  cursor: pointer;
+  margin-left: 9px;
+}
 
+.forgotPasswordSuccess--button-div{
+  display: flex;
+  justify-content: center;
+  margin-top: 3vh;
+}
 @media (max-width: 767px) {
   .invoiceImage{
     display: flex;

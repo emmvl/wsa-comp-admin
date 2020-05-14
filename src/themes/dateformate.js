@@ -38,7 +38,7 @@ function isDateSame(date1, date2) {
 }
 
 function sortArrayByDate(dateArray) {
-    const sortedArray = dateArray.sort((a, b) => moment(a) - moment(b));
+    const sortedArray = dateArray.sort((a, b) => moment(a.date) - moment(b.date));
     return sortedArray;
 }
 function formatDateTime(startDate, startTime, ) {

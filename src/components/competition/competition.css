@@ -381,6 +381,60 @@ a.collapsed i {
   display: flex;
   flex-direction: row;
 }
+.fixtureBorder{
+  min-width: 64px;
+  height: 40px;
+  float: left;
+  border-radius: 6px;
+  border: 2px dashed var(--app-bbbbc6);
+  z-index: 1;
+  position: absolute;
+  top: 0;
+}
+.fixtureBox{
+  position: absolute;
+  top: 0;
+  cursor: move;
+  min-width: 64px;
+  height: 40px;
+  border-radius: 5px;
+  background-color: var(--app-fbf1ea);
+  /* text-transform: uppercase; */
+  text-align: center;
+  line-height: 40px;
+  color: var(--app-white);
+  font-size: 13px;
+  font-family: "Inter-Medium";
+  z-index: 99;
+}
+.fixture-sr-no{
+  color: var(--app-9b9bad);
+  min-width: 25px;
+  float: none;
+  height: 40px;
+  line-height: 40px;
+  margin-bottom: 9px;
+  position: relative;
+  top: 1px;
+}
+.tablehead-row-fixture span {
+  position: absolute;
+  top: 0;
+  min-width: 64px;
+  height: 40px;
+  color: var(--app-9b9bad);
+  line-height: 40px;
+  font-size: 13px;
+  font-family: "Inter-Medium";
+  z-index: 99;
+  text-align: center;
+}
+
+.tablehead-row-fixture {
+  position: relative;
+  margin: 0 20px;
+}
+
 @media (max-width: 991px) {
   .comp-buttons-view .open-reg-button {
     margin-top: 20px;

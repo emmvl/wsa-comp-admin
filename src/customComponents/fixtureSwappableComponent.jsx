@@ -37,6 +37,9 @@ class FixtureSwappable extends Component {
         ev.preventDefault();
 
         let src = document.getElementById(ev.dataTransfer.getData('src'));
+        if (src == null) {
+            return
+        }
         let srcParent = src.parentNode;
 
         let target = document.getElementById(dragableId);
