@@ -101,6 +101,18 @@ class UserAddAffiliates extends Component {
             if(!((this.state.loggedInuserOrgTypeRefId == 1 && (val == 3 || 
                 val == 4)) || (this.state.loggedInuserOrgTypeRefId == 2 && val == 4))){
                     this.props.updateNewAffiliateAction(val,AppConstants.affiliatedToOrgId);
+
+                    let orgVal = this.state.organisationId;
+                    let name = getOrganisationData().name;
+                    this.props.updateNewAffiliateAction(orgVal,AppConstants.affiliatedToOrgId);
+                    this.props.updateNewAffiliateAction(name,"affiliatedToOrgName");
+                }
+                else{
+                    this.props.updateNewAffiliateAction(null,AppConstants.affiliatedToOrgId);
+                    this.props.updateNewAffiliateAction(null,"affiliatedToOrgName"); 
+                    this.props.form.setFieldsValue({
+                        affiliatedToOrgId: null
+                    })
                 }
         }
         this.props.updateNewAffiliateAction(val,key);
@@ -284,7 +296,11 @@ class UserAddAffiliates extends Component {
                     </div>
                     :
                     <div>
-                        <InputWithHead heading={AppConstants.affilatedTo} />
+                        <InputWithHead heading={AppConstants.affilatedTo}   required={"required-field"}/>
+                        <Form.Item >
+                        {getFieldDecorator('affiliatedToOrgId', {
+                        rules: [{ required: true, message: ValidationConstants.affiliateToRequired }],
+                        })(
                         <Select
                             style={{ width: "100%", paddingRight: 1 }}
                             onChange={(e) => this.onChangeSetValue(e, AppConstants.affiliatedToOrgId )}>
@@ -293,6 +309,8 @@ class UserAddAffiliates extends Component {
                              <Option key={aff.organisationId} value={aff.organisationId}>{aff.name}</Option>
                             ))}
                         </Select>
+                        )}
+                        </Form.Item>
                     </div>
                 }
                 <Form.Item >

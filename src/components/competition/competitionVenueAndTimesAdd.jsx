@@ -308,6 +308,28 @@ class CompetitionVenueAndTimesAdd extends Component {
         return hours;
     }
 
+    getDisabledMinutes = (selectedHour, startTime) => {
+        console.log("&&&&&&&&&&&" + startTime);
+        console.log("selectedHour::" + startTime.split(":")[0]);
+        console.log("Current Minute::" + startTime.split(":")[1]);
+        console.log("*****selectedHour:::" + selectedHour);
+        let hour = Number(startTime.split(":")[0]);
+        let min = Number(startTime.split(":")[1]);
+        var minutes= [];
+        if (selectedHour === hour){
+            for(var i =0; i < min; i++){
+                minutes.push(i);
+            }
+        }
+        if (selectedHour < hour){
+            for(var i =0; i < 60; i++){
+                minutes.push(i);
+            }
+        }
+        return minutes;
+    
+    }
+
     onChangeGameTimePicker = (time, value, index, key1, key2) => {
         if (time != null)
             this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, key1, key2)
@@ -525,6 +547,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                     <TimePicker
                         key={"endTime"}
                         disabledHours={() => this.getDisabledHours(item.startTime)}
+                        disabledMinutes={(e) => this.getDisabledMinutes(e)}
                         className="comp-venue-time-timepicker"
                         style={{ width: "100%" }}
                         onChange={(time) => this.onChangeGameTimePicker(time, time.format("HH:mm"), index, 'endTime', "gameTimeslot")}
@@ -603,6 +626,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                         className="comp-venue-time-timepicker"
                         style={{ width: "100%" }}
                         disabledHours={() => this.getDisabledHours(item.startTime)}
+                        disabledMinutes={(e) => this.getDisabledMinutes(e, item.startTime)}
                         onChange={(time) => time !== null && this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, 'endTime', "addTimeSlotField", tableIndex)}
                         value={moment(item.endTime, "HH:mm")}
                         format={"HH:mm "}

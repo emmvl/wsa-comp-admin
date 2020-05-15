@@ -124,14 +124,14 @@ class UserEditAffiliates extends Component {
     }
 
     setFormFieldValue = () => {
-        console.log("setFormFieldValue");
         let affiliate = this.props.userState.affiliateEdit;
         this.props.form.setFieldsValue({
             name: affiliate.name,
             addressOne: affiliate.street1,
             suburb: affiliate.suburb,
             stateRefId: affiliate.stateRefId,
-            postcode: affiliate.postalCode
+            postcode: affiliate.postalCode,
+            affiliatedToOrgId: affiliate.affiliatedToOrgId
         })
         let contacts = affiliate.contacts;
         this.updateContactFormFields(contacts);
@@ -154,7 +154,18 @@ class UserEditAffiliates extends Component {
         if(key === AppConstants.organisationTypeRefId){
             if(!((this.state.loggedInuserOrgTypeRefId == 1 && (val == 3 || 
                 val == 4)) || (this.state.loggedInuserOrgTypeRefId == 2 && val == 4))){
-                    this.props.updateAffiliateAction(val,AppConstants.affiliatedToOrgId);
+                    console.log("***********************" + val);
+                    let orgVal = this.state.organisationId;
+                    let name = getOrganisationData().name;
+                    this.props.updateAffiliateAction(orgVal,AppConstants.affiliatedToOrgId);
+                    this.props.updateAffiliateAction(name,"affiliatedToOrgName");
+                }
+                else{
+                    this.props.updateAffiliateAction(null,AppConstants.affiliatedToOrgId);
+                    this.props.updateAffiliateAction(null,"affiliatedToOrgName"); 
+                    this.props.form.setFieldsValue({
+                        affiliatedToOrgId: null
+                    })
                 }
         }
         this.props.updateAffiliateAction(val,key);
@@ -344,8 +355,11 @@ class UserEditAffiliates extends Component {
 
     ////////form content view
     contentView = (getFieldDecorator) => {
+     
         let affiliateToData = this.props.userState.affiliateTo;
         let affiliate = this.props.userState.affiliateEdit;
+        console.log("&&&&&&& affiliate" + JSON.stringify(affiliate));
+        console.log("&&&&&&& affiliateToData" + JSON.stringify(affiliateToData));
         const { stateList } = this.props.commonReducerState;
         if(affiliate.organisationTypeRefId === 0){
             if(affiliateToData.organisationTypes!= undefined && affiliateToData.organisationTypes.length > 0){
@@ -378,16 +392,22 @@ class UserEditAffiliates extends Component {
                     </div>
                     :
                     <div>
-                        <InputWithHead heading={AppConstants.affilatedTo} />
+                        <InputWithHead heading={AppConstants.affilatedTo}  required={"required-field"}/>
+                        <Form.Item >
+                        {getFieldDecorator('affiliatedToOrgId', {
+                        rules: [{ required: true, message: ValidationConstants.affiliateToRequired }],
+                        })(
                         <Select
                             style={{ width: "100%", paddingRight: 1 }}
-                            value={affiliate.affiliatedToOrgId}
+                            setFieldsValue={affiliate.affiliatedToOrgId}
                             onChange={(e) => this.onChangeSetValue(e, AppConstants.affiliatedToOrgId )}>
                             {(affiliateToData.affiliatedTo || []).filter(x=> x.organisationtypeRefId == (organisationTypeRefId -1)).
                              map((aff, index) => (
                              <Option key={aff.organisationId} value={aff.organisationId}>{aff.name}</Option>
                             ))}
                         </Select>
+                        )}
+                        </Form.Item>
                     </div>
                 }
                 <Form.Item >
