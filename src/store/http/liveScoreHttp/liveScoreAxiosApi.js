@@ -145,9 +145,9 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token)
     },
 
-    liveScoreMatchList(competitionID, start, offset) {
+    liveScoreMatchList(competitionID, start, offset, search) {
         // start=<1 year in past>&limit=<limit>&offset=<offset></offset>
-        var url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}`;
+        var url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}`;
         return Method.dataGet(url, localStorage.token)
     },
 

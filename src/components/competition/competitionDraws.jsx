@@ -718,7 +718,7 @@ class CompetitionDraws extends Component {
                   dayMargin = 50;
                 }
                 return (
-                  <span style={{ left: dayMargin }}>{item.notInDraw == false ? getTime(item.date) : "Not in draw"}</span>
+                  <span style={{ left: dayMargin, fontSize: item.notInDraw !== false && 11 }}>{item.notInDraw == false ? getTime(item.date) : "Not in draw"}</span>
                 );
               })}
             </div>

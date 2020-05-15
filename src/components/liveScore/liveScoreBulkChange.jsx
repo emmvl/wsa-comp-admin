@@ -939,8 +939,8 @@ class LiveScoreBulkChange extends Component {
                                 {
                                     roundResult.map((item) => {
                                         return (
-                                            <Option key={'round' + item.id}
-                                                value={item.id}>
+                                            <Option key={'round' + item.name}
+                                                value={item.name}>
                                                 {item.name}
                                             </Option>
                                         )
@@ -971,8 +971,8 @@ class LiveScoreBulkChange extends Component {
                             >
                                 {roundResult.map((item) => {
                                     return (
-                                        <Option key={'round' + item.id}
-                                            value={item.id}>
+                                        <Option key={'round' + item.name}
+                                            value={item.name}>
                                             {item.name}
                                         </Option>
                                     )
