@@ -139,6 +139,7 @@ const ValidationConstants = {
     startTime: "Start time is required",
 
     pleaseSelectDiscountType: "Please select discount type.",
+    affiliateToRequired: "Please select affiliate to",
 
 };
 
