@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Input, Layout, Breadcrumb, Button, Table, Pagination, } from 'antd';
+import {Input, Layout, Breadcrumb, Button, Table, Pagination,Icon } from 'antd';
 import './liveScore.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -125,7 +125,8 @@ class LiveScoreMatchesList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            competitionId:null
+            competitionId:null,
+            searchText:""
         }
     }
 
@@ -143,13 +144,40 @@ class LiveScoreMatchesList extends Component {
     handleMatchTableList(page, competitionID) {
         let offset = page ? 10 * (page - 1) : 0;
         let start = 1
-        this.props.liveScoreMatchListAction(competitionID, start, offset)
+        this.props.liveScoreMatchListAction(competitionID, start, offset, this.state.searchText)
 
     }
 
     onExport() {
         let url = AppConstants.matchExport +this.state.competitionId
         this.props.exportFilesAction(url)
+    }
+
+     // on change search text
+     onChangeSearchText = (e) => {
+        this.setState({ searchText: e.target.value })
+        if (e.target.value == null || e.target.value == "") {
+            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value)
+        }
+    }
+
+    // search key 
+    onKeyEnterSearchText = (e) => {
+        var code = e.keyCode || e.which;
+      
+        if (code === 13) { //13 is the enter keycode
+            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value)
+        }
+    }
+
+    // on click of search icon
+    onClickSearchIcon = () => {
+       
+        if (this.state.searchText == null || this.state.searchText == "") {
+        }
+        else {
+            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, this.state.searchText)
+        }
     }
 
 
@@ -245,12 +273,12 @@ class LiveScoreMatchesList extends Component {
                 <div className="mt-5" style={{ display: "flex", justifyContent: 'flex-end' }} >
                         <div className="comp-product-search-inp-width" >
                             <Input className="product-reg-search-input"
-                                // onChange={(e) => this.onChangeSearchText(e)}
+                                onChange={(e) => this.onChangeSearchText(e)}
                                 placeholder="Search..."
-                                // onKeyPress={(e) => this.onKeyEnterSearchText(e)}
-                                // prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                //     onClick={() => this.onClickSearchIcon()}
-                                // />}
+                                onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                    onClick={() => this.onClickSearchIcon()}
+                                />}
                                 allowClear
                             />
                         </div>

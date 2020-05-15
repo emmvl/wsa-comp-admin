@@ -54,15 +54,22 @@ class ForgotPassword extends Component {
                         {errors.userName && touched.userName && (
                             <span className="form-err">{errors.userName}</span>
                         )}
-                        <NavLink to={{ pathname: `/login` }}>
+                        {/* <NavLink to={{ pathname: `/login` }}>
                             <span className="forgot-password-link-text">{AppConstants.returnToLogin}</span>
-                        </NavLink>
+                        </NavLink> */}
 
                         <div className="row pt-5" >
                             <div className="col-sm" >
+
                                 <div className="comp-finals-button-view">
+                                    <div className="pr-5">
+                                        <NavLink to={{ pathname: `/login` }}>
+                                            <Button className="open-reg-button" type="primary"
+                                                disabled={this.state.sentEmailButton}>{AppConstants.returnToLogin}</Button>
+                                        </NavLink>
+                                    </div>
                                     <Button className="open-reg-button" htmlType="submit" type="primary"
-                                        disabled={this.state.sentEmailButton}>{AppConstants.sendEmail}</Button>
+                                        disabled={this.state.sentEmailButton}>{AppConstants.submit}</Button>
                                 </div>
                             </div>
                         </div>
