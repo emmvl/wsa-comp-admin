@@ -387,7 +387,6 @@ class Registration extends Component {
                                 <div className='year-select-heading'>{AppConstants.postCode}</div>
                                 <Select
                                     showSearch
-                                     optionFilterProp="children"
                                      mode="multiple"
                                      className="year-select reg-filter-select1"
                                     onChange={(e) => this.onChangeDropDownValue(e, 'postalCode')}
