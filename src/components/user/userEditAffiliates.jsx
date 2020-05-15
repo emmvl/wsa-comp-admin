@@ -401,7 +401,9 @@ class UserEditAffiliates extends Component {
                             style={{ width: "100%", paddingRight: 1 }}
                             setFieldsValue={affiliate.affiliatedToOrgId}
                             onChange={(e) => this.onChangeSetValue(e, AppConstants.affiliatedToOrgId )}>
-                            {(affiliateToData.affiliatedTo || []).filter(x=> x.organisationtypeRefId == (organisationTypeRefId -1)).
+                            {(affiliateToData.affiliatedTo || []).filter(x=> 
+                                x.organisationtypeRefId == (organisationTypeRefId -1) 
+                                    && x.organisationId != this.state.affiliateOrgId).
                              map((aff, index) => (
                              <Option key={aff.organisationId} value={aff.organisationId}>{aff.name}</Option>
                             ))}
