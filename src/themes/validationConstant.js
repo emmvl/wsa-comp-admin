@@ -59,7 +59,10 @@ const ValidationConstants = {
     suburbField: ["Suburb is required."],
     stateField: ['State field is required.'],
     dayField: ['Day field is required.'],
-    courtField: ["Court number field is required.", "Longitude field is required.", "Latitude field is required.", "Court field is required.", "Division field is required.", "Grade field is required."],
+    courtField: ["Court number field is required.", "Longitude field is required.", 
+                "Latitude field is required.", "Court field is required.", 
+                "Division field is required.", "Grade field is required.", "Start time is required",
+                "End time is required"],
     postCodeField: ["Postcode is required"],
 
     //////comp fees
@@ -140,7 +143,8 @@ const ValidationConstants = {
 
     pleaseSelectDiscountType: "Please select discount type.",
     affiliateToRequired: "Please select affiliate to",
-
+    gameDayEndTimeValidation: "Game day end time should be greater than start time",
+    venueCourtEndTimeValidation: "Venue court end time should be greater than start time"
 };
 
 export default ValidationConstants;
