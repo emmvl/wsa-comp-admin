@@ -9,6 +9,7 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
+import InputWithHead from "../../customComponents/InputWithHead";
 import { getOrganisationData } from "../../util/sessionStorage";
 import {endUserRegDashboardListAction} from
     "../../store/actions/registrationAction/endUserRegistrationAction";
@@ -125,7 +126,7 @@ class Registration extends Component {
             dobTo: '-1',
             membershipProductTypeId: -1,
             genderRefId: -1,
-            postalCode: null,
+            postalCode: '',
             affiliate: -1,
             membershipProductId: -1,
             paymentId: -1
@@ -170,35 +171,69 @@ class Registration extends Component {
     }
 
     onChangeDropDownValue = async (value, key) => {
-        if(key == "yearRefId")
+        if(key == "yearRefId"){
           await this.setState({yearRefId: value});
-        else if (key == "competitionId")
+          this.handleRegTableList(1);
+        }
+        else if (key == "competitionId"){
             await   this.setState({competitionUniqueKey: value});
+            this.handleRegTableList(1);
+        }
         else if (key == "dobFrom"){
             let d = moment(value, 'YYYY-mm-dd');
             console.log("DDDD" + d);
             await this.setState({dobFrom: d});
+            this.handleRegTableList(1);
         }
         else if (key == "dobTo"){
             let d = moment(value, 'YYYY-mm-dd');
             await this.setState({dobTo: d});
+            this.handleRegTableList(1);
         }
-        else if (key == "membershipProductTypeId")
+        else if (key == "membershipProductTypeId"){
             await this.setState({membershipProductTypeId: value});
-        else if (key == "genderRefId")
-            await this.setState({genderRefId: value});
-        else if (key == "affiliate")
-            await  this.setState({affiliate: value});
-        else if (key == "membershipProductId")
-            await  this.setState({membershipProductId: value});
-        else if (key == "paymentId")
-            await  this.setState({paymentId: value});
-        else if(key == "postalCode"){
-            console.log("*************" + value);
-            await this.setState({postalCode: value});
+            this.handleRegTableList(1);
         }
+        else if (key == "genderRefId"){
+            await this.setState({genderRefId: value});
+            this.handleRegTableList(1);
+        }
+        else if (key == "affiliate"){
+            await  this.setState({affiliate: value});
+            this.handleRegTableList(1);
+        }
+        else if (key == "membershipProductId"){
+            await  this.setState({membershipProductId: value});
+            this.handleRegTableList(1);
+        }
+        else if (key == "paymentId"){
+            await  this.setState({paymentId: value});
+            this.handleRegTableList(1);
+        }
+        else if(key == "postalCode"){
+            const regex = /,/gi;
+            let canCall = false;
+            let newVal = value.toString().split(',');
+            newVal.map((x,index) => {
+                console.log("Val::" + x + "**" + x.length);
+                if(Number(x.length)%4 == 0 &&  x.length > 0){
+                    canCall = true;
+                }
+                else{
+                    canCall = false; 
+                }
+            })
 
-        this.handleRegTableList(1);
+
+            await this.setState({postalCode: value});
+            if(canCall){
+                this.handleRegTableList(1);
+           }
+           else if(value.length == 0)
+           {
+            this.handleRegTableList(1);
+           }
+        }
     }
 
 
@@ -215,7 +250,7 @@ class Registration extends Component {
                 </div>
             </div >
         )
-    }
+    } 
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
@@ -385,7 +420,12 @@ class Registration extends Component {
                         <div className="reg-col" >
                             <div  className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.postCode}</div>
-                                <Select
+                                <InputWithHead
+                                    placeholder={AppConstants.postCode}
+                                    onChange={(e) => this.onChangeDropDownValue(e.target.value, 'postalCode')}
+                                    value={this.state.postalCode}
+                                />
+                                {/* <Select
                                     showSearch
                                      mode="multiple"
                                      className="year-select reg-filter-select1"
@@ -394,7 +434,7 @@ class Registration extends Component {
                                     {(postalCodes || []).map((post, index) => (
                                         <Option key={post} value={post}>{post}</Option>
                                     ))}
-                                </Select>
+                                </Select> */}
                             </div>
                         </div>
                     </div>

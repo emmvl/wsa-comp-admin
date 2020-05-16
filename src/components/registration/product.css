@@ -784,7 +784,7 @@ display: flex;
   align-items: center;
 }
 .reg-filter-select .ant-select-selection{
-  border: 1px solid var(--app-e8e8e8) !important;
+  border: 1px solid var(--app-d9d9d9) !important;
   width: 160px !important;
   min-height: 40px !important;
   margin-right: 30px;
@@ -793,7 +793,7 @@ display: flex;
 }
 
 .reg-filter-select1 .ant-select-selection{
-  border: 1px solid var(--app-e8e8e8) !important;
+  border: 1px solid var(--app-d9d9d9) !important;
   width: 300px !important;
   min-height: 40px !important;
   margin-right: 25px;
@@ -827,6 +827,11 @@ display: flex;
 
 .reg-filter-select1 .ant-select-selection-selected-value{
   width: 260px;
+}
+
+.reg-filter-col-cont input{
+    width: 300px !important;
+    height: 40px !important;
 }
 
  
