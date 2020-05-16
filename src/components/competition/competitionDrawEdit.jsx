@@ -694,7 +694,7 @@ class CompetitionDrawEdit extends Component {
                                                 }
                                                 style={{ top: topMargin, left: leftMargin }}
                                             >
-                                                <span>N/A</span>
+                                                <span>Free</span>
                                             </div>
                                         ) : (
                                                 <div>

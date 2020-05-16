@@ -11,6 +11,7 @@ import AppConstants from "../themes/appConstants";
 import AppImages from "../themes/appImages";
 import { NavLink } from "react-router-dom";
 import Loader from "../customComponents/loader";
+
 const { Header, Content } = Layout;
 const loginFormSchema = Yup.object().shape({
     userName: Yup.string().min(2, 'Username must be at least 2 characters').required('Username is required'),
@@ -61,8 +62,8 @@ class ForgotPassword extends Component {
                         <div className="row pt-5" >
                             <div className="col-sm" >
 
-                                <div className="comp-finals-button-view">
-                                    <div className="pr-5">
+                                <div className="comp-finals-button-view" style={{ display: "flex", justifyContent: "space-between" }}>
+                                    <div className="pr-5" >
                                         <NavLink to={{ pathname: `/login` }}>
                                             <Button className="open-reg-button" type="primary"
                                                 disabled={this.state.sentEmailButton}>{AppConstants.returnToLogin}</Button>

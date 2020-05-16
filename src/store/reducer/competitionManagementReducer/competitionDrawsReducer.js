@@ -38,7 +38,9 @@ function createLegendsArray(drawsArray, currentLegends, dateArray) {
         "divisionName": drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A"
       }
       if (index === -1) {
-        newArray.push(object)
+        if (color !== "#999999") {
+          newArray.push(object)
+        }
       }
     }
 

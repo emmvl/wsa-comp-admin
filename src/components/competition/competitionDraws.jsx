@@ -774,7 +774,7 @@ class CompetitionDraws extends Component {
                               {slotObject.awayTeamName}
                             </span>
                           ) : (
-                              <span>N/A</span>
+                              <span>Free</span>
                             )}
                         </Swappable>
                       </div>

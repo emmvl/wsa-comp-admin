@@ -169,7 +169,8 @@ let userHttpApi = {
 
   ////forgot password
   forgotPassword(email) {
-    var url = `password/forgot?email=${email}`;
+    let param = encodeURIComponent(email)
+    var url = `password/forgot?email=${param}`;
     return Method.dataGet(url, token);
   },
 
