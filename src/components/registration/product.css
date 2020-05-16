@@ -625,7 +625,6 @@ display: flex;
   line-height: 3;
   color: var(--app-color);
   cursor: pointer;
-  margin-left: 9px;
 }
 
 .forgotPasswordSuccess--button-div{

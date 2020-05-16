@@ -18,7 +18,8 @@ function getPlayerListObject(data) {
         phoneNumber: data.phoneNumber,
         dob: data.dateOfBirth,
         team: data.team,
-        division: data.team.division
+        division: data.team.division,
+        userId: data.userId
     }
 }
 

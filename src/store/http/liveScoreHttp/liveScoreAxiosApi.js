@@ -87,7 +87,7 @@ let LiveScoreAxiosApi = {
     },
     liveScoreGetAffilate(data) {
         // const url = `clubs?name=${data.name}&competitionId=${data.id}`
-        const url = `clubs?competitionId=${data.id}`
+        const url = `organisation?competitionId=${data.id}`
         return Method.dataGet(url, null)
     },
     liveScoreAddNewTeam(data) {
@@ -280,17 +280,17 @@ let LiveScoreAxiosApi = {
     liveScoreGoalList(compId, goaltype, search) {
         let url = null
         if (goaltype === "By Match") {
-             url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}`
+            url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}`
         }
         else if (goaltype === "Total") {
-             url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=ALL&search=${search}`
+            url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=ALL&search=${search}`
 
         }
 
         return Method.dataGet(url, token)
-        
+
     },
-    
+
     liveScoreManagerList(roleId, entityTypeId, entityId) {
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
         var url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${id}`;
@@ -488,7 +488,7 @@ let LiveScoreAxiosApi = {
                 "limit": 10,
                 "offset": `${offset}`
             },
-            "search":searchText
+            "search": searchText
         }
         var url = `/stats/gametime?competitionId=${competitionId}&aggregate=${aggregate.toUpperCase()}`;
         return Method.dataPost(url, localStorage.token, Body)
@@ -500,7 +500,7 @@ let LiveScoreAxiosApi = {
     },
     /// get Game Time statistics api
     umpiresList(competitionId, body) {
-        var url = `/matchUmpires/admin?competitionId=${competitionId}`;
+        var url = `/matchUmpire/admin?competitionId=${competitionId}`;
         return Method.dataPost(url, token, body)
     },
 
@@ -658,21 +658,19 @@ let LiveScoreAxiosApi = {
 
     // Match club list
     liveScoreClubList(competitionId) {
-        var url = `/clubs?competitionId=${competitionId}`
+        var url = `/organisation?competitionId=${competitionId}`
         return Method.dataGet(url, token)
     },
     ladderSettingMatchResult() {
         var url = `/ref/matchResult`
         return Method.dataGet(url, token)
     },
-
     laddersSettingGetData(competitionId) {
 
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
         var url = `/competitions/ladderSettings?competitionId=${id}`
         return Method.dataGet(url, token)
     },
-
     laddersSettingPostData(data) {
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
 
@@ -681,8 +679,6 @@ let LiveScoreAxiosApi = {
         var url = `/competitions/ladderSettings?competitionId=${id}`
         return Method.dataPost(url, token, body)
     },
-
-
     // Get Teams with paggination
     getTeamWithPagging(competitionID, offset, limit, search) {
         console.log(search)

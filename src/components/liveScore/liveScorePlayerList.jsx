@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Input, Icon, Layout, Button, Table, Pagination, Spin, Alert } from 'antd';
+import { Input, Icon, Layout, Button, Table, Pagination, Spin, Alert, message } from 'antd';
 import './liveScore.css';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -14,6 +14,8 @@ import { liveScore_formateDate } from '../../themes/dateformate'
 import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { exportFilesAction } from "../../store/actions/appAction"
+import ValidationConstants from "../../themes/validationConstant";
+import { Server } from "http";
 const { Content } = Layout;
 
 
@@ -23,7 +25,7 @@ function tableSort(a, b, key) {
     let stringB = JSON.stringify(b[key])
     return stringA.localeCompare(stringB)
 }
-
+let this_obj = null;
 
 
 const columns = [
@@ -53,12 +55,12 @@ const columns = [
         key: 'firstsName',
         sorter: (a, b) => tableSort(a, b, "firstName"),
         render: (firstName, record) =>
-            <NavLink to={{
-                pathname: '/liveScorePlayerView',
-                state: { tableRecord: record }
-            }}>
-                <span class="input-heading-add-another pt-0" >{firstName}</span>
-            </NavLink>
+            // <NavLink to={{
+            //     pathname: '/liveScorePlayerView',
+            //     state: { tableRecord: record }
+            // }}>
+            <span class="input-heading-add-another pt-0" onClick={() => this_obj.checkUserId(record)} >{firstName}</span>
+        // </NavLink>
     },
     {
         title: 'Last Name',
@@ -66,12 +68,14 @@ const columns = [
         key: 'lastName',
         sorter: (a, b) => tableSort(a, b, "lastName"),
         render: (lastName, record) =>
-            <NavLink to={{
-                pathname: '/liveScorePlayerView',
-                state: { tableRecord: record }
-            }}>
-                <span class="input-heading-add-another pt-0" >{lastName}</span>
-            </NavLink>
+            // <NavLink to={{
+            //     pathname: '/liveScorePlayerView',
+            //     state: { tableRecord: record }
+            // }}>
+            <span class="input-heading-add-another pt-0"
+                onClick={() => this_obj.checkUserId(record)}
+            > {lastName}</span >
+        // </NavLink>
     },
     {
         title: 'DOB',
@@ -119,6 +123,7 @@ class LiveScorePlayerList extends Component {
             competitionid: null,
             searchText: ""
         }
+        this_obj = this
     }
 
     componentDidMount() {
@@ -202,6 +207,16 @@ class LiveScorePlayerList extends Component {
         this.props.exportFilesAction(url)
     }
 
+    checkUserId(record) {
+        if (record.userId == null) {
+            message.config({ duration: 1.5, maxCount: 1 })
+            message.warn(ValidationConstants.playerMessage)
+        }
+        else {
+            history.push("/userPersonal", { userId: record.userId })
+        }
+    }
+
 
     ///////view for breadcrumb
     headerView = () => {
@@ -274,7 +289,7 @@ class LiveScorePlayerList extends Component {
                                         }}
                                     >
                                         <NavLink to={`/liveScorerPlayerImport`} className="text-decoration-none">
-                                            <Button  className="primary-add-comp-form" type="primary">
+                                            <Button className="primary-add-comp-form" type="primary">
                                                 <div className="row">
                                                     <div className="col-sm">
                                                         <img

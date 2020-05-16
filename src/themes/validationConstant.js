@@ -140,6 +140,7 @@ const ValidationConstants = {
 
     pleaseSelectDiscountType: "Please select discount type.",
     affiliateToRequired: "Please select affiliate to",
+    playerMessage: "This player has not been linked to a user profile"
 
 };
 
