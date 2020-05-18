@@ -343,17 +343,16 @@ class Registration extends Component {
                     <div className="row reg-filter-row" >
                         <div className="reg-col" >
                             <div  className="reg-filter-col-cont" >
-                                <div className='year-select-heading'>{AppConstants.types}</div>
+                                <div className='year-select-heading'>{AppConstants.product}</div>
                                 <Select
                                     showSearch
                                     optionFilterProp="children"
                                     className="year-select reg-filter-select"
-                                    style={{ minWidth: 100 }}
-                                    onChange={(e) => this.onChangeDropDownValue(e, 'membershipProductTypeId')}
-                                    value={this.state.membershipProductTypeId}>
+                                    onChange={(e) => this.onChangeDropDownValue(e, 'membershipProductId')}
+                                    value={this.state.membershipProductId}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {(membershipProductTypes || []).map((g, index) => (
-                                        <Option key={g.membershipProductTypeId} value={g.membershipProductTypeId}>{g.membershipProductTypeName}</Option>
+                                    {(membershipProducts || []).map((g, index) => (
+                                        <Option key={g.membershipProductUniqueKey} value={g.membershipProductUniqueKey}>{g.productName}</Option>
                                     ))}
                                 </Select>
                             </div>
@@ -389,24 +388,6 @@ class Registration extends Component {
                             </div>
                         </div>
                         <div className="reg-col" >
-                            <div  className="reg-filter-col-cont" >
-                                <div className='year-select-heading'>{AppConstants.product}</div>
-                                <Select
-                                    showSearch
-                                    optionFilterProp="children"
-                                    className="year-select reg-filter-select"
-                                    onChange={(e) => this.onChangeDropDownValue(e, 'membershipProductId')}
-                                    value={this.state.membershipProductId}>
-                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {(membershipProducts || []).map((g, index) => (
-                                        <Option key={g.membershipProductUniqueKey} value={g.membershipProductUniqueKey}>{g.productName}</Option>
-                                    ))}
-                                </Select>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row reg-filter-row" >
-                        <div className="reg-col" >
                             <div className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.payment}</div>
                                 <Select
@@ -414,6 +395,25 @@ class Registration extends Component {
                                     onChange={(e) => this.onChangeDropDownValue(e, 'paymentId')}
                                     value={this.state.paymentId}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                </Select>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row reg-filter-row" >
+                        <div className="reg-col" >
+                            <div  className="reg-filter-col-cont" >
+                                <div className='year-select-heading'>{AppConstants.types}</div>
+                                <Select
+                                    showSearch
+                                    optionFilterProp="children"
+                                    className="year-select reg-filter-select"
+                                    style={{ minWidth: 100 }}
+                                    onChange={(e) => this.onChangeDropDownValue(e, 'membershipProductTypeId')}
+                                    value={this.state.membershipProductTypeId}>
+                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                    {(membershipProductTypes || []).map((g, index) => (
+                                        <Option key={g.membershipProductTypeId} value={g.membershipProductTypeId}>{g.membershipProductTypeName}</Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
