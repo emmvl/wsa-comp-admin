@@ -148,8 +148,8 @@ class Registration extends Component {
             organisationUniqueKey: this.state.organisationId,
             yearRefId: this.state.yearRefId,
             competitionUniqueKey: this.state.competitionUniqueKey,
-            dobFrom: this.state.dobFrom!= '-1' ? moment(this.state.dobFrom).format('YYYY-MM-DD') : '-1',
-            dobTo: this.state.dobTo!= '-1' ? moment(this.state.dobTo).format('YYYY-MM-DD') : '-1',
+            dobFrom: (this.state.dobFrom!= '-1' && !isNaN(this.state.dobFrom)) ? moment(this.state.dobFrom).format('YYYY-MM-DD') : '-1',
+            dobTo: (this.state.dobTo!= '-1' && !isNaN(this.state.dobTo)) ? moment(this.state.dobTo).format('YYYY-MM-DD') : '-1',
             membershipProductTypeId: this.state.membershipProductTypeId,
             genderRefId: this.state.genderRefId,
             postalCode: (this.state.postalCode!= '' && this.state.postalCode!= null) ? this.state.postalCode.toString() : '-1',
@@ -343,17 +343,16 @@ class Registration extends Component {
                     <div className="row reg-filter-row" >
                         <div className="reg-col" >
                             <div  className="reg-filter-col-cont" >
-                                <div className='year-select-heading'>{AppConstants.types}</div>
+                                <div className='year-select-heading'>{AppConstants.product}</div>
                                 <Select
                                     showSearch
                                     optionFilterProp="children"
                                     className="year-select reg-filter-select"
-                                    style={{ minWidth: 100 }}
-                                    onChange={(e) => this.onChangeDropDownValue(e, 'membershipProductTypeId')}
-                                    value={this.state.membershipProductTypeId}>
+                                    onChange={(e) => this.onChangeDropDownValue(e, 'membershipProductId')}
+                                    value={this.state.membershipProductId}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {(membershipProductTypes || []).map((g, index) => (
-                                        <Option key={g.membershipProductTypeId} value={g.membershipProductTypeId}>{g.membershipProductTypeName}</Option>
+                                    {(membershipProducts || []).map((g, index) => (
+                                        <Option key={g.membershipProductUniqueKey} value={g.membershipProductUniqueKey}>{g.productName}</Option>
                                     ))}
                                 </Select>
                             </div>
@@ -374,7 +373,7 @@ class Registration extends Component {
                         </div>
                         <div className="reg-col" >
                             <div  className="reg-filter-col-cont" >
-                                <div className='year-select-heading'>{AppConstants.affiliates}</div>
+                                <div className='year-select-heading'>{AppConstants.affiliate}</div>
                                 <Select
                                     showSearch
                                     optionFilterProp="children"
@@ -389,24 +388,6 @@ class Registration extends Component {
                             </div>
                         </div>
                         <div className="reg-col" >
-                            <div  className="reg-filter-col-cont" >
-                                <div className='year-select-heading'>{AppConstants.product}</div>
-                                <Select
-                                    showSearch
-                                    optionFilterProp="children"
-                                    className="year-select reg-filter-select"
-                                    onChange={(e) => this.onChangeDropDownValue(e, 'membershipProductId')}
-                                    value={this.state.membershipProductId}>
-                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {(membershipProducts || []).map((g, index) => (
-                                        <Option key={g.membershipProductUniqueKey} value={g.membershipProductUniqueKey}>{g.productName}</Option>
-                                    ))}
-                                </Select>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row reg-filter-row" >
-                        <div className="reg-col" >
                             <div className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.payment}</div>
                                 <Select
@@ -414,6 +395,25 @@ class Registration extends Component {
                                     onChange={(e) => this.onChangeDropDownValue(e, 'paymentId')}
                                     value={this.state.paymentId}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                </Select>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row reg-filter-row" >
+                        <div className="reg-col" >
+                            <div  className="reg-filter-col-cont" >
+                                <div className='year-select-heading'>{AppConstants.type}</div>
+                                <Select
+                                    showSearch
+                                    optionFilterProp="children"
+                                    className="year-select reg-filter-select"
+                                    style={{ minWidth: 100 }}
+                                    onChange={(e) => this.onChangeDropDownValue(e, 'membershipProductTypeId')}
+                                    value={this.state.membershipProductTypeId}>
+                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                    {(membershipProductTypes || []).map((g, index) => (
+                                        <Option key={g.membershipProductTypeId} value={g.membershipProductTypeId}>{g.membershipProductTypeName}</Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
