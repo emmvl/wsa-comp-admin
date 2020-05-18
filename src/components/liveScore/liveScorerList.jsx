@@ -11,6 +11,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import history from '../../util/history'
+import { exportFilesAction } from "../../store/actions/appAction"
 
 
 function getName(item) {
@@ -121,7 +122,7 @@ class LiveScorerList extends Component {
     }
 
     componentDidMount() {
-     
+
         const body =
         {
             "paging": {
@@ -150,6 +151,13 @@ class LiveScorerList extends Component {
 
         this.props.liveScoreScorerListAction(id, 4, body)
     }
+
+    // on Export
+    onExport = () => {
+        let url = AppConstants.matchExport + this.state.competitionId
+        this.props.exportFilesAction(url)
+    }
+
     ///////view for breadcrumb
     headerView = () => {
         return (
@@ -197,7 +205,7 @@ class LiveScorerList extends Component {
                                         justifyContent: "flex-end"
                                     }}>
 
-                                    <Button className="primary-add-comp-form" type="primary">
+                                    <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img
@@ -334,7 +342,7 @@ class LiveScorerList extends Component {
     }
 }
 function mapDispatchtoprops(dispatch) {
-    return bindActionCreators({ liveScoreScorerListAction }, dispatch)
+    return bindActionCreators({ liveScoreScorerListAction, exportFilesAction }, dispatch)
 }
 
 function mapStatetoProps(state) {

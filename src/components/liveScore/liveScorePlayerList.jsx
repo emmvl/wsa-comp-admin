@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Input, Icon, Layout, Button, Table, Pagination, Spin, Alert, message } from 'antd';
+import { Input, Icon, Layout, Button, Table, Pagination, Spin, Alert, message, Menu } from 'antd';
 import './liveScore.css';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -15,8 +15,8 @@ import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { exportFilesAction } from "../../store/actions/appAction"
 import ValidationConstants from "../../themes/validationConstant";
-import { Server } from "http";
 const { Content } = Layout;
+const { SubMenu } = Menu;
 
 
 /////function to sort table column
@@ -112,6 +112,28 @@ const columns = [
         key: 'phoneNumber',
         sorter: (a, b) => tableSort(a, b, "phoneNumber"),
     },
+    {
+        title: "Action",
+        render: (data, record) => <Menu
+            className="action-triple-dot-submenu"
+            theme="light"
+            mode="horizontal"
+            style={{ lineHeight: '25px' }}
+        >
+            <Menu.SubMenu
+                key="sub1"
+                title={
+                    <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
+                }
+            >
+                <Menu.Item key={'1'}>
+                    <NavLink to={{ pathname: "/liveScoreAddPlayer", state: { isEdit: true, playerData: record } }} >
+                        <span>Edit</span>
+                    </NavLink>
+                </Menu.Item>
+            </Menu.SubMenu>
+        </Menu>
+    }
 
 ];
 
@@ -208,6 +230,7 @@ class LiveScorePlayerList extends Component {
     }
 
     checkUserId(record) {
+        console.log(record)
         if (record.userId == null) {
             message.config({ duration: 1.5, maxCount: 1 })
             message.warn(ValidationConstants.playerMessage)

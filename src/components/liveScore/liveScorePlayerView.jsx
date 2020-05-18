@@ -215,7 +215,22 @@ class LiveScorePlayerView extends Component {
         this.setState({ playerTabKey: key });
     };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     btnView = () => {
+        console.log(this.state.data)
         return (
             <div className="col-sm mt-5" style={{ display: "flex", justifyContent: "flex-end", }}>
                 <div className="comp-dashboard-botton-view-mobile" >
@@ -286,7 +301,7 @@ class LiveScorePlayerView extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"7"} />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">

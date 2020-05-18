@@ -1278,6 +1278,7 @@ const ApiConstants = {
 
   ///clear login reducer
   ACTION_TO_CLEAR_AUTHENTICATION_REDUCER: "ACTION_TO_CLEAR_AUTHENTICATION_REDUCER",
+  Update_QuickCompetition_Data: "Update_QuickCompetition_Data"
 };
 
 

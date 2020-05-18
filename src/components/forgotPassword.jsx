@@ -90,7 +90,7 @@ class ForgotPassword extends Component {
                         <Formik
                             enableReinitialize
                             initialValues={{
-                                userName: "",
+                                userName: this.props.location.state ? this.props.location.state.email : "",
                             }}
                             validationSchema={loginFormSchema}
                             onSubmit={(values, { setSubmitting }) => {

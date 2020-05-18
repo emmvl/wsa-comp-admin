@@ -18,9 +18,11 @@ const initialState = {
         timerType: '',
         allVenue: [],
         venueData: [],
-        mainVenueList: []
+        mainVenueList: [],
 
-    }
+    },
+    buzzerEnabled: false,
+    warningBuzzerEnabled: false
 }
 export default function liveScoreSettingsViewReducer(state = initialState, { type, payload, }) {
 
@@ -58,6 +60,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 return memo
             }, [])
             const venueData = payload.competitionVenues.map(item => (item.venueId))
+            console.log(payload, 'payload')
             return {
                 ...state,
                 loader: false,
@@ -79,6 +82,8 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
 
                 },
                 data: payload,
+                buzzerEnabled: payload.buzzerEnabled,
+                warningBuzzerEnabled: payload.warningBuzzerEnabled
 
             }
         case ApiConstants.LiveScore_SETTING_VIEW_ERROR:
@@ -95,9 +100,26 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 // error: payload
             }
         case ApiConstants.LiveScore_SETTING_CHANGE_FORM:
-          
+
             const keys = payload.key
             const Data = payload.data
+
+            if (keys == 'buzzerEnabled' || keys == 'warningBuzzerEnabled') {
+
+                console.log(payload, 'LiveScore_SETTING_CHANGE_FORM')
+
+                // if (payload.data) {
+                //     state[keys] = keys == 'buzzerEnabled' ? 'Turn off Buzzer' : 'Turn off 30 second warning'
+                // } else {
+                //     state[keys] = keys == 'buzzerEnabled' ? '' : ''
+                // }
+
+                state[keys] = Data
+
+
+
+                console.log(state, 'LiveScore_SETTING_CHANGE_FORM')
+            }
             return {
                 ...state,
                 form: {

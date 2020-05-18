@@ -11,6 +11,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { getTime, liveScore_formateDate } from '../../themes/dateformate'
+import { exportFilesAction } from "../../store/actions/appAction"
+
+
 const { Content } = Layout;
 
 
@@ -192,6 +195,12 @@ class LiveScoreUmpireList extends Component {
         }
     }
 
+    // on Export
+    onExport = () => {
+        let url = AppConstants.matchExport + this.state.competitionId
+        this.props.exportFilesAction(url)
+    }
+
     ///////view for breadcrumb
     headerView = () => {
         return (
@@ -226,13 +235,13 @@ class LiveScoreUmpireList extends Component {
                                                 placeholder="Search..."
                                                 onKeyPress={(e) => this.onKeyEnterSearchText(e)}
                                                 prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                                onClick={() => this.onClickSearchIcon()}
+                                                    onClick={() => this.onClickSearchIcon()}
                                                 />}
                                                 allowClear
                                             />
                                         </div>
                                     </div>
-                                    <Button className="primary-add-comp-form" type="primary">
+                                    <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img
@@ -317,7 +326,7 @@ class LiveScoreUmpireList extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScoreUmpiresListAction }, dispatch)
+    return bindActionCreators({ liveScoreUmpiresListAction, exportFilesAction }, dispatch)
 }
 
 function mapStateToProps(state) {

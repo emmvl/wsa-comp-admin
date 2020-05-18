@@ -155,7 +155,7 @@ const AppConstants = {
   quickCompetition: "Quick Competition",
   quickCompetition3: "Competition Details (3/3)",
   quickCompetition2: "Teams & Players (2/3)",
-  quickCompetition1: "Fixtures (1/3)",
+  quickCompetition1: "Quick Competition (1/3)",
   proposedTeamGrading: "Proposed Team Grading",
   proposedTeamGradingToggle: "Proposed Team Grading Toggle",
   ladder: "Ladder",
@@ -1004,7 +1004,14 @@ const AppConstants = {
   forgotPassword: "Forgot Password",
   logo: "Logo",
   registrationFormQuestions: "Registration Form Questions",
-  noInformationProvided: "No information provided"
+  noInformationProvided: "No information provided",
+
+  previous: "Previous",
+  totalPages: "Total pages",
+  currentPage: "Current page",
+  buzzer: "Buzzer",
+  turnOffBuzzer: "Turn off Buzzer",
+  turnOff_30Second: "Turn off 30 second warning",
 };
 
 export default AppConstants;

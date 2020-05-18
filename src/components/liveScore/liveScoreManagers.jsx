@@ -12,6 +12,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getLiveScoreCompetiton, getUserId } from '../../util/sessionStorage'
 import history from "../../util/history";
+import { exportFilesAction } from "../../store/actions/appAction"
+
 const { Content } = Layout;
 let userId = getUserId();
 
@@ -27,7 +29,7 @@ const columns = [
                 // pathname: '/liveScoreManagerView',
                 // state: { tableRecord: record }
                 pathname: '/userPersonal',
-                state: { userId: record.id, screenKey:"livescore" }
+                state: { userId: record.id, screenKey: "livescore" }
             }}>
                 <span class="input-heading-add-another pt-0" >{firstName}</span>
             </NavLink>
@@ -40,7 +42,7 @@ const columns = [
         render: (lastName, record) =>
             <NavLink to={{
                 pathname: '/userPersonal',
-                state: { userId: record.id,screenKey:"livescore" }
+                state: { userId: record.id, screenKey: "livescore" }
                 // pathname: '/liveScoreManagerView',
                 // state: { tableRecord: record }
             }}>
@@ -70,7 +72,7 @@ const columns = [
                 // pathname: '/liveScoreManagerView',
                 // state: { tableRecord: record }
                 pathname: '/userPersonal',
-                state: { userId: record.id,screenKey:"livescore" }
+                state: { userId: record.id, screenKey: "livescore" }
             }}>
                 {linkedEntity.length > 0 && linkedEntity.map((item) => (
                     <span class="input-heading-add-another pt-0" >{item.name}</span>
@@ -128,6 +130,12 @@ class LiveScoreManagerList extends Component {
         )
     }
 
+    // on Export
+    onExport = () => {
+        let url = AppConstants.matchExport + this.state.competitionId
+        this.props.exportFilesAction(url)
+    }
+
     ///////view for breadcrumb
     headerView = () => {
         return (
@@ -178,7 +186,7 @@ class LiveScoreManagerList extends Component {
                                         }}
                                     >
 
-                                        <Button onclick="window.open('file.doc')" className="primary-add-comp-form" type="primary">
+                                        <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
 
                                             <div className="row">
                                                 <div className="col-sm">
@@ -294,7 +302,7 @@ class LiveScoreManagerList extends Component {
 
 
 function mapDispatchtoprops(dispatch) {
-    return bindActionCreators({ liveScoreManagerListAction }, dispatch)
+    return bindActionCreators({ liveScoreManagerListAction, exportFilesAction }, dispatch)
 }
 
 function mapStatetoProps(state) {

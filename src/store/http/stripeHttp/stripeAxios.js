@@ -55,11 +55,21 @@ let AxiosApi = {
     },
 
     /////////////stripe payments transfer list
-    async getStripeTransferList() {
+    async getStripeTransferList(page, startingAfter, endingBefore) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-        var url = `api/payments/list/transfer?organisationUniqueKey=${organisationUniqueKey}`;
-        return Method.dataGet(url, token);
+        let body = {
+            type: "transfer",
+            organisationUniqueKey: organisationUniqueKey,
+            paging: {
+                starting_after: startingAfter,
+                ending_before: endingBefore,
+                limit: 10
+            }
+        }
+        // var url = `api/payments/list/transfer?organisationUniqueKey=${organisationUniqueKey}`;
+        var url = `api/payments/list`;
+        return Method.dataPost(url, token, body);
     },
 
 

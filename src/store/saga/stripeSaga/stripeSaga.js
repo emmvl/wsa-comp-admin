@@ -113,11 +113,12 @@ export function* getStripeLoginLinkSaga(action) {
 ///stripe payments transfer list
 export function* getStripeTransferListSaga(action) {
     try {
-        const result = yield call(AxiosApi.getStripeTransferList, action);
+        const result = yield call(AxiosApi.getStripeTransferList, action.page, action.starting_after, action.ending_before);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_GET_STRIPE_PAYMENTS_TRANSFER_LIST_API_SUCCESS,
                 result: result.result.data,
+                page: action.page,
                 status: result.status
             });
         } else {

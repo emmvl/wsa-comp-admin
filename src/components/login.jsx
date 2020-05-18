@@ -56,7 +56,7 @@ class Login extends Component {
                 {errors.password && touched.password && (
                     <span className="form-err">{errors.password}</span>
                 )}
-                <NavLink to={{ pathname: `/forgotPassword` }}>
+                <NavLink to={{ pathname: `/forgotPassword`, state: { email: values.userName } }}>
                     <span className="forgot-password-link-text">{AppConstants.forgotResetPassword}</span>
                 </NavLink>
                 <div className="row pt-5" >
