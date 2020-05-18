@@ -373,7 +373,7 @@ class Registration extends Component {
                         </div>
                         <div className="reg-col" >
                             <div  className="reg-filter-col-cont" >
-                                <div className='year-select-heading'>{AppConstants.affiliates}</div>
+                                <div className='year-select-heading'>{AppConstants.affiliate}</div>
                                 <Select
                                     showSearch
                                     optionFilterProp="children"
@@ -402,7 +402,7 @@ class Registration extends Component {
                     <div className="row reg-filter-row" >
                         <div className="reg-col" >
                             <div  className="reg-filter-col-cont" >
-                                <div className='year-select-heading'>{AppConstants.types}</div>
+                                <div className='year-select-heading'>{AppConstants.type}</div>
                                 <Select
                                     showSearch
                                     optionFilterProp="children"
