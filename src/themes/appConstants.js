@@ -1012,6 +1012,8 @@ const AppConstants = {
   buzzer: "Buzzer",
   turnOffBuzzer: "Turn off Buzzer",
   turnOff_30Second: "Turn off 30 second warning",
+  exportTeams: "Export Teams",
+  exportPlayers: "Export Players"
 };
 
 export default AppConstants;

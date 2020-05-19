@@ -236,3 +236,83 @@ export function* deleteTeamActionSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+export function* finalTeamsExportSaga(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.finalTeamsExportApi, action.payload);
+        console.log("(*****" + result.status);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_EXPORT_FINAL_TEAMS_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+
+    }
+}
+
+export function* finalPlayersExportSaga(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.finalPlayersExportApi, action.payload);
+        console.log("(*****" + result.status);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_EXPORT_FINAL_PLAYERS_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+
+    }
+}
+
+export function* proposedTeamsExportSaga(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.proposedTeamsExportApi, action.payload);
+        console.log("(*****" + result.status);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_EXPORT_PROPOSED_TEAMS_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+
+    }
+}
+
+export function* proposedPlayersExportSaga(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.proposedPlayersExportApi, action.payload);
+        console.log("(*****" + result.status);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_EXPORT_PROPOSED_PLAYERS_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+
+    }
+}

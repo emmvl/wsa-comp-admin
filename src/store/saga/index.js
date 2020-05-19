@@ -135,7 +135,11 @@ import {
   getCompFinalGradesListSaga,
   proposedTeamGradingComment,
   partProposedTeamGradingComment,
-  deleteTeamActionSaga
+  deleteTeamActionSaga,
+  finalTeamsExportSaga,
+  finalPlayersExportSaga,
+  proposedTeamsExportSaga,
+  proposedPlayersExportSaga
 } from './competitionManagementSaga/competitionTeamGradingSaga';
 
 // UserSaga
@@ -657,5 +661,11 @@ export default function* root_saga() {
 
   ///forgot password
   yield takeEvery(ApiConstants.API_FORGOT_PASSWORD_LOAD, forgotPasswordSaga);
+
+  //Final Teams Export
+  yield takeEvery(ApiConstants.API_EXPORT_FINAL_TEAMS_LOAD, finalTeamsExportSaga)
+  yield takeEvery(ApiConstants.API_EXPORT_FINAL_PLAYERS_LOAD, finalPlayersExportSaga)
+  yield takeEvery(ApiConstants.API_EXPORT_PROPOSED_TEAMS_LOAD, proposedTeamsExportSaga)
+  yield takeEvery(ApiConstants.API_EXPORT_PROPOSED_PLAYERS_LOAD, proposedPlayersExportSaga)
 
 }
