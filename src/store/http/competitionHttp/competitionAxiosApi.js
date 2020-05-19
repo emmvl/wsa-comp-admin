@@ -471,7 +471,8 @@ const Method = {
                     headers: {
                         "Content-Type": "application/json",
                         "Access-Control-Allow-Origin": "*",
-                        Authorization: "BWSA " + authorization
+                        Authorization: "BWSA " + authorization,
+                        "SourceSystem": "WebAdmin"
                     }
                 })
 
@@ -547,7 +548,8 @@ const Method = {
                         "Content-Type": "application/json",
                         Accept: "application/json",
                         Authorization: "BWSA " + authorization,
-                        "Access-Control-Allow-Origin": "*"
+                        "Access-Control-Allow-Origin": "*",
+                        "SourceSystem": "WebAdmin"
                     }
                 })
 
@@ -619,7 +621,8 @@ const Method = {
                 "Content-Type": "application/json",
                 Accept: "application/csv",
                 Authorization: "BWSA " + authorization,
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "SourceSystem": "WebAdmin"
               }
             })
     
@@ -697,7 +700,8 @@ const Method = {
                         "Content-Type": "application/json",
                         Accept: "application/json",
                         Authorization: "BWSA " + authorization,
-                        "Access-Control-Allow-Origin": "*"
+                        "Access-Control-Allow-Origin": "*",
+                        "SourceSystem": "WebAdmin"
                     }
                 })
 
@@ -768,7 +772,8 @@ const Method = {
                     headers: {
                         "Content-Type": "application/json",
                         "Access-Control-Allow-Origin": "*",
-                        Authorization: "BWSA " + authorization
+                        Authorization: "BWSA " + authorization,
+                        "SourceSystem": "WebAdmin"
                     }
                 })
 
