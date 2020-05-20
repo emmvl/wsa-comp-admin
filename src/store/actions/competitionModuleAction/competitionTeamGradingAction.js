@@ -177,6 +177,39 @@ function deleteTeamActionAction(data){
     }
 }
 
+function exportFinalTeamsAction(payload) {
+    const action = {
+        type: ApiConstants.API_EXPORT_FINAL_TEAMS_LOAD,
+        payload
+    }
+    return action;
+}
+
+function exportFinalPlayersAction(payload) {
+    const action = {
+        type: ApiConstants.API_EXPORT_FINAL_PLAYERS_LOAD,
+        payload
+    }
+    return action;
+}
+
+function exportProposedTeamsAction(payload) {
+    const action = {
+        type: ApiConstants.API_EXPORT_PROPOSED_TEAMS_LOAD,
+        payload
+    }
+    return action;
+}
+
+function exportProposedPlayersAction(payload) {
+    const action = {
+        type: ApiConstants.API_EXPORT_PROPOSED_PLAYERS_LOAD,
+        payload
+    }
+    return action;
+}
+
+
 export {
     getCompOwnProposedTeamGradingAction,
     onchangeCompOwnFinalTeamGradingData,
@@ -194,5 +227,9 @@ export {
     partProposedSummaryComment,
     changeHistoryHover,
     changeProposedHistoryHover,
-    deleteTeamActionAction
+    deleteTeamActionAction,
+    exportFinalTeamsAction,
+    exportFinalPlayersAction,
+    exportProposedTeamsAction,
+    exportProposedPlayersAction
 }                   

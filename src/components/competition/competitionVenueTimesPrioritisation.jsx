@@ -1263,7 +1263,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         <Content>
                             <div className="formView">{this.contentView(getFieldDecorator)}</div>
                             
-                            {venueConstrainstData.competitionTypeRefId == 1 ? 
+                            {/* {venueConstrainstData.competitionTypeRefId == 1 ? 
                                 <div>
                                     <div className="formView" style={{marginTop: '20px'}}>
                                         {this.matchPreferenceView(getFieldDecorator)}
@@ -1276,7 +1276,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                         </div> : null
                                     }
                                 </div> : null 
-                            }
+                            } */}
                            
                         </Content>
                         <Footer>{this.footerView()}</Footer>

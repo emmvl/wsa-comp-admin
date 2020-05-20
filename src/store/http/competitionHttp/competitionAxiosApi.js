@@ -431,6 +431,34 @@ let CompetitionAxiosApi = {
         var url = `/api/draws/matches/export?competitionUniqueKey=${competitionId}`
         return Method.dataGetDownload(url, token, "MatchesList");
     },
+    async finalTeamsExportApi(payload) {
+        let organisationId = await getOrganisationData().organisationUniqueKey;
+        let competitionId = payload.competitionId;
+        let yearRefId = payload.yearRefId;
+        var url = `/api/export/teams/final?competitionUniqueKey=${competitionId}&yearRefId=${yearRefId}&organisationUniqueKey=${organisationId}`
+        return Method.dataGetDownload(url, token, "Teams");
+    },
+    async proposedTeamsExportApi(payload) {
+        let organisationId = await getOrganisationData().organisationUniqueKey;
+        let competitionId = payload.competitionId;
+        let yearRefId = payload.yearRefId;
+        var url = `/api/export/teams/proposed?competitionUniqueKey=${competitionId}&yearRefId=${yearRefId}&organisationUniqueKey=${organisationId}`
+        return Method.dataGetDownload(url, token, "Teams");
+    },
+    async finalPlayersExportApi(payload) {
+        let organisationId = await getOrganisationData().organisationUniqueKey;
+        let competitionId = payload.competitionId;
+        let yearRefId = payload.yearRefId;
+        var url = `/api/export/player/final?competitionUniqueKey=${competitionId}&yearRefId=${yearRefId}&organisationUniqueKey=${organisationId}`
+        return Method.dataGetDownload(url, token, "Players");
+    },
+    async proposedPlayersExportApi(payload) {
+        let organisationId = await getOrganisationData().organisationUniqueKey;
+        let competitionId = payload.competitionId;
+        let yearRefId = payload.yearRefId;
+        var url = `/api/export/player/proposed?competitionUniqueKey=${competitionId}&yearRefId=${yearRefId}&organisationUniqueKey=${organisationId}`
+        return Method.dataGetDownload(url, token, "Players");
+    },
 };
 
 const Method = {
@@ -443,7 +471,8 @@ const Method = {
                     headers: {
                         "Content-Type": "application/json",
                         "Access-Control-Allow-Origin": "*",
-                        Authorization: "BWSA " + authorization
+                        Authorization: "BWSA " + authorization,
+                        "SourceSystem": "WebAdmin"
                     }
                 })
 
@@ -519,7 +548,8 @@ const Method = {
                         "Content-Type": "application/json",
                         Accept: "application/json",
                         Authorization: "BWSA " + authorization,
-                        "Access-Control-Allow-Origin": "*"
+                        "Access-Control-Allow-Origin": "*",
+                        "SourceSystem": "WebAdmin"
                     }
                 })
 
@@ -591,7 +621,8 @@ const Method = {
                 "Content-Type": "application/json",
                 Accept: "application/csv",
                 Authorization: "BWSA " + authorization,
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "SourceSystem": "WebAdmin"
               }
             })
     
@@ -669,7 +700,8 @@ const Method = {
                         "Content-Type": "application/json",
                         Accept: "application/json",
                         Authorization: "BWSA " + authorization,
-                        "Access-Control-Allow-Origin": "*"
+                        "Access-Control-Allow-Origin": "*",
+                        "SourceSystem": "WebAdmin"
                     }
                 })
 
@@ -740,7 +772,8 @@ const Method = {
                     headers: {
                         "Content-Type": "application/json",
                         "Access-Control-Allow-Origin": "*",
-                        Authorization: "BWSA " + authorization
+                        Authorization: "BWSA " + authorization,
+                        "SourceSystem": "WebAdmin"
                     }
                 })
 

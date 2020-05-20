@@ -1016,6 +1016,8 @@ const AppConstants = {
 
   managerExport: `https://users-api-dev.worldsportaction.com/users/byRole/export?roleId=3&entityTypeId=1&entityId=`,
   scorerExport: `https://livescores-api-dev.worldsportaction.com/roster/export?competitionId=`,
+  exportTeams: "Export Teams",
+  exportPlayers: "Export Players"
 };
 
 export default AppConstants;

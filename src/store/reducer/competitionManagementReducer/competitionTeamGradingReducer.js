@@ -438,6 +438,41 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
                 onTeamDeleteLoad: false,
                 error: null
             }
+
+        case ApiConstants.API_EXPORT_FINAL_TEAMS_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_EXPORT_FINAL_TEAMS_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+            }
+        case ApiConstants.API_EXPORT_PROPOSED_TEAMS_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_EXPORT_PROPOSED_TEAMS_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+            }
+        case ApiConstants.API_EXPORT_FINAL_PLAYERS_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_EXPORT_FINAL_PLAYERS_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+            }
+        case ApiConstants.API_EXPORT_PROPOSED_PLAYERS_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_EXPORT_PROPOSED_PLAYERS_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+            }
+    
+
         default:
             return state;
     }
