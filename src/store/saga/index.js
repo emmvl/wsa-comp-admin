@@ -670,4 +670,7 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_EXPORT_PROPOSED_TEAMS_LOAD, proposedTeamsExportSaga)
   yield takeEvery(ApiConstants.API_EXPORT_PROPOSED_PLAYERS_LOAD, proposedPlayersExportSaga)
 
+  /////stripe single payout transaction list
+  yield takeEvery(ApiConstants.API_GET_STRIPE_TRANSACTION_PAYOUT_LIST_API_LOAD, stripeSaga.getTransactionPayoutListSaga)
+
 }

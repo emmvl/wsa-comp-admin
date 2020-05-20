@@ -17,6 +17,7 @@ class CommentModal extends React.Component {
                 >
 
                     {finalGradeId !== null &&
+                        owner &&
                         <div>
                             <div className="col-sm pl-0 pb-2">
                                 {owner !== null &&
@@ -31,11 +32,11 @@ class CommentModal extends React.Component {
 
                             </div>
                             <div>
-
                             </div>
                         </div>
                     }
                     {proposedGradeID !== null &&
+                        affilate &&
                         <div className="col-sm pl-0 pb-2">
                             {affilate !== null &&
                                 < span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className={`comment-heading`}>{affilate}{" "}</span>

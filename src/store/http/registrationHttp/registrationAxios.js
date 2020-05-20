@@ -425,7 +425,7 @@ let AxiosApi = {
         return Method.dataPost(url, token, payload);
     },
 
-    getInvoice( registrationId) {
+    getInvoice(registrationId) {
         let body = {
             registrationId: JSON.parse(registrationId),
         }

@@ -385,7 +385,7 @@ class CompetitionProposedTeamGrading extends Component {
         if (nextProps.appState !== this.props.appState) {
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
-                    let competitionId = competitionList[60].competitionId
+                    let competitionId = competitionList[0].competitionId
                     // let competitionId = this.state.firstTimeCompId !== null ? this.state.firstTimeCompId : competitionList[0].competitionId
                     setOwn_competition(competitionId)
                     this.props.getDivisionsListAction(this.state.yearRefId, competitionId)

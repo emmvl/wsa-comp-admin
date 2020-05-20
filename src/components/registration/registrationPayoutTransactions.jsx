@@ -9,14 +9,13 @@ import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
-    getStripePayoutListAction,
+    getTransactionPayoutListAction,
 } from "../../store/actions/stripeAction/stripeAction";
 import { getOrganisationData } from "../../util/sessionStorage";
 import { currencyFormat } from "../../util/currencyFormat";
 import Loader from '../../customComponents/loader';
-import { liveScore_formateDate } from './../../themes/dateformate';
+import { liveScore_formateDate } from '../../themes/dateformate';
 import moment from 'moment'
-import { NavLink } from 'react-router-dom';
 
 const { Header, Content } = Layout;
 const { Option } = Select;
@@ -31,14 +30,9 @@ function tableSort(a, b, key) {
 const columns = [
     {
         title: "Transaction Id",
-        dataIndex: 'balance_transaction',
-        key: 'balance_transaction',
-        sorter: (a, b) => tableSort(a, b, "balance_transaction"),
-        render: (balance_transaction, record) => (
-            <NavLink to={{ pathname: `/registrationPayoutTransaction`, state: { id: record.id } }} >
-                <span style={{ color: "#ff8237" }} >{balance_transaction}</span>
-            </NavLink>
-        )
+        dataIndex: 'id',
+        key: 'id',
+        sorter: (a, b) => tableSort(a, b, "id")
     },
     {
         title: "Description",
@@ -77,37 +71,11 @@ const columns = [
         key: 'status',
         sorter: (a, b) => tableSort(a, b, "status")
     },
-    // {
-    //     title: 'Action',
-    //     dataIndex: 'refund',
-    //     key: 'refund',
-    //     render: (refund, record) =>
-    //         <Menu
-    //             className="action-triple-dot-submenu"
-    //             theme="light"
-    //             mode="horizontal"
-    //             style={{ lineHeight: '25px' }}
-    //         >
-    //             <SubMenu
-    //                 key="sub1"
-    //                 title={
-    //                     <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
-    //                 }
-    //             >
-    //                 <Menu.Item key="1">
-    //                     <span >Full Refund</span>
-    //                 </Menu.Item>
-    //                 <Menu.Item key="2" >
-    //                     <span >Partial Refund</span>
-    //                 </Menu.Item>
-    //             </SubMenu>
-    //         </Menu>
-    // },
 
 ];
 
 
-class RegistrationSettlements extends Component {
+class RegistrationPayoutTransaction extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -117,7 +85,7 @@ class RegistrationSettlements extends Component {
 
     componentDidMount() {
         if (this.stripeConnected()) {
-            this.props.getStripePayoutListAction(1, null, null)
+            this.props.getTransactionPayoutListAction(1, null, null, this.props.location.state ? this.props.location.state.id : null)
         }
 
     }
@@ -135,7 +103,7 @@ class RegistrationSettlements extends Component {
                 <div className="row" >
                     <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
                         <Breadcrumb separator=" > ">
-                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.payouts}</Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.transactions}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                 </div>
@@ -143,18 +111,16 @@ class RegistrationSettlements extends Component {
         )
     }
 
-
-
-    handleStripePayoutList = (key) => {
-        let page = this.props.stripeState.stripePayoutListPage
-        let stripePayoutList = this.props.stripeState.stripePayoutList
+    handleStripeTransactionPayoutList = (key) => {
+        let page = this.props.stripeState.stripeTransactionPayoutListPage
+        let stripeTransactionPayoutList = this.props.stripeState.stripeTransactionPayoutList
         let starting_after = null
         let ending_before = null
         if (key == "next") {
             ///move forward
             console.log("move forward")
             page = parseInt(page) + 1
-            let id = (stripePayoutList[stripePayoutList.length - 1]['id']);
+            let id = (stripeTransactionPayoutList[stripeTransactionPayoutList.length - 1]['id']);
             console.log("id", id)
             starting_after = id
             ending_before = null
@@ -163,18 +129,18 @@ class RegistrationSettlements extends Component {
             //////move backward
             console.log("move backward")
             page = parseInt(page) - 1
-            let id = (stripePayoutList[0]['id']);
+            let id = (stripeTransactionPayoutList[0]['id']);
             console.log("id", id)
             starting_after = null
             ending_before = id
         }
-        this.props.getStripePayoutListAction(page, starting_after, ending_before)
+        this.props.getTransactionPayoutListAction(page, starting_after, ending_before, this.props.location.state ? this.props.location.state.id : null)
     }
 
     ////checking for enabling click on next button or not
     checkNextEnabled = () => {
-        let currentPage = this.props.stripeState.stripePayoutListPage
-        let totalCount = this.props.stripeState.stripePayoutListTotalCount ? this.props.stripeState.stripePayoutListTotalCount : 1
+        let currentPage = this.props.stripeState.stripeTransactionPayoutListPage
+        let totalCount = this.props.stripeState.stripeTransactionPayoutListTotalCount ? this.props.stripeState.stripeTransactionPayoutListTotalCount : 1
         let lastPage = Math.ceil(parseInt(totalCount) / 10)
         if (lastPage == currentPage) {
             return false
@@ -185,13 +151,13 @@ class RegistrationSettlements extends Component {
     }
 
 
-    payoutListView = () => {
+    transactionPayoutListView = () => {
         console.log("stripeState", this.props.stripeState)
-        let stripePayoutList = this.props.stripeState.stripePayoutList
-        let previousEnabled = this.props.stripeState.stripePayoutListPage == 1 ? false : true
+        let stripeTransactionPayoutList = this.props.stripeState.stripeTransactionPayoutList
+        let previousEnabled = this.props.stripeState.stripeTransactionPayoutListPage == 1 ? false : true
         let nextEnabled = this.checkNextEnabled()
-        let currentPage = this.props.stripeState.stripePayoutListPage
-        let totalCount = this.props.stripeState.stripePayoutListTotalCount ? this.props.stripeState.stripePayoutListTotalCount : 1
+        let currentPage = this.props.stripeState.stripeTransactionPayoutListPage
+        let totalCount = this.props.stripeState.stripeTransactionPayoutListTotalCount ? this.props.stripeState.stripeTransactionPayoutListTotalCount : 1
         let totalPageCount = Math.ceil(parseInt(totalCount) / 10)
         return (
             <div>
@@ -199,7 +165,7 @@ class RegistrationSettlements extends Component {
                     <Table
                         className="home-dashboard-table"
                         columns={columns}
-                        dataSource={stripePayoutList}
+                        dataSource={stripeTransactionPayoutList}
                         pagination={false}
                         loading={this.props.stripeState.onLoad == true && true}
                     />
@@ -209,11 +175,11 @@ class RegistrationSettlements extends Component {
                     <span className="reg-payment-paid-reg-text pt-2">{AppConstants.totalPages + " - " + totalPageCount}</span>
                 </div>
                 <div className="d-flex justify-content-end mb-5">
-                    <div className="pagination-button-div" onClick={() => previousEnabled && this.handleStripePayoutList("Previous")}>
+                    <div className="pagination-button-div" onClick={() => previousEnabled && this.handleStripeTransactionPayoutList("Previous")}>
                         <span style={!previousEnabled ? { color: "#9b9bad" } : null}
                             className="pagination-button-text">{AppConstants.previous}</span>
                     </div>
-                    <div className="pagination-button-div" onClick={() => nextEnabled && this.handleStripePayoutList("next")}>
+                    <div className="pagination-button-div" onClick={() => nextEnabled && this.handleStripeTransactionPayoutList("next")}>
                         <span style={!nextEnabled ? { color: "#9b9bad" } : null}
                             className="pagination-button-text">{AppConstants.next}</span>
                     </div>
@@ -227,7 +193,7 @@ class RegistrationSettlements extends Component {
     contentView = () => {
         return (
             <div className="comp-dash-table-view mt-2">
-                {this.payoutListView()}
+                {this.transactionPayoutListView()}
             </div>
         )
     }
@@ -251,15 +217,14 @@ class RegistrationSettlements extends Component {
 }
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getStripePayoutListAction,
+        getTransactionPayoutListAction,
     }, dispatch)
 }
 
 function mapStatetoProps(state) {
     return {
         stripeState: state.StripeState,
-
     }
 }
 
-export default connect(mapStatetoProps, mapDispatchToProps)((RegistrationSettlements));
+export default connect(mapStatetoProps, mapDispatchToProps)((RegistrationPayoutTransaction));

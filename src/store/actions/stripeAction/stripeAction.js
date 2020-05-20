@@ -59,6 +59,18 @@ function getStripePayoutListAction(page, starting_after, ending_before) {
     return action;
 }
 
+////stripe single payout transaction list
+function getTransactionPayoutListAction(page, starting_after, ending_before, payoutId) {
+    const action = {
+        type: ApiConstants.API_GET_STRIPE_TRANSACTION_PAYOUT_LIST_API_LOAD,
+        page,
+        starting_after,
+        ending_before,
+        payoutId
+
+    };
+    return action;
+}
 export {
     accountBalanceAction,
     chargingPaymentAction,
@@ -66,4 +78,5 @@ export {
     getStripeLoginLinkAction,
     getStripeTransferListAction,
     getStripePayoutListAction,
+    getTransactionPayoutListAction,
 }

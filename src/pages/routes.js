@@ -112,6 +112,7 @@ import LiveScoreSeasonFixture from "../components/liveScore/liveScoreSeasonFixtu
 import RegistrationInvoice from "../components/registration/registrationInvoice"
 import Stripe from "../components/stripe/stripe";
 import RegistrationSettlements from "../components/registration/registrationSettlements";
+import RegistrationPayoutTransaction from "../components/registration/registrationPayoutTransactions";
 
 const lazyLoad = Component => {
   const lazy = props => {
@@ -597,6 +598,10 @@ class Routes extends React.Component {
           component={lazyLoad(RegistrationSettlements)}
         />
 
+        <PrivateRoute
+          path="/registrationPayoutTransaction"
+          component={lazyLoad(RegistrationPayoutTransaction)}
+        />
         <Route path="/" component={lazyLoad(NotFound)} />
 
         <Redirect from="*" to="/404" />

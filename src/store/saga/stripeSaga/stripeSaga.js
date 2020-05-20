@@ -147,3 +147,22 @@ export function* getStripePayoutListSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+//////stripe single payout transaction list
+export function* getTransactionPayoutListSaga(action) {
+    try {
+        const result = yield call(AxiosApi.getTransactionPayoutList, action.page, action.starting_after, action.ending_before, action.payoutId);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_STRIPE_TRANSACTION_PAYOUT_LIST_API_SUCCESS,
+                result: result.result.data,
+                page: action.page,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

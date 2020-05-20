@@ -29,7 +29,7 @@ const columns = [
                 // pathname: '/liveScoreManagerView',
                 // state: { tableRecord: record }
                 pathname: '/userPersonal',
-                state: { userId: record.id, screenKey: "livescore" }
+                state: { userId: record.id, screenKey: "livescore", screen: "/liveScoreManagerList" }
             }}>
                 <span class="input-heading-add-another pt-0" >{firstName}</span>
             </NavLink>
@@ -42,7 +42,7 @@ const columns = [
         render: (lastName, record) =>
             <NavLink to={{
                 pathname: '/userPersonal',
-                state: { userId: record.id, screenKey: "livescore" }
+                state: { userId: record.id, screenKey: "livescore", screen: "/liveScoreManagerList" }
                 // pathname: '/liveScoreManagerView',
                 // state: { tableRecord: record }
             }}>
@@ -75,7 +75,7 @@ const columns = [
                 state: { userId: record.id, screenKey: "livescore" }
             }}>
                 {linkedEntity.length > 0 && linkedEntity.map((item) => (
-                    <span class="input-heading-add-another pt-0" >{item.name}</span>
+                    <span style={{ color: '#ff8237', cursor: 'pointer' }} className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
                 ))
                 }
             </NavLink>

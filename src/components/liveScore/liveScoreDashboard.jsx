@@ -91,11 +91,11 @@ const columnActiveNews = [
         title: "Published Date",
         dataIndex: 'published_at',
         key: 'published_at',
-          sorter: (a, b) => tableSort(a, b, 'published_at'),
+        sorter: (a, b) => tableSort(a, b, 'published_at'),
         render: (published_at) =>
             <span>{published_at && liveScore_formateDate(published_at)}</span>
 
-      
+
 
     },
     {
@@ -301,6 +301,63 @@ const columnsTodaysIncient = [
     },
 ];
 
+const columnsPlayersToPay = [
+    {
+        title: 'First Name',
+        dataIndex: 'firstName',
+        key: 'firstName',
+        sorter: (a, b) => tableSort(a, b, "firstName")
+    },
+    {
+        title: 'Last Name',
+        dataIndex: 'lastName',
+        key: 'lastName',
+        sorter: (a, b) => checkSorting(a, b, "lastName"),
+    },
+    {
+        title: "Linked",
+        dataIndex: 'linked',
+        key: 'linked',
+        sorter: (a, b) => checkSorting(a, b, "linked"),
+    },
+    {
+        title: "Division",
+        dataIndex: 'division',
+        key: 'division',
+        sorter: (a, b) => checkSorting(a, b, "division"),
+    },
+    {
+        title: "Grade",
+        dataIndex: 'grade',
+        key: 'grade',
+        sorter: (a, b) => checkSorting(a, b, "grade"),
+    },
+    {
+        title: "Team",
+        dataIndex: 'team',
+        key: 'team',
+        sorter: (a, b) => checkSorting(a, b, "team"),
+    },
+    {
+        title: "Payment Required",
+        dataIndex: 'payReq',
+        key: 'payReq',
+        sorter: (a, b, payReq) => checkSorting(a, b, payReq),
+    },
+];
+
+const playerTopay=[
+    {
+        "firstName":"Sam",
+        "lastName":"Ham",
+        "linked":"Cromer Netball Club",
+        "division":"11B",
+        "team":"WSA 1",
+        "grade":"A",
+        "payReq":"Voucher redemption"
+    }
+]
+
 
 class LiveScoreDashboard extends Component {
     constructor(props) {
@@ -447,9 +504,6 @@ class LiveScoreDashboard extends Component {
         )
     }
 
-
-
-
     ////////ownedView view for competition
     matchView = () => {
         const { dashboardMatchList } = this.props.liveScoreDashboardState
@@ -466,6 +520,7 @@ class LiveScoreDashboard extends Component {
             </div>
         )
     }
+
     incidentHeading = () => {
         return (
             <div className="row text-view">
@@ -521,6 +576,33 @@ class LiveScoreDashboard extends Component {
         )
     }
 
+    playersToPayHeading = () => {
+        return (
+            <div className="row text-view">
+                <div className="col-sm mb-3" >
+                    <span className='home-dash-left-text'>{AppConstants.playersToPay}</span>
+                </div>
+            </div>
+        )
+    }
+
+    ////////ownedView view for competition
+    playersToPayView = () => {
+        const { dashboardMatchList } = this.props.liveScoreDashboardState
+        return (
+            <div className="comp-dash-table-view mt-4">
+                {this.playersToPayHeading()}
+                <div className="table-responsive home-dash-table-view">
+                    <Table loading={this.props.liveScoreDashboardState.onLoad == true && true}
+                        className="home-dashboard-table" columns={columnsPlayersToPay}
+                        dataSource={playerTopay}
+                        pagination={false}
+                    />
+                </div>
+            </div>
+        )
+    }
+
     // buttons
     btnView = () => {
         return (
@@ -558,6 +640,7 @@ class LiveScoreDashboard extends Component {
                     <Content >
                         {this.addNewsView()}
                         {this.matchView()}
+                        {this.playersToPayView()}
                         {this.incidenceView()}
                     </Content>
                 </Layout>

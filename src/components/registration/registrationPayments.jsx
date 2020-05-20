@@ -16,7 +16,6 @@ import { getOrganisationData } from "../../util/sessionStorage";
 import { currencyFormat } from "../../util/currencyFormat";
 import Loader from '../../customComponents/loader';
 import { liveScore_formateDate } from './../../themes/dateformate';
-import moment from 'moment'
 
 const { Header, Content } = Layout;
 const { Option } = Select;
@@ -126,8 +125,8 @@ class RegistrationPayments extends Component {
 
     componentDidMount() {
         let urlSplit = this.props.location.search.split("?code=")
-        this.props.getStripeTransferListAction(1, null, null)
         if (this.stripeConnected()) {
+            this.props.getStripeTransferListAction(1, null, null)
             this.props.accountBalanceAction()
         }
         else if (urlSplit[1]) {

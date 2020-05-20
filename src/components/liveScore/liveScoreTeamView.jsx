@@ -110,7 +110,7 @@ class LiveScoreTeamView extends Component {
             message.warn(ValidationConstants.playerMessage)
         }
         else {
-            history.push("/userPersonal", { userId: record.userId })
+            history.push("/userPersonal", { userId: record.userId, screenKey: "livescore", screen: "/liveScorePlayerList" })
         }
     }
     componentDidMount() {

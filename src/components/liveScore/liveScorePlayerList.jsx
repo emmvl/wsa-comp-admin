@@ -230,13 +230,12 @@ class LiveScorePlayerList extends Component {
     }
 
     checkUserId(record) {
-        console.log(record)
         if (record.userId == null) {
             message.config({ duration: 1.5, maxCount: 1 })
             message.warn(ValidationConstants.playerMessage)
         }
         else {
-            history.push("/userPersonal", { userId: record.userId })
+            history.push("/userPersonal", { userId: record.userId, screenKey: "livescore", screen: "/liveScorePlayerList" })
         }
     }
 

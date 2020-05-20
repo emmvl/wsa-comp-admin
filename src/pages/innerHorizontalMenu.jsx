@@ -192,21 +192,27 @@ class InnerHorizontalMenu extends React.Component {
                         </NavLink>
                     </Menu.Item>
 
-                    <Menu.Item key="4">
-                        <NavLink to="/registrationPayments" >
-                            <span >Payments</span>
-                        </NavLink>
-                        {/* <a href="https://comp-management-test.firebaseapp.com/payment-dashboard.html">Payments</a> */}
-                    </Menu.Item>
+                    <SubMenu
+                        key="sub2"
+                        title={
+                            <span>Payments</span>
+                        }
+                    >
+                        <Menu.Item key="8">Payment Dashboard</Menu.Item>
+                        <Menu.Item key="4">
+                            <NavLink to="/registrationPayments" >
+                                <span >Payment Gateway</span>
+                            </NavLink>
+                            {/* <a href="https://comp-management-test.firebaseapp.com/payment-dashboard.html">Payments</a> */}
+                        </Menu.Item>
 
-                    <Menu.Item key="5">
-                        <NavLink to="/registrationSettlements" >
-                            <span >Settlements</span>
-                        </NavLink>
-                    </Menu.Item>
-
+                        <Menu.Item key="5">
+                            <NavLink to="/registrationSettlements" >
+                                <span >Payouts</span>
+                            </NavLink>
+                        </Menu.Item>
+                    </SubMenu>
                     <Menu.Item key="6">De-registration forms</Menu.Item>
-
                 </Menu>
                 }
 

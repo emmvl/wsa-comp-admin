@@ -292,13 +292,14 @@ class RegistrationInvoice extends Component {
                                                 }
                                             })}
                                         </div>
-                                        < Divider className="mt-0 mb-0" />
+
                                     </div>
                                 )
                             })
                             }
 
                             <div className="row" >
+                                < Divider className="mt-0 mb-0" />
                                 <div className="invoice-col-View pr-0 pl-0" >
                                     {competitionDetails && competitionDetails.compOrgName &&
                                         <InputWithHead
@@ -404,10 +405,10 @@ class RegistrationInvoice extends Component {
                                         heading={"Total"}
                                     />
                                 </div>
-                                <div className="invoice-total-Amount pr-0">
+                                <div className="invoice-total-Amount">
                                     <InputWithHead
                                         required="invoice"
-                                        heading={"AUD" + " " + "150"}
+                                        heading={"$" + "150"}
                                     />
                                 </div>
                                 {data.length - 1 !== participantIndex &&

@@ -90,6 +90,23 @@ let AxiosApi = {
     },
 
 
+    //////////stripe single payout transaction list
+    async getTransactionPayoutList(page, startingAfter, endingBefore, payoutId) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        let body = {
+            type: "payoutTransfer",
+            organisationUniqueKey: organisationUniqueKey,
+            payoutId: payoutId,
+            paging: {
+                starting_after: startingAfter,
+                ending_before: endingBefore,
+                limit: 10
+            }
+        }
+        var url = `api/payments/payoutTransferList`;
+        return Method.dataPost(url, token, body);
+    },
 
 };
 

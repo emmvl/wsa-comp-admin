@@ -1015,9 +1015,12 @@ const AppConstants = {
   payouts: "Payouts",
 
   managerExport: `https://users-api-dev.worldsportaction.com/users/byRole/export?roleId=3&entityTypeId=1&entityId=`,
-  scorerExport: `https://livescores-api-dev.worldsportaction.com/roster/export?competitionId=`,
+  scorerExport: `https://livescores-api-dev.worldsportaction.com/roster/exportScorer?competitionId=`,
+  teamExport: `https://livescores-api-dev.worldsportaction.com/teams/export?competitionId=`,
+  playersToPay: "Players to Pay",
   exportTeams: "Export Teams",
-  exportPlayers: "Export Players"
+  exportPlayers: "Export Players",
+  transactions: "Transactions",
 };
 
 export default AppConstants;

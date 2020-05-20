@@ -603,6 +603,7 @@ input[type=number] {
 .invoice-total-Amount{
 display: flex;
   width: 13%;
+  padding-right: 15px;
   justify-content: flex-end
 }
 .drop-reverse{
@@ -684,7 +685,7 @@ align-items: flex-end;
   }
   .invoice-total-Amount{
     display: flex;
-      width: 30%;
+      width: 25%;
       justify-content: center
     }
 .invoice-col-View-30{

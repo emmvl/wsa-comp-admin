@@ -70,14 +70,14 @@ const columns = [
         dataIndex: "regForm",
         key: "regForm",
         render: (regForm, e) => (
-            <Menu className="action-triple-dot-submenu" theme="light"  mode="horizontal"
+            <Menu className="action-triple-dot-submenu" theme="light" mode="horizontal"
                 style={{ lineHeight: "25px" }}
             >
                 <SubMenu
                     key="sub1"
-                    title={ <img className="dot-image" src={AppImages.moreTripleDot}
-                            alt="" width="16" height="16" />
-                           }>
+                    title={<img className="dot-image" src={AppImages.moreTripleDot}
+                        alt="" width="16" height="16" />
+                    }>
                     <Menu.Item key="1" onClick={() => this_Obj.viewRegForm(e)}>
                         <span>View</span>
                     </Menu.Item>
@@ -475,20 +475,22 @@ class UserModulePersonalDetail extends Component {
                 divisionName: "", competitionId: null,
                 competitionName: "", year: 0
             },
-            screenKey:null,
+            screenKey: null,
             loading: false,
             registrationForm: null,
-            isRegistrationForm: false
+            isRegistrationForm: false,
+            screen: null
 
         }
     }
 
     componentDidMount() {
-   
+
         if (this.props.location.state != null && this.props.location.state != undefined) {
             let userId = this.props.location.state.userId;
             let screenKey = this.props.location.state.screenKey;
-            this.setState({ userId: userId, screenKey: screenKey });
+            let screen = this.props.location.state.screen;
+            this.setState({ userId: userId, screenKey: screenKey, screen: screen });
             this.apiCalls(userId);
             if (this.state.tabKey == "1") {
                 this.hanleActivityTableList(1, userId, this.state.competition, "parent");
@@ -599,7 +601,7 @@ class UserModulePersonalDetail extends Component {
     };
 
     viewRegForm = async (item) => {
-        await this.setState({isRegistrationForm: true, registrationForm: item.registrationForm});
+        await this.setState({ isRegistrationForm: true, registrationForm: item.registrationForm });
     }
 
     headerView = () => {
@@ -852,15 +854,15 @@ class UserModulePersonalDetail extends Component {
                 <div className="table-responsive home-dash-table-view" style={{ display: 'flex', flexDirection: 'column' }}>
                     <div className="other-info-row" style={{ paddingTop: '10px' }}>
                         <div className="year-select-heading other-info-label" >{AppConstants.countryOfBirth}</div>
-                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData!= null && personalByCompData.length > 0 ? personalByCompData[0].countryName : null}</div>
+                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].countryName : null}</div>
                     </div>
                     <div className="other-info-row">
                         <div className="year-select-heading other-info-label">{AppConstants.nationalityReference}</div>
-                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData!= null  && personalByCompData.length > 0 ? personalByCompData[0].nationalityName: null}</div>
+                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].nationalityName : null}</div>
                     </div>
                     <div className="other-info-row">
                         <div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.childLangSpoken}</div>
-                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData!= null  && personalByCompData.length > 0 ? personalByCompData[0].languages: null}</div>
+                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].languages : null}</div>
                     </div>
                     {/* <div className="other-info-row">
                         <div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.disability}</div>
@@ -898,17 +900,17 @@ class UserModulePersonalDetail extends Component {
                                 </div>
                             </div>
                             {
-                                item.isDisability == 'Yes' ? 
-                                <div className="comp-dash-table-view mt-2" style={{paddingLeft: '0px'}}>
-                                <div className="table-responsive home-dash-table-view">
-                                    <Table className="home-dashboard-table"
-                                        columns={columnsMedical}
-                                        dataSource={item.disability}
-                                        pagination={false}
-                                    />
-                                </div> </div>: null
+                                item.isDisability == 'Yes' ?
+                                    <div className="comp-dash-table-view mt-2" style={{ paddingLeft: '0px' }}>
+                                        <div className="table-responsive home-dash-table-view">
+                                            <Table className="home-dashboard-table"
+                                                columns={columnsMedical}
+                                                dataSource={item.disability}
+                                                pagination={false}
+                                            />
+                                        </div> </div> : null
                             }
-                            
+
                         </div>
                     ))
                 }
@@ -936,7 +938,7 @@ class UserModulePersonalDetail extends Component {
                         className="antd-pagination"
                         current={userState.userRegistrationDataPage}
                         total={total}
-                        onChange={(page) => this.handleRegistrationTableList(page,this.state.userId, this.state.competition)}
+                        onChange={(page) => this.handleRegistrationTableList(page, this.state.userId, this.state.competition)}
                     />
                 </div>
             </div>
@@ -948,83 +950,83 @@ class UserModulePersonalDetail extends Component {
 
         return (
             <div className="comp-dash-table-view mt-2">
-                 <div className="user-module-row-heading">{AppConstants.registrationFormQuestions}</div>
+                <div className="user-module-row-heading">{AppConstants.registrationFormQuestions}</div>
                 {(registrationForm || []).map((item, index) => (
-                    <div key={index} style={{marginBottom: '15px'}}>
-                        <InputWithHead heading={item.description}/>
-                            {
-                                (item.registrationSettingsRefId == 6 || item.registrationSettingsRefId == 11) ? 
+                    <div key={index} style={{ marginBottom: '15px' }}>
+                        <InputWithHead heading={item.description} />
+                        {
+                            (item.registrationSettingsRefId == 6 || item.registrationSettingsRefId == 11) ?
                                 <div className="applicable-to-text">
                                     {item.contentValue == null ? AppConstants.noInformationProvided : item.contentValue}
                                 </div> : null
-                            }
-                            {
-                                 (item.registrationSettingsRefId == 7) ? 
-                                 <div>
-                                     {item.contentValue == "No" ?
-                                      <div className="applicable-to-text">
-                                         {item.contentValue}
-                                     </div> : 
-                                     <div className="table-responsive home-dash-table-view">
-                                         <Table className="home-dashboard-table"
-                                             columns={columnsPlayedBefore}
-                                             dataSource={item.playedBefore}
-                                             pagination={false}
-                                         />
-                                     </div>
-                                     }
-                                 </div> : null
-                            }
-                            {
-                                (item.registrationSettingsRefId == 8) ? 
+                        }
+                        {
+                            (item.registrationSettingsRefId == 7) ?
+                                <div>
+                                    {item.contentValue == "No" ?
+                                        <div className="applicable-to-text">
+                                            {item.contentValue}
+                                        </div> :
+                                        <div className="table-responsive home-dash-table-view">
+                                            <Table className="home-dashboard-table"
+                                                columns={columnsPlayedBefore}
+                                                dataSource={item.playedBefore}
+                                                pagination={false}
+                                            />
+                                        </div>
+                                    }
+                                </div> : null
+                        }
+                        {
+                            (item.registrationSettingsRefId == 8) ?
                                 <div className="table-responsive home-dash-table-view">
-                                         <Table className="home-dashboard-table"
-                                             columns={columnsFriends}
-                                             dataSource={item.friends}
-                                             pagination={false}
-                                         />
-                                     </div> : null
-                            }
-                            {
-                                (item.registrationSettingsRefId == 9) ? 
+                                    <Table className="home-dashboard-table"
+                                        columns={columnsFriends}
+                                        dataSource={item.friends}
+                                        pagination={false}
+                                    />
+                                </div> : null
+                        }
+                        {
+                            (item.registrationSettingsRefId == 9) ?
                                 <div className="table-responsive home-dash-table-view">
-                                         <Table className="home-dashboard-table"
-                                             columns={columnsFriends}
-                                             dataSource={item.referFriends}
-                                             pagination={false}
-                                         />
-                                     </div> : null
-                            }
-                            {
-                                (item.registrationSettingsRefId == 10) ? 
+                                    <Table className="home-dashboard-table"
+                                        columns={columnsFriends}
+                                        dataSource={item.referFriends}
+                                        pagination={false}
+                                    />
+                                </div> : null
+                        }
+                        {
+                            (item.registrationSettingsRefId == 10) ?
                                 <div className="table-responsive home-dash-table-view">
-                                         <Table className="home-dashboard-table"
-                                             columns={columnsFav}
-                                             dataSource={item.favourites}
-                                             pagination={false}
-                                         />
-                                     </div> : null
-                            }
-                            {
-                                (item.registrationSettingsRefId == 12) ? 
+                                    <Table className="home-dashboard-table"
+                                        columns={columnsFav}
+                                        dataSource={item.favourites}
+                                        pagination={false}
+                                    />
+                                </div> : null
+                        }
+                        {
+                            (item.registrationSettingsRefId == 12) ?
                                 <div className="table-responsive home-dash-table-view">
-                                         <Table className="home-dashboard-table"
-                                             columns={columnsVol}
-                                             dataSource={item.volunteers}
-                                             pagination={false}
-                                         />
-                                     </div> : null
-                            }
-                        </div>
-                    ))
+                                    <Table className="home-dashboard-table"
+                                        columns={columnsVol}
+                                        dataSource={item.volunteers}
+                                        pagination={false}
+                                    />
+                                </div> : null
+                        }
+                    </div>
+                ))
                 }
-                {registrationForm.length == 0 ? 
-                    <div>{AppConstants.noInformationProvided}</div>: null
+                {registrationForm.length == 0 ?
+                    <div>{AppConstants.noInformationProvided}</div> : null
                 }
-                <div className="row" style={{marginTop: '50px'}}>
+                <div className="row" style={{ marginTop: '50px' }}>
                     <div className="col-sm-3">
                         <div className="reg-add-save-button">
-                            <Button type="cancel-button" onClick={() => this.setState({isRegistrationForm: false})}>
+                            <Button type="cancel-button" onClick={() => this.setState({ isRegistrationForm: false })}>
                                 {AppConstants.back}</Button>
                         </div>
                     </div>
@@ -1052,9 +1054,9 @@ class UserModulePersonalDetail extends Component {
                         </Breadcrumb>
                     </Header >
                 </div>
-             {this.state.screenKey == "livescore" &&  <div className="col-sm">
+                {this.state.screenKey == "livescore" && <div className="col-sm">
                     <div className="comp-buttons-view mt-4" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
-                        <Button onClick={()=>history.push("/liveScoreManagerList")} className='primary-add-comp-form' type='primary'>
+                        <Button onClick={() => history.push(this.state.screen)} className='primary-add-comp-form' type='primary'>
                             {AppConstants.backToLiveScore}
                         </Button>
                     </div>
@@ -1096,9 +1098,9 @@ class UserModulePersonalDetail extends Component {
                                                 {this.medicalView()}
                                             </TabPane>
                                             <TabPane tab={AppConstants.registration} key="5">
-                                                {!this.state.isRegistrationForm ? 
+                                                {!this.state.isRegistrationForm ?
                                                     this.registrationView() :
-                                                    this.registrationFormView() 
+                                                    this.registrationFormView()
                                                 }
                                             </TabPane>
                                         </Tabs>
