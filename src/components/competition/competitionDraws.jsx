@@ -733,7 +733,7 @@ class CompetitionDraws extends Component {
             }
             return (
               <div>
-                <div className="sr-no"> {courtData.venueShortName + "-" + courtData.venueCourtName}</div>
+                <div className="sr-no"> {courtData.venueShortName + "-" + courtData.venueCourtNumber}</div>
                 {courtData.slotsArray.map((slotObject, slotIndex) => {
                   if (slotIndex !== 0) {
                     leftMargin += 110;

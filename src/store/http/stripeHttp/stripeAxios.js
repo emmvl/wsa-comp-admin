@@ -72,6 +72,23 @@ let AxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
+    //////////stripe payout list
+    async getStripePayoutList(page, startingAfter, endingBefore) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        let body = {
+            type: "payout",
+            organisationUniqueKey: organisationUniqueKey,
+            paging: {
+                starting_after: startingAfter,
+                ending_before: endingBefore,
+                limit: 10
+            }
+        }
+        var url = `api/payments/list`;
+        return Method.dataPost(url, token, body);
+    },
+
 
 
 };

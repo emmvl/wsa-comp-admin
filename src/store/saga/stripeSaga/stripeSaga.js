@@ -129,3 +129,21 @@ export function* getStripeTransferListSaga(action) {
     }
 }
 
+/////stripe payout list
+export function* getStripePayoutListSaga(action) {
+    try {
+        const result = yield call(AxiosApi.getStripePayoutList, action.page, action.starting_after, action.ending_before);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_STRIPE_PAYOUT_LIST_API_SUCCESS,
+                result: result.result.data,
+                page: action.page,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

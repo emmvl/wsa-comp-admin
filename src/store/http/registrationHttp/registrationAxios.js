@@ -425,11 +425,9 @@ let AxiosApi = {
         return Method.dataPost(url, token, payload);
     },
 
-    getInvoice(competitionID, organisationId, registrationId) {
+    getInvoice( registrationId) {
         let body = {
-            competitionUniqueKey: competitionID,
             registrationId: JSON.parse(registrationId),
-            organisationUniqueKey: organisationId
         }
         let url = `/api/invoice`
         return Method.dataPost(url, token, body)

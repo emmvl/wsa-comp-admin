@@ -47,10 +47,23 @@ function getStripeTransferListAction(page, starting_after, ending_before) {
     return action;
 }
 
+////stripe payout list
+function getStripePayoutListAction(page, starting_after, ending_before) {
+    const action = {
+        type: ApiConstants.API_GET_STRIPE_PAYOUT_LIST_API_LOAD,
+        page,
+        starting_after,
+        ending_before
+
+    };
+    return action;
+}
+
 export {
     accountBalanceAction,
     chargingPaymentAction,
     saveStripeAccountAction,
     getStripeLoginLinkAction,
     getStripeTransferListAction,
+    getStripePayoutListAction,
 }

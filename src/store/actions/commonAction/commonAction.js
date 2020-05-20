@@ -150,14 +150,11 @@ function getPhotoTypeAction() {
     return action
 }
 
-function getInvoice(competitionId, orgnaistationID, registrationid) {
+function getInvoice(registrationid) {
     const action = {
         type: ApiConstants.API_GET_INVOICE_LOAD,
-        competitionId,
-        orgnaistationID,
         registrationid
     }
-    console.log(action)
     return action
 }
 

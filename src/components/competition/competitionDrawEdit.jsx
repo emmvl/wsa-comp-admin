@@ -677,7 +677,7 @@ class CompetitionDrawEdit extends Component {
                             return (
                                 <div>
                                     <div className="sr-no huge-sr">
-                                        {courtData.venueShortName + "-" + courtData.venueCourtName}
+                                        {courtData.venueShortName + "-" + courtData.venueCourtNumber}
                                     </div>
 
                                     {courtData.slotsArray.map((slotObject, slotIndex) => {

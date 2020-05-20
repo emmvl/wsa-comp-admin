@@ -1278,7 +1278,11 @@ const ApiConstants = {
 
   ///clear login reducer
   ACTION_TO_CLEAR_AUTHENTICATION_REDUCER: "ACTION_TO_CLEAR_AUTHENTICATION_REDUCER",
-  Update_QuickCompetition_Data: "Update_QuickCompetition_Data"
+  Update_QuickCompetition_Data: "Update_QuickCompetition_Data",
+
+  //////stripe payout list
+  API_GET_STRIPE_PAYOUT_LIST_API_LOAD: "API_GET_STRIPE_PAYOUT_LIST_API_LOAD",
+  API_GET_STRIPE_PAYOUT_LIST_API_SUCCESS: "API_GET_STRIPE_PAYOUT_LIST_API_SUCCESS",
 };
 
 

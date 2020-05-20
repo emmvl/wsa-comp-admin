@@ -117,7 +117,8 @@ class LiveScorerList extends Component {
         this.state = {
             year: "2020",
             scorerTableData: scorerData.scorerData,
-            searchtext: ''
+            searchtext: '',
+            competitionId: null
         }
     }
 
@@ -132,6 +133,7 @@ class LiveScorerList extends Component {
             "searchText": ""
         }
         const { id } = JSON.parse(getLiveScoreCompetiton())
+        this.setState({ competitionId: id })
         if (id !== null) {
 
             this.props.liveScoreScorerListAction(id, 4, body)
@@ -154,7 +156,8 @@ class LiveScorerList extends Component {
 
     // on Export
     onExport = () => {
-        let url = AppConstants.matchExport + this.state.competitionId
+        // let url = AppConstants.scorerExport + this.state.competitionId + '&roleId=4'
+        let url = AppConstants.scorerExport + this.state.competitionId + `&roleId=${4}`
         this.props.exportFilesAction(url)
     }
 

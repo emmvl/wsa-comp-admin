@@ -78,7 +78,7 @@ class CompetitionQuickCompetition extends Component {
                 <div className="col-sm-3">
                     <div
                         style={{
-                            width: '100%',
+                            width: "fit-content",
                             display: 'flex',
                             flexDirection: 'row',
                             alignItems: 'center',
@@ -88,6 +88,7 @@ class CompetitionQuickCompetition extends Component {
                         <span className="year-select-heading">{AppConstants.competition}:</span>
                         <Select
                             name={'competition'}
+                            style={{ minWidth: 160 }}
                             className="year-select"
                             onChange={competitionId =>
                                 this.onCompetitionChange(competitionId)

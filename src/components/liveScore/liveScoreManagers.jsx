@@ -89,12 +89,14 @@ class LiveScoreManagerList extends Component {
         this.state = {
             year: "2020",
             scorerTableData: scorerData.scorerData,
-            searchText: ''
+            searchText: '',
+            competitionId: null
         }
     }
 
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton())
+        this.setState({ competitionId: id })
         this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText)
     }
 
@@ -132,7 +134,8 @@ class LiveScoreManagerList extends Component {
 
     // on Export
     onExport = () => {
-        let url = AppConstants.matchExport + this.state.competitionId
+        // let url = AppConstants.managerExport + this.state.competitionId
+        let url = AppConstants.managerExport + this.state.competitionId
         this.props.exportFilesAction(url)
     }
 

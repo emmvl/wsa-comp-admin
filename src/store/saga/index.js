@@ -658,4 +658,6 @@ export default function* root_saga() {
   ///forgot password
   yield takeEvery(ApiConstants.API_FORGOT_PASSWORD_LOAD, forgotPasswordSaga);
 
+  //////stripe payout list
+  yield takeEvery(ApiConstants.API_GET_STRIPE_PAYOUT_LIST_API_LOAD, stripeSaga.getStripePayoutListSaga)
 }

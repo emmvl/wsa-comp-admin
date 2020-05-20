@@ -438,7 +438,6 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
                 onTeamDeleteLoad: false,
                 error: null
             }
-
         default:
             return state;
     }

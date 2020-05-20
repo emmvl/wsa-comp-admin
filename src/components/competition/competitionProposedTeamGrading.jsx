@@ -254,7 +254,7 @@ class CompetitionProposedTeamGrading extends Component {
             comments: null,
             commentsCreatedOn: null,
             commentsCreatedBy: null,
-            finalGradeId: 0,
+            finalGradeId: null,
             proposedGradeID: 0,
             isDeleteModalVisible: false,
             actionType: '',
@@ -273,7 +273,7 @@ class CompetitionProposedTeamGrading extends Component {
             responseComments: record.responseComments, responseCommentsCreatedBy: record.responseCommentsCreatedBy,
             responseCommentsCreatedOn: moment(record.responseCommentsCreatedOn).format("DD-MM-YYYY HH:mm"),
             comments: record.comments, commentsCreatedOn: moment(record.commentsCreatedOn).format("DD-MM-YYYY HH:mm"), commentsCreatedBy: record.commentsCreatedBy,
-            finalGradeId: record.finalGradeId, proposedGradeID: record.finalGradeId,
+            finalGradeId: record.finalGradeId,
             comment: record.responseComments,
 
         })
@@ -300,7 +300,7 @@ class CompetitionProposedTeamGrading extends Component {
             finalGradeId: null,
             comment: null,
             teamId: null,
-            proposedGradeID: null,
+            proposedGradeID: 0,
         });
     };
     // model cancel for dissapear a model
@@ -313,9 +313,9 @@ class CompetitionProposedTeamGrading extends Component {
             comments: null,
             commentsCreatedOn: null,
             commentsCreatedBy: null,
-            finalGradeId: 0,
+            finalGradeId: null,
             teamId: null,
-            proposedGradeID: null,
+            proposedGradeID: 0,
         });
     };
 
@@ -385,7 +385,7 @@ class CompetitionProposedTeamGrading extends Component {
         if (nextProps.appState !== this.props.appState) {
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
-                    let competitionId = competitionList[0].competitionId
+                    let competitionId = competitionList[60].competitionId
                     // let competitionId = this.state.firstTimeCompId !== null ? this.state.firstTimeCompId : competitionList[0].competitionId
                     setOwn_competition(competitionId)
                     this.props.getDivisionsListAction(this.state.yearRefId, competitionId)
@@ -654,12 +654,12 @@ class CompetitionProposedTeamGrading extends Component {
                     placeholder={AppConstants.addYourComment}
                     onChange={(e) => this.setState({ comment: e.target.value })}
                     value={this.state.comment}
-                    affilate={this.state.responseCommentsCreatedBy}
-                    affilateCreatedComment={this.state.responseCommentsCreatedOn}
-                    affilateComment={this.state.responseComments}
-                    owner={this.state.commentsCreatedBy}
-                    OwnCreatedComment={this.state.commentsCreatedOn}
-                    ownnerComment={this.state.comments}
+                    owner={this.state.responseCommentsCreatedBy}
+                    OwnCreatedComment={this.state.responseCommentsCreatedOn}
+                    ownnerComment={this.state.responseComments}
+                    affilate={this.state.commentsCreatedBy}
+                    affilateCreatedComment={this.state.commentsCreatedOn}
+                    affilateComment={this.state.comments}
                     finalGradeId={this.state.finalGradeId}
                     proposedGradeID={this.state.proposedGradeID}
                 />

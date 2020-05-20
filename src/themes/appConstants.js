@@ -1012,6 +1012,10 @@ const AppConstants = {
   buzzer: "Buzzer",
   turnOffBuzzer: "Turn off Buzzer",
   turnOff_30Second: "Turn off 30 second warning",
+  payouts: "Payouts",
+
+  managerExport: `https://users-api-dev.worldsportaction.com/users/byRole/export?roleId=3&entityTypeId=1&entityId=`,
+  scorerExport: `https://livescores-api-dev.worldsportaction.com/roster/export?competitionId=`,
 };
 
 export default AppConstants;
