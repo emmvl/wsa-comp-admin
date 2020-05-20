@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Select, DatePicker, Button, Table, Menu } from 'antd';
+import { Layout, Breadcrumb, Select, DatePicker, Button, Table, Menu, Pagination } from 'antd';
 import './product.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -16,7 +16,6 @@ import { getOrganisationData } from "../../util/sessionStorage";
 import { currencyFormat } from "../../util/currencyFormat";
 import Loader from '../../customComponents/loader';
 import { liveScore_formateDate } from './../../themes/dateformate';
-import moment from 'moment'
 
 const { Header, Content } = Layout;
 const { Option } = Select;
@@ -126,8 +125,8 @@ class RegistrationPayments extends Component {
 
     componentDidMount() {
         let urlSplit = this.props.location.search.split("?code=")
-        this.props.getStripeTransferListAction()
         if (this.stripeConnected()) {
+            this.props.getStripeTransferListAction(1, null, null)
             this.props.accountBalanceAction()
         }
         else if (urlSplit[1]) {
@@ -315,10 +314,86 @@ class RegistrationPayments extends Component {
     }
 
 
-    ////////form content view
-    contentView = () => {
+    handleStripeTransferList = (key) => {
+        let page = this.props.stripeState.stripeTransferListPage
+        let stripeTransferList = this.props.stripeState.stripeTransferList
+        let starting_after = null
+        let ending_before = null
+        if (key == "next") {
+            ///move forward
+            console.log("move forward")
+            page = parseInt(page) + 1
+            let id = (stripeTransferList[stripeTransferList.length - 1]['id']);
+            console.log("id", id)
+            starting_after = id
+            ending_before = null
+        }
+        if (key == "Previous") {
+            //////move backward
+            console.log("move backward")
+            page = parseInt(page) - 1
+            let id = (stripeTransferList[0]['id']);
+            console.log("id", id)
+            starting_after = null
+            ending_before = id
+        }
+        this.props.getStripeTransferListAction(page, starting_after, ending_before)
+    }
+    ////checking for enabling click on next button or not
+    checkNextEnabled = () => {
+        let currentPage = this.props.stripeState.stripeTransferListPage
+        let totalCount = this.props.stripeState.stripeTransferListTotalCount ? this.props.stripeState.stripeTransferListTotalCount : 1
+        let lastPage = Math.ceil(parseInt(totalCount) / 10)
+        if (lastPage == currentPage) {
+            return false
+        }
+        else {
+            return true
+        }
+    }
+
+
+    transferListView = () => {
         console.log("stripeState", this.props.stripeState)
         let stripeTransferList = this.props.stripeState.stripeTransferList
+        let previousEnabled = this.props.stripeState.stripeTransferListPage == 1 ? false : true
+        let nextEnabled = this.checkNextEnabled()
+        let currentPage = this.props.stripeState.stripeTransferListPage
+        let totalCount = this.props.stripeState.stripeTransferListTotalCount ? this.props.stripeState.stripeTransferListTotalCount : 1
+        let totalPageCount = Math.ceil(parseInt(totalCount) / 10)
+        return (
+            <div>
+                <div className="table-responsive home-dash-table-view mt-5 mb-5">
+                    <Table
+                        className="home-dashboard-table"
+                        columns={columns}
+                        dataSource={stripeTransferList}
+                        pagination={false}
+                    // loading={this.props.stripeState.onLoad == true && true}
+                    />
+                </div>
+                <div className="reg-payment-pages-div mb-5">
+                    <span className="reg-payment-paid-reg-text">{AppConstants.currentPage + " - " + currentPage}</span>
+                    <span className="reg-payment-paid-reg-text pt-2">{AppConstants.totalPages + " - " + totalPageCount}</span>
+                </div>
+                <div className="d-flex justify-content-end mb-5">
+                    <div className="pagination-button-div" onClick={() => previousEnabled && this.handleStripeTransferList("Previous")}>
+                        <span style={!previousEnabled ? { color: "#9b9bad" } : null}
+                            className="pagination-button-text">{AppConstants.previous}</span>
+                    </div>
+                    <div className="pagination-button-div" onClick={() => nextEnabled && this.handleStripeTransferList("next")}>
+                        <span style={!nextEnabled ? { color: "#9b9bad" } : null}
+                            className="pagination-button-text">{AppConstants.next}</span>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+
+    ////////form content view
+    contentView = () => {
+
         return (
             <div >
                 {this.dropdownView()}
@@ -442,16 +517,7 @@ class RegistrationPayments extends Component {
                     <div className="col-sm" >
                     </div>
                 </div> */}
-
-                <div className="table-responsive home-dash-table-view mt-5 mb-5">
-                    <Table
-                        className="home-dashboard-table"
-                        columns={columns}
-                        dataSource={stripeTransferList}
-                        pagination={false}
-                        loading={this.props.stripeState.onLoad == true && true}
-                    />
-                </div>
+                {this.transferListView()}
             </div>
         )
     }

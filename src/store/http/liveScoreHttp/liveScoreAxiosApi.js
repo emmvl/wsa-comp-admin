@@ -87,7 +87,7 @@ let LiveScoreAxiosApi = {
     },
     liveScoreGetAffilate(data) {
         // const url = `clubs?name=${data.name}&competitionId=${data.id}`
-        const url = `clubs?competitionId=${data.id}`
+        const url = `organisation?competitionId=${data.id}`
         return Method.dataGet(url, null)
     },
     liveScoreAddNewTeam(data) {
@@ -145,9 +145,9 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token)
     },
 
-    liveScoreMatchList(competitionID, start, offset) {
+    liveScoreMatchList(competitionID, start, offset, search) {
         // start=<1 year in past>&limit=<limit>&offset=<offset></offset>
-        var url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}`;
+        var url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}`;
         return Method.dataGet(url, localStorage.token)
     },
 
@@ -183,8 +183,8 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token)
     },
 
-    liveScoreIncidentList(competitionID) {
-        var url = `/incident?competitionId=${competitionID}`;
+    liveScoreIncidentList(competitionID, search) {
+        var url = `/incident?competitionId=${competitionID}&search=${search}`;
         return Method.dataGet(url, token)
     },
 
@@ -277,24 +277,20 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
-    liveScoreGoalList(data, goaltype) {
+    liveScoreGoalList(compId, goaltype, search) {
+        let url = null
         if (goaltype === "By Match") {
-            let competitionID = localStorage.getItem("competitionId");
-            let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-            var url = `/stats/scoringByPlayer?competitionId=${id}&aggregate=MATCH`
-            return Method.dataGet(url, token)
+            url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}`
         }
-        if (goaltype === "Total") {
-            let competitionID = localStorage.getItem("competitionId");
-            let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-            var url = `/stats/scoringByPlayer?competitionId=${id}&aggregate=ALL`
-            return Method.dataGet(url, token)
+        else if (goaltype === "Total") {
+            url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=ALL&search=${search}`
+
         }
-        let competitionID = localStorage.getItem("competitionId");
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-        var url = `/stats/scoringByPlayer?competitionId=${id}`;
+
+        return Method.dataGet(url, token)
 
     },
+
     liveScoreManagerList(roleId, entityTypeId, entityId) {
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
         var url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${id}`;
@@ -486,12 +482,13 @@ let LiveScoreAxiosApi = {
     },
 
     /// get Game Time statistics api
-    gameTimeStatistics(competitionId, aggregate, offset) {
+    gameTimeStatistics(competitionId, aggregate, offset, searchText) {
         let Body = {
             "paging": {
                 "limit": 10,
                 "offset": `${offset}`
-            }
+            },
+            "search": searchText
         }
         var url = `/stats/gametime?competitionId=${competitionId}&aggregate=${aggregate.toUpperCase()}`;
         return Method.dataPost(url, localStorage.token, Body)
@@ -503,7 +500,7 @@ let LiveScoreAxiosApi = {
     },
     /// get Game Time statistics api
     umpiresList(competitionId, body) {
-        var url = `/matchUmpires/admin?competitionId=${competitionId}`;
+        var url = `/matchUmpire/admin?competitionId=${competitionId}`;
         return Method.dataPost(url, token, body)
     },
 
@@ -661,21 +658,19 @@ let LiveScoreAxiosApi = {
 
     // Match club list
     liveScoreClubList(competitionId) {
-        var url = `/clubs?competitionId=${competitionId}`
+        var url = `/organisation?competitionId=${competitionId}`
         return Method.dataGet(url, token)
     },
     ladderSettingMatchResult() {
         var url = `/ref/matchResult`
         return Method.dataGet(url, token)
     },
-
     laddersSettingGetData(competitionId) {
 
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
         var url = `/competitions/ladderSettings?competitionId=${id}`
         return Method.dataGet(url, token)
     },
-
     laddersSettingPostData(data) {
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
 
@@ -684,8 +679,6 @@ let LiveScoreAxiosApi = {
         var url = `/competitions/ladderSettings?competitionId=${id}`
         return Method.dataPost(url, token, body)
     },
-
-
     // Get Teams with paggination
     getTeamWithPagging(competitionID, offset, limit, search) {
         console.log(search)
@@ -746,7 +739,8 @@ const Method = {
                     headers: {
                         "Content-Type": "application/json",
                         "Access-Control-Allow-Origin": "*",
-                        Authorization: "BWSA " + authorization
+                        Authorization: "BWSA " + authorization,
+                        "SourceSystem": "WebAdmin"
                     }
                 })
 
@@ -834,7 +828,8 @@ const Method = {
                         "Content-Type": "application/json",
                         Accept: "application/json",
                         Authorization: "BWSA " + authorization,
-                        "Access-Control-Allow-Origin": "*"
+                        "Access-Control-Allow-Origin": "*",
+                        "SourceSystem": "WebAdmin"
                     }
                 })
 
@@ -897,7 +892,8 @@ const Method = {
                         "Content-Type": "application/json",
                         Accept: "application/json",
                         Authorization: "BWSA " + authorization,
-                        "Access-Control-Allow-Origin": "*"
+                        "Access-Control-Allow-Origin": "*",
+                        "SourceSystem": "WebAdmin"
                     }
                 })
 
@@ -961,7 +957,8 @@ const Method = {
                         "Content-Type": "application/json",
                         Accept: "application/csv",
                         Authorization: "BWSA " + authorization,
-                        "Access-Control-Allow-Origin": "*"
+                        "Access-Control-Allow-Origin": "*",
+                        "SourceSystem": "WebAdmin"
                     }
                 })
 

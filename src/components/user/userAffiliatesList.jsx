@@ -86,9 +86,9 @@ const columns = [
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
-                    <Menu.Item key="2" onClick={() => this_Obj.showDeleteConfirm(e.affiliateId)}>
+                    {/* <Menu.Item key="2" onClick={() => this_Obj.showDeleteConfirm(e.affiliateId)}>
                         <span>Delete</span>
-                    </Menu.Item>
+                    </Menu.Item> */}
                 </SubMenu>
             </Menu> : null
         )

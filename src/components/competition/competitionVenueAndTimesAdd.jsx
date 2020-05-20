@@ -308,6 +308,40 @@ class CompetitionVenueAndTimesAdd extends Component {
         return hours;
     }
 
+    getDisabledMinutes = (selectedHour, startTime) => {
+        console.log("&&&&&&&&&&&" + startTime);
+        console.log("selectedHour::" + startTime.split(":")[0]);
+        console.log("Current Minute::" + startTime.split(":")[1]);
+        console.log("*****selectedHour:::" + selectedHour);
+        let hour = Number(startTime.split(":")[0]);
+        let min = Number(startTime.split(":")[1]);
+        var minutes= [];
+        if (selectedHour === hour){
+            for(var i =0; i <= min; i++){
+                minutes.push(i);
+            }
+        }
+        if (selectedHour < hour){
+            for(var i =0; i <= 60; i++){
+                minutes.push(i);
+            }
+        }
+        return minutes;
+    
+    }
+
+    validateTime = (rule, value, callback, startTime, endTime, type) => {
+        console.log( "StartTime"+ startTime + "EndTime::" + endTime + "Type::" + type );
+        if(type == "end"){
+            if(startTime > endTime){
+                callback('End time should be greater than start time');
+                return;
+            }
+            
+        }
+        callback();
+    }
+
     onChangeGameTimePicker = (time, value, index, key1, key2) => {
         if (time != null)
             this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, key1, key2)
@@ -509,6 +543,12 @@ class CompetitionVenueAndTimesAdd extends Component {
                 </div>
                 <div className="col-sm">
                     <InputWithHead heading={AppConstants.startTime} />
+                    {/* <Form.Item >
+                            {getFieldDecorator(`gstartTime${index}`, {
+                               validateTrigger: "onChange",
+                                rules: [{ required: true, message: ValidationConstants.courtField[6] },
+                                {validator: (rule, value, callback) => this.validateTime(rule, value, callback, item.startTime, item.endTime, 'start')}],
+                            })( */}
                     <TimePicker
                         key={"startTime"}
                         className="comp-venue-time-timepicker"
@@ -519,12 +559,21 @@ class CompetitionVenueAndTimesAdd extends Component {
                         minuteStep={15}
                         use12Hours={false}
                     />
+                    {/* )}
+                    </Form.Item> */}
                 </div>
                 <div className="col-sm">
                     <InputWithHead heading={AppConstants.endTime} />
+                    {/* <Form.Item >
+                            {getFieldDecorator(`gendTime${index}`, {
+                               validateTrigger: "onChange",
+                                rules: [{ required: true, message: ValidationConstants.courtField[6] },
+                                {validator: (rule, value, callback) => this.validateTime(rule, value, callback, item.startTime, item.endTime, 'end')}],
+                            })( */}
                     <TimePicker
                         key={"endTime"}
                         disabledHours={() => this.getDisabledHours(item.startTime)}
+                        disabledMinutes={(e) => this.getDisabledMinutes(e, item.startTime)}
                         className="comp-venue-time-timepicker"
                         style={{ width: "100%" }}
                         onChange={(time) => this.onChangeGameTimePicker(time, time.format("HH:mm"), index, 'endTime', "gameTimeslot")}
@@ -533,6 +582,8 @@ class CompetitionVenueAndTimesAdd extends Component {
                         minuteStep={15}
                         use12Hours={false}
                     />
+                    {/* )}
+                    </Form.Item> */}
                 </div>
                 <div className="col-sm-2 delete-image-view pb-4" onClick={() => this.props.removeObjectAction(index, item, 'gameTimeslot')}>
                     <span className="user-remove-btn">
@@ -560,7 +611,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                     })}
                 </div>
                 <span style={{ cursor: 'pointer' }} onClick={() => this.props.updateVenuAndTimeDataAction(null, "addGameAndCourt", 'gameDays')} className="input-heading-add-another">
-                    + {AppConstants.addAnotherDay}
+                    + {AppConstants.addDay}
                 </span>
             </div>
         );
@@ -583,32 +634,48 @@ class CompetitionVenueAndTimesAdd extends Component {
                         ))
                         }
                     </Select>
-
                 </div>
                 <div className="col-sm">
                     <InputWithHead required={"pt-1"} heading={AppConstants.startTime} />
-                    <TimePicker
-                        className="comp-venue-time-timepicker"
-                        style={{ width: "100%" }}
-                        onChange={(time) => time !== null && this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, 'startTime', "addTimeSlotField", tableIndex)}
-                        value={moment(item.startTime, "HH:mm")}
-                        format={"HH:mm "}
-                        minuteStep={15}
-                        use12Hours={false}
-                    />
+                        {/* <Form.Item >
+                            {getFieldDecorator(`startTime${index}${tableIndex}`, {
+                               validateTrigger: "onChange",
+                                rules: [{ required: true, message: ValidationConstants.courtField[6] },
+                                {validator: (rule, value, callback) => this.validateTime(rule, value, callback, item.startTime, item.endTime, 'start')}],
+                            })( */}
+                        <TimePicker
+                            className="comp-venue-time-timepicker"
+                            style={{ width: "100%" }}
+                            onChange={(time) => time !== null && this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, 'startTime', "addTimeSlotField", tableIndex)}
+                            value={moment(item.startTime, "HH:mm")}
+                            format={"HH:mm "}
+                            minuteStep={15}
+                            use12Hours={false}
+                        />
+                        {/* )}
+                        </Form.Item> */}
                 </div>
                 <div className="col-sm">
                     <InputWithHead required={"pt-1"} heading={AppConstants.endTime} />
+                    {/* <Form.Item >
+                        {getFieldDecorator(`endTime${index}${tableIndex}`, {
+                           validateTrigger: "onChange",
+                            rules: [{ required: true, message: ValidationConstants.courtField[7] },
+                            {validator: (rule, value, callback) => this.validateTime(rule, value, callback, item.startTime, item.endTime, 'end')}],
+                        })( */}
                     <TimePicker
                         className="comp-venue-time-timepicker"
                         style={{ width: "100%" }}
                         disabledHours={() => this.getDisabledHours(item.startTime)}
+                        disabledMinutes={(e) => this.getDisabledMinutes(e, item.startTime)}
                         onChange={(time) => time !== null && this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, 'endTime', "addTimeSlotField", tableIndex)}
                         value={moment(item.endTime, "HH:mm")}
                         format={"HH:mm "}
                         minuteStep={15}
                         use12Hours={false}
                     />
+                    {/* )}
+                    </Form.Item> */}
                 </div>
                 <div className="col-sm-2 delete-image-view pb-4" onClick={() => this.props.updateVenuAndTimeDataAction(null, index, 'removeButton', 'add_TimeSlot', tableIndex)}>
                     <span className="user-remove-btn">
@@ -687,6 +754,7 @@ class CompetitionVenueAndTimesAdd extends Component {
 
     onAddVenue = (e) => {
         e.preventDefault();
+        let hasError = false;
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 const { venuData } = this.props.venueTimeState
@@ -694,16 +762,43 @@ class CompetitionVenueAndTimesAdd extends Component {
                     duration: 3.5,
                     maxCount: 1,
                 });
-                // if (venuData.venueCourts.length == 0) {
-                //     message.error(ValidationConstants.emptyAddCourtValidation);
-                // }
-                // else
+                if (venuData.venueCourts.length == 0) {
+                    message.error(ValidationConstants.emptyAddCourtValidation);
+                }
                 if (venuData.gameDays.length == 0) {
                     message.error(ValidationConstants.emptyGameDaysValidation);
                 }
                 else {
-                    this.props.addVenueAction(venuData)
-                    this.setState({ saveContraintLoad: true });
+                    venuData.venueCourts.map((item, index) => {
+                        (item.availabilities || []).map((avItem, avIndex) => {
+                            if(avItem.startTime > avItem.endTime){
+                                hasError = true;
+                            }
+                        })
+                    });
+
+                    if(hasError)
+                    {
+                        message.error(ValidationConstants.venueCourtEndTimeValidation);
+                        return;
+                    }
+
+                    venuData.gameDays.map((item, index) => {
+                        if(item.startTime > item.endTime){
+                            hasError = true;
+                           // break;
+                        }
+                    });
+
+                    if(hasError)
+                    {
+                        message.error(ValidationConstants.gameDayEndTimeValidation);
+                        return;
+                    }
+                    if(!hasError){
+                        this.props.addVenueAction(venuData)
+                        this.setState({ saveContraintLoad: true });
+                    }
                 }
             }
         })

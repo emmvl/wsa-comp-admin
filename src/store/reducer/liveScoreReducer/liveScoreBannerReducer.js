@@ -71,9 +71,9 @@ function LiveScoreBannerState(state = initialState, action) {
 
             state[action.key] = action.data
             if (action.key == 'isEditBanner') {
-                state.showOnHome = action.data.showOnHome
-                state.showOnDraws = action.data.showOnDraws
-                state.showOnLadder = action.data.showOnLadder
+                state.showOnHome = action.data.showOnHome == 1 ? true : false
+                state.showOnDraws = action.data.showOnDraws == 1 ? true : false
+                state.showOnLadder = action.data.showOnLadder == 1 ? true : false
                 state.bannerLink = action.data.bannerLink
 
             } else if (action.key == 'isAddBanner') {

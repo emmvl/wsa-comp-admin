@@ -49,24 +49,16 @@ class RegistrationInvoice extends Component {
             value: "playingMember",
             competition: "all",
         }
-        this.chartRef = React.createRef();
-        this.chartRef2 = React.createRef();
-        this.chartRefCompititions = React.createRef();
-        this.chartRefGender = React.createRef();
+
     }
 
 
-    onChange = e => {
-        console.log('radio checked', e.target.value);
-        this.setState({
-            value: e.target.value,
-        });
-    };
+
 
     componentDidMount() {
         // let competitionId = localStorage.getItem("competitionId")
         // let organisationId = localStorage.getItem('organisationId')
-        this.props.getInvoice('44d558da-7cbc-4afc-9fae-f0bb01fc5a8e', "b6eb9c7b-6c74-4657-bc6d-e2222b23c965", "397")
+        this.props.getInvoice("397")
     }
 
 
@@ -251,7 +243,7 @@ class RegistrationInvoice extends Component {
                                                 if (Number(mproductItem.mCasualFee + mproductItem.mSeasonalFee) !== 0) {
                                                     return (
                                                         <InputWithHead
-                                                            heading={mproductItem.mTypeName}
+                                                            heading={membershipItem.membershipOrgName + "-" + membershipItem.membershipProductName}
                                                         />
                                                     )
                                                 }
@@ -300,13 +292,14 @@ class RegistrationInvoice extends Component {
                                                 }
                                             })}
                                         </div>
-                                        < Divider className="mt-0 mb-0" />
+
                                     </div>
                                 )
                             })
                             }
 
                             <div className="row" >
+                                < Divider className="mt-0 mb-0" />
                                 <div className="invoice-col-View pr-0 pl-0" >
                                     {competitionDetails && competitionDetails.compOrgName &&
                                         <InputWithHead
@@ -412,10 +405,10 @@ class RegistrationInvoice extends Component {
                                         heading={"Total"}
                                     />
                                 </div>
-                                <div className="invoice-total-Amount pr-0">
+                                <div className="invoice-total-Amount">
                                     <InputWithHead
                                         required="invoice"
-                                        heading={"AUD" + " " + "150"}
+                                        heading={"$" + "150"}
                                     />
                                 </div>
                                 {data.length - 1 !== participantIndex &&
@@ -444,7 +437,7 @@ class RegistrationInvoice extends Component {
             for (let a in data) {
                 let membership = data[a].membership
                 let competitionFees = data[a].competitionOrganiser.fees
-                let affilateFees = data[a].affiliate.fees
+                let affilateFees = data[a].affiliate && data[a].affiliate.fees
                 for (let i in membership) {
                     let fees = membership[i].membershipProductTypes
                     for (let j in fees) {
@@ -503,7 +496,7 @@ class RegistrationInvoice extends Component {
                             placeholder="Text Area"
                         />
                     </div>
-                    <div className="col-sm"
+                    <div className="col-sm pl-0 pr-0"
                     >
 
                         <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end" }}>

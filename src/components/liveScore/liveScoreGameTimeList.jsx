@@ -185,17 +185,17 @@ class LiveScoreGameTimeList extends Component {
         this.state = {
             selectStatus: "Select Status",
             filter: "Period",
-            competitionId: null
+            competitionId: null,
+            searchText: ''
         };
         this_obj = this
     }
 
     componentDidMount() {
-        // let competitionId = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ competitionId: id })
         if (id !== null) {
-            this.handleGameTimeTableList(1, id, this.state.filter)
+            this.props.gameTimeStatisticsListAction(id, this.state.filter, 0, this.state.searchText)
         } else {
             history.push("/")
         }
@@ -204,7 +204,7 @@ class LiveScoreGameTimeList extends Component {
     handleGameTimeTableList(page, competitionId, aggergate) {
         let offset = page ? 10 * (page - 1) : 0
 
-        this.props.gameTimeStatisticsListAction(competitionId, aggergate, offset)
+        this.props.gameTimeStatisticsListAction(competitionId, aggergate, offset, this.state.searchText)
 
     }
 
@@ -213,7 +213,7 @@ class LiveScoreGameTimeList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         let offset = 1 ? 10 * (1 - 1) : 0
         this.setState({ filter: data.filter })
-        this.props.gameTimeStatisticsListAction(id, data.filter, offset)
+        this.props.gameTimeStatisticsListAction(id, data.filter, offset, this.state.searchText)
     }
 
     onExport() {
@@ -221,6 +221,35 @@ class LiveScoreGameTimeList extends Component {
         this.props.exportFilesAction(url)
     }
 
+
+      // on change search text
+      onChangeSearchText = (e) => {
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        this.setState({ searchText: e.target.value })
+        if (e.target.value == null || e.target.value == "") {
+            this.props.gameTimeStatisticsListAction(id, this.state.filter, 0,  e.target.value)
+        }
+    }
+
+    // search key 
+    onKeyEnterSearchText = (e) => {
+        var code = e.keyCode || e.which;
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        // this.setState({ searchText: e.target.value })
+        if (code === 13) { //13 is the enter keycode
+            this.props.gameTimeStatisticsListAction(id, this.state.filter, 0, this.state.searchText)
+        }
+    }
+
+    // on click of search icon
+    onClickSearchIcon = () => {
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        if (this.state.searchText == null || this.state.searchText == "") {
+        }
+        else {
+            this.props.gameTimeStatisticsListAction(id, this.state.filter, 0, this.state.searchText)
+        }
+    }
 
     ///////view for breadcrumb
     headerView = () => {
@@ -287,11 +316,11 @@ class LiveScoreGameTimeList extends Component {
                 <div className="col-sm pt-3 ml-3 " style={{ display: "flex", justifyContent: 'flex-end', }} >
                     <div className="comp-product-search-inp-width" >
                         <Input className="product-reg-search-input"
-                            // onChange={(e) => this.onChangeSearchText(e)}
+                            onChange={(e) => this.onChangeSearchText(e)}
                             placeholder="Search..."
-                            // onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                            onKeyPress={(e) => this.onKeyEnterSearchText(e)}
                             prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                            // onClick={() => this.onClickSearchIcon()}
+                            onClick={() => this.onClickSearchIcon()}
                             />}
                             allowClear
                         />

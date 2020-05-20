@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Breadcrumb, Modal } from 'antd';
+import { Layout, Button, Table, Breadcrumb, Modal, message, Menu } from 'antd';
 import './liveScore.css';
 import { NavLink } from "react-router-dom";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -13,8 +13,11 @@ import moment from "moment";
 import Loader from '../../customComponents/loader'
 import { isArrayNotEmpty } from '../../util/helpers'
 import history from "../../util/history";
+import ValidationConstants from "../../themes/validationConstant";
+
 const { Content } = Layout;
 const { confirm } = Modal;
+const { SubMenu } = Menu;
 
 ////columns data
 var _this;
@@ -38,12 +41,15 @@ const columns = [
         sorter: (a, b) => a.name.length - b.name.length,
         render: (name, record) => {
             return (
-                <NavLink to={{
-                    pathname: '/liveScorePlayerView',
-                    state: { tableRecord: record }
-                }}>
-                    <span style={{ color: '#ff8237' }}>{(record.firstName && record.lastName) && record.firstName + ' ' + record.lastName}</span>
-                </NavLink>)
+                // <NavLink to={{
+                //     pathname: '/liveScorePlayerView',
+                //     state: { tableRecord: record }
+                // }}>
+                <span style={{ color: '#ff8237', cursor: "pointer" }}
+                    onClick={() => _this.checkUserId(record)}
+                >{(record.firstName && record.lastName) && record.firstName + ' ' + record.lastName}</span>
+                // </NavLink>)
+            )
         }
     },
     {
@@ -60,6 +66,28 @@ const columns = [
         sorter: (a, b) => a.number.length - b.number.length,
         render: (dob, record) => <span>{record.phoneNumber ? record.phoneNumber : ''}</span>
     },
+    {
+        title: "Action",
+        render: (data, record) => <Menu
+            className="action-triple-dot-submenu"
+            theme="light"
+            mode="horizontal"
+            style={{ lineHeight: '25px' }}
+        >
+            <Menu.SubMenu
+                key="sub1"
+                title={
+                    <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
+                }
+            >
+                <Menu.Item key={'1'}>
+                    <NavLink to={{ pathname: "/liveScoreAddPlayer", state: { isEdit: true, playerData: record } }} >
+                        <span>Edit</span>
+                    </NavLink>
+                </Menu.Item>
+            </Menu.SubMenu>
+        </Menu>
+    }
 ];
 
 
@@ -76,6 +104,15 @@ class LiveScoreTeamView extends Component {
         _this = this
     }
 
+    checkUserId(record) {
+        if (record.userId == null) {
+            message.config({ duration: 1.5, maxCount: 1 })
+            message.warn(ValidationConstants.playerMessage)
+        }
+        else {
+            history.push("/userPersonal", { userId: record.userId, screenKey: "livescore", screen: "/liveScorePlayerList" })
+        }
+    }
     componentDidMount() {
         const { teamId } = this.props.location.state
 

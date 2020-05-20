@@ -15,6 +15,7 @@ import history from "./util/history";
 import Login from "./components/login";
 import { Skeleton } from "antd";
 import PrivateRoute from "./util/protectedRoute";
+import ForgotPassword from "./components/forgotPassword"
 
 function App() {
   const lazyLoad = Component => {
@@ -45,6 +46,7 @@ function App() {
             }
           />
           <Route path="/login" component={lazyLoad(Login)} />
+          <Route path="/forgotPassword" component={lazyLoad(ForgotPassword)} />
           <PrivateRoute path="/" component={lazyLoad(Routes)} />
         </Switch>
       </Router>

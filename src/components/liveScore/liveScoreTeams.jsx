@@ -11,6 +11,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import history from "../../util/history";
+import { exportFilesAction } from "../../store/actions/appAction"
+
 import { isArrayNotEmpty } from "../../util/helpers";
 const { Content } = Layout;
 
@@ -167,6 +169,13 @@ class LiveScoreTeam extends Component {
             this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, this.state.searchText)
         }
     }
+
+    // on Export
+    onExport = () => {
+        let url = AppConstants.matchExport + this.state.competitionId
+        this.props.exportFilesAction(url)
+    }
+
     ///////view for breadcrumb
     headerView = () => {
         return (
@@ -211,7 +220,7 @@ class LiveScoreTeam extends Component {
                                     }}
                                 >
 
-                                    <Button className="primary-add-comp-form" type="primary">
+                                    <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img
@@ -257,7 +266,6 @@ class LiveScoreTeam extends Component {
                     </div>
 
 
-
                 </div>
                 {/* search box */}
 
@@ -277,7 +285,6 @@ class LiveScoreTeam extends Component {
             </div>
         )
     }
-
 
     ////////tableView view for Team list
     tableView = () => {
@@ -327,7 +334,7 @@ class LiveScoreTeam extends Component {
 // export default LiveScoreTeam;
 
 function mapDispatchtoprops(dispatch) {
-    return bindActionCreators({ getTeamsWithPagging }, dispatch)
+    return bindActionCreators({ getTeamsWithPagging, exportFilesAction }, dispatch)
 }
 
 function mapStatetoProps(state) {

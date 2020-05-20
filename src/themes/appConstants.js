@@ -155,7 +155,7 @@ const AppConstants = {
   quickCompetition: "Quick Competition",
   quickCompetition3: "Competition Details (3/3)",
   quickCompetition2: "Teams & Players (2/3)",
-  quickCompetition1: "Fixtures (1/3)",
+  quickCompetition1: "Quick Competition (1/3)",
   proposedTeamGrading: "Proposed Team Grading",
   proposedTeamGradingToggle: "Proposed Team Grading Toggle",
   ladder: "Ladder",
@@ -718,7 +718,7 @@ const AppConstants = {
   addBanners: 'Add Banners',
   ////export URl
   // exportUrl: 'http://world-sport-action-socket.appspot.com/players/csv?competitionId=',
-  exportUrl: 'https://livescores-api-dev.worldsportaction.com/players/csv?competitionId=',
+  exportUrl: 'https://livescores-api-dev.worldsportaction.com/players/csv?',
 
   ////Registartion
   membershipTypeName: "Membership Type Name",
@@ -993,11 +993,34 @@ const AppConstants = {
   teamB: "Team B",
   lockedDraws: "Specific Match Preference",
   year2020: "2020",
-  backToLiveScore:"Back To Live Score",
+  addDay: "Add Day",
+  backToLiveScore: "Back To Live Score",
   venueConstraintModalMsg: "Do you want to remove fixture?",
   removeFixture: "Remove Fixture",
   addPreference: "Add Preference",
-  logo: "Logo"
+  forgotResetPassword: "Forgot/ Reset Password",
+  returnToLogin: "Return to login",
+  sendEmail: "Send Email",
+  forgotPassword: "Forgot Password",
+  logo: "Logo",
+  registrationFormQuestions: "Registration Form Questions",
+  noInformationProvided: "No information provided",
+
+  previous: "Previous",
+  totalPages: "Total pages",
+  currentPage: "Current page",
+  buzzer: "Buzzer",
+  turnOffBuzzer: "Turn off Buzzer",
+  turnOff_30Second: "Turn off 30 second warning",
+  payouts: "Payouts",
+
+  managerExport: `https://users-api-dev.worldsportaction.com/users/byRole/export?roleId=3&entityTypeId=1&entityId=`,
+  scorerExport: `https://livescores-api-dev.worldsportaction.com/roster/exportScorer?competitionId=`,
+  teamExport: `https://livescores-api-dev.worldsportaction.com/teams/export?competitionId=`,
+  playersToPay: "Players to Pay",
+  exportTeams: "Export Teams",
+  exportPlayers: "Export Players",
+  transactions: "Transactions",
 };
 
 export default AppConstants;

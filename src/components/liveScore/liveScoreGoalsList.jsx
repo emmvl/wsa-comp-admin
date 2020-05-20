@@ -184,7 +184,8 @@ class LiveScoreGoalList extends Component {
                     sorter: (a, b) => tableSort(a, b, "goal_percent"),
                 },
             ],
-            competitionId: null
+            competitionId: null,
+            searchText: "",
         }
     }
 
@@ -193,7 +194,7 @@ class LiveScoreGoalList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ competitionId: id })
         if (id !== null) {
-            this.props.liveScoreGoalListAction(1, "By Match")
+            this.props.liveScoreGoalListAction(id, this.state.filter, this.state.searchText)
         } else {
             history.push('/')
         }
@@ -203,6 +204,32 @@ class LiveScoreGoalList extends Component {
     onExport() {
         let url = AppConstants.goalExport + this.state.competitionId + `&aggregate=${this.state.filter}`
         this.props.exportFilesAction(url)
+    }
+    // on change search text
+    onChangeSearchText = (e) => {
+        this.setState({ searchText: e.target.value })
+        if (e.target.value == null || e.target.value == "") {
+            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, e.target.value)
+        }
+    }
+
+    // search key 
+    onKeyEnterSearchText = (e) => {
+        var code = e.keyCode || e.which;
+      
+        if (code === 13) { //13 is the enter keycode
+            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, e.target.value)
+        }
+    }
+
+    // on click of search icon
+    onClickSearchIcon = () => {
+       
+        if (this.state.searchText == null || this.state.searchText == "") {
+        }
+        else {
+            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, this.state.searchText)
+        }
     }
 
 
@@ -230,7 +257,7 @@ class LiveScoreGoalList extends Component {
                                     style={{ display: "flex", alignItems: "flex-start" }}
                                     onChange={(filter) => {
                                         this.setState({ filter })
-                                        this.props.liveScoreGoalListAction(1, filter)
+                                        this.props.liveScoreGoalListAction(this.state.competitionId, filter, this.state.searchText)
                                     }}
                                     value={this.state.filter} >
                                     <Option value={AppConstants.ByMatch}>{AppConstants.ByMatch}</Option>
@@ -272,11 +299,11 @@ class LiveScoreGoalList extends Component {
                 <div className="col-sm pt-3 ml-3 " style={{ display: "flex", justifyContent: 'flex-end', }} >
                     <div className="comp-product-search-inp-width" >
                         <Input className="product-reg-search-input"
-                            // onChange={(e) => this.onChangeSearchText(e)}
+                            onChange={(e) => this.onChangeSearchText(e)}
                             placeholder="Search..."
-                            // onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                            onKeyPress={(e) => this.onKeyEnterSearchText(e)}
                             prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                            // onClick={() => this.onClickSearchIcon()}
+                                onClick={() => this.onClickSearchIcon()}
                             />}
                             allowClear
                         />

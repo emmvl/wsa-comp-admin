@@ -18,27 +18,29 @@ const initialState = {
   divisionGradeNameList: [],
   publishStatus: 0,
   isTeamInDraw: null,
-  legandsArray: [],
+  legendsArray: [],
 
 };
 var gradeColorArray = [];
 const colorsArray = ColorsArray;
 const lightGray = '#999999';
-var legandsArray = [];
+var legendsArray = [];
 
-function createLagendsArray(drawsArray, currentLagends, dateArray) {
-  let newArray = currentLagends
-  console.log("drawsArray, currentLagends", drawsArray, currentLagends)
+function createLegendsArray(drawsArray, currentLegends, dateArray) {
+  let newArray = currentLegends
   for (let i in drawsArray) {
     for (let j in drawsArray[i].slotsArray) {
       let color = drawsArray[i].slotsArray[j].colorCode
-      let index = currentLagends.findIndex((x) => x.colorCode === color)
+      let index = currentLegends.findIndex((x) => x.colorCode === color)
       let object = {
         "colorCode": color,
-        "gradeName": color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName
+        "gradeName": color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
+        "divisionName": drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A"
       }
       if (index === -1) {
-        newArray.push(object)
+        if (color !== "#999999") {
+          newArray.push(object)
+        }
       }
     }
 
@@ -55,6 +57,7 @@ function createLagendsArray(drawsArray, currentLagends, dateArray) {
 }
 
 
+
 function structureDrawsData(data) {
   let mainCourtNumberArray = [];
   let dateArray = [];
@@ -66,9 +69,12 @@ function structureDrawsData(data) {
     if (isArrayNotEmpty(data.draws)) {
       data.draws.map((object) => {
         console.log("object", object)
-        if (checkDateNotInArray(dateArray, object.matchDate)) {
-          dateArray.push(object.matchDate);
-        }
+        dateArray = setupDateObjectArray(dateArray, object)
+        // if (checkDateNotInArray(dateArray, object.matchDate)) {
+        //   let dateObject = checkOutOfRound(object)
+        //   console.log("dateObject", dateObject)
+        //   dateArray.push(dateObject);
+        // }
         if (setupGradesArray(gradeArray, object.competitionDivisionGradeId)) {
           gradeArray.push(object.competitionDivisionGradeId);
         }
@@ -86,7 +92,9 @@ function structureDrawsData(data) {
           });
         }
       });
-      sortedDateArray = sortArrayByDate(dateArray);
+      sortedDateArray = sortDateArray(dateArray);
+      // sortedDateArray = sortArrayByDate(dateArray);
+      // sortedDateArray = dateArray;
       mainCourtNumberArray = mapSlotObjectsWithTimeSlots(
         data.draws,
         mainCourtNumberArray,
@@ -111,7 +119,7 @@ function mapSlotObjectsWithTimeSlots(
         getSlotFromDate(
           drawsArray,
           mainCourtNumberArray[i].venueCourtNumber,
-          sortedDateArray[j],
+          sortedDateArray[j].date,
           gradeArray
         )
       );
@@ -231,14 +239,52 @@ function checkSlots(slotsArray, slotObject) {
   return { status: false, index: -1 };
 }
 
-function checkDateNotInArray(dateArray, date) {
+// function checkDateNotInArray(dateArray, date) {
+//   for (let i in dateArray) {
+//     if (isDateSame(dateArray[i].date, date)) {
+//       return false;
+//     }
+//   }
+//   return true;
+// }
+
+
+function sortDateArray(dateArray) {
+  let inDrawsArray = []
+  let outDrawsArray = []
   for (let i in dateArray) {
-    if (isDateSame(dateArray[i], date)) {
-      return false;
+    if (dateArray[i].notInDraw == false) {
+      inDrawsArray.push(dateArray[i])
+    }
+    else {
+      outDrawsArray.push(dateArray[i])
     }
   }
-  return true;
+  inDrawsArray = sortArrayByDate(inDrawsArray)
+  outDrawsArray = sortArrayByDate(outDrawsArray)
+  return inDrawsArray.concat(outDrawsArray);
 }
+
+function setupDateObjectArray(dateArray, drawObject) {
+  var tempDateArray = JSON.parse(JSON.stringify(dateArray))
+  let defaultDateObject = {
+    date: drawObject.matchDate,
+    notInDraw: drawObject.outOfCompetitionDate == 1 || drawObject.outOfRoundDate == 1 ? true : false
+  }
+  for (let i in dateArray) {
+    if (isDateSame(dateArray[i].date, drawObject.matchDate)) {
+      if (tempDateArray[i].notInDraw == false) {
+        tempDateArray[i] = defaultDateObject
+      }
+      return tempDateArray;
+    }
+
+  }
+  tempDateArray.push(defaultDateObject)
+  return tempDateArray;
+}
+
+
 
 function setupGradesArray(gradesArray, gradeId) {
   for (let i in gradesArray) {
@@ -687,9 +733,9 @@ function CompetitionDraws(state = initialState, action) {
       state.publishStatus = action.result[0].drawsPublish
       state.isTeamInDraw = action.result[0].isTeamNotInDraws
       let drawsSorted = resultData.mainCourtNumberArray
-      legandsArray = []
-      legandsArray = createLagendsArray(drawsSorted, legandsArray, resultData.sortedDateArray)
-      state.legandsArray = legandsArray
+      legendsArray = []
+      legendsArray = createLegendsArray(drawsSorted, legendsArray, resultData.sortedDateArray)
+      state.legendsArray = legendsArray
       return {
         ...state,
         getDrawsData: resultData.mainCourtNumberArray,
@@ -838,14 +884,14 @@ function CompetitionDraws(state = initialState, action) {
       state.publishStatus = 0
       state.getStaticDrawsData = [];
       state.dateArray = [];
-      state.legandsArray = [];
-      legandsArray = []
+      state.legendsArray = [];
+      legendsArray = []
       if (action.key == 'round') {
         state.competitionVenues = [];
         state.getDrawsRoundsData = [];
         state.divisionGradeNameList = [];
-        state.legandsArray = [];
-        legandsArray = []
+        state.legendsArray = [];
+        legendsArray = []
       }
       return { ...state };
 

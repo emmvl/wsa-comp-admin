@@ -1072,9 +1072,11 @@ class RegistrationCompetitionFee extends Component {
         discountData.map((item, index) => {
             let competitionMembershipProductTypeId = `competitionMembershipProductTypeId${index}`
             let membershipProductUniqueKey = `membershipProductUniqueKey${index}`
+            let competitionTypeDiscountTypeRefId = `competitionTypeDiscountTypeRefId${index}`
             this.props.form.setFieldsValue({
                 [competitionMembershipProductTypeId]: item.competitionMembershipProductTypeId,
                 [membershipProductUniqueKey]: item.membershipProductUniqueKey,
+                [competitionTypeDiscountTypeRefId]: item.competitionTypeDiscountTypeRefId,
             })
         })
         let divisionData = this.props.competitionFeesState.competitionDivisionsData
@@ -3051,21 +3053,26 @@ class RegistrationCompetitionFee extends Component {
                         <div className="row">
                             <div className="col-sm">
                                 <InputWithHead required="pt-0" heading={"Discount Type"} />
-                                <Select
-                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                    onChange={discountTypeItem => this.onChangeMembershipProductDisType(discountTypeItem, index)}
-                                    placeholder="Select"
-                                    value={item.competitionTypeDiscountTypeRefId !== 0 && item.competitionTypeDiscountTypeRefId}
-                                    disabled={discountsDisable}
-                                >
-                                    {this.props.competitionFeesState.defaultDiscountType.map((discountTypeItem, discountTypeIndex) => {
-                                        return (
-                                            <Option key={"disType" + discountTypeItem.id} value={discountTypeItem.id}>
-                                                {discountTypeItem.description}
-                                            </Option>
-                                        );
-                                    })}
-                                </Select>
+                                <Form.Item  >
+                                    {getFieldDecorator(`competitionTypeDiscountTypeRefId${index}`,
+                                        { rules: [{ required: true, message: ValidationConstants.pleaseSelectDiscountType }] })(
+                                            <Select
+                                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                                onChange={discountTypeItem => this.onChangeMembershipProductDisType(discountTypeItem, index)}
+                                                placeholder="Select"
+                                                // value={item.competitionTypeDiscountTypeRefId !== 0 && item.competitionTypeDiscountTypeRefId}
+                                                disabled={discountsDisable}
+                                            >
+                                                {this.props.competitionFeesState.defaultDiscountType.map((discountTypeItem, discountTypeIndex) => {
+                                                    return (
+                                                        <Option key={"disType" + discountTypeItem.id} value={discountTypeItem.id}>
+                                                            {discountTypeItem.description}
+                                                        </Option>
+                                                    );
+                                                })}
+                                            </Select>
+                                        )}
+                                </Form.Item>
                             </div>
 
                             <div className="col-sm">

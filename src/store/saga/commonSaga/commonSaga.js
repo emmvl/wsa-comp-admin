@@ -374,7 +374,7 @@ export function* getGenderSaga(action) {
 //get invoice saga
 export function* getInvoiceSaga(action) {
     try {
-        const result = yield call(AxiosApi.getInvoice, action.competitionId, action.orgnaistationID, action.registrationid);
+        const result = yield call(AxiosApi.getInvoice,  action.registrationid);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_GET_INVOICE_SUCCESS,

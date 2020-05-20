@@ -50,7 +50,7 @@ const initialState = {
   membershipDiscountObject: {
     "membershipProductTypeMappingId": "Select",
     "membershipProductTypeDiscountId": 0,
-    "membershipPrdTypeDiscountTypeRefId": 1,
+    "membershipPrdTypeDiscountTypeRefId": 0,
     "amount": "",
     "description": "",
     "availableFrom": null,
@@ -980,7 +980,7 @@ function registration(state = initialState, action) {
         const newObj = {
           "membershipProductTypeMappingId": "Select",
           "membershipProductTypeDiscountId": 0,
-          "membershipPrdTypeDiscountTypeRefId": 1,
+          "membershipPrdTypeDiscountTypeRefId": 0,
           "amount": "",
           "description": "",
           "availableFrom": null,

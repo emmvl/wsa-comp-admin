@@ -14,7 +14,9 @@ import {
     clearTeamGradingReducerDataAction,
     onchangeCompPartProposedTeamGradingData,
     partProposedSummaryComment,
-    changeProposedHistoryHover
+    changeProposedHistoryHover,
+    exportProposedTeamsAction,
+    exportProposedPlayersAction
 } from "../../store/actions/competitionModuleAction/competitionTeamGradingAction";
 import { NavLink } from 'react-router-dom';
 import { gradesReferenceListAction } from "../../store/actions/commonAction/commonAction";
@@ -286,6 +288,23 @@ class CompetitionPartProposedTeamGrading extends Component {
        
     }
 
+    exportTeams = () =>{
+        let payload = {
+            competitionId: this.state.firstTimeCompId,
+            yearRefId: this.state.yearRefId
+        }
+        this.props.exportProposedTeamsAction(payload);
+    }
+
+    exportPlayers = () =>{
+        let payload = {
+            competitionId: this.state.firstTimeCompId,
+            yearRefId: this.state.yearRefId
+        }
+        this.props.exportProposedPlayersAction(payload);
+    }
+
+
 
     ///////view for breadcrumb
     headerView = () => {
@@ -296,6 +315,45 @@ class CompetitionPartProposedTeamGrading extends Component {
                         <Breadcrumb separator=" > ">
                             < Breadcrumb.Item className="breadcrumb-add"> {AppConstants.proposedTeamGrading}</Breadcrumb.Item>
                         </Breadcrumb>
+                    </div>
+                    <div className="col-sm" style={{
+                        display: "flex", flexDirection: 'row', alignItems: "center",
+                        justifyContent: "flex-end", width: "100%", marginRight: '2.8%'
+                    }}>
+                        <div className="row">
+                            <div className="col-sm">
+                                <div className="comp-dashboard-botton-view-mobile">
+                                    <Button className="primary-add-comp-form" type="primary" onClick={() => this.exportTeams()}>
+                                        <div className="row">
+                                            <div className="col-sm">
+                                                <img
+                                                    src={AppImages.export}
+                                                    alt=""
+                                                    className="export-image"
+                                                />
+                                                {AppConstants.exportTeams}
+                                            </div>
+                                        </div>
+                                    </Button>
+                                </div>
+                            </div>
+                            <div  className="col-sm">
+                                <div className="comp-dashboard-botton-view-mobile">
+                                    <Button className="primary-add-comp-form" type="primary"  onClick={() => this.exportPlayers()}>
+                                        <div className="row">
+                                            <div className="col-sm">
+                                                <img
+                                                    src={AppImages.export}
+                                                    alt=""
+                                                    className="export-image"
+                                                />
+                                                {AppConstants.exportPlayers}
+                                            </div>
+                                        </div>
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div >
@@ -511,7 +569,9 @@ function mapDispatchToProps(dispatch) {
         clearReducerDataAction,
         onchangeCompPartProposedTeamGradingData,
         partProposedSummaryComment,
-        changeProposedHistoryHover
+        changeProposedHistoryHover,
+        exportProposedTeamsAction,
+        exportProposedPlayersAction
     }, dispatch)
 }
 

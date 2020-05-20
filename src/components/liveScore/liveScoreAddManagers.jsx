@@ -85,14 +85,8 @@ class LiveScoreAddManager extends Component {
     setInitalFiledValue() {
         const { managerData, teamId } = this.props.liveScoreMangerState
         let data = this.state.tableRecord
-        console.log(managerData, 'tableRecord&**', teamId)
+       
         this.props.form.setFieldsValue({
-            // 'First Name': managerData.firstName,
-            // 'Last Name': managerData.lastName,
-            // 'Email Address': managerData.email,
-            // 'Contact no': managerData.mobileNumber,
-            // 'Select Team': teamId
-
             'First Name': managerData.firstName,
             'Last Name': managerData.lastName,
             'Email Address': managerData.email,

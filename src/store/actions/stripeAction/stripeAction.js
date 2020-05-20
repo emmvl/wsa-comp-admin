@@ -36,17 +36,47 @@ function getStripeLoginLinkAction() {
 }
 
 ////stripe payments transfer list
-function getStripeTransferListAction() {
+function getStripeTransferListAction(page, starting_after, ending_before) {
     const action = {
         type: ApiConstants.API_GET_STRIPE_PAYMENTS_TRANSFER_LIST_API_LOAD,
+        page,
+        starting_after,
+        ending_before
+
     };
     return action;
 }
 
+////stripe payout list
+function getStripePayoutListAction(page, starting_after, ending_before) {
+    const action = {
+        type: ApiConstants.API_GET_STRIPE_PAYOUT_LIST_API_LOAD,
+        page,
+        starting_after,
+        ending_before
+
+    };
+    return action;
+}
+
+////stripe single payout transaction list
+function getTransactionPayoutListAction(page, starting_after, ending_before, payoutId) {
+    const action = {
+        type: ApiConstants.API_GET_STRIPE_TRANSACTION_PAYOUT_LIST_API_LOAD,
+        page,
+        starting_after,
+        ending_before,
+        payoutId
+
+    };
+    return action;
+}
 export {
     accountBalanceAction,
     chargingPaymentAction,
     saveStripeAccountAction,
     getStripeLoginLinkAction,
     getStripeTransferListAction,
+    getStripePayoutListAction,
+    getTransactionPayoutListAction,
 }

@@ -81,29 +81,53 @@ const columns = [
         title: 'Action',
         dataIndex: 'isUsed',
         key: 'isUsed',
-        render: (isUsed, record) =>
-            isUsed == false ? <Menu
-                className="action-triple-dot-submenu"
-                theme="light"
-                mode="horizontal"
-                style={{ lineHeight: '25px' }}
-            >
-                <SubMenu
-                    key="sub1"
-                    title={
-                        <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
-                    }
-                >
-                    <Menu.Item key="1">
-                        <NavLink to={{ pathname: `/registrationMembershipFee`, state: { id: record.membershipProductId } }} >
-                            <span >Edit</span>
-                        </NavLink>
-                    </Menu.Item>
-                    <Menu.Item key="2" onClick={() => this_Obj.showDeleteConfirm(record.membershipProductId)}>
-                        <span >Delete</span>
-                    </Menu.Item>
-                </SubMenu>
-            </Menu> : null
+        render: (isUsed, record) => {
+            return (
+                isUsed == false ?
+                    <Menu
+                        className="action-triple-dot-submenu"
+                        theme="light"
+                        mode="horizontal"
+                        style={{ lineHeight: '25px' }}
+                    >
+                        <SubMenu
+                            key="sub1"
+                            title={
+                                <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
+                            }
+                        >
+                            <Menu.Item key="1">
+                                <NavLink to={{ pathname: `/registrationMembershipFee`, state: { id: record.membershipProductId } }} >
+                                    <span >Edit</span>
+                                </NavLink>
+                            </Menu.Item>
+                            <Menu.Item key="2" onClick={() => this_Obj.showDeleteConfirm(record.membershipProductId)}>
+                                <span >Delete</span>
+                            </Menu.Item>
+                        </SubMenu>
+                    </Menu> :
+                    <Menu
+                        className="action-triple-dot-submenu"
+                        theme="light"
+                        mode="horizontal"
+                        style={{ lineHeight: '25px' }}
+                    >
+                        <SubMenu
+                            key="sub2"
+                            title={
+                                <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
+                            }
+                        >
+                            <Menu.Item key="1">
+                                <NavLink to={{ pathname: `/registrationMembershipFee`, state: { id: record.membershipProductId } }} >
+                                    <span >View</span>
+                                </NavLink>
+                            </Menu.Item>
+                        </SubMenu>
+                    </Menu>
+
+            )
+        }
     },
 
 ];

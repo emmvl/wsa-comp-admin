@@ -150,6 +150,12 @@ class LiveScoreSettingsView extends Component {
                     timerType,
                     venue
                 } = this.props.liveScoreSetting.form
+
+                const {
+                    buzzerEnabled,
+                    warningBuzzerEnabled
+                } = this.props.liveScoreSetting
+
                 const umpire = record1.includes("recordUmpire")
                 const umpirenum = umpire ? 1 : 0
                 const gameTimeTracking = record1.includes("gameTimeTracking")
@@ -182,6 +188,16 @@ class LiveScoreSettingsView extends Component {
                 formData.append('scoringType', scoring)
                 formData.append('timerType', timerType)
                 formData.append('organisationId', orgId ? orgId : this.props.liveScoreSetting.data.organisationId)
+                formData.append('buzzerEnabled', buzzerEnabled)
+                formData.append('warningBuzzerEnabled', warningBuzzerEnabled)
+
+                // if (buzzerEnabled) {
+                //     formData.append('buzzerEnabled', buzzerEnabled)
+                // }
+
+                // if (warningBuzzerEnabled) {
+                //     formData.append('warningBuzzerEnabled', warningBuzzerEnabled)
+                // }
 
                 this.props.settingDataPostInititae({ body: formData, venue: venue, settingView: this.props.location.state })
                 // this.props.clearLiveScoreSetting()
@@ -232,7 +248,7 @@ class LiveScoreSettingsView extends Component {
     ////////form content view
     contentView = (getFieldDecorator) => {
         const { competitionName, competitionLogo, scoring } = this.props.liveScoreSetting.form
-        const { loader } = this.props.liveScoreSetting
+        const { loader, buzzerEnabled, warningBuzzerEnabled } = this.props.liveScoreSetting
         let grade = this.state.venueData
         const applyTo1 = [{ label: 'Record Umpire', value: "recordUmpire" }, { label: ' Game Time Tracking', value: "gameTimeTracking" }, { label: 'Position Tracking', value: "positionTracking" }];
         const applyTo2 = [{ label: 'Record Goal Attempts', value: "recordGoalAttempts" }, { label: 'Centre Pass Enabled', value: "centrePassEnabled" }, { label: 'Incidents Enabled', value: "incidentsEnabled" }];
@@ -449,6 +465,8 @@ class LiveScoreSettingsView extends Component {
                     </Radio.Group>
                 </div>
 
+
+
                 {/* timer view */}
                 <InputWithHead required={"required-field"} heading={AppConstants.timer} />
                 <div>
@@ -473,6 +491,27 @@ class LiveScoreSettingsView extends Component {
                             </Select>
                         )}
                     </Form.Item>
+                </div>
+
+                {/* Buzzer button view */}
+                <span className="applicable-to-heading">{AppConstants.buzzer}</span>
+                <div className="row mt-4 ml-1" >
+
+                    <Checkbox
+                        className="single-checkbosx"
+                        onChange={(e) => this.props.onChangeSettingForm({ key: "buzzerEnabled", data: e.target.checked })}
+                        checked={buzzerEnabled}
+                    >
+                        {AppConstants.turnOffBuzzer}
+                    </Checkbox>
+
+                    <Checkbox
+                        className="single-checkbosx"
+                        onChange={(e) => this.props.onChangeSettingForm({ key: "warningBuzzerEnabled", data: e.target.checked })}
+                        checked={warningBuzzerEnabled}
+                    >
+                        {AppConstants.turnOff_30Second}
+                    </Checkbox>
                 </div>
 
                 {/* ladder setting view */}

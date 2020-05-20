@@ -44,7 +44,7 @@ import ValidationConstants from "../../themes/validationConstant"
 import moment from "moment";
 import LegendComponent from '../../customComponents/legendComponent';
 import { isArrayNotEmpty } from "../../util/helpers";
-import {generateDrawAction} from "../../store/actions/competitionModuleAction/competitionModuleAction";
+import { generateDrawAction } from "../../store/actions/competitionModuleAction/competitionModuleAction";
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { confirm } = Modal;
@@ -116,22 +116,20 @@ class CompetitionDraws extends Component {
       }
     }
 
-    if(nextProps.competitionModuleState != competitionModuleState)
-    {
-        if(competitionModuleState.drawGenerateLoad == false
-              && this.state.venueLoad === true){
-            this.setState({ venueLoad: false });
-
-            if(competitionModuleState.status == 5){
-              message.error(ValidationConstants.drawsMessage[0]);
-            }
-            else if(!competitionModuleState.error && competitionModuleState.status == 1){
-              this.props.clearDraws("rounds")
-              this.setState({ firstTimeCompId: this.state.firstTimeCompId, roundId: null, venueId: null, roundTime: null, venueLoad: true, competitionDivisionGradeId: null });
-              // this.props.getCompetitionVenue(competitionId);
-              this.props.getDrawsRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
-            }
+    if (nextProps.competitionModuleState != competitionModuleState) {
+      if (competitionModuleState.drawGenerateLoad == false
+        && this.state.venueLoad === true) {
+        this.setState({ venueLoad: false });
+        if (competitionModuleState.status == 5) {
+          message.error(ValidationConstants.drawsMessage[0]);
         }
+        else if (!competitionModuleState.error && competitionModuleState.status == 1) {
+          this.props.clearDraws("rounds")
+          this.setState({ firstTimeCompId: this.state.firstTimeCompId, roundId: null, venueId: null, roundTime: null, venueLoad: true, competitionDivisionGradeId: null });
+          // this.props.getCompetitionVenue(competitionId);
+          this.props.getDrawsRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
+        }
+      }
     }
   }
 
@@ -570,12 +568,12 @@ class CompetitionDraws extends Component {
     );
   };
 
-  reGenerateDraw = () =>{
+  reGenerateDraw = () => {
     let payload = {
-      yearRefId: this.state.yearRefId, 
+      yearRefId: this.state.yearRefId,
       competitionUniqueKey: this.state.firstTimeCompId,
       organisationId: getOrganisationData().organisationUniqueKey
-  }
+    }
     this.props.generateDrawAction(payload);
     this.setState({ venueLoad: true });
   }
@@ -687,7 +685,7 @@ class CompetitionDraws extends Component {
     var dayMargin = 25;
     let topMargin = 0;
     console.log(this.props.drawsState)
-    let legendsData = isArrayNotEmpty(this.props.drawsState.legandsArray) ? this.props.drawsState.legandsArray : []
+    let legendsData = isArrayNotEmpty(this.props.drawsState.legendsArray) ? this.props.drawsState.legendsArray : []
     return (
       <div className="draggable-wrap draw-data-table">
         <div className="scroll-bar pb-4">
@@ -695,7 +693,7 @@ class CompetitionDraws extends Component {
             {/* Day name list */}
             <div className="tablehead-row">
               <div className="sr-no empty-bx"></div>
-              {this.props.drawsState.dateArray.map((date, index) => {
+              {this.props.drawsState.dateArray.map((item, index) => {
                 if (index !== 0) {
                   dateMargin += 110;
                 }
@@ -704,7 +702,7 @@ class CompetitionDraws extends Component {
                 }
                 return (
                   <span style={{ left: dateMargin }} >
-                    {getDayName(date)}
+                    {item.notInDraw == false ? getDayName(item.date) : ""}
                   </span>
                 );
               })}
@@ -712,7 +710,7 @@ class CompetitionDraws extends Component {
             {/* Times list */}
             <div className="tablehead-row">
               <div className="sr-no empty-bx"></div>
-              {this.props.drawsState.dateArray.map((date, index) => {
+              {this.props.drawsState.dateArray.map((item, index) => {
                 if (index !== 0) {
                   dayMargin += 110;
                 }
@@ -720,7 +718,7 @@ class CompetitionDraws extends Component {
                   dayMargin = 50;
                 }
                 return (
-                  <span style={{ left: dayMargin }}>{getTime(date)}</span>
+                  <span style={{ left: dayMargin, fontSize: item.notInDraw !== false && 11 }}>{item.notInDraw == false ? getTime(item.date) : "Not in draw"}</span>
                 );
               })}
             </div>
@@ -735,7 +733,7 @@ class CompetitionDraws extends Component {
             }
             return (
               <div>
-                <div className="sr-no"> {courtData.venueShortName + "-" + courtData.venueCourtName}</div>
+                <div className="sr-no"> {courtData.venueShortName + "-" + courtData.venueCourtNumber}</div>
                 {courtData.slotsArray.map((slotObject, slotIndex) => {
                   if (slotIndex !== 0) {
                     leftMargin += 110;
@@ -776,7 +774,7 @@ class CompetitionDraws extends Component {
                               {slotObject.awayTeamName}
                             </span>
                           ) : (
-                              <span>N/A</span>
+                              <span>Free</span>
                             )}
                         </Swappable>
                       </div>
@@ -808,11 +806,11 @@ class CompetitionDraws extends Component {
           <div className="col-sm">
             <div className="comp-buttons-view">
               {/* <NavLink to="/competitionFormat"> */}
-                <Button className="open-reg-button" type="primary" onClick={() => this.reGenerateDraw()}>
-                  {AppConstants.regenerateDraw}
-                </Button>  
-                <div><Loader visible={this.props.competitionModuleState.drawGenerateLoad} />
-                </div>
+              <Button className="open-reg-button" type="primary" onClick={() => this.reGenerateDraw()}>
+                {AppConstants.regenerateDraw}
+              </Button>
+              <div><Loader visible={this.props.competitionModuleState.drawGenerateLoad} />
+              </div>
               {/* </NavLink> */}
             </div>
           </div>

@@ -55,14 +55,58 @@ let AxiosApi = {
     },
 
     /////////////stripe payments transfer list
-    async getStripeTransferList() {
+    async getStripeTransferList(page, startingAfter, endingBefore) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-        var url = `api/payments/list/transfer?organisationUniqueKey=${organisationUniqueKey}`;
-        return Method.dataGet(url, token);
+        let body = {
+            type: "transfer",
+            organisationUniqueKey: organisationUniqueKey,
+            paging: {
+                starting_after: startingAfter,
+                ending_before: endingBefore,
+                limit: 10
+            }
+        }
+        // var url = `api/payments/list/transfer?organisationUniqueKey=${organisationUniqueKey}`;
+        var url = `api/payments/list`;
+        return Method.dataPost(url, token, body);
+    },
+
+    //////////stripe payout list
+    async getStripePayoutList(page, startingAfter, endingBefore) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        let body = {
+            type: "payout",
+            organisationUniqueKey: organisationUniqueKey,
+            paging: {
+                starting_after: startingAfter,
+                ending_before: endingBefore,
+                limit: 10
+            }
+        }
+        var url = `api/payments/list`;
+        return Method.dataPost(url, token, body);
     },
 
 
+    //////////stripe single payout transaction list
+    async getTransactionPayoutList(page, startingAfter, endingBefore, payoutId) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        let body = {
+            type: "payoutTransfer",
+            organisationUniqueKey: organisationUniqueKey,
+            payoutId: payoutId,
+            paging: {
+                starting_after: startingAfter,
+                ending_before: endingBefore,
+                limit: 10
+            }
+        }
+        var url = `api/payments/payoutTransferList`;
+        return Method.dataPost(url, token, body);
+    },
 
 };
 
@@ -75,7 +119,8 @@ const Method = {
                     headers: {
                         "Content-Type": "application/json",
                         "Access-Control-Allow-Origin": "*",
-                        Authorization: "BWSA " + authorization
+                        Authorization: "BWSA " + authorization,
+                        "SourceSystem": "WebAdmin"
                     }
                 })
 
@@ -150,7 +195,8 @@ const Method = {
                         "Content-Type": "application/json",
                         Accept: "application/json",
                         Authorization: "BWSA " + authorization,
-                        "Access-Control-Allow-Origin": "*"
+                        "Access-Control-Allow-Origin": "*",
+                        "SourceSystem": "WebAdmin"
                     }
                 })
 
@@ -221,7 +267,8 @@ const Method = {
                         "Content-Type": "application/json",
                         Accept: "application/json",
                         Authorization: "BWSA " + authorization,
-                        "Access-Control-Allow-Origin": "*"
+                        "Access-Control-Allow-Origin": "*",
+                        "SourceSystem": "WebAdmin"
                     }
                 })
 

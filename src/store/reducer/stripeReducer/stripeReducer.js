@@ -10,6 +10,14 @@ const initialState = {
     accountBalance: null,
     stripeLoginLink: null,
     stripeTransferList: [],
+    stripeTransferListPage: 1,
+    stripeTransferListTotalCount: 1,
+    stripePayoutList: [],
+    stripePayoutListTotalCount: 1,
+    stripePayoutListPage: 1,
+    stripeTransactionPayoutList: [],
+    stripeTransactionPayoutListTotalCount: 1,
+    stripeTransactionPayoutListPage: 1,
 }
 
 
@@ -92,15 +100,51 @@ function stripe(state = initialState, action) {
             return { ...state, onLoad: true, error: null };
 
         case ApiConstants.API_GET_STRIPE_PAYMENTS_TRANSFER_LIST_API_SUCCESS:
-            console.log("action.result", action.result)
+            console.log("action.result", action)
+            let transferListData = action.result
             return {
                 ...state,
-                stripeTransferList: isArrayNotEmpty(action.result) ? action.result : [],
+                stripeTransferList: isArrayNotEmpty(transferListData.transfers) ? transferListData.transfers : [],
+                stripeTransferListTotalCount: transferListData.totalCount,
+                stripeTransferListPage: action.page,
                 onLoad: false,
                 status: action.status,
                 error: null
             };
 
+        /////stripe payout list
+        case ApiConstants.API_GET_STRIPE_PAYOUT_LIST_API_LOAD:
+            return { ...state, onLoad: true, error: null };
+
+        case ApiConstants.API_GET_STRIPE_PAYOUT_LIST_API_SUCCESS:
+            console.log("action.result", action)
+            let payoutListData = action.result
+            return {
+                ...state,
+                stripePayoutList: isArrayNotEmpty(payoutListData.payouts) ? payoutListData.payouts : [],
+                stripePayoutListTotalCount: payoutListData.totalCount,
+                stripePayoutListPage: action.page,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
+
+        /////stripe single payout transaction list
+        case ApiConstants.API_GET_STRIPE_TRANSACTION_PAYOUT_LIST_API_LOAD:
+            return { ...state, onLoad: true, error: null };
+
+        case ApiConstants.API_GET_STRIPE_TRANSACTION_PAYOUT_LIST_API_SUCCESS:
+            console.log("action.result", action)
+            let payoutTransactionListData = action.result
+            return {
+                ...state,
+                stripeTransactionPayoutList: isArrayNotEmpty(payoutTransactionListData.payoutTransfers) ? payoutTransactionListData.payoutTransfers : [],
+                stripeTransactionPayoutListTotalCount: payoutTransactionListData.totalCount,
+                stripeTransactionPayoutListPage: action.page,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
         default:
             return state;
     }

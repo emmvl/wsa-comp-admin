@@ -125,7 +125,7 @@ class CompetitionFinals extends Component {
             if(competitionFinalsState.onLoad == false && competitionModuleState.drawGenerateLoad == false 
                 && this.state.loading === true)
             {
-                if(!competitionModuleState.error){
+                if(!competitionModuleState.error  && competitionModuleState.status == 1){
                     history.push('/competitionDraws');
                 }
                 this.setState({ loading: false });
