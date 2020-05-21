@@ -223,7 +223,7 @@ class CompetitionDraws extends Component {
       console.log("Column Object Source", columnObject)
       postData = {
         "drawsId": targetObject.drawsId,
-        "venueCourtId": targetObject.venueCourtId,
+        "venueCourtId": sourceObejct.venueCourtId,
         "matchDate": moment(columnObject.matchDate).format("YYYY-MM-DD HH:mm"),
         "startTime": columnObject.startTime,
         "endTime": columnObject.endTime,
@@ -233,7 +233,7 @@ class CompetitionDraws extends Component {
       console.log("Column Object Target", columnObject)
       postData = {
         "drawsId": sourceObejct.drawsId,
-        "venueCourtId": sourceObejct.venueCourtId,
+        "venueCourtId": targetObject.venueCourtId,
         "matchDate": moment(columnObject.matchDate).format("YYYY-MM-DD HH:mm"),
         "startTime": columnObject.startTime,
         "endTime": columnObject.endTime,
@@ -435,7 +435,6 @@ class CompetitionDraws extends Component {
 
   ///dropdown view containing all the dropdown of header
   dropdownView = () => {
-    console.log("this.props.drawsState.divisionGradeNameList", this.props.drawsState.divisionGradeNameList)
     return (
       <div className="row">
         <div className="col-sm-3">
@@ -698,7 +697,7 @@ class CompetitionDraws extends Component {
                   dateMargin += 110;
                 }
                 if (index == 0) {
-                  dateMargin = 50
+                  dateMargin = 70
                 }
                 return (
                   <span style={{ left: dateMargin }} >
@@ -715,7 +714,7 @@ class CompetitionDraws extends Component {
                   dayMargin += 110;
                 }
                 if (index == 0) {
-                  dayMargin = 50;
+                  dayMargin = 70;
                 }
                 return (
                   <span style={{ left: dayMargin, fontSize: item.notInDraw !== false && 11 }}>{item.notInDraw == false ? getTime(item.date) : "Not in draw"}</span>
@@ -733,13 +732,17 @@ class CompetitionDraws extends Component {
             }
             return (
               <div>
-                <div className="sr-no"> {courtData.venueShortName + "-" + courtData.venueCourtNumber}</div>
+                <div className="sr-no ">
+                  <div className="venueCourt-tex-div">
+                    <span className="venueCourt-text">{courtData.venueShortName + "-" + courtData.venueCourtName}</span>
+                  </div>
+                </div>
                 {courtData.slotsArray.map((slotObject, slotIndex) => {
                   if (slotIndex !== 0) {
                     leftMargin += 110;
                   }
                   if (slotIndex == 0) {
-                    leftMargin = 50;
+                    leftMargin = 70;
                   }
                   console.log()
                   return (

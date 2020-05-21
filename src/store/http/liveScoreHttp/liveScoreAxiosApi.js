@@ -869,6 +869,8 @@ const Method = {
                                     logout()
                                     message.error(ValidationConstants.messageStatus401)
                                 }
+                            } else if (err.response.status == 500) {
+                                message.error(err.response.data.message)
                             }
                         }
                     }

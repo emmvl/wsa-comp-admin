@@ -14,7 +14,10 @@ import { liveScore_formateDateTime } from '../../themes/dateformate'
 import { NavLink } from 'react-router-dom';
 import AppImages from "../../themes/appImages";
 import moment from "moment";
+
+
 const { Content } = Layout;
+let this_obj = null;
 
 /////function to sort table column
 function tableSort(a, b, key) {
@@ -306,13 +309,17 @@ const columnsPlayersToPay = [
         title: 'First Name',
         dataIndex: 'firstName',
         key: 'firstName',
-        sorter: (a, b) => tableSort(a, b, "firstName")
+        sorter: (a, b) => tableSort(a, b, "firstName"),
+        // render: (firstName, record) =>
+        //     <span class="input-heading-add-another pt-0" onClick={() => this_obj.checkUserId(record)}>{firstName}</span>
     },
     {
         title: 'Last Name',
         dataIndex: 'lastName',
         key: 'lastName',
         sorter: (a, b) => checkSorting(a, b, "lastName"),
+        // render: (lastName, record) =>
+        //     <span class="input-heading-add-another pt-0" onClick={() => this_obj.checkUserId(record)}>{lastName}</span>
     },
     {
         title: "Linked",
@@ -346,15 +353,15 @@ const columnsPlayersToPay = [
     },
 ];
 
-const playerTopay=[
+const playerTopay = [
     {
-        "firstName":"Sam",
-        "lastName":"Ham",
-        "linked":"Cromer Netball Club",
-        "division":"11B",
-        "team":"WSA 1",
-        "grade":"A",
-        "payReq":"Voucher redemption"
+        "firstName": "Sam",
+        "lastName": "Ham",
+        "linked": "Cromer Netball Club",
+        "division": "11B",
+        "team": "WSA 1",
+        "grade": "A",
+        "payReq": "Voucher redemption"
     }
 ]
 
@@ -379,6 +386,17 @@ class LiveScoreDashboard extends Component {
         } else {
             history.push('/')
         }
+    }
+
+    checkUserId(record) {
+        console.log(record, 'checkUserId')
+        // if (record.userId == null) {
+        //     message.config({ duration: 1.5, maxCount: 1 })
+        //     message.warn(ValidationConstants.playerMessage)
+        // }
+        // else {
+        //     history.push("/userPersonal", { userId: record.userId, screenKey: "livescore", screen: "/liveScorePlayerList" })
+        // }
     }
 
 

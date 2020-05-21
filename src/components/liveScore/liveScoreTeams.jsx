@@ -123,7 +123,8 @@ class LiveScoreTeam extends Component {
         super(props);
         this.state = {
             conpetitionId: null,
-            searchText: ""
+            searchText: "",
+            offset: 0
         };
     }
 
@@ -141,6 +142,7 @@ class LiveScoreTeam extends Component {
     /// Handle Page change
     handlePageChnage(page) {
         let offset = page ? 10 * (page - 1) : 0;
+        this.setState({ offset: offset })
         this.props.getTeamsWithPagging(this.state.conpetitionId, offset, 10, this.state.searchText)
     }
 
@@ -172,7 +174,7 @@ class LiveScoreTeam extends Component {
 
     // on Export
     onExport = () => {
-        let url = AppConstants.matchExport + this.state.competitionId
+        let url = AppConstants.teamExport + this.state.conpetitionId + `&offset=${this.state.offset}&limit=${10}`
         this.props.exportFilesAction(url)
     }
 

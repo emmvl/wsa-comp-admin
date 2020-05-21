@@ -639,7 +639,7 @@ class CompetitionDrawEdit extends Component {
                                     dateMargin += 110;
                                 }
                                 if (index == 0) {
-                                    dateMargin = 50;
+                                    dateMargin = 70;
                                 }
                                 return (
                                     <span style={{ left: dateMargin }} >
@@ -656,7 +656,7 @@ class CompetitionDrawEdit extends Component {
                                     dayMargin += 110;
                                 }
                                 if (index == 0) {
-                                    dayMargin = 50;
+                                    dayMargin = 70;
                                 }
                                 return (
                                     <span style={{ left: dayMargin, fontSize: item.notInDraw !== false && 11 }}>{item.notInDraw == false ? getTime(item.date) : "Not in draw"}</span>
@@ -677,7 +677,9 @@ class CompetitionDrawEdit extends Component {
                             return (
                                 <div>
                                     <div className="sr-no huge-sr">
-                                        {courtData.venueShortName + "-" + courtData.venueCourtNumber}
+                                        <div className="venueCourt-tex-div">
+                                            <span className="venueCourt-text">{courtData.venueShortName + "-" + courtData.venueCourtName}</span>
+                                        </div>
                                     </div>
 
                                     {courtData.slotsArray.map((slotObject, slotIndex) => {
@@ -685,7 +687,7 @@ class CompetitionDrawEdit extends Component {
                                             leftMargin += 110;
                                         }
                                         if (slotIndex == 0) {
-                                            leftMargin = 50;
+                                            leftMargin = 70;
                                         }
                                         return slotObject.drawsId === null ? (
                                             <div

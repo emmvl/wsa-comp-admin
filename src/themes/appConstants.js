@@ -1021,6 +1021,10 @@ const AppConstants = {
   exportTeams: "Export Teams",
   exportPlayers: "Export Players",
   transactions: "Transactions",
+  addCoach: "Add Coach",
+  editCoach: "Edit Coach",
+  coachList: "Coach List",
+  addCoach: "Add Coach"
 };
 
 export default AppConstants;

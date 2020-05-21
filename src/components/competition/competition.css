@@ -434,6 +434,17 @@ a.collapsed i {
   position: relative;
   margin: 0 20px;
 }
+.venueCourt-text{
+  white-space: nowrap;
+    word-wrap: break-word;
+}
+.venueCourt-tex-div{
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  padding-right: 10px;
+  width: 75px;
+}
 
 @media (max-width: 991px) {
   .comp-buttons-view .open-reg-button {

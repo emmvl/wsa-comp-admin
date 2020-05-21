@@ -51,6 +51,9 @@ import HomeDashboardState from './homeReducer/homeReducer'
 import LiveScoreFixturCompState from './liveScoreReducer/liveScoreFixtureCompetitionReducer';
 import StripeState from "./stripeReducer/stripeReducer";
 import QuickCompetitionState from "./competitionManagementReducer/competitionQuickCompetitionReducer"
+
+import LiveScoreCoachState from "./liveScoreReducer/liveScoreCoachReducer"
+
 const rootReducer = combineReducers({
   LoginState,
   MenuNavigationState,
@@ -98,7 +101,8 @@ const rootReducer = combineReducers({
   HomeDashboardState,
   LiveScoreFixturCompState,
   StripeState,
-  QuickCompetitionState
+  QuickCompetitionState,
+  LiveScoreCoachState
 });
 
 export default rootReducer;

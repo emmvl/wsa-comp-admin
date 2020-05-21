@@ -176,6 +176,8 @@ import { liveScoreChangeVenueSaga } from "./liveScoreSaga/liveScoreVenueChangeSa
 import { getLiveScoreFixtureCompSaga } from "./liveScoreSaga/liveScoreFixtureCompSaga";
 import * as stripeSaga from "../saga/stripeSaga/stripeSaga"
 
+import { liveScoreCoachSaga } from "../saga/liveScoreSaga/liveScoreCoachSaga"
+
 
 export default function* root_saga() {
   yield takeEvery(ApiConstants.API_LOGIN_LOAD, loginApiSaga);
@@ -672,5 +674,8 @@ export default function* root_saga() {
 
   /////stripe single payout transaction list
   yield takeEvery(ApiConstants.API_GET_STRIPE_TRANSACTION_PAYOUT_LIST_API_LOAD, stripeSaga.getTransactionPayoutListSaga)
+
+  ////coach saga
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_COACH_LIST_LOAD, liveScoreCoachSaga)
 
 }
