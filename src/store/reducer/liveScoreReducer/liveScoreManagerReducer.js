@@ -23,7 +23,7 @@ const initialState = {
     teamResult: [],
     onLoadSearch: false,
     managerSearchResult: [],
-    loading: false
+    loading: false,
 }
 
 /////get manager List Object on index basis
@@ -96,16 +96,16 @@ function liveScoreMangerState(state = initialState, action) {
                 ...state,
             }
 
-            case ApiConstants.API_LIVE_SCORE_TEAM_LOAD:
-                    return { ...state, onLoad: true };
-        
-            case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
+        case ApiConstants.API_LIVE_SCORE_TEAM_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
             console.log(action.result)
             // let playerData = liveScoreTeamModal.getTeamViewPlayerListData(action.result.players)
             return {
                 ...state,
                 teamResult: action.result,
-               
+
             };
 
         ////Update Manager Data

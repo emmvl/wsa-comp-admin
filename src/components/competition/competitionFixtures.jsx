@@ -10,8 +10,31 @@ import { NavLink } from 'react-router-dom';
 
 import { bindActionCreators } from 'redux';
 import {
-
+    setOwnCompetitionYear,
+    getOwnCompetitionYear,
+    setOwn_competition,
+    getOwn_competition,
+    setDraws_venue,
+    getDraws_venue,
+    setDraws_round,
+    getDraws_round,
+    setDraws_roundTime,
+    getDraws_roundTime,
+    setDraws_division_grade,
+    getDraws_division_grade,
+} from "../../util/sessionStorage"
+import {
+    getYearAndCompetitionOwnAction,
+    getVenuesTypeAction
+} from '../../store/actions/appAction';
+import {
+    getCompetitionDrawsAction,
+    getDrawsRoundsAction,
+    updateCompetitionDraws,
+    saveDraws,
+    getCompetitionVenue,
     clearDraws,
+    publishDraws
 } from '../../store/actions/competitionModuleAction/competitionDrawsAction';
 
 
@@ -22,10 +45,13 @@ class CompetitionFixtures extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            year: "2019",
-            competition: "2019winter",
-            venue: "abbott",
-            round: "01",
+            yearRefId: 1,
+            firstTimeCompId: '',
+            venueId: '',
+            roundId: '',
+            venueLoad: false,
+            roundTime: null,
+            competitionDivisionGradeId: "",
         }
     }
 
@@ -34,7 +60,113 @@ class CompetitionFixtures extends Component {
         loadjs('assets/js/custom.js');
     }
 
+    componentDidUpdate(nextProps) {
+        let drawsRoundData = this.props.drawsState.getDrawsRoundsData;
+        let venueData = this.props.drawsState.competitionVenues;
+        let divisionGradeNameList = this.props.drawsState.divisionGradeNameList;
 
+        if (nextProps.appState !== this.props.appState) {
+            let competitionList = this.props.appState.own_CompetitionArr;
+            if (nextProps.appState.own_CompetitionArr !== competitionList) {
+                if (competitionList.length > 0) {
+                    let competitionId = competitionList[9].competitionId;
+                    this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId);
+                    setOwn_competition(competitionId)
+                    this.setState({ firstTimeCompId: competitionId, venueLoad: true })
+                }
+            }
+        }
+        if (this.state.venueLoad == true && this.props.drawsState.updateLoad == false) {
+            if (nextProps.drawsState !== this.props.drawsState) {
+                if (nextProps.drawsState.getDrawsRoundsData !== drawsRoundData) {
+                    if (venueData.length > 0) {
+                        let venueId = venueData[0].id
+                        setDraws_venue(venueId)
+                        if (drawsRoundData.length > 0) {
+
+                            let roundId = drawsRoundData[0].roundId;
+                            setDraws_round(roundId)
+                            let roundTime = drawsRoundData[0].startDateTime
+                            setDraws_roundTime(roundTime)
+                            this.props.getCompetitionDrawsAction(
+                                this.state.yearRefId,
+                                this.state.firstTimeCompId,
+                                venueId,
+                                roundId
+                            );
+                            this.setState({ roundId, venueId, roundTime, venueLoad: false });
+                        }
+                        else {
+                            this.setState({
+                                venueId,
+                                venueLoad: false
+                            })
+                        }
+                    }
+                    if (divisionGradeNameList.length > 0) {
+                        let competitionDivisionGradeId = divisionGradeNameList[0].competitionDivisionGradeId;
+                        setDraws_division_grade(competitionDivisionGradeId)
+                        this.setState({ competitionDivisionGradeId })
+                    }
+                }
+            }
+        }
+    }
+
+    componentDidMount() {
+        loadjs('assets/js/custom.js');
+        this.apiCalls();
+    }
+
+    apiCalls() {
+        this.props.clearDraws()
+        let yearId = getOwnCompetitionYear()
+        let storedCompetitionId = getOwn_competition()
+        let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
+        let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
+        let venueId = getDraws_venue()
+        let roundId = getDraws_round()
+        let roundTime = getDraws_roundTime()
+        let roundData = this.props.drawsState.getDrawsRoundsData.length > 0 ? this.props.drawsState.getDrawsRoundsData : undefined
+        let venueData = this.props.drawsState.competitionVenues.length > 0 ? this.props.drawsState.competitionVenues : undefined
+        let competitionDivisionGradeId = getDraws_division_grade()
+        if (storedCompetitionId && yearId && propsData && compData) {
+            this.setState({
+                yearRefId: JSON.parse(yearId),
+                firstTimeCompId: storedCompetitionId,
+                venueLoad: true
+            })
+            if (venueId && roundId && roundData && venueData) {
+                this.props.getCompetitionDrawsAction(
+                    yearId,
+                    storedCompetitionId,
+                    venueId,
+                    roundId
+                );
+                this.setState({
+                    venueId: JSON.parse(venueId),
+                    roundId: JSON.parse(roundId),
+                    roundTime,
+                    competitionDivisionGradeId: JSON.parse(competitionDivisionGradeId),
+                    venueLoad: false
+                })
+            }
+            else {
+
+                this.props.getDrawsRoundsAction(yearId, storedCompetitionId);
+            }
+        }
+        else if (yearId) {
+            this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
+            this.setState({
+                yearRefId: JSON.parse(yearId)
+            })
+        }
+        else {
+            this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
+            setOwnCompetitionYear(1)
+        }
+    }
 
     onChange = e => {
         console.log('radio checked', e.target.value);
@@ -46,21 +178,148 @@ class CompetitionFixtures extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <Header className="comp-draws-header-view mt-5" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
-                        <Breadcrumb separator=" > ">
+            <Header className="comp-draws-header-view mt-4">
+                <div className="row">
+                    <div
+                        className="col-sm"
+                        style={{ display: 'flex', alignContent: 'center' }}
+                    >
+                        <Breadcrumb
+                            style={{
+                                display: 'flex',
+                                lignItems: 'center',
+                                alignSelf: 'center'
+                            }}
+                            separator=" > "
+                        >
                             <Breadcrumb.Item className="breadcrumb-add">
-                                {AppConstants.winterCompetition_7_8}
-                                {/* <span className="breadcrumb-add"> </span> */}
+                                {' '}
+                                {AppConstants.fixtures}
                             </Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                 </div>
-            </Header >
+            </Header>
         )
     }
+    //////year change onchange
+    onYearChange = yearId => {
+        this.props.clearDraws("rounds")
+        setOwnCompetitionYear(yearId)
+        setOwn_competition(undefined)
+        this.setState({ firstTimeCompId: null, yearRefId: yearId, roundId: null, roundTime: null, venueId: null, competitionDivisionGradeId: null });
+        this.props.getYearAndCompetitionOwnAction(
+            this.props.appState.own_YearArr,
+            yearId,
+            "own_competition"
+        );
+        // this.setDetailsFieldValue()
+    };
 
+    // on Competition change
+    onCompetitionChange(competitionId) {
+        this.props.clearDraws("rounds")
+        setOwn_competition(competitionId)
+        this.setState({ firstTimeCompId: competitionId, roundId: null, venueId: null, roundTime: null, venueLoad: true, competitionDivisionGradeId: null });
+        this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId);
+    }
+
+    ///dropdown view containing all the dropdown of header
+    dropdownView = () => {
+        return (
+            <div className="row">
+                <div className="col-sm-3">
+                    <div className="year-select-heading-view">
+                        <span className="year-select-heading">{AppConstants.year}:</span>
+                        <Select
+                            name={'yearRefId'}
+                            className="year-select"
+                            onChange={yearRefId => this.onYearChange(yearRefId)}
+                            value={this.state.yearRefId}
+                        >
+                            {this.props.appState.own_YearArr.length > 0 && this.props.appState.own_YearArr.map(item => {
+                                return (
+                                    <Option key={'yearRefId' + item.id} value={item.id}>
+                                        {item.description}
+                                    </Option>
+                                );
+                            })}
+                        </Select>
+                    </div>
+                </div>
+                <div className="col-sm-4">
+                    <div
+                        style={{
+                            width: '100%',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            marginRight: 50
+                        }}
+                    >
+                        <span className="year-select-heading">
+                            {AppConstants.competition}:
+        </span>
+                        <Select
+                            style={{ minWidth: 160 }}
+                            name={'competition'}
+                            className="year-select"
+                            onChange={competitionId =>
+                                this.onCompetitionChange(competitionId)
+                            }
+                            value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
+                        >
+                            {this.props.appState.own_CompetitionArr.map(item => {
+                                return (
+                                    <Option
+                                        key={'competition' + item.competitionId}
+                                        value={item.competitionId}
+                                    >
+                                        {item.competitionName}
+                                    </Option>
+                                );
+                            })}
+                        </Select>
+                    </div>
+                </div>
+                {/* <div className="col-sm-5">
+                <div
+                    style={{
+                        width: '100%',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginRight: 50
+                    }}
+                >
+                    <span className="year-select-heading">
+                        {AppConstants.division}:
+        </span>
+                    <Select
+                        style={{ minWidth: 160 }}
+                        name={'competition'}
+                        className="year-select"
+                        onChange={competitionDivisionGradeId =>
+                            this.onDivisionGradeNameChange(competitionDivisionGradeId)
+                        }
+                        value={JSON.parse(JSON.stringify(this.state.competitionDivisionGradeId))}
+                    >
+                        {this.props.drawsState.divisionGradeNameList.map(item => {
+                            return (
+                                <Option
+                                    key={'divisionGradeNameList' + item.competitionDivisionGradeId}
+                                    value={item.competitionDivisionGradeId}
+                                >
+                                    {item.name}
+                                </Option>
+                            );
+                        })}
+                    </Select>
+                </div>
+            </div> */}
+            </div>
+        );
+    };
 
     ////////form content view
     contentView = () => {
@@ -89,7 +348,7 @@ class CompetitionFixtures extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className="col-sm-8 comp-draw-edit-btn-view" >
+                    {/* <div className="col-sm-8 comp-draw-edit-btn-view" >
                         <div className="row">
                             <div className="col-sm mt-1">
                                 <NavLink to="/competitionCourtAndTimesAssign">
@@ -102,7 +361,7 @@ class CompetitionFixtures extends Component {
                                 </NavLink>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 {this.dragableView()}
             </div>
@@ -1277,6 +1536,7 @@ class CompetitionFixtures extends Component {
                 <Layout className="comp-dash-table-view">
                     {/* <div className="comp-draw-head-content-view"> */}
                     {this.headerView()}
+                    {this.dropdownView()}
                     <Content>
                         {this.contentView()}
                     </Content>
@@ -1294,6 +1554,15 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
             clearDraws,
+            getCompetitionDrawsAction,
+            getYearAndCompetitionOwnAction,
+            getVenuesTypeAction,
+            getDrawsRoundsAction,
+            updateCompetitionDraws,
+            saveDraws,
+            getCompetitionVenue,
+            clearDraws,
+            publishDraws
         },
         dispatch
     );
@@ -1301,6 +1570,8 @@ function mapDispatchToProps(dispatch) {
 
 function mapStatetoProps(state) {
     return {
+        appState: state.AppState,
+
         drawsState: state.CompetitionDrawsState
     };
 }

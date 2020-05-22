@@ -202,13 +202,40 @@ const columnsTodaysMatch = [
         render: (competition) =>
             <span class="input-heading-add-another pt-0" onClick={() => { console.log('hello clcicked ') }} >{competition.recordUmpire}</span>
     }, {
-        title: "Scorer",
+        title: "Scorer 1",
         dataIndex: 'scorerStatus',
         key: 'scorerStatus',
-        sorter: (a, b) => tableSort(a, b, "scorerStatus"),
+        sorter: (a, b) => tableSort(a, b, "scorerStatus1"),
 
 
     }, {
+        title: "Scorer 2",
+        dataIndex: 'scorerStatus',
+        key: 'scorerStatus',
+        sorter: (a, b) => tableSort(a, b, "scorerStatus2"),
+        render: (scorerStatus, record) =>
+            <span >{record.competition.scoringType == 'SINGLE' ? "" : scorerStatus}</span>
+
+
+
+    },
+    {
+        title: "Player Attendance Team A",
+        dataIndex: 'playerAttendanveTeamA',
+        key: 'playerAttendanveTeamA',
+        sorter: (a, b) => tableSort(a, b, "playerAttendanveTeamA"),
+
+
+    },
+    {
+        title: "Player Attendance Team B",
+        dataIndex: 'playerAttendanveTeamB',
+        key: 'playerAttendanveTeamA',
+        sorter: (a, b) => tableSort(a, b, "playerAttendanveTeamB"),
+
+
+    },
+    {
         title: "Status",
         dataIndex: 'matchStatus',
         key: 'matchStatus',

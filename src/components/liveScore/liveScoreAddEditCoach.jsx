@@ -14,7 +14,14 @@ import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { isArrayNotEmpty } from "../../util/helpers";
 import Loader from '../../customComponents/loader'
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
-import { liveScoreUpdateCoach } from '../../store/actions/LiveScoreAction/liveScoreCoachAction'
+import {
+    liveScoreUpdateCoach,
+    liveScoreAddEditCoach,
+    liveScoreCoachListAction,
+    liveScoreClear
+} from '../../store/actions/LiveScoreAction/liveScoreCoachAction'
+
+import { liveScoreManagerSearch } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 
 const { Footer, Content, Header } = Layout;
 const { Option } = Select;
@@ -26,7 +33,10 @@ class LiveScoreAddEditCoach extends Component {
         super(props);
         this.state = {
             conpetitionId: null,
-            searchText: ""
+            searchText: "",
+            loader: false,
+            tableRecord: this.props.location.state ? this.props.location.state.tableRecord : null,
+            isEdit: this.props.location.state ? this.props.location.state.isEdit : null,
         }
 
     }
@@ -37,6 +47,30 @@ class LiveScoreAddEditCoach extends Component {
         if (id !== null) {
             this.props.getliveScoreTeams(id)
         }
+
+        if (this.state.isEdit === true) {
+            this.props.liveScoreUpdateCoach(this.state.tableRecord, 'isEditCoach')
+            this.setState({ loader: true })
+        } else {
+            this.props.liveScoreUpdateCoach('', 'isAddCoach')
+        }
+
+        if (this.state.isEdit === true) {
+            this.setInitalFiledValue()
+        }
+    }
+
+    setInitalFiledValue() {
+        const { coachdata, teamId } = this.props.liveScoreCoachState
+        let data = this.state.tableRecord
+
+        this.props.form.setFieldsValue({
+            'First Name': coachdata.firstName,
+            'Last Name': coachdata.lastName,
+            'Email Address': coachdata.email,
+            'Contact no': coachdata.mobileNumber,
+            'Select Team': teamId
+        })
     }
 
 
@@ -94,7 +128,7 @@ class LiveScoreAddEditCoach extends Component {
         const { coachRadioBtn } = this.props.liveScoreCoachState
         return (
             <div className="content-view pb-0 pt-4 row">
-                <span className="applicable-to-heading ml-4">{AppConstants.managerHeading}</span>
+                <span className="applicable-to-heading ml-4">{AppConstants.coach}</span>
                 <Radio.Group
                     className="reg-competition-radio"
                     onChange={(e) => this.onButtonChage(e)}
@@ -229,8 +263,9 @@ class LiveScoreAddEditCoach extends Component {
     }
 
     coachExistingRadioButton(getFieldDecorator) {
-        const { coachdata, teamId, teamResult } = this.props.liveScoreCoachState
+        const { coachdata, teamId, teamResult, coachesResult, onLoadSearch } = this.props.liveScoreCoachState
         let teamData = isArrayNotEmpty(teamResult) ? teamResult : []
+        let coachList = isArrayNotEmpty(coachesResult) ? coachesResult : []
 
         return (
             <div className="content-view pt-4">
@@ -239,39 +274,39 @@ class LiveScoreAddEditCoach extends Component {
                         <Form.Item>
                             <InputWithHead
                                 required={"required-field pb-0 pt-0"}
-                                heading={AppConstants.managerSearch} />
+                                heading={AppConstants.coachSearch} />
                             {getFieldDecorator(AppConstants.team, {
-                                rules: [{ required: true, message: ValidationConstants.searchManager }],
+                                rules: [{ required: true, message: ValidationConstants.searchCoach }],
                             })(
 
                                 <AutoComplete
                                     loading={true}
                                     style={{ width: "100%", height: '56px' }}
                                     placeholder="Select User"
-                                // onSelect={(item, option) => {
-                                //     const ManagerId = JSON.parse(option.key)
-                                //     this.props.liveScoreClear()
-                                //     this.props.liveScoreUpdateManagerDataAction(ManagerId, 'managerSearch')
+                                    onSelect={(item, option) => {
+                                        const ManagerId = JSON.parse(option.key)
+                                        this.props.liveScoreClear()
+                                        this.props.liveScoreUpdateCoach(ManagerId, 'coachSearch')
 
-                                // }}
-                                // notFoundContent={onLoadSearch == true ? <Spin size="small" /> : null}
+                                    }}
+                                    notFoundContent={onLoadSearch == true ? <Spin size="small" /> : null}
 
-                                // onSearch={(value) => {
+                                    onSearch={(value) => {
 
-                                //     value ?
-                                //         this.props.liveScoreManagerSearch(value, this.state.competition_id)
-                                //         :
-                                //         this.props.liveScoreManagerListAction(5, 1, this.state.competition_id)
+                                        value ?
+                                            this.props.liveScoreManagerSearch(value, this.state.conpetitionId)
+                                            :
+                                            this.props.liveScoreCoachListAction(3, 1, this.state.conpetitionId)
 
-                                // }}
+                                    }}
 
 
                                 >
-                                    {/* {managerList.map((item) => {
-                                    return <Option key={item.id} value={item.firstName + " " + item.lastName}>
-                                        {item.firstName + " " + item.lastName}
-                                    </Option>
-                                })} */}
+                                    {coachList.map((item) => {
+                                        return <Option key={item.id} value={item.firstName + " " + item.lastName}>
+                                            {item.firstName + " " + item.lastName}
+                                        </Option>
+                                    })}
                                 </AutoComplete>
                             )}
 
@@ -296,8 +331,8 @@ class LiveScoreAddEditCoach extends Component {
                                     showSearch
                                     placeholder={AppConstants.selectTeam}
                                     style={{ width: "100%", }}
-                                    // onChange={(teamId) => this.props.liveScoreUpdateManagerDataAction(teamId, 'teamId')}
-                                    // value={teamId}
+                                    onChange={(teamId) => this.props.liveScoreUpdateCoach(teamId, 'teamId')}
+                                    value={teamId}
                                     optionFilterProp="children"
                                 >
                                     {teamData.map((item) => (
@@ -323,9 +358,9 @@ class LiveScoreAddEditCoach extends Component {
                     <div className="row">
                         <div className="col-sm-3">
                             <div className="reg-add-save-button">
-                                {/* <NavLink to='/liveScoreManagerList'> */}
-                                <Button type="cancel-button">{AppConstants.cancel}</Button>
-                                {/* </NavLink> */}
+                                <NavLink to='/liveScoreCoaches'>
+                                    <Button type="cancel-button">{AppConstants.cancel}</Button>
+                                </NavLink>
                             </div>
                         </div>
                         <div className="col-sm">
@@ -341,45 +376,46 @@ class LiveScoreAddEditCoach extends Component {
         );
     };
 
-    // onSaveClick = e => {
+    onSaveClick = e => {
 
-    //     const { managerData, teamId, managerRadioBtn, exsitingManagerId } = this.props.liveScoreMangerState
+        const { coachdata, teamId, coachRadioBtn, exsitingManagerId } = this.props.liveScoreCoachState
 
-    //     e.preventDefault();
-    //     this.props.form.validateFields((err, values) => {
-    //         let body = ''
-    //         if (!err) {
-    //             if (managerRadioBtn == 'new') {
-    //                 if (this.state.isEdit == true) {
-    //                     body = {
-    //                         "id": managerData.id,
-    //                         "firstName": managerData.firstName,
-    //                         "lastName": managerData.lastName,
-    //                         "mobileNumber": managerData.mobileNumber,
-    //                         "email": managerData.email,
-    //                         "teams": managerData.teams
-    //                     }
-    //                 } else {
-    //                     body = {
-    //                         "firstName": managerData.firstName,
-    //                         "lastName": managerData.lastName,
-    //                         "mobileNumber": managerData.mobileNumber,
-    //                         "email": managerData.email,
-    //                         "teams": managerData.teams
-    //                     }
-    //                 }
-    //                 this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
-    //             } else if (managerRadioBtn == 'existing') {
-    //                 body = {
-    //                     "id": exsitingManagerId,
-    //                     "teams": managerData.teams
-    //                 }
-    //                 this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
-    //             }
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            let body = ''
+            if (!err) {
+                if (coachRadioBtn == 'new') {
+                    if (this.state.isEdit == true) {
+                        body = {
+                            "id": coachdata.id,
+                            "firstName": coachdata.firstName,
+                            "lastName": coachdata.lastName,
+                            "mobileNumber": coachdata.mobileNumber,
+                            "email": coachdata.email,
+                            "teams": coachdata.teams
+                        }
+                    } else {
+                        console.log(coachdata, 'coachdata!!!!!!')
+                        body = {
+                            "firstName": coachdata.firstName,
+                            "lastName": coachdata.lastName,
+                            "mobileNumber": coachdata.mobileNumber,
+                            "email": coachdata.email,
+                            "teams": coachdata.teams
+                        }
+                    }
+                    this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId)
+                } else if (coachRadioBtn == 'existing') {
+                    body = {
+                        "id": exsitingManagerId,
+                        "teams": coachdata.teams
+                    }
+                    this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId)
+                }
 
-    //         }
-    //     });
-    // };
+            }
+        });
+    };
 
     /////// render function 
 
@@ -389,7 +425,7 @@ class LiveScoreAddEditCoach extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                {/* <Loader visible={this.props.liveScoreMangerState.loading} /> */}
+                <Loader visible={this.props.liveScoreCoachState.loading} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"23"} />
                 <Layout>
                     {this.headerView()}
@@ -413,7 +449,11 @@ class LiveScoreAddEditCoach extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getliveScoreTeams,
-        liveScoreUpdateCoach
+        liveScoreUpdateCoach,
+        liveScoreAddEditCoach,
+        liveScoreCoachListAction,
+        liveScoreManagerSearch,
+        liveScoreClear
     }, dispatch)
 }
 

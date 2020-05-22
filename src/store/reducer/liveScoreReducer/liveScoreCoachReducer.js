@@ -18,7 +18,12 @@ const initialState = {
     teamId: null,
     teamResult: [],
     coachRadioBtn: 'new',
-    coachesResult: []
+    coachesResult: [],
+    mainCoachListResult: [],
+    exsitingManagerId: null,
+    loading: false,
+    teams: null,
+    onLoadSearch: false
 }
 
 function getTeamObj(teamSelectId, teamArr) {
@@ -44,6 +49,17 @@ function getTeamObj(teamSelectId, teamArr) {
 
 }
 
+function genrateTeamId(teamIdArr) {
+
+    let teamId = []
+    for (let i in teamIdArr) {
+        teamId.push(teamIdArr[i].entityId)
+    }
+
+    return teamId
+
+}
+
 function liveScoreCoachState(state = initialState, action) {
     switch (action.type) {
 
@@ -56,8 +72,9 @@ function liveScoreCoachState(state = initialState, action) {
             console.log(action.result, "result")
             return {
                 ...state,
-                onLoad: true,
+                onLoad: false,
                 coachesResult: action.result,
+                mainCoachListResult: action.result,
                 status: action.status
             };
 
@@ -82,11 +99,34 @@ function liveScoreCoachState(state = initialState, action) {
 
             } else if (action.key == 'coachRadioBtn') {
                 state.coachRadioBtn = action.data
+                state.exsitingManagerId = null
+            } else if (action.key == "coachSearch") {
+
+                state.exsitingManagerId = action.data
+            } else if (action.key == 'isEditCoach') {
+                console.log(action, 'isEditCoach')
+                state.coachdata.id = action.data.id
+                state.coachdata.firstName = action.data.firstName
+                state.coachdata.lastName = action.data.lastName
+                state.coachdata.mobileNumber = action.data.mobileNumber
+                state.coachdata.email = action.data.email
+                let getTeamId = genrateTeamId(action.data.linkedEntity)
+                state.teamId = getTeamId
+
+                let coachTeamObj = getTeamObj(state.teamId, state.teamResult)
+                state.coachdata['teams'] = coachTeamObj
+
+                state.coachRadioBtn = 'new'
+
+            } else if (action.key == 'isAddCoach') {
+                state.coachdata = coachObj
+                state.coachdata.id = null
+                state.teamId = []
+                state.coachRadioBtn = 'new'
+
             } else {
                 state.coachdata[action.key] = action.data
             }
-
-
 
             return {
                 ...state,
@@ -100,15 +140,46 @@ function liveScoreCoachState(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 error: action.error,
-                status: action.status
+                status: action.status,
+                loading: false
             };
         case ApiConstants.API_LIVE_SCORE_COACH_ERROR:
             return {
                 ...state,
                 onLoad: false,
                 error: action.error,
-                status: action.status
+                status: action.status,
+                loading: false
             };
+
+        ////Add Edit Coach
+        //// Add Edit Manager
+        case ApiConstants.API_LIVE_SCORE_ADD_EDIT_COACH_LOAD:
+            return { ...state, loading: true };
+
+        case ApiConstants.API_LIVE_SCORE_ADD_EDIT_COACH_SUCCESS:
+            return {
+                ...state,
+            }
+
+        ////Manager Search
+        case ApiConstants.API_LIVESCORE_MANAGER_SEARCH_LOAD:
+            return { ...state, onLoadSearch: true };
+
+        case ApiConstants.API_LIVESCORE_MANAGER_SEARCH_SUCCESS:
+            return {
+                ...state,
+                onLoadSearch: false,
+                coachesResult: action.result,
+                status: action.status,
+            }
+
+        case ApiConstants.CLEAR_LIVESCORE_MANAGER:
+
+            return {
+                ...state,
+                coachesResult: state.mainCoachListResult
+            }
 
 
         default:

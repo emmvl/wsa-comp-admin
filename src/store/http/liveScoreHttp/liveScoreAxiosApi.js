@@ -724,7 +724,13 @@ let LiveScoreAxiosApi = {
     getFixtureCompList(orgId) {
         let url = `/competitions/list?organisationId=${orgId}`
         return Method.dataGet(url, localStorage.token);
-    }
+    },
+    liveScoreAddCoach(data, teamId, exsitingManagerId) {
+        let body = data
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        var url = `/users/coach?competitionId=${id}`;
+        return Method.dataPost(url, token, body)
+    },
 };
 
 

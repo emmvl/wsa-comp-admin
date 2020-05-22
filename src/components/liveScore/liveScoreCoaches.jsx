@@ -8,7 +8,8 @@ import {
   Pagination,
   Icon,
   Menu,
-  Input
+  Input,
+
 } from "antd";
 import "./liveScore.css";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -22,6 +23,7 @@ import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { isArrayNotEmpty } from '../../util/helpers'
+import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 
 const { Content } = Layout;
 const { SubMenu } = Menu;
@@ -39,13 +41,11 @@ const columns = [
     sorter: (a, b) => tableSort(a, b, "firstName"),
     render: (firstName, record) =>
       // <NavLink to={{
-      //   pathname: '/userPersonal',
+      //   pathname: '/liveScoreCoachDetail',
       //   state: { userId: record.id, screenKey: "livescore" }
-      //   // pathname: '/liveScoreManagerView',
-      //   // state: { tableRecord: record }
       // }}>
       <span class="input-heading-add-another pt-0" >{firstName}</span>
-    // </NavLink>
+    //  </NavLink>
   },
   {
     title: "Last Name",
@@ -56,11 +56,9 @@ const columns = [
       // <NavLink to={{
       //   pathname: '/userPersonal',
       //   state: { userId: record.id, screenKey: "livescore" }
-      //   // pathname: '/liveScoreManagerView',
-      //   // state: { tableRecord: record }
       // }}>
       <span class="input-heading-add-another pt-0" >{lastName}</span>
-    // </NavLink>
+    //  </NavLink>
   },
   {
     title: "Email",
@@ -70,87 +68,56 @@ const columns = [
   },
   {
     title: "Contact No",
-    dataIndex: "contactNo",
-    key: "contactNo",
-    sorter: (a, b) => tableSort(a, b, "contactNo"),
+    dataIndex: "mobileNumber",
+    key: "mobileNumber",
+    sorter: (a, b) => tableSort(a, b, "mobileNumber"),
   },
   {
     title: "Team",
-    dataIndex: "team",
-    key: "team",
-    sorter: (a, b) => tableSort(a, b, "team"),
-    render: (team, record) =>
-      // <NavLink to={{
-      //   pathname: '/userPersonal',
-      //   state: { userId: record.id, screenKey: "livescore" }
-      //   // pathname: '/liveScoreManagerView',
-      //   // state: { tableRecord: record }
-      // }}>
-      <span class="input-heading-add-another pt-0" >{team}</span>
+    dataIndex: "linkedEntity",
+    key: "linkedEntity",
+    sorter: (a, b) => tableSort(a, b, "linkedEntity"),
+    render: (linkedEntity, record) =>
+    // <NavLink to={{
+    //     pathname: '/userPersonal',
+    //     state: { userId: record.id, screenKey: "livescoreCoach" }
+    // }}>
+    {
+      linkedEntity.length > 0 && linkedEntity.map((item) => (
+        <span style={{ color: '#ff8237', cursor: 'pointer' }} className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
+      ))
+    }
     // </NavLink>
   },
-  // {
-  //   title: 'Action',
-  //   dataIndex: 'isUsed',
-  //   key: 'isUsed',
-  //   render: (isUsed, record) =>
-  //     <Menu
-  //       className="action-triple-dot-submenu"
-  //       theme="light"
-  //       mode="horizontal"
-  //       style={{ lineHeight: '25px' }}>
+  {
+    title: 'Action',
+    dataIndex: 'isUsed',
+    key: 'isUsed',
+    render: (isUsed, record) =>
+      <Menu
+        className="action-triple-dot-submenu"
+        theme="light"
+        mode="horizontal"
+        style={{ lineHeight: '25px' }}>
 
-  //       <SubMenu
-  //         key="sub1"
-  //         title={
-  //           <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
-  //         }>
-  //         <Menu.Item key="1">
-  //           <NavLink to={{
-  //             pathname: "/liveScoreAddDivision",
-  //             state: { isEdit: true, tableRecord: record }
-  //           }}>
-  //             <span >Edit</span>
-  //           </NavLink>
-  //         </Menu.Item>
-
-  //         <Menu.Item key="2" >
-  //           <span >Delete</span>
-  //         </Menu.Item>
-  //       </SubMenu>
-  //     </Menu>
-  // }
+        <SubMenu
+          key="sub1"
+          title={
+            <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
+          }>
+          <Menu.Item key="1">
+            <NavLink to={{
+              pathname: "/liveScoreAddEditCoach",
+              state: { isEdit: true, tableRecord: record }
+            }}>
+              <span >Edit</span>
+            </NavLink>
+          </Menu.Item>
+        </SubMenu>
+      </Menu>
+  }
 ];
 
-const sourceData = [
-  {
-    key: "1",
-    // id: "1",
-    firstName: "Cara Mgr2",
-    lastName: "Cara Mgr2",
-    team: "WSA",
-    email: "mgr1@wsa.com",
-    contactNo: "1234567890",
-  },
-  {
-    key: "1",
-    // id: "1",
-    firstName: "Cara Mgr2",
-    lastName: "Cara Mgr2",
-    team: "WSA",
-    email: "mgr1@wsa.com",
-    contactNo: "1234567890",
-  },
-  {
-    key: "1",
-    // id: "1",
-    firstName: "Cara Mgr2",
-    lastName: "Cara Mgr2",
-    team: "WSA",
-    email: "mgr1@wsa.com",
-    contactNo: "1234567890",
-  },
-];
 
 
 
@@ -162,21 +129,28 @@ class LiveScoreCoaches extends Component {
 
   componentDidMount() {
     const { id } = JSON.parse(getLiveScoreCompetiton())
-    // this.props.liveScoreCoachListAction(17, 1, id)
+    this.props.liveScoreCoachListAction(3, 1, id)
+
+    if (id !== null) {
+      this.props.getliveScoreTeams(id)
+    } else {
+      history.push('/')
+    }
   }
 
   contentView = () => {
     let couchesList = isArrayNotEmpty(this.props.liveScoreCoachState.coachesResult) ? this.props.liveScoreCoachState.coachesResult : []
-
+    let teamList = isArrayNotEmpty(this.props.liveScoreCoachState.coachesResult) ? this.props.liveScoreCoachState.coachesResult : []
+    console.log(couchesList, "couchesList")
     return (
       <div className="comp-dash-table-view mt-4">
         <div className="table-responsive home-dash-table-view">
           <Table
             className="home-dashboard-table"
             columns={columns}
-            dataSource={sourceData}
+            dataSource={couchesList}
             pagination={false}
-          // loading={this.props.liveScoreDivisionState.onLoad === true && true}
+            loading={this.props.liveScoreCoachState.onLoad === true && true}
           />
         </div>
         <div className="comp-dashboard-botton-view-mobile">
@@ -198,59 +172,6 @@ class LiveScoreCoaches extends Component {
       </div>
     );
   };
-
-  // headerView = () => {
-  //   return (
-  //     <div className="comp-player-grades-header-drop-down-view mt-4">
-  //       <div className="fluid-width">
-  //         <div className="row">
-  //           <div className="col-sm">
-  //             <Breadcrumb separator=" > ">
-  //               <Breadcrumb.Item className="breadcrumb-add">
-  //                 {AppConstants.coachList}
-  //               </Breadcrumb.Item>
-  //             </Breadcrumb>
-  //           </div>
-  //           <div className="col-sm">
-  //             <div
-  //               className="comp-dashboard-botton-view-mobile"
-  //               style={{
-  //                 width: "100%",
-  //                 display: "flex",
-  //                 flexDirection: "row",
-  //                 alignItems: "center",
-  //                 justifyContent: "flex-end",
-  //               }}
-  //             >
-  //               <NavLink
-  //                 to={`/liveScoreAddDivision`}
-  //                 className="text-decoration-none"
-  //               >
-  //                 <Button
-  //                   onClick={() => this.onExport()}
-  //                   className="primary-add-comp-form"
-  //                   type="primary"
-  //                 >
-  //                   <div className="row">
-  //                     <div className="col-sm">
-  //                       <img
-  //                         src={AppImages.export}
-  //                         alt=""
-  //                         className="export-image"
-  //                       />
-  //                       {AppConstants.export}
-  //                     </div>
-  //                   </div>
-  //                 </Button>
-  //               </NavLink>
-  //             </div>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // };
-
 
   ///////view for breadcrumb
   headerView = () => {
@@ -294,7 +215,6 @@ class LiveScoreCoaches extends Component {
                     justifyContent: "flex-end"
                   }}
                 >
-
                   <Button className="primary-add-comp-form" type="primary">
 
                     <div className="row">
@@ -369,6 +289,7 @@ class LiveScoreCoaches extends Component {
         <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"23"} />
         <Layout>
           {this.headerView()}
+
           <Content>{this.contentView()}</Content>
         </Layout>
       </div>
@@ -379,7 +300,8 @@ class LiveScoreCoaches extends Component {
 
 function mapDispatchtoprops(dispatch) {
   return bindActionCreators({
-    liveScoreCoachListAction
+    liveScoreCoachListAction,
+    getliveScoreTeams
   }, dispatch)
 }
 

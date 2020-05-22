@@ -176,7 +176,7 @@ import { liveScoreChangeVenueSaga } from "./liveScoreSaga/liveScoreVenueChangeSa
 import { getLiveScoreFixtureCompSaga } from "./liveScoreSaga/liveScoreFixtureCompSaga";
 import * as stripeSaga from "../saga/stripeSaga/stripeSaga"
 
-import { liveScoreCoachSaga } from "../saga/liveScoreSaga/liveScoreCoachSaga"
+import { liveScoreCoachSaga, liveScoreAddCoachSaga } from "../saga/liveScoreSaga/liveScoreCoachSaga"
 
 
 export default function* root_saga() {
@@ -677,5 +677,6 @@ export default function* root_saga() {
 
   ////coach saga
   yield takeEvery(ApiConstants.API_LIVE_SCORE_COACH_LIST_LOAD, liveScoreCoachSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_EDIT_COACH_LOAD, liveScoreAddCoachSaga)
 
 }

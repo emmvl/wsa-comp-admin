@@ -31,8 +31,14 @@ class SwappableComponentEdit extends Component {
     }
 
     drop(ev, dragableId, dropzoneId, customFunc = null, swappable = true) {
+        if (swappable == false) {
+            return
+        }
         ev.preventDefault();
         let src = document.getElementById(ev.dataTransfer.getData('src'));
+        if (src == null) {
+            return
+        }
         let srcParent = src.parentNode;
 
         let target = document.getElementById(dragableId);
@@ -48,9 +54,10 @@ class SwappableComponentEdit extends Component {
     }
 
     swapElements(src, target, srcParent, targetParent) {
+        console.log(src, target)
         let sourceIndexArray = src.id.split(':');
         let targetIndexArray = target.id.split(':');
-        if (sourceIndexArray[3] === targetIndexArray[3]) {
+        if (sourceIndexArray[1] === targetIndexArray[1] && sourceIndexArray[0] === targetIndexArray[0]) {
             target.replaceWith(src);
             srcParent.appendChild(target);
             this.props.onSwap(src.id, target.id);
@@ -65,6 +72,7 @@ class SwappableComponentEdit extends Component {
 
     transferElement(src, dropzoneId) {
         let dropzone = document.getElementById(dropzoneId);
+        console.log(dropzone)
         dropzone.appendChild(src);
     }
 

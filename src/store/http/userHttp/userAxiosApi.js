@@ -178,7 +178,7 @@ let userHttpApi = {
   liveScoreCoachesList(roleId, entityTypeId, entityId) {
 
     let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-    let url = `/users/byRole?roleId=17&entityTypeId=1&entityId=${id}`
+    let url = `/users/byRole?roleId=${roleId}&entityTypeId=1&entityId=${id}`
     return Method.dataGet(url, localStorage.token);
   }
 
