@@ -244,6 +244,14 @@ function deleteOrganiationPhotoAction(payload){
   return action;
 }
 
+function deleteOrgContact(payload){
+  const action = {
+    type: ApiConstants.API_DELETE_ORG_CONTACT_LOAD,
+    payload: payload
+  };
+  return action;
+}
+
 export {
   getRoleAction,
   getUreAction,
@@ -272,5 +280,6 @@ export {
   getUserReferFriendAction,
   getOrganiationPhotoAction,
   saveOrganiationPhotoAction,
-  deleteOrganiationPhotoAction
+  deleteOrganiationPhotoAction,
+  deleteOrgContact
 }

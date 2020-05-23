@@ -10,7 +10,8 @@ import { bindActionCreators } from "redux";
 import history from "../../util/history";
 import { connect } from 'react-redux';
 import {getAffiliateToOrganisationAction,saveAffiliateAction,updateAffiliateAction,
-    getUreAction, getRoleAction, getAffiliateByOrganisationIdAction} from 
+    getUreAction, getRoleAction, getAffiliateByOrganisationIdAction,
+    deleteOrgContact} from 
                 "../../store/actions/userAction/userAction";
 import ValidationConstants from "../../themes/validationConstant";
 import { getCommonRefData } from '../../store/actions/commonAction/commonAction';
@@ -708,7 +709,8 @@ function mapDispatchToProps(dispatch)
         getAffiliateByOrganisationIdAction,
         getCommonRefData,
         getUreAction,
-        getRoleAction
+        getRoleAction,
+        deleteOrgContact
     }, dispatch);
 
 }

@@ -180,7 +180,12 @@ let userHttpApi = {
     let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
     let url = `/users/byRole?roleId=${roleId}&entityTypeId=1&entityId=${id}`
     return Method.dataGet(url, localStorage.token);
-  }
+  },
+  deleteOrgContact(payload) {
+    // let organisationUniqueKey = await getOrganisationData().organisationUniqueKey;
+    var url = `api/affiliate/user/delete/${payload.id}?organisationUniqueKey=${payload.organisationId}`;
+    return Method.dataDelete(url, token);
+  },
 
 }
 
