@@ -679,4 +679,8 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_LIVE_SCORE_COACH_LIST_LOAD, liveScoreCoachSaga)
   yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_EDIT_COACH_LOAD, liveScoreAddCoachSaga)
 
+    // Organisation Contat Delete
+    yield takeEvery(ApiConstants.API_DELETE_ORG_CONTACT_LOAD, userSaga.deleteOrgContactSaga)
+
+
 }

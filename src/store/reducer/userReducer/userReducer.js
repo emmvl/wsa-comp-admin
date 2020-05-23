@@ -480,6 +480,16 @@ function userReducer(state = initialState, action) {
                 status: action.status,
                 error: null
             };
+        case ApiConstants.API_DELETE_ORG_CONTACT_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_DELETE_ORG_CONTACT_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
         default:
             return state;
     }

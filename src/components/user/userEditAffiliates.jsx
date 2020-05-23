@@ -10,7 +10,8 @@ import { bindActionCreators } from "redux";
 import history from "../../util/history";
 import { connect } from 'react-redux';
 import {getAffiliateToOrganisationAction,saveAffiliateAction,updateAffiliateAction,
-    getUreAction, getRoleAction, getAffiliateByOrganisationIdAction} from 
+    getUreAction, getRoleAction, getAffiliateByOrganisationIdAction,
+    deleteOrgContact} from 
                 "../../store/actions/userAction/userAction";
 import ValidationConstants from "../../themes/validationConstant";
 import { getCommonRefData } from '../../store/actions/commonAction/commonAction';
@@ -206,9 +207,17 @@ class UserEditAffiliates extends Component {
     removeContact = (index) => {
         let affiliate =  this.props.userState.affiliateEdit;
         let contacts = affiliate.contacts;
-        contacts.splice(index,1);
-        this.updateContactFormFields(contacts);
-        this.props.updateAffiliateAction(contacts,"contacts");
+        if(contacts!= null){
+            let contact = contacts[index];
+            contacts.splice(index,1);
+            this.updateContactFormFields(contacts);
+            this.props.updateAffiliateAction(contacts,"contacts");
+            let obj = {
+                id: contact.userId,
+                organisationId: this.state.affiliateOrgId
+            }
+            this.props.deleteOrgContact(obj);
+        }
     }
 
     updateContactFormFields = (contacts) => {
@@ -708,7 +717,8 @@ function mapDispatchToProps(dispatch)
         getAffiliateByOrganisationIdAction,
         getCommonRefData,
         getUreAction,
-        getRoleAction
+        getRoleAction,
+        deleteOrgContact
     }, dispatch);
 
 }
