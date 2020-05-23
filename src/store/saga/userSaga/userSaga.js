@@ -493,6 +493,7 @@ export function* deleteOrgContactSaga(action) {
                 result: result.result.data,
                 status: result.status
             });
+            message.success(result.result.data.message);
         } else {
             yield call(failSaga, result)
         }

@@ -207,9 +207,17 @@ class UserEditAffiliates extends Component {
     removeContact = (index) => {
         let affiliate =  this.props.userState.affiliateEdit;
         let contacts = affiliate.contacts;
-        contacts.splice(index,1);
-        this.updateContactFormFields(contacts);
-        this.props.updateAffiliateAction(contacts,"contacts");
+        if(contacts!= null){
+            let contact = contacts[index];
+            contacts.splice(index,1);
+            this.updateContactFormFields(contacts);
+            this.props.updateAffiliateAction(contacts,"contacts");
+            let obj = {
+                id: contact.userId,
+                organisationId: this.state.affiliateOrgId
+            }
+            this.props.deleteOrgContact(obj);
+        }
     }
 
     updateContactFormFields = (contacts) => {
