@@ -150,6 +150,7 @@ const ValidationConstants = {
 
     coachSearch: "Coach Search",
     searchCoach: "Please search coach.",
+    charityDescriptionIsRequired: "Charity description is required.",
 };
 
 export default ValidationConstants;

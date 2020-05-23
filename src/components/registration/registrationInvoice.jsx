@@ -487,7 +487,8 @@ class RegistrationInvoice extends Component {
 
     totalInvoiceView = (result) => {
         let data = result.length > 0 ? result : []
-        let subValue = this.subTotal(data)
+        // let subValue = this.subTotal(data)
+        let subValue = 0
         return (
             <div className="content-view ">
                 <div className="drop-reverse" >
