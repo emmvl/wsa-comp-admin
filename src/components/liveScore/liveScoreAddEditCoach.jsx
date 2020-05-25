@@ -50,7 +50,7 @@ class LiveScoreAddEditCoach extends Component {
 
         if (this.state.isEdit === true) {
             this.props.liveScoreUpdateCoach(this.state.tableRecord, 'isEditCoach')
-            this.setState({ loader: true })
+             this.setState({ loader: true })
         } else {
             this.props.liveScoreUpdateCoach('', 'isAddCoach')
         }
@@ -60,10 +60,17 @@ class LiveScoreAddEditCoach extends Component {
         }
     }
 
+    componentDidUpdate(nextProps){
+        if(this.state.loader == true && nextProps.liveScoreCoachState.onLoad == false){
+            this.setInitalFiledValue()
+            this.setState({loader : false})
+        }
+    }
+
     setInitalFiledValue() {
         const { coachdata, teamId } = this.props.liveScoreCoachState
         let data = this.state.tableRecord
-
+        console.log(teamId)
         this.props.form.setFieldsValue({
             'First Name': coachdata.firstName,
             'Last Name': coachdata.lastName,
@@ -155,7 +162,7 @@ class LiveScoreAddEditCoach extends Component {
 
         const { coachdata, teamId, teamResult } = this.props.liveScoreCoachState
         let teamData = isArrayNotEmpty(teamResult) ? teamResult : []
-        console.log(coachdata, 'coachdata')
+        console.log(teamId, 'coachdata')
 
         return (
             <div className="content-view pt-4">
@@ -244,7 +251,7 @@ class LiveScoreAddEditCoach extends Component {
                                     placeholder={AppConstants.selectTeam}
                                     style={{ width: "100%" }}
                                     onChange={(teamId) => this.props.liveScoreUpdateCoach(teamId, 'teamId')}
-                                    value={teamId}
+                                    value={[741, 738]}
                                     showSearch
                                     optionFilterProp="children"
 
@@ -266,7 +273,7 @@ class LiveScoreAddEditCoach extends Component {
         const { coachdata, teamId, teamResult, coachesResult, onLoadSearch } = this.props.liveScoreCoachState
         let teamData = isArrayNotEmpty(teamResult) ? teamResult : []
         let coachList = isArrayNotEmpty(coachesResult) ? coachesResult : []
-
+        
         return (
             <div className="content-view pt-4">
                 <div className="row" >

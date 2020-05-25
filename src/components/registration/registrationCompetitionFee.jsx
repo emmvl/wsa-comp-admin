@@ -849,10 +849,7 @@ class RegistrationCompetitionFee extends Component {
                     image: null
                 })
             }
-            // if (this.state.buttonPressed == "save" || this.state.buttonPressed == "publish" || this.state.buttonPressed == "delete") {
-            //     history.push('/registrationCompetitionList');
-            // }
-            if (this.state.buttonPressed == "publish" || this.state.buttonPressed == "delete") {
+            if (this.state.buttonPressed == "save" || this.state.buttonPressed == "publish" || this.state.buttonPressed == "delete") {
                 history.push('/registrationCompetitionList');
             }
         }
@@ -1083,6 +1080,7 @@ class RegistrationCompetitionFee extends Component {
             startDate: compFeesState.competitionDetailData.startDate && moment(compFeesState.competitionDetailData.startDate),
             endDate: compFeesState.competitionDetailData.endDate && moment(compFeesState.competitionDetailData.endDate),
             charityTitle: compFeesState.charityTitle,
+            charityDescription: compFeesState.charityDescription,
         })
         let data = this.props.competitionFeesState.competionDiscountValue
         let discountData = data && data.competitionDiscounts !== null ? data.competitionDiscounts[0].discounts : []
@@ -2591,7 +2589,6 @@ class RegistrationCompetitionFee extends Component {
         let charityRoundUp = this.props.competitionFeesState.charityRoundUp
         let paymentData = this.props.competitionFeesState.competitionPaymentsData
         let paymentsDisable = this.state.permissionState.paymentsDisable
-        const { charityTitle, charityDescription } = this.props.competitionFeesState
         let checkCharityArray = this.props.competitionFeesState.competitionPaymentsData.charityRoundUp
         return (
             <div className="advanced-setting-view pt-5">
@@ -2617,7 +2614,7 @@ class RegistrationCompetitionFee extends Component {
                     <div>
                         <Form.Item >
                             {getFieldDecorator('charityTitle',
-                                { rules: [{ required: false, message: ValidationConstants.charityTitleNameIsRequired }] })(
+                                { rules: [{ required: true, message: ValidationConstants.charityTitleNameIsRequired }] })(
                                     <InputWithHead
                                         heading={AppConstants.title}
                                         placeholder={AppConstants.title}
@@ -2628,13 +2625,18 @@ class RegistrationCompetitionFee extends Component {
                                 )}
                         </Form.Item>
                         <InputWithHead heading={AppConstants.description} />
-                        <TextArea
-                            placeholder={AppConstants.addCharityDescription}
-                            allowClear
-                            value={charityDescription}
-                            onChange={(e) => this.props.updatePaymentOption(e.target.value, null, "description")}
-                            disabled={paymentsDisable}
-                        />
+                        <Form.Item >
+                            {getFieldDecorator('charityDescription',
+                                { rules: [{ required: true, message: ValidationConstants.charityDescriptionIsRequired }] })(
+                                    <TextArea
+                                        placeholder={AppConstants.addCharityDescription}
+                                        allowClear
+                                        // value={charityDescription}
+                                        onChange={(e) => this.props.updatePaymentOption(e.target.value, null, "description")}
+                                        disabled={paymentsDisable}
+                                    />
+                                )}
+                        </Form.Item>
                     </div>
                 }
 

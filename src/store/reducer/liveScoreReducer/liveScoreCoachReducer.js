@@ -1,5 +1,5 @@
 import ApiConstants from '../../../themes/apiConstants'
-
+import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
 var coachObj = {
     id: null,
     firstName: "",
@@ -69,7 +69,7 @@ function liveScoreCoachState(state = initialState, action) {
 
 
         case ApiConstants.API_LIVE_SCORE_COACH_LIST_SUCCESS:
-            console.log(action.result, "result")
+         
             return {
                 ...state,
                 onLoad: false,
@@ -82,19 +82,23 @@ function liveScoreCoachState(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
-            console.log(action.result)
+           
             return {
                 ...state,
+                onLoad:false,
+                loading:false,
                 teamResult: action.result,
 
             };
 
         ////Update Coach Data
         case ApiConstants.API_LIVE_SCORE_UPDATE_COACH:
+         
             if (action.key == 'teamId') {
 
                 let teamObj = getTeamObj(action.data, state.teamResult)
                 state.coachdata['teams'] = teamObj
+            
                 state.teamId = action.data
 
             } else if (action.key == 'coachRadioBtn') {
@@ -104,12 +108,13 @@ function liveScoreCoachState(state = initialState, action) {
 
                 state.exsitingManagerId = action.data
             } else if (action.key == 'isEditCoach') {
-                console.log(action, 'isEditCoach')
+                state.onLoad = true
                 state.coachdata.id = action.data.id
                 state.coachdata.firstName = action.data.firstName
                 state.coachdata.lastName = action.data.lastName
                 state.coachdata.mobileNumber = action.data.mobileNumber
                 state.coachdata.email = action.data.email
+               
                 let getTeamId = genrateTeamId(action.data.linkedEntity)
                 state.teamId = getTeamId
 
@@ -130,7 +135,8 @@ function liveScoreCoachState(state = initialState, action) {
 
             return {
                 ...state,
-
+                onLoad: false,
+                loading:false
             }
 
         ///******fail and error handling */
@@ -159,6 +165,7 @@ function liveScoreCoachState(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_ADD_EDIT_COACH_SUCCESS:
             return {
+                loading:false,
                 ...state,
             }
 

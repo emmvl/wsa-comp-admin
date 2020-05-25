@@ -22,11 +22,11 @@ function* errorSaga(error) {
 }
 
 export function* liveScoreCoachSaga(action) {
-    console.log('action', action)
+  
     try {
-        const result = yield call(userHttpApi.liveScoreCoachesList, action.roleId, action.entityTypeId, action.entityId);
+        const result = yield call(userHttpApi.liveScoreCoachesList, action.roleId, action.entityTypeId, action.entityId, action.search);
         if (result.status === 1) {
-            console.log('saga', result)
+            
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_COACH_LIST_SUCCESS,
                 result: result.result.data,
@@ -42,7 +42,7 @@ export function* liveScoreCoachSaga(action) {
 }
 
 export function* liveScoreAddCoachSaga(action) {
-    console.log('action', action)
+  
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreAddCoach, action.data, action.teamId, action.exsitingManagerId);
         if (result.status === 1) {
@@ -53,7 +53,7 @@ export function* liveScoreAddCoachSaga(action) {
                 status: result.status,
             });
             message.success('Add Coach - Successfully Added')
-            history.push('/liveScoreCoachList')
+            history.push('/LiveScoreCoaches')
         } else {
             yield call(failSaga, result)
         }

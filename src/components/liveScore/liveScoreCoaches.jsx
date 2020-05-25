@@ -78,16 +78,17 @@ const columns = [
     key: "linkedEntity",
     sorter: (a, b) => tableSort(a, b, "linkedEntity"),
     render: (linkedEntity, record) =>
-    // <NavLink to={{
-    //     pathname: '/userPersonal',
-    //     state: { userId: record.id, screenKey: "livescoreCoach" }
-    // }}>
-    {
-      linkedEntity.length > 0 && linkedEntity.map((item) => (
-        <span style={{ color: '#ff8237', cursor: 'pointer' }} className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
-      ))
-    }
-    // </NavLink>
+      <NavLink to={{
+        // pathname: '/liveScoreManagerView',
+        // state: { tableRecord: record }
+        pathname: '/userPersonal',
+        state: { userId: record.id, screenKey: "livescore" }
+      }}>
+        {linkedEntity.length > 0 && linkedEntity.map((item) => (
+          <span style={{ color: '#ff8237', cursor: 'pointer' }} className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
+        ))
+        }
+      </NavLink>
   },
   {
     title: 'Action',
@@ -124,12 +125,14 @@ const columns = [
 class LiveScoreCoaches extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      searchText: ""
+    };
   }
 
   componentDidMount() {
     const { id } = JSON.parse(getLiveScoreCompetiton())
-    this.props.liveScoreCoachListAction(3, 1, id)
+    this.props.liveScoreCoachListAction(17, 1, id, this.state.searchText)
 
     if (id !== null) {
       this.props.getliveScoreTeams(id)
@@ -141,7 +144,7 @@ class LiveScoreCoaches extends Component {
   contentView = () => {
     let couchesList = isArrayNotEmpty(this.props.liveScoreCoachState.coachesResult) ? this.props.liveScoreCoachState.coachesResult : []
     let teamList = isArrayNotEmpty(this.props.liveScoreCoachState.coachesResult) ? this.props.liveScoreCoachState.coachesResult : []
-    console.log(couchesList, "couchesList")
+
     return (
       <div className="comp-dash-table-view mt-4">
         <div className="table-responsive home-dash-table-view">
@@ -264,11 +267,11 @@ class LiveScoreCoaches extends Component {
         <div className="mt-5" style={{ display: "flex", justifyContent: 'flex-end' }} >
           <div className="comp-product-search-inp-width" >
             <Input className="product-reg-search-input"
-              // onChange={(e) => this.onChangeSearchText(e)}
+              onChange={(e) => this.onChangeSearchText(e)}
               placeholder="Search..."
-              // onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+              onKeyPress={(e) => this.onKeyEnterSearchText(e)}
               prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-              // onClick={() => this.onClickSearchIcon()}
+                onClick={() => this.onClickSearchIcon()}
               />}
               allowClear
             />
@@ -277,6 +280,40 @@ class LiveScoreCoaches extends Component {
       </div>
     )
   }
+
+  // on change search text
+  onChangeSearchText = (e) => {
+    const { id } = JSON.parse(getLiveScoreCompetiton())
+    this.setState({ searchText: e.target.value })
+    if (e.target.value == null || e.target.value == "") {
+      // this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, e.target.value)
+
+      this.props.liveScoreCoachListAction(17, 1, id, e.target.value)
+    }
+  }
+
+  // search key 
+  onKeyEnterSearchText = (e) => {
+    var code = e.keyCode || e.which;
+    const { id } = JSON.parse(getLiveScoreCompetiton())
+    if (code === 13) { //13 is the enter keycode
+      // this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, this.state.searchText)
+      this.props.liveScoreCoachListAction(17, 1, id, e.target.value)
+    }
+  }
+
+  // on click of search icon
+  onClickSearchIcon = () => {
+    const { id } = JSON.parse(getLiveScoreCompetiton())
+    if (this.state.searchText == null || this.state.searchText == "") {
+    }
+    else {
+      // this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, this.state.searchText)
+      this.props.liveScoreCoachListAction(17, 1, id, this.state.searchText)
+    }
+  }
+
+
 
   render() {
     return (

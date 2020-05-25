@@ -1882,6 +1882,11 @@ function competitionFees(state = initialState, action) {
                 state.competionDiscountValue.competitionDiscounts[0].discounts = []
                 state.charityTitle = ""
                 state.charityDescription = ""
+                const paymentOptionObject = {
+                    paymentOptions: [],
+                    charityRoundUp: []
+                }
+                state.competitionPaymentsData = paymentOptionObject
             }
             return {
                 ...state, error: null
