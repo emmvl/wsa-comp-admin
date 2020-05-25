@@ -10,7 +10,10 @@ import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 import { getOrganisationData } from "../../util/sessionStorage";
 import {getUserDashboardTextualAction} from "../../store/actions/userAction/userAction";
+import { getOnlyYearListAction } from '../../store/actions/appAction'
+import { getGenderAction } from '../../store/actions/commonAction/commonAction';
 import moment from 'moment';
+import InputWithHead from "../../customComponents/InputWithHead";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -26,7 +29,7 @@ const columns = [
         sorter: (a, b) => a.name.localeCompare(b.name),
         render: (name, record) =>
         <NavLink to={{ pathname: `/userPersonal`, state: {userId: record.userId} }}>
-            <span class="input-heading-add-another pt-0" >{name}</span>
+            <span className="input-heading-add-another pt-0" >{name}</span>
         </NavLink>
     },
     {
@@ -137,9 +140,12 @@ class UserTextualDashboard extends Component{
         super(props);
         this.state = {
             organisationId: getOrganisationData().organisationUniqueKey,
-            year: "2019winter",
-            value: "playingMember",
-            competition: "all",
+            yearRefId: -1,
+            competitionUniqueKey: '-1',
+            roleId: -1,
+            genderRefId: -1,
+            linkedEntityId: '-1',
+            postalCode: '',
             searchText: '',
             deleteLoading: false,
         }
@@ -147,7 +153,8 @@ class UserTextualDashboard extends Component{
     }
 
     componentDidMount(){
-        this.handleTextualTableList(1, this.state.organisationId, -1,'-1',-1,-1,-1,'-1')
+        this.referenceCalls();
+        this.handleTextualTableList(1)
     }
 
     componentDidUpdate(nextProps){
@@ -162,16 +169,70 @@ class UserTextualDashboard extends Component{
         }
     }
 
-    handleTextualTableList = (page, organisationId,yearRefId, competitionUniqueKey, roleId, genderRefId, linkedEntityId, postCode) => {
+    referenceCalls = () => {
+        this.props.getGenderAction();
+        this.props.getOnlyYearListAction();
+    }
+
+    onChangeDropDownValue = async (value, key) => {
+        if(key == "yearRefId"){
+          await this.setState({yearRefId: value});
+          this.handleTextualTableList(1);
+        }
+        else if (key == "competitionId"){
+            await   this.setState({competitionUniqueKey: value});
+            this.handleTextualTableList(1);
+        }
+        else if (key == "genderRefId"){
+            await this.setState({genderRefId: value});
+            this.handleTextualTableList(1);
+        }
+        else if (key == "linkedEntityId"){
+            await  this.setState({linkedEntityId: value});
+            this.handleTextualTableList(1);
+        }
+        else if (key == "roleId"){
+            await  this.setState({roleId: value});
+            this.handleTextualTableList(1);
+        }
+        else if(key == "postalCode"){
+            const regex = /,/gi;
+            let canCall = false;
+            let newVal = value.toString().split(',');
+            newVal.map((x,index) => {
+                console.log("Val::" + x + "**" + x.length);
+                if(Number(x.length)%4 == 0 &&  x.length > 0){
+                    canCall = true;
+                }
+                else{
+                    canCall = false; 
+                }
+            })
+
+
+            await this.setState({postalCode: value});
+            if(canCall){
+                this.handleTextualTableList(1);
+           }
+           else if(value.length == 0)
+           {
+            this.handleTextualTableList(1);
+           }
+        }
+    }
+
+
+    handleTextualTableList = (page) => {
+        console.log("RoleId:;" + this.state.roleId);
         let filter = 
         {
-            organisationId: organisationId,
-            yearRefId:yearRefId,
-            competitionUniqueKey:competitionUniqueKey,
-            roleId: roleId,
-            genderRefId: genderRefId,
-            linkedEntityId: linkedEntityId,
-            postCode: postCode,
+            organisationId: this.state.organisationId,
+            yearRefId:this.state.yearRefId,
+            competitionUniqueKey: this.state.competitionUniqueKey,
+            roleId: this.state.roleId,
+            genderRefId: this.state.genderRefId,
+            linkedEntityId: this.state.linkedEntityId,
+            postCode: (this.state.postalCode!= '' && this.state.postalCode!= null) ? this.state.postalCode.toString() : '-1',
             searchText: this.state.searchText,
             paging : {
                 limit : 10,
@@ -198,98 +259,115 @@ class UserTextualDashboard extends Component{
 
       ///dropdown view containing all the dropdown of header
       dropdownView = () => {
+        let uniqueValues = [];
+        const {genderData} = this.props.commonReducerState;
+        const {competitions, organisations, roles} = this.props.userState;
+        let competitionList = [];
+        if(this.state.yearRefId != -1){
+            competitionList = competitions.filter(x=>x.yearRefId == this.state.yearRefId);
+        }
+        else{
+            competitionList =  competitions;
+        }
+        
         return (
             <div style={{paddingLeft: '3.0%'}}>
                 <div className="fluid-width" >
-                    <div className="row" >
-                        {/* <div className="col-sm" >
-                            <div style={{ width: "100%", display: "flex", flexDirection: "row",
-                                alignItems: "center",
-                            }} >
-                                <span className='year-select-heading'>{AppConstants.year}:</span>
+                    <div className="row user-filter-row" >
+                        <div className="user-col" >
+                            <div className="user-filter-col-cont">
+                                <div className='year-select-heading'>{AppConstants.year}</div>
                                 <Select
-                                    className="year-select"
-                                    // style={{ width: 140 }}
-                                    onChange={(competition) => this.setState({ competition })}
-                                    value={this.state.competition}
-                                >
-                                    <Option value={"all"}>{AppConstants.all}</Option>
-                                </Select>
-                            </div>
-                        </div> */}
-                        <div className="col-sm" >
-                            <div style={{ width: "100%", display: "flex", flexDirection: "row",
-                                alignItems: "center",
-                            }} >
-                                <span className='year-select-heading'>{AppConstants.competition}:</span>
-                                <Select
-                                    className="year-select"
-                                    // style={{ width: 140 }}
-                                    onChange={(competition) => this.setState({ competition })}
-                                    value={this.state.competition}
-                                >
-                                    <Option value={"all"}>{AppConstants.all}</Option>
+                                    name={"yearRefId"}
+                                    className="year-select user-filter-select"
+                                    onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
+                                    value={this.state.yearRefId}>
+                                        <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                    {this.props.appState.yearList.map(item => {
+                                        return (
+                                            <Option key={"yearRefId" + item.id} value={item.id}>
+                                                {item.description}
+                                            </Option>
+                                        );
+                                    })}
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm" >
-                            <div style={{ width: "100%", display: "flex", flexDirection: "row",
-                                alignItems: "center",
-                            }} >
-                                <span className='year-select-heading'>{AppConstants.roles}:</span>
+                        <div className="user-col" >
+                            <div className="user-filter-col-cont">
+                                <div className='year-select-heading'>{AppConstants.competition}</div>
                                 <Select
-                                    className="year-select"
-                                    // style={{ width: 140 }}
-                                    onChange={(competition) => this.setState({ competition })}
-                                    value={this.state.competition}
-                                >
-                                    <Option value={"all"}>{AppConstants.all}</Option>
+                                    showSearch
+                                    optionFilterProp="children"
+                                    className="year-select user-filter-select1"
+                                    onChange={competitionId => this.onChangeDropDownValue(competitionId, "competitionId")}
+                                    value={this.state.competitionUniqueKey}>
+                                        <Option key={-1} value={'-1'}>{AppConstants.all}</Option>
+                                    {(competitionList || []).map((item,cIndex) => {
+                                        return (
+                                            <Option key={"competition" + item.competitionUniqueKey + "" + cIndex} value={item.competitionUniqueKey}>
+                                                {item.name}
+                                            </Option>
+                                        );
+                                    })}
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm" >
-                            <div style={{ width: "100%", display: "flex", flexDirection: "row",
-                                alignItems: "center",
-                            }} >
-                                <span className='year-select-heading'>{AppConstants.gender}:</span>
+                        <div className="user-col" >
+                            <div  className="user-filter-col-cont" >
+                                <div className='year-select-heading'>{AppConstants.roles}</div>
                                 <Select
-                                    className="year-select"
-                                    // style={{ width: 140 }}
-                                    onChange={(competition) => this.setState({ competition })}
-                                    value={this.state.competition}
-                                >
-                                    <Option value={"all"}>{AppConstants.all}</Option>
+                                    className="year-select user-filter-select"
+                                    onChange={(e) => this.onChangeDropDownValue(e, 'roleId')}
+                                    value={this.state.roleId}>
+                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                    {(roles || []).map((org, index) => (
+                                        <Option key={org.id} value={org.id}>{org.description}</Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm" >
-                            <div style={{ width: "100%", display: "flex", flexDirection: "row",
-                                alignItems: "center",
-                            }} >
-                                <span className='year-select-heading'>{AppConstants.linked}:</span>
+                        <div className="user-col" >
+                            <div  className="user-filter-col-cont" >
+                                <div className='year-select-heading'>{AppConstants.gender}</div>
                                 <Select
-                                    className="year-select"
-                                    // style={{ width: 140 }}
-                                    onChange={(competition) => this.setState({ competition })}
-                                    value={this.state.competition}
-                                >
-                                    <Option value={"all"}>{AppConstants.all}</Option>
+                                    className="year-select user-filter-select"
+                                    onChange={(e) => this.onChangeDropDownValue(e, 'genderRefId')}
+                                    value={this.state.genderRefId}>
+                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                    {(genderData || []).map((g, index) => (
+                                        <Option key={g.id} value={g.id}>{g.description}</Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm" >
-                            <div style={{ width: "100%", display: "flex", flexDirection: "row",
-                                alignItems: "center",
-                            }} >
-                                <span className='year-select-heading'>{AppConstants.postCode}:</span>
+                    </div>
+                    <div className="row reg-filter-row" >
+                        <div className="reg-col" >
+                            <div  className="reg-filter-col-cont" >
+                                <div className='year-select-heading'>{AppConstants.affiliate}</div>
                                 <Select
-                                    className="year-select"
-                                    // style={{ width: 140 }}
-                                    onChange={(competition) => this.setState({ competition })}
-                                    value={this.state.competition}
-                                >
-                                    <Option value={"all"}>{AppConstants.all}</Option>
+                                    showSearch
+                                    optionFilterProp="children"
+                                    className="year-select reg-filter-select"
+                                    style={{ minWidth: 100 }}
+                                    onChange={(e) => this.onChangeDropDownValue(e, 'linkedEntityId')}
+                                    value={this.state.linkedEntityId}>
+                                    <Option key={'-1'} value={'-1'}>{AppConstants.all}</Option>
+                                    {(organisations || []).map((g, index) => (
+                                        <Option key={g.organisationUniqueKey} value={g.organisationUniqueKey}>{g.name}</Option>
+                                    ))}
                                 </Select>
+                            </div>
+                        </div>
+                        <div className="reg-col" >
+                            <div  className="reg-filter-col-cont" >
+                                <div className='year-select-heading'>{AppConstants.postCode}</div>
+                                <InputWithHead
+                                    placeholder={AppConstants.postCode}
+                                    onChange={(e) => this.onChangeDropDownValue(e.target.value, 'postalCode')}
+                                    value={this.state.postalCode}
+                                />
                             </div>
                         </div>
                     </div>
@@ -317,7 +395,7 @@ class UserTextualDashboard extends Component{
                         className="antd-pagination"
                         current={userState.userDashboardTextualPage}
                         total={total}
-                        onChange={(page) => this.handleTextualTableList(page, this.state.organisationId, -1,'-1',-1,-1,-1,'-1' )}
+                        onChange={(page) => this.handleTextualTableList(page)}
                     />
                 </div>
             </div>
@@ -346,14 +424,18 @@ class UserTextualDashboard extends Component{
 function mapDispatchToProps(dispatch)
 {
     return bindActionCreators({
-        getUserDashboardTextualAction
+        getUserDashboardTextualAction,
+        getOnlyYearListAction,
+        getGenderAction
     }, dispatch);
 
 }
 
 function mapStatetoProps(state){
     return {
-        userState: state.UserState
+        userState: state.UserState,
+        appState: state.AppState,
+        commonReducerState: state.CommonReducerState,
     }
 }
 

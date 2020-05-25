@@ -301,6 +301,9 @@ function userReducer(state = initialState, action) {
                 userDashboardTextualList: textualData.users,
                 userDashboardTextualPage: textualData.page ? textualData.page.currentPage : 1,
                 userDashboardTextualTotalCount: textualData.page.totalCount,
+                competitions:isArrayNotEmpty(textualData.competitions) ? textualData.competitions : [],
+                organisations: isArrayNotEmpty(textualData.organisations) ? textualData.organisations : [],
+                roles: isArrayNotEmpty(textualData.roles) ? textualData.roles : [],
                 status: action.status
             };
         case ApiConstants.API_USER_MODULE_PERSONAL_DETAIL_LOAD:
