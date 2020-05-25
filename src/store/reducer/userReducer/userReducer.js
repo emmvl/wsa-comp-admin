@@ -493,6 +493,16 @@ function userReducer(state = initialState, action) {
                 status: action.status,
                 error: null
             };
+        case ApiConstants.API_EXPORT_ORG_REG_QUESTIONS_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_EXPORT_ORG_REG_QUESTIONS_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
         default:
             return state;
     }

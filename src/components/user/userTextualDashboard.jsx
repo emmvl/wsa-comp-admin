@@ -345,7 +345,7 @@ class UserTextualDashboard extends Component{
                     <div className="row reg-filter-row" >
                         <div className="reg-col" >
                             <div  className="reg-filter-col-cont" >
-                                <div className='year-select-heading'>{AppConstants.affiliate}</div>
+                                <div className='year-select-heading'>{AppConstants.linked}</div>
                                 <Select
                                     showSearch
                                     optionFilterProp="children"

@@ -252,6 +252,17 @@ function deleteOrgContact(payload){
   return action;
 }
 
+
+/* Export Organisation Registration Question */
+function exportOrgRegQuestionAction(payload) {
+  const action = {
+    type: ApiConstants.API_EXPORT_ORG_REG_QUESTIONS_LOAD,
+    payload: payload
+  };
+  return action;
+}
+
+
 export {
   getRoleAction,
   getUreAction,
@@ -281,5 +292,6 @@ export {
   getOrganiationPhotoAction,
   saveOrganiationPhotoAction,
   deleteOrganiationPhotoAction,
-  deleteOrgContact
+  deleteOrgContact,
+  exportOrgRegQuestionAction
 }
