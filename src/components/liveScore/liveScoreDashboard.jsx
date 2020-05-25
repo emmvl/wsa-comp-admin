@@ -14,7 +14,7 @@ import { liveScore_formateDateTime } from '../../themes/dateformate'
 import { NavLink } from 'react-router-dom';
 import AppImages from "../../themes/appImages";
 import moment from "moment";
-
+import { isArrayNotEmpty } from "../../util/helpers";
 
 const { Content } = Layout;
 let this_obj = null;
@@ -203,36 +203,39 @@ const columnsTodaysMatch = [
             <span class="input-heading-add-another pt-0" onClick={() => { console.log('hello clcicked ') }} >{competition.recordUmpire}</span>
     }, {
         title: "Scorer 1",
-        dataIndex: 'scorerStatus',
-        key: 'scorerStatus',
-        sorter: (a, b) => tableSort(a, b, "scorerStatus1"),
-
+        dataIndex: 'scorer1Status',
+        key: 'scorer1Status',
+        sorter: (a, b) => tableSort(a, b, "scorer1Status"),
+        render: (scorer1Status) =>
+        <span>{ isArrayNotEmpty(scorer1Status) ? scorer1Status[0].r_status == "YES" ? "Accepted" :"Not Accepted" :"Not SET"}</span>
 
     }, {
         title: "Scorer 2",
-        dataIndex: 'scorerStatus',
-        key: 'scorerStatus',
-        sorter: (a, b) => tableSort(a, b, "scorerStatus2"),
-        render: (scorerStatus, record) =>
-            <span >{record.competition.scoringType == 'SINGLE' ? "" : scorerStatus}</span>
+        dataIndex: 'scorer2Status',
+        key: 'scorer2Status',
+        sorter: (a, b) => tableSort(a, b, "scorer2Status"),
+        render: (scorer2Status, record) =>
+            <span >{record.competition.scoringType == 'SINGLE' ? "" : isArrayNotEmpty(scorer2Status) ? scorer2Status[0].r_status == "YES" ? "Accepted" :"Not Accepted":"  Not SET" }</span>
 
 
 
     },
     {
         title: "Player Attendance Team A",
-        dataIndex: 'playerAttendanveTeamA',
-        key: 'playerAttendanveTeamA',
-        sorter: (a, b) => tableSort(a, b, "playerAttendanveTeamA"),
-
+        dataIndex: 'teamAttendanceCountA',
+        key: 'teamAttendanceCountA',
+        sorter: (a, b) => tableSort(a, b, "teamAttendanceCountA"),
+        render: (teamAttendanceCountA, record) =>
+        <span >{teamAttendanceCountA > 0? "Complete" :"Not Complete"}</span>
 
     },
     {
         title: "Player Attendance Team B",
-        dataIndex: 'playerAttendanveTeamB',
-        key: 'playerAttendanveTeamA',
-        sorter: (a, b) => tableSort(a, b, "playerAttendanveTeamB"),
-
+        dataIndex: 'teamAttendanceCountB',
+        key: 'teamAttendanceCountB',
+        sorter: (a, b) => tableSort(a, b, "teamAttendanceCountB"),
+        render: (teamAttendanceCountB, record) =>
+        <span >{teamAttendanceCountB > 0? "Complete" :"Not Complete"}</span>
 
     },
     {
