@@ -1026,6 +1026,8 @@ const AppConstants = {
   editCoach: "Edit Coach",
   coachList: "Coach List",
   addCoach: "Add Coach",
+  exportRegQuestion: "Reg. Form Questions",
+  noDataAvailable: "No Data Available"
 };
 
 export default AppConstants;

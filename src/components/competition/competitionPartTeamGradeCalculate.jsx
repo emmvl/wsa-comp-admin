@@ -170,7 +170,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                 render: (grades, record) =>
                     < div style={{ width: "fit-content", display: "flex", flexDirection: 'column', justifyContent: 'center' }}>
                         <a className="pb-3">
-                            <span
+                            <span  style={{color: "var(--app-color)"}}
                                 onClick={() => this.updateGradeName(grades.competitionDivisionGradeId, record.competitionMembershipProductDivisionId)} className="year-select-heading ">
                                 {grades.gradeName}
                             </span>
