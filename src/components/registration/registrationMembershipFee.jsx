@@ -520,6 +520,8 @@ class RegistrationMembershipFee extends Component {
                                                                 showTime={false}
                                                                 // defaultValue={item.dobFrom !== null ? moment(item.dobFrom) : null}
                                                                 disabled={this.state.membershipIsUsed}
+                                                                disabledDate={d => d.isSameOrAfter(item.dobTo)
+                                                                }
                                                             />
                                                         )}
                                                     </Form.Item>
@@ -546,6 +548,8 @@ class RegistrationMembershipFee extends Component {
                                                                 showTime={false}
                                                                 defaultValue={item.dobTo !== null ? moment(item.dobTo) : null}
                                                                 disabled={this.state.membershipIsUsed}
+                                                                disabledDate={d => d.isSameOrBefore(item.dobFrom)
+                                                                }
                                                             />
                                                         )}
                                                     </Form.Item>

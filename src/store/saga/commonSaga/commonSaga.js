@@ -371,30 +371,7 @@ export function* getGenderSaga(action) {
     }
 }
 
-//get invoice saga
-export function* getInvoiceSaga(action) {
-    try {
-        const result = yield call(AxiosApi.getInvoice,  action.registrationid);
-        if (result.status === 1) {
-            yield put({
-                type: ApiConstants.API_GET_INVOICE_SUCCESS,
-                result: result.result.data,
-                status: result.result.status
-            });
-        } else {
-            yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
-            setTimeout(() => {
-                alert(result.data.message);
-            }, 800);
-        }
-    } catch (error) {
-        yield put({
-            type: ApiConstants.API_COMMON_SAGA_ERROR,
-            error: error,
-            status: error.status
-        });
-    }
-}
+
 
 export function* getPhotoTypeSaga(action) {
     try {

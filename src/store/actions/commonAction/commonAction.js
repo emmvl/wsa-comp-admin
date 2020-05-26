@@ -150,13 +150,7 @@ function getPhotoTypeAction() {
     return action
 }
 
-function getInvoice(registrationid) {
-    const action = {
-        type: ApiConstants.API_GET_INVOICE_LOAD,
-        registrationid
-    }
-    return action
-}
+
 
 
 function getApplyToAction() {
@@ -201,7 +195,6 @@ export {
     venuesListAction,
     venueDeleteAction,
     getGenderAction,
-    getInvoice,
     getPhotoTypeAction,
     getApplyToAction,
     getExtraTimeDrawAction,

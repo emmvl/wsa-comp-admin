@@ -391,6 +391,8 @@ class RegistrationCompetitionForm extends Component {
                                             showTime={false}
                                             disabled={!record.ageRestriction || this.state.permissionState.divisionsDisable}
                                             setFieldsValue={fromDate !== null && moment(fromDate)}
+                                            disabledDate={d => !d || d.isSameOrAfter(record.toDate)
+                                            }
                                         />
                                     )}
                             </Form.Item>
@@ -417,6 +419,8 @@ class RegistrationCompetitionForm extends Component {
                                             showTime={false}
                                             disabled={!record.ageRestriction || this.state.permissionState.divisionsDisable}
                                             setFieldsValue={toDate !== null && moment(toDate)}
+                                            disabledDate={d => !d || d.isSameOrBefore(record.fromDate)
+                                            }
                                         />
                                     )}
                             </Form.Item>
@@ -796,6 +800,13 @@ class RegistrationCompetitionForm extends Component {
     }
 
 
+    checkDivisionEmpty(data) {
+        for (let i in data) {
+            if (data[i].divisions.length == 0) {
+                return true
+            }
+        }
+    }
 
     saveAPIsActionCall = (e) => {
         e.preventDefault();
@@ -895,8 +906,14 @@ class RegistrationCompetitionForm extends Component {
                         statusRefId: this.state.statusRefId,
                         divisions: payload
                     }
-                    this.props.saveCompetitionFeesDivisionAction(finalDivisionPayload, competitionId)
-                    this.setState({ loading: true })
+                    if (this.checkDivisionEmpty(divisionArrayData) == true) {
+                        message.error(ValidationConstants.pleaseAddDivisionForMembershipProduct)
+                    }
+                    else {
+                        this.props.saveCompetitionFeesDivisionAction(finalDivisionPayload, competitionId)
+                        this.setState({ loading: true })
+                    }
+
                 }
                 // else if (tabKey == "4") {
                 //     this.saveCompFeesApiCall(e)

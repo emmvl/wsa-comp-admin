@@ -247,6 +247,7 @@ function getDivisionTableData(data) {
             })
         }
     }
+    console.log("compDivisionTempArray", compDivisionTempArray)
     return compDivisionTempArray
 
 }
@@ -1900,6 +1901,10 @@ function competitionFees(state = initialState, action) {
 
         case ApiConstants.API_COMPETITION_FEE_DEFAULT_LOGO_SUCCESS:
             console.log("action.result.data", action.result.data)
+            if (state.competitionId.length == 0 || state.competitionId == null) {
+                state.competitionDetailData.competitionLogoUrl = action.result.data.logoUrl
+                state.competitionDetailData.logoIsDefault = true
+            }
             return {
                 ...state,
                 onLoad: false,

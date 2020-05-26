@@ -777,6 +777,8 @@ class RegistrationCompetitionFee extends Component {
                                             showTime={false}
                                             disabled={!record.ageRestriction || this.state.permissionState.divisionsDisable}
                                             setFieldsValue={fromDate !== null && moment(fromDate)}
+                                            disabledDate={d => !d || d.isSameOrAfter(record.toDate)
+                                            }
                                         />
                                     )}
                             </Form.Item>
@@ -803,6 +805,8 @@ class RegistrationCompetitionFee extends Component {
                                             showTime={false}
                                             disabled={!record.ageRestriction || this.state.permissionState.divisionsDisable}
                                             setFieldsValue={toDate !== null && moment(toDate)}
+                                            disabledDate={d => !d || d.isSameOrBefore(record.fromDate)
+                                            }
                                         />
                                     )}
                             </Form.Item>
@@ -1224,6 +1228,14 @@ class RegistrationCompetitionFee extends Component {
         })
     }
 
+    checkDivisionEmpty(data) {
+        for (let i in data) {
+            if (data[i].divisions.length == 0) {
+                return true
+            }
+        }
+    }
+
 
 
     saveAPIsActionCall = (e) => {
@@ -1324,12 +1336,18 @@ class RegistrationCompetitionFee extends Component {
                         finalDivisionArray = [...finalDivisionArray, ...divisionArrayData[i].divisions]
                     }
                     let payload = finalDivisionArray
+                    console.log("payload", divisionArrayData)
                     let finalDivisionPayload = {
                         statusRefId: this.state.statusRefId,
                         divisions: payload
                     }
-                    this.props.saveCompetitionFeesDivisionAction(finalDivisionPayload, competitionId)
-                    this.setState({ loading: true })
+                    if (this.checkDivisionEmpty(divisionArrayData) == true) {
+                        message.error(ValidationConstants.pleaseAddDivisionForMembershipProduct)
+                    }
+                    else {
+                        this.props.saveCompetitionFeesDivisionAction(finalDivisionPayload, competitionId)
+                        this.setState({ loading: true })
+                    }
                 }
                 else if (tabKey == "4") {
                     this.saveCompFeesApiCall(e)

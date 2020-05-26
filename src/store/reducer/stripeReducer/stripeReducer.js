@@ -18,6 +18,7 @@ const initialState = {
     stripeTransactionPayoutList: [],
     stripeTransactionPayoutListTotalCount: 1,
     stripeTransactionPayoutListPage: 1,
+    getInvoicedata: [],
 }
 
 
@@ -145,6 +146,22 @@ function stripe(state = initialState, action) {
                 status: action.status,
                 error: null
             };
+
+        ///get invoice
+        case ApiConstants.API_GET_INVOICE_LOAD:
+            return {
+                ...state,
+                onLoad: true,
+                error: null,
+
+            }
+
+        case ApiConstants.API_GET_INVOICE_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                getInvoicedata: action.result
+            }
         default:
             return state;
     }

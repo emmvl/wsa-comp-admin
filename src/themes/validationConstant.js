@@ -151,6 +151,7 @@ const ValidationConstants = {
     coachSearch: "Coach Search",
     searchCoach: "Please search coach.",
     charityDescriptionIsRequired: "Charity description is required.",
+    pleaseAddDivisionForMembershipProduct: "Please add division for membershipProduct.",
 };
 
 export default ValidationConstants;

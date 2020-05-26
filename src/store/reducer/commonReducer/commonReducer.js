@@ -42,7 +42,6 @@ const initialState = {
     }
     ],
     genderData: [],
-    getInvoicedata: [],
     photoTypeData: [],
     applyToData: [],
     extraTimeDrawData: [],
@@ -262,20 +261,7 @@ function commonReducerState(state = initialState, action) {
                 status: action.status
             }
 
-        case ApiConstants.API_GET_INVOICE_LOAD:
-            return {
-                ...state,
-                onLoad: true,
-                error: null,
 
-            }
-
-        case ApiConstants.API_GET_INVOICE_SUCCESS:
-            return {
-                ...state,
-                onLoad: false,
-                getInvoicedata: action.result
-            }
 
         case ApiConstants.API_GET_PHOTO_TYPE_LOAD:
             return {
