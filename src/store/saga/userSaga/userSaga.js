@@ -505,14 +505,14 @@ export function* deleteOrgContactSaga(action) {
 /* Export Organisation Registration Quesations */
 export function* exportOrgRegQuestionsSaga(action) {
     try {
-        const result = yield call(userHttpApi.deleteOrgContact, action.payload);
+        const result = yield call(userHttpApi.exportOrgRegQuestions, action.payload);
         if (result.status === 1) {
             yield put({
-                type: ApiConstants.API_DELETE_ORG_CONTACT_SUCCESS,
+                type: ApiConstants.API_EXPORT_ORG_REG_QUESTIONS_SUCCESS,
                 result: result.result.data,
                 status: result.status
             });
-            message.success(result.result.data.message);
+          //  message.success(result.result.data.message);
         } else {
             yield call(failSaga, result)
         }

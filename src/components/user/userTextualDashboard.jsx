@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Table, Select, Menu, Pagination } from 'antd';
+import { Layout, Breadcrumb, Table, Select, Menu, Pagination,Button } from 'antd';
 import './user.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -9,11 +9,12 @@ import { NavLink } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 import { getOrganisationData } from "../../util/sessionStorage";
-import {getUserDashboardTextualAction} from "../../store/actions/userAction/userAction";
+import {getUserDashboardTextualAction, exportOrgRegQuestionAction} from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 import { getGenderAction } from '../../store/actions/commonAction/commonAction';
 import moment from 'moment';
 import InputWithHead from "../../customComponents/InputWithHead";
+import Loader from '../../customComponents/loader';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -242,6 +243,22 @@ class UserTextualDashboard extends Component{
         this.props.getUserDashboardTextualAction(filter);
     };
 
+    exportOrgRegistrationQuestions = () => {
+        let filter = 
+        {
+            organisationId: this.state.organisationId,
+            yearRefId:this.state.yearRefId,
+            competitionUniqueKey: this.state.competitionUniqueKey,
+            roleId: this.state.roleId,
+            genderRefId: this.state.genderRefId,
+            linkedEntityId: this.state.linkedEntityId,
+            postCode: (this.state.postalCode!= '' && this.state.postalCode!= null) ? this.state.postalCode.toString() : '-1',
+            searchText: this.state.searchText
+        }
+
+        this.props.exportOrgRegQuestionAction(filter);
+    }
+
      ///////view for breadcrumb
      headerView = () => {
         return (
@@ -251,6 +268,29 @@ class UserTextualDashboard extends Component{
                         <Breadcrumb separator=" > ">
                             < Breadcrumb.Item className="breadcrumb-add">{AppConstants.userProfile}</Breadcrumb.Item>
                         </Breadcrumb>
+                    </div>
+                    <div className="col-sm" style={{
+                        display: "flex", flexDirection: 'row', alignItems: "center",
+                        justifyContent: "flex-end", width: "100%"
+                    }}>
+                        <div className="row">
+                            <div className="col-sm">
+                                <div className="comp-dashboard-botton-view-mobile">
+                                    <Button className="primary-add-comp-form" type="primary" onClick={()=> this.exportOrgRegistrationQuestions()}>
+                                            <div className="row">
+                                                <div className="col-sm">
+                                                    <img
+                                                        src={AppImages.export}
+                                                        alt=""
+                                                        className="export-image"
+                                                    />
+                                                    {AppConstants.exportRegQuestion}
+                                                </div>
+                                            </div>
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </Header >
@@ -412,6 +452,10 @@ class UserTextualDashboard extends Component{
                     <Content>
                         {this.dropdownView()}
                         {this.contentView()}
+                        <Loader
+                            visible={
+                                this.props.userState.onExpOrgRegQuesLoad
+                            } />
                     </Content>
                 </Layout>
             </div>
@@ -426,7 +470,8 @@ function mapDispatchToProps(dispatch)
     return bindActionCreators({
         getUserDashboardTextualAction,
         getOnlyYearListAction,
-        getGenderAction
+        getGenderAction,
+        exportOrgRegQuestionAction
     }, dispatch);
 
 }

@@ -680,6 +680,9 @@ export default function* root_saga() {
   // Organisation Contat Delete
   yield takeEvery(ApiConstants.API_DELETE_ORG_CONTACT_LOAD, userSaga.deleteOrgContactSaga)
 
+  // Organisation Contat Delete
+  yield takeEvery(ApiConstants.API_EXPORT_ORG_REG_QUESTIONS_LOAD, userSaga.exportOrgRegQuestionsSaga)
+
   /////API_GET_INVOICE data
   yield takeEvery(ApiConstants.API_GET_INVOICE_LOAD, stripeSaga.getInvoiceSaga)
 
