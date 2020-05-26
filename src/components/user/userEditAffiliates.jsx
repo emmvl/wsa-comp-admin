@@ -135,20 +135,9 @@ class UserEditAffiliates extends Component {
             affiliatedToOrgId: affiliate.affiliatedToOrgId
         })
         let contacts = affiliate.contacts;
-        this.updateContactFormFields(contacts);
-        // contacts.map((item, index) => {
-        //     this.props.form.setFieldsValue({
-        //         [`firstName${index}`]: item.firstName,
-        //         [`lastName${index}`]: item.lastName,
-        //         [`email${index}`]: item.email,
-        //     });
-        //     let permissions = item.permissions;
-        //     permissions.map((perm, permIndex) => {
-        //         this.props.form.setFieldsValue({
-        //             [`permissions${index}`]: perm.roleId,
-        //         });
-        //     })
-        // })
+        if(contacts!= null && contacts.length > 0){
+            this.updateContactFormFields(contacts);
+        }
     }
 
     onChangeSetValue = (val, key) => {
@@ -210,7 +199,10 @@ class UserEditAffiliates extends Component {
         if(contacts!= null){
             let contact = contacts[index];
             contacts.splice(index,1);
-            this.updateContactFormFields(contacts);
+            if(contacts!= null && contacts.length > 0){
+                this.updateContactFormFields(contacts);
+            }
+           
             this.props.updateAffiliateAction(contacts,"contacts");
             let obj = {
                 id: contact.userId,
