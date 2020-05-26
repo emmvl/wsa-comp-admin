@@ -178,7 +178,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                         <NavLink
                             to={{ pathname: `/competitionProposedTeamGrading`, state: { id: record.competitionMembershipProductDivisionId, gradeRefId: grades.gradeRefId } }}>
                             {grades.teamCount !== null ?
-                                <Tag className="comp-dashboard-table-tag  text-center" key={grades}
+                                <Tag className="comp-dashboard-table-tag  text-center tag-col" key={grades}
                                 >{grades.teamCount}
                                 </Tag>
                                 : null}

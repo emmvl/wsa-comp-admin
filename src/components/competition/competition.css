@@ -539,3 +539,8 @@ a.collapsed i {
 .venue-cons-err{
   color: var(--app-f5222d);
 }
+
+.tag-col{
+  background-color: var(--app-color);
+  color: white;
+}

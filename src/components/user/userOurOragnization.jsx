@@ -717,12 +717,14 @@ class UserOurOragnization extends Component {
                         <div className="col-sm" >
                             <span className="user-contact-heading">{AppConstants.contact + (index+1)}</span>
                         </div>
+                        {affiliate.contacts.length == 1 ? null :
                         <div className="transfer-image-view pointer" onClick={() => this.deleteContact(index)}>
                             <span class="user-remove-btn" ><i class="fa fa-trash-o" aria-hidden="true"></i></span>
                             <span className="user-remove-text">
                                 {AppConstants.remove}
                             </span>
                         </div>
+                        }
                     </div>
     
                     <Form.Item >
