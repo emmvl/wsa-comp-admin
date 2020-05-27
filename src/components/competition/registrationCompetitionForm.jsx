@@ -531,7 +531,7 @@ class RegistrationCompetitionForm extends Component {
                     feesTableDisable: true,
                     paymentsDisable: true,
                     discountsDisable: true,
-                    allDisable: false,
+                    allDisable: true,
                     isPublished: true
                 }
                 this.setState({ permissionState: permissionObject })

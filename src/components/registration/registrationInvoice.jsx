@@ -455,12 +455,12 @@ class RegistrationInvoice extends Component {
 
     }
 
-    totalInvoiceView = (result) => {
-        let data = result.length > 0 ? result : []
-        // let subValue = this.subTotal(data)
-        let subValue = 0
+
+
+    charityRoundUpView = (result) => {
+        let data = isArrayNotEmpty(result) ? result : []
         return (
-            <div className="content-view ">
+            <div>
                 {data && data.length > 0 && data.map((participantItem, participantIndex) => {
                     let charityRoundUpData = participantItem && isArrayNotEmpty(participantItem.charityDetail) ? participantItem.charityDetail : []
                     return (
@@ -478,6 +478,21 @@ class RegistrationInvoice extends Component {
                         </Radio.Group>
                     )
                 })}
+            </div>
+        )
+    }
+
+
+
+
+
+    totalInvoiceView = (result) => {
+        let data = result.length > 0 ? result : []
+        // let subValue = this.subTotal(data)
+        let subValue = 0
+        return (
+            <div className="content-view ">
+                {this.charityRoundUpView(result)}
                 <div className="drop-reverse" >
                     <div className="col-sm ">
                         <TextArea
