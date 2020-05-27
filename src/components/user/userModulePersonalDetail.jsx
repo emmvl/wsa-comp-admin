@@ -599,6 +599,7 @@ class UserModulePersonalDetail extends Component {
         {
             competitionId: competition.competitionId,
             userId: userId,
+            organisationId: getOrganisationData().organisationUniqueKey,
             paging: {
                 limit: 10,
                 offset: (page ? (10 * (page - 1)) : 0)
