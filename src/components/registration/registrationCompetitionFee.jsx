@@ -805,7 +805,9 @@ class RegistrationCompetitionFee extends Component {
                                             showTime={false}
                                             disabled={!record.ageRestriction || this.state.permissionState.divisionsDisable}
                                             setFieldsValue={toDate !== null && moment(toDate)}
-                                            disabledDate={d => !d || d.isSameOrBefore(record.fromDate)
+                                            // disabledDate={d => !d || d.isSameOrBefore(record.fromDate)
+                                            // }
+                                            disabledDate={d => moment(record.fromDate).isSameOrAfter(d, 'day')
                                             }
                                         />
                                     )}

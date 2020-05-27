@@ -498,7 +498,7 @@ class LiveScoreSettingsView extends Component {
                 <div className="row mt-4 ml-1" >
 
                     <Checkbox
-                        className="single-checkbosx"
+                        className="single-checkbox"
                         onChange={(e) => this.props.onChangeSettingForm({ key: "buzzerEnabled", data: e.target.checked })}
                         checked={buzzerEnabled}
                     >
@@ -506,7 +506,7 @@ class LiveScoreSettingsView extends Component {
                     </Checkbox>
 
                     <Checkbox
-                        className="single-checkbosx"
+                        className="single-checkbox"
                         onChange={(e) => this.props.onChangeSettingForm({ key: "warningBuzzerEnabled", data: e.target.checked })}
                         checked={warningBuzzerEnabled}
                     >

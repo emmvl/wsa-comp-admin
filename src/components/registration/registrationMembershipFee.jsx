@@ -143,6 +143,7 @@ class RegistrationMembershipFee extends Component {
         let productId = null
         productId = this.props.location.state ? this.props.location.state.id : null
         this.apiCalls(productId)
+        this.setFieldDecoratorValues()
     }
 
     componentDidUpdate(prevState) {
@@ -284,6 +285,7 @@ class RegistrationMembershipFee extends Component {
         this.props.form.setFieldsValue({
             yearRefId: membershipProductData.yearRefId ? membershipProductData.yearRefId : 1,
             membershipProductName: membershipProductData.membershipProductName,
+            validityRefId: membershipProductData.ValidityRefId ? membershipProductData.ValidityRefId : 2,
         });
         let typesData = membershipProductData.membershipProductTypes ? membershipProductData.membershipProductTypes : []
         typesData.length > 0 && typesData.map((item, index) => {
@@ -429,6 +431,7 @@ class RegistrationMembershipFee extends Component {
         this.props.updatedMembershipTypeDataAction(membershipTypeData)
     };
 
+
     //////dynamic membership type view
     membershipTypesView = (
         getFieldDecorator
@@ -548,7 +551,9 @@ class RegistrationMembershipFee extends Component {
                                                                 showTime={false}
                                                                 defaultValue={item.dobTo !== null ? moment(item.dobTo) : null}
                                                                 disabled={this.state.membershipIsUsed}
-                                                                disabledDate={d => d.isSameOrBefore(item.dobFrom)
+                                                                // disabledDate={d => d.isSameOrBefore(item.dobFrom)
+                                                                // }
+                                                                disabledDate={d => moment(item.dobFrom).isSameOrAfter(d, 'day')
                                                                 }
                                                             />
                                                         )}
@@ -614,20 +619,23 @@ class RegistrationMembershipFee extends Component {
                     {AppConstants.validity}
                 </span>
                 <Form.Item  >
-                    {getFieldDecorator('validityRefId', { initialValue: 1 },
-                        { rules: [{ required: true, message: ValidationConstants.pleaseSelectValidity }] })(
-                            <Radio.Group
-                                className="reg-competition-radio"
-                                disabled={this.state.membershipIsUsed}
-                            >
-                                {appState.productValidityList.map(item => {
-                                    return (
-                                        <Radio key={"validityRefId" + item.id} value={item.id}> {item.description}</Radio>
-                                    );
-                                })}
+                    {getFieldDecorator('validityRefId', { initialValue: 2 }, { rules: [{ required: true, message: ValidationConstants.pleaseSelectValidity }] })(
+                        <Radio.Group
+                            className="reg-competition-radio"
+                            disabled={this.state.membershipIsUsed}
+                        >
+                            {appState.productValidityList.map(item => {
+                                return (
+                                    <div>
+                                        {item.id == "2" &&
+                                            <Radio key={"validityRefId" + item.id} value={item.id}> {item.description}</Radio>
+                                        }
+                                    </div>
+                                );
+                            })}
 
-                            </Radio.Group>
-                        )}
+                        </Radio.Group>
+                    )}
                 </Form.Item>
                 {this.membershipTypesView(getFieldDecorator)}
             </div >

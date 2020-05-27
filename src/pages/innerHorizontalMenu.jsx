@@ -212,7 +212,7 @@ class InnerHorizontalMenu extends React.Component {
                             </NavLink>
                         </Menu.Item>
                     </SubMenu>
-                    <Menu.Item key="6">De-registration forms</Menu.Item>
+                    <Menu.Item key="9">De-registration forms</Menu.Item>
                 </Menu>
                 }
 

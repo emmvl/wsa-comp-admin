@@ -9,7 +9,7 @@ import { bindActionCreators } from 'redux';
 import { clearCompReducerDataAction } from "../../store/actions/registrationAction/competitionFeeAction";
 import { competitionDashboardAction } from '../../store/actions/competitionModuleAction/competitionDashboardAction';
 import history from "../../util/history";
-import { getOnlyYearListAction } from '../../store/actions/appAction'
+import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from '../../store/actions/appAction'
 import { isArrayNotEmpty } from "../../util/helpers";
 import moment from "moment";
 import { checkRegistrationType } from "../../util/permissions";
@@ -166,6 +166,7 @@ class CompetitionDashboard extends Component {
             year: "2019",
             loading: false
         };
+        this.props.CLEAR_OWN_COMPETITION_DATA("participate_CompetitionArr")
     }
 
     componentDidMount() {
@@ -419,7 +420,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         clearCompReducerDataAction,
         competitionDashboardAction,
-        getOnlyYearListAction
+        getOnlyYearListAction,
+        CLEAR_OWN_COMPETITION_DATA,
     }, dispatch)
 }
 

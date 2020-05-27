@@ -190,9 +190,10 @@ function exportFilesAction(URL) {
 }
 
 
-function CLEAR_OWN_COMPETITION_DATA() {
+function CLEAR_OWN_COMPETITION_DATA(key) {
   const action = {
-    type: ApiConstants.CLEAR_OWN_COMPETITION_DATA
+    type: ApiConstants.CLEAR_OWN_COMPETITION_DATA,
+    key
   }
   return action
 }

@@ -10,7 +10,9 @@ import { bindActionCreators } from 'redux';
 import { getUserOrganisationAction, onOrganisationChangeAction } from "../store/actions/userAction/userAction";
 import {
   setOrganisationData,
-  getOrganisationData
+  getOrganisationData,
+  setAuthToken, getAuthToken,
+  setUserId, getUserId,
 } from "../util/sessionStorage";
 import { clearHomeDashboardData, } from "../store/actions/homeAction/homeAction"
 
@@ -104,11 +106,12 @@ class DashboardLayout extends React.Component {
     this.setState({ windowMobile: !this.state.windowMobile });
   };
 
-  onOrganisationChange = (organisationData) => {
+  onOrganisationChange = async (organisationData) => {
     this.props.onOrganisationChangeAction(organisationData, "organisationChange")
     setOrganisationData(organisationData)
     this.props.clearHomeDashboardData("user")
     history.push("./")
+    window.location.reload();
   }
 
   ///////user profile dropdown
