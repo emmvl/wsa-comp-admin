@@ -64,6 +64,7 @@ function structureDrawsData(data) {
   let gradeArray = [];
   let sortedDateArray = [];
   let legendArray = [];
+  let sortMainCourtNumberArray = [];
 
   if (data.draws) {
     if (isArrayNotEmpty(data.draws)) {
@@ -88,16 +89,20 @@ function structureDrawsData(data) {
             venueCourtNumber: object.venueCourtNumber,
             venueCourtName: object.venueCourtName,
             venueShortName: object.venueShortName,
+            venueNameCourtName: (object.venueShortName + object.venueCourtName),
+            venueCourtId: object.venueCourtId,
             slotsArray: [],
           });
         }
       });
       sortedDateArray = sortDateArray(dateArray);
+      sortMainCourtNumberArray = sortCourtArray(JSON.parse(JSON.stringify(mainCourtNumberArray)))
+
       // sortedDateArray = sortArrayByDate(dateArray);
       // sortedDateArray = dateArray;
       mainCourtNumberArray = mapSlotObjectsWithTimeSlots(
         data.draws,
-        mainCourtNumberArray,
+        sortMainCourtNumberArray,
         sortedDateArray,
         gradeArray
       );
@@ -118,7 +123,7 @@ function mapSlotObjectsWithTimeSlots(
       tempSlotsArray.push(
         getSlotFromDate(
           drawsArray,
-          mainCourtNumberArray[i].venueCourtNumber,
+          mainCourtNumberArray[i].venueCourtId,
           sortedDateArray[j].date,
           gradeArray
         )
@@ -129,14 +134,14 @@ function mapSlotObjectsWithTimeSlots(
   return mainCourtNumberArray;
 }
 
-function getSlotFromDate(drawsArray, venueCourtNumber, matchDate, gradeArray) {
+function getSlotFromDate(drawsArray, venueCourtId, matchDate, gradeArray) {
   let startTime;
   let endTime;
   for (let i in drawsArray) {
     startTime = drawsArray[i].startTime;
     endTime = drawsArray[i].endTime;
     if (
-      drawsArray[i].venueCourtNumber === venueCourtNumber &&
+      drawsArray[i].venueCourtId === venueCourtId &&
       isDateSame(drawsArray[i].matchDate, matchDate)
     ) {
       // let gradeIndex = gradeArray.indexOf(
@@ -180,8 +185,9 @@ function getSlotFromDate(drawsArray, venueCourtNumber, matchDate, gradeArray) {
   ];
   return {
     drawsId: null,
-    venueCourtNumber: venueCourtNumber,
+    venueCourtNumber: null,
     venueCourtName: null,
+    venueCourtId: venueCourtId,
     venueShortName: null,
     matchDate: matchDate,
     startTime: startTime,
@@ -223,7 +229,7 @@ function getGradeColor(gradeId) {
 
 function checkVenueCourtNumber(mainCourtNumberArray, object) {
   for (let i in mainCourtNumberArray) {
-    if (mainCourtNumberArray[i].venueCourtNumber === object.venueCourtNumber) {
+    if (mainCourtNumberArray[i].venueCourtId === object.venueCourtId) {
       return { status: true, index: i };
     }
   }
@@ -247,6 +253,16 @@ function checkSlots(slotsArray, slotObject) {
 //   }
 //   return true;
 // }
+
+//sort court array
+function sortCourtArray(mainCourtNumberArray) {
+  let isSortedArray = []
+
+  isSortedArray = mainCourtNumberArray.sort((a, b) => a.venueNameCourtName.localeCompare(b.venueNameCourtName));
+
+  return isSortedArray
+
+}
 
 
 function sortDateArray(dateArray) {
