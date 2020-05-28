@@ -151,7 +151,7 @@ import {
   getCompetitionDrawsSaga, getDrawsRoundsSaga,
   updateCompetitionDraws, saveDrawsSaga,
   getCompetitionVenues, updateCourtTimingsDrawsAction,
-  getDivisionGradeNameListSaga, publishDraws, drawsMatchesListExportSaga
+  getDivisionGradeNameListSaga, publishDraws, drawsMatchesListExportSaga, getDivisionSaga, competitionFixtureSaga, updateCompetitionFixtures
 } from './competitionManagementSaga/competitionDrawsSaga';
 
 import { regDashboardListSaga } from "./registrationSaga/registrationDashboardSaga"
@@ -686,4 +686,8 @@ export default function* root_saga() {
   /////API_GET_INVOICE data
   yield takeEvery(ApiConstants.API_GET_INVOICE_LOAD, stripeSaga.getInvoiceSaga)
 
+  //fixtureSaga get division grade api
+  yield takeEvery(ApiConstants.API_GET_DIVISION_LOAD, getDivisionSaga)
+  yield takeEvery(ApiConstants.API_GET_FIXTURE_LOAD, competitionFixtureSaga)
+  yield takeEvery(ApiConstants.API_UPDATE_COMPETITION_FIXTURE_LOAD, updateCompetitionFixtures)
 }

@@ -22,6 +22,26 @@ const initialState = {
 }
 
 
+//for making charity roundup array
+function getCharityRoundUpArray(allData) {
+    let getCharityRoundUpArray = []
+    let feesAllData = allData[0].fees
+    console.log("feesAllData", feesAllData)
+
+    for (let i in feesAllData) {
+        let charityObj = {
+            competitionId: feesAllData[i].competitionDetail.competitionId,
+            competitionName: feesAllData[i].competitionDetail.competitionName,
+            charityTitle: feesAllData[i].charityDetail[0].roundUpName,
+            charityDetail: feesAllData[i].charityDetail[0],
+        }
+        getCharityRoundUpArray.push(charityObj)
+    }
+    console.log("getCharityRoundUpArray", getCharityRoundUpArray)
+    return getCharityRoundUpArray
+}
+
+
 function stripe(state = initialState, action) {
     switch (action.type) {
 
@@ -47,7 +67,6 @@ function stripe(state = initialState, action) {
             return { ...state, onLoad: true, error: null };
 
         case ApiConstants.API_STRIPE_ACCOUNT_BALANCE_API_SUCCESS:
-            console.log("account balance", action.result)
             return {
                 ...state,
                 accountBalance: action.result,
@@ -101,7 +120,6 @@ function stripe(state = initialState, action) {
             return { ...state, onLoad: true, error: null };
 
         case ApiConstants.API_GET_STRIPE_PAYMENTS_TRANSFER_LIST_API_SUCCESS:
-            console.log("action.result", action)
             let transferListData = action.result
             return {
                 ...state,
@@ -118,7 +136,6 @@ function stripe(state = initialState, action) {
             return { ...state, onLoad: true, error: null };
 
         case ApiConstants.API_GET_STRIPE_PAYOUT_LIST_API_SUCCESS:
-            console.log("action.result", action)
             let payoutListData = action.result
             return {
                 ...state,
@@ -135,7 +152,6 @@ function stripe(state = initialState, action) {
             return { ...state, onLoad: true, error: null };
 
         case ApiConstants.API_GET_STRIPE_TRANSACTION_PAYOUT_LIST_API_SUCCESS:
-            console.log("action.result", action)
             let payoutTransactionListData = action.result
             return {
                 ...state,
@@ -157,6 +173,10 @@ function stripe(state = initialState, action) {
             }
 
         case ApiConstants.API_GET_INVOICE_SUCCESS:
+            console.log("getInvoicedata", action.result)
+            let invoicedata = isArrayNotEmpty(action.result) ? action.result : []
+            let charityRoundUpData = getCharityRoundUpArray(invoicedata)
+            console.log("charityRoundUpData", charityRoundUpData)
             return {
                 ...state,
                 onLoad: false,

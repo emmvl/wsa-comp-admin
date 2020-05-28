@@ -145,8 +145,6 @@ class InnerHorizontalMenu extends React.Component {
                                 <span >Team Grading</span>
                             </NavLink>
                         </Menu.Item>
-                        <Menu.Item key="16">Fixtures</Menu.Item>
-                        <Menu.Item key="17">Draw</Menu.Item>
                     </SubMenu>
 
 

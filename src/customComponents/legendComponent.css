@@ -2,13 +2,13 @@
 
 .legend-main-div{
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    white-space: initial;
-    word-wrap: break-word;
-    float: left; 
-    clear: both;
+    /* flex-direction: row; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    /* white-space: initial; */
+    /* word-wrap: break-word; */
+    /* float: left; */
+    /* clear: both; */
     padding-right: 15px;
     padding-left: 25px;
 }
