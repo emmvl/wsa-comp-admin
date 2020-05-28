@@ -6,6 +6,7 @@ const initialState = {
     onLoad: false,
     onTeamDeleteLoad: false,
     updateGradeOnLoad: false,
+    onDivisionChangeLoad: false,								
     error: null,
     result: [],
     status: 0,
@@ -471,6 +472,14 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
                 ...state,
                 onLoad: false,
             }
+        case ApiConstants.API_CHANGE_COMPETITION_DIVISION_TEAM_LOAD:
+            return { ...state, onDivisionChangeLoad: true };
+
+        case ApiConstants.API_CHANGE_COMPETITION_DIVISION_TEAM_SUCCESS:
+            return {
+                ...state,
+                onDivisionChangeLoad: false,
+            }																										 
     
 
         default:
