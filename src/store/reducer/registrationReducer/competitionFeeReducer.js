@@ -118,7 +118,8 @@ const initialState = {
     affiliateOrgSelected: [],
     searchLoad: false,
     charityTitle: "",
-    charityDescription: ''
+    charityDescription: '',
+    deleteDivisionLoad: false
 };
 
 /////function to append isselected values in default membership types array
@@ -1977,12 +1978,12 @@ function competitionFees(state = initialState, action) {
             }
 
         case ApiConstants.API_COMPETITION_DIVISION_DELETE_LOAD:
-            return { ...state, onLoad: true };
+            return { ...state, deleteDivisionLoad: true };
 
         case ApiConstants.API_COMPETITION_DIVISION_DELETE_SUCCESS:
             return {
                 ...state,
-                onLoad: false,
+                deleteDivisionLoad: false,
                 status: action.status,
                 error: null
             };

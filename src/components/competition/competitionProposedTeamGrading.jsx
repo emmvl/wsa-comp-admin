@@ -377,6 +377,7 @@ class CompetitionProposedTeamGrading extends Component {
     componentDidMount() {
         let divisionId = this.props.location.state ? this.props.location.state.id : null;
         let gradeRefId = this.props.location.state ? this.props.location.state.gradeRefId : null;
+        console.log("GradeRefId" + gradeRefId);
         this.setState({ divisionId: divisionId, gradeRefId: gradeRefId })
         // this.props.gradesReferenceListAction()
         let yearId = getOwnCompetitionYear()
@@ -423,7 +424,9 @@ class CompetitionProposedTeamGrading extends Component {
         }
         if (nextProps.registrationState.allDivisionsData !== allDivisionsData) {
             if (allDivisionsData.length > 0) {
-                let divisionId = this.state.divisionId == null ? allDivisionsData[0].competitionMembershipProductDivisionId : this.state.divisionId
+                
+                //let divisionId = this.state.divisionId == null ? allDivisionsData[0].competitionMembershipProductDivisionId : this.state.divisionId
+                let divisionId = this.state.divisionId;
                 this.props.getCompFinalGradesListAction(this.state.yearRefId, this.state.firstTimeCompId, divisionId)
                 // this.props.getCompOwnProposedTeamGradingAction(this.state.yearRefId, this.state.firstTimeCompId, divisionId, gradeRefId)
                 this.setState({ divisionId })
