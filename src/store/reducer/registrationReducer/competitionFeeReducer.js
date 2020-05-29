@@ -247,7 +247,6 @@ function getDivisionTableData(data) {
             })
         }
     }
-    console.log("compDivisionTempArray", compDivisionTempArray)
     return compDivisionTempArray
 
 }
@@ -1494,6 +1493,7 @@ function competitionFees(state = initialState, action) {
                     membershipProductUniqueKey: action.item.membershipProductUniqueKey,
                     competitionMembershipProductId: action.item.competitionMembershipProductId,
                     competitionMembershipProductDivisionId: 0,
+					competitionDivisionId: 0,						 
                     ageRestriction: false,
                     genderRestriction: false,
                     parentIndex: action.index
@@ -1976,6 +1976,17 @@ function competitionFees(state = initialState, action) {
                 searchLoad: false
             }
 
+        case ApiConstants.API_COMPETITION_DIVISION_DELETE_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_COMPETITION_DIVISION_DELETE_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
+    
 
         default:
             return state;

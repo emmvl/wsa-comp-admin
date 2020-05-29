@@ -6,6 +6,7 @@ import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
 const initialState = {
     onLoad: false,
     onTeamDeleteLoad: false,
+    onDivisionChangeLoad: false,								
     error: null,
     result: [],
     status: 0,
@@ -15,7 +16,8 @@ const initialState = {
         teamId: null,
         teamName: "Unassigned",
         playerCount: 0,
-        players: []
+        players: [],
+        isChecked: false					
     },
     newTeam: [],
     AllPartPlayerGradingListData: [],
@@ -31,7 +33,8 @@ function unassignedListDataFormation(data, ) {
         teamId: null,
         teamName: "Unassigned",
         playerCount: 0,
-        players: []
+        players: [],
+        isChecked: false					
     }
     for (let i in data) {
         if (data[i].teamId !== null) {
@@ -183,7 +186,8 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
                     teamId: null,
                     teamName: "Unassigned",
                     playerCount: 0,
-                    players: []
+                    players: [],
+                    isChecked: false				
                 }
                 state.assignedPartPlayerGradingListData = []
             }
@@ -203,7 +207,8 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
                 "teamId": action.result.teamId,
                 "teamName": action.result.teamName,
                 "playerCount": action.result.playerCount,
-                "players": action.result.players
+                "players": action.result.players,
+                "isChecked": false						  
             }
             state.assignedPartPlayerGradingListData.push(newobj)
             state.AllPartPlayerGradingListData.push(newobj)
@@ -328,6 +333,23 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
                 onTeamDeleteLoad: false,
                 error: null
             }
+        case ApiConstants.API_CHANGE_COMPETITION_DIVISION_PLAYER_LOAD:
+            return { ...state, onDivisionChangeLoad: true };
+
+        case ApiConstants.API_CHANGE_COMPETITION_DIVISION_PLAYER_SUCCESS:
+            return {
+                ...state,
+                onDivisionChangeLoad: false,
+            }
+
+        case ApiConstants.UPDATE_PLAYER_GRADING_DATA:
+            if(action.key == "assigned"){
+                state.assignedPartPlayerGradingListData = action.data;  
+            }
+            else if (action.key == "unAssigned"){
+                state.unassignedPartPlayerGradingListData = action.data;
+            }
+            return { ...state}												  
     
         default:
             return state;

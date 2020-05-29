@@ -56,7 +56,8 @@ import {
   defaultCompetitionDiscountSaga,
   defaultCharity_voucherSaga,
   getDefaultCompFeesLogoSaga,
-  inviteeSearchSaga
+  inviteeSearchSaga,
+  deleteCompetitionDivisionSaga						   
 } from './registrationSaga/competitionFeeSaga';
 
 
@@ -122,7 +123,8 @@ import {
   partPlayerSummaryCommentSaga,
   importCompetitionPlayer,
   importCompetitionTeams,
-  deleteTeamSaga
+  deleteTeamSaga,
+  playerChangeDivisionSaga						  
 } from './competitionManagementSaga/competitionPartPlayerGradingSaga';
 import {
   getCompOwnProposedTeamGradingSaga,
@@ -139,7 +141,8 @@ import {
   finalTeamsExportSaga,
   finalPlayersExportSaga,
   proposedTeamsExportSaga,
-  proposedPlayersExportSaga
+  proposedPlayersExportSaga,
+  teamChangeDivisionSaga				
 } from './competitionManagementSaga/competitionTeamGradingSaga';
 
 // UserSaga
@@ -690,4 +693,12 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_GET_DIVISION_LOAD, getDivisionSaga)
   yield takeEvery(ApiConstants.API_GET_FIXTURE_LOAD, competitionFixtureSaga)
   yield takeEvery(ApiConstants.API_UPDATE_COMPETITION_FIXTURE_LOAD, updateCompetitionFixtures)
+  //// Competition division delete 
+  yield takeEvery(ApiConstants.API_COMPETITION_DIVISION_DELETE_LOAD, deleteCompetitionDivisionSaga)
+
+  // Team Change division 
+  yield takeEvery(ApiConstants.API_CHANGE_COMPETITION_DIVISION_TEAM_LOAD, teamChangeDivisionSaga)
+
+  // Player Change division 
+  yield takeEvery(ApiConstants.API_CHANGE_COMPETITION_DIVISION_PLAYER_LOAD, playerChangeDivisionSaga)
 }

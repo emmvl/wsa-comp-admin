@@ -1027,7 +1027,11 @@ const AppConstants = {
   coachList: "Coach List",
   addCoach: "Add Coach",
   exportRegQuestion: "Reg. Form Questions",
-  noDataAvailable: "No Data Available"
+  noDataAvailable: "No Data Available",
+  deleteDivision: "Delete Competition Division",
+  changeDivision: "Change Division",
+  action: "Action",
+  competitionDivisionValidation: "If there are any players graded to this division, they will be unassigned.",
 };
 
 export default AppConstants;

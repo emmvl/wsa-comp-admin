@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Input, Button, Table, Select, Tag, Form, Tooltip, message } from 'antd';
+import { Layout, Breadcrumb, Input, Button, Table, Select, Tag, Form, Tooltip, message, Menu, Modal } from 'antd';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -16,7 +16,8 @@ import {
     partProposedSummaryComment,
     changeProposedHistoryHover,
     exportProposedTeamsAction,
-    exportProposedPlayersAction
+    exportProposedPlayersAction,
+    changeDivisionTeamAction
 } from "../../store/actions/competitionModuleAction/competitionTeamGradingAction";
 import { NavLink } from 'react-router-dom';
 import { gradesReferenceListAction } from "../../store/actions/commonAction/commonAction";
@@ -33,6 +34,7 @@ import ValidationConstants from "../../themes/validationConstant";
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 let this_obj = null;
+const { SubMenu } = Menu;
 
 /////function to sort table column
 function tableSort(a, b, key) {
@@ -121,6 +123,25 @@ const columns = [
                 <img src={comments !== null && comments.length > 0 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
             </div>,
     },
+    {
+        title: "Action",
+        dataIndex: "isUsed",
+        key: "isUsed",
+        render: (isUsed, e, index) => (
+            <Menu  className="action-triple-dot-submenu" theme="light" mode="horizontal"
+                style={{ lineHeight: "25px" }}>
+                <SubMenu key="sub1"
+                    title={ <img className="dot-image" src={AppImages.moreTripleDot}
+                            alt="" width="16" height="16"
+                        />
+                    }>
+                     <Menu.Item key="1" onClick={() => this_obj.onClickChangeDivision(e)}>
+                          <span>Change Division</span>
+                     </Menu.Item>
+                </SubMenu>
+            </Menu>
+        )
+    }
 
 
 ];
@@ -145,6 +166,8 @@ class CompetitionPartProposedTeamGrading extends Component {
             commentsCreatedBy: null,
             finalGradeId: 0,
             proposedGradeID: 0,
+            changeDivisionModalVisible: false,
+            competitionDivisionId: null
         }
         this_obj = this;
         this.props.clearTeamGradingReducerDataAction("getPartProposedTeamGradingData")
@@ -176,6 +199,36 @@ class CompetitionPartProposedTeamGrading extends Component {
             this.setState({ saveLoad: false })
         }
 
+        if (nextProps.ownTeamGradingState != this.props.ownTeamGradingState) {
+            if (this.props.ownTeamGradingState.onDivisionChangeLoad == false && this.state.loading === true) {
+                this.setState({ loading: false });
+                this.props.getCompPartProposedTeamGradingAction(this.state.yearRefId, this.state.firstTimeCompId, this.state.divisionId)
+            }
+        }
+
+    }
+
+    onClickChangeDivision = (record) =>{
+        this.setState({
+            changeDivisionModalVisible: true, teamId: record.teamId
+        })
+    }
+
+    handleChangeDivision = (key) =>{
+        if(key == "ok"){
+            let payload = {
+                competitionDivisionId: this.state.divisionId,
+                teamId: this.state.teamId,
+                competitionUniqueKey: this.state.firstTimeCompId,
+                organisationUniqueKey: null
+            }
+            this.props.changeDivisionTeamAction(payload);
+            this.setState({ loading: true })
+            console.log("payload::" + JSON.stringify(payload));
+        }
+        this.setState({
+            changeDivisionModalVisible: false, teamId: null
+        })
     }
 
 
@@ -504,6 +557,32 @@ class CompetitionPartProposedTeamGrading extends Component {
                     finalGradeId={this.state.finalGradeId}
                     proposedGradeID={this.state.proposedGradeID}
                 />
+
+                <Modal
+                    className="add-membership-type-modal"
+                    title={AppConstants.changeDivision}
+                    visible={this.state.changeDivisionModalVisible}
+                    onOk={ () => this.handleChangeDivision("ok")}
+                    onCancel={() => this.handleChangeDivision("cancel")}>
+                        <div className="change-division-modal">
+                            <div className='year-select-heading'>{AppConstants.division}</div>
+                            <Select
+                                style={{ minWidth: 120 }}
+                                className="year-select change-division-select"
+                                onChange={(divisionId) => this.setState({divisionId: divisionId})}
+                                value={JSON.parse(JSON.stringify(this.state.divisionId))}>
+                                {this.props.registrationState.allDivisionsData.map(item => {
+                                return (
+                                    <Option key={"division" + item.competitionMembershipProductDivisionId}
+                                        value={item.competitionMembershipProductDivisionId}>
+                                        {item.divisionName}
+                                    </Option>
+                                )
+                            })}
+                            </Select>
+                        </div>
+                     
+                </Modal>
             </div>
         )
     }
@@ -571,7 +650,8 @@ function mapDispatchToProps(dispatch) {
         partProposedSummaryComment,
         changeProposedHistoryHover,
         exportProposedTeamsAction,
-        exportProposedPlayersAction
+        exportProposedPlayersAction,
+        changeDivisionTeamAction
     }, dispatch)
 }
 

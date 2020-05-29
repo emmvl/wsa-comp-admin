@@ -218,5 +218,24 @@ export function* deleteTeamSaga(action) {
     }
 }
 
+export function* playerChangeDivisionSaga(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.playerChangeDivisionApi, action.payload);
+        console.log("(*****" + result.status);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_CHANGE_COMPETITION_DIVISION_PLAYER_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+
+    }
+}												   
 
 
