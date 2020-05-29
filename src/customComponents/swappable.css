@@ -18,15 +18,27 @@
     white-space: nowrap;
     overflow: hidden;
 }
+.fixtureDragableId{
+    display: flex;
+    width: 100px;
+    height: 53px;
+    justify-content: center !important;
+}
+.fixturteDropzoneId {
+    display: flex;
+    width: 100px;
+    height: 53px;
+    justify-content: center !important;
+}
 
-.fixtureDropzoneId {
+.quickCompetitionDropzoneId {
     display: flex;
     width: 64px;
     height: 40px;
     justify-content: center !important;
 }
 
-.fixtureDragableId {
+.quickCompetitionDragableId {
     display: flex;
     width: 64px;
     height: 40px;

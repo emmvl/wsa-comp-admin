@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import "./swappable.css"
-class FixtureSwappable extends Component {
+class CompetitionSwappable extends Component {
     constructor() {
         super();
 
@@ -45,22 +45,23 @@ class FixtureSwappable extends Component {
         let target = document.getElementById(dragableId);
         let targetParent = target.parentNode;
 
+        // console.log(src.parentNode.id, 'dragged element');
+        // console.log(srcParent, 'parent of dragged');
+        // console.log(target.parentNode.id, 'element to be swapped');
+
         swappable
             ? this.swapElements(src, target, srcParent, targetParent)
             : this.transferElement(src, dropzoneId);
     }
 
     swapElements(src, target, srcParent, targetParent) {
-        console.log(src, target)
-        let sourceIndexArray = src.id.split(':');
-        let targetIndexArray = target.id.split(':');
-
-        if (sourceIndexArray[3] === targetIndexArray[3]) {
-            target.replaceWith(src);
-            srcParent.appendChild(target);
-            this.props.onSwap(src.id, target.id);
-        }
+        target.replaceWith(src);
+        srcParent.appendChild(target);
+        this.props.onSwap(src.id, target.id);
+        // console.log(src.id, 'source');
+        // console.log(target.id, 'target');
     }
+
     transferElement(src, dropzoneId) {
         let dropzone = document.getElementById(dropzoneId);
         dropzone.appendChild(src);
@@ -94,14 +95,14 @@ class FixtureSwappable extends Component {
                     this.drop(event, dragableId, dropzoneId, customFunc, swappable)
                 }
                 onDragOver={event => this.allowDrop(event)}
-                className="fixtureDropzoneId"
+                className="quickCompetitionDropzoneId"
             >
                 <div
                     id={dragableId}
                     draggable={swappable}
                     onDragStart={event => this.drag(event)}
                     onDragEnd={event => this.dragEnd(event, customFunc)}
-                    className="fixtureDragableId"
+                    className="quickCompetitionDragableId"
                 >
                     {this.props.children}
                 </div>
@@ -110,4 +111,4 @@ class FixtureSwappable extends Component {
     }
 }
 
-export default FixtureSwappable;
+export default CompetitionSwappable;

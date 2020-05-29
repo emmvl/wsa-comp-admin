@@ -92,9 +92,9 @@ class CompetitionPlayerGrades extends Component {
             }
         }
 
-        if(nextProps.partPlayerGradingState != this.props.partPlayerGradingState){
-            if(this.props.partPlayerGradingState.onTeamDeleteLoad == false && this.state.loading === true){
-                this.setState({loading : false});
+        if (nextProps.partPlayerGradingState != this.props.partPlayerGradingState) {
+            if (this.props.partPlayerGradingState.onTeamDeleteLoad == false && this.state.loading === true) {
+                this.setState({ loading: false });
                 this.props.getCompPartPlayerGradingAction(this.state.yearRefId, this.state.firstTimeCompId, this.state.divisionId)
             }
         }
@@ -188,7 +188,7 @@ class CompetitionPlayerGrades extends Component {
                                     </NavLink>
                                 </div>
                             </div>
-                            <div  className="col-sm">
+                            <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile">
                                     <NavLink to={{
                                         pathname: `/competitionTeamsImport`,
@@ -464,7 +464,7 @@ class CompetitionPlayerGrades extends Component {
                         </div>
                         <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end", alignSelf: "center" }} >
                             <NavLink to="/competitionPlayerGradeCalculate" >
-                                <span className='year-select-heading'>{AppConstants.playerGradingToggle}</span>
+                                <span className='input-heading-add-another pt-0'>{AppConstants.playerGradingToggle}</span>
                             </NavLink>
                         </div>
                     </div>
@@ -561,13 +561,13 @@ class CompetitionPlayerGrades extends Component {
                                                     {teamItem.players.length > 1 ? teamItem.players.length + " Players" : teamItem.players.length + " Player"} </span>
                                             </div>
                                             <div className="col-sm d-flex justify-content-end ">
-                                                {(teamItem.gradeRefId == null || teamItem.gradeRefId == 0) ? 
-                                                <img className="comp-player-table-img team-delete-link" src={AppImages.deleteImage} 
+                                                {(teamItem.gradeRefId == null || teamItem.gradeRefId == 0) ?
+                                                    <img className="comp-player-table-img team-delete-link" src={AppImages.deleteImage}
                                                         alt="" height="20" width="20"
-                                                    style={{ cursor: "pointer" }}
-                                                    onClick={() => this.onClickDeleteTeam(teamItem, teamIndex)}
-                                                />
-                                                : null}
+                                                        style={{ cursor: "pointer" }}
+                                                        onClick={() => this.onClickDeleteTeam(teamItem, teamIndex)}
+                                                    />
+                                                    : null}
                                                 <a className="view-more-btn collapsed" data-toggle="collapse" href={`#${teamIndex}`} role="button" aria-expanded="false" aria-controls={teamIndex}>
                                                     <i className="fa fa-angle-down" style={{ color: "#ff8237", }} aria-hidden="true" ></i>
                                                 </a>
@@ -673,7 +673,7 @@ class CompetitionPlayerGrades extends Component {
                     onOk={this.handleDeleteTeamOk}
                     onCancel={this.handleDeleteTeamCancel}
                 >
-                     <p>Are you sure you want to delete?</p>
+                    <p>Are you sure you want to delete?</p>
                 </Modal>
 
             </div>
@@ -716,23 +716,23 @@ class CompetitionPlayerGrades extends Component {
     };
 
     handleDeleteTeamOk = () => {
-        this.setState({deleteModalVisible: false});
+        this.setState({ deleteModalVisible: false });
         let payload = {
             competitionUniqueKey: this.state.firstTimeCompId,
             organisationId: '',
             teamId: this.state.teamID,
             competitionMembershipProductDivisionId: this.state.divisionId
         }
-      this.props.deleteTeamAction(payload);
-      this.setState({loading: true});
+        this.props.deleteTeamAction(payload);
+        this.setState({ loading: true });
     }
 
     handleDeleteTeamCancel = () => {
-        this.setState({deleteModalVisible: false});
+        this.setState({ deleteModalVisible: false });
     }
 
-    onClickDeleteTeam = async (teamItem, teamIndex) =>{
-      await  this.setState({teamID: teamItem.teamId, deleteModalVisible: true});
+    onClickDeleteTeam = async (teamItem, teamIndex) => {
+        await this.setState({ teamID: teamItem.teamId, deleteModalVisible: true });
     }
 
 

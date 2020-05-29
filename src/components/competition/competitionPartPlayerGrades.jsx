@@ -463,7 +463,7 @@ class CompetitionPartPlayerGrades extends Component {
                         </div>
                         <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end", alignSelf: "center" }} >
                             <NavLink to="/competitionPartPlayerGradeCalculate" >
-                                <span className='year-select-heading'>{AppConstants.playerGradingToggle}</span>
+                                <span className='input-heading-add-another pt-0'>{AppConstants.playerGradingToggle}</span>
                             </NavLink>
                         </div>
                     </div>

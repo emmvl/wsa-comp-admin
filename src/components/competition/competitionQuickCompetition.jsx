@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 import loadjs from 'loadjs';
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
-import FixtureSwappable from '../../customComponents/fixtureSwappableComponent';
+import CompetitionSwappable from '../../customComponents/quickCompetitionComponent';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
@@ -721,7 +721,7 @@ class CompetitionQuickCompetition extends Component {
                                                     whiteSpace: "nowrap",
                                                 }}
                                             >
-                                                <FixtureSwappable
+                                                <CompetitionSwappable
                                                     id={index.toString() + ':' + slotIndex.toString()}
                                                     content={1}
                                                     swappable={true}
@@ -736,7 +736,7 @@ class CompetitionQuickCompetition extends Component {
                                                     ) : (
                                                             <span>N/A</span>
                                                         )}
-                                                </FixtureSwappable>
+                                                </CompetitionSwappable>
                                             </div>
                                         </div>
                                     );
