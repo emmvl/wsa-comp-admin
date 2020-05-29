@@ -469,6 +469,11 @@ class CompetitionOpenRegForm extends Component {
                 })
                 this.setDetailsFieldValue()
             }
+
+            if(competitionFeesState.deleteDivisionLoad == false && this.state.deleteLoading == true){
+                this.setState({deleteLoading:false});
+                this.setDivisionFormFields();
+            }
         }
         if (nextProps.appState !== this.props.appState) {
             let competitionTypeList = this.props.appState.own_CompetitionArr
@@ -684,6 +689,12 @@ class CompetitionOpenRegForm extends Component {
                 [membershipProductUniqueKey]: item.membershipProductUniqueKey,
             })
         })
+
+        this.setDivisionFormFields();
+        
+    }
+
+    setDivisionFormFields = () => {
         let divisionData = this.props.competitionFeesState.competitionDivisionsData
         let divisionArray = divisionData !== null ? divisionData : []
         divisionArray.map((item, index) => {
@@ -1701,6 +1712,7 @@ class CompetitionOpenRegForm extends Component {
             }
             this.props.addRemoveDivisionAction(this.state.divisionIndex, this.state.competitionDivision, "remove");
             this.props.removeCompetitionDivisionAction(payload);
+            this.setState({deleteLoading: true});
         }
         this.setState({deleteDivModalVisible: false})
     }
@@ -2720,7 +2732,9 @@ class CompetitionOpenRegForm extends Component {
                                 </Tabs>
                             </div>
                             <Loader
-                                visible={this.props.competitionFeesState.onLoad || this.props.appState.onLoad || this.state.getDataLoading} />
+                                visible={this.props.competitionFeesState.onLoad || 
+                                this.props.appState.onLoad || this.state.getDataLoading ||
+                                this.props.competitionFeesState.deleteDivisionLoad} />
                         </Content>
                         <Footer>{this.footerView()}</Footer>
                     </Form>
