@@ -499,16 +499,26 @@ a.collapsed i {
   font-weight: 700;
 }
 .draws-round{
-  font-size: 25px;
-  color: black;
-  font-weight: 700;
+  font-size: 22px;
+  color: var(--app-1b1b34);
+  font-weight: 500;
   position: absolute;
+  font-family: inter-medium;
   left: 25px;
   align-self: center;
+  /* display: flex;
+    align-content: flex-start;
+    text-align: center;
+    font-size: 22px;
+   
+    padding-bottom: 7.5px;
+    font-weight: 500;
+   
+    margin-left: 50px; */
 }
 .draws-round-view{
   display: flex;
-      height: 50px;
+      height: 60px;
     padding-top: 10px;
       flex-direction: column
 }

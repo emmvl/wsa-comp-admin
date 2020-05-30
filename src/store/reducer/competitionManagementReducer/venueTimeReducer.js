@@ -25,7 +25,7 @@ var venueDataObj = {
     competitionMembershipProductDivisionId: 1,
     venueId: 0,
     name: "",
-    shortName:"",
+    shortName: "",
     street1: "",
     street2: "",
     suburb: "",
@@ -80,7 +80,8 @@ const initialState = {
     onVenueDataClear: false,
     courtPrefArrayStore: null,
     searchVenueList: [],
-    venueIsUsed: false
+    venueIsUsed: false,
+    onVenuSucess: false
 };
 
 ////get court rotation
@@ -125,6 +126,25 @@ function getEditOrganisation(key, organisationData) {
 function generateTableKey(data) {
     let arrayKey = data.length + 1
     return arrayKey
+}
+
+// generate  new court object 
+function generateCourtObj(oldCourtData, resultData) {
+    let courtDetail = resultData.venueCourts
+    if (isArrayNotEmpty(courtDetail)) {
+        for (let j in courtDetail) {
+            let object = {
+                lat: courtDetail[j].lat,
+                lng: courtDetail[j].lng,
+                courtNumber: courtDetail[j].courtNumber,
+                venueId: courtDetail[j].venueCourtId,
+                availabilities: courtDetail[j].availabilities,
+                name: resultData.name + " - " + courtDetail[j].courtNumber
+            }
+            oldCourtData.push(object)
+        }
+    }
+    return oldCourtData
 }
 
 /// Generate court array
@@ -367,15 +387,50 @@ function createEntityObject(action, courtPreferencesPost, evenRotation, venuePre
                 "venuePreferenceEntityId": action.data[i]
             }
         }
-
-
-
         entityObjectArr.push(entityObject)
-
-
     }
     return entityObjectArr
 }
+
+//update venue court preference object 
+function getUpdatedCourtPreferences(updatedCourtsArray, courtPreferencesPost, selectedCourtId) {
+    let statusArray
+    if (selectedCourtId.length > 0) {
+        if (updatedCourtsArray.length > 0) {
+            for (let i in selectedCourtId) {
+                statusArray = checkVenueID(selectedCourtId[i], updatedCourtsArray)
+                let postStausArray = checkVenueID(selectedCourtId[i], courtPreferencesPost)
+                if (statusArray.status == true) {
+                    delete updatedCourtsArray[i]
+                }
+                if (postStausArray.status == true) {
+                    delete courtPreferencesPost[i]
+                }
+            }
+
+
+        }
+    }
+    return { updatedCourtsArray, courtPreferencesPost }
+}
+// check checkTimeSlotStatus
+function checkVenueID(courtID, updatedCourtsArray) {
+    let obj = {
+        status: false,
+        index: null
+    }
+    for (let i in updatedCourtsArray) {
+        if (courtID !== updatedCourtsArray[i].venueCourtId) {
+            obj = {
+                status: true,
+                index: [i]
+            }
+            break;
+        }
+    }
+    return obj
+}
+
 
 function VenueTimeState(state = initialState, action) {
 
@@ -384,7 +439,7 @@ function VenueTimeState(state = initialState, action) {
         case ApiConstants.API_VENUE_CONSTRAINTS_LIST_LOAD:
             state.competitionUniqueKey = action.competitionUniqueKey
             state.yearId = action.yearRefId
-            return { ...state, onLoad: true };
+            return { ...state, onLoad: true, onVenuSucess: true };
 
         case ApiConstants.API_VENUE_CONSTRAINTS_LIST_SUCCESS:
 
@@ -401,12 +456,10 @@ function VenueTimeState(state = initialState, action) {
             let selecetdVenueListId = []
 
             let allCourtsList = generateCourtData(action.result && action.result.venues)
-            state.courtArray = allCourtsList
-
+            if (state.selectedVenueIdAdd == null) {
+                state.courtArray = allCourtsList
+            }
             let selectedCourtPrefArray = craeteSelectedCourtPrefArray(action.result.courtPreferences, allCourtsList, action.result.courtRotationRefId)
-
-
-
             for (let i in action.result.venues) {
                 selecetdVenueListId.push(action.result.venues[i].venueId)
                 // state.courtArray.push(action.result.venues[i]
@@ -435,20 +488,22 @@ function VenueTimeState(state = initialState, action) {
             } else if (courtRotationRefId == 6 || courtRotationRefId == 7) {
                 state.courtRotation[1].selectedPrefrence = 5
                 state.selectedRadioBtn = 5
-            } else if(courtRotationRefId == 8){
+            } else if (courtRotationRefId == 8) {
                 state.courtRotation[2].selectedPrefrence = 8;
                 state.selectedRadioBtn = 8;
             }
-            else{
+            else {
                 state.selectedRadioBtn = 0;
             }
             //  state.venueConstrainstData['courtRotationRefId'] = state.selectedRadioBtn;
             state.onLoad = false
+            state.onVenuSucess = false
             return {
                 ...state,
                 result: action.result,
                 status: action.status,
-                homeTeamRotation: action.commResult.HomeTeamRotation
+                homeTeamRotation: action.commResult.HomeTeamRotation,
+                // onVenuSucess: false
             };
 
 
@@ -488,12 +543,12 @@ function VenueTimeState(state = initialState, action) {
             }
             if (action.index == 'Venue') {
                 let upDateData = state.venuData
-                if(action.key == "affiliate"){
-                    if(action.data == false)
+                if (action.key == "affiliate") {
+                    if (action.data == false)
                         upDateData["affiliateData"] = [];
-                        upDateData["organisations"] = [];
+                    upDateData["organisations"] = [];
                 }
-               
+
                 upDateData[action.key] = action.data
                 state.venuData = upDateData
 
@@ -673,7 +728,6 @@ function VenueTimeState(state = initialState, action) {
                         return object_1.venueId === object_2;
                     });
                 });
-
                 let courtDataArray = generateCourtData(venueSelectedData)
 
                 state.courtArray = courtDataArray
@@ -681,7 +735,9 @@ function VenueTimeState(state = initialState, action) {
                 if (state.courtArray.length == 0) {
                     state.courtId = []
                 }
-
+                // let updatedCourtPrefernces = getUpdatedCourtPreferences(state.venueConstrainstData.courtPreferences, state.courtPreferencesPost, action.data)
+                // state.venueConstrainstData.courtPreferences = updatedCourtPrefernces.updatedCourtsArray
+                // state.courtPreferencesPost = updatedCourtPrefernces.courtPreferencesPost
                 let selectedVenues = checkSelectedVenuesList(state.venueConstrainstData.venues, venueSelectedData)
                 state.venuePost = selectedVenues
                 // state.venueConstrainstData[action.key] = selectedVenues
@@ -792,9 +848,9 @@ function VenueTimeState(state = initialState, action) {
                     }
                 }
             }
-            else if(action.contentType == "matchPreference"){
-               // let matchPreference = state.venueConstrainstData.matchPreference;
-                if(action.key == "addMatchPreference"){
+            else if (action.contentType == "matchPreference") {
+                // let matchPreference = state.venueConstrainstData.matchPreference;
+                if (action.key == "addMatchPreference") {
                     let obj = {
                         matchPreferenceId: 0,
                         competitionMembershipProductDivisionId: null,
@@ -811,20 +867,19 @@ function VenueTimeState(state = initialState, action) {
                     }
                     state.venueConstrainstData[action.contentType].push(obj);
                 }
-                else if(action.key == "removeMatchPreference"){
+                else if (action.key == "removeMatchPreference") {
                     state.venueConstrainstData[action.contentType].splice(action.index, 1);
                     state.venueConstrainstData["isMPDeleteHappened"] = true;
                 }
-                else if(action.key == "isMPDeleteHappened"){
+                else if (action.key == "isMPDeleteHappened") {
                     state.venueConstrainstData["isMPDeleteHappened"] = false;
                 }
-                else{
-                    if(action.key == "competitionMembershipProductDivisionId"){
-                       
-                       let division =  (state.venueConstrainstData.divisionGrades || []).find(x=>x.
+                else {
+                    if (action.key == "competitionMembershipProductDivisionId") {
+
+                        let division = (state.venueConstrainstData.divisionGrades || []).find(x => x.
                             competitionMembershipProductDivisionId == action.data);
-                        if(division!= null && division!= undefined)
-                        {
+                        if (division != null && division != undefined) {
                             let grades = division.grades;
                             state.venueConstrainstData[action.contentType][action.index]["grades"] = (grades == null ? [] : grades);
                             state.venueConstrainstData[action.contentType][action.index]["competitionDivisionGradeId"] = null;
@@ -832,41 +887,40 @@ function VenueTimeState(state = initialState, action) {
                             state.venueConstrainstData[action.contentType][action.index]["team2Id"] = null;
                         }
                     }
-                    else if(action.key == "competitionDivisionGradeId"){
-                        let grade = state.venueConstrainstData[action.contentType][action.index].grades.find(x=>x.gradeId == action.data);
-                        if(grade!= null && grade!= undefined){
+                    else if (action.key == "competitionDivisionGradeId") {
+                        let grade = state.venueConstrainstData[action.contentType][action.index].grades.find(x => x.gradeId == action.data);
+                        if (grade != null && grade != undefined) {
                             let teams = grade.teams;
                             state.venueConstrainstData[action.contentType][action.index]["teams"] = (teams == null ? [] : teams);
                             state.venueConstrainstData[action.contentType][action.index]["team1Id"] = null;
                             state.venueConstrainstData[action.contentType][action.index]["team2Id"] = null;
                         }
                     }
-                    else if(action.key == "venueId"){
-                       let venue =  (state.venuePost || []).find(x=>x.venueId == action.data);
-                        if(venue!= null && venue!= undefined){
+                    else if (action.key == "venueId") {
+                        let venue = (state.venuePost || []).find(x => x.venueId == action.data);
+                        if (venue != null && venue != undefined) {
                             let courts = venue.venueCourts;
                             state.venueConstrainstData[action.contentType][action.index]["courts"] = (courts == null ? [] : courts);
                             state.venueConstrainstData[action.contentType][action.index]["courtId"] = null;
                         }
                     }
-                    else if(action.key == "mpinitial"){
+                    else if (action.key == "mpinitial") {
                         let matchPreference = state.venueConstrainstData.matchPreference[action.index];
-                        let division =  (state.venueConstrainstData.divisionGrades || []).find(x=>x.
+                        let division = (state.venueConstrainstData.divisionGrades || []).find(x => x.
                             competitionMembershipProductDivisionId == matchPreference.competitionMembershipProductDivisionId);
-                        
-                        if(division!= null && division!= undefined)
-                        {
+
+                        if (division != null && division != undefined) {
                             let grades = division.grades;
                             state.venueConstrainstData[action.contentType][action.index]["grades"] = (grades == null ? [] : grades);
-                            
-                            let grade = (grades || [] ).find(x=>x.gradeId == matchPreference.competitionDivisionGradeId);
-                            if(grade!= null && grade!= undefined){
+
+                            let grade = (grades || []).find(x => x.gradeId == matchPreference.competitionDivisionGradeId);
+                            if (grade != null && grade != undefined) {
                                 let teams = grade.teams;
                                 state.venueConstrainstData[action.contentType][action.index]["teams"] = (teams == null ? [] : teams);
                             }
                         }
-                        let venue =  (state.venuePost || []).find(x=>x.venueId == matchPreference.venueId);
-                        if(venue!= null && venue!= undefined){
+                        let venue = (state.venuePost || []).find(x => x.venueId == matchPreference.venueId);
+                        if (venue != null && venue != undefined) {
                             let courts = venue.venueCourts;
                             state.venueConstrainstData[action.contentType][action.index]["courts"] = (courts == null ? [] : courts);
                         }
@@ -874,68 +928,68 @@ function VenueTimeState(state = initialState, action) {
                     state.venueConstrainstData[action.contentType][action.index][action.key] = action.data;
                 }
             }
-            else if(action.contentType == "lockedDraws"){
+            else if (action.contentType == "lockedDraws") {
                 // let matchPreference = state.venueConstrainstData.matchPreference;
-                if(action.key == "competitionMembershipProductDivisionId"){
-                        
-                    let division =  (state.venueConstrainstData.divisionGrades || []).find(x=>x.
-                         competitionMembershipProductDivisionId == action.data).grades;
-                    if(division!= null && division!= undefined){
+                if (action.key == "competitionMembershipProductDivisionId") {
+
+                    let division = (state.venueConstrainstData.divisionGrades || []).find(x => x.
+                        competitionMembershipProductDivisionId == action.data).grades;
+                    if (division != null && division != undefined) {
                         let grades = division.grades;
                         state.venueConstrainstData[action.contentType][action.index]["grades"] = (grades == null ? [] : grades);
                         state.venueConstrainstData[action.contentType][action.index]["competitionDivisionGradeId"] = null;
                         state.venueConstrainstData[action.contentType][action.index]["team1Id"] = null;
                         state.venueConstrainstData[action.contentType][action.index]["team2Id"] = null;
                     }
-                 }
-                 else if(action.key == "competitionDivisionGradeId"){
-                    let grades = state.venueConstrainstData[action.contentType][action.index].grades.find(x=>x.gradeId == action.data);
-                    if(grades != null && grades!= undefined){
+                }
+                else if (action.key == "competitionDivisionGradeId") {
+                    let grades = state.venueConstrainstData[action.contentType][action.index].grades.find(x => x.gradeId == action.data);
+                    if (grades != null && grades != undefined) {
                         let teams = grades.teams;
                         state.venueConstrainstData[action.contentType][action.index]["teams"] = (teams == null ? [] : teams);
                         state.venueConstrainstData[action.contentType][action.index]["team1Id"] = null;
                         state.venueConstrainstData[action.contentType][action.index]["team2Id"] = null;
                     }
-                     
-                 }
-                 else if(action.key == "venueId"){
-                    let venue =  (state.venuePost || []).find(x=>x.venueId == action.data);
-                    if(venue!= null && venue!= undefined){
+
+                }
+                else if (action.key == "venueId") {
+                    let venue = (state.venuePost || []).find(x => x.venueId == action.data);
+                    if (venue != null && venue != undefined) {
                         let courts = venue.venueCourts;
                         state.venueConstrainstData[action.contentType][action.index]["courts"] = (courts == null ? [] : courts);
                         state.venueConstrainstData[action.contentType][action.index]["courtId"] = null;
                     }
-                  
-                 }
-                 else if(action.key == "ldinitial"){
-                     let lockedDraw = state.venueConstrainstData.lockedDraws[action.index];
-                     let division =  (state.venueConstrainstData.divisionGrades || []).find(x=>x.
-                         competitionMembershipProductDivisionId == lockedDraw.competitionMembershipProductDivisionId);
-                    
-                    if(division!= null && division!= undefined){
+
+                }
+                else if (action.key == "ldinitial") {
+                    let lockedDraw = state.venueConstrainstData.lockedDraws[action.index];
+                    let division = (state.venueConstrainstData.divisionGrades || []).find(x => x.
+                        competitionMembershipProductDivisionId == lockedDraw.competitionMembershipProductDivisionId);
+
+                    if (division != null && division != undefined) {
                         let grades = division.grades;
 
                         state.venueConstrainstData[action.contentType][action.index]["grades"] = (grades == null ? [] : grades);
-                        let grade = (grades || [] ).find(x=>x.gradeId == lockedDraw.competitionDivisionGradeId);
-                        if(grade!= null && grade!= undefined){
+                        let grade = (grades || []).find(x => x.gradeId == lockedDraw.competitionDivisionGradeId);
+                        if (grade != null && grade != undefined) {
                             let teams = grade.teams;
                             state.venueConstrainstData[action.contentType][action.index]["teams"] = (teams == null ? [] : teams);
                         }
                     }
-                    let venue =  (state.venuePost || []).find(x=>x.venueId == lockedDraw.venueId);
-                    if(venue!= null && venue!= undefined){
+                    let venue = (state.venuePost || []).find(x => x.venueId == lockedDraw.venueId);
+                    if (venue != null && venue != undefined) {
                         let courts = venue.venueCourts;
                         state.venueConstrainstData[action.contentType][action.index]["courts"] = (courts == null ? [] : courts);
                     }
-                 }
-                 else if(action.key == "isLocked"){
+                }
+                else if (action.key == "isLocked") {
                     state.venueConstrainstData["isLDDeleteHappened"] = true;
-                 }
-                 else if(action.key == "isLDDeleteHappened"){
+                }
+                else if (action.key == "isLDDeleteHappened") {
                     state.venueConstrainstData["isLDDeleteHappened"] = false;
-                } 
-                 state.venueConstrainstData[action.contentType][action.index][action.key] = action.data;
-             }
+                }
+                state.venueConstrainstData[action.contentType][action.index][action.key] = action.data;
+            }
 
             else {
                 let venueConstrainstDetails = state.venueConstrainstData
@@ -1103,9 +1157,13 @@ function VenueTimeState(state = initialState, action) {
             };
 
         case ApiConstants.API_ADD_VENUE_SUCCESS:
+            console.log(action, state.courtArray)
             if (action.result != null) {
+                console.log(action, state.courtArray)
                 state.selectedVenueIdAdd = "addVenue"
                 state.selectedVenueId.push(action.result.venueId)
+                let courtAddData = generateCourtObj(state.courtArray, action.result)
+                state.courtArray = courtAddData
             }
             return { ...state }
 
