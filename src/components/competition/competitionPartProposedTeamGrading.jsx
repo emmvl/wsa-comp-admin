@@ -217,7 +217,7 @@ class CompetitionPartProposedTeamGrading extends Component {
     handleChangeDivision = (key) =>{
         if(key == "ok"){
             let payload = {
-                competitionDivisionId: this.state.divisionId,
+                competitionDivisionId: this.state.competitionDivisionId,
                 teamId: this.state.teamId,
                 competitionUniqueKey: this.state.firstTimeCompId,
                 organisationUniqueKey: null
@@ -227,7 +227,8 @@ class CompetitionPartProposedTeamGrading extends Component {
             console.log("payload::" + JSON.stringify(payload));
         }
         this.setState({
-            changeDivisionModalVisible: false, teamId: null
+            changeDivisionModalVisible: false, teamId: null,
+            divisionId: this.state.competitionDivisionId
         })
     }
 
@@ -569,8 +570,8 @@ class CompetitionPartProposedTeamGrading extends Component {
                             <Select
                                 style={{ minWidth: 120 }}
                                 className="year-select change-division-select"
-                                onChange={(divisionId) => this.setState({divisionId: divisionId})}
-                                value={JSON.parse(JSON.stringify(this.state.divisionId))}>
+                                onChange={(divisionId) => this.setState({competitionDivisionId: divisionId})}
+                                value={JSON.parse(JSON.stringify(this.state.competitionDivisionId))}>
                                 {this.props.registrationState.allDivisionsData.map(item => {
                                 return (
                                     <Option key={"division" + item.competitionMembershipProductDivisionId}
@@ -596,6 +597,7 @@ class CompetitionPartProposedTeamGrading extends Component {
                 <div className="comp-player-grades-footer-view">
                     <div className="row" >
                         <div className="col-sm" >
+                            {this.state.divisionId!= null &&
                             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
                                 {/* <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button> */}
                                 <Button className="open-reg-button" style={{marginRight: '20px'}}
@@ -607,7 +609,7 @@ class CompetitionPartProposedTeamGrading extends Component {
                                     type="primary"
                                     onClick={() => this.submitApiCall("submit")}>
                                     {AppConstants.submit}</Button>
-                            </div>
+                            </div>}
                         </div>
                     </div>
                 </div>

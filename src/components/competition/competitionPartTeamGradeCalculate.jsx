@@ -107,7 +107,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
             }
         }
         if (this.props.ownTeamGradingState.onLoad == false && this.state.getDataLoading == true) {
-            console.log('called')
+            console.log('called' + JSON.stringify(this.props.ownTeamGradingState.finalsortOrderArray));
             this.setState({ getDataLoading: false })
             let arr = this.props.ownTeamGradingState.finalsortOrderArray
             this.addNewGrade(arr)
