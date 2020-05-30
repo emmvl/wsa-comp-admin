@@ -151,6 +151,7 @@ export function* liveScoreMatchImportSaga(action) {
     }
 }
 export function* liveScoreMatchSaga({ payload }) {
+    console.log("colleddddddd")
     try {
         // yield console.log(payload)
         const result = yield call(LiveScoreAxiosApi.livescoreMatchDetails, payload)

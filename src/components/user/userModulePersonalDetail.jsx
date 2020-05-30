@@ -470,11 +470,7 @@ class UserModulePersonalDetail extends Component {
         this.state = {
             userId: 0,
             tabKey: "1",
-            competition: {
-                team: { teamId: 0, teamName: "" },
-                divisionName: "", competitionId: null,
-                competitionName: "", year: 0
-            },
+            competition: null,
             screenKey: null,
             loading: false,
             registrationForm: null,
@@ -484,13 +480,23 @@ class UserModulePersonalDetail extends Component {
         }
     }
 
-    componentDidMount() {
+    componentWillMount(){
+        let competition =  {
+            team: { teamId: 0, teamName: "" },
+            divisionName: "", competitionId: null,
+            competitionName: "", year: 0
+        };
+
+        this.setState({competition: competition})
+    }
+
+   componentDidMount() {
 
         if (this.props.location.state != null && this.props.location.state != undefined) {
             let userId = this.props.location.state.userId;
             let screenKey = this.props.location.state.screenKey;
             let screen = this.props.location.state.screen;
-            this.setState({ userId: userId, screenKey: screenKey, screen: screen });
+             this.setState({ userId: userId, screenKey: screenKey, screen: screen });
             this.apiCalls(userId);
             if (this.state.tabKey == "1") {
                 this.hanleActivityTableList(1, userId, this.state.competition, "parent");
@@ -513,7 +519,8 @@ class UserModulePersonalDetail extends Component {
         }
 
         if (this.state.competition.competitionId == null && personal.competitions != undefined &&
-            personal.competitions.length > 0) {
+            personal.competitions.length > 0 
+            && this.props.userState.personalData!= nextProps.userState.personalData) {
             this.setState({ competition: personal.competitions[0] })
             this.tabApiCalls(this.state.tabKey, personal.competitions[0], this.state.userId);
         }
@@ -592,6 +599,7 @@ class UserModulePersonalDetail extends Component {
         {
             competitionId: competition.competitionId,
             userId: userId,
+            organisationId: getOrganisationData().organisationUniqueKey,
             paging: {
                 limit: 10,
                 offset: (page ? (10 * (page - 1)) : 0)
@@ -621,6 +629,7 @@ class UserModulePersonalDetail extends Component {
     leftHandSideView = () => {
         let userState = this.props.userState;
         let personal = userState.personalData;
+        let compititionId = this.state.competition!= null ? this.state.competition.competitionId : null;
 
         return (
             <div className="fluid-width mt-2" >
@@ -668,7 +677,7 @@ class UserModulePersonalDetail extends Component {
                         <Select
                             style={{ width: "100%", paddingRight: 1, paddingTop: '15px' }}
                             onChange={(e) => this.onChangeSetValue(e)}
-                            value={this.state.competition.competitionId}>
+                            value={compititionId}>
                             {(personal.competitions || []).map((comp, index) => (
                                 <Option key={comp.competitionId} value={comp.competitionId}>{comp.competitionName}</Option>
                             ))}
@@ -681,7 +690,7 @@ class UserModulePersonalDetail extends Component {
                             </div>
                             <span className='year-select-heading ml-3'>{AppConstants.team}</span>
                         </div>
-                        {(this.state.competition.teams || []).map((item, index) => (
+                        {(this.state.competition!= null && this.state.competition.teams || []).map((item, index) => (
                             <div key={item.teamId} className="live-score-desc-text side-bar-profile-data">{item.teamName}</div>
                         ))}
 
@@ -693,7 +702,7 @@ class UserModulePersonalDetail extends Component {
                             </div>
                             <span className='year-select-heading ml-3'>{AppConstants.division}</span>
                         </div>
-                        <span className="live-score-desc-text side-bar-profile-data">{this.state.competition.divisionName}</span>
+                        <span className="live-score-desc-text side-bar-profile-data">{this.state.competition!= null ? this.state.competition.divisionName : null}</span>
                     </div>
 
                 </div>
@@ -1035,6 +1044,14 @@ class UserModulePersonalDetail extends Component {
         )
     }
 
+    noDataAvailable = () => {
+        return (
+            <div style={{display: 'flex'}}>
+                <span className="inside-table-view mt-4">{AppConstants.noDataAvailable}</span>
+            </div>
+        )
+    }
+
     headerView = () => {
         return (
             <div className="row" >
@@ -1066,6 +1083,8 @@ class UserModulePersonalDetail extends Component {
     }
 
     render() {
+        let {activityPlayerList, activityManagerList, activityScorerList, activityParentList} = this.props.userState;
+
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
@@ -1083,10 +1102,13 @@ class UserModulePersonalDetail extends Component {
                                     <div className="inside-table-view mt-4" >
                                         <Tabs defaultActiveKey="1" onChange={(e) => this.onChangeTab(e)}>
                                             <TabPane tab={AppConstants.activity} key="1">
-                                                {this.playerActivityView()}
-                                                {this.managerActivityView()}
-                                                {this.scorerActivityView()}
-                                                {this.parentActivityView()}
+                                                {activityPlayerList!= null && activityPlayerList.length > 0 && this.playerActivityView()}
+                                                {activityManagerList!= null && activityManagerList.length > 0 && this.managerActivityView()}
+                                                {activityScorerList!= null && activityScorerList.length > 0 && this.scorerActivityView()}
+                                                {activityParentList!= null && activityParentList.length > 0 && this.parentActivityView()}
+                                                {activityPlayerList.length == 0 && activityManagerList.length == 0
+                                                 &&  activityScorerList.length == 0 && activityParentList.length == 0
+                                                         && this.noDataAvailable()}
                                             </TabPane>
                                             <TabPane tab={AppConstants.statistics} key="2">
                                                 {this.statisticsView()}

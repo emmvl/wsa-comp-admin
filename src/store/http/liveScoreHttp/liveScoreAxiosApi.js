@@ -724,7 +724,13 @@ let LiveScoreAxiosApi = {
     getFixtureCompList(orgId) {
         let url = `/competitions/list?organisationId=${orgId}`
         return Method.dataGet(url, localStorage.token);
-    }
+    },
+    liveScoreAddCoach(data, teamId, exsitingManagerId) {
+        let body = data
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        var url = `/users/coach?competitionId=${id}`;
+        return Method.dataPost(url, token, body)
+    },
 };
 
 
@@ -869,6 +875,8 @@ const Method = {
                                     logout()
                                     message.error(ValidationConstants.messageStatus401)
                                 }
+                            } else if (err.response.status == 500) {
+                                message.error(err.response.data.message)
                             }
                         }
                     }

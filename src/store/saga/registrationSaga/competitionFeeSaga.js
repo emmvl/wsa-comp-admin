@@ -100,7 +100,8 @@ export function* getAllCompetitionFeesDeatilsSaga(action) {
 
                 const result = yield call(
                     AxiosApi.getAllCompetitionFeesDeatils,
-                    action.competitionId
+                    action.competitionId,
+                    action.sourceModule								   
                 );
                 if (result.status === 1) {
                     yield put({
@@ -155,7 +156,8 @@ export function* saveCompetitionFeesDetailsSaga(action) {
     try {
         const result = yield call(
             AxiosApi.saveCompetitionFeesDetails,
-            action.payload
+            action.payload,
+            action.sourceModule							   
         );
         if (result.status === 1) {
             yield put({
@@ -393,5 +395,27 @@ export function* inviteeSearchSaga(action) {
     }
 }
 
+///////////Delete Competition Division from Comp Details
+export function* deleteCompetitionDivisionSaga(action) {
+    try {
+        const result = yield call(
+            AxiosApi.deleteCompetitionDivision,
+            action.payload
+        );
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_COMPETITION_DIVISION_DELETE_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+            message.success(result.result.data.message);
+        }
+        else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}														
 
 

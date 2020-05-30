@@ -18,7 +18,7 @@ import {
     clearTeamGradingReducerDataAction,
     getCompFinalGradesListAction,
     teamGradingCommentAction,
-    changeHistoryHover, deleteTeamActionAction
+    changeHistoryHover, deleteTeamActionAction, changeDivisionTeamAction
 } from "../../store/actions/competitionModuleAction/competitionTeamGradingAction";
 import { gradesReferenceListAction } from "../../store/actions/commonAction/commonAction";
 import {
@@ -220,14 +220,20 @@ const columns = [
                             height="16"
                         />
                     }>
-                    {e.isActive == 1 ?
+                    
+                        { (this_obj.state.divisionId!= null &&  e.isActive == 1) &&
                         <Menu.Item key="1" onClick={() => this_obj.showDeleteConfirm(e, "IsActive", index)}>
                             <span>Delete</span>
-                        </Menu.Item> :
+                        </Menu.Item>
+                        }   
+                        { (this_obj.state.divisionId!= null && e.isActive == 0) && 
                         <Menu.Item key="2" onClick={() => this_obj.showDeleteConfirm(e, "Undelete", index)}>
                             <span>Undelete</span>
-                        </Menu.Item>
-                    }
+                        </Menu.Item>  }
+                    
+                     <Menu.Item key="3" onClick={() => this_obj.onClickChangeDivision(e)}>
+                          <span>Change Division</span>
+                     </Menu.Item>
                 </SubMenu>
             </Menu>
         )
@@ -259,7 +265,10 @@ class CompetitionProposedTeamGrading extends Component {
             isDeleteModalVisible: false,
             actionType: '',
             loading: false,
-            rowIndex: 0
+            rowIndex: 0,
+            changeDivisionModalVisible: false,
+            divisionLoad: false,
+            competitionDivisionId: null
         }
         this_obj = this
         this.props.clearTeamGradingReducerDataAction("finalTeamGrading")
@@ -276,6 +285,30 @@ class CompetitionProposedTeamGrading extends Component {
             finalGradeId: record.finalGradeId,
             comment: record.responseComments,
 
+        })
+    }
+
+    onClickChangeDivision = (record) =>{
+        this.setState({
+            changeDivisionModalVisible: true, teamId: record.teamId
+        })
+    }
+
+    handleChangeDivision = (key) =>{
+        if(key == "ok"){
+            let payload = {
+                competitionDivisionId: this.state.competitionDivisionId,
+                teamId: this.state.teamId,
+                competitionUniqueKey: this.state.firstTimeCompId,
+                organisationUniqueKey: null
+            }
+            this.props.changeDivisionTeamAction(payload);
+            this.setState({ divisionLoad: true })
+            console.log("payload::" + JSON.stringify(payload));
+        }
+        this.setState({
+            changeDivisionModalVisible: false, teamId: null,
+            divisionId: this.state.competitionDivisionId
         })
     }
 
@@ -349,6 +382,7 @@ class CompetitionProposedTeamGrading extends Component {
     componentDidMount() {
         let divisionId = this.props.location.state ? this.props.location.state.id : null;
         let gradeRefId = this.props.location.state ? this.props.location.state.gradeRefId : null;
+        console.log("GradeRefId" + gradeRefId);
         this.setState({ divisionId: divisionId, gradeRefId: gradeRefId })
         // this.props.gradesReferenceListAction()
         let yearId = getOwnCompetitionYear()
@@ -395,7 +429,9 @@ class CompetitionProposedTeamGrading extends Component {
         }
         if (nextProps.registrationState.allDivisionsData !== allDivisionsData) {
             if (allDivisionsData.length > 0) {
-                let divisionId = this.state.divisionId == null ? allDivisionsData[0].competitionMembershipProductDivisionId : this.state.divisionId
+                
+                //let divisionId = this.state.divisionId == null ? allDivisionsData[0].competitionMembershipProductDivisionId : this.state.divisionId
+                let divisionId = this.state.divisionId;
                 this.props.getCompFinalGradesListAction(this.state.yearRefId, this.state.firstTimeCompId, divisionId)
                 // this.props.getCompOwnProposedTeamGradingAction(this.state.yearRefId, this.state.firstTimeCompId, divisionId, gradeRefId)
                 this.setState({ divisionId })
@@ -423,9 +459,15 @@ class CompetitionProposedTeamGrading extends Component {
         }
 
 
+        if (nextProps.ownTeamGradingState != this.props.ownTeamGradingState) {
+            if (this.props.ownTeamGradingState.onDivisionChangeLoad == false && this.state.divisionLoad === true) {
+                this.setState({ divisionLoad: false });
+                this.props.getCompFinalGradesListAction(this.state.yearRefId, this.state.firstTimeCompId, this.state.divisionId)
+            }
+        }
+
+
     }
-
-
 
     ////save the final team grading data
     submitApiCall = (buttonClicked) => {
@@ -672,6 +714,31 @@ class CompetitionProposedTeamGrading extends Component {
                     onCancel={this.handleDeleteTeamCancel}>
                     <p>Are you sure you want to {this.state.actionType == 'IsActive' ? 'delete' : 'Undelete'}?</p>
                 </Modal>
+                <Modal
+                    className="add-membership-type-modal"
+                    title={AppConstants.changeDivision}
+                    visible={this.state.changeDivisionModalVisible}
+                    onOk={ () => this.handleChangeDivision("ok")}
+                    onCancel={() => this.handleChangeDivision("cancel")}>
+                        <div className="change-division-modal">
+                            <div className='year-select-heading'>{AppConstants.division}</div>
+                            <Select
+                                style={{ minWidth: 120 }}
+                                className="year-select change-division-select"
+                                onChange={(divisionId) => this.setState({competitionDivisionId: divisionId})}
+                                value={JSON.parse(JSON.stringify(this.state.competitionDivisionId))}>
+                                {this.props.registrationState.allDivisionsData.map(item => {
+                                return (
+                                    <Option key={"division" + item.competitionMembershipProductDivisionId}
+                                        value={item.competitionMembershipProductDivisionId}>
+                                        {item.divisionName}
+                                    </Option>
+                                )
+                            })}
+                            </Select>
+                        </div>
+                     
+                </Modal>
             </div>
         )
     }
@@ -690,15 +757,18 @@ class CompetitionProposedTeamGrading extends Component {
                                     onClick={() => this.cancelCall()}
                                 >{AppConstants.cancel}
                                 </Button>
-                                <Button className="open-reg-button" style={{ marginRight: '20px' }}
-                                    onClick={() => this.submitApiCall("save")}
-                                    type="primary">{AppConstants.save}
-                                </Button>
-                                {/* {this.state.gradeRefId != -1 ?  */}
-                                <Button className="open-reg-button"
-                                    onClick={() => this.submitApiCall("submit")}
-                                    type="primary">{AppConstants.submit}
-                                </Button>
+                                {this.state.divisionId!= null &&
+                                <div>
+                                    <Button className="open-reg-button" style={{ marginRight: '20px' }}
+                                        onClick={() => this.submitApiCall("save")}
+                                        type="primary">{AppConstants.save}
+                                    </Button>
+                                    {/* {this.state.gradeRefId != -1 ?  */}
+                                    <Button className="open-reg-button"
+                                        onClick={() => this.submitApiCall("submit")}
+                                        type="primary">{AppConstants.submit}
+                                    </Button>
+                                </div>}
                                 {/* : null } */}
 
                                 {/* </NavLink> */}
@@ -744,7 +814,8 @@ function mapDispatchToProps(dispatch) {
         getCompFinalGradesListAction,
         teamGradingCommentAction,
         changeHistoryHover,
-        deleteTeamActionAction
+        deleteTeamActionAction,
+        changeDivisionTeamAction
     }, dispatch)
 }
 

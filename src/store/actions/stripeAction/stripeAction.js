@@ -71,6 +71,17 @@ function getTransactionPayoutListAction(page, starting_after, ending_before, pay
     };
     return action;
 }
+
+/////get invoice 
+function getInvoice(registrationid) {
+    const action = {
+        type: ApiConstants.API_GET_INVOICE_LOAD,
+        registrationid
+    }
+    return action
+}
+
+
 export {
     accountBalanceAction,
     chargingPaymentAction,
@@ -79,4 +90,5 @@ export {
     getStripeTransferListAction,
     getStripePayoutListAction,
     getTransactionPayoutListAction,
+    getInvoice,
 }

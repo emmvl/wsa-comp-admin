@@ -203,86 +203,88 @@ class CompetitionDrawEdit extends Component {
         // console.log("Source",sourceObejct)
         // console.log("Target",targetObject)
 
-        if (targetObject.drawsId !== sourceObejct.drawsId) {
+        // if (targetObject.drawsId !== sourceObejct.drawsId) {
+        //     console.log('called207')
 
+        //     if (sourceZIndex == 0) {
+        //         if (targetZIndex == 0) {
+        //             customSourceObject = {
+        //                 drawsId: sourceObejct.drawsId,
+        //                 // roundId: this.state.roundId,
+        //                 homeTeamId: targetObject.homeTeamId,
+        //                 awayTeamId: sourceObejct.awayTeamId,
+        //                 isLocked: 1
+        //             };
+        //         } else {
+        //             customSourceObject = {
+        //                 drawsId: sourceObejct.drawsId,
+        //                 // roundId: this.state.roundId,
+        //                 homeTeamId: targetObject.awayTeamId,
+        //                 awayTeamId: sourceObejct.awayTeamId,
+        //                 isLocked: 1
+        //             };
+        //         }
 
-            if (sourceZIndex == 0) {
-                if (targetZIndex == 0) {
-                    customSourceObject = {
-                        drawsId: sourceObejct.drawsId,
-                        // roundId: this.state.roundId,
-                        homeTeamId: targetObject.homeTeamId,
-                        awayTeamId: sourceObejct.awayTeamId,
-                        isLocked: 1
-                    };
-                } else {
-                    customSourceObject = {
-                        drawsId: sourceObejct.drawsId,
-                        // roundId: this.state.roundId,
-                        homeTeamId: targetObject.awayTeamId,
-                        awayTeamId: sourceObejct.awayTeamId,
-                        isLocked: 1
-                    };
-                }
+        //     } else {
+        //         if (targetZIndex == 0) {
+        //             customSourceObject = {
+        //                 drawsId: sourceObejct.drawsId,
+        //                 // roundId: this.state.roundId,
+        //                 homeTeamId: sourceObejct.homeTeamId,
+        //                 awayTeamId: targetObject.homeTeamId,
+        //                 isLocked: 1
+        //             };
+        //         } else {
+        //             customSourceObject = {
+        //                 drawsId: sourceObejct.drawsId,
+        //                 // roundId: this.state.roundId,
+        //                 homeTeamId: sourceObejct.homeTeamId,
+        //                 awayTeamId: targetObject.awayTeamId,
+        //                 isLocked: 1
+        //             };
+        //         }
 
-            } else {
-                if (targetZIndex == 0) {
-                    customSourceObject = {
-                        drawsId: sourceObejct.drawsId,
-                        // roundId: this.state.roundId,
-                        homeTeamId: sourceObejct.homeTeamId,
-                        awayTeamId: targetObject.homeTeamId,
-                        isLocked: 1
-                    };
-                } else {
-                    customSourceObject = {
-                        drawsId: sourceObejct.drawsId,
-                        // roundId: this.state.roundId,
-                        homeTeamId: sourceObejct.homeTeamId,
-                        awayTeamId: targetObject.awayTeamId,
-                        isLocked: 1
-                    };
-                }
-
-            }
-            if (targetZIndex == 0) {
-                if (sourceZIndex == 0) {
-                    customTargetObject = {
-                        drawsId: targetObject.drawsId,
-                        // roundId: this.state.roundId,
-                        homeTeamId: sourceObejct.homeTeamId,
-                        awayTeamId: targetObject.awayTeamId,
-                        isLocked: 1
-                    }
-                } else {
-                    customTargetObject = {
-                        drawsId: targetObject.drawsId,
-                        // roundId: this.state.roundId,
-                        homeTeamId: sourceObejct.awayTeamId,
-                        awayTeamId: targetObject.awayTeamId,
-                        isLocked: 1
-                    }
-                }
-            } else {
-                if (sourceZIndex == 0) {
-                    customTargetObject = {
-                        drawsId: targetObject.drawsId,
-                        // roundId: this.state.roundId,
-                        homeTeamId: targetObject.homeTeamId,
-                        awayTeamId: sourceObejct.homeTeamId,
-                        isLocked: 1
-                    }
-                } else {
-                    customTargetObject = {
-                        drawsId: targetObject.drawsId,
-                        // roundId: this.state.roundId,
-                        homeTeamId: targetObject.homeTeamId,
-                        awayTeamId: sourceObejct.awayTeamId,
-                        isLocked: 1
-                    }
-                }
-            }
-        } else {
+        //     }
+        //     if (targetZIndex == 0) {
+        //         if (sourceZIndex == 0) {
+        //             customTargetObject = {
+        //                 drawsId: targetObject.drawsId,
+        //                 // roundId: this.state.roundId,
+        //                 homeTeamId: sourceObejct.homeTeamId,
+        //                 awayTeamId: targetObject.awayTeamId,
+        //                 isLocked: 1
+        //             }
+        //         } else {
+        //             customTargetObject = {
+        //                 drawsId: targetObject.drawsId,
+        //                 // roundId: this.state.roundId,
+        //                 homeTeamId: sourceObejct.awayTeamId,
+        //                 awayTeamId: targetObject.awayTeamId,
+        //                 isLocked: 1
+        //             }
+        //         }
+        //     } else {
+        //         if (sourceZIndex == 0) {
+        //             customTargetObject = {
+        //                 drawsId: targetObject.drawsId,
+        //                 // roundId: this.state.roundId,
+        //                 homeTeamId: targetObject.homeTeamId,
+        //                 awayTeamId: sourceObejct.homeTeamId,
+        //                 isLocked: 1
+        //             }
+        //         } else {
+        //             customTargetObject = {
+        //                 drawsId: targetObject.drawsId,
+        //                 // roundId: this.state.roundId,
+        //                 homeTeamId: targetObject.homeTeamId,
+        //                 awayTeamId: sourceObejct.awayTeamId,
+        //                 isLocked: 1
+        //             }
+        //         }
+        //     }
+        // } else {
+        if (targetObject.drawsId == sourceObejct.drawsId) {
+            console.log('called207')
             customSourceObject = {
                 drawsId: sourceObejct.drawsId,
                 // roundId: this.state.roundId,
@@ -299,27 +301,20 @@ class CompetitionDrawEdit extends Component {
                 // awayTeamId: 294,
                 isLocked: 1
             }
+            let postObject = {
+                // drawsMasterId: 1,
+                draws: [customSourceObject, customTargetObject]
+            };
 
+
+
+            this.props.updateCompetitionDraws(
+                postObject,
+                sourceIndexArray,
+                targetIndexArray,
+                "edit"
+            );
         }
-
-        console.log("SourceObject", customSourceObject)
-        console.log("TargetObject", customTargetObject)
-
-        let postObject = {
-            // drawsMasterId: 1,
-            draws: [customSourceObject, customTargetObject]
-        };
-
-
-
-        this.props.updateCompetitionDraws(
-            postObject,
-            sourceIndexArray,
-            targetIndexArray,
-            "edit"
-        );
-
-
     }
 
     saveAPIsActionCall() {
@@ -627,6 +622,7 @@ class CompetitionDrawEdit extends Component {
         let topMarginHomeTeam = 36;
         let topMarginAwayTeam = 84;
         let legendsData = isArrayNotEmpty(this.props.drawsState.legendsArray) ? this.props.drawsState.legendsArray : []
+        console.log(this.props.drawsState.getStaticDrawsData)
         return (
             <div className="draggable-wrap draw-data-table">
                 <div className="scroll-bar">

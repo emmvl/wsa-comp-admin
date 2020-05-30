@@ -59,10 +59,10 @@ const ValidationConstants = {
     suburbField: ["Suburb is required."],
     stateField: ['State field is required.'],
     dayField: ['Day field is required.'],
-    courtField: ["Court number field is required.", "Longitude field is required.", 
-                "Latitude field is required.", "Court field is required.", 
-                "Division field is required.", "Grade field is required.", "Start time is required",
-                "End time is required"],
+    courtField: ["Court number field is required.", "Longitude field is required.",
+        "Latitude field is required.", "Court field is required.",
+        "Division field is required.", "Grade field is required.", "Start time is required",
+        "End time is required"],
     postCodeField: ["Postcode is required"],
 
     //////comp fees
@@ -145,7 +145,14 @@ const ValidationConstants = {
     affiliateToRequired: "Please select affiliate to",
     playerMessage: "This player has not been linked to a user profile",
     gameDayEndTimeValidation: "Game day end time should be greater than start time",
-    venueCourtEndTimeValidation: "Venue court end time should be greater than start time"
+    venueCourtEndTimeValidation: "Venue court end time should be greater than start time",
+    charityTitleNameIsRequired: "Charity title is required.",
+
+    coachSearch: "Coach Search",
+    searchCoach: "Please search coach.",
+    charityDescriptionIsRequired: "Charity description is required.",
+    pleaseAddDivisionForMembershipProduct: "Please add division for membershipProduct.",
+    pleaseEnterChildDiscountPercentage:"Please enter child discount."
 };
 
 export default ValidationConstants;

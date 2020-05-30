@@ -116,7 +116,10 @@ const initialState = {
     associationAffilites: [],
     clubAffilites: [],
     affiliateOrgSelected: [],
-    serachLoad: false
+    searchLoad: false,
+    charityTitle: "",
+    charityDescription: '',
+    deleteDivisionLoad: false
 };
 
 /////function to append isselected values in default membership types array
@@ -603,13 +606,17 @@ function checkCharityArray(selectedArr, defaultCharityArr) {
         if (charityObjectArray.status == true) {
             charityObj = {
                 charityRoundUpId: charityObjectArray.result.charityRoundUpId,
-                charityRoundUpRefId: slectedArray[i].id
+                charityRoundUpRefId: slectedArray[i].id,
+                charityRoundUpDescription: "",
+                charityRoundUpName: ""
             }
         }
         else {
             charityObj = {
                 charityRoundUpId: 0,
                 charityRoundUpRefId: slectedArray[i].id,
+                charityRoundUpDescription: "",
+                charityRoundUpName: ""
             }
         }
         postCharityArr.push(charityObj)
@@ -1347,6 +1354,11 @@ function competitionFees(state = initialState, action) {
             let affiliateOrgSelectedArr = getAffiliateOrgSelectedArr(allData.competitiondetail.invitees)
             state.affiliateOrgSelected = affiliateOrgSelectedArr
 
+
+            state.charityTitle = isArrayNotEmpty(allData.competitionpayments.charityRoundUp) ? allData.competitionpayments.charityRoundUp[0].charityRoundUpName : ""
+            state.charityDescription = isArrayNotEmpty(allData.competitionpayments.charityRoundUp) ? allData.competitionpayments.charityRoundUp[0].charityRoundUpDescription : ""
+
+
             state.onLoad = false
             state.getCompAllDataOnLoad = false
             return {
@@ -1482,6 +1494,7 @@ function competitionFees(state = initialState, action) {
                     membershipProductUniqueKey: action.item.membershipProductUniqueKey,
                     competitionMembershipProductId: action.item.competitionMembershipProductId,
                     competitionMembershipProductDivisionId: 0,
+					competitionDivisionId: 0,						 
                     ageRestriction: false,
                     genderRestriction: false,
                     parentIndex: action.index
@@ -1585,10 +1598,20 @@ function competitionFees(state = initialState, action) {
                 state.govtVoucher[action.index].isSelected = action.value
                 // state.selectedCharityArray.push(charityRoundUp[action.index])
             }
+            if (action.key == "title") {
+                state.charityTitle = action.value
+            }
+            if (action.key == "description") {
+                state.charityDescription = action.value
+            }
             let postCharityArray = checkCharityArray(state.charityRoundUp, state.defaultChairtyOption)
             let postGovtArray = checkVoucherArray(state.govtVoucher, state.defaultGovtVoucher)
             state.competitionPaymentsData.charityRoundUp = postCharityArray
             state.competitionDiscountsData.govermentVouchers = postGovtArray
+            if (state.competitionPaymentsData.charityRoundUp.length == 0) {
+                state.charityTitle = ""
+                state.charityDescription = ""
+            }
             return { ...state }
 
         /// update payment option in competiton fee
@@ -1614,6 +1637,11 @@ function competitionFees(state = initialState, action) {
         case ApiConstants.API_POST_COMPETITION_FEE_PAYMENT_LOAD:
             return { ...state, onLoad: true, error: null }
         case ApiConstants.API_POST_COMPETITION_FEE_PAYMENT_SUCCESS:
+            let paymentSuccessAllData = action.result.data
+            state.charityTitle = isArrayNotEmpty(paymentSuccessAllData.competitionpayments.charityRoundUp) ?
+                paymentSuccessAllData.competitionpayments.charityRoundUp[0].charityRoundUpName : ""
+            state.charityDescription = isArrayNotEmpty(paymentSuccessAllData.competitionpayments.charityRoundUp) ?
+                paymentSuccessAllData.competitionpayments.charityRoundUp[0].charityRoundUpDescription : ""
             return {
                 ...state,
                 onLoad: false,
@@ -1625,12 +1653,14 @@ function competitionFees(state = initialState, action) {
 
         // for add and remove another discount competion fee
         case ApiConstants.ADD_ANOTHER_DISCOUNT_COMPETITION_FEE:
+            let orgData = getOrganisationData()
+            let currentOrganisationId = orgData ? orgData.organisationId : 0
             if (action.keyAction == "add") {
                 const newObj = {
-                    "competitionMembershipProductTypeId": null,
+                    "competitionMembershipProductTypeId": [],
                     "competitionTypeDiscountId": 0,
-                    "membershipProductUniqueKey": null,
-                    "competitionTypeDiscountTypeRefId": 0,
+                    "membershipProductUniqueKey": [],
+                    "competitionTypeDiscountTypeRefId": [],
                     "amount": "",
                     "description": '',
                     "availableFrom": null,
@@ -1641,6 +1671,7 @@ function competitionFees(state = initialState, action) {
                     "question": '',
                     "applyDiscount": 0,
                     "membershipProductTypes": [],
+                    "organisationId": currentOrganisationId,
                 }
                 state.competionDiscountValue.competitionDiscounts[0].discounts.push(newObj)
             }
@@ -1851,6 +1882,13 @@ function competitionFees(state = initialState, action) {
                 // state.charityRoundUp = []
                 // state.govtVoucher = []
                 state.competionDiscountValue.competitionDiscounts[0].discounts = []
+                state.charityTitle = ""
+                state.charityDescription = ""
+                const paymentOptionObject = {
+                    paymentOptions: [],
+                    charityRoundUp: []
+                }
+                state.competitionPaymentsData = paymentOptionObject
             }
             return {
                 ...state, error: null
@@ -1864,6 +1902,10 @@ function competitionFees(state = initialState, action) {
 
         case ApiConstants.API_COMPETITION_FEE_DEFAULT_LOGO_SUCCESS:
             console.log("action.result.data", action.result.data)
+            if (state.competitionId.length == 0 || state.competitionId == null) {
+                state.competitionDetailData.competitionLogoUrl = action.result.data.logoUrl
+                state.competitionDetailData.logoIsDefault = true
+            }
             return {
                 ...state,
                 onLoad: false,
@@ -1919,7 +1961,7 @@ function competitionFees(state = initialState, action) {
 
             return {
                 ...state,
-                serachLoad: true
+                searchLoad: true
             }
 
         case ApiConstants.API_COMPETITION_FEE_INVITEES_SEARCH_SUCCESS:
@@ -1932,9 +1974,20 @@ function competitionFees(state = initialState, action) {
 
             return {
                 ...state,
-                serachLoad: false
+                searchLoad: false
             }
 
+        case ApiConstants.API_COMPETITION_DIVISION_DELETE_LOAD:
+            return { ...state, deleteDivisionLoad: true };
+
+        case ApiConstants.API_COMPETITION_DIVISION_DELETE_SUCCESS:
+            return {
+                ...state,
+                deleteDivisionLoad: false,
+                status: action.status,
+                error: null
+            };
+    
 
         default:
             return state;

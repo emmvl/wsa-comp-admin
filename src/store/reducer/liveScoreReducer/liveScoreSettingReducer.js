@@ -22,7 +22,12 @@ const initialState = {
 
     },
     buzzerEnabled: false,
-    warningBuzzerEnabled: false
+    warningBuzzerEnabled: false,
+    recordUmpire: [],
+    affiliateSelected: null,
+    anyOrgSelected: null,
+    otherSelected: null,
+    nonSelected: null
 }
 export default function liveScoreSettingsViewReducer(state = initialState, { type, payload, }) {
 
@@ -83,7 +88,8 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 },
                 data: payload,
                 buzzerEnabled: payload.buzzerEnabled,
-                warningBuzzerEnabled: payload.warningBuzzerEnabled
+                warningBuzzerEnabled: payload.warningBuzzerEnabled,
+                recordUmpire: payload.recordUmpireType
 
             }
         case ApiConstants.LiveScore_SETTING_VIEW_ERROR:
@@ -105,20 +111,32 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
             const Data = payload.data
 
             if (keys == 'buzzerEnabled' || keys == 'warningBuzzerEnabled') {
-
-                console.log(payload, 'LiveScore_SETTING_CHANGE_FORM')
-
-                // if (payload.data) {
-                //     state[keys] = keys == 'buzzerEnabled' ? 'Turn off Buzzer' : 'Turn off 30 second warning'
-                // } else {
-                //     state[keys] = keys == 'buzzerEnabled' ? '' : ''
-                // }
-
                 state[keys] = Data
+            }
 
+            if (keys == 'recordUmpire') {
+                state.recordUmpire = Data
+            }
+            if (keys == 'affiliateSelected' || keys == 'anyOrgSelected' || keys == 'otherSelected' || keys == 'nonSelected') {
 
+                if (keys == 'affiliateSelected') {
+                    state.affiliateSelected = Data
+                    state.otherSelected = null
+                }
+                if (keys == 'anyOrgSelected') {
+                    state.anyOrgSelected = Data
+                    state.otherSelected = null
+                }
 
-                console.log(state, 'LiveScore_SETTING_CHANGE_FORM')
+                if (keys == 'otherSelected') {
+                    state.otherSelected = Data
+                    state.affiliateSelected = null
+                    state.anyOrgSelected = null
+                }
+                if (keys == 'nonSelected') {
+                    state.nonSelected = Data ? null : Data
+                }
+                console.log(Data, 'LiveScore_SETTING_CHANGE_FORM')
             }
             return {
                 ...state,

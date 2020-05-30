@@ -107,7 +107,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
             }
         }
         if (this.props.ownTeamGradingState.onLoad == false && this.state.getDataLoading == true) {
-            console.log('called')
+            console.log('called' + JSON.stringify(this.props.ownTeamGradingState.finalsortOrderArray));
             this.setState({ getDataLoading: false })
             let arr = this.props.ownTeamGradingState.finalsortOrderArray
             this.addNewGrade(arr)
@@ -170,7 +170,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                 render: (grades, record) =>
                     < div style={{ width: "fit-content", display: "flex", flexDirection: 'column', justifyContent: 'center' }}>
                         <a className="pb-3">
-                            <span
+                            <span  style={{color: "var(--app-color)"}}
                                 onClick={() => this.updateGradeName(grades.competitionDivisionGradeId, record.competitionMembershipProductDivisionId)} className="year-select-heading ">
                                 {grades.gradeName}
                             </span>
@@ -178,7 +178,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                         <NavLink
                             to={{ pathname: `/competitionProposedTeamGrading`, state: { id: record.competitionMembershipProductDivisionId, gradeRefId: grades.gradeRefId } }}>
                             {grades.teamCount !== null ?
-                                <Tag className="comp-dashboard-table-tag  text-center" key={grades}
+                                <Tag className="comp-dashboard-table-tag  text-center tag-col" key={grades}
                                 >{grades.teamCount}
                                 </Tag>
                                 : null}

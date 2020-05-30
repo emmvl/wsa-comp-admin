@@ -145,8 +145,6 @@ class InnerHorizontalMenu extends React.Component {
                                 <span >Team Grading</span>
                             </NavLink>
                         </Menu.Item>
-                        <Menu.Item key="16">Fixtures</Menu.Item>
-                        <Menu.Item key="17">Draw</Menu.Item>
                     </SubMenu>
 
 
@@ -212,7 +210,7 @@ class InnerHorizontalMenu extends React.Component {
                             </NavLink>
                         </Menu.Item>
                     </SubMenu>
-                    <Menu.Item key="6">De-registration forms</Menu.Item>
+                    <Menu.Item key="9">De-registration forms</Menu.Item>
                 </Menu>
                 }
 
@@ -244,6 +242,11 @@ class InnerHorizontalMenu extends React.Component {
                         <Menu.Item key="3">
                             <NavLink to="/liveScoreTeam">
                                 <span>Teams</span>
+                            </NavLink>
+                        </Menu.Item>
+                        <Menu.Item key="23">
+                            <NavLink to="/LiveScoreCoaches">
+                                <span>Coaches </span>
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="4">
@@ -369,6 +372,7 @@ class InnerHorizontalMenu extends React.Component {
                     </SubMenu>
                     <Menu.Item key="21">
                         <NavLink to="/liveScoreNewsList">
+                            {/* <NavLink to="/liveScoreAddEditCoach"> */}
                             <span>News & Messages</span>
                         </NavLink>
                     </Menu.Item>

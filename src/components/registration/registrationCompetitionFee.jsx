@@ -777,6 +777,8 @@ class RegistrationCompetitionFee extends Component {
                                             showTime={false}
                                             disabled={!record.ageRestriction || this.state.permissionState.divisionsDisable}
                                             setFieldsValue={fromDate !== null && moment(fromDate)}
+                                            disabledDate={d => !d || d.isSameOrAfter(record.toDate)
+                                            }
                                         />
                                     )}
                             </Form.Item>
@@ -803,6 +805,10 @@ class RegistrationCompetitionFee extends Component {
                                             showTime={false}
                                             disabled={!record.ageRestriction || this.state.permissionState.divisionsDisable}
                                             setFieldsValue={toDate !== null && moment(toDate)}
+                                            // disabledDate={d => !d || d.isSameOrBefore(record.fromDate)
+                                            // }
+                                            disabledDate={d => moment(record.fromDate).isSameOrAfter(d, 'day')
+                                            }
                                         />
                                     )}
                             </Form.Item>
@@ -932,7 +938,7 @@ class RegistrationCompetitionFee extends Component {
                     divisionsDisable: true,
                     feesTableDisable: true,
                     paymentsDisable: true,
-                    discountsDisable: true,
+                    discountsDisable: false,
                     allDisable: false,
                     isPublished: true
                 }
@@ -946,7 +952,7 @@ class RegistrationCompetitionFee extends Component {
                     divisionsDisable: true,
                     feesTableDisable: true,
                     paymentsDisable: false,
-                    discountsDisable: true,
+                    discountsDisable: false,
                     allDisable: false,
                     isPublished: true
                 }
@@ -1011,6 +1017,15 @@ class RegistrationCompetitionFee extends Component {
         let SelectedSeasonalPaymentArr = this.props.competitionFeesState.SelectedSeasonalFee
         let paymentOptionData = selectedCasualPaymentArr.concat(SelectedSeasonalPaymentArr)
         paymentDataArr.paymentOptions = paymentOptionData
+        let charityTitle = this.props.competitionFeesState.charityTitle
+        let charityDescription = this.props.competitionFeesState.charityDescription
+        let postCharityRoundUpData = JSON.parse(JSON.stringify(paymentDataArr.charityRoundUp))
+        console.log("paymentDataArr", paymentDataArr.charityRoundUp, charityTitle, charityDescription)
+        postCharityRoundUpData.map((item) => {
+            item.charityRoundUpName = charityTitle
+            item.charityRoundUpDescription = charityDescription
+        })
+        paymentDataArr.charityRoundUp = postCharityRoundUpData
         this.props.competitionPaymentApi(paymentDataArr, competitionId)
     }
 
@@ -1022,6 +1037,9 @@ class RegistrationCompetitionFee extends Component {
         discountDataArr.map((item) => {
             if (item.childDiscounts) {
                 if (item.childDiscounts.length == 0) {
+                    item.childDiscounts = null
+                }
+                if (item.competitionTypeDiscountTypeRefId !== 3) {
                     item.childDiscounts = null
                 }
             }
@@ -1039,13 +1057,18 @@ class RegistrationCompetitionFee extends Component {
             }
             return item
         })
-
+        console.log("discountDataArr", discountDataArr)
+        let finalOrgPostDiscountData = JSON.parse(JSON.stringify(discountDataArr))
+        let orgData = getOrganisationData()
+        let currentOrganisationId = orgData ? orgData.organisationId : 0
+        let filterOrgPostDiscountData = finalOrgPostDiscountData.filter(x => x.organisationId == currentOrganisationId);
+        console.log("filterOrgPostDiscountData", filterOrgPostDiscountData)
         let discountBody = {
             "competitionId": competitionId,
             "statusRefId": this.state.statusRefId,
             "competitionDiscounts": [
                 {
-                    "discounts": discountDataArr
+                    "discounts": filterOrgPostDiscountData
                 }
             ],
             "govermentVouchers": govtVoucher
@@ -1065,11 +1088,13 @@ class RegistrationCompetitionFee extends Component {
             selectedVenues: compFeesState.selectedVenues,
             startDate: compFeesState.competitionDetailData.startDate && moment(compFeesState.competitionDetailData.startDate),
             endDate: compFeesState.competitionDetailData.endDate && moment(compFeesState.competitionDetailData.endDate),
-
+            charityTitle: compFeesState.charityTitle,
+            charityDescription: compFeesState.charityDescription,
         })
         let data = this.props.competitionFeesState.competionDiscountValue
         let discountData = data && data.competitionDiscounts !== null ? data.competitionDiscounts[0].discounts : []
-        discountData.map((item, index) => {
+        console.log("discountData", data.competitionDiscounts)
+        discountData.length > 0 && discountData.map((item, index) => {
             let competitionMembershipProductTypeId = `competitionMembershipProductTypeId${index}`
             let membershipProductUniqueKey = `membershipProductUniqueKey${index}`
             let competitionTypeDiscountTypeRefId = `competitionTypeDiscountTypeRefId${index}`
@@ -1078,11 +1103,18 @@ class RegistrationCompetitionFee extends Component {
                 [membershipProductUniqueKey]: item.membershipProductUniqueKey,
                 [competitionTypeDiscountTypeRefId]: item.competitionTypeDiscountTypeRefId,
             })
+            let childDiscounts = item.childDiscounts !== null && item.childDiscounts.length > 0 ? item.childDiscounts : []
+            childDiscounts.map((childItem, childindex) => {
+                let childDiscountPercentageValue = `percentageValue${index} + ${childindex}`
+                this.props.form.setFieldsValue({
+                    [childDiscountPercentageValue]: childItem.percentageValue
+                })
+            })
         })
         let divisionData = this.props.competitionFeesState.competitionDivisionsData
         let divisionArray = divisionData !== null ? divisionData : []
         console.log("divisionArray", divisionArray)
-        divisionArray.map((item, index) => {
+        divisionArray.length > 0 && divisionArray.map((item, index) => {
             console.log(item)
             item.divisions.map((divItem, divIndex) => {
                 let divisionName = `divisionName${index}${divIndex}`
@@ -1208,6 +1240,14 @@ class RegistrationCompetitionFee extends Component {
         })
     }
 
+    checkDivisionEmpty(data) {
+        for (let i in data) {
+            if (data[i].divisions.length == 0) {
+                return true
+            }
+        }
+    }
+
 
 
     saveAPIsActionCall = (e) => {
@@ -1308,12 +1348,18 @@ class RegistrationCompetitionFee extends Component {
                         finalDivisionArray = [...finalDivisionArray, ...divisionArrayData[i].divisions]
                     }
                     let payload = finalDivisionArray
+                    console.log("payload", divisionArrayData)
                     let finalDivisionPayload = {
                         statusRefId: this.state.statusRefId,
                         divisions: payload
                     }
-                    this.props.saveCompetitionFeesDivisionAction(finalDivisionPayload, competitionId)
-                    this.setState({ loading: true })
+                    if (this.checkDivisionEmpty(divisionArrayData) == true) {
+                        message.error(ValidationConstants.pleaseAddDivisionForMembershipProduct)
+                    }
+                    else {
+                        this.props.saveCompetitionFeesDivisionAction(finalDivisionPayload, competitionId)
+                        this.setState({ loading: true })
+                    }
                 }
                 else if (tabKey == "4") {
                     this.saveCompFeesApiCall(e)
@@ -2373,7 +2419,7 @@ class RegistrationCompetitionFee extends Component {
                         disabled={regInviteesDisable}
                         showSearch={true}
                         onBlur={() => this.onInviteeSearch("", 3)}
-                    // loading={detailsData.serachLoad}
+                    // loading={detailsData.searchLoad}
                     >
                         {associationAffilites.map((item) => {
                             return (
@@ -2407,7 +2453,7 @@ class RegistrationCompetitionFee extends Component {
                         onSearch={(value) => { this.onInviteeSearch(value, 4) }}
                         disabled={regInviteesDisable}
                         onBlur={() => this.onInviteeSearch("", 4)}
-                    // loading={detailsData.serachLoad}
+                    // loading={detailsData.searchLoad}
                     >
                         {clubAffilites.map((item) => {
                             return (
@@ -2569,10 +2615,11 @@ class RegistrationCompetitionFee extends Component {
 
 
     //////charity voucher view
-    charityVoucherView = () => {
+    charityVoucherView = (getFieldDecorator) => {
         let charityRoundUp = this.props.competitionFeesState.charityRoundUp
         let paymentData = this.props.competitionFeesState.competitionPaymentsData
         let paymentsDisable = this.state.permissionState.paymentsDisable
+        let checkCharityArray = this.props.competitionFeesState.competitionPaymentsData.charityRoundUp
         return (
             <div className="advanced-setting-view pt-5">
                 <span className="form-heading">{AppConstants.charityRoundUp}</span>
@@ -2592,6 +2639,37 @@ class RegistrationCompetitionFee extends Component {
                         )
                     })}
                 </div>
+
+                {checkCharityArray.length > 0 &&
+                    <div>
+                        <Form.Item >
+                            {getFieldDecorator('charityTitle',
+                                { rules: [{ required: true, message: ValidationConstants.charityTitleNameIsRequired }] })(
+                                    <InputWithHead
+                                        heading={AppConstants.title}
+                                        placeholder={AppConstants.title}
+                                        // value={charityTitle}
+                                        disabled={paymentsDisable}
+                                        onChange={(e) => this.props.updatePaymentOption(e.target.value, null, "title")}
+                                    />
+                                )}
+                        </Form.Item>
+                        <InputWithHead heading={AppConstants.description} />
+                        <Form.Item >
+                            {getFieldDecorator('charityDescription',
+                                { rules: [{ required: true, message: ValidationConstants.charityDescriptionIsRequired }] })(
+                                    <TextArea
+                                        placeholder={AppConstants.addCharityDescription}
+                                        allowClear
+                                        // value={charityDescription}
+                                        onChange={(e) => this.props.updatePaymentOption(e.target.value, null, "description")}
+                                        disabled={paymentsDisable}
+                                    />
+                                )}
+                        </Form.Item>
+                    </div>
+                }
+
             </div >
         );
     };
@@ -2642,6 +2720,7 @@ class RegistrationCompetitionFee extends Component {
     ////add  or remove  discount in discount section
     addRemoveDiscount = (keyAction, index) => {
         this.props.addRemoveCompFeeDiscountAction(keyAction, index)
+        this.setDetailsFieldValue()
     }
 
     //On change membership product discount type
@@ -2649,11 +2728,16 @@ class RegistrationCompetitionFee extends Component {
         let discountData = this.props.competitionFeesState.competionDiscountValue.competitionDiscounts[0].discounts
         discountData[index].competitionTypeDiscountTypeRefId = discountType
         this.props.updatedDiscountDataAction(discountData)
+        if (discountType == 3) {
+            if (isArrayNotEmpty(discountData[index].childDiscounts) == false) {
+                this.addRemoveChildDiscount(index, "add", -1)
+            }
+        }
     }
 
-    discountViewChange = (item, index) => {
+    discountViewChange = (item, index, getFieldDecorator) => {
         let childDiscounts = item.childDiscounts !== null && item.childDiscounts.length > 0 ? item.childDiscounts : []
-        let discountsDisable = this.state.permissionState.discountsDisable
+        // let discountsDisable = this.state.permissionState.discountsDisable
         switch (item.competitionTypeDiscountTypeRefId) {
 
             case 1:
@@ -2664,7 +2748,7 @@ class RegistrationCompetitionFee extends Component {
                         onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
                         placeholder="Select"
                         value={item.discountTypeRefId}
-                        disabled={discountsDisable}
+                        disabled={this.checkDiscountDisable(item.organisationId)}
                     >
                         {this.props.appState.commonDiscountTypes.map(item => {
                             return (
@@ -2681,8 +2765,8 @@ class RegistrationCompetitionFee extends Component {
                                 placeholder={AppConstants.percentageOff_FixedAmount}
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                 value={item.amount}
-                                disabled={discountsDisable}
-                                suffix={item.discountTypeRefId == "2" ? "%" : null}
+                                disabled={this.checkDiscountDisable(item.organisationId)}
+                                suffix={JSON.stringify(item.discountTypeRefId) == "2" ? "%" : null}
                                 type="number"
                             />
                         </div>
@@ -2692,7 +2776,7 @@ class RegistrationCompetitionFee extends Component {
                                 placeholder={AppConstants.gernalDiscount}
                                 onChange={(e) => this.onChangeDescription(e.target.value, index)}
                                 value={item.description}
-                                disabled={discountsDisable}
+                                disabled={this.checkDiscountDisable(item.organisationId)}
                             />
                         </div>
                     </div>
@@ -2707,7 +2791,7 @@ class RegistrationCompetitionFee extends Component {
                                     format={"DD-MM-YYYY"}
                                     showTime={false}
                                     value={item.availableFrom !== null && moment(item.availableFrom)}
-                                    disabled={discountsDisable}
+                                    disabled={this.checkDiscountDisable(item.organisationId)}
                                 />
                             </div>
                             <div className="col-sm">
@@ -2721,7 +2805,7 @@ class RegistrationCompetitionFee extends Component {
                                     format={"DD-MM-YYYY"}
                                     showTime={false}
                                     value={item.availableTo !== null && moment(item.availableTo)}
-                                    disabled={discountsDisable}
+                                    disabled={this.checkDiscountDisable(item.organisationId)}
                                 />
                             </div>
                         </div>
@@ -2737,7 +2821,7 @@ class RegistrationCompetitionFee extends Component {
                         onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
                         placeholder="Select"
                         value={item.discountTypeRefId}
-                        disabled={discountsDisable}
+                        disabled={this.checkDiscountDisable(item.organisationId)}
                     >
                         {this.props.appState.commonDiscountTypes.map(item => {
                             return (
@@ -2752,7 +2836,7 @@ class RegistrationCompetitionFee extends Component {
                         placeholder={AppConstants.code}
                         onChange={(e) => this.onChangeDiscountCode(e.target.value, index)}
                         value={item.discountCode}
-                        disabled={discountsDisable}
+                        disabled={this.checkDiscountDisable(item.organisationId)}
                     />
                     <div className="row">
                         <div className="col-sm">
@@ -2761,8 +2845,8 @@ class RegistrationCompetitionFee extends Component {
                                 placeholder={AppConstants.percentageOff_FixedAmount}
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                 value={item.amount}
-                                disabled={discountsDisable}
-                                suffix={item.discountTypeRefId == "2" ? "%" : null}
+                                disabled={this.checkDiscountDisable(item.organisationId)}
+                                suffix={JSON.stringify(item.discountTypeRefId) == "2" ? "%" : null}
                                 type="number"
                             />
                         </div>
@@ -2772,7 +2856,7 @@ class RegistrationCompetitionFee extends Component {
                                 placeholder={AppConstants.gernalDiscount}
                                 onChange={(e) => this.onChangeDescription(e.target.value, index)}
                                 value={item.description}
-                                disabled={discountsDisable}
+                                disabled={this.checkDiscountDisable(item.organisationId)}
                             />
                         </div>
                     </div>
@@ -2788,7 +2872,7 @@ class RegistrationCompetitionFee extends Component {
                                     format={"DD-MM-YYYY"}
                                     showTime={false}
                                     value={item.availableFrom !== null ? moment(item.availableFrom) : null}
-                                    disabled={discountsDisable}
+                                    disabled={this.checkDiscountDisable(item.organisationId)}
                                 />
                             </div>
                             <div className="col-sm">
@@ -2802,7 +2886,7 @@ class RegistrationCompetitionFee extends Component {
                                     format={"DD-MM-YYYY"}
                                     showTime={false}
                                     value={item.availableTo !== null ? moment(item.availableTo) : null}
-                                    disabled={discountsDisable}
+                                    disabled={this.checkDiscountDisable(item.organisationId)}
                                 />
                             </div>
                         </div>
@@ -2815,25 +2899,33 @@ class RegistrationCompetitionFee extends Component {
                     {childDiscounts.map((childItem, childindex) => (
                         <div className="row">
                             <div className="col-sm-10">
-                                <InputWithHead
-                                    heading={`Child ${childindex + 1}%`}
-                                    placeholder={`Child ${childindex + 1}%`}
-                                    onChange={(e) => this.onChangeChildPercent(e.target.value, index, childindex, childItem)}
-                                    value={childItem.percentageValue}
-                                    disabled={discountsDisable}
-                                />
+                                <Form.Item  >
+                                    {getFieldDecorator(`percentageValue${index} + ${childindex}`,
+                                        { rules: [{ required: true, message: ValidationConstants.pleaseEnterChildDiscountPercentage }] })(
+                                            <InputWithHead
+                                                heading={`Child ${childindex + 1}%`}
+                                                placeholder={`Child ${childindex + 1}%`}
+                                                onChange={(e) => this.onChangeChildPercent(e.target.value, index, childindex, childItem)}
+                                                // value={childItem.percentageValue}
+                                                disabled={this.checkDiscountDisable(item.organisationId)}
+                                                type={"number"}
+                                            />
+                                        )}
+                                </Form.Item>
                             </div>
-                            <div className="col-sm-2 delete-image-view pb-4"
-                                onClick={() => !discountsDisable ? this.addRemoveChildDiscount(index, "delete", childindex) : null}>
-                                <span className="user-remove-btn">
-                                    <i className="fa fa-trash-o" aria-hidden="true"></i>
-                                </span>
-                                <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
-                            </div>
+                            {childindex > 0 &&
+                                <div className="col-sm-2 delete-image-view pb-4"
+                                    onClick={() => !this.checkDiscountDisable(item.organisationId) ? this.addRemoveChildDiscount(index, "delete", childindex) : null}>
+                                    <span className="user-remove-btn">
+                                        <i className="fa fa-trash-o" aria-hidden="true"></i>
+                                    </span>
+                                    <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                                </div>
+                            }
                         </div>
                     ))}
                     <span className="input-heading-add-another"
-                        onClick={() => !discountsDisable ? this.addRemoveChildDiscount(index, "add", -1) : null}>
+                        onClick={() => !this.checkDiscountDisable(item.organisationId) ? this.addRemoveChildDiscount(index, "add", -1) : null}>
                         + {AppConstants.addChild}
                     </span>
                 </div>
@@ -2846,7 +2938,7 @@ class RegistrationCompetitionFee extends Component {
                         onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
                         placeholder="Select"
                         value={item.discountTypeRefId}
-                        disabled={discountsDisable}
+                        disabled={this.checkDiscountDisable(item.organisationId)}
                     >
                         {this.props.appState.commonDiscountTypes.map(item => {
                             return (
@@ -2863,7 +2955,7 @@ class RegistrationCompetitionFee extends Component {
                                 placeholder={AppConstants.percentageOff_FixedAmount}
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                 value={item.amount}
-                                disabled={discountsDisable}
+                                disabled={this.checkDiscountDisable(item.organisationId)}
                             />
                         </div>
                         <div className="col-sm">
@@ -2872,7 +2964,7 @@ class RegistrationCompetitionFee extends Component {
                                 placeholder={AppConstants.gernalDiscount}
                                 onChange={(e) => this.onChangeDescription(e.target.value, index)}
                                 value={item.description}
-                                disabled={discountsDisable}
+                                disabled={this.checkDiscountDisable(item.organisationId)}
                             />
                         </div>
                     </div>
@@ -2888,7 +2980,7 @@ class RegistrationCompetitionFee extends Component {
                                     format={"DD-MM-YYYY"}
                                     showTime={false}
                                     value={item.availableFrom !== null && moment(item.availableFrom)}
-                                    disabled={discountsDisable}
+                                    disabled={this.checkDiscountDisable(item.organisationId)}
 
                                 />
                             </div>
@@ -2903,7 +2995,7 @@ class RegistrationCompetitionFee extends Component {
                                     format={"DD-MM-YYYY"}
                                     showTime={false}
                                     value={item.availableTo !== null && moment(item.availableTo)}
-                                    disabled={discountsDisable}
+                                    disabled={this.checkDiscountDisable(item.organisationId)}
 
                                 />
                             </div>
@@ -2919,21 +3011,21 @@ class RegistrationCompetitionFee extends Component {
                         placeholder={AppConstants.description}
                         onChange={(e) => this.onChangeDescription(e.target.value, index)}
                         value={item.description}
-                        disabled={discountsDisable}
+                        disabled={this.checkDiscountDisable(item.organisationId)}
                     />
                     <InputWithHead
                         heading={AppConstants.question}
                         placeholder={AppConstants.question}
                         onChange={(e) => this.onChangeQuestion(e.target.value, index)}
                         value={item.question}
-                        disabled={discountsDisable}
+                        disabled={this.checkDiscountDisable(item.organisationId)}
                     />
                     <InputWithHead heading={"Apply Discount if Answer is Yes"} />
                     <Radio.Group
                         className="reg-competition-radio"
                         onChange={e => this.applyDiscountQuestionCheck(e.target.value, index)}
                         value={JSON.stringify(JSON.parse(item.applyDiscount))}
-                        disabled={discountsDisable}
+                        disabled={this.checkDiscountDisable(item.organisationId)}
                     >
                         <Radio value={"1"}>{AppConstants.yes}</Radio>
                         <Radio value={"0"}>{AppConstants.no}</Radio>
@@ -2956,6 +3048,9 @@ class RegistrationCompetitionFee extends Component {
             discountData[index].childDiscounts.splice(childindex, 1)
         }
         this.props.updatedDiscountDataAction(discountData)
+        if (keyWord == "delete") {
+            this.setDetailsFieldValue()
+        }
     }
 
     ////////onchange apply discount question radio button
@@ -3031,6 +3126,26 @@ class RegistrationCompetitionFee extends Component {
         this.props.updatedDiscountMemberPrd(data, discountData, index)
     }
 
+    ////to check discount fields would be enable or disable
+    checkDiscountDisable = (organisationId) => {
+        let discountsDisable = this.state.permissionState.discountsDisable
+        let orgData = getOrganisationData()
+        let currentOrganisationId = orgData ? orgData.organisationId : 0
+        if (discountsDisable == false) {
+            if (currentOrganisationId == organisationId) {
+                return false
+            }
+            else {
+                return true
+            }
+        }
+        else {
+            return true
+        }
+    }
+
+
+
 
     ////discount view inside the content
     discountView = (getFieldDecorator) => {
@@ -3038,13 +3153,14 @@ class RegistrationCompetitionFee extends Component {
         let discountData = data && data.competitionDiscounts !== null ? data.competitionDiscounts[0].discounts : []
         let membershipPrdArr = this.props.competitionFeesState.competitionMembershipProductData !== null ? this.props.competitionFeesState.competitionMembershipProductData : []
         let discountsDisable = this.state.permissionState.discountsDisable
+        console.log("discountData", discountData)
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading">{AppConstants.discounts}</span>
                 {discountData.length > 0 && discountData.map((item, index) => (
                     <div className="prod-reg-inside-container-view">
                         <div className="transfer-image-view pt-2"
-                            onClick={() => !discountsDisable ? this.addRemoveDiscount("remove", index) : null}>
+                            onClick={() => !this.checkDiscountDisable(item.organisationId) ? this.addRemoveDiscount("remove", index) : null}>
                             <span className="user-remove-btn">
                                 <i className="fa fa-trash-o" aria-hidden="true"></i>
                             </span>
@@ -3061,7 +3177,7 @@ class RegistrationCompetitionFee extends Component {
                                                 onChange={discountTypeItem => this.onChangeMembershipProductDisType(discountTypeItem, index)}
                                                 placeholder="Select"
                                                 // value={item.competitionTypeDiscountTypeRefId !== 0 && item.competitionTypeDiscountTypeRefId}
-                                                disabled={discountsDisable}
+                                                disabled={this.checkDiscountDisable(item.organisationId)}
                                             >
                                                 {this.props.competitionFeesState.defaultDiscountType.map((discountTypeItem, discountTypeIndex) => {
                                                     return (
@@ -3088,7 +3204,7 @@ class RegistrationCompetitionFee extends Component {
                                                 placeholder={"Select"}
                                                 // value={item.membershipProductUniqueKey}
                                                 onChange={item => this.onChangeMembershipProduct(item, index)}
-                                                disabled={discountsDisable}
+                                                disabled={this.checkDiscountDisable(item.organisationId)}
                                             >
                                                 {membershipPrdArr && membershipPrdArr.membershipProducts && membershipPrdArr.membershipProducts.map(item => {
                                                     return (
@@ -3118,10 +3234,10 @@ class RegistrationCompetitionFee extends Component {
                                             }
                                             placeholder={"Select"}
                                             // value={item.competitionMembershipProductTypeId}
-                                            disabled={discountsDisable}
+                                            disabled={this.checkDiscountDisable(item.organisationId)}
 
                                         >
-                                            {item.membershipProductTypes.map(item => {
+                                            {item.membershipProductTypes.length > 0 && item.membershipProductTypes.map(item => {
                                                 return (
                                                     <Option key={item.competitionMembershipProductTypeId} value={item.competitionMembershipProductTypeId}>
                                                         {item.membershipProductTypeName}
@@ -3132,7 +3248,7 @@ class RegistrationCompetitionFee extends Component {
                                     )}
                             </Form.Item>
                         </div>
-                        {this.discountViewChange(item, index)}
+                        {this.discountViewChange(item, index, getFieldDecorator)}
                     </div>
                 ))}
 
@@ -3177,7 +3293,6 @@ class RegistrationCompetitionFee extends Component {
             return true
         }
     }
-
 
 
     //////footer view containing all the buttons like submit and cancel
@@ -3225,7 +3340,7 @@ class RegistrationCompetitionFee extends Component {
                                     <Tooltip
                                         style={{ height: "100%" }}
                                         onMouseEnter={() =>
-                                            this.setState({ tooltipVisiblePublish: (isPublished) && (tabKey === "2" || tabKey === "3" || tabKey === "6") ? true : allDisable })}
+                                            this.setState({ tooltipVisiblePublish: (isPublished) && (tabKey === "2" || tabKey === "3") ? true : allDisable })}
                                         onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
                                         visible={this.state.tooltipVisiblePublish}
                                         title={ValidationConstants.compIsPublished}>
@@ -3233,31 +3348,35 @@ class RegistrationCompetitionFee extends Component {
                                             className="publish-button"
                                             type="primary"
                                             htmlType="submit"
-                                            disabled={tabKey === "1" || tabKey === "4" || tabKey === "5" ? allDisable : isPublished}
+                                            disabled={tabKey === "1" || tabKey === "4" || tabKey === "5" || tabKey === "6" ? allDisable : isPublished}
                                             onClick={() => this.setState({
-                                                statusRefId: tabKey == "6" ? 2 : 1,
+                                                statusRefId: tabKey == "6" && isPublished == true ? 3 : tabKey == "6" ? 2 : 1,
                                                 buttonPressed: tabKey == "6" ? "publish" : "next"
                                             })}
                                             style={{ height: 48, width: 92.5 }}
                                         >
-                                            {tabKey === "6"
+                                            {tabKey === "6" && isPublished == false
                                                 ? AppConstants.publish
-                                                : AppConstants.next}
+                                                : tabKey === "6" && isPublished == true
+                                                    ? AppConstants.save
+                                                    :
+                                                    AppConstants.next}
                                         </Button>
                                     </Tooltip>
                                 </div>
                             </div>
                         </div>
                         :
-                        tabKey == "4" &&
+                        (tabKey == "4" || tabKey == "6") &&
                         <div className="row">
                             <div className="col-sm">
                                 <div className="comp-buttons-view">
                                     <Button className="publish-button" type="primary"
-                                        disabled={allDisable}
+                                        // disabled={allDisable}
                                         htmlType="submit" onClick={() => this.setState({
-                                            statusRefId: 2,
-                                            buttonPressed: "publish"
+                                            statusRefId: tabKey == "6" && isPublished == true ? 3 : 2,
+                                            // buttonPressed: "publish"
+                                            buttonPressed: tabKey == "6" ? "publish" : "next"
                                         })}
                                     >
                                         {AppConstants.save}
@@ -3285,10 +3404,8 @@ class RegistrationCompetitionFee extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        // console.log("this.props.form", this.props.form)
         const { ...props } = this.props;
         console.log(this.props.competitionFeesState)
-        // console.log("permissionObject", this.state.permissionState)
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout

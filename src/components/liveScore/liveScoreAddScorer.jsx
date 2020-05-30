@@ -14,7 +14,7 @@ import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScore
 import { NavLink } from 'react-router-dom';
 import { liveScoreScorerUpdate, liveScoreAddEditScorer, liveScoreScorerSearch } from '../../store/actions/LiveScoreAction/liveScoreScorerAction'
 import Loader from '../../customComponents/loader'
-import { isArrayNotEmpty } from "../../util/helpers";
+import { isArrayNotEmpty,captializedString } from "../../util/helpers";
 import { liveScoreManagerSearch, liveScoreClear, liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 import { getliveScoreDivisions } from '../../store/actions/LiveScoreAction/liveScoreActions'
 
@@ -218,13 +218,13 @@ class LiveScoreAddScorer extends Component {
                 <div className="row" >
                     <div className="col-sm" >
                         <Form.Item>
-                            {getFieldDecorator(AppConstants.firstName, {
+                        {getFieldDecorator(AppConstants.firstName, { normalize : (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.firstName}
-                                    onChange={(firstName) => this.props.liveScoreScorerUpdate(firstName.target.value, "firstName")}
+                                    onChange={(firstName) => this.props.liveScoreScorerUpdate(captializedString(firstName.target.value), "firstName")}
                                     placeholder={AppConstants.firstName} />
                             )}
 
@@ -232,15 +232,14 @@ class LiveScoreAddScorer extends Component {
                     </div>
                     <div className="col-sm" >
                         <Form.Item>
-                            {getFieldDecorator(AppConstants.lastName, {
+                        {getFieldDecorator(AppConstants.lastName, { normalize : (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.lastName}
-                                    onChange={(lastName) => this.props.liveScoreScorerUpdate(lastName.target.value, "lastName")}
-
+                                    onChange={(lastName) => this.props.liveScoreScorerUpdate(captializedString(lastName.target.value), "lastName")}
                                 />
                             )}
                         </Form.Item>
@@ -262,7 +261,6 @@ class LiveScoreAddScorer extends Component {
                                 />
                             )}
                         </Form.Item>
-
                     </div>
                     <div className="col-sm" >
                         <Form.Item>

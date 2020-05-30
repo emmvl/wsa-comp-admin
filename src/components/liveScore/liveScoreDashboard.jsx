@@ -14,7 +14,10 @@ import { liveScore_formateDateTime } from '../../themes/dateformate'
 import { NavLink } from 'react-router-dom';
 import AppImages from "../../themes/appImages";
 import moment from "moment";
+import { isArrayNotEmpty } from "../../util/helpers";
+
 const { Content } = Layout;
+let this_obj = null;
 
 /////function to sort table column
 function tableSort(a, b, key) {
@@ -199,13 +202,43 @@ const columnsTodaysMatch = [
         render: (competition) =>
             <span class="input-heading-add-another pt-0" onClick={() => { console.log('hello clcicked ') }} >{competition.recordUmpire}</span>
     }, {
-        title: "Scorer",
-        dataIndex: 'scorerStatus',
-        key: 'scorerStatus',
-        sorter: (a, b) => tableSort(a, b, "scorerStatus"),
-
+        title: "Scorer 1",
+        dataIndex: 'scorer1Status',
+        key: 'scorer1Status',
+        sorter: (a, b) => tableSort(a, b, "scorer1Status"),
+        render: (scorer1Status) =>
+        <span>{ isArrayNotEmpty(scorer1Status) ? scorer1Status[0].r_status == "YES" ? "Accepted" :"Not Accepted" :"Not SET"}</span>
 
     }, {
+        title: "Scorer 2",
+        dataIndex: 'scorer2Status',
+        key: 'scorer2Status',
+        sorter: (a, b) => tableSort(a, b, "scorer2Status"),
+        render: (scorer2Status, record) =>
+            <span >{record.competition.scoringType == 'SINGLE' ? "" : isArrayNotEmpty(scorer2Status) ? scorer2Status[0].r_status == "YES" ? "Accepted" :"Not Accepted":"  Not SET" }</span>
+
+
+
+    },
+    {
+        title: "Player Attendance Team A",
+        dataIndex: 'teamAttendanceCountA',
+        key: 'teamAttendanceCountA',
+        sorter: (a, b) => tableSort(a, b, "teamAttendanceCountA"),
+        render: (teamAttendanceCountA, record) =>
+        <span >{teamAttendanceCountA > 0? "Complete" :"Not Complete"}</span>
+
+    },
+    {
+        title: "Player Attendance Team B",
+        dataIndex: 'teamAttendanceCountB',
+        key: 'teamAttendanceCountB',
+        sorter: (a, b) => tableSort(a, b, "teamAttendanceCountB"),
+        render: (teamAttendanceCountB, record) =>
+        <span >{teamAttendanceCountB > 0? "Complete" :"Not Complete"}</span>
+
+    },
+    {
         title: "Status",
         dataIndex: 'matchStatus',
         key: 'matchStatus',
@@ -306,13 +339,17 @@ const columnsPlayersToPay = [
         title: 'First Name',
         dataIndex: 'firstName',
         key: 'firstName',
-        sorter: (a, b) => tableSort(a, b, "firstName")
+        sorter: (a, b) => tableSort(a, b, "firstName"),
+        // render: (firstName, record) =>
+        //     <span class="input-heading-add-another pt-0" onClick={() => this_obj.checkUserId(record)}>{firstName}</span>
     },
     {
         title: 'Last Name',
         dataIndex: 'lastName',
         key: 'lastName',
         sorter: (a, b) => checkSorting(a, b, "lastName"),
+        // render: (lastName, record) =>
+        //     <span class="input-heading-add-another pt-0" onClick={() => this_obj.checkUserId(record)}>{lastName}</span>
     },
     {
         title: "Linked",
@@ -346,15 +383,15 @@ const columnsPlayersToPay = [
     },
 ];
 
-const playerTopay=[
+const playerTopay = [
     {
-        "firstName":"Sam",
-        "lastName":"Ham",
-        "linked":"Cromer Netball Club",
-        "division":"11B",
-        "team":"WSA 1",
-        "grade":"A",
-        "payReq":"Voucher redemption"
+        "firstName": "Sam",
+        "lastName": "Ham",
+        "linked": "Cromer Netball Club",
+        "division": "11B",
+        "team": "WSA 1",
+        "grade": "A",
+        "payReq": "Voucher redemption"
     }
 ]
 
@@ -379,6 +416,17 @@ class LiveScoreDashboard extends Component {
         } else {
             history.push('/')
         }
+    }
+
+    checkUserId(record) {
+        console.log(record, 'checkUserId')
+        // if (record.userId == null) {
+        //     message.config({ duration: 1.5, maxCount: 1 })
+        //     message.warn(ValidationConstants.playerMessage)
+        // }
+        // else {
+        //     history.push("/userPersonal", { userId: record.userId, screenKey: "livescore", screen: "/liveScorePlayerList" })
+        // }
     }
 
 

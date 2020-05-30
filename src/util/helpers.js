@@ -46,4 +46,21 @@ const stringTONumber = (value) => {
     }
 }
 
-module.exports = { isArrayNotEmpty, isNullOrEmptyString, getAge, deepCopyFunction, stringTONumber }
+const captializedString = (value) => {
+    if (value) {
+        let capString = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()
+        //    let capString= value.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+        return capString
+    }
+}
+
+const teamListData = (value) => {
+    console.log(value, "teamListData")
+    if (value == 1) {
+        return false
+    } else {
+        return true
+    }
+}
+
+module.exports = { isArrayNotEmpty, isNullOrEmptyString, getAge, deepCopyFunction, stringTONumber, captializedString, teamListData }

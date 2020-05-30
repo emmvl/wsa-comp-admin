@@ -36,11 +36,11 @@ const columns = [
     },
     {
         title: "Description",
-        dataIndex: 'description',
-        key: 'description',
+        dataIndex: 'source_transfer',
+        key: 'source_transfer',
         sorter: (a, b) => tableSort(a, b, "description"),
-        render: description => (
-            <span >{description ? description : "N/A"}</span>
+        render: source_transfer => (
+            <span >{source_transfer ? source_transfer.description : "N/A"}</span>
         )
     },
     {

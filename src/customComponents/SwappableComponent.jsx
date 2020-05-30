@@ -55,9 +55,13 @@ class Swappable extends Component {
   }
 
   swapElements(src, target, srcParent, targetParent) {
-    target.replaceWith(src);
-    srcParent.appendChild(target);
-    this.props.onSwap(src.id, target.id);
+    let sourceIndexArray = src.id.split(':');
+    let targetIndexArray = target.id.split(':');
+    if (sourceIndexArray[2] === targetIndexArray[2]) {
+      target.replaceWith(src);
+      srcParent.appendChild(target);
+      this.props.onSwap(src.id, target.id);
+    }
     // console.log(src.id, 'source');
     // console.log(target.id, 'target');
   }

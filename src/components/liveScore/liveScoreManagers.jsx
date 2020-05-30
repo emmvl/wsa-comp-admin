@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Pagination, Input, Icon } from 'antd';
+import { Layout, Button, Table, Pagination, Input, Icon, Menu } from 'antd';
 import './liveScore.css';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -13,6 +13,8 @@ import { bindActionCreators } from 'redux';
 import { getLiveScoreCompetiton, getUserId } from '../../util/sessionStorage'
 import history from "../../util/history";
 import { exportFilesAction } from "../../store/actions/appAction"
+import { teamListData } from "../../util/helpers";
+
 
 const { Content } = Layout;
 let userId = getUserId();
@@ -67,19 +69,72 @@ const columns = [
         dataIndex: 'linkedEntity',
         key: 'linkedEntity',
         sorter: (a, b) => a.linkedEntity.length - b.linkedEntity.length,
-        render: (linkedEntity, record) =>
-            <NavLink to={{
-                // pathname: '/liveScoreManagerView',
-                // state: { tableRecord: record }
-                pathname: '/userPersonal',
-                state: { userId: record.id, screenKey: "livescore" }
-            }}>
-                {linkedEntity.length > 0 && linkedEntity.map((item) => (
-                    <span style={{ color: '#ff8237', cursor: 'pointer' }} className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
-                ))
-                }
-            </NavLink>
+        render: (linkedEntity, record) => {
+            // return (
+            //     teamListArr(linkedEntity.length > 0 && linkedEntity.map((item) => item.entityId)) ?
+            //         <NavLink to={{
+            //             // pathname: '/liveScoreManagerView',
+            //             // state: { tableRecord: record }
+            //             pathname: '/userPersonal',
+            //             state: { userId: record.id, screenKey: "livescore" }
+            //         }}>
+            //             {linkedEntity.length > 0 && linkedEntity.map((item) => (
+            //                 <span style={{ color: '#ff8237', cursor: 'pointer' }} className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
+            //             ))
+            //             }
+            //         </NavLink>
+            //         : linkedEntity.length > 0 && linkedEntity.map((item) => (
+            //             <span style={{ color: 'red', cursor: 'pointer' }} className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
+            //         ))
+            // )
+            return (
+                <div>
+                    {linkedEntity.length > 0 && linkedEntity.map((item) => (
+                        teamListData(item.entityId) ?
+                            <NavLink to={{
+                                // pathname: '/liveScoreManagerView',
+                                // state: { tableRecord: record }
+                                pathname: '/userPersonal',
+                                state: { userId: record.id, screenKey: "livescore" }
+                            }}>
+                                <span style={{ color: '#ff8237', cursor: 'pointer' }} className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
+                            </NavLink>
+                            :
+                            <span  >{item.name}</span>
+                    ))
+                    }
+                </div>)
+        }
     },
+    {
+        title: "Action",
+        render: (data, record) => <Menu
+            className="action-triple-dot-submenu"
+            theme="light"
+            mode="horizontal"
+            style={{ lineHeight: '25px' }}
+        >
+            <Menu.SubMenu
+                key="sub1"
+                title={
+                    <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
+                }
+            >
+                <Menu.Item key={'1'}>
+                    <NavLink to={{
+                        pathname: '/liveScoreAddManagers',
+                        state: { isEdit: true, tableRecord: record }
+                    }}><span >Edit</span></NavLink>
+                </Menu.Item>
+                {/* <Menu.Item key="2" >
+                    <NavLink to={{
+                        pathname: "./liveScoreAssignMatch",
+                        state: { record: record }
+                    }}><span >Assign to match</span></NavLink>
+                </Menu.Item> */}
+            </Menu.SubMenu>
+        </Menu>
+    }
 
 ];
 

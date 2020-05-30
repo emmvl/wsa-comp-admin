@@ -12,6 +12,7 @@ import { connect } from 'react-redux'
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import history from '../../util/history'
 import { exportFilesAction } from "../../store/actions/appAction"
+import { teamListData } from "../../util/helpers";
 
 
 function getName(item) {
@@ -66,17 +67,38 @@ const columns = [
         dataIndex: 'teams',
         key: 'teams',
         sorter: (a, b) => a.teams.length - b.teams.length,
-        render: (teams, record) =>
-            <NavLink to={{
-                pathname: '/liveScorerView',
-                // pathname: '/userPersonal',
-                state: { tableRecord: record, userId: record.id }
-            }}>
-                {teams.length > 0 && teams.map((item) => (
-                    <span class="input-heading-add-another pt-0" >{item.name}</span>
-                ))
-                }
-            </NavLink>
+        render: (teams, record) => {
+            // teamListArr(teams.length > 0 && teams.map((item) => item.id)) ?
+            //     <NavLink to={{
+            //         pathname: '/liveScorerView',
+            //         // pathname: '/userPersonal',
+            //         state: { tableRecord: record, userId: record.id }
+            //     }}>
+            //         {teams.length > 0 && teams.map((item) => (
+            //             <span class="input-heading-add-another pt-0" >{item.name}</span>
+            //         ))
+            //         }
+            //     </NavLink>:
+            //     teams.length > 0 && teams.map((item) => (
+            //         <span class="input-heading-add-another pt-0" >{item.name}</span>
+            //     ))
+            return (
+                <div>
+                    {teams.length > 0 && teams.map((item) => (
+                        teamListData(item.id) ?
+                            <NavLink to={{
+                                pathname: '/liveScorerView',
+                                // pathname: '/userPersonal',
+                                state: { tableRecord: record, userId: record.id }
+                            }}>
+                                <span class="input-heading-add-another pt-0" >{item.name}</span>
+                            </NavLink>
+                            :
+                            <span >{item.name}</span>
+                    ))
+                    }
+                </div>)
+        }
     },
     {
         title: "Action",

@@ -1011,16 +1011,39 @@ const AppConstants = {
   currentPage: "Current page",
   buzzer: "Buzzer",
   turnOffBuzzer: "Turn off Buzzer",
-  turnOff_30Second: "Turn off 30 second warning",
+  turnOff_30Second: "30 second warning",
   payouts: "Payouts",
 
   managerExport: `https://users-api-dev.worldsportaction.com/users/byRole/export?roleId=3&entityTypeId=1&entityId=`,
-  scorerExport: `https://livescores-api-dev.worldsportaction.com/roster/exportScorer?competitionId=`,
-  teamExport: `https://livescores-api-dev.worldsportaction.com/teams/export?competitionId=`,
+  scorerExport: `http://127.0.0.1:5002/roster/exportScorer?competitionId=`,
+  teamExport: `http://127.0.0.1:5002/teams/export?competitionId=`,
   playersToPay: "Players to Pay",
   exportTeams: "Export Teams",
   exportPlayers: "Export Players",
   transactions: "Transactions",
+  addCharityDescription: "Write a brief description of the Charity..",
+  addCoach: "Add Coach",
+  editCoach: "Edit Coach",
+  coachList: "Coach List",
+  addCoach: "Add Coach",
+  exportRegQuestion: "Reg. Form Questions",
+  noDataAvailable: "No Data Available",
+  recordUmpire: "Record Umpire",
+  deleteDivision: "Delete Competition Division",
+  changeDivision: "Change Division",
+  action: "Action",
+  competitionDivisionValidation: "If there are any players graded to this division, they will be unassigned.",
+
+  //Add Venue ToolTip Messages
+
+  LatitudeMsg:`'1. Go to google maps https://www.google.com/maps\n\n'
+  2. Click on satellite view.\n\n'
+  3. Search for your venue.\n\n
+  4. Click and drop a pin on the centre of the court then copy and paste both the Longitude and Latitude.'`,
+
+  overRideSlotMsg:'Only click if the Court has different availability to the Venue ie. Court 1 is only available for matches from 9am but the other courts are free from 8am',
+  gameDayMsg :'Add the days of the week, matches can be played at this venue. Click + Add Day.',
+  courtsMsg:'Add the Courts at this venue. For effective use of the Live Scoring App please add Longitude and Latitude of the Court.'
 };
 
 export default AppConstants;

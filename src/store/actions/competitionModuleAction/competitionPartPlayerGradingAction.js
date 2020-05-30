@@ -139,6 +139,23 @@ function deleteTeamAction(data){
     }
 }
 
+function changeDivisionPlayerAction(payload) {
+    const action = {
+        type: ApiConstants.API_CHANGE_COMPETITION_DIVISION_PLAYER_LOAD,
+        payload
+    }
+    return action;
+}
+
+function addOrRemovePlayerForChangeDivisionAction(data, key){
+    const action = {
+        type: ApiConstants.UPDATE_PLAYER_GRADING_DATA,
+        data: data,
+        key: key
+    }
+    return action;
+}
+
 
 export {
     getCompPartPlayerGradingSummaryAction,
@@ -154,5 +171,7 @@ export {
     competitionPlayerImportAction,
     deleteTeamAction,
     competitionTeamsImportAction,
-    competitionImportDataCleanUpAction
+    competitionImportDataCleanUpAction,
+    changeDivisionPlayerAction,
+    addOrRemovePlayerForChangeDivisionAction							  											
 }

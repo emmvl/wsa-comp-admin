@@ -257,22 +257,22 @@ let AxiosApi = {
     },
 
     ////get the competition fees all the data in one API
-    async getAllCompetitionFeesDeatils(competitionId) {
+    async getAllCompetitionFeesDeatils(competitionId, sourceModule) {
         let userId = await getUserId()
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         // if (userId !== user_Id) {
         //     history.push("/")
         // }
-        var url = `/api/competitionfee/competitiondetails?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`;
+        var url = `/api/competitionfee/competitiondetails?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}&sourceModule=${sourceModule}`;
         return Method.dataGet(url, token);
     },
 
     ///////////save the competition fees deatils 
-    async saveCompetitionFeesDetails(payload) {
+    async saveCompetitionFeesDetails(payload, sourceModule) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-        var url = `/api/competitionfee/detail?organisationUniqueKey=${organisationUniqueKey}`;
+        var url = `/api/competitionfee/detail?organisationUniqueKey=${organisationUniqueKey}&sourceModule=${sourceModule}`;
         return Method.dataPost(url, token, payload);
     },
 
@@ -296,7 +296,8 @@ let AxiosApi = {
     async  saveCompetitionFeesDivisionAction(payload, competitionId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-        var url = `/api/competitionfee/division?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`;
+		let sourceModule = payload.sourceModule!= undefined ? payload.sourceModule : "REG";																			   
+        var url = `/api/competitionfee/division?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}&sourceModule=${sourceModule}`;
         return Method.dataPost(url, token, payload);
     },
     //casual PaymentOption
@@ -425,13 +426,11 @@ let AxiosApi = {
         return Method.dataPost(url, token, payload);
     },
 
-    getInvoice(registrationId) {
-        let body = {
-            registrationId: JSON.parse(registrationId),
-        }
-        let url = `/api/invoice`
-        return Method.dataPost(url, token, body)
-    }
+   ///////////Delete Competition Division
+    async deleteCompetitionDivision(payload) {
+        var url = `/api/competitionfee/competitiondivision/delete`;
+        return Method.dataPost(url, token, payload);
+    },									  
 
 };
 

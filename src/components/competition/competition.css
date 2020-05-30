@@ -224,6 +224,7 @@
   display: flex;
   background-color: var(--app-ff6c4f);
   border-color: var(--app-ff6c4f);
+  align-items: center;
 }
 
 .inside-table-view {
@@ -441,9 +442,155 @@ a.collapsed i {
 .venueCourt-tex-div{
   text-overflow: ellipsis;
   overflow: hidden;
-  white-space: nowrap;
+  position: absolute;
+   /* white-space: nowrap; */
   padding-right: 10px;
   width: 75px;
+}
+
+.Tooltip_Wrapper__3AlJ0 svg {
+  cursor: pointer;
+  margin-left: 5px;
+  height: 15px;
+  width: 15px;
+}
+
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  overflow: visible;
+  -webkit-overflow-scrolling: touch;
+}
+
+
+.ant-table-empty .ant-table-body {
+  /* overflow-x: auto !important; */
+  /* overflow-y: hidden !important; */
+  overflow: visible !important;
+}
+
+.Content_Content__1CE8z {
+  overflow-wrap: break-word;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.25em;
+  color: inherit;
+  margin: 0px;
+  cursor: auto;
+  background-color: white
+}
+
+.Content_Container__xhjD8 {
+  position: absolute;
+  z-index: 5;
+  padding: 12px 32px 12px 12px;
+  display: block;
+  width: 380px;
+  max-width: 80vw;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px;
+  border: 1px solid inherit;
+  border-radius: 10px !important;
+  background: inherit;
+  color: inherit;
+  border-image: initial;
+  background-color: white !important;
+  margin-top: 4px
+}
+
+.ant-table-thead > tr > th .anticon-filter, .ant-table-thead > tr > th .ant-table-filter-icon {
+  width: 0px;
+}
+
+
+.fixture-huge-sr {
+  height: 106px !important;
+  line-height: 106px !important;
+  margin-bottom: 24px !important;
+}
+
+.fxiture-huge-border {
+  height: 106px !important;
+}
+
+.fixture-huge-undraggble-box {
+  position: absolute;
+  top: 0;
+  background-color: var(--app-ebf0f3);
+  color: var(--app-9b9bad);
+  width: 100px;
+  z-index: 99;
+  height: 106px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Inter-Medium";
+  border-radius: 5px;
+}
+.fixture-main-canvas.Draws .box {
+  min-width: 100px;
+  height: 53px;
+  line-height: initial;
+  display: flex;
+  justify-content: center !important;
+}
+.fixture-main-canvas.Draws .box span {
+  font-size: 11px;
+  letter-spacing: normal;
+  padding: 5px;
+  margin: auto;
+  align-self: center;
+  text-align: center;
+}
+.fixture-round-view{
+      display: flex;
+      height: 50px;
+      margin-left: 70px;
+      flex-direction: column
+}
+.fixture-round{
+  font-size: 11px;
+  color: black;
+  font-weight: 700;
+}
+.draws-round{
+  font-size: 22px;
+  color: var(--app-1b1b34);
+  font-weight: 500;
+  position: absolute;
+  font-family: inter-medium;
+  left: 25px;
+  align-self: center;
+  /* display: flex;
+    align-content: flex-start;
+    text-align: center;
+    font-size: 22px;
+   
+    padding-bottom: 7.5px;
+    font-weight: 500;
+   
+    margin-left: 50px; */
+}
+.draws-round-view{
+  display: flex;
+      height: 60px;
+    padding-top: 10px;
+      flex-direction: column
+}
+.box-exception {
+  position: absolute;
+  top: 0;
+  cursor: pointer;
+  height: 40px;
+  border-radius: 5px;
+  background-color: var(--app-fbf1ea);
+  /* text-transform: uppercase; */
+  text-align: center;
+  line-height: 40px;
+  color: var(--app-white);
+  font-size: 13px;
+  font-family: "Inter-Medium";
+  z-index: 99;
 }
 
 @media (max-width: 991px) {
@@ -538,4 +685,34 @@ a.collapsed i {
 
 .venue-cons-err{
   color: var(--app-f5222d);
+}
+
+.tag-col{
+  background-color: var(--app-color);
+  color: white;
+}
+
+.change-division-select  .ant-select-selection-selected-value{
+  width: 210px;
+}
+
+.change-division-modal {
+  display: flex;
+  align-items: center;
+}
+.change-division-modal .year-select-heading{
+  width: 65px;
+}
+.change-division-select .ant-select-selection{
+  border: 1px solid var(--app-d9d9d9) !important;
+  width: 420px !important;
+  min-height: 40px !important;
+  margin-right: 30px;
+  box-shadow: 0px 8px 16px 0 rgba(27, 27, 52, 0.06);
+  background-color: var(--app-white);
+}
+
+.check-box-player{
+  padding-left: 15px;
+    padding-top: 3px;
 }

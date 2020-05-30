@@ -100,18 +100,19 @@ class LiveScoreGoalList extends Component {
                     key: 'miss',
                     sorter: (a, b) => tableSort(a, b, "miss"),
                 },
-                // {
-                //     title: 'Attempts',
-                //     dataIndex: 'attempts',
-                //     key: 'attempts',
-                //     sorter: (a, b) => checkSorting(a, b, "attempts"),
-                // },
+              
                 {
                     title: 'Goals',
                     dataIndex: 'goal',
                     key: 'goal',
                     sorter: (a, b) => tableSort(a, b, "goal"),
 
+                },
+                  {
+                    title: 'Attempts',
+                    dataIndex: 'attempts',
+                    key: 'attempts',
+                    sorter: (a, b) => tableSort(a, b, "attempts"),
                 },
                 {
                     title: 'Goals%',
@@ -165,17 +166,17 @@ class LiveScoreGoalList extends Component {
                     key: 'miss',
                     sorter: (a, b) => tableSort(a, b, "miss"),
                 },
-                // {
-                //     title: 'Attempts',
-                //     dataIndex: 'attempts',
-                //     key: 'attempts',
-                //     sorter: (a, b) => checkSorting(a, b, "attempts"),
-                // },
                 {
                     title: 'Goals',
                     dataIndex: 'goal',
                     key: 'goal',
                     sorter: (a, b) => tableSort(a, b, "goal"),
+                },
+                {
+                    title: 'Attempts',
+                    dataIndex: 'attempts',
+                    key: 'attempts',
+                    sorter: (a, b) => tableSort(a, b, "attempts"),
                 },
                 {
                     title: 'Goals%',

@@ -108,6 +108,15 @@ let AxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
+    ///get invoice
+    getInvoice(registrationId) {
+        let body = {
+            registrationId: JSON.parse(registrationId),
+        }
+        let url = `/api/invoice`
+        return Method.dataPost(url, token, body)
+    }
+
 };
 
 const Method = {

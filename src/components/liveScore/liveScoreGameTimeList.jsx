@@ -11,6 +11,8 @@ import { bindActionCreators } from 'redux';
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { NavLink } from 'react-router-dom';
 import { exportFilesAction } from "../../store/actions/appAction"
+import { isArrayNotEmpty, teamListData } from "../../util/helpers";
+
 const { Content } = Layout;
 const { Option } = Select;
 
@@ -134,13 +136,13 @@ const columns = [
         dataIndex: 'team',
         key: 'team',
         sorter: (a, b) => tableSort(a, b, "team"),
-        render: (team) =>
+        render: (team) => teamListData(team.id) ?
             <NavLink to={{
                 pathname: '/liveScoreTeamView',
                 state: { tableRecord: team, screenName: 'fromGameTimeList' }
             }} >
                 <span class="input-heading-add-another pt-0" >{team.name}</span>
-            </NavLink>
+            </NavLink> : <span  >{team.name}</span>
     },
     {
         title: 'DIV',
@@ -222,12 +224,12 @@ class LiveScoreGameTimeList extends Component {
     }
 
 
-      // on change search text
-      onChangeSearchText = (e) => {
+    // on change search text
+    onChangeSearchText = (e) => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ searchText: e.target.value })
         if (e.target.value == null || e.target.value == "") {
-            this.props.gameTimeStatisticsListAction(id, this.state.filter, 0,  e.target.value)
+            this.props.gameTimeStatisticsListAction(id, this.state.filter, 0, e.target.value)
         }
     }
 
@@ -320,7 +322,7 @@ class LiveScoreGameTimeList extends Component {
                             placeholder="Search..."
                             onKeyPress={(e) => this.onKeyEnterSearchText(e)}
                             prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                            onClick={() => this.onClickSearchIcon()}
+                                onClick={() => this.onClickSearchIcon()}
                             />}
                             allowClear
                         />

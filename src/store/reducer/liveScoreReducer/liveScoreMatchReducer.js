@@ -339,13 +339,7 @@ function liveScoreMatchReducer(state = initialState, action) {
                 status: action.status
             };
 
-        case ApiConstants.API_LIVE_SCORE_CREATE_MATCH_FAIL:
-            return {
-                ...state,
-                onLoad: false,
-                error: action.error,
-                status: action.status
-            };
+
         case ApiConstants.API_LIVE_SCORE_COMPETITION_VENUES_LIST_SUCCESS:
 
 
@@ -438,7 +432,12 @@ function liveScoreMatchReducer(state = initialState, action) {
             };
 
         case ApiConstants.API_LIVE_SCORE_CREATE_MATCH_FAIL:
-            return { ...state, onLoad: false };
+            return {
+                ...state,
+                onLoad: false,
+                error: action.error,
+                status: action.status
+            };
 
         case ApiConstants.API_LIVE_SCORE_CREATE_MATCH_ERROR:
             return {
@@ -480,8 +479,8 @@ function liveScoreMatchReducer(state = initialState, action) {
             }
 
         case ApiConstants.API_LIVE_SCORE_ROUND_LIST_LOAD:
-                return { ...state,  rounLoad:true };
-    
+            return { ...state, rounLoad: true };
+
 
         case ApiConstants.API_LIVE_SCORE_ROUND_LIST_SUCCESS:
 
@@ -490,7 +489,7 @@ function liveScoreMatchReducer(state = initialState, action) {
                 onLoad: false,
                 roundList: action.result,
                 status: action.status,
-                rounLoad:false
+                rounLoad: false
             };
 
         case ApiConstants.API_LIVE_SCORE_CLUB_LIST_LOAD:
@@ -524,18 +523,18 @@ function liveScoreMatchReducer(state = initialState, action) {
                 ...state
             }
 
-            case ApiConstants.API_CLEAR_ROUND_DATA:
-                    if (action.key == 'all') {
-                        state.roundList = []
-                        state.divisionList = []
-                    }
-                    else {
-                        state.roundList = []
-                    }
-        
-                    return {
-                        ...state,
-                    }
+        case ApiConstants.API_CLEAR_ROUND_DATA:
+            if (action.key == 'all') {
+                state.roundList = []
+                state.divisionList = []
+            }
+            else {
+                state.roundList = []
+            }
+
+            return {
+                ...state,
+            }
 
     };
 

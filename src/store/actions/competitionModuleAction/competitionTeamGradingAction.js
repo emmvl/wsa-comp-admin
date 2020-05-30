@@ -209,6 +209,13 @@ function exportProposedPlayersAction(payload) {
     return action;
 }
 
+function changeDivisionTeamAction(payload) {
+    const action = {
+        type: ApiConstants.API_CHANGE_COMPETITION_DIVISION_TEAM_LOAD,
+        payload
+    }
+    return action;
+}
 
 export {
     getCompOwnProposedTeamGradingAction,
@@ -231,5 +238,6 @@ export {
     exportFinalTeamsAction,
     exportFinalPlayersAction,
     exportProposedTeamsAction,
-    exportProposedPlayersAction
+    exportProposedPlayersAction,
+    changeDivisionTeamAction							  
 }                   

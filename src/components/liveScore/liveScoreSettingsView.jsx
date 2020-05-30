@@ -33,6 +33,11 @@ import {
 } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
 import ImageLoader from '../../customComponents/ImageLoader'
 import history from "../../util/history";
+import { isArrayNotEmpty, captializedString } from "../../util/helpers";
+import { competitionFeeInit } from "../../store/actions/appAction";
+
+
+
 const { Header, Footer } = Layout;
 const { Option } = Select;
 
@@ -51,6 +56,7 @@ class LiveScoreSettingsView extends Component {
     }
     componentDidMount() {
         let comp_id = getLiveScoreCompetiton()
+        this.props.competitionFeeInit();
         if (comp_id) {
             const { id } = JSON.parse(getLiveScoreCompetiton())
             if (this.props.location.state === 'edit' || id) {
@@ -153,7 +159,8 @@ class LiveScoreSettingsView extends Component {
 
                 const {
                     buzzerEnabled,
-                    warningBuzzerEnabled
+                    warningBuzzerEnabled,
+                    recordUmpire
                 } = this.props.liveScoreSetting
 
                 const umpire = record1.includes("recordUmpire")
@@ -177,7 +184,8 @@ class LiveScoreSettingsView extends Component {
                 formData.append('longName', competitionName)
                 formData.append('name', shortName)
                 formData.append('logo', competitionLogo)
-                formData.append('recordUmpire', umpirenum)
+                // formData.append('recordUmpire', umpirenum)
+                formData.append('recordUmpireType', recordUmpire)
                 formData.append('gameTimeTracking', gameTimeTracking)
                 formData.append('positionTracking', positionTracking)
                 formData.append('recordGoalAttempts', recordGoalAttempts)
@@ -248,10 +256,13 @@ class LiveScoreSettingsView extends Component {
     ////////form content view
     contentView = (getFieldDecorator) => {
         const { competitionName, competitionLogo, scoring } = this.props.liveScoreSetting.form
-        const { loader, buzzerEnabled, warningBuzzerEnabled } = this.props.liveScoreSetting
+        const { loader, buzzerEnabled, warningBuzzerEnabled, recordUmpire } = this.props.liveScoreSetting
         let grade = this.state.venueData
-        const applyTo1 = [{ label: 'Record Umpire', value: "recordUmpire" }, { label: ' Game Time Tracking', value: "gameTimeTracking" }, { label: 'Position Tracking', value: "positionTracking" }];
-        const applyTo2 = [{ label: 'Record Goal Attempts', value: "recordGoalAttempts" }, { label: 'Centre Pass Enabled', value: "centrePassEnabled" }, { label: 'Incidents Enabled', value: "incidentsEnabled" }];
+        // const applyTo1 = [{ label: 'Record Umpire', value: "recordUmpire" }, { label: ' Game Time Tracking', value: "gameTimeTracking" }, { label: 'Position Tracking', value: "positionTracking" }];
+        const applyTo1 = [{ label: ' Game Time Tracking', value: "gameTimeTracking" }, { label: 'Position Tracking', value: "positionTracking" }, { label: 'Record Goal Attempts', value: "recordGoalAttempts" }];
+        const applyTo2 = [{ label: 'Centre Pass Enabled', value: "centrePassEnabled" }, { label: 'Incidents Enabled', value: "incidentsEnabled" }];
+        const turnOffBuzzer = [{ label: AppConstants.turnOffBuzzer, value: true }];
+        const buzzerEnabledArr = [{ label: AppConstants.turnOff_30Second, value: true }];
 
         return (
             <div className="content-view pt-4">
@@ -264,9 +275,10 @@ class LiveScoreSettingsView extends Component {
                             heading={AppConstants.competition_name}
                             placeholder={AppConstants.competition_name}
                             name="competitionName"
+
                             // value="xyz"
                             onChange={(e) => {
-                                this.props.onChangeSettingForm({ key: e.target.name, data: e.target.value })
+                                this.props.onChangeSettingForm({ key: e.target.name, data: captializedString(e.target.value) })
                             }}
                         />
                     )}
@@ -283,7 +295,7 @@ class LiveScoreSettingsView extends Component {
                             name="shortName"
                             // value="xyz"
                             onChange={(e) => {
-                                this.props.onChangeSettingForm({ key: e.target.name, data: e.target.value })
+                                this.props.onChangeSettingForm({ key: e.target.name, data: captializedString(e.target.value) })
                             }}
                         />
                     )}
@@ -414,6 +426,23 @@ class LiveScoreSettingsView extends Component {
                     </div>
                 </div>
 
+                {/* Record Umpire dropdown view */}
+                <InputWithHead heading={AppConstants.recordUmpire} />
+                <div className="row" >
+                    <div className="col-sm" >
+                        <Select
+                            placeholder={'Select Record Umpire'}
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
+                            onChange={recordUmpire => this.props.onChangeSettingForm({ key: "recordUmpire", data: recordUmpire })}
+                            value={recordUmpire}
+                        >
+                            <Option value={"NONE"}>{'None'}</Option>
+                            <Option value={"NAMES"}>{'Integrated'}</Option>
+                            <Option value={"USERS"}>{'At courts'}</Option>
+                        </Select>
+                    </div>
+                </div>
+
                 {/* dropdown view */}
                 <InputWithHead heading={AppConstants.attendence_reord_report} />
                 <div className="row" >
@@ -497,8 +526,12 @@ class LiveScoreSettingsView extends Component {
                 <span className="applicable-to-heading">{AppConstants.buzzer}</span>
                 <div className="row mt-4 ml-1" >
 
-                    <Checkbox
-                        className="single-checkbosx"
+                    <Checkbox style={{
+                        display: "-ms-flexbox",
+                        flexDirection: "column",
+                        justifyContent: "center"
+                    }}
+                        className="single-checkbox"
                         onChange={(e) => this.props.onChangeSettingForm({ key: "buzzerEnabled", data: e.target.checked })}
                         checked={buzzerEnabled}
                     >
@@ -506,7 +539,7 @@ class LiveScoreSettingsView extends Component {
                     </Checkbox>
 
                     <Checkbox
-                        className="single-checkbosx"
+                        className="single-checkbox"
                         onChange={(e) => this.props.onChangeSettingForm({ key: "warningBuzzerEnabled", data: e.target.checked })}
                         checked={warningBuzzerEnabled}
                     >
@@ -514,15 +547,161 @@ class LiveScoreSettingsView extends Component {
                     </Checkbox>
                 </div>
 
-                {/* ladder setting view */}
-                {/* <InputWithHead heading={AppConstants.ladderSettings} />
-                <div className="inside-container-view" >
-                    <div className="table-responsive">
-                        <Table className="fees-table" columns={columns} dataSource={data} pagination={false} Divider=" false" />
-                    </div>
-                </div> */}
+                {this.regInviteesView()}
             </div>
         )
+    };
+
+    regInviteesView = () => {
+        let invitees = this.props.appState.registrationInvitees.length > 0 ? this.props.appState.registrationInvitees : [];
+        const { affiliateSelected, anyOrgSelected, otherSelected, nonSelected } = this.props.liveScoreSetting
+        console.log(this.props.appState.registrationInvitees, 'invitees')
+        return (
+            <div >
+                {/* <span className="applicable-to-heading">{AppConstants.registrationInvitees}</span> */}
+                <div>
+                    <Radio.Group
+                        className="reg-competition-radio mt-5"
+                        onChange={(e) => this.props.onChangeSettingForm({ key: "affiliateSelected", data: e.target.value })}
+                        value={affiliateSelected}
+                    >
+                        {(invitees || []).map((item, index) =>
+                            (
+                                index == 0
+                                &&
+                                <div>
+                                    {item.subReferences.length == 0 ?
+                                        <Radio value={item.id}>{item.description}</Radio>
+                                        : <div>
+                                            <div class="applicable-to-heading invitees-main">{item.description}</div>
+                                            {(item.subReferences).map((subItem, subIndex) => (
+                                                subItem.id == 2
+                                                    ?
+                                                    <>
+                                                        <div style={{ marginLeft: '20px' }}>
+                                                            <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
+                                                        </div>
+
+                                                        {/* {
+                                                        affiliateSelected == 3
+                                                        &&
+                                                        <div style={{ marginLeft: '20px' }}>
+                                                            <Radio.Group >
+                                                                <div style={{ marginLeft: '20px' }}>
+                                                                    <Radio value={'None'}>{'None'}</Radio>
+                                                                </div>
+                                                            </Radio.Group>
+                                                        </div>
+                                                    } */}
+                                                    </>
+                                                    :
+                                                    <>
+                                                        <div style={{ marginLeft: '20px' }}>
+                                                            <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
+                                                        </div>
+
+                                                        {
+                                                            affiliateSelected == 3
+                                                            &&
+                                                            <div style={{ marginLeft: '20px' }}>
+                                                                <Radio.Group
+                                                                // onChange={(e) => this.props.onChangeSettingForm({ key: "nonSelected", data: e.target.value })}
+                                                                // value={nonSelected}
+                                                                >
+                                                                    <div style={{ marginLeft: '20px' }}>
+                                                                        <Radio key={4} value={4}>{'None'}</Radio>
+                                                                    </div>
+                                                                </Radio.Group>
+
+                                                            </div>
+                                                        }
+                                                    </>
+                                            ))}
+                                        </div>
+                                    }
+                                </div>
+                            ))
+                        }
+                    </Radio.Group>
+
+
+                    <Radio.Group
+                        className="reg-competition-radio mt-0"
+                        onChange={(e) => this.props.onChangeSettingForm({ key: "anyOrgSelected", data: e.target.value })}
+                        value={anyOrgSelected}
+                    >
+                        {(invitees || []).map((item, index) =>
+                            (
+                                index == 1
+                                &&
+                                <div>
+                                    {item.subReferences.length == 0 ?
+                                        <Radio value={item.id}>{item.description}</Radio>
+                                        : <div>
+                                            <div class="applicable-to-heading invitees-main">{item.description}</div>
+                                            {(item.subReferences).map((subItem, subIndex) => (
+                                                <div style={{ marginLeft: '20px' }}>
+                                                    <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    }
+                                </div>
+                            ))
+                        }
+                    </Radio.Group>
+
+                    <Radio.Group
+                        className="reg-competition-radio mt-0"
+                        onChange={(e) => this.props.onChangeSettingForm({ key: "otherSelected", data: e.target.value })}
+                        value={otherSelected}
+                    >
+                        {(invitees || []).map((item, index) =>
+                            (
+                                index > 1
+                                &&
+                                <div>
+                                    {item.subReferences.length == 0 ?
+                                        <Radio value={item.id}>{item.description}</Radio>
+                                        : <div>
+                                            <div class="applicable-to-heading invitees-main">{item.description}</div>
+                                            {(item.subReferences).map((subItem, subIndex) => (
+                                                <div style={{ marginLeft: '20px' }}>
+                                                    <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    }
+                                </div>
+                            ))
+                        }
+                    </Radio.Group>
+
+                </div>
+
+                {/* <div>
+                    <Radio.Group
+                        className="reg-competition-radio mt-5"
+                        onChange={(e) => this.props.onChangeSettingForm({ key: "invitees", data: e.target.value })}
+                    >
+                        <div>
+                            {subReferences.length == 0 ?
+                                <Radio value={invitees_1.id}>{invitees_1.description}</Radio>
+                                : <div>
+                                    <div class="applicable-to-heading invitees-main">{invitees_1.description}</div>
+                                    {(subReferences).map((subItem, subIndex) => (
+                                        <div style={{ marginLeft: '20px' }}>
+                                            <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
+                                        </div>
+                                    ))}
+                                </div>
+                            }
+                        </div>
+                    </Radio.Group>
+                </div> */}
+
+            </div >
+        );
     };
 
 
@@ -554,6 +733,8 @@ class LiveScoreSettingsView extends Component {
 
     };
 
+
+
     render() {
         const { getFieldDecorator } = this.props.form
         let local_Id = getLiveScoreCompetiton()
@@ -581,7 +762,17 @@ class LiveScoreSettingsView extends Component {
 function mapStatetoProps(state) {
     return {
         liveScoreSetting: state.LiveScoreSetting,
-        venueList: state.LiveScoreMatchState
+        venueList: state.LiveScoreMatchState,
+        appState: state.AppState,
     }
 }
-export default connect(mapStatetoProps, { clearLiveScoreSetting, getLiveScoreSettingInitiate, onChangeSettingForm, getCompetitonVenuesList, settingDataPostInititae, searchVenueList, clearFilter })((Form.create()(LiveScoreSettingsView)));
+export default connect(mapStatetoProps, {
+    clearLiveScoreSetting,
+    getLiveScoreSettingInitiate,
+    onChangeSettingForm,
+    getCompetitonVenuesList,
+    settingDataPostInititae,
+    searchVenueList,
+    clearFilter,
+    competitionFeeInit
+})((Form.create()(LiveScoreSettingsView)));

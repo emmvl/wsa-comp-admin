@@ -195,9 +195,9 @@ class CompetitionDraws extends Component {
     });
   };
 
-  getColumnData = (indexArray) => {
+  getColumnData = (indexArray, drawData) => {
     let yIndex = indexArray[1];
-    let drawData = this.props.drawsState.getStaticDrawsData;
+    // let drawData = this.props.drawsState.getStaticDrawsData;
     let object = null
 
     for (let i in drawData) {
@@ -215,11 +215,12 @@ class CompetitionDraws extends Component {
     sourceObejct,
     targetObject,
     sourceIndexArray,
-    targetIndexArray
+    targetIndexArray,
+    drawData, round_Id
   ) => {
     let postData = null
     if (sourceObejct.drawsId == null) {
-      let columnObject = this.getColumnData(sourceIndexArray)
+      let columnObject = this.getColumnData(sourceIndexArray, drawData)
       console.log("Column Object Source", columnObject)
       postData = {
         "drawsId": targetObject.drawsId,
@@ -229,8 +230,8 @@ class CompetitionDraws extends Component {
         "endTime": columnObject.endTime,
       };
     } else {
-      let columnObject = this.getColumnData(targetIndexArray)
-      console.log("Column Object Target", columnObject)
+      let columnObject = this.getColumnData(targetIndexArray, drawData)
+      console.log("Column Object target", columnObject)
       postData = {
         "drawsId": sourceObejct.drawsId,
         "venueCourtId": targetObject.venueCourtId,
@@ -243,7 +244,7 @@ class CompetitionDraws extends Component {
       postData,
       sourceIndexArray,
       targetIndexArray,
-      "add")
+      "add", round_Id)
   }
 
   ///////update the competition draws on  swapping and hitting update Apis if both has value
@@ -251,7 +252,7 @@ class CompetitionDraws extends Component {
     sourceObejct,
     targetObject,
     sourceIndexArray,
-    targetIndexArray
+    targetIndexArray, drawsData, round_Id
   ) => {
     let customSourceObject = {
       // drawsId: sourceObejct.drawsId,
@@ -279,7 +280,7 @@ class CompetitionDraws extends Component {
       postObject,
       sourceIndexArray,
       targetIndexArray,
-      "add"
+      "add", round_Id
     );
   }
 
@@ -325,7 +326,7 @@ class CompetitionDraws extends Component {
 
 
 
-  onSwap(source, target) {
+  onSwap(source, target, drawData, round_Id) {
     let sourceIndexArray = source.split(':');
     let targetIndexArray = target.split(':');
     let sourceXIndex = sourceIndexArray[0];
@@ -335,7 +336,7 @@ class CompetitionDraws extends Component {
     if (sourceXIndex === targetXIndex && sourceYIndex === targetYIndex) {
       return;
     }
-    let drawData = this.props.drawsState.getStaticDrawsData;
+    // let drawData = this.props.drawsState.getStaticDrawsData;
     let sourceObejct = drawData[sourceXIndex].slotsArray[sourceYIndex];
     let targetObject = drawData[targetXIndex].slotsArray[targetYIndex];
     // console.log("Source",sourceObejct)
@@ -346,7 +347,8 @@ class CompetitionDraws extends Component {
         sourceObejct,
         targetObject,
         sourceIndexArray,
-        targetIndexArray
+        targetIndexArray,
+        drawData, round_Id
       )
     }
     else if (sourceObejct.drawsId == null && targetObject.drawsId == null) {
@@ -356,7 +358,8 @@ class CompetitionDraws extends Component {
         sourceObejct,
         targetObject,
         sourceIndexArray,
-        targetIndexArray
+        targetIndexArray,
+        drawData, round_Id
       )
     }
   }
@@ -656,22 +659,52 @@ class CompetitionDraws extends Component {
               </div>
             </div>
           </div>
-          <div className="col-sm-2 comp-draw-edit-btn-view">
+          {/* <div className="col-sm-2 comp-draw-edit-btn-view">
             <NavLink to="/competitionDrawEdit">
               <Button className="live-score-edit" type="primary">
                 {AppConstants.edit}
               </Button>
             </NavLink>
-          </div>
+          </div> */}
 
         </div>
         {/* {this.draggableView()} */}
         {
           this.props.drawsState.updateLoad ?
-            <div><Loader visible={this.props.drawsState.updateLoad} />
-              {this.draggableView()}
+            <div className="draggable-wrap draw-data-table"><Loader visible={this.props.drawsState.updateLoad} />
+              {this.props.drawsState.getRoundsDrawsdata.length > 0 && this.props.drawsState.getRoundsDrawsdata.map((dateItem, dateIndex) => {
+
+                return (
+                  <div>
+                    <div className="draws-round-view" >
+
+                      <span className="draws-round">{dateItem.roundName}</span>
+
+                    </div>
+                    {this.draggableView(dateItem)}
+                    <LegendComponent legendArray={dateItem.legendsArray} />
+                  </div>
+                )
+              })}
             </div> :
-            this.draggableView()
+            <div className="draggable-wrap draw-data-table">
+              {
+                this.props.drawsState.getRoundsDrawsdata.length > 0 && this.props.drawsState.getRoundsDrawsdata.map((dateItem, dateIndex) => {
+                  return (
+                    <div>
+                      <div className="draws-round-view" >
+
+                        <span className="draws-round">{dateItem.roundName}</span>
+
+                      </div>
+                      {this.draggableView(dateItem)}
+                      <LegendComponent legendArray={dateItem.legendsArray} />
+                    </div>
+                  )
+                }
+                )
+              }
+            </div>
         }
       </div>
     );
@@ -679,37 +712,44 @@ class CompetitionDraws extends Component {
 
 
   //////the gragable content view inside the container
-  draggableView = () => {
+  draggableView = (dateItem) => {
     var dateMargin = 25;
     var dayMargin = 25;
     let topMargin = 0;
-    console.log(this.props.drawsState)
+    console.log(dateItem)
     let legendsData = isArrayNotEmpty(this.props.drawsState.legendsArray) ? this.props.drawsState.legendsArray : []
     return (
-      <div className="draggable-wrap draw-data-table">
+      <div >
+
         <div className="scroll-bar pb-4">
           <div className="table-head-wrap">
             {/* Day name list */}
             <div className="tablehead-row">
               <div className="sr-no empty-bx"></div>
-              {this.props.drawsState.dateArray.map((item, index) => {
-                if (index !== 0) {
-                  dateMargin += 110;
-                }
-                if (index == 0) {
-                  dateMargin = 70
-                }
-                return (
-                  <span style={{ left: dateMargin }} >
-                    {item.notInDraw == false ? getDayName(item.date) : ""}
-                  </span>
-                );
-              })}
+
+              {
+                dateItem.dateNewArray.length > 0 && dateItem.dateNewArray.map((item, index) => {
+                  if (index !== 0) {
+                    dateMargin += 110;
+                  }
+                  if (index == 0) {
+                    dateMargin = 70
+                  }
+                  return (
+                    <span style={{ left: dateMargin }} >
+                      {item.notInDraw == false ? getDayName(item.date) : ""}
+                    </span>
+                  );
+                })
+              }
+
             </div>
             {/* Times list */}
             <div className="tablehead-row">
               <div className="sr-no empty-bx"></div>
-              {this.props.drawsState.dateArray.map((item, index) => {
+
+
+              {dateItem.dateNewArray.length > 0 && dateItem.dateNewArray.map((item, index) => {
                 if (index !== 0) {
                   dayMargin += 110;
                 }
@@ -720,12 +760,12 @@ class CompetitionDraws extends Component {
                   <span style={{ left: dayMargin, fontSize: item.notInDraw !== false && 11 }}>{item.notInDraw == false ? getTime(item.date) : "Not in draw"}</span>
                 );
               })}
+
             </div>
           </div>
         </div>
-
         <div className="main-canvas Draws">
-          {this.props.drawsState.getStaticDrawsData.map((courtData, index) => {
+          {dateItem.draws.map((courtData, index) => {
             let leftMargin = 25;
             if (index !== 0) {
               topMargin += 55;
@@ -764,11 +804,11 @@ class CompetitionDraws extends Component {
                         }}
                       >
                         <Swappable
-                          id={index.toString() + ':' + slotIndex.toString()}
+                          id={index.toString() + ':' + slotIndex.toString() + ':' + dateItem.roundId.toString()}
                           content={1}
                           swappable={slotObject.competitionDivisionGradeId == this.state.competitionDivisionGradeId || this.state.competitionDivisionGradeId == 0 ? true : false}
                           onSwap={(source, target) =>
-                            this.onSwap(source, target)
+                            this.onSwap(source, target, dateItem.draws, dateItem.roundId)
                           }
                         >
                           {slotObject.drawsId != null ? (
@@ -780,6 +820,7 @@ class CompetitionDraws extends Component {
                               <span>Free</span>
                             )}
                         </Swappable>
+
                       </div>
                     </div>
                   );
@@ -790,7 +831,7 @@ class CompetitionDraws extends Component {
         </div>
         <div className="draws-legend-view">
           {/* <LegendComponent legendArray={Array(10).fill(legendsData).flat()} /> */}
-          <LegendComponent legendArray={legendsData} />
+
         </div>
       </div>
     );

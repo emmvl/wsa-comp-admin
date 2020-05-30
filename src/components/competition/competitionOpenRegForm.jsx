@@ -50,7 +50,8 @@ import {
     regCompetitionListDeleteAction,
     getDefaultCharity,
     getDefaultCompFeesLogoAction,
-    clearCompReducerDataAction
+    clearCompReducerDataAction,
+    removeCompetitionDivisionAction
 } from "../../store/actions/registrationAction/competitionFeeAction";
 import {
     competitionFeeInit, getVenuesTypeAction, getCommonDiscountTypeTypeAction,
@@ -217,6 +218,7 @@ class CompetitionOpenRegForm extends Component {
             yearRefId: 1,
             value: "NETSETGO",
             division: "Division",
+			sourceModule: "COMP",
             discountCode: false,
             membershipProduct: ["Player", "NetSetGo", "Walking Netball", "Fast Five"],
             membershipProductSelected: [],
@@ -257,6 +259,9 @@ class CompetitionOpenRegForm extends Component {
             tooltipVisibleDelete: false,
             tooltipVisibleDraft: false,
             tooltipVisiblePublish: false,
+            deleteDivModalVisible: false,
+            competitionDivisionId: null,
+            deleteLoading: false,
             divisionTable: [
                 {
                     title: "Division Name",
@@ -360,6 +365,8 @@ class CompetitionOpenRegForm extends Component {
                                             showTime={false}
                                             disabled={!record.ageRestriction || this.state.permissionState.divisionsDisable}
                                             setFieldsValue={fromDate !== null && moment(fromDate)}
+                                            disabledDate={d => !d || d.isSameOrAfter(record.toDate)
+                                            }
                                         />
                                     )}
                             </Form.Item>
@@ -386,6 +393,8 @@ class CompetitionOpenRegForm extends Component {
                                             showTime={false}
                                             disabled={!record.ageRestriction || this.state.permissionState.divisionsDisable}
                                             setFieldsValue={toDate !== null && moment(toDate)}
+                                            disabledDate={d => moment(record.fromDate).isSameOrAfter(d, 'day')
+                                            }
                                         />
                                     )}
                             </Form.Item>
@@ -460,13 +469,18 @@ class CompetitionOpenRegForm extends Component {
                 })
                 this.setDetailsFieldValue()
             }
+
+            if(competitionFeesState.deleteDivisionLoad == false && this.state.deleteLoading == true){
+                this.setState({deleteLoading:false});
+                this.setDivisionFormFields();
+            }
         }
         if (nextProps.appState !== this.props.appState) {
             let competitionTypeList = this.props.appState.own_CompetitionArr
             if (nextProps.appState.own_CompetitionArr !== competitionTypeList) {
                 if (competitionTypeList.length > 0) {
                     let competitionId = competitionTypeList[0].competitionId
-                    this.props.getAllCompetitionFeesDeatilsAction(competitionId)
+                    this.props.getAllCompetitionFeesDeatilsAction(competitionId,null, this.state.sourceModule)
                     setOwn_competition(competitionId)
                     this.setState({ getDataLoading: true, firstTimeCompId: competitionId })
                 }
@@ -488,7 +502,7 @@ class CompetitionOpenRegForm extends Component {
                     compDetailDisable: false,
                     regInviteesDisable: true,
                     membershipDisable: true,
-                    divisionsDisable: true,
+                    divisionsDisable: false,  // Updated for Comp Division Handling
                     feesTableDisable: true,
                     paymentsDisable: true,
                     discountsDisable: true,
@@ -504,11 +518,11 @@ class CompetitionOpenRegForm extends Component {
                     compDetailDisable: true,
                     regInviteesDisable: true,
                     membershipDisable: true,
-                    divisionsDisable: true,
+                    divisionsDisable: false,// Updated for Comp Division Handling
                     feesTableDisable: true,
                     paymentsDisable: true,
                     discountsDisable: true,
-                    allDisable: false,
+                    allDisable: true,
                     isPublished: true
                 }
                 this.setState({ permissionState: permissionObject })
@@ -518,7 +532,8 @@ class CompetitionOpenRegForm extends Component {
                     compDetailDisable: false,
                     regInviteesDisable: true,
                     membershipDisable: true,
-                    divisionsDisable: hasRegistration == 1 ? true : false,
+                    // divisionsDisable: hasRegistration == 1 ? true : false,
+                    divisionsDisable: false, // Updated for Comp Division Handling																  
                     feesTableDisable: true,
                     paymentsDisable: false,
                     discountsDisable: true,
@@ -561,7 +576,7 @@ class CompetitionOpenRegForm extends Component {
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
 
         if (storedCompetitionId && yearId && propsData && compData) {
-            this.props.getAllCompetitionFeesDeatilsAction(storedCompetitionId)
+            this.props.getAllCompetitionFeesDeatilsAction(storedCompetitionId, null, this.state.sourceModule)
             this.setState({
                 yearRefId: JSON.parse(yearId),
                 firstTimeCompId: storedCompetitionId,
@@ -593,7 +608,7 @@ class CompetitionOpenRegForm extends Component {
         // this.props.venueListAction();
         if (competitionId !== null) {
             let hasRegistration = 0
-            this.props.getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration)
+            this.props.getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration, this.state.sourceModule)
             this.setState({ getDataLoading: true })
         }
         else {
@@ -674,6 +689,12 @@ class CompetitionOpenRegForm extends Component {
                 [membershipProductUniqueKey]: item.membershipProductUniqueKey,
             })
         })
+
+        this.setDivisionFormFields();
+        
+    }
+
+    setDivisionFormFields = () => {
         let divisionData = this.props.competitionFeesState.competitionDivisionsData
         let divisionArray = divisionData !== null ? divisionData : []
         divisionArray.map((item, index) => {
@@ -692,7 +713,13 @@ class CompetitionOpenRegForm extends Component {
         })
     }
 
-
+    checkDivisionEmpty(data) {
+        for (let i in data) {
+            if (data[i].divisions.length == 0) {
+                return true
+            }
+        }
+    }
 
     saveAPIsActionCall = (e) => {
         e.preventDefault();
@@ -750,7 +777,7 @@ class CompetitionOpenRegForm extends Component {
                             }
                         }
                         formData.append("logoIsDefault", postData.logoIsDefault)
-                        this.props.saveCompetitionFeesDetailsAction(formData, compFeesState.defaultCompFeesOrgLogoData.id)
+                        this.props.saveCompetitionFeesDetailsAction(formData, compFeesState.defaultCompFeesOrgLogoData.id, this.state.sourceModule)
                         this.setState({ loading: true })
                     } else {
                         message.error(ValidationConstants.competitionLogoIsRequired)
@@ -789,10 +816,17 @@ class CompetitionOpenRegForm extends Component {
                     let payload = finalDivisionArray
                     let finalDivisionPayload = {
                         statusRefId: this.state.statusRefId,
-                        divisions: payload
+                        divisions: payload,
+                        sourceModule: this.state.sourceModule
                     }
-                    this.props.saveCompetitionFeesDivisionAction(finalDivisionPayload, competitionId)
-                    this.setState({ loading: true })
+                    if (this.checkDivisionEmpty(divisionArrayData) == true) {
+                        message.error(ValidationConstants.pleaseAddDivisionForMembershipProduct)
+                    }
+                    else {
+                        this.props.saveCompetitionFeesDivisionAction(finalDivisionPayload, competitionId)
+                        this.setState({ loading: true })
+                    }
+
                 }
                 // else if (tabKey == "4") {
                 //     let finalPostData = []
@@ -1005,7 +1039,7 @@ class CompetitionOpenRegForm extends Component {
     onCompetitionChange(competitionId) {
         setOwn_competition(competitionId)
         this.props.clearCompReducerDataAction("all")
-        this.props.getAllCompetitionFeesDeatilsAction(competitionId)
+        this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule)
         this.setState({ getDataLoading: true, firstTimeCompId: competitionId })
 
     }
@@ -1656,13 +1690,32 @@ class CompetitionOpenRegForm extends Component {
 
     //////add or remove another division inthe divsision tab
     addRemoveDivision = (index, item, keyword) => {
-        this.props.addRemoveDivisionAction(index, item, keyword)
+        console.log("item:: Competition Division::" + JSON.stringify(item));
+        if(keyword == "add"){
+            this.props.addRemoveDivisionAction(index, item, keyword);
+        }
+        else{
+            this.setState({deleteDivModalVisible: true, divisionIndex: index, competitionDivision: item}) 
+        }
+        
     }
 
 
 
+    handleDeleteDivision = (key) =>{
+        console.log("****************handleDeleteDivision" + JSON.stringify(this.state.competitionDivision));
+        console.log("&&&&&&" + this.state.divisionIndex);
 
-
+        if(key == "ok"){
+            let payload = {
+                competitionDivisionId: this.state.competitionDivision.competitionDivisionId
+            }
+            this.props.addRemoveDivisionAction(this.state.divisionIndex, this.state.competitionDivision, "remove");
+            this.props.removeCompetitionDivisionAction(payload);
+            this.setState({deleteLoading: true});
+        }
+        this.setState({deleteDivModalVisible: false})
+    }
 
     divisionsView = () => {
         let divisionData = this.props.competitionFeesState.competitionDivisionsData
@@ -1699,6 +1752,15 @@ class CompetitionOpenRegForm extends Component {
                         </div>
                     </div>
                 )}
+
+                    <Modal
+                        className="add-membership-type-modal"
+                        title={AppConstants.deleteDivision}
+                        visible={this.state.deleteDivModalVisible}
+                        onOk={ () => this.handleDeleteDivision("ok")}
+                        onCancel={ () => this.handleDeleteDivision("cancel")}>
+                        <p>{AppConstants.competitionDivisionValidation}</p>
+                    </Modal>				  
             </div>
         );
     };
@@ -2670,7 +2732,9 @@ class CompetitionOpenRegForm extends Component {
                                 </Tabs>
                             </div>
                             <Loader
-                                visible={this.props.competitionFeesState.onLoad || this.props.appState.onLoad || this.state.getDataLoading} />
+                                visible={this.props.competitionFeesState.onLoad || 
+                                this.props.appState.onLoad || this.state.getDataLoading ||
+                                this.props.competitionFeesState.deleteDivisionLoad} />
                         </Content>
                         <Footer>{this.footerView()}</Footer>
                     </Form>
@@ -2718,6 +2782,7 @@ function mapDispatchToProps(dispatch) {
         searchVenueList,
         venueListAction,
         clearFilter,
+        removeCompetitionDivisionAction				
     }, dispatch)
 }
 

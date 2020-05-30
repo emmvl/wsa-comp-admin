@@ -143,6 +143,7 @@ class RegistrationMembershipFee extends Component {
         let productId = null
         productId = this.props.location.state ? this.props.location.state.id : null
         this.apiCalls(productId)
+        this.setFieldDecoratorValues()
     }
 
     componentDidUpdate(prevState) {
@@ -243,6 +244,9 @@ class RegistrationMembershipFee extends Component {
                             if (item.childDiscounts.length == 0) {
                                 item.childDiscounts = null
                             }
+                            if (item.membershipPrdTypeDiscountTypeRefId !== 3) {
+                                item.childDiscounts = null
+                            }
                         }
                         item.applyDiscount = parseInt(item.applyDiscount)
                         if (item.amount !== null) {
@@ -284,6 +288,7 @@ class RegistrationMembershipFee extends Component {
         this.props.form.setFieldsValue({
             yearRefId: membershipProductData.yearRefId ? membershipProductData.yearRefId : 1,
             membershipProductName: membershipProductData.membershipProductName,
+            validityRefId: membershipProductData.ValidityRefId ? membershipProductData.ValidityRefId : 2,
         });
         let typesData = membershipProductData.membershipProductTypes ? membershipProductData.membershipProductTypes : []
         typesData.length > 0 && typesData.map((item, index) => {
@@ -303,6 +308,13 @@ class RegistrationMembershipFee extends Component {
             this.props.form.setFieldsValue({
                 [membershipProductTypeMappingId]: item.membershipProductTypeMappingId,
                 [membershipPrdTypeDiscountTypeRefId]: item.membershipPrdTypeDiscountTypeRefId,
+            })
+            let childDiscounts = item.childDiscounts !== null && item.childDiscounts.length > 0 ? item.childDiscounts : []
+            childDiscounts.map((childItem, childindex) => {
+                let childDiscountPercentageValue = `percentageValue${index} + ${childindex}`
+                this.props.form.setFieldsValue({
+                    [childDiscountPercentageValue]: childItem.percentageValue
+                })
             })
         })
     }
@@ -429,6 +441,7 @@ class RegistrationMembershipFee extends Component {
         this.props.updatedMembershipTypeDataAction(membershipTypeData)
     };
 
+
     //////dynamic membership type view
     membershipTypesView = (
         getFieldDecorator
@@ -520,6 +533,8 @@ class RegistrationMembershipFee extends Component {
                                                                 showTime={false}
                                                                 // defaultValue={item.dobFrom !== null ? moment(item.dobFrom) : null}
                                                                 disabled={this.state.membershipIsUsed}
+                                                                disabledDate={d => d.isSameOrAfter(item.dobTo)
+                                                                }
                                                             />
                                                         )}
                                                     </Form.Item>
@@ -546,6 +561,10 @@ class RegistrationMembershipFee extends Component {
                                                                 showTime={false}
                                                                 defaultValue={item.dobTo !== null ? moment(item.dobTo) : null}
                                                                 disabled={this.state.membershipIsUsed}
+                                                                // disabledDate={d => d.isSameOrBefore(item.dobFrom)
+                                                                // }
+                                                                disabledDate={d => moment(item.dobFrom).isSameOrAfter(d, 'day')
+                                                                }
                                                             />
                                                         )}
                                                     </Form.Item>
@@ -610,20 +629,23 @@ class RegistrationMembershipFee extends Component {
                     {AppConstants.validity}
                 </span>
                 <Form.Item  >
-                    {getFieldDecorator('validityRefId', { initialValue: 1 },
-                        { rules: [{ required: true, message: ValidationConstants.pleaseSelectValidity }] })(
-                            <Radio.Group
-                                className="reg-competition-radio"
-                                disabled={this.state.membershipIsUsed}
-                            >
-                                {appState.productValidityList.map(item => {
-                                    return (
-                                        <Radio key={"validityRefId" + item.id} value={item.id}> {item.description}</Radio>
-                                    );
-                                })}
+                    {getFieldDecorator('validityRefId', { initialValue: 2 }, { rules: [{ required: true, message: ValidationConstants.pleaseSelectValidity }] })(
+                        <Radio.Group
+                            className="reg-competition-radio"
+                            disabled={this.state.membershipIsUsed}
+                        >
+                            {appState.productValidityList.map(item => {
+                                return (
+                                    <div>
+                                        {item.id == "2" &&
+                                            <Radio key={"validityRefId" + item.id} value={item.id}> {item.description}</Radio>
+                                        }
+                                    </div>
+                                );
+                            })}
 
-                            </Radio.Group>
-                        )}
+                        </Radio.Group>
+                    )}
                 </Form.Item>
                 {this.membershipTypesView(getFieldDecorator)}
             </div >
@@ -676,8 +698,9 @@ class RegistrationMembershipFee extends Component {
 
 
 
-    discountViewChange = (item, index) => {
+    discountViewChange = (item, index, getFieldDecorator) => {
         let childDiscounts = item.childDiscounts !== null && item.childDiscounts.length > 0 ? item.childDiscounts : []
+        console.log("item", item)
         switch (item.membershipPrdTypeDiscountTypeRefId) {
             case 1:
                 return <div>
@@ -704,7 +727,7 @@ class RegistrationMembershipFee extends Component {
                                 placeholder={AppConstants.percentageOff_FixedAmount}
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                 value={item.amount}
-                                suffix={item.discountTypeRefId == "2" ? "%" : null}
+                                suffix={JSON.stringify(item.discountTypeRefId) == "2" ? "%" : null}
                                 type="number"
                                 disabled={this.state.membershipIsUsed}
                             />
@@ -784,7 +807,7 @@ class RegistrationMembershipFee extends Component {
                                 placeholder={AppConstants.percentageOff_FixedAmount}
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                 value={item.amount}
-                                suffix={item.discountTypeRefId == "2" ? "%" : null}
+                                suffix={JSON.stringify(item.discountTypeRefId) == "2" ? "%" : null}
                                 type="number"
                                 disabled={this.state.membershipIsUsed}
                             />
@@ -838,21 +861,28 @@ class RegistrationMembershipFee extends Component {
                     {childDiscounts.map((childItem, childindex) => (
                         <div className="row">
                             <div className="col-sm-10">
-                                <InputWithHead
-                                    heading={`Child ${childindex + 1}%`}
-                                    placeholder={`Child ${childindex + 1}%`}
-                                    onChange={(e) => this.onChangeChildPercent(e.target.value, index, childindex, childItem)}
-                                    value={childItem.percentageValue}
-                                    disabled={this.state.membershipIsUsed}
-                                />
+                                <Form.Item  >
+                                    {getFieldDecorator(`percentageValue${index} + ${childindex}`,
+                                        { rules: [{ required: true, message: ValidationConstants.pleaseEnterChildDiscountPercentage }] })(
+                                            <InputWithHead
+                                                heading={`Child ${childindex + 1}%`}
+                                                placeholder={`Child ${childindex + 1}%`}
+                                                onChange={(e) => this.onChangeChildPercent(e.target.value, index, childindex, childItem)}
+                                                // value={childItem.percentageValue}
+                                                disabled={this.state.membershipIsUsed}
+                                            />
+                                        )}
+                                </Form.Item>
                             </div>
-                            <div className="col-sm-2 delete-image-view pb-4"
-                                onClick={() => !this.state.membershipIsUsed ? this.addRemoveChildDiscount(index, "delete", childindex) : null}>
-                                <span className="user-remove-btn">
-                                    <i className="fa fa-trash-o" aria-hidden="true"></i>
-                                </span>
-                                <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
-                            </div>
+                            {childindex > 0 &&
+                                <div className="col-sm-2 delete-image-view pb-4"
+                                    onClick={() => !this.state.membershipIsUsed ? this.addRemoveChildDiscount(index, "delete", childindex) : null}>
+                                    <span className="user-remove-btn">
+                                        <i className="fa fa-trash-o" aria-hidden="true"></i>
+                                    </span>
+                                    <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                                </div>
+                            }
                         </div>
                     ))}
                     <span className="input-heading-add-another"
@@ -988,6 +1018,9 @@ class RegistrationMembershipFee extends Component {
             }
         }
         this.props.updatedDiscountDataAction(discountData)
+        if (keyWord == "delete") {
+            this.setFieldDecoratorValues()
+        }
     }
 
 
@@ -1025,6 +1058,11 @@ class RegistrationMembershipFee extends Component {
         let discountData = this.props.registrationState.membershipProductDiscountData.membershipProductDiscounts[0].discounts
         discountData[index].membershipPrdTypeDiscountTypeRefId = discountType
         this.props.updatedDiscountDataAction(discountData)
+        if (discountType == 3) {
+            if (isArrayNotEmpty(discountData[index].childDiscounts) == false) {
+                this.addRemoveChildDiscount(index, "add", -1)
+            }
+        }
     }
 
     //onChange membership type  discount
@@ -1149,7 +1187,7 @@ class RegistrationMembershipFee extends Component {
                                 </Form.Item>
                             </div>
                         </div>
-                        {this.discountViewChange(item, index)}
+                        {this.discountViewChange(item, index, getFieldDecorator)}
                     </div>
                 ))}
                 < span className="input-heading-add-another"

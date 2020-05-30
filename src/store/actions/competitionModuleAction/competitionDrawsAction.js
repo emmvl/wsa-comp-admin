@@ -12,7 +12,7 @@ function getCompetitionVenue(competitionId) {
 
 
 /////get competition draws
-function getCompetitionDrawsAction(yearRefId, competitionId, venueId, roundId) {
+function getCompetitionDrawsAction(yearRefId, competitionId, venueId, roundId, ) {
     const action = {
         type: ApiConstants.API_GET_COMPETITION_DRAWS_LOAD,
         yearRefId, competitionId, venueId, roundId
@@ -32,13 +32,14 @@ function getDrawsRoundsAction(yearRefId, competitionId) {
 }
 
 ////update competition drwas
-function updateCompetitionDraws(data, source, target, actionType) {
+function updateCompetitionDraws(data, source, target, actionType, drawData) {
     const action = {
         type: ApiConstants.API_UPDATE_COMPETITION_DRAWS_LOAD,
         data: data,
         sourceArray: source,
         targetArray: target,
-        actionType: actionType
+        actionType: actionType,
+        drawData: drawData
     }
     return action
 }
@@ -55,14 +56,15 @@ function saveDraws(yearId, competitionId, drawsMasterId) {
 }
 
 /////update draws court timing where N/A is there
-function updateCourtTimingsDrawsAction(data, source, target, actionType) {
+function updateCourtTimingsDrawsAction(data, source, target, actionType, drawData) {
     console.log(data)
     const action = {
         type: ApiConstants.API_UPDATE_COMPETITION_DRAWS_COURT_TIMINGS_LOAD,
         data: data,
         sourceArray: source,
         targetArray: target,
-        actionType: actionType
+        actionType: actionType,
+        drawData: drawData
     }
     return action
 }
@@ -78,6 +80,14 @@ function dateSelectionRounds(data) {
 function clearDraws(key) {
     const action = {
         type: ApiConstants.cleardrawsData,
+        key
+    }
+    return action
+}
+
+function clearFixtureData(key) {
+    const action = {
+        type: ApiConstants.clearFixtureData,
         key
     }
     return action
@@ -109,6 +119,37 @@ function matchesListDrawsAction(competitionId) {
     return action
 }
 
+///// get Division by competition
+function getDivisionAction(competitionId) {
+    const action = {
+        type: ApiConstants.API_GET_DIVISION_LOAD,
+        competitionId: competitionId
+    }
+    return action
+}
+
+//get competition fixtures
+function getCompetitionFixtureAction(yearId, competitionId, competitionDivisionGradeId) {
+    const action = {
+        type: ApiConstants.API_GET_FIXTURE_LOAD,
+        yearId,
+        competitionId,
+        competitionDivisionGradeId
+    }
+    return action
+}
+
+////update competition drwas
+function updateCompetitionFixtures(data, source, target) {
+    const action = {
+        type: ApiConstants.API_UPDATE_COMPETITION_FIXTURE_LOAD,
+        data: data,
+        sourceArray: source,
+        targetArray: target,
+    }
+    return action
+}
+
 export {
     getCompetitionDrawsAction,
     getDrawsRoundsAction,
@@ -120,5 +161,9 @@ export {
     clearDraws,
     getDivisionGradeNameLisAction,
     publishDraws,
-    matchesListDrawsAction
+    matchesListDrawsAction,
+    getDivisionAction,
+    getCompetitionFixtureAction,
+    clearFixtureData,
+    updateCompetitionFixtures
 }

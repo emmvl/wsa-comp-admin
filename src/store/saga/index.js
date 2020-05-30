@@ -56,7 +56,8 @@ import {
   defaultCompetitionDiscountSaga,
   defaultCharity_voucherSaga,
   getDefaultCompFeesLogoSaga,
-  inviteeSearchSaga
+  inviteeSearchSaga,
+  deleteCompetitionDivisionSaga						   
 } from './registrationSaga/competitionFeeSaga';
 
 
@@ -107,7 +108,7 @@ import {
   registrationOtherInfoReferenceSaga, firebirdPlayerReferenceSaga, favouriteTeamReferenceSaga,
   nationalityReferenceSaga, heardByReferenceSaga, playerPositionReferenceSaga, venuesListSaga,
   venueByIdSaga, venueDeleteSaga,
-  getGenderSaga, getPhotoTypeSaga, getInvoiceSaga, getAppyToSaga, getExtraTimeDrawSaga,
+  getGenderSaga, getPhotoTypeSaga, getAppyToSaga, getExtraTimeDrawSaga,
   getFinalsFixtureTemplateSaga
 } from "./commonSaga/commonSaga";
 ////Venue constraints
@@ -122,7 +123,8 @@ import {
   partPlayerSummaryCommentSaga,
   importCompetitionPlayer,
   importCompetitionTeams,
-  deleteTeamSaga
+  deleteTeamSaga,
+  playerChangeDivisionSaga						  
 } from './competitionManagementSaga/competitionPartPlayerGradingSaga';
 import {
   getCompOwnProposedTeamGradingSaga,
@@ -139,7 +141,8 @@ import {
   finalTeamsExportSaga,
   finalPlayersExportSaga,
   proposedTeamsExportSaga,
-  proposedPlayersExportSaga
+  proposedPlayersExportSaga,
+  teamChangeDivisionSaga				
 } from './competitionManagementSaga/competitionTeamGradingSaga';
 
 // UserSaga
@@ -151,7 +154,7 @@ import {
   getCompetitionDrawsSaga, getDrawsRoundsSaga,
   updateCompetitionDraws, saveDrawsSaga,
   getCompetitionVenues, updateCourtTimingsDrawsAction,
-  getDivisionGradeNameListSaga, publishDraws, drawsMatchesListExportSaga
+  getDivisionGradeNameListSaga, publishDraws, drawsMatchesListExportSaga, getDivisionSaga, competitionFixtureSaga, updateCompetitionFixtures
 } from './competitionManagementSaga/competitionDrawsSaga';
 
 import { regDashboardListSaga } from "./registrationSaga/registrationDashboardSaga"
@@ -175,6 +178,8 @@ import { laddersSettingGetMatchResult, laddersSettingGetData, laddersSettingPost
 import { liveScoreChangeVenueSaga } from "./liveScoreSaga/liveScoreVenueChangeSaga"
 import { getLiveScoreFixtureCompSaga } from "./liveScoreSaga/liveScoreFixtureCompSaga";
 import * as stripeSaga from "../saga/stripeSaga/stripeSaga"
+
+import { liveScoreCoachSaga, liveScoreAddCoachSaga } from "../saga/liveScoreSaga/liveScoreCoachSaga"
 
 
 export default function* root_saga() {
@@ -636,8 +641,6 @@ export default function* root_saga() {
   //part proposed team grading comment 
   yield takeEvery(ApiConstants.API_COMPETITION_TEAM_DELETE_ACTION_LOAD, deleteTeamActionSaga)
 
-  yield takeEvery(ApiConstants.API_GET_INVOICE_LOAD, getInvoiceSaga)
-
   //////////stripe payment account balance API
   yield takeEvery(ApiConstants.API_SAVE_STRIPE_ACCOUNT_API_LOAD, stripeSaga.saveStripeAccountSaga)
 
@@ -673,4 +676,29 @@ export default function* root_saga() {
   /////stripe single payout transaction list
   yield takeEvery(ApiConstants.API_GET_STRIPE_TRANSACTION_PAYOUT_LIST_API_LOAD, stripeSaga.getTransactionPayoutListSaga)
 
+  ////coach saga
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_COACH_LIST_LOAD, liveScoreCoachSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_EDIT_COACH_LOAD, liveScoreAddCoachSaga)
+
+  // Organisation Contat Delete
+  yield takeEvery(ApiConstants.API_DELETE_ORG_CONTACT_LOAD, userSaga.deleteOrgContactSaga)
+
+  // Organisation Contat Delete
+  yield takeEvery(ApiConstants.API_EXPORT_ORG_REG_QUESTIONS_LOAD, userSaga.exportOrgRegQuestionsSaga)
+
+  /////API_GET_INVOICE data
+  yield takeEvery(ApiConstants.API_GET_INVOICE_LOAD, stripeSaga.getInvoiceSaga)
+
+  //fixtureSaga get division grade api
+  yield takeEvery(ApiConstants.API_GET_DIVISION_LOAD, getDivisionSaga)
+  yield takeEvery(ApiConstants.API_GET_FIXTURE_LOAD, competitionFixtureSaga)
+  yield takeEvery(ApiConstants.API_UPDATE_COMPETITION_FIXTURE_LOAD, updateCompetitionFixtures)
+  //// Competition division delete 
+  yield takeEvery(ApiConstants.API_COMPETITION_DIVISION_DELETE_LOAD, deleteCompetitionDivisionSaga)
+
+  // Team Change division 
+  yield takeEvery(ApiConstants.API_CHANGE_COMPETITION_DIVISION_TEAM_LOAD, teamChangeDivisionSaga)
+
+  // Player Change division 
+  yield takeEvery(ApiConstants.API_CHANGE_COMPETITION_DIVISION_PLAYER_LOAD, playerChangeDivisionSaga)
 }

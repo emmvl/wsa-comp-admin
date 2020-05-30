@@ -12,7 +12,8 @@ import history from "../../util/history";
 import { connect } from 'react-redux';
 import {getAffiliateToOrganisationAction,saveAffiliateAction,updateOrgAffiliateAction,
     getUreAction, getRoleAction, getAffiliateOurOrganisationIdAction,
-    getOrganiationPhotoAction, saveOrganiationPhotoAction, deleteOrganiationPhotoAction} from 
+    getOrganiationPhotoAction, saveOrganiationPhotoAction, deleteOrganiationPhotoAction,
+    deleteOrgContact} from 
                 "../../store/actions/userAction/userAction";
 import ValidationConstants from "../../themes/validationConstant";
 import { getCommonRefData, getPhotoTypeAction } from '../../store/actions/commonAction/commonAction';
@@ -236,9 +237,15 @@ class UserOurOragnization extends Component {
         let contacts = affiliate.contacts;
         if(contacts!= null && contacts!= undefined)
         {
+            let contact = contacts[index];
             contacts.splice(index,1);
             this.updateContactFormFields(contacts);
             this.props.updateOrgAffiliateAction(contacts,"contacts");
+            let obj = {
+                id: contact.userId,
+                organisationId: this.state.organisationId
+            }
+            this.props.deleteOrgContact(obj);
         }
     }
 
@@ -710,12 +717,14 @@ class UserOurOragnization extends Component {
                         <div className="col-sm" >
                             <span className="user-contact-heading">{AppConstants.contact + (index+1)}</span>
                         </div>
+                        {affiliate.contacts.length == 1 ? null :
                         <div className="transfer-image-view pointer" onClick={() => this.deleteContact(index)}>
                             <span class="user-remove-btn" ><i class="fa fa-trash-o" aria-hidden="true"></i></span>
                             <span className="user-remove-text">
                                 {AppConstants.remove}
                             </span>
                         </div>
+                        }
                     </div>
     
                     <Form.Item >
@@ -1150,7 +1159,8 @@ function mapDispatchToProps(dispatch)
         getPhotoTypeAction,
         getOrganiationPhotoAction,
         saveOrganiationPhotoAction,
-        deleteOrganiationPhotoAction
+        deleteOrganiationPhotoAction,
+        deleteOrgContact
     }, dispatch);
 
 }

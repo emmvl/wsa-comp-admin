@@ -22,11 +22,12 @@ function regCompetitionListDeleteAction(competitionId) {
 }
 
 /////get the competition fees all the data in one API
-function getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration) {
+function getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration, sourceModule) {
     const action = {
         type: ApiConstants.API_GET_COMPETITION_FEES_DETAILS_LOAD,
         competitionId: competitionId,
-        hasRegistration
+        hasRegistration,
+        sourceModule: sourceModule							  
     };
     return action;
 }
@@ -34,11 +35,12 @@ function getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration) {
 
 
 /////save the competition fees deatils 
-function saveCompetitionFeesDetailsAction(payload, logoOrgId) {
+function saveCompetitionFeesDetailsAction(payload, logoOrgId, sourceModule) {
     const action = {
         type: ApiConstants.API_SAVE_COMPETITION_FEES_DETAILS_LOAD,
         payload: payload,
-        logoOrgId
+        logoOrgId,
+        sourceModule: sourceModule							  
     };
     return action;
 }
@@ -298,6 +300,14 @@ function onInviteesSearchAction(value, inviteesType){
     return action
 }
 
+//Delete Competition Division from Comp Details
+function removeCompetitionDivisionAction(payload){
+    const action = {
+        type: ApiConstants.API_COMPETITION_DIVISION_DELETE_LOAD,
+        payload: payload
+    };
+    return action;
+}
 export {
     regCompetitionListAction,
     regCompetitionListDeleteAction,
@@ -327,5 +337,6 @@ export {
     clearCompReducerDataAction,
     getDefaultCharity,
     getDefaultCompFeesLogoAction,
-    onInviteesSearchAction
+    onInviteesSearchAction,
+    removeCompetitionDivisionAction								   
 };

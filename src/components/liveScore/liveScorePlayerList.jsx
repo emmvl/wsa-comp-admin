@@ -15,6 +15,8 @@ import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { exportFilesAction } from "../../store/actions/appAction"
 import ValidationConstants from "../../themes/validationConstant";
+import { isArrayNotEmpty, teamListData } from "../../util/helpers";
+
 const { Content } = Layout;
 const { SubMenu } = Menu;
 
@@ -98,13 +100,14 @@ const columns = [
         dataIndex: 'team',
         key: 'team',
         sorter: (a, b) => tableSort(a, b, "team"),
-        render: (team, record) =>
+        render: (team, record) => teamListData(team.id) ?
             <NavLink to={{
                 pathname: "/liveScoreTeamView",
                 state: { tableRecord: record, screenName: 'fromPlayerList' }
             }} >
                 <span class="input-heading-add-another pt-0" >{team.name}</span>
             </NavLink>
+            : <span  >{team.name}</span>
     },
     {
         title: 'Contact No',

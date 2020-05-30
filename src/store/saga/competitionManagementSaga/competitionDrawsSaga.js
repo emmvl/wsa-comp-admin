@@ -99,7 +99,8 @@ export function* updateCompetitionDraws(action) {
                 status: result.status,
                 sourceArray: action.sourceArray,
                 targetArray: action.targetArray,
-                actionType: action.actionType
+                actionType: action.actionType,
+                drawData: action.drawData
             });
             message.success(result.result.data.message)
         } else {
@@ -170,14 +171,14 @@ export function* updateCourtTimingsDrawsAction(action) {
         const result = yield call(CompetitionAxiosApi.updateCourtTimingsDrawsAction, action.data);
 
         if (result.status === 1) {
-            console.log(result)
             yield put({
                 type: ApiConstants.API_UPDATE_COMPETITION_DRAWS_COURT_TIMINGS_SUCCESS,
                 result: result.result.data,
                 status: result.status,
                 sourceArray: action.sourceArray,
                 targetArray: action.targetArray,
-                actionType: action.actionType
+                actionType: action.actionType,
+                drawData: action.drawData
             });
             message.success(result.result.data.message)
         } else {
@@ -257,4 +258,69 @@ export function* drawsMatchesListExportSaga(action) {
         yield call(errorSaga, error)
 
     }
+}
+export function* getDivisionSaga(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.getDivisionGradeNameList, action.competitionId);
+        if (result.status === 1) {
+
+            yield put({
+                type: ApiConstants.API_GET_DIVISION_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+
+    }
+}
+
+export function* competitionFixtureSaga(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.getFixtureData, action.yearId, action.competitionId, action.competitionDivisionGradeId);
+        if (result.status === 1) {
+
+            yield put({
+                type: ApiConstants.API_GET_FIXTURE_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+
+    }
+}
+
+//// Update Competition Draws
+
+export function* updateCompetitionFixtures(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.updateFixture, action.data);
+
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_UPDATE_COMPETITION_FIXTURE_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+                sourceArray: action.sourceArray,
+                targetArray: action.targetArray,
+                data: action.data
+            });
+            message.success(result.result.data.message)
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+
+    }
+
+
+
 }

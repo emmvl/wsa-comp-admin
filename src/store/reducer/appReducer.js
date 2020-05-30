@@ -434,7 +434,13 @@ function appState(state = initialState, action) {
 
 
     case ApiConstants.CLEAR_OWN_COMPETITION_DATA:
-      state.own_CompetitionArr = []
+
+      if (action.key == "participate_CompetitionArr") {
+        state.participate_CompetitionArr = []
+      }
+      else {
+        state.own_CompetitionArr = []
+      }
       return { ...state }
 
     case ApiConstants.CLEAR_FILTER_SEARCH_VENUE:

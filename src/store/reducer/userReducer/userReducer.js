@@ -301,6 +301,9 @@ function userReducer(state = initialState, action) {
                 userDashboardTextualList: textualData.users,
                 userDashboardTextualPage: textualData.page ? textualData.page.currentPage : 1,
                 userDashboardTextualTotalCount: textualData.page.totalCount,
+                competitions:isArrayNotEmpty(textualData.competitions) ? textualData.competitions : [],
+                organisations: isArrayNotEmpty(textualData.organisations) ? textualData.organisations : [],
+                roles: isArrayNotEmpty(textualData.roles) ? textualData.roles : [],
                 status: action.status
             };
         case ApiConstants.API_USER_MODULE_PERSONAL_DETAIL_LOAD:
@@ -477,6 +480,26 @@ function userReducer(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
+                status: action.status,
+                error: null
+            };
+        case ApiConstants.API_DELETE_ORG_CONTACT_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_DELETE_ORG_CONTACT_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
+        case ApiConstants.API_EXPORT_ORG_REG_QUESTIONS_LOAD:
+            return { ...state, onExpOrgRegQuesLoad: true };
+
+        case ApiConstants.API_EXPORT_ORG_REG_QUESTIONS_SUCCESS:
+            return {
+                ...state,
+                onExpOrgRegQuesLoad: false,
                 status: action.status,
                 error: null
             };
