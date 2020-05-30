@@ -13,7 +13,7 @@ import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import history from "../../util/history";
 import { exportFilesAction } from "../../store/actions/appAction"
 
-import { isArrayNotEmpty } from "../../util/helpers";
+import { isArrayNotEmpty, teamListData } from "../../util/helpers";
 const { Content } = Layout;
 
 
@@ -37,14 +37,15 @@ const columns = [
         dataIndex: 'name',
         key: 'name',
         sorter: (a, b) => tableSort(a, b, "name"),
-        render: (name, record) =>
+        render: (name, record) => teamListData(record.id) ?
 
             <NavLink to={{
                 pathname: "/liveScoreTeamView",
                 state: { tableRecord: record, screenName: 'fromTeamList' }
             }} >
-                <span className="input-heading-add-another pt-0">{name}</span>
-            </NavLink>,
+                <span className="input-heading-add-another pt-0">{record.name}</span>
+            </NavLink> :
+            <span >{name}</span>
     },
     {
         title: 'Team Alias Name',

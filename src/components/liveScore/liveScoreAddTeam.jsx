@@ -29,13 +29,14 @@ import {
     liveScoreGetDivision,
     liveScoreGetaffilate,
     liveAddNewTeam,
-    liveScoreGetTeamDataAction
+    liveScoreGetTeamDataAction 
 } from '../../store/actions/LiveScoreAction/liveScoreTeamAction';
 import Loader from '../../customComponents/loader'
 // import LoaderImg from 'react-loader-spinner'
 import { setTimeout } from "timers";
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import ImageLoader from '../../customComponents/ImageLoader'
+import { isArrayNotEmpty ,captializedString} from '../../util/helpers';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -177,24 +178,30 @@ class LiveScoreAddTeam extends Component {
     ////////form content view
     contentView = (getFieldDecorator) => {
         const { teamManagerData, affilateList, divisionList, managerType } = this.props.liveScoreTeamState
+        let name = teamManagerData.name
+        let alias = teamManagerData.alias
+        console.log(name,alias,"dataaa") 
         return (
             <div className="content-view pt-4">
                 <Form.Item>
-                    {getFieldDecorator('teamName', {
+                    {getFieldDecorator('teamName', {normalize: (input) => captializedString(input),
                         rules: [{ required: true, message: ValidationConstants.teamName }],
                     })(
                         <InputWithHead
-                            required={"required-field pt-0 pb-0"}
                             heading={AppConstants.teamName}
                             placeholder={AppConstants.enterTeamName}
-                            name={'teamName'}
+                            name={'teamName'} 
                             onChange={(event) => {
-                                this.props.liveScoreAddTeamform({ key: 'name', data: event.target.value })
+                                this.props.liveScoreAddTeamform({ key: 'name',data:captializedString( event.target.value)  })
                             }
                             }
-                            value={teamManagerData.name}
+                            value={captializedString(name)}
                         />
                     )}
+
+{/* var x="ebe";
+if(x[0].charCodeAt()>=97)
+    x[0]=x[0].toUpperCase(); */}
 
                 </Form.Item>
                 {/* <Form.Item>
@@ -207,10 +214,10 @@ class LiveScoreAddTeam extends Component {
                     placeholder={"please Enter Team Alias"}
                     name={'teamAlias'}
                     onChange={(event) => {
-                        this.props.liveScoreAddTeamform({ key: 'alias', data: event.target.value })
+                        this.props.liveScoreAddTeamform({ key: 'alias', data:captializedString( event.target.value)  })
                     }
                     }
-                    value={teamManagerData.alias}
+                    value={alias}
                 />
                 {/* )}
 
@@ -426,7 +433,7 @@ class LiveScoreAddTeam extends Component {
                 <div className="row" >
                     <div className="col-sm" >
                         <Form.Item>
-                            {getFieldDecorator('firstName', {
+                        {getFieldDecorator('firstName', {normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(<InputWithHead
                                 required={"required-field pt-0 pb-0"}
@@ -434,7 +441,7 @@ class LiveScoreAddTeam extends Component {
                                 placeholder={AppConstants.enter_firstName}
                                 name={'firstName'}
                                 onChange={(event) => {
-                                    this.props.liveScoreAddTeamform({ key: 'firstName', data: event.target.value })
+                                    this.props.liveScoreAddTeamform({ key: 'firstName', data:captializedString( event.target.value) })
 
                                 }}
                                 value={teamManagerData.firstName}
@@ -445,7 +452,7 @@ class LiveScoreAddTeam extends Component {
                     </div>
                     <div className="col-sm" >
                         <Form.Item>
-                            {getFieldDecorator('lastName', {
+                        {getFieldDecorator('lastName', { normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
@@ -454,7 +461,7 @@ class LiveScoreAddTeam extends Component {
                                     placeholder={AppConstants.enterLastName}
                                     name={'lastName'}
                                     onChange={(event) => {
-                                        this.props.liveScoreAddTeamform({ key: 'lastName', data: event.target.value })
+                                        this.props.liveScoreAddTeamform({ key: 'lastName',data:captializedString( event.target.value) })
                                     }}
                                     value={teamManagerData.lastName}
                                 />

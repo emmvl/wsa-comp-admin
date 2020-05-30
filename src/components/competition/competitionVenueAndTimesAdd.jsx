@@ -9,7 +9,7 @@ import {
     Checkbox,
     TimePicker,
     message,
-    Form
+    Form,
 } from "antd";
 import "./competition.css";
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -29,7 +29,8 @@ import history from '../../util/history'
 import ValidationConstants from "../../themes/validationConstant";
 import AppImages from "../../themes/appImages";
 import CSVReader from 'react-csv-reader'
-import { deepCopyFunction } from '../../util/helpers';
+import { deepCopyFunction, captializedString } from '../../util/helpers';
+import Tooltip from 'react-png-tooltip'
 
 
 const { Header, Footer, Content } = Layout;
@@ -57,6 +58,7 @@ class CompetitionVenueAndTimesAdd extends Component {
             csvData: null,
             loading: false,
             screenHeader: "",
+            hover: false,
             courtColumns: [
                 {
                     title: "Court Numbers",
@@ -97,23 +99,42 @@ class CompetitionVenueAndTimesAdd extends Component {
                     title: "Longitude",
                     dataIndex: "lat",
                     key: "lat",
-                    render: (lat, record, index) => {
-                        const { getFieldDecorator } = this.props.form;
+                    // Sorter: true,
+                    filterDropdown: true,
+                    filterIcon: () => {
                         return (
 
-                            <Form.Item >
-                                {getFieldDecorator(`lat${index}`, {
-                                    rules: [{ required: true, message: ValidationConstants.courtField[1] }],
-                                })(
-                                    <Input
-                                        className="input-inside-table-venue-court"
-                                        onChange={(lat) => this.props.updateVenuAndTimeDataAction(lat.target.value, index, 'lat', 'courtData')}
-                                        setFieldsValue={lat}
-                                        placeholder={'Longitude'}
+                            <Tooltip placement="top" background='#ff8237'>
+                                <span>{AppConstants.LatitudeMsg}</span>
+                            </Tooltip>
 
-                                    />
-                                )}
-                            </Form.Item>
+
+                        );
+                    },
+
+                    render: (lat, record, index) => {
+                        const { getFieldDecorator } = this.props.form;
+                        console.log(index, 'tooltipindex')
+                        return (
+
+                            // <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', height: index > 0 ? 0 : 150 }}>
+                            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
+
+                                <Form.Item >
+                                    {getFieldDecorator(`lat${index}`, {
+                                        rules: [{ required: true, message: ValidationConstants.courtField[1] }],
+                                    })(
+                                        <Input
+                                            className="input-inside-table-venue-court"
+                                            onChange={(lat) => this.props.updateVenuAndTimeDataAction(lat.target.value, index, 'lat', 'courtData')}
+                                            setFieldsValue={lat}
+                                            placeholder={'Longitude'}
+
+                                        />
+                                    )}
+                                </Form.Item>
+
+                            </div>
                         )
                     }
                 },
@@ -121,36 +142,60 @@ class CompetitionVenueAndTimesAdd extends Component {
                     title: "Latitude",
                     dataIndex: "lng",
                     key: "lng",
+                    filterDropdown: true,
+                    filterIcon: () => {
+                        return (
+
+                            <Tooltip placement="top" background='#ff8237'>
+                                <span>{AppConstants.LatitudeMsg}</span>
+                            </Tooltip>
+
+                        );
+                    },
                     render: (lng, record, index) => {
                         const { getFieldDecorator } = this.props.form;
                         return (
-                            <Form.Item >
-                                {getFieldDecorator(`lng${index}`, {
-                                    rules: [{ required: true, message: ValidationConstants.courtField[2] }],
-                                })(
-                                    <Input className="input-inside-table-venue-court"
-                                        onChange={(lng) => this.props.updateVenuAndTimeDataAction(lng.target.value, index, 'lng', 'courtData')}
-                                        setFieldsValue={lng}
-                                        placeholder={'Latitude'}
-                                    />
-                                )}
-                            </Form.Item>
+                            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
+                                <Form.Item >
+                                    {getFieldDecorator(`lng${index}`, {
+                                        rules: [{ required: true, message: ValidationConstants.courtField[2] }],
+                                    })(
+                                        <Input className="input-inside-table-venue-court"
+                                            onChange={(lng) => this.props.updateVenuAndTimeDataAction(lng.target.value, index, 'lng', 'courtData')}
+                                            setFieldsValue={lng}
+                                            placeholder={'Latitude'}
+                                        />
+                                    )}
+                                </Form.Item>
+
+                            </div>
                         )
                     }
                 },
                 {
-                    title: "Override Venue Timeslots?",
+                    // title: "Override Venue Timeslots?",
+                    title: <span >Override Venue Timeslots?</span>,
                     dataIndex: "overideSlot",
                     key: "overideSlot",
-                    width: 200,
+                    width: "22%",
+                    filterDropdown: true,
+                    filterIcon: () => {
+                        return (
+
+                            <Tooltip background='#ff8237'>
+                                {AppConstants.overRideSlotMsg}
+                            </Tooltip>
+
+                        );
+                    },
                     render: (overideSlot, record, index) => (
-                        <div>
-                            <Checkbox
-                                className="single-checkbox mt-1 d-flex justify-content-center"
-                                defaultChecked={overideSlot}
-                                onChange={e => this.overideVenueslotOnchange(e, index)}
-                            ></Checkbox>
-                        </div>
+                        // <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
+                        <Checkbox
+                            className="single-checkbox mt-1 d-flex justify-content-center"
+                            defaultChecked={overideSlot}
+                            onChange={e => this.overideVenueslotOnchange(e, index)}
+                        ></Checkbox>
+                        // </div>
                     )
                 },
                 {
@@ -178,6 +223,7 @@ class CompetitionVenueAndTimesAdd extends Component {
         this.props.getOrganisationAction()
 
     }
+
 
 
     removeTableObj(clear, record, index) {
@@ -385,7 +431,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                             required={"required-field pt-0 pb-0"}
                             heading={AppConstants.name}
                             placeholder={AppConstants.name}
-                            onChange={(name) => this.props.updateVenuAndTimeDataAction(name.target.value, 'Venue', 'name')}
+                            onChange={(name) => this.props.updateVenuAndTimeDataAction(captializedString(name.target.value), 'Venue', 'name')}
                             setFieldsValue={venuData.name}
                         />
                     )}
@@ -400,7 +446,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                             disabled={this.state.isUsed}
                             placeholder={AppConstants.short_Name}
                             maxLength={4}
-                            onChange={(name) => this.props.updateVenuAndTimeDataAction(name.target.value, 'Venue', 'shortName')}
+                            onChange={(name) => this.props.updateVenuAndTimeDataAction(captializedString(name.target.value), 'Venue', 'shortName')}
                             setFieldsValue={venuData.shortName}
                         />
                     )}
@@ -595,15 +641,33 @@ class CompetitionVenueAndTimesAdd extends Component {
         )
     }
 
+    handleMouseIn() {
+        this.setState({ hover: true })
+    }
+
+    handleMouseOut() {
+        this.setState({ hover: false })
+    }
+
     ///game day view
     gameDayView = (getFieldDecorator) => {
         const { gameDays } = this.props.venueTimeState.venuData
         return (
             <div className="fees-view pt-5">
-                <span className="form-heading">
-                    {AppConstants.game_Days}
-                    <span className="required-field" style={{ fontSize: "14px" }}></span>
-                </span>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
+                    <span className="form-heading">
+                        {AppConstants.game_Days}
+                        <span className="required-field" style={{ fontSize: "14px" }}></span>
+                    </span>
+
+                    <div style={{ marginTop: -15, }}>
+                        <Tooltip background='#ff8237'>
+                            {AppConstants.gameDayMsg}
+                        </Tooltip>
+                    </div>
+
+                </div>
+
                 <div className="fluid-width">
                     {/* {this.gameData()} */}
                     {gameDays.map((item, index) => {
@@ -709,9 +773,16 @@ class CompetitionVenueAndTimesAdd extends Component {
         return (
             <div className="fees-view pt-5">
                 <div style={{ display: 'flex' }}>
-                    <span className="form-heading">
-                        {AppConstants.courts} <span className="required-field" style={{ fontSize: "14px", paddingTop: '5px' }}></span>
-                    </span>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', }}>
+                        <span className="form-heading">
+                            {AppConstants.courts} <span className="required-field" style={{ fontSize: "14px", paddingTop: '5px' }}></span>
+                        </span>
+                        <div style={{ marginTop: -15, }}>
+                            <Tooltip background='#ff8237'>
+                                {AppConstants.courtsMsg}
+                            </Tooltip>
+                        </div>
+                    </div>
                     <Button className="primary-add-comp-form" type="primary" style={{ marginLeft: 'auto' }}>
                         <div className="row">
                             <div className="col-sm">

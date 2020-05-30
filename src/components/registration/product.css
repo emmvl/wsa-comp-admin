@@ -534,6 +534,7 @@
   flex-direction: row;
   justify-content: flex-end;
   align-items: flex-end;
+  cursor: pointer;
 }
 
 .delete-image-timeSlot-view {
@@ -663,6 +664,28 @@ display: flex;
 flex-direction: column;
 justify-content: center;
 align-items: flex-end;
+}
+
+.charity-invoice-heading {
+  display: flex;
+  align-content: flex-start;
+  font-size: 16px;
+  color: var(--app-4c4c6d);
+  font-weight: 500;
+  font-family: inter-bold;
+}
+
+.charity-invoice-div{
+  display: flex;
+  justify-content: flex-start;
+}
+
+.roundUpDescription-text{
+  font-size: 13px;
+  color: var(--app-4c4c6d);
+  font-weight: 500;
+  font-family: inter;
+  padding-left: 35px;
 }
 
 @media (max-width: 767px) {

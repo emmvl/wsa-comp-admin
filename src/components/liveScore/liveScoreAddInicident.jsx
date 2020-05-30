@@ -23,7 +23,10 @@ import { liveScoreUpdateIncident, liveScoreClearIncident } from '../../store/act
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import history from "../../util/history";
+import {  captializedString } from '../../util/helpers';
+
 const { Footer, Content, Header } = Layout;
+
 const { TextArea } = Input;
 class LiveScoreAddIncident extends Component {
     constructor(props) {
@@ -211,10 +214,11 @@ class LiveScoreAddIncident extends Component {
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.description} />
                         <TextArea allowClear
-                            onChange={(event) => this.props.liveScoreUpdateIncident(event.target.value, "description")}
+                               onChange={(event) => this.props.liveScoreUpdateIncident(captializedString(event.target.value), "description")}
                             // dangerouslySetInnerHTML={{ _html: editData.body }}
                             // dangerouslySetInnerHTML={{ __html: editData.body }}
                             // value={this.html2text(editData.body)}
+                            value={incidentData.description}
                             name={'newsTitle'}
                         />
                     </div>

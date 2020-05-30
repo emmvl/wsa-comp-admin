@@ -1028,10 +1028,22 @@ const AppConstants = {
   addCoach: "Add Coach",
   exportRegQuestion: "Reg. Form Questions",
   noDataAvailable: "No Data Available",
+  recordUmpire: "Record Umpire",
   deleteDivision: "Delete Competition Division",
   changeDivision: "Change Division",
   action: "Action",
   competitionDivisionValidation: "If there are any players graded to this division, they will be unassigned.",
+
+  //Add Venue ToolTip Messages
+
+  LatitudeMsg:`'1. Go to google maps https://www.google.com/maps\n\n'
+  2. Click on satellite view.\n\n'
+  3. Search for your venue.\n\n
+  4. Click and drop a pin on the centre of the court then copy and paste both the Longitude and Latitude.'`,
+
+  overRideSlotMsg:'Only click if the Court has different availability to the Venue ie. Court 1 is only available for matches from 9am but the other courts are free from 8am',
+  gameDayMsg :'Add the days of the week, matches can be played at this venue. Click + Add Day.',
+  courtsMsg:'Add the Courts at this venue. For effective use of the Live Scoring App please add Longitude and Latitude of the Court.'
 };
 
 export default AppConstants;

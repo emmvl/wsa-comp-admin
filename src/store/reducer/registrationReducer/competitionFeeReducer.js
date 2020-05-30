@@ -1657,10 +1657,10 @@ function competitionFees(state = initialState, action) {
             let currentOrganisationId = orgData ? orgData.organisationId : 0
             if (action.keyAction == "add") {
                 const newObj = {
-                    "competitionMembershipProductTypeId": null,
+                    "competitionMembershipProductTypeId": [],
                     "competitionTypeDiscountId": 0,
-                    "membershipProductUniqueKey": null,
-                    "competitionTypeDiscountTypeRefId": 0,
+                    "membershipProductUniqueKey": [],
+                    "competitionTypeDiscountTypeRefId": [],
                     "amount": "",
                     "description": '',
                     "availableFrom": null,

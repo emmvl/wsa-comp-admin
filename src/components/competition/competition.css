@@ -448,6 +448,61 @@ a.collapsed i {
   width: 75px;
 }
 
+.Tooltip_Wrapper__3AlJ0 svg {
+  cursor: pointer;
+  margin-left: 5px;
+  height: 15px;
+  width: 15px;
+}
+
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  overflow: visible;
+  -webkit-overflow-scrolling: touch;
+}
+
+
+.ant-table-empty .ant-table-body {
+  /* overflow-x: auto !important; */
+  /* overflow-y: hidden !important; */
+  overflow: visible !important;
+}
+
+.Content_Content__1CE8z {
+  overflow-wrap: break-word;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.25em;
+  color: inherit;
+  margin: 0px;
+  cursor: auto;
+  background-color: white
+}
+
+.Content_Container__xhjD8 {
+  position: absolute;
+  z-index: 5;
+  padding: 12px 32px 12px 12px;
+  display: block;
+  width: 380px;
+  max-width: 80vw;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px;
+  border: 1px solid inherit;
+  border-radius: 10px !important;
+  background: inherit;
+  color: inherit;
+  border-image: initial;
+  background-color: white !important;
+  margin-top: 4px
+}
+
+.ant-table-thead > tr > th .anticon-filter, .ant-table-thead > tr > th .ant-table-filter-icon {
+  width: 0px;
+}
+
+
 .fixture-huge-sr {
   height: 106px !important;
   line-height: 106px !important;

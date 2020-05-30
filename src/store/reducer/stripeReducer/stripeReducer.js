@@ -19,6 +19,9 @@ const initialState = {
     stripeTransactionPayoutListTotalCount: 1,
     stripeTransactionPayoutListPage: 1,
     getInvoicedata: [],
+    charityRoundUpFilter: [],
+    subTotalFees:0,
+    subTotalGst:0,
 }
 
 
@@ -32,14 +35,58 @@ function getCharityRoundUpArray(allData) {
         let charityObj = {
             competitionId: feesAllData[i].competitionDetail.competitionId,
             competitionName: feesAllData[i].competitionDetail.competitionName,
-            charityTitle: feesAllData[i].charityDetail[0].roundUpName,
-            charityDetail: feesAllData[i].charityDetail[0],
+            charityTitle: isArrayNotEmpty(feesAllData[i].charityDetail) ? feesAllData[i].charityDetail[0].roundUpName : "N/A",
+            roundUpDescription: isArrayNotEmpty(feesAllData[i].charityDetail) ? feesAllData[i].charityDetail[0].roundUpDescription : "N/A",
+            charityDetail: isArrayNotEmpty(feesAllData[i].charityDetail) ? feesAllData[i].charityDetail : [],
         }
-        getCharityRoundUpArray.push(charityObj)
+        let competitionIdIndex = getCharityRoundUpArray.findIndex(x => x.competitionId == feesAllData[i].competitionDetail.competitionId)
+        if (competitionIdIndex === -1) {
+            getCharityRoundUpArray.push(charityObj)
+        }
+
     }
+    let charityNoneObject = {
+        competitionId: 0,
+        competitionName: "None",
+        charityTitle: "None",
+        roundUpDescription: "",
+        charityDetail: [],
+    }
+    getCharityRoundUpArray.push(charityNoneObject)
     console.log("getCharityRoundUpArray", getCharityRoundUpArray)
     return getCharityRoundUpArray
 }
+
+//for calculating subtotal 
+function calculateSubTotal(allData) {
+    let fees_All_Data = allData[0].fees
+    console.log("feesAllData", fees_All_Data)
+    let resultData = {
+        invoiceSubtotal: 0,
+        invoiceGstTotal: 0
+    }
+    for (let i in fees_All_Data) {
+
+        if (fees_All_Data[i].totalAmount.affiliateFees && fees_All_Data[i].totalAmount.affiliateGst) {
+            resultData.invoiceSubtotal = Number(resultData.invoiceSubtotal) + Number(fees_All_Data[i].totalAmount.affiliateFees) +
+                Number(fees_All_Data[i].totalAmount.competitionFees) + Number(fees_All_Data[i].totalAmount.membershipFees)
+
+            resultData.invoiceGstTotal = Number(resultData.invoiceGstTotal) + Number(fees_All_Data[i].totalAmount.affiliateGst) +
+                Number(fees_All_Data[i].totalAmount.competitionGst) + Number(fees_All_Data[i].totalAmount.membershipGst)
+        }
+        else {
+            resultData.invoiceSubtotal = Number(resultData.invoiceSubtotal) +
+                Number(fees_All_Data[i].totalAmount.competitionFees) + Number(fees_All_Data[i].totalAmount.membershipFees)
+
+            resultData.invoiceGstTotal = Number(resultData.invoiceGstTotal) +
+                Number(fees_All_Data[i].totalAmount.competitionGst) + Number(fees_All_Data[i].totalAmount.membershipGst)
+        }
+
+    }
+    return resultData
+}
+
+
 
 
 function stripe(state = initialState, action) {
@@ -176,11 +223,16 @@ function stripe(state = initialState, action) {
             console.log("getInvoicedata", action.result)
             let invoicedata = isArrayNotEmpty(action.result) ? action.result : []
             let charityRoundUpData = getCharityRoundUpArray(invoicedata)
-            console.log("charityRoundUpData", charityRoundUpData)
+            let calculateSubTotalData = calculateSubTotal(invoicedata)
+            console.log("calculateSubTotalData", calculateSubTotalData)
+            state.subTotalFees=calculateSubTotalData.invoiceSubtotal
+            state.subTotalGst=calculateSubTotalData.invoiceGstTotal
+            state.charityRoundUpFilter = charityRoundUpData
+            state.getInvoicedata = action.result
+
             return {
                 ...state,
                 onLoad: false,
-                getInvoicedata: action.result
             }
         default:
             return state;

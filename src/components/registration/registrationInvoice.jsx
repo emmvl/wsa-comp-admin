@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Radio, Select, Descriptions, Input, Divider } from 'antd';
+import { Layout, Radio, Select, Descriptions, Input, Divider, Button } from 'antd';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import Chart from "chart.js";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -11,35 +11,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Loader from '../../customComponents/loader';
 import { isArrayNotEmpty, isNullOrEmptyString } from "../../util/helpers";
+import history from "../../util/history";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { TextArea } = Input
 let totalArray = []
-// let data =
-//     [
-//         {
-//             "id": 1585,
-//             "firstName": "Stella",
-//             "middleName": "",
-//             "lastName": "L",
-//             "suburb": "Wynne",
-//             "street1": "135 County 646 Rd",
-//             "street2": "",
-//             "mCasualFee": "0.00",
-//             "mCasualGst": "0.00",
-//             "mSeasonalFee": "0.00",
-//             "mSeasonalGst": "0.00",
-//             "cSeasonalFees": "15.00",
-//             "cSeasonalGST": "1.50",
-//             "cCasualFees": "14.00",
-//             "cCasualGST": "1.40",
-//             "aSeasonalFees": "14.00",
-//             "aSeasonalGST": "1.40",
-//             "aCasualFees": "13.00",
-//             "aCasualGST": "1.30"
-//         }
-//     ]
+
 
 class RegistrationInvoice extends Component {
     constructor(props) {
@@ -58,14 +36,12 @@ class RegistrationInvoice extends Component {
     componentDidMount() {
         // let competitionId = localStorage.getItem("competitionId")
         // let organisationId = localStorage.getItem('organisationId')
-        this.props.getInvoice("397")
+        this.props.getInvoice("584")
     }
 
 
-
-
-    ///////view for breadcrumb
-    headerView = () => {
+     ///////view for breadcrumb
+     headerView = () => {
         return (
             <Header className="comp-player-grades-header-view container mb-n3" >
                 <div className="row" >
@@ -136,6 +112,164 @@ class RegistrationInvoice extends Component {
         )
     }
 
+
+    membershipProductView = (membershipDetail) => {
+        return (
+            < div className="row" >
+                <div className="invoice-col-View pb-0 pr-0 pl-0" >
+                    <InputWithHead
+                        heading={membershipDetail.mOrganisationName + "-" + membershipDetail.membershipProductName + " Membership Fees"}
+                    />
+                </div>
+
+                <div className="invoice-col-View-30 pb-0 pl-0 pr-0" >
+                    <div>
+                        < div className="row" >
+                            <div className="col-sm invoice-description"  >
+                                <InputWithHead
+                                    // required='justify-content-center'
+                                    heading={("1.00")}
+                                />
+                            </div>
+                            <div className="col-sm invoice-description" >
+                                <InputWithHead
+                                    heading={(Number(membershipDetail.mCasualFee) + Number(membershipDetail.mSeasonalFee)).toFixed(2)}
+                                />
+                            </div>
+                            <div className="col-sm invoice-description" >
+                                <InputWithHead
+                                    heading={'N/A'}
+                                />
+                            </div>
+                            <div className="col-sm invoice-description" >
+                                <InputWithHead
+                                    heading={(Number(membershipDetail.mCasualGst) + Number(membershipDetail.mSeasonalGst)).toFixed(2)}
+                                />
+                            </div>
+                            <div className="col-sm " >
+                                <InputWithHead
+                                    required="invoice"
+                                    heading={(Number(membershipDetail.mCasualFee) + Number(membershipDetail.mSeasonalFee) + Number(membershipDetail.mCasualGst) + Number(membershipDetail.mSeasonalGst)).toFixed(2)}
+                                />
+                            </div>
+                        </ div>
+                    </div>
+                </div>
+                < Divider className="mt-0 mb-0" />
+            </div>
+        )
+    }
+
+
+    competitionOrganiserView = (competitionDetails) => {
+        return (
+            <div className="row" >
+                {/* < Divider className="mt-0 mb-0" /> */}
+                <div className="invoice-col-View pr-0 pl-0" >
+                    {competitionDetails && competitionDetails.cOrganisationName &&
+                        <InputWithHead
+                            heading={competitionDetails.cOrganisationName + " Competition Fees"}
+                        />
+                    }
+                </div>
+                <div className="invoice-col-View-30 pb-0 pl-0 pr-0" >
+                    <div>
+                        <div className="row">
+                            <div className="col-sm invoice-description" >
+                                <InputWithHead
+                                    heading={"1.00"}
+                                />
+                            </div>
+                            <div className="col-sm invoice-description" >
+                                <InputWithHead
+                                    heading={(Number(competitionDetails.cCasualFee) + Number(competitionDetails.cSeasonalFee)).toFixed(2)}
+                                />
+                            </div>
+                            <div className="col-sm invoice-description" >
+                                <InputWithHead
+                                    heading={'N/A'}
+                                />
+                            </div>
+                            <div className="col-sm invoice-description" >
+                                <InputWithHead
+                                    heading={(Number(competitionDetails.cCasualGst) + Number(competitionDetails.cSeasonalGst)).toFixed(2)}
+                                />
+                            </div>
+                            <div className="col-sm" >
+                                <InputWithHead
+                                    required="invoice"
+                                    heading={((Number(competitionDetails.cCasualFee) + Number(competitionDetails.cSeasonalFee)) + (Number(competitionDetails.cCasualGst) + Number(competitionDetails.cSeasonalGst))).toFixed(2)}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                < Divider className="mt-0 mb-0" />
+            </div>
+        )
+    }
+
+
+    competitionAffiliateView = (affiliateDetail) => {
+        return (
+            <div className="row" >
+                <div className="invoice-col-View pb-0 pr-0 pl-0" >
+                    {affiliateDetail && affiliateDetail.aOrganisationName &&
+                        <InputWithHead
+                            heading={affiliateDetail.aOrganisationName + " Competition Fees"}
+                        />
+                    }
+                </div>
+                <div className="invoice-col-View-30 pb-0 pl-0 pr-0" >
+                    <div>
+                        <div className="row">
+                            <div className="col-sm invoice-description" >
+                                {affiliateDetail &&
+                                    <InputWithHead
+                                        heading={"1.00"}
+                                    />}
+                            </div>
+                            <div className="col-sm invoice-description" >
+                                {affiliateDetail &&
+                                    <InputWithHead
+                                        heading={(Number(affiliateDetail.aCasualFee) + Number(affiliateDetail.aSeasonalFee)).toFixed(2)}
+                                    />
+                                }
+                            </div>
+                            <div className="col-sm invoice-description" >
+                                {affiliateDetail &&
+                                    <InputWithHead
+                                        heading={'N/A'}
+                                    />
+                                }
+                            </div>
+                            <div className="col-sm invoice-description" >
+                                {affiliateDetail &&
+                                    < InputWithHead
+                                        heading={(Number(affiliateDetail.aCasualGst) + Number(affiliateDetail.aSeasonalGst)).toFixed(2)}
+                                    />}
+                            </div>
+                            <div className="col-sm" >
+                                {affiliateDetail &&
+                                    < InputWithHead
+                                        required="invoice"
+                                        heading={((Number(affiliateDetail.aCasualFee) + Number(affiliateDetail.aSeasonalFee)) + (Number(affiliateDetail.aCasualGst) + Number(affiliateDetail.aSeasonalGst))).toFixed(2)}
+                                    />}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                {/* {data.length - 1 !== participantIndex && */}
+                < Divider className="mt-0 mb-0" />
+
+                {/* } */}
+            </div>
+        )
+    }
+
+
+
     ////////form content view
     contentView = (result) => {
         let data = result.length > 0 ? result[0].fees : []
@@ -187,6 +321,7 @@ class RegistrationInvoice extends Component {
                     let userDetail = participantItem.userDetail && participantItem.userDetail
                     let membershipDetail = participantItem && participantItem.membershipDetail
                     let affiliateDetail = participantItem && participantItem.affiliateDetail
+                    let totalAmount = participantItem && participantItem.totalAmount
                     return (
                         <div>
                             < div className="invoice-row-view" >
@@ -194,7 +329,14 @@ class RegistrationInvoice extends Component {
                                     <div className="invoice-col-View pb-0 pl-0 pr-0" >
                                         {userDetail && userDetail.firstName &&
                                             <InputWithHead
-                                                heading={"Registration - " + userDetail.firstName + " " + userDetail.lastName}
+                                                heading=
+                                                {competitionDetails.competitionDivisionName ?
+                                                    "Registration - " + membershipDetail.mTypeName + " " + userDetail.firstName + " " + userDetail.lastName
+                                                    + ", " + competitionDetails.competitionName + ", " + competitionDetails.competitionDivisionName
+                                                    :
+                                                    "Registration - " + membershipDetail.mTypeName + " " + userDetail.firstName + " " + userDetail.lastName
+                                                    + ", " + competitionDetails.competitionName
+                                                }
                                             />
                                         }
                                     </div>
@@ -231,144 +373,13 @@ class RegistrationInvoice extends Component {
                                 </div>
                                 < Divider className="mt-0 mb-0" />
                             </ div>
-                            < div className="row" >
-                                <div className="invoice-col-View pb-0 pr-0 pl-0" >
-                                    <InputWithHead
-                                        heading={membershipDetail.mOrganisationName + "-" + membershipDetail.membershipProductName}
-                                    />
-                                </div>
+                            {affiliateDetail &&
+                                this.competitionAffiliateView(affiliateDetail)
+                            }
+                            {this.competitionOrganiserView(competitionDetails)}
+                            {this.membershipProductView(membershipDetail)}
 
-                                <div className="invoice-col-View-30 pb-0 pl-0 pr-0" >
-                                    <div>
-                                        < div className="row" >
-                                            <div className="col-sm invoice-description"  >
-                                                <InputWithHead
-                                                    // required='justify-content-center'
-                                                    heading={("1.00")}
-                                                />
-                                            </div>
-                                            <div className="col-sm invoice-description" >
-                                                <InputWithHead
-                                                    heading={(Number(membershipDetail.mCasualFee) + Number(membershipDetail.mSeasonalFee)).toFixed(2)}
-                                                />
-                                            </div>
-                                            <div className="col-sm invoice-description" >
-                                                <InputWithHead
-                                                    heading={'N/A'}
-                                                />
-                                            </div>
-                                            <div className="col-sm invoice-description" >
-                                                <InputWithHead
-                                                    heading={(Number(membershipDetail.mCasualGst) + Number(membershipDetail.mSeasonalGst)).toFixed(2)}
-                                                />
-                                            </div>
-                                            <div className="col-sm " >
-                                                <InputWithHead
-                                                    required="invoice"
-                                                    heading={(Number(membershipDetail.mCasualFee) + Number(membershipDetail.mSeasonalFee) + Number(membershipDetail.mCasualGst) + Number(membershipDetail.mSeasonalGst)).toFixed(2)}
-                                                />
-                                            </div>
-                                        </ div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="row" >
-                                < Divider className="mt-0 mb-0" />
-                                <div className="invoice-col-View pr-0 pl-0" >
-                                    {competitionDetails && competitionDetails.cOrganisationName &&
-                                        <InputWithHead
-                                            heading={competitionDetails.cOrganisationName}
-                                        />
-                                    }
-                                </div>
-                                <div className="invoice-col-View-30 pb-0 pl-0 pr-0" >
-                                    <div>
-                                        <div className="row">
-                                            <div className="col-sm invoice-description" >
-                                                <InputWithHead
-                                                    heading={"1.00"}
-                                                />
-                                            </div>
-                                            <div className="col-sm invoice-description" >
-                                                <InputWithHead
-                                                    heading={(Number(competitionDetails.cCasualFee) + Number(competitionDetails.cSeasonalFee)).toFixed(2)}
-                                                />
-                                            </div>
-                                            <div className="col-sm invoice-description" >
-                                                <InputWithHead
-                                                    heading={'N/A'}
-                                                />
-                                            </div>
-                                            <div className="col-sm invoice-description" >
-                                                <InputWithHead
-                                                    heading={(Number(competitionDetails.cCasualGst) + Number(competitionDetails.cSeasonalGst)).toFixed(2)}
-                                                />
-                                            </div>
-                                            <div className="col-sm" >
-                                                <InputWithHead
-                                                    required="invoice"
-                                                    heading={((Number(competitionDetails.cCasualFee) + Number(competitionDetails.cSeasonalFee)) + (Number(competitionDetails.cCasualGst) + Number(competitionDetails.cSeasonalGst))).toFixed(2)}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                < Divider className="mt-0 mb-0" />
-                            </div>
-                            <div className="row" >
-                                <div className="invoice-col-View pb-0 pr-0 pl-0" >
-                                    {affiliateDetail && affiliateDetail.aOrganisationName &&
-                                        <InputWithHead
-                                            heading={affiliateDetail.aOrganisationName}
-                                        />
-                                    }
-                                </div>
-                                <div className="invoice-col-View-30 pb-0 pl-0 pr-0" >
-                                    <div>
-                                        <div className="row">
-                                            <div className="col-sm invoice-description" >
-                                                {affiliateDetail &&
-                                                    <InputWithHead
-                                                        heading={"1.00"}
-                                                    />}
-                                            </div>
-                                            <div className="col-sm invoice-description" >
-                                                {affiliateDetail &&
-                                                    <InputWithHead
-                                                        heading={(Number(affiliateDetail.aCasualFee) + Number(affiliateDetail.aSeasonalFee)).toFixed(2)}
-                                                    />
-                                                }
-                                            </div>
-                                            <div className="col-sm invoice-description" >
-                                                {affiliateDetail &&
-                                                    <InputWithHead
-                                                        heading={'N/A'}
-                                                    />
-                                                }
-                                            </div>
-                                            <div className="col-sm invoice-description" >
-                                                {affiliateDetail &&
-                                                    < InputWithHead
-                                                        heading={(Number(affiliateDetail.aCasualGst) + Number(affiliateDetail.aSeasonalGst)).toFixed(2)}
-                                                    />}
-                                            </div>
-                                            <div className="col-sm" >
-                                                {affiliateDetail &&
-                                                    < InputWithHead
-                                                        required="invoice"
-                                                        heading={((Number(affiliateDetail.aCasualFee) + Number(affiliateDetail.aSeasonalFee)) + (Number(affiliateDetail.aCasualGst) + Number(affiliateDetail.aSeasonalGst))).toFixed(2)}
-                                                    />}
-                                            </div>
 
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* {data.length - 1 !== participantIndex && */}
-                                < Divider className="mt-0 mb-0" />
-
-                                {/* } */}
-                            </div>
                             <div className="d-flex row d-flex justify-content-end" >
                                 <div className="invoice-total justify-content-end">
                                     <InputWithHead
@@ -378,7 +389,7 @@ class RegistrationInvoice extends Component {
                                 <div className="invoice-total-Amount">
                                     <InputWithHead
                                         required="invoice"
-                                        heading={"$" + "150"}
+                                        heading={"$" + totalAmount ? (totalAmount.totalSum).toFixed(2) : "N/A"}
                                     />
                                 </div>
                                 {data.length - 1 !== participantIndex &&
@@ -400,84 +411,48 @@ class RegistrationInvoice extends Component {
         )
     }
 
-    subTotal = (data) => {
-        let totalvalueArray = []
-        let totalValue = 0
-        if (data.length > 0) {
-            for (let a in data) {
-                let membership = data[a].membership
-                let competitionFees = data[a].competitionOrganiser.fees
-                let affilateFees = data[a].affiliate && data[a].affiliate.fees
-                for (let i in membership) {
-                    let fees = membership[i].membershipProductTypes
-                    for (let j in fees) {
-                        totalvalueArray.push(Number(fees[j].mCasualFee + fees[j].mSeasonalFee))
-                    }
-                }
-                for (let k in competitionFees) {
-                    totalvalueArray.push(Number(competitionFees[k].cCasualFees + competitionFees[k].cSeasonalFees))
-                }
-                for (let l in affilateFees) {
-                    totalvalueArray.push(Number(affilateFees[l].aCasualFees + affilateFees[l].aSeasonalFees))
-                }
-            }
-            totalValue = totalvalueArray.reduce((a, b) => a + b, 0)
-            return totalValue
-        }
-        return totalValue
-    }
-
-    subGst = (data) => {
-        let totalGstArray = []
-        let totalGst = 0
-        if (data.length > 0) {
-            for (let a in data) {
-                let membership = data[a].membership
-                let competitionFees = data[a].competitionOrganiser.fees
-                let affilateFees = data[a].affiliate.fees
-                for (let i in membership) {
-                    let fees = membership[i].membershipProductTypes
-                    for (let j in fees) {
-                        totalGstArray.push(Number(fees[j].mCasualFee + fees[j].mSeasonalFee))
-                    }
-                }
-                for (let k in competitionFees) {
-                    totalGstArray.push(Number(competitionFees[k].cCasualFees + competitionFees[k].cSeasonalFees))
-                }
-                for (let l in affilateFees) {
-                    totalGstArray.push(Number(affilateFees[l].aCasualFees + affilateFees[l].aSeasonalFees))
-                }
-            }
-            totalGst = totalGstArray.reduce((a, b) => a + b, 0)
-            return totalGst
-        }
-        return totalGst
-
-    }
 
 
-
-    charityRoundUpView = (result) => {
-        let data = isArrayNotEmpty(result) ? result : []
+    charityRoundUpView = () => {
+        let charityRoundUpData = this.props.stripeState.charityRoundUpFilter
+        console.log("charityRoundUpData", charityRoundUpData)
         return (
-            <div>
-                {data && data.length > 0 && data.map((participantItem, participantIndex) => {
-                    let charityRoundUpData = participantItem && isArrayNotEmpty(participantItem.charityDetail) ? participantItem.charityDetail : []
-                    return (
-                        <Radio.Group
-                            className="reg-competition-radio"
-                            // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionTypeRefId")}
-                            value={"item.id"}
-                        >
-                            {charityRoundUpData.length > 0 && charityRoundUpData.map(charityRoundUpItem => {
-                                return (
-                                    <Radio key={charityRoundUpItem.id} value={charityRoundUpItem.id}>{charityRoundUpItem.roundUpName}</Radio>
-                                );
-                            })}
+            <div className="d-flex justify-content-start mb-5">
 
-                        </Radio.Group>
-                    )
-                })}
+                <div  >
+                    <Radio.Group
+                        className="reg-competition-radio"
+                        // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionTypeRefId")}
+                        // value={index == 0 && item.competitionId}
+                        defaultValue={0}
+                    >
+                        {charityRoundUpData.length > 0 && charityRoundUpData.map((item, index) => {
+                            return (
+                                <div>
+                                    <Radio key={item.competitionId} value={item.competitionId}>{item.competitionId == 0 ? (item.charityTitle) : ("Support " + item.charityTitle)}</Radio>
+                                    <div className="d-flex justify-content-start pl-5">
+                                        <span className="roundUpDescription-text">{item.roundUpDescription}</span>
+                                    </div>
+                                    <div className="ml-5">
+                                        <Radio.Group
+                                            className="reg-competition-radio"
+                                        // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionTypeRefId")}
+                                        // value={charityRoundUpIndex == 0 && charityRoundUpItem.charitySelectedId}
+                                        >
+                                            {item.charityDetail.length > 0 && item.charityDetail.map((charityRoundUpItem, charityRoundUpIndex) => {
+                                                return (
+                                                    <Radio key={charityRoundUpItem.charitySelectedId} value={charityRoundUpItem.charitySelectedId}>{charityRoundUpItem.charitySelectedDescription}</Radio>
+                                                )
+                                            })}
+                                        </Radio.Group>
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </Radio.Group>
+
+                </div>
+
             </div>
         )
     }
@@ -487,12 +462,17 @@ class RegistrationInvoice extends Component {
 
 
     totalInvoiceView = (result) => {
-        let data = result.length > 0 ? result : []
-        // let subValue = this.subTotal(data)
-        let subValue = 0
+        let subTotalFees = this.props.stripeState.subTotalFees
+        let subTotalGst = this.props.stripeState.subTotalGst
         return (
-            <div className="content-view ">
+            <div className="content-view">
+                <div className="charity-invoice-div">
+                    <span className="charity-invoice-heading">{"Charity Support"}</span>
+                </div>
                 {this.charityRoundUpView(result)}
+                <div className="charity-invoice-div mb-5">
+                    <span className="charity-invoice-heading">{"Total Charity Amount: $0"}</span>
+                </div>
                 <div className="drop-reverse" >
                     <div className="col-sm ">
                         <TextArea
@@ -511,7 +491,7 @@ class RegistrationInvoice extends Component {
                             </div>
                             <InputWithHead
                                 style={{ display: "flex", justifyContent: 'flex-start' }}
-                                heading={subValue !== 0 ? subValue.toFixed(2) : '0'}
+                                heading={subTotalFees !== 0 ? subTotalFees.toFixed(2) : '0'}
                             />
 
                         </div>
@@ -519,13 +499,13 @@ class RegistrationInvoice extends Component {
                             <div className="col-sm-8" style={{ display: "flex", justifyContent: "flex-end" }}>
                                 <InputWithHead
                                     required={"pr-4 pt-0"}
-                                    heading={"GST 10%"}
+                                    heading={"GST"}
                                 />
                             </div>
                             <InputWithHead
                                 required={"pt-0"}
                                 style={{ display: "flex", justifyContent: 'flex-start' }}
-                                heading={subValue !== 0 ? (subValue / 10).toFixed(2) : '0'}
+                                heading={subTotalGst !== 0 ? subTotalGst.toFixed(2) : '0'}
                             />
 
                         </div>
@@ -547,7 +527,7 @@ class RegistrationInvoice extends Component {
                             <InputWithHead
                                 required={"pt-0"}
                                 style={{ display: "flex", justifyContent: 'flex-start' }}
-                                heading={"AUD" + " " + Number(subValue + subValue / 10).toFixed(2)}
+                                heading={"AUD" + " " + Number(subTotalFees + subTotalGst).toFixed(2)}
                             />
                         </div>
                     </div>
@@ -587,16 +567,26 @@ class RegistrationInvoice extends Component {
         )
     }
 
+    ////navigate to stripe payment screen
+    navigatePaymentScreen = () => {
+        history.push("/checkoutPayment", {
+            registrationId: this.props.location.state ? this.props.location.state.registrationId : null,
+        })
+    }
+
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
-            <div >
-                <div className="comp-player-grades-footer-view">
-                    <div className="row" >
-                        <div className="col-sm" >
-                            <div style={{ display: 'flex', justifyContent: "flex-end" }}>
-                            </div>
-                        </div>
+            <div className="container" >
+                <div className="footer-view">
+                    <div className="comp-buttons-view pt-5 pr-5">
+                        <Button
+                            className="open-reg-button"
+                            htmlType="submit"
+                            type="primary"
+                            onClick={() => this.navigatePaymentScreen()}>
+                            {"Pay"}
+                        </Button>
                     </div>
                 </div>
             </div>
@@ -625,9 +615,7 @@ class RegistrationInvoice extends Component {
                         </div>
                         <Loader visible={this.props.stripeState.onLoad} />
                     </Content>
-                    <Footer>
-                        {this.footerView()}
-                    </Footer>
+                    {this.footerView()}
                 </Layout>
             </div>
 

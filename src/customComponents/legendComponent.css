@@ -10,7 +10,7 @@
     /* float: left; */
     /* clear: both; */
     padding-right: 15px;
-    padding-left: 25px;
+    /* padding-left: 25px; */
 }
 
 .legend-color-text-div{
@@ -19,7 +19,7 @@
     align-items: center;
     white-space: initial;
     word-wrap: break-word;
-    margin-top: 25px;
+    height: 40px;
     width:190px;
 
 }

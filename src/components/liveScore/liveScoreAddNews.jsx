@@ -34,15 +34,13 @@ import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, ContentState, convertFromHTML, } from 'draft-js';
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { getLiveScoreCompetiton } from '../../util/sessionStorage';
-import { isArrayNotEmpty, } from "../../util/helpers";
+import { isArrayNotEmpty, captializedString} from "../../util/helpers";
 import { liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 // import LoaderImg from 'react-loader-spinner'
 import ImageLoader from '../../customComponents/ImageLoader'
 
-
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
-
 
 class LiveScoreAddNews extends Component {
     constructor(props) {
@@ -55,7 +53,7 @@ class LiveScoreAddNews extends Component {
             newsTitle: null,
             author: '',
             managerData: [],
-            scorerData: [],
+            scorerData: [], 
             imageSelection: AppImages.circleImage,
             videoSelection: '',
             date: null,
@@ -105,7 +103,7 @@ class LiveScoreAddNews extends Component {
     }
 
     onChangeEditorData = (event) => {
-
+console.log(event,"event")
         this.props.liveScoreUpdateNewsAction(event, "body")
         // this.setState({ editorState: event })
     }
@@ -387,7 +385,7 @@ class LiveScoreAddNews extends Component {
         return (
             <div className="content-view pt-4">
                 <Form.Item >
-                    {getFieldDecorator('news_Title', {
+                {getFieldDecorator('news_Title', { normalize :(input) => captializedString(input),
                         rules: [{ required: true, message: ValidationConstants.newsValidation[0] }],
                     })(
                         <InputWithHead
@@ -395,7 +393,7 @@ class LiveScoreAddNews extends Component {
                             heading={AppConstants.newsTitle}
                             placeholder={AppConstants.enterNewsTitle}
                             name={'newsTitle'}
-                            onChange={(event) => this.props.liveScoreUpdateNewsAction(event.target.value, "title")}
+                            onChange={(event) => this.props.liveScoreUpdateNewsAction(captializedString(event.target.value), "title")}
                             value={editData.title}
                         />
                     )}
@@ -407,7 +405,7 @@ class LiveScoreAddNews extends Component {
                 {this.EditorView()}
 
                 <Form.Item >
-                    {getFieldDecorator('author', {
+                {getFieldDecorator('author', { normalize :(input) => captializedString(input),
                         rules: [{ required: true, message: ValidationConstants.newsValidation[1] }],
                     })(
                         <InputWithHead
@@ -415,7 +413,7 @@ class LiveScoreAddNews extends Component {
                             heading={AppConstants.author}
                             placeholder={AppConstants.enterAuthor}
                             name={'authorName'}
-                            onChange={(event) => this.props.liveScoreUpdateNewsAction(event.target.value, "author")}
+                            onChange={(event) => this.props.liveScoreUpdateNewsAction(captializedString(event.target.value), "author")}
                         // value={'xyz'}
                         // {editData.author}
                         />

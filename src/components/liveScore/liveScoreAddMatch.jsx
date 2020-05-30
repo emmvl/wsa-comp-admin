@@ -39,7 +39,7 @@ import { formateTime, liveScore_formateDate, formatDateTime } from '../../themes
 import { getVenuesTypeAction } from "../../store/actions/appAction"
 import Loader from '../../customComponents/loader'
 import { getliveScoreScorerList } from '../../store/actions/LiveScoreAction/liveScoreAction';
-import { isArrayNotEmpty } from '../../util/helpers';
+import { isArrayNotEmpty ,captializedString} from '../../util/helpers';
 import { getLiveScoreDivisionList } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction'
 
 const { Footer, Content, Header } = Layout;
@@ -546,7 +546,7 @@ class LiveScoreAddMatch extends Component {
                         <InputWithHead
                             type='text'
                             heading={AppConstants.umpire1Name}
-                            onChange={(e) => { this.props.liveScoreUpdateMatchAction(e.target.value, 'umpire1') }}
+                            onChange={(e) => { this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire1') }}
                             value={addEditMatch.umpire1}
                             placeholder={AppConstants.enterUmpire1name} />
 
@@ -554,7 +554,7 @@ class LiveScoreAddMatch extends Component {
                     <div className="col-sm" >
                         <InputWithHead
                             heading={AppConstants.umpire2Name}
-                            onChange={(e) => { this.props.liveScoreUpdateMatchAction(e.target.value, 'umpire2') }}
+                            onChange={(e) => { this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire2') }}
                             value={addEditMatch.umpire2}
                             placeholder={AppConstants.enterUmpire2name} />
                     </div>

@@ -1039,6 +1039,9 @@ class RegistrationCompetitionFee extends Component {
                 if (item.childDiscounts.length == 0) {
                     item.childDiscounts = null
                 }
+                if (item.competitionTypeDiscountTypeRefId !== 3) {
+                    item.childDiscounts = null
+                }
             }
             item.applyDiscount = parseInt(item.applyDiscount)
             if (item.amount !== null) {
@@ -1099,6 +1102,13 @@ class RegistrationCompetitionFee extends Component {
                 [competitionMembershipProductTypeId]: item.competitionMembershipProductTypeId,
                 [membershipProductUniqueKey]: item.membershipProductUniqueKey,
                 [competitionTypeDiscountTypeRefId]: item.competitionTypeDiscountTypeRefId,
+            })
+            let childDiscounts = item.childDiscounts !== null && item.childDiscounts.length > 0 ? item.childDiscounts : []
+            childDiscounts.map((childItem, childindex) => {
+                let childDiscountPercentageValue = `percentageValue${index} + ${childindex}`
+                this.props.form.setFieldsValue({
+                    [childDiscountPercentageValue]: childItem.percentageValue
+                })
             })
         })
         let divisionData = this.props.competitionFeesState.competitionDivisionsData
@@ -2718,9 +2728,14 @@ class RegistrationCompetitionFee extends Component {
         let discountData = this.props.competitionFeesState.competionDiscountValue.competitionDiscounts[0].discounts
         discountData[index].competitionTypeDiscountTypeRefId = discountType
         this.props.updatedDiscountDataAction(discountData)
+        if (discountType == 3) {
+            if (isArrayNotEmpty(discountData[index].childDiscounts) == false) {
+                this.addRemoveChildDiscount(index, "add", -1)
+            }
+        }
     }
 
-    discountViewChange = (item, index) => {
+    discountViewChange = (item, index, getFieldDecorator) => {
         let childDiscounts = item.childDiscounts !== null && item.childDiscounts.length > 0 ? item.childDiscounts : []
         // let discountsDisable = this.state.permissionState.discountsDisable
         switch (item.competitionTypeDiscountTypeRefId) {
@@ -2751,7 +2766,7 @@ class RegistrationCompetitionFee extends Component {
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                 value={item.amount}
                                 disabled={this.checkDiscountDisable(item.organisationId)}
-                                suffix={item.discountTypeRefId == "2" ? "%" : null}
+                                suffix={JSON.stringify(item.discountTypeRefId) == "2" ? "%" : null}
                                 type="number"
                             />
                         </div>
@@ -2831,7 +2846,7 @@ class RegistrationCompetitionFee extends Component {
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
                                 value={item.amount}
                                 disabled={this.checkDiscountDisable(item.organisationId)}
-                                suffix={item.discountTypeRefId == "2" ? "%" : null}
+                                suffix={JSON.stringify(item.discountTypeRefId) == "2" ? "%" : null}
                                 type="number"
                             />
                         </div>
@@ -2884,21 +2899,29 @@ class RegistrationCompetitionFee extends Component {
                     {childDiscounts.map((childItem, childindex) => (
                         <div className="row">
                             <div className="col-sm-10">
-                                <InputWithHead
-                                    heading={`Child ${childindex + 1}%`}
-                                    placeholder={`Child ${childindex + 1}%`}
-                                    onChange={(e) => this.onChangeChildPercent(e.target.value, index, childindex, childItem)}
-                                    value={childItem.percentageValue}
-                                    disabled={this.checkDiscountDisable(item.organisationId)}
-                                />
+                                <Form.Item  >
+                                    {getFieldDecorator(`percentageValue${index} + ${childindex}`,
+                                        { rules: [{ required: true, message: ValidationConstants.pleaseEnterChildDiscountPercentage }] })(
+                                            <InputWithHead
+                                                heading={`Child ${childindex + 1}%`}
+                                                placeholder={`Child ${childindex + 1}%`}
+                                                onChange={(e) => this.onChangeChildPercent(e.target.value, index, childindex, childItem)}
+                                                // value={childItem.percentageValue}
+                                                disabled={this.checkDiscountDisable(item.organisationId)}
+                                                type={"number"}
+                                            />
+                                        )}
+                                </Form.Item>
                             </div>
-                            <div className="col-sm-2 delete-image-view pb-4"
-                                onClick={() => !this.checkDiscountDisable(item.organisationId) ? this.addRemoveChildDiscount(index, "delete", childindex) : null}>
-                                <span className="user-remove-btn">
-                                    <i className="fa fa-trash-o" aria-hidden="true"></i>
-                                </span>
-                                <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
-                            </div>
+                            {childindex > 0 &&
+                                <div className="col-sm-2 delete-image-view pb-4"
+                                    onClick={() => !this.checkDiscountDisable(item.organisationId) ? this.addRemoveChildDiscount(index, "delete", childindex) : null}>
+                                    <span className="user-remove-btn">
+                                        <i className="fa fa-trash-o" aria-hidden="true"></i>
+                                    </span>
+                                    <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                                </div>
+                            }
                         </div>
                     ))}
                     <span className="input-heading-add-another"
@@ -3025,6 +3048,9 @@ class RegistrationCompetitionFee extends Component {
             discountData[index].childDiscounts.splice(childindex, 1)
         }
         this.props.updatedDiscountDataAction(discountData)
+        if (keyWord == "delete") {
+            this.setDetailsFieldValue()
+        }
     }
 
     ////////onchange apply discount question radio button
@@ -3222,7 +3248,7 @@ class RegistrationCompetitionFee extends Component {
                                     )}
                             </Form.Item>
                         </div>
-                        {this.discountViewChange(item, index)}
+                        {this.discountViewChange(item, index, getFieldDecorator)}
                     </div>
                 ))}
 

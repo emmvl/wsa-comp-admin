@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import history from "../../util/history";
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
-import { isArrayNotEmpty } from "../../util/helpers";
+import { isArrayNotEmpty, captializedString } from "../../util/helpers";
 import Loader from '../../customComponents/loader'
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 import {
@@ -126,7 +126,6 @@ class LiveScoreAddEditCoach extends Component {
         return (
             <div >
                 {this.coachNewRadioBtnView(getFieldDecorator)}
-
             </div>
         )
     }
@@ -136,7 +135,7 @@ class LiveScoreAddEditCoach extends Component {
         return (
             <div className="content-view pb-0 pt-4 row">
                 <span className="applicable-to-heading ml-4">{AppConstants.coach}</span>
-                <Radio.Group
+                <Radio.Group 
                     className="reg-competition-radio"
                     onChange={(e) => this.onButtonChage(e)}
                     value={coachRadioBtn}
@@ -146,7 +145,6 @@ class LiveScoreAddEditCoach extends Component {
                         <Radio value={"existing"}>{AppConstants.existing} </Radio>
                     </div>
                 </Radio.Group>
-
             </div>
         )
     }
@@ -155,8 +153,6 @@ class LiveScoreAddEditCoach extends Component {
         this.setState({ loader: true })
         this.props.liveScoreUpdateCoach(e.target.value, 'coachRadioBtn')
     }
-
-
 
     coachNewRadioBtnView(getFieldDecorator) {
 
@@ -169,14 +165,14 @@ class LiveScoreAddEditCoach extends Component {
                 <div className="row" >
                     <div className="col-sm" >
                         <Form.Item>
-                            {getFieldDecorator(AppConstants.firstName, {
+                        {getFieldDecorator(AppConstants.firstName, { normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.firstName}
                                     placeholder={AppConstants.firstName}
-                                    onChange={(firstName) => this.props.liveScoreUpdateCoach(firstName.target.value, 'firstName')}
+                                    onChange={(firstName) => this.props.liveScoreUpdateCoach(captializedString(firstName.target.value), 'firstName')}
                                     value={coachdata.firstName}
                                 />
                             )}
@@ -185,14 +181,14 @@ class LiveScoreAddEditCoach extends Component {
                     </div>
                     <div className="col-sm" >
                         <Form.Item>
-                            {getFieldDecorator(AppConstants.lastName, {
+                        {getFieldDecorator(AppConstants.lastName, { normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.lastName}
-                                    onChange={(lastName) => this.props.liveScoreUpdateCoach(lastName.target.value, 'lastName')}
+                                    onChange={(lastName) => this.props.liveScoreUpdateCoach(captializedString(lastName.target.value), 'lastName')}
                                     value={coachdata.lastName}
                                 />
                             )}
@@ -386,7 +382,6 @@ class LiveScoreAddEditCoach extends Component {
     onSaveClick = e => {
 
         const { coachdata, teamId, coachRadioBtn, exsitingManagerId } = this.props.liveScoreCoachState
-
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             let body = ''

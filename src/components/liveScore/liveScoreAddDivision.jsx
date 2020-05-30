@@ -13,7 +13,7 @@ import { bindActionCreators } from 'redux';
 import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage';
 import Loader from '../../customComponents/loader'
-
+import { captializedString } from "../../util/helpers"
 const { Footer, Content, Header } = Layout;
 
 class LiveScoreAddDivision extends Component {
@@ -86,13 +86,14 @@ class LiveScoreAddDivision extends Component {
                     <div className="col-sm">
                         <Form.Item>
                             {getFieldDecorator("name", {
+                                normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameisrequired }],
                             })(
                                 <InputWithHead
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.name}
                                     placeholder={AppConstants.name}
-                                    onChange={(name) => this.props.liveScoreUpdateDivisionAction(name.target.value, 'name')}
+                                    onChange={(name) => this.props.liveScoreUpdateDivisionAction(captializedString(name.target.value), 'name')}
                                     value={name} />
                             )}
                         </Form.Item>
@@ -102,14 +103,14 @@ class LiveScoreAddDivision extends Component {
                 <div className="row" >
                     <div className="col-sm">
                         <Form.Item>
-                            {getFieldDecorator("divisionName", {
+                        {getFieldDecorator("divisionName", { normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.divisionNameisrequired }],
                             })(
                                 <InputWithHead
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.divisionName}
                                     placeholder={AppConstants.divisionName}
-                                    onChange={(divisionName) => this.props.liveScoreUpdateDivisionAction(divisionName.target.value, 'divisionName')}
+                                    onChange={(divisionName) => this.props.liveScoreUpdateDivisionAction(captializedString(divisionName.target.value), 'divisionName')}
                                     value={divisionName} />
                             )}
 
@@ -120,7 +121,7 @@ class LiveScoreAddDivision extends Component {
                 <div className="row" >
                     <div className="col-sm" >
                         <Form.Item>
-                            {getFieldDecorator("gradeName", {
+                        {getFieldDecorator("gradeName", { normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.gradeisrequired }],
                             })(
                                 <InputWithHead
@@ -128,7 +129,7 @@ class LiveScoreAddDivision extends Component {
                                     heading={AppConstants.gradeName}
                                     placeholder={AppConstants.gradeName}
                                     maxLength="4"
-                                    onChange={(gradeName) => this.props.liveScoreUpdateDivisionAction(gradeName.target.value, 'gradeName')}
+                                    onChange={(gradeName) => this.props.liveScoreUpdateDivisionAction(captializedString(gradeName.target.value), 'gradeName')}
                                     value={gradeName} />
                             )}
 
@@ -181,7 +182,7 @@ class LiveScoreAddDivision extends Component {
         const { getFieldDecorator } = this.props.form
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.addDivision} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.addDivision} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"9"} />
                 <Layout>
                     <Loader visible={this.props.liveScoreDivisionState.onLoad} />

@@ -20,7 +20,8 @@ import {
     liveScoreManagerFilter,
     liveScoreManagerSearch
 } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
-import { isArrayNotEmpty } from "../../util/helpers";
+import { isArrayNotEmpty,captializedString } from "../../util/helpers";
+
 import Loader from '../../customComponents/loader'
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 
@@ -234,14 +235,14 @@ class LiveScoreAddManager extends Component {
                 <div className="row" >
                     <div className="col-sm" >
                         <Form.Item>
-                            {getFieldDecorator(AppConstants.firstName, {
+                        {getFieldDecorator(AppConstants.firstName, { normalize : (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.firstName}
                                     placeholder={AppConstants.firstName}
-                                    onChange={(firstName) => this.props.liveScoreUpdateManagerDataAction(firstName.target.value, 'firstName')}
+                                    onChange={(firstName) => this.props.liveScoreUpdateManagerDataAction(captializedString(firstName.target.value), 'firstName')}
                                     value={managerData.firstName}
                                 />
                             )}
@@ -250,14 +251,14 @@ class LiveScoreAddManager extends Component {
                     </div>
                     <div className="col-sm" >
                         <Form.Item>
-                            {getFieldDecorator(AppConstants.lastName, {
+                        {getFieldDecorator(AppConstants.lastName, {normalize : (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.lastName}
-                                    onChange={(lastName) => this.props.liveScoreUpdateManagerDataAction(lastName.target.value, 'lastName')}
+                                    onChange={(lastName) => this.props.liveScoreUpdateManagerDataAction(captializedString(lastName.target.value), 'lastName')}
                                     value={managerData.lastName}
                                 />
                             )}
