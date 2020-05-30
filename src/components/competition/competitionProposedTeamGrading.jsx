@@ -220,14 +220,17 @@ const columns = [
                             height="16"
                         />
                     }>
-                    {e.isActive == 1 ?
+                    
+                        { (this_obj.state.divisionId!= null &&  e.isActive == 1) &&
                         <Menu.Item key="1" onClick={() => this_obj.showDeleteConfirm(e, "IsActive", index)}>
                             <span>Delete</span>
-                        </Menu.Item> :
+                        </Menu.Item>
+                        }   
+                        { (this_obj.state.divisionId!= null && e.isActive == 0) && 
                         <Menu.Item key="2" onClick={() => this_obj.showDeleteConfirm(e, "Undelete", index)}>
                             <span>Undelete</span>
-                        </Menu.Item>
-                    }
+                        </Menu.Item>  }
+                    
                      <Menu.Item key="3" onClick={() => this_obj.onClickChangeDivision(e)}>
                           <span>Change Division</span>
                      </Menu.Item>
@@ -264,7 +267,8 @@ class CompetitionProposedTeamGrading extends Component {
             loading: false,
             rowIndex: 0,
             changeDivisionModalVisible: false,
-            divisionLoad: false
+            divisionLoad: false,
+            competitionDivisionId: null
         }
         this_obj = this
         this.props.clearTeamGradingReducerDataAction("finalTeamGrading")
@@ -293,7 +297,7 @@ class CompetitionProposedTeamGrading extends Component {
     handleChangeDivision = (key) =>{
         if(key == "ok"){
             let payload = {
-                competitionDivisionId: this.state.divisionId,
+                competitionDivisionId: this.state.competitionDivisionId,
                 teamId: this.state.teamId,
                 competitionUniqueKey: this.state.firstTimeCompId,
                 organisationUniqueKey: null
@@ -303,7 +307,8 @@ class CompetitionProposedTeamGrading extends Component {
             console.log("payload::" + JSON.stringify(payload));
         }
         this.setState({
-            changeDivisionModalVisible: false, teamId: null
+            changeDivisionModalVisible: false, teamId: null,
+            divisionId: this.state.competitionDivisionId
         })
     }
 
@@ -720,8 +725,8 @@ class CompetitionProposedTeamGrading extends Component {
                             <Select
                                 style={{ minWidth: 120 }}
                                 className="year-select change-division-select"
-                                onChange={(divisionId) => this.setState({divisionId: divisionId})}
-                                value={JSON.parse(JSON.stringify(this.state.divisionId))}>
+                                onChange={(divisionId) => this.setState({competitionDivisionId: divisionId})}
+                                value={JSON.parse(JSON.stringify(this.state.competitionDivisionId))}>
                                 {this.props.registrationState.allDivisionsData.map(item => {
                                 return (
                                     <Option key={"division" + item.competitionMembershipProductDivisionId}
@@ -752,15 +757,18 @@ class CompetitionProposedTeamGrading extends Component {
                                     onClick={() => this.cancelCall()}
                                 >{AppConstants.cancel}
                                 </Button>
-                                <Button className="open-reg-button" style={{ marginRight: '20px' }}
-                                    onClick={() => this.submitApiCall("save")}
-                                    type="primary">{AppConstants.save}
-                                </Button>
-                                {/* {this.state.gradeRefId != -1 ?  */}
-                                <Button className="open-reg-button"
-                                    onClick={() => this.submitApiCall("submit")}
-                                    type="primary">{AppConstants.submit}
-                                </Button>
+                                {this.state.divisionId!= null &&
+                                <div>
+                                    <Button className="open-reg-button" style={{ marginRight: '20px' }}
+                                        onClick={() => this.submitApiCall("save")}
+                                        type="primary">{AppConstants.save}
+                                    </Button>
+                                    {/* {this.state.gradeRefId != -1 ?  */}
+                                    <Button className="open-reg-button"
+                                        onClick={() => this.submitApiCall("submit")}
+                                        type="primary">{AppConstants.submit}
+                                    </Button>
+                                </div>}
                                 {/* : null } */}
 
                                 {/* </NavLink> */}
