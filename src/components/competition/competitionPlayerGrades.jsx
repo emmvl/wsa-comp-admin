@@ -342,13 +342,20 @@ class CompetitionPlayerGrades extends Component {
                 competitionUniqueKey: this.state.firstTimeCompId,
                 organisationUniqueKey: null,
                 competitionDivisionId: this.state.competitionDivisionId,
-                players: []        
+                players: [],
+                teams: []      
             }
     
             let assignedData = this.props.partPlayerGradingState.assignedPartPlayerGradingListData;
 
             if(assignedData!= null && assignedData.length > 0){
                 (assignedData || []).map((team, index) => {
+                    if(team.isChecked){
+                        let obj = {
+                           teamId: team.teamId 
+                        }
+                        res.teams.push(obj);
+                    }
                     (team.players || []).map((item, pIndex) => {
                         if(item.isChecked){
                             let obj = {
