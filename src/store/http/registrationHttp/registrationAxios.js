@@ -352,11 +352,12 @@ let AxiosApi = {
     },
 
     //////get the divisions list on the basis of year and competition
-    async getDivisionsList(yearRefId, competitionId) {
+    async getDivisionsList(yearRefId, competitionId, sourceModule) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let payload = {
-            organisationUniqueKey: organisationUniqueKey
+            organisationUniqueKey: organisationUniqueKey,
+            sourceModule: sourceModule
         }
         var url = `/api/competitionfee/divisionsByCompetition?competitionUniqueKey=${competitionId}&yearRefId=${yearRefId}`;
         return Method.dataPost(url, token, payload);
