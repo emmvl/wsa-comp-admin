@@ -165,6 +165,7 @@ class CompetitionPartPlayerGrades extends Component {
                                     </Dropdown>
                                 </div>
                             </div>
+                            {this.state.divisionId!= null && 
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile">
                                     <NavLink to={{
@@ -185,7 +186,8 @@ class CompetitionPartPlayerGrades extends Component {
                                         </Button>
                                     </NavLink>
                                 </div>
-                            </div>
+                            </div>}
+                            {this.state.divisionId!= null && 
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile">
                                     <NavLink to={{
@@ -206,7 +208,7 @@ class CompetitionPartPlayerGrades extends Component {
                                         </Button>
                                     </NavLink>
                                 </div>
-                            </div>
+                            </div>}
                         </div>
                     </div>
                 </div>
@@ -734,8 +736,10 @@ class CompetitionPartPlayerGrades extends Component {
     ////////for the unassigned teams on the right side of the view port
     unassignedView = () => {
         let unassignedData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData;
-        let colorPosition1
-        let colorPosition2
+        let colorPosition1;
+        let colorPosition2;
+        let divisionData = this.props.registrationState.allDivisionsData.filter(x=>x.competitionMembershipProductDivisionId!= null);
+
         return (
             <div>
                 <Droppable droppableId={'0'}>
@@ -756,12 +760,13 @@ class CompetitionPartPlayerGrades extends Component {
                                             {unassignedData.players.length > 1 ? unassignedData.players.length + " Players" : unassignedData.players.length + " Player"}
                                         </span>
                                     </div>
+                                    {this.state.divisionId!= null &&
                                     <div className="col-sm d-flex justify-content-end">
                                         <Button className="primary-add-comp-form" type="primary" onClick={this.addNewTeam}  >
                                             + {AppConstants.createTeam}
                                         </Button>
 
-                                    </div>
+                                    </div>}
 
                                 </div>
                             </div>
@@ -881,7 +886,7 @@ class CompetitionPartPlayerGrades extends Component {
                                 className="year-select change-division-select"
                                 onChange={(divisionId) => this.setState({competitionDivisionId: divisionId})}
                                 value={JSON.parse(JSON.stringify(this.state.competitionDivisionId))}>
-                                {this.props.registrationState.allDivisionsData.map(item => {
+                                {divisionData.map(item => {
                                 return (
                                     <Option key={"division" + item.competitionMembershipProductDivisionId}
                                         value={item.competitionMembershipProductDivisionId}>
