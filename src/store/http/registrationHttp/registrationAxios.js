@@ -352,9 +352,14 @@ let AxiosApi = {
     },
 
     //////get the divisions list on the basis of year and competition
-    getDivisionsList(yearRefId, competitionId) {
+    async getDivisionsList(yearRefId, competitionId) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        let payload = {
+            organisationUniqueKey: organisationUniqueKey
+        }
         var url = `/api/competitionfee/divisionsByCompetition?competitionUniqueKey=${competitionId}&yearRefId=${yearRefId}`;
-        return Method.dataPost(url, token);
+        return Method.dataPost(url, token, payload);
     },
 
     ///// Get Competition Venue 
