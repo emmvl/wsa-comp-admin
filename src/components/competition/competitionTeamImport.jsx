@@ -77,7 +77,7 @@ class CompetitionTeamImport extends Component {
             if(this.props.partPlayerGradingState.onLoad == false && this.state.loading === true)
             {
                 this.setState({ loading: false });
-                if(!this.props.partPlayerGradingState.error)
+                if(!this.props.partPlayerGradingState.error && this.props.partPlayerGradingState.status == 1)
                 {
                     if(this.state.buttonPressed == "upload")
                     {

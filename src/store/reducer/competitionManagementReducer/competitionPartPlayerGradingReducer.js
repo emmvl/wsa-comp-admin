@@ -299,6 +299,7 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             return {
                 ...state,
                 playerImportData: res.data,
+                status: action.status,
                 onLoad: false,
             }
         case ApiConstants.API_COMPETITION_TEAMS_IMPORT_LOAD:
@@ -309,6 +310,7 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             return {
                 ...state,
                 teamsImportData: resTeams.data,
+                status: action.status,
                 onLoad: false,
             }
 

@@ -1043,7 +1043,9 @@ const AppConstants = {
 
   overRideSlotMsg:'Only click if the Court has different availability to the Venue ie. Court 1 is only available for matches from 9am but the other courts are free from 8am',
   gameDayMsg :'Add the days of the week, matches can be played at this venue. Click + Add Day.',
-  courtsMsg:'Add the Courts at this venue. For effective use of the Live Scoring App please add Longitude and Latitude of the Court.'
+  courtsMsg:'Add the Courts at this venue. For effective use of the Live Scoring App please add Longitude and Latitude of the Court.',
+  affiliateDirectory: "Affiliate Directory",
+
 };
 
 export default AppConstants;

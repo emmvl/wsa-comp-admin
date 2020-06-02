@@ -458,6 +458,11 @@ class InnerHorizontalMenu extends React.Component {
                                     <span >{AppConstants.ourOrganisation}</span>
                                 </NavLink>
                             </Menu.Item>
+                            <Menu.Item key="4">
+                                <NavLink to="/affiliateDirectory" >
+                                    <span >{AppConstants.affiliateDirectory}</span>
+                                </NavLink>
+                            </Menu.Item>
                             {/* <Menu.Item key="3">
                             <NavLink to="/userAffiliateApproveRejectForm" >
                                 <span >{AppConstants.affiliateApproveReject}</span>

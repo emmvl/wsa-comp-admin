@@ -45,6 +45,7 @@ import RegistrationForm from "../components/registration/registrationForm";
 import RegistrationMembershipFee from "../components/registration/registrationMembershipFee";
 import RegistrationCompetitionFee from "../components/registration/registrationCompetitionFee";
 import UserAffiliatesList from "../components/user/userAffiliatesList";
+import AffiliateDirectory from "../components/user/affiliateDirectory";
 import UserAffiliateApproveRejectForm from "../components/user/userAffiliateApproveRejectForm";
 import UserAddAffiliates from "../components/user/userAddAffiliates";
 import UserEditAffiliates from "../components/user/userEditAffiliates";
@@ -310,6 +311,11 @@ class Routes extends React.Component {
           path="/userAffiliatesList"
           component={lazyLoad(UserAffiliatesList)}
         />
+        <PrivateRoute
+          path="/affiliateDirectory"
+          component={lazyLoad(AffiliateDirectory)}
+        />
+
         <PrivateRoute
           path="/userAffiliateApproveRejectForm"
           component={lazyLoad(UserAffiliateApproveRejectForm)}
