@@ -167,6 +167,7 @@ class CompetitionPlayerGrades extends Component {
                                     </Dropdown>
                                 </div>
                             </div>
+                            {this.state.divisionId!= null &&
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile">
                                     <NavLink to={{
@@ -187,7 +188,8 @@ class CompetitionPlayerGrades extends Component {
                                         </Button>
                                     </NavLink>
                                 </div>
-                            </div>
+                            </div>}
+                            {this.state.divisionId!= null && 
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile">
                                     <NavLink to={{
@@ -208,7 +210,7 @@ class CompetitionPlayerGrades extends Component {
                                         </Button>
                                     </NavLink>
                                 </div>
-                            </div>
+                            </div>}
                         </div>
                     </div>
                 </div>
@@ -340,17 +342,25 @@ class CompetitionPlayerGrades extends Component {
                 competitionUniqueKey: this.state.firstTimeCompId,
                 organisationUniqueKey: null,
                 competitionDivisionId: this.state.competitionDivisionId,
-                players: []        
+                players: [],
+                teams: []      
             }
     
             let assignedData = this.props.partPlayerGradingState.assignedPartPlayerGradingListData;
 
             if(assignedData!= null && assignedData.length > 0){
                 (assignedData || []).map((team, index) => {
+                    if(team.isChecked){
+                        let obj = {
+                           teamId: team.teamId 
+                        }
+                        res.teams.push(obj);
+                    }
                     (team.players || []).map((item, pIndex) => {
                         if(item.isChecked){
                             let obj = {
-                                playerId: item.playerId
+                                playerId: item.playerId,
+                                teamId: team.teamId 
                             }
                             res.players.push(obj);
                         }
@@ -741,6 +751,7 @@ class CompetitionPlayerGrades extends Component {
         let unassignedData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData;
         let colorPosition1
         let colorPosition2
+        let divisionData = this.props.registrationState.allDivisionsData.filter(x=>x.competitionMembershipProductDivisionId!= null);
         return (
             <div>
                 <Droppable droppableId={'0'}>
@@ -761,12 +772,13 @@ class CompetitionPlayerGrades extends Component {
                                             {unassignedData.players.length > 1 ? unassignedData.players.length + " Players" : unassignedData.players.length + " Player"}
                                         </span>
                                     </div>
+                                    {this.state.divisionId!= null &&
                                     <div className="col-sm d-flex justify-content-end">
                                         <Button className="primary-add-comp-form" type="primary" onClick={this.addNewTeam}  >
                                             + {AppConstants.createTeam}
                                         </Button>
 
-                                    </div>
+                                    </div> }
 
                                 </div>
                             </div>
@@ -845,8 +857,8 @@ class CompetitionPlayerGrades extends Component {
                     className="add-membership-type-modal"
                     title={AppConstants.addTeam}
                     visible={this.state.visible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
+                    onOk={() =>this.handleOk()}
+                    onCancel={() =>this.handleCancel()}
                 >
                     <InputWithHead
                         required={"pt-0 mt-0"}
@@ -883,7 +895,7 @@ class CompetitionPlayerGrades extends Component {
                                 className="year-select change-division-select"
                                 onChange={(divisionId) => this.setState({competitionDivisionId: divisionId})}
                                 value={JSON.parse(JSON.stringify(this.state.competitionDivisionId))}>
-                                {this.props.registrationState.allDivisionsData.map(item => {
+                                {divisionData.map(item => {
                                 return (
                                     <Option key={"division" + item.competitionMembershipProductDivisionId}
                                         value={item.competitionMembershipProductDivisionId}>

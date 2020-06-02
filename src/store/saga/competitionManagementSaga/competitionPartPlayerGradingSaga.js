@@ -10,6 +10,8 @@ function* failSaga(result) {
     }, 800);
 }
 
+
+
 function* errorSaga(error) {
     yield put({
         type: ApiConstants.API_COMPETITION_PART_PLAYER_GRADING_ERROR,
@@ -177,7 +179,20 @@ export function* importCompetitionPlayer(action) {
                 status: result.status,
             });
         } else {
-            yield call(failSaga, result)
+            let res = JSON.parse(JSON.stringify(result));
+            yield put({ type: ApiConstants.API_COMPETITION_PART_PLAYER_GRADING_FAIL,
+                status: result.status });
+            setTimeout(() => {
+                message.config({
+                    duration: 4,
+                    maxCount: 1
+                })
+                message.error(JSON.stringify(result.result.data.message));
+            }, 800);
+
+            // setTimeout(() => {
+            //     alert(JSON.stringify(result.result.data.message));
+            // }, 800);
         }
     } catch (error) {
         yield call(errorSaga, error)
@@ -194,7 +209,20 @@ export function* importCompetitionTeams(action) {
                 status: result.status,
             });
         } else {
-            yield call(failSaga, result)
+            let res = JSON.parse(JSON.stringify(result));
+            yield put({ type: ApiConstants.API_COMPETITION_PART_PLAYER_GRADING_FAIL,
+                status: result.status});
+            setTimeout(() => {
+                message.config({
+                    duration: 4,
+                    maxCount: 1
+                })
+                message.error(JSON.stringify(result.result.data.message));
+            }, 800);
+
+            // setTimeout(() => {
+            //     alert(JSON.stringify(result.result.data.message));
+            // }, 800);
         }
     } catch (error) {
         yield call(errorSaga, error)

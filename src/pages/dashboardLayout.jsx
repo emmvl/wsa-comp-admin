@@ -298,7 +298,7 @@ class DashboardLayout extends React.Component {
                             }
                           >
                             <div className="user-menu menu-wrap">
-                              <NavLink to="/userGraphicalDashboard">
+                              <NavLink to="/userTextualDashboard">
                                 <span className="icon"></span>
                                 {AppConstants.user}
                               </NavLink>

@@ -156,7 +156,7 @@ const columns = [
         key: 'proposedGradeRefId',
         render: (proposedGradeRefId, record) => (
             record.isDirectRegistration == 0 ?
-                <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>{gradeName(proposedGradeRefId)}</span> : ""
+                <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>{proposedGradeRefId > 0 ? gradeName(proposedGradeRefId) : ''}</span> : ""
         ),
         sorter: (a, b) => tableSort(a, b, "proposedGradeRefId")
 
@@ -246,6 +246,7 @@ class CompetitionProposedTeamGrading extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            sourceModule: "FTG",
             yearRefId: 1,
             divisionId: null,
             gradeRefId: null,
@@ -395,7 +396,7 @@ class CompetitionProposedTeamGrading extends Component {
                 firstTimeCompId: storedCompetitionId,
                 getDataLoading: true
             })
-            this.props.getDivisionsListAction(yearId, storedCompetitionId)
+            this.props.getDivisionsListAction(yearId, storedCompetitionId, this.state.sourceModule)
             // this.props.getCompetitionWithTimeSlots(yearId, storedCompetitionId, 1, 6)
         }
         else {
@@ -422,7 +423,7 @@ class CompetitionProposedTeamGrading extends Component {
                     let competitionId = competitionList[0].competitionId
                     // let competitionId = this.state.firstTimeCompId !== null ? this.state.firstTimeCompId : competitionList[0].competitionId
                     setOwn_competition(competitionId)
-                    this.props.getDivisionsListAction(this.state.yearRefId, competitionId)
+                    this.props.getDivisionsListAction(this.state.yearRefId, competitionId, this.state.sourceModule)
                     this.setState({ firstTimeCompId: competitionId })
                 }
             }
@@ -546,7 +547,7 @@ class CompetitionProposedTeamGrading extends Component {
         this.props.clearTeamGradingReducerDataAction("finalTeamGrading")
         this.props.clearReducerDataAction("allDivisionsData")
         this.setState({ firstTimeCompId: competitionId, divisionId: null, gradeRefId: null })
-        this.props.getDivisionsListAction(this.state.yearRefId, competitionId)
+        this.props.getDivisionsListAction(this.state.yearRefId, competitionId, this.state.sourceModule)
     }
 
     /////on division change
