@@ -39,8 +39,9 @@ import { formateTime, liveScore_formateDate, formatDateTime } from '../../themes
 import { getVenuesTypeAction } from "../../store/actions/appAction"
 import Loader from '../../customComponents/loader'
 import { getliveScoreScorerList } from '../../store/actions/LiveScoreAction/liveScoreAction';
-import { isArrayNotEmpty ,captializedString} from '../../util/helpers';
+import { isArrayNotEmpty, captializedString } from '../../util/helpers';
 import { getLiveScoreDivisionList } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction'
+import Tooltip from 'react-png-tooltip'
 
 const { Footer, Content, Header } = Layout;
 const { Option } = Select;
@@ -233,7 +234,14 @@ class LiveScoreAddMatch extends Component {
 
             <div className="row">
                 <div className="col-sm">
-                    <InputWithHead required={"required-field"} heading={AppConstants.matchDuration} />
+
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                        <InputWithHead required={"required-field"} heading={AppConstants.matchDuration} />
+                        <Tooltip background='#ff8237'>
+                            <span>{AppConstants.matchDurationMsg}</span>
+                        </Tooltip>
+                    </div>
+
                     <Form.Item>
                         {getFieldDecorator('matchDuration', {
                             rules: [{ required: true, message: ValidationConstants.durationField }]
@@ -249,7 +257,13 @@ class LiveScoreAddMatch extends Component {
                     </Form.Item>
                 </div>
                 <div className="col-sm">
-                    <InputWithHead required={"required-field"} heading={AppConstants.mainBreak} />
+
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                        <InputWithHead required={"required-field"} heading={AppConstants.mainBreak} />
+                        <Tooltip background='#ff8237'>
+                            <span>{AppConstants.mainBreakMsg}</span>
+                        </Tooltip>
+                    </div>
                     <Form.Item>
                         {getFieldDecorator('mainBreak', {
                             rules: [{ required: true, message: ValidationConstants.durationField }]
@@ -265,7 +279,13 @@ class LiveScoreAddMatch extends Component {
                     </Form.Item>
                 </div>
                 {addEditMatch.type == "FOUR_QUARTERS" && <div className="col-sm">
-                    <InputWithHead required={"required-field"} heading={AppConstants.qtrBreak} />
+
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                        <InputWithHead required={"required-field"} heading={AppConstants.qtrBreak} />
+                        <Tooltip background='#ff8237'>
+                            <span>{AppConstants.qtrBreatMsg}</span>
+                        </Tooltip>
+                    </div>
                     <Form.Item>
                         {getFieldDecorator('qtrBreak', {
                             rules: [{ required: true, message: ValidationConstants.durationField }]
@@ -794,7 +814,7 @@ function mapDispatchToProps(dispatch) {
         liveScoreRoundListAction,
         liveScoreClubListAction,
         searchFilterAction,
-    
+
     }, dispatch)
 }
 

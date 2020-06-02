@@ -183,7 +183,7 @@ class CompetitionFixtures extends Component {
     }
 
 
-    onSwap(source, target, team) {
+    onSwap(source, target, round_Id) {
         let sourceIndexArray = source.split(':');
         let targetIndexArray = target.split(':');
         let sourceXIndex = sourceIndexArray[0];
@@ -203,31 +203,65 @@ class CompetitionFixtures extends Component {
         let targetRoundObject = drawData[targetXIndex]
         let sourceObejct = drawData[sourceXIndex].draws[sourceYIndex]
         let targetObject = drawData[targetXIndex].draws[targetYIndex]
-        console.log(targetObject, sourceObejct)
+        var customSourceObject = null
         if (sourceRoundObject.roundId == targetRoundObject.roundId) {
-            let postObject
-            if (team == "team1") {
-                postObject = {
+            if (targetObject.drawsId !== sourceObejct.drawsId) {
+                if (sourceZIndex == 0) {
+                    if (targetZIndex == 0) {
+                        console.log('called')
+                        customSourceObject = {
+                            competitionUniqueKey: this.state.firstTimeCompId,
+                            team1: targetObject.team1,
+                            team2: sourceObejct.team1,
+
+                        };
+                    } else {
+                        console.log('called')
+                        customSourceObject = {
+                            competitionUniqueKey: this.state.firstTimeCompId,
+                            team1: targetObject.team2,
+                            team2: sourceObejct.team1,
+
+                        };
+                    }
+
+                } else {
+                    if (targetZIndex == 0) {
+                        console.log('called')
+                        customSourceObject = {
+                            competitionUniqueKey: this.state.firstTimeCompId,
+                            team1: sourceObejct.team2,
+                            team2: targetObject.team1,
+
+                        };
+                    } else {
+                        console.log('called')
+                        customSourceObject = {
+                            competitionUniqueKey: this.state.firstTimeCompId,
+                            team1: sourceObejct.team2,
+                            team2: targetObject.team2,
+                        };
+                    }
+
+                }
+
+            } else {
+                customSourceObject = {
                     competitionUniqueKey: this.state.firstTimeCompId,
                     team1: sourceObejct.team1,
-                    team2: targetObject.team2
+                    team2: targetObject.team2,
                 };
-            }
-            else {
-                postObject = {
-                    competitionUniqueKey: this.state.firstTimeCompId,
-                    team1: sourceObejct.team2,
-                    team2: targetObject.team1
-                };
-
             }
             this.props.updateCompetitionFixtures(
-                postObject,
+                customSourceObject,
                 sourceIndexArray,
                 targetIndexArray,
+                round_Id
             )
         }
+
     }
+
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
@@ -329,18 +363,16 @@ class CompetitionFixtures extends Component {
                         </div>
                     </div>
                 </div>
-                {
+                {/* {
                     this.props.drawsState.updateFixtureLoad ?
                         <div><Loader visible={this.props.drawsState.updateFixtureLoad} />
                             {this.dragableView()}
                         </div> :
                         this.dragableView()
-                }
-                {}
+                } */}
             </div>
         )
     }
-
 
     //////the gragable content view inside the container
     dragableView = () => {
@@ -417,7 +449,7 @@ class CompetitionFixtures extends Component {
                                                                 content={1}
                                                                 swappable={true}
                                                                 onSwap={(source, target) =>
-                                                                    this.onSwap(source, target, "team1")
+                                                                    this.onSwap(source, target, courtData.roundId)
                                                                 }
                                                             >
                                                                 <span>{slotObject.team1Name}</span>
@@ -448,7 +480,7 @@ class CompetitionFixtures extends Component {
                                                                 content={1}
                                                                 swappable={true}
                                                                 onSwap={(source, target) =>
-                                                                    this.onSwap(source, target, "team2")
+                                                                    this.onSwap(source, target, courtData.roundId)
                                                                 }
                                                             >
                                                                 <span>{slotObject.team2Name}</span>

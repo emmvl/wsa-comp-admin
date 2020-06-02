@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Breadcrumb, Select, Button, Form, message, Modal } from 'antd';
+import { Layout, Breadcrumb, Select, Button, Form, message, Modal, Menu } from 'antd';
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
 import { NavLink } from 'react-router-dom';
 import loadjs from 'loadjs';
@@ -16,7 +16,7 @@ import {
   getCompetitionVenue,
   updateCourtTimingsDrawsAction,
   clearDraws,
-  publishDraws, matchesListDrawsAction
+  publishDraws, matchesListDrawsAction, unlockDrawsAction
 } from '../../store/actions/competitionModuleAction/competitionDrawsAction';
 import Swappable from '../../customComponents/SwappableComponent';
 import { getDayName, getTime } from '../../themes/dateformate';
@@ -48,6 +48,7 @@ import { generateDrawAction } from "../../store/actions/competitionModuleAction/
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { confirm } = Modal;
+const { SubMenu } = Menu;
 class CompetitionDraws extends Component {
   constructor(props) {
     super(props);
@@ -108,7 +109,7 @@ class CompetitionDraws extends Component {
       let competitionList = this.props.appState.own_CompetitionArr;
       if (nextProps.appState.own_CompetitionArr !== competitionList) {
         if (competitionList.length > 0) {
-          let competitionId = competitionList[0].competitionId;
+          let competitionId = competitionList[7].competitionId;
           this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId);
           setOwn_competition(competitionId)
           this.setState({ firstTimeCompId: competitionId, venueLoad: true })
@@ -579,6 +580,14 @@ class CompetitionDraws extends Component {
     this.props.generateDrawAction(payload);
     this.setState({ venueLoad: true });
   }
+  //unlockDraws
+
+  unlockDraws(id, round_Id,venueCourtId) {
+    this.props.unlockDrawsAction(id, round_Id,venueCourtId)
+
+
+  }
+
 
   ////// Publish draws
   // publishDraws() {
@@ -768,11 +777,11 @@ class CompetitionDraws extends Component {
           {dateItem.draws.map((courtData, index) => {
             let leftMargin = 25;
             if (index !== 0) {
-              topMargin += 55;
+              topMargin += 70;
             }
             return (
               <div>
-                <div className="sr-no ">
+                <div className="sr-no" style={{ height: 62 }}>
                   <div className="venueCourt-tex-div">
                     <span className="venueCourt-text">{courtData.venueShortName + "-" + courtData.venueCourtName}</span>
                   </div>
@@ -784,7 +793,7 @@ class CompetitionDraws extends Component {
                   if (slotIndex == 0) {
                     leftMargin = 70;
                   }
-                  console.log()
+                  console.log(slotObject.isLocked)
                   return (
                     <div>
                       <span
@@ -822,6 +831,53 @@ class CompetitionDraws extends Component {
                         </Swappable>
 
                       </div>
+                      {slotObject.drawsId !== null &&
+                        <div className='box-exception' style={{
+                          left: leftMargin, top: topMargin + 50, overflow: "hidden",
+                          whiteSpace: "nowrap",
+                        }}>
+
+                          <Menu
+                            className="action-triple-dot-draws"
+                            theme="light"
+                            mode="horizontal"
+                            style={{ lineHeight: '15px', }}
+                          >
+                            <SubMenu
+                              key="sub1"
+                              title={
+
+
+
+
+
+                                slotObject.isLocked == 1 ?
+                                  <div style={{ display: 'flex', justifyContent: 'space-between', width: 80, maxWidth: 80 }}>
+                                    <img className="dot-image" src={AppImages.drawsLock} alt="" width="16" height="10" />
+                                    <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="10" />
+                                  </div>
+                                  :
+                                  <div>
+                                    <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="10" />
+                                  </div>
+                              }
+                            >
+                              {slotObject.isLocked == 1 &&
+                                <Menu.Item key="1">
+                                  <span onClick={() => this.unlockDraws(slotObject.drawsId, dateItem.roundId,courtData.venueCourtId)} >Unlock</span>
+                                </Menu.Item>
+                              }
+                              <Menu.Item key="2" >
+                                <NavLink to={{ pathname: `/competitionException`, state: { drawsObj: slotObject } }} >
+                                  <span >Exception</span>
+                                </NavLink>
+                              </Menu.Item>
+                            </SubMenu>
+                          </Menu>
+
+
+                        </div>
+                      }
                     </div>
                   );
                 })}
@@ -914,7 +970,8 @@ function mapDispatchToProps(dispatch) {
       clearDraws,
       publishDraws,
       matchesListDrawsAction,
-      generateDrawAction
+      generateDrawAction,
+      unlockDrawsAction
     },
     dispatch
   );
