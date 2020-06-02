@@ -39,8 +39,8 @@ const columns = [
     },
     {
         title: 'Competition',
-        dataIndex: 'competitionName',
-        key: 'competitionName',
+        dataIndex: 'competitions',
+        key: 'competitions',
         sorter: (a, b) => a.competitionName.localeCompare(b.competitionName),
         render: (competition, record, index) => {
             return (
