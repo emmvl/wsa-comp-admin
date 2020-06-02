@@ -1033,17 +1033,81 @@ const AppConstants = {
   changeDivision: "Change Division",
   action: "Action",
   competitionDivisionValidation: "If there are any players graded to this division, they will be unassigned.",
+  exception: "Exception",
+  exceptionHeading: "This allows you to schedule a match at a venue or time outside the automatic scheduling",
+
 
   //Add Venue ToolTip Messages
 
-  LatitudeMsg:`'1. Go to google maps https://www.google.com/maps\n\n'
+  LatitudeMsg: `1. Go to google maps https://www.google.com/maps\n\n'
+  2. Click on satellite view.\n\n
+  3. Search for your venue.\n\n
+  4. Click and drop a pin on the centre of the court then copy and paste both the Longitude and Latitude.`,
+
+  overRideSlotMsg: 'Only click if the Court has different availability to the Venue ie. Court 1 is only available for matches from 9am but the other courts are free from 8am',
+  gameDayMsg: 'Add the days of the week, matches can be played at this venue. Click + Add Day.',
+  courtsMsg: 'Add the Courts at this venue. For effective use of the Live Scoring App please add Longitude and Latitude of the Court.',
+
+  activeNewsMsg: "A list of all of the news that currently appears in the Game Day App",
+  todayMatchMsg: "A list of all the matches being played on this day. This list shows whether scorers have been set , attendance has been taken and if umpires have been recorded(optional). Please refresh your screen to get the latest updates.",
+  playersToPayMsg: "A list of players who have registered and a required to pay either with cash or a voucher.",
+  todayIncidentMsg: "A list of all of the incidents that have occured on day including injuries and disciplinary.",
+  matchDurationMsg: "Game time only (in minutes). This time should exclude time for breaks.",
+  mainBreakMsg: "Half time Break (in minutes).",
+  qtrBreatMsg: "Break after 1st and 3rd quaters (in minutes).",
+  teamAliasMsg: "The name that is used for the Team on the draw and media.",
+  managerNewMsg: "Add a user who has not registered in the App or Web platform as a ",
+  managerExsitingMsg: 'Add a user who has already registered in the App or Web platform as a ',
+  bulkMatchMsg: `Push Back - Push back one, a number or all games to a day or time that suits.\n\n
+  Bring Forward - Bring forward one, a number or all games to a day or time that suits.\n\n
+  Abandon Matches - Abandon one, a number or all matches that are incomplete or not played.\n\n
+  End Matches - End one, a number or all matches.\n\n
+  Double Header - Create a double header where two rounds are played in the one round allocation ie. Round 2 is rained out and the association decides to play Round 2 and Round 3 together as two half matches.`,
+
+  courtChangeMsg: 'Move the matches on one, many or all Venues, Courts to another Venue, Court.',
+  shortNameMsg: 'The short name is used in the APP to make it easier for users to search.',
+  recordUmpireMsg: 'The Scorer or Manager of a match will document the Umpire names and the Clubs they belong to.',
+  gameTimeTrackMsg: 'If selected it portrays the Game Time played by the team and players of that team in the Game Day App.',
+  positionTrackMsg: 'If Selected allows tracking of team positions by player.',
+  recordGoalAtteptMsg: 'If selected allows for the recording of Goal Attempts, Misses and Penalty Misses by player.',
+  centerPassEnableMsg: 'Enable Centre Pass display. ',
+  incidentEnableMsg: 'Enable the trackng of incidents including disciplinary, injury- first aid and injury - ambulance.',
+  recordMsg: 'Choose between allowing scorers to record their own team, both teams or the oppositions team attendance.',
+  reportMsg: 'Determine which game time report you would like managers and coaches to see - choose between minute, period or games.',
+  singleScoringMsg: 'Team A is the only team scoring the match.',
+  fiftyScoringMsg: 'Team A scores first half and Team B scores second half',
+
+  timerMsg: `Central  - games start, break and end at the same time. The Scorer has no ability to pause.\n\n
+  Central with per match override - games all start at the designated time but can be paused and resumed by the Scorer anytime throughout the game.\n\n
+  Per Match - games are started and paused by the Scorer.`,
+
+  buzzerMsg: `Click on Turn off the Buzzer so it doesnt signal the start, breaks or end of the game.\n\n
+  Click on 30 second warning so it doesnt sound with a 30 second warning for players to take the court.`,
+  newsPublishMsg: 'Publish the news/ message to the App only.',
+  newsPublishNotifyMsg: 'Publish the news/ message to the App and notify App users.',
+  participateCompMsg: "A list of all Competitions your Organisations is Competing In.",
+  ownedCompetitionMsg: "A List of all Competitions your Organisation is responsible for.",
+  compDetailsMsg: "If you have opened Registrations for this Competition than Commpetiition Details fields will be pre-populated but you can change key details as appropriate. If you have not opened Registrations for this competition, then you need to complete these screens.",
+  knockOutMsg: "A competition where teams are eliminated progressively. Each winner will play another in the next round until the final two teams meet.",
+  roundRobinMsg: "Teams play each other one time. Finals are optional.",
+  enhancedRoundRobinMsg: "Teams play each as many times as required in the number of rounds specified. Finals are optional.",
+  compDivisionMsg: "You must add a Division to move to the next screen.Divisions can be age related or any category you choice. Example could include 11,12,13 etc or Junior, Senior. ",
+  genderRestrictionMsg: "Restricts Users who register to a particular division based on their gender.",
+  ageRestrictionMsg: "Restricts Users who register to a particular division based on their DOB.",
+  playerGradingMsg: "For Direct Competitions only. Create Teams and then Drag and Drop Players from Unassigned in to their teams.",
+  playerGradingToggleMsg: "Displays a running tally of the number of teams required for each division and the number of players in each team.",
+  teamGradingSummaryMsg: "Teams will remain ungraded until you move them into Grades. Click on the square titled 'Unassigned' (which contains the number of teams) to begin grading.You can also re-name grades by clicking on the letter or name.",
+  timeSloteNoPrefMsg: "There is no preference for the timeslots Divisions, Grades and Teams play in.",
+  timeSloteEvenRotationMsg: "Divisions, Grades and Teams equally rotate through the timeslots.",
+  allocateToSametimeslotMsg: "Divisions and Grades can be allocated to a Timeslot.",
+  LatitudeMsg: `'1. Go to google maps https://www.google.com/maps\n\n'
   2. Click on satellite view.\n\n'
   3. Search for your venue.\n\n
   4. Click and drop a pin on the centre of the court then copy and paste both the Longitude and Latitude.'`,
 
-  overRideSlotMsg:'Only click if the Court has different availability to the Venue ie. Court 1 is only available for matches from 9am but the other courts are free from 8am',
-  gameDayMsg :'Add the days of the week, matches can be played at this venue. Click + Add Day.',
-  courtsMsg:'Add the Courts at this venue. For effective use of the Live Scoring App please add Longitude and Latitude of the Court.'
+  overRideSlotMsg: 'Only click if the Court has different availability to the Venue ie. Court 1 is only available for matches from 9am but the other courts are free from 8am',
+  gameDayMsg: 'Add the days of the week, matches can be played at this venue. Click + Add Day.',
+  courtsMsg: 'Add the Courts at this venue. For effective use of the Live Scoring App please add Longitude and Latitude of the Court.'
 };
 
 export default AppConstants;

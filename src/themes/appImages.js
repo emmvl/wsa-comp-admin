@@ -39,6 +39,7 @@ const AppImages = {
   netballLogoMain: require("../images/netball.png"),
   deleteImage: require("../images/delete.png"),
   loginImage: require("../images/sign_in.jpg"),
+  drawsLock: require("../images/draws-lock.png")
 };
 
 export default AppImages;

@@ -181,6 +181,11 @@ export function* updateCourtTimingsDrawsAction(action) {
                 drawData: action.drawData
             });
             message.success(result.result.data.message)
+            console.log(action.actionType)
+            if (action.actionType == "exception") {
+                history.push('/competitionDraws')
+            }
+
         } else {
             yield call(failSaga, result)
         }
@@ -323,4 +328,30 @@ export function* updateCompetitionFixtures(action) {
 
 
 
+}
+
+
+//////////update draws court timing where N/A(null) is there
+export function* updateDrawsLock(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.updateDrawsLock, action.drawsId);
+
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_UPDATE_DRAWS_LOCK_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+                roundId: action.roundId,
+                drawsId: action.drawsId,
+                venueCourtId: action.venueCourtId
+            });
+            message.success(result.result.data.message)
+
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+
+    }
 }

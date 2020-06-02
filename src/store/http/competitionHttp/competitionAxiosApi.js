@@ -477,7 +477,7 @@ let CompetitionAxiosApi = {
         var url = `/api/draws/team/update`
         return Method.dataPut(url, token, body);
     },
-   async teamChangeDivisionApi(payload) {
+    async teamChangeDivisionApi(payload) {
         let organisationId = await getOrganisationData().organisationUniqueKey;
         payload.organisationUniqueKey = organisationId;
         var url = `/api/team/division/update`
@@ -488,7 +488,15 @@ let CompetitionAxiosApi = {
         payload.organisationUniqueKey = organisationId;
         var url = `/api/player/division/update`
         return Method.dataPost(url, token, payload);
-    },										  
+    },
+
+    async updateDrawsLock(drawsId) {
+        let body = {
+            "drawsId": drawsId
+        }
+        var url = `/api/draws/unlock`
+        return Method.dataPost(url, token, body);
+    }
 };
 
 const Method = {

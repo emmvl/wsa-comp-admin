@@ -150,6 +150,17 @@ function updateCompetitionFixtures(data, source, target) {
     return action
 }
 
+
+//unlockDrawsAction
+function unlockDrawsAction(drawsId, roundId, venueCourtId) {
+    const action = {
+        type: ApiConstants.API_UPDATE_DRAWS_LOCK_LOAD,
+        drawsId,
+        roundId, venueCourtId
+
+    }
+    return action
+}
 export {
     getCompetitionDrawsAction,
     getDrawsRoundsAction,
@@ -165,5 +176,6 @@ export {
     getDivisionAction,
     getCompetitionFixtureAction,
     clearFixtureData,
-    updateCompetitionFixtures
+    updateCompetitionFixtures,
+    unlockDrawsAction
 }

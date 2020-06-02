@@ -115,7 +115,8 @@ import RegistrationSettlements from "../components/registration/registrationSett
 import RegistrationPayoutTransaction from "../components/registration/registrationPayoutTransactions";
 
 import LiveScoreCoaches from "../components/liveScore/liveScoreCoaches";
-import LiveScoreAddEditCoach from "../components/liveScore/liveScoreAddEditCoach"
+import LiveScoreAddEditCoach from "../components/liveScore/liveScoreAddEditCoach";
+import CompetitionException from "../components/competition/comeptitionException";
 
 const lazyLoad = Component => {
   const lazy = props => {
@@ -614,6 +615,10 @@ class Routes extends React.Component {
         <PrivateRoute
           path="/liveScoreAddEditCoach"
           component={lazyLoad(LiveScoreAddEditCoach)}
+        />
+        <PrivateRoute
+          path="/competitionException"
+          component={lazyLoad(CompetitionException)}
         />
 
         <Route path="/" component={lazyLoad(NotFound)} />

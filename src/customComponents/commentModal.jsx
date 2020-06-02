@@ -49,21 +49,20 @@ class CommentModal extends React.Component {
                             }
                         </div>
                     }
-                    {finalGradeId == null &&
-                        <TextArea
-                            className="textAreaInput"
-                            placeholder={placeholder}
-                            allowClear
-                            name={name}
-                            // handleChange={(name) => alert(name)}
-                            onBlur={handleBlur}
-                            onChange={onChange}
-                            type={type}
-                            value={value}
-                            // defaultValue="xyz"
-                            {...this.props}
-                        />
-                    }
+
+                    <TextArea
+                        className="textAreaInput"
+                        placeholder={placeholder}
+                        allowClear
+                        name={name}
+                        // handleChange={(name) => alert(name)}
+                        onBlur={handleBlur}
+                        onChange={onChange}
+                        type={type}
+                        value={value}
+                        // defaultValue="xyz"
+                        {...this.props}
+                    />
                 </Modal >
             </div >
         )

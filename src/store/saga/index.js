@@ -57,7 +57,7 @@ import {
   defaultCharity_voucherSaga,
   getDefaultCompFeesLogoSaga,
   inviteeSearchSaga,
-  deleteCompetitionDivisionSaga						   
+  deleteCompetitionDivisionSaga
 } from './registrationSaga/competitionFeeSaga';
 
 
@@ -109,7 +109,7 @@ import {
   nationalityReferenceSaga, heardByReferenceSaga, playerPositionReferenceSaga, venuesListSaga,
   venueByIdSaga, venueDeleteSaga,
   getGenderSaga, getPhotoTypeSaga, getAppyToSaga, getExtraTimeDrawSaga,
-  getFinalsFixtureTemplateSaga
+  getFinalsFixtureTemplateSaga, courtListSaga
 } from "./commonSaga/commonSaga";
 ////Venue constraints
 import { venueTimeSaga, venueConstraintPostSaga } from './competitionManagementSaga/venueTimeSaga'
@@ -124,7 +124,7 @@ import {
   importCompetitionPlayer,
   importCompetitionTeams,
   deleteTeamSaga,
-  playerChangeDivisionSaga						  
+  playerChangeDivisionSaga
 } from './competitionManagementSaga/competitionPartPlayerGradingSaga';
 import {
   getCompOwnProposedTeamGradingSaga,
@@ -142,7 +142,7 @@ import {
   finalPlayersExportSaga,
   proposedTeamsExportSaga,
   proposedPlayersExportSaga,
-  teamChangeDivisionSaga				
+  teamChangeDivisionSaga
 } from './competitionManagementSaga/competitionTeamGradingSaga';
 
 // UserSaga
@@ -154,7 +154,8 @@ import {
   getCompetitionDrawsSaga, getDrawsRoundsSaga,
   updateCompetitionDraws, saveDrawsSaga,
   getCompetitionVenues, updateCourtTimingsDrawsAction,
-  getDivisionGradeNameListSaga, publishDraws, drawsMatchesListExportSaga, getDivisionSaga, competitionFixtureSaga, updateCompetitionFixtures
+  getDivisionGradeNameListSaga, publishDraws, drawsMatchesListExportSaga,
+  getDivisionSaga, competitionFixtureSaga, updateCompetitionFixtures, updateDrawsLock
 } from './competitionManagementSaga/competitionDrawsSaga';
 
 import { regDashboardListSaga } from "./registrationSaga/registrationDashboardSaga"
@@ -701,4 +702,7 @@ export default function* root_saga() {
 
   // Player Change division 
   yield takeEvery(ApiConstants.API_CHANGE_COMPETITION_DIVISION_PLAYER_LOAD, playerChangeDivisionSaga)
+  yield takeEvery(ApiConstants.API_COURT_LIST_LOAD, courtListSaga)
+
+  yield takeEvery(ApiConstants.API_UPDATE_DRAWS_LOCK_LOAD, updateDrawsLock)
 }

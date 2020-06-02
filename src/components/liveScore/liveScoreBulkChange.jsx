@@ -39,6 +39,7 @@ import history from '../../util/history'
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { isArrayNotEmpty } from "../../util/helpers";
 import { liveScoreRoundListAction } from '../../store/actions/LiveScoreAction/liveScoreRoundAction'
+import Tooltip from 'react-png-tooltip'
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -231,7 +232,17 @@ class LiveScoreBulkChange extends Component {
         const { selectedOption } = this.props.liveScoreBulkMatchState
         return (
             <div className="content-view pt-4">
-                <span className='bulk-match-heading' >{AppConstants.whatDoWantDO}</span>
+
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <span className='bulk-match-heading' >{AppConstants.whatDoWantDO}</span>
+                    <div style={{ marginTop: -10 }}>
+                        <Tooltip placement="top" background='#ff8237'>
+                            <span>{AppConstants.bulkMatchMsg}</span>
+                            {/* {AppConstants.LatitudeMsg} */}
+                        </Tooltip>
+                    </div>
+                </div>
+
                 {this.initialPageView(getFieldDecorator)}
                 {selectedOption == 'pushBack' && this.pushBackView(getFieldDecorator)}
                 {selectedOption == 'endMatch' && this.endMatchedView(getFieldDecorator)}
@@ -917,7 +928,7 @@ class LiveScoreBulkChange extends Component {
         let roundResult = isArrayNotEmpty(roundList) ? roundList : []
 
         const { doubleHeaderResult } = this.props.liveScoreBulkMatchState
-    
+
         return (
             <div>
                 {/* round 1 drop down view */}
@@ -991,7 +1002,7 @@ class LiveScoreBulkChange extends Component {
         let roundResult = isArrayNotEmpty(roundList) ? roundList : []
 
         const { abandonData, venueData, abandonCourtData, matchResult, mainCourtList } = this.props.liveScoreBulkMatchState
-     
+
         return (
             <div>
                 <div>
@@ -1233,7 +1244,7 @@ class LiveScoreBulkChange extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 if (selectedOption == 'pushBack') {
-                
+
 
                     let startDate = moment(pushBackData.startDate).format("YYYY-MMM-DD")
                     let startTime = moment(pushBackData.startTime).format("HH:mm")

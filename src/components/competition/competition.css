@@ -478,14 +478,15 @@ a.collapsed i {
   color: inherit;
   margin: 0px;
   cursor: auto;
-  background-color: white
+  background-color: white;
+  white-space:'pre-line'
 }
 
 .Content_Container__xhjD8 {
   position: absolute;
   z-index: 5;
   padding: 12px 32px 12px 12px;
-  display: block;
+  display: table;
   width: 380px;
   max-width: 80vw;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px;
@@ -561,15 +562,6 @@ a.collapsed i {
   font-family: inter-medium;
   left: 25px;
   align-self: center;
-  /* display: flex;
-    align-content: flex-start;
-    text-align: center;
-    font-size: 22px;
-   
-    padding-bottom: 7.5px;
-    font-weight: 500;
-   
-    margin-left: 50px; */
 }
 .draws-round-view{
   display: flex;
@@ -581,17 +573,16 @@ a.collapsed i {
   position: absolute;
   top: 0;
   cursor: pointer;
-  height: 40px;
-  border-radius: 5px;
-  background-color: var(--app-fbf1ea);
+  min-width: 100px;
+  height: 15px;
   /* text-transform: uppercase; */
   text-align: center;
-  line-height: 40px;
-  color: var(--app-white);
-  font-size: 13px;
-  font-family: "Inter-Medium";
   z-index: 99;
 }
+.action-triple-dot-draws .ant-menu-submenu-title  {
+ padding: 0px
+}
+
 
 @media (max-width: 991px) {
   .comp-buttons-view .open-reg-button {

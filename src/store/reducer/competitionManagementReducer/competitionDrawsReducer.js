@@ -955,16 +955,17 @@ function CompetitionDraws(state = initialState, action) {
       };
 
     case ApiConstants.API_UPDATE_COMPETITION_DRAWS_COURT_TIMINGS_SUCCESS:
-      let sourceXNullCaseIndex = action.sourceArray[0];
-      let sourceYNullCaseIndex = action.sourceArray[1];
-      let targetXNullCaseIndex = action.targetArray[0];
-      let targetYNullCaseIndex = action.targetArray[1];
-      console.log(action)
-      let drawDataNullCaseIndex = state.getRoundsDrawsdata.findIndex((x) => x.roundId === action.drawData)
-      let drawDataNullCase = state.getRoundsDrawsdata[drawDataNullCaseIndex].draws;
-
-      let swapedDrawsArrayNullCase = state.getRoundsDrawsdata[drawDataNullCaseIndex].draws;
       if (action.actionType == 'add') {
+        let sourceXNullCaseIndex = action.sourceArray[0];
+        let sourceYNullCaseIndex = action.sourceArray[1];
+        let targetXNullCaseIndex = action.targetArray[0];
+        let targetYNullCaseIndex = action.targetArray[1];
+        console.log(action)
+        let drawDataNullCaseIndex = state.getRoundsDrawsdata.findIndex((x) => x.roundId === action.drawData)
+        let drawDataNullCase = state.getRoundsDrawsdata[drawDataNullCaseIndex].draws;
+
+        let swapedDrawsArrayNullCase = state.getRoundsDrawsdata[drawDataNullCaseIndex].draws;
+
         swapedDrawsArrayNullCase = swapedDrawsArrayFunc(
           drawDataNullCase,
           sourceXNullCaseIndex,
@@ -972,19 +973,20 @@ function CompetitionDraws(state = initialState, action) {
           sourceYNullCaseIndex,
           targetYNullCaseIndex
         );
-      } else {
-        swapedDrawsArrayNullCase = swapedDrawsEditArrayFunc(
-          drawDataNullCase,
-          sourceXNullCaseIndex,
-          targetXNullCaseIndex,
-          sourceYNullCaseIndex,
-          targetYNullCaseIndex,
-          action.sourceArray[2],
-          action.targetArray[2]
-        );
+        // } else {
+        //   swapedDrawsArrayNullCase = swapedDrawsEditArrayFunc(
+        //     drawDataNullCase,
+        //     sourceXNullCaseIndex,
+        //     targetXNullCaseIndex,
+        //     sourceYNullCaseIndex,
+        //     targetYNullCaseIndex,
+        //     action.sourceArray[2],
+        //     action.targetArray[2]
+        //   );
+        // }
+        // console.log(state.getStaticDrawsData, drawDataNullCaseIndex)
+        state.getRoundsDrawsdata[drawDataNullCaseIndex].draws = swapedDrawsArrayNullCase;
       }
-      console.log(state.getStaticDrawsData, drawDataNullCaseIndex)
-      state.getRoundsDrawsdata[drawDataNullCaseIndex].draws = swapedDrawsArrayNullCase;
 
       return {
         ...state,
@@ -1121,6 +1123,25 @@ function CompetitionDraws(state = initialState, action) {
         error: null,
         updateFixtureLoad: false,
       };
+
+    case ApiConstants.API_UPDATE_DRAWS_LOCK_LOAD:
+      return {
+        ...state,
+        onLoad: true,
+        error: null
+      }
+
+    case ApiConstants.API_UPDATE_DRAWS_LOCK_SUCCESS:
+      let getDrawsArray = state.getRoundsDrawsdata
+      let getDrawsArrayIndex = getDrawsArray.findIndex((x) => x.roundId === action.roundId)
+      let updatetLockValueIndex = getDrawsArray[getDrawsArrayIndex].draws.findIndex((x) => x.venueCourtId == action.venueCourtId)
+      let updateslotsIndex = getDrawsArray[getDrawsArrayIndex].draws[updatetLockValueIndex].slotsArray.findIndex((x) => x.drawsId == action.drawsId)
+      getDrawsArray[getDrawsArrayIndex].draws[updatetLockValueIndex].slotsArray[updateslotsIndex].isLocked = 0
+      state.getRoundsDrawsdata = getDrawsArray
+      return {
+        ...state,
+        onLoad: false,
+      }
 
     default:
       return state;
