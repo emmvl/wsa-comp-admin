@@ -520,3 +520,21 @@ export function* exportOrgRegQuestionsSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+/* Get the Affiliate Directory  */
+export function* getAffiliateDirectorySaga(action) {
+    try {
+        const result = yield call(userHttpApi.affiliateDirectory, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_AFFILIATE_DIRECTORY_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

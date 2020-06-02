@@ -190,6 +190,10 @@ let userHttpApi = {
     var url = `api/export/registration/questions`;
     return Method.dataPostDownload(url, token, payload,"RegistrationQuestions");
   },
+  async affiliateDirectory(payload) {
+    var url = `api/affiliatedirectory`;
+    return Method.dataPost(url, token, payload);
+  },
 
 }
 

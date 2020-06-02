@@ -1,16 +1,13 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Table, Select, Menu, Pagination, Modal } from "antd";
+import { Layout, Breadcrumb, Button, Table, Select, Menu, Pagination, Modal, Input,Icon } from "antd";
 import './user.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import { NavLink } from "react-router-dom";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
-import {
-    getAffiliatesListingAction, getUreAction, getAffiliateToOrganisationAction,
-    affiliateDeleteAction
-} from
-    "../../store/actions/userAction/userAction";
+import { getAffiliateDirectoryAction} from "../../store/actions/userAction/userAction";
+import { getOnlyYearListAction } from '../../store/actions/appAction'
 import { bindActionCreators } from "redux";
 import AppImages from "../../themes/appImages";
 import { getOrganisationData } from "../../util/sessionStorage";
@@ -36,9 +33,9 @@ const columns = [
     },
     {
         title: 'Affiliated To',
-        dataIndex: 'affiliatedTo',
-        key: 'affiliatedTo',
-        sorter: (a, b) => a.affiliatedTo.localeCompare(b.affiliatedTo),
+        dataIndex: 'affiliatedToName',
+        key: 'affiliatedToName',
+        sorter: (a, b) => a.affiliatedToName.localeCompare(b.affiliatedToName),
     },
     {
         title: 'Competition',
@@ -63,9 +60,9 @@ const columns = [
     },
     {
         title: 'Postcode',
-        dataIndex: 'postcode',
-        key: 'postcode',
-        sorter: (a, b) => a.postcode.localeCompare(b.postcode),
+        dataIndex: 'postalCode',
+        key: 'postalCode',
+        sorter: (a, b) => a.postalCode.localeCompare(b.postalCode),
     },
     {
         title: "Action",
@@ -108,16 +105,16 @@ class AffiliateDirectory extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            yearRefId: -1,
             organisationId: getOrganisationData().organisationUniqueKey,
-            affiliatedToOrgId: -1,
             organisationTypeRefId: -1,
-            statusRefId: -1,
             deleteLoading: false,
+            searchText: ''
         }
         this_Obj = this;
         // this.props.getUreAction();
         this.referenceCalls(this.state.organisationId);
-        this.handleAffiliateTableList(1, this.state.organisationId, -1, -1, -1)
+        this.handleAffiliateTableList(1)
     }
 
     componentDidMount() {
@@ -134,76 +131,58 @@ class AffiliateDirectory extends Component {
                 })
             }
         }
-
-        if (userState.onLoad === false && this.state.deleteLoading === true) {
-            if (!userState.error) {
-                this.setState({
-                    deleteLoading: false,
-                });
-                this.handleAffiliateTableList(1, this.state.organisationId, -1, -1, -1)
-            }
-        }
     }
 
     referenceCalls = (organisationId) => {
-        this.props.getAffiliateToOrganisationAction(organisationId);
+        this.props.getOnlyYearListAction();
     }
 
-    handleAffiliateTableList = (page, organisationId, affiliatedToOrgId, organisationTypeRefId, statusRefId) => {
+    handleAffiliateTableList = (page) => {
         let filter =
         {
-            organisationId: organisationId,
-            affiliatedToOrgId: affiliatedToOrgId,
-            organisationTypeRefId: organisationTypeRefId,
-            statusRefId: statusRefId,
+            organisationUniqueKey: this.state.organisationId,
+            yearRefId: this.state.yearRefId,
+            organisationTypeRefId: this.state.organisationTypeRefId,
+            searchText: this.state.searchText,
             paging: {
                 limit: 10,
                 offset: (page ? (10 * (page - 1)) : 0)
             }
         }
-        this.props.getAffiliatesListingAction(filter);
+        this.props.getAffiliateDirectoryAction(filter);
     };
 
     naviageToAffiliate = (e) => {
         this.props.history.push("/userEditAffiliates", { affiliateOrgId: e.affiliateOrgId, orgTypeRefId: e.organisationTypeRefId })
     }
 
-    onChangeOrganisationTypes = (e) => {
-        this.setState({ organisationTypeRefId: e })
-        this.handleAffiliateTableList(1, this.state.organisationId, this.state.affiliatedToOrgId, e, this.state.statusRefId);
+    onChangeDropDownValue = async (value, key) => {
+        if(key == "yearRefId"){
+          await this.setState({yearRefId: value});
+          this.handleAffiliateTableList(1);
+        }
+        else if (key == "organisationTypeRefId"){
+            await   this.setState({competitionUniqueKey: value});
+            this.handleAffiliateTableList(1);
+        }
+        else if (key == "searchText"){
+            await this.setState({searchText: value});
+            if(value == null || value== "")
+            {
+                this.handleAffiliateTableList(1); 
+            }
+        }
     }
 
-    onChangeAffiliateTo = (e) => {
-        this.setState({ affiliatedToOrgId: e })
-        this.handleAffiliateTableList(1, this.state.organisationId, e, this.state.organisationTypeRefId, this.state.statusRefId);
+    onKeyEnterSearchText = (e) =>{
+        var code = e.keyCode || e.which;
+        if(code === 13) { //13 is the enter keycode
+            this.handleAffiliateTableList(1);
+        } 
     }
 
-    onChangeStatusRefId = (e) => {
-        this.setState({ statusRefId: e })
-        this.handleAffiliateTableList(1, this.state.organisationId, this.state.affiliatedToOrgId, this.state.organisationTypeRefId, e);
-    }
-
-    showDeleteConfirm = (affiliateId) => {
-        let this_ = this
-        confirm({
-            title: 'Are you sure you want to delete this affiliate?',
-            // content: 'Some descriptions',
-            okText: 'Yes',
-            okType: 'danger',
-            cancelText: 'No',
-            onOk() {
-                this_.deleteAffiliate(affiliateId)
-            },
-            onCancel() {
-                console.log('Cancel');
-            },
-        });
-    }
-
-    deleteAffiliate = (affiliateId) => {
-        console.log("affiliateId::" + affiliateId);
-        this.props.affiliateDeleteAction(affiliateId)
-        this.setState({ deleteLoading: true })
+    onClickSearchIcon = () =>{
+        this.handleAffiliateTableList(1);
     }
 
     headerView = () => {
@@ -213,7 +192,7 @@ class AffiliateDirectory extends Component {
                     <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
                         <Breadcrumb separator=" > ">
                             {/* <Breadcrumb.Item className="breadcrumb-product">User</Breadcrumb.Item> */}
-                            <Breadcrumb.Item className="breadcrumb-add">Affiliates</Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.affiliateDirectory}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                 </div>
@@ -223,72 +202,62 @@ class AffiliateDirectory extends Component {
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
-        let affiliateToData = this.props.userState.affiliateTo;
-        let uniqueValues = [];
-        if (affiliateToData.affiliatedTo != undefined) {
-            uniqueValues = [...new Map(affiliateToData.affiliatedTo.map(obj => [obj["affiliatedToOrgId"], obj])).values()];
-        }
+        let {organisationTypes} = this.props.userState;
 
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
                 <div className="fluid-width" >
-                    <div className="row" >
-                        <div className="col-sm-3" >
-                            <div style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center" }} >
-                                <span className='year-select-heading'>{AppConstants.affiliatedTo}</span>
+                    <div className="row user-filter-row" >
+                        <div className="user-col" >
+                            <div className="user-filter-col-cont">
+                                <div className='year-select-heading' style={{width:'65px'}}>{AppConstants.year}</div>
                                 <Select
-                                    style={{ minWidth: 100 }}
-                                    className="year-select"
-                                    onChange={(e) => this.onChangeAffiliateTo(e)}
-                                    value={this.state.affiliatedToOrgId}>
-                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {(uniqueValues || []).map((org, index) => (
-                                        <Option key={org.affiliatedToOrgId} value={org.affiliatedToOrgId}>{org.affiliatedToOrgName}</Option>
-                                    ))}
+                                    name={"yearRefId"}
+                                    className="year-select user-filter-select" 
+                                    onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
+                                    value={this.state.yearRefId}>
+                                        <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                    {this.props.appState.yearList.map(item => {
+                                        return (
+                                            <Option key={"yearRefId" + item.id} value={item.id}>
+                                                {item.description}
+                                            </Option>
+                                        );
+                                    })}
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-3" >
-                            <div style={{ width: "fit-content", display: "flex", flexDirection: "row", alignItems: "center" }} >
-                                <span className='year-select-heading'>{AppConstants.organisationType}</span>
+                        <div className="user-col" >
+                            <div className="user-filter-col-cont" >
+                                <div className='year-select-heading' style={{width:'150px'}}>{AppConstants.organisationType}</div>
                                 <Select
-                                    style={{ minWidth: 100 }}
-                                    className="year-select"
-                                    onChange={(e) => this.onChangeOrganisationTypes(e)}
+                                   name={"organisationTypeRefId"}
+                                    className="year-select user-filter-select"
+                                    onChange={(e) => this.onChangeDropDownValue(e,"organisationTypeRefId")}
                                     value={this.state.organisationTypeRefId}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {(affiliateToData.organisationTypes || []).map((org, index) => (
+                                    {(organisationTypes || []).map((org, index) => (
                                         <Option key={org.id} value={org.id}>{org.name}</Option>
                                     ))}
-
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-2" >
-                            <div style={{ width: "fit-content", display: "flex", flexDirection: "row", alignItems: "center" }} >
-                                <span className='year-select-heading'>{AppConstants.status}</span>
-                                <Select
-                                    className="year-select"
-                                    style={{ minWidth: 100 }}
-                                    onChange={(e) => this.onChangeStatusRefId(e)}
-                                    value={this.state.statusRefId}>
-                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {(affiliateToData.status || []).map((st, index) => (
-                                        <Option key={st.id} value={st.id}>{st.description}</Option>
-                                    ))}
-                                </Select>
+                        <div className="user-col affiliate-dir-srch" >
+                            <div>
+                                <button className="dashboard-lay-search-button"
+                                    onClick={() => this.onClickSearchIcon()}>
+                                <img src={AppImages.searchIcon} height="15" width="15" alt="" />
+                                </button>
+                                <div className="reg-product-search-inp-width">
+                                    <Input className="product-reg-search-input" 
+                                        onChange={(e) => this.onChangeDropDownValue(e.target.value, "searchText")}
+                                        placeholder="Search..." onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                        prefix={ <Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16}}
+                                    />
+                                    }
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div className="col-sm-2 add-affiliate-btn">
-                            {
-                                affiliateToData.isEligibleToAddAffiliate ?
-                                    <div className="d-flex flex-row-reverse">
-                                        <NavLink to={"/userAddAffiliates"}>
-                                            <Button className='primary-add-product' type='primary'>+ {AppConstants.addAffiliate}</Button>
-                                        </NavLink>
-                                    </div>
-                                    : null
-                            }
                         </div>
                     </div>
                 </div>
@@ -299,51 +268,31 @@ class AffiliateDirectory extends Component {
     ////////form content view
     contentView = () => {
         let userState = this.props.userState;
-        let affiliates = userState.affiliateList;
-        let total = userState.affiliateListTotalCount;
+        let affiliates = userState.affiliateDirectoryList;
+        let total = userState.affiliateDirectoryTotalCount;
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
-                    {/* <Table className="home-dashboard-table" columns={columns} dataSource={affiliates} pagination={false}
-                        onRow={(r) => ({onClick: () => this.naviageToAffiliate(r, this.state.organisationId)})}
-                    /> */}
                     <Table className="home-dashboard-table"
                         columns={columns}
                         dataSource={affiliates}
                         pagination={false}
-                        loading={this.props.userState.onLoad === true && true}
+                        loading={this.props.userState.onAffiliateDirLoad === true && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                        current={userState.affiliateListPage}
+                        current={userState.affiliateDirectoryPage}
                         total={total}
-                        onChange={(page) => this.handleAffiliateTableList(page, this.state.organisationId, this.state.affiliatedToOrgId, this.state.organisationTypeRefId, this.state.statusRefId)}
+                        onChange={(page) => this.handleAffiliateTableList(page)}
                     />
                 </div>
             </div>
         )
     }
 
-    //////footer view containing all the buttons like submit and cancel
-    footerView = () => {
-        let affiliateToData = this.props.userState.affiliateTo;
-        return (
-            <div>
-                {
-                    affiliateToData.isEligibleToAddAffiliate ?
-                        <div className="d-flex flex-row-reverse">
-                            <NavLink to={"/userAddAffiliates"}>
-                                <Button className='primary-add-product' type='primary'>+ {AppConstants.addAffiliate}</Button>
-                            </NavLink>
-                        </div>
-                        : null
-                }
-            </div>
-        )
-    }
-
+   
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
@@ -355,9 +304,6 @@ class AffiliateDirectory extends Component {
                         {this.dropdownView()}
                         {this.contentView()}
                     </Content>
-                    {/* <Footer>
-                        {this.footerView()}
-                    </Footer> */}
                 </Layout>
             </div>
 
@@ -368,17 +314,16 @@ class AffiliateDirectory extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getAffiliatesListingAction,
-        getUreAction,
-        getAffiliateToOrganisationAction,
-        affiliateDeleteAction
+        getOnlyYearListAction,
+        getAffiliateDirectoryAction
     }, dispatch);
 
 }
 
 function mapStatetoProps(state) {
     return {
-        userState: state.UserState
+        userState: state.UserState,
+        appState: state.AppState
     }
 }
 

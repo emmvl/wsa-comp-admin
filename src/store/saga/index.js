@@ -701,4 +701,6 @@ export default function* root_saga() {
 
   // Player Change division 
   yield takeEvery(ApiConstants.API_CHANGE_COMPETITION_DIVISION_PLAYER_LOAD, playerChangeDivisionSaga)
+
+  yield takeEvery(ApiConstants.API_AFFILIATE_DIRECTORY_LOAD, userSaga.getAffiliateDirectorySaga)
 }

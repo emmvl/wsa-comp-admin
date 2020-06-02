@@ -263,6 +263,16 @@ function exportOrgRegQuestionAction(payload) {
 }
 
 
+/* Affiliates Listing */
+function getAffiliateDirectoryAction(payload) {
+  const action = {
+    type: ApiConstants.API_AFFILIATE_DIRECTORY_LOAD,
+    payload: payload
+  };
+  return action;
+}
+
+
 export {
   getRoleAction,
   getUreAction,
@@ -293,5 +303,6 @@ export {
   saveOrganiationPhotoAction,
   deleteOrganiationPhotoAction,
   deleteOrgContact,
-  exportOrgRegQuestionAction
+  exportOrgRegQuestionAction,
+  getAffiliateDirectoryAction
 }

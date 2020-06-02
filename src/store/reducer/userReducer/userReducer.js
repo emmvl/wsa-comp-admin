@@ -95,7 +95,13 @@ const initialState = {
     referFriendPage: 1,
     referFriendTotalCount: 1,
     orgPhotosList: [],
-    userDashboardCounts: null
+    userDashboardCounts: null,
+    onAffiliateDirLoad: false,
+    affiliateDirectoryList: [],
+    affiliateDirectoryPage: 1,
+    affiliateDirectoryTotalCount: 1,
+    organisationTypes: []
+
 };
 
 function userReducer(state = initialState, action) {
@@ -504,6 +510,21 @@ function userReducer(state = initialState, action) {
                 onExpOrgRegQuesLoad: false,
                 status: action.status,
                 error: null
+            };
+        case ApiConstants.API_AFFILIATE_DIRECTORY_LOAD:
+            return { ...state, onAffiliateDirLoad: true };
+
+        case ApiConstants.API_AFFILIATE_DIRECTORY_SUCCESS:
+            let affiliateDirData = action.result;
+
+            return {
+                ...state,
+                onAffiliateDirLoad: false,
+                affiliateDirectoryList: affiliateDirData.affiliates,
+                affiliateDirectoryPage: affiliateDirData.page ? affiliateDirData.page.currentPage : 1,
+                affiliateDirectoryTotalCount: affiliateDirData.page.totalCount,
+                organisationTypes: isArrayNotEmpty(affiliateDirData.organisationTypes) ?  affiliateDirData.organisationTypes : [],
+                status: action.status
             };
         default:
             return state;
