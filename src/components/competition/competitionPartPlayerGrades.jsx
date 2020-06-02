@@ -855,8 +855,8 @@ class CompetitionPartPlayerGrades extends Component {
                     className="add-membership-type-modal"
                     title={AppConstants.addTeam}
                     visible={this.state.visible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
+                    onOk={()=>this.handleOk()}
+                    onCancel={()=>this.handleCancel()}
                 >
                     <InputWithHead
                         required={"pt-0 mt-0"}

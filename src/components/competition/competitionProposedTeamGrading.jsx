@@ -156,7 +156,7 @@ const columns = [
         key: 'proposedGradeRefId',
         render: (proposedGradeRefId, record) => (
             record.isDirectRegistration == 0 ?
-                <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>{gradeName(proposedGradeRefId)}</span> : ""
+                <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>{proposedGradeRefId > 0 ? gradeName(proposedGradeRefId) : ''}</span> : ""
         ),
         sorter: (a, b) => tableSort(a, b, "proposedGradeRefId")
 
