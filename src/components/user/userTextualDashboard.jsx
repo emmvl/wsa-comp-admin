@@ -298,7 +298,7 @@ class UserTextualDashboard extends Component{
     }
 
       ///dropdown view containing all the dropdown of header
-      dropdownView = () => {
+    dropdownView = () => {
         let uniqueValues = [];
         const {genderData} = this.props.commonReducerState;
         const {competitions, organisations, roles} = this.props.userState;
@@ -416,6 +416,32 @@ class UserTextualDashboard extends Component{
         )
     }
 
+    countView = () =>{
+        const {userDashboardCounts} = this.props.userState;
+        let noOfRegisteredUsers = userDashboardCounts!= null ? userDashboardCounts.noOfRegisteredUsers: 0;
+        let noOfUsers  = userDashboardCounts!= null ? userDashboardCounts.noOfUsers: 0;
+        return(
+            <div className="comp-dash-table-view mt-2">
+                <div>
+                    <div className="row">
+                        <div className="col-sm-6" >
+                            <div className="registration-count">
+                                <div className="reg-payment-paid-reg-text">No. of Users</div>
+                                <div className="reg-payment-price-text">{noOfUsers}</div>
+                            </div>
+                        </div>
+                        <div className="col-sm-6" >
+                            <div className="registration-count">
+                                <div className="reg-payment-paid-reg-text">No. of Registered Users</div>
+                                <div className="reg-payment-price-text">{noOfRegisteredUsers}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     contentView = () => {
         let userState = this.props.userState;
         let userDashboardTextualList = userState.userDashboardTextualList;
@@ -446,11 +472,12 @@ class UserTextualDashboard extends Component{
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
-                <InnerHorizontalMenu menu={"user"} userSelectedKey={"4"} />
+                <InnerHorizontalMenu menu={"user"} userSelectedKey={"1"} />
                 <Layout>
                     {this.headerView()}
                     <Content>
                         {this.dropdownView()}
+                        {this.countView()}
                         {this.contentView()}
                         <Loader
                             visible={

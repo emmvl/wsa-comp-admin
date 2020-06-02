@@ -359,7 +359,8 @@ class CompetitionPlayerGrades extends Component {
                     (team.players || []).map((item, pIndex) => {
                         if(item.isChecked){
                             let obj = {
-                                playerId: item.playerId
+                                playerId: item.playerId,
+                                teamId: team.teamId 
                             }
                             res.players.push(obj);
                         }

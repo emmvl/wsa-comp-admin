@@ -94,7 +94,8 @@ const initialState = {
     referFriendList: [],
     referFriendPage: 1,
     referFriendTotalCount: 1,
-    orgPhotosList: []
+    orgPhotosList: [],
+    userDashboardCounts: null
 };
 
 function userReducer(state = initialState, action) {
@@ -304,6 +305,7 @@ function userReducer(state = initialState, action) {
                 competitions:isArrayNotEmpty(textualData.competitions) ? textualData.competitions : [],
                 organisations: isArrayNotEmpty(textualData.organisations) ? textualData.organisations : [],
                 roles: isArrayNotEmpty(textualData.roles) ? textualData.roles : [],
+                userDashboardCounts: textualData.counts,
                 status: action.status
             };
         case ApiConstants.API_USER_MODULE_PERSONAL_DETAIL_LOAD:
