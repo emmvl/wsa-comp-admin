@@ -149,7 +149,20 @@ export function* publishGradeTeamSummarySaga(action) {
                 status: result.status,
             });
             message.success(result.result.data.message)
-        } else {
+        } 
+        else if(result.status === 4){
+            let res = JSON.parse(JSON.stringify(result));
+            yield put({ type: ApiConstants.API_COMPETITION_OWN_TEAM_GRADING_FAIL,
+                status: result.status });
+            setTimeout(() => {
+                message.config({
+                    duration: 4,
+                    maxCount: 1
+                })
+                message.error(JSON.stringify(result.result.data.message));
+            }, 800);
+        }
+        else {
             yield call(failSaga, result)
         }
     } catch (error) {
@@ -189,7 +202,8 @@ export function* proposedTeamGradingComment(action) {
                 teamId: action.teamId,
                 comment: action.comment
             });
-        } else {
+        }
+        else {
             yield call(failSaga, result)
         }
     } catch (error) {
