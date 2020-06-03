@@ -263,10 +263,19 @@ function exportOrgRegQuestionAction(payload) {
 }
 
 
-/* Affiliates Listing */
+/* Affiliate Directory Listing */
 function getAffiliateDirectoryAction(payload) {
   const action = {
     type: ApiConstants.API_AFFILIATE_DIRECTORY_LOAD,
+    payload: payload
+  };
+  return action;
+}
+
+/* Export Affiliate Directory */
+function exportAffiliateDirectoryAction(payload) {
+  const action = {
+    type: ApiConstants.API_EXPORT_AFFILIATE_DIRECTORY_LOAD,
     payload: payload
   };
   return action;
@@ -304,5 +313,6 @@ export {
   deleteOrganiationPhotoAction,
   deleteOrgContact,
   exportOrgRegQuestionAction,
-  getAffiliateDirectoryAction
+  getAffiliateDirectoryAction,
+  exportAffiliateDirectoryAction
 }

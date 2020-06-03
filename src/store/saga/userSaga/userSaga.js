@@ -538,3 +538,21 @@ export function* getAffiliateDirectorySaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+export function* exportAffiliateDirectorySaga(action) {
+    try {
+        const result = yield call(userHttpApi.exportAffiliateDirectory, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_EXPORT_AFFILIATE_DIRECTORY_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+          //  message.success(result.result.data.message);
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

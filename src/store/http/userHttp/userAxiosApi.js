@@ -153,7 +153,7 @@ let userHttpApi = {
   },
   async getOrgPhotosList(payload) {
     let organisationUniqueKey = await getOrganisationData().organisationUniqueKey;
-    var url = `api/organisationphoto/list?organisationUniqueKey=${organisationUniqueKey}`;
+    var url = `api/organisationphoto/list?organisationUniqueKey=${payload.organisationId}`;
     return Method.dataGet(url, token, payload);
   },
   saveOrgPhoto(payload) {
@@ -194,7 +194,10 @@ let userHttpApi = {
     var url = `api/affiliatedirectory`;
     return Method.dataPost(url, token, payload);
   },
-
+  exportAffiliateDirectory(payload) {
+    var url = `api/export/affiliatedirectory`;
+    return Method.dataPostDownload(url, token, payload,"AffiliateDirectory");
+  },
 }
 
 let Method = {

@@ -6,11 +6,13 @@ import { NavLink } from "react-router-dom";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
-import { getAffiliateDirectoryAction} from "../../store/actions/userAction/userAction";
+import { getAffiliateDirectoryAction, exportAffiliateDirectoryAction} from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 import { bindActionCreators } from "redux";
 import AppImages from "../../themes/appImages";
 import { getOrganisationData } from "../../util/sessionStorage";
+import Loader from '../../customComponents/loader';
+
 const { Content } = Layout;
 const { Option } = Select;
 const { confirm } = Modal;
@@ -69,34 +71,19 @@ const columns = [
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, e) => (
-            isUsed === false ? <Menu
-                className="action-triple-dot-submenu"
-                theme="light"
-                mode="horizontal"
-                style={{ lineHeight: "25px" }}
-            >
-                <SubMenu
-                    key="sub1"
-                    title={
-                        <img
-                            className="dot-image"
-                            src={AppImages.moreTripleDot}
-                            alt=""
-                            width="16"
-                            height="16"
-                        />
-                    }
-                >
+            <Menu className="action-triple-dot-submenu" theme="light" mode="horizontal"
+                style={{ lineHeight: "25px" }}>
+                <SubMenu key="sub1"
+                    title={ <img className="dot-image" src={AppImages.moreTripleDot}
+                            alt="" width="16" height="16" />
+                    }>
                     <Menu.Item key="1">
-                        <NavLink to={{ pathname: `/userEditAffiliates`, state: { affiliateOrgId: e.affiliateOrgId, orgTypeRefId: e.organisationTypeRefId } }} >
-                            <span>Edit</span>
+                        <NavLink to={{ pathname: `/userOurOrganisation`, state: { affiliateOrgId: e.affiliateOrgId, orgTypeRefId: e.organisationTypeRefId, isEditable: false, sourcePage: "DIR" } }} >
+                            <span>View</span>
                         </NavLink>
                     </Menu.Item>
-                    {/* <Menu.Item key="2" onClick={() => this_Obj.showDeleteConfirm(e.affiliateId)}>
-                        <span>Delete</span>
-                    </Menu.Item> */}
                 </SubMenu>
-            </Menu> : null
+            </Menu>
         )
     }
 ];
@@ -162,7 +149,7 @@ class AffiliateDirectory extends Component {
           this.handleAffiliateTableList(1);
         }
         else if (key == "organisationTypeRefId"){
-            await   this.setState({competitionUniqueKey: value});
+            await   this.setState({organisationTypeRefId: value});
             this.handleAffiliateTableList(1);
         }
         else if (key == "searchText"){
@@ -185,6 +172,18 @@ class AffiliateDirectory extends Component {
         this.handleAffiliateTableList(1);
     }
 
+    exportAffiliateDirectory = () => {
+        let filter = 
+        {
+            organisationUniqueKey: this.state.organisationId,
+            yearRefId: this.state.yearRefId,
+            organisationTypeRefId: this.state.organisationTypeRefId,
+            searchText: this.state.searchText,
+        }
+
+        this.props.exportAffiliateDirectoryAction(filter);
+    }
+
     headerView = () => {
         return (
             <div className="comp-player-grades-header-view-design" >
@@ -194,6 +193,29 @@ class AffiliateDirectory extends Component {
                             {/* <Breadcrumb.Item className="breadcrumb-product">User</Breadcrumb.Item> */}
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.affiliateDirectory}</Breadcrumb.Item>
                         </Breadcrumb>
+                    </div>
+                    <div className="col-sm" style={{
+                        display: "flex", flexDirection: 'row', alignItems: "center",
+                        justifyContent: "flex-end", width: "100%", marginRight:'3.0%'
+                    }}>
+                        <div className="row">
+                            <div className="col-sm">
+                                <div className="comp-dashboard-botton-view-mobile">
+                                    <Button className="primary-add-comp-form" type="primary" onClick={()=> this.exportAffiliateDirectory()}>
+                                            <div className="row">
+                                                <div className="col-sm">
+                                                    <img
+                                                        src={AppImages.export}
+                                                        alt=""
+                                                        className="export-image"
+                                                    />
+                                                    {AppConstants.export}
+                                                </div>
+                                            </div>
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div >
@@ -303,6 +325,10 @@ class AffiliateDirectory extends Component {
                     <Content>
                         {this.dropdownView()}
                         {this.contentView()}
+                        <Loader
+                            visible={
+                                this.props.userState.onExpAffiliateDirLoad
+                            } />
                     </Content>
                 </Layout>
             </div>
@@ -315,7 +341,8 @@ class AffiliateDirectory extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getOnlyYearListAction,
-        getAffiliateDirectoryAction
+        getAffiliateDirectoryAction,
+        exportAffiliateDirectoryAction
     }, dispatch);
 
 }

@@ -100,7 +100,8 @@ const initialState = {
     affiliateDirectoryList: [],
     affiliateDirectoryPage: 1,
     affiliateDirectoryTotalCount: 1,
-    organisationTypes: []
+    organisationTypes: [],
+    onExpAffiliateDirLoad: false
 
 };
 
@@ -525,6 +526,17 @@ function userReducer(state = initialState, action) {
                 affiliateDirectoryTotalCount: affiliateDirData.page.totalCount,
                 organisationTypes: isArrayNotEmpty(affiliateDirData.organisationTypes) ?  affiliateDirData.organisationTypes : [],
                 status: action.status
+            };
+
+        case ApiConstants.API_EXPORT_AFFILIATE_DIRECTORY_LOAD:
+            return { ...state, onExpAffiliateDirLoad: true };
+
+        case ApiConstants.API_EXPORT_AFFILIATE_DIRECTORY_SUCCESS:
+            return {
+                ...state,
+                onExpAffiliateDirLoad: false,
+                status: action.status,
+                error: null
             };
         default:
             return state;

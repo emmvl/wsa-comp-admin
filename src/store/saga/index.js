@@ -704,7 +704,9 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_CHANGE_COMPETITION_DIVISION_PLAYER_LOAD, playerChangeDivisionSaga)
 
   yield takeEvery(ApiConstants.API_AFFILIATE_DIRECTORY_LOAD, userSaga.getAffiliateDirectorySaga)
-  yield takeEvery(ApiConstants.API_COURT_LIST_LOAD, courtListSaga)
 
+  yield takeEvery(ApiConstants.API_COURT_LIST_LOAD, courtListSaga)
   yield takeEvery(ApiConstants.API_UPDATE_DRAWS_LOCK_LOAD, updateDrawsLock)
+
+  yield takeEvery(ApiConstants.API_EXPORT_AFFILIATE_DIRECTORY_LOAD, userSaga.exportAffiliateDirectorySaga)
 }
