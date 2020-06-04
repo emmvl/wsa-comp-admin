@@ -352,6 +352,7 @@ let CompetitionAxiosApi = {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
+            organisationId: organisationUniqueKey,
             yearRefId: year,
             competitionUniqueKey: competitionId,
             competitionMembershipProductDivisionId: divisionId,
@@ -370,6 +371,7 @@ let CompetitionAxiosApi = {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
+            organisationId: organisationUniqueKey,
             competitionUniqueKey: competitionId,
             competitionMembershipProductDivisionId: divisionId,
             teamId: teamId,

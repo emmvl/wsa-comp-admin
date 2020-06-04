@@ -675,7 +675,9 @@ class CompetitionProposedTeamGrading extends Component {
 
     ////////form content view
     contentView = () => {
-        let proposedTeamGradingData = this.props.ownTeamGradingState.getCompOwnProposedTeamGradingData
+        let proposedTeamGradingData = this.props.ownTeamGradingState.getCompOwnProposedTeamGradingData;
+        let divisionData = this.props.registrationState.allDivisionsData.filter(x=>x.competitionMembershipProductDivisionId!= null);
+
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
@@ -728,7 +730,7 @@ class CompetitionProposedTeamGrading extends Component {
                                 className="year-select change-division-select"
                                 onChange={(divisionId) => this.setState({competitionDivisionId: divisionId})}
                                 value={JSON.parse(JSON.stringify(this.state.competitionDivisionId))}>
-                                {this.props.registrationState.allDivisionsData.map(item => {
+                                {divisionData.map(item => {
                                 return (
                                     <Option key={"division" + item.competitionMembershipProductDivisionId}
                                         value={item.competitionMembershipProductDivisionId}>

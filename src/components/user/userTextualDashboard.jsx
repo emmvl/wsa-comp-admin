@@ -284,7 +284,7 @@ class UserTextualDashboard extends Component{
                                                         alt=""
                                                         className="export-image"
                                                     />
-                                                    {AppConstants.exportRegQuestion}
+                                                    {AppConstants.export}
                                                 </div>
                                             </div>
                                     </Button>
