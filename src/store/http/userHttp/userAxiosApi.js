@@ -188,7 +188,7 @@ let userHttpApi = {
   },
   exportOrgRegQuestions(payload) {
     var url = `api/export/registration/questions`;
-    return Method.dataPostDownload(url, token, payload,"RegistrationQuestions");
+    return Method.dataPostDownload(url, token, payload,"Userexport");
   },
   async affiliateDirectory(payload) {
     var url = `api/affiliatedirectory`;
