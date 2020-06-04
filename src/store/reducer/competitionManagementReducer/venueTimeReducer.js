@@ -81,7 +81,7 @@ const initialState = {
     courtPrefArrayStore: null,
     searchVenueList: [],
     venueIsUsed: false,
-    onVenuSucess: false
+    onVenueSuccess: false
 };
 
 ////get court rotation
@@ -439,7 +439,7 @@ function VenueTimeState(state = initialState, action) {
         case ApiConstants.API_VENUE_CONSTRAINTS_LIST_LOAD:
             state.competitionUniqueKey = action.competitionUniqueKey
             state.yearId = action.yearRefId
-            return { ...state, onLoad: true, onVenuSucess: true };
+            return { ...state, onLoad: true, onVenueSuccess: true };
 
         case ApiConstants.API_VENUE_CONSTRAINTS_LIST_SUCCESS:
 
@@ -497,7 +497,7 @@ function VenueTimeState(state = initialState, action) {
             }
             //  state.venueConstrainstData['courtRotationRefId'] = state.selectedRadioBtn;
             state.onLoad = false
-            state.onVenuSucess = false
+            state.onVenueSuccess = false
             return {
                 ...state,
                 result: action.result,

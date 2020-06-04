@@ -207,7 +207,7 @@ class LiveScoreNewsView extends Component {
                                         <Button
                                             className="open-reg-button mr-0" type="primary"
                                             onClick={() => this.onSubmitNewsPublish(newsDataArr, true)}>{AppConstants.publish}</Button>
-                                        <div style={{ paddingRight: 20, alignItems: 'center', justifyContent: 'center', marginTop: '10px' }}>
+                                        <div style={{ paddingRight: 20, alignItems: 'center', justifyContent: 'center' }}>
                                             <Tooltip background='#ff8237'>
                                                 <span>{AppConstants.newsPublishMsg}</span>
                                             </Tooltip>
@@ -228,7 +228,7 @@ class LiveScoreNewsView extends Component {
                                         }
 
                                     </Button>
-                                    <div style={{ marginTop: '10px' }} >
+                                    <div  >
                                         <Tooltip background='#ff8237'>
                                             <span>{AppConstants.newsPublishNotifyMsg}</span>
                                         </Tooltip>

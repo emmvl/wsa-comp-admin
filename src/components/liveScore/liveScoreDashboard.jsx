@@ -584,14 +584,14 @@ class LiveScoreDashboard extends Component {
                 </div>
 
                 <div className="col-sm text-right" >
-                    {/* <NavLink to={{
+                    <NavLink to={{
                         pathname: './liveScoreAddIncident',
                         state: { key: 'dashboard' }
                     }}>
                         <Button className='primary-add-comp-form' type='primary'>
                             + {AppConstants.addNew}
                         </Button>
-                    </NavLink> */}
+                    </NavLink>
                 </div>
             </div>
         )

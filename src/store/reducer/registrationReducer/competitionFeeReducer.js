@@ -1494,7 +1494,7 @@ function competitionFees(state = initialState, action) {
                     membershipProductUniqueKey: action.item.membershipProductUniqueKey,
                     competitionMembershipProductId: action.item.competitionMembershipProductId,
                     competitionMembershipProductDivisionId: 0,
-					competitionDivisionId: 0,						 
+                    competitionDivisionId: 0,
                     ageRestriction: false,
                     genderRestriction: false,
                     parentIndex: action.index
@@ -1932,7 +1932,11 @@ function competitionFees(state = initialState, action) {
                 state.selectedVenuesAdd = "Add"
                 state.selectedVenues.push(venueSuccess.venueId)
             }
-
+            let defaultPostVenueObject = {
+                competitionVenueId: 0,
+                venueId: venueSuccess.venueId
+            }
+            state.postVenues.push(defaultPostVenueObject)
             console.log(state.selectedVenues)
             return { ...state }
 
@@ -1987,7 +1991,7 @@ function competitionFees(state = initialState, action) {
                 status: action.status,
                 error: null
             };
-    
+
 
         default:
             return state;

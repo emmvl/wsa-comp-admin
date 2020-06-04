@@ -13,6 +13,7 @@ import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from '../../store/a
 import { isArrayNotEmpty } from "../../util/helpers";
 import moment from "moment";
 import { checkRegistrationType } from "../../util/permissions";
+import Tooltip from 'react-png-tooltip'
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -214,10 +215,15 @@ class CompetitionDashboard extends Component {
             >
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm-4">
+                        <div className="col-sm-4" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                             <span className="form-heading">
                                 {AppConstants.participateInComp}
                             </span>
+                            <div style={{ marginTop: -10 }}>
+                                <Tooltip placement="top" background='#ff8237'>
+                                    <span>{AppConstants.participateCompMsg}</span>
+                                </Tooltip>
+                            </div>
                         </div>
                         <div className="col-sm-8">
                             <div className="year-select-heading-view">
@@ -286,10 +292,15 @@ class CompetitionDashboard extends Component {
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm">
+                        <div className="col-sm" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                             <span className="form-heading">
                                 {AppConstants.ownedCompetitions}
                             </span>
+                            <div style={{ marginTop: -10 }}>
+                                <Tooltip placement="top" background='#ff8237'>
+                                    <span>{AppConstants.ownedCompetitionMsg}</span>
+                                </Tooltip>
+                            </div>
                         </div>
                         <div className="col-sm" style={{
                             display: "flex", maxWidth: "99%",

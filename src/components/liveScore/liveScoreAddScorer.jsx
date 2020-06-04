@@ -331,16 +331,20 @@ class LiveScoreAddScorer extends Component {
 
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"new"}>{AppConstants.new}</Radio>
-                            <Tooltip background='#ff8237'>
-                                <span>{AppConstants.managerNewMsg + 'Scorer.'}</span>
-                            </Tooltip>
+                            <div style={{ marginLeft: -10, width: 50 }}>
+                                <Tooltip background='#ff8237'>
+                                    <span>{AppConstants.newMsgForScorerManager}</span>
+                                </Tooltip>
+                            </div>
                         </div>
 
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', marginLeft: -10 }}>
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"existing"}>{AppConstants.existing} </Radio>
-                            <Tooltip background='#ff8237' >
-                                <span>{AppConstants.managerExsitingMsg + 'Scorer.'}</span>
-                            </Tooltip>
+                            <div style={{ marginLeft: -10 }}>
+                                <Tooltip background='#ff8237' >
+                                    <span>{AppConstants.existingMsgForScorerManager}</span>
+                                </Tooltip>
+                            </div>
                         </div>
 
                     </div>

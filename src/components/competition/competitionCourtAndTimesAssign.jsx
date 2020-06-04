@@ -29,6 +29,7 @@ import {
 } from "../../util/sessionStorage"
 import AppImages from "../../themes/appImages";
 import Loader from '../../customComponents/loader'
+import Tooltip from 'react-png-tooltip'
 
 
 
@@ -577,7 +578,12 @@ class CompetitionCourtAndTimesAssign extends Component {
                             {commonState.timeSlotRotation.length > 0 && commonState.timeSlotRotation.map((item, index) => {
                                 return (
                                     <div>
-                                        <Radio key={item.id} value={item.id}> {item.description}</Radio>
+                                        <div >
+                                            <Radio key={item.id} value={item.id}> {item.description}</Radio>
+                                            {/* <Tooltip background='#ff8237'>
+                                                <span>{item.helpMsg}</span>
+                                            </Tooltip> */}
+                                        </div>
                                         {isArrayNotEmpty(item.subReferences) && <div>
                                             <Form.Item  >
                                                 {getFieldDecorator('timeslotRotationRefId', { rules: [{ required: false, message: "Please select time slot preference" }] })(
@@ -590,6 +596,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                     >
                                                         {timeSlotData.mainTimeRotationID == item.id && item.subReferences.map((subArr) => {
                                                             return (
+
                                                                 <Radio key={"data" + subArr.id} value={subArr.id}> {subArr.description}</Radio>
                                                             )
                                                         })}

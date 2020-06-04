@@ -109,7 +109,7 @@ class CompetitionDraws extends Component {
       let competitionList = this.props.appState.own_CompetitionArr;
       if (nextProps.appState.own_CompetitionArr !== competitionList) {
         if (competitionList.length > 0) {
-          let competitionId = competitionList[7].competitionId;
+          let competitionId = competitionList[0].competitionId;
           this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId);
           setOwn_competition(competitionId)
           this.setState({ firstTimeCompId: competitionId, venueLoad: true })

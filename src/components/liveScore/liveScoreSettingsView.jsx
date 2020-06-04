@@ -527,16 +527,20 @@ class LiveScoreSettingsView extends Component {
 
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"SINGLE"}>{AppConstants.single}</Radio>
-                                <Tooltip background='#ff8237'>
-                                    <span>{AppConstants.singleScoringMsg}</span>
-                                </Tooltip>
+                                <div style={{ marginLeft: -10 }}>
+                                    <Tooltip background='#ff8237'>
+                                        <span>{AppConstants.singleScoringMsg}</span>
+                                    </Tooltip>
+                                </div>
                             </div>
 
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', marginLeft: 10 }}>
                                 <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"50_50"}>{'50/50'} </Radio>
-                                <Tooltip background='#ff8237' >
-                                    <span>{AppConstants.fiftyScoringMsg}</span>
-                                </Tooltip>
+                                <div style={{ marginLeft: -10 }}>
+                                    <Tooltip background='#ff8237' >
+                                        <span>{AppConstants.fiftyScoringMsg}</span>
+                                    </Tooltip>
+                                </div>
                             </div>
 
                         </div>
@@ -585,7 +589,7 @@ class LiveScoreSettingsView extends Component {
                         onChange={(e) => this.props.onChangeSettingForm({ key: "buzzerEnabled", data: e.target.checked })}
                         checked={buzzerEnabled}
                     >
-                        {AppConstants.turnOffBuzzer}
+                        {AppConstants.buzzer}
                     </Checkbox>
 
                     <Checkbox
