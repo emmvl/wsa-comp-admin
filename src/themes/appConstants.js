@@ -1143,6 +1143,14 @@ const AppConstants = {
   courtsMsg:
     'Add the Courts at this venue. For effective use of the Live Scoring App please add Longitude and Latitude of the Court.',
   affiliateDirectory: 'Affiliate Directory',
+  inviteTypeRef: 'InviteType',
+  inviteType:'Type',
+  DobMoreThan:'DOB more than',
+  DobLessThan:'DOB less than',
+  NoDobPreference:'No DOB Preference',
+  DobPreference:'DOB Preference',
+  both:'Both',
+  sendInvitesTo: "Send invites to"
 };
 
 export default AppConstants;

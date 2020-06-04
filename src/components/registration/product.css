@@ -358,6 +358,22 @@
   font-family: inter-medium;
 }
 
+.dob-pref-radio-inner-heading {
+  color: var(--app-1b1b34);
+}
+
+.dob-pref-date-picker {
+  margin-top: 29px;
+}
+.applicable-to-datepicker-col {
+  display: flex;
+  align-content: flex-start;
+  padding-top: 32px;
+  margin: 0px 23px 8px 10px;
+  align-self: center;  
+  color: var(--app-1b1b34);
+}								   
+
 .reg-pro-rename-text {
   font-size: 13px;
   color: var(--app-color);

@@ -186,6 +186,13 @@ function courtListAction(venueId) {
 
     return action;
 }
+// Send invite to
+function inviteTypeAction(){
+    const action = {
+        type: ApiConstants.API_GET_INVITE_TYPE_LOAD,
+    }
+    return action;
+}				 		
 
 export {
     timeSlotInit,
@@ -209,5 +216,6 @@ export {
     getApplyToAction,
     getExtraTimeDrawAction,
     getFinalFixtureTemplateAction,
-    courtListAction
+    courtListAction,
+    inviteTypeAction				
 }
