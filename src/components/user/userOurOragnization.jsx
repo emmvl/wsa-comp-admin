@@ -82,12 +82,10 @@ class UserOurOragnization extends Component {
     async componentDidMount(){
       //  console.log("Component Did mount");
         if(this.props.location.state!= null && this.props.location.state!= undefined){
-            let isEditable = true;
+            let isEditable = this.props.location.state.isEditable;
             let affiliateOrgId = this.props.location.state.affiliateOrgId;
             let sourcePage = this.props.location.state.sourcePage;
-            if(affiliateOrgId != this.state.organisationId){
-                isEditable = this.props.location.state.isEditable;
-            }
+           
             await this.setState({organisationId: affiliateOrgId, isEditable: isEditable, sourcePage: sourcePage})
         }
         
