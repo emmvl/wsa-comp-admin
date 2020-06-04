@@ -358,16 +358,20 @@ if(x[0].charCodeAt()>=97)
 
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"new"}>{AppConstants.new}</Radio>
-                                <Tooltip background='#ff8237'>
-                                    <span>{AppConstants.managerNewMsg + 'Manager.'}</span>
-                                </Tooltip>
+                                <div style={{ marginLeft: -10, width: 50 }}>
+                                    <Tooltip background='#ff8237'>
+                                        <span>{AppConstants.teamNewMsg}</span>
+                                    </Tooltip>
+                                </div>
                             </div>
 
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', marginLeft: -15 }}>
                                 <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"existing"}>{AppConstants.existing} </Radio>
-                                <Tooltip background='#ff8237' >
-                                    <span>{AppConstants.managerExsitingMsg + 'Manager.'}</span>
-                                </Tooltip>
+                                <div style={{ marginLeft: -10 }}>
+                                    <Tooltip background='#ff8237' >
+                                        <span>{AppConstants.teamExsitingMsg}</span>
+                                    </Tooltip>
+                                </div>
                             </div>
                         </div>
                     </Radio.Group>

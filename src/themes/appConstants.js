@@ -1053,10 +1053,9 @@ const AppConstants = {
     'A list of all of the news that currently appears in the Game Day App',
   todayMatchMsg:
     'A list of all the matches being played on this day. This list shows whether scorers have been set , attendance has been taken and if umpires have been recorded(optional). Please refresh your screen to get the latest updates.',
-  playersToPayMsg:
-    'A list of players who have registered and a required to pay either with cash or a voucher.',
+  playersToPayMsg: "A list of Players who have registered and are required to pay either with cash or a voucher.",
   todayIncidentMsg:
-    'A list of all of the incidents that have occured on day including injuries and disciplinary.',
+    'If enabled, a list of all of the incidents that have occured on this day including injuries and disciplinary.',
   matchDurationMsg:
     'Game time only (in minutes). This time should exclude time for breaks.',
   mainBreakMsg: 'Half time Break (in minutes).',
@@ -1106,8 +1105,7 @@ const AppConstants = {
     'A list of all Competitions your Organisations is Competing In.',
   ownedCompetitionMsg:
     'A List of all Competitions your Organisation is responsible for.',
-  compDetailsMsg:
-    'If you have opened Registrations for this Competition than Commpetiition Details fields will be pre-populated but you can change key details as appropriate. If you have not opened Registrations for this competition, then you need to complete these screens.',
+  compDetailsMsg: "If you have opened Registrations for this Competition than Competition Details fields will be pre-populated but you can change key details as appropriate. If you have not opened Registrations for this competition, then you need to complete these screens.",
   knockOutMsg:
     'A competition where teams are eliminated progressively. Each winner will play another in the next round until the final two teams meet.',
   roundRobinMsg: 'Teams play each other one time. Finals are optional.',
@@ -1131,18 +1129,19 @@ const AppConstants = {
     'Divisions, Grades and Teams equally rotate through the timeslots.',
   allocateToSametimeslotMsg:
     'Divisions and Grades can be allocated to a Timeslot.',
-  LatitudeMsg: `'1. Go to google maps https://www.google.com/maps\n\n'
-  2. Click on satellite view.\n\n'
-  3. Search for your venue.\n\n
-  4. Click and drop a pin on the centre of the court then copy and paste both the Longitude and Latitude.'`,
 
-  overRideSlotMsg:
-    'Only click if the Court has different availability to the Venue ie. Court 1 is only available for matches from 9am but the other courts are free from 8am',
-  gameDayMsg:
-    'Add the days of the week, matches can be played at this venue. Click + Add Day.',
-  courtsMsg:
-    'Add the Courts at this venue. For effective use of the Live Scoring App please add Longitude and Latitude of the Court.',
   affiliateDirectory: 'Affiliate Directory',
+
+  newMsgForScorerManager: 'Add a user who has NOT created an account in the App, is an administrator or has registered.',
+  existingMsgForScorerManager: 'Add a user who has either created an account in the App, is an administrator or has registered.',
+  evenRotationMsgFor_V_T: 'Evenly rotate Divisions or Grades to Courts.',
+  allocateToSameCourtMsg: 'Allocate Divisions or Grades to the same courts.',
+  noPreferenceMsgFor_V_T: 'There is No Preference for Court Rotations or Allocations',
+
+  teamNewMsg:"Add a user who has NOT created an account in the App, is an administrator or has registered.",
+  teamExsitingMsg:"Add a user who has either created an account in the App, is an administrator or has registered.",
+  doubleRoundRobinMsg:"Teams play each other twice. Finals are optional.",
+
   inviteTypeRef: 'InviteType',
   inviteType:'Type',
   DobMoreThan:'DOB more than',

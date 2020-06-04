@@ -43,6 +43,7 @@ import {
     getOwn_competition
 } from "../../util/sessionStorage"
 import Loader from '../../customComponents/loader'
+import Tooltip from 'react-png-tooltip'
 
 
 const { Header, Footer, Content } = Layout;
@@ -137,7 +138,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
         }
 
         if (nextProps.venueConstrainstData != venueConstrainstData) {
-            if (this.state.getDataLoading == true && this.props.venueTimeState.onVenuSucess == false) {
+            if (this.state.getDataLoading == true && this.props.venueTimeState.onVenueSuccess == false) {
                 this.setDetailsFieldValue()
                 this.setState({ getDataLoading: false })
             }
@@ -617,6 +618,9 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         return (
                             <div>
                                 <Radio key={"main" + index} value={item.id}>{item.description}</Radio>
+                                <Tooltip background='#ff8237'>
+                                    <span>{AppConstants.compDetailsMsg}</span>
+                                </Tooltip>
                                 {item.selectedPrefrence == 1 &&
                                     <div className="ml-5" >
                                         <Radio.Group

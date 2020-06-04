@@ -2,6 +2,8 @@ import ApiConstants from "../../themes/apiConstants";
 import history from "../../util/history";
 import { getRegistrationSetting } from "../objectModel/getRegSettingObject";
 import { getUserId, getOrganisationData } from "../../util/sessionStorage"
+import AppConstants from "../../themes/appConstants";
+
 const initialState = {
   onLoad: false,
   error: null,
@@ -40,6 +42,7 @@ const initialState = {
   demographicSetting: [],
   netballQuestionsSetting: [],
   otherQuestionsSetting: [],
+  helpMessage: [AppConstants.knockOutMsg, AppConstants.roundRobinMsg, AppConstants.doubleRoundRobinMsg, AppConstants.enhancedRoundRobinMsg]
 };
 function arraymove(arr, fromIndex, toIndex) {
   var element = arr[fromIndex];
@@ -91,6 +94,15 @@ function filteredSettingArray(result) {
     advanceSettings
   }
 
+}
+
+function getCompetitionFormatTypeWithHelpMsg(data, helpMsg) {
+  console.log(data, 'getCompetitionFormatTypeWithHelpMsg', helpMsg)
+
+  for (let i in data) {
+    data[i]['helpMsg'] = helpMsg[i]
+  }
+  return data;
 }
 
 function appState(state = initialState, action) {
@@ -274,10 +286,13 @@ function appState(state = initialState, action) {
       invitees.splice(notApplicableIndex, 1)
       const casualPayment = getRegistrationSetting(action.paymentOptionResult)
       // const seasonalPayment = getRegistrationSetting(action.paymentOptionResult[1])
+      console.log(action.competitionFormat, 'competitionFormat~~~~')
+      const competitionFormatTypeWithHelpMsg = getCompetitionFormatTypeWithHelpMsg(action.competitionFormat, state.helpMessage)
       return {
         ...state,
         onLoad: false,
-        competitionFormatTypes: action.competitionFormat,
+        // competitionFormatTypes: action.competitionFormat,
+        competitionFormatTypes: competitionFormatTypeWithHelpMsg,
         typesOfCompetition: action.compeitionTypeResult,
         registrationInvitees: invitees,
         casualPaymentOption: casualPayment,
@@ -302,6 +317,7 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_COMPETITION_FORMAT_TYPES_SUCCESS:
+      console.log(action.result, 'competitionFormatTypes')
       return {
         ...state,
         onLoad: false,

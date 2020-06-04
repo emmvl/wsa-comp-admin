@@ -454,7 +454,9 @@ class RegistrationCompetitionForm extends Component {
         };
         this_Obj = this;
         this.props.CLEAR_OWN_COMPETITION_DATA()
-        this.props.clearCompReducerDataAction("all")
+        let competitionId = null
+        competitionId = this.props.location.state ? this.props.location.state.id : null
+        competitionId !== null && this.props.clearCompReducerDataAction("all")
     }
 
     componentDidUpdate(nextProps) {

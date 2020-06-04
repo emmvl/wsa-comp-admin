@@ -85,7 +85,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                                     <Input
                                         disabled={record.isDisabled}
                                         required={"required-field pt-0 pb-0"}
-                                        className="input-inside-table-fees"
+                                        className="input-inside-table-venue-court"
                                         onChange={(courtName) => this.props.updateVenuAndTimeDataAction(courtName.target.value, index, 'venueCourtName', 'courtData')}
                                         setFieldsValue={courtName}
                                         placeholder={'Court Name'}
