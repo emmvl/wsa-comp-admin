@@ -469,6 +469,31 @@ export function* getFinalsFixtureTemplateSaga(action) {
     }
 }
 
+////get the radio meta service for send invites to
+
+export function* getSendInvitesSaga(action) {
+    try {
+        const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.inviteTypeRef)
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_INVITE_TYPE_SUCCESS,
+                result: result.result.data,
+                status: result.result.status
+            });
+        } else {
+            yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
+            setTimeout(() => {
+                alert(result.data.message);
+            }, 800);
+        }
+    } catch (error) {
+        yield put({
+            type: ApiConstants.API_COMMON_SAGA_ERROR,
+            error: error,
+            status: error.status
+        });
+    }
+}
 ////get the Venue list for own competition venue and times
 export function* courtListSaga(action) {
     try {

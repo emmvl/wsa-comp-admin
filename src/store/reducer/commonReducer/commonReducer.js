@@ -45,7 +45,8 @@ const initialState = {
     photoTypeData: [],
     applyToData: [],
     extraTimeDrawData: [],
-    finalFixtureTemplateData: [], courtLoad: false, courtList: []
+    finalFixtureTemplateData: [], courtLoad: false, courtList: [],
+	  inviteTypeData:[],				  
 };
 
 
@@ -331,7 +332,21 @@ function commonReducerState(state = initialState, action) {
                 courtList: action.result,
                 courtLoad: false
             };
+        // Send invite to
+       
+        case ApiConstants.API_GET_INVITE_TYPE_LOAD:
+            return {
+                ...state,
+                onLoad: true
+            }
 
+        case ApiConstants.API_GET_INVITE_TYPE_SUCCESS:
+            return {
+                ...state,
+                onLoad: true,
+                inviteTypeData: action.result,
+                status: action.status
+            }
         default:
             return state;
     }
