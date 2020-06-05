@@ -1204,8 +1204,8 @@ class RegistrationForm extends Component {
                 <InputWithHead heading={AppConstants.gender} />                
                 <Radio.Group className="reg-competition-radio"  disabled={isPublished}  value={registrationFormData.genderRefId}  
                         onChange={(e)=>(this.props.updateRegistrationForm(e.target.value,"genderRefId"))}>                               
-                    <Radio value={1}>{AppConstants.male}</Radio>
-                    <Radio value={2}> {AppConstants.female}</Radio> 
+                    <Radio value={2}>{AppConstants.male}</Radio>
+                    <Radio value={1}> {AppConstants.female}</Radio> 
                     <Radio value={3}>{AppConstants.both}</Radio>                          
                 </Radio.Group>
                 <Radio.Group className="mt-5 reg-competition-radio"  disabled={isPublished} 
