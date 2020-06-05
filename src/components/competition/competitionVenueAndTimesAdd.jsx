@@ -10,6 +10,7 @@ import {
     TimePicker,
     message,
     Form,
+    
 } from "antd";
 import "./competition.css";
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -104,7 +105,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                     filterIcon: () => {
                         return (
 
-                            <Tooltip placement="top" background='#ff8237'>
+                            <Tooltip placement="bottom"  background='#ff8237'>
                                 <span>{AppConstants.LatitudeMsg}</span>
                             </Tooltip>
 
@@ -146,7 +147,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                     filterIcon: () => {
                         return (
 
-                            <Tooltip placement="top" background='#ff8237'>
+                            <Tooltip placement="bottom" background='#ff8237'>
                                 <span>{AppConstants.LatitudeMsg}</span>
                             </Tooltip>
 
@@ -182,7 +183,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                     filterIcon: () => {
                         return (
 
-                            <Tooltip background='#ff8237'>
+                            <Tooltip placement="bottom" background='#ff8237'>
                                 {AppConstants.overRideSlotMsg}
                             </Tooltip>
 
@@ -801,9 +802,9 @@ class CompetitionVenueAndTimesAdd extends Component {
                 </div>
 
                 <div className="inside-container-view">
-                    <div className="table-responsive">
+                    <div className="contextual-table-responsive">
                         <Table
-                            className="fees-table"
+                            className="fees-table overflow-auto"
                             columns={this.state.courtColumns}
                             dataSource={venueCourts}
                             pagination={false}

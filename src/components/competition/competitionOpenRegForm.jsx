@@ -1773,9 +1773,10 @@ class CompetitionOpenRegForm extends Component {
                             <span className="form-heading pt-2 pl-2">
                                 {item.membershipProductName}
                             </span>
-                            <div className="table-responsive">
+                          
+                            <div className="contextual-table-responsive">
                                 <Table
-                                    className="fees-table"
+                                    className="fees-table overflow-auto"
                                     columns={this.state.divisionTable}
                                     dataSource={item.divisions}
                                     pagination={false}
@@ -1784,6 +1785,7 @@ class CompetitionOpenRegForm extends Component {
 
                                 />
                             </div>
+                            
                             <a>
                                 <span className="input-heading-add-another" onClick={() => !divisionsDisable ? this.addRemoveDivision(index, item, "add") : null}>+ {AppConstants.addDivision}</span>
                             </a>

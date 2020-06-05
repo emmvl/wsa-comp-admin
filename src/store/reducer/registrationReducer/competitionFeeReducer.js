@@ -890,10 +890,15 @@ function getTotalFees(feesOwner, data, mFees) {
 ///// check Fee Type ---- 
 
 function checkFeeType(feeArray) {
+    console.log("feeArray", feeArray)
     for (let i in feeArray) {
-        if (feeArray[i].fee !== null && feeArray[i].gst !== null) {
+        if (feeArray[i].mFees !== 0 && feeArray[i].mFees !== null) {
             return true
-        } else {
+        }
+        // if (feeArray[i].fee !== null && feeArray[i].gst !== null) {
+        //     return true
+        // } 
+        else {
             return false
         }
     }

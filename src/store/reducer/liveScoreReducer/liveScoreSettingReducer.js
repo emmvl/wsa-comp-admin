@@ -27,7 +27,11 @@ const initialState = {
     affiliateSelected: null,
     anyOrgSelected: null,
     otherSelected: null,
-    nonSelected: null
+    nonSelected: null,
+    invitedTo: [],
+    invitedOrganisation: [],
+    associationLeague: [],
+    clubSchool: []
 }
 export default function liveScoreSettingsViewReducer(state = initialState, { type, payload, }) {
 
@@ -112,31 +116,68 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
 
             if (keys == 'buzzerEnabled' || keys == 'warningBuzzerEnabled') {
                 state[keys] = Data
-            }
-
-            if (keys == 'recordUmpire') {
+            } else if (keys == 'recordUmpire') {
                 state.recordUmpire = Data
-            }
-            if (keys == 'affiliateSelected' || keys == 'anyOrgSelected' || keys == 'otherSelected' || keys == 'nonSelected') {
+            } else if (keys == 'affiliateSelected' || keys == 'anyOrgSelected' || keys == 'otherSelected' || keys == 'nonSelected') {
+                state.invitedOrganisation = []
+                state.associationLeague = []
+                state.clubSchool = []
+                console.log(Data, 'affiliateSelected')
 
                 if (keys == 'affiliateSelected') {
                     state.affiliateSelected = Data
                     state.otherSelected = null
+                    state.invitedTo.splice(0, 1, Data)
                 }
                 if (keys == 'anyOrgSelected') {
                     state.anyOrgSelected = Data
                     state.otherSelected = null
+                    state.invitedTo.splice(1, 1, Data)
                 }
 
                 if (keys == 'otherSelected') {
                     state.otherSelected = Data
                     state.affiliateSelected = null
                     state.anyOrgSelected = null
+                    state.invitedTo = []
+                    state.invitedTo.push(Data)
                 }
                 if (keys == 'nonSelected') {
                     state.nonSelected = Data ? null : Data
                 }
-                console.log(Data, 'LiveScore_SETTING_CHANGE_FORM')
+
+            } else if (keys == 'associationAffilite' || keys == 'clubAffilite') {
+
+                if (keys == 'associationAffilite') {
+                    console.log(Data, 'Data~~~~~~')
+                    state.associationLeague = Data
+                    let inviteeArray = []
+                    for (let i in Data) {
+                        let associationAffiliteObj = {
+                            organisationId: Data[i]
+                        }
+                        inviteeArray.push(associationAffiliteObj)
+
+                    }
+
+                    state.invitedOrganisation = inviteeArray
+
+                }
+
+                if (keys == 'clubAffilite') {
+                    state.clubSchool = Data
+                    let inviteeArray = []
+                    for (let i in Data) {
+                        let clubAffiliteObj = {
+                            organisationId: Data[i]
+                        }
+                        inviteeArray.push(clubAffiliteObj)
+
+                    }
+
+                    state.invitedOrganisation = inviteeArray
+                }
+                console.log(state.invitedOrganisation, 'LiveScore_SETTING_CHANGE_FORM', Data)
             }
             return {
                 ...state,

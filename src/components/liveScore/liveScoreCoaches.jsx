@@ -244,7 +244,7 @@ class LiveScoreCoaches extends Component {
                     justifyContent: "flex-end"
                   }}
                 >
-                  {/* <NavLink to="/liveScoreMatchImport"> */}
+                    <NavLink to="/liveScoreCoachImport">
                   <Button className="primary-add-comp-form" type="primary">
 
                     <div className="row">
@@ -258,7 +258,7 @@ class LiveScoreCoaches extends Component {
                       </div>
                     </div>
                   </Button>
-                  {/* </NavLink> */}
+                  </NavLink>
                 </div>
               </div>
             </div>

@@ -36,6 +36,7 @@ import history from "../../util/history";
 import { isArrayNotEmpty, captializedString } from "../../util/helpers";
 import { competitionFeeInit } from "../../store/actions/appAction";
 import Tooltip from 'react-png-tooltip'
+import { onInviteesSearchAction } from "../../store/actions/registrationAction/competitionFeeAction";
 
 
 
@@ -138,6 +139,8 @@ class LiveScoreSettingsView extends Component {
     }
 
     handleSubmit = e => {
+
+        console.log(this.props.liveScoreSetting.invitedTo, 'this.props.liveScoreSetting', this.props.liveScoreSetting.invitedOrganisation)
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
 
@@ -161,8 +164,15 @@ class LiveScoreSettingsView extends Component {
                 const {
                     buzzerEnabled,
                     warningBuzzerEnabled,
-                    recordUmpire
+                    recordUmpire,
+                    affiliateSelected,
+                    anyOrgSelected,
+                    otherSelected,
+                    invitedTo,
+                    invitedOrganisation
                 } = this.props.liveScoreSetting
+
+                console.log(invitedOrganisation, 'invitedOrganisation')
 
                 const umpire = record1.includes("recordUmpire")
                 const umpirenum = umpire ? 1 : 0
@@ -199,6 +209,8 @@ class LiveScoreSettingsView extends Component {
                 formData.append('organisationId', orgId ? orgId : this.props.liveScoreSetting.data.organisationId)
                 formData.append('buzzerEnabled', buzzerEnabled)
                 formData.append('warningBuzzerEnabled', warningBuzzerEnabled)
+                formData.append('invitedTo', JSON.stringify(invitedTo))
+                formData.append('invitedOrganisation', JSON.stringify(invitedOrganisation))
 
                 // if (buzzerEnabled) {
                 //     formData.append('buzzerEnabled', buzzerEnabled)
@@ -606,6 +618,98 @@ class LiveScoreSettingsView extends Component {
         )
     };
 
+    //// On change Invitees
+    onInviteesChange(value) {
+        console.log(value, 'onInviteesChange')
+
+        this.props.onChangeSettingForm({ key: "anyOrgSelected", data: value })
+        if (value == 7) {
+            this.onInviteeSearch("", 3)
+        }
+        else if (value == 8) {
+            this.onInviteeSearch("", 4)
+        }
+    }
+
+    onInviteeSearch = (value, inviteesType) => {
+        console.log(value, "**** value")
+        this.props.onInviteesSearchAction(value, inviteesType)
+    }
+    ////////reg invitees search view for any organisation
+    affiliatesSearchInvitee = (subItem, seletedInvitee) => {
+        let detailsData = this.props.competitionFeesState
+        // let seletedInvitee = detailsData.selectedInvitees.find(x => x);
+        let associationAffilites = detailsData.associationAffilites
+        let clubAffilites = detailsData.clubAffilites
+        const { associationLeague, clubSchool } = this.props.liveScoreSetting
+        // let regInviteesDisable = this.state.permissionState.regInviteesDisable
+        if (subItem.id == 7 && seletedInvitee == 7) {
+            return (
+                < div >
+                    <Select
+                        mode="multiple"
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        onChange={associationAffilite => {
+                            this.props.onChangeSettingForm({ key: "associationAffilite", data: associationAffilite })
+                        }}
+                        value={associationLeague}
+                        placeholder={AppConstants.selectOrganisation}
+                        filterOption={false}
+                        onSearch={(value) => { this.onInviteeSearch(value, 3) }}
+                        // disabled={regInviteesDisable}
+                        showSearch={true}
+                        onBlur={() => this.onInviteeSearch("", 3)}
+                    // loading={detailsData.searchLoad}
+                    >
+                        {associationAffilites.map((item) => {
+                            console.log(item, 'associationAffilites')
+                            return (
+                                <Option
+                                    key={item.id}
+                                    value={item.id}>
+                                    {item.name}</Option>
+                            )
+                        })}
+                    </Select>
+                </div>
+            )
+        }
+        else if (subItem.id == 8 && seletedInvitee == 8) {
+
+            return (
+
+                < div >
+                    <Select
+                        mode="multiple"
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        onChange={clubAffilite => {
+                            // this.onSelectValues(venueSelection, detailsData)
+                            this.props.onChangeSettingForm({ key: "clubAffilite", data: clubAffilite })
+                        }}
+
+                        value={clubSchool}
+                        placeholder={AppConstants.selectOrganisation}
+                        filterOption={false}
+                        onSearch={(value) => { this.onInviteeSearch(value, 4) }}
+                        // disabled={regInviteesDisable}
+                        onBlur={() => this.onInviteeSearch("", 4)}
+                    // loading={detailsData.searchLoad}
+                    >
+                        {clubAffilites.map((item) => {
+                            return (
+                                <Option
+                                    key={item.id}
+                                    value={item.id}>
+                                    {item.name}</Option>
+                            )
+                        })}
+                    </Select>
+                </div>
+            )
+        }
+
+    }
+
     regInviteesView = () => {
         let invitees = this.props.appState.registrationInvitees.length > 0 ? this.props.appState.registrationInvitees : [];
         const { affiliateSelected, anyOrgSelected, otherSelected, nonSelected } = this.props.liveScoreSetting
@@ -681,7 +785,7 @@ class LiveScoreSettingsView extends Component {
 
                     <Radio.Group
                         className="reg-competition-radio mt-0"
-                        onChange={(e) => this.props.onChangeSettingForm({ key: "anyOrgSelected", data: e.target.value })}
+                        onChange={(e) => this.onInviteesChange(e.target.value)}
                         value={anyOrgSelected}
                     >
                         {(invitees || []).map((item, index) =>
@@ -696,6 +800,7 @@ class LiveScoreSettingsView extends Component {
                                             {(item.subReferences).map((subItem, subIndex) => (
                                                 <div style={{ marginLeft: '20px' }}>
                                                     <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
+                                                    {this.affiliatesSearchInvitee(subItem, anyOrgSelected)}
                                                 </div>
                                             ))}
                                         </div>
@@ -818,6 +923,7 @@ function mapStatetoProps(state) {
         liveScoreSetting: state.LiveScoreSetting,
         venueList: state.LiveScoreMatchState,
         appState: state.AppState,
+        competitionFeesState: state.CompetitionFeesState,
     }
 }
 export default connect(mapStatetoProps, {
@@ -828,5 +934,6 @@ export default connect(mapStatetoProps, {
     settingDataPostInititae,
     searchVenueList,
     clearFilter,
-    competitionFeeInit
+    competitionFeeInit,
+    onInviteesSearchAction
 })((Form.create()(LiveScoreSettingsView)));

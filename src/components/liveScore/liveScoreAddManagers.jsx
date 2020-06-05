@@ -42,7 +42,8 @@ class LiveScoreAddManager extends Component {
             isEdit: this.props.location.state ? this.props.location.state.isEdit : null,
             loader: false,
             showOption: false,
-            competition_id: null
+            competition_id: null,
+            teamLoad:false
         }
 
     }
@@ -80,10 +81,24 @@ class LiveScoreAddManager extends Component {
 
         }
 
-
+        if(this.props.liveScoreMangerState.teamId !== nextProps.liveScoreMangerState.teamId){
+            if(this.state.teamLoad===true){
+              const {teamId} = this.props.liveScoreMangerState
+                this.setSelectedTeamValue(teamId)
+                console.log(teamId,"lkjh")
+                this.setState({teamLoad:false})
+               
+            }
+        }
 
     }
 
+    setSelectedTeamValue(teamId){
+        
+        this.props.form.setFieldsValue({
+            'managerTeamName': teamId
+        })
+    }
     setInitalFiledValue() {
         const { managerData, teamId } = this.props.liveScoreMangerState
         let data = this.state.tableRecord
@@ -166,7 +181,7 @@ class LiveScoreAddManager extends Component {
                                         const ManagerId = JSON.parse(option.key)
                                         this.props.liveScoreClear()
                                         this.props.liveScoreUpdateManagerDataAction(ManagerId, 'managerSearch')
-
+                                        this.setState({teamLoad:true})
                                     }}
                                     notFoundContent={onLoadSearch == true ? <Spin size="small" /> : null}
 

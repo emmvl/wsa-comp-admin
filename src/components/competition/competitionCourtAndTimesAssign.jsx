@@ -576,13 +576,16 @@ class CompetitionCourtAndTimesAssign extends Component {
                             setFieldsValue={timeSlotData.mainTimeRotationID}
                         >
                             {commonState.timeSlotRotation.length > 0 && commonState.timeSlotRotation.map((item, index) => {
+                                console.log(item, 'timeSlotRotation')
                                 return (
                                     <div>
-                                        <div >
+                                        <div className='row' >
                                             <Radio key={item.id} value={item.id}> {item.description}</Radio>
-                                            {/* <Tooltip background='#ff8237'>
-                                                <span>{item.helpMsg}</span>
-                                            </Tooltip> */}
+                                            <div style={{ marginLeft: -22, marginTop: -5 }}>
+                                                <Tooltip background='#ff8237'>
+                                                    <span>{item.helpMsg}</span>
+                                                </Tooltip>
+                                            </div>
                                         </div>
                                         {isArrayNotEmpty(item.subReferences) && <div>
                                             <Form.Item  >
@@ -618,9 +621,17 @@ class CompetitionCourtAndTimesAssign extends Component {
                             // setFieldsValue={timeSlotData.timeslotGenerationRefId}
                             >
                                 {commonState.timeSlotGeneration.length > 0 && commonState.timeSlotGeneration.map((item, index) => {
+                                    console.log(item, 'timeSlotGeneration')
                                     return (
                                         <div>
-                                            <Radio key={item.id} value={item.id}> {item.description}</Radio>
+                                            <div className='row' >
+                                                <Radio key={item.id} value={item.id}> {item.description}</Radio>
+                                                <div style={{ marginLeft: -22, marginTop: -5 }}>
+                                                    <Tooltip background='#ff8237'>
+                                                        <span>{item.helpMsg}</span>
+                                                    </Tooltip>
+                                                </div>
+                                            </div>
                                             {timeSlotData.timeslotGenerationRefId === index + 1 && item.id == 1 && (timeSlotData.mainTimeRotationID === 8 || timeSlotData.mainTimeRotationID === 9 || timeSlotData.mainTimeRotationID === 6 || timeSlotData.mainTimeRotationID === 7) &&
                                                 <div>
                                                     <div className="fluid-width">
