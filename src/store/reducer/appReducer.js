@@ -386,7 +386,6 @@ function appState(state = initialState, action) {
 
     /////////
     case ApiConstants.API_GET_YEAR_OWN_COMPETITION_LOAD:
-      console.log(action)
       return { ...state, onLoad: true };
 
     case ApiConstants.API_GET_YEAR_OWN_COMPETITION_SUCCESS:

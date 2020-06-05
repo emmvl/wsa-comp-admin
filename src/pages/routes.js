@@ -37,7 +37,7 @@ import LiveScorePlayerProfile from "../components/liveScore/liveScorePlayerProfi
 import RegistrationPayments from "../components/registration/registrationPayments";
 import HomeDashboard from "../components/home/homeDashboard";
 import CompetitionDraws from "../components/competition/competitionDraws";
-import CompetitionDrawEdit from "../components/competition/competitionDrawEdit";
+import CompetitionDrawEdit from "../components/competition/competitionDrawEditNew";
 import UmpireAllocation from "../components/umpire/umpireAllocation";
 import CompetitionFixtures from "../components/competition/competitionFixtures";
 import CompetitionQuickCompetition from "../components/competition/competitionQuickCompetition";

@@ -4,7 +4,6 @@ class LegendComponent extends React.Component {
 
     render() {
         const { legendArray } = this.props
-        console.log("legendArray", legendArray)
         return (
             <div >
                 {legendArray.length > 0 && legendArray.map((item, index) => {

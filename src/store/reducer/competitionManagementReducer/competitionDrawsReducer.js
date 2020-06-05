@@ -35,7 +35,6 @@ var legendsArray = [];
 let colorsArrayDup = [...colorsArray];
 
 function createLegendsArray(drawsArray, currentLegends, dateArray) {
-  console.log(drawsArray, currentLegends, dateArray)
   let newArray = currentLegends
   for (let i in drawsArray) {
     for (let j in drawsArray[i].slotsArray) {
@@ -61,13 +60,12 @@ function createLegendsArray(drawsArray, currentLegends, dateArray) {
     temparray = newArray.slice(i, i + dateArrayLength);
     finalLegendsChunkArray.push(temparray)
   }
-  console.log(finalLegendsChunkArray)
   return finalLegendsChunkArray
 }
 
 function fixtureColor(data) {
 
-  console.log(data)
+
   let fixtureDraws
   let team1Color
   let team2Color
@@ -76,7 +74,6 @@ function fixtureColor(data) {
     for (let j in fixtureDraws) {
 
       let colorTeam = getColor(fixtureDraws[j])
-      console.log(colorTeam)
       fixtureDraws[j].team1Color = colorTeam.color1
       fixtureDraws[j].team2Color = colorTeam.color2
     }
@@ -89,7 +86,6 @@ function roundstructureData(data) {
   let newStructureDrawsData
   if (roundsdata.length > 0) {
     for (let i in roundsdata) {
-      console.log(roundsdata[i].draws)
       newStructureDrawsData = structureDrawsData(roundsdata[i].draws)
 
       roundsdata[i].draws = newStructureDrawsData.mainCourtNumberArray
@@ -111,13 +107,10 @@ function structureDrawsData(data) {
   let sortedDateArray = [];
   let legendArray = [];
   let sortMainCourtNumberArray = [];
-  console.log(data)
   if (data) {
     if (isArrayNotEmpty(data)) {
       data.map((object) => {
-        console.log("object", object)
         dateArray = setupDateObjectArray(dateArray, object)
-        console.log(dateArray)
         // if (checkDateNotInArray(dateArray, object.matchDate)) {
         //   let dateObject = checkOutOfRound(object)
         //   console.log("dateObject", dateObject)
@@ -131,12 +124,11 @@ function structureDrawsData(data) {
           object
         );
         if (!courtNumberResponse.status) {
-          console.log(object)
           mainCourtNumberArray.push({
             venueCourtNumber: object.venueCourtNumber,
             venueCourtName: object.venueCourtName,
             venueShortName: object.venueShortName,
-            venueNameCourtName: (object.venueShortName + object.venueCourtName),
+            venueNameCourtName: (object.venueShortName + object.venueCourtNumber),
             venueCourtId: object.venueCourtId,
             slotsArray: [],
           });
@@ -252,14 +244,22 @@ function getSlotFromDate(drawsArray, venueCourtId, matchDate, gradeArray) {
     teamArray: teamArray,
   };
 }
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
 
 function getColor(draws) {
   let fixtureTempArray = JSON.parse(JSON.stringify(fixtureColorArray))
-  let color1 = lightGray
-  let color2 = lightGray
+
+  let color1 = getRandomColor()
+  let color2 = getRandomColor()
 
   for (let [index, value] of colorsArrayDup.entries()) {
-    console.log(value, index)
     fixtureColorArray.push({
       drawsId: draws.drawsId,
       colorCode1: colorsArrayDup[index],
@@ -330,11 +330,12 @@ function checkSlots(slotsArray, slotObject) {
 //sort court array
 function sortCourtArray(mainCourtNumberArray) {
   let isSortedArray = []
-
-  isSortedArray = mainCourtNumberArray.sort((a, b) => a.venueNameCourtName.localeCompare(b.venueNameCourtName));
-
+  const sortAlphaNum = (a, b) => a.venueNameCourtName.localeCompare(b.venueNameCourtName, 'en', { numeric: true })
+  // let collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
+  // isSortedArray = mainCourtNumberArray.sort(collator.compare)
+  // isSortedArray = mainCourtNumberArray.sort((a, b) => a.venueNameCourtName.localeCompare(b.venueNameCourtName));
+  isSortedArray = mainCourtNumberArray.sort(sortAlphaNum)
   return isSortedArray
-
 }
 
 
@@ -421,9 +422,7 @@ function swapedDrawsArrayFunc(
     drawsArray[targetXIndex].slotsArray[targetYIndex] = sourceCopy;
   }
 
-  console.log('Source', source);
-  console.log('Target', target);
-  console.log('Draws', drawsArray);
+
 
   /*
   var source = drawsArray[sourtXIndex].slotsArray[sourceYIndex];
@@ -505,28 +504,91 @@ function swapedFixtureArrayFunc(fixtureArray, fixtureSourceXIndex,
   fixtureTargetXIndex,
   fixtureSourceYIndex,
   fixtureTargetYIndex,
-  data,
+  sourceZIndex,
+  targetZIndex
 ) {
-  console.log(fixtureArray, fixtureSourceXIndex,
-    fixtureTargetXIndex,
-    fixtureSourceYIndex,
-    fixtureTargetYIndex,
-    data)
-  // var fixtureSourceArray = JSON.parse(JSON.stringify(fixtureArray))
-  // var fixtureTargetArray = JSON.parse(JSON.stringify(fixtureArray))
-  // var fixtureSource = fixtureSourceArray[fixtureSourceXIndex].draws[fixtureSourceYIndex];
-  // var fixtureTarget = fixtureTargetArray[fixtureTargetXIndex].draws[fixtureTargetYIndex];
-  // if (fixtureSource.team1 == data.team1) {
-  //   fixtureArray[fixtureSourceXIndex].draws[fixtureSourceYIndex].team1 = data.team2
 
-  // } else if (fixtureSource.team2 == data.team2) {
-  //   fixtureArray[fixtureSourceXIndex].draws[fixtureSourceYIndex].team2 = data.team2
-  // }
-  // else if (fixtureTarget.team1 == data.team1) {
-  //   fixtureTargetArray[fixtureTargetXIndex].draws[fixtureTargetYIndex].team1 = data.team2
-  // } else if (fixtureTarget.team == data.team1) {
-  //   fixtureTargetArray[fixtureTargetXIndex].draws[fixtureTargetYIndex].team1 = data.team2
-  // }
+  var fixtureSourceArray = JSON.parse(JSON.stringify(fixtureArray))
+  var fixtureTargetArray = JSON.parse(JSON.stringify(fixtureArray))
+  var fixtureSource = fixtureSourceArray[fixtureSourceYIndex];
+  var fixtureTarget = fixtureTargetArray[fixtureTargetYIndex];
+
+  if (sourceZIndex === '0') {
+    if (targetZIndex === '0') {
+      fixtureArray[fixtureSourceYIndex].team1 =
+        fixtureTarget.team1;
+      fixtureArray[fixtureSourceYIndex].team1Name =
+        fixtureTarget.team1Name;
+      fixtureArray[fixtureSourceYIndex].team1Color =
+        fixtureTarget.team1Color
+    }
+    else {
+
+      fixtureArray[fixtureSourceYIndex].team1 =
+        fixtureTarget.team2;
+      fixtureArray[fixtureSourceYIndex].team1Name =
+        fixtureTarget.team2Name;
+      fixtureArray[fixtureSourceYIndex].team1Color =
+        fixtureTarget.team2Color;
+    }
+  }
+  else {
+    if (targetZIndex === '0') {
+      fixtureArray[fixtureSourceYIndex].team2 =
+        fixtureTarget.team1;
+      fixtureArray[fixtureSourceYIndex].team2Name =
+        fixtureTarget.team1Name;
+      fixtureArray[fixtureSourceYIndex].team2Color =
+        fixtureTarget.team1Color;
+
+    } else {
+      fixtureArray[fixtureSourceYIndex].team2 =
+        fixtureTarget.team2;
+      fixtureArray[fixtureSourceYIndex].team2Name =
+        fixtureTarget.team2Name;
+      fixtureArray[fixtureSourceYIndex].team2Color =
+        fixtureTarget.team2Color;
+
+    }
+  }
+
+  if (targetZIndex === '0') {
+    if (sourceZIndex === '0') {
+      fixtureArray[fixtureTargetYIndex].team1 =
+        fixtureSource.team1;
+      fixtureArray[fixtureTargetYIndex].team1Name =
+        fixtureSource.team1Name;
+      fixtureArray[fixtureTargetYIndex].team1Color =
+        fixtureSource.team1Color;
+
+    } else {
+      fixtureArray[fixtureTargetYIndex].team1 =
+        fixtureSource.team2;
+      fixtureArray[fixtureTargetYIndex].team1Name =
+        fixtureSource.team2Name;
+      fixtureArray[fixtureTargetYIndex].team1Color =
+        fixtureSource.team2Color;
+
+    }
+  } else {
+    if (sourceZIndex === '0') {
+      fixtureArray[fixtureTargetYIndex].team2 =
+        fixtureSource.team1;
+      fixtureArray[fixtureTargetYIndex].team2Name =
+        fixtureSource.team1Name;
+      fixtureArray[fixtureTargetYIndex].team2Color =
+        fixtureSource.team1Color;
+
+    } else {
+      fixtureArray[fixtureTargetYIndex].team2 =
+        fixtureSource.team2;
+      fixtureArray[fixtureTargetYIndex].team2Name =
+        fixtureSource.team2Name;
+      fixtureArray[fixtureTargetYIndex].team2Color =
+        fixtureSource.team2Color;
+    }
+  }
+
   return fixtureArray
 }
 
@@ -560,7 +622,6 @@ function swapedDrawsEditArrayFunc(
       drawsArray[sourceXIndex].slotsArray[sourceYIndex].teamArray[0].teamName =
         target.homeTeamName;
     } else {
-      console.error('Called123');
       drawsArray[sourceXIndex].slotsArray[sourceYIndex].homeTeamId =
         target.awayTeamId;
       drawsArray[sourceXIndex].slotsArray[sourceYIndex].homeTeamName =
@@ -634,9 +695,6 @@ function swapedDrawsEditArrayFunc(
     }
   }
 
-  console.log('Source', source);
-  console.log('Target', target);
-  console.log('Draws Data**', drawsArray);
 
   // let sourceObject = null
   // let targetObject = null
@@ -833,22 +891,12 @@ function CompetitionDraws(state = initialState, action) {
 
       let drawsResultData = action.result;
       let resultData = roundstructureData(drawsResultData)
-      console.log(resultData)
-      // let resultData = structureDrawsData(drawsResultData);
       state.publishStatus = action.result.drawsPublish
       state.isTeamInDraw = action.result.isTeamNotInDraws
-      // let drawsSorted = resultData.mainCourtNumberArray
-      // legendsArray = []
-      // legendsArray = createLegendsArray(drawsSorted, legendsArray, resultData.sortedDateArray)
-      // state.legendsArray = legendsArray
+
       return {
         ...state,
         getRoundsDrawsdata: resultData.roundsdata,
-        // getDrawsData: resultData.mainCourtNumberArray,
-        // getStaticDrawsData: JSON.parse(
-        //   JSON.stringify(resultData.mainCourtNumberArray)
-        // ),
-        // dateArray: resultData.sortedDateArray,
         onLoad: false,
         error: null,
       };
@@ -870,7 +918,7 @@ function CompetitionDraws(state = initialState, action) {
         competitionDivisionGradeId: 0
       }
       let roundNameObject = {
-        roundId: 0, name: "All Round", startDateTime: null
+        roundId: 0, name: "All Rounds", startDateTime: ""
       }
       state.competitionVenues.unshift(venueObject)
       state.divisionGradeNameList.unshift(divisionNameObject)
@@ -960,7 +1008,6 @@ function CompetitionDraws(state = initialState, action) {
         let sourceYNullCaseIndex = action.sourceArray[1];
         let targetXNullCaseIndex = action.targetArray[0];
         let targetYNullCaseIndex = action.targetArray[1];
-        console.log(action)
         let drawDataNullCaseIndex = state.getRoundsDrawsdata.findIndex((x) => x.roundId === action.drawData)
         let drawDataNullCase = state.getRoundsDrawsdata[drawDataNullCaseIndex].draws;
 
@@ -1057,19 +1104,15 @@ function CompetitionDraws(state = initialState, action) {
         error: null
       }
     case ApiConstants.API_GET_DIVISION_SUCCESS:
-      state.fixtureDivisionGradeNameList = JSON.parse(JSON.stringify(action.result))
-      let newDivisionNameObject = {
-        name: "All Division",
-        competitionDivisionGradeId: 0
-      }
-      state.fixtureDivisionGradeNameList.unshift(newDivisionNameObject)
+      state.fixtureDivisionGradeNameList = action.result
       return { ...state, onLoad: true, divisionLoad: false };
 
     case ApiConstants.API_GET_FIXTURE_LOAD:
       colorsArrayDup = [...colorsArray]
       return {
         ...state,
-        onLoad: true
+        onLoad: true,
+        updateFixtureLoad: true
       }
 
     case ApiConstants.API_GET_FIXTURE_SUCCESS:
@@ -1079,6 +1122,7 @@ function CompetitionDraws(state = initialState, action) {
       return {
         ...state,
         onLoad: false,
+        updateFixtureLoad: false
 
       }
 
@@ -1092,6 +1136,7 @@ function CompetitionDraws(state = initialState, action) {
 
     /// Update draws reducer ceses
     case ApiConstants.API_UPDATE_COMPETITION_FIXTURE_LOAD:
+      colorsArrayDup = [...colorsArray]
 
       return {
         ...state,
@@ -1099,24 +1144,27 @@ function CompetitionDraws(state = initialState, action) {
       };
 
     case ApiConstants.API_UPDATE_COMPETITION_FIXTURE_SUCCESS:
-      let fixtureSourceXIndex = action.sourceArray[0];
-      let fixtureSourceYIndex = action.sourceArray[1];
-      let fixtureTargetXIndex = action.targetArray[0];
-      let fixtureTargetYIndex = action.targetArray[1];
+      let updatedFixtureResult = fixtureColor(action.fixtureResult)
+      state.fixtureArray = updatedFixtureResult
+      // let fixtureSourceXIndex = action.sourceArray[0];
+      // let fixtureSourceYIndex = action.sourceArray[1];
+      // let fixtureTargetXIndex = action.targetArray[0];
+      // let fixtureTargetYIndex = action.targetArray[1];
 
-      let fixtureData = state.fixtureArray;
-      fixtureData = swapedFixtureArrayFunc(
-        state.fixtureArray,
-        fixtureSourceXIndex,
-        fixtureTargetXIndex,
-        fixtureSourceYIndex,
-        fixtureTargetYIndex,
-        action.data,
-
-      );
-
-      // state.getDrawsData = swapedDrawsArray;
-      state.fixtureArray = fixtureData;
+      // let fixtureDataIndex = state.fixtureArray.findIndex((x) => x.roundId == action.roundId);
+      // let fixtureData = state.fixtureArray[fixtureDataIndex].draws
+      // let updatedFixtureData = state.fixtureArray[fixtureDataIndex].draws
+      // updatedFixtureData = swapedFixtureArrayFunc(
+      //   fixtureData,
+      //   fixtureSourceXIndex,
+      //   fixtureTargetXIndex,
+      //   fixtureSourceYIndex,
+      //   fixtureTargetYIndex,
+      //   action.sourceArray[2],
+      //   action.targetArray[2]
+      // );
+      // console.log(updatedFixtureData)
+      // state.fixtureArray[fixtureDataIndex].draws = updatedFixtureData;
       return {
         ...state,
         onLoad: false,
@@ -1128,7 +1176,8 @@ function CompetitionDraws(state = initialState, action) {
       return {
         ...state,
         onLoad: true,
-        error: null
+        error: null,
+        updateLoad: true
       }
 
     case ApiConstants.API_UPDATE_DRAWS_LOCK_SUCCESS:
@@ -1141,6 +1190,7 @@ function CompetitionDraws(state = initialState, action) {
       return {
         ...state,
         onLoad: false,
+        updateLoad: false
       }
 
     default:

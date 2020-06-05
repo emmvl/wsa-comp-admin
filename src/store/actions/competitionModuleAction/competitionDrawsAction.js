@@ -140,12 +140,14 @@ function getCompetitionFixtureAction(yearId, competitionId, competitionDivisionG
 }
 
 ////update competition drwas
-function updateCompetitionFixtures(data, source, target) {
+function updateCompetitionFixtures(data, source, target, roundId, yearId, competitionId, competitionDivisionGradeId) {
     const action = {
         type: ApiConstants.API_UPDATE_COMPETITION_FIXTURE_LOAD,
         data: data,
         sourceArray: source,
         targetArray: target,
+        roundId: roundId,
+        yearId, competitionId, competitionDivisionGradeId
     }
     return action
 }
