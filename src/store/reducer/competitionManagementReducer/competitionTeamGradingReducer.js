@@ -123,6 +123,17 @@ function sortOrderArray(ownTeamGradingSummaryData) {
                 sortOrderArray.indexOf(sortOrder) === -1 && sortOrderArray.push(sortOrder)
             })
         })
+		sortOrderArray.sort(function(a, b){
+            if(a==null||b==null)
+            {
+                return null  
+            }
+            return a-b
+        });
+        if(sortOrderArray[0]==-1){
+            sortOrderArray.shift()
+            sortOrderArray.push(-1);
+        }
     }
     return sortOrderArray
 }
