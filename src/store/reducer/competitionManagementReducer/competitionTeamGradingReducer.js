@@ -119,17 +119,11 @@ function sortOrderArray(ownTeamGradingSummaryData) {
         ownTeamGradingSummaryData.map((item) => {
             let grades = item.grades
             grades.map((gradeItem) => {
-                let sortOrder = gradeItem.sortOrder
+                let sortOrder = (gradeItem.sortOrder == null)?null:parseInt(gradeItem.sortOrder); 
                 sortOrderArray.indexOf(sortOrder) === -1 && sortOrderArray.push(sortOrder)
             })
         })
-		sortOrderArray.sort(function(a, b){
-            if(a==null||b==null)
-            {
-                return null  
-            }
-            return a-b
-        });
+		sortOrderArray.sort(sortOrder(true)) 
         if(sortOrderArray[0]==-1){
             sortOrderArray.shift()
             sortOrderArray.push(-1);
@@ -137,6 +131,25 @@ function sortOrderArray(ownTeamGradingSummaryData) {
     }
     return sortOrderArray
 }
+function sortOrder(ascending) {
+    return function (a, b) {           
+      if (a === b) {
+          return 0;
+      }             
+      else if (a === null) {
+          return 1;
+      }
+      else if (b === null) {
+          return -1;
+      }
+      else if (ascending) {
+          return a < b ? -1 : 1;
+      }
+      else { 
+          return a < b ? 1 : -1;
+      }          
+    };          
+  }  
 
 function getProposedTeamGradingData(data) {
     if (data.length > 0) {
