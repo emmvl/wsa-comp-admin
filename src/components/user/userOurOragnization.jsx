@@ -560,6 +560,7 @@ class UserOurOragnization extends Component {
                             placeholder={AppConstants.organisationName}
                             onChange={(e) => this.onChangeSetValue(e.target.value, "name" )}
                             //value={affiliate.name}
+							disabled={!this.state.isEditable}								 
                             setFieldsValue={affiliate.name}
                         />
                     )}
@@ -570,11 +571,12 @@ class UserOurOragnization extends Component {
                         <div className="col-sm">
                             <div className="reg-competition-logo-view" onClick={this.selectImage}>
                                 <label>
-                                    <img
+                                     <input
                                         src={affiliate.logoUrl == null ? AppImages.circleImage  : affiliate.logoUrl}
                                         alt=""
                                         height="120"
                                         width="120"
+                                        disabled={!this.state.isEditable}			 
                                         style={{ borderRadius: 60 }}
                                         name={'image'}
                                         onError={ev => {
@@ -599,6 +601,7 @@ class UserOurOragnization extends Component {
                                 className="single-checkbox"
                                 // defaultChecked={false}
                                 checked={affiliate.logoIsDefault}
+								disabled={!this.state.isEditable}								 
                                 onChange={e =>
                                     this.logoIsDefaultOnchange(e.target.checked, "logoIsDefault")
                                 }
@@ -646,6 +649,7 @@ class UserOurOragnization extends Component {
                         name={AppConstants.addressOne}
                         onChange={(e) => this.onChangeSetValue(e.target.value, "street1" )} 
                         //value={affiliate.street1}
+						disabled={!this.state.isEditable}								 
                         setFieldsValue={affiliate.street1}
                     />
                     )}
@@ -656,6 +660,7 @@ class UserOurOragnization extends Component {
                     placeholder={AppConstants.addressTwo}
                     onChange={(e) => this.onChangeSetValue(e.target.value, "street2" )} 
                     value={affiliate.street2}
+					disabled={!this.state.isEditable}								 
                 />
 
                 <Form.Item >
@@ -669,6 +674,7 @@ class UserOurOragnization extends Component {
                             onChange={(e) => this.onChangeSetValue(e.target.value, "suburb" )}
                             //value={affiliate.suburb}
                             setFieldsValue={affiliate.suburb}
+							disabled={!this.state.isEditable}								 
                         />
                     )}
                 </Form.Item>
@@ -688,6 +694,7 @@ class UserOurOragnization extends Component {
                             onChange={(e) => this.onChangeSetValue(e, "stateRefId" )}
                             //value={affiliate.stateRefId}
                             setFieldsValue={affiliate.stateRefId}
+							disabled={!this.state.isEditable}								 
 
                         >
                             {stateList.length > 0 && stateList.map((item) => (
@@ -711,6 +718,7 @@ class UserOurOragnization extends Component {
                             //value={affiliate.postalCode}
                             setFieldsValue={affiliate.postalCode}
                             maxLength={4}
+							disabled={!this.state.isEditable}								 
                         />
                     )}
                 </Form.Item>
@@ -718,6 +726,7 @@ class UserOurOragnization extends Component {
                 <InputWithHead heading={AppConstants.phoneNumber} placeholder={AppConstants.phoneNumber}
                         onChange={(e) => this.onChangeSetValue(e.target.value, "phoneNo" )} 
                         value={affiliate.phoneNo}
+						disabled={!this.state.isEditable}								 
                     />
             </div>
         )
@@ -757,6 +766,7 @@ class UserOurOragnization extends Component {
                             onChange={(e) => this.onChangeContactSetValue(e.target.value, "firstName", index )}
                             //value={item.firstName}
                             setFieldsValue={item.firstName}
+							disabled={!this.state.isEditable}								 
                         />
                     )}
                     </Form.Item>
@@ -765,6 +775,7 @@ class UserOurOragnization extends Component {
                         placeholder={AppConstants.middleName} 
                         onChange={(e) => this.onChangeContactSetValue(e.target.value, "middleName", index )}
                         value={item.middleName}
+						disabled={!this.state.isEditable}								 
                         />
 
                  
@@ -776,6 +787,7 @@ class UserOurOragnization extends Component {
                         heading={AppConstants.lastName} placeholder={AppConstants.lastName} 
                             onChange={(e) => this.onChangeContactSetValue(e.target.value, "lastName", index )}
                             setFieldsValue={item.lastName}
+							disabled={!this.state.isEditable}								 
                             />
                         )}
                     </Form.Item>
@@ -792,6 +804,7 @@ class UserOurOragnization extends Component {
                             onChange={(e) => this.onChangeContactSetValue(e.target.value, "email", index )}
                             //value={item.email}
                             setFieldsValue={item.email}
+							disabled={!this.state.isEditable}								 
                         />
                     )}
                     </Form.Item>
@@ -806,6 +819,7 @@ class UserOurOragnization extends Component {
                         placeholder={AppConstants.phoneNumber} 
                         onChange={(e) => this.onChangeContactSetValue(e.target.value, "mobileNumber", index )}
                         value={item.mobileNumber}
+						disabled={!this.state.isEditable}								 
                         />
                     {this.state.isEditable && 
                     <div>   
