@@ -576,6 +576,7 @@ class UserOurOragnization extends Component {
                                         alt=""
                                         height="120"
                                         width="120"
+                                        type="image"
                                         disabled={!this.state.isEditable}			 
                                         style={{ borderRadius: 60 }}
                                         name={'image'}
