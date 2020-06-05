@@ -459,10 +459,17 @@ a.collapsed i {
   display: block;
   width: 100%;
   overflow-x: auto;
-  overflow: visible;
+  /* overflow: visible; */
   -webkit-overflow-scrolling: touch;
 }
 
+.contextual-table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  overflow: visible;
+  -webkit-overflow-scrolling: touch;
+}
 
 .ant-table-empty .ant-table-body {
   /* overflow-x: auto !important; */
@@ -483,12 +490,12 @@ a.collapsed i {
 }
 
 .Content_Container__xhjD8 {
-  position: absolute;
+  position: fixed;
   z-index: 5;
   padding: 12px 32px 12px 12px;
   display: table;
-  width: 380px;
-  max-width: 80vw;
+  /* width: 380px;
+  max-width: 80vw; */
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px;
   border: 1px solid inherit;
   border-radius: 10px !important;
@@ -582,7 +589,9 @@ a.collapsed i {
 .action-triple-dot-draws .ant-menu-submenu-title  {
  padding: 0px
 }
-
+.contextual-upper-div-table{
+  overflow: inherit;
+}
 
 @media (max-width: 991px) {
   .comp-buttons-view .open-reg-button {

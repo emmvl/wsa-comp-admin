@@ -71,6 +71,34 @@ function getTeamObj(teamSelectId, teamArr) {
 
 }
 
+function getSelectedTeam(managerSelectedId, managerArr){
+    let teamObjArr
+    console.log(managerSelectedId,"managerSelectedId")
+
+    for(let i in managerArr){
+        if(managerSelectedId == managerArr[i].id){
+            teamObjArr =  managerArr[i].linkedEntity
+         console.log(teamObjArr,"teamObjArr")
+         return teamObjArr
+        }
+         
+    }
+}
+function genrateSelectedTeamId(linkedEntityArr , teamArray){
+    let teamIds = []
+    let teamsIds
+    console.log(linkedEntityArr,teamArray,"ididid")
+
+    for(let i in teamArray){
+        for(let j in linkedEntityArr){
+            if(linkedEntityArr[j].entityId == teamArray[i].id){
+                teamIds.push(linkedEntityArr[j].entityId)
+            }
+        }
+    }
+    console.log(teamIds,"teams11")
+    return teamIds
+}
 function liveScoreMangerState(state = initialState, action) {
     switch (action.type) {
         //// Manager List
@@ -125,7 +153,14 @@ function liveScoreMangerState(state = initialState, action) {
             } else if (action.key == "managerSearch") {
 
                 state.exsitingManagerId = action.data
+                state.selectedTeam = getSelectedTeam(action.data, state.managerListResult)
 
+                let getTeamId = genrateSelectedTeamId( state.selectedTeam, state.teamResult)
+                state.teamId = getTeamId
+
+                let managerTeamObj = getTeamObj(state.teamId, state.teamResult)
+                // let managerTeamObj1 = getSelectedTeamObj(state.getSelectedTeam)
+                 state.managerData['teams'] = managerTeamObj
 
             } else if (action.key == 'isEditManager') {
                 state.managerData.id = action.data.id

@@ -381,7 +381,7 @@ class DashboardLayout extends React.Component {
                               </NavLink>
                             </div>
                           </li>
-                          <li
+                          {/* <li
                             className={
                               menuName === AppConstants.incidents
                                 ? "active"
@@ -394,7 +394,7 @@ class DashboardLayout extends React.Component {
                                 {AppConstants.incidents}
                               </a>
                             </div>
-                          </li>
+                          </li> */}
                           <li
                             className={
                               menuName === AppConstants.finance ? "active" : ""

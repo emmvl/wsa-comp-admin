@@ -582,7 +582,18 @@ class CompetitionVenueTimesPrioritisation extends Component {
                 >
                     {homeTeamRotationList.length > 0 && homeTeamRotationList.map((item, index) => {
                         return (
-                            <Radio value={item.id}>{item.description}</Radio>
+                            <div className='row'>
+                                <Radio value={item.id}>{item.description}</Radio>
+
+                                {
+                                    item.helpMsg &&
+                                    <div style={{ marginLeft: -20, marginTop: 3 }}>
+                                        <Tooltip background='#ff8237'>
+                                            <span>{item.helpMsg}</span>
+                                        </Tooltip>
+                                    </div>
+                                }
+                            </div>
                         )
 
                     }
@@ -616,11 +627,15 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
                     {courtRotationList.length > 0 && courtRotationList.map((item, index) => {
                         return (
-                            <div>
-                                <Radio key={"main" + index} value={item.id}>{item.description}</Radio>
-                                <Tooltip background='#ff8237'>
-                                    <span>{AppConstants.compDetailsMsg}</span>
-                                </Tooltip>
+                            <div >
+                                <div className='row'>
+                                    <Radio key={"main" + index} value={item.id}>{item.description}</Radio>
+                                    <div style={{ marginLeft: -20, marginTop: 3 }}>
+                                        <Tooltip background='#ff8237'>
+                                            <span>{item.helpMsg}</span>
+                                        </Tooltip>
+                                    </div>
+                                </div>
                                 {item.selectedPrefrence == 1 &&
                                     <div className="ml-5" >
                                         <Radio.Group

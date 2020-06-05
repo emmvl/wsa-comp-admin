@@ -1053,7 +1053,8 @@ const AppConstants = {
     'A list of all of the news that currently appears in the Game Day App',
   todayMatchMsg:
     'A list of all the matches being played on this day. This list shows whether scorers have been set , attendance has been taken and if umpires have been recorded(optional). Please refresh your screen to get the latest updates.',
-  playersToPayMsg: "A list of Players who have registered and are required to pay either with cash or a voucher.",
+  playersToPayMsg:
+    'A list of Players who have registered and are required to pay either with cash or a voucher.',
   todayIncidentMsg:
     'If enabled, a list of all of the incidents that have occured on this day including injuries and disciplinary.',
   matchDurationMsg:
@@ -1105,7 +1106,8 @@ const AppConstants = {
     'A list of all Competitions your Organisations is Competing In.',
   ownedCompetitionMsg:
     'A List of all Competitions your Organisation is responsible for.',
-  compDetailsMsg: "If you have opened Registrations for this Competition than Competition Details fields will be pre-populated but you can change key details as appropriate. If you have not opened Registrations for this competition, then you need to complete these screens.",
+  compDetailsMsg:
+    'If you have opened Registrations for this Competition than Competition Details fields will be pre-populated but you can change key details as appropriate. If you have not opened Registrations for this competition, then you need to complete these screens.',
   knockOutMsg:
     'A competition where teams are eliminated progressively. Each winner will play another in the next round until the final two teams meet.',
   roundRobinMsg: 'Teams play each other one time. Finals are optional.',
@@ -1132,24 +1134,78 @@ const AppConstants = {
 
   affiliateDirectory: 'Affiliate Directory',
 
-  newMsgForScorerManager: 'Add a user who has NOT created an account in the App, is an administrator or has registered.',
-  existingMsgForScorerManager: 'Add a user who has either created an account in the App, is an administrator or has registered.',
+  newMsgForScorerManager:
+    'Add a user who has NOT created an account in the App, is an administrator or has registered.',
+  existingMsgForScorerManager:
+    'Add a user who has either created an account in the App, is an administrator or has registered.',
   evenRotationMsgFor_V_T: 'Evenly rotate Divisions or Grades to Courts.',
   allocateToSameCourtMsg: 'Allocate Divisions or Grades to the same courts.',
-  noPreferenceMsgFor_V_T: 'There is No Preference for Court Rotations or Allocations',
+  noPreferenceMsgFor_V_T:
+    'There is No Preference for Court Rotations or Allocations',
 
-  teamNewMsg:"Add a user who has NOT created an account in the App, is an administrator or has registered.",
-  teamExsitingMsg:"Add a user who has either created an account in the App, is an administrator or has registered.",
-  doubleRoundRobinMsg:"Teams play each other twice. Finals are optional.",
+  teamNewMsg:
+    'Add a user who has NOT created an account in the App, is an administrator or has registered.',
+  teamExsitingMsg:
+    'Add a user who has either created an account in the App, is an administrator or has registered.',
+  doubleRoundRobinMsg: 'Teams play each other twice. Finals are optional.',
+  timeSlote_BasedOnMatchDurationMsg:
+    'Timeslots are determined based on the match duration. ',
+  manuallyAddTimeSloteMsg:
+    'Manually create Timeslots. You can apply these timeslots to all or individual Venues.',
+  equallyRotateHomeAwayMsg:
+    'Choose Equally rotate teams home/away venue competition if competition features Home and Away venues.',
+  equallyRotateCentralizedVenueMsg:
+    'Choose Equally rotate teams - centralised venue competition if competition is run at centralised venues.',
 
+  ////Competition Format Screen
+  applyMatchFormatMsg:
+    'Choose whether the match format is applied to all Divisions or whether it is different for particular Divisions.',
+  applyFinalFormatMsg:
+    'Choose to enable Finals. Apply Final format to all Divsions or by particular Division. ',
+  matchDurationCompFormatMsg: 'Total Match time NOT including breaks.',
+  mainBreakCompFormatMsg: 'Break Duration at half-time.',
+  qtrBreakCompFormatMsg: 'Break Duration at end of 1st and 3rd quarters.',
+
+  ////Registration Competition Fees
+  regInviteesAffiliatesMsg:
+    'Organisations that are affiliated below your organisation. They will invite Users (Players, Coaches, Umpires etc) to register to their organisation and they will then submit them to your competition.',
+  regInviteesAnyOrgMsg:
+    'Add Organisation(s) not linked below your organisation in your State.They will invite Users (Players, Coaches, Umpires etc) to register to their organisation and they will then submit them to your competition.',
+  regInviteesDirectMsg:
+    'Users (Players, Coaches, Umpire etc) will register direct to your organisation and you will place them into teams (if they are not directly registering teams to your organisation).',
+
+  ////Registration Form List
+  regFormDashBoardMsg:
+    'After you have added your Competition Fees, locate the Competition in the Registration Form table and click on edit (three dots in Action) to add Registration details and open registrations.',
+  regFormOpenMsg:
+    'List the date you want Registrations to open and be made available to users.',
+  regFormCloseMsg:
+    'List the date you want Registrations to close. Please note registrations can still be taken after this date if required.',
+  regLockMsg:
+    'Registration Lock immediately closes registration for those divisions it is applied to.',
+  regFormTraningMsg: 'Show users training details like Date, Time and Venue.',
+  regFormSpecialNoteMsg:
+    'Detail any special notes you would like to include on the Registration Form.',
+  regFormPhotoMsg:
+    'These are stored in "Our Organisation" Photos. You can display as many photos as you would like to Users to show them your uniform, courts, logo etc.',
+  replyContactDetailMsg:
+    'Let Users know who to contact if they have any questions. You can choose to list their Name, Role, Email and or Phone number.',
+  howUserRegisterMsg: 'Define how Users can Register for your Competition.',
+  additionQuesMsg:
+    'Click on the Questions you would like to ask Users who are Registering to your Competition.',
+
+  selectedTeams: 'Selected Teams Array',
+  importCoach: 'Import Coaches',
+  ladderLink: 'Ladder Link',
+  public_Ladder_Url: `https://netball-comp-admin-dev.worldsportaction.com/liveScorePublicLadder?`,
   inviteTypeRef: 'InviteType',
-  inviteType:'Type',
-  DobMoreThan:'DOB more than',
-  DobLessThan:'DOB less than',
-  NoDobPreference:'No DOB Preference',
-  DobPreference:'DOB Preference',
-  both:'Both',
-  sendInvitesTo: "Send invites to"
+  inviteType: 'Type',
+  DobMoreThan: 'DOB more than',
+  DobLessThan: 'DOB less than',
+  NoDobPreference: 'No DOB Preference',
+  DobPreference: 'DOB Preference',
+  both: 'Both',
+  sendInvitesTo: 'Send invites to',
 };
 
 export default AppConstants;
