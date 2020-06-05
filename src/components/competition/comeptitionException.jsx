@@ -19,9 +19,11 @@ import { bindActionCreators } from 'redux';
 import ValidationConstants from '../../themes/validationConstant'
 import { venueListAction, courtListAction } from '../../store/actions/commonAction/commonAction'
 import { updateCourtTimingsDrawsAction } from "../../store/actions/competitionModuleAction/competitionDrawsAction"
+import { generateDrawAction } from "../../store/actions/competitionModuleAction/competitionModuleAction";
 import { isArrayNotEmpty } from "../../util/helpers";
 import { NavLink } from 'react-router-dom';
 import history from "../../util/history";
+import Loader from '../../customComponents/loader'
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -37,7 +39,9 @@ class CompetitionException extends Component {
             drawsObj: this.props.location ? this.props.location.state ? this.props.location.state.drawsObj ? this.props.location.state.drawsObj : null : null : null,
             courtLoad: false,
             matchDuration: null,
-            drawsId: null
+            drawsId: null,
+            reGenerateDrawLoad: false,
+            exceptionUpdateLoad: false
         };
     }
 
@@ -56,17 +60,24 @@ class CompetitionException extends Component {
             let diffTime = endTime.getTime() - startTime.getTime()
             let matchDuration = Math.round(diffTime / 60000)
             let drawsId = drawsData.drawsId
+            let yearRefId = this.props.location.state.yearRefId;
+            let competitionId = this.props.location.state.competitionId;
+            let organisationId = this.props.location.state.organisationId;
             this.setState({
-                venueId, venueCourtId, matchDate, time, matchDuration, drawsId
+                venueId, venueCourtId, matchDate, time, matchDuration, drawsId,
+                yearRefId, competitionId, organisationId
             })
             this.props.courtListAction(venueId)
         }
         else {
+            console.log("(((((((");
             history.push("/competitionDraws")
         }
     }
 
     componentDidUpdate(nextProps) {
+        let drawsState = this.props.drawsState;
+        let competitionModuleState = this.props.competitionModuleState;
         let courtListData = this.props.commonReducerState.courtList
         if (nextProps.commonReducerState !== this.props.commonReducerState) {
             if (nextProps.commonReducerState.courtListData !== courtListData) {
@@ -79,6 +90,20 @@ class CompetitionException extends Component {
                             })
                         }
                     }
+            }
+        }
+
+        if(nextProps.drawsState!= drawsState){
+            if(drawsState.updateLoad == false && this.state.exceptionUpdateLoad == true){
+                this.setState({exceptionUpdateLoad: false});
+                this.reGenerateDraw();
+            }
+        }
+
+        if(nextProps.competitionModuleState != competitionModuleState){
+            if(competitionModuleState.drawGenerateLoad == false && this.state.reGenerateDrawLoad == true){
+                this.setState({reGenerateDrawLoad: false});
+                history.push('/competitionDraws');
             }
         }
 
@@ -262,8 +287,19 @@ class CompetitionException extends Component {
                 "endTime": moment(date).format("HH:mm")
             }
             this.props.updateCourtTimingsDrawsAction(postObj, null, null, "exception")
+            this.setState({ exceptionUpdateLoad: true });
         }
     }
+
+    reGenerateDraw = () => {
+        let payload = {
+          yearRefId: this.state.yearRefId,
+          competitionUniqueKey: this.state.competitionId,
+          organisationId: this.state.organisationId
+        }
+        this.props.generateDrawAction(payload);
+        this.setState({ reGenerateDrawLoad: true });
+      }
 
 
     //////footer view containing all the buttons like submit and cancel
@@ -281,7 +317,7 @@ class CompetitionException extends Component {
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button className="user-approval-button" type="primary" htmlType="submit" onClick={() => this.courttiming()} >
+                                <Button className="user-approval-button" type="primary"  onClick={() => this.courttiming()} >
                                     {AppConstants.save}
                                 </Button>
                             </div>
@@ -311,6 +347,7 @@ class CompetitionException extends Component {
                         noValidate="noValidate">
                         <Content>
                             <div className="formView">{this.contentView(getFieldDecorator)}</div>
+                                   <Loader visible={this.props.competitionModuleState.drawGenerateLoad} />
                         </Content>
                         <Footer >{this.footerView()}</Footer>
                     </Form>
@@ -323,12 +360,15 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         venueListAction,
         courtListAction,
-        updateCourtTimingsDrawsAction
+        updateCourtTimingsDrawsAction,
+        generateDrawAction
     }, dispatch)
 }
 function mapStatetoProps(state) {
     return {
-        commonReducerState: state.CommonReducerState
+        commonReducerState: state.CommonReducerState,
+        competitionModuleState: state.CompetitionModuleState,
+        drawsState: state.CompetitionDrawsState,
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionException));
