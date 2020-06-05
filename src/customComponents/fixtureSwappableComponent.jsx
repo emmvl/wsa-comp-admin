@@ -25,7 +25,6 @@ class FixtureSwappable extends Component {
     dragEnd(ev, customFunc = null) {
         // console.log(ev.target.parentNode, 'TARGET DRAGEND');
         if (customFunc && ev.target.parentNode != this.state.initialParentNode) {
-            console.log('custom func');
             this.props.customFunc();
         }
     }
@@ -51,14 +50,22 @@ class FixtureSwappable extends Component {
     }
 
     swapElements(src, target, srcParent, targetParent) {
-        console.log(src, target)
         let sourceIndexArray = src.id.split(':');
         let targetIndexArray = target.id.split(':');
-
-        if (sourceIndexArray[3] === targetIndexArray[3]) {
-            target.replaceWith(src);
-            srcParent.appendChild(target);
-            this.props.onSwap(src.id, target.id);
+        if (sourceIndexArray[4] !== "2") {
+            if (sourceIndexArray[3] === targetIndexArray[3]) {
+                target.replaceWith(src);
+                srcParent.appendChild(target);
+                this.props.onSwap(src.id, target.id);
+            }
+        } else {
+            if (sourceIndexArray[0] == 0) {
+                if (sourceIndexArray[3] === targetIndexArray[3]) {
+                    target.replaceWith(src);
+                    srcParent.appendChild(target);
+                    this.props.onSwap(src.id, target.id);
+                }
+            }
         }
     }
     transferElement(src, dropzoneId) {

@@ -47,7 +47,7 @@ import { isArrayNotEmpty } from "../../util/helpers";
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
-class CompetitionDrawEdit extends Component {
+class CompetitionDrawEditOld extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -881,4 +881,4 @@ function mapStatetoProps(state) {
 export default connect(
     mapStatetoProps,
     mapDispatchToProps
-)(Form.create()(CompetitionDrawEdit));
+)(Form.create()(CompetitionDrawEditOld));

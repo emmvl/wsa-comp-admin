@@ -25,7 +25,6 @@ class Swappable extends Component {
   dragEnd(ev, customFunc = null) {
     // console.log(ev.target.parentNode, 'TARGET DRAGEND');
     if (customFunc && ev.target.parentNode != this.state.initialParentNode) {
-      console.log('custom func');
       this.props.customFunc();
     }
   }
