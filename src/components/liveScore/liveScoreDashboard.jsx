@@ -15,6 +15,7 @@ import { NavLink } from 'react-router-dom';
 import AppImages from "../../themes/appImages";
 import moment from "moment";
 import { isArrayNotEmpty } from "../../util/helpers";
+import Tooltip from 'react-png-tooltip'
 
 const { Content } = Layout;
 let this_obj = null;
@@ -207,7 +208,7 @@ const columnsTodaysMatch = [
         key: 'scorer1Status',
         sorter: (a, b) => tableSort(a, b, "scorer1Status"),
         render: (scorer1Status) =>
-        <span>{ isArrayNotEmpty(scorer1Status) ? scorer1Status[0].r_status == "YES" ? "Accepted" :"Not Accepted" :"Not SET"}</span>
+            <span>{isArrayNotEmpty(scorer1Status) ? scorer1Status[0].r_status == "YES" ? "Accepted" : "Not Accepted" : "Not SET"}</span>
 
     }, {
         title: "Scorer 2",
@@ -215,7 +216,7 @@ const columnsTodaysMatch = [
         key: 'scorer2Status',
         sorter: (a, b) => tableSort(a, b, "scorer2Status"),
         render: (scorer2Status, record) =>
-            <span >{record.competition.scoringType == 'SINGLE' ? "" : isArrayNotEmpty(scorer2Status) ? scorer2Status[0].r_status == "YES" ? "Accepted" :"Not Accepted":"  Not SET" }</span>
+            <span >{record.competition.scoringType == 'SINGLE' ? "" : isArrayNotEmpty(scorer2Status) ? scorer2Status[0].r_status == "YES" ? "Accepted" : "Not Accepted" : "  Not SET"}</span>
 
 
 
@@ -226,7 +227,7 @@ const columnsTodaysMatch = [
         key: 'teamAttendanceCountA',
         sorter: (a, b) => tableSort(a, b, "teamAttendanceCountA"),
         render: (teamAttendanceCountA, record) =>
-        <span >{teamAttendanceCountA > 0? "Complete" :"Not Complete"}</span>
+            <span >{teamAttendanceCountA > 0 ? "Complete" : "Not Complete"}</span>
 
     },
     {
@@ -235,7 +236,7 @@ const columnsTodaysMatch = [
         key: 'teamAttendanceCountB',
         sorter: (a, b) => tableSort(a, b, "teamAttendanceCountB"),
         render: (teamAttendanceCountB, record) =>
-        <span >{teamAttendanceCountB > 0? "Complete" :"Not Complete"}</span>
+            <span >{teamAttendanceCountB > 0 ? "Complete" : "Not Complete"}</span>
 
     },
     {
@@ -479,8 +480,11 @@ class LiveScoreDashboard extends Component {
         return (
             <div className="row text-view">
 
-                <div className="col-sm" >
+                <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }} >
                     <span className='home-dash-left-text'>{AppConstants.todaysMatch}</span>
+                    <Tooltip background='#ff8237'>
+                        <span>{AppConstants.todayMatchMsg}</span>
+                    </Tooltip>
                 </div>
 
                 <div className="col-sm text-right" >
@@ -572,19 +576,22 @@ class LiveScoreDashboard extends Component {
     incidentHeading = () => {
         return (
             <div className="row text-view">
-                <div className="col-sm mb-3" >
+                <div className="col-sm mb-3" style={{ display: 'flex', alignItems: 'center' }} >
                     <span className='home-dash-left-text'>{AppConstants.todaysIncidents}</span>
+                    <Tooltip background='#ff8237'>
+                        <span>{AppConstants.todayIncidentMsg}</span>
+                    </Tooltip>
                 </div>
 
                 <div className="col-sm text-right" >
-                    {/* <NavLink to={{
+                    <NavLink to={{
                         pathname: './liveScoreAddIncident',
                         state: { key: 'dashboard' }
                     }}>
                         <Button className='primary-add-comp-form' type='primary'>
                             + {AppConstants.addNew}
                         </Button>
-                    </NavLink> */}
+                    </NavLink>
                 </div>
             </div>
         )
@@ -593,8 +600,11 @@ class LiveScoreDashboard extends Component {
     addNewsHeading = () => {
         return (
             <div className="row text-view">
-                <div className="col-sm" >
+                <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }} >
                     <span className='home-dash-left-text'>{AppConstants.activeNews}</span>
+                    <Tooltip background='#ff8237'>
+                        <span>{AppConstants.activeNewsMsg}</span>
+                    </Tooltip>
                 </div>
                 <div className="col-sm text-right" >
                     <NavLink to={{
@@ -627,8 +637,11 @@ class LiveScoreDashboard extends Component {
     playersToPayHeading = () => {
         return (
             <div className="row text-view">
-                <div className="col-sm mb-3" >
+                <div className="col-sm mb-3" style={{ display: 'flex', alignItems: 'center' }} >
                     <span className='home-dash-left-text'>{AppConstants.playersToPay}</span>
+                    <Tooltip background='#ff8237'>
+                        <span>{AppConstants.playersToPayMsg}</span>
+                    </Tooltip>
                 </div>
             </div>
         )

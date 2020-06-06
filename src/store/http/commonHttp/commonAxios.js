@@ -122,7 +122,7 @@ let AxiosApi = {
         console.log(venuData, 'venuData_FetchApi')
         let body = {
             "competitionUniqueKey": venuData.competitionUniqueKey,
-            "organisationId":organisationId,
+            "organisationId": organisationId,
             "yearRefId": venuData.yearRefId,
             "competitionMembershipProductDivisionId": venuData.competitionMembershipProductDivisionId,
             "venueId": venuData.venueId,
@@ -145,16 +145,16 @@ let AxiosApi = {
     },
 
     ////own Competition venue list
-  async  getVenueList(competitionID, search) {
+    async  getVenueList(competitionID, search) {
         var url = ""
         let organisationId = await getOrganisationData().organisationUniqueKey;
         if (competitionID) {
-            if(search){
+            if (search) {
                 url = `/api/venue/competitionmgmnt?search=${search}&competitionId=${competitionID}&organisationUniqueKey=${organisationId}`;
-            }else{
+            } else {
                 url = `/api/venue/competitionmgmnt?competitionId=${competitionID}&organisationUniqueKey=${organisationId}`;
             }
-           
+
         } else {
             url = `/api/venue/competitionmgmnt?organisationUniqueKey=${organisationId}`;
         }
@@ -191,17 +191,21 @@ let AxiosApi = {
     },
 
     //// Get Org Venue list
-    async getOrgVenue(search){
+    async getOrgVenue(search) {
         let userId = await getUserId()
         let url = null
-        if(search.length > 0){
+        if (search.length > 0) {
             url = `/api/venue/organisationVenue?organisationUniquekey=b6eb9c7b-6c74-4657-bc6d-e2222b23c965&search=${search}`
-        }else{
-             url = `/api/venue/organisationVenue?organisationUniquekey=b6eb9c7b-6c74-4657-bc6d-e2222b23c965&search=`;
+        } else {
+            url = `/api/venue/organisationVenue?organisationUniquekey=b6eb9c7b-6c74-4657-bc6d-e2222b23c965&search=`;
         }
         console.log("colled ", url)
         return Method.dataGet(url, token);
-    }
+    },
+    getCourtList(venueId) {
+        let url = `/api/venueCourt?venueId=${venueId}`;
+        return Method.dataGet(url, token)
+    },
 
 };
 const Method = {

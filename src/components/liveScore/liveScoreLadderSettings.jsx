@@ -66,7 +66,7 @@ class LiveScoreLadderSettings extends Component {
     }
 
     contentView = () => {
-        const { matchResult} = this.props.ladderSettingState
+        const { matchResult } = this.props.ladderSettingState
         let matchResultData = isArrayNotEmpty(matchResult) ? matchResult : []
         return (
             <div className="content-view pt-4">
@@ -74,12 +74,12 @@ class LiveScoreLadderSettings extends Component {
 
                 <div className="inside-container-view" >
                     <div className="table-responsive">
-                        <Table 
-                        loading={this.props.ladderSettingState.onLoad} 
-                        className="fees-table" 
-                        columns={columns} 
-                        dataSource={matchResultData} 
-                        pagination={false} Divider=" false" />
+                        <Table
+                            loading={this.props.ladderSettingState.onLoad}
+                            className="fees-table"
+                            columns={columns}
+                            dataSource={matchResultData}
+                            pagination={false} Divider=" false" />
                     </div>
                 </div>
             </div>
@@ -146,6 +146,28 @@ class LiveScoreLadderSettings extends Component {
         this.props.ladderSettingPostDATA(postData)
     }
 
+    publicLadderLink = () => {
+        let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
+
+        return (
+
+            <div className="content-view mt-5 pt-3" >
+                <div className="row">
+                    <div className="col-sm">
+                        <InputWithHead heading={AppConstants.ladderLink} />
+                        <div>
+                            <a className="userRegLink" href={AppConstants.public_Ladder_Url + `organisationId=${organisationId}`} target='_blank' >
+                                {AppConstants.public_Ladder_Url + `organisationId=${organisationId}`}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        )
+    }
+
+
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
@@ -157,6 +179,8 @@ class LiveScoreLadderSettings extends Component {
                     {/* <Content> */}
                     <Form onSubmit={this.handleSubmit} className="login-form">
                         <div className="formView">{this.contentView()}</div>
+                        <div className="formView">{this.publicLadderLink()}</div>
+
                     </Form>
 
                     <Footer>{this.footerView()}</Footer>

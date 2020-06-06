@@ -29,6 +29,7 @@ import {
 } from "../../util/sessionStorage"
 import AppImages from "../../themes/appImages";
 import Loader from '../../customComponents/loader'
+import Tooltip from 'react-png-tooltip'
 
 
 
@@ -575,9 +576,17 @@ class CompetitionCourtAndTimesAssign extends Component {
                             setFieldsValue={timeSlotData.mainTimeRotationID}
                         >
                             {commonState.timeSlotRotation.length > 0 && commonState.timeSlotRotation.map((item, index) => {
+                                console.log(item, 'timeSlotRotation')
                                 return (
                                     <div>
-                                        <Radio key={item.id} value={item.id}> {item.description}</Radio>
+                                        <div className='row' >
+                                            <Radio key={item.id} value={item.id}> {item.description}</Radio>
+                                            <div style={{ marginLeft: -22, marginTop: -5 }}>
+                                                <Tooltip background='#ff8237'>
+                                                    <span>{item.helpMsg}</span>
+                                                </Tooltip>
+                                            </div>
+                                        </div>
                                         {isArrayNotEmpty(item.subReferences) && <div>
                                             <Form.Item  >
                                                 {getFieldDecorator('timeslotRotationRefId', { rules: [{ required: false, message: "Please select time slot preference" }] })(
@@ -590,6 +599,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                     >
                                                         {timeSlotData.mainTimeRotationID == item.id && item.subReferences.map((subArr) => {
                                                             return (
+
                                                                 <Radio key={"data" + subArr.id} value={subArr.id}> {subArr.description}</Radio>
                                                             )
                                                         })}
@@ -611,9 +621,17 @@ class CompetitionCourtAndTimesAssign extends Component {
                             // setFieldsValue={timeSlotData.timeslotGenerationRefId}
                             >
                                 {commonState.timeSlotGeneration.length > 0 && commonState.timeSlotGeneration.map((item, index) => {
+                                    console.log(item, 'timeSlotGeneration')
                                     return (
                                         <div>
-                                            <Radio key={item.id} value={item.id}> {item.description}</Radio>
+                                            <div className='row' >
+                                                <Radio key={item.id} value={item.id}> {item.description}</Radio>
+                                                <div style={{ marginLeft: -22, marginTop: -5 }}>
+                                                    <Tooltip background='#ff8237'>
+                                                        <span>{item.helpMsg}</span>
+                                                    </Tooltip>
+                                                </div>
+                                            </div>
                                             {timeSlotData.timeslotGenerationRefId === index + 1 && item.id == 1 && (timeSlotData.mainTimeRotationID === 8 || timeSlotData.mainTimeRotationID === 9 || timeSlotData.mainTimeRotationID === 6 || timeSlotData.mainTimeRotationID === 7) &&
                                                 <div>
                                                     <div className="fluid-width">

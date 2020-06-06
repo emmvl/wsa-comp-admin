@@ -37,7 +37,7 @@ const columns = [
 
             return (
                 <div>
-                    {_this.photosRemoveBtnView(record)}
+                    {_this.state.isEditable && _this.photosRemoveBtnView(record)}
                     {_this.photosImageView(photoUrl, record)}
                 </div>
             )
@@ -66,7 +66,9 @@ class UserOurOragnization extends Component {
             imageError: "",
             tableRecord: null,
             isEditView: false,
-            orgPhotoModalVisible: false
+            orgPhotoModalVisible: false,
+            isEditable: true,
+            sourcePage: "AFF"
         }
         _this = this;
         this.props.getCommonRefData();
@@ -77,17 +79,26 @@ class UserOurOragnization extends Component {
         //this.addContact();
     }
 
-    componentDidMount(){
-        console.log("Component Did mount");
+    async componentDidMount(){
+      //  console.log("Component Did mount");
+        if(this.props.location.state!= null && this.props.location.state!= undefined){
+            let isEditable = this.props.location.state.isEditable;
+            let affiliateOrgId = this.props.location.state.affiliateOrgId;
+            let sourcePage = this.props.location.state.sourcePage;
+           
+            await this.setState({organisationId: affiliateOrgId, isEditable: isEditable, sourcePage: sourcePage})
+        }
+        
         this.referenceCalls(this.state.organisationId);
         this.apiCalls(this.state.organisationId);
     }
 
     componentDidUpdate(nextProps){
-        console.log("Component componentDidUpdate");
+       // console.log("Component componentDidUpdate");
        let userState = this.props.userState;
        let commonState = this.props.commonReducerState;
        let affiliateTo = this.props.userState.affiliateTo;
+       let obj = {organisationId: this.state.organisationId}
         if (userState.onLoad === false && this.state.loading === true) {
             if (!userState.error) {
                 this.setState({
@@ -104,15 +115,22 @@ class UserOurOragnization extends Component {
             }
             if (userState.status == 1 && this.state.buttonPressed == "savePhotos") {
                this.setState({isEditView: false, orgPhotosImg: null, orgPhotosImgSend: null});
-               this.props.getOrganiationPhotoAction();
+               
+               this.props.getOrganiationPhotoAction(obj);
             }
             if (userState.status == 1 && this.state.buttonPressed == "deletePhotos") {
                 this.setState({isEditView: false, orgPhotosImg: null, orgPhotosImgSend: null});
-                this.props.getOrganiationPhotoAction();
+                this.props.getOrganiationPhotoAction(obj);
              }
         }
         if (this.state.buttonPressed == "cancel") {
-            history.push('/userAffiliatesList');
+            if(this.state.sourcePage == "DIR"){
+                history.push('/affiliateDirectory');
+            }
+            else{
+                history.push('/userAffiliatesList');
+            }
+           
         }
         
 
@@ -434,8 +452,9 @@ class UserOurOragnization extends Component {
     tabCallBack = (key) => {
         this.setState({ organisationTabKey: key})
         if(key == "2"){
+            let obj = {organisationId: this.state.organisationId}
             this.setState({isEditView: false});
-            this.props.getOrganiationPhotoAction();
+            this.props.getOrganiationPhotoAction(obj);
         }
     }
 
@@ -504,14 +523,17 @@ class UserOurOragnization extends Component {
                     display: "flex",
                     alignItems: "center",
                 }} >
+                     {this.state.isEditable ? 
                     <Breadcrumb separator=" > ">
-
                         <NavLink to="/userAffiliatesList" >
                             <Breadcrumb.Item separator=">" className="breadcrumb-product">{AppConstants.affiliates}</Breadcrumb.Item>
                         </NavLink>
                         {/* <Breadcrumb.Item className="breadcrumb-product">{AppConstants.user}</Breadcrumb.Item> */}
                         <Breadcrumb.Item className="breadcrumb-add">{AppConstants.ourOrganisation}</Breadcrumb.Item>
-                    </Breadcrumb>
+                    </Breadcrumb> : 
+                     <NavLink to="/affiliatedirectory" >
+                        <span className="breadcrumb-product">{AppConstants.affiliates}</span>
+                     </NavLink> }
                 </Header >
             </div>
         )
@@ -541,6 +563,7 @@ class UserOurOragnization extends Component {
                             placeholder={AppConstants.organisationName}
                             onChange={(e) => this.onChangeSetValue(e.target.value, "name" )}
                             //value={affiliate.name}
+							disabled={!this.state.isEditable}								 
                             setFieldsValue={affiliate.name}
                         />
                     )}
@@ -551,11 +574,13 @@ class UserOurOragnization extends Component {
                         <div className="col-sm">
                             <div className="reg-competition-logo-view" onClick={this.selectImage}>
                                 <label>
-                                    <img
+                                     <input
                                         src={affiliate.logoUrl == null ? AppImages.circleImage  : affiliate.logoUrl}
                                         alt=""
                                         height="120"
                                         width="120"
+                                        type="image"
+                                        disabled={!this.state.isEditable}			 
                                         style={{ borderRadius: 60 }}
                                         name={'image'}
                                         onError={ev => {
@@ -580,6 +605,7 @@ class UserOurOragnization extends Component {
                                 className="single-checkbox"
                                 // defaultChecked={false}
                                 checked={affiliate.logoIsDefault}
+								disabled={!this.state.isEditable}								 
                                 onChange={e =>
                                     this.logoIsDefaultOnchange(e.target.checked, "logoIsDefault")
                                 }
@@ -627,6 +653,7 @@ class UserOurOragnization extends Component {
                         name={AppConstants.addressOne}
                         onChange={(e) => this.onChangeSetValue(e.target.value, "street1" )} 
                         //value={affiliate.street1}
+						disabled={!this.state.isEditable}								 
                         setFieldsValue={affiliate.street1}
                     />
                     )}
@@ -637,6 +664,7 @@ class UserOurOragnization extends Component {
                     placeholder={AppConstants.addressTwo}
                     onChange={(e) => this.onChangeSetValue(e.target.value, "street2" )} 
                     value={affiliate.street2}
+					disabled={!this.state.isEditable}								 
                 />
 
                 <Form.Item >
@@ -650,6 +678,7 @@ class UserOurOragnization extends Component {
                             onChange={(e) => this.onChangeSetValue(e.target.value, "suburb" )}
                             //value={affiliate.suburb}
                             setFieldsValue={affiliate.suburb}
+							disabled={!this.state.isEditable}								 
                         />
                     )}
                 </Form.Item>
@@ -669,6 +698,7 @@ class UserOurOragnization extends Component {
                             onChange={(e) => this.onChangeSetValue(e, "stateRefId" )}
                             //value={affiliate.stateRefId}
                             setFieldsValue={affiliate.stateRefId}
+							disabled={!this.state.isEditable}								 
 
                         >
                             {stateList.length > 0 && stateList.map((item) => (
@@ -692,6 +722,7 @@ class UserOurOragnization extends Component {
                             //value={affiliate.postalCode}
                             setFieldsValue={affiliate.postalCode}
                             maxLength={4}
+							disabled={!this.state.isEditable}								 
                         />
                     )}
                 </Form.Item>
@@ -699,6 +730,7 @@ class UserOurOragnization extends Component {
                 <InputWithHead heading={AppConstants.phoneNumber} placeholder={AppConstants.phoneNumber}
                         onChange={(e) => this.onChangeSetValue(e.target.value, "phoneNo" )} 
                         value={affiliate.phoneNo}
+						disabled={!this.state.isEditable}								 
                     />
             </div>
         )
@@ -717,7 +749,7 @@ class UserOurOragnization extends Component {
                         <div className="col-sm" >
                             <span className="user-contact-heading">{AppConstants.contact + (index+1)}</span>
                         </div>
-                        {affiliate.contacts.length == 1 ? null :
+                        {(!this.state.isEditable || affiliate.contacts.length == 1) ? null :
                         <div className="transfer-image-view pointer" onClick={() => this.deleteContact(index)}>
                             <span class="user-remove-btn" ><i class="fa fa-trash-o" aria-hidden="true"></i></span>
                             <span className="user-remove-text">
@@ -738,6 +770,7 @@ class UserOurOragnization extends Component {
                             onChange={(e) => this.onChangeContactSetValue(e.target.value, "firstName", index )}
                             //value={item.firstName}
                             setFieldsValue={item.firstName}
+							disabled={!this.state.isEditable}								 
                         />
                     )}
                     </Form.Item>
@@ -746,6 +779,7 @@ class UserOurOragnization extends Component {
                         placeholder={AppConstants.middleName} 
                         onChange={(e) => this.onChangeContactSetValue(e.target.value, "middleName", index )}
                         value={item.middleName}
+						disabled={!this.state.isEditable}								 
                         />
 
                  
@@ -757,6 +791,7 @@ class UserOurOragnization extends Component {
                         heading={AppConstants.lastName} placeholder={AppConstants.lastName} 
                             onChange={(e) => this.onChangeContactSetValue(e.target.value, "lastName", index )}
                             setFieldsValue={item.lastName}
+							disabled={!this.state.isEditable}								 
                             />
                         )}
                     </Form.Item>
@@ -773,6 +808,7 @@ class UserOurOragnization extends Component {
                             onChange={(e) => this.onChangeContactSetValue(e.target.value, "email", index )}
                             //value={item.email}
                             setFieldsValue={item.email}
+							disabled={!this.state.isEditable}								 
                         />
                     )}
                     </Form.Item>
@@ -787,32 +823,37 @@ class UserOurOragnization extends Component {
                         placeholder={AppConstants.phoneNumber} 
                         onChange={(e) => this.onChangeContactSetValue(e.target.value, "mobileNumber", index )}
                         value={item.mobileNumber}
+						disabled={!this.state.isEditable}								 
                         />
-  
-                    <InputWithHead heading={AppConstants.permissionLevel} />
-                    <Form.Item >
-                    {getFieldDecorator(`permissions${index}`, {
-                        rules: [{ required: true, message: ValidationConstants.rolesField[0] }],
-                    })(
-                        <Select
-                            style={{ width: "100%", paddingRight: 1 }}
-                            onChange={(e) => this.onChangeContactSetValue(e, "roles", index )}
-                            setFieldsValue={item.roleId}
-                            >
-                            {(roles || []).map((role, index) => (
-                            <Option key={role.id} value={role.id}>{role.description}</Option>
-                            ))}
-                        </Select>
-                     )}
-                     </Form.Item>
+                    {this.state.isEditable && 
+                    <div>   
+                        <InputWithHead heading={AppConstants.permissionLevel} />
+                        <Form.Item >
+                        {getFieldDecorator(`permissions${index}`, {
+                            rules: [{ required: true, message: ValidationConstants.rolesField[0] }],
+                        })(
+                            <Select
+                                style={{ width: "100%", paddingRight: 1 }}
+                                onChange={(e) => this.onChangeContactSetValue(e, "roles", index )}
+                                setFieldsValue={item.roleId}
+                                >
+                                {(roles || []).map((role, index) => (
+                                <Option key={role.id} value={role.id}>{role.description}</Option>
+                                ))}
+                            </Select>
+                        )}
+                        </Form.Item>
+                     </div>}
                 </div >
                 ))}
                  {this.deleteConfirmModalView()}
-                <div className="transfer-image-view mt-2 pointer"  onClick={() => this.addContact()}>
-                    <span className="user-remove-text">
-                        + {AppConstants.addContact}
-                    </span>
-                </div>
+                 {this.state.isEditable &&
+                    <div className="transfer-image-view mt-2 pointer"  onClick={() => this.addContact()}>
+                        <span className="user-remove-text">
+                            + {AppConstants.addContact}
+                        </span>
+                    </div>
+                }
                 {
                     (userState.error && userState.status == 4) ? 
                     <div style={{color:'red'}}>{userState.error.result.data.message}</div> : null
@@ -845,9 +886,10 @@ class UserOurOragnization extends Component {
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.photos}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
+                    {this.state.isEditable && 
                         <div className="col-sm live-form-view-button-container" style={{ display: "flex", justifyContent: "flex-end" }} >
                             <Button className="primary-add-comp-form " type="primary" onClick={() => this.addPhoto()}>{"+" + AppConstants.addPhoto}</Button>
-                        </div>
+                    </div> }
                 </div>
             </Header >
         )
@@ -1071,6 +1113,7 @@ class UserOurOragnization extends Component {
                                     {AppConstants.cancel}</Button>
                             </div>
                         </div>
+                        {this.state.isEditable &&
                         <div className="col-sm">
                             <div className="comp-buttons-view">
                                 <Button className="user-approval-button" type="primary" htmlType="submit" disabled={isSubmitting}
@@ -1078,7 +1121,7 @@ class UserOurOragnization extends Component {
                                     {AppConstants.updateAffiliates}
                                 </Button>
                             </div>
-                        </div>
+                        </div> }
                     </div>
                 </div>
             </div>
@@ -1092,7 +1135,7 @@ class UserOurOragnization extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
-                <InnerHorizontalMenu menu={"user"} userSelectedKey={"2"} />
+                <InnerHorizontalMenu menu={"user"} userSelectedKey={"3"} />
                 <Layout>
                     {this.headerView()}
                     <Form

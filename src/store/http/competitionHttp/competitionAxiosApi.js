@@ -352,6 +352,7 @@ let CompetitionAxiosApi = {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
+            organisationId: organisationUniqueKey,
             yearRefId: year,
             competitionUniqueKey: competitionId,
             competitionMembershipProductDivisionId: divisionId,
@@ -370,6 +371,7 @@ let CompetitionAxiosApi = {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
+            organisationId: organisationUniqueKey,
             competitionUniqueKey: competitionId,
             competitionMembershipProductDivisionId: divisionId,
             teamId: teamId,
@@ -477,7 +479,7 @@ let CompetitionAxiosApi = {
         var url = `/api/draws/team/update`
         return Method.dataPut(url, token, body);
     },
-   async teamChangeDivisionApi(payload) {
+    async teamChangeDivisionApi(payload) {
         let organisationId = await getOrganisationData().organisationUniqueKey;
         payload.organisationUniqueKey = organisationId;
         var url = `/api/team/division/update`
@@ -488,7 +490,15 @@ let CompetitionAxiosApi = {
         payload.organisationUniqueKey = organisationId;
         var url = `/api/player/division/update`
         return Method.dataPost(url, token, payload);
-    },										  
+    },
+
+    async updateDrawsLock(drawsId) {
+        let body = {
+            "drawsId": drawsId
+        }
+        var url = `/api/draws/unlock`
+        return Method.dataPost(url, token, body);
+    }
 };
 
 const Method = {

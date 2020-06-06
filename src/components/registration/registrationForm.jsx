@@ -11,6 +11,7 @@ import {
     Form,
     Table,
     message,
+	Radio,	  
     Tooltip
 } from "antd";
 import "./product.css";
@@ -39,6 +40,7 @@ import { isArrayNotEmpty } from "../../util/helpers";
 import Loader from '../../customComponents/loader';
 import history from "../../util/history";
 import { getOrganisationData } from "../../util/sessionStorage";
+import {inviteTypeAction} from '../../store/actions/commonAction/commonAction';																			   
 
 
 const { Header, Footer, Content } = Layout;
@@ -161,6 +163,7 @@ class RegistrationForm extends Component {
         this.props.getVenuesTypeAction();
         this.props.getRegistrationMethod();
         this.props.getRegFormAdvSettings();
+		this.props.inviteTypeAction();							  
     }
 
 
@@ -1183,6 +1186,78 @@ class RegistrationForm extends Component {
             </div>
         );
     };
+   // Send invite to
+    sendInviteToView = () =>{
+        console.log("commonReducerState"+JSON.stringify(this.props.registrationState.registrationFormData[0].inviteTypeRefId));
+        const registrationFormData = this.props.registrationState.registrationFormData[0]
+        let {inviteTypeData} = this.props.commonReducerState;
+        let isPublished = this.state.isPublished;
+        return(
+            <div className="discount-view pt-5">
+                <span className="form-heading">{AppConstants.sendInvitesTo}</span>
+                <InputWithHead heading={AppConstants.inviteType} />               
+                <Radio.Group className="reg-competition-radio"   disabled={isPublished} onChange={(e)=>(this.props.updateRegistrationForm(e.target.value,"inviteTypeRefId"))} value={registrationFormData.inviteTypeRefId}>
+                    {(inviteTypeData || []).map((fix) => (   
+                        <Radio key={fix.id} value={fix.id}>{fix.description}</Radio>
+                    ))}
+                </Radio.Group>                 
+                <InputWithHead heading={AppConstants.gender} />                
+                <Radio.Group className="reg-competition-radio"  disabled={isPublished}  value={registrationFormData.genderRefId}  
+                        onChange={(e)=>(this.props.updateRegistrationForm(e.target.value,"genderRefId"))}>                               
+                    <Radio value={2}>{AppConstants.male}</Radio>
+                    <Radio value={1}> {AppConstants.female}</Radio> 
+                    <Radio value={3}>{AppConstants.both}</Radio>                          
+                </Radio.Group>
+                <InputWithHead heading={AppConstants.dOB} />        
+                <Radio.Group className="reg-competition-radio"  disabled={isPublished} 
+                        value={registrationFormData.dobPreferenceRefId}  onChange={(e)=>(this.props.updateRegistrationForm(e.target.value,"dobPreferenceRefId"))}>                               
+                    <Radio className="dob-pref-radio-inner-heading" style={{marginBottom: 10}} value={1}>{AppConstants.NoDobPreference}</Radio>  
+                    <Radio className="dob-pref-radio-inner-heading" value={2}>{AppConstants.DobPreference}</Radio>                     
+                </Radio.Group>  
+                {(registrationFormData.dobPreferenceRefId == 2)?
+                    <div>                              
+                        <div style={{display:"flex",marginLeft:23}}>
+                            <span className="applicable-to-datepicker-col">{AppConstants.DobMoreThan}</span>               
+                            <div className="dob-pref-date-picker">
+                                <DatePicker
+                                    size="large"
+                                    placeholder={"Select Date"}
+                                    style={{ width: "100%" }}
+                                    onChange={(e) => this.dateChange(e, "dobPreferenceMoreThan")}
+                                    name={"dobPreferenceMoreThan"}
+                                    format={"DD-MM-YYYY"}
+                                    showTime={false}
+                                    disabled={isPublished}
+                                    disabledDate={(registrationFormData.dobPreferenceLessThan==null)?false:d => !d || d.isAfter(registrationFormData.dobPreferenceLessThan)}
+                                    value={(registrationFormData.dobPreferenceMoreThan == null || registrationFormData.dobPreferenceMoreThan == "")?"":moment(registrationFormData.dobPreferenceMoreThan, "YYYY-MM-DD")}                                   
+                                />
+                            </div>
+                        </div>
+                        <div style={{display:"flex",marginLeft:23}}>
+                            <span className="applicable-to-datepicker-col">{AppConstants.DobLessThan}</span>               
+                            <div className="dob-pref-date-picker" style={{marginLeft:9}}>
+                                <DatePicker
+                                    size="large"
+                                    style={{ width: "100%" }}                                      
+                                    placeholder={"Select Date"}
+                                    onChange={(e) => this.dateChange(e, "dobPreferenceLessThan")}
+                                    name={"dobPreferenceLessThan"}
+                                    disabledTime={this.disabledTime}
+                                    format={"DD-MM-YYYY"}
+                                    disabled={isPublished}
+                                    showTime={false}
+                                    disabledDate={(registrationFormData.dobPreferenceMoreThan==null)?false:d => !d || d.isSameOrBefore(registrationFormData.dobPreferenceMoreThan)}
+                                    // || d.isSameOrBefore(dateOpen)                                      
+                                    //  value={closeDate ? moment(closeDate, "YYYY-MM-DD") : ""}
+                                    value={(registrationFormData.dobPreferenceLessThan==null||registrationFormData.dobPreferenceLessThan=="")?"":moment(registrationFormData.dobPreferenceLessThan, "YYYY-MM-DD")}
+                                />
+                            </div>
+                        </div>                     
+                    </div>  
+                :null} 
+            </div>
+        )
+    }	 
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
@@ -1306,6 +1381,7 @@ class RegistrationForm extends Component {
                                 getFieldDecorator
                             )}</div>
                             <div className="formView">{this.advancedSettingView()}</div>
+							 <div className="formView">{this.sendInviteToView()}</div>													 
                             <div className="formView">
                                 {this.disclaimerView(
                                     getFieldDecorator
@@ -1339,7 +1415,8 @@ function mapDispatchToProps(dispatch) {
             updateRegistrationLock,
             updateDisclamerText,
             isCheckedVisible,
-            isReplyCheckVisible
+            isReplyCheckVisible,
+			inviteTypeAction			
         },
         dispatch
     );
@@ -1348,6 +1425,7 @@ function mapStatetoProps(state) {
     return {
         appState: state.AppState,
         registrationState: state.RegistrationState,
+        commonReducerState: state.CommonReducerState													
     };
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(RegistrationForm));

@@ -37,7 +37,7 @@ import LiveScorePlayerProfile from "../components/liveScore/liveScorePlayerProfi
 import RegistrationPayments from "../components/registration/registrationPayments";
 import HomeDashboard from "../components/home/homeDashboard";
 import CompetitionDraws from "../components/competition/competitionDraws";
-import CompetitionDrawEdit from "../components/competition/competitionDrawEdit";
+import CompetitionDrawEdit from "../components/competition/competitionDrawEditNew";
 import UmpireAllocation from "../components/umpire/umpireAllocation";
 import CompetitionFixtures from "../components/competition/competitionFixtures";
 import CompetitionQuickCompetition from "../components/competition/competitionQuickCompetition";
@@ -45,6 +45,7 @@ import RegistrationForm from "../components/registration/registrationForm";
 import RegistrationMembershipFee from "../components/registration/registrationMembershipFee";
 import RegistrationCompetitionFee from "../components/registration/registrationCompetitionFee";
 import UserAffiliatesList from "../components/user/userAffiliatesList";
+import AffiliateDirectory from "../components/user/affiliateDirectory";
 import UserAffiliateApproveRejectForm from "../components/user/userAffiliateApproveRejectForm";
 import UserAddAffiliates from "../components/user/userAddAffiliates";
 import UserEditAffiliates from "../components/user/userEditAffiliates";
@@ -115,8 +116,9 @@ import RegistrationSettlements from "../components/registration/registrationSett
 import RegistrationPayoutTransaction from "../components/registration/registrationPayoutTransactions";
 
 import LiveScoreCoaches from "../components/liveScore/liveScoreCoaches";
-import LiveScoreAddEditCoach from "../components/liveScore/liveScoreAddEditCoach"
-
+import LiveScoreAddEditCoach from "../components/liveScore/liveScoreAddEditCoach";
+import CompetitionException from "../components/competition/comeptitionException";
+import LiveScorerCoachImport from "../components/liveScore/liveScoreCoachImport";
 const lazyLoad = Component => {
   const lazy = props => {
     return (
@@ -310,6 +312,11 @@ class Routes extends React.Component {
           path="/userAffiliatesList"
           component={lazyLoad(UserAffiliatesList)}
         />
+        <PrivateRoute
+          path="/affiliateDirectory"
+          component={lazyLoad(AffiliateDirectory)}
+        />
+
         <PrivateRoute
           path="/userAffiliateApproveRejectForm"
           component={lazyLoad(UserAffiliateApproveRejectForm)}
@@ -615,7 +622,15 @@ class Routes extends React.Component {
           path="/liveScoreAddEditCoach"
           component={lazyLoad(LiveScoreAddEditCoach)}
         />
+        <PrivateRoute
+          path="/competitionException"
+          component={lazyLoad(CompetitionException)}
+        />
 
+<PrivateRoute
+          path="/liveScoreCoachImport"
+          component={lazyLoad(LiveScorerCoachImport)}
+        />
         <Route path="/" component={lazyLoad(NotFound)} />
 
         <Redirect from="*" to="/404" />

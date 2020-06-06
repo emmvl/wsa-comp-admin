@@ -1,5 +1,6 @@
 import ApiConstants from "../../../themes/apiConstants";
 import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
+import AppConstants from "../../../themes/appConstants";
 
 const initailTimeSlotObj = {
     "startTime": "00:00",
@@ -52,7 +53,9 @@ const initialState = {
     defaultDataAllVenue: [],
     timeSlotEntityManualkey: [],
     allResult: [],
-    competitionVenues: []
+    competitionVenues: [],
+    timeSlotRotationHelpMessage: [AppConstants.timeSloteNoPrefMsg, AppConstants.timeSloteEvenRotationMsg, AppConstants.allocateToSametimeslotMsg],
+    timeSlotGenerationHelpMessage: [AppConstants.timeSlote_BasedOnMatchDurationMsg, AppConstants.manuallyAddTimeSloteMsg]
 };
 
 //time slot Entity
@@ -531,6 +534,24 @@ function updatedTimeslotsDayTime(result) {
 
 }
 
+function getTimeSlotRotationWithHelpMsg(data, helpMsg) {
+    console.log(data, 'datadata')
+    for (let i in data) {
+        data[i]['helpMsg'] = helpMsg[i]
+    }
+    console.log(data, 'datadata~~')
+    return data;
+}
+
+function getTimeSlotGenerationWithHelpMsg(data, helpMsg) {
+    console.log(data, 'DataForMSg')
+    for (let i in data) {
+        data[i]['helpMsg'] = helpMsg[i]
+    }
+    console.log(data, 'datadata@@@@')
+    return data;
+}
+
 
 // state Competition TIme Slots
 function CompetitionTimeSlots(state = initialState, action) {
@@ -541,14 +562,26 @@ function CompetitionTimeSlots(state = initialState, action) {
         case ApiConstants.API_GET_COMPETITION_WITH_TIME_SLOTS_LOAD:
             return { ...state, onLoad: true, onGetTimeSlotLoad: true, error: null };
         case ApiConstants.API_GET_COMPETITION_WITH_TIME_SLOTS_SUCCESS:
+
+
             let refData = action.refResult
+
+            ////Added By Abhishek for Conceptual Help
+            const timeSlotRotationWithHelpMsg = getTimeSlotRotationWithHelpMsg(refData.TimeslotRotation, state.timeSlotRotationHelpMessage)
+            console.log(timeSlotRotationWithHelpMsg, 'timeSlotRotationWithHelpMsg')
+            const timeSlotGenerationWithHelpMsg = getTimeSlotGenerationWithHelpMsg(refData.TimeslotGeneration, state.timeSlotGenerationHelpMessage)
+            console.log(timeSlotGenerationWithHelpMsg, 'timeSlotGenerationWithHelpMsg')
+            ////Added By Abhishek for Conceptual Help
+
             state.allrefernceData = action.result
             let venueData = getVenueData(refData.ApplyToVenue)
             let timeSlotGeneration = getVenueData(refData.TimeslotGeneration)
             // let rotationData = getRotationData(action.result.TimeslotRotation)
             state.applyVenue = venueData
-            state.timeSlotRotation = refData.TimeslotRotation
-            state.timeSlotGeneration = timeSlotGeneration
+            // state.timeSlotRotation = refData.TimeslotRotation
+            state.timeSlotRotation = timeSlotRotationWithHelpMsg
+            state.timeSlotGeneration = timeSlotGenerationWithHelpMsg
+            // state.timeSlotGeneration = timeSlotGeneration
             state.weekDays = refData.Day
             let resultData = JSON.parse(JSON.stringify(action.result))
             let selectedTimeGeneration = getSelectedTimeGeneration(state.timeSlotGeneration, action.result)

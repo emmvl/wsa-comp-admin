@@ -251,6 +251,14 @@
     color:'#1b1b34';
     font-weight: 200
 } */
+.tool-tip-display{
+    display: table !important
+}
+
+.Content_Content__1CE8z * {
+    max-width: 100%;
+    white-space: pre-line;
+}
 
 
 

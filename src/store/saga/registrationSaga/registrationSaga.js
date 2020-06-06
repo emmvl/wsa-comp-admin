@@ -265,7 +265,7 @@ export function* getMembershipproduct(action) {
 //////get the divisions list on the basis of year and competition
 export function* getDivisionsListSaga(action) {
   try {
-    const result = yield call(AxiosApi.getDivisionsList, action.yearRefId, action.competitionId);
+    const result = yield call(AxiosApi.getDivisionsList, action.yearRefId, action.competitionId, action.sourceModule);
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_GET_DIVISIONS_LIST_ON_YEAR_AND_COMPETITION_SUCCESS,

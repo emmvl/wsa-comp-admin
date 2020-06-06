@@ -45,7 +45,8 @@ const initialState = {
     photoTypeData: [],
     applyToData: [],
     extraTimeDrawData: [],
-    finalFixtureTemplateData: []
+    finalFixtureTemplateData: [], courtLoad: false, courtList: [],
+	  inviteTypeData:[],				  
 };
 
 
@@ -319,6 +320,33 @@ function commonReducerState(state = initialState, action) {
                 status: action.status
             }
 
+        ////Court List for own competitionvenue and times
+        case ApiConstants.API_COURT_LIST_LOAD:
+            return { ...state, onLoad: true, courtLoad: true, courtList: [] };
+
+        case ApiConstants.API_COURT_LIST_SUCCESS:
+            console.log(action, 'VenueListResult')
+            return {
+                ...state,
+                status: action.status,
+                courtList: action.result,
+                courtLoad: false
+            };
+        // Send invite to
+       
+        case ApiConstants.API_GET_INVITE_TYPE_LOAD:
+            return {
+                ...state,
+                onLoad: true
+            }
+
+        case ApiConstants.API_GET_INVITE_TYPE_SUCCESS:
+            return {
+                ...state,
+                onLoad: true,
+                inviteTypeData: action.result,
+                status: action.status
+            }
         default:
             return state;
     }

@@ -20,10 +20,11 @@ import {
     liveScoreManagerFilter,
     liveScoreManagerSearch
 } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
-import { isArrayNotEmpty,captializedString } from "../../util/helpers";
+import { isArrayNotEmpty, captializedString } from "../../util/helpers";
 
 import Loader from '../../customComponents/loader'
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
+import Tooltip from 'react-png-tooltip'
 
 
 const { Footer, Content, Header } = Layout;
@@ -41,7 +42,8 @@ class LiveScoreAddManager extends Component {
             isEdit: this.props.location.state ? this.props.location.state.isEdit : null,
             loader: false,
             showOption: false,
-            competition_id: null
+            competition_id: null,
+            teamLoad:false
         }
 
     }
@@ -79,14 +81,28 @@ class LiveScoreAddManager extends Component {
 
         }
 
-
+        if(this.props.liveScoreMangerState.teamId !== nextProps.liveScoreMangerState.teamId){
+            if(this.state.teamLoad===true){
+              const {teamId} = this.props.liveScoreMangerState
+                this.setSelectedTeamValue(teamId)
+                console.log(teamId,"lkjh")
+                this.setState({teamLoad:false})
+               
+            }
+        }
 
     }
 
+    setSelectedTeamValue(teamId){
+        
+        this.props.form.setFieldsValue({
+            'managerTeamName': teamId
+        })
+    }
     setInitalFiledValue() {
         const { managerData, teamId } = this.props.liveScoreMangerState
         let data = this.state.tableRecord
-       
+
         this.props.form.setFieldsValue({
             'First Name': managerData.firstName,
             'Last Name': managerData.lastName,
@@ -165,7 +181,7 @@ class LiveScoreAddManager extends Component {
                                         const ManagerId = JSON.parse(option.key)
                                         this.props.liveScoreClear()
                                         this.props.liveScoreUpdateManagerDataAction(ManagerId, 'managerSearch')
-
+                                        this.setState({teamLoad:true})
                                     }}
                                     notFoundContent={onLoadSearch == true ? <Spin size="small" /> : null}
 
@@ -235,7 +251,8 @@ class LiveScoreAddManager extends Component {
                 <div className="row" >
                     <div className="col-sm" >
                         <Form.Item>
-                        {getFieldDecorator(AppConstants.firstName, { normalize : (input) => captializedString(input),
+                            {getFieldDecorator(AppConstants.firstName, {
+                                normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
@@ -251,7 +268,8 @@ class LiveScoreAddManager extends Component {
                     </div>
                     <div className="col-sm" >
                         <Form.Item>
-                        {getFieldDecorator(AppConstants.lastName, {normalize : (input) => captializedString(input),
+                            {getFieldDecorator(AppConstants.lastName, {
+                                normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
@@ -319,7 +337,7 @@ class LiveScoreAddManager extends Component {
                                     value={teamId}
                                     showSearch
                                     optionFilterProp="children"
-                                    
+
                                 >
                                     {teamData.map((item) => (
                                         < Option value={item.id} > {item.name}</Option>
@@ -350,10 +368,31 @@ class LiveScoreAddManager extends Component {
                     onChange={(e) => this.onButtonChage(e)}
                     value={managerRadioBtn}
                 >
-                    <div className="row ml-2" style={{ marginTop: 18 }} >
+                    {/* <div className="row ml-2" style={{ marginTop: 18 }} >
                         <Radio value={"new"}>{AppConstants.new}</Radio>
                         <Radio value={"existing"}>{AppConstants.existing} </Radio>
+                    </div> */}
+                    <div className="row ml-2" style={{ marginTop: 18 }} >
+
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"new"}>{AppConstants.new}</Radio>
+                            <div style={{ marginLeft: -10, width: 50 }}>
+                                <Tooltip background='#ff8237'>
+                                    <span>{AppConstants.newMsgForScorerManager}</span>
+                                </Tooltip>
+                            </div>
+                        </div>
+
+                        <div style={{ display: 'flex', alignItems: 'center', marginLeft: -10 }}>
+                            <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"existing"}>{AppConstants.existing} </Radio>
+                            <div style={{ marginLeft: -10 }}>
+                                <Tooltip background='#ff8237' >
+                                    <span>{AppConstants.existingMsgForScorerManager}</span>
+                                </Tooltip>
+                            </div>
+                        </div>
                     </div>
+
                 </Radio.Group>
 
             </div>

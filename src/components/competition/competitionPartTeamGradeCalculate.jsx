@@ -25,6 +25,7 @@ import {
     getOwn_competition
 } from "../../util/sessionStorage";
 import AppImages from "../../themes/appImages";
+import Tooltip from 'react-png-tooltip'
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
@@ -170,7 +171,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                 render: (grades, record) =>
                     < div style={{ width: "fit-content", display: "flex", flexDirection: 'column', justifyContent: 'center' }}>
                         <a className="pb-3">
-                            <span  style={{color: "var(--app-color)"}}
+                            <span style={{ color: "var(--app-color)" }}
                                 onClick={() => this.updateGradeName(grades.competitionDivisionGradeId, record.competitionMembershipProductDivisionId)} className="year-select-heading ">
                                 {grades.gradeName}
                             </span>
@@ -193,7 +194,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
         })
     }
 
-    exportTeams = () =>{
+    exportTeams = () => {
         let payload = {
             competitionId: this.state.firstTimeCompId,
             yearRefId: this.state.yearRefId
@@ -201,7 +202,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
         this.props.exportFinalTeamsAction(payload);
     }
 
-    exportPlayers = () =>{
+    exportPlayers = () => {
         let payload = {
             competitionId: this.state.firstTimeCompId,
             yearRefId: this.state.yearRefId
@@ -219,6 +220,11 @@ class CompetitionPartTeamGradeCalculate extends Component {
                         <Breadcrumb separator=" > ">
                             < Breadcrumb.Item className="breadcrumb-add"> {AppConstants.teamGradingSummary}</Breadcrumb.Item>
                         </Breadcrumb>
+                        <div style={{ marginTop: 10 }}>
+                            <Tooltip placement="top" background='#ff8237'>
+                                <span>{AppConstants.teamGradingSummaryMsg}</span>
+                            </Tooltip>
+                        </div>
                     </div>
                     <div className="col-sm" style={{
                         display: "flex", flexDirection: 'row', alignItems: "center",
@@ -241,9 +247,9 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                     </Button>
                                 </div>
                             </div>
-                            <div  className="col-sm">
+                            <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile">
-                                    <Button className="primary-add-comp-form" type="primary"  onClick={() => this.exportPlayers()}>
+                                    <Button className="primary-add-comp-form" type="primary" onClick={() => this.exportPlayers()}>
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img

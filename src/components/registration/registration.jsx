@@ -313,7 +313,7 @@ class Registration extends Component {
                             </div>
                         </div>
                         <div className="reg-col">
-                            <div className="reg-filter-col-cont">
+                            <div className="reg-filter-col-cont" style={{marginRight: '30px'}}>
                                 <div className='year-select-heading'>{AppConstants.dobFrom}</div>
                                 <DatePicker
                                     size="default"
@@ -327,7 +327,7 @@ class Registration extends Component {
                         </div>
                         <div className="reg-col">
                             <div className="reg-filter-col-cont" >
-                                <div className='year-select-heading' style={{marginLeft: '25px'}}>{AppConstants.dobTo}</div>
+                                <div className='year-select-heading'>{AppConstants.dobTo}</div>
                                 <DatePicker
                                     size="large"
                                     className="year-select reg-filter-select"

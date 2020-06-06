@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Breadcrumb, Select, Button, Form, message, Modal } from 'antd';
+import { Layout, Breadcrumb, Select, Button, Form, message, Modal, Menu } from 'antd';
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
 import { NavLink } from 'react-router-dom';
 import loadjs from 'loadjs';
@@ -16,7 +16,7 @@ import {
   getCompetitionVenue,
   updateCourtTimingsDrawsAction,
   clearDraws,
-  publishDraws, matchesListDrawsAction
+  publishDraws, matchesListDrawsAction, unlockDrawsAction
 } from '../../store/actions/competitionModuleAction/competitionDrawsAction';
 import Swappable from '../../customComponents/SwappableComponent';
 import { getDayName, getTime } from '../../themes/dateformate';
@@ -48,6 +48,7 @@ import { generateDrawAction } from "../../store/actions/competitionModuleAction/
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { confirm } = Modal;
+const { SubMenu } = Menu;
 class CompetitionDraws extends Component {
   constructor(props) {
     super(props);
@@ -59,6 +60,7 @@ class CompetitionDraws extends Component {
       venueLoad: false,
       roundTime: null,
       competitionDivisionGradeId: "",
+      organisationId: getOrganisationData().organisationUniqueKey
     };
   }
 
@@ -74,20 +76,42 @@ class CompetitionDraws extends Component {
           let venueId = venueData[0].id
           setDraws_venue(venueId)
           if (drawsRoundData.length > 0) {
-            let roundId = drawsRoundData[0].roundId;
-            setDraws_round(roundId)
-            let roundTime = drawsRoundData[0].startDateTime
-            setDraws_roundTime(roundTime)
-            this.props.getCompetitionDrawsAction(
-              this.state.yearRefId,
-              this.state.firstTimeCompId,
-              venueId,
-              roundId
-            );
-            this.setState({
-              roundId, roundTime, venueId,
-              venueLoad: false,
-            });
+            let roundId = null
+            let roundTime = null
+            if (drawsRoundData.length > 1) {
+              roundId = drawsRoundData[1].roundId;
+              setDraws_round(roundId)
+              roundTime = drawsRoundData[1].startDateTime
+              setDraws_roundTime(roundTime)
+              this.props.getCompetitionDrawsAction(
+                this.state.yearRefId,
+                this.state.firstTimeCompId,
+                venueId,
+                roundId
+              );
+              this.setState({
+                roundId, roundTime, venueId,
+                venueLoad: false,
+              });
+            }
+            else {
+              roundId = drawsRoundData[0].roundId;
+              setDraws_round(roundId)
+              roundTime = drawsRoundData[0].startDateTime
+              setDraws_roundTime(roundTime)
+              this.props.getCompetitionDrawsAction(
+                this.state.yearRefId,
+                this.state.firstTimeCompId,
+                venueId,
+                roundId
+              );
+              this.setState({
+                roundId, roundTime, venueId,
+                venueLoad: false,
+              });
+
+            }
+
 
           }
           else {
@@ -164,10 +188,11 @@ class CompetitionDraws extends Component {
           venueId,
           roundId
         );
+
         this.setState({
           venueId: JSON.parse(venueId),
           roundId: JSON.parse(roundId),
-          roundTime,
+          roundTime: roundTime,
           competitionDivisionGradeId: JSON.parse(competitionDivisionGradeId),
           venueLoad: false
         })
@@ -221,7 +246,6 @@ class CompetitionDraws extends Component {
     let postData = null
     if (sourceObejct.drawsId == null) {
       let columnObject = this.getColumnData(sourceIndexArray, drawData)
-      console.log("Column Object Source", columnObject)
       postData = {
         "drawsId": targetObject.drawsId,
         "venueCourtId": sourceObejct.venueCourtId,
@@ -231,7 +255,6 @@ class CompetitionDraws extends Component {
       };
     } else {
       let columnObject = this.getColumnData(targetIndexArray, drawData)
-      console.log("Column Object target", columnObject)
       postData = {
         "drawsId": sourceObejct.drawsId,
         "venueCourtId": targetObject.venueCourtId,
@@ -339,9 +362,7 @@ class CompetitionDraws extends Component {
     // let drawData = this.props.drawsState.getStaticDrawsData;
     let sourceObejct = drawData[sourceXIndex].slotsArray[sourceYIndex];
     let targetObject = drawData[targetXIndex].slotsArray[targetYIndex];
-    // console.log("Source",sourceObejct)
-    // console.log("Target",targetObject)
-    // drawData
+
     if (sourceObejct.drawsId !== null && targetObject.drawsId !== null) {
       this.updateCompetitionDraws(
         sourceObejct,
@@ -579,6 +600,14 @@ class CompetitionDraws extends Component {
     this.props.generateDrawAction(payload);
     this.setState({ venueLoad: true });
   }
+  //unlockDraws
+
+  unlockDraws(id, round_Id, venueCourtId) {
+    this.props.unlockDrawsAction(id, round_Id, venueCourtId)
+
+
+  }
+
 
   ////// Publish draws
   // publishDraws() {
@@ -587,6 +616,12 @@ class CompetitionDraws extends Component {
 
   ////////form content view
   contentView = () => {
+    let roundTime = ""
+    if (this.state.roundTime) {
+      if (this.state.roundTime.length > 0) {
+        roundTime = moment(this.state.roundTime).format("ddd DD/MM")
+      }
+    }
     return (
       <div className="comp-draw-content-view">
         <div className="row comp-draw-list-top-head">
@@ -650,22 +685,22 @@ class CompetitionDraws extends Component {
                         );
                       })}
                   </Select>
-                  {this.state.roundTime !== null &&
+                  {roundTime !== "" &&
                     <span className="year-select-heading pb-1">
-                      {"Starting"} {"  "}{moment(this.state.roundTime).format("ddd DD/MM")}
+                      {"Starting"} {"  "}{roundTime}
                     </span>
                   }
                 </div>
               </div>
             </div>
           </div>
-          {/* <div className="col-sm-2 comp-draw-edit-btn-view">
+          <div className="col-sm-2 comp-draw-edit-btn-view">
             <NavLink to="/competitionDrawEdit">
               <Button className="live-score-edit" type="primary">
                 {AppConstants.edit}
               </Button>
             </NavLink>
-          </div> */}
+          </div>
 
         </div>
         {/* {this.draggableView()} */}
@@ -682,7 +717,9 @@ class CompetitionDraws extends Component {
 
                     </div>
                     {this.draggableView(dateItem)}
-                    <LegendComponent legendArray={dateItem.legendsArray} />
+                    <div style={{ display: "table" }}>
+                      <LegendComponent legendArray={dateItem.legendsArray} />
+                    </div>
                   </div>
                 )
               })}
@@ -698,7 +735,9 @@ class CompetitionDraws extends Component {
 
                       </div>
                       {this.draggableView(dateItem)}
-                      <LegendComponent legendArray={dateItem.legendsArray} />
+                      <div style={{ display: "table" }}>
+                        <LegendComponent legendArray={dateItem.legendsArray} />
+                      </div>
                     </div>
                   )
                 }
@@ -716,7 +755,6 @@ class CompetitionDraws extends Component {
     var dateMargin = 25;
     var dayMargin = 25;
     let topMargin = 0;
-    console.log(dateItem)
     let legendsData = isArrayNotEmpty(this.props.drawsState.legendsArray) ? this.props.drawsState.legendsArray : []
     return (
       <div >
@@ -768,13 +806,13 @@ class CompetitionDraws extends Component {
           {dateItem.draws.map((courtData, index) => {
             let leftMargin = 25;
             if (index !== 0) {
-              topMargin += 55;
+              topMargin += 70;
             }
             return (
               <div>
-                <div className="sr-no ">
+                <div className="sr-no" style={{ height: 62 }}>
                   <div className="venueCourt-tex-div">
-                    <span className="venueCourt-text">{courtData.venueShortName + "-" + courtData.venueCourtName}</span>
+                    <span className="venueCourt-text">{courtData.venueShortName + "-" + courtData.venueCourtNumber}</span>
                   </div>
                 </div>
                 {courtData.slotsArray.map((slotObject, slotIndex) => {
@@ -784,7 +822,6 @@ class CompetitionDraws extends Component {
                   if (slotIndex == 0) {
                     leftMargin = 70;
                   }
-                  console.log()
                   return (
                     <div>
                       <span
@@ -822,6 +859,55 @@ class CompetitionDraws extends Component {
                         </Swappable>
 
                       </div>
+                      {slotObject.drawsId !== null &&
+                        <div className='box-exception' style={{
+                          left: leftMargin, top: topMargin + 50, overflow: "hidden",
+                          whiteSpace: "nowrap",
+                        }}>
+
+                          <Menu
+                            className="action-triple-dot-draws"
+                            theme="light"
+                            mode="horizontal"
+                            style={{ lineHeight: '15px', }}
+                          >
+                            <SubMenu
+                              key="sub1"
+                              title={
+
+
+
+
+
+                                slotObject.isLocked == 1 ?
+                                  <div style={{ display: 'flex', justifyContent: 'space-between', width: 80, maxWidth: 80 }}>
+                                    <img className="dot-image" src={AppImages.drawsLock} alt="" width="16" height="10" />
+                                    <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="10" />
+                                  </div>
+                                  :
+                                  <div>
+                                    <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="10" />
+                                  </div>
+                              }
+                            >
+                              {slotObject.isLocked == 1 &&
+                                <Menu.Item key="1">
+                                  <span onClick={() => this.unlockDraws(slotObject.drawsId, dateItem.roundId, courtData.venueCourtId)} >Unlock</span>
+                                </Menu.Item>
+                              }
+                              <Menu.Item key="2" >
+                                <NavLink to={{ pathname: `/competitionException`, 
+                                          state: { drawsObj: slotObject, yearRefId: this.state.yearRefId, 
+                                          competitionId: this.state.firstTimeCompId, organisationId: this.state.organisationId} }} >
+                                  <span >Exception</span>
+                                </NavLink>
+                              </Menu.Item>
+                            </SubMenu>
+                          </Menu>
+
+
+                        </div>
+                      }
                     </div>
                   );
                 })}
@@ -914,7 +1000,8 @@ function mapDispatchToProps(dispatch) {
       clearDraws,
       publishDraws,
       matchesListDrawsAction,
-      generateDrawAction
+      generateDrawAction,
+      unlockDrawsAction
     },
     dispatch
   );

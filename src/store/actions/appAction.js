@@ -144,7 +144,6 @@ function getYearAndCompetitionOwnAction(yearData, yearId, key) {
     yearId: yearId,
     key: key
   }
-  console.log(action)
   return action
 }
 
@@ -155,7 +154,6 @@ function getYearAndCompetitionParticipateAction(yearData, yearId, key) {
     yearId: yearId,
     key: key
   }
-  console.log(action)
   return action
 }
 

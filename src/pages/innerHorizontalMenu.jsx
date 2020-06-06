@@ -406,18 +406,21 @@ class InnerHorizontalMenu extends React.Component {
                         style={{ lineHeight: '64px' }}
                         selectedKeys={[this.props.userSelectedKey]}>
                         <Menu.Item key="1">
-                            <NavLink to="/userGraphicalDashboard" >
+                            {/* <NavLink to="/userGraphicalDashboard" >
                                 <span >{AppConstants.dashboard}</span>
+                            </NavLink> */}
+                            <NavLink to="/userTextualDashboard" >
+                                    <span >{AppConstants.dashboard}</span>
                             </NavLink>
                         </Menu.Item>
                         <SubMenu
                             key="sub2"
                             title={<span>{AppConstants.users}</span>}>
-                            <Menu.Item key="4">
+                            {/* <Menu.Item key="4">
                                 <NavLink to="/userTextualDashboard" >
                                     <span >{AppConstants.users}</span>
                                 </NavLink>
-                            </Menu.Item>
+                            </Menu.Item> */}
                             <Menu.Item key="5">
                                 <NavLink to="/playWithFriend" >
                                     <span >{AppConstants.playWithAFriend}</span>
@@ -453,6 +456,11 @@ class InnerHorizontalMenu extends React.Component {
                             <Menu.Item key="3">
                                 <NavLink to="/userOurOrganisation" >
                                     <span >{AppConstants.ourOrganisation}</span>
+                                </NavLink>
+                            </Menu.Item>
+                            <Menu.Item key="4">
+                                <NavLink to="/affiliateDirectory" >
+                                    <span >{AppConstants.affiliateDirectory}</span>
                                 </NavLink>
                             </Menu.Item>
                             {/* <Menu.Item key="3">

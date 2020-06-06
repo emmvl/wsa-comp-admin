@@ -177,6 +177,23 @@ function getFinalFixtureTemplateAction() {
     return action
 }
 
+////Court List for own competitionvenue and times
+function courtListAction(venueId) {
+    const action = {
+        type: ApiConstants.API_COURT_LIST_LOAD,
+        venueId
+    };
+
+    return action;
+}
+// Send invite to
+function inviteTypeAction(){
+    const action = {
+        type: ApiConstants.API_GET_INVITE_TYPE_LOAD,
+    }
+    return action;
+}				 		
+
 export {
     timeSlotInit,
     getCommonRefData,
@@ -198,5 +215,7 @@ export {
     getPhotoTypeAction,
     getApplyToAction,
     getExtraTimeDrawAction,
-    getFinalFixtureTemplateAction
+    getFinalFixtureTemplateAction,
+    courtListAction,
+    inviteTypeAction				
 }

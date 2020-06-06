@@ -4,7 +4,7 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import loadjs from 'loadjs';
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
-import FixtureSwappable from '../../customComponents/fixtureSwappableComponent';
+import CompetitionSwappable from '../../customComponents/quickCompetitionComponent';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
@@ -183,7 +183,7 @@ class CompetitionFixtures extends Component {
     }
 
 
-    onSwap(source, target, team) {
+    onSwap(source, target, round_Id, draws) {
         let sourceIndexArray = source.split(':');
         let targetIndexArray = target.split(':');
         let sourceXIndex = sourceIndexArray[0];
@@ -196,38 +196,67 @@ class CompetitionFixtures extends Component {
         let targetYIndex = targetIndexArray[1];
         let targetZIndex = targetIndexArray[2];
         let targetID = targetIndexArray[3];
+        let sourceObejct = draws[sourceYIndex]
+        let targetObject = draws[targetYIndex]
+        var customSourceObject = null
+        if (sourceID == targetID) {
+            if (targetObject.drawsId !== sourceObejct.drawsId) {
+                if (sourceZIndex == 0) {
+                    if (targetZIndex == 0) {
+                        console.log('called')
+                        customSourceObject = {
+                            competitionUniqueKey: this.state.firstTimeCompId,
+                            team1: targetObject.team1,
+                            team2: sourceObejct.team1,
 
+                        };
+                    } else {
+                        console.log('called')
+                        customSourceObject = {
+                            competitionUniqueKey: this.state.firstTimeCompId,
+                            team1: targetObject.team2,
+                            team2: sourceObejct.team1,
 
-        let drawData = this.props.drawsState.fixtureArray;
-        let sourceRoundObject = drawData[sourceXIndex]
-        let targetRoundObject = drawData[targetXIndex]
-        let sourceObejct = drawData[sourceXIndex].draws[sourceYIndex]
-        let targetObject = drawData[targetXIndex].draws[targetYIndex]
-        console.log(targetObject, sourceObejct)
-        if (sourceRoundObject.roundId == targetRoundObject.roundId) {
-            let postObject
-            if (team == "team1") {
-                postObject = {
+                        };
+                    }
+
+                } else {
+                    if (targetZIndex == 0) {
+                        console.log('called')
+                        customSourceObject = {
+                            competitionUniqueKey: this.state.firstTimeCompId,
+                            team1: sourceObejct.team2,
+                            team2: targetObject.team1,
+
+                        };
+                    } else {
+                        console.log('called')
+                        customSourceObject = {
+                            competitionUniqueKey: this.state.firstTimeCompId,
+                            team1: sourceObejct.team2,
+                            team2: targetObject.team2,
+                        };
+                    }
+
+                }
+
+            } else {
+                customSourceObject = {
                     competitionUniqueKey: this.state.firstTimeCompId,
                     team1: sourceObejct.team1,
-                    team2: targetObject.team2
+                    team2: targetObject.team2,
                 };
-            }
-            else {
-                postObject = {
-                    competitionUniqueKey: this.state.firstTimeCompId,
-                    team1: sourceObejct.team2,
-                    team2: targetObject.team1
-                };
-
             }
             this.props.updateCompetitionFixtures(
-                postObject,
+                customSourceObject,
                 sourceIndexArray,
                 targetIndexArray,
+                round_Id
             )
         }
+
     }
+
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
@@ -336,137 +365,667 @@ class CompetitionFixtures extends Component {
                         </div> :
                         this.dragableView()
                 }
-                {}
             </div>
         )
     }
 
-
-    //////the gragable content view inside the container
     dragableView = () => {
-
-        let topMargin = 50;
-        let topMarginHomeTeam = 50;
-        let topMarginAwayTeam = 103;
-        let getStaticDrawsData = this.props.drawsState.fixtureArray
+        var dateMargin = 25;
+        var dayMargin = 25;
+        let topMargin = 0;
+        let getStaticDrawsData = [{
+            venueCourtNumber: 1, venueCourtName: "1", venueShortName: "Lots", slotsArray: [{
+                drawsId: 12,
+                venueCourtNumber: 1,
+                venueCourtName: null,
+                venueShortName: null,
+                matchDate: null,
+                startTime: null,
+                endTime: null,
+                homeTeamId: null,
+                awayTeamId: null,
+                homeTeamName: "3B",
+                awayTeamName: null,
+                gradeName: null,
+                competitionDivisionGradeId: null,
+                divisionName: null,
+                isLocked: 0,
+                colorCode: '#25ab85',
+                teamArray: [
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                ],
+            }, {
+                drawsId: 13,
+                venueCourtNumber: 1,
+                venueCourtName: null,
+                venueShortName: null,
+                matchDate: null,
+                startTime: null,
+                endTime: null,
+                homeTeamId: "11A",
+                awayTeamId: null,
+                homeTeamName: "11A",
+                awayTeamName: null,
+                gradeName: null,
+                competitionDivisionGradeId: null,
+                divisionName: null,
+                isLocked: 0,
+                colorCode: 'pink',
+                teamArray: [
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                ],
+            }, {
+                drawsId: 25,
+                venueCourtNumber: 1,
+                venueCourtName: null,
+                venueShortName: null,
+                matchDate: null,
+                startTime: null,
+                endTime: null,
+                homeTeamId: null,
+                awayTeamId: null,
+                homeTeamName: "15A",
+                awayTeamName: null,
+                gradeName: null,
+                competitionDivisionGradeId: null,
+                divisionName: null,
+                isLocked: 0,
+                colorCode: 'blue',
+                teamArray: [
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                ],
+            }, {
+                drawsId: 14,
+                venueCourtNumber: 1,
+                venueCourtName: null,
+                venueShortName: null,
+                matchDate: null,
+                startTime: null,
+                endTime: null,
+                homeTeamId: null,
+                awayTeamId: null,
+                homeTeamName: "16A",
+                awayTeamName: null,
+                gradeName: null,
+                competitionDivisionGradeId: null,
+                divisionName: null,
+                isLocked: 0,
+                colorCode: 'orange',
+                teamArray: [
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                ],
+            }]
+        }, {
+            venueCourtNumber: 1, venueCourtName: "1", venueShortName: "Lots", slotsArray: [{
+                drawsId: 12,
+                venueCourtNumber: 1,
+                venueCourtName: null,
+                venueShortName: null,
+                matchDate: null,
+                startTime: null,
+                endTime: null,
+                homeTeamId: null,
+                awayTeamId: null,
+                homeTeamName: "17A",
+                awayTeamName: null,
+                gradeName: null,
+                competitionDivisionGradeId: null,
+                divisionName: null,
+                isLocked: 0,
+                colorCode: '#282828',
+                teamArray: [
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                ],
+            }, {
+                drawsId: 26,
+                venueCourtNumber: 1,
+                venueCourtName: null,
+                venueShortName: null,
+                matchDate: null,
+                startTime: null,
+                endTime: null,
+                homeTeamId: null,
+                awayTeamId: null,
+                homeTeamName: "26L",
+                awayTeamName: null,
+                gradeName: null,
+                competitionDivisionGradeId: null,
+                divisionName: null,
+                isLocked: 0,
+                colorCode: '#875241',
+                teamArray: [
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                ],
+            }, {
+                drawsId: null,
+                venueCourtNumber: 1,
+                venueCourtName: null,
+                venueShortName: null,
+                matchDate: null,
+                startTime: null,
+                endTime: null,
+                homeTeamId: null,
+                awayTeamId: null,
+                homeTeamName: null,
+                awayTeamName: null,
+                gradeName: null,
+                competitionDivisionGradeId: null,
+                divisionName: null,
+                isLocked: 0,
+                colorCode: '#999999',
+                teamArray: [
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                ],
+            }, {
+                drawsId: 27,
+                venueCourtNumber: 1,
+                venueCourtName: null,
+                venueShortName: null,
+                matchDate: null,
+                startTime: null,
+                endTime: null,
+                homeTeamId: null,
+                awayTeamId: null,
+                homeTeamName: "25T",
+                awayTeamName: null,
+                gradeName: null,
+                competitionDivisionGradeId: null,
+                divisionName: null,
+                isLocked: 0,
+                colorCode: '#279792',
+                teamArray: [
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                ],
+            }]
+        }, {
+            venueCourtNumber: 1, venueCourtName: "1", venueShortName: "Lots", slotsArray: [{
+                drawsId: 17,
+                venueCourtNumber: 1,
+                venueCourtName: null,
+                venueShortName: null,
+                matchDate: null,
+                startTime: null,
+                endTime: null,
+                homeTeamId: null,
+                awayTeamId: null,
+                homeTeamName: "17D",
+                awayTeamName: null,
+                gradeName: null,
+                competitionDivisionGradeId: null,
+                divisionName: null,
+                isLocked: 0,
+                colorCode: 'red',
+                teamArray: [
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                ],
+            }, {
+                drawsId: 59,
+                venueCourtNumber: 1,
+                venueCourtName: null,
+                venueShortName: null,
+                matchDate: null,
+                startTime: null,
+                endTime: null,
+                homeTeamId: null,
+                awayTeamId: null,
+                homeTeamName: "25A",
+                awayTeamName: null,
+                gradeName: null,
+                competitionDivisionGradeId: null,
+                divisionName: null,
+                isLocked: 0,
+                colorCode: '#859642',
+                teamArray: [
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                ],
+            }, {
+                drawsId: 84,
+                venueCourtNumber: 1,
+                venueCourtName: null,
+                venueShortName: null,
+                matchDate: null,
+                startTime: null,
+                endTime: null,
+                homeTeamId: null,
+                awayTeamId: null,
+                homeTeamName: "66A",
+                awayTeamName: null,
+                gradeName: null,
+                competitionDivisionGradeId: null,
+                divisionName: null,
+                isLocked: 0,
+                colorCode: '#628549',
+                teamArray: [
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                ],
+            }, {
+                drawsId: 65,
+                venueCourtNumber: 1,
+                venueCourtName: null,
+                venueShortName: null,
+                matchDate: null,
+                startTime: null,
+                endTime: null,
+                homeTeamId: null,
+                awayTeamId: null,
+                homeTeamName: "62F",
+                awayTeamName: null,
+                gradeName: null,
+                competitionDivisionGradeId: null,
+                divisionName: null,
+                isLocked: 0,
+                colorCode: '#279792',
+                teamArray: [
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                ],
+            }]
+        }, {
+            venueCourtNumber: 1, venueCourtName: "1", venueShortName: "Lots", slotsArray: [{
+                drawsId: 20,
+                venueCourtNumber: 1,
+                venueCourtName: null,
+                venueShortName: null,
+                matchDate: null,
+                startTime: null,
+                endTime: null,
+                homeTeamId: null,
+                awayTeamId: null,
+                homeTeamName: "25S",
+                awayTeamName: null,
+                gradeName: null,
+                competitionDivisionGradeId: null,
+                divisionName: null,
+                isLocked: 0,
+                colorCode: 'green',
+                teamArray: [
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                ],
+            }, {
+                drawsId: null,
+                venueCourtNumber: 1,
+                venueCourtName: null,
+                venueShortName: null,
+                matchDate: null,
+                startTime: null,
+                endTime: null,
+                homeTeamId: null,
+                awayTeamId: null,
+                homeTeamName: null,
+                awayTeamName: null,
+                gradeName: null,
+                competitionDivisionGradeId: null,
+                divisionName: null,
+                isLocked: 0,
+                colorCode: '#999999',
+                teamArray: [
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                ],
+            }, {
+                drawsId: null,
+                venueCourtNumber: 1,
+                venueCourtName: null,
+                venueShortName: null,
+                matchDate: null,
+                startTime: null,
+                endTime: null,
+                homeTeamId: null,
+                awayTeamId: null,
+                homeTeamName: null,
+                awayTeamName: null,
+                gradeName: null,
+                competitionDivisionGradeId: null,
+                divisionName: null,
+                isLocked: 0,
+                colorCode: '#999999',
+                teamArray: [
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                ],
+            }, {
+                drawsId: 168,
+                venueCourtNumber: 1,
+                venueCourtName: null,
+                venueShortName: null,
+                matchDate: null,
+                startTime: null,
+                endTime: null,
+                homeTeamId: "A",
+                awayTeamId: null,
+                homeTeamName: "PG8",
+                awayTeamName: null,
+                gradeName: null,
+                competitionDivisionGradeId: null,
+                divisionName: null,
+                isLocked: 0,
+                colorCode: 'red',
+                teamArray: [
+                    {
+                        teamName: "A",
+                        teamId: null,
+                    },
+                    {
+                        teamName: null,
+                        teamId: null,
+                    },
+                ],
+            }]
+        },
+        ]
+        let dateArray = [{ time: "09:00" }, { time: "10:00" }, { time: "11:00" }, { time: "12:00" }]
         return (
             <div className="draggable-wrap draw-data-table">
-                <div className="scroll-bar">
-
-                    {/* Slots View */}
-                    < div className="fixture-main-canvas Draws" >
-                        {
-                            getStaticDrawsData.map((courtData, index) => {
-                                let leftMargin = 25;
+                <div className="scroll-bar pb-4">
+                    <div className="table-head-wrap">
+                        {/* Times list */}
+                        <div className="tablehead-row-fixture ">
+                            <div className="sr-no empty-bx"></div>
+                            {dateArray.map((date, index) => {
                                 if (index !== 0) {
-                                    topMargin += 180;
-                                    topMarginHomeTeam += 180;
-                                    topMarginAwayTeam += 180;
+                                    dayMargin += 75;
                                 }
+                                // if (index == 0) {
+                                //     dayMargin = 30;
+                                // }
                                 return (
-                                    <div>
-                                        <div className="fixture-round-view" >
-                                            <div >
-                                                <span className="fixture-round">{courtData.roundName}</span>
-                                            </div>
-                                            <div>
-                                                <span style={{ fontSize: 11 }}>{moment(courtData.roundStartDate).format("ddd DD/MM")}</span>
-                                            </div>
-                                        </div>
-                                        <div className="sr-no fixture-huge-sr">
-
-
-                                        </div>
-
-                                        {courtData.draws.map((slotObject, slotIndex) => {
-                                            if (slotIndex !== 0) {
-                                                leftMargin += 110;
-                                            }
-                                            if (slotIndex == 0) {
-                                                leftMargin = 70;
-                                            }
-                                            return slotObject.drawsId === null ? (
-                                                <div
-                                                    className={
-                                                        'fixture-huge-undraggble-box grey--bg'
-                                                    }
-                                                    style={{ top: topMargin, left: leftMargin }}
-                                                >
-                                                    <span>Free</span>
-                                                </div>
-                                            ) : (
-                                                    <div>
-
-                                                        <div
-                                                            className={
-                                                                'box purple-box' + ' purple-bg'
-                                                            }
-                                                            style={{
-                                                                top: topMarginHomeTeam,
-                                                                backgroundColor: slotObject.team1Color,
-                                                                left: leftMargin
-                                                            }}
-                                                        >
-                                                            <FixtureSwappable
-                                                                id={
-                                                                    index.toString() +
-                                                                    ':' +
-                                                                    slotIndex.toString() +
-                                                                    ':0:' + courtData.roundId
-                                                                }
-                                                                content={1}
-                                                                swappable={true}
-                                                                onSwap={(source, target) =>
-                                                                    this.onSwap(source, target, "team1")
-                                                                }
-                                                            >
-                                                                <span>{slotObject.team1Name}</span>
-                                                            </FixtureSwappable>
-                                                        </div>
-                                                        <span
-                                                            className={'border'}
-                                                            style={{ top: topMarginAwayTeam, left: leftMargin }}
-                                                        ></span>
-                                                        <div
-                                                            className={
-                                                                'box purple-box ' +
-                                                                ' purple-bg'
-                                                            }
-                                                            style={{
-                                                                top: topMarginAwayTeam,
-                                                                backgroundColor: slotObject.team2Color,
-                                                                left: leftMargin
-                                                            }}
-                                                        >
-                                                            <FixtureSwappable
-                                                                id={
-                                                                    index.toString() +
-                                                                    ':' +
-                                                                    slotIndex.toString() +
-                                                                    ':1:' + courtData.roundId
-                                                                }
-                                                                content={1}
-                                                                swappable={true}
-                                                                onSwap={(source, target) =>
-                                                                    this.onSwap(source, target, "team2")
-                                                                }
-                                                            >
-                                                                <span>{slotObject.team2Name}</span>
-                                                            </FixtureSwappable>
-                                                        </div>
-                                                    </div>
-                                                );
-                                        })}
-                                    </div>
+                                    <span style={{ left: dayMargin }}>{date.time}</span>
                                 );
-                            })
-                        }
+                            })}
+                        </div>
                     </div>
                 </div>
-            </div>
 
+                <div className="main-canvas Draws">
+                    {getStaticDrawsData.map((courtData, index) => {
+                        let leftMargin = 25;
+                        if (index !== 0) {
+                            topMargin += 50;
+                        }
+                        return (
+                            <div>
+                                <div className="fixture-sr-no"> {index + 1}</div>
+                                {courtData.slotsArray.map((slotObject, slotIndex) => {
+                                    if (slotIndex !== 0) {
+                                        leftMargin += 75;
+                                    }
+                                    // if (slotIndex == 0) {
+                                    //     leftMargin = 40;
+                                    // }
+                                    console.log(slotObject)
+                                    return (
+                                        <div>
+                                            <span
+                                                style={{ left: leftMargin, top: topMargin }}
+                                                className={
+                                                    'fixtureBorder'
+                                                }
+                                            ></span>
+                                            <div
+                                                className={
+                                                    'fixtureBox'
+                                                }
+                                                style={{
+                                                    backgroundColor: slotObject.colorCode,
+                                                    left: leftMargin, top: topMargin, overflow: "hidden",
+                                                    whiteSpace: "nowrap",
+                                                }}
+                                            >
+                                                <CompetitionSwappable
+                                                    id={index.toString() + ':' + slotIndex.toString()}
+                                                    content={1}
+                                                    swappable={true}
+                                                    onSwap={(source, target) =>
+                                                        console.log(source, target)
+                                                    }
+                                                >
+                                                    {slotObject.drawsId != null ? (
+                                                        <span>
+                                                            {slotObject.homeTeamName}
+                                                        </span>
+                                                    ) : (
+                                                            <span>N/A</span>
+                                                        )}
+                                                </CompetitionSwappable>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        );
+                    })}
+                </div>
+
+            </div >
         );
     };
+    //////the gragable content view inside the container
+    // dragableView = () => {
+
+    //     let topMargin = 50;
+    //     let topMarginHomeTeam = 50;
+    //     let topMarginAwayTeam = 103;
+    //     let getStaticDrawsData = this.props.drawsState.fixtureArray
+    //     return (
+    //         <div className="draggable-wrap draw-data-table">
+    //             <div className="scroll-bar">
+
+    //                 {/* Slots View */}
+    //                 < div className="fixture-main-canvas Draws" >
+    //                     {
+    //                         getStaticDrawsData.map((courtData, index) => {
+    //                             let leftMargin = 25;
+    //                             if (index !== 0) {
+    //                                 topMargin += 180;
+    //                                 topMarginHomeTeam += 180;
+    //                                 topMarginAwayTeam += 180;
+    //                             }
+    //                             return (
+    //                                 <div>
+    //                                     <div className="fixture-round-view" >
+    //                                         <div >
+    //                                             <span className="fixture-round">{courtData.roundName}</span>
+    //                                         </div>
+    //                                         <div>
+    //                                             <span style={{ fontSize: 11 }}>{moment(courtData.roundStartDate).format("ddd DD/MM")}</span>
+    //                                         </div>
+    //                                     </div>
+    //                                     <div className="sr-no fixture-huge-sr">
+
+
+    //                                     </div>
+
+    //                                     {courtData.draws.map((slotObject, slotIndex) => {
+    //                                         if (slotIndex !== 0) {
+    //                                             leftMargin += 110;
+    //                                         }
+    //                                         if (slotIndex == 0) {
+    //                                             leftMargin = 70;
+    //                                         }
+    //                                         return slotObject.drawsId === null ? (
+    //                                             <div
+    //                                                 className={
+    //                                                     'fixture-huge-undraggble-box grey--bg'
+    //                                                 }
+    //                                                 style={{ top: topMargin, left: leftMargin }}
+    //                                             >
+    //                                                 <span>Free</span>
+    //                                             </div>
+    //                                         ) : (
+    //                                                 <div>
+
+    //                                                     <div
+    //                                                         className={
+    //                                                             'box purple-box' + ' purple-bg'
+    //                                                         }
+    //                                                         style={{
+    //                                                             top: topMarginHomeTeam,
+    //                                                             backgroundColor: slotObject.team1Color,
+    //                                                             left: leftMargin
+    //                                                         }}
+    //                                                     >
+    //                                                         <FixtureSwappable
+    //                                                             id={
+    //                                                                 index.toString() +
+    //                                                                 ':' +
+    //                                                                 slotIndex.toString() +
+    //                                                                 ':0:' + courtData.roundId
+    //                                                             }
+    //                                                             content={1}
+    //                                                             swappable={true}
+    //                                                             onSwap={(source, target) =>
+    //                                                                 this.onSwap(source, target, courtData.roundId, courtData.draws)
+    //                                                             }
+    //                                                         >
+    //                                                             <span>{slotObject.team1Name}</span>
+    //                                                         </FixtureSwappable>
+    //                                                     </div>
+    //                                                     <span
+    //                                                         className={'border'}
+    //                                                         style={{ top: topMarginAwayTeam, left: leftMargin }}
+    //                                                     ></span>
+    //                                                     <div
+    //                                                         className={
+    //                                                             'box purple-box ' +
+    //                                                             ' purple-bg'
+    //                                                         }
+    //                                                         style={{
+    //                                                             top: topMarginAwayTeam,
+    //                                                             backgroundColor: slotObject.team2Color,
+    //                                                             left: leftMargin
+    //                                                         }}
+    //                                                     >
+    //                                                         <FixtureSwappable
+    //                                                             id={
+    //                                                                 index.toString() +
+    //                                                                 ':' +
+    //                                                                 slotIndex.toString() +
+    //                                                                 ':1:' + courtData.roundId
+    //                                                             }
+    //                                                             content={1}
+    //                                                             swappable={true}
+    //                                                             onSwap={(source, target) =>
+    //                                                                 this.onSwap(source, target, courtData.roundId, courtData.draws)
+    //                                                             }
+    //                                                         >
+    //                                                             <span>{slotObject.team2Name}</span>
+    //                                                         </FixtureSwappable>
+    //                                                     </div>
+    //                                                 </div>
+    //                                             );
+    //                                     })}
+    //                                 </div>
+    //                             );
+    //                         })
+    //                     }
+    //                 </div>
+    //             </div>
+    //         </div>
+
+    //     );
+    // };
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {

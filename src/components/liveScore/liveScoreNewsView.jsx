@@ -17,6 +17,7 @@ import {
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Loader from '../../customComponents/loader'
+import Tooltip from 'react-png-tooltip'
 
 const { Header, Footer, Content } = Layout;
 const { confirm } = Modal;
@@ -199,22 +200,40 @@ class LiveScoreNewsView extends Component {
                             </div>
                         </div>
                         <div className="col-sm">
-                            <div className="comp-buttons-view">
+                            <div className="comp-buttons-view" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
                                 {!newsDataArr.published_at &&
-                                    <Button 
-                                        className="open-reg-button mr-5" type="primary" 
-                                        onClick={() => this.onSubmitNewsPublish(newsDataArr, true)}>{AppConstants.publish}</Button>
+                                    // <div style={{ display: 'flex', flexDirection: 'row', paddingHorizontal: 50, }}>
+                                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                        <Button
+                                            className="open-reg-button mr-0" type="primary"
+                                            onClick={() => this.onSubmitNewsPublish(newsDataArr, true)}>{AppConstants.publish}</Button>
+                                        <div style={{ paddingRight: 20, alignItems: 'center', justifyContent: 'center' }}>
+                                            <Tooltip background='#ff8237'>
+                                                <span>{AppConstants.newsPublishMsg}</span>
+                                            </Tooltip>
+                                        </div>
+                                    </div>
+
+
+                                    // </div>
                                 }
-                                <Button className="open-reg-button" type="primary"
-                                    onClick={() => this.onSubmitNewsPublish(newsDataArr, false)}
-                                >
-                                    {!newsDataArr.published_at ? AppConstants.publish_notify
-                                        : (newsDataArr.isActive == 1 && newsDataArr.isNotification == 1) ?
-                                            AppConstants.notifyAgain : AppConstants.notify
+                                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                    <Button className="open-reg-button" type="primary"
+                                        onClick={() => this.onSubmitNewsPublish(newsDataArr, false)}
+                                    >
+                                        {!newsDataArr.published_at ? AppConstants.publish_notify
+                                            : (newsDataArr.isActive == 1 && newsDataArr.isNotification == 1) ?
+                                                AppConstants.notifyAgain : AppConstants.notify
 
-                                    }
+                                        }
 
-                                </Button>
+                                    </Button>
+                                    <div  >
+                                        <Tooltip background='#ff8237'>
+                                            <span>{AppConstants.newsPublishNotifyMsg}</span>
+                                        </Tooltip>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -234,7 +253,7 @@ class LiveScoreNewsView extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"21"} />
                 <Loader visible={this.props.liveScoreNewsState.notifyLoad} />
                 <Layout>

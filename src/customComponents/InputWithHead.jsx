@@ -1,13 +1,28 @@
 import React from 'react';
 import { Input } from 'antd';
+import Tooltip from 'react-png-tooltip'
+import AppConstants from "../themes/appConstants";
 
 class InputWithHead extends React.Component {
 
     render() {
-        const { heading, placeholder, name, handleBlur, onChange, type, value, maxLength } = this.props
+        const { heading, placeholder, name, handleBlur, onChange, type, value, maxLength, conceptulHelp, conceptulHelpMsg, marginTop } = this.props
         return <div >
             {heading &&
-                <span className={`input-heading ${this.props.required}`}>{heading}</span>}
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <span className={`input-heading ${this.props.required}`}>{heading}</span>
+                    {
+                        conceptulHelp &&
+                        <div style={{ marginTop: marginTop }}>
+                            <Tooltip background='#ff8237'>
+                                <span>{conceptulHelpMsg}</span>
+                            </Tooltip>
+                        </div>
+                    }
+
+                </div>
+            }
+
             {placeholder &&
                 <Input
 

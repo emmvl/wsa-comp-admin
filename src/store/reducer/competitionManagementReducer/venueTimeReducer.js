@@ -1,5 +1,6 @@
 import ApiConstants from "../../../themes/apiConstants";
 import { isArrayNotEmpty, isNullOrEmptyString, deepCopyFunction } from "../../../util/helpers";
+import AppConstants from "../../../themes/appConstants";
 ////Venue Constraints List Object /////////////Start
 
 
@@ -81,7 +82,9 @@ const initialState = {
     courtPrefArrayStore: null,
     searchVenueList: [],
     venueIsUsed: false,
-    onVenuSucess: false
+    onVenueSuccess: false,
+    courtPrefHelpMsg: [AppConstants.evenRotationMsgFor_V_T, AppConstants.allocateToSameCourtMsg, AppConstants.noPreferenceMsgFor_V_T],
+    homeTeamRotationHelpMsg: [AppConstants.equallyRotateHomeAwayMsg, AppConstants.equallyRotateCentralizedVenueMsg],
 };
 
 ////get court rotation
@@ -431,6 +434,26 @@ function checkVenueID(courtID, updatedCourtsArray) {
     return obj
 }
 
+function getCourtRotationHelpMsg(data, helpMsg) {
+    console.log(data, 'datadata')
+    for (let i in data) {
+        data[i]['helpMsg'] = helpMsg[i]
+    }
+    console.log(data, 'datadata~~')
+    return data;
+}
+
+function getHomeTeamRotationHelpMsg(data, helpMsg) {
+    console.log(data, 'datadata')
+    for (let i in data) {
+        data[i]['helpMsg'] = helpMsg[i]
+    }
+    console.log(data, 'datadata~~')
+    return data;
+}
+
+
+
 
 function VenueTimeState(state = initialState, action) {
 
@@ -439,11 +462,16 @@ function VenueTimeState(state = initialState, action) {
         case ApiConstants.API_VENUE_CONSTRAINTS_LIST_LOAD:
             state.competitionUniqueKey = action.competitionUniqueKey
             state.yearId = action.yearRefId
-            return { ...state, onLoad: true, onVenuSucess: true };
+            return { ...state, onLoad: true, onVenueSuccess: true };
 
         case ApiConstants.API_VENUE_CONSTRAINTS_LIST_SUCCESS:
 
             state.courtRotation = getCourtRotation(action.commResult.CourtRotation)
+
+            const courtRotationHelpMsg = getCourtRotationHelpMsg(state.courtRotation, state.courtPrefHelpMsg)
+            state.courtRotation = courtRotationHelpMsg
+            console.log(state.courtRotation, 'state.courtRotation')
+
             state.evenRotation = action.commResult.CourtRotation[0].subReferences[0].id
             state.radioButton = action.commResult.CourtRotation[2].id
             state.allocateToSameCourt = action.commResult.CourtRotation[1].subReferences[0].id
@@ -452,6 +480,7 @@ function VenueTimeState(state = initialState, action) {
             state.divisionList = action.result.divisions
             state.gradeList = action.result.grades
             state.homeRotation = action.result.homeTeamRotationRefId
+            console.log(state.homeRotation, 'state.homeRotation')
 
             let selecetdVenueListId = []
 
@@ -497,7 +526,13 @@ function VenueTimeState(state = initialState, action) {
             }
             //  state.venueConstrainstData['courtRotationRefId'] = state.selectedRadioBtn;
             state.onLoad = false
-            state.onVenuSucess = false
+            state.onVenueSuccess = false
+
+            const homeTeamRotationHelpMsg = getHomeTeamRotationHelpMsg(action.commResult.HomeTeamRotation, state.homeTeamRotationHelpMsg)
+            console.log(homeTeamRotationHelpMsg, 'homeTeamRotationHelpMsg')
+            state.courtRotation = courtRotationHelpMsg
+            console.log(state.courtRotation, 'state.courtRotation')
+
             return {
                 ...state,
                 result: action.result,

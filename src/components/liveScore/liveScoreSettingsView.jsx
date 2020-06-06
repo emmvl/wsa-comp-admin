@@ -35,6 +35,8 @@ import ImageLoader from '../../customComponents/ImageLoader'
 import history from "../../util/history";
 import { isArrayNotEmpty, captializedString } from "../../util/helpers";
 import { competitionFeeInit } from "../../store/actions/appAction";
+import Tooltip from 'react-png-tooltip'
+import { onInviteesSearchAction } from "../../store/actions/registrationAction/competitionFeeAction";
 
 
 
@@ -137,6 +139,8 @@ class LiveScoreSettingsView extends Component {
     }
 
     handleSubmit = e => {
+
+        console.log(this.props.liveScoreSetting.invitedTo, 'this.props.liveScoreSetting', this.props.liveScoreSetting.invitedOrganisation)
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
 
@@ -160,8 +164,15 @@ class LiveScoreSettingsView extends Component {
                 const {
                     buzzerEnabled,
                     warningBuzzerEnabled,
-                    recordUmpire
+                    recordUmpire,
+                    affiliateSelected,
+                    anyOrgSelected,
+                    otherSelected,
+                    invitedTo,
+                    invitedOrganisation
                 } = this.props.liveScoreSetting
+
+                console.log(invitedOrganisation, 'invitedOrganisation')
 
                 const umpire = record1.includes("recordUmpire")
                 const umpirenum = umpire ? 1 : 0
@@ -198,6 +209,8 @@ class LiveScoreSettingsView extends Component {
                 formData.append('organisationId', orgId ? orgId : this.props.liveScoreSetting.data.organisationId)
                 formData.append('buzzerEnabled', buzzerEnabled)
                 formData.append('warningBuzzerEnabled', warningBuzzerEnabled)
+                formData.append('invitedTo', JSON.stringify(invitedTo))
+                formData.append('invitedOrganisation', JSON.stringify(invitedOrganisation))
 
                 // if (buzzerEnabled) {
                 //     formData.append('buzzerEnabled', buzzerEnabled)
@@ -259,8 +272,8 @@ class LiveScoreSettingsView extends Component {
         const { loader, buzzerEnabled, warningBuzzerEnabled, recordUmpire } = this.props.liveScoreSetting
         let grade = this.state.venueData
         // const applyTo1 = [{ label: 'Record Umpire', value: "recordUmpire" }, { label: ' Game Time Tracking', value: "gameTimeTracking" }, { label: 'Position Tracking', value: "positionTracking" }];
-        const applyTo1 = [{ label: ' Game Time Tracking', value: "gameTimeTracking" }, { label: 'Position Tracking', value: "positionTracking" }, { label: 'Record Goal Attempts', value: "recordGoalAttempts" }];
-        const applyTo2 = [{ label: 'Centre Pass Enabled', value: "centrePassEnabled" }, { label: 'Incidents Enabled', value: "incidentsEnabled" }];
+        const applyTo1 = [{ label: ' Game Time Tracking', value: "gameTimeTracking", helpMsg: 'hi' }, { label: 'Position Tracking', value: "positionTracking", helpMsg: 'hi' }, { label: 'Record Goal Attempts', value: "recordGoalAttempts", helpMsg: 'hi' }];
+        const applyTo2 = [{ label: 'Centre Pass Enabled', value: "centrePassEnabled", helpMsg: 'hi' }, { label: 'Incidents Enabled', value: "incidentsEnabled", helpMsg: 'hi' }];
         const turnOffBuzzer = [{ label: AppConstants.turnOffBuzzer, value: true }];
         const buzzerEnabledArr = [{ label: AppConstants.turnOff_30Second, value: true }];
 
@@ -293,7 +306,9 @@ class LiveScoreSettingsView extends Component {
                             heading={AppConstants.short_Name}
                             placeholder={AppConstants.short_Name}
                             name="shortName"
-                            // value="xyz"
+                            conceptulHelp
+                            conceptulHelpMsg={AppConstants.shortNameMsg}
+                            marginTop={10}
                             onChange={(e) => {
                                 this.props.onChangeSettingForm({ key: e.target.name, data: captializedString(e.target.value) })
                             }}
@@ -406,10 +421,18 @@ class LiveScoreSettingsView extends Component {
                                     flexDirection: "column",
                                     justifyContent: "center"
                                 }}
+
                                 options={applyTo1}
                                 value={this.props.liveScoreSetting.form.record1}
-                                onChange={e => this.onChangeCheckBox(e)}
-                            />
+                                onChange={e => this.onChangeCheckBox(e)}>
+                                {applyTo1.map((item) => (
+                                    <Tooltip background='#ff8237'>
+                                        {/* <span>{item.helpMsg}</span> */}
+                                        {item.helpMsg}
+                                    </Tooltip>
+                                ))}
+
+                            </Checkbox.Group>
                         </div>
                         <div className="col-sm" style={{ paddingTop: 1 }}>
                             <Checkbox.Group
@@ -421,13 +444,21 @@ class LiveScoreSettingsView extends Component {
                                 options={applyTo2}
                                 value={this.props.liveScoreSetting.form.record2}
                                 onChange={e => this.onChangeCheckBox2(e)}
-                            />
+                            >
+                                {applyTo2.map((item) => (
+                                    <Tooltip background='#ff8237'>
+                                        {/* <span>{item.helpMsg}</span> */}
+                                        {item.helpMsg}
+                                    </Tooltip>
+                                ))}
+                            </Checkbox.Group>
                         </div>
                     </div>
                 </div>
 
                 {/* Record Umpire dropdown view */}
-                <InputWithHead heading={AppConstants.recordUmpire} />
+                <InputWithHead conceptulHelp conceptulHelpMsg={AppConstants.recordUmpireMsg} marginTop={5} heading={AppConstants.recordUmpire} />
+
                 <div className="row" >
                     <div className="col-sm" >
                         <Select
@@ -447,7 +478,7 @@ class LiveScoreSettingsView extends Component {
                 <InputWithHead heading={AppConstants.attendence_reord_report} />
                 <div className="row" >
                     <div className="col-sm" >
-                        <InputWithHead heading={AppConstants.record} />
+                        <InputWithHead conceptulHelp conceptulHelpMsg={AppConstants.recordMsg} heading={AppConstants.record} />
                         <Select
                             placeholder={'Select Record'}
                             style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
@@ -462,7 +493,7 @@ class LiveScoreSettingsView extends Component {
                         </Select>
                     </div>
                     <div className="col-sm" >
-                        <InputWithHead heading={AppConstants.report} />
+                        <InputWithHead conceptulHelp conceptulHelpMsg={AppConstants.reportMsg} heading={AppConstants.report} />
                         <Select
                             placeholder={'Select Report'}
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
@@ -488,8 +519,42 @@ class LiveScoreSettingsView extends Component {
                         value={this.props.liveScoreSetting.form.scoring}
                     >
                         <div className="row ml-2" style={{ marginTop: 18 }} >
-                            <Radio value={"SINGLE"}>{AppConstants.single}</Radio>
-                            <Radio value={"50_50"}>{'50/50'} </Radio>
+
+                            {/* <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
+                                <Radio value={"SINGLE"}>{AppConstants.single}</Radio>
+                                <div style={{ marginLeft: -20, }}>
+                                    <Tooltip background='#ff8237'>
+                                        <span>{AppConstants.singleScoringMsg}</span>
+                                    </Tooltip>
+                                </div>
+                            </div> */}
+
+
+                            {/* <div >
+                                <Radio value={"50_50"}>{'50/50'} </Radio>
+                                <Tooltip background='#ff8237'>
+                                    <span>{AppConstants.fiftyScoringMsg}</span>
+                                </Tooltip>
+                            </div> */}
+
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"SINGLE"}>{AppConstants.single}</Radio>
+                                <div style={{ marginLeft: -10 }}>
+                                    <Tooltip background='#ff8237'>
+                                        <span>{AppConstants.singleScoringMsg}</span>
+                                    </Tooltip>
+                                </div>
+                            </div>
+
+                            <div style={{ display: 'flex', alignItems: 'center', marginLeft: 10 }}>
+                                <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"50_50"}>{'50/50'} </Radio>
+                                <div style={{ marginLeft: -10 }}>
+                                    <Tooltip background='#ff8237' >
+                                        <span>{AppConstants.fiftyScoringMsg}</span>
+                                    </Tooltip>
+                                </div>
+                            </div>
+
                         </div>
                     </Radio.Group>
                 </div>
@@ -497,7 +562,7 @@ class LiveScoreSettingsView extends Component {
 
 
                 {/* timer view */}
-                <InputWithHead required={"required-field"} heading={AppConstants.timer} />
+                <InputWithHead conceptulHelp conceptulHelpMsg={AppConstants.timerMsg} required={"required-field"} heading={AppConstants.timer} />
                 <div>
                     <Form.Item>
                         {getFieldDecorator('time', {
@@ -523,8 +588,9 @@ class LiveScoreSettingsView extends Component {
                 </div>
 
                 {/* Buzzer button view */}
-                <span className="applicable-to-heading">{AppConstants.buzzer}</span>
-                <div className="row mt-4 ml-1" >
+                {/* <span className="applicable-to-heading">{AppConstants.buzzer}</span> */}
+                <InputWithHead conceptulHelp conceptulHelpMsg={AppConstants.buzzerMsg} marginTop={5} heading={AppConstants.buzzer} />
+                <div className="row mt-2 ml-1" >
 
                     <Checkbox style={{
                         display: "-ms-flexbox",
@@ -535,7 +601,7 @@ class LiveScoreSettingsView extends Component {
                         onChange={(e) => this.props.onChangeSettingForm({ key: "buzzerEnabled", data: e.target.checked })}
                         checked={buzzerEnabled}
                     >
-                        {AppConstants.turnOffBuzzer}
+                        {AppConstants.buzzer}
                     </Checkbox>
 
                     <Checkbox
@@ -551,6 +617,98 @@ class LiveScoreSettingsView extends Component {
             </div>
         )
     };
+
+    //// On change Invitees
+    onInviteesChange(value) {
+        console.log(value, 'onInviteesChange')
+
+        this.props.onChangeSettingForm({ key: "anyOrgSelected", data: value })
+        if (value == 7) {
+            this.onInviteeSearch("", 3)
+        }
+        else if (value == 8) {
+            this.onInviteeSearch("", 4)
+        }
+    }
+
+    onInviteeSearch = (value, inviteesType) => {
+        console.log(value, "**** value")
+        this.props.onInviteesSearchAction(value, inviteesType)
+    }
+    ////////reg invitees search view for any organisation
+    affiliatesSearchInvitee = (subItem, seletedInvitee) => {
+        let detailsData = this.props.competitionFeesState
+        // let seletedInvitee = detailsData.selectedInvitees.find(x => x);
+        let associationAffilites = detailsData.associationAffilites
+        let clubAffilites = detailsData.clubAffilites
+        const { associationLeague, clubSchool } = this.props.liveScoreSetting
+        // let regInviteesDisable = this.state.permissionState.regInviteesDisable
+        if (subItem.id == 7 && seletedInvitee == 7) {
+            return (
+                < div >
+                    <Select
+                        mode="multiple"
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        onChange={associationAffilite => {
+                            this.props.onChangeSettingForm({ key: "associationAffilite", data: associationAffilite })
+                        }}
+                        value={associationLeague}
+                        placeholder={AppConstants.selectOrganisation}
+                        filterOption={false}
+                        onSearch={(value) => { this.onInviteeSearch(value, 3) }}
+                        // disabled={regInviteesDisable}
+                        showSearch={true}
+                        onBlur={() => this.onInviteeSearch("", 3)}
+                    // loading={detailsData.searchLoad}
+                    >
+                        {associationAffilites.map((item) => {
+                            console.log(item, 'associationAffilites')
+                            return (
+                                <Option
+                                    key={item.id}
+                                    value={item.id}>
+                                    {item.name}</Option>
+                            )
+                        })}
+                    </Select>
+                </div>
+            )
+        }
+        else if (subItem.id == 8 && seletedInvitee == 8) {
+
+            return (
+
+                < div >
+                    <Select
+                        mode="multiple"
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        onChange={clubAffilite => {
+                            // this.onSelectValues(venueSelection, detailsData)
+                            this.props.onChangeSettingForm({ key: "clubAffilite", data: clubAffilite })
+                        }}
+
+                        value={clubSchool}
+                        placeholder={AppConstants.selectOrganisation}
+                        filterOption={false}
+                        onSearch={(value) => { this.onInviteeSearch(value, 4) }}
+                        // disabled={regInviteesDisable}
+                        onBlur={() => this.onInviteeSearch("", 4)}
+                    // loading={detailsData.searchLoad}
+                    >
+                        {clubAffilites.map((item) => {
+                            return (
+                                <Option
+                                    key={item.id}
+                                    value={item.id}>
+                                    {item.name}</Option>
+                            )
+                        })}
+                    </Select>
+                </div>
+            )
+        }
+
+    }
 
     regInviteesView = () => {
         let invitees = this.props.appState.registrationInvitees.length > 0 ? this.props.appState.registrationInvitees : [];
@@ -627,7 +785,7 @@ class LiveScoreSettingsView extends Component {
 
                     <Radio.Group
                         className="reg-competition-radio mt-0"
-                        onChange={(e) => this.props.onChangeSettingForm({ key: "anyOrgSelected", data: e.target.value })}
+                        onChange={(e) => this.onInviteesChange(e.target.value)}
                         value={anyOrgSelected}
                     >
                         {(invitees || []).map((item, index) =>
@@ -642,6 +800,7 @@ class LiveScoreSettingsView extends Component {
                                             {(item.subReferences).map((subItem, subIndex) => (
                                                 <div style={{ marginLeft: '20px' }}>
                                                     <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
+                                                    {this.affiliatesSearchInvitee(subItem, anyOrgSelected)}
                                                 </div>
                                             ))}
                                         </div>
@@ -764,6 +923,7 @@ function mapStatetoProps(state) {
         liveScoreSetting: state.LiveScoreSetting,
         venueList: state.LiveScoreMatchState,
         appState: state.AppState,
+        competitionFeesState: state.CompetitionFeesState,
     }
 }
 export default connect(mapStatetoProps, {
@@ -774,5 +934,6 @@ export default connect(mapStatetoProps, {
     settingDataPostInititae,
     searchVenueList,
     clearFilter,
-    competitionFeeInit
+    competitionFeeInit,
+    onInviteesSearchAction
 })((Form.create()(LiveScoreSettingsView)));

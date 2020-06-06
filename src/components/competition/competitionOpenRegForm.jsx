@@ -74,6 +74,7 @@ import {
 import Loader from '../../customComponents/loader';
 import { venueListAction, getCommonRefData, } from '../../store/actions/commonAction/commonAction'
 import { getUserId, getOrganisationData } from "../../util/sessionStorage"
+import CustumToolTip from 'react-png-tooltip'
 
 
 const { Header, Footer, Content } = Layout;
@@ -218,7 +219,7 @@ class CompetitionOpenRegForm extends Component {
             yearRefId: 1,
             value: "NETSETGO",
             division: "Division",
-			sourceModule: "COMP",
+            sourceModule: "COMP",
             discountCode: false,
             membershipProduct: ["Player", "NetSetGo", "Walking Netball", "Fast Five"],
             membershipProductSelected: [],
@@ -289,6 +290,17 @@ class CompetitionOpenRegForm extends Component {
                     title: "Gender Restriction",
                     dataIndex: "genderRestriction",
                     key: "genderRestriction",
+                    filterDropdown: true,
+                    filterIcon: () => {
+                        return (
+
+                            <CustumToolTip placement="top" background='#ff8237'>
+                                <span>{AppConstants.genderRestrictionMsg}</span>
+                            </CustumToolTip>
+
+
+                        );
+                    },
                     render: (genderRestriction, record, index) => (
                         <Checkbox
                             className="single-checkbox mt-1"
@@ -335,7 +347,17 @@ class CompetitionOpenRegForm extends Component {
                     title: "Age Restriction",
                     dataIndex: "ageRestriction",
                     key: "ageRestriction",
+                    filterDropdown: true,
+                    filterIcon: () => {
+                        return (
 
+                            <CustumToolTip placement="top" background='#ff8237'>
+                                <span>{AppConstants.ageRestrictionMsg}</span>
+                            </CustumToolTip>
+
+
+                        );
+                    },
                     render: (ageRestriction, record, index) => (
                         <Checkbox
                             className="single-checkbox mt-1"
@@ -470,8 +492,8 @@ class CompetitionOpenRegForm extends Component {
                 this.setDetailsFieldValue()
             }
 
-            if(competitionFeesState.deleteDivisionLoad == false && this.state.deleteLoading == true){
-                this.setState({deleteLoading:false});
+            if (competitionFeesState.deleteDivisionLoad == false && this.state.deleteLoading == true) {
+                this.setState({ deleteLoading: false });
                 this.setDivisionFormFields();
             }
         }
@@ -480,7 +502,7 @@ class CompetitionOpenRegForm extends Component {
             if (nextProps.appState.own_CompetitionArr !== competitionTypeList) {
                 if (competitionTypeList.length > 0) {
                     let competitionId = competitionTypeList[0].competitionId
-                    this.props.getAllCompetitionFeesDeatilsAction(competitionId,null, this.state.sourceModule)
+                    this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule)
                     setOwn_competition(competitionId)
                     this.setState({ getDataLoading: true, firstTimeCompId: competitionId })
                 }
@@ -691,7 +713,7 @@ class CompetitionOpenRegForm extends Component {
         })
 
         this.setDivisionFormFields();
-        
+
     }
 
     setDivisionFormFields = () => {
@@ -1012,11 +1034,14 @@ class CompetitionOpenRegForm extends Component {
                         alignItems: "center"
                     }}
                 >
-                    <Breadcrumb separator=">">
+                    <Breadcrumb separator="">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.competitionDetails}
                         </Breadcrumb.Item>
                     </Breadcrumb>
+                    <CustumToolTip background='#ff8237'>
+                        <span>{AppConstants.compDetailsMsg}</span>
+                    </CustumToolTip>
                 </Header>
             </div>
         );
@@ -1446,7 +1471,15 @@ class CompetitionOpenRegForm extends Component {
                         >
                             {appState.competitionFormatTypes.length > 0 && appState.competitionFormatTypes.map(item => {
                                 return (
-                                    <Radio key={item.id} value={item.id}> {item.description}</Radio>
+                                    <div className='row'>
+                                        <Radio key={item.id} value={item.id}> {item.description}</Radio>
+
+                                        <div style={{ marginLeft: -20, marginTop: -5 }}>
+                                            <CustumToolTip background='#ff8237'>
+                                                <span>{item.helpMsg}</span>
+                                            </CustumToolTip>
+                                        </div>
+                                    </div>
                                 );
                             })}
                         </Radio.Group>
@@ -1691,30 +1724,30 @@ class CompetitionOpenRegForm extends Component {
     //////add or remove another division inthe divsision tab
     addRemoveDivision = (index, item, keyword) => {
         console.log("item:: Competition Division::" + JSON.stringify(item));
-        if(keyword == "add"){
+        if (keyword == "add") {
             this.props.addRemoveDivisionAction(index, item, keyword);
         }
-        else{
-            this.setState({deleteDivModalVisible: true, divisionIndex: index, competitionDivision: item}) 
+        else {
+            this.setState({ deleteDivModalVisible: true, divisionIndex: index, competitionDivision: item })
         }
-        
+
     }
 
 
 
-    handleDeleteDivision = (key) =>{
+    handleDeleteDivision = (key) => {
         console.log("****************handleDeleteDivision" + JSON.stringify(this.state.competitionDivision));
         console.log("&&&&&&" + this.state.divisionIndex);
 
-        if(key == "ok"){
+        if (key == "ok") {
             let payload = {
                 competitionDivisionId: this.state.competitionDivision.competitionDivisionId
             }
             this.props.addRemoveDivisionAction(this.state.divisionIndex, this.state.competitionDivision, "remove");
             this.props.removeCompetitionDivisionAction(payload);
-            this.setState({deleteLoading: true});
+            this.setState({ deleteLoading: true });
         }
-        this.setState({deleteDivModalVisible: false})
+        this.setState({ deleteDivModalVisible: false })
     }
 
     divisionsView = () => {
@@ -1723,7 +1756,12 @@ class CompetitionOpenRegForm extends Component {
         let divisionsDisable = this.state.permissionState.divisionsDisable
         return (
             <div className="fees-view pt-5">
-                <span className="form-heading required-field" >{AppConstants.divisions}</span>
+                <div className='row'>
+                    <span className="form-heading required-field" >{AppConstants.divisions}</span>
+                    <CustumToolTip placement="top" background='#ff8237'>
+                        <span>{AppConstants.compDivisionMsg}</span>
+                    </CustumToolTip>
+                </div>
                 {divisionArray.length == 0 && (
                     <span className="applicable-to-heading pt-0">
                         {AppConstants.please_Sel_mem_pro}
@@ -1735,9 +1773,10 @@ class CompetitionOpenRegForm extends Component {
                             <span className="form-heading pt-2 pl-2">
                                 {item.membershipProductName}
                             </span>
-                            <div className="table-responsive">
+                          
+                            <div className="contextual-table-responsive">
                                 <Table
-                                    className="fees-table"
+                                    className="fees-table overflow-auto"
                                     columns={this.state.divisionTable}
                                     dataSource={item.divisions}
                                     pagination={false}
@@ -1746,6 +1785,7 @@ class CompetitionOpenRegForm extends Component {
 
                                 />
                             </div>
+                            
                             <a>
                                 <span className="input-heading-add-another" onClick={() => !divisionsDisable ? this.addRemoveDivision(index, item, "add") : null}>+ {AppConstants.addDivision}</span>
                             </a>
@@ -1753,14 +1793,14 @@ class CompetitionOpenRegForm extends Component {
                     </div>
                 )}
 
-                    <Modal
-                        className="add-membership-type-modal"
-                        title={AppConstants.deleteDivision}
-                        visible={this.state.deleteDivModalVisible}
-                        onOk={ () => this.handleDeleteDivision("ok")}
-                        onCancel={ () => this.handleDeleteDivision("cancel")}>
-                        <p>{AppConstants.competitionDivisionValidation}</p>
-                    </Modal>				  
+                <Modal
+                    className="add-membership-type-modal"
+                    title={AppConstants.deleteDivision}
+                    visible={this.state.deleteDivModalVisible}
+                    onOk={() => this.handleDeleteDivision("ok")}
+                    onCancel={() => this.handleDeleteDivision("cancel")}>
+                    <p>{AppConstants.competitionDivisionValidation}</p>
+                </Modal>
             </div>
         );
     };
@@ -2732,9 +2772,9 @@ class CompetitionOpenRegForm extends Component {
                                 </Tabs>
                             </div>
                             <Loader
-                                visible={this.props.competitionFeesState.onLoad || 
-                                this.props.appState.onLoad || this.state.getDataLoading ||
-                                this.props.competitionFeesState.deleteDivisionLoad} />
+                                visible={this.props.competitionFeesState.onLoad ||
+                                    this.props.appState.onLoad || this.state.getDataLoading ||
+                                    this.props.competitionFeesState.deleteDivisionLoad} />
                         </Content>
                         <Footer>{this.footerView()}</Footer>
                     </Form>
@@ -2782,7 +2822,7 @@ function mapDispatchToProps(dispatch) {
         searchVenueList,
         venueListAction,
         clearFilter,
-        removeCompetitionDivisionAction				
+        removeCompetitionDivisionAction
     }, dispatch)
 }
 

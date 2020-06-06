@@ -94,7 +94,15 @@ const initialState = {
     referFriendList: [],
     referFriendPage: 1,
     referFriendTotalCount: 1,
-    orgPhotosList: []
+    orgPhotosList: [],
+    userDashboardCounts: null,
+    onAffiliateDirLoad: false,
+    affiliateDirectoryList: [],
+    affiliateDirectoryPage: 1,
+    affiliateDirectoryTotalCount: 1,
+    organisationTypes: [],
+    onExpAffiliateDirLoad: false
+
 };
 
 function userReducer(state = initialState, action) {
@@ -304,6 +312,7 @@ function userReducer(state = initialState, action) {
                 competitions:isArrayNotEmpty(textualData.competitions) ? textualData.competitions : [],
                 organisations: isArrayNotEmpty(textualData.organisations) ? textualData.organisations : [],
                 roles: isArrayNotEmpty(textualData.roles) ? textualData.roles : [],
+                userDashboardCounts: textualData.counts,
                 status: action.status
             };
         case ApiConstants.API_USER_MODULE_PERSONAL_DETAIL_LOAD:
@@ -500,6 +509,32 @@ function userReducer(state = initialState, action) {
             return {
                 ...state,
                 onExpOrgRegQuesLoad: false,
+                status: action.status,
+                error: null
+            };
+        case ApiConstants.API_AFFILIATE_DIRECTORY_LOAD:
+            return { ...state, onAffiliateDirLoad: true };
+
+        case ApiConstants.API_AFFILIATE_DIRECTORY_SUCCESS:
+            let affiliateDirData = action.result;
+
+            return {
+                ...state,
+                onAffiliateDirLoad: false,
+                affiliateDirectoryList: affiliateDirData.affiliates,
+                affiliateDirectoryPage: affiliateDirData.page ? affiliateDirData.page.currentPage : 1,
+                affiliateDirectoryTotalCount: affiliateDirData.page.totalCount,
+                organisationTypes: isArrayNotEmpty(affiliateDirData.organisationTypes) ?  affiliateDirData.organisationTypes : [],
+                status: action.status
+            };
+
+        case ApiConstants.API_EXPORT_AFFILIATE_DIRECTORY_LOAD:
+            return { ...state, onExpAffiliateDirLoad: true };
+
+        case ApiConstants.API_EXPORT_AFFILIATE_DIRECTORY_SUCCESS:
+            return {
+                ...state,
+                onExpAffiliateDirLoad: false,
                 status: action.status,
                 error: null
             };

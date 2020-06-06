@@ -260,11 +260,12 @@ function isReplyCheckVisible(checked, key) {
 }
 
 /////get the divisions list on the basis of year and competition
-function getDivisionsListAction(yearRefId, competitionId) {
+function getDivisionsListAction(yearRefId, competitionId, sourceModule) {
   const action = {
     type: ApiConstants.API_GET_DIVISIONS_LIST_ON_YEAR_AND_COMPETITION_LOAD,
     yearRefId: yearRefId,
-    competitionId: competitionId
+    competitionId: competitionId,
+    sourceModule: sourceModule
   };
   return action;
 }

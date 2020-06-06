@@ -50,7 +50,8 @@ import {
     regCompetitionListDeleteAction,
     getDefaultCharity,
     getDefaultCompFeesLogoAction,
-    clearCompReducerDataAction
+    clearCompReducerDataAction,
+    removeCompetitionDivisionAction							   
 } from "../../store/actions/registrationAction/competitionFeeAction";
 import {
     competitionFeeInit, getVenuesTypeAction,
@@ -249,6 +250,7 @@ class RegistrationCompetitionForm extends Component {
         this.state = {
             value: "NETSETGO",
             division: "Division",
+			sourceModule: "COMP",			
             discountCode: false,
             membershipProduct: ["Player", "NetSetGo", "Walking Netball", "Fast Five"],
             membershipProductSelected: [],
@@ -288,6 +290,9 @@ class RegistrationCompetitionForm extends Component {
             tooltipVisibleDelete: false,
             tooltipVisibleDraft: false,
             tooltipVisiblePublish: false,
+            deleteDivModalVisible: false,
+            competitionDivisionId: null,
+            deleteLoading: false,								 
             divisionTable: [
                 {
                     title: "Division Name",
@@ -449,7 +454,9 @@ class RegistrationCompetitionForm extends Component {
         };
         this_Obj = this;
         this.props.CLEAR_OWN_COMPETITION_DATA()
-        this.props.clearCompReducerDataAction("all")
+        let competitionId = null
+        competitionId = this.props.location.state ? this.props.location.state.id : null
+        competitionId !== null && this.props.clearCompReducerDataAction("all")
     }
 
     componentDidUpdate(nextProps) {
@@ -495,6 +502,10 @@ class RegistrationCompetitionForm extends Component {
                 })
                 this.setDetailsFieldValue()
             }
+			if(competitionFeesState.deleteDivisionLoad == false && this.state.deleteLoading == true){
+                this.setState({deleteLoading:false});
+                this.setDivisionFormFields();
+            }
         }
         if (this.state.divisionState === true) {
             this.setState({ divisionState: false })
@@ -512,7 +523,7 @@ class RegistrationCompetitionForm extends Component {
                     compDetailDisable: false,
                     regInviteesDisable: true,
                     membershipDisable: true,
-                    divisionsDisable: true,
+                    divisionsDisable: false,
                     feesTableDisable: true,
                     paymentsDisable: true,
                     discountsDisable: true,
@@ -527,7 +538,7 @@ class RegistrationCompetitionForm extends Component {
                     compDetailDisable: true,
                     regInviteesDisable: true,
                     membershipDisable: true,
-                    divisionsDisable: true,
+                    divisionsDisable: false,
                     feesTableDisable: true,
                     paymentsDisable: true,
                     discountsDisable: true,
@@ -541,7 +552,8 @@ class RegistrationCompetitionForm extends Component {
                     compDetailDisable: false,
                     regInviteesDisable: true,
                     membershipDisable: true,
-                    divisionsDisable: hasRegistration == 1 ? true : false,
+                    //divisionsDisable: hasRegistration == 1 ? true : false,
+					divisionsDisable: false,														 
                     feesTableDisable: true,
                     paymentsDisable: false,
                     discountsDisable: true,
@@ -593,7 +605,7 @@ class RegistrationCompetitionForm extends Component {
         // this.props.venueListAction();
         if (competitionId !== null) {
             let hasRegistration = 0
-            this.props.getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration)
+            this.props.getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration, this.state.sourceModule)
             this.setState({ getDataLoading: true })
         }
         else {
@@ -674,6 +686,10 @@ class RegistrationCompetitionForm extends Component {
                 [membershipProductUniqueKey]: item.membershipProductUniqueKey,
             })
         })
+		this.setDivisionFormFields();							 
+    }
+	
+	setDivisionFormFields = () => {
         let divisionData = this.props.competitionFeesState.competitionDivisionsData
         let divisionArray = divisionData !== null ? divisionData : []
         divisionArray.map((item, index) => {
@@ -865,7 +881,7 @@ class RegistrationCompetitionForm extends Component {
                             }
                         }
                         formData.append("logoIsDefault", postData.logoIsDefault)
-                        this.props.saveCompetitionFeesDetailsAction(formData, compFeesState.defaultCompFeesOrgLogoData.id)
+                        this.props.saveCompetitionFeesDetailsAction(formData, compFeesState.defaultCompFeesOrgLogoData.id, this.state.sourceModule)
                         this.setState({ loading: true })
                     } else {
                         message.error(ValidationConstants.competitionLogoIsRequired)
@@ -904,7 +920,8 @@ class RegistrationCompetitionForm extends Component {
                     let payload = finalDivisionArray
                     let finalDivisionPayload = {
                         statusRefId: this.state.statusRefId,
-                        divisions: payload
+                        divisions: payload,
+                        sourceModule: this.state.sourceModule																			 
                     }
                     if (this.checkDivisionEmpty(divisionArrayData) == true) {
                         message.error(ValidationConstants.pleaseAddDivisionForMembershipProduct)
@@ -1729,12 +1746,28 @@ class RegistrationCompetitionForm extends Component {
 
     //////add or remove another division inthe divsision tab
     addRemoveDivision = (index, item, keyword) => {
-        this.props.addRemoveDivisionAction(index, item, keyword)
+		if(keyword == "add"){
+            this.props.addRemoveDivisionAction(index, item, keyword);
+        }
+        else{
+            this.setState({deleteDivModalVisible: true, divisionIndex: index, competitionDivision: item}) 
+        }
     }
 
+	handleDeleteDivision = (key) =>{
+        console.log("****************handleDeleteDivision" + JSON.stringify(this.state.competitionDivision));
+        console.log("&&&&&&" + this.state.divisionIndex);
 
-
-
+        if(key == "ok"){
+            let payload = {
+                competitionDivisionId: this.state.competitionDivision.competitionDivisionId
+            }
+            this.props.addRemoveDivisionAction(this.state.divisionIndex, this.state.competitionDivision, "remove");
+            this.props.removeCompetitionDivisionAction(payload);
+            this.setState({deleteLoading: true});
+        }
+        this.setState({deleteDivModalVisible: false})
+    }
 
     divisionsView = () => {
         let divisionData = this.props.competitionFeesState.competitionDivisionsData
@@ -1771,6 +1804,15 @@ class RegistrationCompetitionForm extends Component {
                         </div>
                     </div>
                 )}
+
+                    <Modal
+                        className="add-membership-type-modal"
+                        title={AppConstants.deleteDivision}
+                        visible={this.state.deleteDivModalVisible}
+                        onOk={ () => this.handleDeleteDivision("ok")}
+                        onCancel={ () => this.handleDeleteDivision("cancel")}>
+                        <p>{AppConstants.competitionDivisionValidation}</p>
+                    </Modal>		  
                 ``            </div>
         );
     };
@@ -2818,7 +2860,8 @@ class RegistrationCompetitionForm extends Component {
                                         </TabPane>} */}
                                 </Tabs>
                             </div>
-                            <Loader visible={this.props.competitionFeesState.onLoad || this.state.getDataLoading} />
+                            <Loader visible={this.props.competitionFeesState.onLoad || this.state.getDataLoading ||
+								this.props.competitionFeesState.deleteDivisionLoad} />
                         </Content>
                         {/* <Footer>{competitionId == null ? this.footerView() : this.editFooterView()}</Footer> */}
                         <Footer>{this.footerView()}</Footer>
@@ -2864,7 +2907,8 @@ function mapDispatchToProps(dispatch) {
         searchVenueList,
         venueListAction,
         clearFilter,
-        CLEAR_OWN_COMPETITION_DATA
+        CLEAR_OWN_COMPETITION_DATA,
+        removeCompetitionDivisionAction	
     }, dispatch)
 }
 

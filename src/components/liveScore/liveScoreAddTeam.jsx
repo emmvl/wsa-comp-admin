@@ -29,14 +29,15 @@ import {
     liveScoreGetDivision,
     liveScoreGetaffilate,
     liveAddNewTeam,
-    liveScoreGetTeamDataAction 
+    liveScoreGetTeamDataAction
 } from '../../store/actions/LiveScoreAction/liveScoreTeamAction';
 import Loader from '../../customComponents/loader'
 // import LoaderImg from 'react-loader-spinner'
 import { setTimeout } from "timers";
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import ImageLoader from '../../customComponents/ImageLoader'
-import { isArrayNotEmpty ,captializedString} from '../../util/helpers';
+import { isArrayNotEmpty, captializedString } from '../../util/helpers';
+import Tooltip from 'react-png-tooltip'
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -180,26 +181,27 @@ class LiveScoreAddTeam extends Component {
         const { teamManagerData, affilateList, divisionList, managerType } = this.props.liveScoreTeamState
         let name = teamManagerData.name
         let alias = teamManagerData.alias
-        console.log(name,alias,"dataaa") 
+        console.log(name, alias, "dataaa")
         return (
             <div className="content-view pt-4">
                 <Form.Item>
-                    {getFieldDecorator('teamName', {normalize: (input) => captializedString(input),
+                    {getFieldDecorator('teamName', {
+                        normalize: (input) => captializedString(input),
                         rules: [{ required: true, message: ValidationConstants.teamName }],
                     })(
                         <InputWithHead
                             heading={AppConstants.teamName}
                             placeholder={AppConstants.enterTeamName}
-                            name={'teamName'} 
+                            name={'teamName'}
                             onChange={(event) => {
-                                this.props.liveScoreAddTeamform({ key: 'name',data:captializedString( event.target.value)  })
+                                this.props.liveScoreAddTeamform({ key: 'name', data: captializedString(event.target.value) })
                             }
                             }
                             value={captializedString(name)}
                         />
                     )}
 
-{/* var x="ebe";
+                    {/* var x="ebe";
 if(x[0].charCodeAt()>=97)
     x[0]=x[0].toUpperCase(); */}
 
@@ -213,12 +215,15 @@ if(x[0].charCodeAt()>=97)
                     heading={"Team Alias"}
                     placeholder={"please Enter Team Alias"}
                     name={'teamAlias'}
+                    conceptulHelp
+                    conceptulHelpMsg={AppConstants.teamAliasMsg}
                     onChange={(event) => {
-                        this.props.liveScoreAddTeamform({ key: 'alias', data:captializedString( event.target.value)  })
+                        this.props.liveScoreAddTeamform({ key: 'alias', data: captializedString(event.target.value) })
                     }
                     }
                     value={alias}
                 />
+
                 {/* )}
 
                 </Form.Item> */}
@@ -350,8 +355,24 @@ if(x[0].charCodeAt()>=97)
                         value={managerType}
                     >
                         <div className="row ml-2" style={{ marginTop: 18 }} >
-                            <Radio value={"new"}>{AppConstants.new}</Radio>
-                            <Radio value={"existing"}>{AppConstants.existing} </Radio>
+
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"new"}>{AppConstants.new}</Radio>
+                                <div style={{ marginLeft: -10, width: 50 }}>
+                                    <Tooltip background='#ff8237'>
+                                        <span>{AppConstants.teamNewMsg}</span>
+                                    </Tooltip>
+                                </div>
+                            </div>
+
+                            <div style={{ display: 'flex', alignItems: 'center', marginLeft: -15 }}>
+                                <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"existing"}>{AppConstants.existing} </Radio>
+                                <div style={{ marginLeft: -10 }}>
+                                    <Tooltip background='#ff8237' >
+                                        <span>{AppConstants.teamExsitingMsg}</span>
+                                    </Tooltip>
+                                </div>
+                            </div>
                         </div>
                     </Radio.Group>
                 </div>
@@ -390,7 +411,7 @@ if(x[0].charCodeAt()>=97)
                                         :
                                         this.props.liveScoreManagerListAction(5, 1, this.state.loaclCompetitionID)
                                 }}
-                                onBlur={()=> this.props.liveScoreManagerListAction(5, 1, this.state.loaclCompetitionID)}
+                                onBlur={() => this.props.liveScoreManagerListAction(5, 1, this.state.loaclCompetitionID)}
                                 optionFilterProp="children"
 
                                 // onSearch={(value) => {
@@ -433,7 +454,8 @@ if(x[0].charCodeAt()>=97)
                 <div className="row" >
                     <div className="col-sm" >
                         <Form.Item>
-                        {getFieldDecorator('firstName', {normalize: (input) => captializedString(input),
+                            {getFieldDecorator('firstName', {
+                                normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(<InputWithHead
                                 required={"required-field pt-0 pb-0"}
@@ -441,7 +463,7 @@ if(x[0].charCodeAt()>=97)
                                 placeholder={AppConstants.enter_firstName}
                                 name={'firstName'}
                                 onChange={(event) => {
-                                    this.props.liveScoreAddTeamform({ key: 'firstName', data:captializedString( event.target.value) })
+                                    this.props.liveScoreAddTeamform({ key: 'firstName', data: captializedString(event.target.value) })
 
                                 }}
                                 value={teamManagerData.firstName}
@@ -452,7 +474,8 @@ if(x[0].charCodeAt()>=97)
                     </div>
                     <div className="col-sm" >
                         <Form.Item>
-                        {getFieldDecorator('lastName', { normalize: (input) => captializedString(input),
+                            {getFieldDecorator('lastName', {
+                                normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
@@ -461,7 +484,7 @@ if(x[0].charCodeAt()>=97)
                                     placeholder={AppConstants.enterLastName}
                                     name={'lastName'}
                                     onChange={(event) => {
-                                        this.props.liveScoreAddTeamform({ key: 'lastName',data:captializedString( event.target.value) })
+                                        this.props.liveScoreAddTeamform({ key: 'lastName', data: captializedString(event.target.value) })
                                     }}
                                     value={teamManagerData.lastName}
                                 />

@@ -14,9 +14,10 @@ import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScore
 import { NavLink } from 'react-router-dom';
 import { liveScoreScorerUpdate, liveScoreAddEditScorer, liveScoreScorerSearch } from '../../store/actions/LiveScoreAction/liveScoreScorerAction'
 import Loader from '../../customComponents/loader'
-import { isArrayNotEmpty,captializedString } from "../../util/helpers";
+import { isArrayNotEmpty, captializedString } from "../../util/helpers";
 import { liveScoreManagerSearch, liveScoreClear, liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 import { getliveScoreDivisions } from '../../store/actions/LiveScoreAction/liveScoreActions'
+import Tooltip from 'react-png-tooltip'
 
 const { Footer, Content, Header } = Layout;
 const { Option } = Select;
@@ -131,7 +132,7 @@ class LiveScoreAddScorer extends Component {
 
         const { searchScorer, onLoadSearch } = this.props.liveScoreScorerState
         let scorer_list = isArrayNotEmpty(searchScorer) ? searchScorer : []
-      
+
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -218,7 +219,8 @@ class LiveScoreAddScorer extends Component {
                 <div className="row" >
                     <div className="col-sm" >
                         <Form.Item>
-                        {getFieldDecorator(AppConstants.firstName, { normalize : (input) => captializedString(input),
+                            {getFieldDecorator(AppConstants.firstName, {
+                                normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
@@ -232,7 +234,8 @@ class LiveScoreAddScorer extends Component {
                     </div>
                     <div className="col-sm" >
                         <Form.Item>
-                        {getFieldDecorator(AppConstants.lastName, { normalize : (input) => captializedString(input),
+                            {getFieldDecorator(AppConstants.lastName, {
+                                normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
@@ -323,8 +326,27 @@ class LiveScoreAddScorer extends Component {
                     value={scorerRadioBtn}
                 >
                     <div className="row ml-2" style={{ marginTop: 18 }} >
-                        <Radio value={"new"}>{AppConstants.new}</Radio>
-                        <Radio value={"existing"}>{AppConstants.existing} </Radio>
+                        {/* <Radio value={"new"}>{AppConstants.new}</Radio>
+                        <Radio value={"existing"}>{AppConstants.existing} </Radio> */}
+
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"new"}>{AppConstants.new}</Radio>
+                            <div style={{ marginLeft: -10, width: 50 }}>
+                                <Tooltip background='#ff8237'>
+                                    <span>{AppConstants.newMsgForScorerManager}</span>
+                                </Tooltip>
+                            </div>
+                        </div>
+
+                        <div style={{ display: 'flex', alignItems: 'center', marginLeft: -10 }}>
+                            <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"existing"}>{AppConstants.existing} </Radio>
+                            <div style={{ marginLeft: -10 }}>
+                                <Tooltip background='#ff8237' >
+                                    <span>{AppConstants.existingMsgForScorerManager}</span>
+                                </Tooltip>
+                            </div>
+                        </div>
+
                     </div>
                 </Radio.Group>
             </div>

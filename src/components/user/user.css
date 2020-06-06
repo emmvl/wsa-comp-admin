@@ -225,3 +225,14 @@
     width: 300px !important;
     height: 40px !important;
 }
+
+.affiliate-dir-srch{
+  margin-left: auto;
+  margin-right: 1.6%;
+  padding-top: 4px;
+}
+
+.affiliate-dir-srch .ant-input{
+  box-shadow: 0px 8px 16px 0 rgba(27, 27, 52, 0.06);
+  background-color: var(--app-white);
+}

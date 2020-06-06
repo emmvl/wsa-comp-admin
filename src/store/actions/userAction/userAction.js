@@ -263,6 +263,25 @@ function exportOrgRegQuestionAction(payload) {
 }
 
 
+/* Affiliate Directory Listing */
+function getAffiliateDirectoryAction(payload) {
+  const action = {
+    type: ApiConstants.API_AFFILIATE_DIRECTORY_LOAD,
+    payload: payload
+  };
+  return action;
+}
+
+/* Export Affiliate Directory */
+function exportAffiliateDirectoryAction(payload) {
+  const action = {
+    type: ApiConstants.API_EXPORT_AFFILIATE_DIRECTORY_LOAD,
+    payload: payload
+  };
+  return action;
+}
+
+
 export {
   getRoleAction,
   getUreAction,
@@ -293,5 +312,7 @@ export {
   saveOrganiationPhotoAction,
   deleteOrganiationPhotoAction,
   deleteOrgContact,
-  exportOrgRegQuestionAction
+  exportOrgRegQuestionAction,
+  getAffiliateDirectoryAction,
+  exportAffiliateDirectoryAction
 }

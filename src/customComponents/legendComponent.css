@@ -8,9 +8,10 @@
     /* white-space: initial; */
     /* word-wrap: break-word; */
     /* float: left; */
-    /* clear: both; */
+    clear: both; 
     padding-right: 15px;
-    /* padding-left: 25px; */
+    /* margin-left: 70px; */
+    padding-left: 15px;
 }
 
 .legend-color-text-div{
@@ -19,7 +20,7 @@
     align-items: center;
     white-space: initial;
     word-wrap: break-word;
-    height: 40px;
+    height:40px ;
     width:190px;
 
 }
@@ -43,8 +44,8 @@
 }
 
 .draws-legend-view{
-       display: flex;
-       margin: 50px 50px 50px 50px;
+       display: table;
+       margin: 30px 50px 10px 50px;
        justify-content: center;
        float: left; 
 }
