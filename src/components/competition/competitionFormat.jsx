@@ -787,7 +787,11 @@ class CompetitionFormat extends Component {
                                 : null}
                             </div>
                         </div>
-                        <Checkbox className="single-checkbox pt-2" checked={item.isFinal} onChange={(e) => this.onChangeFinal(e, data.competionFormatDivisions,index)}>{AppConstants.applyFinalFormat}</Checkbox>
+						{data.competitionFormatRefId != 1 &&
+							<div>
+								<Checkbox className="single-checkbox pt-2" checked={item.isFinal} onChange={(e) => this.onChangeFinal(e, data.competionFormatDivisions,index)}>{AppConstants.applyFinalFormat}</Checkbox>
+							</div>
+                        }
                     </div>
                  ))}
                 {/* <NavLink to="/competitionFinals" >
