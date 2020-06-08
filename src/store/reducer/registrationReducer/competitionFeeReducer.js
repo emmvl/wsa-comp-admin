@@ -119,7 +119,24 @@ const initialState = {
     searchLoad: false,
     charityTitle: "",
     charityDescription: '',
-    deleteDivisionLoad: false
+    deleteDivisionLoad: false,
+    affiliateSelected: null,
+    otherSelected: null,
+    anyOrgSelected: null,
+    nonSelected: null,
+
+    invitedTo: [],
+    invitedOrganisation: [],
+
+    associationLeague: [],
+    clubSchool: [],
+
+    affiliateNonSelected: null,
+    anyOrgNonSelected: null,
+
+    affiliateArray: [],
+    anyOrgAffiliateArr: [],
+    any_club_Org_AffiliateArr: []
 };
 
 /////function to append isselected values in default membership types array
@@ -659,36 +676,69 @@ function checkVoucherArray(voucherArr, defaultGovtVoucher) {
 }
 
 
-function inviteesOrgCheck() {
+// function createInviteesPostArray(selectedInvitees, getInvitees) {
+//     console.log("selectedInvitees, getInvitees", selectedInvitees, getInvitees)
+//     let invitessObjectArr = []
+//     for (let i in selectedInvitees) {
+//         // let selectedInviteesArray = checkExistingInvitees(getInvitees, selectedInvitees[i])
+//         let inviteesObject = null
+//         // console.log("selectedInviteesArray", selectedInviteesArray)
+//         // if (selectedInviteesArray.status == true) {
+//         inviteesObject = {
+//             "inviteesId": isArrayNotEmpty(getInvitees) ? getInvitees[i].inviteesId : 0,
+//             "registrationInviteesRefId": selectedInvitees[i],
+//             "inviteesOrg": isArrayNotEmpty(getInvitees) ? getInvitees[i].inviteesOrg : []
+//         }
 
-}
+//         // } else {
+//         //     inviteesObject = {
+//         //         "inviteesId": 0,
+//         //         "registrationInviteesRefId": selectedInvitees[i]
+//         //     }
+//         // }
+
+//         invitessObjectArr.push(inviteesObject)
+//     }
+//     return invitessObjectArr
+// }
 
 function createInviteesPostArray(selectedInvitees, getInvitees) {
-    console.log("selectedInvitees, getInvitees", selectedInvitees, getInvitees)
     let invitessObjectArr = []
-    for (let i in selectedInvitees) {
-        // let selectedInviteesArray = checkExistingInvitees(getInvitees, selectedInvitees[i])
-        let inviteesObject = null
-        // console.log("selectedInviteesArray", selectedInviteesArray)
-        // if (selectedInviteesArray.status == true) {
-        inviteesObject = {
-            "inviteesId": isArrayNotEmpty(getInvitees) ? getInvitees[i].inviteesId : 0,
-            "registrationInviteesRefId": selectedInvitees[i],
-            "inviteesOrg": isArrayNotEmpty(getInvitees) ? getInvitees[i].inviteesOrg : []
+    if (isArrayNotEmpty(getInvitees)) {
+        for (let i in getInvitees) {
+            let selectedInviteesArray = checkExistingInvitees(getInvitees, selectedInvitees)
+            console.log("selectedInviteesArray", selectedInviteesArray)
+            let inviteesObject = null
+            if (selectedInviteesArray.status == true) {
+                inviteesObject = {
+                    "inviteesId": selectedInviteesArray.result.inviteesId,
+                    "registrationInviteesRefId": selectedInvitees,
+                    "inviteesOrg": isArrayNotEmpty(selectedInviteesArray.result.inviteesOrg) ? selectedInviteesArray.result.inviteesOrg : []
+                }
+
+            } else {
+                inviteesObject = {
+                    "inviteesId": 0,
+                    "registrationInviteesRefId": selectedInvitees,
+                    "inviteesOrg": []
+                }
+            }
+
+            invitessObjectArr.push(inviteesObject)
+            break;
         }
-
-        // } else {
-        //     inviteesObject = {
-        //         "inviteesId": 0,
-        //         "registrationInviteesRefId": selectedInvitees[i]
-        //     }
-        // }
-
-        invitessObjectArr.push(inviteesObject)
     }
+    else {
+        let invitees_Object = {
+            "inviteesId": 0,
+            "registrationInviteesRefId": selectedInvitees,
+            "inviteesOrg": []
+        }
+        invitessObjectArr.push(invitees_Object)
+    }
+    console.log("invitessObjectArr", invitessObjectArr)
     return invitessObjectArr
 }
-
 function checkOrgKeysSelection(key, orgArray) {
     let object = {
         status: false,
@@ -718,7 +768,7 @@ function createInviteesOrgArray(selectedInvitees, orgKeys) {
         "competitionInviteesOrgId": 0,
         "organisationUniqueKey": null
     }
-    let orgArray = selectedInvitees[0].inviteesOrg
+    let orgArray = isArrayNotEmpty(selectedInvitees) ? selectedInvitees[0].inviteesOrg : []
     console.log(orgArray)
     for (let i in orgKeys) {
         let details = checkOrgKeysSelection(orgKeys[i], orgArray)
@@ -739,39 +789,41 @@ function createInviteesOrgArray(selectedInvitees, orgKeys) {
 
     return invitessObjectArr
 
-    // for (let i in selectedInvitees) {
-    //     // let selectedInviteesArray = checkExistingInvitees(getInvitees, selectedInvitees[i])
-    //     let inviteesObject = null
-    //     // console.log("selectedInviteesArray", selectedInviteesArray)
-    //     // if (selectedInviteesArray.status == true) {
-    //     inviteesObject = {
-    //         "inviteesId": isArrayNotEmpty(getInvitees) ? getInvitees[i].inviteesId : 0,
-    //         "registrationInviteesRefId": selectedInvitees[i],
-    //         "inviteesOrg": []
-    //     }
-
-    //     // } else {
-    //     //     inviteesObject = {
-    //     //         "inviteesId": 0,
-    //     //         "registrationInviteesRefId": selectedInvitees[i]
-    //     //     }
-    //     // }
-
-    //     invitessObjectArr.push(inviteesObject)
-    // }
-    // return invitessObjectArr
 }
 
 
-function getAffiliateOrgSelectedArr(invitees) {
-    let orgInvitees = isArrayNotEmpty(invitees) ? invitees[0].inviteesOrg : []
+// function getAffiliateOrgSelectedArr(invitees) {
+//     let orgInvitees = isArrayNotEmpty(invitees) ? invitees[0].inviteesOrg : []
+//     let slectedAffilitesArray = []
+//     for (let i in orgInvitees) {
+//         slectedAffilitesArray.push(orgInvitees[i].organisationUniqueKey)
+//     }
+//     return slectedAffilitesArray
+// }
+
+function getAffiliateOrgSelectedArr(invitees, id) {
     let slectedAffilitesArray = []
-    for (let i in orgInvitees) {
-        slectedAffilitesArray.push(orgInvitees[i].organisationUniqueKey)
-    }
-    return slectedAffilitesArray
-}
+    let selecetdOrgArray = []
+    for (let j in invitees) {
+        if (invitees[j].registrationInviteesRefId == id) {
 
+            let orgInvitees = isArrayNotEmpty(invitees[j].inviteesOrg) ? invitees[j].inviteesOrg : []
+
+            for (let i in orgInvitees) {
+                slectedAffilitesArray.push(orgInvitees[i].organisationUniqueKey)
+                let object = {
+                    "competitionInviteesOrgId": orgInvitees[i].competitionInviteesOrgId,
+                    "organisationUniqueKey": orgInvitees[i].organisationUniqueKey
+                }
+                selecetdOrgArray.push(object)
+            }
+
+
+            break
+        }
+    }
+    return { slectedAffilitesArray, selecetdOrgArray }
+}
 
 function getMemberShipProductTypes(key, productsArr) {
     let productTypes = []
@@ -1319,8 +1371,49 @@ function competitionFees(state = initialState, action) {
             let allData = action.result.data
             console.log("allData", allData)
             state.competitionCreator = allData.competitiondetail.competitionCreatorOrgUniqueKey
-            // state.competitionCreator = 6
             let selectedInvitees = checkSlectedInvitees(allData.competitiondetail.invitees)
+            for (let o in selectedInvitees) {
+                if (selectedInvitees[o] == 2 || selectedInvitees[o] == 3) {
+                    state.affiliateSelected = selectedInvitees[o]
+                    console.log(selectedInvitees[o], "selectedInvitees[o]")
+                    let affiliate_Object = {
+                        "inviteesId": allData.competitiondetail.invitees[o].inviteesId,
+                        "registrationInviteesRefId": selectedInvitees[o],
+                        "inviteesOrg": []
+                    }
+                    state.affiliateArray = [affiliate_Object]
+                } else if (selectedInvitees[o] == 7 || selectedInvitees[o] == 8) {
+                    state.anyOrgSelected = selectedInvitees[o]
+                    let affiliateObject = null
+                    if (selectedInvitees[o] == 7) {
+                        /// any-org association
+                        let affiliateOrgSelectedArr = getAffiliateOrgSelectedArr(allData.competitiondetail.invitees, selectedInvitees[o])
+                        state.associationLeague = affiliateOrgSelectedArr.slectedAffilitesArray
+                        state.any_club_Org_AffiliateArr = affiliateOrgSelectedArr.selecetdOrgArray
+                        affiliateObject = {
+                            "inviteesId": allData.competitiondetail.invitees[o].inviteesId,
+                            "registrationInviteesRefId": selectedInvitees[o],
+                            "inviteesOrg": affiliateOrgSelectedArr.selecetdOrgArray
+                        }
+                        state.anyOrgAffiliateArr = [affiliateObject]
+                    }
+                    else {
+                        // club
+                        let affiliate_Org_SelectedArr = getAffiliateOrgSelectedArr(allData.competitiondetail.invitees, selectedInvitees[o])
+                        state.clubSchool = affiliate_Org_SelectedArr.slectedAffilitesArray
+                        state.any_club_Org_AffiliateArr = affiliate_Org_SelectedArr.selecetdOrgArray
+                        affiliateObject = {
+                            "inviteesId": allData.competitiondetail.invitees[o].inviteesId,
+                            "registrationInviteesRefId": selectedInvitees[o],
+                            "inviteesOrg": affiliate_Org_SelectedArr.selecetdOrgArray
+                        }
+                        state.anyOrgAffiliateArr = [affiliateObject]
+                    }
+
+                } else {
+                    state.otherSelected = selectedInvitees[o]
+                }
+            }
             let selectedVenues = checkSelectedVenue(allData.competitiondetail.venues, state.venueList)
             if (state.selectedVenuesAdd == null) {
                 state.selectedVenues = selectedVenues
@@ -1356,14 +1449,8 @@ function competitionFees(state = initialState, action) {
             }
             state.postInvitees = allData.competitiondetail.invitees
             state.postVenues = allData.competitiondetail.venues
-            let affiliateOrgSelectedArr = getAffiliateOrgSelectedArr(allData.competitiondetail.invitees)
-            state.affiliateOrgSelected = affiliateOrgSelectedArr
-
-
             state.charityTitle = isArrayNotEmpty(allData.competitionpayments.charityRoundUp) ? allData.competitionpayments.charityRoundUp[0].charityRoundUpName : ""
             state.charityDescription = isArrayNotEmpty(allData.competitionpayments.charityRoundUp) ? allData.competitionpayments.charityRoundUp[0].charityRoundUpDescription : ""
-
-
             state.onLoad = false
             state.getCompAllDataOnLoad = false
             return {
@@ -1384,6 +1471,8 @@ function competitionFees(state = initialState, action) {
                 defaultGovtVoucher: allData.competitiondiscounts.govermentVouchers,
                 error: null
             };
+
+
 
 
         ///////get the venue list in the first tab
@@ -1548,30 +1637,31 @@ function competitionFees(state = initialState, action) {
 
         ////Add-Edit competition fees details
         case ApiConstants.API_ADD_EDIT_COMPETITION_FEES_DETAILS:
-
+            console.log("change123", action.key, action.data)
             if (action.key == "venues") { /// add-edit venues
                 state.selectedVenues = action.data
                 let venuesForPost = createVenuesList(state.venueList, action.data, state.competitionDetailData.venues)
                 state.postVenues = venuesForPost
             } else if (action.key == "nonPlayingObjectAdd") { /// add non playing dates
                 state.competitionDetailData.nonPlayingDates.push(action.data)
-            } else if (action.key == "invitees") { /// add-edit inviteess
-                console.log("Selected Invitees" + JSON.stringify(action.data));
-                state.selectedInvitees = action.data
-                state.postInvitees = createInviteesPostArray(action.data, state.competitionDetailData.invitees)
-                state.affiliateOrgSelected = []
-                state.postInvitees[0]["inviteesOrg"] = []
             }
-            else if (action.key == "affiliateOrgKey") { /// add-edit inviteess
-                state.affiliateOrgSelected = action.data
-                console.log("affiliateOrgKey", state.postInvitees)
-                // state.selectedInvitees = action.data
-                let orgInviteesArray = createInviteesOrgArray(state.postInvitees, action.data)
-                state.postInvitees[0]["inviteesOrg"] = orgInviteesArray
-                console.log(orgInviteesArray)
-                console.log(state.postInvitees)
+            // else if (action.key == "invitees") { /// add-edit inviteess
+            //     console.log("Selected Invitees" + JSON.stringify(action.data));
+            //     state.selectedInvitees = action.data
+            //     state.postInvitees = createInviteesPostArray(action.data, state.competitionDetailData.invitees)
+            //     state.affiliateOrgSelected = []
+            //     state.postInvitees[0]["inviteesOrg"] = []
+            // }
+            // else if (action.key == "affiliateOrgKey") { /// add-edit inviteess
+            //     state.affiliateOrgSelected = action.data
+            //     console.log("affiliateOrgKey", state.postInvitees)
+            //     // state.selectedInvitees = action.data
+            //     let orgInviteesArray = createInviteesOrgArray(state.postInvitees, action.data)
+            //     state.postInvitees[0]["inviteesOrg"] = orgInviteesArray
+            //     console.log(orgInviteesArray)
+            //     console.log(state.postInvitees)
 
-            }
+            // }
             else if (action.key == "logoIsDefault") {
                 state.competitionDetailData[action.key] = action.data
                 if (action.data == true) {
@@ -1582,6 +1672,60 @@ function competitionFees(state = initialState, action) {
             else if (action.key == "nonPlayingDataRemove") {
                 let nonPlayingIndex = action.data
                 state.competitionDetailData.nonPlayingDates.splice(nonPlayingIndex, 1)
+            }
+            else if (action.key == 'affiliateSelected' || action.key == 'anyOrgSelected' || action.key == 'otherSelected' || action.key == 'affiliateNonSelected' || action.key == 'anyOrgNonSelected') {
+                if (action.key == 'affiliateSelected') {
+                    state.affiliateSelected = action.data
+                    state.affiliateArray = createInviteesPostArray(action.data, state.competitionDetailData.invitees)
+                    state.otherSelected = null
+                    state.affiliateNonSelected = null
+                    state.invitedTo.splice(0, 1, action.data)
+                }
+                if (action.key == 'anyOrgSelected') {
+                    state.anyOrgSelected = action.data
+                    state.anyOrgAffiliateArr = createInviteesPostArray(action.data, state.competitionDetailData.invitees)
+                    state.otherSelected = null
+                    state.anyOrgNonSelected = null
+                }
+
+                if (action.key == 'otherSelected') {
+                    state.otherSelected = action.data
+                    state.affiliateSelected = null
+                    state.anyOrgSelected = null
+                    state.affiliateNonSelected = null
+                    state.anyOrgNonSelected = null
+                    state.invitedTo = []
+                    state.invitedTo.push(action.data)
+                    state.anyOrgAffiliateArr = []
+                    state.affiliateArray = []
+                    state.affiliateArray = createInviteesPostArray(action.data, state.competitionDetailData.invitees)
+                }
+                if (action.key == 'affiliateNonSelected') {
+                    state.invitedTo = []
+                    state.affiliateSelected = []
+                    state.otherSelected = null
+                    state.affiliateNonSelected = action.data
+                    state.affiliateArray = []
+                }
+                if (action.key == 'anyOrgNonSelected') {
+                    state.invitedTo = []
+                    state.anyOrgSelected = []
+                    state.otherSelected = null
+                    state.anyOrgNonSelected = action.data
+                    state.anyOrgAffiliateArr = []
+                }
+            } else if (action.key == 'associationAffilite' || action.key == 'clubAffilite') {
+                if (action.key == 'associationAffilite') {
+                    state.associationLeague = action.data
+                    let orgInviteesArray = createInviteesOrgArray(state.any_club_Org_AffiliateArr, action.data)
+                    state.anyOrgAffiliateArr[0]["inviteesOrg"] = orgInviteesArray
+                }
+
+                if (action.key == 'clubAffilite') {
+                    state.clubSchool = action.data
+                    let orgInviteesArray = createInviteesOrgArray(state.any_club_Org_AffiliateArr, action.data)
+                    state.anyOrgAffiliateArr[0]["inviteesOrg"] = orgInviteesArray
+                }
             }
             else {
                 state.competitionDetailData[action.key] = action.data
@@ -1894,6 +2038,22 @@ function competitionFees(state = initialState, action) {
                     charityRoundUp: []
                 }
                 state.competitionPaymentsData = paymentOptionObject
+                state.affiliateSelected = null
+                state.otherSelected = null
+                state.anyOrgSelected = null
+                state.nonSelected = null
+                state.invitedTo = []
+                state.invitedOrganisation = []
+
+                state.associationLeague = []
+                state.clubSchool = []
+
+                state.affiliateNonSelected = null
+                state.anyOrgNonSelected = null
+
+                state.affiliateArray = []
+                state.anyOrgAffiliateArr = []
+                state.any_club_Org_AffiliateArr = []
             }
             return {
                 ...state, error: null

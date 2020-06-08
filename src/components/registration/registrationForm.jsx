@@ -11,7 +11,7 @@ import {
     Form,
     Table,
     message,
-	Radio,	  
+    Radio,
     Tooltip
 } from "antd";
 import "./product.css";
@@ -40,7 +40,8 @@ import { isArrayNotEmpty } from "../../util/helpers";
 import Loader from '../../customComponents/loader';
 import history from "../../util/history";
 import { getOrganisationData } from "../../util/sessionStorage";
-import {inviteTypeAction} from '../../store/actions/commonAction/commonAction';																			   
+import CustomTooltip from 'react-png-tooltip'
+import { inviteTypeAction } from '../../store/actions/commonAction/commonAction';
 
 
 const { Header, Footer, Content } = Layout;
@@ -82,6 +83,17 @@ const columns = [
         dataIndex: "registrationLock",
         width: "25%",
         key: "registrationLock",
+        filterDropdown: true,
+        filterIcon: () => {
+            return (
+
+                <CustomTooltip placement="top" background='#ff8237'>
+                    <span>{AppConstants.regLockMsg}</span>
+                </CustomTooltip>
+
+
+            );
+        },
         render: (registrationLock, record, index) => (
             <Checkbox
                 className="single-checkbox mt-1"
@@ -163,7 +175,7 @@ class RegistrationForm extends Component {
         this.props.getVenuesTypeAction();
         this.props.getRegistrationMethod();
         this.props.getRegFormAdvSettings();
-		this.props.inviteTypeAction();							  
+        this.props.inviteTypeAction();
     }
 
 
@@ -500,7 +512,11 @@ class RegistrationForm extends Component {
                 <div className="row">
                     <div className="col-sm">
 
-                        <InputWithHead heading={AppConstants.registrationOpen} />
+                        <InputWithHead
+                            heading={AppConstants.registrationOpen}
+                            conceptulHelp
+                            conceptulHelpMsg={AppConstants.regFormOpenMsg}
+                            marginTop={5} />
                         <Form.Item >
                             {getFieldDecorator('registrationOpenDate',
                                 { rules: [{ required: true, message: ValidationConstants.registrationOpenDateIsRequired }] })(
@@ -521,7 +537,11 @@ class RegistrationForm extends Component {
                         </Form.Item>
                     </div>
                     <div className="col-sm">
-                        <InputWithHead heading={AppConstants.registration_close} />
+                        <InputWithHead
+                            heading={AppConstants.registration_close}
+                            conceptulHelp
+                            conceptulHelpMsg={AppConstants.regFormCloseMsg}
+                            marginTop={5} />
                         <Form.Item >
                             {getFieldDecorator('registrationCloseDate',
                                 { rules: [{ required: true, message: ValidationConstants.registrationCloseDateIsRequired }] })(
@@ -588,13 +608,21 @@ class RegistrationForm extends Component {
                             </div>
                         ))
                 }
-                <Checkbox
-                    className="single-checkbox pt-2"
-                    checked={defaultChecked.trainingVisible}
-                    onChange={(e) => this.updateTraining(e.target.checked, "trainingVisible")}
-                >
-                    {AppConstants.training}
-                </Checkbox>
+                <div className='row ml-1' style={{ display: 'flex', alignItems: 'center' }}>
+                    <Checkbox
+                        className="single-checkbox pt-2"
+                        checked={defaultChecked.trainingVisible}
+                        onChange={(e) => this.updateTraining(e.target.checked, "trainingVisible")}
+                    >
+                        {AppConstants.training}
+                    </Checkbox>
+                    <div style={{ marginTop: 15, marginLeft: -8 }}>
+                        <CustomTooltip background='#ff8237'>
+                            <span>{AppConstants.regFormTraningMsg}</span>
+                        </CustomTooltip>
+                    </div>
+
+                </div>
                 {defaultChecked.trainingVisible && (
                     <div className="comp-open-reg-check-inpt-view">
                         <div className="fluid-width" style={{ marginTop: 15 }}>
@@ -659,7 +687,11 @@ class RegistrationForm extends Component {
                     </div>
                 )
                 }
-                <InputWithHead heading={AppConstants.specialNote} />
+                <InputWithHead
+                    heading={AppConstants.specialNote}
+                    conceptulHelp
+                    conceptulHelpMsg={AppConstants.regFormSpecialNoteMsg}
+                    marginTop={5} />
 
                 < TextArea
                     placeholder={AppConstants.addShortNotes_registering}
@@ -669,39 +701,43 @@ class RegistrationForm extends Component {
                     value={formDataValue ? formDataValue.specialNote : null}
                 />
 
-                <InputWithHead heading={AppConstants.photos}/>
-                {((formDataValue.organisationPhotos == null ||  formDataValue.organisationPhotos.length == 0) && 
-                  (getOrganisationData().orgLogoUrl == null)) ? <span>{AppConstants.noPhotosAvailable}</span> :
-                <div className="org-photos">
-                    {
-                        getOrganisationData().orgLogoUrl == null ? null :
-                        <div>
-                            <div>
-                                <img src={getOrganisationData().orgLogoUrl} alt=""height= {125} width={125}
-                                    style={{ borderRadius:0, marginLeft: 0 }} name={'image'}
-                                        onError={ev => {ev.target.src = AppImages.circleImage;}}
-                                />
-                            </div>
-                            <div className="photo-type">{AppConstants.logo}</div>
-                        </div>
-                    }
-                    {((formDataValue.organisationPhotos) || [] )
-                    .map((ph, phIndex) => (
-                        <div key={ph.organisationPhotoId}>
-                            <div>
-                                <img src={ph.photoUrl} alt=""height= {125} width={125}
-                                    style={{ borderRadius:0, marginLeft: 0 }} name={'image'}
-                                        onError={ev => {ev.target.src = AppImages.circleImage;}}
-                                />
-                            </div>
-                            <div className="photo-type">{ph.photoType}</div>
-                        </div>
-                    ))}
-                    {/* {(formDataValue.organisationPhotos == null || 
+                <InputWithHead
+                    heading={AppConstants.photos}
+                    conceptulHelp
+                    conceptulHelpMsg={AppConstants.regFormPhotoMsg}
+                    marginTop={5} />
+                {((formDataValue.organisationPhotos == null || formDataValue.organisationPhotos.length == 0) &&
+                    (getOrganisationData().orgLogoUrl == null)) ? <span>{AppConstants.noPhotosAvailable}</span> :
+                    <div className="org-photos">
+                        {
+                            getOrganisationData().orgLogoUrl == null ? null :
+                                <div>
+                                    <div>
+                                        <img src={getOrganisationData().orgLogoUrl} alt="" height={125} width={125}
+                                            style={{ borderRadius: 0, marginLeft: 0 }} name={'image'}
+                                            onError={ev => { ev.target.src = AppImages.circleImage; }}
+                                        />
+                                    </div>
+                                    <div className="photo-type">{AppConstants.logo}</div>
+                                </div>
+                        }
+                        {((formDataValue.organisationPhotos) || [])
+                            .map((ph, phIndex) => (
+                                <div key={ph.organisationPhotoId}>
+                                    <div>
+                                        <img src={ph.photoUrl} alt="" height={125} width={125}
+                                            style={{ borderRadius: 0, marginLeft: 0 }} name={'image'}
+                                            onError={ev => { ev.target.src = AppImages.circleImage; }}
+                                        />
+                                    </div>
+                                    <div className="photo-type">{ph.photoType}</div>
+                                </div>
+                            ))}
+                        {/* {(formDataValue.organisationPhotos == null || 
                         formDataValue.organisationPhotos == undefined || 
                         formDataValue.organisationPhotos.length == 0) ? 
                             <span>{AppConstants.noPhotosAvailable}</span> : null} */}
-                </div> 
+                    </div>
                 }
             </div >
         );
@@ -727,13 +763,21 @@ class RegistrationForm extends Component {
         let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
         return (
             <div className="fees-view">
-                <Checkbox
-                    className="single-checkbox mt-0"
-                    checked={defaultChecked.replyContactVisible}
-                    onChange={e => this.checkReplyTocontact(e.target.checked, "replyContactVisible")}
-                >
-                    {AppConstants.replyToContactDetails}
-                </Checkbox>
+                <div className='row ml-1' style={{ display: 'flex', alignItems: 'center' }}>
+                    <Checkbox
+                        className="single-checkbox mt-0"
+                        checked={defaultChecked.replyContactVisible}
+                        onChange={e => this.checkReplyTocontact(e.target.checked, "replyContactVisible")}
+                    >
+                        {AppConstants.replyToContactDetails}
+                    </Checkbox>
+                    <div style={{ marginTop: -2, marginLeft: -8 }}>
+                        <CustomTooltip background='#ff8237'>
+                            <span>{AppConstants.replyContactDetailMsg}</span>
+                        </CustomTooltip>
+                    </div>
+
+                </div>
                 {defaultChecked.replyContactVisible === true && (
                     <div className="comp-open-reg-check-inpt-view">
                         <div className="fluid-width" style={{ marginTop: 15 }}>
@@ -876,7 +920,14 @@ class RegistrationForm extends Component {
         let isPublished = this.state.isPublished
         return (
             <div className="discount-view pt-5">
-                <span className="form-heading">{AppConstants.how_users_Register}</span>
+                <div className='row ml-1'>
+                    <span className="form-heading">{AppConstants.how_users_Register}</span>
+                    <div style={{ marginTop: 5, marginLeft: -2 }}>
+                        <CustomTooltip background='#ff8237'>
+                            <span>{AppConstants.howUserRegisterMsg}</span>
+                        </CustomTooltip>
+                    </div>
+                </div>
                 <div className="checkbox-row-wise">
                     {registrationMethod.length > 0 && registrationMethod.map((item, index) => (
                         <Checkbox
@@ -1008,7 +1059,15 @@ class RegistrationForm extends Component {
 
         return (
             <div className="discount-view pt-5">
-                <span className="form-heading">{AppConstants.additionalQuestions}</span>
+                <div className='row ml-1'>
+                    <span className="form-heading">{AppConstants.additionalQuestions}</span>
+                    <div style={{ marginTop: 5, marginLeft: -2 }}>
+                        <CustomTooltip background='#ff8237'>
+                            <span>{AppConstants.additionQuesMsg}</span>
+                        </CustomTooltip>
+                    </div>
+                </div>
+
                 <div className="inside-container-view">
                     <span className="setting-heading">{AppConstants.demographicQuestions}</span>
                     <Tree
@@ -1186,37 +1245,37 @@ class RegistrationForm extends Component {
             </div>
         );
     };
-   // Send invite to
-    sendInviteToView = () =>{
-        console.log("commonReducerState"+JSON.stringify(this.props.registrationState.registrationFormData[0].inviteTypeRefId));
+    // Send invite to
+    sendInviteToView = () => {
+        console.log("commonReducerState" + JSON.stringify(this.props.registrationState.registrationFormData[0].inviteTypeRefId));
         const registrationFormData = this.props.registrationState.registrationFormData[0]
-        let {inviteTypeData} = this.props.commonReducerState;
+        let { inviteTypeData } = this.props.commonReducerState;
         let isPublished = this.state.isPublished;
-        return(
+        return (
             <div className="discount-view pt-5">
                 <span className="form-heading">{AppConstants.sendInvitesTo}</span>
-                <InputWithHead heading={AppConstants.inviteType} />               
-                <Radio.Group className="reg-competition-radio"   disabled={isPublished} onChange={(e)=>(this.props.updateRegistrationForm(e.target.value,"inviteTypeRefId"))} value={registrationFormData.inviteTypeRefId}>
-                    {(inviteTypeData || []).map((fix) => (   
+                <InputWithHead heading={AppConstants.inviteType} />
+                <Radio.Group className="reg-competition-radio" disabled={isPublished} onChange={(e) => (this.props.updateRegistrationForm(e.target.value, "inviteTypeRefId"))} value={registrationFormData.inviteTypeRefId}>
+                    {(inviteTypeData || []).map((fix) => (
                         <Radio key={fix.id} value={fix.id}>{fix.description}</Radio>
                     ))}
-                </Radio.Group>                 
-                <InputWithHead heading={AppConstants.gender} />                
-                <Radio.Group className="reg-competition-radio"  disabled={isPublished}  value={registrationFormData.genderRefId}  
-                        onChange={(e)=>(this.props.updateRegistrationForm(e.target.value,"genderRefId"))}>                               
-                    <Radio value={2}>{AppConstants.male}</Radio>
-                    <Radio value={1}> {AppConstants.female}</Radio> 
-                    <Radio value={3}>{AppConstants.both}</Radio>                          
                 </Radio.Group>
-                <Radio.Group className="mt-5 reg-competition-radio"  disabled={isPublished} 
-                        value={registrationFormData.dobPreferenceRefId}  onChange={(e)=>(this.props.updateRegistrationForm(e.target.value,"dobPreferenceRefId"))}>                               
-                    <Radio className="dob-pref-radio-inner-heading" style={{marginBottom: 10}} value={1}>{AppConstants.NoDobPreference}</Radio>  
-                    <Radio className="dob-pref-radio-inner-heading" value={2}>{AppConstants.DobPreference}</Radio>                     
-                </Radio.Group>  
-                {(registrationFormData.dobPreferenceRefId == 2)?
-                    <div>                              
-                        <div style={{display:"flex",marginLeft:23}}>
-                            <span className="applicable-to-datepicker-col">{AppConstants.DobMoreThan}</span>               
+                <InputWithHead heading={AppConstants.gender} />
+                <Radio.Group className="reg-competition-radio" disabled={isPublished} value={registrationFormData.genderRefId}
+                    onChange={(e) => (this.props.updateRegistrationForm(e.target.value, "genderRefId"))}>
+                    <Radio value={2}>{AppConstants.male}</Radio>
+                    <Radio value={1}> {AppConstants.female}</Radio>
+                    <Radio value={3}>{AppConstants.both}</Radio>
+                </Radio.Group>
+                <Radio.Group className="mt-5 reg-competition-radio" disabled={isPublished}
+                    value={registrationFormData.dobPreferenceRefId} onChange={(e) => (this.props.updateRegistrationForm(e.target.value, "dobPreferenceRefId"))}>
+                    <Radio className="dob-pref-radio-inner-heading" style={{ marginBottom: 10 }} value={1}>{AppConstants.NoDobPreference}</Radio>
+                    <Radio className="dob-pref-radio-inner-heading" value={2}>{AppConstants.DobPreference}</Radio>
+                </Radio.Group>
+                {(registrationFormData.dobPreferenceRefId == 2) ?
+                    <div>
+                        <div style={{ display: "flex", marginLeft: 23 }}>
+                            <span className="applicable-to-datepicker-col">{AppConstants.DobMoreThan}</span>
                             <div className="dob-pref-date-picker">
                                 <DatePicker
                                     size="large"
@@ -1227,17 +1286,17 @@ class RegistrationForm extends Component {
                                     format={"DD-MM-YYYY"}
                                     showTime={false}
                                     disabled={isPublished}
-                                    disabledDate={(registrationFormData.dobPreferenceLessThan==null)?false:d => !d || d.isAfter(registrationFormData.dobPreferenceLessThan)}
-                                    value={(registrationFormData.dobPreferenceMoreThan == null || registrationFormData.dobPreferenceMoreThan == "")?"":moment(registrationFormData.dobPreferenceMoreThan, "YYYY-MM-DD")}                                   
+                                    disabledDate={(registrationFormData.dobPreferenceLessThan == null) ? false : d => !d || d.isAfter(registrationFormData.dobPreferenceLessThan)}
+                                    value={(registrationFormData.dobPreferenceMoreThan == null || registrationFormData.dobPreferenceMoreThan == "") ? "" : moment(registrationFormData.dobPreferenceMoreThan, "YYYY-MM-DD")}
                                 />
                             </div>
                         </div>
-                        <div style={{display:"flex",marginLeft:23}}>
-                            <span className="applicable-to-datepicker-col">{AppConstants.DobLessThan}</span>               
-                            <div className="dob-pref-date-picker" style={{marginLeft:9}}>
+                        <div style={{ display: "flex", marginLeft: 23 }}>
+                            <span className="applicable-to-datepicker-col">{AppConstants.DobLessThan}</span>
+                            <div className="dob-pref-date-picker" style={{ marginLeft: 9 }}>
                                 <DatePicker
                                     size="large"
-                                    style={{ width: "100%" }}                                      
+                                    style={{ width: "100%" }}
                                     placeholder={"Select Date"}
                                     onChange={(e) => this.dateChange(e, "dobPreferenceLessThan")}
                                     name={"dobPreferenceLessThan"}
@@ -1245,18 +1304,18 @@ class RegistrationForm extends Component {
                                     format={"DD-MM-YYYY"}
                                     disabled={isPublished}
                                     showTime={false}
-                                    disabledDate={(registrationFormData.dobPreferenceMoreThan==null)?false:d => !d || d.isSameOrBefore(registrationFormData.dobPreferenceMoreThan)}
+                                    disabledDate={(registrationFormData.dobPreferenceMoreThan == null) ? false : d => !d || d.isSameOrBefore(registrationFormData.dobPreferenceMoreThan)}
                                     // || d.isSameOrBefore(dateOpen)                                      
                                     //  value={closeDate ? moment(closeDate, "YYYY-MM-DD") : ""}
-                                    value={(registrationFormData.dobPreferenceLessThan==null||registrationFormData.dobPreferenceLessThan=="")?"":moment(registrationFormData.dobPreferenceLessThan, "YYYY-MM-DD")}
+                                    value={(registrationFormData.dobPreferenceLessThan == null || registrationFormData.dobPreferenceLessThan == "") ? "" : moment(registrationFormData.dobPreferenceLessThan, "YYYY-MM-DD")}
                                 />
                             </div>
-                        </div>                     
-                    </div>  
-                :null} 
+                        </div>
+                    </div>
+                    : null}
             </div>
         )
-    }	 
+    }
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
@@ -1323,7 +1382,7 @@ class RegistrationForm extends Component {
     userRegisrationLinkView = () => {
         let formDataValue = this.props.registrationState.registrationFormData !== 0 ?
             this.props.registrationState.registrationFormData[0] : [];
-             let statusRefId = formDataValue.statusRefId
+        let statusRefId = formDataValue.statusRefId
         return (
             <div>
                 {statusRefId == 2 ?
@@ -1380,7 +1439,7 @@ class RegistrationForm extends Component {
                                 getFieldDecorator
                             )}</div>
                             <div className="formView">{this.advancedSettingView()}</div>
-							 <div className="formView">{this.sendInviteToView()}</div>													 
+                            <div className="formView">{this.sendInviteToView()}</div>
                             <div className="formView">
                                 {this.disclaimerView(
                                     getFieldDecorator
@@ -1415,7 +1474,7 @@ function mapDispatchToProps(dispatch) {
             updateDisclamerText,
             isCheckedVisible,
             isReplyCheckVisible,
-			inviteTypeAction			
+            inviteTypeAction
         },
         dispatch
     );
@@ -1424,7 +1483,7 @@ function mapStatetoProps(state) {
     return {
         appState: state.AppState,
         registrationState: state.RegistrationState,
-        commonReducerState: state.CommonReducerState													
+        commonReducerState: state.CommonReducerState
     };
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(RegistrationForm));

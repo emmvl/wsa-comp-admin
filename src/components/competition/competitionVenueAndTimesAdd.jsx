@@ -10,7 +10,7 @@ import {
     TimePicker,
     message,
     Form,
-    
+
 } from "antd";
 import "./competition.css";
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -105,7 +105,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                     filterIcon: () => {
                         return (
 
-                            <Tooltip placement="bottom"  background='#ff8237'>
+                            <Tooltip placement="bottom" background='#ff8237'>
                                 <span>{AppConstants.LatitudeMsg}</span>
                             </Tooltip>
 

@@ -24,7 +24,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { isArrayNotEmpty } from '../../util/helpers'
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
-
+import { exportFilesAction } from "../../store/actions/appAction"
 const { Content } = Layout;
 const { SubMenu } = Menu;
 function tableSort(a, b, key) {
@@ -126,12 +126,14 @@ class LiveScoreCoaches extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchText: ""
+      searchText: "",
+      competitionId:null
     };
   }
 
   componentDidMount() {
     const { id } = JSON.parse(getLiveScoreCompetiton())
+    this.setState({competitionId:id})
     this.props.liveScoreCoachListAction(17, 1, id, this.state.searchText)
 
     if (id !== null) {
@@ -218,7 +220,7 @@ class LiveScoreCoaches extends Component {
                     justifyContent: "flex-end"
                   }}
                 >
-                  <Button className="primary-add-comp-form" type="primary">
+                  <Button onClick={()=>this.onExport()} className="primary-add-comp-form" type="primary">
 
                     <div className="row">
                       <div className="col-sm">
@@ -245,8 +247,7 @@ class LiveScoreCoaches extends Component {
                   }}
                 >
                     <NavLink to="/liveScoreCoachImport">
-                  <Button className="primary-add-comp-form" type="primary">
-
+                    <Button  className="primary-add-comp-form" type="primary">
                     <div className="row">
                       <div className="col-sm">
                         <img
@@ -281,13 +282,20 @@ class LiveScoreCoaches extends Component {
     )
   }
 
+   // on Export
+   onExport(){
+
+    // let url = AppConstants.managerExport + this.state.competitionId
+
+    let url = AppConstants.coachExport + this.state.competitionId
+    this.props.exportFilesAction(url)
+}
+
   // on change search text
   onChangeSearchText = (e) => {
     const { id } = JSON.parse(getLiveScoreCompetiton())
     this.setState({ searchText: e.target.value })
     if (e.target.value == null || e.target.value == "") {
-      // this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, e.target.value)
-
       this.props.liveScoreCoachListAction(17, 1, id, e.target.value)
     }
   }
@@ -297,7 +305,6 @@ class LiveScoreCoaches extends Component {
     var code = e.keyCode || e.which;
     const { id } = JSON.parse(getLiveScoreCompetiton())
     if (code === 13) { //13 is the enter keycode
-      // this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, this.state.searchText)
       this.props.liveScoreCoachListAction(17, 1, id, e.target.value)
     }
   }
@@ -338,7 +345,9 @@ class LiveScoreCoaches extends Component {
 function mapDispatchtoprops(dispatch) {
   return bindActionCreators({
     liveScoreCoachListAction,
-    getliveScoreTeams
+    getliveScoreTeams,
+    exportFilesAction
+    
   }, dispatch)
 }
 

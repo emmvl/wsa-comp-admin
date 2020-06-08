@@ -31,7 +31,9 @@ const initialState = {
     invitedTo: [],
     invitedOrganisation: [],
     associationLeague: [],
-    clubSchool: []
+    clubSchool: [],
+    affiliateNonSelected: null,
+    anyOrgNonSelected: null
 }
 export default function liveScoreSettingsViewReducer(state = initialState, { type, payload, }) {
 
@@ -118,20 +120,23 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 state[keys] = Data
             } else if (keys == 'recordUmpire') {
                 state.recordUmpire = Data
-            } else if (keys == 'affiliateSelected' || keys == 'anyOrgSelected' || keys == 'otherSelected' || keys == 'nonSelected') {
+            } else if (keys == 'affiliateSelected' || keys == 'anyOrgSelected' || keys == 'otherSelected' || keys == 'affiliateNonSelected' || keys == 'anyOrgNonSelected') {
                 state.invitedOrganisation = []
                 state.associationLeague = []
                 state.clubSchool = []
-                console.log(Data, 'affiliateSelected')
 
                 if (keys == 'affiliateSelected') {
                     state.affiliateSelected = Data
                     state.otherSelected = null
+                    state.affiliateNonSelected = null
+                    // state.anyOrgNonSelected = null
                     state.invitedTo.splice(0, 1, Data)
                 }
                 if (keys == 'anyOrgSelected') {
                     state.anyOrgSelected = Data
                     state.otherSelected = null
+                    // state.affiliateNonSelected = null
+                    state.anyOrgNonSelected = null
                     state.invitedTo.splice(1, 1, Data)
                 }
 
@@ -139,11 +144,28 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     state.otherSelected = Data
                     state.affiliateSelected = null
                     state.anyOrgSelected = null
+                    state.affiliateNonSelected = null
+                    state.anyOrgNonSelected = null
                     state.invitedTo = []
                     state.invitedTo.push(Data)
                 }
-                if (keys == 'nonSelected') {
-                    state.nonSelected = Data ? null : Data
+                if (keys == 'affiliateNonSelected') {
+                    state.invitedTo = []
+                    state.affiliateSelected = []
+                    // state.anyOrgSelected = []
+                    state.otherSelected = null
+                    state.affiliateNonSelected = Data
+                    // state.anyOrgNonSelected = null
+                    console.log(state.invitedTo, 'state.invitedTo')
+                }
+                if (keys == 'anyOrgNonSelected') {
+                    state.invitedTo = []
+                    // state.affiliateSelected = []
+                    state.anyOrgSelected = []
+                    state.otherSelected = null
+                    // state.affiliateNonSelected = null
+                    state.anyOrgNonSelected = Data
+
                 }
 
             } else if (keys == 'associationAffilite' || keys == 'clubAffilite') {

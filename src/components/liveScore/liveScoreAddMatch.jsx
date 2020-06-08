@@ -42,6 +42,8 @@ import { getliveScoreScorerList } from '../../store/actions/LiveScoreAction/live
 import { isArrayNotEmpty, captializedString } from '../../util/helpers';
 import { getLiveScoreDivisionList } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction'
 import Tooltip from 'react-png-tooltip'
+import { ladderSettingGetMatchResultAction } from '../../store/actions/LiveScoreAction/liveScoreLadderSettingAction'
+import { message } from "antd";
 
 const { Footer, Content, Header } = Layout;
 const { Option } = Select;
@@ -60,7 +62,9 @@ class LiveScoreAddMatch extends Component {
             createMatch: false,
             key: props.location.state ? props.location.state.key ? props.location.state.key : null : null,
             roundLoad: false,
-            selectedDivision: null
+            selectedDivision: null,
+            forfeitVisible: false,
+            abandonVisible: false
         }
         this.props.clearMatchAction()
     }
@@ -80,6 +84,8 @@ class LiveScoreAddMatch extends Component {
         }
         if (this.state.isEdit == true) {
             this.props.liveScoreAddEditMatchAction(this.state.matchId)
+            this.props.ladderSettingGetMatchResultAction()
+            this.props.liveScoreUpdateMatchAction('', "clearData")
         } else {
 
         }
@@ -193,6 +199,194 @@ class LiveScoreAddMatch extends Component {
                             onChange={(e) => this.setState({ createRound: e.target.value })} />
                     )}
                 </Form.Item>
+            </Modal>
+        )
+    }
+
+    onModalCancel() {
+        this.setState({ forfeitVisible: false, abandonVisible: false })
+        this.props.liveScoreUpdateMatchAction('', "clearData")
+    }
+
+    forefeitedTeamResult = () => {
+
+        let { addEditMatch, matchData, start_date, start_time, matchResult, forfietedTeam } = this.props.liveScoreMatchState
+
+        console.log(matchResult, 'matchResult')
+        let date = new Date()
+        let endMatchDate = moment(date).format("YYYY-MMM-DD")
+        let endMatchTime = moment(date).format("HH:mm")
+        let endMatchDateTime = moment(endMatchDate + " " + endMatchTime);
+        let formatEndMatchDate = new Date(endMatchDateTime).toISOString()
+        let matchStatus = 'ENDED'
+
+        let match_date_ = moment(start_date, "DD-MM-YYYY")
+        let startDate = moment(match_date_).format("YYYY-MMM-DD")
+        let start = moment(start_time).format("HH:mm")
+
+
+        let datetimeA = moment(startDate + " " + start);
+        let formated__Date = new Date(datetimeA).toISOString()
+
+        matchData.startTime = formated__Date
+
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+
+
+        if (forfietedTeam) {
+            if (forfietedTeam == 'team1') {
+                this.setState({ forfeitVisible: false })
+                let team1resultId = matchResult[3].id
+                let team2resultId = matchResult[4].id
+                this.props.liveScoreCreateMatchAction(matchData, id, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate)
+
+            } else if (forfietedTeam == 'team2') {
+                this.setState({ forfeitVisible: false })
+                let team1resultId = matchResult[3].id
+                let team2resultId = matchResult[4].id
+                this.props.liveScoreCreateMatchAction(matchData, id, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate)
+
+            } else if (forfietedTeam == 'Both') {
+                this.setState({ forfeitVisible: false })
+                let team1resultId = matchResult[5].id
+                let team2resultId = matchResult[5].id
+                this.props.liveScoreCreateMatchAction(matchData, id, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate)
+
+            }
+
+        } else {
+            message.config({
+                duration: 1.5,
+                maxCount: 1,
+            });
+            message.error(ValidationConstants.pleaseSelectTeam)
+        }
+
+    }
+
+    ////modal view
+    forfietModalView(getFieldDecorator) {
+        let { addEditMatch, forfietedTeam } = this.props.liveScoreMatchState
+        console.log(this.props.liveScoreMatchState, 'this.props.liveScoreMatchState~~~~')
+
+
+        return (
+            <Modal
+                visible={this.state.forfeitVisible}
+                onOk={() => this.forefeitedTeamResult()}
+                // onCancel={() => this.setState({ forfeitVisible: false })}
+                onCancel={() => this.onModalCancel()}
+                // onChange={(createRound) => this.props.liveScoreUpdateMatchAction(createRound, "")}
+                okButtonProps={{ style: { backgroundColor: '#ff8237', borderColor: '#ff8237' } }}
+                okText={'Save'}
+                centered={true}
+            >
+                <div className="col-sm" >
+                    <InputWithHead required={"required-field"} heading={AppConstants.whichTeamForfieted} />
+
+                    <Select
+                        showSearch
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        onChange={(value) => this.props.liveScoreUpdateMatchAction(value, "forfietedTeam")}
+                        value={forfietedTeam ? forfietedTeam : undefined}
+                        placeholder={'Select Team'}
+                        optionFilterProp="children"
+                    >
+                        <Option key={'team1'} value={'team1'} > {addEditMatch.team1.name}</Option>
+                        <Option key={'team2'} value={'team2'} > {addEditMatch.team2.name}</Option>
+                        <Option key={'BOTH'} value={'BOTH'} > {'Both'}</Option>
+                    </Select>
+
+
+                </div>
+            </Modal>
+
+
+        )
+    }
+
+    abandonReasonResult = () => {
+
+        let { addEditMatch, matchData, start_date, start_time, matchResult, abandoneReason } = this.props.liveScoreMatchState
+
+        console.log(matchResult, 'matchResult')
+        let date = new Date()
+        let endMatchDate = moment(date).format("YYYY-MMM-DD")
+        let endMatchTime = moment(date).format("HH:mm")
+        let endMatchDateTime = moment(endMatchDate + " " + endMatchTime);
+        let formatEndMatchDate = new Date(endMatchDateTime).toISOString()
+        let matchStatus = 'ENDED'
+
+        let match_date_ = moment(start_date, "DD-MM-YYYY")
+        let startDate = moment(match_date_).format("YYYY-MMM-DD")
+        let start = moment(start_time).format("HH:mm")
+
+
+        let datetimeA = moment(startDate + " " + start);
+        let formated__Date = new Date(datetimeA).toISOString()
+
+        matchData.startTime = formated__Date
+
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+
+
+        if (abandoneReason) {
+            if (abandoneReason == 'Incomplete') {
+                this.setState({ abandonVisible: false })
+                let team1resultId = matchResult[7].id
+                let team2resultId = matchResult[7].id
+                this.props.liveScoreCreateMatchAction(matchData, id, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate)
+
+            } else if (abandoneReason == 'notPlayed') {
+                this.setState({ abandonVisible: false })
+                let team1resultId = matchResult[8].id
+                let team2resultId = matchResult[8].id
+                this.props.liveScoreCreateMatchAction(matchData, id, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate)
+
+            }
+
+        } else {
+            message.config({
+                duration: 1.5,
+                maxCount: 1,
+            });
+            message.error(ValidationConstants.selectAbandonMatchReason)
+        }
+
+    }
+
+    abandonMatchView() {
+        let { addEditMatch, abandoneReason } = this.props.liveScoreMatchState
+        console.log(this.props.liveScoreMatchState, 'this.props.liveScoreMatchState~~~~')
+
+
+        return (
+            <Modal
+                visible={this.state.abandonVisible}
+                onOk={() => this.abandonReasonResult()}
+                // onCancel={() => this.setState({ abandonVisible: false })}
+                onCancel={() => this.onModalCancel()}
+                // onChange={(createRound) => this.props.liveScoreUpdateMatchAction(createRound, "")}
+                okButtonProps={{ style: { backgroundColor: '#ff8237', borderColor: '#ff8237' } }}
+                okText={'Save'}
+                centered={true}
+            >
+                <div className="col-sm" >
+                    <InputWithHead required={"required-field"} heading={AppConstants.matchAbandoned} />
+
+                    <Select
+                        showSearch
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        onChange={(value) => this.props.liveScoreUpdateMatchAction(value, "abandoneReason")}
+                        value={abandoneReason ? abandoneReason : undefined}
+                        placeholder={'Select Reason'}
+                        optionFilterProp="children"
+                    >
+                        <Option key={'Incomplete'} value={'Incomplete'} > {'Incomplete'}</Option>
+                        <Option key={'notPlayed'} value={'notPlayed'} > {'Not Played'}</Option>
+                    </Select>
+
+                </div>
             </Modal>
         )
     }
@@ -667,9 +861,75 @@ class LiveScoreAddMatch extends Component {
                             />
                         </div>
                     </div>
+
+
                 }
+
+                {
+                    this.state.isEdit == true && <div className="row" >
+                        <div className="col-sm-6" >
+                            <InputWithHead heading={AppConstants.resultStatus} />
+                            <Select
+                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                onChange={(value) => this.props.liveScoreUpdateMatchAction(value, "resultStatus")}
+                                placeholder={'Select Result Status'}
+                                value={addEditMatch.resultStatus ? addEditMatch.resultStatus : undefined}
+                            >
+                                <Option key={'UNCONFIRMED'} value={'UNCONFIRMED'}>{'Unconfirmed'}</Option>
+                                <Option key={'DISPUTE'} value={'DISPUTE'}>{'Dispute'}</Option>
+                                <Option key={'FINAL'} value={'FINAL'}>{'Final'}</Option>
+                            </Select>
+                        </div>
+                    </div>
+
+
+                }
+
             </div >
         )
+    }
+
+    endMatchResult() {
+
+        let { addEditMatch, matchData, start_date, start_time, matchResult } = this.props.liveScoreMatchState
+
+
+        let date = new Date()
+        let endMatchDate = moment(date).format("YYYY-MMM-DD")
+        let endMatchTime = moment(date).format("HH:mm")
+        let endMatchDateTime = moment(endMatchDate + " " + endMatchTime);
+        let formatEndMatchDate = new Date(endMatchDateTime).toISOString()
+        let matchStatus = 'ENDED'
+
+        let match_date_ = moment(start_date, "DD-MM-YYYY")
+        let startDate = moment(match_date_).format("YYYY-MMM-DD")
+        let start = moment(start_time).format("HH:mm")
+
+
+        let datetimeA = moment(startDate + " " + start);
+        let formated__Date = new Date(datetimeA).toISOString()
+
+        matchData.startTime = formated__Date
+
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+
+        if (addEditMatch.team1ResultId > addEditMatch.team2ResultId) {
+            let team1resultId = matchResult[0].id
+            let team2resultId = matchResult[1].id
+            this.props.liveScoreCreateMatchAction(matchData, id, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate)
+
+        } else if (addEditMatch.team1ResultId < addEditMatch.team2ResultId) {
+            let team1resultId = matchResult[1].id
+            let team2resultId = matchResult[0].id
+            this.props.liveScoreCreateMatchAction(matchData, id, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate)
+
+        } else if (addEditMatch.team1ResultId == addEditMatch.team2ResultId) {
+            let team1resultId = matchResult[2].id
+            let team2resultId = matchResult[2].id
+            this.props.liveScoreCreateMatchAction(matchData, id, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate)
+
+        }
+
     }
 
     ////create match post method
@@ -691,7 +951,7 @@ class LiveScoreAddMatch extends Component {
                 matchData.startTime = formated__Date
 
                 const { id } = JSON.parse(getLiveScoreCompetiton())
-                this.props.liveScoreCreateMatchAction(matchData, id, this.state.key)
+                this.props.liveScoreCreateMatchAction(matchData, id, this.state.key, this.state.isEdit)
             }
         });
     }
@@ -745,9 +1005,9 @@ class LiveScoreAddMatch extends Component {
                             <div className="col-sm">
                                 <div className="reg-add-save-button">
                                     <Button onClick={() => history.push(this.state.key == 'dashboard' ? 'liveScoreDashboard' : '/liveScoreMatches')} type="cancel-button">{AppConstants.cancel}</Button>
-                                    {this.state.isEdit == true && <Button className="ml-3" type="cancel-button">{AppConstants.forfiet}</Button>}
-                                    {this.state.isEdit == true && <Button className="ml-3" type="cancel-button">{AppConstants.abandon}</Button>}
-                                    {this.state.isEdit == true && <Button className="ml-3" type="cancel-button">{AppConstants.endMatch}</Button>}
+                                    {this.state.isEdit == true && <Button onClick={() => this.setState({ forfeitVisible: true })} className="ml-3" type="cancel-button">{AppConstants.forfiet}</Button>}
+                                    {this.state.isEdit == true && <Button onClick={() => this.setState({ abandonVisible: true })} className="ml-3" type="cancel-button">{AppConstants.abandon}</Button>}
+                                    {this.state.isEdit == true && <Button onClick={() => this.endMatchResult()} className="ml-3" type="cancel-button">{AppConstants.endMatch}</Button>}
                                 </div>
                             </div>
                             <div className="col-sm">
@@ -784,6 +1044,8 @@ class LiveScoreAddMatch extends Component {
                             <div className="formView">
                                 {this.contentView(getFieldDecorator)}
                                 {this.ModalView(getFieldDecorator)}
+                                {this.forfietModalView(getFieldDecorator)}
+                                {this.abandonMatchView()}
                             </div>
                         </Content>
                         <Footer>
@@ -814,6 +1076,7 @@ function mapDispatchToProps(dispatch) {
         liveScoreRoundListAction,
         liveScoreClubListAction,
         searchFilterAction,
+        ladderSettingGetMatchResultAction
 
     }, dispatch)
 }

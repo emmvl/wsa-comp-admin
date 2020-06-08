@@ -152,7 +152,9 @@ const ValidationConstants = {
     searchCoach: "Please search coach.",
     charityDescriptionIsRequired: "Charity description is required.",
     pleaseAddDivisionForMembershipProduct: "Please add division for membershipProduct.",
-    pleaseEnterChildDiscountPercentage:"Please enter child discount."
+    pleaseEnterChildDiscountPercentage: "Please enter child discount.",
+    pleaseSelectTeam: 'Please Select Team.',
+    selectAbandonMatchReason: 'Please Select Reason.'
 };
 
 export default ValidationConstants;

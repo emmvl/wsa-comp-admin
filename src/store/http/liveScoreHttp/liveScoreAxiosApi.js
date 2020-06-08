@@ -188,8 +188,9 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, token)
     },
 
-    liveScoreCreateMatch(data, competitionId) {
+    liveScoreCreateMatch(data, competitionId, key, isEdit, team1resultId, team2resultId, matchStatus, endTime) {
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        console.log(isEdit, 'matchKey')
 
         let body = {
             "id": data.id ? data.id : 0,
@@ -207,6 +208,11 @@ let LiveScoreAxiosApi = {
             "breakDuration": (data.type == 'TWO_HALVES' || data.type == 'SINGLE') ? data.mainBreakDuration : data.qtrBreak,
             "team1Score": data.team1Score,
             "team2Score": data.team2Score,
+            "resultStatus": isEdit && data.resultStatus,
+            "team1resultId": isEdit && team1resultId,
+            "team2resultId": isEdit && team2resultId,
+            "matchStatus": isEdit && matchStatus,
+            "endTime": isEdit && endTime,
             // "breakDuration": data.breakDuration
         }
 

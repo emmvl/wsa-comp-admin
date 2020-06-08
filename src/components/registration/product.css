@@ -703,6 +703,11 @@ align-items: flex-end;
   padding-left: 35px;
 }
 
+.contextualHelp-RowDirection{
+  display: flex;
+  flex-direction: row;
+}
+
 @media (max-width: 767px) {
   .invoiceImage{
     display: flex;

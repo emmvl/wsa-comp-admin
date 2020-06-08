@@ -1011,6 +1011,7 @@ const AppConstants = {
   turnOff_30Second: '30 second warning',
   payouts: 'Payouts',
 
+  coachExport: `https://users-api-dev.worldsportaction.com/users/byRole/export?roleId=17&entityTypeId=1&entityId=`,
   managerExport: `https://users-api-dev.worldsportaction.com/users/byRole/export?roleId=3&entityTypeId=1&entityId=`,
   scorerExport: `http://127.0.0.1:5002/roster/exportScorer?competitionId=`,
   teamExport: `http://127.0.0.1:5002/teams/export?competitionId=`,
@@ -1191,6 +1192,46 @@ const AppConstants = {
   replyContactDetailMsg:
     'Let Users know who to contact if they have any questions. You can choose to list their Name, Role, Email and or Phone number.',
   howUserRegisterMsg: 'Define how Users can Register for your Competition.',
+  additionQuesMsg: 'Click on the Questions you would like to ask Users who are Registering to your Competition.',
+  allDivisionsMsg: 'All Divisions are changed the same Fees.',
+  perDivisionMsg: 'Each Dvision can be charged a different Fee. ',
+  paymentSeasonalFeeMsg: 'Choose the payment options you would like to offer users to pay their Registration Fees with.You can choose multiple.',
+  paymentCausalFeeMsg: 'Choose the payment options you would like to offer users to pay their Registration Fees with.You can choose multiple.',
+  charityRoundUpMsg: 'Add the ability for users Registering to round up their registration to the nearest $1, $5 or $10 to support the pre-defined charity.',
+  discountMsg: 'Choose the discount you would like to apply to your Compettion Fee. Please note, this discount only applies to your orgaisations Competition Fee. You can choose which membership Product and Type this fee is applied to.',
+  discountTypeMsg: 'Currently the only choices are -  Discount Code or Family. You can offer both discounts for the one competitiion but Family will be applied first. ',
+
+  ////Registration Memership Fee 
+
+  membershipProductNameMsg: 'Add a name that your affiliated organisations can resonate with e.g. Annual Membership Fee',
+  validityMsg: `Add how long you want the membership product to be available:\n\n
+  * Calendar Year - 1st Jan to 31st Dec in that year\n\n
+  * 12 months from date of Registration`,
+
+  membershipCasualFeeMsg: 'Fee charged to participate in a single game.',
+  membershipSeasonalFeeMsg: 'Fee charged to join a Netball competition.',
+  firstComRegOnlyMsg: 'Fee charged to the User for the first competition they join in the defined period (whether it be calendar year or 12 months from date of registration). It will not be charged if they join another competition in that defined period.',
+  allCompRegMsg: 'Fee charged to the User every time they join a competition in the defined period (whether it be calendar year or 12 months from date of registration).',
+  membershipDiscountMsg: 'Discounts applied here apply to Player Membership Fees only.',
+
+  ////For Users Module
+  orgTypeMsg: 'Detail the type of organisation being added. State Organisations can add Associations/ Leagues and Clubs/ Schools, Associations can only add Clubs/ Schools.',
+  addAfiliatePermisionLevelMsg: `Choose the permission level for each contact.\n\n
+  Admin - can access all areas in the platform.\n\n
+  Communications Admin - can access the advertising platform and the Home Screen for News and Notifications.\n\n
+  Umpires Admin - can access the Umpires platform.\n\n
+  Results Admin - can access the Live Scores Platform to upload match results and player information.\n\n
+  Finance Admin - can access Payments and the Registration platform.`,
+
+  ourOrgPermissionLevelMsg: `Choose the permission level for each contact.\n\n
+  Admin - can access all areas in the platform.\n\n
+  Communications Admin - can access the advertising platform and the Home Screen for News and Notifications.\n\n
+  Umpires Admin - can access the Umpires platform.\n\n
+  Results Admin - can access the Live Scores Platform to upload match results and player information.\n\n
+  Finance Admin - can access Payments and the Registration platform.`,
+
+
+
   additionQuesMsg:
     'Click on the Questions you would like to ask Users who are Registering to your Competition.',
 
@@ -1206,6 +1247,11 @@ const AppConstants = {
   DobPreference: 'DOB Preference',
   both: 'Both',
   sendInvitesTo: 'Send invites to',
+
+  resultStatus: 'Result Status',
+
+  whichTeamForfieted: 'Which team forfeited?',
+  matchAbandoned: "Match Abandoned?"
 };
 
 export default AppConstants;

@@ -37,6 +37,7 @@ class LiveScoreAddEditCoach extends Component {
             loader: false,
             tableRecord: this.props.location.state ? this.props.location.state.tableRecord : null,
             isEdit: this.props.location.state ? this.props.location.state.isEdit : null,
+            teamLoad:false
         }
 
     }
@@ -65,12 +66,23 @@ class LiveScoreAddEditCoach extends Component {
             this.setInitalFiledValue()
             this.setState({loader : false})
         }
+       
+
+        if(this.props.liveScoreCoachState !== nextProps.liveScoreCoachState){
+           
+            if(this.state.teamLoad == true){
+                console.log(this.props.liveScoreCoachState.teamId ,"Colleddd")
+                const {teamId} = this.props.liveScoreCoachState
+                this.setSelectedTeamValue(teamId)
+
+                this.setState({teamLoad:false})
+            }
+        }
     }
 
     setInitalFiledValue() {
         const { coachdata, teamId } = this.props.liveScoreCoachState
         let data = this.state.tableRecord
-        console.log(teamId)
         this.props.form.setFieldsValue({
             'First Name': coachdata.firstName,
             'Last Name': coachdata.lastName,
@@ -80,6 +92,12 @@ class LiveScoreAddEditCoach extends Component {
         })
     }
 
+    setSelectedTeamValue(teamId){
+        console.log(teamId , "qqq")
+        this.props.form.setFieldsValue({
+            'coachTeamName': teamId
+        })
+    }
 
 
 
@@ -288,8 +306,9 @@ class LiveScoreAddEditCoach extends Component {
                                     placeholder="Select User"
                                     onSelect={(item, option) => {
                                         const ManagerId = JSON.parse(option.key)
-                                        this.props.liveScoreClear()
+                                        // this.props.liveScoreClear()
                                         this.props.liveScoreUpdateCoach(ManagerId, 'coachSearch')
+                                        this.setState({ teamLoad:true })
 
                                     }}
                                     notFoundContent={onLoadSearch == true ? <Spin size="small" /> : null}
@@ -324,7 +343,7 @@ class LiveScoreAddEditCoach extends Component {
                             <InputWithHead
                                 required={"required-field pb-1"}
                                 heading={AppConstants.team} />
-                            {getFieldDecorator("managerTeamName", {
+                            {getFieldDecorator("coachTeamName", {
                                 rules: [{ required: true, message: ValidationConstants.teamName }],
                             })(
 

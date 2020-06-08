@@ -42,7 +42,10 @@ const initialState = {
   demographicSetting: [],
   netballQuestionsSetting: [],
   otherQuestionsSetting: [],
-  helpMessage: [AppConstants.knockOutMsg, AppConstants.roundRobinMsg, AppConstants.doubleRoundRobinMsg, AppConstants.enhancedRoundRobinMsg]
+  helpMessage: [AppConstants.knockOutMsg, AppConstants.roundRobinMsg, AppConstants.doubleRoundRobinMsg, AppConstants.enhancedRoundRobinMsg],
+  regInviteesMsg: [AppConstants.regInviteesAffiliatesMsg, AppConstants.regInviteesAnyOrgMsg, AppConstants.regInviteesDirectMsg],
+  membershipProductFeeMsg: [AppConstants.firstComRegOnlyMsg, AppConstants.allCompRegMsg],
+
 };
 function arraymove(arr, fromIndex, toIndex) {
   var element = arr[fromIndex];
@@ -104,6 +107,26 @@ function getCompetitionFormatTypeWithHelpMsg(data, helpMsg) {
   }
   return data;
 }
+
+function getRegInviteesWithHelpMsg(data, helpMsg) {
+  console.log(data, 'getCompetitionFormatTypeWithHelpMsg', helpMsg)
+
+  for (let i in data) {
+    data[i]['helpMsg'] = helpMsg[i]
+  }
+  return data;
+}
+
+function getMembershipProductFeesTypesWithHelpMsg(data, helpMsg) {
+  console.log(data, 'getCompetitionFormatTypeWithHelpMsg', helpMsg)
+
+  for (let i in data) {
+    data[i]['helpMsg'] = helpMsg[i]
+  }
+  return data;
+}
+
+
 
 function appState(state = initialState, action) {
   switch (action.type) {
@@ -182,10 +205,12 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_COMMON_MEMBERSHIP_PRODUCT_FEES_TYPE_SUCCESS:
+      const membershipProductFeesTypesWithHelpMsg = getMembershipProductFeesTypesWithHelpMsg(action.result, state.membershipProductFeeMsg)
       return {
         ...state,
         onLoad: false,
-        membershipProductFeesTypes: action.result,
+        // membershipProductFeesTypes: action.result,
+        membershipProductFeesTypes: membershipProductFeesTypesWithHelpMsg,
         status: action.status
       };
 
@@ -278,6 +303,8 @@ function appState(state = initialState, action) {
 
     case ApiConstants.API_REG_COMPETITION_FEE_INIT_SUCCESS:
       const invitees = getRegistrationSetting(action.inviteesResult)
+      const regInviteesWithHelpMsg = getRegInviteesWithHelpMsg(invitees, state.regInviteesMsg)
+      console.log(invitees, 'invitees~~~~')
       let notApplicableIndex = invitees.findIndex(
         x =>
           x.name ==
@@ -294,7 +321,8 @@ function appState(state = initialState, action) {
         // competitionFormatTypes: action.competitionFormat,
         competitionFormatTypes: competitionFormatTypeWithHelpMsg,
         typesOfCompetition: action.compeitionTypeResult,
-        registrationInvitees: invitees,
+        // registrationInvitees: invitees,
+        registrationInvitees: regInviteesWithHelpMsg,
         casualPaymentOption: casualPayment,
         seasonalPaymentOption: casualPayment,
         // charityRoundUp: action.charityResult,

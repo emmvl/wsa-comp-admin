@@ -53,8 +53,10 @@ class LiveScoreSettingsView extends Component {
             reportSelection: 'Period',
             recordSelection: 'Own',
             competitionFormat: null,
-            timeOut: null
+            timeOut: null,
+            isEdit: props.location ? props.location.state ? props.location.state : null : null
         };
+        console.log(this.state.isEdit, 'isEdit')
     }
     componentDidMount() {
         let comp_id = getLiveScoreCompetiton()
@@ -172,7 +174,7 @@ class LiveScoreSettingsView extends Component {
                     invitedOrganisation
                 } = this.props.liveScoreSetting
 
-                console.log(invitedOrganisation, 'invitedOrganisation')
+                console.log(invitedTo, 'invitedOrganisation', invitedOrganisation)
 
                 const umpire = record1.includes("recordUmpire")
                 const umpirenum = umpire ? 1 : 0
@@ -209,8 +211,11 @@ class LiveScoreSettingsView extends Component {
                 formData.append('organisationId', orgId ? orgId : this.props.liveScoreSetting.data.organisationId)
                 formData.append('buzzerEnabled', buzzerEnabled)
                 formData.append('warningBuzzerEnabled', warningBuzzerEnabled)
-                formData.append('invitedTo', JSON.stringify(invitedTo))
-                formData.append('invitedOrganisation', JSON.stringify(invitedOrganisation))
+
+                if (this.state.isEdit == 'add') {
+                    formData.append('invitedTo', JSON.stringify(invitedTo))
+                    formData.append('invitedOrganisation', JSON.stringify(invitedOrganisation))
+                }
 
                 // if (buzzerEnabled) {
                 //     formData.append('buzzerEnabled', buzzerEnabled)
@@ -511,7 +516,7 @@ class LiveScoreSettingsView extends Component {
 
                 {/* radion button view */}
                 <span className="applicable-to-heading">{AppConstants.scoring}</span>
-                <div className="row" >
+                <div className='contextualHelp-RowDirection' >
 
                     <Radio.Group
                         className="reg-competition-radio"
@@ -613,7 +618,7 @@ class LiveScoreSettingsView extends Component {
                     </Checkbox>
                 </div>
 
-                {this.regInviteesView()}
+                {this.state.isEdit == 'add' && this.regInviteesView()}
             </div>
         )
     };
@@ -712,7 +717,7 @@ class LiveScoreSettingsView extends Component {
 
     regInviteesView = () => {
         let invitees = this.props.appState.registrationInvitees.length > 0 ? this.props.appState.registrationInvitees : [];
-        const { affiliateSelected, anyOrgSelected, otherSelected, nonSelected } = this.props.liveScoreSetting
+        const { affiliateSelected, anyOrgSelected, otherSelected, nonSelected, affiliateNonSelected, anyOrgNonSelected } = this.props.liveScoreSetting
         console.log(this.props.appState.registrationInvitees, 'invitees')
         return (
             <div >
@@ -758,7 +763,7 @@ class LiveScoreSettingsView extends Component {
                                                             <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
                                                         </div>
 
-                                                        {
+                                                        {/* {
                                                             affiliateSelected == 3
                                                             &&
                                                             <div style={{ marginLeft: '20px' }}>
@@ -772,8 +777,20 @@ class LiveScoreSettingsView extends Component {
                                                                 </Radio.Group>
 
                                                             </div>
-                                                        }
+                                                        } */}
+
+                                                        <div style={{ marginLeft: 20 }}>
+                                                            <Radio.Group
+                                                                onChange={(e) => this.props.onChangeSettingForm({ key: "affiliateNonSelected", data: e.target.value })}
+                                                                value={affiliateNonSelected}
+                                                            >
+                                                                <Radio
+
+                                                                    key={'none1'} value={'none1'}>{'None'}</Radio>
+                                                            </Radio.Group>
+                                                        </div>
                                                     </>
+
                                             ))}
                                         </div>
                                     }
@@ -803,6 +820,16 @@ class LiveScoreSettingsView extends Component {
                                                     {this.affiliatesSearchInvitee(subItem, anyOrgSelected)}
                                                 </div>
                                             ))}
+                                            <div style={{ marginLeft: 20 }}>
+                                                <Radio.Group
+                                                    onChange={(e) => this.props.onChangeSettingForm({ key: "anyOrgNonSelected", data: e.target.value })}
+                                                    value={anyOrgNonSelected}
+                                                >
+                                                    <Radio
+
+                                                        key={'none2'} value={'none2'}>{'None'}</Radio>
+                                                </Radio.Group>
+                                            </div>
                                         </div>
                                     }
                                 </div>
@@ -826,7 +853,9 @@ class LiveScoreSettingsView extends Component {
                                             <div class="applicable-to-heading invitees-main">{item.description}</div>
                                             {(item.subReferences).map((subItem, subIndex) => (
                                                 <div style={{ marginLeft: '20px' }}>
-                                                    <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
+                                                    <Radio
+                                                        onChange={(e) => this.props.onChangeSettingForm({ key: "none", data: e.target.value })}
+                                                        key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
                                                 </div>
                                             ))}
                                         </div>

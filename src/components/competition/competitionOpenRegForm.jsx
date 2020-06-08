@@ -1471,7 +1471,7 @@ class CompetitionOpenRegForm extends Component {
                         >
                             {appState.competitionFormatTypes.length > 0 && appState.competitionFormatTypes.map(item => {
                                 return (
-                                    <div className='row'>
+                                    <div className='contextualHelp-RowDirection' >
                                         <Radio key={item.id} value={item.id}> {item.description}</Radio>
 
                                         <div style={{ marginLeft: -20, marginTop: -5 }}>
@@ -1756,7 +1756,7 @@ class CompetitionOpenRegForm extends Component {
         let divisionsDisable = this.state.permissionState.divisionsDisable
         return (
             <div className="fees-view pt-5">
-                <div className='row'>
+                <div className='contextualHelp-RowDirection' >
                     <span className="form-heading required-field" >{AppConstants.divisions}</span>
                     <CustumToolTip placement="top" background='#ff8237'>
                         <span>{AppConstants.compDivisionMsg}</span>
@@ -1773,7 +1773,7 @@ class CompetitionOpenRegForm extends Component {
                             <span className="form-heading pt-2 pl-2">
                                 {item.membershipProductName}
                             </span>
-                          
+
                             <div className="contextual-table-responsive">
                                 <Table
                                     className="fees-table overflow-auto"
@@ -1785,7 +1785,7 @@ class CompetitionOpenRegForm extends Component {
 
                                 />
                             </div>
-                            
+
                             <a>
                                 <span className="input-heading-add-another" onClick={() => !divisionsDisable ? this.addRemoveDivision(index, item, "add") : null}>+ {AppConstants.addDivision}</span>
                             </a>

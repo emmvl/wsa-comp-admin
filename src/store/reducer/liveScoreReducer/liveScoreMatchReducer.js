@@ -38,6 +38,9 @@ var object = {
     centrePassWonBy: '',
     umpire1: '',
     umpire2: '',
+    resultStatus: '',
+    forfietedTeam: null,
+    abandoneReason: null,
     team1: {
         id: '',
         name: '',
@@ -138,7 +141,10 @@ var matchObj = {
     "team1Score": 0,
     "team2Score": 0,
     umpire1: '',
-    umpire2: ''
+    umpire2: '',
+    "resultStatus": '',
+    "forfietedTeam": null,
+    "abandoneReason": null
 }
 
 const initialState = {
@@ -166,7 +172,10 @@ const initialState = {
     roundList: [],
     clubListData: [],
     courList: [],
-    rounLoad: false
+    rounLoad: false,
+    matchResult: [],
+    forfietedTeam: undefined,
+    abandoneReason: undefined
 };
 
 function setMatchData(data) {
@@ -254,6 +263,8 @@ function liveScoreMatchReducer(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_ADD_EDIT_MATCH_SUCCESS:
 
             let data = action.result
+            console.log(action, 'API_LIVE_SCORE_ADD_EDIT_MATCH_SUCCESS')
+
             state.addEditMatch = action.result;
             state.start_date = moment(action.result.startTime).format("DD-MM-YYYY")
             state.start_post_date = moment(action.result.startTime, "YYYY-MM-DD")
@@ -311,6 +322,17 @@ function liveScoreMatchReducer(state = initialState, action) {
                 state.start_time = action.data
                 state.displayTime = action.data
 
+
+            } else if (action.key == 'forfietedTeam') {
+                state.forfietedTeam = action.data
+
+            } else if (action.key == 'abandoneReason') {
+                console.log(action, 'API_LIVE_SCORE_UPDATE_MATCH')
+                state.abandoneReason = action.data
+
+            } else if (action.key == 'clearData') {
+                state.forfietedTeam = null
+                state.abandoneReason = null
 
             } else {
 
@@ -531,6 +553,16 @@ function liveScoreMatchReducer(state = initialState, action) {
             else {
                 state.roundList = []
             }
+
+        //// Match Result Api
+
+        case ApiConstants.API_LADDER_SETTING_MATCH_RESULT_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                matchResult: action.result,
+            };
+
 
             return {
                 ...state,

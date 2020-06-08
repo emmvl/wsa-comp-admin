@@ -65,6 +65,7 @@ import { NavLink } from "react-router-dom";
 import Loader from '../../customComponents/loader';
 import { getUserId, getOrganisationData } from "../../util/sessionStorage"
 import { getAffiliateToOrganisationAction } from "../../store/actions/userAction/userAction";
+import CustumToolTip from 'react-png-tooltip'
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -701,6 +702,17 @@ class RegistrationCompetitionFee extends Component {
                     title: "Gender Restriction",
                     dataIndex: "genderRestriction",
                     key: "genderRestriction",
+                    filterDropdown: true,
+                    filterIcon: () => {
+                        return (
+
+                            <CustumToolTip placement="bottom" background='#ff8237'>
+                                <span>{AppConstants.genderRestrictionMsg}</span>
+                            </CustumToolTip>
+
+
+                        );
+                    },
                     render: (genderRestriction, record, index) => (
                         <Checkbox
                             className="single-checkbox mt-1"
@@ -747,7 +759,17 @@ class RegistrationCompetitionFee extends Component {
                     title: "Age Restriction",
                     dataIndex: "ageRestriction",
                     key: "ageRestriction",
+                    filterDropdown: true,
+                    filterIcon: () => {
+                        return (
 
+                            <CustumToolTip placement="bottom" background='#ff8237'>
+                                <span>{AppConstants.ageRestrictionMsg}</span>
+                            </CustumToolTip>
+
+
+                        );
+                    },
                     render: (ageRestriction, record, index) => (
                         <Checkbox
                             className="single-checkbox mt-1"
@@ -861,9 +883,14 @@ class RegistrationCompetitionFee extends Component {
         }
         if (nextProps.competitionFeesState !== competitionFeesState) {
             if (competitionFeesState.getCompAllDataOnLoad === false && this.state.getDataLoading == true) {
-                let registrationInviteesRefId = isArrayNotEmpty(competitionFeesState.competitionDetailData.invitees) ?
-                    competitionFeesState.competitionDetailData.invitees[0].registrationInviteesRefId : null
-                console.log("registrationInviteesRefId", registrationInviteesRefId)
+                let registrationInviteesRefId = 7
+                let inviteeArray = competitionFeesState.competitionDetailData.invitees
+                if (isArrayNotEmpty(inviteeArray)) {
+                    let index = inviteeArray.findIndex(x => x.registrationInviteesRefId == 7 || x.registrationInviteesRefId == 8)
+                    if (index > -1) {
+                        registrationInviteesRefId = inviteeArray[index].registrationInviteesRefId
+                    }
+                }
                 this.callAnyorgSearchApi(registrationInviteesRefId)
                 let isPublished = competitionFeesState.competitionDetailData.statusRefId == 2 ? true : false
 
@@ -1260,7 +1287,9 @@ class RegistrationCompetitionFee extends Component {
             if (!err) {
                 let nonPlayingDate = JSON.stringify(postData.nonPlayingDates)
                 let venue = JSON.stringify(compFeesState.postVenues)
-                let invitees = compFeesState.postInvitees
+                // let invitees = compFeesState.postInvitees
+                let invitees = compFeesState.affiliateArray.concat(compFeesState.anyOrgAffiliateArr)
+                console.log(invitees, "compFeesState")
                 if (tabKey == "1") {
                     if (compFeesState.competitionDetailData.competitionLogoUrl !== null && invitees.length > 0) {
                         let formData = new FormData();
@@ -1896,7 +1925,15 @@ class RegistrationCompetitionFee extends Component {
                         >
                             {appState.competitionFormatTypes.length > 0 && appState.competitionFormatTypes.map(item => {
                                 return (
-                                    <Radio key={item.id} value={item.id}> {item.description}</Radio>
+                                    <div className='contextualHelp-RowDirection' >
+                                        <Radio key={item.id} value={item.id}> {item.description}</Radio>
+
+                                        <div style={{ marginLeft: -20, marginTop: -5 }}>
+                                            <CustumToolTip background='#ff8237'>
+                                                <span>{item.helpMsg}</span>
+                                            </CustumToolTip>
+                                        </div>
+                                    </div>
                                 );
                             })}
                         </Radio.Group>
@@ -2281,13 +2318,27 @@ class RegistrationCompetitionFee extends Component {
                                 <div className="fluid-width">
                                     <div className="row">
                                         <div className="col-sm-2">
-                                            <Radio value={"allDivisions"}>{AppConstants.allDivisions}</Radio>
+                                            <div className='contextualHelp-RowDirection' >
+                                                <Radio value={"allDivisions"}>{AppConstants.allDivisions}</Radio>
+                                                <div style={{ marginLeft: -20 }}>
+                                                    <CustumToolTip background='#ff8237'>
+                                                        <span>{AppConstants.allDivisionsMsg}</span>
+                                                    </CustumToolTip>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div
                                             className="col-sm-2"
                                             style={{ display: "flex", alignItems: "center" }}
                                         >
-                                            <Radio value={"perDivision"}>{AppConstants.perDivision}</Radio>
+                                            <div className='contextualHelp-RowDirection' >
+                                                <Radio value={"perDivision"}>{AppConstants.perDivision}</Radio>
+                                                <div style={{ marginLeft: -20 }}>
+                                                    <CustumToolTip background='#ff8237'>
+                                                        <span>{AppConstants.perDivisionMsg}</span>
+                                                    </CustumToolTip>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -2396,12 +2447,131 @@ class RegistrationCompetitionFee extends Component {
     }
 
 
+    // ////////reg invitees search view for any organisation
+    // affiliatesSearchInvitee = (subItem) => {
+    //     let detailsData = this.props.competitionFeesState
+    //     let seletedInvitee = detailsData.selectedInvitees.find(x => x);
+    //     let associationAffilites = detailsData.associationAffilites
+    //     let clubAffilites = detailsData.clubAffilites
+    //     let regInviteesDisable = this.state.permissionState.regInviteesDisable
+    //     if (subItem.id == 7 && seletedInvitee == 7) {
+    //         return (
+    //             < div >
+    //                 <Select
+    //                     mode="multiple"
+    //                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+    //                     onChange={associationAffilite => {
+    //                         this.affiliateSearchOnchange(associationAffilite)
+    //                     }}
+    //                     value={detailsData.affiliateOrgSelected}
+    //                     placeholder={AppConstants.selectOrganisation}
+    //                     filterOption={false}
+    //                     onSearch={(value) => { this.onInviteeSearch(value, 3) }}
+    //                     disabled={regInviteesDisable}
+    //                     showSearch={true}
+    //                     onBlur={() => this.onInviteeSearch("", 3)}
+    //                 // loading={detailsData.searchLoad}
+    //                 >
+    //                     {associationAffilites.map((item) => {
+    //                         return (
+    //                             <Option
+    //                                 key={item.organisationId}
+    //                                 value={item.organisationId}>
+    //                                 {item.name}</Option>
+    //                         )
+    //                     })}
+    //                 </Select>
+    //             </div>
+    //         )
+    //     }
+    //     else if (subItem.id == 8 && seletedInvitee == 8) {
+
+    //         return (
+
+    //             < div >
+    //                 <Select
+    //                     mode="multiple"
+    //                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+    //                     onChange={clubAffilite => {
+    //                         // this.onSelectValues(venueSelection, detailsData)
+    //                         this.affiliateSearchOnchange(clubAffilite)
+    //                     }}
+
+    //                     value={detailsData.affiliateOrgSelected}
+    //                     placeholder={AppConstants.selectOrganisation}
+    //                     filterOption={false}
+    //                     // onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
+    //                     onSearch={(value) => { this.onInviteeSearch(value, 4) }}
+    //                     disabled={regInviteesDisable}
+    //                     onBlur={() => this.onInviteeSearch("", 4)}
+    //                 // loading={detailsData.searchLoad}
+    //                 >
+    //                     {clubAffilites.map((item) => {
+    //                         return (
+    //                             <Option
+    //                                 key={item.organisationId}
+    //                                 value={item.organisationId}>
+    //                                 {item.name}</Option>
+    //                         )
+    //                     })}
+    //                 </Select>
+    //             </div>
+    //         )
+    //     }
+
+    // }
+
+
+
+    // regInviteesView = () => {
+    //     let invitees = this.props.appState.registrationInvitees.length > 0 ? this.props.appState.registrationInvitees : [];
+    //     let detailsData = this.props.competitionFeesState
+    //     let seletedInvitee = detailsData.selectedInvitees.find(x => x);
+    //     let orgLevelId = JSON.stringify(this.state.organisationTypeRefId)
+    //     let regInviteesDisable = this.state.permissionState.regInviteesDisable
+    //     console.log(this.props.competitionFeesState.postInvitees)
+    //     return (
+    //         <div className="fees-view pt-5">
+    //             <span className="form-heading required-field">{AppConstants.registrationInvitees}</span>
+    //             <div>
+    //                 <Radio.Group
+    //                     className="reg-competition-radio"
+    //                     disabled={regInviteesDisable}
+    //                     onChange={(e) => this.onInviteesChange(e.target.value)}
+    //                     value={seletedInvitee}>
+    //                     {(invitees || []).map((item, index) =>
+    //                         (
+    //                             <div>
+    //                                 {item.subReferences.length == 0 ?
+    //                                     <Radio value={item.id}>{item.description}</Radio>
+    //                                     : <div>
+    //                                         <div class="applicable-to-heading invitees-main">{orgLevelId == "4" && item.id == 1 ? "" : item.description}</div>
+    //                                         {(item.subReferences).map((subItem, subIndex) => (
+    //                                             <div style={{ marginLeft: '20px' }}>
+    //                                                 {this.disableInvitee(subItem) &&
+    //                                                     <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
+    //                                                 }
+    //                                                 {this.affiliatesSearchInvitee(subItem)}
+    //                                             </div>
+    //                                         ))}
+    //                                     </div>
+    //                                 }
+    //                             </div>
+    //                         ))
+    //                     }
+    //                 </Radio.Group>
+    //             </div>
+    //         </div >
+    //     );
+    // };
+
+
     ////////reg invitees search view for any organisation
-    affiliatesSearchInvitee = (subItem) => {
+    affiliatesSearchInvitee = (subItem, seletedInvitee) => {
         let detailsData = this.props.competitionFeesState
-        let seletedInvitee = detailsData.selectedInvitees.find(x => x);
         let associationAffilites = detailsData.associationAffilites
         let clubAffilites = detailsData.clubAffilites
+        const { associationLeague, clubSchool } = this.props.competitionFeesState
         let regInviteesDisable = this.state.permissionState.regInviteesDisable
         if (subItem.id == 7 && seletedInvitee == 7) {
             return (
@@ -2410,18 +2580,20 @@ class RegistrationCompetitionFee extends Component {
                         mode="multiple"
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         onChange={associationAffilite => {
-                            this.affiliateSearchOnchange(associationAffilite)
+                            this.props.add_editcompetitionFeeDeatils(associationAffilite, "associationAffilite")
                         }}
-                        value={detailsData.affiliateOrgSelected}
+                        value={associationLeague}
                         placeholder={AppConstants.selectOrganisation}
                         filterOption={false}
                         onSearch={(value) => { this.onInviteeSearch(value, 3) }}
                         disabled={regInviteesDisable}
                         showSearch={true}
-                        onBlur={() => this.onInviteeSearch("", 3)}
-                    // loading={detailsData.searchLoad}
+                        onBlur={() => isArrayNotEmpty(associationAffilites) == false ? this.onInviteeSearch("", 3) : null}
+                        onFocus={() => isArrayNotEmpty(associationAffilites) == false ? this.onInviteeSearch("", 3) : null}
+                        loading={detailsData.searchLoad}
                     >
                         {associationAffilites.map((item) => {
+                            console.log(item, 'associationAffilites')
                             return (
                                 <Option
                                     key={item.organisationId}
@@ -2443,17 +2615,18 @@ class RegistrationCompetitionFee extends Component {
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         onChange={clubAffilite => {
                             // this.onSelectValues(venueSelection, detailsData)
-                            this.affiliateSearchOnchange(clubAffilite)
+                            this.props.add_editcompetitionFeeDeatils(clubAffilite, "clubAffilite")
                         }}
 
-                        value={detailsData.affiliateOrgSelected}
+                        value={clubSchool}
                         placeholder={AppConstants.selectOrganisation}
                         filterOption={false}
-                        // onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
                         onSearch={(value) => { this.onInviteeSearch(value, 4) }}
                         disabled={regInviteesDisable}
                         onBlur={() => this.onInviteeSearch("", 4)}
-                    // loading={detailsData.searchLoad}
+                        onBlur={() => isArrayNotEmpty(clubAffilites) == false ? this.onInviteeSearch("", 4) : null}
+                        onFocus={() => isArrayNotEmpty(clubAffilites) == false ? this.onInviteeSearch("", 4) : null}
+                        loading={detailsData.searchLoad}
                     >
                         {clubAffilites.map((item) => {
                             return (
@@ -2474,33 +2647,155 @@ class RegistrationCompetitionFee extends Component {
 
     regInviteesView = () => {
         let invitees = this.props.appState.registrationInvitees.length > 0 ? this.props.appState.registrationInvitees : [];
-        let detailsData = this.props.competitionFeesState
-        let seletedInvitee = detailsData.selectedInvitees.find(x => x);
+        const { affiliateSelected, anyOrgSelected, otherSelected, nonSelected, affiliateNonSelected, anyOrgNonSelected } = this.props.competitionFeesState
+        console.log(this.props.appState.registrationInvitees, 'invitees')
         let orgLevelId = JSON.stringify(this.state.organisationTypeRefId)
         let regInviteesDisable = this.state.permissionState.regInviteesDisable
-        console.log(this.props.competitionFeesState.postInvitees)
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading required-field">{AppConstants.registrationInvitees}</span>
                 <div>
                     <Radio.Group
                         className="reg-competition-radio"
+                        onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "affiliateSelected")}
                         disabled={regInviteesDisable}
-                        onChange={(e) => this.onInviteesChange(e.target.value)}
-                        value={seletedInvitee}>
+                        value={affiliateSelected}
+                    >
                         {(invitees || []).map((item, index) =>
                             (
+                                index == 0
+                                &&
                                 <div>
                                     {item.subReferences.length == 0 ?
                                         <Radio value={item.id}>{item.description}</Radio>
                                         : <div>
-                                            <div class="applicable-to-heading invitees-main">{orgLevelId == "4" && item.id == 1 ? "" : item.description}</div>
+                                            {(orgLevelId == "4" && item.id == 1) == false ?
+
+                                                <div className='contextualHelp-RowDirection' >
+                                                    <div class="applicable-to-heading invitees-main">{item.description}</div>
+                                                    <div style={{ marginTop: 2 }}>
+                                                        <CustumToolTip background='#ff8237'>
+                                                            <span>{item.helpMsg}</span>
+                                                        </CustumToolTip>
+                                                    </div>
+                                                </div>
+                                                : null}
+                                            {(item.subReferences).map((subItem, subIndex) => (
+                                                subItem.id == 2
+                                                    ?
+                                                    <>
+                                                        <div style={{ marginLeft: '20px' }}>
+                                                            {this.disableInvitee(subItem) &&
+                                                                <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
+                                                            }
+                                                        </div>
+                                                    </>
+                                                    :
+                                                    <>
+                                                        <div style={{ marginLeft: '20px' }}>
+                                                            {this.disableInvitee(subItem) &&
+                                                                <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
+                                                            }
+                                                        </div>
+                                                        <div style={{ marginLeft: 20 }}>
+                                                            {this.disableInvitee(subItem) &&
+                                                                <Radio.Group
+                                                                    onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "affiliateNonSelected")}
+                                                                    disabled={regInviteesDisable}
+                                                                    value={affiliateNonSelected}
+                                                                >
+                                                                    <Radio
+
+                                                                        key={'none1'} value={'none1'}>{'None'}</Radio>
+                                                                </Radio.Group>
+                                                            }
+                                                        </div>
+                                                    </>
+
+                                            ))}
+                                        </div>
+                                    }
+                                </div>
+                            ))
+                        }
+                    </Radio.Group>
+
+
+                    <Radio.Group
+                        className="reg-competition-radio mt-0"
+                        // onChange={(e) => this.onInviteesChange(e.target.value)}
+                        onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "anyOrgSelected")}
+                        value={anyOrgSelected}
+                        disabled={regInviteesDisable}
+                    >
+                        {(invitees || []).map((item, index) =>
+                            (
+                                index == 1
+                                &&
+                                <div>
+                                    {item.subReferences.length == 0 ?
+                                        <Radio value={item.id}>{item.description}</Radio>
+                                        : <div>
+                                            <div className='contextualHelp-RowDirection' >
+                                                <div class="applicable-to-heading invitees-main">{item.description}</div>
+                                                <div style={{ marginTop: 2 }}>
+                                                    <CustumToolTip background='#ff8237'>
+                                                        <span>{item.helpMsg}</span>
+                                                    </CustumToolTip>
+                                                </div>
+                                            </div>
                                             {(item.subReferences).map((subItem, subIndex) => (
                                                 <div style={{ marginLeft: '20px' }}>
-                                                    {this.disableInvitee(subItem) &&
-                                                        <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
-                                                    }
-                                                    {this.affiliatesSearchInvitee(subItem)}
+                                                    <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
+                                                    {this.affiliatesSearchInvitee(subItem, anyOrgSelected)}
+                                                </div>
+                                            ))}
+                                            <div style={{ marginLeft: 20 }}>
+                                                <Radio.Group
+                                                    onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "anyOrgNonSelected")}
+                                                    value={anyOrgNonSelected}
+                                                    disabled={regInviteesDisable}
+                                                >
+                                                    <Radio
+
+                                                        key={'none2'} value={'none2'}>{'None'}</Radio>
+                                                </Radio.Group>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            ))
+                        }
+                    </Radio.Group>
+
+                    <Radio.Group
+                        className="reg-competition-radio mt-0"
+                        onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "otherSelected")}
+                        disabled={regInviteesDisable}
+                        value={otherSelected}
+                    >
+                        {(invitees || []).map((item, index) =>
+                            (
+                                index > 1
+                                &&
+                                <div>
+                                    {item.subReferences.length == 0 ?
+                                        <div className='contextualHelp-RowDirection' >
+                                            <Radio value={item.id}>{item.description}</Radio>
+                                            <div style={{ marginLeft: -20, marginTop: 2 }}>
+                                                <CustumToolTip background='#ff8237'>
+                                                    <span>{item.helpMsg}</span>
+                                                </CustumToolTip>
+                                            </div>
+                                        </div>
+                                        : <div>
+                                            <div class="applicable-to-heading invitees-main">{item.description}</div>
+                                            {(item.subReferences).map((subItem, subIndex) => (
+                                                <div style={{ marginLeft: '20px' }}>
+                                                    <Radio
+                                                        disabled={regInviteesDisable}
+                                                        onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "none")}
+                                                        key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
                                                 </div>
                                             ))}
                                         </div>
@@ -2509,6 +2804,8 @@ class RegistrationCompetitionFee extends Component {
                             ))
                         }
                     </Radio.Group>
+
+
                 </div>
             </div >
         );
@@ -2575,7 +2872,14 @@ class RegistrationCompetitionFee extends Component {
                 }
                 {isSeasonal == true &&
                     <div className="inside-container-view">
-                        <span className="form-heading">{AppConstants.seasonalFee}</span>
+                        <div className='contextualHelp-RowDirection' >
+                            <span className="form-heading">{AppConstants.seasonalFee}</span>
+                            <div style={{ marginTop: 4 }}>
+                                <CustumToolTip placement="top" background='#ff8237'>
+                                    <span>{AppConstants.paymentSeasonalFeeMsg}</span>
+                                </CustumToolTip>
+                            </div>
+                        </div>
                         <Tree
                             style={{ flexDirection: 'column' }}
                             className="tree-government-rebate tree-selection-icon"
@@ -2591,7 +2895,14 @@ class RegistrationCompetitionFee extends Component {
                     </div>
                 }
                 {isCasual == true && <div className="inside-container-view">
-                    <span className="form-heading">{AppConstants.casualFee}</span>
+                    <div className='contextualHelp-RowDirection' >
+                        <span className="form-heading">{AppConstants.casualFee}</span>
+                        <div style={{ marginTop: 4 }}>
+                            <CustumToolTip placement="top" background='#ff8237'>
+                                <span>{AppConstants.paymentCausalFeeMsg}</span>
+                            </CustumToolTip>
+                        </div>
+                    </div>
                     <Tree
                         style={{ flexDirection: 'column' }}
                         className="tree-government-rebate tree-selection-icon"
@@ -2622,7 +2933,14 @@ class RegistrationCompetitionFee extends Component {
         let checkCharityArray = this.props.competitionFeesState.competitionPaymentsData.charityRoundUp
         return (
             <div className="advanced-setting-view pt-5">
-                <span className="form-heading">{AppConstants.charityRoundUp}</span>
+                <div className='contextualHelp-RowDirection' >
+                    <span className="form-heading">{AppConstants.charityRoundUp}</span>
+                    <div style={{ marginTop: 4 }}>
+                        <CustumToolTip placement="top" background='#ff8237'>
+                            <span>{AppConstants.charityRoundUpMsg}</span>
+                        </CustumToolTip>
+                    </div>
+                </div>
                 <div className="inside-container-view">
                     {charityRoundUp.map((item, index) => {
                         return (
@@ -3156,7 +3474,14 @@ class RegistrationCompetitionFee extends Component {
         console.log("discountData", discountData)
         return (
             <div className="discount-view pt-5">
-                <span className="form-heading">{AppConstants.discounts}</span>
+                <div className='contextualHelp-RowDirection' >
+                    <span className="form-heading">{AppConstants.discounts}</span>
+                    <div style={{ marginTop: 4 }}>
+                        <CustumToolTip placement="bottom" background='#ff8237'>
+                            <span>{AppConstants.discountMsg}</span>
+                        </CustumToolTip>
+                    </div>
+                </div>
                 {discountData.length > 0 && discountData.map((item, index) => (
                     <div className="prod-reg-inside-container-view">
                         <div className="transfer-image-view pt-2"

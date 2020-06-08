@@ -579,7 +579,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 console.log(item, 'timeSlotRotation')
                                 return (
                                     <div>
-                                        <div className='row' >
+                                        <div className='contextualHelp-RowDirection' >
                                             <Radio key={item.id} value={item.id}> {item.description}</Radio>
                                             <div style={{ marginLeft: -22, marginTop: -5 }}>
                                                 <Tooltip background='#ff8237'>
@@ -624,7 +624,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     console.log(item, 'timeSlotGeneration')
                                     return (
                                         <div>
-                                            <div className='row' >
+                                            <div className='contextualHelp-RowDirection' >
                                                 <Radio key={item.id} value={item.id}> {item.description}</Radio>
                                                 <div style={{ marginLeft: -22, marginTop: -5 }}>
                                                     <Tooltip background='#ff8237'>
