@@ -60,6 +60,7 @@ class CompetitionDraws extends Component {
       venueLoad: false,
       roundTime: null,
       competitionDivisionGradeId: "",
+      organisationId: getOrganisationData().organisationUniqueKey
     };
   }
 
@@ -895,7 +896,9 @@ class CompetitionDraws extends Component {
                                 </Menu.Item>
                               }
                               <Menu.Item key="2" >
-                                <NavLink to={{ pathname: `/competitionException`, state: { drawsObj: slotObject } }} >
+                                <NavLink to={{ pathname: `/competitionException`, 
+                                          state: { drawsObj: slotObject, yearRefId: this.state.yearRefId, 
+                                          competitionId: this.state.firstTimeCompId, organisationId: this.state.organisationId} }} >
                                   <span >Exception</span>
                                 </NavLink>
                               </Menu.Item>

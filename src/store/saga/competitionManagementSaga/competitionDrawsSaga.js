@@ -180,11 +180,11 @@ export function* updateCourtTimingsDrawsAction(action) {
                 actionType: action.actionType,
                 drawData: action.drawData
             });
-            message.success(result.result.data.message)
-            console.log(action.actionType)
-            if (action.actionType == "exception") {
-                history.push('/competitionDraws')
-            }
+            // message.success(result.result.data.message)
+            // console.log(action.actionType)
+            // if (action.actionType == "exception") {
+            //     history.push('/competitionDraws')
+            // }
 
         } else {
             yield call(failSaga, result)

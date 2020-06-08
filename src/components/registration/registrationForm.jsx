@@ -1267,15 +1267,16 @@ class RegistrationForm extends Component {
                     <Radio value={1}> {AppConstants.female}</Radio>
                     <Radio value={3}>{AppConstants.both}</Radio>
                 </Radio.Group>
-                <Radio.Group className="mt-5 reg-competition-radio" disabled={isPublished}
-                    value={registrationFormData.dobPreferenceRefId} onChange={(e) => (this.props.updateRegistrationForm(e.target.value, "dobPreferenceRefId"))}>
-                    <Radio className="dob-pref-radio-inner-heading" style={{ marginBottom: 10 }} value={1}>{AppConstants.NoDobPreference}</Radio>
-                    <Radio className="dob-pref-radio-inner-heading" value={2}>{AppConstants.DobPreference}</Radio>
-                </Radio.Group>
-                {(registrationFormData.dobPreferenceRefId == 2) ?
-                    <div>
-                        <div style={{ display: "flex", marginLeft: 23 }}>
-                            <span className="applicable-to-datepicker-col">{AppConstants.DobMoreThan}</span>
+                <InputWithHead heading={AppConstants.dOB} />        
+                <Radio.Group className="reg-competition-radio"  disabled={isPublished} 
+                        value={registrationFormData.dobPreferenceRefId}  onChange={(e)=>(this.props.updateRegistrationForm(e.target.value,"dobPreferenceRefId"))}>                               
+                    <Radio className="dob-pref-radio-inner-heading" style={{marginBottom: 10}} value={1}>{AppConstants.NoDobPreference}</Radio>  
+                    <Radio className="dob-pref-radio-inner-heading" value={2}>{AppConstants.DobPreference}</Radio>                     
+                </Radio.Group>  
+                {(registrationFormData.dobPreferenceRefId == 2)?
+                    <div>                              
+                        <div style={{display:"flex",marginLeft:23}}>
+                            <span className="applicable-to-datepicker-col">{AppConstants.DobMoreThan}</span>               
                             <div className="dob-pref-date-picker">
                                 <DatePicker
                                     size="large"

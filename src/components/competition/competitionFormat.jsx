@@ -787,7 +787,11 @@ class CompetitionFormat extends Component {
                                 : null}
                             </div>
                         </div>
-                        <Checkbox className="single-checkbox pt-2" checked={item.isFinal} onChange={(e) => this.onChangeFinal(e, data.competionFormatDivisions,index)}>{AppConstants.applyFinalFormat}</Checkbox>
+						{data.competitionFormatRefId != 1 &&
+							<div>
+								<Checkbox className="single-checkbox pt-2" checked={item.isFinal} onChange={(e) => this.onChangeFinal(e, data.competionFormatDivisions,index)}>{AppConstants.applyFinalFormat}</Checkbox>
+							</div>
+                        }
                     </div>
                  ))}
                 {/* <NavLink to="/competitionFinals" >
@@ -795,7 +799,7 @@ class CompetitionFormat extends Component {
                 </NavLink> */}
                 { !isAllDivisionChecked ?
                 <span className='input-heading-add-another pointer' onClick={() => this.addCompetitionFormatDivision(data)} >+ {AppConstants.addNewCompetitionFormat}</span> : null}
-                <Checkbox className="single-checkbox pt-2" defaultChecked={data.isDefault} onChange={(e) => this.onChangeSetValue(e.target.checked, 'isDefault')}>{AppConstants.setAsDefault}</Checkbox>
+                {/* <Checkbox className="single-checkbox pt-2" defaultChecked={data.isDefault} onChange={(e) => this.onChangeSetValue(e.target.checked, 'isDefault')}>{AppConstants.setAsDefault}</Checkbox> */}
             </div>
         )
     }

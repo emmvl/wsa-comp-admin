@@ -511,14 +511,17 @@ class UserOurOragnization extends Component {
                     display: "flex",
                     alignItems: "center",
                 }} >
+                     {this.state.sourcePage == "AFF" ? 
                     <Breadcrumb separator=" > ">
-
                         <NavLink to="/userAffiliatesList" >
                             <Breadcrumb.Item separator=">" className="breadcrumb-product">{AppConstants.affiliates}</Breadcrumb.Item>
                         </NavLink>
                         {/* <Breadcrumb.Item className="breadcrumb-product">{AppConstants.user}</Breadcrumb.Item> */}
                         <Breadcrumb.Item className="breadcrumb-add">{AppConstants.ourOrganisation}</Breadcrumb.Item>
-                    </Breadcrumb>
+                    </Breadcrumb> : 
+                     <NavLink to="/affiliatedirectory" >
+                        <span className="breadcrumb-product">{AppConstants.affiliates}</span>
+                     </NavLink> }
                 </Header >
             </div>
         )
@@ -1124,7 +1127,7 @@ class UserOurOragnization extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
-                <InnerHorizontalMenu menu={"user"} userSelectedKey={"2"} />
+                <InnerHorizontalMenu menu={"user"} userSelectedKey={"3"} />
                 <Layout>
                     {this.headerView()}
                     <Form
