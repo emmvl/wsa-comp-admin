@@ -1238,7 +1238,7 @@ const AppConstants = {
   selectedTeams: 'Selected Teams Array',
   importCoach: 'Import Coaches',
   ladderLink: 'Ladder Link',
-  public_Ladder_Url: `https://netball-comp-admin-dev.worldsportaction.com/liveScorePublicLadder?`,
+  public_Ladder_Url: `https://netball-registration-dev.worldsportaction.com/liveScorePublicLadder?`,
   inviteTypeRef: 'InviteType',
   inviteType: 'Type',
   DobMoreThan: 'DOB more than',
