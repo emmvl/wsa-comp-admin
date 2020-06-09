@@ -1247,6 +1247,11 @@ const AppConstants = {
   DobPreference: 'DOB Preference',
   both: 'Both',
   sendInvitesTo: 'Send invites to',
+  registrationWizard: "Registration Wizard",
+  createPublish: "Create and Publish",
+  set: "Set",
+  setup: "Set up",
+  setupStripe: "Stripe account",
 
   resultStatus: 'Result Status',
 

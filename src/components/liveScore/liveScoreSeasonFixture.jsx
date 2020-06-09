@@ -248,7 +248,7 @@ class LiveScoreSeasonFixture extends Component {
     componentDidMount() {
 
         this.setState({ onCompLoad: true })
-        let orgParam =  this.props.location.search.split("?organisationId=")
+        let orgParam =  this.props.location.search.split("?organisationKey=")
         let orgId  =  orgParam[1]
         // let orgKey = getOrganisationData() ? getOrganisationData().organisationId : null
         this.props.fixtureCompetitionListAction(orgId)

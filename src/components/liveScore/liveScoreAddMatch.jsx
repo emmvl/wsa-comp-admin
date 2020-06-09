@@ -246,7 +246,7 @@ class LiveScoreAddMatch extends Component {
                 let team2resultId = matchResult[4].id
                 this.props.liveScoreCreateMatchAction(matchData, id, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate)
 
-            } else if (forfietedTeam == 'Both') {
+            } else if (forfietedTeam == 'both') {
                 this.setState({ forfeitVisible: false })
                 let team1resultId = matchResult[5].id
                 let team2resultId = matchResult[5].id
@@ -294,7 +294,7 @@ class LiveScoreAddMatch extends Component {
                     >
                         <Option key={'team1'} value={'team1'} > {addEditMatch.team1.name}</Option>
                         <Option key={'team2'} value={'team2'} > {addEditMatch.team2.name}</Option>
-                        <Option key={'BOTH'} value={'BOTH'} > {'Both'}</Option>
+                        <Option key={'both'} value={'both'} > {'Both'}</Option>
                     </Select>
 
 

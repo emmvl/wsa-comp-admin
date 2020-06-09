@@ -11,13 +11,14 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import InputWithHead from "../../customComponents/InputWithHead";
 import { getOrganisationData } from "../../util/sessionStorage";
-import {endUserRegDashboardListAction} from
+import { endUserRegDashboardListAction } from
     "../../store/actions/registrationAction/endUserRegistrationAction";
-import { getCommonRefData, getGenderAction } from 
-        '../../store/actions/commonAction/commonAction';
-import { getAffiliateToOrganisationAction} from "../../store/actions/userAction/userAction";
+import { getCommonRefData, getGenderAction } from
+    '../../store/actions/commonAction/commonAction';
+import { getAffiliateToOrganisationAction } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 import { isEmptyArray } from "formik";
+import WizardModel from "../../customComponents/registrationWizardModel"
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
@@ -40,7 +41,7 @@ const columns = [
         render: (registrationDate, record, index) => {
             return (
                 <div>
-                   {registrationDate!= null ? moment(registrationDate).format("DD/MM/YYYY") : ""}
+                    {registrationDate != null ? moment(registrationDate).format("DD/MM/YYYY") : ""}
                 </div>
             )
         }
@@ -65,7 +66,7 @@ const columns = [
         render: (dateOfBirth, record, index) => {
             return (
                 <div>
-                   {dateOfBirth!= null ? moment(dateOfBirth).format("DD/MM/YYYY") : ""}
+                    {dateOfBirth != null ? moment(dateOfBirth).format("DD/MM/YYYY") : ""}
                 </div>
             )
         }
@@ -129,16 +130,17 @@ class Registration extends Component {
             postalCode: '',
             affiliate: -1,
             membershipProductId: -1,
-            paymentId: -1
+            paymentId: -1,
+            visible: false
         }
         // this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.referenceCalls(this.state.organisationId);
         this.handleRegTableList(1);
     }
-    componentDidUpdate(nextProps){
+    componentDidUpdate(nextProps) {
 
     }
 
@@ -148,11 +150,11 @@ class Registration extends Component {
             organisationUniqueKey: this.state.organisationId,
             yearRefId: this.state.yearRefId,
             competitionUniqueKey: this.state.competitionUniqueKey,
-            dobFrom: (this.state.dobFrom!= '-1' && !isNaN(this.state.dobFrom)) ? moment(this.state.dobFrom).format('YYYY-MM-DD') : '-1',
-            dobTo: (this.state.dobTo!= '-1' && !isNaN(this.state.dobTo)) ? moment(this.state.dobTo).format('YYYY-MM-DD') : '-1',
+            dobFrom: (this.state.dobFrom != '-1' && !isNaN(this.state.dobFrom)) ? moment(this.state.dobFrom).format('YYYY-MM-DD') : '-1',
+            dobTo: (this.state.dobTo != '-1' && !isNaN(this.state.dobTo)) ? moment(this.state.dobTo).format('YYYY-MM-DD') : '-1',
             membershipProductTypeId: this.state.membershipProductTypeId,
             genderRefId: this.state.genderRefId,
-            postalCode: (this.state.postalCode!= '' && this.state.postalCode!= null) ? this.state.postalCode.toString() : '-1',
+            postalCode: (this.state.postalCode != '' && this.state.postalCode != null) ? this.state.postalCode.toString() : '-1',
             affiliate: this.state.affiliate,
             membershipProductId: this.state.membershipProductId,
             paymentId: this.state.paymentId,
@@ -171,86 +173,127 @@ class Registration extends Component {
     }
 
     onChangeDropDownValue = async (value, key) => {
-        if(key == "yearRefId"){
-          await this.setState({yearRefId: value});
-          this.handleRegTableList(1);
-        }
-        else if (key == "competitionId"){
-            await   this.setState({competitionUniqueKey: value});
+        if (key == "yearRefId") {
+            await this.setState({ yearRefId: value });
             this.handleRegTableList(1);
         }
-        else if (key == "dobFrom"){
+        else if (key == "competitionId") {
+            await this.setState({ competitionUniqueKey: value });
+            this.handleRegTableList(1);
+        }
+        else if (key == "dobFrom") {
             let d = moment(value, 'YYYY-mm-dd');
             console.log("DDDD" + d);
-            await this.setState({dobFrom: d});
+            await this.setState({ dobFrom: d });
             this.handleRegTableList(1);
         }
-        else if (key == "dobTo"){
+        else if (key == "dobTo") {
             let d = moment(value, 'YYYY-mm-dd');
-            await this.setState({dobTo: d});
+            await this.setState({ dobTo: d });
             this.handleRegTableList(1);
         }
-        else if (key == "membershipProductTypeId"){
-            await this.setState({membershipProductTypeId: value});
+        else if (key == "membershipProductTypeId") {
+            await this.setState({ membershipProductTypeId: value });
             this.handleRegTableList(1);
         }
-        else if (key == "genderRefId"){
-            await this.setState({genderRefId: value});
+        else if (key == "genderRefId") {
+            await this.setState({ genderRefId: value });
             this.handleRegTableList(1);
         }
-        else if (key == "affiliate"){
-            await  this.setState({affiliate: value});
+        else if (key == "affiliate") {
+            await this.setState({ affiliate: value });
             this.handleRegTableList(1);
         }
-        else if (key == "membershipProductId"){
-            await  this.setState({membershipProductId: value});
+        else if (key == "membershipProductId") {
+            await this.setState({ membershipProductId: value });
             this.handleRegTableList(1);
         }
-        else if (key == "paymentId"){
-            await  this.setState({paymentId: value});
+        else if (key == "paymentId") {
+            await this.setState({ paymentId: value });
             this.handleRegTableList(1);
         }
-        else if(key == "postalCode"){
+        else if (key == "postalCode") {
             const regex = /,/gi;
             let canCall = false;
             let newVal = value.toString().split(',');
-            newVal.map((x,index) => {
+            newVal.map((x, index) => {
                 console.log("Val::" + x + "**" + x.length);
-                if(Number(x.length)%4 == 0 &&  x.length > 0){
+                if (Number(x.length) % 4 == 0 && x.length > 0) {
                     canCall = true;
                 }
-                else{
-                    canCall = false; 
+                else {
+                    canCall = false;
                 }
             })
 
 
-            await this.setState({postalCode: value});
-            if(canCall){
+            await this.setState({ postalCode: value });
+            if (canCall) {
                 this.handleRegTableList(1);
-           }
-           else if(value.length == 0)
-           {
-            this.handleRegTableList(1);
-           }
+            }
+            else if (value.length == 0) {
+                this.handleRegTableList(1);
+            }
         }
     }
 
+    openwizardmodel() {
+        this.setState
+            ({
+                visible: true
+            })
+
+    }
+    userEmail = () => {
+        let orgData = getOrganisationData()
+        console.log(orgData)
+        let email = orgData && orgData.email ? orgData.email : ""
+        return email
+    }
+    stripeConnected = () => {
+        let orgData = getOrganisationData()
+        let stripeAccountID = orgData ? orgData.stripeAccountID : null
+        return stripeAccountID
+    }
 
     ///////view for breadcrumb
     headerView = () => {
+        let stripeConnected = this.stripeConnected()
+        let userEmail = this.userEmail()
+        let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=ca_GoE4DQeJGNAvRzAq6MJOmZ8xmFTeLgan&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=https://netball-comp-admin-dev.worldsportaction.com/registrationPayments`
+
+        let registrationCompetition = []
         return (
             <div className="comp-player-grades-header-view-design" >
                 <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+                    <div className="col-sm-8" style={{ display: "flex", alignContent: "center" }} >
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.dashboard}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
+                    <div className="col-sm-4" style={{ display: "flex", alignContent: "center", justifyContent: 'center' }} >
+                        <Button
+                            className="open-reg-button"
+                            type="primary"
+                            onClick={() => this.openwizardmodel()}
+                        >
+                            {/* <a href={stripeDashboardUrl} class="stripe-connect"> */}
+                            {AppConstants.registrationWizard}
+                            {/* </a> */}
+                        </Button>
+                    </div>
                 </div>
+                <WizardModel
+                    modalTitle={AppConstants.registrationWizard}
+                    visible={this.state.visible}
+                    onCancel={() => this.setState({ visible: false })}
+                    wizardCompetition={registrationCompetition}
+                    stripeConnected={stripeConnected}
+                    stripeConnectURL={stripeConnectURL}
+                />
             </div >
         )
-    } 
+    }
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
@@ -262,13 +305,13 @@ class Registration extends Component {
                 name: getOrganisationData().name
             }
             uniqueValues.push(obj);
-            let arr  = [...new Map(affiliateToData.affiliatedTo.map(obj => [obj["organisationId"], obj])).values()];
-            if(isEmptyArray){
+            let arr = [...new Map(affiliateToData.affiliatedTo.map(obj => [obj["organisationId"], obj])).values()];
+            if (isEmptyArray) {
                 uniqueValues = [...uniqueValues, ...arr];
             }
         }
-        const {genderData} = this.props.commonReducerState;
-        const {competitions, membershipProductTypes, membershipProducts, postalCodes} = this.props.userRegistrationState;
+        const { genderData } = this.props.commonReducerState;
+        const { competitions, membershipProductTypes, membershipProducts, postalCodes } = this.props.userRegistrationState;
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
                 <div className="fluid-width" >
@@ -281,7 +324,7 @@ class Registration extends Component {
                                     className="year-select reg-filter-select"
                                     onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
                                     value={this.state.yearRefId}>
-                                        <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {this.props.appState.yearList.map(item => {
                                         return (
                                             <Option key={"yearRefId" + item.id} value={item.id}>
@@ -301,7 +344,7 @@ class Registration extends Component {
                                     className="year-select reg-filter-select1"
                                     onChange={competitionId => this.onChangeDropDownValue(competitionId, "competitionId")}
                                     value={this.state.competitionUniqueKey}>
-                                        <Option key={-1} value={'-1'}>{AppConstants.all}</Option>
+                                    <Option key={-1} value={'-1'}>{AppConstants.all}</Option>
                                     {(competitions || []).map(item => {
                                         return (
                                             <Option key={"competition" + item.competitionUniqueKey} value={item.competitionUniqueKey}>
@@ -313,7 +356,7 @@ class Registration extends Component {
                             </div>
                         </div>
                         <div className="reg-col">
-                            <div className="reg-filter-col-cont" style={{marginRight: '30px'}}>
+                            <div className="reg-filter-col-cont" style={{ marginRight: '30px' }}>
                                 <div className='year-select-heading'>{AppConstants.dobFrom}</div>
                                 <DatePicker
                                     size="default"
@@ -342,7 +385,7 @@ class Registration extends Component {
                     </div>
                     <div className="row reg-filter-row" >
                         <div className="reg-col" >
-                            <div  className="reg-filter-col-cont" >
+                            <div className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.product}</div>
                                 <Select
                                     showSearch
@@ -358,7 +401,7 @@ class Registration extends Component {
                             </div>
                         </div>
                         <div className="reg-col1" >
-                            <div  className="reg-filter-col-cont" >
+                            <div className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.gender}</div>
                                 <Select
                                     className="year-select reg-filter-select1"
@@ -372,7 +415,7 @@ class Registration extends Component {
                             </div>
                         </div>
                         <div className="reg-col" >
-                            <div  className="reg-filter-col-cont" >
+                            <div className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.affiliate}</div>
                                 <Select
                                     showSearch
@@ -401,7 +444,7 @@ class Registration extends Component {
                     </div>
                     <div className="row reg-filter-row" >
                         <div className="reg-col" >
-                            <div  className="reg-filter-col-cont" >
+                            <div className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.type}</div>
                                 <Select
                                     showSearch
@@ -418,7 +461,7 @@ class Registration extends Component {
                             </div>
                         </div>
                         <div className="reg-col" >
-                            <div  className="reg-filter-col-cont" >
+                            <div className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.postCode}</div>
                                 <InputWithHead
                                     placeholder={AppConstants.postCode}
@@ -443,11 +486,11 @@ class Registration extends Component {
         )
     }
 
-    countView = () =>{
+    countView = () => {
         let userRegistrationState = this.props.userRegistrationState;
         let userRegDashboardList = userRegistrationState.userRegDashboardListData;
         let total = userRegistrationState.userRegDashboardListTotalCount;
-        return(
+        return (
             <div className="comp-dash-table-view mt-2">
                 <div>
                     <div className="row">
@@ -476,23 +519,23 @@ class Registration extends Component {
         let total = userRegistrationState.userRegDashboardListTotalCount;
         return (
             <div className="comp-dash-table-view mt-2">
-            <div className="table-responsive home-dash-table-view">
-                <Table className="home-dashboard-table"
-                    columns={columns}
-                    dataSource={userRegDashboardList}
-                    pagination={false}
-                    loading={userRegistrationState.onUserRegDashboardLoad === true && true}
-                />
+                <div className="table-responsive home-dash-table-view">
+                    <Table className="home-dashboard-table"
+                        columns={columns}
+                        dataSource={userRegDashboardList}
+                        pagination={false}
+                        loading={userRegistrationState.onUserRegDashboardLoad === true && true}
+                    />
+                </div>
+                <div className="d-flex justify-content-end">
+                    <Pagination
+                        className="antd-pagination"
+                        current={userRegistrationState.userRegDashboardListPage}
+                        total={total}
+                        onChange={(page) => this.handleRegTableList(page)}
+                    />
+                </div>
             </div>
-            <div className="d-flex justify-content-end">
-                <Pagination
-                    className="antd-pagination"
-                    current={userRegistrationState.userRegDashboardListPage}
-                    total={total}
-                    onChange={(page) => this.handleRegTableList(page)}
-                />
-            </div>
-        </div>
         )
     }
 
@@ -519,7 +562,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         endUserRegDashboardListAction,
         getAffiliateToOrganisationAction,
-        getCommonRefData, 
+        getCommonRefData,
         getGenderAction,
         getOnlyYearListAction
     }, dispatch);

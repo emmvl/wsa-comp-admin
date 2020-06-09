@@ -273,7 +273,6 @@ class CompetitionPartPlayerGrades extends Component {
     };
 
     onChangeParentDivCheckbox = (checked, teamIndex, key) => {
-        console.log("teamIndex::" + teamIndex + "key::" + key + "checked::" + checked);
 
         if (key == "assigned") {
             let assignedData = this.props.partPlayerGradingState.assignedPartPlayerGradingListData;
@@ -385,7 +384,6 @@ class CompetitionPartPlayerGrades extends Component {
             }
 
             this.setState({ divisionId: this.state.competitionDivisionId })
-            console.log("Response ::" + JSON.stringify(res));
             this.props.changeDivisionPlayerAction(res);
             this.setState({ divisionLoad: true })
         }
@@ -505,13 +503,22 @@ class CompetitionPartPlayerGrades extends Component {
         }
         else if (source.droppableId !== destination.droppableId) {
             let teamId = destination !== null && destination.droppableId == 0 ? null : JSON.parse(destination.droppableId)
+            let sourceTeamID = source !== null && source.droppableId == 0 ? null : JSON.parse(source.droppableId)
             if (teamId !== null) {
-                playerId = unassignedPlayerData.players[source.index].playerId
+                if (sourceTeamID == null) {
+                    playerId = unassignedPlayerData.players[source.index].playerId
+                }
+                else {
+                    for (let i in assignedPlayerData) {
+                        if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
+                            playerId = assignedPlayerData[i].players[source.index].playerId
+                        }
+                    }
+                }
             }
             else {
                 for (let i in assignedPlayerData) {
                     if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
-                        console.log(assignedPlayerData[i].players[source.index])
                         playerId = assignedPlayerData[i].players[source.index].playerId
                     }
                 }
@@ -557,6 +564,8 @@ class CompetitionPartPlayerGrades extends Component {
     //////for the assigned teams on the left side of the view port
     assignedView = () => {
         let assignedData = this.props.partPlayerGradingState.assignedPartPlayerGradingListData
+        let commentList = this.props.partPlayerGradingState.playerCommentList
+        let commentLoad = this.props.partPlayerGradingState.commentLoad
         return (
             <div className="d-flex flex-column">
                 {assignedData.map((teamItem, teamIndex) =>
@@ -677,9 +686,8 @@ class CompetitionPartPlayerGrades extends Component {
                     placeholder={AppConstants.addYourComment}
                     onChange={(e) => this.setState({ comment: e.target.value })}
                     value={this.state.comment}
-                    owner={this.state.commentsCreatedBy}
-                    OwnCreatedComment={this.state.commentsCreatedOn}
-                    ownnerComment={this.state.comments}
+                    commentList={commentList}
+                    commentLoad={commentLoad}
                 />
 
                 <Modal
@@ -697,8 +705,7 @@ class CompetitionPartPlayerGrades extends Component {
     }
     onClickComment(player, teamID) {
         this.setState({
-            modalVisible: true, comment: player.comments, comments: player.comments, playerId: player.playerId,
-            commentsCreatedBy: player.comments == "" ? null : player.commentsCreatedBy, commentsCreatedOn: player.comments == "" ? null : moment(player.commentsCreatedOn).format("DD-MM-YYYY HH:mm"),
+            modalVisible: true, comment: player.comments, playerId: player.playerId,
             teamID
         })
     }
@@ -726,27 +733,28 @@ class CompetitionPartPlayerGrades extends Component {
 
     ///modal ok for hitting Api and close modal
     handleModalOk = e => {
-        this.props.playerGradingComment(this.state.firstTimeCompId, this.state.divisionId, this.state.comment, this.state.playerId, this.state.teamID)
+        this.props.clearReducerCompPartPlayerGradingAction("commentList")
+        {
+            this.state.comment.length > 0 &&
+                this.props.playerGradingComment(this.state.firstTimeCompId, this.state.divisionId, this.state.comment, this.state.playerId, this.state.teamID)
+        }
         this.setState({
             modalVisible: false,
             comment: "",
             playerId: null,
             teamID: null,
-            commentsCreatedBy: null,
-            commentsCreatedOn: null,
-            comments: null
+
         });
     };
     // model cancel for dissapear a model
     handleModalCancel = e => {
+        this.props.clearReducerCompPartPlayerGradingAction("commentList")
         this.setState({
             modalVisible: false,
             comment: "",
             playerId: null,
             teamID: null,
-            commentsCreatedBy: null,
-            commentsCreatedOn: null,
-            comments: null
+
         });
     };
 
@@ -758,7 +766,8 @@ class CompetitionPartPlayerGrades extends Component {
         let colorPosition1;
         let colorPosition2;
         let divisionData = this.props.registrationState.allDivisionsData.filter(x => x.competitionMembershipProductDivisionId != null);
-
+        let commentList = this.props.partPlayerGradingState.playerCommentList
+        let commentLoad = this.props.partPlayerGradingState.commentLoad
         return (
             <div>
                 <Droppable droppableId={'0'}>
@@ -887,9 +896,8 @@ class CompetitionPartPlayerGrades extends Component {
                     placeholder={AppConstants.addYourComment}
                     onChange={(e) => this.setState({ comment: e.target.value })}
                     value={this.state.comment}
-                    owner={this.state.commentsCreatedBy}
-                    OwnCreatedComment={this.state.commentsCreatedOn}
-                    ownnerComment={this.state.comments}
+                    commentList={commentList}
+                    commentLoad={commentLoad}
                 />
 
                 <Modal
