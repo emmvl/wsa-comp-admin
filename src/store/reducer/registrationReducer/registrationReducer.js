@@ -579,6 +579,15 @@ function getDefaultMembershipType(data) {
         else {
           getMembershipType[i]["isMemebershipType"] = false;
         }
+
+        if(getMembershipType[i].allowTeamRegistrationTypeRefId!= null && 
+          getMembershipType[i].allowTeamRegistrationTypeRefId != 0){
+            getMembershipType[i]["isAllow"] = true;
+          }
+          else{
+            getMembershipType[i]["isAllow"] = false;
+          }
+
       }
       membershipProductTypesTempArray = getMembershipType
     }
