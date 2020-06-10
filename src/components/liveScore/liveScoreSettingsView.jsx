@@ -473,8 +473,8 @@ class LiveScoreSettingsView extends Component {
                             value={recordUmpire}
                         >
                             <Option value={"NONE"}>{'None'}</Option>
-                            <Option value={"NAMES"}>{'Integrated'}</Option>
-                            <Option value={"USERS"}>{'At courts'}</Option>
+                            <Option value={"USERS"}>{'Integrated'}</Option>
+                            <Option value={"NAMES"}>{'At courts'}</Option>
                         </Select>
                     </div>
                 </div>

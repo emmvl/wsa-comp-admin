@@ -49,11 +49,11 @@ const columns = [
     },
     {
         title: 'Team',
-        dataIndex: 'teamName',
-        key: 'teamName',
-        sorter: (a, b) => tableSort(a, b, 'teamName'),
-        render: (teamName) =>
-            <span className="input-heading-add-another pt-0">{teamName}</span>
+        dataIndex: 'name',
+        key: 'name',
+        sorter: (a, b) => tableSort(a, b, 'name'),
+        render: (name) =>
+            <span >{name}</span>
 
     },
     {
@@ -110,7 +110,7 @@ class LiveScoreTeamAttendance extends Component {
             teamSelection: "WSA 1",
             selectStatus: "Borrowed",
             competitionId: null,
-            searchText:""
+            searchText: ""
         }
     }
 
@@ -167,8 +167,8 @@ class LiveScoreTeamAttendance extends Component {
         this.props.exportFilesAction(url)
     }
 
-      // on change search text
-      onChangeSearchText = (e) => {
+    // on change search text
+    onChangeSearchText = (e) => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ searchText: e.target.value })
         if (e.target.value == null || e.target.value == "") {
@@ -185,8 +185,8 @@ class LiveScoreTeamAttendance extends Component {
         }
     }
 
-     // search key 
-     onKeyEnterSearchText = (e) => {
+    // search key 
+    onKeyEnterSearchText = (e) => {
         var code = e.keyCode || e.which;
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (code === 13) { //13 is the enter keycode
@@ -202,23 +202,23 @@ class LiveScoreTeamAttendance extends Component {
         }
     }
 
-        // on click of search icon
-        onClickSearchIcon = () => {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
-            if (this.state.searchText == null || this.state.searchText == "") {
-            }
-            else {
-                const body =
-                {
-                    "paging": {
-                        "limit": 10,
-                        "offset": 0
-                    },
-                    "search": this.state.searchText
-                }
-                this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
-            }
+    // on click of search icon
+    onClickSearchIcon = () => {
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        if (this.state.searchText == null || this.state.searchText == "") {
         }
+        else {
+            const body =
+            {
+                "paging": {
+                    "limit": 10,
+                    "offset": 0
+                },
+                "search": this.state.searchText
+            }
+            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
+        }
+    }
 
     ///////view for breadcrumb
     headerView = () => {
@@ -293,7 +293,7 @@ class LiveScoreTeamAttendance extends Component {
                             placeholder="Search..."
                             onKeyPress={(e) => this.onKeyEnterSearchText(e)}
                             prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                            onClick={() => this.onClickSearchIcon()}
+                                onClick={() => this.onClickSearchIcon()}
                             />}
                             allowClear
                         />
