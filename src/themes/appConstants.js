@@ -985,6 +985,7 @@ const AppConstants = {
   applyToRef: 'ApplyToFinals',
   extraTimeDrawRef: 'ExtraTimeDraw',
   finalsFixtureTemplateRef: 'FinalsFixtureTemplate',
+  allowTeamRegistrationTypeRefId: "TeamRegistrationType",													 
   matchPreference: 'Match Preference',
   teamA: 'Team A',
   teamB: 'Team B',
@@ -1251,7 +1252,8 @@ const AppConstants = {
   resultStatus: 'Result Status',
 
   whichTeamForfieted: 'Which team forfeited?',
-  matchAbandoned: "Match Abandoned?"
+  matchAbandoned: "Match Abandoned?",
+  finalsMessage: "Finals has not been enabled for this Competition"
 };
 
 export default AppConstants;

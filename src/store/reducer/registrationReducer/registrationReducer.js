@@ -1032,6 +1032,9 @@ function registration(state = initialState, action) {
         state.getDefaultMembershipProductTypes[action.index].isMandate = action.checkedValue
 
       }
+	  if (action.keyword == "isAllow") {
+        state.getDefaultMembershipProductTypes[action.index].isAllow = action.checkedValue
+      }
       if (action.keyword == "isMemebershipType") {
         state.getDefaultMembershipProductTypes[action.index].isMemebershipType = action.checkedValue
       }

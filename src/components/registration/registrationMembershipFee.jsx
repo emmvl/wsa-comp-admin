@@ -19,6 +19,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import{getAllowTeamRegistrationTypeAction} from '../../store/actions/commonAction/commonAction';																								
 import {
     regGetMembershipProductDetailsAction,
     regSaveMembershipProductDetailsAction,
@@ -211,6 +212,7 @@ class RegistrationMembershipFee extends Component {
         this.props.getMembershipProductFeesTypeAction()
         this.props.getCommonDiscountTypeTypeAction()
         this.props.membershipProductDiscountTypesAction()
+		this.props.getAllowTeamRegistrationTypeAction()											   
     }
 
 
@@ -318,9 +320,11 @@ class RegistrationMembershipFee extends Component {
             console.log("item, index", item, index)
             let dobFrom = `dobFrom${index}`
             let dobTo = `dobTo${index}`
+            let allowTeamRegistrationTypeRefId = `allowTeamRegistrationTypeRefId${index}`
             this.props.form.setFieldsValue({
                 [dobFrom]: moment(item.dobFrom),
-                [dobTo]: moment(item.dobTo)
+                [dobTo]: moment(item.dobTo),
+                [allowTeamRegistrationTypeRefId]: item.allowTeamRegistrationTypeRefId
             })
         })
         let data = this.props.registrationState.membershipProductDiscountData
@@ -464,7 +468,13 @@ class RegistrationMembershipFee extends Component {
         this.props.updatedMembershipTypeDataAction(membershipTypeData)
     };
 
-
+	allowTeamRegistrationPlayer = (checkedValue, index , keyword) => {
+        let allowTeamRegistration = checkedValue;
+        let membershipTypeData = this.props.registrationState.getDefaultMembershipProductTypes
+        console.log("JSON stringify::"+JSON.stringify(membershipTypeData))
+        membershipTypeData[index][keyword] = allowTeamRegistration;
+        this.props.updatedMembershipTypeDataAction(membershipTypeData)
+    };	  
     //////dynamic membership type view
     membershipTypesView = (
         getFieldDecorator
@@ -472,6 +482,7 @@ class RegistrationMembershipFee extends Component {
         let registrationState = this.props.registrationState
         const defaultTypes = registrationState.getDefaultMembershipProductTypes !== null ? registrationState.getDefaultMembershipProductTypes : []
         let allData = this.props.registrationState.getMembershipProductDetails
+		let {allowTeamRegistration} = this.props.commonReducerState;															
         return (
             <div>
                 <span className="applicable-to-heading">
@@ -522,6 +533,7 @@ class RegistrationMembershipFee extends Component {
                                     </div>
                                     <Checkbox
                                         className="single-checkbox"
+                                        style={{width: '100%'}}
                                         checked={item.isMandate}
                                         onChange={e =>
                                             this.membershipTypesAndAgeSelected(e.target.checked, index, "isMandate")
@@ -595,6 +607,40 @@ class RegistrationMembershipFee extends Component {
                                             </div>
                                         </div>
                                     )}
+									<Checkbox
+										className="single-checkbox"
+										style={{marginLeft:"0px"}}
+										checked={item.isAllow}
+										onChange={e =>
+											this.membershipTypesAndAgeSelected(e.target.checked, index, "isAllow")
+                                    }
+                                    disabled={this.state.membershipIsUsed}
+									>
+										{`Allow ${item.membershipProductTypeRefName} Registrations`}
+									</Checkbox>
+
+									{item.isAllow && (
+										<div className="fluid-width" style={{marginTop:"10px"}}>
+											<div className="row">
+												<div className="col-sm">
+																										
+													<Form.Item  >
+													{getFieldDecorator(`allowTeamRegistrationTypeRefId${index}`, {
+																		rules: [{ required: true, message: ValidationConstants.finalFixtureTemplateRequired }]
+													})(
+														<Radio.Group className="reg-competition-radio" 
+															onChange={(e) => this.allowTeamRegistrationPlayer(e.target.value, index, 'allowTeamRegistrationTypeRefId')} 
+															setFieldsValue={item.allowTeamRegistrationTypeRefId}>
+																{(allowTeamRegistration || []).map((fix, fixIndex) => (
+																	<Radio key={fix.id} value={fix.id}>{fix.description}</Radio>
+																))}
+														</Radio.Group>
+													)}
+													</Form.Item>
+												</div>
+											</div>
+										</div>
+									)}
                                 </div>
                             )
                         }
@@ -1350,7 +1396,7 @@ function mapDispatchToProps(dispatch) {
         membershipFeesTableInputChangeAction, getCommonDiscountTypeTypeAction, membershipProductDiscountTypesAction,
         addNewMembershipTypeAction, addRemoveDiscountAction, updatedDiscountDataAction,
         membershipFeesApplyRadioAction, onChangeAgeCheckBoxAction, updatedMembershipTypeDataAction,
-        removeCustomMembershipTypeAction, regMembershipListDeleteAction
+        removeCustomMembershipTypeAction, regMembershipListDeleteAction,regMembershipListDeleteAction,getAllowTeamRegistrationTypeAction
     }, dispatch)
 }
 
@@ -1358,6 +1404,7 @@ function mapStatetoProps(state) {
     return {
         registrationState: state.RegistrationState,
         appState: state.AppState,
+        commonReducerState: state.CommonReducerState
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(RegistrationMembershipFee));

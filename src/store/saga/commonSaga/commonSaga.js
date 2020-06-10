@@ -518,3 +518,27 @@ export function* courtListSaga(action) {
         });
     }
 }
+
+export function* getAllowTeamRegistrationTypeSaga(action) {
+    try {
+        const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.allowTeamRegistrationTypeRefId)
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_ALLOW_TEAM_REGISTRATION_TYPE_SUCCESS,
+                result: result.result.data,
+                status: result.result.status
+            });
+        } else {
+            yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
+            setTimeout(() => {
+                alert(result.data.message);
+            }, 800);
+        }
+    } catch (error) {
+        yield put({
+            type: ApiConstants.API_COMMON_SAGA_ERROR,
+            error: error,
+            status: error.status
+        });
+    }
+}

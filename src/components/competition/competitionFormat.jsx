@@ -520,7 +520,8 @@ class CompetitionFormat extends Component {
                 <div className="fluid-width" >
                     <div className="row" >
                         <div className="col-sm-3" >
-                            <div className="com-year-select-heading-view" >
+                            <div style={{width: "fit-content",display: "flex", flexDirection: "row",
+                                    alignItems: "center"}}  >
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
                                     name={"yearRefId"}
