@@ -307,6 +307,7 @@ class RegistrationMembershipFee extends Component {
 
 
     setFieldDecoratorValues = () => {
+        console.log("setFieldDecoratorValues");
         let allData = this.props.registrationState.getMembershipProductDetails
         let membershipProductData = allData !== null ? allData.membershipproduct : []
         this.props.form.validateFields((err, values) => console.log("values266", Object.keys(values)))
@@ -430,6 +431,7 @@ class RegistrationMembershipFee extends Component {
             "membershipProductTypeMappingId": 0,
             "isDefault": 0,
             "isPlaying": 0,
+            "allowTeamRegistrationTypeRefId": null
         }
         this.props.addNewMembershipTypeAction(newObj)
         this.setState({
@@ -471,7 +473,6 @@ class RegistrationMembershipFee extends Component {
 	allowTeamRegistrationPlayer = (checkedValue, index , keyword) => {
         let allowTeamRegistration = checkedValue;
         let membershipTypeData = this.props.registrationState.getDefaultMembershipProductTypes
-        console.log("JSON stringify::"+JSON.stringify(membershipTypeData))
         membershipTypeData[index][keyword] = allowTeamRegistration;
         this.props.updatedMembershipTypeDataAction(membershipTypeData)
     };	  
@@ -625,7 +626,7 @@ class RegistrationMembershipFee extends Component {
 												<div className="col-sm">
 																										
 													<Form.Item  >
-													{getFieldDecorator(`allowTeamRegistrationTypeRefId${index}`, {
+													{getFieldDecorator(`allowTeamRegistrationTypeRefId${index}`, { initialValue: 1,
 																		rules: [{ required: true, message: ValidationConstants.finalFixtureTemplateRequired }]
 													})(
 														<Radio.Group className="reg-competition-radio" 

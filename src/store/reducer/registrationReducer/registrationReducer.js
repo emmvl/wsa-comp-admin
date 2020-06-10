@@ -1043,6 +1043,12 @@ function registration(state = initialState, action) {
       }
 	  if (action.keyword == "isAllow") {
         state.getDefaultMembershipProductTypes[action.index].isAllow = action.checkedValue
+        if(action.checkedValue == true){
+          state.getDefaultMembershipProductTypes[action.index]["allowTeamRegistrationTypeRefId"] = 1
+        }
+        else{
+          state.getDefaultMembershipProductTypes[action.index]["allowTeamRegistrationTypeRefId"] = null;
+        }
       }
       if (action.keyword == "isMemebershipType") {
         state.getDefaultMembershipProductTypes[action.index].isMemebershipType = action.checkedValue
