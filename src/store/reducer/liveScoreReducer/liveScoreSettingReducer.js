@@ -56,12 +56,15 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 if (data.positionTracking) {
                     memo.push('positionTracking')
                 }
-                return memo
-            }, [])
-            const record2 = arraymaped.reduce((memo, data) => {
                 if (data.recordGoalAttempts === true) {
                     memo.push('recordGoalAttempts')
                 }
+                return memo
+            }, [])
+            const record2 = arraymaped.reduce((memo, data) => {
+                // if (data.recordGoalAttempts === true) {
+                //     memo.push('recordGoalAttempts')
+                // }
                 if (data.centrePassEnabled) {
                     memo.push('centrePassEnabled')
                 }
@@ -112,6 +115,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 // error: payload
             }
         case ApiConstants.LiveScore_SETTING_CHANGE_FORM:
+            console.log(payload, 'LiveScore_SETTING_CHANGE_FORM')
 
             const keys = payload.key
             const Data = payload.data

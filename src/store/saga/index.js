@@ -125,7 +125,8 @@ import {
   importCompetitionPlayer,
   importCompetitionTeams,
   deleteTeamSaga,
-  playerChangeDivisionSaga
+  playerChangeDivisionSaga,
+  playerCommentList
 } from './competitionManagementSaga/competitionPartPlayerGradingSaga';
 import {
   getCompOwnProposedTeamGradingSaga,
@@ -711,8 +712,10 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_UPDATE_DRAWS_LOCK_LOAD, updateDrawsLock)
 
   yield takeEvery(ApiConstants.API_EXPORT_AFFILIATE_DIRECTORY_LOAD, userSaga.exportAffiliateDirectorySaga)
-  
+
   // invite send in registration Form
   yield takeEvery(ApiConstants.API_GET_INVITE_TYPE_LOAD, getSendInvitesSaga)
+
+  yield takeEvery(ApiConstants.API_GET_COMMENT_LIST_LOAD, playerCommentList)
 
 }

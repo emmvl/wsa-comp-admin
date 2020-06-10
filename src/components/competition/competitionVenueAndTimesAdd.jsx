@@ -552,9 +552,11 @@ class CompetitionVenueAndTimesAdd extends Component {
                             <div className="col-sm">
                                 <Select
                                     mode="multiple"
+                                    showSearch
                                     style={{ width: "100%" }}
                                     onChange={(affiliateData) => this.props.updateVenuAndTimeDataAction(affiliateData, 'organisations', 'organisations')}
                                     placeholder={'Select '}
+                                    optionFilterProp="children"
                                 >
                                     {venueOragnasation.length > 0 && venueOragnasation.map((item, index) => (
                                         < Option key={item.id} value={item.id}> {item.name}</Option>

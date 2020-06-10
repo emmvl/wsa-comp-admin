@@ -327,7 +327,6 @@ function liveScoreMatchReducer(state = initialState, action) {
                 state.forfietedTeam = action.data
 
             } else if (action.key == 'abandoneReason') {
-                console.log(action, 'API_LIVE_SCORE_UPDATE_MATCH')
                 state.abandoneReason = action.data
 
             } else if (action.key == 'clearData') {

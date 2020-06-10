@@ -147,7 +147,7 @@ class LiveScoreLadderSettings extends Component {
     }
 
     publicLadderLink = () => {
-        let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
+        let { organisationUniqueKey } = JSON.parse(localStorage.getItem('setOrganisationData'))
 
         return (
 
@@ -156,8 +156,8 @@ class LiveScoreLadderSettings extends Component {
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.ladderLink} />
                         <div>
-                            <a className="userRegLink" href={AppConstants.public_Ladder_Url + `organisationId=${organisationId}`} target='_blank' >
-                                {AppConstants.public_Ladder_Url + `organisationId=${organisationId}`}
+                            <a className="userRegLink" href={AppConstants.public_Ladder_Url + `organisationKey=${organisationUniqueKey}`} target='_blank' >
+                                {AppConstants.public_Ladder_Url + `organisationKey=${organisationUniqueKey}`}
                             </a>
                         </div>
                     </div>

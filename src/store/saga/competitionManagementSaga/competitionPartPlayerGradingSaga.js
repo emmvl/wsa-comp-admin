@@ -180,8 +180,10 @@ export function* importCompetitionPlayer(action) {
             });
         } else {
             let res = JSON.parse(JSON.stringify(result));
-            yield put({ type: ApiConstants.API_COMPETITION_PART_PLAYER_GRADING_FAIL,
-                status: result.status });
+            yield put({
+                type: ApiConstants.API_COMPETITION_PART_PLAYER_GRADING_FAIL,
+                status: result.status
+            });
             setTimeout(() => {
                 message.config({
                     duration: 4,
@@ -210,8 +212,10 @@ export function* importCompetitionTeams(action) {
             });
         } else {
             let res = JSON.parse(JSON.stringify(result));
-            yield put({ type: ApiConstants.API_COMPETITION_PART_PLAYER_GRADING_FAIL,
-                status: result.status});
+            yield put({
+                type: ApiConstants.API_COMPETITION_PART_PLAYER_GRADING_FAIL,
+                status: result.status
+            });
             setTimeout(() => {
                 message.config({
                     duration: 4,
@@ -264,6 +268,26 @@ export function* playerChangeDivisionSaga(action) {
         yield call(errorSaga, error)
 
     }
-}												   
+}
+
+export function* playerCommentList(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.getCommentList, action.competitionId, action.entityId, action.commentType);
+        console.log("(*****" + result.status);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_COMMENT_LIST_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+
+    }
+}
 
 

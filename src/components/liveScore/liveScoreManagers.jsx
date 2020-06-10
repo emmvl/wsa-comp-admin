@@ -70,23 +70,7 @@ const columns = [
         key: 'linkedEntity',
         sorter: (a, b) => a.linkedEntity.length - b.linkedEntity.length,
         render: (linkedEntity, record) => {
-            // return (
-            //     teamListArr(linkedEntity.length > 0 && linkedEntity.map((item) => item.entityId)) ?
-            //         <NavLink to={{
-            //             // pathname: '/liveScoreManagerView',
-            //             // state: { tableRecord: record }
-            //             pathname: '/userPersonal',
-            //             state: { userId: record.id, screenKey: "livescore" }
-            //         }}>
-            //             {linkedEntity.length > 0 && linkedEntity.map((item) => (
-            //                 <span style={{ color: '#ff8237', cursor: 'pointer' }} className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
-            //             ))
-            //             }
-            //         </NavLink>
-            //         : linkedEntity.length > 0 && linkedEntity.map((item) => (
-            //             <span style={{ color: 'red', cursor: 'pointer' }} className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
-            //         ))
-            // )
+
             return (
                 <div>
                     {linkedEntity.length > 0 && linkedEntity.map((item) => (
@@ -104,7 +88,31 @@ const columns = [
                     ))
                     }
                 </div>)
-        }
+        },
+    },
+    {
+        title: 'Organisation',
+        dataIndex: 'linkedEntity',
+        key: 'linkedEntity',
+        sorter: (a, b) => a.linkedEntity.length - b.linkedEntity.length,
+        render: (linkedEntity, record) => {
+
+            return (
+                <div>
+                    {linkedEntity.length > 0 && linkedEntity.map((item) => (
+                        // teamListData(item.entityId) ?
+                        //     <NavLink to={{
+                        //         // pathname: '/userPersonal',
+                        //         // state: { userId: record.id, screenKey: "livescore" }
+                        //     }}>
+                        //         <span style={{ color: '#ff8237', cursor: 'pointer' }} className="live-score-desc-text side-bar-profile-data" >{item.parentName}</span>
+                        //     </NavLink>
+                        //     :
+                        <span className="live-score-desc-text side-bar-profile-data">{item.parentName}</span>
+                    ))
+                    }
+                </div>)
+        },
     },
     {
         title: "Action",

@@ -46,3 +46,13 @@
     /* background-color: red; */
 }
 
+.wizard_div{
+    padding: 10px;
+    /* border-style: groove; */
+    border: 1px;
+    border-color: black;
+    border-style: solid;
+  
+
+}
+

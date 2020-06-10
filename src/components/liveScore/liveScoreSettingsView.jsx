@@ -180,7 +180,7 @@ class LiveScoreSettingsView extends Component {
                 const umpirenum = umpire ? 1 : 0
                 const gameTimeTracking = record1.includes("gameTimeTracking")
                 const positionTracking = record1.includes("positionTracking")
-                const recordGoalAttempts = record2.includes("recordGoalAttempts")
+                const recordGoalAttempts = record1.includes("recordGoalAttempts")
                 const centrePassEnabled = record2.includes("centrePassEnabled")
                 const incidentsEnabled = record2.includes("incidentsEnabled")
 
@@ -277,8 +277,8 @@ class LiveScoreSettingsView extends Component {
         const { loader, buzzerEnabled, warningBuzzerEnabled, recordUmpire } = this.props.liveScoreSetting
         let grade = this.state.venueData
         // const applyTo1 = [{ label: 'Record Umpire', value: "recordUmpire" }, { label: ' Game Time Tracking', value: "gameTimeTracking" }, { label: 'Position Tracking', value: "positionTracking" }];
-        const applyTo1 = [{ label: ' Game Time Tracking', value: "gameTimeTracking", helpMsg: 'hi' }, { label: 'Position Tracking', value: "positionTracking", helpMsg: 'hi' }, { label: 'Record Goal Attempts', value: "recordGoalAttempts", helpMsg: 'hi' }];
-        const applyTo2 = [{ label: 'Centre Pass Enabled', value: "centrePassEnabled", helpMsg: 'hi' }, { label: 'Incidents Enabled', value: "incidentsEnabled", helpMsg: 'hi' }];
+        const applyTo1 = [{ label: ' Game Time Tracking', value: "gameTimeTracking", }, { label: 'Position Tracking', value: "positionTracking", }, { label: 'Record Goal Attempts', value: "recordGoalAttempts", }];
+        const applyTo2 = [{ label: 'Centre Pass Enabled', value: "centrePassEnabled", }, { label: 'Incidents Enabled', value: "incidentsEnabled", }];
         const turnOffBuzzer = [{ label: AppConstants.turnOffBuzzer, value: true }];
         const buzzerEnabledArr = [{ label: AppConstants.turnOff_30Second, value: true }];
 
@@ -473,8 +473,8 @@ class LiveScoreSettingsView extends Component {
                             value={recordUmpire}
                         >
                             <Option value={"NONE"}>{'None'}</Option>
-                            <Option value={"NAMES"}>{'Integrated'}</Option>
-                            <Option value={"USERS"}>{'At courts'}</Option>
+                            <Option value={"USERS"}>{'Integrated'}</Option>
+                            <Option value={"NAMES"}>{'At courts'}</Option>
                         </Select>
                     </div>
                 </div>
