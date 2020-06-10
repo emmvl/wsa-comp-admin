@@ -1258,7 +1258,8 @@ const AppConstants = {
 
   whichTeamForfieted: 'Which team forfeited?',
   matchAbandoned: "Match Abandoned?",
-  finalsMessage: "Finals has not been enabled for this Competition"
+  finalsMessage: "Finals has not been enabled for this Competition",
+  allowTeamRegistration: "Allow Team Registrations"
 };
 
 export default AppConstants;

@@ -616,7 +616,7 @@ class RegistrationMembershipFee extends Component {
                                     }
                                     disabled={this.state.membershipIsUsed}
 									>
-										{`Allow ${item.membershipProductTypeRefName} Registrations`}
+										{AppConstants.allowTeamRegistration}
 									</Checkbox>
 
 									{item.isAllow && (
