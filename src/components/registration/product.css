@@ -909,4 +909,12 @@ align-items: flex-end;
     height: 40px !important;
 }
 
+.comp-fee-sub-heading-txt{
+  margin-top: 15px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  color: var(--app-1b1b34);
+  font-weight: 500;
+  font-family: inter-medium;
+}
  
