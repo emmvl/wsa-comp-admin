@@ -289,11 +289,10 @@ function checkEntitiyObjectValues(selected, defaultEnitties, venuePrefId) {
         status: false,
         result: []
     }
-
     for (let i in defaultEnitties) {
         let entitiy = defaultEnitties[i].entities
         for (let j in entitiy) {
-            if (entitiy[j].venuePreferenceEntityId == selected && venuePrefId == defaultEnitties[j].venueConstraintCourtPreferenceId) {
+            if (entitiy[j].venuePreferenceEntityId == selected && venuePrefId == defaultEnitties[i].venueConstraintCourtPreferenceId) {
                 entityOnjecy = {
                     status: true,
                     result: entitiy[j]
@@ -371,7 +370,7 @@ function craeteSelectedCourtPrefArray(selectedCourts, allCourtsList, courtRotati
 }
 
 function createEntityObject(action, courtPreferencesPost, evenRotation, venuePrefId) {
-
+  
     let entityObjectArr = []
     for (let i in action.data) {
         let checkEntitiyObject = checkEntitiyObjectValues(action.data[i], courtPreferencesPost, venuePrefId)
