@@ -317,10 +317,6 @@ class CompetitionDraws extends Component {
       message.config({ duration: 0.9, maxCount: 1 })
       message.error(ValidationConstants.pleaseSelectVenue)
     }
-    else if (this.state.roundId == null || this.state.roundId == "") {
-      message.config({ duration: 0.9, maxCount: 1 })
-      message.error(ValidationConstants.pleaseSelectRound)
-    }
     else {
       this.props.publishDraws(this.state.firstTimeCompId)
     }
@@ -896,9 +892,13 @@ class CompetitionDraws extends Component {
                                 </Menu.Item>
                               }
                               <Menu.Item key="2" >
-                                <NavLink to={{ pathname: `/competitionException`, 
-                                          state: { drawsObj: slotObject, yearRefId: this.state.yearRefId, 
-                                          competitionId: this.state.firstTimeCompId, organisationId: this.state.organisationId} }} >
+                                <NavLink to={{
+                                  pathname: `/competitionException`,
+                                  state: {
+                                    drawsObj: slotObject, yearRefId: this.state.yearRefId,
+                                    competitionId: this.state.firstTimeCompId, organisationId: this.state.organisationId
+                                  }
+                                }} >
                                   <span >Exception</span>
                                 </NavLink>
                               </Menu.Item>

@@ -123,7 +123,7 @@ const columns = [
         width: 110,
         render: (comments, record) =>
             <div style={{ display: "flex", justifyContent: "center", cursor: "pointer" }} onClick={() => this_obj.onClickComment(record)}>
-                <img src={comments !== null && comments.length > 0 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
+                <img src={record.isCommentsAvailable == 1 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
             </div>,
     },
     {

@@ -1013,8 +1013,8 @@ const AppConstants = {
 
   coachExport: `https://users-api-dev.worldsportaction.com/users/byRole/export?roleId=17&entityTypeId=1&entityId=`,
   managerExport: `https://users-api-dev.worldsportaction.com/users/byRole/export?roleId=3&entityTypeId=1&entityId=`,
-  scorerExport: `http://127.0.0.1:5002/roster/exportScorer?competitionId=`,
-  teamExport: `http://127.0.0.1:5002/teams/export?competitionId=`,
+  scorerExport: `https://livescores-api-dev.worldsportaction.com/roster/exportScorer?competitionId=`,
+  teamExport: `https://livescores-api-dev.worldsportaction.com/teams/export?competitionId=`,
   playersToPay: 'Players to Pay',
   exportTeams: 'Export Teams',
   exportPlayers: 'Export Players',
@@ -1252,11 +1252,11 @@ const AppConstants = {
   set: "Set",
   setup: "Set up",
   setupStripe: "Stripe account",
-
   resultStatus: 'Result Status',
-
   whichTeamForfieted: 'Which team forfeited?',
-  matchAbandoned: "Match Abandoned?"
+  matchAbandoned: "Match Abandoned?",
+  drawsLink:"Draws Link",
+  public_draws_Url: `https://netball-registration-dev.worldsportaction.com/livescoreSeasonFixture?`,
 };
 
 export default AppConstants;

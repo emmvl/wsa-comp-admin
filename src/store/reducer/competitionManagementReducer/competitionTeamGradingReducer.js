@@ -6,7 +6,7 @@ const initialState = {
     onLoad: false,
     onTeamDeleteLoad: false,
     updateGradeOnLoad: false,
-    onDivisionChangeLoad: false,								
+    onDivisionChangeLoad: false,
     error: null,
     result: [],
     status: 0,
@@ -119,12 +119,12 @@ function sortOrderArray(ownTeamGradingSummaryData) {
         ownTeamGradingSummaryData.map((item) => {
             let grades = item.grades
             grades.map((gradeItem) => {
-                let sortOrder = (gradeItem.sortOrder == null)?null:parseInt(gradeItem.sortOrder); 
+                let sortOrder = (gradeItem.sortOrder == null) ? null : parseInt(gradeItem.sortOrder);
                 sortOrderArray.indexOf(sortOrder) === -1 && sortOrderArray.push(sortOrder)
             })
         })
-		sortOrderArray.sort(sortOrder(true)) 
-        if(sortOrderArray[0]==-1){
+        sortOrderArray.sort(sortOrder(true))
+        if (sortOrderArray[0] == -1) {
             sortOrderArray.shift()
             sortOrderArray.push(-1);
         }
@@ -132,24 +132,24 @@ function sortOrderArray(ownTeamGradingSummaryData) {
     return sortOrderArray
 }
 function sortOrder(ascending) {
-    return function (a, b) {           
-      if (a === b) {
-          return 0;
-      }             
-      else if (a === null) {
-          return 1;
-      }
-      else if (b === null) {
-          return -1;
-      }
-      else if (ascending) {
-          return a < b ? -1 : 1;
-      }
-      else { 
-          return a < b ? 1 : -1;
-      }          
-    };          
-  }  
+    return function (a, b) {
+        if (a === b) {
+            return 0;
+        }
+        else if (a === null) {
+            return 1;
+        }
+        else if (b === null) {
+            return -1;
+        }
+        else if (ascending) {
+            return a < b ? -1 : 1;
+        }
+        else {
+            return a < b ? 1 : -1;
+        }
+    };
+}
 
 function getProposedTeamGradingData(data) {
     if (data.length > 0) {
@@ -228,8 +228,8 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
                     x.sortOrder = index + 1;
                 })
             }
-            else if(action.key == "actionType"){
-                if(action.value == "IsActive"){
+            else if (action.key == "actionType") {
+                if (action.value == "IsActive") {
                     finalGradingOnChangeData[action.index][action.key] = action.value;
                     finalGradingOnChangeData[action.index]["isActive"] = 0;
                     finalGradingOnChangeData[action.index]["delIndicationMsg"] = "Marked as deleted";
@@ -239,7 +239,7 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
                         x.sortOrder = index + 1;
                     })
                 }
-                else{
+                else {
                     finalGradingOnChangeData[action.index][action.key] = action.value;
                     finalGradingOnChangeData[action.index]["isActive"] = 1;
                     finalGradingOnChangeData[action.index]["delIndicationMsg"] = "";
@@ -427,7 +427,7 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
                 state.getCompOwnProposedTeamGradingData[gradingIndex].responseComments = action.comment
                 state.getCompOwnProposedTeamGradingData[gradingIndex].responseCommentsCreatedBy = action.result.message.responseCommentsCreatedBy
                 state.getCompOwnProposedTeamGradingData[gradingIndex].responseCommentsCreatedOn = action.result.message.responseCommentsCreatedOn
-
+                state.getCompOwnProposedTeamGradingData[gradingIndex].isCommentsAvailable = 1
             }
             return {
                 ...state,
@@ -443,6 +443,7 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
                 state.getPartProposedTeamGradingData[partTeamIndex].comments = action.comment
                 state.getPartProposedTeamGradingData[partTeamIndex].commentsCreatedBy = action.result.message.commentsCreatedBy
                 state.getPartProposedTeamGradingData[partTeamIndex].commentsCreatedOn = action.result.message.commentsCreatedOn
+                state.getPartProposedTeamGradingData[partTeamIndex].isCommentsAvailable = 1
             }
             return { ...state, onLoad: false }
 
@@ -455,7 +456,7 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
             return { ...state }
 
         case ApiConstants.API_COMPETITION_TEAM_DELETE_ACTION_LOAD:
-        return { ...state, onTeamDeleteLoad: true };
+            return { ...state, onTeamDeleteLoad: true };
 
         case ApiConstants.API_COMPETITION_TEAM_DELETE_ACTION_SUCCESS:
             return {
@@ -503,8 +504,8 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
             return {
                 ...state,
                 onDivisionChangeLoad: false,
-            }																										 
-    
+            }
+
 
         default:
             return state;

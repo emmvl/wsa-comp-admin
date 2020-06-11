@@ -168,6 +168,28 @@ class LiveScoreLadderSettings extends Component {
     }
 
 
+    publiDrawsLink = () => {
+        let { organisationUniqueKey } = JSON.parse(localStorage.getItem('setOrganisationData'))
+
+        return (
+
+            <div className="content-view mt-5 pt-3" >
+                <div className="row">
+                    <div className="col-sm">
+                        <InputWithHead heading={AppConstants.drawsLink} />
+                        <div>
+                            <a className="userRegLink" href={AppConstants.public_draws_Url + `organisationKey=${organisationUniqueKey}`} target='_blank' >
+                                {AppConstants.public_draws_Url + `organisationKey=${organisationUniqueKey}`}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        )
+    }
+
+
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
@@ -180,7 +202,7 @@ class LiveScoreLadderSettings extends Component {
                     <Form onSubmit={this.handleSubmit} className="login-form">
                         <div className="formView">{this.contentView()}</div>
                         <div className="formView">{this.publicLadderLink()}</div>
-
+                        <div className="formView">{this.publiDrawsLink()}</div>
                     </Form>
 
                     <Footer>{this.footerView()}</Footer>

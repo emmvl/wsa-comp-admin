@@ -296,7 +296,7 @@ let AxiosApi = {
     async  saveCompetitionFeesDivisionAction(payload, competitionId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-		let sourceModule = payload.sourceModule!= undefined ? payload.sourceModule : "REG";																			   
+        let sourceModule = payload.sourceModule != undefined ? payload.sourceModule : "REG";
         var url = `/api/competitionfee/division?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}&sourceModule=${sourceModule}`;
         return Method.dataPost(url, token, payload);
     },
@@ -432,11 +432,21 @@ let AxiosApi = {
         return Method.dataPost(url, token, payload);
     },
 
-   ///////////Delete Competition Division
+    ///////////Delete Competition Division
     async deleteCompetitionDivision(payload) {
         var url = `/api/competitionfee/competitiondivision/delete`;
         return Method.dataPost(url, token, payload);
-    },									  
+    },
+
+    ///registration wizard 
+    async getAllCompetitionList(yearId) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem.organisationUniqueKey
+        // var url = `/api/orgregistration/competitionyear/${year}`;
+        var url = `/api/competitionfee/registrationWizard?organisationUniqueKey=${organisationUniqueKey}&yearId=${yearId}`;
+        return Method.dataGet(url, token);
+
+    }
 
 };
 

@@ -12,7 +12,7 @@ import {
     getCompPartPlayerGradingAction, clearReducerCompPartPlayerGradingAction,
     addNewTeamAction, onDragPlayerAction, onSameTeamDragAction,
     playerGradingComment, deleteTeamAction, addOrRemovePlayerForChangeDivisionAction,
-    changeDivisionPlayerAction
+    changeDivisionPlayerAction, commentListingAction
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import {
     setParticipatingYear,
@@ -654,7 +654,7 @@ class CompetitionPartPlayerGrades extends Component {
                                                                             </Tag>
                                                                         }
                                                                         <img className="comp-player-table-img" src={
-                                                                            (playerItem.comments !== null && playerItem.comments !== "") ? AppImages.commentFilled :
+                                                                            playerItem.isCommentsAvailable == 1 ? AppImages.commentFilled :
                                                                                 AppImages.commentEmpty} alt="" height="20" width="20"
                                                                             style={{ cursor: "pointer" }}
                                                                             onClick={() => this.onClickComment(playerItem, teamIndex)} />
@@ -704,8 +704,9 @@ class CompetitionPartPlayerGrades extends Component {
         )
     }
     onClickComment(player, teamID) {
+        this.props.commentListingAction(this.state.firstTimeCompId, player.playerId, "1")
         this.setState({
-            modalVisible: true, comment: player.comments, playerId: player.playerId,
+            modalVisible: true, comment: "", playerId: player.playerId,
             teamID
         })
     }
@@ -848,8 +849,7 @@ class CompetitionPartPlayerGrades extends Component {
                                                             </Tag>
                                                         }
                                                         <img className="comp-player-table-img" src={
-
-                                                            (playerItem.comments !== null && playerItem.comments !== "") ? AppImages.commentFilled :
+                                                            playerItem.isCommentsAvailable == 1 ? AppImages.commentFilled :
                                                                 AppImages.commentEmpty} alt="" height="20" width="20"
                                                             style={{ cursor: "pointer" }}
                                                             onClick={() => this.onClickComment(playerItem, null)}
@@ -1009,7 +1009,8 @@ function mapDispatchToProps(dispatch) {
         playerGradingComment,
         deleteTeamAction,
         addOrRemovePlayerForChangeDivisionAction,
-        changeDivisionPlayerAction
+        changeDivisionPlayerAction,
+        commentListingAction
     }, dispatch)
 }
 

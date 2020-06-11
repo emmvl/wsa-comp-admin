@@ -45,3 +45,22 @@ export function* regDashboardListSaga(action) {
     }
 }
 
+
+//////get the membership fee list in registration
+export function* getCompetitionSaga(action) {
+    try {
+        const result = yield call(AxiosApi.getAllCompetitionList, action.yearRefId);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_ALL_COMPETITION_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+

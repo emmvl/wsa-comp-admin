@@ -14,7 +14,8 @@ class RegistrationWizardModel extends React.Component {
     }
 
     render() {
-        const { stripeConnectURL, stripeConnected, competitionValue, competitionChange, wizardCompetition, heading, placeholder, name, handleBlur, modalTitle, visible, onOK, onCancel, ownnerComment, affilateComment } = this.props
+        const { competitionClick, registrationClick, publishStatus, stripeConnectURL, stripeConnected, competitionId, competitionChange, wizardCompetition, heading, placeholder, name, handleBlur, modalTitle, visible, onOK, onCancel, ownnerComment, affilateComment } = this.props
+        console.log(publishStatus)
         return (
             <div style={{ backgroundColor: "red" }}>
                 <Modal
@@ -40,7 +41,7 @@ class RegistrationWizardModel extends React.Component {
                             className="year-select"
                             style={{ minWidth: 160 }}
                             onChange={competitionChange}
-                            value={competitionValue}
+                            value={competitionId}
                         >
                             {wizardCompetition.length > 0 && wizardCompetition.map((item, index) => {
                                 return (
@@ -94,22 +95,23 @@ class RegistrationWizardModel extends React.Component {
                                 <span className={`comment-heading`}>
                                     {AppConstants.set} {" "}
                                 </span>
-                                <span className={`comment-heading`} style={{ textDecoration: "underline", cursor: 'pointer' }}>
+
+                                <span className={`comment-heading`} onClick={competitionClick} style={{ textDecoration: "underline", cursor: 'pointer' }}>
                                     {AppConstants.competitionFees}
                                 </span>
                             </div>
                         </div>
-                        <div className="col-sm pl-0 pb-2">
+                        <div click className="col-sm pl-0 pb-2">
                             <div className="col-sm-2 pl-0 pb-2">
                                 <span className={`comment-heading`} >
                                     {!stripeConnected ? "3" : "2"} {" "}
                                 </span>
                             </div>
                             <div className="col-sm pl-0 pb-2">
-                                <span className={`comment-heading`}>
+                                <span disabled={publishStatus == 2 ? true : false} className={`comment-heading`}>
                                     {AppConstants.createPublish} {" "}
                                 </span>
-                                <span className={`comment-heading`} style={{ textDecoration: "underline", cursor: 'pointer' }}>
+                                <span onClick={registrationClick} className={`comment-heading`} style={{ textDecoration: "underline", cursor: 'pointer' }}>
                                     {AppConstants.registrationForm}
                                 </span>
                             </div>

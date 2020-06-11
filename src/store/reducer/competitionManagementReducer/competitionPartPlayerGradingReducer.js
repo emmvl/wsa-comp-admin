@@ -261,18 +261,18 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             console.log(action)
             if (action.teamIndex == null) {
                 let matchIndex = state.unassignedPartPlayerGradingListData.players.findIndex(x => x.playerId == action.playerId)
-                console.log(matchIndex)
                 if (matchIndex > -1) {
                     state.unassignedPartPlayerGradingListData["players"][matchIndex].comments = action.comment
                     state.unassignedPartPlayerGradingListData["players"][matchIndex].commentsCreatedBy = action.result.message.commentsCreatedBy
                     state.unassignedPartPlayerGradingListData["players"][matchIndex].commentsCreatedOn = action.result.message.commentsCreatedOn
-
+                    state.unassignedPartPlayerGradingListData["players"][matchIndex].isCommentsAvailable = 1
                 }
             }
             else {
                 let assignMatchIndex = state.assignedPartPlayerGradingListData[action.teamIndex].players.findIndex(x => x.playerId == action.playerId)
                 if (assignMatchIndex > -1) {
                     state.assignedPartPlayerGradingListData[action.teamIndex].players[assignMatchIndex].comments = action.comment
+                    state.assignedPartPlayerGradingListData[action.teamIndex].players[assignMatchIndex].isCommentsAvailable = 1
                 }
             }
             state.onLoad = false
