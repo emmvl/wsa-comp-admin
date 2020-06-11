@@ -699,7 +699,7 @@ class RegistrationMembershipFee extends Component {
                 </Form.Item>
 
 
-                <div className='row'>
+                <div className='contextualHelp-RowDirection'>
                     <span className="applicable-to-heading  required-field">
                         {AppConstants.validity}
                     </span>

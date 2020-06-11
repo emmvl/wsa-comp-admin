@@ -116,7 +116,7 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "mainBreakDuration"),
     },
     {
-        title: 'Quater Break',
+        title: 'Quarter Break',
         dataIndex: 'qtrBreak',
         key: 'qtrBreak',
         sorter: (a, b) => tableSort(a, b, "qtrBreak"),

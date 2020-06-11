@@ -12,7 +12,16 @@ function regDashboardListAction(offset, yearRefId) {
     return action;
 }
 
+function getAllCompetitionAction(yearRefId) {
+    const action = {
+        type: ApiConstants.API_GET_ALL_COMPETITION_LOAD,
+        yearRefId
+    }
+    return action
+}
+
 
 export {
     regDashboardListAction,
+    getAllCompetitionAction
 };

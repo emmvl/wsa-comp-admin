@@ -199,7 +199,7 @@ const columns = [
             <div className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}
                 style={{ display: "flex", justifyContent: "center", cursor: "pointer", backgroundColor: "none" }}
                 onClick={() => this_obj.onClickComment(record)}>
-                <img src={responseComments !== null && responseComments.length > 0 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
+                <img src={record.isCommentsAvailable == 1 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
             </div>,
     },
     {

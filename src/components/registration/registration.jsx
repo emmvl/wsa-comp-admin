@@ -16,9 +16,11 @@ import { endUserRegDashboardListAction } from
 import { getCommonRefData, getGenderAction } from
     '../../store/actions/commonAction/commonAction';
 import { getAffiliateToOrganisationAction } from "../../store/actions/userAction/userAction";
-import { getOnlyYearListAction } from '../../store/actions/appAction'
+import { getAllCompetitionAction } from "../../store/actions/registrationAction/registrationDashboardAction"
+import { getOnlyYearListAction, } from '../../store/actions/appAction'
 import { isEmptyArray } from "formik";
 import WizardModel from "../../customComponents/registrationWizardModel"
+import history from "../../util/history";
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
@@ -131,7 +133,16 @@ class Registration extends Component {
             affiliate: -1,
             membershipProductId: -1,
             paymentId: -1,
-            visible: false
+            visible: false,
+            competitionId: "",
+            publishStatus: 0,
+            orgRegistratinId: 0,
+            registrationCloseDate: '',
+            wizardYear: 1,
+            isDirect: false,
+            inviteeStatus: 0,
+            competitionCreatorOrganisation: 0,
+
         }
         // this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
@@ -139,9 +150,33 @@ class Registration extends Component {
     componentDidMount() {
         this.referenceCalls(this.state.organisationId);
         this.handleRegTableList(1);
+        this.props.getAllCompetitionAction(this.state.yearRefId)
     }
     componentDidUpdate(nextProps) {
+        let competitionTypeList = this.props.registrationDashboardState.competitionTypeList
+        if (nextProps.registrationDashboardState !== this.props.registrationDashboardState) {
+            if (nextProps.registrationDashboardState.competitionTypeList !== competitionTypeList) {
+                if (competitionTypeList.length > 0) {
+                    let competitionId = competitionTypeList[0].competitionId
+                    let publishStatus = competitionTypeList[0].competitionStatusId
+                    let orgRegistratinId = competitionTypeList[0].orgRegistratinId
+                    let wizardYear = competitionTypeList[0].yearId
+                    let registrationCloseDate = competitionTypeList[0].registrationCloseDate
+                    let inviteeStatus = competitionTypeList[0].inviteeStatus
+                    let competitionCreatorOrganisation = competitionTypeList[0].competitionCreatorOrganisation
+                    let isDirect = competitionTypeList[0].isDirect
+                    this.setState({
+                        competitionId: competitionId,
+                        publishStatus: publishStatus,
+                        orgRegistratinId: orgRegistratinId,
+                        wizardYear: wizardYear, registrationCloseDate: registrationCloseDate,
+                        inviteeStatus: inviteeStatus, competitionCreatorOrganisation: competitionCreatorOrganisation,
+                        isDirect: isDirect,
+                    })
 
+                }
+            }
+        }
     }
 
     handleRegTableList = (page) => {
@@ -175,6 +210,7 @@ class Registration extends Component {
     onChangeDropDownValue = async (value, key) => {
         if (key == "yearRefId") {
             await this.setState({ yearRefId: value });
+            this.props.getAllCompetitionAction(this.state.yearRefId)
             this.handleRegTableList(1);
         }
         else if (key == "competitionId") {
@@ -238,15 +274,32 @@ class Registration extends Component {
     }
 
     openwizardmodel() {
-        this.setState
-            ({
-                visible: true
-            })
+        let competitionData = this.props.registrationDashboardState.competitionTypeList
+        if (competitionData.length > 0) {
+            let competitionId = competitionData[0].competitionId
+            let publishStatus = competitionData[0].competitionStatusId
+            let orgRegistrationId = competitionData[0].orgRegistratinId
+            let wizardYear = competitionData[0].yearId
+            let registrationCloseDate = competitionData[0].registrationCloseDate
+            let inviteeStatus = competitionData[0].inviteeStatus
+            let competitionCreatorOrganisation = competitionData[0].competitionCreatorOrganisation
+            let isDirect = competitionData[0].isDirect
+            this.setState
+                ({
+                    competitionId, publishStatus, orgRegistrationId,
+                    wizardYear, registrationCloseDate, inviteeStatus, competitionCreatorOrganisation, isDirect,
+                    visible: true
+                })
+        } else {
+            this.setState
+                ({
+                    visible: true
+                })
+        }
 
     }
     userEmail = () => {
         let orgData = getOrganisationData()
-        console.log(orgData)
         let email = orgData && orgData.email ? orgData.email : ""
         return email
     }
@@ -261,8 +314,8 @@ class Registration extends Component {
         let stripeConnected = this.stripeConnected()
         let userEmail = this.userEmail()
         let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=ca_GoE4DQeJGNAvRzAq6MJOmZ8xmFTeLgan&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=https://netball-comp-admin-dev.worldsportaction.com/registrationPayments`
-
-        let registrationCompetition = []
+        let registrationCompetition = this.props.registrationDashboardState.competitionTypeList
+        console.log(registrationCompetition, this.props.appState)
         return (
             <div className="comp-player-grades-header-view-design" >
                 <div className="row" >
@@ -288,11 +341,62 @@ class Registration extends Component {
                     visible={this.state.visible}
                     onCancel={() => this.setState({ visible: false })}
                     wizardCompetition={registrationCompetition}
+                    competitionChange={(competitionId) => this.changeCompetition(competitionId)}
+                    competitionId={this.state.competitionId}
                     stripeConnected={stripeConnected}
                     stripeConnectURL={stripeConnectURL}
+                    publishStatus={this.state.publishStatus}
+                    competitionClick={() => this.clickCompetition()}
+                    registrationClick={() => this.state.publishStatus == 2 && this.onClickRegistration()}
                 />
             </div >
         )
+    }
+
+    //wizard  registration click
+    onClickRegistration() {
+        if (this.state.isDirect == true && this.state.competitionCreatorOrganisation == 1) {
+            history.push("/registrationForm", {
+                id: this.state.competitionId,
+                year: this.state.wizardYear,
+                orgRegId: this.state.orgRegistrationId, compCloseDate: this.state.registrationCloseDate
+            })
+        } else if (this.state.inviteeStatus == 1) {
+            history.push("/registrationForm", {
+                id: this.state.competitionId,
+                year: this.state.wizardYear,
+                orgRegId: this.state.orgRegistrationId, compCloseDate: this.state.registrationCloseDate
+            })
+        }
+    }
+
+
+    //wizard competition click
+    clickCompetition() {
+        if (this.state.competitionId !== 0) {
+            history.push("/registrationCompetitionFee", { id: this.state.competitionId })
+        }
+        else {
+            history.push("/registrationCompetitionFee", { id: null })
+        }
+
+    }
+
+    changeCompetition(competitionId) {
+        let competitionData = this.props.registrationDashboardState.competitionTypeList
+        let competitionIndex = competitionData.findIndex((x) => x.competitionId === competitionId)
+        let publishStatus = competitionData[competitionIndex].competitionStatusId
+        let orgRegistrationId = competitionData[competitionIndex].orgRegistratinId
+        let wizardYear = competitionData[competitionIndex].yearId
+        let registrationCloseDate = competitionData[competitionIndex].registrationCloseDate
+        let inviteeStatus = competitionData[competitionIndex].inviteeStatus
+        let competitionCreatorOrganisation = competitionData[competitionIndex].competitionCreatorOrganisation
+        let isDirect = competitionData[competitionIndex].isDirect
+        this.setState({
+            competitionId, publishStatus, orgRegistrationId,
+            wizardYear, registrationCloseDate, inviteeStatus, competitionCreatorOrganisation,
+            isDirect,
+        })
     }
 
     ///dropdown view containing all the dropdown of header
@@ -564,7 +668,8 @@ function mapDispatchToProps(dispatch) {
         getAffiliateToOrganisationAction,
         getCommonRefData,
         getGenderAction,
-        getOnlyYearListAction
+        getOnlyYearListAction,
+        getAllCompetitionAction
     }, dispatch);
 }
 
@@ -573,7 +678,8 @@ function mapStatetoProps(state) {
         userRegistrationState: state.EndUserRegistrationState,
         userState: state.UserState,
         commonReducerState: state.CommonReducerState,
-        appState: state.AppState
+        appState: state.AppState,
+        registrationDashboardState: state.RegistrationDashboardState
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)((Registration));

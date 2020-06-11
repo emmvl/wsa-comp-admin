@@ -160,7 +160,7 @@ import {
   getDivisionSaga, competitionFixtureSaga, updateCompetitionFixtures, updateDrawsLock
 } from './competitionManagementSaga/competitionDrawsSaga';
 
-import { regDashboardListSaga } from "./registrationSaga/registrationDashboardSaga"
+import { regDashboardListSaga, getCompetitionSaga } from "./registrationSaga/registrationDashboardSaga"
 ////Competition Dashboard Saga
 import { competitionDashboardSaga } from './competitionManagementSaga/competitionDashboardSaga';
 // import { liveScoreAddEditManagerSaga } from './liveScoreSaga/liveScoreManagerSaga';
@@ -717,5 +717,7 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_GET_INVITE_TYPE_LOAD, getSendInvitesSaga)
 
   yield takeEvery(ApiConstants.API_GET_COMMENT_LIST_LOAD, playerCommentList)
+
+  yield takeEvery(ApiConstants.API_GET_ALL_COMPETITION_LOAD, getCompetitionSaga)
 
 }
