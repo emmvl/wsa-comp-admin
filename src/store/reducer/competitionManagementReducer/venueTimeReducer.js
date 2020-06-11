@@ -289,11 +289,10 @@ function checkEntitiyObjectValues(selected, defaultEnitties, venuePrefId) {
         status: false,
         result: []
     }
-
     for (let i in defaultEnitties) {
         let entitiy = defaultEnitties[i].entities
         for (let j in entitiy) {
-            if (entitiy[j].venuePreferenceEntityId == selected && venuePrefId == defaultEnitties[j].venueConstraintCourtPreferenceId) {
+            if (entitiy[j].venuePreferenceEntityId == selected && venuePrefId == defaultEnitties[i].venueConstraintCourtPreferenceId) {
                 entityOnjecy = {
                     status: true,
                     result: entitiy[j]
@@ -371,7 +370,7 @@ function craeteSelectedCourtPrefArray(selectedCourts, allCourtsList, courtRotati
 }
 
 function createEntityObject(action, courtPreferencesPost, evenRotation, venuePrefId) {
-
+  
     let entityObjectArr = []
     for (let i in action.data) {
         let checkEntitiyObject = checkEntitiyObjectValues(action.data[i], courtPreferencesPost, venuePrefId)
@@ -1204,16 +1203,17 @@ function VenueTimeState(state = initialState, action) {
             };
 
         case ApiConstants.API_ADD_VENUE_SUCCESS:
-
+            console.log('venuePost Success', action.result)
             if (action.result != null) {
-
+               
                 state.selectedVenueIdAdd = "addVenue"
                 state.selectedVenueId.push(action.result.venueId)
+               
                 let courtAddData = generateCourtObj(state.courtArray, action.result)
                 state.courtArray = courtAddData
                 state.createVenue = action.result
 
-                console.log(state.venuePost, 'venuePostIssue', action.result)
+               
             }
             return { ...state }
 

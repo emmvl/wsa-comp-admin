@@ -258,7 +258,8 @@ class CompetitionFinals extends Component {
                 <div className="fluid-width" >
                     <div className="row" >
                         <div className="col-sm-3" >
-                            <div className="com-year-select-heading-view" >
+                            <div  style={{width: "fit-content",display: "flex", flexDirection: "row",
+                                    alignItems: "center"}} >
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
                                     name={"yearRefId"}
@@ -276,7 +277,7 @@ class CompetitionFinals extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-3" >
+                        <div className="col-sm-4" >
                             <div style={{
                                 width: "100%", display: "flex",
                                 flexDirection: "row",
@@ -315,7 +316,6 @@ class CompetitionFinals extends Component {
         let appState = this.props.appState;
         let {applyToData, extraTimeDrawData, finalFixtureTemplateData} = this.props.commonReducerState;
         return (
-           
             <div className="content-view" style={{paddingLeft: '0px', paddingTop: '0px'}}>
                 {(finalsList || []).map((data, index) => (
                     <div key={data.competitionFormatTemplateId} className="inside-container-view">
@@ -542,8 +542,13 @@ class CompetitionFinals extends Component {
                 {/* <Checkbox className="single-checkbox pt-2" defaultChecked={data.isDefault} onChange={(e) => this.onChangeSetValue(e.target.checked, 'isDefault',index)}>{AppConstants.setAsDefault}</Checkbox> */}
                 </div>
                 ))}
-            </div>
-           
+
+                {(finalsList == null || finalsList.length == 0) &&
+                <div className="final-validation">
+                    {AppConstants.finalsMessage}
+                </div>
+                }
+            </div> 
         )
     }
 

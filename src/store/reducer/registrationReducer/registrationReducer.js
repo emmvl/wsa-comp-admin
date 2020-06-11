@@ -579,6 +579,15 @@ function getDefaultMembershipType(data) {
         else {
           getMembershipType[i]["isMemebershipType"] = false;
         }
+
+        if(getMembershipType[i].allowTeamRegistrationTypeRefId!= null && 
+          getMembershipType[i].allowTeamRegistrationTypeRefId != 0){
+            getMembershipType[i]["isAllow"] = true;
+          }
+          else{
+            getMembershipType[i]["isAllow"] = false;
+          }
+
       }
       membershipProductTypesTempArray = getMembershipType
     }
@@ -1031,6 +1040,15 @@ function registration(state = initialState, action) {
       if (action.keyword == "isMandate") {
         state.getDefaultMembershipProductTypes[action.index].isMandate = action.checkedValue
 
+      }
+	  if (action.keyword == "isAllow") {
+        state.getDefaultMembershipProductTypes[action.index].isAllow = action.checkedValue
+        if(action.checkedValue == true){
+          state.getDefaultMembershipProductTypes[action.index]["allowTeamRegistrationTypeRefId"] = 1
+        }
+        else{
+          state.getDefaultMembershipProductTypes[action.index]["allowTeamRegistrationTypeRefId"] = null;
+        }
       }
       if (action.keyword == "isMemebershipType") {
         state.getDefaultMembershipProductTypes[action.index].isMemebershipType = action.checkedValue

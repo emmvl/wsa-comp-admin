@@ -192,7 +192,17 @@ function inviteTypeAction(){
         type: ApiConstants.API_GET_INVITE_TYPE_LOAD,
     }
     return action;
-}				 		
+}	
+
+function getAllowTeamRegistrationTypeAction() {
+								   
+    const action = {
+        type: ApiConstants.API_ALLOW_TEAM_REGISTRATION_TYPE_LOAD,
+
+    };
+
+    return action
+}			 		
 
 export {
     timeSlotInit,
@@ -217,5 +227,6 @@ export {
     getExtraTimeDrawAction,
     getFinalFixtureTemplateAction,
     courtListAction,
-    inviteTypeAction				
+    inviteTypeAction,
+	getAllowTeamRegistrationTypeAction	
 }

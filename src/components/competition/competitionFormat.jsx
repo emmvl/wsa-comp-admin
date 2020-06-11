@@ -443,9 +443,9 @@ class CompetitionFormat extends Component {
 
                 for(let item in competitionFormatDivision)
                 {
-                    console.log("item.isFinal::" + JSON.stringify(competitionFormatDivision[item]["isFinal"]));
+                    console.log("item.isFinal::" + formatList.competitionFormatRefId);
                     let isFinal = competitionFormatDivision[item]["isFinal"];
-                    if(isFinal)
+                    if(isFinal && formatList.competitionFormatRefId!= 1)
                     {
                         console.log("***********************");
                         this.setState({isFinalAvailable: true});
@@ -520,7 +520,8 @@ class CompetitionFormat extends Component {
                 <div className="fluid-width" >
                     <div className="row" >
                         <div className="col-sm-3" >
-                            <div className="com-year-select-heading-view" >
+                            <div style={{width: "fit-content",display: "flex", flexDirection: "row",
+                                    alignItems: "center"}}  >
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
                                     name={"yearRefId"}
