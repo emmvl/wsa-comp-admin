@@ -443,9 +443,9 @@ class CompetitionFormat extends Component {
 
                 for(let item in competitionFormatDivision)
                 {
-                    console.log("item.isFinal::" + JSON.stringify(competitionFormatDivision[item]["isFinal"]));
+                    console.log("item.isFinal::" + formatList.competitionFormatRefId);
                     let isFinal = competitionFormatDivision[item]["isFinal"];
-                    if(isFinal)
+                    if(isFinal && formatList.competitionFormatRefId!= 1)
                     {
                         console.log("***********************");
                         this.setState({isFinalAvailable: true});
