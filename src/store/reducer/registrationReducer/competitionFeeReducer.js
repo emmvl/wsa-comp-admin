@@ -1001,11 +1001,13 @@ function createProductFeeArr(data) {
 
 
         let memberShipProductType = getMemberShipProductTypes(divisions[i].membershipProductUniqueKey, product)
-
+        //console.log("memberShipProductType&&&&&&&&&&&&" + JSON.stringify(memberShipProductType));
         let alltypeArraySeasonal = []
         let perTypeArraySeasonal = []
         let alltypeArrayCasual = []
         let perTypeArrayCasual = []
+        let allTypeTeamArraySeasonal = [];
+        let perTypeTeamArraySeasonal = [];
 
         for (let j in memberShipProductType) {
             let statusSeasonal = checkStatus(getDivisionsArray, memberShipProductType[j], null, 2)
@@ -2080,7 +2082,7 @@ function competitionFees(state = initialState, action) {
             }
 
         case ApiConstants.API_ADD_VENUE_SUCCESS:
-            console.log(state.selectedVenues)
+           // console.log( 'Competition Fee Venue Success', action.result)
             let venueSuccess = action.result
             if (venueSuccess != null) {
                 let updatedVenue = JSON.parse(JSON.stringify(state.newVenueObj))
@@ -2096,12 +2098,14 @@ function competitionFees(state = initialState, action) {
                 state.venueList.push(updatedVenue)
                 state.selectedVenuesAdd = "Add"
                 state.selectedVenues.push(venueSuccess.venueId)
+
+                let defaultPostVenueObject = {
+                    competitionVenueId: 0,
+                    venueId: venueSuccess.venueId
+                }
+                state.postVenues.push(defaultPostVenueObject)
             }
-            let defaultPostVenueObject = {
-                competitionVenueId: 0,
-                venueId: venueSuccess.venueId
-            }
-            state.postVenues.push(defaultPostVenueObject)
+            
             console.log(state.selectedVenues)
             return { ...state }
 

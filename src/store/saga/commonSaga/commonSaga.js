@@ -78,6 +78,7 @@ export function* addVenueSaga(action) {
         const result = yield call(CommonAxiosApi.addVenue, action.data);
         console.log(result, 'AddVenueSaga' + venueId);
         if (result.status === 1) {
+            console.log("*******************************&&&&&" + venueId);
             yield put({
                 type: ApiConstants.API_ADD_VENUE_SUCCESS,
                 result: venueId == 0 ? result.result.data : null,
@@ -93,6 +94,7 @@ export function* addVenueSaga(action) {
             }, 800);
         }
     } catch (error) {
+        console.log("Error:" + error);
         setTimeout(() => {
             message.error('Something went wrong!');
         }, 800);

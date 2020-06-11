@@ -1204,16 +1204,17 @@ function VenueTimeState(state = initialState, action) {
             };
 
         case ApiConstants.API_ADD_VENUE_SUCCESS:
-
+            console.log('venuePost Success', action.result)
             if (action.result != null) {
-
+               
                 state.selectedVenueIdAdd = "addVenue"
                 state.selectedVenueId.push(action.result.venueId)
+               
                 let courtAddData = generateCourtObj(state.courtArray, action.result)
                 state.courtArray = courtAddData
                 state.createVenue = action.result
 
-                console.log(state.venuePost, 'venuePostIssue', action.result)
+               
             }
             return { ...state }
 
