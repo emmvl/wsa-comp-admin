@@ -1025,7 +1025,7 @@ function createProductFeeArr(data) {
 
     let removeDuplicacyFeeArray = removeDuplicacyInFeeArray(getFeeData)
     getFeeData = removeDuplicacyFeeArray
-    console.log("Test Array**************", getFeeData)
+   // console.log("Test Array**************", getFeeData)
 
     let productArray = []
     for (let i in divisions) {
@@ -1043,12 +1043,15 @@ function createProductFeeArr(data) {
         let perTypeTeamArraySeasonal = [];
 
         for (let j in memberShipProductType) {
+            console.log("*&*&*&*" + JSON.stringify(memberShipProductType[j]));
             let statusSeasonal = checkStatus(getDivisionsArray, memberShipProductType[j], null, 2)
             let statusCasual = checkStatus(getDivisionsArray, memberShipProductType[j], null, 1)
+            let statusteamSeasonal = checkStatus(getDivisionsArray, memberShipProductType[j], null, 3)
 
             let type_Object_casual = null
             let type_Object_seasonal = null
-            console.log("statusCasual, statusSeasonal", statusCasual, statusSeasonal)
+            let type_object_team_seasonal = null;
+            console.log("statusCasual, statusSeasonal, statusteamSeasonal", statusCasual, statusSeasonal, statusteamSeasonal)
             ////// CASUAL OBJECT
             if (statusCasual.status == true) {
                 let mFeesCasual = Number(memberShipProductType[j].mCasualFee) + Number(memberShipProductType[j].mCasualGst)
@@ -1125,6 +1128,50 @@ function createProductFeeArr(data) {
                     "membershipGst": memberShipProductType[j].mSeasonalGst
                 }
             }
+            
+             //// SEASONAL OBJECT Team
+            if(memberShipProductType[j].allowTeamRegistrationTypeRefId == 1)
+            {
+                if (statusteamSeasonal.status == true) {
+                    let mFeesSeasonal = Number(memberShipProductType[j].mSeasonalFee) + Number(memberShipProductType[j].mSeasonalGst)
+
+                    type_object_team_seasonal = {
+                        "competitionMembershipProductFeeId": statusteamSeasonal.result.competitionMembershipProductFeeId,
+                        "competitionMembershipProductTypeId": memberShipProductType[j].competitionMembershipProductTypeId,
+                        "competitionMembershipProductDivisionId": null,
+                        "fee": memberShipProductType[j].isPlaying == 1 ? statusteamSeasonal.result.Fees : null,
+                        "gst": memberShipProductType[j].isPlaying == 1 ? statusteamSeasonal.result.GST : null,
+                        "affiliateFee": statusteamSeasonal.result.affiliateFee ? statusteamSeasonal.result.affiliateFee : 0,
+                        "affiliateGst": statusteamSeasonal.result.affiliateGst ? statusteamSeasonal.result.affiliateGst : 0,
+                        "feeTypeRefId": statusteamSeasonal.result.feeTypeRefId,
+                        "membershipProductTypeName": memberShipProductType[j].membershipProductTypeName,
+                        "membershipProductUniqueKey": divisions[i].membershipProductUniqueKey,
+                        "total": getTotalFees(feesOwner, statusteamSeasonal.result, mFeesSeasonal),
+                        "mFees": mFeesSeasonal,
+                        "membershipSeasonal": memberShipProductType[j].mSeasonalFee,
+                        "membershipGst": memberShipProductType[j].mSeasonalGst
+                    }
+                } else {
+                    type_object_team_seasonal = {
+                        "competitionMembershipProductFeeId": 0,
+                        "competitionMembershipProductTypeId": memberShipProductType[j].competitionMembershipProductTypeId,
+                        "competitionMembershipProductDivisionId": null,
+                        "fee": memberShipProductType[j].isPlaying == 1 ? 0 : null,
+                        "gst": memberShipProductType[j].isPlaying == 1 ? 0 : null,
+                        "affiliateFee": memberShipProductType[j].isPlaying == 1 ? 0 : null,
+                        "affiliateGst": memberShipProductType[j].isPlaying == 1 ? 0 : null,
+                        "feeTypeRefId": 3,
+                        "membershipProductTypeName": memberShipProductType[j].membershipProductTypeName,
+                        "membershipProductUniqueKey": divisions[i].membershipProductUniqueKey,
+                        "total": null,
+                        "mFees": Number(memberShipProductType[j].mSeasonalFee) + Number(memberShipProductType[j].mSeasonalGst),
+                        "membershipSeasonal": memberShipProductType[j].mSeasonalFee,
+                        "membershipGst": memberShipProductType[j].mSeasonalGst
+                    }
+                }
+
+                allTypeTeamArraySeasonal.push(type_object_team_seasonal)
+            }
 
             alltypeArraySeasonal.push(type_Object_seasonal)
             alltypeArrayCasual.push(type_Object_casual)
@@ -1136,9 +1183,11 @@ function createProductFeeArr(data) {
             for (let k in memberShipProductType) {
                 let statusSeasonal = checkStatus(getDivisionsArray, memberShipProductType[k], divisionProductType[j].competitionMembershipProductDivisionId, 2)
                 let statusCasual = checkStatus(getDivisionsArray, memberShipProductType[k], divisionProductType[j].competitionMembershipProductDivisionId, 1)
-
+                let statusTeamSeasonal = checkStatus(getDivisionsArray, memberShipProductType[k], divisionProductType[j].competitionMembershipProductDivisionId, 3)
+                
                 let type_Object_casual = null
                 let type_Object_seasonal = null
+                let type_object_team_seasonal = null;
 
                 ///// CASUAL TYPE -  DIVIVSION
                 if (statusCasual.status == true) {
@@ -1220,18 +1269,59 @@ function createProductFeeArr(data) {
                     }
                 }
 
+                if(memberShipProductType[k].allowTeamRegistrationTypeRefId == 1){
+                    if (statusTeamSeasonal.status == true) {
+                        let mFeesCasualPer = Number(memberShipProductType[k].mSeasonalFee) + Number(memberShipProductType[k].mSeasonalGst)
+                        console.log(memberShipProductType[k])
+                        type_object_team_seasonal = {
+                            "competitionMembershipProductFeeId": statusTeamSeasonal.result.competitionMembershipProductFeeId,
+                            "competitionMembershipProductTypeId": memberShipProductType[k].competitionMembershipProductTypeId,
+                            "competitionMembershipProductDivisionId": divisionProductType[j].competitionMembershipProductDivisionId,
+                            "fee": memberShipProductType[k].isPlaying == 1 ? statusTeamSeasonal.result.Fees : null,
+                            "gst": memberShipProductType[k].isPlaying == 1 ? statusTeamSeasonal.result.GST : null,
+                            "affiliateFee": memberShipProductType[k].isPlaying == 1 ? (statusTeamSeasonal.result.affiliateFee ? statusSeasonal.result.affiliateFee : 0) : null,
+                            "affiliateGst": memberShipProductType[k].isPlaying == 1 ? (statusTeamSeasonal.result.affiliateGst ? statusSeasonal.result.affiliateGst : 0) : null,
+                            "feeTypeRefId": 3,
+                            "membershipProductTypeName": memberShipProductType[k].membershipProductTypeName,
+                            "divisionName": memberShipProductType[k].isPlaying == 1 ? divisionProductType[j].divisionName : "N/A",
+                            "membershipProductUniqueKey": divisions[i].membershipProductUniqueKey,
+                            "total": getTotalFees(feesOwner, statusTeamSeasonal.result, mFeesCasualPer),
+                            "mFees": mFeesCasualPer,
+                            "membershipSeasonal": memberShipProductType[k].mSeasonalFee,
+                            "membershipGst": memberShipProductType[k].mSeasonalGst
+                        }
+                    } else {
+                        type_object_team_seasonal = {
+                            "competitionMembershipProductFeeId": 0,
+                            "competitionMembershipProductTypeId": memberShipProductType[k].competitionMembershipProductTypeId,
+                            "competitionMembershipProductDivisionId": divisionProductType[j].competitionMembershipProductDivisionId,
+                            "fee": memberShipProductType[k].isPlaying == 1 ? 0 : null,
+                            "gst":  memberShipProductType[k].isPlaying == 1 ? 0 : null,
+                            "affiliateFee":  memberShipProductType[k].isPlaying == 1 ? 0 : null,
+                            "affiliateGst":  memberShipProductType[k].isPlaying == 1 ? 0 : null,
+                            "feeTypeRefId": 3,
+                            "membershipProductTypeName": memberShipProductType[k].membershipProductTypeName,
+                            "divisionName": memberShipProductType[k].isPlaying == 1 ? divisionProductType[j].divisionName : "N/A",
+                            "membershipProductUniqueKey": divisions[i].membershipProductUniqueKey,
+                            "total": null,
+                            "mFees": Number(memberShipProductType[k].mSeasonalFee) + Number(memberShipProductType[k].mSeasonalGst),
+                            "membershipSeasonal": memberShipProductType[k].mSeasonalFee,
+                            "membershipGst": memberShipProductType[k].mSeasonalGst
+                        }
+                    }
+                }
+
                 if (memberShipProductType[k].isPlaying == 1) {
                     perTypeArrayCasual.push(type_Object_casual)
                     perTypeArraySeasonal.push(type_Object_seasonal)
+                    perTypeTeamArraySeasonal.push(type_object_team_seasonal)
                 } else {
                     if (j == 0) {
                         perTypeArrayCasual.push(type_Object_casual)
                         perTypeArraySeasonal.push(type_Object_seasonal)
+                        perTypeTeamArraySeasonal.push(type_object_team_seasonal)
                     }
                 }
-
-
-
             }
 
         }
@@ -1249,13 +1339,16 @@ function createProductFeeArr(data) {
         }
         let isSeasonalFeeTypeAvailable = null
         let isCasualFeeTypeAvailable = null
+        let isSeasonalTeamFeeTypeAvailable = null
 
         if (product[i].isProductTypeALL == false) {
             isSeasonalFeeTypeAvailable = checkFeeType(alltypeArraySeasonal)
             isCasualFeeTypeAvailable = checkFeeType(alltypeArrayCasual)
+            isSeasonalTeamFeeTypeAvailable = checkFeeType(allTypeTeamArraySeasonal)
         } else {
             isSeasonalFeeTypeAvailable = checkFeeType(perTypeArraySeasonal)
             isCasualFeeTypeAvailable = checkFeeType(perTypeArrayCasual)
+            isSeasonalTeamFeeTypeAvailable = checkFeeType(perTypeTeamArraySeasonal)
         }
         let object = {
             "membershipProductName": product[i].membershipProductName,
@@ -1263,9 +1356,12 @@ function createProductFeeArr(data) {
             "membershipProductUniqueKey": product[i].membershipProductUniqueKey,
             "seasonal": { allType: alltypeArraySeasonal, perType: perTypeArraySeasonal },
             "casual": { allType: alltypeArrayCasual, perType: perTypeArrayCasual, perType: perTypeArrayCasual },
+            "seasonalTeam": { allType: allTypeTeamArraySeasonal, perType: perTypeTeamArraySeasonal },
             "isAllType": product[i].isProductTypeALL === false ? "allDivisions" : "perDivision",
             "isSeasonal": isSeasonalFeeTypeAvailable,
-            "isCasual": isCasualFeeTypeAvailable
+            "isCasual": isCasualFeeTypeAvailable,
+            "isTeamSeasonal": isSeasonalTeamFeeTypeAvailable,
+            "isIndividualReg": (isSeasonalFeeTypeAvailable == true || isCasualFeeTypeAvailable == true) ?  true : false
         }
 
         productArray.push(object)
@@ -1919,7 +2015,21 @@ function competitionFees(state = initialState, action) {
 
         case ApiConstants.CHECK_UNCHECK_COMPETITION_FEES_SECTION:
 
+            if(action.key == "isIndividualReg"){
+                state.competitionFeesData[action.parentIndex]["isSeasonal"] = action.data
+                state.competitionFeesData[action.parentIndex]["isCasual"] = action.data
+            }
+            
             state.competitionFeesData[action.parentIndex][action.key] = action.data
+
+            if(action.key == "isSeasonal" || action.key == "isCasual"){
+                let isCasual = state.competitionFeesData[action.parentIndex]["isCasual"];
+                let isSeasonal = state.competitionFeesData[action.parentIndex]["isSeasonal"];
+                if(isSeasonal == true && isCasual == true)
+                    state.competitionFeesData[action.parentIndex]["isIndividualReg"] = true
+                else if(isSeasonal == false && isCasual == false)
+                    state.competitionFeesData[action.parentIndex]["isIndividualReg"] = false
+            }
 
             return {
                 ...state,
@@ -1930,8 +2040,9 @@ function competitionFees(state = initialState, action) {
 
         case ApiConstants.API_ADD_EDIT_COMPETITION_FEES_SECTION:
             let array = JSON.parse(JSON.stringify(state.competitionFeesData))
-
+           // console.log("action.record" + JSON.stringify(action.record));
             let index = array.findIndex(x => x.membershipProductUniqueKey == action.record.membershipProductUniqueKey)
+            console.log("TableIndex:::" + action.tableIndex + "ArrayKEy::" + action.arrayKey + "index::" + index + "action.data::" + action.data);
 
             if (index > -1) {
                 if (array[index].isAllType == "allDivisions") {

@@ -47,7 +47,8 @@ const initialState = {
     extraTimeDrawData: [],
     finalFixtureTemplateData: [], courtLoad: false, courtList: [],
 	inviteTypeData:[],
-	allowTeamRegistration: [],	  
+	allowTeamRegistration: [],	
+    registrationTypeData:[],	  
 };
 
 
@@ -361,6 +362,18 @@ function commonReducerState(state = initialState, action) {
                     allowTeamRegistration: action.result,
                     status: action.status
                 }
+				
+		case ApiConstants.API_REGISTRATION_RESTRICTIONTYPE_LOAD:
+						
+            return { ...state}; 
+
+        case ApiConstants.API_REGISTRATION_RESTRICTIONTYPE_SUCCESS:
+            return {
+                ...state,
+                onLoad: true,
+                registrationTypeData: action.result,
+                status: action.status
+            };
         default:
             return state;
     }

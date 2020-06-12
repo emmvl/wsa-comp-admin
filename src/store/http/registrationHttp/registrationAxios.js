@@ -444,8 +444,7 @@ let AxiosApi = {
         let organisationUniqueKey = orgItem.organisationUniqueKey
         // var url = `/api/orgregistration/competitionyear/${year}`;
         var url = `/api/competitionfee/registrationWizard?organisationUniqueKey=${organisationUniqueKey}&yearId=${yearId}`;
-        return Method.dataGet(url, token);
-
+        return Method.dataGet(url, token);			   
     }
 
 };

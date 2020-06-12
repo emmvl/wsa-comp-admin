@@ -202,7 +202,17 @@ function getAllowTeamRegistrationTypeAction() {
     };
 
     return action
-}			 		
+}	
+// Registration RegistrationRestrictionType
+
+function registrationRestrictionTypeAction(){
+    const action = {
+        type: ApiConstants.API_REGISTRATION_RESTRICTIONTYPE_LOAD,
+
+    };
+
+    return action;
+}		 		
 
 export {
     timeSlotInit,
@@ -228,5 +238,6 @@ export {
     getFinalFixtureTemplateAction,
     courtListAction,
     inviteTypeAction,
-	getAllowTeamRegistrationTypeAction	
+	getAllowTeamRegistrationTypeAction,
+	registrationRestrictionTypeAction	
 }

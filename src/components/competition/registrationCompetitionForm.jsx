@@ -66,7 +66,7 @@ import { NavLink } from "react-router-dom";
 import Loader from '../../customComponents/loader';
 import { venueListAction, getCommonRefData, } from '../../store/actions/commonAction/commonAction'
 import { getUserId, getOrganisationData } from "../../util/sessionStorage"
-
+import {fixtureTemplateRoundsAction} from '../../store/actions/competitionModuleAction/competitionDashboardAction';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -284,11 +284,6 @@ class RegistrationCompetitionForm extends Component {
             isCreatorEdit: false, //////// user is owner of the competition than isCreatorEdit will be false 
             isPublished: false,
             isRegClosed: false,
-            roundsArray: [{ id: 3, value: 3 }, { id: 4, value: 4 }, { id: 5, value: 5 },
-            { id: 6, value: 6 }, { id: 7, value: 7 }, { id: 8, value: 8 }, { id: 9, value: 9 },
-            { id: 10, value: 10 }, { id: 11, value: 11 }, { id: 12, value: 12 }, { id: 13, value: 13 },
-            { id: 14, value: 14 }, { id: 15, value: 15 }, { id: 16, value: 16 }, { id: 17, value: 17 },
-            { id: 18, value: 18 }],
             permissionState: permissionObject,
             tooltipVisibleDelete: false,
             tooltipVisibleDraft: false,
@@ -605,6 +600,7 @@ class RegistrationCompetitionForm extends Component {
         this.props.paymentSeasonalFee()
         this.props.getCommonDiscountTypeTypeAction()
         this.props.getVenuesTypeAction();
+		this.props.fixtureTemplateRoundsAction();								
         // this.props.venueListAction();
         if (competitionId !== null) {
             let hasRegistration = 0
@@ -1340,6 +1336,7 @@ class RegistrationCompetitionForm extends Component {
 
     ///////form content view - fee details
     contentView = (getFieldDecorator) => {
+		let roundsArray = this.props.competitionManagementState.fixtureTemplate;																		
         let appState = this.props.appState
         const { venueList, mainVenueList } = this.props.commonReducerState
         let detailsData = this.props.competitionFeesState
@@ -1565,9 +1562,9 @@ class RegistrationCompetitionForm extends Component {
                                         value={detailsData.competitionDetailData.noOfRounds}
                                         disabled={compDetailDisable}
                                     >
-                                        {this.state.roundsArray.map(item => {
+                                    {roundsArray.map(item => {
                                             return (
-                                                <Option key={item.id} value={item.id}>{item.value}</Option>
+                                                <Option key={item.noOfRounds} value={item.noOfRounds}>{item.noOfRounds}</Option>
                                             );
                                         })}
                                     </Select>
@@ -2911,7 +2908,8 @@ function mapDispatchToProps(dispatch) {
         venueListAction,
         clearFilter,
         CLEAR_OWN_COMPETITION_DATA,
-        removeCompetitionDivisionAction
+        removeCompetitionDivisionAction,
+        fixtureTemplateRoundsAction					   
     }, dispatch)
 }
 
@@ -2919,7 +2917,8 @@ function mapStatetoProps(state) {
     return {
         competitionFeesState: state.CompetitionFeesState,
         appState: state.AppState,
-        commonReducerState: state.CommonReducerState
+        commonReducerState: state.CommonReducerState,
+        competitionManagementState:state.CompetitionManagementState
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(RegistrationCompetitionForm));

@@ -511,6 +511,10 @@ let CompetitionAxiosApi = {
         }
         var url = `/api/grading/comments`
         return Method.dataPost(url, token, body);
+    },
+	 async fixtureTemplateRounds() {       																
+        var url = `/api/fixturetemplate/rounds`
+        return Method.dataGet(url, token);
     }
 
 };
