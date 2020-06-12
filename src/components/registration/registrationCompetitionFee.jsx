@@ -66,6 +66,8 @@ import Loader from '../../customComponents/loader';
 import { getUserId, getOrganisationData } from "../../util/sessionStorage"
 import { getAffiliateToOrganisationAction } from "../../store/actions/userAction/userAction";
 import CustumToolTip from 'react-png-tooltip'
+import {registrationRestrictionTypeAction} from '../../store/actions/commonAction/commonAction';
+import {fixtureTemplateRoundsAction} from '../../store/actions/competitionModuleAction/competitionDashboardAction';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -944,7 +946,7 @@ class RegistrationCompetitionFee extends Component {
             loading: false,
             getDataLoading: false,
             discountMembershipTypeData: [],
-            statusRefId: 1,
+            statusRefId: 1,							   
             buttonPressed: "next",
             logoIsDefault: false,
             logoSetDefault: false,
@@ -958,11 +960,6 @@ class RegistrationCompetitionFee extends Component {
             tooltipVisibleDelete: false,
             tooltipVisibleDraft: false,
             tooltipVisiblePublish: false,
-            roundsArray: [{ id: 3, value: 3 },{ id: 4, value: 4 },{ id: 5, value: 5 },
-            { id: 6, value: 6 },{ id: 7, value: 7 }, { id: 8, value: 8 },{ id: 9, value: 9 }, 
-            { id: 10, value: 10 },{ id: 11, value: 11 }, { id: 12, value: 12 },{ id: 13, value: 13 },
-             { id: 14, value: 14 },{ id: 15, value: 15 }, { id: 16, value: 16 },{ id: 17, value: 17 },
-              { id: 18, value: 18 }],
             permissionState: permissionObject,
             divisionTable: [
                 {
@@ -1314,6 +1311,8 @@ class RegistrationCompetitionFee extends Component {
         this.props.paymentSeasonalFee()
         this.props.getCommonDiscountTypeTypeAction()
         this.props.getVenuesTypeAction();
+		this.props.registrationRestrictionTypeAction()
+        this.props.fixtureTemplateRoundsAction();
         if (competitionId !== null) {
             let hasRegistration = 1
             this.props.getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration)
@@ -1812,10 +1811,12 @@ class RegistrationCompetitionFee extends Component {
                         finalDivisionArray = [...finalDivisionArray, ...divisionArrayData[i].divisions]
                     }
                     let payload = finalDivisionArray
-                    console.log("payload", divisionArrayData)
+                   
                     let finalDivisionPayload = {
                         statusRefId: this.state.statusRefId,
-                        divisions: payload
+                        divisions: payload,
+                        registrationRestrictionTypeRefId: postData.registrationRestrictionTypeRefId == null ? 1 : 
+                            postData.registrationRestrictionTypeRefId
                     }
                     if (this.checkDivisionEmpty(divisionArrayData) == true) {
                         message.error(ValidationConstants.pleaseAddDivisionForMembershipProduct)
@@ -2195,6 +2196,7 @@ class RegistrationCompetitionFee extends Component {
 
     ////////form content view - fee details
     contentView = (getFieldDecorator) => {
+		let roundsArray = this.props.competitionManagementState.fixtureTemplate;																	
         let appState = this.props.appState
         let detailsData = this.props.competitionFeesState
         let defaultCompFeesOrgLogo = detailsData.defaultCompFeesOrgLogo
@@ -2426,9 +2428,9 @@ class RegistrationCompetitionFee extends Component {
                                         value={detailsData.competitionDetailData.noOfRounds}
                                         disabled={compDetailDisable}
                                     >
-                                        {this.state.roundsArray.map(item => {
+                                       {roundsArray.map(item => {
                                             return (
-                                                <Option key={item.id} value={item.id}>{item.value}</Option>
+                                                <Option key={item.noOfRounds} value={item.noOfRounds}>{item.noOfRounds}</Option>
                                             );
                                         })}
                                     </Select>
@@ -2624,6 +2626,8 @@ class RegistrationCompetitionFee extends Component {
         let divisionData = this.props.competitionFeesState.competitionDivisionsData
         let divisionArray = divisionData !== null ? divisionData : []
         let divisionsDisable = this.state.permissionState.divisionsDisable
+        let restrictionTypeMeta = this.props.commonReducerState.registrationTypeData
+        let detailsData = this.props.competitionFeesState.competitionDetailData
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading required-field" >{AppConstants.divisions}</span>
@@ -2654,7 +2658,19 @@ class RegistrationCompetitionFee extends Component {
                         </div>
                     </div>
                 )}
-
+				<div className="inside-container-view">
+                    <span className="form-heading pl-2">{AppConstants.CompetitionRegistration}</span>                  
+                  <Radio.Group className="reg-competition-radio"
+                  disabled={divisionsDisable}
+                   onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "registrationRestrictionTypeRefId")}
+                   value={detailsData.registrationRestrictionTypeRefId == null ? 1 : detailsData.registrationRestrictionTypeRefId}>
+                        {restrictionTypeMeta.map((item) =>          
+                            <div className='contextualHelp-RowDirection' >
+                                <Radio key={item.id} value={item.id}> {item.description}</Radio>
+                            </div>  
+                        )}                       
+                    </Radio.Group>                   
+                </div>					
             </div>
         );
     };
@@ -4326,7 +4342,9 @@ function mapDispatchToProps(dispatch) {
         clearFilter,
         clearCompReducerDataAction,
         getAffiliateToOrganisationAction,
-        onInviteesSearchAction
+        onInviteesSearchAction,
+		registrationRestrictionTypeAction,
+        fixtureTemplateRoundsAction
     }, dispatch)
 }
 
@@ -4334,7 +4352,8 @@ function mapStatetoProps(state) {
     return {
         competitionFeesState: state.CompetitionFeesState,
         appState: state.AppState,
-        commonReducerState: state.CommonReducerState
+        commonReducerState: state.CommonReducerState,
+		competitionManagementState:state.CompetitionManagementState,
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(RegistrationCompetitionFee));

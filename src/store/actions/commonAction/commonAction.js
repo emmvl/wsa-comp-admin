@@ -205,7 +205,7 @@ function getAllowTeamRegistrationTypeAction() {
 }	
 // Registration RegistrationRestrictionType
 
-function RegistrationRestrictionType(){
+function registrationRestrictionTypeAction(){
     const action = {
         type: ApiConstants.API_REGISTRATION_RESTRICTIONTYPE_LOAD,
 
@@ -239,5 +239,5 @@ export {
     courtListAction,
     inviteTypeAction,
 	getAllowTeamRegistrationTypeAction,
-	RegistrationRestrictionType	
+	registrationRestrictionTypeAction	
 }
