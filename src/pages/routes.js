@@ -16,7 +16,6 @@ import CompetitionCourtAndTimesAssign from "../components/competition/competitio
 import UserDashboard from "../components/user/userDashboard";
 import CompetitionVenueAndCourts from "../components/competition/competitionVenueAndCourts";
 import CompetitionReplicate from "../components/competition/competitionReplicate";
-import CompetitionMatchSheets from "../components/competition/competitionMatchSheets";
 import CompetitionVenueAndTimesAdd from "../components/competition/competitionVenueAndTimesAdd";
 import CompetitionVenueAndTimesEdit from "../components/competition/competitionVenueAndTimesEdit";
 import CompetitionVenueTimesPrioritisation from "../components/competition/competitionVenueTimesPrioritisation";
@@ -120,7 +119,14 @@ import LiveScoreAddEditCoach from "../components/liveScore/liveScoreAddEditCoach
 import CompetitionException from "../components/competition/comeptitionException";
 import LiveScorerCoachImport from "../components/liveScore/liveScoreCoachImport";
 
-import LiveScoreMatchSheet from "../components/liveScore/liveScoreMatchSheet"
+import LiveScoreSocialSheet from "../components/liveScore/liveScoreSocialSheet"
+import UmpireDashboard from "../components/umpire/umpireDashboard"
+import AddUmpire from "../components/umpire/addUmpire"
+
+
+import LiveScoreMatchSheet from "../components/liveScore/liveScoreMatchSheet";
+import ShopDashboard from "../components/shop/shopDashboard";
+
 const lazyLoad = Component => {
   const lazy = props => {
     return (
@@ -199,8 +205,8 @@ class Routes extends React.Component {
           component={lazyLoad(CompetitionReplicate)}
         />
         <PrivateRoute
-          path="/competitionMatchSheets"
-          component={lazyLoad(CompetitionMatchSheets)}
+          path="/liveScoreMatchSheet"
+          component={lazyLoad(LiveScoreMatchSheet)}
         />
         <PrivateRoute
           path="/competitionVenueAndTimesAdd"
@@ -635,8 +641,23 @@ class Routes extends React.Component {
         />
 
         <PrivateRoute
-          path="/liveScoreMatchSheet"
-          component={lazyLoad(LiveScoreMatchSheet)}
+          path="/liveScoreSocialSheet"
+          component={lazyLoad(LiveScoreSocialSheet)}
+        />
+
+        <PrivateRoute
+          path="/umpireDashboard"
+          component={lazyLoad(UmpireDashboard)}
+        />
+
+        <PrivateRoute
+          path="/addUmpire"
+          component={lazyLoad(AddUmpire)}
+        />
+
+        <PrivateRoute
+          path="/shopDashboard"
+          component={lazyLoad(ShopDashboard)}
         />
 
         <Route path="/" component={lazyLoad(NotFound)} />

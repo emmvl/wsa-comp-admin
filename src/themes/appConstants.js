@@ -1267,6 +1267,10 @@ const AppConstants = {
   resultStatus: 'Result Status',
   whichTeamForfieted: 'Which team forfeited?',
   matchAbandoned: "Match Abandoned?",
+
+  addUmpire: "Add Umpire",
+  editUmpire: "Edit Umpire",
+  umpireSearch: "Umpire Search",
   nonPlayerDivisionMessage: "Divisions are not required for your selected membership type.",
   matchAbandoned: 'Match Abandoned?',
   drawsLink: 'Draws Link',
@@ -1274,7 +1278,12 @@ const AppConstants = {
   finalsMessage: 'Finals has not been enabled for this Competition',
   allowTeamRegistration: 'Allow Team Registrations',
   teamRegistration: "Team Registrations",  
-  individualRegistrations: "Individual Registrations"
+  individualRegistrations: "Individual Registrations",
+
+  /////////shop
+  shop:"Shop",
+  products:"Products",
+  listProducts:"List Products",
 };
 
 export default AppConstants;

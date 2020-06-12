@@ -33,7 +33,8 @@ const initialState = {
     associationLeague: [],
     clubSchool: [],
     affiliateNonSelected: null,
-    anyOrgNonSelected: null
+    anyOrgNonSelected: null,
+    registrationInvitees: []
 }
 export default function liveScoreSettingsViewReducer(state = initialState, { type, payload, }) {
 
@@ -266,6 +267,19 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
             state.venueData = state.mainVenueList
             return {
                 ...state
+
+            }
+
+        case ApiConstants.SETTING_REGISTRATION_INVITEES_LOAD:
+
+            return { ...state, loader: false }
+
+        case ApiConstants.SETTING_REGISTRATION_INVITEES_SUCCESS:
+            console.log(payload, 'payload')
+            return {
+                ...state,
+                loader: false,
+                registrationInvitees: payload
 
             }
 

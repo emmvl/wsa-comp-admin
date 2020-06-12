@@ -8,26 +8,36 @@ const initialState = {
     result: null,
     status: 0,
     liveScoreDivisionList: [],
-    allTeamData:[],
-    isLoaderActive : false
+    allTeamData: [],
+    isLoaderActive: false,
+    allDivisionData: []
 };
 
 function liveScoreMatchSheetState(state = initialState, action) {
     switch (action.type) {
         case ApiConstants.API_LIVE_SCORE_GET_FIXTURE_COMP_LOAD:
-            return{
+            return {
                 ...state,
-                isLoaderActive:false
+                isLoaderActive: false
             }
 
         case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_LOAD:
             return { ...state, onLoad: true };
         case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_SUCCESS:
-            console.log("colled **** ")
+            let divisionArray = JSON.parse(JSON.stringify(action.result))
+            state.allDivisionData = JSON.parse(JSON.stringify(action.result))
+            let divisionObject = {
+                name: "All",
+                id: null
+            }
+
+            state.allDivisionData.unshift(divisionObject)
+            state.isLoaderActive = false
+            console.log(action.result, 'arrayMatchSheet', divisionArray)
             return {
                 ...state,
                 onLoad: false,
-                liveScoreDivisionList: action.result,
+                liveScoreDivisionList: divisionArray,
                 status: action.status
             };
 
@@ -43,7 +53,7 @@ function liveScoreMatchSheetState(state = initialState, action) {
             }
 
             state.allTeamData.unshift(teamObject)
-            state.isLoaderActive=false
+            state.isLoaderActive = false
             return {
                 ...state,
                 onLoad: false,

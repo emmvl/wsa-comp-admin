@@ -154,7 +154,8 @@ const ValidationConstants = {
     pleaseAddDivisionForMembershipProduct: "Please enter divisions before proceeding.",
     pleaseEnterChildDiscountPercentage: "Please enter child discount.",
     pleaseSelectTeam: 'Please Select Team.',
-    selectAbandonMatchReason: 'Please Select Reason.'
+    selectAbandonMatchReason: 'Please Select Reason.',
+    umpireSearch: "Umpire search is required.",
 };
 
 export default ValidationConstants;

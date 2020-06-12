@@ -8,7 +8,8 @@ import { getUserId, getAuthToken, getOrganisationData } from "../../../util/sess
 
 let token = getAuthToken();
 let userId = getUserId()
-
+const internetStatus = navigator.onLine ? true : false;
+console.log(internetStatus, 'internetStatus')
 async function logout() {
   await localStorage.clear();
   history.push("/");
@@ -188,7 +189,7 @@ let userHttpApi = {
   },
   exportOrgRegQuestions(payload) {
     var url = `api/export/registration/questions`;
-    return Method.dataPostDownload(url, token, payload,"RegistrationQuestions");
+    return Method.dataPostDownload(url, token, payload, "RegistrationQuestions");
   },
   async affiliateDirectory(payload) {
     var url = `api/affiliatedirectory`;
@@ -196,8 +197,17 @@ let userHttpApi = {
   },
   exportAffiliateDirectory(payload) {
     var url = `api/export/affiliatedirectory`;
-    return Method.dataPostDownload(url, token, payload,"AffiliateDirectory");
+    return Method.dataPostDownload(url, token, payload, "AffiliateDirectory");
   },
+  umpireDashboardList(refRoleId, compId, entityTypeId, userName) {
+    let url = ''
+    if (userName) {
+      url = `/users/byRole?roleId=${refRoleId}&entityTypeId=${entityTypeId}&entityId=${compId}&userName=${userName}`
+    } else {
+      url = `/users/byRole?roleId=${refRoleId}&entityTypeId=${entityTypeId}&entityId=${compId}`
+    }
+    return Method.dataGet(url, localStorage.token);
+  }
 }
 
 let Method = {
@@ -242,7 +252,6 @@ let Method = {
           }
         })
         .catch(err => {
-          console.log(err.response)
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status == 401) {
@@ -293,7 +302,7 @@ let Method = {
             const url = window.URL.createObjectURL(new Blob([result.data]));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', fileName+'.csv'); //or any other extension
+            link.setAttribute('download', fileName + '.csv'); //or any other extension
             document.body.appendChild(link);
             link.click();
             return resolve({
@@ -322,7 +331,6 @@ let Method = {
           }
         })
         .catch(err => {
-          console.log(err.response)
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status == 401) {
@@ -369,7 +377,6 @@ let Method = {
         })
 
         .then(result => {
-          console.log("***********" + result);
           if (result.status === 200) {
             return resolve({
               status: 1,
@@ -397,7 +404,6 @@ let Method = {
           }
         })
         .catch(err => {
-          console.log(err.response)
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status == 401) {
@@ -469,7 +475,6 @@ let Method = {
           }
         })
         .catch(err => {
-          console.log(err.response)
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status == 401) {

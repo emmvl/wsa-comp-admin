@@ -1037,7 +1037,7 @@ class CompetitionOpenRegForm extends Component {
                             {AppConstants.competitionDetails}
                         </Breadcrumb.Item>
                     </Breadcrumb>
-                    <CustumToolTip background='#ff8237'>
+                    <CustumToolTip placement="top" background='#ff8237'>
                         <span>{AppConstants.compDetailsMsg}</span>
                     </CustumToolTip>
                 </Header>

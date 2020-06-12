@@ -28,7 +28,7 @@ const initialState = {
 }
 
 function getTeamObj(teamSelectId, teamArr) {
-   
+
     let teamObj = []
     let obj = ''
     for (let i in teamArr) {
@@ -127,11 +127,11 @@ function liveScoreCoachState(state = initialState, action) {
                 state.coachRadioBtn = action.data
                 state.exsitingManagerId = null
             } else if (action.key == "coachSearch") {
-                
+
 
                 state.exsitingManagerId = action.data
                 let index = state.coachesResult.findIndex(x => x.id == action.data)
-             
+
                 let selectedTeam = []
                 if (index > -1) {
                     selectedTeam = state.coachesResult[index].linkedEntity
@@ -141,7 +141,7 @@ function liveScoreCoachState(state = initialState, action) {
                 state.teamId = teamIds
                 let coach_TeamObj = getTeamObj(teamIds, state.teamResult)
                 state.coachdata['teams'] = coach_TeamObj
-                
+
 
             } else if (action.key == 'isEditCoach') {
                 state.onLoad = true
@@ -210,9 +210,9 @@ function liveScoreCoachState(state = initialState, action) {
             return { ...state, onLoadSearch: true };
 
         case ApiConstants.API_LIVESCORE_MANAGER_SEARCH_SUCCESS:
-           
+
             state.coachesResult = action.result
-           
+
             return {
                 ...state,
                 onLoadSearch: false,
@@ -226,6 +226,16 @@ function liveScoreCoachState(state = initialState, action) {
                 ...state,
                 // coachesResult: state.mainCoachListResult
             }
+
+        case ApiConstants.API_LIVE_SCORE_COACH_IMPORT_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_LIVE_SCORE_COACH_IMPORT_SUCCESS:
+
+            return {
+                ...state,
+                onLoad: false,
+            };
 
 
         default:

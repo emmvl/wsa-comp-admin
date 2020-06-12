@@ -365,7 +365,7 @@ class InnerHorizontalMenu extends React.Component {
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="22">
-                            <NavLink to="/competitionMatchSheets" >
+                            <NavLink to="/liveScoreMatchSheet" >
                                 <span >Match Sheets</span>
                             </NavLink>
                         </Menu.Item>
@@ -388,7 +388,10 @@ class InnerHorizontalMenu extends React.Component {
                     selectedKeys={[this.props.umpireSelectedKey]}
                 >
                     <Menu.Item key="1">
-                        <span >Dashboard</span>
+                        <NavLink to="/umpireDashboard" >
+                            <span >Dashboard</span>
+                        </NavLink>
+
                     </Menu.Item>
                     <Menu.Item key="2">
                         <NavLink to="/umpireAllocation" >
@@ -410,7 +413,7 @@ class InnerHorizontalMenu extends React.Component {
                                 <span >{AppConstants.dashboard}</span>
                             </NavLink> */}
                             <NavLink to="/userTextualDashboard" >
-                                    <span >{AppConstants.dashboard}</span>
+                                <span >{AppConstants.dashboard}</span>
                             </NavLink>
                         </Menu.Item>
                         <SubMenu
@@ -492,6 +495,33 @@ class InnerHorizontalMenu extends React.Component {
                             <Menu.Item key="2">
                                 <NavLink to="/venuesList" >
                                     <span >{AppConstants.venueAndCourts}</span>
+                                </NavLink>
+                            </Menu.Item>
+                        </SubMenu>
+                    </Menu>
+                }
+
+
+
+                {this.props.menu === "shop" &&
+                    <Menu
+                        theme="light"
+                        mode="horizontal"
+                        defaultSelectedKeys={['1']}
+                        style={{ lineHeight: '64px' }}
+                        selectedKeys={[this.props.shopSelectedKey]}>
+                        <Menu.Item key="1">
+                            <NavLink to="/shopDashboard" >
+                                <span >{AppConstants.dashboard}</span>
+                            </NavLink>
+                        </Menu.Item>
+                        <SubMenu
+                            key="sub1"
+                            title={<span>{AppConstants.products}</span>}>
+
+                            <Menu.Item key="2">
+                                <NavLink to="/listProducts" >
+                                    <span >{AppConstants.listProducts}</span>
                                 </NavLink>
                             </Menu.Item>
                         </SubMenu>

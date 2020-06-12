@@ -56,6 +56,15 @@ const columns = [
             <span >{name}</span>
 
     },
+    // {
+    //     title: 'Borrowing Team',
+    //     dataIndex: 'teamName',
+    //     key: 'teamName',
+    //     sorter: (a, b) => tableSort(a, b, 'teamName'),
+    //     render: (teamName) =>
+    //         <span >{teamName}</span>
+
+    // },
     {
         title: 'Player Id',
         dataIndex: 'playerId',

@@ -32,7 +32,7 @@ const columns = [
         title: 'Profile Picture',
         dataIndex: 'photoUrl',
         key: 'photoUrl',
-        sorter: (a, b) => tableSort(a,b, "photoUrl"),
+        sorter: (a, b) => tableSort(a, b, "photoUrl"),
         render: (photoUrl) =>
             // <img className="live-score-user-image" src={AppImages.playerDp} alt="" height="70" width="70" />
             photoUrl ?
@@ -44,7 +44,7 @@ const columns = [
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
-        sorter: (a, b) => tableSort(a,b, "name"),
+        sorter: (a, b) => tableSort(a, b, "name"),
         // render: (record, name) => console.log(record, 'record')
         // <NavLink to={{
         //     pathname: '/liveScorePlayerProfile',
@@ -58,14 +58,14 @@ const columns = [
         title: 'Team',
         dataIndex: 'team',
         key: 'team',
-        sorter: (a, b) => tableSort(a,b, "team"),
+        sorter: (a, b) => tableSort(a, b, "team"),
         // render: (record) => <span class="input-heading-add-another pt-0" >{record.team.name}</span>
     },
     {
         title: 'Played?',
         dataIndex: 'attended',
         key: 'attended',
-        sorter: (a, b) => tableSort(a,b, "attended"),
+        sorter: (a, b) => tableSort(a, b, "attended"),
         render: attended =>
             <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
                 <img className="dot-image"
@@ -201,6 +201,7 @@ class LiveScoreMatchDetails extends Component {
         const length = match ? match.length : 0
         let UmpireData = isArrayNotEmpty(umpires) ? umpires : []
         const { scoringType } = JSON.parse(getLiveScoreCompetiton())
+        console.log(UmpireData, 'UmpireData')
 
         return (
 
@@ -231,13 +232,13 @@ class LiveScoreMatchDetails extends Component {
                     </div>
                     <div style={{ display: "flex", alignContent: "center" }} >
                         {UmpireData.map((item) => (
-                            <span className="inbox-name-text pt-2" >{item.umpire1Club.name}</span>
+                            <span className="inbox-name-text pt-2" >{item.umpire1Club && item.umpire1Club.name}</span>
                         ))
                         }
                     </div>
                     <div style={{ display: "flex", alignContent: "center" }} >
                         {UmpireData.map((item) => (
-                            <span className="inbox-name-text pt-2" >{item.umpire2Club.name}</span>
+                            <span className="inbox-name-text pt-2" >{item.umpire2Club && item.umpire2Club.name}</span>
                         ))
                         }
                     </div>
@@ -314,7 +315,7 @@ class LiveScoreMatchDetails extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"2"} />
                 <Loader visible={this.props.liveScoreMatchState.onLoad} />
                 <Layout>

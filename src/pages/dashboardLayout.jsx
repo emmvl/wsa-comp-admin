@@ -363,10 +363,10 @@ class DashboardLayout extends React.Component {
                             }
                           >
                             <div className="shop-menu menu-wrap">
-                              <a href="#">
+                              <NavLink to="/shopDashboard">
                                 <span className="icon"></span>
                                 {AppConstants.shop}
-                              </a>
+                              </NavLink>
                             </div>
                           </li>
                           <li
@@ -375,7 +375,7 @@ class DashboardLayout extends React.Component {
                             }
                           >
                             <div className="umpires-menu menu-wrap">
-                              <NavLink to="/umpireAllocation">
+                              <NavLink to="/umpireDashboard">
                                 <span className="icon"></span>
                                 {AppConstants.umpires}
                               </NavLink>

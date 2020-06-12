@@ -7,7 +7,7 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-// import { liveScoreCoachImportAction } from '../../store/actions/LiveScoreAction/liveScoreCoachAction'
+import { liveScoreCoachImportAction } from '../../store/actions/LiveScoreAction/liveScoreCoachAction'
 import Loader from '../../customComponents/loader'
 import { message } from "antd";
 import ValidationConstants from "../../themes/validationConstant";
@@ -56,7 +56,7 @@ class LiveScorerCoachImport extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
 
         if (this.state.csvdata) {
-            // this.props.liveScoreCoachImportAction(id, 1)
+            this.props.liveScoreCoachImportAction({ id: id, csvFile: this.state.csvdata })
         } else {
             message.config({ duration: 0.9, maxCount: 1 })
             message.error(ValidationConstants.csvField)
@@ -107,9 +107,9 @@ class LiveScorerCoachImport extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"23"} />
-                <Loader visible={this.props.liveScoreCoachState.loading} />
+                <Loader visible={this.props.liveScoreCoachState.onLoad} />
                 <Layout>
                     {this.headerView()}
                     <Content>
@@ -124,7 +124,7 @@ class LiveScorerCoachImport extends Component {
     }
 }
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({  }, dispatch)
+    return bindActionCreators({ liveScoreCoachImportAction }, dispatch)
 }
 
 function mapStateToProps(state) {

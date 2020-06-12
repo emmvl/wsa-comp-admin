@@ -23,7 +23,8 @@ import {
     settingDataPostInititae,
     clearLiveScoreSetting,
     searchVenueList,
-    clearFilter
+    clearFilter,
+    settingRegInvitees
 } from '../../store/actions/LiveScoreAction/LiveScoreSettingAction'
 import Loader from '../../customComponents/loader';
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
@@ -34,7 +35,6 @@ import {
 import ImageLoader from '../../customComponents/ImageLoader'
 import history from "../../util/history";
 import { isArrayNotEmpty, captializedString } from "../../util/helpers";
-import { competitionFeeInit } from "../../store/actions/appAction";
 import Tooltip from 'react-png-tooltip'
 import { onInviteesSearchAction } from "../../store/actions/registrationAction/competitionFeeAction";
 
@@ -56,11 +56,10 @@ class LiveScoreSettingsView extends Component {
             timeOut: null,
             isEdit: props.location ? props.location.state ? props.location.state : null : null
         };
-        console.log(this.state.isEdit, 'isEdit')
     }
     componentDidMount() {
         let comp_id = getLiveScoreCompetiton()
-        this.props.competitionFeeInit();
+        this.props.settingRegInvitees()
         if (comp_id) {
             const { id } = JSON.parse(getLiveScoreCompetiton())
             if (this.props.location.state === 'edit' || id) {
@@ -716,12 +715,11 @@ class LiveScoreSettingsView extends Component {
     }
 
     regInviteesView = () => {
-        let invitees = this.props.appState.registrationInvitees.length > 0 ? this.props.appState.registrationInvitees : [];
-        const { affiliateSelected, anyOrgSelected, otherSelected, nonSelected, affiliateNonSelected, anyOrgNonSelected } = this.props.liveScoreSetting
-        console.log(this.props.appState.registrationInvitees, 'invitees')
+        const { affiliateSelected, anyOrgSelected, otherSelected, nonSelected, affiliateNonSelected, anyOrgNonSelected, registrationInvitees } = this.props.liveScoreSetting
+        let invitees = isArrayNotEmpty(registrationInvitees) ? registrationInvitees : [];
+        console.log(registrationInvitees, 'registrationInvitees')
         return (
             <div >
-                {/* <span className="applicable-to-heading">{AppConstants.registrationInvitees}</span> */}
                 <div>
                     <Radio.Group
                         className="reg-competition-radio mt-5"
@@ -847,9 +845,9 @@ class LiveScoreSettingsView extends Component {
                                 index > 1
                                 &&
                                 <div>
-                                    {item.subReferences.length == 0 ?
-                                        <Radio value={item.id}>{item.description}</Radio>
-                                        : <div>
+                                    {item.subReferences ?
+
+                                        <div>
                                             <div class="applicable-to-heading invitees-main">{item.description}</div>
                                             {(item.subReferences).map((subItem, subIndex) => (
                                                 <div style={{ marginLeft: '20px' }}>
@@ -859,6 +857,10 @@ class LiveScoreSettingsView extends Component {
                                                 </div>
                                             ))}
                                         </div>
+
+
+                                        :
+                                        <Radio value={item.id}>{item.description}</Radio>
                                     }
                                 </div>
                             ))
@@ -963,6 +965,6 @@ export default connect(mapStatetoProps, {
     settingDataPostInititae,
     searchVenueList,
     clearFilter,
-    competitionFeeInit,
-    onInviteesSearchAction
+    onInviteesSearchAction,
+    settingRegInvitees
 })((Form.create()(LiveScoreSettingsView)));
