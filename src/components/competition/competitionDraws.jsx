@@ -870,11 +870,6 @@ class CompetitionDraws extends Component {
                             <SubMenu
                               key="sub1"
                               title={
-
-
-
-
-
                                 slotObject.isLocked == 1 ?
                                   <div style={{ display: 'flex', justifyContent: 'space-between', width: 80, maxWidth: 80 }}>
                                     <img className="dot-image" src={AppImages.drawsLock} alt="" width="16" height="10" />
@@ -887,8 +882,10 @@ class CompetitionDraws extends Component {
                               }
                             >
                               {slotObject.isLocked == 1 &&
-                                <Menu.Item key="1">
-                                  <span onClick={() => this.unlockDraws(slotObject.drawsId, dateItem.roundId, courtData.venueCourtId)} >Unlock</span>
+                                <Menu.Item key="1" onClick={() => this.unlockDraws(slotObject.drawsId, dateItem.roundId, courtData.venueCourtId)}>
+                                  <div style={{ display: 'flex' }}>
+                                    <span >Unlock</span>
+                                  </div>
                                 </Menu.Item>
                               }
                               <Menu.Item key="2" >

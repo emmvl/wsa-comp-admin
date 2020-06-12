@@ -672,11 +672,11 @@ class RegistrationCompetitionFee extends Component {
             tooltipVisibleDelete: false,
             tooltipVisibleDraft: false,
             tooltipVisiblePublish: false,
-            roundsArray: [{ id: 3, value: 3 },{ id: 4, value: 4 },{ id: 5, value: 5 },
-            { id: 6, value: 6 },{ id: 7, value: 7 }, { id: 8, value: 8 },{ id: 9, value: 9 }, 
-            { id: 10, value: 10 },{ id: 11, value: 11 }, { id: 12, value: 12 },{ id: 13, value: 13 },
-             { id: 14, value: 14 },{ id: 15, value: 15 }, { id: 16, value: 16 },{ id: 17, value: 17 },
-              { id: 18, value: 18 }],
+            roundsArray: [{ id: 3, value: 3 }, { id: 4, value: 4 }, { id: 5, value: 5 },
+                { id: 6, value: 6 }, { id: 7, value: 7 }, { id: 8, value: 8 }, { id: 9, value: 9 },
+                { id: 10, value: 10 }, { id: 11, value: 11 }, { id: 12, value: 12 }, { id: 13, value: 13 },
+                { id: 14, value: 14 }, { id: 15, value: 15 }, { id: 16, value: 16 }, { id: 17, value: 17 },
+                { id: 18, value: 18 }],
             permissionState: permissionObject,
             divisionTable: [
                 {
@@ -1378,13 +1378,15 @@ class RegistrationCompetitionFee extends Component {
                     let finalDivisionArray = []
                     for (let i in divisionArrayData) {
                         finalDivisionArray = [...finalDivisionArray, ...divisionArrayData[i].divisions]
+
                     }
                     let payload = finalDivisionArray
-                    console.log("payload", divisionArrayData)
                     let finalDivisionPayload = {
                         statusRefId: this.state.statusRefId,
                         divisions: payload
                     }
+                    console.log("payload", finalDivisionPayload)
+
                     if (this.checkDivisionEmpty(divisionArrayData) == true) {
                         message.error(ValidationConstants.pleaseAddDivisionForMembershipProduct)
                     }
@@ -2194,7 +2196,7 @@ class RegistrationCompetitionFee extends Component {
         let divisionsDisable = this.state.permissionState.divisionsDisable
         return (
             <div className="fees-view pt-5">
-                <span className="form-heading required-field" >{AppConstants.divisions}</span>
+                <span className="form-heading" >{AppConstants.divisions}</span>
                 {divisionArray.length == 0 && (
                     <span className="applicable-to-heading pt-0">
                         {AppConstants.please_Sel_mem_pro}
@@ -2206,19 +2208,25 @@ class RegistrationCompetitionFee extends Component {
                             <span className="form-heading pt-2 pl-2">
                                 {item.membershipProductName}
                             </span>
-                            <div className="table-responsive">
-                                <Table
-                                    className="fees-table"
-                                    columns={this.state.divisionTable}
-                                    dataSource={item.divisions}
-                                    pagination={false}
-                                    Divider="false"
-                                    key={index}
-                                />
-                            </div>
-                            <a>
-                                <span className="input-heading-add-another" onClick={() => !divisionsDisable ? this.addRemoveDivision(index, item, "add") : null}>+ {AppConstants.addDivision}</span>
-                            </a>
+                            {item.isPlayingStatus == true ?
+                                <div>
+                                    <div className="table-responsive">
+                                        <Table
+                                            className="fees-table"
+                                            columns={this.state.divisionTable}
+                                            dataSource={item.divisions}
+                                            pagination={false}
+                                            Divider="false"
+                                            key={index}
+                                        />
+                                    </div>
+                                    <a>
+                                        <span className="input-heading-add-another" onClick={() => !divisionsDisable ? this.addRemoveDivision(index, item, "add") : null}>+ {AppConstants.addDivision}</span>
+                                    </a>
+                                </div> :
+                                  <span className="applicable-to-heading pt-0 pl-2">
+                                  {AppConstants.nonPlayerDivisionMessage}
+                              </span>}
                         </div>
                     </div>
                 )}

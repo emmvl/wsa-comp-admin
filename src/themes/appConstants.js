@@ -1264,6 +1264,8 @@ const AppConstants = {
   setupStripe: 'Stripe account',
   resultStatus: 'Result Status',
   whichTeamForfieted: 'Which team forfeited?',
+  matchAbandoned: "Match Abandoned?",
+  nonPlayerDivisionMessage: "Divisions are not required for your selected membership type.",
   matchAbandoned: 'Match Abandoned?',
   drawsLink: 'Draws Link',
   public_draws_Url: `https://netball-registration-dev.worldsportaction.com/livescoreSeasonFixture?`,

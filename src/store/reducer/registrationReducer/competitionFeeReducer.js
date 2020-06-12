@@ -160,6 +160,7 @@ function getDefaultCompMemberhsipProduct(data, apiSelectedData) {
                 for (let j in getmembershipProducts[i].membershipProductTypes) {
                     if (!checkMembershipProductTypes(getmembershipProducts[i].membershipProductTypes[j], statusData.types)) {
                         getmembershipProducts[i].membershipProductTypes[j]["isTypeSelected"] = false;
+                        getmembershipProducts[i].membershipProductTypes[j]["competitionMembershipProductTypeId"] = 0;
                     }
                     else {
                         console.log("statusData", statusData, getmembershipProducts[i].membershipProductTypes)
@@ -250,6 +251,18 @@ function checkDivision(divisionArray, membershipProductUniqueKey, parentIndex) {
     return divisions
 }
 
+function isPlayingStatus(productTypesArray) {
+    console.log("productTypesArray", productTypesArray)
+    let isPlaying_Status = false
+    for (let k in productTypesArray) {
+        if (productTypesArray[k].isPlaying == 1) {
+            // array.push(productTypesArray[k])
+            isPlaying_Status = true
+        }
+    }
+    return isPlaying_Status
+}
+
 /////function to append isselected age restriction in the division section table
 function getDivisionTableData(data) {
     let compDivisionTempArray = []
@@ -257,14 +270,34 @@ function getDivisionTableData(data) {
     let compDivisionArray = data.competitiondivisions.competitionFeeDivision
     if (selectedMebershipProductArray) {
         for (let i in selectedMebershipProductArray) {
+            console.log("selectedMebershipProductArray", selectedMebershipProductArray)
+            let checkIsPlaying = isPlayingStatus(selectedMebershipProductArray[i].membershipProductTypes)
+            console.log("checkIsPlaying", checkIsPlaying)
+            // if(selectedMebershipProductArray[i].membershipProductTypes)
+            let defaultNonPlayingArray = [{
+                ageRestriction: false,
+                competitionDivisionId: 0,
+                competitionMembershipProductDivisionId: 0,
+                competitionMembershipProductId: selectedMebershipProductArray[i].competitionMembershipProductId,
+                divisionName: "",
+                fromDate: null,
+                genderRefId: null,
+                genderRestriction: false,
+                isPlaying: 0,
+                membershipProductUniqueKey: selectedMebershipProductArray[i].membershipProductUniqueKey,
+                parentIndex: 0,
+                toDate: null,
+            }]
             compDivisionTempArray.push({
-                divisions: checkDivision(compDivisionArray, selectedMebershipProductArray[i].membershipProductUniqueKey, i),
+                divisions: checkIsPlaying == false ? defaultNonPlayingArray : checkDivision(compDivisionArray, selectedMebershipProductArray[i].membershipProductUniqueKey, i),
                 membershipProductName: selectedMebershipProductArray[i].membershipProductName,
                 membershipProductUniqueKey: selectedMebershipProductArray[i].membershipProductUniqueKey,
-                competitionMembershipProductId: selectedMebershipProductArray[i].competitionMembershipProductId
+                competitionMembershipProductId: selectedMebershipProductArray[i].competitionMembershipProductId,
+                isPlayingStatus: checkIsPlaying
             })
         }
     }
+    console.log("compDivisionTempArray", compDivisionTempArray)
     return compDivisionTempArray
 
 }
@@ -1500,7 +1533,8 @@ function competitionFees(state = initialState, action) {
             let divisionGetMembershipSuccesData = getDivisionTableData(savemembershipAllData)
             state.competitionDivisionsData = divisionGetMembershipSuccesData
             state.defaultCompFeesMembershipProduct = getDefaultCompMemberhsipProduct(state.defaultCompFeesMembershipProduct, savemembershipAllData.competitionmembershipproduct)
-
+            let competitionFee_Products= createProductFeeArr(savemembershipAllData)
+            state.competitionFeesData = competitionFee_Products
             return {
                 ...state,
                 onLoad: false,
@@ -1593,7 +1627,8 @@ function competitionFees(state = initialState, action) {
                     competitionDivisionId: 0,
                     ageRestriction: false,
                     genderRestriction: false,
-                    parentIndex: action.index
+                    parentIndex: action.index,
+                    isPlaying: 0,
                 }
                 console.log(defaultDivisionObject)
                 state.competitionDivisionsData[action.index].divisions.push(defaultDivisionObject)
