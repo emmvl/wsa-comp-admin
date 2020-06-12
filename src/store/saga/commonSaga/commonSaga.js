@@ -544,3 +544,27 @@ export function* getAllowTeamRegistrationTypeSaga(action) {
         });
     }
 }
+
+export function* RegistrationRestrictionType() {
+    try {
+        const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.RegistrationRestrictionType)
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_REGISTRATION_RESTRICTIONTYPE_SUCCESS,
+                result: result.result.data,
+                status: result.result.status
+            });
+        } else {
+            yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
+            setTimeout(() => {
+                alert(result.data.message);
+            }, 800);
+        }
+        } catch (error) {
+            yield put({
+                type: ApiConstants.API_COMMON_SAGA_ERROR,
+                error: error,
+                status: error.status
+            });
+    }  
+}

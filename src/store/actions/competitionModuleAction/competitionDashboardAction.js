@@ -8,8 +8,16 @@ function competitionDashboardAction(yearId) {
     return action;
 }
 
+//  Enhanced Round Robin Fixture template
+
+function fixtureTemplateRoundsAction() {
+    const action = {
+        type: ApiConstants.API_FIXTURE_TEMPLATE_ROUNDS_LOAD,        
+    };
+    return action;
+}
 
 export {
     competitionDashboardAction,
-
+    fixtureTemplateRoundsAction
 }

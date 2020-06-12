@@ -109,9 +109,11 @@ import {
   nationalityReferenceSaga, heardByReferenceSaga, playerPositionReferenceSaga, venuesListSaga,
   venueByIdSaga, venueDeleteSaga,
   getGenderSaga, getPhotoTypeSaga, getAppyToSaga, getExtraTimeDrawSaga,
-  getFinalsFixtureTemplateSaga, courtListSaga,getSendInvitesSaga,
+  getFinalsFixtureTemplateSaga, courtListSaga,getSendInvitesSaga,RegistrationRestrictionType,
   getAllowTeamRegistrationTypeSaga
 } from "./commonSaga/commonSaga";
+
+import {fixtureTemplateSaga} from '../saga/competitionManagementSaga/competitionManagementSaga';
 ////Venue constraints
 import { venueTimeSaga, venueConstraintPostSaga } from './competitionManagementSaga/venueTimeSaga'
 import {
@@ -719,5 +721,10 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_GET_COMMENT_LIST_LOAD, playerCommentList)
 
   yield takeEvery(ApiConstants.API_GET_ALL_COMPETITION_LOAD, getCompetitionSaga)
+  
+  yield takeEvery(ApiConstants.API_REGISTRATION_RESTRICTIONTYPE_LOAD, RegistrationRestrictionType)
+
+  yield takeEvery(ApiConstants.API_FIXTURE_TEMPLATE_ROUNDS_LOAD, fixtureTemplateSaga)
+  
 
 }

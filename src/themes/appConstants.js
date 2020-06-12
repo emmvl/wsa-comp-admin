@@ -252,6 +252,8 @@ const AppConstants = {
   fixtures: 'Fixtures',
   add_TimeSlot: 'Add Timeslot',
   addCourt: 'Add Court',
+  RegistrationRestrictionType: 'RegistrationRestrictionType',
+  CompetitionRegistration:'Competition Registration',
 
   //******************user Add Affiliates */
   All_communications: 'All communications',

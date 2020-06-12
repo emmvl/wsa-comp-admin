@@ -24,6 +24,7 @@ import LiveScoreDashboardState from './liveScoreReducer/liveScoreDashboardReduce
 import CompetitionDashboardState from './competitionManagementReducer/competitionDashboard'
 import CompetitionModuleState from './competitionManagementReducer/competitionModuleReducer'
 import liveScoreCompetition from './liveScoreReducer/liveScoreCompetitionReducer';
+import CompetitionManagementState from './competitionManagementReducer/competitionManagement';																							  
 ////Year and Competition
 import CommonAppState from './appReducer'
 import CompetitionFormatState from './competitionManagementReducer/competitionFormatReducer';
@@ -104,7 +105,8 @@ const rootReducer = combineReducers({
   StripeState,
   QuickCompetitionState,
   LiveScoreCoachState,
-  LiveScoreMatchSheetState
+  LiveScoreMatchSheetState,
+  CompetitionManagementState
 });
 
 export default rootReducer;
