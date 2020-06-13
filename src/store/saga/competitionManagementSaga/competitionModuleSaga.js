@@ -38,7 +38,7 @@ export function* competitonGenerateDrawSaga(action) {
             });
         } else {
             let res = JSON.parse(JSON.stringify(result));
-            yield put({ type: ApiConstants.API_GENERATE_DRAW_FAIL });
+            yield put({ type: ApiConstants.API_GENERATE_DRAW_FAIL,  status: result.status });
             setTimeout(() => {
                 message.config({
                     duration: 4,

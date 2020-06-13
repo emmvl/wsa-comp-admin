@@ -129,6 +129,9 @@ class CompetitionFormat extends Component {
                                         this.props.generateDrawAction(payload);
                                         this.setState({ loading: true });
                                 }
+
+                                
+                                
                             }
                         }
                     }
@@ -147,10 +150,15 @@ class CompetitionFormat extends Component {
                    
                     this.setState({ loading: false });
                 }
-    
+                console.log("&&&&&&&&&&&&&&&" + competitionModuleState.status);
                 if(competitionModuleState.status == 5 && competitionModuleState.drawGenerateLoad == false){
                     this.setState({ loading: false });
                     message.error(ValidationConstants.drawsMessage[0]);
+                    this.apiCalls(this.state.firstTimeCompId, this.state.yearRefId);
+                }
+                if(competitionModuleState.status == 4 && competitionModuleState.drawGenerateLoad == false){
+                        this.setState({ loading: false });
+                        this.apiCalls(this.state.firstTimeCompId, this.state.yearRefId);
                 }
             }
         }
