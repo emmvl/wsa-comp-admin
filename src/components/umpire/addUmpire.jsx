@@ -9,7 +9,7 @@ import ValidationConstants from "../../themes/validationConstant";
 import InputWithHead from "../../customComponents/InputWithHead";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { getUmpireCompetiton } from '../../util/sessionStorage'
 import { isArrayNotEmpty, captializedString } from "../../util/helpers";
 import Loader from '../../customComponents/loader'
 import {
@@ -40,17 +40,19 @@ class AddUmpire extends Component {
             loader: false,
             showOption: false,
             competition_id: null,
-            teamLoad: false
+            teamLoad: false,
+            affiliateLoader: false
         }
 
     }
 
     componentDidMount() {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.props.umpireListAction(5, 1, id)
+        const compId = JSON.parse(getUmpireCompetiton())
+        console.log(compId, 'getUmpireCompetiton')
+        this.props.umpireListAction(5, 1, compId)
 
-        if (id !== null) {
-            this.props.getUmpireAffiliateList({ id: id })
+        if (compId !== null) {
+            this.props.getUmpireAffiliateList({ id: compId })
         }
 
         if (this.state.isEdit === true) {
@@ -59,7 +61,7 @@ class AddUmpire extends Component {
         } else {
             this.props.updateAddUmpireData('', 'isAddUmpire')
         }
-        this.setState({ load: true, competition_id: id })
+        this.setState({ load: true, competition_id: compId })
     }
 
     componentDidUpdate(nextProps) {
@@ -77,10 +79,10 @@ class AddUmpire extends Component {
         }
 
         if (this.props.umpireDashboardState.affiliateId !== nextProps.umpireDashboardState.affiliateId) {
-            if (this.state.teamLoad === true) {
+            if (this.state.affiliateLoader === true) {
                 const { affiliateId } = this.props.umpireDashboardState
                 this.setSelectedAffiliateValue(affiliateId)
-                // this.setState({ teamLoad: false })
+                this.setState({ affiliateLoader: false })
 
             }
         }
@@ -102,7 +104,7 @@ class AddUmpire extends Component {
             'Last Name': umpireData.lastName,
             'Email Address': umpireData.email,
             'Contact no': umpireData.mobileNumber,
-            'umpireAffiliateName': affiliateId
+            'umpireNewAffiliateName': affiliateId
         })
     }
 
@@ -169,6 +171,7 @@ class AddUmpire extends Component {
                                         const umpireId = JSON.parse(option.key)
                                         this.props.umpireClear()
                                         this.props.updateAddUmpireData(umpireId, 'umnpireSearch')
+                                        this.setState({ affiliateLoader: true })
                                     }}
                                     notFoundContent={onLoadSearch == true ? <Spin size="small" /> : null}
 
@@ -177,7 +180,7 @@ class AddUmpire extends Component {
                                         value ?
                                             this.props.umpireSearchAction(refRoleTypes('member'), entityTypes('COMPETITION'), this.state.competition_id, value)
                                             :
-                                            this.props.umpireListAction(refRoleTypes('umpire'), entityTypes('COMPETITION'), this.state.competition_id)
+                                            this.props.umpireListAction(refRoleTypes('member'), entityTypes('COMPETITION'), this.state.competition_id)
 
                                     }}
 
@@ -314,7 +317,7 @@ class AddUmpire extends Component {
                             <InputWithHead
                                 required={"required-field pb-1"}
                                 heading={AppConstants.affiliate} />
-                            {getFieldDecorator("umpireAffiliateName", {
+                            {getFieldDecorator("umpireNewAffiliateName", {
                                 rules: [{ required: true, message: ValidationConstants.affiliateField }],
                             })(
 

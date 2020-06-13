@@ -19,11 +19,13 @@ function* errorSaga(error) {
         status: error.status
     });
     message.error(error.error)
+    // message.error('Something went wrong!!')
+
 }
 
 export function* umpireDashboardListSaga(action) {
     try {
-        const result = yield call(UserAxiosApi.umpireDashboardList, action.refRoleId, action.competitionID, action.entityTypeId);
+        const result = yield call(UserAxiosApi.umpireDashboardList, action.refRoleId, action.entityTypeId, action.competitionID, action.serachText);
         if (result.status === 1) {
             // console.log('saga', result)
             yield put({

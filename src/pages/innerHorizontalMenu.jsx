@@ -287,7 +287,7 @@ class InnerHorizontalMenu extends React.Component {
 
                         <Menu.Item key="11">
                             <NavLink to="/liveScoreLadderList">
-                                <span>Ladder/Draw</span>
+                                <span>Ladder</span>
                             </NavLink>
                         </Menu.Item>
                     </SubMenu>
@@ -356,7 +356,7 @@ class InnerHorizontalMenu extends React.Component {
                         </Menu.Item>
                         <Menu.Item key="19">
                             <NavLink to="/liveScoreLadderSettings">
-                                <span>Ladder</span>
+                                <span>Ladder/Draw</span>
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="20">

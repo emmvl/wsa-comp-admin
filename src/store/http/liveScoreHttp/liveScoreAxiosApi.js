@@ -738,13 +738,13 @@ let LiveScoreAxiosApi = {
     },
     liveScoreAddCoach(data, teamId, exsitingManagerId) {
         let body = data
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let { id } = JSON.parse(localStorage.getItem('getUmpireCompetiton'))
         var url = `/users/coach?competitionId=${id}`;
         return Method.dataPost(url, token, body)
     },
     addEditUmpire(data, teamId, exsitingManagerId) {
         let body = data
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let id = JSON.parse(localStorage.getItem('umpireCompetitionId'))
         var url = `/users/umpire?competitionId=${id}`;
         return Method.dataPost(url, token, body)
     },

@@ -199,7 +199,7 @@ let userHttpApi = {
     var url = `api/export/affiliatedirectory`;
     return Method.dataPostDownload(url, token, payload, "AffiliateDirectory");
   },
-  umpireDashboardList(refRoleId, compId, entityTypeId, userName) {
+  umpireDashboardList(refRoleId, entityTypeId, compId, userName) {
     let url = ''
     if (userName) {
       url = `/users/byRole?roleId=${refRoleId}&entityTypeId=${entityTypeId}&entityId=${compId}&userName=${userName}`
