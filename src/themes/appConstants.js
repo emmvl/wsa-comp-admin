@@ -253,7 +253,7 @@ const AppConstants = {
   add_TimeSlot: 'Add Timeslot',
   addCourt: 'Add Court',
   RegistrationRestrictionType: 'RegistrationRestrictionType',
-  CompetitionRegistration:'Competition Registration',
+  CompetitionRegistration: 'Competition Registration',
 
   //******************user Add Affiliates */
   All_communications: 'All communications',
@@ -1277,13 +1277,16 @@ const AppConstants = {
   public_draws_Url: `https://netball-registration-dev.worldsportaction.com/livescoreSeasonFixture?`,
   finalsMessage: 'Finals has not been enabled for this Competition',
   allowTeamRegistration: 'Allow Team Registrations',
-  teamRegistration: "Team Registrations",  
+  teamRegistration: "Team Registrations",
   individualRegistrations: "Individual Registrations",
 
   /////////shop
   shop:"Shop",
   products:"Products",
   listProducts:"List Products",
+  addAProduct:"Add a Product",
+  addProduct: "Add Product",
+  enterTitle:"Enter Title",
 };
 
 export default AppConstants;

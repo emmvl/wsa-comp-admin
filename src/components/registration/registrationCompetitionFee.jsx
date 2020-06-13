@@ -63,7 +63,7 @@ import {
 } from '../../store/actions/appAction';
 import moment from 'moment';
 import history from '../../util/history';
-import { isArrayNotEmpty, isNullOrEmptyString } from '../../util/helpers';
+import { isArrayNotEmpty, isNotNullOrEmptyString } from '../../util/helpers';
 import ValidationConstants from '../../themes/validationConstant';
 import { NavLink } from 'react-router-dom';
 import Loader from '../../customComponents/loader';

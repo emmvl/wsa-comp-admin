@@ -17,7 +17,7 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { timeSlotInit } from "../../store/actions/commonAction/commonAction"
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
 import InputWithHead from "../../customComponents/InputWithHead";
 import { getVenuesTypeAction } from "../../store/actions/appAction";
 import ValidationConstants from "../../themes/validationConstant";

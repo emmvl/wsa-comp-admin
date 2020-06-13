@@ -55,12 +55,12 @@ class InnerHorizontalMenu extends React.Component {
                             <span>Own Competitions</span>
                         }
                     >
-                        <Menu.Item key="2">
-                            {/* <a href="https://comp-management-test.firebaseapp.com/quick-competitions.html">Quick Competition</a> */}
-                            <NavLink to="competitionQuickCompetition">
+                        {/* <Menu.Item key="2"> */}
+                        {/* <a href="https://comp-management-test.firebaseapp.com/quick-competitions.html">Quick Competition</a> */}
+                        {/* <NavLink to="competitionQuickCompetition">
                                 <span>Quick Competition</span>
                             </NavLink>
-                        </Menu.Item>
+                        </Menu.Item> */}
                         <Menu.Item key="3">
                             <NavLink to="/competitionOpenRegForm" >
                                 <span > Competition Details</span>
@@ -101,14 +101,20 @@ class InnerHorizontalMenu extends React.Component {
                                 <span >Finals</span>
                             </NavLink>
                         </Menu.Item>
-                        <Menu.Item key="11">
-                            {/* <a href="http://clixlogix.org/test/netball/fixtures.html">Fixtures</a> */}
-                            <NavLink to="competitionFixtures">
+                        {/* <Menu.Item key="11"> */}
+                        {/* <a href="http://clixlogix.org/test/netball/fixtures.html">Fixtures</a> */}
+                        {/* <NavLink to="competitionFixtures">
                                 Fixtures
                             </NavLink>
-                        </Menu.Item>
+                        </Menu.Item> */}
 
-                        <SubMenu
+                        <Menu.Item key="18" >
+                            {/* <a href="https://comp-management-test.firebaseapp.com/competitions-draws.html">Draws</a> */}
+                            <NavLink to="/competitionDraws" >
+                                <span >Draws</span>
+                            </NavLink>
+                        </Menu.Item>
+                        {/* <SubMenu
                             key="sub2"
                             title={
                                 <span>Draw</span>
@@ -120,13 +126,13 @@ class InnerHorizontalMenu extends React.Component {
                                     <span >Re-grading</span>
                                 </NavLink>
                             </Menu.Item>
-                            <Menu.Item key="18" >
-                                {/* <a href="https://comp-management-test.firebaseapp.com/competitions-draws.html">Draws</a> */}
-                                <NavLink to="/competitionDraws" >
+                            <Menu.Item key="18" > */}
+                        {/* <a href="https://comp-management-test.firebaseapp.com/competitions-draws.html">Draws</a> */}
+                        {/* <NavLink to="/competitionDraws" >
                                     <span >Draws</span>
                                 </NavLink>
                             </Menu.Item>
-                        </SubMenu>
+                        </SubMenu> */}
                     </SubMenu>
 
                     <SubMenu
@@ -521,8 +527,9 @@ class InnerHorizontalMenu extends React.Component {
 
                             <Menu.Item key="2">
                                 <NavLink to="/listProducts" >
-                                    <span >{AppConstants.listProducts}</span>
+                                    <span >{AppConstants.products}</span>
                                 </NavLink>
+
                             </Menu.Item>
                         </SubMenu>
                     </Menu>

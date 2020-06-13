@@ -1,6 +1,6 @@
 import ApiConstants from "../../../themes/apiConstants";
 import history from "../../../util/history";
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 
 
 const newObjvalue = {
@@ -567,7 +567,7 @@ function getDefaultMembershipType(data) {
     if (data.membershipproducttypes) {
       let getMembershipType = data.membershipproducttypes.MembershipProductTypes
       for (let i in getMembershipType) {
-        if (isNullOrEmptyString(getMembershipType[i].dobFrom) && isNullOrEmptyString(getMembershipType[i].dobTo)) {
+        if (isNotNullOrEmptyString(getMembershipType[i].dobFrom) && isNotNullOrEmptyString(getMembershipType[i].dobTo)) {
           getMembershipType[i]["isMandate"] = true;
         }
         else {

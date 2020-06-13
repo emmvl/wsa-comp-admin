@@ -347,6 +347,7 @@ class UserOurOragnization extends Component {
                                 affiliate.organisationLogo = this.state.image;
                                 affiliate.organisationLogoId = 0;
                             }
+                            formData.append("email", affiliate.email);
                             formData.append("organisationLogo", this.state.image);
                             formData.append("organisationLogoId", affiliate.organisationLogoId);
                             formData.append("affiliateId", affiliate.affiliateId);
@@ -364,7 +365,8 @@ class UserOurOragnization extends Component {
                             formData.append("stateRefId", affiliate.stateRefId);
                             formData.append("whatIsTheLowestOrgThatCanAddChild", affiliate.whatIsTheLowestOrgThatCanAddChild);
                             formData.append("contacts", contacts);
-                            console.log("Req Body ::" + JSON.stringify(affiliate));
+
+
                             this.setState({ loading: true });
                             //this.props.saveAffiliateAction(affiliate);
                             this.props.saveAffiliateAction(formData);
@@ -511,17 +513,17 @@ class UserOurOragnization extends Component {
                     display: "flex",
                     alignItems: "center",
                 }} >
-                     {this.state.sourcePage == "AFF" ? 
-                    <Breadcrumb separator=" > ">
-                        <NavLink to="/userAffiliatesList" >
-                            <Breadcrumb.Item separator=">" className="breadcrumb-product">{AppConstants.affiliates}</Breadcrumb.Item>
-                        </NavLink>
-                        {/* <Breadcrumb.Item className="breadcrumb-product">{AppConstants.user}</Breadcrumb.Item> */}
-                        <Breadcrumb.Item className="breadcrumb-add">{AppConstants.ourOrganisation}</Breadcrumb.Item>
-                    </Breadcrumb> : 
-                     <NavLink to="/affiliatedirectory" >
-                        <span className="breadcrumb-product">{AppConstants.affiliates}</span>
-                     </NavLink> }
+                    {this.state.sourcePage == "AFF" ?
+                        <Breadcrumb separator=" > ">
+                            <NavLink to="/userAffiliatesList" >
+                                <Breadcrumb.Item separator=">" className="breadcrumb-product">{AppConstants.affiliates}</Breadcrumb.Item>
+                            </NavLink>
+                            {/* <Breadcrumb.Item className="breadcrumb-product">{AppConstants.user}</Breadcrumb.Item> */}
+                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.ourOrganisation}</Breadcrumb.Item>
+                        </Breadcrumb> :
+                        <NavLink to="/affiliatedirectory" >
+                            <span className="breadcrumb-product">{AppConstants.affiliates}</span>
+                        </NavLink>}
                 </Header >
             </div>
         )
@@ -718,6 +720,12 @@ class UserOurOragnization extends Component {
                 <InputWithHead heading={AppConstants.phoneNumber} placeholder={AppConstants.phoneNumber}
                     onChange={(e) => this.onChangeSetValue(e.target.value, "phoneNo")}
                     value={affiliate.phoneNo}
+                    disabled={!this.state.isEditable}
+                />
+
+                <InputWithHead heading={AppConstants.email} placeholder={AppConstants.email}
+                    onChange={(e) => this.onChangeSetValue(e.target.value, "email")}
+                    value={affiliate.email}
                     disabled={!this.state.isEditable}
                 />
             </div>

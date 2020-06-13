@@ -126,6 +126,8 @@ import AddUmpire from "../components/umpire/addUmpire"
 
 import LiveScoreMatchSheet from "../components/liveScore/liveScoreMatchSheet";
 import ShopDashboard from "../components/shop/shopDashboard";
+import ListProducts from "../components/shop/listProducts";
+import AddProduct from "../components/shop/addproduct";
 
 const lazyLoad = Component => {
   const lazy = props => {
@@ -660,6 +662,15 @@ class Routes extends React.Component {
           component={lazyLoad(ShopDashboard)}
         />
 
+        <PrivateRoute
+          path="/listProducts"
+          component={lazyLoad(ListProducts)}
+        />
+
+        <PrivateRoute
+          path="/addProduct"
+          component={lazyLoad(AddProduct)}
+        />
         <Route path="/" component={lazyLoad(NotFound)} />
 
         <Redirect from="*" to="/404" />

@@ -1,5 +1,5 @@
 import ApiConstants from '../../../themes/apiConstants'
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 
 
 const initialState = {

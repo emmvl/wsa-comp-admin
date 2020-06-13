@@ -529,7 +529,7 @@ class CompetitionDrawEdit extends Component {
                 <div className="row" >
                     <div className="col-sm-3">
                         <div className="reg-add-save-button">
-                            <Button onClick={() => history.push('/competitionDraws')} type="cancel-button">{AppConstants.back}</Button>
+                            <Button onClick={() => history.push('/competitionDraws')} className="open-reg-button" type="primary">{AppConstants.save}</Button>
                         </div>
                     </div>
                     <Loader visible={this.props.competitionModuleState.drawGenerateLoad} />

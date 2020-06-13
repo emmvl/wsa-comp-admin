@@ -40,7 +40,7 @@ class ShopDashboard extends Component {
                 <InnerHorizontalMenu menu={"shop"} shopSelectedKey={"1"} />
                 <Layout>
                     <Content className="comp-dash-table-view">
-                        <span>SHOP DASHBOARD</span>
+                        {/* <span>SHOP DASHBOARD</span> */}
                     </Content>
                     {/* <Loader
                         visible={this.props.appState.onLoad} /> */}

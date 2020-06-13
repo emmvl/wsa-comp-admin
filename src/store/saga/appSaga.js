@@ -2,7 +2,7 @@ import { put, call } from "redux-saga/effects";
 import ApiConstants from "../../themes/apiConstants";
 import AxiosApi from "../http/axiosApi";
 import LiveScoreApi from "../http/liveScoreHttp/liveScoreAxiosApi"
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
 import RegistrationAxiosApi from "../http/registrationHttp/registrationAxios";
 import CommonAxiosApi from "../http/commonHttp/commonAxios";
 import AppConstants from "../../themes/appConstants";

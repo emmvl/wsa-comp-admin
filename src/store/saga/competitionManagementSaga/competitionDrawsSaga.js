@@ -122,7 +122,7 @@ export function* saveDrawsSaga(action) {
 
         if (result.status === 1) {
             yield put({
-                type: ApiConstants.API_UPDATE_COMPETITION_DRAWS_SUCCESS,
+                type: ApiConstants.API_UPDATE_COMPETITION_SAVE_DRAWS_SUCCESS,
                 result: result.result.data,
                 status: result.status,
 

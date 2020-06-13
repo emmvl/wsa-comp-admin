@@ -33,7 +33,7 @@ import {
 import { getYearAndCompetitionOwnAction, clearYearCompetitionAction } from '../../store/actions/appAction'
 import { getVenuesTypeAction } from "../../store/actions/appAction";
 import { venueListAction, getCommonRefData, searchVenueList, clearFilter } from '../../store/actions/commonAction/commonAction'
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
 import history from '../../util/history'
 import ValidationConstant from '../../themes/validationConstant'
 import {

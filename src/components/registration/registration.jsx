@@ -348,9 +348,28 @@ class Registration extends Component {
                     publishStatus={this.state.publishStatus}
                     competitionClick={() => this.clickCompetition()}
                     registrationClick={() => this.state.publishStatus == 2 && this.onClickRegistration()}
+                    registrationStatus={this.regStatus()}
                 />
             </div >
         )
+    }
+
+
+    regStatus() {
+        let regstatus = false
+        if (this.state.publishStatus == 2) {
+            if (this.state.isDirect == true && this.state.competitionCreatorOrganisation == 1) {
+                return true
+            }
+            else if (this.state.inviteeStatus == 1) {
+                return true
+            }
+        }
+        else {
+            return regstatus
+        }
+
+
     }
 
     //wizard  registration click

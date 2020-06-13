@@ -11,7 +11,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import ReactPlayer from 'react-player';
 import { liveScore_formateDateTime } from '../../themes/dateformate'
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
 import history from "../../util/history";
 const { Header, Content } = Layout;
 

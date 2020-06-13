@@ -1,7 +1,7 @@
 import ApiConstants from "../../../themes/apiConstants";
 import history from "../../../util/history";
 import { getRegistrationSetting } from "../../objectModel/getRegSettingObject";
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 import { getUserId, getOrganisationData } from "../../../util/sessionStorage"
 import { stat } from "fs";
 
@@ -227,7 +227,7 @@ function checkDivision(divisionArray, membershipProductUniqueKey, parentIndex) {
                 let tempDivisionArray = divisionArray[i].divisions
                 for (let j in tempDivisionArray) {
                     tempDivisionArray[j]["parentIndex"] = parentIndex
-                    if (isNullOrEmptyString(tempDivisionArray[j].fromDate) && isNullOrEmptyString(tempDivisionArray[j].toDate)) {
+                    if (isNotNullOrEmptyString(tempDivisionArray[j].fromDate) && isNotNullOrEmptyString(tempDivisionArray[j].toDate)) {
                         tempDivisionArray[j]["ageRestriction"] = true;
                     }
                     else {

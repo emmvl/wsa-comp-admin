@@ -1,5 +1,5 @@
 import ApiConstants from "../../../themes/apiConstants";
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 import { JsonWebTokenError } from "jsonwebtoken";
 
 let affiliate = {
@@ -17,7 +17,8 @@ let affiliate = {
     postalCode: '',
     stateRefId: 0,
     whatIsTheLowestOrgThatCanAddChild: 0,
-    contacts: []
+    contacts: [],
+    email: ''
 }
 
 let affiliateListObj = {
@@ -222,11 +223,11 @@ function userReducer(state = initialState, action) {
             return { ...state, error: null };
 
         case ApiConstants.UPDATE_ORG_AFFILIATE:
-
             let oldOrgData = state.affiliateOurOrg;
             let updatedOrgValue = action.updatedData;
             let getOrgKey = action.key;
             oldOrgData[getOrgKey] = updatedOrgValue;
+           
             return { ...state, error: null };
 
         case ApiConstants.UPDATE_NEW_AFFILIATE:
@@ -309,7 +310,7 @@ function userReducer(state = initialState, action) {
                 userDashboardTextualList: textualData.users,
                 userDashboardTextualPage: textualData.page ? textualData.page.currentPage : 1,
                 userDashboardTextualTotalCount: textualData.page.totalCount,
-                competitions:isArrayNotEmpty(textualData.competitions) ? textualData.competitions : [],
+                competitions: isArrayNotEmpty(textualData.competitions) ? textualData.competitions : [],
                 organisations: isArrayNotEmpty(textualData.organisations) ? textualData.organisations : [],
                 roles: isArrayNotEmpty(textualData.roles) ? textualData.roles : [],
                 userDashboardCounts: textualData.counts,
@@ -439,9 +440,9 @@ function userReducer(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
-                friendList: friendData? friendData.friends : [],
+                friendList: friendData ? friendData.friends : [],
                 friendPage: (friendData && friendData.page) ? friendData.page.currentPage : 1,
-                friendTotalCount: (friendData && friendData.page) ?  friendData.page.totalCount : 1,
+                friendTotalCount: (friendData && friendData.page) ? friendData.page.totalCount : 1,
                 status: action.status
             };
 
@@ -524,7 +525,7 @@ function userReducer(state = initialState, action) {
                 affiliateDirectoryList: affiliateDirData.affiliates,
                 affiliateDirectoryPage: affiliateDirData.page ? affiliateDirData.page.currentPage : 1,
                 affiliateDirectoryTotalCount: affiliateDirData.page.totalCount,
-                organisationTypes: isArrayNotEmpty(affiliateDirData.organisationTypes) ?  affiliateDirData.organisationTypes : [],
+                organisationTypes: isArrayNotEmpty(affiliateDirData.organisationTypes) ? affiliateDirData.organisationTypes : [],
                 status: action.status
             };
 

@@ -1,7 +1,7 @@
 import { put, call } from 'redux-saga/effects'
 import ApiConstants from "../../../themes/apiConstants";
 import CommonAxiosApi from "../../http/commonHttp/commonAxios";
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 import { message } from "antd";
 import AppConstants from "../../../themes/appConstants";
 import AxiosApi from '../../http/registrationHttp/registrationAxios';
