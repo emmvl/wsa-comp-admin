@@ -363,13 +363,13 @@ class CompetitionProposedTeamGrading extends Component {
             competitionUniqueKey: this.state.firstTimeCompId,
             organisationId: '',
             teamId: this.state.teamId,
-            competitionMembershipProductDivisionId: this.state.divisionId,
+            divisionId: this.state.divisionId,
             actionType: this.state.actionType
         }
-        //this.props.deleteTeamActionAction(payload);
-        //this.setState({loading: true});
+        this.props.deleteTeamActionAction(payload);
+        this.setState({loading: true});
 
-        this_obj.props.onchangeCompOwnFinalTeamGradingData(this.state.actionType, this.state.rowIndex, "actionType");
+       // this_obj.props.onchangeCompOwnFinalTeamGradingData(this.state.actionType, this.state.rowIndex, "actionType");
 
     }
 

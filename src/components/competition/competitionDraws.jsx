@@ -157,10 +157,10 @@ class CompetitionDraws extends Component {
       }
     }
 
-    if (this.state.updateLoad == true && this.props.drawsState.updateLoad == false) {
-      this.setState({updateLoad: false})
-      this.reGenerateDraw();
-    }
+    // if (this.state.updateLoad == true && this.props.drawsState.updateLoad == false) {
+    //   this.setState({updateLoad: false})
+    //   this.reGenerateDraw();
+    // }
   }
 
   componentDidMount() {
