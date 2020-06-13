@@ -60,7 +60,8 @@ class CompetitionDraws extends Component {
       venueLoad: false,
       roundTime: null,
       competitionDivisionGradeId: "",
-      organisationId: getOrganisationData().organisationUniqueKey
+      organisationId: getOrganisationData().organisationUniqueKey,
+      updateLoad: false
     };
   }
 
@@ -154,6 +155,11 @@ class CompetitionDraws extends Component {
           this.props.getDrawsRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
         }
       }
+    }
+
+    if (this.state.updateLoad == true && this.props.drawsState.updateLoad == false) {
+      this.setState({updateLoad: false})
+      this.reGenerateDraw();
     }
   }
 
@@ -268,6 +274,8 @@ class CompetitionDraws extends Component {
       sourceIndexArray,
       targetIndexArray,
       "add", round_Id)
+
+      this.setState({updateLoad: true});
   }
 
   ///////update the competition draws on  swapping and hitting update Apis if both has value
@@ -305,6 +313,8 @@ class CompetitionDraws extends Component {
       targetIndexArray,
       "add", round_Id
     );
+
+    this.setState({updateLoad: true});
   }
 
 
