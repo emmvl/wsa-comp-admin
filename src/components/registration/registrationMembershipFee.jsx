@@ -483,7 +483,8 @@ class RegistrationMembershipFee extends Component {
         let registrationState = this.props.registrationState
         const defaultTypes = registrationState.getDefaultMembershipProductTypes !== null ? registrationState.getDefaultMembershipProductTypes : []
         let allData = this.props.registrationState.getMembershipProductDetails
-		let {allowTeamRegistration} = this.props.commonReducerState;															
+        let {allowTeamRegistration} = this.props.commonReducerState;
+        console.log("defaultTypes::" + JSON.stringify(defaultTypes));															
         return (
             <div>
                 <span className="applicable-to-heading">
@@ -620,7 +621,7 @@ class RegistrationMembershipFee extends Component {
 										{AppConstants.allowTeamRegistration}
 									</Checkbox>
 
-									{item.isAllow && (
+									{item.isAllow && item.isPlaying == 1 && (
 										<div className="fluid-width" style={{marginTop:"10px"}}>
 											<div className="row">
 												<div className="col-sm">
