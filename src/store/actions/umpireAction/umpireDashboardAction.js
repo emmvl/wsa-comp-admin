@@ -1,11 +1,12 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-function umpireListAction(refRoleId, competitionID, entityTypeId) {
+function umpireListAction(refRoleId, entityTypeId, competitionID, serachText) {
     const action = {
         type: ApiConstants.API_UMPIRE_DASHBOARD_LIST_LOAD,
         refRoleId,
+        entityTypeId,
         competitionID,
-        entityTypeId
+        serachText
     };
     console.log(action, 'umpireListAction')
     return action;

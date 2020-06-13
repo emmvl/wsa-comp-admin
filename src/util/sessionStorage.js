@@ -105,6 +105,13 @@ const getDraws_division_grade = () => {
     return localStorage.draws_division_grade
 }
 
+const getUmpireCompetiton = () => {
+    return localStorage.umpireCompetitionId
+}
+const setUmpireCompition = umpireCompetitionId => {
+    localStorage.setItem("umpireCompetitionId", umpireCompetitionId)
+}
+
 
 
 module.exports = {
@@ -130,4 +137,6 @@ module.exports = {
     getDraws_roundTime,
     setDraws_division_grade,
     getDraws_division_grade,
+    getUmpireCompetiton,
+    setUmpireCompition
 }

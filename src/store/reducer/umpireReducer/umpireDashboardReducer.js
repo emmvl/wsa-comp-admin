@@ -17,13 +17,14 @@ const initialState = {
     umpireList: [],
     umpireRadioBtn: 'new',
     umpireData: umpireObj,
-    affiliateId: [],
+    affiliateId: null,
     exsitingUmpireId: null,
     affilateList: [],
     umpireListResult: [],
     onLoadSearch: false,
     selectedAffiliate: null,
-    onAffiliateLoad: false
+    onAffiliateLoad: false,
+    selectedAffiliateId: null
 };
 
 function getAffiliateData(selectedAffiliateId, affiliateArray) {
@@ -59,6 +60,35 @@ function genrateAffiliateId(affiliateIdArr) {
     return affiliateId
 
 }
+
+//// get umpire selected Affiliate
+function getumpireAffiliate(selectedUmpireId, umpireListArr) {
+
+    let selectedAffiliate
+
+    for (let i in umpireListArr) {
+
+        if (selectedUmpireId == umpireListArr[i].id) {
+            selectedAffiliate = umpireListArr[i].linkedEntity
+        }
+    }
+
+    return selectedAffiliate
+}
+
+function genrateSelectedAffiliateId(linkedEntityArr, affiliateArr) {
+    let affiliateIds = []
+
+    for (let i in affiliateArr) {
+        for (let j in linkedEntityArr) {
+            if (linkedEntityArr[j].entityId == affiliateArr[i].id) {
+                affiliateIds.push(linkedEntityArr[j].entityId)
+            }
+        }
+    }
+    return affiliateIds
+}
+
 
 function umpireDashboardState(state = initialState, action) {
     switch (action.type) {
@@ -96,6 +126,7 @@ function umpireDashboardState(state = initialState, action) {
             return { ...state, onAffiliateLoad: true };
 
         case ApiConstants.API_GET_UMPIRE_AFFILIATE_LIST_SUCCESS:
+            console.log(action.result, 'affilateListSuccess')
             return {
                 ...state,
                 onAffiliateLoad: false,
@@ -119,7 +150,16 @@ function umpireDashboardState(state = initialState, action) {
                 state.umpireData['affiliates'] = affiliateObj
 
             } else if (key == 'umnpireSearch') {
+
                 state.exsitingUmpireId = data
+                state.selectedAffiliateId = getumpireAffiliate(data, state.umpireListResult)
+                console.log(state.selectedAffiliateId, 'getAffiliateId~~')
+
+                let getAffiliateId = genrateSelectedAffiliateId(state.selectedAffiliateId, state.affilateList)
+                console.log(getAffiliateId, 'getAffiliateId')
+                state.affiliateId = getAffiliateId
+
+
             } else if (action.key == 'isEditUmpire') {
                 state.umpireData.id = data.id
                 state.umpireData.firstName = data.firstName
