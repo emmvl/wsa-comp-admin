@@ -1,6 +1,6 @@
 import ApiConstants from '../../../themes/apiConstants'
 import moment from 'moment';
-import { isArrayNotEmpty, isNullOrEmptyString } from '../../../util/helpers';
+import { isArrayNotEmpty, isNotNullOrEmptyString } from '../../../util/helpers';
 import { getLiveScoreCompetiton } from '../../../util/sessionStorage';
 
 var object = {

@@ -1,12 +1,12 @@
 import ApiConstants from "../../../themes/apiConstants";
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 
 
 
 const initialState = {
     onLoad: false,
     onTeamDeleteLoad: false,
-    onDivisionChangeLoad: false,								
+    onDivisionChangeLoad: false,
     error: null,
     result: [],
     status: 0,
@@ -17,12 +17,14 @@ const initialState = {
         teamName: "Unassigned",
         playerCount: 0,
         players: [],
-        isChecked: false					
+        isChecked: false
     },
     newTeam: [],
     AllPartPlayerGradingListData: [],
     playerImportData: [],
-    teamsImportData: []
+    teamsImportData: [],
+    playerCommentList: [],
+    commentLoad: false
 };
 
 
@@ -34,7 +36,7 @@ function unassignedListDataFormation(data, ) {
         teamName: "Unassigned",
         playerCount: 0,
         players: [],
-        isChecked: false					
+        isChecked: false
     }
     for (let i in data) {
         if (data[i].teamId !== null) {
@@ -187,9 +189,12 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
                     teamName: "Unassigned",
                     playerCount: 0,
                     players: [],
-                    isChecked: false				
+                    isChecked: false
                 }
                 state.assignedPartPlayerGradingListData = []
+            }
+            if (action.key == "commentList") {
+                state.playerCommentList = []
             }
             return {
                 ...state,
@@ -208,7 +213,7 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
                 "teamName": action.result.teamName,
                 "playerCount": action.result.playerCount,
                 "players": action.result.players,
-                "isChecked": false						  
+                "isChecked": false
             }
             state.assignedPartPlayerGradingListData.push(newobj)
             state.AllPartPlayerGradingListData.push(newobj)
@@ -256,18 +261,18 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             console.log(action)
             if (action.teamIndex == null) {
                 let matchIndex = state.unassignedPartPlayerGradingListData.players.findIndex(x => x.playerId == action.playerId)
-                console.log(matchIndex)
                 if (matchIndex > -1) {
                     state.unassignedPartPlayerGradingListData["players"][matchIndex].comments = action.comment
                     state.unassignedPartPlayerGradingListData["players"][matchIndex].commentsCreatedBy = action.result.message.commentsCreatedBy
                     state.unassignedPartPlayerGradingListData["players"][matchIndex].commentsCreatedOn = action.result.message.commentsCreatedOn
-
+                    state.unassignedPartPlayerGradingListData["players"][matchIndex].isCommentsAvailable = 1
                 }
             }
             else {
                 let assignMatchIndex = state.assignedPartPlayerGradingListData[action.teamIndex].players.findIndex(x => x.playerId == action.playerId)
                 if (assignMatchIndex > -1) {
                     state.assignedPartPlayerGradingListData[action.teamIndex].players[assignMatchIndex].comments = action.comment
+                    state.assignedPartPlayerGradingListData[action.teamIndex].players[assignMatchIndex].isCommentsAvailable = 1
                 }
             }
             state.onLoad = false
@@ -315,17 +320,17 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             }
 
         case ApiConstants.API_COMPETITION_IMPORT_DATA_CLEANUP:
-            if(action.key == "player"){
+            if (action.key == "player") {
                 state.playerImportData = [];
             }
-            else if(action.key == "team"){
+            else if (action.key == "team") {
                 state.teamsImportData = [];
             }
             return {
                 ...state
             }
 
-                
+
         case ApiConstants.API_COMPETITION_TEAM_DELETE_LOAD:
             return { ...state, onTeamDeleteLoad: true };
 
@@ -345,14 +350,29 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             }
 
         case ApiConstants.UPDATE_PLAYER_GRADING_DATA:
-            if(action.key == "assigned"){
-                state.assignedPartPlayerGradingListData = action.data;  
+            if (action.key == "assigned") {
+                state.assignedPartPlayerGradingListData = action.data;
             }
-            else if (action.key == "unAssigned"){
+            else if (action.key == "unAssigned") {
                 state.unassignedPartPlayerGradingListData = action.data;
             }
-            return { ...state}												  
-    
+            return { ...state }
+
+        case ApiConstants.API_GET_COMMENT_LIST_LOAD:
+            return {
+                ...state,
+                onLoad: true,
+                commentLoad: true
+            }
+
+        case ApiConstants.API_GET_COMMENT_LIST_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                playerCommentList: action.result,
+                commentLoad: false
+            }
+
         default:
             return state;
     }

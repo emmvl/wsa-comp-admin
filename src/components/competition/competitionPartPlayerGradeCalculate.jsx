@@ -71,19 +71,20 @@ const columns = [
         title: 'Extra Players',
         dataIndex: 'extraPlayers',
         key: 'extraPlayers',
+        width: '20%',
         render: extraPlayers => <Input disabled={true} className="input-inside-player-grades-table-for-grade" value={extraPlayers} />,
         sorter: (a, b) => tableSort(a, b, "extraPlayers")
     },
-    {
-        title: 'Comments',
-        dataIndex: 'comments',
-        key: 'comments',
-        width: 110,
-        render: (comments, record) =>
-            <div style={{ display: "flex", justifyContent: "center", cursor: "pointer" }} onClick={() => this_Obj.onClickComment(record)}>
-                <img src={comments !== null && comments.length > 0 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
-            </div>
-    },
+    // {
+    //     title: 'Comments',
+    //     dataIndex: 'comments',
+    //     key: 'comments',
+    //     width: 110,
+    //     render: (comments, record) =>
+    //         <div style={{ display: "flex", justifyContent: "center", cursor: "pointer" }} onClick={() => this_Obj.onClickComment(record)}>
+    //             <img src={comments !== null && comments.length > 0 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
+    //         </div>
+    // },
 
 ];
 
@@ -207,42 +208,42 @@ class CompetitionPartPlayerGradeCalculate extends Component {
         this.setState({ getDataLoading: true, firstTimeCompId: competitionId })
     }
 
-    onClickComment(record) {
-        this.setState({
-            visible: true, comment: record.comments,
-            divisionId: record.competitionMembershipProductDivisionId,
-            playerGradingorgId: record.playerGradingOrganisationId,
-            commentsCreatedBy: record.comments == "" ? null : record.commentsCreatedBy,
-            commentsCreatedOn: record.comments == "" ? null : moment(record.commentsCreatedOn).format("DD-MM-YYYY HH:mm"),
-            comments: record.comments
-        })
-    }
+    // onClickComment(record) {
+    //     this.setState({
+    //         visible: true, comment: record.comments,
+    //         divisionId: record.competitionMembershipProductDivisionId,
+    //         playerGradingorgId: record.playerGradingOrganisationId,
+    //         commentsCreatedBy: record.comments == "" ? null : record.commentsCreatedBy,
+    //         commentsCreatedOn: record.comments == "" ? null : moment(record.commentsCreatedOn).format("DD-MM-YYYY HH:mm"),
+    //         comments: record.comments
+    //     })
+    // }
 
-    handleOk = e => {
-        this.props.playerSummaryCommentAction(this.state.yearRefId, this.state.firstTimeCompId,
-            this.state.divisionId, this.state.playerGradingorgId, this.state.comment)
-        this.setState({
-            visible: false,
-            comment: "",
-            divisionId: null,
-            playerGradingorgId: null,
-            commentCreatedBy: null,
-            commentsCreatedOn: null,
-            comments: null
-        });
-    };
-    // model cancel for dissapear a model
-    handleCancel = e => {
-        this.setState({
-            visible: false,
-            comment: "",
-            divisionId: null,
-            playerGradingorgId: null,
-            commentCreatedBy: null,
-            commentsCreatedOn: null,
-            comments: null
-        });
-    };
+    // handleOk = e => {
+    //     this.props.playerSummaryCommentAction(this.state.yearRefId, this.state.firstTimeCompId,
+    //         this.state.divisionId, this.state.playerGradingorgId, this.state.comment)
+    //     this.setState({
+    //         visible: false,
+    //         comment: "",
+    //         divisionId: null,
+    //         playerGradingorgId: null,
+    //         commentCreatedBy: null,
+    //         commentsCreatedOn: null,
+    //         comments: null
+    //     });
+    // };
+    // // model cancel for dissapear a model
+    // handleCancel = e => {
+    //     this.setState({
+    //         visible: false,
+    //         comment: "",
+    //         divisionId: null,
+    //         playerGradingorgId: null,
+    //         commentCreatedBy: null,
+    //         commentsCreatedOn: null,
+    //         comments: null
+    //     });
+    // };
 
 
     ///dropdown view containing all the dropdown of header
@@ -320,7 +321,7 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                         loading={this.props.partPlayerGradingState.onLoad == true && true}
                     />
                 </div>
-                <PlayerCommentModal
+                {/* <PlayerCommentModal
                     visible={this.state.visible}
                     modalTitle={AppConstants.add_edit_comment}
                     onOK={this.handleOk}
@@ -331,7 +332,7 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                     owner={this.state.commentsCreatedBy}
                     OwnCreatedComment={this.state.commentsCreatedOn}
                     ownnerComment={this.state.comments}
-                />
+                /> */}
             </div>
         )
     }

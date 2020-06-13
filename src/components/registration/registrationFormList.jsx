@@ -16,6 +16,8 @@ import {
 }
     from "../../store/actions/registrationAction/registrationDashboardAction"
 import moment from "moment"
+import Tooltip from 'react-png-tooltip'
+
 const { Footer, Content } = Layout;
 const { Option } = Select;
 const { SubMenu } = Menu;
@@ -141,6 +143,11 @@ class RegistrationFormList extends Component {
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.registrationForm}</Breadcrumb.Item>
 
                         </Breadcrumb>
+                        <div style={{ marginTop: 8 }}>
+                            <Tooltip background='#ff8237'>
+                                <span>{AppConstants.regFormDashBoardMsg}</span>
+                            </Tooltip>
+                        </div>
                     </div>
                 </div>
 

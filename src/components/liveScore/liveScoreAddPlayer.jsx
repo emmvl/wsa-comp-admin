@@ -23,7 +23,7 @@ import history from '../../util/history'
 import Loader from '../../customComponents/loader'
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
-import { isArrayNotEmpty, isNullOrEmptyString, captializedString } from '../../util/helpers';
+import { isArrayNotEmpty, isNotNullOrEmptyString, captializedString } from '../../util/helpers';
 import ImageLoader from '../../customComponents/ImageLoader'
  
 

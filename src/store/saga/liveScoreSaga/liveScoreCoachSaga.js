@@ -22,11 +22,11 @@ function* errorSaga(error) {
 }
 
 export function* liveScoreCoachSaga(action) {
-  
+
     try {
         const result = yield call(userHttpApi.liveScoreCoachesList, action.roleId, action.entityTypeId, action.entityId, action.search);
         if (result.status === 1) {
-            
+
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_COACH_LIST_SUCCESS,
                 result: result.result.data,
@@ -42,7 +42,7 @@ export function* liveScoreCoachSaga(action) {
 }
 
 export function* liveScoreAddCoachSaga(action) {
-  
+
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreAddCoach, action.data, action.teamId, action.exsitingManagerId);
         if (result.status === 1) {
@@ -60,4 +60,23 @@ export function* liveScoreAddCoachSaga(action) {
     } catch (error) {
         yield call(errorSaga, error)
     }
+}
+
+export function* liveScoreCoachImportSaga(action) {
+    try {
+        const result = yield call(LiveScoreAxiosApi.liveScoreCoachImport, action.payload)
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_LIVE_SCORE_COACH_IMPORT_SUCCESS
+            });
+            history.push('/LiveScoreCoaches')
+            message.success('Coach Imported Successfully.')
+        }
+        else {
+            yield call(failSaga, result)
+        }
+    } catch (e) {
+        yield call(errorSaga, e)
+    }
+
 }

@@ -6,7 +6,7 @@ const isArrayNotEmpty = array => {
     }
 }
 
-const isNullOrEmptyString = word => {
+const isNotNullOrEmptyString = word => {
     if (word !== null && word !== undefined && word.length > 0) {
         return true
     } else {
@@ -63,4 +63,4 @@ const teamListData = (value) => {
     }
 }
 
-module.exports = { isArrayNotEmpty, isNullOrEmptyString, getAge, deepCopyFunction, stringTONumber, captializedString, teamListData }
+module.exports = { isArrayNotEmpty, isNotNullOrEmptyString, getAge, deepCopyFunction, stringTONumber, captializedString, teamListData }

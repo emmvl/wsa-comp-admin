@@ -1,6 +1,6 @@
 import ApiConstants from "../../../themes/apiConstants";
 import { isEmptyArray } from "formik";
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 import { deepCopyFunction} from '../../../util/helpers';
 
 let obj = {

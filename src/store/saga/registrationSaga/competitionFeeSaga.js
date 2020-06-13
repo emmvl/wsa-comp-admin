@@ -2,7 +2,7 @@ import { put, call } from "redux-saga/effects";
 import ApiConstants from "../../../themes/apiConstants";
 import AxiosApi from "../../http/registrationHttp/registrationAxios";
 import commonAxiosApi from "../../http/axiosApi";
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 import { message } from "antd";
 
 function* failSaga(result) {

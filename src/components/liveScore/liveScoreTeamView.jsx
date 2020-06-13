@@ -97,7 +97,7 @@ class LiveScoreTeamView extends Component {
         this.state = {
             data: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord : null : null,
             // teamId: props.location.state ? props.location.state.teamId : null,
-            teamId: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord.id ? props.location.state.tableRecord.id : props.location.state.tableRecord.team ? props.location.state.tableRecord.team.id : null : null : null,
+            teamId: props.location ? props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord.id ? props.location.state.tableRecord.id : props.location.state.tableRecord.team ? props.location.state.tableRecord.team.id : null : null : null : null,
             screenName: this.props.location.state ? this.props.location.state.screenName : null,
             key: props.location.state ? props.location.state.key ? props.location.state.key : null : null,
         }
@@ -114,7 +114,7 @@ class LiveScoreTeamView extends Component {
         }
     }
     componentDidMount() {
-        const { teamId } = this.props.location.state
+        const { teamId } = this.props.location ? this.props.location.state : null
 
         let teamIds = this.state.teamId ? this.state.teamId : teamId
         this.props.getTeamViewPlayerList(teamIds)
@@ -127,22 +127,18 @@ class LiveScoreTeamView extends Component {
     ////view for profile image
     profileImageView = () => {
         // let data = this.state.data 
-        let data = this.props.location.state ? this.props.location.state.tableRecord ? this.props.location.state.tableRecord : null : null
+        let data = this.props.location ? this.props.location.state ? this.props.location.state.tableRecord ? this.props.location.state.tableRecord : null : null : null
         const { teamData, managerData, managerList } = this.props.liveScoreTeamState
         const { name, logoUrl } = teamData ? teamData : ''
         const { mobileNumber, email } = managerData ? managerData : ''
-        console.log('76', managerList)
+        console.log('76', data)
 
         let managerDataList = isArrayNotEmpty(managerList) ? managerList : []
+        let coachData = isArrayNotEmpty(data && data.coaches) ? data.coaches : []
         return (
             <div className="fluid-width mt-2">
-                {/* <img className="live-score-user-image" src={'https://www.si.com/specials/fittest50-2017/img/men/ngolo_kante.jpg'} alt="" height="80" width="80" />
-                <span className="live-score-profile-user-name">WSA 1</span>
-                <span className="live-score-profile-user-name">{AppConstants.teamManagers}</span> */}
 
                 <div className='profile-image-view mr-5' >
-                    {/* <span className="user-contact-heading">{AppConstants.teamManagers}</span> */}
-                    {/* <img className="live-score-user-image" src={'https://www.si.com/specials/fittest50-2017/img/men/ngolo_kante.jpg'} alt="" height="80" width="80" /> */}
 
                     {
                         this.props.liveScoreTeamState && this.props.liveScoreTeamState.teamData ?
@@ -163,7 +159,7 @@ class LiveScoreTeamView extends Component {
                             </div>
                             <span className='year-select-heading ml-3'>{AppConstants.name}</span>
                         </div>
-                        {/* <span className="live-score-desc-text side-bar-profile-data">{name ? name : ''}</span> */}
+
                         {managerDataList.map((item) => (
                             <span className="live-score-desc-text side-bar-profile-data">{(item.firstName || item.lastName) && item.firstName + " " + item.lastName}</span>
                         ))
@@ -196,6 +192,51 @@ class LiveScoreTeamView extends Component {
                         }
                     </div>
 
+                    {/* coaches View */}
+                    <div>
+                        <span className="user-contact-heading">Coaches</span>
+
+                        <div className="live-score-side-desc-view">
+                            <div className="live-score-title-icon-view">
+                                <div className="live-score-icon-view">
+                                    <img src={AppImages.group} height="16" width="16" alt="" />
+                                </div>
+                                <span className='year-select-heading ml-3'>{AppConstants.name}</span>
+                            </div>
+
+                            {coachData.map((item) => (
+                                <span className="live-score-desc-text side-bar-profile-data">{item.name && item.name}</span>
+                            ))
+                            }
+                        </div>
+
+                        <div className="live-score-side-desc-view">
+                            <div className="live-score-title-icon-view">
+                                <div className="live-score-icon-view">
+                                    <img src={AppImages.group} height="16" width="16" alt="" />
+                                </div>
+                                <span className='year-select-heading ml-3'>{AppConstants.email}</span>
+                            </div>
+                            {coachData.map((item) => (
+                                <span className="live-score-desc-text side-bar-profile-data">{item.email}</span>
+                            ))
+                            }
+                        </div>
+
+                        <div className="live-score-side-desc-view">
+                            <div className="live-score-title-icon-view">
+                                <div className="live-score-icon-view">
+                                    <img src={AppImages.callAnswer} alt="" height="16" width="16" />
+                                </div>
+                                <span className='year-select-heading ml-3'>{AppConstants.contactNumber}</span>
+                            </div>
+                            {coachData.map((item) => (
+                                <span className="live-score-desc-text side-bar-profile-data">{item.mobileNumber}</span>
+                            ))
+                            }
+                        </div>
+
+                    </div>
                 </div>
             </div>
         )

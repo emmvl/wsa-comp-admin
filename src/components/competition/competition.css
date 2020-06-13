@@ -496,7 +496,8 @@ a.collapsed i {
   display: table;
   /* width: 380px;
   max-width: 80vw; */
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px;
+  /* box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px; */
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 14px 8px;
   border: 1px solid inherit;
   border-radius: 10px !important;
   background: inherit;
@@ -589,6 +590,12 @@ a.collapsed i {
 .action-triple-dot-draws .ant-menu-submenu-title  {
  padding: 0px
 }
+.Content_Cancel__VinjW svg {
+  width: 10px;
+  height: 10px;
+  /* margin-top: 10px */
+}
+
 .contextual-upper-div-table{
   overflow: inherit;
 }
@@ -715,4 +722,11 @@ a.collapsed i {
 .check-box-player{
   padding-left: 15px;
     padding-top: 3px;
+}
+
+.final-validation {
+  font-family: inter-medium;
+  font-size: 18px;
+  text-align: center;
+  padding-top: 40px;
 }

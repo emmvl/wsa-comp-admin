@@ -594,8 +594,8 @@ if(x[0].charCodeAt()>=97)
                         formData.append('id', this.state.teamId)
                     }
 
-                    formData.append('name', name)
-                    formData.append('alias', alias)
+                    formData.append('name', captializedString(name))
+                    formData.append('alias', captializedString(alias))
 
                     if (this.state.image) {
                         formData.append('logo', this.state.image)

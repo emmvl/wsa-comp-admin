@@ -5,6 +5,7 @@ const initialState = {
     error: null,
     result: [],
     status: 0,
+    fixtureTemplate:[],	   
 };
 function CompetitionManagementState(state = initialState, action) {
 
@@ -49,7 +50,19 @@ function CompetitionManagementState(state = initialState, action) {
                 error: action.error,
                 status: action.status
             }
+        // get Fixture template meta data    
 
+        case ApiConstants.API_FIXTURE_TEMPLATE_ROUNDS_LOAD:
+        return { ...state, onLoad: true };
+
+        case ApiConstants.API_FIXTURE_TEMPLATE_ROUNDS_SUCCESS:
+            return {
+                ...state,
+                error: action.error,
+                status: action.status,
+                fixtureTemplate:action.result,
+
+            }
         default:
             return state;
     }

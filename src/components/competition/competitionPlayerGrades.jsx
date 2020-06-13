@@ -12,7 +12,7 @@ import {
     getCompPartPlayerGradingAction, clearReducerCompPartPlayerGradingAction,
     addNewTeamAction, onDragPlayerAction, onSameTeamDragAction,
     playerGradingComment, deleteTeamAction, addOrRemovePlayerForChangeDivisionAction,
-    changeDivisionPlayerAction
+    changeDivisionPlayerAction, commentListingAction,
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import {
     setOwnCompetitionYear,
@@ -69,6 +69,7 @@ class CompetitionPlayerGrades extends Component {
         this_obj = this;
         this.onDragEnd = this.onDragEnd.bind(this);
         this.props.clearReducerCompPartPlayerGradingAction("partPlayerGradingListData")
+
     }
 
     componentDidUpdate(nextProps) {
@@ -258,7 +259,10 @@ class CompetitionPlayerGrades extends Component {
     }
     // model ok button
     handleOk = e => {
-        this.props.addNewTeamAction(this.state.firstTimeCompId, this.state.divisionId, this.state.newTeam)
+        {
+            this.state.newTeam.length > 0 &&
+                this.props.addNewTeamAction(this.state.firstTimeCompId, this.state.divisionId, this.state.newTeam)
+        }
         this.setState({
             visible: false,
             newNameMembershipType: "",
@@ -275,7 +279,6 @@ class CompetitionPlayerGrades extends Component {
     };
 
     onChangeParentDivCheckbox = (checked, teamIndex, key) => {
-        console.log("teamIndex::" + teamIndex + "key::" + key + "checked::" + checked);
 
         if (key == "assigned") {
             let assignedData = this.props.partPlayerGradingState.assignedPartPlayerGradingListData;
@@ -387,7 +390,6 @@ class CompetitionPlayerGrades extends Component {
             }
 
             this.setState({ divisionId: this.state.competitionDivisionId })
-            console.log("Response ::" + JSON.stringify(res));
             this.props.changeDivisionPlayerAction(res);
             this.setState({ divisionLoad: true })
         }
@@ -497,7 +499,6 @@ class CompetitionPlayerGrades extends Component {
 
     onDragEnd = result => {
         const { source, destination } = result;
-        console.log()
         let assignedPlayerData = this.props.partPlayerGradingState.assignedPartPlayerGradingListData
         let unassignedPlayerData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData
         let playerId
@@ -506,14 +507,28 @@ class CompetitionPlayerGrades extends Component {
             return;
         }
         else if (source.droppableId !== destination.droppableId) {
+            console.log(unassignedPlayerData, assignedPlayerData, source, destination,
+                'called1')
             let teamId = destination !== null && destination.droppableId == 0 ? null : JSON.parse(destination.droppableId)
+            let sourceTeamID = source !== null && source.droppableId == 0 ? null : JSON.parse(source.droppableId)
             if (teamId !== null) {
-                playerId = unassignedPlayerData.players[source.index].playerId
+                if (sourceTeamID == null) {
+                    console.log("called A")
+                    playerId = unassignedPlayerData.players[source.index].playerId
+                }
+                else {
+                    console.log("called B")
+                    for (let i in assignedPlayerData) {
+                        if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
+                            playerId = assignedPlayerData[i].players[source.index].playerId
+                        }
+                    }
+                }
             }
             else {
+                console.log('called2')
                 for (let i in assignedPlayerData) {
                     if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
-                        console.log(assignedPlayerData[i].players[source.index])
                         playerId = assignedPlayerData[i].players[source.index].playerId
                     }
                 }
@@ -559,6 +574,8 @@ class CompetitionPlayerGrades extends Component {
     //////for the assigned teams on the left side of the view port
     assignedView = () => {
         let assignedData = this.props.partPlayerGradingState.assignedPartPlayerGradingListData
+        let commentList = this.props.partPlayerGradingState.playerCommentList
+        let commentLoad = this.props.partPlayerGradingState.commentLoad
         return (
             <div className="d-flex flex-column">
                 {assignedData.map((teamItem, teamIndex) =>
@@ -649,7 +666,7 @@ class CompetitionPlayerGrades extends Component {
                                                                             </Tag>
                                                                         }
                                                                         <img className="comp-player-table-img" src={
-                                                                            (playerItem.comments !== null && playerItem.comments !== "") ? AppImages.commentFilled :
+                                                                            playerItem.isCommentsAvailable == 1 ? AppImages.commentFilled :
                                                                                 AppImages.commentEmpty} alt="" height="20" width="20"
                                                                             style={{ cursor: "pointer" }}
                                                                             onClick={() => this.onClickComment(playerItem, teamIndex)}
@@ -682,9 +699,8 @@ class CompetitionPlayerGrades extends Component {
                     placeholder={AppConstants.addYourComment}
                     onChange={(e) => this.setState({ comment: e.target.value })}
                     value={this.state.comment}
-                    owner={this.state.commentsCreatedBy}
-                    OwnCreatedComment={this.state.commentsCreatedOn}
-                    ownnerComment={this.state.comments}
+                    commentList={commentList}
+                    commentLoad={commentLoad}
                 />
 
                 <Modal
@@ -703,36 +719,36 @@ class CompetitionPlayerGrades extends Component {
     }
 
     onClickComment(player, teamID) {
+        this.props.commentListingAction(this.state.firstTimeCompId, player.playerId, "1")
         this.setState({
-            modalVisible: true, comment: player.comments, comments: player.comments, playerId: player.playerId,
-            commentsCreatedBy: player.comments == "" ? null : player.commentsCreatedBy, commentsCreatedOn: player.comments == "" ? null : moment(player.commentsCreatedOn).format("DD-MM-YYYY HH:mm"),
+            modalVisible: true, comment: "", playerId: player.playerId,
             teamID
         })
     }
 
     ///modal ok for hitting Api and close modal
     handleModalOk = e => {
-        this.props.playerGradingComment(this.state.firstTimeCompId, this.state.divisionId, this.state.comment, this.state.playerId, this.state.teamID)
+
+        this.props.clearReducerCompPartPlayerGradingAction("commentList")
+        {
+            this.state.comment.length > 0 &&
+                this.props.playerGradingComment(this.state.firstTimeCompId, this.state.divisionId, this.state.comment, this.state.playerId, this.state.teamID)
+        }
         this.setState({
             modalVisible: false,
             comment: "",
             playerId: null,
             teamID: null,
-            commentsCreatedBy: null,
-            commentsCreatedOn: null,
-            comments: null
         });
     };
     // model cancel for dissapear a model
     handleModalCancel = e => {
+        this.props.clearReducerCompPartPlayerGradingAction("commentList")
         this.setState({
             modalVisible: false,
             comment: "",
             playerId: null,
             teamID: null,
-            commentsCreatedBy: null,
-            commentsCreatedOn: null,
-            comments: null
         });
     };
 
@@ -759,6 +775,8 @@ class CompetitionPlayerGrades extends Component {
 
     ////////for the unassigned teams on the right side of the view port
     unassignedView = () => {
+        let commentList = this.props.partPlayerGradingState.playerCommentList
+        let commentLoad = this.props.partPlayerGradingState.commentLoad
         let unassignedData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData;
         let colorPosition1
         let colorPosition2
@@ -843,7 +861,7 @@ class CompetitionPlayerGrades extends Component {
                                                             </Tag>
                                                         }
                                                         <img className="comp-player-table-img" src={
-                                                            (playerItem.comments !== null && playerItem.comments !== "") ? AppImages.commentFilled :
+                                                              playerItem.isCommentsAvailable == 1 ?  AppImages.commentFilled :
                                                                 AppImages.commentEmpty} alt="" height="20" width="20"
                                                             style={{ cursor: "pointer" }}
                                                             onClick={() => this.onClickComment(playerItem, null)}
@@ -888,9 +906,8 @@ class CompetitionPlayerGrades extends Component {
                     placeholder={AppConstants.addYourComment}
                     onChange={(e) => this.setState({ comment: e.target.value })}
                     value={this.state.comment}
-                    owner={this.state.commentsCreatedBy}
-                    OwnCreatedComment={this.state.commentsCreatedOn}
-                    ownnerComment={this.state.comments}
+                    commentList={commentList}
+                    commentLoad={commentLoad}
                 />
 
                 <Modal
@@ -1001,7 +1018,8 @@ function mapDispatchToProps(dispatch) {
         playerGradingComment,
         deleteTeamAction,
         addOrRemovePlayerForChangeDivisionAction,
-        changeDivisionPlayerAction
+        changeDivisionPlayerAction,
+        commentListingAction,
     }, dispatch)
 }
 

@@ -109,8 +109,11 @@ import {
   nationalityReferenceSaga, heardByReferenceSaga, playerPositionReferenceSaga, venuesListSaga,
   venueByIdSaga, venueDeleteSaga,
   getGenderSaga, getPhotoTypeSaga, getAppyToSaga, getExtraTimeDrawSaga,
-  getFinalsFixtureTemplateSaga, courtListSaga,getSendInvitesSaga
+  getFinalsFixtureTemplateSaga, courtListSaga, getSendInvitesSaga, RegistrationRestrictionType,
+  getAllowTeamRegistrationTypeSaga
 } from "./commonSaga/commonSaga";
+
+import { fixtureTemplateSaga } from '../saga/competitionManagementSaga/competitionManagementSaga';
 ////Venue constraints
 import { venueTimeSaga, venueConstraintPostSaga } from './competitionManagementSaga/venueTimeSaga'
 import {
@@ -124,7 +127,8 @@ import {
   importCompetitionPlayer,
   importCompetitionTeams,
   deleteTeamSaga,
-  playerChangeDivisionSaga
+  playerChangeDivisionSaga,
+  playerCommentList
 } from './competitionManagementSaga/competitionPartPlayerGradingSaga';
 import {
   getCompOwnProposedTeamGradingSaga,
@@ -158,7 +162,7 @@ import {
   getDivisionSaga, competitionFixtureSaga, updateCompetitionFixtures, updateDrawsLock
 } from './competitionManagementSaga/competitionDrawsSaga';
 
-import { regDashboardListSaga } from "./registrationSaga/registrationDashboardSaga"
+import { regDashboardListSaga, getCompetitionSaga } from "./registrationSaga/registrationDashboardSaga"
 ////Competition Dashboard Saga
 import { competitionDashboardSaga } from './competitionManagementSaga/competitionDashboardSaga';
 // import { liveScoreAddEditManagerSaga } from './liveScoreSaga/liveScoreManagerSaga';
@@ -169,7 +173,7 @@ import * as endUserRegSaga from '../saga/registrationSaga/endUserRegistrationSag
 import * as divisionsaga from "../saga/liveScoreSaga/liveScoreDivisionSaga"
 
 import { liveScoreGameTimeStatisticsSaga } from '../saga/liveScoreSaga/liveScoreGameTimeStatisticsSaga'
-import { liveScoreSettingSaga, liveScorePostSaga } from './liveScoreSaga/liveScoreSettingSaga'
+import { liveScoreSettingSaga, liveScorePostSaga, settingRegInviteesSaga } from './liveScoreSaga/liveScoreSettingSaga'
 import { liveScoreUmpiresSaga } from './liveScoreSaga/liveScoreUmpiresSaga'
 
 import { liveScoreTeamAttendanceListSaga } from './liveScoreSaga/liveScoreTeamAttendanceSaga'
@@ -180,7 +184,10 @@ import { liveScoreChangeVenueSaga } from "./liveScoreSaga/liveScoreVenueChangeSa
 import { getLiveScoreFixtureCompSaga } from "./liveScoreSaga/liveScoreFixtureCompSaga";
 import * as stripeSaga from "../saga/stripeSaga/stripeSaga"
 
-import { liveScoreCoachSaga, liveScoreAddCoachSaga } from "../saga/liveScoreSaga/liveScoreCoachSaga"
+import { liveScoreCoachSaga, liveScoreAddCoachSaga, liveScoreCoachImportSaga } from "../saga/liveScoreSaga/liveScoreCoachSaga"
+
+import * as umpireDashboardSaga from "../saga/umpireSaga/umpireDashboardSaga"
+import * as umpireCompSaga from "../saga/umpireSaga/umpireCompetitionSaga"
 
 
 export default function* root_saga() {
@@ -580,6 +587,7 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_GET_APPY_TO_LOAD, getAppyToSaga)
   yield takeEvery(ApiConstants.API_GET_EXTRA_TIME_DRAW_LOAD, getExtraTimeDrawSaga)
   yield takeEvery(ApiConstants.API_GET_FINAL_FIXTURE_TEMPLATE_LOAD, getFinalsFixtureTemplateSaga)
+  yield takeEvery(ApiConstants.API_ALLOW_TEAM_REGISTRATION_TYPE_LOAD, getAllowTeamRegistrationTypeSaga)
 
 
 
@@ -709,8 +717,27 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_UPDATE_DRAWS_LOCK_LOAD, updateDrawsLock)
 
   yield takeEvery(ApiConstants.API_EXPORT_AFFILIATE_DIRECTORY_LOAD, userSaga.exportAffiliateDirectorySaga)
-  
+
   // invite send in registration Form
   yield takeEvery(ApiConstants.API_GET_INVITE_TYPE_LOAD, getSendInvitesSaga)
+
+  yield takeEvery(ApiConstants.API_GET_COMMENT_LIST_LOAD, playerCommentList)
+
+  //// Umpire Module
+  yield takeEvery(ApiConstants.API_UMPIRE_DASHBOARD_LIST_LOAD, umpireDashboardSaga.umpireDashboardListSaga)
+  yield takeEvery(ApiConstants.API_UMPIRE_COMPETITION_LIST_LOAD, umpireCompSaga.getUmpireCompSaga)
+  yield takeEvery(ApiConstants.API_GET_UMPIRE_AFFILIATE_LIST_LOAD, umpireDashboardSaga.getAffiliateSaga)
+  yield takeEvery(ApiConstants.API_UMPIRE_SEARCH_LOAD, umpireDashboardSaga.umpireSearchSaga)
+  yield takeEvery(ApiConstants.API_ADD_UMPIRE_LOAD, umpireDashboardSaga.addEditUmpireSaga)
+
+  yield takeEvery(ApiConstants.SETTING_REGISTRATION_INVITEES_LOAD, settingRegInviteesSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_COACH_IMPORT_LOAD, liveScoreCoachImportSaga)
+
+  yield takeEvery(ApiConstants.API_GET_ALL_COMPETITION_LOAD, getCompetitionSaga)
+
+  yield takeEvery(ApiConstants.API_REGISTRATION_RESTRICTIONTYPE_LOAD, RegistrationRestrictionType)
+
+  yield takeEvery(ApiConstants.API_FIXTURE_TEMPLATE_ROUNDS_LOAD, fixtureTemplateSaga)
+
 
 }

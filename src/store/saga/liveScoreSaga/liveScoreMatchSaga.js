@@ -74,7 +74,17 @@ export function* liveScoreAddMatchSaga(action) {
 export function* liveScoreCreateMatchSaga(action) {
 
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreCreateMatch, action.data, action.competitionId);
+        const result = yield call(LiveScoreAxiosApi.liveScoreCreateMatch,
+            action.data,
+            action.competitionId,
+            action.key,
+            action.isEdit,
+            action.team1resultId,
+            action.team2resultId,
+            action.matchStatus,
+            action.endTime,
+
+        );
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_CREATE_MATCH_SUCCESS,

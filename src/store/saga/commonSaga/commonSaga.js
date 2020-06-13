@@ -1,7 +1,7 @@
 import { put, call } from 'redux-saga/effects'
 import ApiConstants from "../../../themes/apiConstants";
 import CommonAxiosApi from "../../http/commonHttp/commonAxios";
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 import { message } from "antd";
 import AppConstants from "../../../themes/appConstants";
 import AxiosApi from '../../http/registrationHttp/registrationAxios';
@@ -78,6 +78,7 @@ export function* addVenueSaga(action) {
         const result = yield call(CommonAxiosApi.addVenue, action.data);
         console.log(result, 'AddVenueSaga' + venueId);
         if (result.status === 1) {
+            console.log("*******************************&&&&&" + venueId);
             yield put({
                 type: ApiConstants.API_ADD_VENUE_SUCCESS,
                 result: venueId == 0 ? result.result.data : null,
@@ -93,6 +94,7 @@ export function* addVenueSaga(action) {
             }, 800);
         }
     } catch (error) {
+        console.log("Error:" + error);
         setTimeout(() => {
             message.error('Something went wrong!');
         }, 800);
@@ -517,4 +519,52 @@ export function* courtListSaga(action) {
             status: error.status
         });
     }
+}
+
+export function* getAllowTeamRegistrationTypeSaga(action) {
+    try {
+        const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.allowTeamRegistrationTypeRefId)
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_ALLOW_TEAM_REGISTRATION_TYPE_SUCCESS,
+                result: result.result.data,
+                status: result.result.status
+            });
+        } else {
+            yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
+            setTimeout(() => {
+                alert(result.data.message);
+            }, 800);
+        }
+    } catch (error) {
+        yield put({
+            type: ApiConstants.API_COMMON_SAGA_ERROR,
+            error: error,
+            status: error.status
+        });
+    }
+}
+
+export function* RegistrationRestrictionType() {
+    try {
+        const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.RegistrationRestrictionType)
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_REGISTRATION_RESTRICTIONTYPE_SUCCESS,
+                result: result.result.data,
+                status: result.result.status
+            });
+        } else {
+            yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
+            setTimeout(() => {
+                alert(result.data.message);
+            }, 800);
+        }
+        } catch (error) {
+            yield put({
+                type: ApiConstants.API_COMMON_SAGA_ERROR,
+                error: error,
+                status: error.status
+            });
+    }  
 }

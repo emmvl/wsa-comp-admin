@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Checkbox, Button, Menu, Select, Tag, Form, Modal,Dropdown } from 'antd';
+import { Layout, Breadcrumb, Checkbox, Button, Menu, Select, Tag, Form, Modal, Dropdown } from 'antd';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -12,7 +12,7 @@ import {
     getCompPartPlayerGradingAction, clearReducerCompPartPlayerGradingAction,
     addNewTeamAction, onDragPlayerAction, onSameTeamDragAction,
     playerGradingComment, deleteTeamAction, addOrRemovePlayerForChangeDivisionAction,
-    changeDivisionPlayerAction
+    changeDivisionPlayerAction, commentListingAction
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import {
     setParticipatingYear,
@@ -27,6 +27,7 @@ import InputWithHead from "../../customComponents/InputWithHead";
 import ColorsArray from "../../util/colorsArray";
 import PlayerCommentModal from "../../customComponents/playerCommentModal";
 import moment from "moment"
+import Tooltip from 'react-png-tooltip'
 
 
 const { Header, Footer, Content } = Layout;
@@ -35,11 +36,11 @@ let this_obj = null;
 
 const menu = (
     <Menu>
-      <Menu.Item onClick ={()=> this_obj.changeDivisionModal()}>
-        Change Division
+        <Menu.Item onClick={() => this_obj.changeDivisionModal()}>
+            Change Division
       </Menu.Item>
     </Menu>
-  );
+);
 
 class CompetitionPartPlayerGrades extends Component {
     constructor(props) {
@@ -59,7 +60,7 @@ class CompetitionPartPlayerGrades extends Component {
             commentsCreatedOn: null,
             comments: null,
             deleteModalVisible: false,
-            loading:false,
+            loading: false,
             changeDivisionModalVisible: false,
             competitionDivisionId: null,
             divisionLoad: false
@@ -90,9 +91,9 @@ class CompetitionPartPlayerGrades extends Component {
             }
         }
 
-        if(nextProps.partPlayerGradingState != this.props.partPlayerGradingState){
-            if(this.props.partPlayerGradingState.onTeamDeleteLoad == false && this.state.loading === true){
-                this.setState({loading : false});
+        if (nextProps.partPlayerGradingState != this.props.partPlayerGradingState) {
+            if (this.props.partPlayerGradingState.onTeamDeleteLoad == false && this.state.loading === true) {
+                this.setState({ loading: false });
                 this.props.getCompPartPlayerGradingAction(this.state.yearRefId, this.state.firstTimeCompId, this.state.divisionId)
             }
         }
@@ -145,6 +146,11 @@ class CompetitionPartPlayerGrades extends Component {
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.playerGrading}</Breadcrumb.Item>
                         </Breadcrumb>
+                        <div style={{ marginTop: 10 }}>
+                            <Tooltip placement="top" background='#ff8237'>
+                                <span>{AppConstants.playerGradingMsg}</span>
+                            </Tooltip>
+                        </div>
                     </div>
                     <div className="col-sm" style={{
                         display: "flex", flexDirection: 'row', alignItems: "center",
@@ -157,7 +163,7 @@ class CompetitionPartPlayerGrades extends Component {
                                         <Button className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">
-                                                <img src={AppImages.import} alt="" className="export-image"/>
+                                                    <img src={AppImages.import} alt="" className="export-image" />
                                                     {AppConstants.action}
                                                 </div>
                                             </div>
@@ -165,50 +171,50 @@ class CompetitionPartPlayerGrades extends Component {
                                     </Dropdown>
                                 </div>
                             </div>
-                            {this.state.divisionId!= null && 
-                            <div className="col-sm">
-                                <div className="comp-dashboard-botton-view-mobile">
-                                    <NavLink to={{
-                                        pathname: `/competitionPlayerImport`,
-                                        state: { divisionId: this.state.divisionId, competitionId: this.state.firstTimeCompId, screenNavigationKey: 'ProposedPlayerGrading' }
-                                    }}>
-                                        <Button className="primary-add-comp-form" type="primary">
-                                            <div className="row">
-                                                <div className="col-sm">
-                                                    <img
-                                                        src={AppImages.import}
-                                                        alt=""
-                                                        className="export-image"
-                                                    />
-                                                    {AppConstants.import}
+                            {this.state.divisionId != null &&
+                                <div className="col-sm">
+                                    <div className="comp-dashboard-botton-view-mobile">
+                                        <NavLink to={{
+                                            pathname: `/competitionPlayerImport`,
+                                            state: { divisionId: this.state.divisionId, competitionId: this.state.firstTimeCompId, screenNavigationKey: 'ProposedPlayerGrading' }
+                                        }}>
+                                            <Button className="primary-add-comp-form" type="primary">
+                                                <div className="row">
+                                                    <div className="col-sm">
+                                                        <img
+                                                            src={AppImages.import}
+                                                            alt=""
+                                                            className="export-image"
+                                                        />
+                                                        {AppConstants.import}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </Button>
-                                    </NavLink>
-                                </div>
-                            </div>}
-                            {this.state.divisionId!= null && 
-                            <div className="col-sm">
-                                <div className="comp-dashboard-botton-view-mobile">
-                                    <NavLink to={{
-                                        pathname: `/competitionTeamsImport`,
-                                        state: {  competitionId: this.state.firstTimeCompId, screenNavigationKey: 'ProposedPlayerGrading' }
-                                    }}>
-                                        <Button className="primary-add-comp-form" type="primary">
-                                            <div className="row">
-                                                <div className="col-sm">
-                                                    <img
-                                                        src={AppImages.import}
-                                                        alt=""
-                                                        className="export-image"
-                                                    />
-                                                    {AppConstants.importTeams}
+                                            </Button>
+                                        </NavLink>
+                                    </div>
+                                </div>}
+                            {this.state.divisionId != null &&
+                                <div className="col-sm">
+                                    <div className="comp-dashboard-botton-view-mobile">
+                                        <NavLink to={{
+                                            pathname: `/competitionTeamsImport`,
+                                            state: { competitionId: this.state.firstTimeCompId, screenNavigationKey: 'ProposedPlayerGrading' }
+                                        }}>
+                                            <Button className="primary-add-comp-form" type="primary">
+                                                <div className="row">
+                                                    <div className="col-sm">
+                                                        <img
+                                                            src={AppImages.import}
+                                                            alt=""
+                                                            className="export-image"
+                                                        />
+                                                        {AppConstants.importTeams}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </Button>
-                                    </NavLink>
-                                </div>
-                            </div>}
+                                            </Button>
+                                        </NavLink>
+                                    </div>
+                                </div>}
                         </div>
                     </div>
                 </div>
@@ -266,10 +272,9 @@ class CompetitionPartPlayerGrades extends Component {
         });
     };
 
-    onChangeParentDivCheckbox = (checked, teamIndex, key) =>{
-        console.log("teamIndex::" + teamIndex + "key::" + key + "checked::" + checked);
+    onChangeParentDivCheckbox = (checked, teamIndex, key) => {
 
-        if(key == "assigned"){
+        if (key == "assigned") {
             let assignedData = this.props.partPlayerGradingState.assignedPartPlayerGradingListData;
             let teamItem = assignedData[teamIndex];
             teamItem["isChecked"] = checked;
@@ -280,7 +285,7 @@ class CompetitionPartPlayerGrades extends Component {
             //console.log("assignedData::" + JSON.stringify(assignedData));
             this.props.addOrRemovePlayerForChangeDivisionAction(assignedData, key);
         }
-        else if(key == "unAssigned"){
+        else if (key == "unAssigned") {
             let unassignedData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData;
             unassignedData["isChecked"] = checked;
 
@@ -292,8 +297,8 @@ class CompetitionPartPlayerGrades extends Component {
         }
     }
 
-    onChangeChildDivCheckbox = (checked, teamIndex, playerIndex, key) =>{
-        if(key == "assigned"){
+    onChangeChildDivCheckbox = (checked, teamIndex, playerIndex, key) => {
+        if (key == "assigned") {
             let assignedData = this.props.partPlayerGradingState.assignedPartPlayerGradingListData;
             let teamItem = assignedData[teamIndex];
             //teamItem["isChecked"] = checked;
@@ -301,33 +306,33 @@ class CompetitionPartPlayerGrades extends Component {
 
             let flag = true;
             (teamItem.players || []).map((item, ind) => {
-                if(!item.isChecked){
+                if (!item.isChecked) {
                     flag = false;
                 }
             })
-            if(flag){
+            if (flag) {
                 teamItem["isChecked"] = true;
             }
-            else{
+            else {
                 teamItem["isChecked"] = false;
             }
             this.props.addOrRemovePlayerForChangeDivisionAction(assignedData, key);
         }
-        else if(key == "unAssigned"){
+        else if (key == "unAssigned") {
             let unassignedData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData;
             //teamItem["isChecked"] = checked;
             unassignedData.players[playerIndex]["isChecked"] = checked;
 
             let flag = true;
             (unassignedData.players || []).map((item, ind) => {
-                if(!item.isChecked){
+                if (!item.isChecked) {
                     flag = false;
                 }
             })
-            if(flag){
+            if (flag) {
                 unassignedData["isChecked"] = true;
             }
-            else{
+            else {
                 unassignedData["isChecked"] = false;
             }
             this.props.addOrRemovePlayerForChangeDivisionAction(unassignedData, key);
@@ -335,30 +340,30 @@ class CompetitionPartPlayerGrades extends Component {
     }
 
     changePlayerDivision = (key) => {
-        if(key == "ok"){
+        if (key == "ok") {
             let res = {
                 competitionUniqueKey: this.state.firstTimeCompId,
                 organisationUniqueKey: null,
                 competitionDivisionId: this.state.competitionDivisionId,
                 players: [],
-                teams: []            
+                teams: []
             }
-    
+
             let assignedData = this.props.partPlayerGradingState.assignedPartPlayerGradingListData;
 
-            if(assignedData!= null && assignedData.length > 0){
+            if (assignedData != null && assignedData.length > 0) {
                 (assignedData || []).map((team, index) => {
-                    if(team.isChecked){
+                    if (team.isChecked) {
                         let obj = {
-                           teamId: team.teamId 
+                            teamId: team.teamId
                         }
                         res.teams.push(obj);
                     }
                     (team.players || []).map((item, pIndex) => {
-                        if(item.isChecked){
+                        if (item.isChecked) {
                             let obj = {
                                 playerId: item.playerId,
-                                teamId: team.teamId 
+                                teamId: team.teamId
                             }
                             res.players.push(obj);
                         }
@@ -366,10 +371,10 @@ class CompetitionPartPlayerGrades extends Component {
                 })
             }
             let unassignedData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData;
-    
-            if(unassignedData!= null && unassignedData.players.length > 0){
+
+            if (unassignedData != null && unassignedData.players.length > 0) {
                 (unassignedData.players || []).map((item, index) => {
-                    if(item.isChecked){
+                    if (item.isChecked) {
                         let obj = {
                             playerId: item.playerId
                         }
@@ -377,19 +382,18 @@ class CompetitionPartPlayerGrades extends Component {
                     }
                 })
             }
-    
-            this.setState({divisionId: this.state.competitionDivisionId})
-            console.log("Response ::" + JSON.stringify(res));
+
+            this.setState({ divisionId: this.state.competitionDivisionId })
             this.props.changeDivisionPlayerAction(res);
             this.setState({ divisionLoad: true })
         }
 
-        this.setState({changeDivisionModalVisible: false})
-        
+        this.setState({ changeDivisionModalVisible: false })
+
     }
 
     changeDivisionModal = () => {
-        this.setState({changeDivisionModalVisible: true});
+        this.setState({ changeDivisionModalVisible: true });
     }
 
 
@@ -475,6 +479,11 @@ class CompetitionPartPlayerGrades extends Component {
                             <NavLink to="/competitionPartPlayerGradeCalculate" >
                                 <span className='input-heading-add-another pt-0'>{AppConstants.playerGradingToggle}</span>
                             </NavLink>
+                            <div style={{ marginTop: 4 }}>
+                                <Tooltip placement="top" background='#ff8237'>
+                                    <span>{AppConstants.playerGradingToggleMsg}</span>
+                                </Tooltip>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -494,13 +503,22 @@ class CompetitionPartPlayerGrades extends Component {
         }
         else if (source.droppableId !== destination.droppableId) {
             let teamId = destination !== null && destination.droppableId == 0 ? null : JSON.parse(destination.droppableId)
+            let sourceTeamID = source !== null && source.droppableId == 0 ? null : JSON.parse(source.droppableId)
             if (teamId !== null) {
-                playerId = unassignedPlayerData.players[source.index].playerId
+                if (sourceTeamID == null) {
+                    playerId = unassignedPlayerData.players[source.index].playerId
+                }
+                else {
+                    for (let i in assignedPlayerData) {
+                        if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
+                            playerId = assignedPlayerData[i].players[source.index].playerId
+                        }
+                    }
+                }
             }
             else {
                 for (let i in assignedPlayerData) {
                     if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
-                        console.log(assignedPlayerData[i].players[source.index])
                         playerId = assignedPlayerData[i].players[source.index].playerId
                     }
                 }
@@ -546,6 +564,8 @@ class CompetitionPartPlayerGrades extends Component {
     //////for the assigned teams on the left side of the view port
     assignedView = () => {
         let assignedData = this.props.partPlayerGradingState.assignedPartPlayerGradingListData
+        let commentList = this.props.partPlayerGradingState.playerCommentList
+        let commentLoad = this.props.partPlayerGradingState.commentLoad
         return (
             <div className="d-flex flex-column">
                 {assignedData.map((teamItem, teamIndex) =>
@@ -569,8 +589,8 @@ class CompetitionPartPlayerGrades extends Component {
                                                     {teamItem.players.length > 1 ? teamItem.players.length + " Players" : teamItem.players.length + " Player"} </span>
                                             </div>
                                             <div className="col-sm d-flex justify-content-end ">
-                                            <img className="comp-player-table-img team-delete-link" src={AppImages.deleteImage} 
-                                                        alt="" height="20" width="20"
+                                                <img className="comp-player-table-img team-delete-link" src={AppImages.deleteImage}
+                                                    alt="" height="20" width="20"
                                                     style={{ cursor: "pointer" }}
                                                     onClick={() => this.onClickDeleteTeam(teamItem, teamIndex)}
                                                 />
@@ -599,7 +619,7 @@ class CompetitionPartPlayerGrades extends Component {
                                                                 <Checkbox
                                                                     checked={playerItem.isChecked}
                                                                     className="single-checkbox mt-1 check-box-player"
-                                                                    onChange={e => this.onChangeChildDivCheckbox(e.target.checked, teamIndex, playerIndex, "assigned" )} >
+                                                                    onChange={e => this.onChangeChildDivCheckbox(e.target.checked, teamIndex, playerIndex, "assigned")} >
                                                                 </Checkbox>
                                                                 <div className="col-sm d-flex align-items-center"  >
                                                                     <NavLink to={{ pathname: `/userPersonal`, state: { userId: playerItem.userId } }}
@@ -634,7 +654,7 @@ class CompetitionPartPlayerGrades extends Component {
                                                                             </Tag>
                                                                         }
                                                                         <img className="comp-player-table-img" src={
-                                                                            (playerItem.comments !== null && playerItem.comments !== "") ? AppImages.commentFilled :
+                                                                            playerItem.isCommentsAvailable == 1 ? AppImages.commentFilled :
                                                                                 AppImages.commentEmpty} alt="" height="20" width="20"
                                                                             style={{ cursor: "pointer" }}
                                                                             onClick={() => this.onClickComment(playerItem, teamIndex)} />
@@ -666,76 +686,76 @@ class CompetitionPartPlayerGrades extends Component {
                     placeholder={AppConstants.addYourComment}
                     onChange={(e) => this.setState({ comment: e.target.value })}
                     value={this.state.comment}
-                    owner={this.state.commentsCreatedBy}
-                    OwnCreatedComment={this.state.commentsCreatedOn}
-                    ownnerComment={this.state.comments}
+                    commentList={commentList}
+                    commentLoad={commentLoad}
                 />
-            
-             <Modal
+
+                <Modal
                     className="add-membership-type-modal"
                     title={AppConstants.deleteTeam}
                     visible={this.state.deleteModalVisible}
                     onOk={this.handleDeleteTeamOk}
                     onCancel={this.handleDeleteTeamCancel}
                 >
-                     <p>Are you sure you want to delete?</p>
+                    <p>Are you sure you want to delete?</p>
                 </Modal>
             </div>
 
         )
     }
     onClickComment(player, teamID) {
+        this.props.commentListingAction(this.state.firstTimeCompId, player.playerId, "1")
         this.setState({
-            modalVisible: true, comment: player.comments, comments: player.comments, playerId: player.playerId,
-            commentsCreatedBy: player.comments == "" ? null : player.commentsCreatedBy, commentsCreatedOn: player.comments == "" ? null : moment(player.commentsCreatedOn).format("DD-MM-YYYY HH:mm"),
+            modalVisible: true, comment: "", playerId: player.playerId,
             teamID
         })
     }
 
-    
+
     handleDeleteTeamOk = () => {
-        this.setState({deleteModalVisible: false});
+        this.setState({ deleteModalVisible: false });
         let payload = {
             competitionUniqueKey: this.state.firstTimeCompId,
             organisationId: '',
             teamId: this.state.teamID,
             competitionMembershipProductDivisionId: this.state.divisionId
         }
-      this.props.deleteTeamAction(payload);
-      this.setState({loading: true});
+        this.props.deleteTeamAction(payload);
+        this.setState({ loading: true });
     }
 
     handleDeleteTeamCancel = () => {
-        this.setState({deleteModalVisible: false});
+        this.setState({ deleteModalVisible: false });
     }
 
-    onClickDeleteTeam = async (teamItem, teamIndex) =>{
-      await  this.setState({teamID: teamItem.teamId, deleteModalVisible: true});
+    onClickDeleteTeam = async (teamItem, teamIndex) => {
+        await this.setState({ teamID: teamItem.teamId, deleteModalVisible: true });
     }
 
     ///modal ok for hitting Api and close modal
     handleModalOk = e => {
-        this.props.playerGradingComment(this.state.firstTimeCompId, this.state.divisionId, this.state.comment, this.state.playerId, this.state.teamID)
+        this.props.clearReducerCompPartPlayerGradingAction("commentList")
+        {
+            this.state.comment.length > 0 &&
+                this.props.playerGradingComment(this.state.firstTimeCompId, this.state.divisionId, this.state.comment, this.state.playerId, this.state.teamID)
+        }
         this.setState({
             modalVisible: false,
             comment: "",
             playerId: null,
             teamID: null,
-            commentsCreatedBy: null,
-            commentsCreatedOn: null,
-            comments: null
+
         });
     };
     // model cancel for dissapear a model
     handleModalCancel = e => {
+        this.props.clearReducerCompPartPlayerGradingAction("commentList")
         this.setState({
             modalVisible: false,
             comment: "",
             playerId: null,
             teamID: null,
-            commentsCreatedBy: null,
-            commentsCreatedOn: null,
-            comments: null
+
         });
     };
 
@@ -746,8 +766,9 @@ class CompetitionPartPlayerGrades extends Component {
         let unassignedData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData;
         let colorPosition1;
         let colorPosition2;
-        let divisionData = this.props.registrationState.allDivisionsData.filter(x=>x.competitionMembershipProductDivisionId!= null);
-
+        let divisionData = this.props.registrationState.allDivisionsData.filter(x => x.competitionMembershipProductDivisionId != null);
+        let commentList = this.props.partPlayerGradingState.playerCommentList
+        let commentLoad = this.props.partPlayerGradingState.commentLoad
         return (
             <div>
                 <Droppable droppableId={'0'}>
@@ -768,13 +789,13 @@ class CompetitionPartPlayerGrades extends Component {
                                             {unassignedData.players.length > 1 ? unassignedData.players.length + " Players" : unassignedData.players.length + " Player"}
                                         </span>
                                     </div>
-                                    {this.state.divisionId!= null &&
-                                    <div className="col-sm d-flex justify-content-end">
-                                        <Button className="primary-add-comp-form" type="primary" onClick={this.addNewTeam}  >
-                                            + {AppConstants.createTeam}
-                                        </Button>
+                                    {this.state.divisionId != null &&
+                                        <div className="col-sm d-flex justify-content-end">
+                                            <Button className="primary-add-comp-form" type="primary" onClick={this.addNewTeam}  >
+                                                + {AppConstants.createTeam}
+                                            </Button>
 
-                                    </div>}
+                                        </div>}
 
                                 </div>
                             </div>
@@ -794,7 +815,7 @@ class CompetitionPartPlayerGrades extends Component {
                                                 <Checkbox
                                                     checked={playerItem.isChecked}
                                                     className="single-checkbox mt-1 check-box-player"
-                                                    onChange={e => this.onChangeChildDivCheckbox(e.target.checked, 0, playerIndex, "unAssigned" )} >
+                                                    onChange={e => this.onChangeChildDivCheckbox(e.target.checked, 0, playerIndex, "unAssigned")} >
                                                 </Checkbox>
                                                 <div className="col-sm d-flex align-items-center"  >
                                                     <NavLink to={{ pathname: `/userPersonal`, state: { userId: playerItem.userId } }}
@@ -828,8 +849,7 @@ class CompetitionPartPlayerGrades extends Component {
                                                             </Tag>
                                                         }
                                                         <img className="comp-player-table-img" src={
-
-                                                            (playerItem.comments !== null && playerItem.comments !== "") ? AppImages.commentFilled :
+                                                            playerItem.isCommentsAvailable == 1 ? AppImages.commentFilled :
                                                                 AppImages.commentEmpty} alt="" height="20" width="20"
                                                             style={{ cursor: "pointer" }}
                                                             onClick={() => this.onClickComment(playerItem, null)}
@@ -856,8 +876,8 @@ class CompetitionPartPlayerGrades extends Component {
                     className="add-membership-type-modal"
                     title={AppConstants.addTeam}
                     visible={this.state.visible}
-                    onOk={()=>this.handleOk()}
-                    onCancel={()=>this.handleCancel()}
+                    onOk={() => this.handleOk()}
+                    onCancel={() => this.handleCancel()}
                 >
                     <InputWithHead
                         required={"pt-0 mt-0"}
@@ -876,25 +896,24 @@ class CompetitionPartPlayerGrades extends Component {
                     placeholder={AppConstants.addYourComment}
                     onChange={(e) => this.setState({ comment: e.target.value })}
                     value={this.state.comment}
-                    owner={this.state.commentsCreatedBy}
-                    OwnCreatedComment={this.state.commentsCreatedOn}
-                    ownnerComment={this.state.comments}
+                    commentList={commentList}
+                    commentLoad={commentLoad}
                 />
 
                 <Modal
                     className="add-membership-type-modal"
                     title={AppConstants.changeDivision}
                     visible={this.state.changeDivisionModalVisible}
-                    onOk={ () => this.changePlayerDivision("ok")}
+                    onOk={() => this.changePlayerDivision("ok")}
                     onCancel={() => this.changePlayerDivision("cancel")}>
-                        <div className="change-division-modal">
-                            <div className='year-select-heading'>{AppConstants.division}</div>
-                            <Select
-                                style={{ minWidth: 120 }}
-                                className="year-select change-division-select"
-                                onChange={(divisionId) => this.setState({competitionDivisionId: divisionId})}
-                                value={JSON.parse(JSON.stringify(this.state.competitionDivisionId))}>
-                                {divisionData.map(item => {
+                    <div className="change-division-modal">
+                        <div className='year-select-heading'>{AppConstants.division}</div>
+                        <Select
+                            style={{ minWidth: 120 }}
+                            className="year-select change-division-select"
+                            onChange={(divisionId) => this.setState({ competitionDivisionId: divisionId })}
+                            value={JSON.parse(JSON.stringify(this.state.competitionDivisionId))}>
+                            {divisionData.map(item => {
                                 return (
                                     <Option key={"division" + item.competitionMembershipProductDivisionId}
                                         value={item.competitionMembershipProductDivisionId}>
@@ -902,9 +921,9 @@ class CompetitionPartPlayerGrades extends Component {
                                     </Option>
                                 )
                             })}
-                            </Select>
-                        </div>
-                     
+                        </Select>
+                    </div>
+
                 </Modal>
 
             </div>
@@ -990,7 +1009,8 @@ function mapDispatchToProps(dispatch) {
         playerGradingComment,
         deleteTeamAction,
         addOrRemovePlayerForChangeDivisionAction,
-        changeDivisionPlayerAction
+        changeDivisionPlayerAction,
+        commentListingAction
     }, dispatch)
 }
 

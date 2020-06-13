@@ -132,7 +132,7 @@ function competitionImportDataCleanUpAction(data) {
     }
 }
 
-function deleteTeamAction(data){
+function deleteTeamAction(data) {
     return {
         type: ApiConstants.API_COMPETITION_TEAM_DELETE_LOAD,
         payload: data
@@ -147,13 +147,23 @@ function changeDivisionPlayerAction(payload) {
     return action;
 }
 
-function addOrRemovePlayerForChangeDivisionAction(data, key){
+function addOrRemovePlayerForChangeDivisionAction(data, key) {
     const action = {
         type: ApiConstants.UPDATE_PLAYER_GRADING_DATA,
         data: data,
         key: key
     }
     return action;
+}
+
+function commentListingAction(competitionId, entityId, commentType) {
+    const action = {
+        type: ApiConstants.API_GET_COMMENT_LIST_LOAD,
+        competitionId,
+        entityId,
+        commentType
+    }
+    return action
 }
 
 
@@ -173,5 +183,6 @@ export {
     competitionTeamsImportAction,
     competitionImportDataCleanUpAction,
     changeDivisionPlayerAction,
-    addOrRemovePlayerForChangeDivisionAction							  											
+    addOrRemovePlayerForChangeDivisionAction,
+    commentListingAction
 }

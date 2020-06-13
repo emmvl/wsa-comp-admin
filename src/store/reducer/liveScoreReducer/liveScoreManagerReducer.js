@@ -122,6 +122,7 @@ function liveScoreMangerState(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_ADD_EDIT_MANAGER_SUCCESS:
             return {
                 ...state,
+                loading: false,
             }
 
         case ApiConstants.API_LIVE_SCORE_TEAM_LOAD:

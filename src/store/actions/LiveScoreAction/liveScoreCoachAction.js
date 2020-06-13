@@ -6,7 +6,7 @@ function liveScoreCoachListAction(roleId, entityTypeId, entityId, search) {
         roleId: roleId,
         entityTypeId: entityTypeId,
         entityId: entityId,
-        search:search
+        search: search
     };
 
     return action;
@@ -48,6 +48,14 @@ function liveScoreClear() {
     return action
 }
 
+function liveScoreCoachImportAction(payload) {
+    const action = {
+        type: ApiConstants.API_LIVE_SCORE_COACH_IMPORT_LOAD,
+        payload
+    }
+    return action
+}
+
 
 
 export {
@@ -55,5 +63,6 @@ export {
     liveScoreCoachListAction,
     liveScoreAddEditCoach,
     liveScoreCoachSearch,
-    liveScoreClear
+    liveScoreClear,
+    liveScoreCoachImportAction
 };

@@ -24,6 +24,7 @@ import LiveScoreDashboardState from './liveScoreReducer/liveScoreDashboardReduce
 import CompetitionDashboardState from './competitionManagementReducer/competitionDashboard'
 import CompetitionModuleState from './competitionManagementReducer/competitionModuleReducer'
 import liveScoreCompetition from './liveScoreReducer/liveScoreCompetitionReducer';
+import CompetitionManagementState from './competitionManagementReducer/competitionManagement';
 ////Year and Competition
 import CommonAppState from './appReducer'
 import CompetitionFormatState from './competitionManagementReducer/competitionFormatReducer';
@@ -53,6 +54,13 @@ import StripeState from "./stripeReducer/stripeReducer";
 import QuickCompetitionState from "./competitionManagementReducer/competitionQuickCompetitionReducer"
 
 import LiveScoreCoachState from "./liveScoreReducer/liveScoreCoachReducer"
+
+import LiveScoreMatchSheetState from "./liveScoreReducer/liveScoreMatcheSheet"
+import AddProductReducer from "./shopReducer/addProductReducer"
+
+//// Umpire Module
+import UmpireDashboardState from "./umpireReducer/umpireDashboardReducer"
+import UmpireCompetitionState from "./umpireReducer/umpireCompetitionReducer"
 
 const rootReducer = combineReducers({
   LoginState,
@@ -102,7 +110,13 @@ const rootReducer = combineReducers({
   LiveScoreFixturCompState,
   StripeState,
   QuickCompetitionState,
-  LiveScoreCoachState
+  LiveScoreCoachState,
+  LiveScoreMatchSheetState,
+  CompetitionManagementState,
+  AddProductReducer,
+  UmpireDashboardState,
+  UmpireCompetitionState,
+  CompetitionManagementState
 });
 
 export default rootReducer;

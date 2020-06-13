@@ -1,6 +1,6 @@
 import ApiConstants from "../../../themes/apiConstants";
 import history from "../../../util/history";
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 
 const initialState = {
     onLoad: false,

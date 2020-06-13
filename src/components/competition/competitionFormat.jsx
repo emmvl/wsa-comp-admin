@@ -129,6 +129,9 @@ class CompetitionFormat extends Component {
                                         this.props.generateDrawAction(payload);
                                         this.setState({ loading: true });
                                 }
+
+                                
+                                
                             }
                         }
                     }
@@ -147,10 +150,15 @@ class CompetitionFormat extends Component {
                    
                     this.setState({ loading: false });
                 }
-    
+                console.log("&&&&&&&&&&&&&&&" + competitionModuleState.status);
                 if(competitionModuleState.status == 5 && competitionModuleState.drawGenerateLoad == false){
                     this.setState({ loading: false });
                     message.error(ValidationConstants.drawsMessage[0]);
+                    this.apiCalls(this.state.firstTimeCompId, this.state.yearRefId);
+                }
+                if(competitionModuleState.status == 4 && competitionModuleState.drawGenerateLoad == false){
+                        this.setState({ loading: false });
+                        this.apiCalls(this.state.firstTimeCompId, this.state.yearRefId);
                 }
             }
         }
@@ -443,9 +451,9 @@ class CompetitionFormat extends Component {
 
                 for(let item in competitionFormatDivision)
                 {
-                    console.log("item.isFinal::" + JSON.stringify(competitionFormatDivision[item]["isFinal"]));
+                    console.log("item.isFinal::" + formatList.competitionFormatRefId);
                     let isFinal = competitionFormatDivision[item]["isFinal"];
-                    if(isFinal)
+                    if(isFinal && formatList.competitionFormatRefId!= 1)
                     {
                         console.log("***********************");
                         this.setState({isFinalAvailable: true});
@@ -520,7 +528,8 @@ class CompetitionFormat extends Component {
                 <div className="fluid-width" >
                     <div className="row" >
                         <div className="col-sm-3" >
-                            <div className="com-year-select-heading-view" >
+                            <div style={{width: "fit-content",display: "flex", flexDirection: "row",
+                                    alignItems: "center"}}  >
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
                                     name={"yearRefId"}
@@ -799,7 +808,7 @@ class CompetitionFormat extends Component {
                 </NavLink> */}
                 { !isAllDivisionChecked ?
                 <span className='input-heading-add-another pointer' onClick={() => this.addCompetitionFormatDivision(data)} >+ {AppConstants.addNewCompetitionFormat}</span> : null}
-                <Checkbox className="single-checkbox pt-2" defaultChecked={data.isDefault} onChange={(e) => this.onChangeSetValue(e.target.checked, 'isDefault')}>{AppConstants.setAsDefault}</Checkbox>
+                {/* <Checkbox className="single-checkbox pt-2" defaultChecked={data.isDefault} onChange={(e) => this.onChangeSetValue(e.target.checked, 'isDefault')}>{AppConstants.setAsDefault}</Checkbox> */}
             </div>
         )
     }

@@ -1,5 +1,5 @@
 import ApiConstants from '../../../themes/apiConstants'
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 var coachObj = {
     id: null,
     firstName: "",
@@ -23,7 +23,8 @@ const initialState = {
     exsitingManagerId: null,
     loading: false,
     teams: null,
-    onLoadSearch: false
+    onLoadSearch: false,
+    selectedteam: []
 }
 
 function getTeamObj(teamSelectId, teamArr) {
@@ -59,6 +60,27 @@ function genrateTeamId(teamIdArr) {
     return teamId
 
 }
+function getSelectedTeam(coachId, CoachListArray) {
+    console.log(coachId, CoachListArray, "64646")
+    let teamObj = null
+    for (let i in CoachListArray) {
+        if (coachId == CoachListArray[i].id) {
+            teamObj = (CoachListArray[i].linkedEntity)
+        }
+    }
+    return teamObj
+}
+// function generateSelectedTeam(selectedTeams, teamList){
+//     let teamIds = []
+//     for(let i in teamList){
+//         for(let j in selectedTeams){
+//             if( selectedTeams[j].entityId == teamList[i].id){
+//                 teamIds.push(selectedTeams[j].entityId)
+//             }
+//         }
+//     }
+//     return teamIds
+// }
 
 function liveScoreCoachState(state = initialState, action) {
     switch (action.type) {
@@ -69,7 +91,7 @@ function liveScoreCoachState(state = initialState, action) {
 
 
         case ApiConstants.API_LIVE_SCORE_COACH_LIST_SUCCESS:
-         
+
             return {
                 ...state,
                 onLoad: false,
@@ -82,23 +104,23 @@ function liveScoreCoachState(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
-           
+
             return {
                 ...state,
-                onLoad:false,
-                loading:false,
+                onLoad: false,
+                loading: false,
                 teamResult: action.result,
 
             };
 
         ////Update Coach Data
         case ApiConstants.API_LIVE_SCORE_UPDATE_COACH:
-         
+
             if (action.key == 'teamId') {
 
                 let teamObj = getTeamObj(action.data, state.teamResult)
                 state.coachdata['teams'] = teamObj
-            
+
                 state.teamId = action.data
 
             } else if (action.key == 'coachRadioBtn') {
@@ -106,7 +128,21 @@ function liveScoreCoachState(state = initialState, action) {
                 state.exsitingManagerId = null
             } else if (action.key == "coachSearch") {
 
+
                 state.exsitingManagerId = action.data
+                let index = state.coachesResult.findIndex(x => x.id == action.data)
+
+                let selectedTeam = []
+                if (index > -1) {
+                    selectedTeam = state.coachesResult[index].linkedEntity
+                }
+                // state.selectedteam = getSelectedTeam(action.data,state.coachesResult)
+                let teamIds = genrateTeamId(selectedTeam)
+                state.teamId = teamIds
+                let coach_TeamObj = getTeamObj(teamIds, state.teamResult)
+                state.coachdata['teams'] = coach_TeamObj
+
+
             } else if (action.key == 'isEditCoach') {
                 state.onLoad = true
                 state.coachdata.id = action.data.id
@@ -114,7 +150,7 @@ function liveScoreCoachState(state = initialState, action) {
                 state.coachdata.lastName = action.data.lastName
                 state.coachdata.mobileNumber = action.data.mobileNumber
                 state.coachdata.email = action.data.email
-               
+
                 let getTeamId = genrateTeamId(action.data.linkedEntity)
                 state.teamId = getTeamId
 
@@ -136,7 +172,7 @@ function liveScoreCoachState(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
-                loading:false
+                loading: false
             }
 
         ///******fail and error handling */
@@ -165,7 +201,7 @@ function liveScoreCoachState(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_ADD_EDIT_COACH_SUCCESS:
             return {
-                loading:false,
+                loading: false,
                 ...state,
             }
 
@@ -174,10 +210,13 @@ function liveScoreCoachState(state = initialState, action) {
             return { ...state, onLoadSearch: true };
 
         case ApiConstants.API_LIVESCORE_MANAGER_SEARCH_SUCCESS:
+
+            state.coachesResult = action.result
+
             return {
                 ...state,
                 onLoadSearch: false,
-                coachesResult: action.result,
+                // coachesResult: action.result,
                 status: action.status,
             }
 
@@ -185,8 +224,18 @@ function liveScoreCoachState(state = initialState, action) {
 
             return {
                 ...state,
-                coachesResult: state.mainCoachListResult
+                // coachesResult: state.mainCoachListResult
             }
+
+        case ApiConstants.API_LIVE_SCORE_COACH_IMPORT_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_LIVE_SCORE_COACH_IMPORT_SUCCESS:
+
+            return {
+                ...state,
+                onLoad: false,
+            };
 
 
         default:

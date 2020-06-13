@@ -1,5 +1,5 @@
 import ApiConstants from '../../../themes/apiConstants';
-import { isArrayNotEmpty, isNullOrEmptyString } from '../../../util/helpers';
+import { isArrayNotEmpty, isNotNullOrEmptyString } from '../../../util/helpers';
 import { isDateSame, sortArrayByDate } from './../../../themes/dateformate';
 import ColorsArray from '../../../util/colorsArray';
 
@@ -23,7 +23,8 @@ const initialState = {
   divisionLoad: false,
   fixtureArray: [],
   updateFixtureLoad: false,
-  getRoundsDrawsdata: []
+  getRoundsDrawsdata: [],
+  spinLoad: false
   // colorsArray: []
 
 };
@@ -63,19 +64,14 @@ function createLegendsArray(drawsArray, currentLegends, dateArray) {
   return finalLegendsChunkArray
 }
 
-function fixtureColor(data) {
-
-
+function setFixtureColor(data) {
   let fixtureDraws
-  let team1Color
-  let team2Color
   for (let i in data) {
     fixtureDraws = data[i].draws
     for (let j in fixtureDraws) {
-
-      let colorTeam = getColor(fixtureDraws[j])
-      fixtureDraws[j].team1Color = colorTeam.color1
-      fixtureDraws[j].team2Color = colorTeam.color2
+      // let colorTeam = getColor(fixtureDraws[j].team1)
+      fixtureDraws[j].team1Color = getFixtureColor(fixtureDraws[j].team1)
+      fixtureDraws[j].team2Color = getFixtureColor(fixtureDraws[j].team2)
     }
   }
   return data
@@ -253,28 +249,48 @@ function getRandomColor() {
   return color;
 }
 
-function getColor(draws) {
-  let fixtureTempArray = JSON.parse(JSON.stringify(fixtureColorArray))
+function getFixtureColor(team) {
 
-  let color1 = getRandomColor()
-  let color2 = getRandomColor()
+  let teamColorTempArray = JSON.parse(JSON.stringify(fixtureColorArray));
+  let index = teamColorTempArray.findIndex((x) => x.team === team);
 
-  for (let [index, value] of colorsArrayDup.entries()) {
-    fixtureColorArray.push({
-      drawsId: draws.drawsId,
-      colorCode1: colorsArrayDup[index],
-      colorCode2: colorsArrayDup[Number(index) + 1]
-    });
-    color1 = colorsArrayDup[Number(index)]
-    color2 = colorsArrayDup[Number(index) + 1]
-
-    colorsArrayDup.splice(0, 2)
-    break
+  var color = lightGray;
+  if (index !== -1) {
+    color = teamColorTempArray[index].colorCode;
+  } else {
+    for (var i in colorsArray) {
+      let colorIndex = teamColorTempArray.findIndex(
+        (x) => x.colorCode === colorsArray[i]
+      );
+      if (colorIndex === -1) {
+        fixtureColorArray.push({ team: team, colorCode: colorsArray[i] });
+        color = colorsArray[i];
+        break;
+      }
+    }
   }
-  return {
-    color1,
-    color2,
-  }
+  return color;
+  // let fixtureTempArray = JSON.parse(JSON.stringify(fixtureColorArray))
+
+  // let color1 = getRandomColor()
+  // let color2 = getRandomColor()
+
+  // for (let [index, value] of colorsArrayDup.entries()) {
+  //   fixtureColorArray.push({
+  //     drawsId: draws.drawsId,
+  //     colorCode1: colorsArrayDup[index],
+  //     colorCode2: colorsArrayDup[Number(index) + 1]
+  //   });
+  //   color1 = colorsArrayDup[Number(index)]
+  //   color2 = colorsArrayDup[Number(index) + 1]
+
+  //   colorsArrayDup.splice(0, 2)
+  //   break
+  // }
+  // return {
+  //   color1,
+  //   color2,
+  // }
 
 }
 
@@ -397,9 +413,11 @@ function swapedDrawsArrayFunc(
 ) {
   let sourceArray = JSON.parse(JSON.stringify(drawsArray));
   let targetArray = JSON.parse(JSON.stringify(drawsArray));
+  sourceArray[sourtXIndex].slotsArray[sourceYIndex].isLocked = 1
   let source = JSON.parse(
     JSON.stringify(sourceArray[sourtXIndex].slotsArray[sourceYIndex])
   );
+  targetArray[targetXIndex].slotsArray[targetYIndex].isLocked = 1
   let target = JSON.parse(
     JSON.stringify(targetArray[targetXIndex].slotsArray[targetYIndex])
   );
@@ -413,6 +431,7 @@ function swapedDrawsArrayFunc(
   targetCopy.drawsId = source.drawsId;
   if (source.drawsId === null) {
     drawsArray[sourtXIndex].slotsArray[sourceYIndex] = target;
+
     drawsArray[targetXIndex].slotsArray[targetYIndex] = source;
   } else if (target.drawsId === null) {
     drawsArray[sourtXIndex].slotsArray[sourceYIndex] = target;
@@ -885,7 +904,7 @@ function CompetitionDraws(state = initialState, action) {
 
     //competition part player grade calculate player grading summmary get API
     case ApiConstants.API_GET_COMPETITION_DRAWS_LOAD:
-      return { ...state, onLoad: true, error: null };
+      return { ...state, onLoad: true, error: null, spinLoad: true };
 
     case ApiConstants.API_GET_COMPETITION_DRAWS_SUCCESS:
 
@@ -899,6 +918,7 @@ function CompetitionDraws(state = initialState, action) {
         getRoundsDrawsdata: resultData.roundsdata,
         onLoad: false,
         error: null,
+        spinLoad: false
       };
 
     /////get rounds in the competition draws
@@ -972,6 +992,14 @@ function CompetitionDraws(state = initialState, action) {
         error: null,
         updateLoad: false,
       };
+
+    //case 
+    case ApiConstants.API_UPDATE_COMPETITION_SAVE_DRAWS_LOAD:
+      return {
+        ...state,
+        onLoad: true,
+        error: null
+      }
 
     /// Save Draws Success
     case ApiConstants.API_UPDATE_COMPETITION_SAVE_DRAWS_SUCCESS:
@@ -1112,12 +1140,11 @@ function CompetitionDraws(state = initialState, action) {
       return {
         ...state,
         onLoad: true,
-        updateFixtureLoad: true
+        updateFixtureLoad: true,
       }
 
     case ApiConstants.API_GET_FIXTURE_SUCCESS:
-      let fixtureResult = fixtureColor(action.result)
-
+      let fixtureResult = setFixtureColor(action.result)
       state.fixtureArray = fixtureResult
       return {
         ...state,
@@ -1144,7 +1171,7 @@ function CompetitionDraws(state = initialState, action) {
       };
 
     case ApiConstants.API_UPDATE_COMPETITION_FIXTURE_SUCCESS:
-      let updatedFixtureResult = fixtureColor(action.fixtureResult)
+      let updatedFixtureResult = setFixtureColor(action.fixtureResult)
       state.fixtureArray = updatedFixtureResult
       // let fixtureSourceXIndex = action.sourceArray[0];
       // let fixtureSourceYIndex = action.sourceArray[1];

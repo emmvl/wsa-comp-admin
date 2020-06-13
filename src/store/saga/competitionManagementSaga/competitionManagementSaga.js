@@ -50,4 +50,21 @@ export function* competitonWithTimeSlots(action) {
         yield call(errorSaga, error)
     }
 }
+export function* fixtureTemplateSaga() {
+    try {
+        const result = yield call(CompetitionAxiosApi.fixtureTemplateRounds);
+        if (result.status === 1) {
+            
+            yield put({
+                type: ApiConstants.API_FIXTURE_TEMPLATE_ROUNDS_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+} 
 

@@ -358,7 +358,7 @@ let CompetitionAxiosApi = {
             competitionMembershipProductDivisionId: divisionId,
             gradeRefId: gradeRefId,
             teamId: teamId,
-            responseComments: comment,
+            comments: comment,
         }
         var url = `/api/teamgrading/comment?userId=${userId}`;
         return Method.dataPost(url, token, body);
@@ -378,6 +378,7 @@ let CompetitionAxiosApi = {
             comments: comment,
         }
         var url = `/api/proposedteamgrading/comment?userId=${userId}`;
+        console.log(url, token, body)
         return Method.dataPost(url, token, body);
     },
 
@@ -498,7 +499,24 @@ let CompetitionAxiosApi = {
         }
         var url = `/api/draws/unlock`
         return Method.dataPost(url, token, body);
+    },
+
+    async getCommentList(competitionId, entityId, commentType) {
+        let organisationId = await getOrganisationData().organisationUniqueKey;
+        let body = {
+            "competitionUniqueKey": competitionId,
+            "organisationUniqueKey": organisationId,
+            "entityId": entityId,
+            "commentType": commentType
+        }
+        var url = `/api/grading/comments`
+        return Method.dataPost(url, token, body);
+    },
+	 async fixtureTemplateRounds() {       																
+        var url = `/api/fixturetemplate/rounds`
+        return Method.dataGet(url, token);
     }
+
 };
 
 const Method = {

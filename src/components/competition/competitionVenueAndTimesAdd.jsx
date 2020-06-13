@@ -10,7 +10,7 @@ import {
     TimePicker,
     message,
     Form,
-    
+
 } from "antd";
 import "./competition.css";
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -105,7 +105,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                     filterIcon: () => {
                         return (
 
-                            <Tooltip placement="bottom"  background='#ff8237'>
+                            <Tooltip placement="bottom" background='#ff8237'>
                                 <span>{AppConstants.LatitudeMsg}</span>
                             </Tooltip>
 
@@ -552,9 +552,11 @@ class CompetitionVenueAndTimesAdd extends Component {
                             <div className="col-sm">
                                 <Select
                                     mode="multiple"
+                                    showSearch
                                     style={{ width: "100%" }}
                                     onChange={(affiliateData) => this.props.updateVenuAndTimeDataAction(affiliateData, 'organisations', 'organisations')}
                                     placeholder={'Select '}
+                                    optionFilterProp="children"
                                 >
                                     {venueOragnasation.length > 0 && venueOragnasation.map((item, index) => (
                                         < Option key={item.id} value={item.id}> {item.name}</Option>

@@ -62,3 +62,10 @@ export const clearFilter = () => {
 
     }
 }
+
+export const settingRegInvitees = () => {
+    return {
+        type: ApiConstants.SETTING_REGISTRATION_INVITEES_LOAD,
+
+    }
+}

@@ -1,6 +1,6 @@
 import ApiConstants from "../../../themes/apiConstants";
 import history from "../../../util/history";
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 
 const initialState = {
     onLoad: false,
@@ -10,6 +10,7 @@ const initialState = {
     regDashboardListData: [], ////////registration Dashboard list
     regDashboardListPage: 1,
     regDashboardListTotalCount: 1,
+    competitionTypeList: []
 
 };
 
@@ -48,6 +49,34 @@ function registrationDashboard(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 error: action.error,
+                status: action.status
+            };
+
+        /////get the Competition type list 
+        case ApiConstants.API_GET_ALL_COMPETITION_LOAD:
+            state.competitionTypeList = [];
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_GET_ALL_COMPETITION_SUCCESS:
+            let competitionData = JSON.parse(JSON.stringify(action.result))
+            let competitionObject = {
+                competitionId: 0,
+                competitionName: "New Competition ",
+                competitionStatus: "draft",
+                competitionStatusId: 0,
+                id: 0,
+                isDirect: false,
+                registrationCloseDate: "",
+                yearId: "",
+                orgRegistratinId: 0,
+                competitionCreatorOrganisation: 0,
+                inviteeStatus: 0
+            }
+            competitionData.unshift(competitionObject)
+            return {
+                ...state,
+                onLoad: false,
+                competitionTypeList: competitionData,
                 status: action.status
             };
 

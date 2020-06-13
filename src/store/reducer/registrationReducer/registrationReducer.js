@@ -1,6 +1,6 @@
 import ApiConstants from "../../../themes/apiConstants";
 import history from "../../../util/history";
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 
 
 const newObjvalue = {
@@ -567,7 +567,7 @@ function getDefaultMembershipType(data) {
     if (data.membershipproducttypes) {
       let getMembershipType = data.membershipproducttypes.MembershipProductTypes
       for (let i in getMembershipType) {
-        if (isNullOrEmptyString(getMembershipType[i].dobFrom) && isNullOrEmptyString(getMembershipType[i].dobTo)) {
+        if (isNotNullOrEmptyString(getMembershipType[i].dobFrom) && isNotNullOrEmptyString(getMembershipType[i].dobTo)) {
           getMembershipType[i]["isMandate"] = true;
         }
         else {
@@ -579,6 +579,15 @@ function getDefaultMembershipType(data) {
         else {
           getMembershipType[i]["isMemebershipType"] = false;
         }
+
+        if(getMembershipType[i].allowTeamRegistrationTypeRefId!= null && 
+          getMembershipType[i].allowTeamRegistrationTypeRefId != 0){
+            getMembershipType[i]["isAllow"] = true;
+          }
+          else{
+            getMembershipType[i]["isAllow"] = false;
+          }
+
       }
       membershipProductTypesTempArray = getMembershipType
     }
@@ -1031,6 +1040,15 @@ function registration(state = initialState, action) {
       if (action.keyword == "isMandate") {
         state.getDefaultMembershipProductTypes[action.index].isMandate = action.checkedValue
 
+      }
+	  if (action.keyword == "isAllow") {
+        state.getDefaultMembershipProductTypes[action.index].isAllow = action.checkedValue
+        if(action.checkedValue == true){
+          state.getDefaultMembershipProductTypes[action.index]["allowTeamRegistrationTypeRefId"] = 1
+        }
+        else{
+          state.getDefaultMembershipProductTypes[action.index]["allowTeamRegistrationTypeRefId"] = null;
+        }
       }
       if (action.keyword == "isMemebershipType") {
         state.getDefaultMembershipProductTypes[action.index].isMemebershipType = action.checkedValue

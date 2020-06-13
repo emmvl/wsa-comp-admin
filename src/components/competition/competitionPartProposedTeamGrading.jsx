@@ -30,7 +30,10 @@ import {
 import CommentModal from "../../customComponents/commentModal"
 import moment from "moment"
 import ValidationConstants from "../../themes/validationConstant";
-
+import {
+    clearReducerCompPartPlayerGradingAction,
+    commentListingAction,
+} from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 let this_obj = null;
@@ -120,7 +123,7 @@ const columns = [
         width: 110,
         render: (comments, record) =>
             <div style={{ display: "flex", justifyContent: "center", cursor: "pointer" }} onClick={() => this_obj.onClickComment(record)}>
-                <img src={comments !== null && comments.length > 0 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
+                <img src={record.isCommentsAvailable == 1 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
             </div>,
     },
     {
@@ -128,16 +131,16 @@ const columns = [
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, e, index) => (
-            <Menu  className="action-triple-dot-submenu" theme="light" mode="horizontal"
+            <Menu className="action-triple-dot-submenu" theme="light" mode="horizontal"
                 style={{ lineHeight: "25px" }}>
                 <SubMenu key="sub1"
-                    title={ <img className="dot-image" src={AppImages.moreTripleDot}
-                            alt="" width="16" height="16"
-                        />
+                    title={<img className="dot-image" src={AppImages.moreTripleDot}
+                        alt="" width="16" height="16"
+                    />
                     }>
-                     <Menu.Item key="1" onClick={() => this_obj.onClickChangeDivision(e)}>
-                          <span>Change Division</span>
-                     </Menu.Item>
+                    <Menu.Item key="1" onClick={() => this_obj.onClickChangeDivision(e)}>
+                        <span>Change Division</span>
+                    </Menu.Item>
                 </SubMenu>
             </Menu>
         )
@@ -156,7 +159,7 @@ class CompetitionPartProposedTeamGrading extends Component {
             firstTimeCompId: "",
             saveLoad: false,
             visible: false,
-            comment: null,
+            comment: "",
             teamId: null,
             responseCommentsCreatedBy: null,
             responseCommentsCreatedOn: null,
@@ -208,14 +211,14 @@ class CompetitionPartProposedTeamGrading extends Component {
 
     }
 
-    onClickChangeDivision = (record) =>{
+    onClickChangeDivision = (record) => {
         this.setState({
             changeDivisionModalVisible: true, teamId: record.teamId
         })
     }
 
-    handleChangeDivision = (key) =>{
-        if(key == "ok"){
+    handleChangeDivision = (key) => {
+        if (key == "ok") {
             let payload = {
                 competitionDivisionId: this.state.competitionDivisionId,
                 teamId: this.state.teamId,
@@ -224,7 +227,6 @@ class CompetitionPartProposedTeamGrading extends Component {
             }
             this.props.changeDivisionTeamAction(payload);
             this.setState({ loading: true })
-            console.log("payload::" + JSON.stringify(payload));
         }
         this.setState({
             changeDivisionModalVisible: false, teamId: null,
@@ -269,44 +271,34 @@ class CompetitionPartProposedTeamGrading extends Component {
 
 
     onClickComment(record) {
+        this.props.commentListingAction(this.state.firstTimeCompId, record.teamId, "2")
         this.setState({
-            visible: true, comment: record.comments,
+            visible: true, comment: "",
             teamId: record.teamId,
-            responseComments: record.responseComments, responseCommentsCreatedBy: record.responseCommentsCreatedBy,
-            responseCommentsCreatedOn: moment(record.responseCommentsCreatedOn).format("DD-MM-YYYY HH:mm"),
-            comments: record.comments, commentsCreatedOn: moment(record.commentsCreatedOn).format("DD-MM-YYYY HH:mm"), commentsCreatedBy: record.commentsCreatedBy,
             finalGradeId: record.proposedGradeRefId,
             proposedGradeID: record.proposedGradeRefId
         })
     }
 
     handleOk = e => {
-        if (this.state.finalGradeId == null) {
-            this.props.partProposedSummaryComment(this.state.firstTimeCompId, this.state.divisionId, this.state.teamId, this.state.comment)
+        {
+            this.state.comment.length > 0 &&
+                this.props.partProposedSummaryComment(this.state.firstTimeCompId, this.state.divisionId, this.state.teamId, this.state.comment)
         }
+        this.props.clearReducerCompPartPlayerGradingAction("commentList")
         this.setState({
             visible: false,
             comment: "",
             teamId: null,
-            responseComments: null,
-            responseCommentsCreatedBy: null,
-            responseCommentsCreatedOn: null,
-            comments: null,
-            commentsCreatedOn: null,
-            commentsCreatedBy: null,
             finalGradeId: null,
         });
     };
     // model cancel for dissapear a model
     handleCancel = e => {
+        this.props.clearReducerCompPartPlayerGradingAction("commentList")
         this.setState({
             visible: false,
-            responseComments: null,
-            responseCommentsCreatedBy: null,
-            responseCommentsCreatedOn: null,
-            comments: null,
-            commentsCreatedOn: null,
-            commentsCreatedBy: null,
+            comment: "",
             finalGradeId: null,
             teamId: null,
         });
@@ -317,7 +309,7 @@ class CompetitionPartProposedTeamGrading extends Component {
     submitApiCall = (buttonClicked) => {
         let proposedTeamGradingData = this.props.ownTeamGradingState.getPartProposedTeamGradingData
         let isError = false;
-        if(buttonClicked == "submit"){
+        if (buttonClicked == "submit") {
             proposedTeamGradingData.map((item) => {
                 if ((item.proposedGradeRefId == 0 || item.proposedGradeRefId == null || item.proposedGradeRefId == "" ||
                     item.proposedGradeRefId == undefined)) {
@@ -326,7 +318,7 @@ class CompetitionPartProposedTeamGrading extends Component {
             })
         }
 
-        if(!isError){
+        if (!isError) {
             let payload = {
                 "competitionUniqueKey": this.state.firstTimeCompId,
                 "competitionMembershipProductDivisionId": this.state.divisionId,
@@ -336,13 +328,13 @@ class CompetitionPartProposedTeamGrading extends Component {
             this.props.savePartProposedTeamGradingDataAction(payload)
             this.setState({ saveLoad: true })
         }
-        else{
+        else {
             message.error(ValidationConstants.proposedGrading[0])
         }
-       
+
     }
 
-    exportTeams = () =>{
+    exportTeams = () => {
         let payload = {
             competitionId: this.state.firstTimeCompId,
             yearRefId: this.state.yearRefId
@@ -350,7 +342,7 @@ class CompetitionPartProposedTeamGrading extends Component {
         this.props.exportProposedTeamsAction(payload);
     }
 
-    exportPlayers = () =>{
+    exportPlayers = () => {
         let payload = {
             competitionId: this.state.firstTimeCompId,
             yearRefId: this.state.yearRefId
@@ -391,9 +383,9 @@ class CompetitionPartProposedTeamGrading extends Component {
                                     </Button>
                                 </div>
                             </div>
-                            <div  className="col-sm">
+                            <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile">
-                                    <Button className="primary-add-comp-form" type="primary"  onClick={() => this.exportPlayers()}>
+                                    <Button className="primary-add-comp-form" type="primary" onClick={() => this.exportPlayers()}>
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img
@@ -529,6 +521,8 @@ class CompetitionPartProposedTeamGrading extends Component {
 
     ////////form content view
     contentView = () => {
+        let commentList = this.props.partPlayerGradingState.playerCommentList
+        let commentLoad = this.props.partPlayerGradingState.commentLoad
         let getPartProposedTeamGradingData = this.props.ownTeamGradingState.getPartProposedTeamGradingData
         return (
             <div className="comp-dash-table-view mt-2">
@@ -549,30 +543,32 @@ class CompetitionPartProposedTeamGrading extends Component {
                     placeholder={AppConstants.addYourComment}
                     onChange={(e) => this.setState({ comment: e.target.value })}
                     value={this.state.comment}
-                    owner={this.state.commentsCreatedBy}
-                    OwnCreatedComment={this.state.commentsCreatedOn}
-                    ownnerComment={this.state.comments}
-                    affilate={this.state.responseCommentsCreatedBy}
-                    affilateCreatedComment={this.state.responseCommentsCreatedOn}
-                    affilateComment={this.state.responseComments}
-                    finalGradeId={this.state.finalGradeId}
-                    proposedGradeID={this.state.proposedGradeID}
+                    commentLoad={commentLoad}
+                    commentList={commentList}
+                // owner={this.state.commentsCreatedBy}
+                // OwnCreatedComment={this.state.commentsCreatedOn}
+                // ownnerComment={this.state.comments}
+                // affilate={this.state.responseCommentsCreatedBy}
+                // affilateCreatedComment={this.state.responseCommentsCreatedOn}
+                // affilateComment={this.state.responseComments}
+                // finalGradeId={this.state.finalGradeId}
+                // proposedGradeID={this.state.proposedGradeID}
                 />
 
                 <Modal
                     className="add-membership-type-modal"
                     title={AppConstants.changeDivision}
                     visible={this.state.changeDivisionModalVisible}
-                    onOk={ () => this.handleChangeDivision("ok")}
+                    onOk={() => this.handleChangeDivision("ok")}
                     onCancel={() => this.handleChangeDivision("cancel")}>
-                        <div className="change-division-modal">
-                            <div className='year-select-heading'>{AppConstants.division}</div>
-                            <Select
-                                style={{ minWidth: 120 }}
-                                className="year-select change-division-select"
-                                onChange={(divisionId) => this.setState({competitionDivisionId: divisionId})}
-                                value={JSON.parse(JSON.stringify(this.state.competitionDivisionId))}>
-                                {this.props.registrationState.allDivisionsData.map(item => {
+                    <div className="change-division-modal">
+                        <div className='year-select-heading'>{AppConstants.division}</div>
+                        <Select
+                            style={{ minWidth: 120 }}
+                            className="year-select change-division-select"
+                            onChange={(divisionId) => this.setState({ competitionDivisionId: divisionId })}
+                            value={JSON.parse(JSON.stringify(this.state.competitionDivisionId))}>
+                            {this.props.registrationState.allDivisionsData.map(item => {
                                 return (
                                     <Option key={"division" + item.competitionMembershipProductDivisionId}
                                         value={item.competitionMembershipProductDivisionId}>
@@ -580,9 +576,9 @@ class CompetitionPartProposedTeamGrading extends Component {
                                     </Option>
                                 )
                             })}
-                            </Select>
-                        </div>
-                     
+                        </Select>
+                    </div>
+
                 </Modal>
             </div>
         )
@@ -597,19 +593,19 @@ class CompetitionPartProposedTeamGrading extends Component {
                 <div className="comp-player-grades-footer-view">
                     <div className="row" >
                         <div className="col-sm" >
-                            {this.state.divisionId!= null &&
-                            <div style={{ display: 'flex', justifyContent: "flex-end" }}>
-                                {/* <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button> */}
-                                <Button className="open-reg-button" style={{marginRight: '20px'}}
-                                    onClick={() => this.submitApiCall("save")}
-                                    type="primary">{AppConstants.save}
-                                </Button>
-                                <Button
-                                    className="open-reg-button"
-                                    type="primary"
-                                    onClick={() => this.submitApiCall("submit")}>
-                                    {AppConstants.submit}</Button>
-                            </div>}
+                            {this.state.divisionId != null &&
+                                <div style={{ display: 'flex', justifyContent: "flex-end" }}>
+                                    {/* <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button> */}
+                                    <Button className="open-reg-button" style={{ marginRight: '20px' }}
+                                        onClick={() => this.submitApiCall("save")}
+                                        type="primary">{AppConstants.save}
+                                    </Button>
+                                    <Button
+                                        className="open-reg-button"
+                                        type="primary"
+                                        onClick={() => this.submitApiCall("submit")}>
+                                        {AppConstants.submit}</Button>
+                                </div>}
                         </div>
                     </div>
                 </div>
@@ -653,7 +649,9 @@ function mapDispatchToProps(dispatch) {
         changeProposedHistoryHover,
         exportProposedTeamsAction,
         exportProposedPlayersAction,
-        changeDivisionTeamAction
+        changeDivisionTeamAction,
+        clearReducerCompPartPlayerGradingAction,
+        commentListingAction,
     }, dispatch)
 }
 
@@ -662,7 +660,8 @@ function mapStatetoProps(state) {
         appState: state.AppState,
         ownTeamGradingState: state.CompetitionOwnTeamGradingState,
         registrationState: state.RegistrationState,
-        commonReducerState: state.CommonReducerState
+        commonReducerState: state.CommonReducerState,
+        partPlayerGradingState: state.CompetitionPartPlayerGradingState,
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionPartProposedTeamGrading));

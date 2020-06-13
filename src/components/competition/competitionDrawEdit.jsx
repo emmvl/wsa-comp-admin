@@ -10,7 +10,8 @@ import { getDayName, getTime } from './../../themes/dateformate';
 import SwappableComponentEdit from '../../customComponents/SwappableComponentEdit.jsx';
 import AppConstants from '../../themes/appConstants';
 import history from "../../util/history";
-
+import { generateDrawAction } 
+    from "../../store/actions/competitionModuleAction/competitionModuleAction";
 import {
     getYearAndCompetitionOwnAction,
     getVenuesTypeAction
@@ -38,6 +39,7 @@ import {
     getDraws_roundTime,
     setDraws_division_grade,
     getDraws_division_grade,
+    getOrganisationData
 } from "../../util/sessionStorage"
 import moment from "moment"
 import ValidationConstants from "../../themes/validationConstant"
@@ -58,6 +60,8 @@ class CompetitionDrawEditOld extends Component {
             venueLoad: false,
             roundTime: null,
             competitionDivisionGradeId: "",
+            updateLoad: false,
+            organisationId: getOrganisationData().organisationUniqueKey,
         };
     }
 
@@ -111,6 +115,12 @@ class CompetitionDrawEditOld extends Component {
                     }
                 }
             }
+        }
+
+        if (this.state.updateLoad == true && this.props.drawsState.updateLoad == false) {
+            console.log("*********************************");
+            this.setState({updateLoad: false})
+            this.reGenerateDraw();
         }
     }
 
@@ -168,6 +178,18 @@ class CompetitionDrawEditOld extends Component {
             setOwnCompetitionYear(1)
         }
     }
+
+    reGenerateDraw = () => {
+        let payload = {
+          yearRefId: this.state.yearRefId,
+          competitionUniqueKey: this.state.firstTimeCompId,
+          organisationId: getOrganisationData().organisationUniqueKey
+        }
+        this.props.generateDrawAction(payload);
+        this.setState({ venueLoad: true });
+      }
+
+
     onChange = e => {
         this.setState({
             value: e.target.value
@@ -314,6 +336,8 @@ class CompetitionDrawEditOld extends Component {
                 targetIndexArray,
                 "edit"
             );
+
+            this.setState({updateLoad: true});
         }
     }
 
@@ -866,7 +890,8 @@ function mapDispatchToProps(dispatch) {
             saveDraws,
             getCompetitionVenue,
             clearDraws,
-            publishDraws
+            publishDraws,
+            generateDrawAction,
         },
         dispatch
     );
@@ -875,7 +900,8 @@ function mapDispatchToProps(dispatch) {
 function mapStatetoProps(state) {
     return {
         appState: state.AppState,
-        drawsState: state.CompetitionDrawsState
+        drawsState: state.CompetitionDrawsState,
+        competitionModuleState: state.CompetitionModuleState
     };
 }
 export default connect(

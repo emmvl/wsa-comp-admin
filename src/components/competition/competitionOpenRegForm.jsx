@@ -62,7 +62,7 @@ import {
 } from "../../store/actions/appAction";
 import moment from "moment";
 import history from "../../util/history";
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
 import ValidationConstants from "../../themes/validationConstant";
 import { NavLink } from "react-router-dom"
 import {
@@ -75,8 +75,7 @@ import Loader from '../../customComponents/loader';
 import { venueListAction, getCommonRefData, } from '../../store/actions/commonAction/commonAction'
 import { getUserId, getOrganisationData } from "../../util/sessionStorage"
 import CustumToolTip from 'react-png-tooltip'
-
-
+import {fixtureTemplateRoundsAction} from '../../store/actions/competitionModuleAction/competitionDashboardAction';
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { TextArea } = Input;
@@ -254,9 +253,7 @@ class CompetitionOpenRegForm extends Component {
             isCreatorEdit: false, //////// user is owner of the competition than isCreatorEdit will be false 
             isPublished: false,
             isRegClosed: false,
-            roundsArray: [{ id: 4, value: 4 },
-            { id: 6, value: 6 }, { id: 8, value: 8 }, { id: 10, value: 10 }, { id: 12, value: 12 }, { id: 14, value: 14 }, { id: 16, value: 16 }, { id: 18, value: 18 }],
-            permissionState: permissionObject,
+                   permissionState: permissionObject,
             tooltipVisibleDelete: false,
             tooltipVisibleDraft: false,
             tooltipVisiblePublish: false,
@@ -627,6 +624,7 @@ class CompetitionOpenRegForm extends Component {
         this.props.paymentSeasonalFee()
         this.props.getCommonDiscountTypeTypeAction()
         this.props.getVenuesTypeAction();
+        this.props.fixtureTemplateRoundsAction();	
         // this.props.venueListAction();
         if (competitionId !== null) {
             let hasRegistration = 0
@@ -1039,7 +1037,7 @@ class CompetitionOpenRegForm extends Component {
                             {AppConstants.competitionDetails}
                         </Breadcrumb.Item>
                     </Breadcrumb>
-                    <CustumToolTip background='#ff8237'>
+                    <CustumToolTip placement="top" background='#ff8237'>
                         <span>{AppConstants.compDetailsMsg}</span>
                     </CustumToolTip>
                 </Header>
@@ -1310,6 +1308,7 @@ class CompetitionOpenRegForm extends Component {
 
     ///////form content view - fee details
     contentView = (getFieldDecorator) => {
+		let roundsArray = this.props.competitionManagementState.fixtureTemplate;																		
         let appState = this.props.appState
         const { venueList, mainVenueList } = this.props.commonReducerState
         let detailsData = this.props.competitionFeesState
@@ -1471,7 +1470,7 @@ class CompetitionOpenRegForm extends Component {
                         >
                             {appState.competitionFormatTypes.length > 0 && appState.competitionFormatTypes.map(item => {
                                 return (
-                                    <div className='row'>
+                                    <div className='contextualHelp-RowDirection' >
                                         <Radio key={item.id} value={item.id}> {item.description}</Radio>
 
                                         <div style={{ marginLeft: -20, marginTop: -5 }}>
@@ -1538,9 +1537,9 @@ class CompetitionOpenRegForm extends Component {
                                         value={detailsData.competitionDetailData.noOfRounds}
                                         disabled={compDetailDisable}
                                     >
-                                        {this.state.roundsArray.map(item => {
+                                     {roundsArray.map(item => {
                                             return (
-                                                <Option key={item.id} value={item.id}>{item.value}</Option>
+                                                <Option key={item.noOfRounds} value={item.noOfRounds}>{item.noOfRounds}</Option>
                                             );
                                         })}
                                     </Select>
@@ -1756,7 +1755,7 @@ class CompetitionOpenRegForm extends Component {
         let divisionsDisable = this.state.permissionState.divisionsDisable
         return (
             <div className="fees-view pt-5">
-                <div className='row'>
+                <div className='contextualHelp-RowDirection' >
                     <span className="form-heading required-field" >{AppConstants.divisions}</span>
                     <CustumToolTip placement="top" background='#ff8237'>
                         <span>{AppConstants.compDivisionMsg}</span>
@@ -1773,7 +1772,7 @@ class CompetitionOpenRegForm extends Component {
                             <span className="form-heading pt-2 pl-2">
                                 {item.membershipProductName}
                             </span>
-                          
+
                             <div className="contextual-table-responsive">
                                 <Table
                                     className="fees-table overflow-auto"
@@ -1785,7 +1784,7 @@ class CompetitionOpenRegForm extends Component {
 
                                 />
                             </div>
-                            
+
                             <a>
                                 <span className="input-heading-add-another" onClick={() => !divisionsDisable ? this.addRemoveDivision(index, item, "add") : null}>+ {AppConstants.addDivision}</span>
                             </a>
@@ -2822,7 +2821,8 @@ function mapDispatchToProps(dispatch) {
         searchVenueList,
         venueListAction,
         clearFilter,
-        removeCompetitionDivisionAction
+        removeCompetitionDivisionAction,
+		fixtureTemplateRoundsAction						   
     }, dispatch)
 }
 
@@ -2830,7 +2830,8 @@ function mapStatetoProps(state) {
     return {
         competitionFeesState: state.CompetitionFeesState,
         appState: state.AppState,
-        commonReducerState: state.CommonReducerState
+        commonReducerState: state.CommonReducerState,
+        competitionManagementState:state.CompetitionManagementState,
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionOpenRegForm));

@@ -3,6 +3,7 @@ import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 import ApiConstants from '../../../themes/apiConstants';
 import { message } from "antd";
 import history from "../../../util/history";
+import CommonAxiosApi from "../../http/commonHttp/commonAxios";
 
 export function* liveScoreSettingSaga({ payload }) {
     try {
@@ -27,14 +28,9 @@ export function* liveScoreSettingSaga({ payload }) {
 
 export function* liveScorePostSaga({ payload }) {
     yield console.log('Sagapayload', payload)
-
-    // const result = yield call(LiveScoreAxiosApi.liveScoreSettingPost, payload)
-    // console.log('resultSaga', result)
-    // yield call(LiveScoreAxiosApi.liveScoreSettingPost, payload)
     try {
 
         const result = yield call(LiveScoreAxiosApi.liveScoreSettingPost, payload)
-        console.log('saga', result)
         localStorage.setItem("LiveScoreCompetiton", JSON.stringify(result.result.data))
         if (result.status === 1) {
             yield put({
@@ -44,19 +40,34 @@ export function* liveScorePostSaga({ payload }) {
             });
             message.success('Successfully Updated')
             history.push(payload.settingView && '/liveScoreDashboard')
-            // yield put({ type: ApiConstants.LiveScore_SETTING_VIEW_SUCCESS, payload: result.result.data })
         } else {
 
             yield put({ type: ApiConstants.LiveScore_SETTING_VIEW_FAIL, payloads: result })
-            // setInterval(() => {
-            //     message.error('Something Went Wrong')
-            // }, 800)
+
         }
     } catch (e) {
 
         yield put({ type: ApiConstants.LiveScore_SETTING_VIEW_ERROR, payloads: e })
-        // setTimeout(() => {
-        //     message.error('Something Went Wrong')
-        // }, 800)
+    }
+}
+
+export function* settingRegInviteesSaga({ payload }) {
+    try {
+
+        const result = yield call(CommonAxiosApi.getRegistrationInvitees)
+        console.log('saga', result)
+        if (result.status === 1) {
+            yield put({ type: ApiConstants.SETTING_REGISTRATION_INVITEES_SUCCESS, payload: result.result.data, })
+        } else {
+            yield put({ type: ApiConstants.LiveScore_SETTING_VIEW_ERROR, payloads: result })
+            setInterval(() => {
+                message.error('Something Went Wrong')
+            }, 800)
+        }
+    } catch (e) {
+        yield put({ type: ApiConstants.LiveScore_SETTING_VIEW_ERROR, repayloadsult: e })
+        setTimeout(() => {
+            message.error('Something Went Wrong')
+        }, 800)
     }
 }

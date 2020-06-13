@@ -1,5 +1,5 @@
 import ApiConstants from "../../../themes/apiConstants";
-import { isArrayNotEmpty, isNullOrEmptyString, deepCopyFunction } from "../../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString, deepCopyFunction } from "../../../util/helpers";
 import AppConstants from "../../../themes/appConstants";
 ////Venue Constraints List Object /////////////Start
 
@@ -85,6 +85,7 @@ const initialState = {
     onVenueSuccess: false,
     courtPrefHelpMsg: [AppConstants.evenRotationMsgFor_V_T, AppConstants.allocateToSameCourtMsg, AppConstants.noPreferenceMsgFor_V_T],
     homeTeamRotationHelpMsg: [AppConstants.equallyRotateHomeAwayMsg, AppConstants.equallyRotateCentralizedVenueMsg],
+    createVenue: null
 };
 
 ////get court rotation
@@ -288,11 +289,10 @@ function checkEntitiyObjectValues(selected, defaultEnitties, venuePrefId) {
         status: false,
         result: []
     }
-
     for (let i in defaultEnitties) {
         let entitiy = defaultEnitties[i].entities
         for (let j in entitiy) {
-            if (entitiy[j].venuePreferenceEntityId == selected && venuePrefId == defaultEnitties[j].venueConstraintCourtPreferenceId) {
+            if (entitiy[j].venuePreferenceEntityId == selected && venuePrefId == defaultEnitties[i].venueConstraintCourtPreferenceId) {
                 entityOnjecy = {
                     status: true,
                     result: entitiy[j]
@@ -370,7 +370,7 @@ function craeteSelectedCourtPrefArray(selectedCourts, allCourtsList, courtRotati
 }
 
 function createEntityObject(action, courtPreferencesPost, evenRotation, venuePrefId) {
-
+  
     let entityObjectArr = []
     for (let i in action.data) {
         let checkEntitiyObject = checkEntitiyObjectValues(action.data[i], courtPreferencesPost, venuePrefId)
@@ -470,7 +470,7 @@ function VenueTimeState(state = initialState, action) {
 
             const courtRotationHelpMsg = getCourtRotationHelpMsg(state.courtRotation, state.courtPrefHelpMsg)
             state.courtRotation = courtRotationHelpMsg
-            console.log(state.courtRotation, 'state.courtRotation')
+            console.log(action.result, 'API_VENUE_CONSTRAINTS_LIST_SUCCESS')
 
             state.evenRotation = action.commResult.CourtRotation[0].subReferences[0].id
             state.radioButton = action.commResult.CourtRotation[2].id
@@ -500,6 +500,17 @@ function VenueTimeState(state = initialState, action) {
             state.venueConstrainstData.courtPreferences = selectedCourtPrefArray.courtsArray
             state.courtPreferencesPost = selectedCourtPrefArray.courtPreferencesPost
             state.venuePost = state.venueConstrainstData.venues
+
+            if (state.createVenue) {
+                let venueObj = {
+                    competitionVenueId: 0,
+                    venueId: state.createVenue.venueId
+                }
+                console.log(state.createVenue, 'state.createVenue')
+                state.venuePost.push(venueObj)
+            }
+
+            console.log(state.venuePost, 'API_VENUE_CONSTRAINTS_LIST_SUCCESS', action.result)
 
             // let setVenueObj = getVenueObj(action.result)
             // state.venueConstrainstData = setVenueObj
@@ -1192,13 +1203,17 @@ function VenueTimeState(state = initialState, action) {
             };
 
         case ApiConstants.API_ADD_VENUE_SUCCESS:
-            console.log(action, state.courtArray)
+            console.log('venuePost Success', action.result)
             if (action.result != null) {
-                console.log(action, state.courtArray)
+               
                 state.selectedVenueIdAdd = "addVenue"
                 state.selectedVenueId.push(action.result.venueId)
+               
                 let courtAddData = generateCourtObj(state.courtArray, action.result)
                 state.courtArray = courtAddData
+                state.createVenue = action.result
+
+               
             }
             return { ...state }
 

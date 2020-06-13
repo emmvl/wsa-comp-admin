@@ -5,13 +5,13 @@ import ColorsArray from '../../util/colorsArray'
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { NavLink } from "react-router-dom";
-import {getOrganisationData } from "../../util/sessionStorage"
+import { getOrganisationData } from "../../util/sessionStorage"
 import { connect } from 'react-redux';
 import { liveScoreCompetionActioninitiate, liveScoreCompetitionDeleteInitate } from '../../store/actions/LiveScoreAction/liveScoreCompetitionAction';
 import Loader from '../../customComponents/loader'
 import AppImages from "../../themes/appImages";
 import {
-   getOnlyYearListAction
+    getOnlyYearListAction
 } from "../../store/actions/appAction";
 import { isArrayNotEmpty } from "../../util/helpers";
 const { Content } = Layout;
@@ -155,26 +155,26 @@ class LiveScoreCompetitions extends Component {
         super(props);
         this.state = {
             year: "2019",
-            onLoad : false,
-            orgKey :getOrganisationData() ? getOrganisationData().organisationId :null
+            onLoad: false,
+            orgKey: getOrganisationData() ? getOrganisationData().organisationId : null
         }
         this_Obj = this
         // this.orgKey = getOrganisationData().organisationUniqueKey
     }
- 
+
 
     componentDidMount() {
         // console.log( this.orgKey , "****")
-        if(isArrayNotEmpty(this.props.liveScoreCompetition.yearList)){
-       
+        if (isArrayNotEmpty(this.props.liveScoreCompetition.yearList)) {
+
             let selectedYear = this.props.liveScoreCompetition.yearList[0].id
             this.competitionListApi(selectedYear)
-            this.setState({year: selectedYear})
-        }else{
+            this.setState({ year: selectedYear })
+        } else {
             this.props.getOnlyYearListAction(this.props.liveScoreCompetition.yearList)
-            this.setState({onLoad:true})
+            this.setState({ onLoad: true })
         }
-       
+
 
         // this.props.liveScoreCompetionActioninitiate(body)
         // setTimeout(() => { console.log('uhhhhh', this.props.liveScoreCompetition) }, 5000)
@@ -182,26 +182,26 @@ class LiveScoreCompetitions extends Component {
     }
 
 
-    componentDidUpdate(nextProps){
-        if(nextProps.liveScoreCompetition.yearList !== this.props.liveScoreCompetition.yearList){
-            if(this.props.liveScoreCompetition.loader == false && this.state.onLoad == true){
+    componentDidUpdate(nextProps) {
+        if (nextProps.liveScoreCompetition.yearList !== this.props.liveScoreCompetition.yearList) {
+            if (this.props.liveScoreCompetition.loader == false && this.state.onLoad == true) {
                 let selectedYear = this.props.liveScoreCompetition.yearList[0].id
                 this.competitionListApi(selectedYear)
-                this.setState({onLoad:false, year: selectedYear })
+                this.setState({ onLoad: false, year: selectedYear })
             }
         }
     }
 
-    competitionListApi(selectedYear){
+    competitionListApi(selectedYear) {
         const body = {
             "paging": {
                 "limit": 10,
                 "offset": 0
             }
         }
-         this.props.liveScoreCompetionActioninitiate(body, selectedYear, this.state.orgKey)
-        
-    } 
+        this.props.liveScoreCompetionActioninitiate(body, selectedYear, this.state.orgKey)
+
+    }
 
 
 
@@ -227,7 +227,7 @@ class LiveScoreCompetitions extends Component {
             },
         });
     }
- 
+
     /// Handle Pagination 
     handlePaggination(page) {
         let offset = page ? 10 * (page - 1) : 0;
@@ -241,8 +241,8 @@ class LiveScoreCompetitions extends Component {
         this.props.liveScoreCompetionActioninitiate(body, this.state.year, this.state.orgKey)
     }
 
-    onChnageYear=(evt)=>{
-        this.setState({year: evt.year })
+    onChnageYear = (evt) => {
+        this.setState({ year: evt.year })
         this.handlePaggination()
     }
 
@@ -266,14 +266,14 @@ class LiveScoreCompetitions extends Component {
                                     onChange={year => this.onChnageYear({ year })}
                                     value={this.state.year}
                                 >{
-                                    isArrayNotEmpty(yearList) && yearList.map(item => {
-                                    return (
-                                        <Option key={"yearRefId" + item.id} value={item.id}>
-                                            {item.description}
-                                        </Option>
-                                    );
-                                })}
-        
+                                        isArrayNotEmpty(yearList) && yearList.map(item => {
+                                            return (
+                                                <Option key={"yearRefId" + item.id} value={item.id}>
+                                                    {item.description}
+                                                </Option>
+                                            );
+                                        })}
+
                                 </Select>
                             </div>
                         </div>

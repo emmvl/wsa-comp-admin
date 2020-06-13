@@ -33,7 +33,7 @@ import {
 import { getYearAndCompetitionOwnAction, clearYearCompetitionAction } from '../../store/actions/appAction'
 import { getVenuesTypeAction } from "../../store/actions/appAction";
 import { venueListAction, getCommonRefData, searchVenueList, clearFilter } from '../../store/actions/commonAction/commonAction'
-import { isArrayNotEmpty, isNullOrEmptyString } from "../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
 import history from '../../util/history'
 import ValidationConstant from '../../themes/validationConstant'
 import {
@@ -582,7 +582,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                 >
                     {homeTeamRotationList.length > 0 && homeTeamRotationList.map((item, index) => {
                         return (
-                            <div className='row'>
+                            <div className='contextualHelp-RowDirection' >
                                 <Radio value={item.id}>{item.description}</Radio>
 
                                 {
@@ -628,7 +628,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     {courtRotationList.length > 0 && courtRotationList.map((item, index) => {
                         return (
                             <div >
-                                <div className='row'>
+                                <div className='contextualHelp-RowDirection' >
                                     <Radio key={"main" + index} value={item.id}>{item.description}</Radio>
                                     <div style={{ marginLeft: -20, marginTop: 3 }}>
                                         <Tooltip background='#ff8237'>

@@ -18,7 +18,9 @@ function* errorSaga(error) {
         error: error,
         status: error.status
     });
-    message.error(error ? error.error ? error.error : "Something went wrong." : "Something went wrong.");
+    console.log(error, 'liveScoreManagerListSaga')
+    // message.error(error ? error.error ? error.error : "Something went wrong." : "Something went wrong.");
+    message.error("Something went wrong.");
 }
 
 //// get manager list

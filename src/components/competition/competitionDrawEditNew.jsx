@@ -15,10 +15,13 @@ import {
     getOwn_competition,
     setDraws_division_grade,
     getDraws_division_grade,
+    getOrganisationData
 } from "../../util/sessionStorage"
 import {
     getYearAndCompetitionOwnAction,
 } from '../../store/actions/appAction';
+import { generateDrawAction } 
+    from "../../store/actions/competitionModuleAction/competitionModuleAction";
 import { getDivisionAction, getCompetitionFixtureAction, clearFixtureData, updateCompetitionFixtures } from "../../store/actions/competitionModuleAction/competitionDrawsAction"
 import moment from 'moment'
 import Loader from '../../customComponents/loader'
@@ -38,6 +41,8 @@ class CompetitionDrawEdit extends Component {
             venueLoad: false,
             roundTime: null,
             competitionDivisionGradeId: "",
+            updateLoad: false,
+            reGenerateLoad: false
         }
     }
 
@@ -72,6 +77,18 @@ class CompetitionDrawEdit extends Component {
                     this.setState({ competitionDivisionGradeId, venueLoad: false })
                     // }
                 }
+            }
+        }
+
+        if (this.state.updateLoad == true && this.props.drawsState.updateFixtureLoad == false) {
+            this.setState({updateLoad: false, reGenerateLoad: true})
+            this.reGenerateDraw();
+        }
+
+        if(this.state.reGenerateLoad == true && this.props.competitionModuleState.drawGenerateLoad == false){
+            this.setState({reGenerateLoad: false})
+            if(!this.props.competitionModuleState.error && this.props.competitionModuleState.status == 1){
+                this.props.getCompetitionFixtureAction(this.state.yearRefId, this.state.firstTimeCompId, this.state.competitionDivisionGradeId)
             }
         }
     }
@@ -109,6 +126,16 @@ class CompetitionDrawEdit extends Component {
             setOwnCompetitionYear(1)
         }
     }
+
+    reGenerateDraw = () => {
+        let payload = {
+          yearRefId: this.state.yearRefId,
+          competitionUniqueKey: this.state.firstTimeCompId,
+          organisationId: getOrganisationData().organisationUniqueKey
+        }
+        this.props.generateDrawAction(payload);
+        this.setState({ reGenerateLoad: true });
+      }
 
     onChange = e => {
         this.setState({
@@ -251,6 +278,8 @@ class CompetitionDrawEdit extends Component {
                 targetIndexArray,
                 round_Id, this.state.yearRefId, this.state.firstTimeCompId, this.state.competitionDivisionGradeId,
             )
+
+            this.setState({updateLoad: true});
         }
     }
 
@@ -500,9 +529,10 @@ class CompetitionDrawEdit extends Component {
                 <div className="row" >
                     <div className="col-sm-3">
                         <div className="reg-add-save-button">
-                            <Button onClick={() => history.push('/competitionDraws')} type="cancel-button">{AppConstants.back}</Button>
+                            <Button onClick={() => history.push('/competitionDraws')} className="open-reg-button" type="primary">{AppConstants.save}</Button>
                         </div>
                     </div>
+                    <Loader visible={this.props.competitionModuleState.drawGenerateLoad} />
                     {/* <div className="col-sm" >
                         <div className="comp-buttons-view"> */}
                     {/* <Button className="open-reg-button" type="primary">{AppConstants.next}</Button> */}
@@ -543,7 +573,8 @@ function mapDispatchToProps(dispatch) {
             getDivisionAction,
             getCompetitionFixtureAction,
             clearFixtureData,
-            updateCompetitionFixtures
+            updateCompetitionFixtures,
+            generateDrawAction
         },
         dispatch
     );
@@ -553,6 +584,7 @@ function mapStatetoProps(state) {
     return {
         appState: state.AppState,
         drawsState: state.CompetitionDrawsState,
+        competitionModuleState: state.CompetitionModuleState
     };
 }
 export default connect(
