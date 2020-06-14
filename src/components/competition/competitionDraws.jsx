@@ -193,6 +193,7 @@ class CompetitionDraws extends Component {
   }
 
   componentDidMount() {
+    console.log("*************************componentDidMount")
     loadjs('assets/js/custom.js');
     this.apiCalls();
   }
