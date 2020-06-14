@@ -15,7 +15,8 @@ import {
     getOwn_competition,
     setDraws_division_grade,
     getDraws_division_grade,
-    getOrganisationData
+    getOrganisationData,
+    setDraws_round
 } from "../../util/sessionStorage"
 import {
     getYearAndCompetitionOwnAction,
@@ -88,6 +89,7 @@ class CompetitionDrawEdit extends Component {
         if(this.state.reGenerateLoad == true && this.props.competitionModuleState.drawGenerateLoad == false){
             this.setState({reGenerateLoad: false})
             if(!this.props.competitionModuleState.error && this.props.competitionModuleState.status == 1){
+                setDraws_round(0);
                 history.push('/competitionDraws')
             }
         }
