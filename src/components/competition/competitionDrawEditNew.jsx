@@ -89,7 +89,7 @@ class CompetitionDrawEdit extends Component {
         if(this.state.reGenerateLoad == true && this.props.competitionModuleState.drawGenerateLoad == false){
             this.setState({reGenerateLoad: false})
             if(!this.props.competitionModuleState.error && this.props.competitionModuleState.status == 1){
-                setDraws_round(0);
+                localStorage.removeItem("draws_round");
                 history.push('/competitionDraws')
             }
         }
