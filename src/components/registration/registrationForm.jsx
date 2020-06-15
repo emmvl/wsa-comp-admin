@@ -141,7 +141,8 @@ class RegistrationForm extends Component {
             tooltipVisiblePublish: false,
             isPublished: false,
             orgRegId: 0,
-            compCloseDate: null
+            compCloseDate: null,
+            compName: ""
         };
         this_Obj = this;
         this.props.clearReducerDataAction("getRegistrationFormDetails")
@@ -154,8 +155,9 @@ class RegistrationForm extends Component {
         let year = this.props.location.state ? this.props.location.state.year : null
         let orgRegId = this.props.location.state ? this.props.location.state.orgRegId : 0
         let compCloseDate = this.props.location.state ? this.props.location.state.compCloseDate : null
-        console.log(compCloseDate)
-        this.setState({ orgRegId, compCloseDate })
+        let compName = this.props.location.state ? this.props.location.state.compName : null
+
+        this.setState({ orgRegId, compCloseDate, compName })
 
         if (competitionId !== null && year !== null) {
             this.props.getRegistrationForm(year, competitionId)
@@ -371,82 +373,82 @@ class RegistrationForm extends Component {
     };
 
     ///dropdown view containing all the dropdown of header
-    dropdownView = (
-        getFieldDecorator
-    ) => {
-        let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
-        return (
-            <div className="comp-venue-courts-dropdown-view mt-0">
-                <div className="fluid-width">
-                    <div className="row">
-                        <div className="col-sm-3">
-                            <div
-                                style={{
-                                    width: "fit-content",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center"
-                                }}
-                            >
-                                <span className="year-select-heading">
-                                    {AppConstants.year}:
-                </span>
-                                <Select
-                                    name={"yearRefId"}
-                                    className="year-select"
-                                    onChange={yearRefId => this.onYearChange(yearRefId)}
-                                    value={this.state.yearRefId}
-                                // value={formDataValue ? formDataValue.yearRefId ? formDataValue.yearRefId : 1 : 1}
-                                >
-                                    {this.props.appState.yearList.map(item => {
-                                        return (
-                                            <Option key={"yearRefId" + item.id} value={item.id}>
-                                                {item.description}
-                                            </Option>
-                                        );
-                                    })}
-                                </Select>
-                            </div>
+    // dropdownView = (
+    //     getFieldDecorator
+    // ) => {
+    //     let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
+    //     return (
+    //         <div className="comp-venue-courts-dropdown-view mt-0">
+    //             <div className="fluid-width">
+    //                 <div className="row">
+    //                     <div className="col-sm-3">
+    //                         <div
+    //                             style={{
+    //                                 width: "fit-content",
+    //                                 display: "flex",
+    //                                 flexDirection: "row",
+    //                                 alignItems: "center"
+    //                             }}
+    //                         >
+    //                             <span className="year-select-heading">
+    //                                 {AppConstants.year}:
+    //             </span>
+    //                             <Select
+    //                                 name={"yearRefId"}
+    //                                 className="year-select"
+    //                                 onChange={yearRefId => this.onYearChange(yearRefId)}
+    //                                 value={this.state.yearRefId}
+    //                             // value={formDataValue ? formDataValue.yearRefId ? formDataValue.yearRefId : 1 : 1}
+    //                             >
+    //                                 {this.props.appState.yearList.map(item => {
+    //                                     return (
+    //                                         <Option key={"yearRefId" + item.id} value={item.id}>
+    //                                             {item.description}
+    //                                         </Option>
+    //                                     );
+    //                                 })}
+    //                             </Select>
+    //                         </div>
 
-                        </div>
-                        <div className="col-sm-3">
-                            <div
-                                style={{
-                                    width: "fit-content",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    marginRight: 50
-                                }}
-                            >
-                                <span className="year-select-heading">
-                                    {AppConstants.competition}:
-                </span>
-                                <Select
-                                    style={{ minWidth: 160 }}
-                                    name={"competition"}
-                                    className="year-select"
-                                    onChange={competitionUniqueKeyId => this.onCompetitionChange(competitionUniqueKeyId)
-                                    }
-                                    value={this.state.firstTimeCompId}
-                                // value={formDataValue ? formDataValue.competitionUniqueKeyId ? formDataValue.competitionUniqueKeyId : "" : ""}
-                                >
-                                    {this.props.appState.competitionList.map(item => {
-                                        return (
-                                            <Option key={"competition" + item.competitionId} value={item.competitionId}>
-                                                {item.competitionName}
-                                            </Option>
-                                        );
-                                    })}
-                                </Select>
-                            </div>
+    //                     </div>
+    //                     <div className="col-sm-3">
+    //                         <div
+    //                             style={{
+    //                                 width: "fit-content",
+    //                                 display: "flex",
+    //                                 flexDirection: "row",
+    //                                 alignItems: "center",
+    //                                 marginRight: 50
+    //                             }}
+    //                         >
+    //                             <span className="year-select-heading">
+    //                                 {AppConstants.competition}:
+    //             </span>
+    //                             <Select
+    //                                 style={{ minWidth: 160 }}
+    //                                 name={"competition"}
+    //                                 className="year-select"
+    //                                 onChange={competitionUniqueKeyId => this.onCompetitionChange(competitionUniqueKeyId)
+    //                                 }
+    //                                 value={this.state.firstTimeCompId}
+    //                             // value={formDataValue ? formDataValue.competitionUniqueKeyId ? formDataValue.competitionUniqueKeyId : "" : ""}
+    //                             >
+    //                                 {this.props.appState.competitionList.map(item => {
+    //                                     return (
+    //                                         <Option key={"competition" + item.competitionId} value={item.competitionId}>
+    //                                             {item.competitionName}
+    //                                         </Option>
+    //                                     );
+    //                                 })}
+    //                             </Select>
+    //                         </div>
 
-                        </div>
-                    </div>
-                </div>
-            </div >
-        );
-    };
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         </div >
+    //     );
+    // };
 
     onSelectionMembershipCategory(value) {
         this.props.changeMembershipProduct(value)
@@ -505,9 +507,11 @@ class RegistrationForm extends Component {
         let compCLoseDate = moment(this.state.compCloseDate).format("DD-MM-YYYY")
         let defaultChecked = this.props.registrationState.defaultChecked
         let isPublished = this.state.isPublished
-        console.log("****" + getOrganisationData.orgLogoUrl);
         return (
             <div className="content-view pt-4">
+                <div className="row " style={{ paddingLeft: 10, paddingBottom: 15 }}>
+                    <span className="form-heading pt-2 pl-2">{this.state.compName}</span>
+                </div>
                 <span className="userRegLink">{`Competition Registrations close on ${compCLoseDate}`}</span>
                 <div className="row">
                     <div className="col-sm">
