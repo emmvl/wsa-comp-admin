@@ -236,3 +236,7 @@
   box-shadow: 0px 8px 16px 0 rgba(27, 27, 52, 0.06);
   background-color: var(--app-white);
 }
+
+.user-prof-filter-select .ant-select-selection{
+  min-height: 40px !important;
+}

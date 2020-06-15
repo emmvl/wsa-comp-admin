@@ -15,6 +15,7 @@ import {
     getUserModuleActivityParentAction, getUserModuleActivityScorerAction,
     getUserModuleActivityManagerAction
 } from "../../store/actions/userAction/userAction";
+import { getOnlyYearListAction, } from '../../store/actions/appAction'
 import { getOrganisationData } from "../../util/sessionStorage";
 import moment from 'moment';
 import history from '../../util/history'
@@ -475,23 +476,21 @@ class UserModulePersonalDetail extends Component {
             loading: false,
             registrationForm: null,
             isRegistrationForm: false,
-            screen: null
-
+            screen: null,
+            yearRefId: 1,
+            competitions: []
         }
     }
 
     componentWillMount(){
-        let competition =  {
-            team: { teamId: 0, teamName: "" },
-            divisionName: "", competitionId: null,
-            competitionName: "", year: 0
-        };
-
-        this.setState({competition: competition})
+        console.log("componentWillMount")
+        let competition =  this.getEmptyCompObj();
+        this.setState({competition: competition});
+        this.props.getOnlyYearListAction();
     }
 
    componentDidMount() {
-
+        console.log("componentDidMount")
         if (this.props.location.state != null && this.props.location.state != undefined) {
             let userId = this.props.location.state.userId;
             let screenKey = this.props.location.state.screenKey;
@@ -521,8 +520,22 @@ class UserModulePersonalDetail extends Component {
         if (this.state.competition.competitionId == null && personal.competitions != undefined &&
             personal.competitions.length > 0 
             && this.props.userState.personalData!= nextProps.userState.personalData) {
-            this.setState({ competition: personal.competitions[0] })
-            this.tabApiCalls(this.state.tabKey, personal.competitions[0], this.state.userId);
+                let years = [];
+                let competitions = [];
+                (personal.competitions || []).map((item, index) => {
+                    let obj = {
+                        id: item.yearRefId
+                    }
+                    years.push(obj);
+                });
+
+                let yearRefId = years.length > 0 ? years[0].id : null;
+                this.setState({yearRefId: yearRefId, years: years});
+                if(personal.competitions!=null && personal.competitions.length > 0 && yearRefId!= null){
+                    competitions = personal.competitions.filter(x=>x.yearRefId == yearRefId);
+                    this.setState({competitions: competitions, competition: competitions[0] });
+                    this.tabApiCalls(this.state.tabKey, competitions[0], this.state.userId);
+                }
         }
     }
 
@@ -534,6 +547,25 @@ class UserModulePersonalDetail extends Component {
         }
         this.props.getUserModulePersonalDetailsAction(payload);
     };
+
+    onChangeYear = (value) => {
+        let userState = this.props.userState;
+        let personal = userState.personalData;
+
+        let competitions = personal.competitions.filter(x => x.yearRefId === value);
+        this.setState({ competitions: competitions, competition: this.getEmptyCompObj(),
+        yearRefId: value });
+    }
+
+    getEmptyCompObj = () =>{
+        let competition =  {
+            team: { teamId: 0, teamName: "" },
+            divisionName: "", competitionId: null,
+            competitionName: "", year: 0
+        };
+
+        return competition;
+    }
 
     onChangeSetValue = (value) => {
         let userState = this.props.userState;
@@ -675,10 +707,25 @@ class UserModulePersonalDetail extends Component {
                             <span className='year-select-heading ml-3'>{AppConstants.competition}</span>
                         </div>
                         <Select
+                            name={"yearRefId"}
+                            className="user-prof-filter-select"
+                            style={{ width: "100%", paddingRight: 1, paddingTop: '15px' }}
+                            onChange={yearRefId => this.onChangeYear(yearRefId)}
+                            value={this.state.yearRefId}>
+                            {this.props.appState.yearList.map(item => {
+                                return (
+                                    <Option key={"yearRefId" + item.id} value={item.id}>
+                                        {item.description}
+                                    </Option>
+                                );
+                            })}
+                        </Select>
+                        <Select
+                            className="user-prof-filter-select"
                             style={{ width: "100%", paddingRight: 1, paddingTop: '15px' }}
                             onChange={(e) => this.onChangeSetValue(e)}
                             value={compititionId}>
-                            {(personal.competitions || []).map((comp, index) => (
+                            {(this.state.competitions || []).map((comp, index) => (
                                 <Option key={comp.competitionId} value={comp.competitionId}>{comp.competitionName}</Option>
                             ))}
                         </Select>
@@ -1148,7 +1195,8 @@ function mapDispatchToProps(dispatch) {
         getUserModuleActivityPlayerAction,
         getUserModuleActivityParentAction,
         getUserModuleActivityScorerAction,
-        getUserModuleActivityManagerAction
+        getUserModuleActivityManagerAction,
+        getOnlyYearListAction,
 
     }, dispatch);
 
@@ -1156,7 +1204,8 @@ function mapDispatchToProps(dispatch) {
 
 function mapStatetoProps(state) {
     return {
-        userState: state.UserState
+        userState: state.UserState,
+        appState: state.AppState,
     }
 }
 

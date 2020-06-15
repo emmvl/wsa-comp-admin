@@ -15,7 +15,8 @@ import {
     getOwn_competition,
     setDraws_division_grade,
     getDraws_division_grade,
-    getOrganisationData
+    getOrganisationData,
+    setDraws_round
 } from "../../util/sessionStorage"
 import {
     getYearAndCompetitionOwnAction,
@@ -80,15 +81,16 @@ class CompetitionDrawEdit extends Component {
             }
         }
 
-        if (this.state.updateLoad == true && this.props.drawsState.updateFixtureLoad == false) {
-            this.setState({updateLoad: false, reGenerateLoad: true})
-            this.reGenerateDraw();
-        }
+        // if (this.state.updateLoad == true && this.props.drawsState.updateFixtureLoad == false) {
+        //     this.setState({updateLoad: false, reGenerateLoad: true})
+        //     this.reGenerateDraw();
+        // }
 
         if(this.state.reGenerateLoad == true && this.props.competitionModuleState.drawGenerateLoad == false){
             this.setState({reGenerateLoad: false})
             if(!this.props.competitionModuleState.error && this.props.competitionModuleState.status == 1){
-                this.props.getCompetitionFixtureAction(this.state.yearRefId, this.state.firstTimeCompId, this.state.competitionDivisionGradeId)
+                localStorage.removeItem("draws_round");
+                history.push('/competitionDraws')
             }
         }
     }
@@ -529,7 +531,7 @@ class CompetitionDrawEdit extends Component {
                 <div className="row" >
                     <div className="col-sm-3">
                         <div className="reg-add-save-button">
-                            <Button onClick={() => history.push('/competitionDraws')} className="open-reg-button" type="primary">{AppConstants.save}</Button>
+                            <Button onClick={() => this.reGenerateDraw()} className="open-reg-button" type="primary">{AppConstants.save}</Button>
                         </div>
                     </div>
                     <Loader visible={this.props.competitionModuleState.drawGenerateLoad} />
