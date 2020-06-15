@@ -10,7 +10,7 @@ let stgStripeKeys = {
     url: "https://netball-comp-admin-stg.worldsportaction.com",////staging server
 };
 
-const StripeKeys = devStripeKeys  ////dev server
-// const StripeKeys = stgStripeKeys   ///staging server
+//const StripeKeys = devStripeKeys  ////dev server
+ const StripeKeys = stgStripeKeys   ///staging server
 
 export default StripeKeys;
