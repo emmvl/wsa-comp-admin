@@ -1281,12 +1281,28 @@ const AppConstants = {
   individualRegistrations: "Individual Registrations",
 
   /////////shop
-  shop:"Shop",
-  products:"Products",
-  listProducts:"List Products",
-  addAProduct:"Add a Product",
+  shop: "Shop",
+  products: "Products",
+  listProducts: "List Products",
+  addAProduct: "Add a Product",
   addProduct: "Add Product",
-  enterTitle:"Enter Title",
+  enterTitle: "Enter Title",
+  pricing: "Pricing",
+  price: "Price",
+  costPerItem: "Cost per item",
+  chargeTaxesOnProduct: "Charge taxes on product",
+  inventory: "Inventory",
+  enableInventoryTracking: "Enable inventory tracking",
+  SKU: "Stock keeping unit",
+  skuHeader: "SKU(stock keeping unit)",
+  barcodeHeading: "Barcode(ISBN,UPC,GTIN,etc)",
+  barcode: "Barcode",
+  quantity: "Quantity",
+  allowCustToPurchase: "Allow customers to purchase this product when it's out of stock",
+  varients: "Varients",
+  enableVarients: "Enable Varients",
+  shipping: "Shipping",
+  varientName: "Varient Name"
 };
 
 export default AppConstants;
