@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Select, Breadcrumb } from 'antd';
+import { Layout, Button, Checkbox, Select, Breadcrumb } from 'antd';
 import './shop.css';
 import { NavLink } from 'react-router-dom';
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -98,7 +98,8 @@ class AddProduct extends Component {
 
     ////////form content view
     contentView = () => {
-
+        let typeArray = [{ id: 1, name: "Merchandise" }]
+        let affiliateArray = [{ id: 1, name: "Direct" }, { id: 2, name: "1st Level Affiliate" }, { id: 3, name: "2nd Level Affiliate" }]
         return (
             <div className="content-view pt-4">
 
@@ -113,10 +114,110 @@ class AddProduct extends Component {
                 <InputWithHead heading={AppConstants.description}
                 />
                 {this.EditorView()}
+
+                <InputWithHead required="pt-5" heading={AppConstants.type} />
+                <Select
+                    style={{
+                        width: '100%',
+                        paddingRight: 1,
+                        minWidth: 182,
+                    }}
+                    onChange={(value) => console.log("value")}
+                    placeholder="Select"
+                    value={1}
+                >
+                    {typeArray.map(
+                        (item, index) => {
+                            return (
+                                <Option
+                                    key={'type' + item.id}
+                                    value={item.id}
+                                >
+                                    {item.name}
+                                </Option>
+                            );
+                        }
+                    )}
+                </Select>
+
+                <InputWithHead required="pb-0" heading={AppConstants.affiliates} />
+                {affiliateArray.map((item, index) => {
+                    return (
+                        <div >
+                            <Checkbox
+                                className="single-checkbox mt-3"
+                                checked={true}
+                                onChange={(e) =>
+                                    console.log(
+                                        e.target.checked,
+                                        index,
+                                    )
+                                }
+                            >
+                                {item.name}
+                            </Checkbox>
+                        </div>
+                    );
+                })}
             </div >
         );
     };
 
+    ////////Image content view
+    imageView = () => {
+        return (
+            <div className="fees-view pt-5">
+                <span>Drag Files to Upload</span>
+            </div >
+        );
+    };
+
+    ////////pricing content view
+    pricingView = () => {
+        return (
+            <div className="fees-view pt-5">
+                <span>Pricing</span>
+            </div >
+        );
+    };
+
+
+
+    ////////Inventory content view
+    inventoryView = () => {
+        return (
+            <div className="fees-view pt-5">
+                <span>Inventory</span>
+            </div >
+        );
+    };
+
+    ////////Varients content view
+    varientsView = () => {
+        return (
+            <div className="fees-view pt-5">
+                <span>Varients</span>
+            </div >
+        );
+    };
+
+    ////////Varients content view
+    varientsView = () => {
+        return (
+            <div className="fees-view pt-5">
+                <span>Varients</span>
+            </div >
+        );
+    };
+
+    ////////Shipping content view
+    shippingView = () => {
+        return (
+            <div className="fees-view pt-5">
+                <span>Shipping</span>
+            </div >
+        );
+    };
 
     render() {
 
@@ -125,9 +226,15 @@ class AddProduct extends Component {
                 <DashboardLayout menuHeading={AppConstants.shop} menuName={AppConstants.shop} />
                 <InnerHorizontalMenu menu={"shop"} shopSelectedKey={"2"} />
                 <Layout>
-                    {this.headerView()}
+
                     <Content className="comp-dash-table-view">
+                        {this.headerView()}
                         <div className="formView">{this.contentView()}</div>
+                        <div className="formView">{this.imageView()}</div>
+                        <div className="formView">{this.pricingView()}</div>
+                        <div className="formView">{this.inventoryView()}</div>
+                        <div className="formView">{this.varientsView()}</div>
+                        <div className="formView">{this.shippingView()}</div>
                     </Content>
 
                     {/* <Loader

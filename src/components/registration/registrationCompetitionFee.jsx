@@ -17,6 +17,7 @@ import {
   Tooltip,
 } from 'antd';
 import InputWithHead from '../../customComponents/InputWithHead';
+import { captializedString } from "../../util/helpers"
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
 import DashboardLayout from '../../pages/dashboardLayout';
 import AppConstants from '../../themes/appConstants';
@@ -3107,6 +3108,7 @@ class RegistrationCompetitionFee extends Component {
       <div className="content-view pt-4">
         <Form.Item>
           {getFieldDecorator('competition_name', {
+             normalize: (input) => captializedString(input),
             rules: [
               {
                 required: true,
@@ -3121,8 +3123,8 @@ class RegistrationCompetitionFee extends Component {
               // setFieldsValue={}
               // value={detailsData.competitionDetailData.competitionName}
               onChange={(e) =>
-                this.props.add_editcompetitionFeeDeatils(
-                  e.target.value,
+                this.props.add_editcompetitionFeeDeatils(captializedString(
+                  e.target.value),
                   'competitionName'
                 )
               }
@@ -4736,6 +4738,7 @@ class RegistrationCompetitionFee extends Component {
           <div>
             <Form.Item>
               {getFieldDecorator('charityTitle', {
+                normalize: (input) => captializedString(input),
                 rules: [
                   {
                     required: true,
@@ -4750,7 +4753,7 @@ class RegistrationCompetitionFee extends Component {
                   disabled={paymentsDisable}
                   onChange={(e) =>
                     this.props.updatePaymentOption(
-                      e.target.value,
+                      captializedString(e.target.value),
                       null,
                       'title'
                     )

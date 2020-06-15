@@ -97,7 +97,8 @@ const columns = [
                             pathname: `/registrationForm`, state: {
                                 id: record.competitionId,
                                 year: record.yearId,
-                                orgRegId: record.orgRegId, compCloseDate: record.compRegCloseDate
+                                orgRegId: record.orgRegId, compCloseDate: record.compRegCloseDate,
+                                compName: record.competitionName
                             }
                         }}
                         >

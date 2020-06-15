@@ -16,6 +16,7 @@ import { getOrganisationData } from "../../util/sessionStorage";
 import { currencyFormat } from "../../util/currencyFormat";
 import Loader from '../../customComponents/loader';
 import { liveScore_formateDate } from './../../themes/dateformate';
+import StripeKeys from "../stripe/stripeKeys";
 
 const { Header, Content } = Layout;
 const { Option } = Select;
@@ -263,7 +264,7 @@ class RegistrationPayments extends Component {
 
     userEmail = () => {
         let orgData = getOrganisationData()
-        let email = orgData ? orgData.email : ""
+        let email = orgData && orgData.email ? orgData.email : ""
         return email
     }
 
@@ -276,8 +277,8 @@ class RegistrationPayments extends Component {
         let stripeConnected = this.stripeConnected()
         let accountBalance = this.props.stripeState.accountBalance ? this.props.stripeState.accountBalance.pending : "N/A"
         let userEmail = this.userEmail()
-        let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=ca_GoE4DQeJGNAvRzAq6MJOmZ8xmFTeLgan&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=https://netball-comp-admin-dev.worldsportaction.com/registrationPayments`
-        let stripeDashboardUrl = `https://dashboard.stripe.com/${stripeConnected}/test/dashboard`
+        let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=ca_GoE4DQeJGNAvRzAq6MJOmZ8xmFTeLgan&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=${StripeKeys.url}/registrationPayments`
+        // let stripeDashboardUrl = `https://dashboard.stripe.com/${stripeConnected}/test/dashboard`
         return (
             <div className="pb-5">
                 <div className="row">

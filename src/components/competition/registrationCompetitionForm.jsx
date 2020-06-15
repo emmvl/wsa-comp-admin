@@ -17,6 +17,7 @@ import {
     Tooltip
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
+import { captializedString } from "../../util/helpers"
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -66,7 +67,7 @@ import { NavLink } from "react-router-dom";
 import Loader from '../../customComponents/loader';
 import { venueListAction, getCommonRefData, } from '../../store/actions/commonAction/commonAction'
 import { getUserId, getOrganisationData } from "../../util/sessionStorage"
-import {fixtureTemplateRoundsAction} from '../../store/actions/competitionModuleAction/competitionDashboardAction';
+import { fixtureTemplateRoundsAction } from '../../store/actions/competitionModuleAction/competitionDashboardAction';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -600,7 +601,7 @@ class RegistrationCompetitionForm extends Component {
         this.props.paymentSeasonalFee()
         this.props.getCommonDiscountTypeTypeAction()
         this.props.getVenuesTypeAction();
-		this.props.fixtureTemplateRoundsAction();								
+        this.props.fixtureTemplateRoundsAction();
         // this.props.venueListAction();
         if (competitionId !== null) {
             let hasRegistration = 0
@@ -1336,7 +1337,7 @@ class RegistrationCompetitionForm extends Component {
 
     ///////form content view - fee details
     contentView = (getFieldDecorator) => {
-		let roundsArray = this.props.competitionManagementState.fixtureTemplate;																		
+        let roundsArray = this.props.competitionManagementState.fixtureTemplate;
         let appState = this.props.appState
         const { venueList, mainVenueList } = this.props.commonReducerState
         let detailsData = this.props.competitionFeesState
@@ -1346,14 +1347,14 @@ class RegistrationCompetitionForm extends Component {
             <div className="content-view pt-4">
                 <Form.Item >
                     {getFieldDecorator('competition_name',
-                        { rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }] })(
+                        { normalize: (input) => captializedString(input), rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }] })(
                             <InputWithHead
                                 required={"required-field pb-0 "}
                                 heading={AppConstants.competition_name}
                                 placeholder={AppConstants.competition_name}
                                 // setFieldsValue={}
                                 // value={detailsData.competitionDetailData.competitionName}
-                                onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionName")}
+                                onChange={(e) => this.props.add_editcompetitionFeeDeatils(captializedString(e.target.value), "competitionName")}
                                 disabled={compDetailDisable}
                             />
                         )}
@@ -1562,7 +1563,7 @@ class RegistrationCompetitionForm extends Component {
                                         value={detailsData.competitionDetailData.noOfRounds}
                                         disabled={compDetailDisable}
                                     >
-                                    {roundsArray.map(item => {
+                                        {roundsArray.map(item => {
                                             return (
                                                 <Option key={item.noOfRounds} value={item.noOfRounds}>{item.noOfRounds}</Option>
                                             );
@@ -2909,7 +2910,7 @@ function mapDispatchToProps(dispatch) {
         clearFilter,
         CLEAR_OWN_COMPETITION_DATA,
         removeCompetitionDivisionAction,
-        fixtureTemplateRoundsAction					   
+        fixtureTemplateRoundsAction
     }, dispatch)
 }
 
@@ -2918,7 +2919,7 @@ function mapStatetoProps(state) {
         competitionFeesState: state.CompetitionFeesState,
         appState: state.AppState,
         commonReducerState: state.CommonReducerState,
-        competitionManagementState:state.CompetitionManagementState
+        competitionManagementState: state.CompetitionManagementState
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(RegistrationCompetitionForm));
