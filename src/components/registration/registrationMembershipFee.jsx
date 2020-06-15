@@ -51,6 +51,7 @@ import { isArrayNotEmpty } from "../../util/helpers";
 import Loader from '../../customComponents/loader';
 import { routePermissionForOrgLevel } from "../../util/permissions";
 import Tooltip from 'react-png-tooltip'
+import { captializedString } from "../../util/helpers"
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
@@ -686,7 +687,8 @@ class RegistrationMembershipFee extends Component {
                 <span className="form-heading ">{AppConstants.membershipProduct}</span>
                 <Form.Item >
                     {getFieldDecorator('membershipProductName',
-                        { rules: [{ required: true, message: ValidationConstants.membershipProductIsRequired }] })(
+
+                        { normalize: (input) => captializedString(input), rules: [{ required: true, message: ValidationConstants.membershipProductIsRequired }] })(
                             <InputWithHead
                                 required={"required-field pb-0 "}
                                 heading={AppConstants.membershipProductName}

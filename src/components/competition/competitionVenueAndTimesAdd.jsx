@@ -426,6 +426,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                 </span>
                 <Form.Item >
                     {getFieldDecorator('name', {
+                        normalize: (input) => captializedString(input),
                         rules: [{ required: true, message: ValidationConstants.nameField[2] }],
                     })(
                         <InputWithHead
@@ -439,6 +440,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                 </Form.Item>
                 <Form.Item >
                     {getFieldDecorator('shortName', {
+                        normalize: (input) => captializedString(input),
                         rules: [{ required: true, message: ValidationConstants.nameField[3] }],
                     })(
                         <InputWithHead
