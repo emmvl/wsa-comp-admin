@@ -894,7 +894,7 @@ class UserModulePersonalDetail extends Component {
                     />
                 </div>
 
-                <div className="user-module-row-heading" style={{ marginTop: '30px' }}>{AppConstants.primaryContact}</div>
+                <div className="user-module-row-heading" style={{ marginTop: '30px' }}>{AppConstants.parentOrGuardianDetail}</div>
                 <div className="table-responsive home-dash-table-view">
                     <Table className="home-dashboard-table"
                         columns={columnsPersonalPrimaryContacts}
