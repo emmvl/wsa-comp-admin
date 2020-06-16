@@ -1,0 +1,15 @@
+.tickView{
+    width: 20%;
+    display: flex;
+    justify-content: flex-end;
+    /* background: red; */
+    padding-right: 0px;
+    align-items: center;
+}
+.serialView{
+    width:20%
+}
+
+.setupView{
+    width: 60%
+}

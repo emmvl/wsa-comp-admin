@@ -264,7 +264,7 @@ class RegistrationPayments extends Component {
 
     userEmail = () => {
         let orgData = getOrganisationData()
-        let email = orgData && orgData.email ? orgData.email : ""
+        let email = orgData && orgData.email ? encodeURIComponent(orgData.email) : ""
         return email
     }
 

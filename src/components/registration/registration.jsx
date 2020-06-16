@@ -143,7 +143,9 @@ class Registration extends Component {
             isDirect: false,
             inviteeStatus: 0,
             competitionCreatorOrganisation: 0,
-
+            compFeeStatus: 0,
+            compName: "",
+            regStatus: false
         }
         // this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
@@ -166,13 +168,17 @@ class Registration extends Component {
                     let inviteeStatus = competitionTypeList[0].inviteeStatus
                     let competitionCreatorOrganisation = competitionTypeList[0].competitionCreatorOrganisation
                     let isDirect = competitionTypeList[0].isDirect
+                    let compFeeStatus = competitionTypeList[0].creatorFeeStatus
+                    let compName = competitionTypeList[0].competitionName
+                    let regStatus = competitionTypeList[0].orgRegistrationStatusId
+
                     this.setState({
                         competitionId: competitionId,
                         publishStatus: publishStatus,
                         orgRegistratinId: orgRegistratinId,
                         wizardYear: wizardYear, registrationCloseDate: registrationCloseDate,
                         inviteeStatus: inviteeStatus, competitionCreatorOrganisation: competitionCreatorOrganisation,
-                        isDirect: isDirect,
+                        isDirect: isDirect, compFeeStatus, compName, regStatus
                     })
 
                 }
@@ -285,11 +291,14 @@ class Registration extends Component {
             let inviteeStatus = competitionData[0].inviteeStatus
             let competitionCreatorOrganisation = competitionData[0].competitionCreatorOrganisation
             let isDirect = competitionData[0].isDirect
+            let compFeeStatus = competitionData[0].creatorFeeStatus
+            let compName = competitionData[0].competitionName
+            let regStatus = competitionData[0].orgRegistrationStatusId
             this.setState
                 ({
                     competitionId, publishStatus, orgRegistrationId,
                     wizardYear, registrationCloseDate, inviteeStatus, competitionCreatorOrganisation, isDirect,
-                    visible: true
+                    visible: true, compFeeStatus, compName, regStatus
                 })
         } else {
             this.setState
@@ -301,7 +310,7 @@ class Registration extends Component {
     }
     userEmail = () => {
         let orgData = getOrganisationData()
-        let email = orgData && orgData.email ? orgData.email : ""
+        let email = orgData && orgData.email ? encodeURIComponent(orgData.email) : ""
         return email
     }
     stripeConnected = () => {
@@ -357,20 +366,12 @@ class Registration extends Component {
 
 
     regStatus() {
-        let regstatus = false
-        if (this.state.publishStatus == 2) {
-            if (this.state.isDirect == true && this.state.competitionCreatorOrganisation == 1) {
-                return true
-            }
-            else if (this.state.inviteeStatus == 1) {
-                return true
-            }
+        if (this.state.regStatus == 2) {
+            return true
         }
         else {
-            return regstatus
+            return false
         }
-
-
     }
 
     //wizard  registration click
@@ -379,13 +380,15 @@ class Registration extends Component {
             history.push("/registrationForm", {
                 id: this.state.competitionId,
                 year: this.state.wizardYear,
-                orgRegId: this.state.orgRegistrationId, compCloseDate: this.state.registrationCloseDate
+                orgRegId: this.state.orgRegistrationId, compCloseDate: this.state.registrationCloseDate,
+                compName: this.state.compName
             })
         } else if (this.state.inviteeStatus == 1) {
             history.push("/registrationForm", {
                 id: this.state.competitionId,
                 year: this.state.wizardYear,
-                orgRegId: this.state.orgRegistrationId, compCloseDate: this.state.registrationCloseDate
+                orgRegId: this.state.orgRegistrationId, compCloseDate: this.state.registrationCloseDate,
+                compName: this.state.compName
             })
         }
     }
@@ -412,10 +415,13 @@ class Registration extends Component {
         let inviteeStatus = competitionData[competitionIndex].inviteeStatus
         let competitionCreatorOrganisation = competitionData[competitionIndex].competitionCreatorOrganisation
         let isDirect = competitionData[competitionIndex].isDirect
+        let compFeeStatus = competitionData[competitionIndex].creatorFeeStatus
+        let compName = competitionData[competitionIndex].competitionName
+        let regStatus = competitionData[competitionIndex].orgRegistrationStatusId
         this.setState({
             competitionId, publishStatus, orgRegistrationId,
             wizardYear, registrationCloseDate, inviteeStatus, competitionCreatorOrganisation,
-            isDirect,
+            isDirect, compFeeStatus, compName, regStatus
         })
     }
 
