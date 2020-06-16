@@ -1302,7 +1302,10 @@ const AppConstants = {
   varients: "Varients",
   enableVarients: "Enable Varients",
   shipping: "Shipping",
-  varientName: "Varient Name"
+  varientName: "Varient Name",
+  orders: "Orders",
+  orderSummary: "Order Summary",
+  orderStatus: "Order Status",
 };
 
 export default AppConstants;

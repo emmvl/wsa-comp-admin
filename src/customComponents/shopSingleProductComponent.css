@@ -5,7 +5,7 @@
     background-color: white;
     border-radius: 10px;
     width: 250px;
-    margin: 15px;
+    margin: 15px 30px 15px 0px;
     height: 365px;
 }
 
@@ -46,4 +46,11 @@
     color: var(--app-9b9bad);
     font-weight: 500;
     font-family: inter-medium;
+}
+
+@media (max-width: 767px) {
+    .shop-single-prd-main-view{
+        margin: 15px 0px 15px 0px;
+    }
+    
 }

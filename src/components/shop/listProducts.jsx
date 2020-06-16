@@ -86,6 +86,42 @@ const dummyProductListData = [{
         count: 6
     }]
 },
+{
+    productName: "Vixens Essential Tee",
+    image: AppImages.product2,
+    price: "$70.00",
+    type: "Merchandise",
+    size: [{
+        sizeName: "Small",
+        count: 5
+    },
+    {
+        sizeName: "Medium",
+        count: 10
+    },
+    {
+        sizeName: "Large",
+        count: 6
+    }]
+},
+{
+    productName: "Vixens Essential Tee",
+    image: AppImages.product2,
+    price: "$70.00",
+    type: "Merchandise",
+    size: [{
+        sizeName: "Small",
+        count: 5
+    },
+    {
+        sizeName: "Medium",
+        count: 10
+    },
+    {
+        sizeName: "Large",
+        count: 6
+    }]
+},
 
 
 ]
@@ -118,6 +154,19 @@ class ListProducts extends Component {
                             </Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
+                    <div className="col-sm" style={{ marginRight: "25px", display: "flex", alignItems: 'center',justifyContent:"flex-end" }} >
+                            <div className="comp-product-search-inp-width" >
+                                <Input className="product-reg-search-input"
+                                    // onChange={(e) => this.onChangeSearchText(e)}
+                                    placeholder="Search..."
+                                    // onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                    prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                    // onClick={() => this.onClickSearchIcon()}
+                                    />}
+                                    allowClear
+                                />
+                            </div>
+                        </div>
                 </div>
             </div>
         );
@@ -134,7 +183,7 @@ class ListProducts extends Component {
 
                             </div>
                         </div>
-                        <div style={{ marginRight: "25px", display: "flex", alignItems: 'center' }} >
+                        {/* <div style={{ marginRight: "25px", display: "flex", alignItems: 'center' }} >
                             <div className="comp-product-search-inp-width" >
                                 <Input className="product-reg-search-input"
                                     // onChange={(e) => this.onChangeSearchText(e)}
@@ -146,9 +195,9 @@ class ListProducts extends Component {
                                     allowClear
                                 />
                             </div>
-                        </div>
+                        </div> */}
 
-                        <div style={{ marginRight: '1%', display: "flex", alignItems: 'center' }}>
+                        <div style={{ display: "flex", alignItems: 'center',justifyContent:"flex-end" }}>
                             <div className="d-flex flex-row-reverse button-with-search"
                             // onClick={() => this.props.clearCompReducerDataAction("all")}>
                             >
