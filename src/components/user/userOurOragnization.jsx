@@ -364,6 +364,7 @@ class UserOurOragnization extends Component {
                             formData.append("postalCode", affiliate.postalCode);
                             formData.append("stateRefId", affiliate.stateRefId);
                             formData.append("whatIsTheLowestOrgThatCanAddChild", affiliate.whatIsTheLowestOrgThatCanAddChild);
+                            formData.append("logoIsDefault", affiliate.logoIsDefault == true ? 1 : 0);
                             formData.append("contacts", contacts);
 
 

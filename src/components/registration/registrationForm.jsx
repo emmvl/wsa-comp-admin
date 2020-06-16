@@ -533,7 +533,12 @@ class RegistrationForm extends Component {
                                         name={"registrationOpenDate"}
                                         format={"DD-MM-YYYY"}
                                         showTime={false}
-                                        disabled={isPublished}
+                                        disabledDate={this.disabledDate}
+                                        disabledTime={this.disabledTime}
+                                        //disabled={isPublished}
+                                        disabledDate={d => !d || d.isAfter(closeDate)
+                                            // || d.isSameOrBefore(dateOpen)
+                                        }
                                     // value={dateOpen ? moment(dateOpen, "YYYY-MM-DD") : ''}
 
                                     />

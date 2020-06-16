@@ -553,8 +553,13 @@ class UserModulePersonalDetail extends Component {
         let personal = userState.personalData;
 
         let competitions = personal.competitions.filter(x => x.yearRefId === value);
-        this.setState({ competitions: competitions, competition: this.getEmptyCompObj(),
+        let competition = this.getEmptyCompObj();
+        if(competitions!= null && competitions.length > 0)
+            competition = competitions[0]
+        this.setState({ competitions: competitions, competition: competition,
         yearRefId: value });
+
+        this.tabApiCalls(this.state.tabKey, competition, this.state.userId);
     }
 
     getEmptyCompObj = () =>{
@@ -889,7 +894,7 @@ class UserModulePersonalDetail extends Component {
                     />
                 </div>
 
-                <div className="user-module-row-heading" style={{ marginTop: '30px' }}>{AppConstants.primaryContact}</div>
+                <div className="user-module-row-heading" style={{ marginTop: '30px' }}>{AppConstants.parentOrGuardianDetail}</div>
                 <div className="table-responsive home-dash-table-view">
                     <Table className="home-dashboard-table"
                         columns={columnsPersonalPrimaryContacts}
@@ -909,6 +914,10 @@ class UserModulePersonalDetail extends Component {
                 <div className="user-module-row-heading" style={{ marginTop: '30px' }}>{AppConstants.otherInformation}</div>
                 <div className="table-responsive home-dash-table-view" style={{ display: 'flex', flexDirection: 'column' }}>
                     <div className="other-info-row" style={{ paddingTop: '10px' }}>
+                        <div className="year-select-heading other-info-label" >{AppConstants.gender}</div>
+                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].gender : null}</div>
+                    </div>
+                    <div className="other-info-row">
                         <div className="year-select-heading other-info-label" >{AppConstants.countryOfBirth}</div>
                         <div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].countryName : null}</div>
                     </div>
