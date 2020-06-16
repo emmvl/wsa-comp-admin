@@ -410,12 +410,12 @@ class LiveScoreDashboard extends Component {
         let startDay = this.getStartofDay()
 
         let currentTime = moment.utc().format()
-
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        if (id !== null) {
+       
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
             this.props.liveScoreDashboardListAction(id, startDay, currentTime)
         } else {
-            history.push('/')
+            history.push('/liveScoreCompetitions')
         }
     }
 
@@ -701,7 +701,7 @@ class LiveScoreDashboard extends Component {
                     <Content >
                         {this.addNewsView()}
                         {this.matchView()}
-                        {this.playersToPayView()}
+                        {/* {this.playersToPayView()} */}
                         {this.incidenceView()}
                     </Content>
                 </Layout>
