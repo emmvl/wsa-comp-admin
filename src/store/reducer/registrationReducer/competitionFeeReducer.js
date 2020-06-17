@@ -1541,6 +1541,7 @@ function competitionFees(state = initialState, action) {
                     }
 
                 } else {
+                    state.affiliateArray = allData.competitiondetail.invitees
                     state.otherSelected = selectedInvitees[o]
                 }
             }

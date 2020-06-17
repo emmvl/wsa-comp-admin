@@ -2635,7 +2635,7 @@ class RegistrationCompetitionFee extends Component {
             );
             this.setState({ loading: true });
           } else {
-            if (compFeesState.postInvitees.length == 0) {
+            if (invitees.length == 0) {
               message.error(ValidationConstants.pleaseSelectRegInvitees);
             }
             if (
@@ -3938,7 +3938,7 @@ class RegistrationCompetitionFee extends Component {
                           <Radio value={'allDivisions'}>
                             {AppConstants.allDivisions}
                           </Radio>
-                          <div style={{ marginLeft: -20 }}>
+                          <div style={{ marginLeft: -10 }}>
                             <CustumToolTip background="#ff8237">
                               <span>{AppConstants.allDivisionsMsg}</span>
                             </CustumToolTip>
