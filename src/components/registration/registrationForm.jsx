@@ -142,7 +142,9 @@ class RegistrationForm extends Component {
             isPublished: false,
             orgRegId: 0,
             compCloseDate: null,
-            compName: ""
+            compName: "",
+            allYearRefId: -1,
+            allCompetition: null
         };
         this_Obj = this;
         this.props.clearReducerDataAction("getRegistrationFormDetails")
@@ -151,6 +153,7 @@ class RegistrationForm extends Component {
     }
 
     componentDidMount() {
+        this.props.getYearAndCompetitionAction(this.props.appState.allYearList, null)
         let competitionId = this.props.location.state ? this.props.location.state.id : null
         let year = this.props.location.state ? this.props.location.state.year : null
         let orgRegId = this.props.location.state ? this.props.location.state.orgRegId : 0
@@ -183,6 +186,7 @@ class RegistrationForm extends Component {
 
     componentDidUpdate(nextProps) {
         let registrationState = this.props.registrationState
+        let allCompetitionTypeList = this.props.appState.allCompetitionTypeList
         if (nextProps.registrationState.registrationFormData !== registrationState.registrationFormData) {
             if (this.state.onRegistrationLoad === true && registrationState.onLoad === false) {
                 this.setFieldDecoratorValues()
@@ -192,7 +196,16 @@ class RegistrationForm extends Component {
                 })
             }
         }
-
+        if (nextProps.appState !== this.props.appState) {
+            if (nextProps.appState.allCompetitionTypeList !== allCompetitionTypeList) {
+                if (allCompetitionTypeList.length > 0) {
+                    let allCompetition = allCompetitionTypeList[0].competitionId
+                    this.setState({
+                        allCompetition: allCompetition
+                    })
+                }
+            }
+        }
         // if (nextProps.appState !== this.props.appState) {
         //     if (nextProps.appState.competitionList !== competitionList) {
         //         if (competitionList.length > 0) {
@@ -205,18 +218,13 @@ class RegistrationForm extends Component {
     }
 
     // year change and get competition lost
-    onYearChange = (yearRefId) => {
-        this.props.clearReducerDataAction("getRegistrationFormDetails")
-        this.setState({ firstTimeCompId: null, yearRefId: yearRefId, })
-        this.props.getYearAndCompetitionAction(this.props.appState.yearList, yearRefId)
-        this.setFieldDecoratorValues()
+    onYearChange = (allYearRefId) => {
+        this.setState({ allCompetition: null, allYearRefId: allYearRefId, })
+        this.props.getYearAndCompetitionAction(this.props.appState.allYearList, allYearRefId)
     }
 
-    onCompetitionChange = (value) => {
-        this.props.clearReducerDataAction("getRegistrationFormDetails")
-        this.props.getRegistrationForm(this.state.yearRefId, value)
-        this.setState({ firstTimeCompId: value, onRegistrationLoad: true })
-        this.setFieldDecoratorValues()
+    onCompetitionChange = (allCompetition) => {
+        this.setState({ allCompetition: allCompetition })
     }
 
 
@@ -1263,6 +1271,75 @@ class RegistrationForm extends Component {
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading">{AppConstants.sendInvitesTo}</span>
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm-3">
+                            <div
+                                style={{
+                                    width: "fit-content",
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center"
+                                }}
+                            >
+                                <span className="year-select-heading">
+                                    {AppConstants.year}:
+            </span>
+                                <Select
+                                    name={"yearRefId"}
+                                    className="year-select"
+                                    style={{ minWidth: 100 }}
+                                    disabled={isPublished}
+                                    onChange={yearRefId => this.onYearChange(yearRefId)}
+                                    value={this.state.allYearRefId}
+                                // value={formDataValue ? formDataValue.yearRefId ? formDataValue.yearRefId : 1 : 1}
+                                >
+                                    {this.props.appState.allYearList.map(item => {
+                                        return (
+                                            <Option key={"yearRefId" + item.id} value={item.id}>
+                                                {item.description}
+                                            </Option>
+                                        );
+                                    })}
+                                </Select>
+                            </div>
+
+                        </div>
+                        <div className="col-sm-3">
+                            <div
+                                style={{
+                                    width: "fit-content",
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    marginRight: 50
+                                }}
+                            >
+                                <span className="year-select-heading">
+                                    {AppConstants.competition}:
+                </span>
+                                <Select
+                                    style={{ minWidth: 160 }}
+                                    name={"competition"}
+                                    className="year-select"
+                                    disabled={isPublished}
+                                    onChange={competitionUniqueKeyId => this.onCompetitionChange(competitionUniqueKeyId)
+                                    }
+                                    value={this.state.allCompetition}
+                                // value={formDataValue ? formDataValue.competitionUniqueKeyId ? formDataValue.competitionUniqueKeyId : "" : ""}
+                                >
+                                    {this.props.appState.allCompetitionTypeList.map(item => {
+                                        return (
+                                            <Option key={"competition" + item.competitionId} value={item.competitionId}>
+                                                {item.competitionName}
+                                            </Option>
+                                        );
+                                    })}
+                                </Select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <InputWithHead heading={AppConstants.inviteType} />
                 <Radio.Group className="reg-competition-radio" disabled={isPublished} onChange={(e) => (this.props.updateRegistrationForm(e.target.value, "inviteTypeRefId"))} value={registrationFormData.inviteTypeRefId}>
                     {(inviteTypeData || []).map((fix) => (
@@ -1276,16 +1353,16 @@ class RegistrationForm extends Component {
                     <Radio value={1}> {AppConstants.female}</Radio>
                     <Radio value={3}>{AppConstants.both}</Radio>
                 </Radio.Group>
-                <InputWithHead heading={AppConstants.dOB} />        
-                <Radio.Group className="reg-competition-radio"  disabled={isPublished} 
-                        value={registrationFormData.dobPreferenceRefId}  onChange={(e)=>(this.props.updateRegistrationForm(e.target.value,"dobPreferenceRefId"))}>                               
-                    <Radio className="dob-pref-radio-inner-heading" style={{marginBottom: 10}} value={1}>{AppConstants.NoDobPreference}</Radio>  
-                    <Radio className="dob-pref-radio-inner-heading" value={2}>{AppConstants.DobPreference}</Radio>                     
-                </Radio.Group>  
-                {(registrationFormData.dobPreferenceRefId == 2)?
-                    <div>                              
-                        <div style={{display:"flex",marginLeft:23}}>
-                            <span className="applicable-to-datepicker-col">{AppConstants.DobMoreThan}</span>               
+                <InputWithHead heading={AppConstants.dOB} />
+                <Radio.Group className="reg-competition-radio" disabled={isPublished}
+                    value={registrationFormData.dobPreferenceRefId} onChange={(e) => (this.props.updateRegistrationForm(e.target.value, "dobPreferenceRefId"))}>
+                    <Radio className="dob-pref-radio-inner-heading" style={{ marginBottom: 10 }} value={1}>{AppConstants.NoDobPreference}</Radio>
+                    <Radio className="dob-pref-radio-inner-heading" value={2}>{AppConstants.DobPreference}</Radio>
+                </Radio.Group>
+                {(registrationFormData.dobPreferenceRefId == 2) ?
+                    <div>
+                        <div style={{ display: "flex", marginLeft: 23 }}>
+                            <span className="applicable-to-datepicker-col">{AppConstants.DobMoreThan}</span>
                             <div className="dob-pref-date-picker">
                                 <DatePicker
                                     size="large"
