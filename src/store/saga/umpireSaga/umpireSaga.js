@@ -2,7 +2,6 @@ import { put, call } from '../../../../node_modules/redux-saga/effects'
 import ApiConstants from "../../../themes/apiConstants";
 import UserAxiosApi from "../../http/userHttp/userAxiosApi";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
-import CommonAxiosApi from "../../http/commonHttp/commonAxios";
 import { message } from "antd";
 import history from "../../../util/history";
 
@@ -24,16 +23,13 @@ function* errorSaga(error) {
 
 }
 
-////*********************** */
-
-export function* umpireListDashboardSaga(action) {
-    console.log(action, 'getUmpireDashboardList')
+export function* umpireListSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.umpireListDashboard, action.data);
+        const result = yield call(UserAxiosApi.umpireList, action.data);
         if (result.status === 1) {
             // console.log('saga', result)
             yield put({
-                type: ApiConstants.API_GET_UMPIRE_DASHBOARD_LIST_SUCCESS,
+                type: ApiConstants.API_UMPIRE_LIST_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });
@@ -45,13 +41,34 @@ export function* umpireListDashboardSaga(action) {
     }
 }
 
-export function* umpireVenueListSaga(action) {
+export function* addEditUmpireSaga(action) {
     try {
-        const result = yield call(CommonAxiosApi.getVenueList, action.compId);
+        const result = yield call(LiveScoreAxiosApi.addEditUmpire, action.data, action.affiliateId, action.exsitingUmpireId);
         if (result.status === 1) {
             // console.log('saga', result)
             yield put({
-                type: ApiConstants.API_GET_UMPIRE_DASHBOARD_VENUE_LIST_SUCCESS,
+                type: ApiConstants.API_ADD_UMPIRE_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+            message.success('Add Umpire - Successfully Added')
+            history.push('/umpire')
+
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+export function* getAffiliateSaga(action) {
+    try {
+        const result = yield call(LiveScoreAxiosApi.liveScoreGetAffilate, action.data);
+        if (result.status === 1) {
+            // console.log('saga', result)
+            yield put({
+                type: ApiConstants.API_GET_UMPIRE_AFFILIATE_LIST_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });
@@ -63,13 +80,13 @@ export function* umpireVenueListSaga(action) {
     }
 }
 
-export function* umpireDivisionListSaga(action) {
+export function* umpireSearchSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreGetDivision, action.competitionID);
+        const result = yield call(UserAxiosApi.umpireDashboardList, action.data);
         if (result.status === 1) {
             // console.log('saga', result)
             yield put({
-                type: ApiConstants.API_GET_UMPIRE_DASHBOARD_DIVISION_LIST_SUCCESS,
+                type: ApiConstants.API_UMPIRE_SEARCH_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });

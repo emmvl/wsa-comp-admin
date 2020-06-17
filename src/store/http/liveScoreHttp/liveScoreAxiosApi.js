@@ -214,8 +214,8 @@ let LiveScoreAxiosApi = {
             "team1Score": data.team1Score,
             "team2Score": data.team2Score,
             "resultStatus": isEdit && data.resultStatus,
-            "team1resultId": isEdit && team1resultId,
-            "team2resultId": isEdit && team2resultId,
+            "team1ResultId": isEdit && team1resultId,
+            "team2ResultId": isEdit && team2resultId,
             "matchStatus": isEdit && matchStatus,
             "endTime": isEdit && endTime,
             // "breakDuration": data.breakDuration
@@ -707,9 +707,9 @@ let LiveScoreAxiosApi = {
     getPlayerWithPaggination(competitionID, offset, limit, search) {
         var url = null
         if (search && search.length > 0) {
-            url = `/players/admin?competitionId=${competitionID}&offset=${offset}&limit=${limit}&name=${search}`;
+            url = `/players/admin?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=${search}`;
         } else {
-            url = `/players/admin?competitionId=${competitionID}&offset=${offset}&limit=${limit}&name=`;
+            url = `/players/admin?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=`;
         }
 
         return Method.dataGet(url, localStorage.token);
@@ -738,7 +738,7 @@ let LiveScoreAxiosApi = {
     },
     liveScoreAddCoach(data, teamId, exsitingManagerId) {
         let body = data
-        let { id } = JSON.parse(localStorage.getItem('getUmpireCompetiton'))
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
         var url = `/users/coach?competitionId=${id}`;
         return Method.dataPost(url, token, body)
     },
@@ -757,6 +757,29 @@ let LiveScoreAxiosApi = {
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
         var url = `users/importCoach?competitionId=${id}`;
         return Method.dataPost(url, token, body)
+    },
+
+    umpireRoasterList(competitionID, status, refRoleId, paginationBody) {
+        let body = paginationBody
+        let id = JSON.parse(localStorage.getItem('umpireCompetitionId'))
+        var url = `/roster/list?competitionId=${id}&status=${status}&roleId=${refRoleId}`;
+        return Method.dataPost(url, token, body)
+    },
+    umpireRoasterActionPerform(data) {
+
+        var url = `/roster?rosterId=${data.roasterId}&status=${data.status}&category=${data.category}`;
+        return Method.dataPatch(url, token)
+    },
+    umpireRoasterDeleteAction(data) {
+        var url = `/roster?id=${data.roasterId}`
+        return Method.dataDelete(url, localStorage.token)
+    },
+    umpireListDashboard(data) {
+        let body = data.pageData
+        var url = `/matchUmpire/dashboard?competitionId=${data.compId}&divisionId=${data.divisionid}&venueId=${data.venueId}&organisationId=${data.orgId}`;
+        // var url = `/matchUmpire/dashboard?competitionId=${1}&divisionId=${3}&venueId=${233}&organisationId=${3}`;
+        return Method.dataPost(url, token, body)
+
     }
 };
 
@@ -1113,6 +1136,110 @@ const Method = {
                             return reject({
                                 status: 5,
                                 error: err
+                            });
+
+                        }
+                    } else {
+                        message.config({
+                            duration: 1.5,
+                            maxCount: 1,
+                        });
+                        message.error('Please check your internet connection.')
+                    }
+                });
+        });
+    },
+
+    //// Method to patch response
+    async dataPatch(newurl, authorization, body) {
+        const url = newurl;
+        return await new Promise((resolve, reject) => {
+            http
+                .patch(url, body, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Origin": "*",
+                        Authorization: "BWSA " + authorization,
+                        "SourceSystem": "WebAdmin"
+                    }
+                })
+
+                .then(result => {
+
+                    if (internetStatus) {
+                        if (result.status === 200) {
+                            return resolve({
+                                status: 1,
+                                result: result
+                            });
+                        }
+                        else if (result.status == 212) {
+                            return resolve({
+                                status: 4,
+                                result: result
+                            });
+                        }
+                        else {
+                            if (result) {
+                                return reject({
+                                    status: 3,
+                                    error: result.data.message,
+                                });
+                            } else {
+
+                                return reject({
+                                    status: 4,
+                                    error: "Something went wrong."
+                                });
+                            }
+                        }
+                    } else {
+                        message.config({
+                            duration: 1.5,
+                            maxCount: 1,
+                        });
+                        message.error('Please check your internet connection.')
+                    }
+                })
+                .catch(err => {
+
+                    if (internetStatus) {
+                        if (err.response) {
+
+                            if (err.response.status !== null || err.response.status !== undefined) {
+                                if (err.response.status == 401) {
+                                    let unauthorizedStatus = err.response.status
+                                    if (unauthorizedStatus == 401) {
+                                        logout()
+                                        message.error(ValidationConstants.messageStatus401)
+                                    }
+                                }
+                                else if (err.response.status == 400) {
+                                    console.log(err.response, 'err.response')
+                                    message.config({
+                                        duration: 1.5,
+                                        maxCount: 1,
+                                    });
+                                    message.error(err.response.data.message)
+                                    return reject({
+                                        status: 5,
+                                        error: err.response.data.message
+                                    });
+                                }
+                                else {
+                                    return reject({
+
+                                        status: 5,
+                                        error: err.response && err.response.data.message
+                                    });
+                                }
+                            }
+                        }
+                        else {
+                            console.log(err.response, 'catch')
+                            return reject({
+                                status: 5,
+                                error: err.response && err.response.data.message
                             });
 
                         }

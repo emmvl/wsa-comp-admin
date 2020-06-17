@@ -37,7 +37,7 @@ class LiveScoreAddEditCoach extends Component {
             loader: false,
             tableRecord: this.props.location.state ? this.props.location.state.tableRecord : null,
             isEdit: this.props.location.state ? this.props.location.state.isEdit : null,
-            teamLoad:false
+            teamLoad: false
         }
 
     }
@@ -51,7 +51,7 @@ class LiveScoreAddEditCoach extends Component {
 
         if (this.state.isEdit === true) {
             this.props.liveScoreUpdateCoach(this.state.tableRecord, 'isEditCoach')
-             this.setState({ loader: true })
+            this.setState({ loader: true })
         } else {
             this.props.liveScoreUpdateCoach('', 'isAddCoach')
         }
@@ -61,21 +61,21 @@ class LiveScoreAddEditCoach extends Component {
         }
     }
 
-    componentDidUpdate(nextProps){
-        if(this.state.loader == true && nextProps.liveScoreCoachState.onLoad == false){
+    componentDidUpdate(nextProps) {
+        if (this.state.loader == true && nextProps.liveScoreCoachState.onLoad == false) {
             this.setInitalFiledValue()
-            this.setState({loader : false})
+            this.setState({ loader: false })
         }
-       
 
-        if(this.props.liveScoreCoachState !== nextProps.liveScoreCoachState){
-           
-            if(this.state.teamLoad == true){
-                console.log(this.props.liveScoreCoachState.teamId ,"Colleddd")
-                const {teamId} = this.props.liveScoreCoachState
+
+        if (this.props.liveScoreCoachState !== nextProps.liveScoreCoachState) {
+
+            if (this.state.teamLoad == true) {
+                console.log(this.props.liveScoreCoachState.teamId, "Colleddd")
+                const { teamId } = this.props.liveScoreCoachState
                 this.setSelectedTeamValue(teamId)
 
-                this.setState({teamLoad:false})
+                this.setState({ teamLoad: false })
             }
         }
     }
@@ -92,8 +92,8 @@ class LiveScoreAddEditCoach extends Component {
         })
     }
 
-    setSelectedTeamValue(teamId){
-        console.log(teamId , "qqq")
+    setSelectedTeamValue(teamId) {
+        console.log(teamId, "qqq")
         this.props.form.setFieldsValue({
             'coachTeamName': teamId
         })
@@ -153,7 +153,7 @@ class LiveScoreAddEditCoach extends Component {
         return (
             <div className="content-view pb-0 pt-4 row">
                 <span className="applicable-to-heading ml-4">{AppConstants.coach}</span>
-                <Radio.Group 
+                <Radio.Group
                     className="reg-competition-radio"
                     onChange={(e) => this.onButtonChage(e)}
                     value={coachRadioBtn}
@@ -183,7 +183,8 @@ class LiveScoreAddEditCoach extends Component {
                 <div className="row" >
                     <div className="col-sm" >
                         <Form.Item>
-                        {getFieldDecorator(AppConstants.firstName, { normalize: (input) => captializedString(input),
+                            {getFieldDecorator(AppConstants.firstName, {
+                                normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
@@ -199,7 +200,8 @@ class LiveScoreAddEditCoach extends Component {
                     </div>
                     <div className="col-sm" >
                         <Form.Item>
-                        {getFieldDecorator(AppConstants.lastName, { normalize: (input) => captializedString(input),
+                            {getFieldDecorator(AppConstants.lastName, {
+                                normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
@@ -287,7 +289,7 @@ class LiveScoreAddEditCoach extends Component {
         const { coachdata, teamId, teamResult, coachesResult, onLoadSearch } = this.props.liveScoreCoachState
         let teamData = isArrayNotEmpty(teamResult) ? teamResult : []
         let coachList = isArrayNotEmpty(coachesResult) ? coachesResult : []
-        
+
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -308,7 +310,7 @@ class LiveScoreAddEditCoach extends Component {
                                         const ManagerId = JSON.parse(option.key)
                                         // this.props.liveScoreClear()
                                         this.props.liveScoreUpdateCoach(ManagerId, 'coachSearch')
-                                        this.setState({ teamLoad:true })
+                                        this.setState({ teamLoad: true })
 
                                     }}
                                     notFoundContent={onLoadSearch == true ? <Spin size="small" /> : null}

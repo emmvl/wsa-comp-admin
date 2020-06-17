@@ -1127,10 +1127,10 @@ class UserModulePersonalDetail extends Component {
                         </Breadcrumb>
                     </Header >
                 </div>
-                {this.state.screenKey == "livescore" && <div className="col-sm">
+                {(this.state.screenKey == "livescore" || this.state.screenKey == "umpireRoaster") && <div className="col-sm">
                     <div className="comp-buttons-view mt-4" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
                         <Button onClick={() => history.push(this.state.screen)} className='primary-add-comp-form' type='primary'>
-                            {AppConstants.backToLiveScore}
+                            {this.state.screenKey == "umpireRoaster" ? AppConstants.backToUmpire : AppConstants.backToLiveScore}
                         </Button>
                     </div>
                 </div>}

@@ -91,7 +91,7 @@ export function* liveScoreCreateMatchSaga(action) {
                 result: result.result.data,
                 status: result.status,
             });
-            history.push(action.key == 'dashboard' ? 'liveScoreDashboard' : '/liveScoreMatches')
+            history.push(action.key == 'dashboard' ? 'liveScoreDashboard' : action.key == 'umpireRoaster' ? 'umpireRoaster' : '/liveScoreMatches')
             message.success(action.data.id == 0 ? 'Match has been created Successfully.' : 'Match has been updated Successfully.')
         } else {
             yield call(failSaga, result)

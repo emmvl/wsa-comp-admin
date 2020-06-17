@@ -566,7 +566,7 @@ const AppConstants = {
   scorer1: 'Scorer 1',
   scorer2: 'Scorer 2',
   umpireName: 'Umpire Name',
-  umpireClubName: "Umpire's Club Name",
+  umpireClubName: "Umpire's Organisation Name",
   scorerName: 'Scorer Name',
   score: 'Score',
   players: 'Players',
@@ -1278,13 +1278,18 @@ const AppConstants = {
   public_draws_Url: `https://netball-registration-dev.worldsportaction.com/livescoreSeasonFixture?`,
   finalsMessage: 'Finals has not been enabled for this Competition',
   allowTeamRegistration: 'Allow Team Registrations',
-  teamRegistration: 'Team Registrations',
-  individualRegistrations: 'Individual Registrations',
+  teamRegistration: "Team Registrations",
+  individualRegistrations: "Individual Registrations",
 
   /////////shop
-  shop: 'Shop',
-  products: 'Products',
-  listProducts: 'List Products',
+  shop: "Shop",
+  products: "Products",
+  listProducts: "List Products",
+
+  importUmpire: 'Import Umpire',
+
+  backToUmpire: "Back To Umpire",
+  
   addAProduct: 'Add a Product',
   addProduct: 'Add Product',
   enterTitle: 'Enter Title',
@@ -1309,6 +1314,13 @@ const AppConstants = {
   orderSummary: 'Order Summary',
   orderStatus: 'Order Status',
   parentOrGuardianDetail: 'Parent/Guardian Details',
+  numbersOfOrders:"Number of ORDERS",
+  valueOfOrders:"Value of ORDERS",
+  orderId:"Order Id",
+  netProfit:"Net Profit",
+  paid:"Paid",
+  addOrder:"Add Order",
+  paymentStatus:"Payment Status",
 };
 
 export default AppConstants;

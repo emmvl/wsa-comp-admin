@@ -126,9 +126,13 @@ import AddUmpire from "../components/umpire/addUmpire"
 
 import LiveScoreMatchSheet from "../components/liveScore/liveScoreMatchSheet";
 import ShopDashboard from "../components/shop/shopDashboard";
+import UmpireRoaster from "../components/umpire/umpireRoaster"
+import UmpireImport from "../components/umpire/umpireImport"
+import Umpire from "../components/umpire/umpire"
 import ListProducts from "../components/shop/listProducts";
 import AddProduct from "../components/shop/addproduct";
-
+import OrderSummary from "../components/shop/orderSummary"
+import ShopOrderStatus from "../components/shop/shopOrderStatus"
 const lazyLoad = Component => {
   const lazy = props => {
     return (
@@ -663,6 +667,20 @@ class Routes extends React.Component {
         />
 
         <PrivateRoute
+          path="/umpireRoaster"
+          component={lazyLoad(UmpireRoaster)}
+        />
+
+        <PrivateRoute
+          path="/umpireImport"
+          component={lazyLoad(UmpireImport)}
+        />
+
+        <PrivateRoute
+          path="/umpire"
+          component={lazyLoad(Umpire)}
+        />
+        <PrivateRoute
           path="/listProducts"
           component={lazyLoad(ListProducts)}
         />
@@ -671,6 +689,17 @@ class Routes extends React.Component {
           path="/addProduct"
           component={lazyLoad(AddProduct)}
         />
+
+        <PrivateRoute
+          path="/orderSummary"
+          component={lazyLoad(OrderSummary)}
+        />
+
+        <PrivateRoute
+          path="/orderStatus"
+          component={lazyLoad(ShopOrderStatus)}
+        />
+
         <Route path="/" component={lazyLoad(NotFound)} />
 
         <Redirect from="*" to="/404" />

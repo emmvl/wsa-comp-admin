@@ -152,6 +152,7 @@ class LiveScoreTeamView extends Component {
                 </div>
 
                 <div className="live-score-profile-img-view">
+                    <span className="user-contact-heading">{AppConstants.manager}</span>
                     <div className="live-score-side-desc-view">
                         <div className="live-score-title-icon-view">
                             <div className="live-score-icon-view">
@@ -194,7 +195,7 @@ class LiveScoreTeamView extends Component {
 
                     {/* coaches View */}
                     <div>
-                        <span className="user-contact-heading">Coaches</span>
+                        <span className="user-contact-heading">{AppConstants.coach}</span>
 
                         <div className="live-score-side-desc-view">
                             <div className="live-score-title-icon-view">

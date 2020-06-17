@@ -199,14 +199,16 @@ let userHttpApi = {
     var url = `api/export/affiliatedirectory`;
     return Method.dataPostDownload(url, token, payload, "AffiliateDirectory");
   },
-  umpireDashboardList(refRoleId, entityTypeId, compId, userName) {
+  umpireList(data) {
     let url = ''
-    if (userName) {
-      url = `/users/byRole?roleId=${refRoleId}&entityTypeId=${entityTypeId}&entityId=${compId}&userName=${userName}`
+    if (data.userName) {
+      url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}&offset=${data.offset}&limit=${10}`
     } else {
-      url = `/users/byRole?roleId=${refRoleId}&entityTypeId=${entityTypeId}&entityId=${compId}`
+      url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&offset=${data.offset}&limit=${10}`
     }
+
     return Method.dataGet(url, localStorage.token);
+
   }
 }
 

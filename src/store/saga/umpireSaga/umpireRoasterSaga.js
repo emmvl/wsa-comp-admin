@@ -2,7 +2,6 @@ import { put, call } from '../../../../node_modules/redux-saga/effects'
 import ApiConstants from "../../../themes/apiConstants";
 import UserAxiosApi from "../../http/userHttp/userAxiosApi";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
-import CommonAxiosApi from "../../http/commonHttp/commonAxios";
 import { message } from "antd";
 import history from "../../../util/history";
 
@@ -24,16 +23,17 @@ function* errorSaga(error) {
 
 }
 
-////*********************** */
-
-export function* umpireListDashboardSaga(action) {
-    console.log(action, 'getUmpireDashboardList')
+export function* umpireRoasterListSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.umpireListDashboard, action.data);
+        const result = yield call(LiveScoreAxiosApi.umpireRoasterList,
+            action.competitionID,
+            action.status,
+            action.refRoleId,
+            action.paginationBody);
+
         if (result.status === 1) {
-            // console.log('saga', result)
             yield put({
-                type: ApiConstants.API_GET_UMPIRE_DASHBOARD_LIST_SUCCESS,
+                type: ApiConstants.API_UMPIRE_ROASTER_LIST_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });
@@ -45,31 +45,14 @@ export function* umpireListDashboardSaga(action) {
     }
 }
 
-export function* umpireVenueListSaga(action) {
+export function* umpireActionPerofomSaga(action) {
     try {
-        const result = yield call(CommonAxiosApi.getVenueList, action.compId);
-        if (result.status === 1) {
-            // console.log('saga', result)
-            yield put({
-                type: ApiConstants.API_GET_UMPIRE_DASHBOARD_VENUE_LIST_SUCCESS,
-                result: result.result.data,
-                status: result.status,
-            });
-        } else {
-            yield call(failSaga, result)
-        }
-    } catch (error) {
-        yield call(errorSaga, error)
-    }
-}
+        const result = yield call(action.data.status == 'DELETE' ? LiveScoreAxiosApi.umpireRoasterDeleteAction : LiveScoreAxiosApi.umpireRoasterActionPerform,
+            action.data);
 
-export function* umpireDivisionListSaga(action) {
-    try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreGetDivision, action.competitionID);
         if (result.status === 1) {
-            // console.log('saga', result)
             yield put({
-                type: ApiConstants.API_GET_UMPIRE_DASHBOARD_DIVISION_LIST_SUCCESS,
+                type: ApiConstants.API_UMPIRE_ROASTER_ACTION_CLICK_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });

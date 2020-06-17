@@ -19,7 +19,7 @@ import {
     getUmpireAffiliateList,
     umpireSearchAction,
     umpireClear
-} from '../../store/actions/umpireAction/umpireDashboardAction'
+} from '../../store/actions/umpireAction/umpireAction'
 import { entityTypes } from '../../util/entityTypes'
 import { refRoleTypes } from '../../util/refRoles'
 
@@ -49,7 +49,7 @@ class AddUmpire extends Component {
     componentDidMount() {
         const compId = JSON.parse(getUmpireCompetiton())
         console.log(compId, 'getUmpireCompetiton')
-        this.props.umpireListAction(5, 1, compId)
+        this.props.umpireListAction({ refRoleId: 5, entityTypes: 1, compId: compId, offset: 0 })
 
         if (compId !== null) {
             this.props.getUmpireAffiliateList({ id: compId })
@@ -66,9 +66,9 @@ class AddUmpire extends Component {
 
     componentDidUpdate(nextProps) {
 
-        if (this.props.umpireDashboardState.umpireList !== nextProps.umpireDashboardState.umpireList) {
+        if (this.props.umpireState.umpireList !== nextProps.umpireState.umpireList) {
 
-            if (this.state.loader === true && this.props.umpireDashboardState.onLoad === false) {
+            if (this.state.loader === true && this.props.umpireState.onLoad === false) {
                 this.filterUmpireList()
                 if (this.state.isEdit === true) {
                     this.setInitalFiledValue()
@@ -78,9 +78,9 @@ class AddUmpire extends Component {
 
         }
 
-        if (this.props.umpireDashboardState.affiliateId !== nextProps.umpireDashboardState.affiliateId) {
+        if (this.props.umpireState.affiliateId !== nextProps.umpireState.affiliateId) {
             if (this.state.affiliateLoader === true) {
-                const { affiliateId } = this.props.umpireDashboardState
+                const { affiliateId } = this.props.umpireState
                 this.setSelectedAffiliateValue(affiliateId)
                 this.setState({ affiliateLoader: false })
 
@@ -96,7 +96,7 @@ class AddUmpire extends Component {
         })
     }
     setInitalFiledValue() {
-        const { umpireData, affiliateId } = this.props.umpireDashboardState
+        const { umpireData, affiliateId } = this.props.umpireState
         let data = this.state.tableRecord
 
         this.props.form.setFieldsValue({
@@ -109,7 +109,7 @@ class AddUmpire extends Component {
     }
 
     filterUmpireList() {
-        const { umpireListResult } = this.props.umpireDashboardState
+        const { umpireListResult } = this.props.umpireState
         let umpireList = isArrayNotEmpty(umpireListResult) ? umpireListResult : []
 
         for (let i in umpireList) {
@@ -145,9 +145,9 @@ class AddUmpire extends Component {
 
     umpireExistingRadioButton(getFieldDecorator) {
 
-        const { umpireListResult, onLoadSearch, affilateList, onAffiliateLoad } = this.props.umpireDashboardState
+        const { umpireListResult, onLoadSearch, affilateList, onAffiliateLoad } = this.props.umpireState
         let umpireList = isArrayNotEmpty(umpireListResult) ? umpireListResult : []
-        const { affiliateId } = this.props.umpireDashboardState
+        const { affiliateId } = this.props.umpireState
 
         let affilateData = isArrayNotEmpty(affilateList) ? affilateList : []
 
@@ -178,9 +178,11 @@ class AddUmpire extends Component {
                                     onSearch={(value) => {
 
                                         value ?
-                                            this.props.umpireSearchAction(refRoleTypes('member'), entityTypes('COMPETITION'), this.state.competition_id, value)
+                                            // this.props.umpireSearchAction(refRoleTypes('member'), entityTypes('COMPETITION'), this.state.competition_id, value)
+                                            this.props.umpireSearchAction({ refRoleId: refRoleTypes('member'), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id, userName: value, offset: 0 })
                                             :
-                                            this.props.umpireListAction(refRoleTypes('member'), entityTypes('COMPETITION'), this.state.competition_id)
+                                            // this.props.umpireListAction(refRoleTypes('member'), entityTypes('COMPETITION'), this.state.competition_id)
+                                            this.props.umpireListAction({ refRoleId: refRoleTypes('member'), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id, offset: 0 })
 
                                     }}
 
@@ -233,7 +235,7 @@ class AddUmpire extends Component {
     }
 
     umpireNewRadioBtnView(getFieldDecorator) {
-        const { affilateList, umpireData, affiliateId, onAffiliateLoad } = this.props.umpireDashboardState
+        const { affilateList, umpireData, affiliateId, onAffiliateLoad } = this.props.umpireState
         let affiliateListResult = isArrayNotEmpty(affilateList) ? affilateList : []
         console.log(umpireData, 'umpireData')
         return (
@@ -357,7 +359,7 @@ class AddUmpire extends Component {
     }
 
     radioBtnContainer() {
-        const { umpireRadioBtn } = this.props.umpireDashboardState
+        const { umpireRadioBtn } = this.props.umpireState
         return (
             <div className="content-view pb-0 pt-4 row">
                 <span className="applicable-to-heading ml-4">{AppConstants.umpire}</span>
@@ -404,7 +406,7 @@ class AddUmpire extends Component {
 
     ////form view
     contentViewForAddUmpire = (getFieldDecorator) => {
-        const { umpireRadioBtn } = this.props.umpireDashboardState
+        const { umpireRadioBtn } = this.props.umpireState
         return (
             <div >
 
@@ -434,7 +436,7 @@ class AddUmpire extends Component {
                     <div className="row">
                         <div className="col-sm-3">
                             <div className="reg-add-save-button">
-                                <NavLink to='/umpireDashboard'>
+                                <NavLink to='/umpire'>
                                     <Button type="cancel-button">{AppConstants.cancel}</Button>
                                 </NavLink>
                             </div>
@@ -454,7 +456,7 @@ class AddUmpire extends Component {
 
     onSaveClick = e => {
 
-        const { umpireData, affiliateId, umpireRadioBtn, exsitingUmpireId } = this.props.umpireDashboardState
+        const { umpireData, affiliateId, umpireRadioBtn, exsitingUmpireId } = this.props.umpireState
 
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -498,9 +500,9 @@ class AddUmpire extends Component {
 
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <Loader visible={this.props.umpireDashboardState.onLoad} />
+                <Loader visible={this.props.umpireState.onLoad} />
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
-                <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"1"} />
+                <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"2"} />
                 <Layout>
                     {this.headerView()}
                     <Form onSubmit={this.onSaveClick} className="login-form" noValidate="noValidate">
@@ -532,7 +534,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStatetoProps(state) {
     return {
-        umpireDashboardState: state.UmpireDashboardState,
+        umpireState: state.UmpireState,
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(AddUmpire));

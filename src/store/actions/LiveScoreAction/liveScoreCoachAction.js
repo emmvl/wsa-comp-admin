@@ -28,6 +28,7 @@ function liveScoreAddEditCoach(data, teamId, exsitingManagerId) {
         teamId,
         exsitingManagerId
     };
+    console.log(action, 'liveScoreCoachSaga~~')
     return action;
 }
 
