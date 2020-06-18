@@ -179,16 +179,28 @@ export function* getInvoiceSaga(action) {
                 status: result.result.status
             });
         } else {
-            yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
-            setTimeout(() => {
-                alert(result.data.message);
-            }, 800);
+            yield call(failSaga, result)
         }
     } catch (error) {
-        yield put({
-            type: ApiConstants.API_COMMON_SAGA_ERROR,
-            error: error,
-            status: error.status
-        });
+        yield call(errorSaga, error)
     }
 }
+
+//get invoice saga
+export function* getPaymentListSaga(action) {
+    try {
+        const result = yield call(AxiosApi.getPaymentList, action.offset);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_PAYMENT_TYPE_LIST_SUCCESS,
+                result: result.result.data,
+                status: result.result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+

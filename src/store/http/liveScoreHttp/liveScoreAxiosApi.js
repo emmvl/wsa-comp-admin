@@ -802,89 +802,73 @@ const Method = {
 
                 .then(result => {
 
-                    if (internetStatus) {
-                        if (result.status === 200) {
-                            return resolve({
-                                status: 1,
-                                result: result
-                            });
-                        }
-                        else if (result.status == 212) {
-                            return resolve({
-                                status: 4,
-                                result: result
-                            });
-                        }
-                        else {
-                            if (result) {
-                                return reject({
-                                    status: 3,
-                                    error: result.data.message,
-                                });
-                            } else {
-
-                                return reject({
-                                    status: 4,
-                                    error: "Something went wrong."
-                                });
-                            }
-                        }
-                    } else {
-                        message.config({
-                            duration: 1.5,
-                            maxCount: 1,
+                    if (result.status === 200) {
+                        return resolve({
+                            status: 1,
+                            result: result
                         });
-                        message.error('Please check your internet connection.')
+                    }
+                    else if (result.status == 212) {
+                        return resolve({
+                            status: 4,
+                            result: result
+                        });
+                    }
+                    else {
+                        if (result) {
+                            return reject({
+                                status: 3,
+                                error: result.data.message,
+                            });
+                        } else {
+
+                            return reject({
+                                status: 4,
+                                error: "Something went wrong."
+                            });
+                        }
                     }
                 })
                 .catch(err => {
 
-                    if (internetStatus) {
-                        if (err.response) {
+                    if (err.response) {
 
-                            if (err.response.status !== null || err.response.status !== undefined) {
-                                if (err.response.status == 401) {
-                                    let unauthorizedStatus = err.response.status
-                                    if (unauthorizedStatus == 401) {
-                                        logout()
-                                        message.error(ValidationConstants.messageStatus401)
-                                    }
-                                }
-                                else if (err.response.status == 400) {
-                                    console.log(err.response, 'err.response')
-                                    message.config({
-                                        duration: 1.5,
-                                        maxCount: 1,
-                                    });
-                                    message.error(err.response.data.message)
-                                    return reject({
-                                        status: 5,
-                                        error: err.response.data.message
-                                    });
-                                }
-                                else {
-                                    return reject({
-
-                                        status: 5,
-                                        error: err.response && err.response.data.message
-                                    });
+                        if (err.response.status !== null || err.response.status !== undefined) {
+                            if (err.response.status == 401) {
+                                let unauthorizedStatus = err.response.status
+                                if (unauthorizedStatus == 401) {
+                                    logout()
+                                    message.error(ValidationConstants.messageStatus401)
                                 }
                             }
-                        }
-                        else {
-                            console.log(err.response, 'catch')
-                            return reject({
-                                status: 5,
-                                error: err.response && err.response.data.message
-                            });
+                            else if (err.response.status == 400) {
+                                console.log(err.response, 'err.response')
+                                message.config({
+                                    duration: 1.5,
+                                    maxCount: 1,
+                                });
+                                message.error(err.response.data.message)
+                                return reject({
+                                    status: 5,
+                                    error: err.response.data.message
+                                });
+                            }
+                            else {
+                                return reject({
 
+                                    status: 5,
+                                    error: err.response && err.response.data.message
+                                });
+                            }
                         }
-                    } else {
-                        message.config({
-                            duration: 1.5,
-                            maxCount: 1,
+                    }
+                    else {
+                        console.log(err.response, 'catch')
+                        return reject({
+                            status: 5,
+                            error: err.response && err.response.data.message
                         });
-                        message.error('Please check your internet connection.')
+
                     }
                 });
         });
@@ -907,68 +891,52 @@ const Method = {
                 })
 
                 .then(result => {
-                    if (internetStatus) {
-                        if (result.status === 200) {
-                            return resolve({
-                                status: 1,
-                                result: result
-                            });
-                        }
-                        else if (result.status == 212) {
-                            return resolve({
-                                status: 4,
-                                result: result
-                            });
-                        }
-                        else {
-                            if (result) {
-                                return reject({
-                                    status: 3,
-                                    error: result.data.message,
-                                });
-                            } else {
-                                return reject({
-                                    status: 4,
-                                    error: "Something went wrong."
-                                });
-                            }
-                        }
-                    } else {
-                        message.config({
-                            duration: 1.5,
-                            maxCount: 1,
+                    if (result.status === 200) {
+                        return resolve({
+                            status: 1,
+                            result: result
                         });
-                        message.error('Please check your internet connection.')
+                    }
+                    else if (result.status == 212) {
+                        return resolve({
+                            status: 4,
+                            result: result
+                        });
+                    }
+                    else {
+                        if (result) {
+                            return reject({
+                                status: 3,
+                                error: result.data.message,
+                            });
+                        } else {
+                            return reject({
+                                status: 4,
+                                error: "Something went wrong."
+                            });
+                        }
                     }
                 })
                 .catch(err => {
-                    if (internetStatus) {
-                        if (err.response) {
-                            if (err.response.status !== null && err.response.status !== undefined) {
-                                if (err.response.status == 401) {
-                                    let unauthorizedStatus = err.response.status
-                                    if (unauthorizedStatus == 401) {
-                                        logout()
-                                        message.error(ValidationConstants.messageStatus401)
-                                    }
-                                } else if (err.response.status == 500) {
-                                    message.error(err.response.data.message)
+                    if (err.response) {
+                        if (err.response.status !== null && err.response.status !== undefined) {
+                            if (err.response.status == 401) {
+                                let unauthorizedStatus = err.response.status
+                                if (unauthorizedStatus == 401) {
+                                    logout()
+                                    message.error(ValidationConstants.messageStatus401)
                                 }
+                            } else if (err.response.status == 500) {
+                                message.error(err.response.data.message)
                             }
                         }
-                        else {
-                            return reject({
-                                status: 5,
-                                error: err
-                            });
-
-                        }
-                    } else {
-                        message.config({
-                            duration: 1.5,
-                            maxCount: 1,
+                    }
+                    else {
+                        return reject({
+                            status: 5,
+                            error: err
                         });
-                        message.error('Please check your internet connection.')
+
                     }
                 });
         });
@@ -989,66 +957,50 @@ const Method = {
                 })
 
                 .then(result => {
-                    if (internetStatus) {
-                        if (result.status === 200) {
-                            return resolve({
-                                status: 1,
-                                result: result
-                            });
-                        }
-                        else if (result.status == 212) {
-                            return resolve({
-                                status: 4,
-                                result: result
-                            });
-                        }
-                        else {
-                            if (result) {
-                                return reject({
-                                    status: 3,
-                                    error: result.data.message,
-                                });
-                            } else {
-                                return reject({
-                                    status: 4,
-                                    error: "Something went wrong."
-                                });
-                            }
-                        }
-                    } else {
-                        message.config({
-                            duration: 1.5,
-                            maxCount: 1,
+                    if (result.status === 200) {
+                        return resolve({
+                            status: 1,
+                            result: result
                         });
-                        message.error('Please check your internet connection.')
+                    }
+                    else if (result.status == 212) {
+                        return resolve({
+                            status: 4,
+                            result: result
+                        });
+                    }
+                    else {
+                        if (result) {
+                            return reject({
+                                status: 3,
+                                error: result.data.message,
+                            });
+                        } else {
+                            return reject({
+                                status: 4,
+                                error: "Something went wrong."
+                            });
+                        }
                     }
                 })
                 .catch(err => {
-                    if (internetStatus) {
-                        if (err.response) {
-                            if (err.response.status !== null && err.response.status !== undefined) {
-                                if (err.response.status == 401) {
-                                    let unauthorizedStatus = err.response.status
-                                    if (unauthorizedStatus == 401) {
-                                        logout()
-                                        message.error(ValidationConstants.messageStatus401)
-                                    }
+                    if (err.response) {
+                        if (err.response.status !== null && err.response.status !== undefined) {
+                            if (err.response.status == 401) {
+                                let unauthorizedStatus = err.response.status
+                                if (unauthorizedStatus == 401) {
+                                    logout()
+                                    message.error(ValidationConstants.messageStatus401)
                                 }
                             }
                         }
-                        else {
-                            return reject({
-                                status: 5,
-                                error: err
-                            });
-
-                        }
-                    } else {
-                        message.config({
-                            duration: 1.5,
-                            maxCount: 1,
+                    }
+                    else {
+                        return reject({
+                            status: 5,
+                            error: err
                         });
-                        message.error('Please check your internet connection.')
+
                     }
                 });
         });
@@ -1070,81 +1022,64 @@ const Method = {
                 })
 
                 .then(result => {
-                    if (internetStatus) {
-                        if (result.status === 200) {
-                            console.log("*************" + JSON.stringify(result.data));
-                            const url = window.URL.createObjectURL(new Blob([result.data]));
-                            const link = document.createElement('a');
-                            link.href = url;
-                            link.setAttribute('download', 'filecsv.csv'); //or any other extension
-                            document.body.appendChild(link);
-                            link.click();
-                            return resolve({
-                                status: 1,
-                                result: result
-                            });
-                        }
-                        else if (result.status == 212) {
-                            return resolve({
-                                status: 4,
-                                result: result
-                            });
-                        }
-                        else {
-                            if (result) {
-                                return reject({
-                                    status: 3,
-                                    error: result.data.message,
-                                });
-                            } else {
-                                return reject({
-                                    status: 4,
-                                    error: "Something went wrong."
-                                });
-                            }
-                        }
-                    } else {
-                        message.config({
-                            duration: 1.5,
-                            maxCount: 1,
+                    if (result.status === 200) {
+                        console.log("*************" + JSON.stringify(result.data));
+                        const url = window.URL.createObjectURL(new Blob([result.data]));
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', 'filecsv.csv'); //or any other extension
+                        document.body.appendChild(link);
+                        link.click();
+                        return resolve({
+                            status: 1,
+                            result: result
                         });
-                        message.error('Please check your internet connection.')
+                    }
+                    else if (result.status == 212) {
+                        return resolve({
+                            status: 4,
+                            result: result
+                        });
+                    }
+                    else {
+                        if (result) {
+                            return reject({
+                                status: 3,
+                                error: result.data.message,
+                            });
+                        } else {
+                            return reject({
+                                status: 4,
+                                error: "Something went wrong."
+                            });
+                        }
                     }
                 })
                 .catch(err => {
-                    if (internetStatus) {
-                        console.log(err.response)
-                        if (err.response) {
-                            if (err.response.status !== null && err.response.status !== undefined) {
-                                if (err.response.status == 401) {
-                                    let unauthorizedStatus = err.response.status
-                                    if (unauthorizedStatus == 401) {
-                                        logout()
-                                        message.error(ValidationConstants.messageStatus401)
-                                    }
-                                }
-                                else {
-                                    return reject({
-                                        status: 5,
-                                        error: err
-                                    })
-
+                    if (err.response) {
+                        if (err.response.status !== null && err.response.status !== undefined) {
+                            if (err.response.status == 401) {
+                                let unauthorizedStatus = err.response.status
+                                if (unauthorizedStatus == 401) {
+                                    logout()
+                                    message.error(ValidationConstants.messageStatus401)
                                 }
                             }
-                        }
-                        else {
-                            return reject({
-                                status: 5,
-                                error: err
-                            });
+                            else {
+                                return reject({
+                                    status: 5,
+                                    error: err
+                                })
 
+                            }
                         }
-                    } else {
-                        message.config({
-                            duration: 1.5,
-                            maxCount: 1,
+                    }
+                    else {
+                        return reject({
+                            status: 5,
+                            error: err
                         });
-                        message.error('Please check your internet connection.')
+
                     }
                 });
         });
@@ -1166,89 +1101,73 @@ const Method = {
 
                 .then(result => {
 
-                    if (internetStatus) {
-                        if (result.status === 200) {
-                            return resolve({
-                                status: 1,
-                                result: result
-                            });
-                        }
-                        else if (result.status == 212) {
-                            return resolve({
-                                status: 4,
-                                result: result
-                            });
-                        }
-                        else {
-                            if (result) {
-                                return reject({
-                                    status: 3,
-                                    error: result.data.message,
-                                });
-                            } else {
-
-                                return reject({
-                                    status: 4,
-                                    error: "Something went wrong."
-                                });
-                            }
-                        }
-                    } else {
-                        message.config({
-                            duration: 1.5,
-                            maxCount: 1,
+                    if (result.status === 200) {
+                        return resolve({
+                            status: 1,
+                            result: result
                         });
-                        message.error('Please check your internet connection.')
+                    }
+                    else if (result.status == 212) {
+                        return resolve({
+                            status: 4,
+                            result: result
+                        });
+                    }
+                    else {
+                        if (result) {
+                            return reject({
+                                status: 3,
+                                error: result.data.message,
+                            });
+                        } else {
+
+                            return reject({
+                                status: 4,
+                                error: "Something went wrong."
+                            });
+                        }
                     }
                 })
                 .catch(err => {
 
-                    if (internetStatus) {
-                        if (err.response) {
+                    if (err.response) {
 
-                            if (err.response.status !== null || err.response.status !== undefined) {
-                                if (err.response.status == 401) {
-                                    let unauthorizedStatus = err.response.status
-                                    if (unauthorizedStatus == 401) {
-                                        logout()
-                                        message.error(ValidationConstants.messageStatus401)
-                                    }
-                                }
-                                else if (err.response.status == 400) {
-                                    console.log(err.response, 'err.response')
-                                    message.config({
-                                        duration: 1.5,
-                                        maxCount: 1,
-                                    });
-                                    message.error(err.response.data.message)
-                                    return reject({
-                                        status: 5,
-                                        error: err.response.data.message
-                                    });
-                                }
-                                else {
-                                    return reject({
-
-                                        status: 5,
-                                        error: err.response && err.response.data.message
-                                    });
+                        if (err.response.status !== null || err.response.status !== undefined) {
+                            if (err.response.status == 401) {
+                                let unauthorizedStatus = err.response.status
+                                if (unauthorizedStatus == 401) {
+                                    logout()
+                                    message.error(ValidationConstants.messageStatus401)
                                 }
                             }
-                        }
-                        else {
-                            console.log(err.response, 'catch')
-                            return reject({
-                                status: 5,
-                                error: err.response && err.response.data.message
-                            });
+                            else if (err.response.status == 400) {
+                                console.log(err.response, 'err.response')
+                                message.config({
+                                    duration: 1.5,
+                                    maxCount: 1,
+                                });
+                                message.error(err.response.data.message)
+                                return reject({
+                                    status: 5,
+                                    error: err.response.data.message
+                                });
+                            }
+                            else {
+                                return reject({
 
+                                    status: 5,
+                                    error: err.response && err.response.data.message
+                                });
+                            }
                         }
-                    } else {
-                        message.config({
-                            duration: 1.5,
-                            maxCount: 1,
+                    }
+                    else {
+                        console.log(err.response, 'catch')
+                        return reject({
+                            status: 5,
+                            error: err.response && err.response.data.message
                         });
-                        message.error('Please check your internet connection.')
+
                     }
                 });
         });

@@ -1289,7 +1289,7 @@ const AppConstants = {
   importUmpire: 'Import Umpire',
 
   backToUmpire: "Back To Umpire",
-  
+
   addAProduct: 'Add a Product',
   addProduct: 'Add Product',
   enterTitle: 'Enter Title',
@@ -1314,13 +1314,22 @@ const AppConstants = {
   orderSummary: 'Order Summary',
   orderStatus: 'Order Status',
   parentOrGuardianDetail: 'Parent/Guardian Details',
-  numbersOfOrders:"Number of ORDERS",
-  valueOfOrders:"Value of ORDERS",
-  orderId:"Order Id",
-  netProfit:"Net Profit",
-  paid:"Paid",
-  addOrder:"Add Order",
-  paymentStatus:"Payment Status",
+  numbersOfOrders: "Number of ORDERS",
+  valueOfOrders: "Value of ORDERS",
+  orderId: "Order Id",
+  netProfit: "Net Profit",
+  paid: "Paid",
+  addOrder: "Add Order",
+  paymentStatus: "Payment Status",
+
+  fullFillmentStatus: "Fullfilment Status",
+  attendence_Recording_Time: "Attendance Recording Time",
+  lineupSelection: "Lineup Selection",
+  _days: "Days",
+  _hours: "Hours",
+  _minutes: "Minutes",
+
+  lineUpSelectionMsg: "We can’t enable lineup selection without position tracking"
 };
 
 export default AppConstants;

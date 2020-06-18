@@ -131,6 +131,8 @@ import UmpireImport from "../components/umpire/umpireImport"
 import Umpire from "../components/umpire/umpire"
 import ListProducts from "../components/shop/listProducts";
 import AddProduct from "../components/shop/addproduct";
+import PaymentDashboard from "../components/registration/paymentDashboard"
+
 import OrderSummary from "../components/shop/orderSummary"
 import ShopOrderStatus from "../components/shop/shopOrderStatus"
 const lazyLoad = Component => {
@@ -690,6 +692,10 @@ class Routes extends React.Component {
           component={lazyLoad(AddProduct)}
         />
 
+        <PrivateRoute
+          path="/paymentDashboard"
+          component={lazyLoad(PaymentDashboard)}
+        />
         <PrivateRoute
           path="/orderSummary"
           component={lazyLoad(OrderSummary)}

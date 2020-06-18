@@ -8,8 +8,9 @@ import history from "../../../util/history";
 function* failSaga(result) {
     yield put({ type: ApiConstants.API_LIVE_SCORE_COACH_FAIL });
     setTimeout(() => {
-        message.error(result.message)
+        message.error(result.result.data)
     }, 800);
+    console.log(result, 'result')
 }
 
 function* errorSaga(error) {
@@ -18,6 +19,7 @@ function* errorSaga(error) {
         error: error,
         status: error.status
     });
+    console.log(error, 'error')
     message.error(error ? error.error : 'Something went wrong!!')
 }
 

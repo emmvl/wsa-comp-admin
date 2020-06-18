@@ -1,5 +1,6 @@
 import ApiConstants from '../../../themes/apiConstants'
 import { actionChannel } from '@redux-saga/core/effects'
+import { stat } from 'fs';
 const initialState = {
     loader: false,
     form: {
@@ -19,6 +20,12 @@ const initialState = {
         allVenue: [],
         venueData: [],
         mainVenueList: [],
+        days: null,
+        hours: null,
+        minutes: null,
+        lineupSelectionDays: null,
+        lineupSelectionHours: null,
+        lineupSelectionMins: null
 
     },
     buzzerEnabled: false,
@@ -34,8 +41,50 @@ const initialState = {
     clubSchool: [],
     affiliateNonSelected: null,
     anyOrgNonSelected: null,
-    registrationInvitees: []
+    registrationInvitees: [],
+    lineupSelection: false,
 }
+
+
+//minutes to hour (and days) converter
+function recordingTimeDays(num) {
+    if (num != null) {
+        let d, h, m
+        d = Math.floor(num / 1440); // 60*24
+        h = Math.floor((num - (d * 1440)) / 60);
+        m = Math.round(num % 60);
+        if (d > 0) {
+            return d
+        }
+    }
+}
+
+//minutes to hour (and days) converter
+function recordingTimeHours(num) {
+    if (num != null) {
+        let d, h, m
+        d = Math.floor(num / 1440); // 60*24
+        h = Math.floor((num - (d * 1440)) / 60);
+        m = Math.round(num % 60);
+        if (d > 0) {
+            return h
+        }
+    }
+}
+
+//minutes to hour (and days) converter
+function recordingTimeMins(num) {
+    if (num != null) {
+        let d, h, m
+        d = Math.floor(num / 1440); // 60*24
+        h = Math.floor((num - (d * 1440)) / 60);
+        m = Math.round(num % 60);
+        if (d > 0) {
+            return m
+        }
+    }
+}
+
 export default function liveScoreSettingsViewReducer(state = initialState, { type, payload, }) {
 
     switch (type) {
@@ -75,7 +124,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 return memo
             }, [])
             const venueData = payload.competitionVenues.map(item => (item.venueId))
-            console.log(payload, 'payload')
+            console.log(venueData, 'venueData')
             return {
                 ...state,
                 loader: false,
@@ -93,13 +142,20 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     record2,
                     attendanceRecordingType: payload.attendanceRecordingType,
                     attendanceRecordingPeriod: payload.attendanceRecordingPeriod,
-                    timerType: payload.timerType
+                    timerType: payload.timerType,
+                    days: recordingTimeDays(payload.attendanceSelectionTime),
+                    hours: recordingTimeHours(payload.attendanceSelectionTime),
+                    minutes: recordingTimeMins(payload.attendanceSelectionTime),
+                    lineupSelectionDays: recordingTimeDays(payload.lineupSelectionTime),
+                    lineupSelectionHours: recordingTimeHours(payload.lineupSelectionTime),
+                    lineupSelectionMins: recordingTimeMins(payload.lineupSelectionTime),
 
                 },
                 data: payload,
                 buzzerEnabled: payload.buzzerEnabled,
                 warningBuzzerEnabled: payload.warningBuzzerEnabled,
-                recordUmpire: payload.recordUmpireType
+                recordUmpire: payload.recordUmpireType,
+                lineupSelection: payload.lineupSelectionEnabled,
 
             }
         case ApiConstants.LiveScore_SETTING_VIEW_ERROR:
@@ -121,7 +177,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
             const keys = payload.key
             const Data = payload.data
 
-            if (keys == 'buzzerEnabled' || keys == 'warningBuzzerEnabled') {
+            if (keys == 'buzzerEnabled' || keys == 'warningBuzzerEnabled' || keys == "lineupSelection") {
                 state[keys] = Data
             } else if (keys == 'recordUmpire') {
                 state.recordUmpire = Data
@@ -204,7 +260,28 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
 
                     state.invitedOrganisation = inviteeArray
                 }
-                console.log(state.invitedOrganisation, 'LiveScore_SETTING_CHANGE_FORM', Data)
+
+            } else if (keys == 'record1') {
+
+                let posTracking = false
+                for (let i in Data) {
+                    if (Data[i] == "positionTracking") {
+                        posTracking = true
+                        break;
+                    }
+                }
+
+                if (posTracking) {
+                    // state.lineupSelection = true
+                } else {
+                    state.lineupSelection = false
+                    state.form.lineupSelectionDays = null
+                    state.form.lineupSelectionHours = null
+                    state.form.lineupSelectionMins = null
+                }
+                console.log(payload, 'record')
+
+
             }
             return {
                 ...state,

@@ -202,7 +202,11 @@ class InnerHorizontalMenu extends React.Component {
                             <span>Payments</span>
                         }
                     >
-                        <Menu.Item key="8">Payment Dashboard</Menu.Item>
+                        <Menu.Item key="8">
+                            <NavLink to='/paymentDashboard' >
+                                <span >Payment Dashboard</span>
+                            </NavLink>
+                        </Menu.Item>
                         <Menu.Item key="4">
                             <NavLink to="/registrationPayments" >
                                 <span >Payment Gateway</span>

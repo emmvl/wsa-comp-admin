@@ -156,6 +156,9 @@ const ValidationConstants = {
     pleaseSelectTeam: 'Please Select Team.',
     selectAbandonMatchReason: 'Please Select Reason.',
     umpireSearch: "Umpire search is required.",
+    pleaseFillFeesBeforePublishing: "Please fill fees before publishing.",
+    pleaseFillDivisionBeforePublishing: "Please fill division before publishing.",
+
     umpireMessage: "This umpire has not been linked to a user profile",
 };
 
