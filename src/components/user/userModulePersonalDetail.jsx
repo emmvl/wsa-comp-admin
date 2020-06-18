@@ -27,7 +27,7 @@ const { Option } = Select;
 const { TabPane } = Tabs;
 const { SubMenu } = Menu;
 let this_Obj = null;
-
+let section = null ;
 const columns = [
 
     {
@@ -324,6 +324,28 @@ const columnsPersonalAddress = [
         title: 'Email',
         dataIndex: 'email',
         key: 'email',
+    },
+    {
+        title: 'Action',
+        dataIndex: 'isUsed',
+        key: 'isUsed',
+        render: (data, record) => (
+             <Menu
+                className="action-triple-dot-submenu" theme="light" mode="horizontal"
+                style={{ lineHeight: "25px" }}>
+                <SubMenu
+                    key="sub1"
+                    title={<img className="dot-image" src={AppImages.moreTripleDot}
+                            alt="" width="16" height="16" />}
+                    >
+                    <Menu.Item key="1">
+                        <NavLink to={{ pathname: `/userProfileEdit`, state: { userData : record , modulefrom:"1"}}} >
+                            <span>Edit</span>
+                        </NavLink>
+                    </Menu.Item>
+                </SubMenu>
+            </Menu>
+        )
     }
 ];
 
@@ -362,19 +384,65 @@ const columnsPersonalPrimaryContacts = [
         title: 'Email',
         dataIndex: 'email',
         key: 'email',
-    }
+        width: 180
+    },
+    {
+        title: 'Action',
+        dataIndex: 'isUser',
+        key: 'isUser',
+        render: (data, record) => (
+            <Menu className="action-triple-dot-submenu" theme="light"
+               mode="horizontal" style={{ lineHeight: "25px" }}>
+               <SubMenu
+                   key="sub1"
+                   title={<img className="dot-image" src={AppImages.moreTripleDot}
+                           alt="" width="16" height="16"/>
+                  }>
+                   <Menu.Item key="1">
+                       <NavLink to={{ pathname: `/userProfileEdit`,state: { userData : record , modulefrom:"2" }}} >
+                           <span>Edit</span>
+                       </NavLink>
+                   </Menu.Item>
+               </SubMenu>
+           </Menu>
+       )
+   }
 ];
 
 const columnsPersonalEmergency = [
     {
         title: 'Name',
         dataIndex: 'emergencyContactName',
-        key: 'emergencyContactName'
+        key: 'emergencyContactName',
+        width:300
     },
     {
         title: 'Phone Number',
         dataIndex: 'emergencyContactNumber',
-        key: 'emergencyContactNumber'
+        key: 'emergencyContactNumber',
+        width:450
+    },
+    {
+        title: 'Action',
+        dataIndex: 'isUser',
+        key: 'isUser',
+        render: (data, record) => (
+            <Menu
+               className="action-triple-dot-submenu" theme="light"
+               mode="horizontal" style={{ lineHeight: "25px" }}>
+               <SubMenu
+                   key="sub1"
+                   title={<img className="dot-image"
+                           src={AppImages.moreTripleDot} alt="" width="16" height="16"/>
+                   }>
+                   <Menu.Item key="1">
+                       <NavLink to={{ pathname: `/userProfileEdit`,state: { userData : record , modulefrom:"3" }}} >
+                           <span>Edit</span>
+                       </NavLink>
+                   </Menu.Item>
+               </SubMenu>
+           </Menu>
+       )
     }
 ];
 
@@ -988,30 +1056,43 @@ class UserModulePersonalDetail extends Component {
                         pagination={false}
                     />
                 </div>
-                <div className="user-module-row-heading" style={{ marginTop: '30px' }}>{AppConstants.otherInformation}</div>
-                <div className="table-responsive home-dash-table-view" style={{ display: 'flex', flexDirection: 'column' }}>
-                    <div className="other-info-row" style={{ paddingTop: '10px' }}>
-                        <div className="year-select-heading other-info-label" >{AppConstants.gender}</div>
-                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].gender : null}</div>
+                <div className="row ">
+                    <div className="col-sm user-module-row-heading" style={{ marginTop: '30px' }}>{AppConstants.otherInformation}</div>
+                    <div className="col-sm" style={{ marginTop: '7px' , marginRight: '15px'}}>
+                        <div className="comp-buttons-view">
+                            <NavLink to={{ pathname: `/userProfileEdit`,state: {userData : personalByCompData[0] , modulefrom:"4"}}} >
+                                <Button className="other-info-edit-btn" type="primary" >
+                                    {AppConstants.edit}
+                                </Button>
+                            </NavLink>
+                        </div>
                     </div>
-                    <div className="other-info-row">
-                        <div className="year-select-heading other-info-label" >{AppConstants.countryOfBirth}</div>
-                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].countryName : null}</div>
-                    </div>
-                    <div className="other-info-row">
-                        <div className="year-select-heading other-info-label">{AppConstants.nationalityReference}</div>
-                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].nationalityName : null}</div>
-                    </div>
-                    <div className="other-info-row">
-                        <div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.childLangSpoken}</div>
-                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].languages : null}</div>
-                    </div>
-                    {/* <div className="other-info-row">
-                        <div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.disability}</div>
-                        <div className="live-score-desc-text side-bar-profile-data other-info-font">{personal.isDisability == 0 ? "No" : "Yes"}</div>
-                    </div> */}
                 </div>
-            </div>
+                <div className="table-responsive home-dash-table-view" >
+					<div style={{ marginTop: '7px' , marginRight: '15px'}}>
+						<div className="other-info-row" style={{ paddingTop: '10px' }}>
+							<div className="year-select-heading other-info-label" >{AppConstants.gender}</div>
+							<div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].gender : null}</div>	  
+						</div>
+                        <div className="other-info-row">														   
+							<div className="year-select-heading other-info-label" >{AppConstants.countryOfBirth}</div>
+							<div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].countryName : null}</div>
+						</div>
+						<div className="other-info-row">
+							<div className="year-select-heading other-info-label">{AppConstants.nationalityReference}</div>
+							<div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].nationalityName : null}</div>	  			  
+						</div>
+						<div className="other-info-row">
+							<div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.childLangSpoken}</div>
+							<div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].languages : null}</div>
+						</div>
+						{/* <div className="other-info-row">
+							<div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.disability}</div>
+							<div className="live-score-desc-text side-bar-profile-data other-info-font">{personal.isDisability == 0 ? "No" : "Yes"}</div>
+						</div> */}
+					</div>
+				</div>
+			</div>
         )
     }
 
@@ -1023,6 +1104,15 @@ class UserModulePersonalDetail extends Component {
                 {
                     (medical || []).map((item, index) => (
                         <div key={item.id} className="table-responsive home-dash-table-view">
+                            <div className="col-sm" style={{ marginTop: '7px' , marginRight: '15px'}}>
+                                <div className="comp-buttons-view">
+                                    <NavLink to={{ pathname: `/userProfileEdit`,state: {userData : medical, modulefrom:"5"}}} >
+                                        <Button className="other-info-edit-btn" type="primary" >
+                                            {AppConstants.edit}
+                                        </Button>
+                                    </NavLink>
+                                </div>
+                            </div>
                             <div style={{ marginBottom: "1%", display: 'flex' }} >
                                 <div className="year-select-heading other-info-label col-sm-2">{AppConstants.existingMedConditions}</div>
                                 <div className="live-score-desc-text side-bar-profile-data other-info-font" style={{ textAlign: 'left' }}>

@@ -209,7 +209,11 @@ let userHttpApi = {
 
     return Method.dataGet(url, localStorage.token);
 
-  }
+  },
+  updateUserProfile(payload) {
+    var url = `api/userprofile/update?section=${payload.section}`;
+    return Method.dataPost(url, token, payload);
+  },
 }
 
 let Method = {

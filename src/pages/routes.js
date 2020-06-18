@@ -51,6 +51,7 @@ import UserEditAffiliates from "../components/user/userEditAffiliates";
 import UserOurOragnization from "../components/user/userOurOragnization";
 import UserTextualDashboard from "../components/user/userTextualDashboard";
 import UserModulePersonalDetail from "../components/user/userModulePersonalDetail";
+import UserProfileEdit from "../components/user/userProfileEdit"																
 import VenuesList from '../components/user/venuesList';
 import AppRegistrationForm from "../components/registration/appRegistrationForm";
 import NotFound from "./404";
@@ -704,6 +705,11 @@ class Routes extends React.Component {
         <PrivateRoute
           path="/orderStatus"
           component={lazyLoad(ShopOrderStatus)}
+        />
+		
+      <PrivateRoute
+            path="/userProfileEdit"
+            component={lazyLoad(UserProfileEdit)}
         />
 
         <Route path="/" component={lazyLoad(NotFound)} />

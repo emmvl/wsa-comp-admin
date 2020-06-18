@@ -281,6 +281,14 @@ function exportAffiliateDirectoryAction(payload) {
   return action;
 }
 
+function userProfileUpdateAction(data) {
+  const action = {
+      type: ApiConstants.API_USER_PROFILE_UPDATE_LOAD,
+      data,
+  };
+
+  return action;
+}
 
 export {
   getRoleAction,
@@ -314,5 +322,6 @@ export {
   deleteOrgContact,
   exportOrgRegQuestionAction,
   getAffiliateDirectoryAction,
-  exportAffiliateDirectoryAction
+  exportAffiliateDirectoryAction,
+  userProfileUpdateAction						 
 }
