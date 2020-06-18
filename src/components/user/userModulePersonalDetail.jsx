@@ -477,8 +477,10 @@ class UserModulePersonalDetail extends Component {
             registrationForm: null,
             isRegistrationForm: false,
             screen: null,
-            yearRefId: 1,
-            competitions: []
+            yearRefId: -1,
+            competitions: [],
+            teams: [],
+            divisions: []
         }
     }
 
@@ -517,24 +519,26 @@ class UserModulePersonalDetail extends Component {
             }
         }
 
-        if (this.state.competition.competitionId == null && personal.competitions != undefined &&
+        if ((this.state.competition.competitionUniqueKey == null || this.state.competition.competitionUniqueKey == '-1'
+            ) && personal.competitions != undefined &&
             personal.competitions.length > 0 
             && this.props.userState.personalData!= nextProps.userState.personalData) {
-                let years = [];
-                let competitions = [];
-                (personal.competitions || []).map((item, index) => {
-                    let obj = {
-                        id: item.yearRefId
-                    }
-                    years.push(obj);
-                });
-
-                let yearRefId = years.length > 0 ? years[0].id : null;
-                this.setState({yearRefId: yearRefId, years: years});
+                //let years = [];
+                //let competitions = [];
+                // (personal.competitions || []).map((item, index) => {
+                //     let obj = {
+                //         id: item.yearRefId
+                //     }
+                //     years.push(obj);
+                // });
+                console.log("personal.competitions::" + JSON.stringify(personal.competitions));
+                 let yearRefId = -1;
+                this.setState({yearRefId: -1});
                 if(personal.competitions!=null && personal.competitions.length > 0 && yearRefId!= null){
-                    competitions = personal.competitions.filter(x=>x.yearRefId == yearRefId);
-                    this.setState({competitions: competitions, competition: competitions[0] });
-                    this.tabApiCalls(this.state.tabKey, competitions[0], this.state.userId);
+                    let competitions = personal.competitions;
+                    this.generateCompInfo(competitions, yearRefId);
+                    // this.setState({competitions: competitions, competition: this.getEmptyCompObj()});
+                    // this.tabApiCalls(this.state.tabKey, this.getEmptyCompObj(), this.state.userId);
                 }
         }
     }
@@ -551,22 +555,59 @@ class UserModulePersonalDetail extends Component {
     onChangeYear = (value) => {
         let userState = this.props.userState;
         let personal = userState.personalData;
+        let competitions = [];
 
-        let competitions = personal.competitions.filter(x => x.yearRefId === value);
+        if(value != -1){
+            competitions = personal.competitions.filter(x => x.yearRefId === value);
+        }
+        else{
+            competitions = personal.competitions;
+        }
+       
+        this.generateCompInfo(competitions, value);
+    }
+
+    generateCompInfo = (competitions, yearRefId) => {
+        let teams = []; 
+        let divisions = [];
+        console.log("competitions::" + JSON.stringify(competitions));
+        (competitions || []).map((item, index) => {
+            if(item.teams!= null && item.teams.length > 0){
+                (item.teams || []).map((i, ind) => {
+                    let obj = {
+                        teamId: i.teamId,
+                        teamName: i.teamName
+                    }
+                    if(i.teamId!= null)
+                        teams.push(obj);
+                })
+            }
+            
+            let div = {
+                divisionId: item.divisionId,
+                divisionName : item.divisionName
+            }
+
+            if(item.divisionName!= null)
+                divisions.push(div);
+        });
+        
         let competition = this.getEmptyCompObj();
-        if(competitions!= null && competitions.length > 0)
-            competition = competitions[0]
+        if(competitions!= null && competitions.length > 0){
+            competition = this.getEmptyCompObj();
+        }
+            
         this.setState({ competitions: competitions, competition: competition,
-        yearRefId: value });
+        yearRefId: yearRefId, teams: teams, divisions: divisions });
 
-        this.tabApiCalls(this.state.tabKey, competition, this.state.userId);
+        this.tabApiCalls(this.state.tabKey, competition, this.state.userId, yearRefId);
     }
 
     getEmptyCompObj = () =>{
         let competition =  {
             team: { teamId: 0, teamName: "" },
-            divisionName: "", competitionId: null,
-            competitionName: "", year: 0
+            divisionName: "", competitionUniqueKey: '-1',
+            competitionName: "All", year: 0
         };
 
         return competition;
@@ -575,28 +616,57 @@ class UserModulePersonalDetail extends Component {
     onChangeSetValue = (value) => {
         let userState = this.props.userState;
         let personal = userState.personalData;
-
-        let competition = personal.competitions.find(x => x.competitionId === value);
-        this.setState({ competition: competition });
-        this.tabApiCalls(this.state.tabKey, competition, this.state.userId);
+        if(value!= -1){
+            let teams = [];
+            let divisions = [];
+    
+            let competition = personal.competitions.find(x => x.competitionUniqueKey === value);
+       
+            if(competition.teams!= null && competition.teams.length > 0){
+                (competition.teams || []).map((i, ind) => {
+                    let obj = {
+                        teamId: i.teamId,
+                        teamName: i.teamName
+                    }
+                    if(i.teamId!= null)
+                        teams.push(obj);
+                })
+            }
+    
+            let div = {
+                divisionId: competition.divisionId,
+                divisionName : competition.divisionName
+            }
+    
+            if(competition.divisionName!= null)
+                divisions.push(div);
+    
+            this.setState({ competition: competition, divisions: divisions, teams: teams });
+            this.tabApiCalls(this.state.tabKey, competition, this.state.userId, this.state.yearRefId);
+        }
+        else{
+            this.generateCompInfo(personal.competitions,  this.state.yearRefId);
+        }
+       
     }
 
     onChangeTab = (key) => {
         console.log("onChangeTab::" + key);
         this.setState({ tabKey: key, isRegistrationForm: false });
-        this.tabApiCalls(key, this.state.competition, this.state.userId);
+        this.tabApiCalls(key, this.state.competition, this.state.userId, this.state.yearRefId);
     };
 
-    tabApiCalls = (tabKey, competition, userId) => {
+    tabApiCalls = (tabKey, competition, userId, yearRefId) => {
         let payload = {
             userId: userId,
-            competitionId: competition.competitionId
+            competitionId: competition.competitionUniqueKey,
+            yearRefId: yearRefId
         }
         if (tabKey == "1") {
-            this.hanleActivityTableList(1, userId, competition, "player");
-            this.hanleActivityTableList(1, userId, competition, "parent");
-            this.hanleActivityTableList(1, userId, competition, "scorer");
-            this.hanleActivityTableList(1, userId, competition, "manager");
+            this.hanleActivityTableList(1, userId, competition, "player", yearRefId);
+            this.hanleActivityTableList(1, userId, competition, "parent", yearRefId);
+            this.hanleActivityTableList(1, userId, competition, "scorer", yearRefId);
+            this.hanleActivityTableList(1, userId, competition, "manager", yearRefId);
         }
         if (tabKey === "3") {
             this.props.getUserModulePersonalByCompetitionAction(payload)
@@ -605,17 +675,18 @@ class UserModulePersonalDetail extends Component {
             this.props.getUserModuleMedicalInfoAction(payload)
         }
         else if (tabKey === "5") {
-            this.handleRegistrationTableList(1, userId, competition);
+            this.handleRegistrationTableList(1, userId, competition, yearRefId);
 
         }
     }
 
-    hanleActivityTableList = (page, userId, competition, key) => {
+    hanleActivityTableList = (page, userId, competition, key, yearRefId) => {
         let filter =
         {
-            competitionId: competition.competitionId,
+            competitionId: competition.competitionUniqueKey,
             organisationId: getOrganisationData().organisationUniqueKey,
             userId: userId,
+            yearRefId: yearRefId,
             paging: {
                 limit: 10,
                 offset: (page ? (10 * (page - 1)) : 0)
@@ -631,12 +702,13 @@ class UserModulePersonalDetail extends Component {
             this.props.getUserModuleActivityManagerAction(filter);
     }
 
-    handleRegistrationTableList = (page, userId, competition) => {
+    handleRegistrationTableList = (page, userId, competition, yearRefId) => {
         let filter =
         {
-            competitionId: competition.competitionId,
+            competitionId: competition.competitionUniqueKey,
             userId: userId,
             organisationId: getOrganisationData().organisationUniqueKey,
+            yearRefId: yearRefId,
             paging: {
                 limit: 10,
                 offset: (page ? (10 * (page - 1)) : 0)
@@ -666,7 +738,7 @@ class UserModulePersonalDetail extends Component {
     leftHandSideView = () => {
         let userState = this.props.userState;
         let personal = userState.personalData;
-        let compititionId = this.state.competition!= null ? this.state.competition.competitionId : null;
+        let compititionId = this.state.competition!= null ? this.state.competition.competitionUniqueKey : null;
 
         return (
             <div className="fluid-width mt-2" >
@@ -717,6 +789,7 @@ class UserModulePersonalDetail extends Component {
                             style={{ width: "100%", paddingRight: 1, paddingTop: '15px' }}
                             onChange={yearRefId => this.onChangeYear(yearRefId)}
                             value={this.state.yearRefId}>
+                                 <Option key={-1} value={-1}>{AppConstants.all}</Option>
                             {this.props.appState.yearList.map(item => {
                                 return (
                                     <Option key={"yearRefId" + item.id} value={item.id}>
@@ -730,8 +803,9 @@ class UserModulePersonalDetail extends Component {
                             style={{ width: "100%", paddingRight: 1, paddingTop: '15px' }}
                             onChange={(e) => this.onChangeSetValue(e)}
                             value={compititionId}>
+                                <Option key={-1} value={'-1'}>{AppConstants.all}</Option>
                             {(this.state.competitions || []).map((comp, index) => (
-                                <Option key={comp.competitionId} value={comp.competitionId}>{comp.competitionName}</Option>
+                                <Option key={comp.competitionUniqueKey} value={comp.competitionUniqueKey}>{comp.competitionName}</Option>
                             ))}
                         </Select>
                     </div>
@@ -742,7 +816,7 @@ class UserModulePersonalDetail extends Component {
                             </div>
                             <span className='year-select-heading ml-3'>{AppConstants.team}</span>
                         </div>
-                        {(this.state.competition!= null && this.state.competition.teams || []).map((item, index) => (
+                        {(this.state.teams!= null && this.state.teams || []).map((item, index) => (
                             <div key={item.teamId} className="live-score-desc-text side-bar-profile-data">{item.teamName}</div>
                         ))}
 
@@ -754,7 +828,10 @@ class UserModulePersonalDetail extends Component {
                             </div>
                             <span className='year-select-heading ml-3'>{AppConstants.division}</span>
                         </div>
-                        <span className="live-score-desc-text side-bar-profile-data">{this.state.competition!= null ? this.state.competition.divisionName : null}</span>
+                        {(this.state.divisions!= null && this.state.divisions || []).map((item, index) => (
+                            <div key={item.divisionId} className="live-score-desc-text side-bar-profile-data">{item.divisionName}</div>
+                        ))}
+                        {/* <span className="live-score-desc-text side-bar-profile-data">{this.state.competition!= null ? this.state.competition.divisionName : null}</span> */}
                     </div>
 
                 </div>
@@ -1003,7 +1080,7 @@ class UserModulePersonalDetail extends Component {
                         className="antd-pagination"
                         current={userState.userRegistrationDataPage}
                         total={total}
-                        onChange={(page) => this.handleRegistrationTableList(page, this.state.userId, this.state.competition)}
+                        onChange={(page) => this.handleRegistrationTableList(page, this.state.userId, this.state.competition, this.state.yearRefId)}
                     />
                 </div>
             </div>
