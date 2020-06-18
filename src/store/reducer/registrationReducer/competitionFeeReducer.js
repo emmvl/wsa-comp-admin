@@ -1562,8 +1562,10 @@ function competitionFees(state = initialState, action) {
             let divisionGetSuccesData = getDivisionTableData(allData)
             state.competitionDivisionsData = divisionGetSuccesData
             state.defaultCompFeesMembershipProduct = getDefaultCompMemberhsipProduct(state.defaultCompFeesMembershipProduct, allData.competitionmembershipproduct)
-            let competitionFeeProducts = createProductFeeArr(allData)
-            state.competitionFeesData = competitionFeeProducts
+            if (allData.competitiondetail.hasRegistration == 1) {
+                let competitionFeeProducts = createProductFeeArr(allData)
+                state.competitionFeesData = competitionFeeProducts
+            }
 
             if (isArrayNotEmpty(allData.competitiondiscounts.competitionDiscounts)) {
                 let selectDiscountArray = allData.competitiondiscounts.competitionDiscounts[0].discounts
