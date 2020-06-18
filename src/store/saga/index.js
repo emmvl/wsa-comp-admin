@@ -740,6 +740,7 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_REGISTRATION_RESTRICTIONTYPE_LOAD, RegistrationRestrictionType)
 
   yield takeEvery(ApiConstants.API_FIXTURE_TEMPLATE_ROUNDS_LOAD, fixtureTemplateSaga)
+  yield takeEvery(ApiConstants.API_PAYMENT_TYPE_LIST_LOAD, stripeSaga.getPaymentListSaga)
 
   yield takeEvery(ApiConstants.API_UMPIRE_ROASTER_LIST_LOAD, umpireRoasterSaga.umpireRoasterListSaga)
 
