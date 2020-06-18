@@ -2077,6 +2077,23 @@ class RegistrationCompetitionFee extends Component {
     this.props.competitionPaymentApi(paymentDataArr, competitionId);
   };
 
+ ////check the division objects does not contain empty division array
+  checkDivisionEmpty(data) {
+    if (isArrayNotEmpty(data) == true) {
+      for (let i in data) {
+        if (data[i].divisions.length == 0) {
+          return true;
+        }
+        else {
+          return false
+        }
+      }
+    }
+    else {
+      return true;
+    }
+  }
+
   discountApiCall = (competitionId) => {
     // let govtVoucherData= this.props.competitionFeesState.competitionDiscountsData.govermentVouchers
     let govtVoucher = this.props.competitionFeesState.competitionDiscountsData
@@ -2123,7 +2140,29 @@ class RegistrationCompetitionFee extends Component {
       ],
       govermentVouchers: govtVoucher,
     };
-    this.props.regSaveCompetitionFeeDiscountAction(discountBody, competitionId);
+    let compFeesState = this.props.competitionFeesState;
+    let fee_data = compFeesState.competitionFeesData;
+    let divisionArrayData = compFeesState.competitionDivisionsData;
+    console.log("fee_data", fee_data, divisionArrayData)
+    if (this.state.statusRefId == 1) {
+      this.props.regSaveCompetitionFeeDiscountAction(discountBody, competitionId);
+      this.setState({ loading: true });
+    }
+    if (this.state.statusRefId == 2 || this.state.statusRefId == 3) {
+      if (divisionArrayData.length > 0 && this.checkDivisionEmpty(divisionArrayData) == false && fee_data.length > 0) {
+        this.props.regSaveCompetitionFeeDiscountAction(discountBody, competitionId);
+        this.setState({ loading: true });
+      }
+      else {
+        if (this.checkDivisionEmpty(divisionArrayData) == true) {
+          message.config({ duration: 0.9, maxCount: 1 })
+          message.error(ValidationConstants.pleaseFillDivisionBeforePublishing);
+        }
+        else if (fee_data.length == 0) {
+          message.error(ValidationConstants.pleaseFillFeesBeforePublishing);
+        }
+      }
+    }
   };
 
   setDetailsFieldValue() {
@@ -2517,13 +2556,6 @@ class RegistrationCompetitionFee extends Component {
     });
   };
 
-  checkDivisionEmpty(data) {
-    for (let i in data) {
-      if (data[i].divisions.length == 0) {
-        return true;
-      }
-    }
-  }
 
   saveAPIsActionCall = (e) => {
     e.preventDefault();
@@ -2714,7 +2746,6 @@ class RegistrationCompetitionFee extends Component {
           this.setState({ loading: true });
         } else if (tabKey == '6') {
           this.discountApiCall(competitionId);
-          this.setState({ loading: true });
         }
       }
     });
