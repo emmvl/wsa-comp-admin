@@ -1631,8 +1631,10 @@ function competitionFees(state = initialState, action) {
             let divisionGetMembershipSuccesData = getDivisionTableData(savemembershipAllData)
             state.competitionDivisionsData = divisionGetMembershipSuccesData
             state.defaultCompFeesMembershipProduct = getDefaultCompMemberhsipProduct(state.defaultCompFeesMembershipProduct, savemembershipAllData.competitionmembershipproduct)
-            let competitionFee_Products= createProductFeeArr(savemembershipAllData)
-            state.competitionFeesData = competitionFee_Products
+            if (savemembershipAllData.competitiondetail.hasRegistration == 1) {
+                let competitionFee_Products = createProductFeeArr(savemembershipAllData)
+                state.competitionFeesData = competitionFee_Products
+            }
             return {
                 ...state,
                 onLoad: false,
@@ -1674,8 +1676,10 @@ function competitionFees(state = initialState, action) {
             let saveDivisionData = action.result.data
             let divisionSaveSuccessData = getDivisionTableData(saveDivisionData)
             state.competitionDivisionsData = divisionSaveSuccessData
-            let competitionFeeProductsDivision = createProductFeeArr(saveDivisionData)
-            state.competitionFeesData = competitionFeeProductsDivision
+            if (saveDivisionData.competitiondetail.hasRegistration == 1) {
+                let competitionFeeProductsDivision = createProductFeeArr(saveDivisionData)
+                state.competitionFeesData = competitionFeeProductsDivision
+            }
             return {
                 ...state,
                 onLoad: false,
