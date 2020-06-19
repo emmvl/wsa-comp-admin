@@ -671,7 +671,7 @@ class Routes extends React.Component {
         />
 
         <PrivateRoute
-          path="/umpireRoaster"
+          path="/umpireRoster"
           component={lazyLoad(UmpireRoaster)}
         />
 

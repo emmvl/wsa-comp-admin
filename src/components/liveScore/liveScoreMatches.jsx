@@ -15,7 +15,7 @@ import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStora
 import { liveScore_MatchFormate } from '../../themes/dateformate'
 import { exportFilesAction } from "../../store/actions/appAction"
 import { isArrayNotEmpty, teamListData } from "../../util/helpers";
-
+const { Content } = Layout;
 /////function to sort table column
 function tableSort(a, b, key) {
     let stringA = JSON.stringify(a[key])
@@ -24,7 +24,20 @@ function tableSort(a, b, key) {
 }
 
 
-const { Content } = Layout;
+function setMatchResult(record){
+    if(record.team1ResultId !== null){
+        if(record.team1ResultId === 4 || record.team1ResultId === 6 || record.team1ResultId === 6){
+            return "Forfeit"
+        }else if(record.team1ResultId === 8 || record.team1ResultId === 9 ){
+            return "Abandoned"
+        }else {
+            return  record.score
+        }
+    }else{
+        return record.score
+    }   
+}
+
 
 const columns = [
     {
@@ -95,7 +108,7 @@ const columns = [
         dataIndex: 'score',
         key: 'score',
         sorter: (a, b) => tableSort(a, b, "score"),
-        render: (score) => <span nowrap>{score}</span>
+        render: (score, records) => <span nowrap>{setMatchResult(records)}</span>
     },
     {
         title: 'Type',

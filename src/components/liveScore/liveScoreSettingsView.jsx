@@ -81,7 +81,7 @@ class LiveScoreSettingsView extends Component {
     componentDidUpdate(nextProps) {
         if (nextProps.liveScoreSetting != this.props.liveScoreSetting) {
             const { competitionName, shortName, competitionLogo, scoring } = this.props.liveScoreSetting.form
-            console.log(this.props.liveScoreSetting.form, 'componentDidUpdate')
+
             this.props.form.setFieldsValue({
                 competition_name: competitionName,
                 short_name: shortName,
@@ -148,7 +148,6 @@ class LiveScoreSettingsView extends Component {
             hoursToMinutes = hours * 60
             _minutes = minutes * 1
             totalMinutes = dayToMinutes + hoursToMinutes + _minutes
-            console.log(dayToMinutes, hoursToMinutes, _minutes, "djjddj")
             return totalMinutes
 
         }
@@ -156,8 +155,6 @@ class LiveScoreSettingsView extends Component {
     }
 
     handleSubmit = e => {
-
-        console.log(this.props.liveScoreSetting.invitedTo, 'this.props.liveScoreSetting', this.props.liveScoreSetting.invitedOrganisation)
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
 
@@ -196,8 +193,6 @@ class LiveScoreSettingsView extends Component {
                     lineupSelection
                 } = this.props.liveScoreSetting
 
-                console.log(invitedTo, 'invitedOrganisation', invitedOrganisation)
-
                 const umpire = record1.includes("recordUmpire")
                 const umpirenum = umpire ? 1 : 0
                 const gameTimeTracking = record1.includes("gameTimeTracking")
@@ -211,9 +206,7 @@ class LiveScoreSettingsView extends Component {
                 if (lineupSelection) {
                     lineUpSelectionTime = this.getRecordingTime(lineupSelectionDays, lineupSelectionHours, lineupSelectionMins)
                 }
-                console.log(attendenceRecordingTime, 'attendenceRecordingTime')
-
-
+           
                 let orgId = null
                 if (this.props.location.state === 'add') {
                     let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
@@ -240,7 +233,10 @@ class LiveScoreSettingsView extends Component {
                 formData.append('organisationId', orgId ? orgId : this.props.liveScoreSetting.data.organisationId)
                 formData.append('buzzerEnabled', buzzerEnabled)
                 formData.append('warningBuzzerEnabled', warningBuzzerEnabled)
-                formData.append('attendanceSelectionTime', attendenceRecordingTime)
+                if(attendenceRecordingTime){
+                    formData.append('attendanceSelectionTime', attendenceRecordingTime)
+                }
+               
 
                 if (lineupSelection) {
                     formData.append('lineupSelectionEnabled', lineupSelection)
@@ -340,18 +336,16 @@ class LiveScoreSettingsView extends Component {
         const applyTo2 = [{ label: 'Centre Pass Enabled', value: "centrePassEnabled", }, { label: 'Incidents Enabled', value: "incidentsEnabled", }];
         const turnOffBuzzer = [{ label: AppConstants.turnOffBuzzer, value: true }];
         const buzzerEnabledArr = [{ label: AppConstants.turnOff_30Second, value: true }];
-        console.log(this.props.liveScoreSetting.form, 'this.props.liveScoreSetting.form')
 
         return (
             <div className="content-view pt-4">
-                <span className='bulk-match-heading' >{AppConstants.competition_name}<span style={{ color: 'red' }}>{'*'}</span></span>
                 <Form.Item>
                     {getFieldDecorator('competition_name', {
                         rules: [{ required: true, message: ValidationConstants.competitionField }]
                     })(
                         <InputWithHead
                             required={"required-field pb-0"}
-                            // heading={AppConstants.competition_name}
+                            heading={AppConstants.competition_name}
                             placeholder={AppConstants.competition_name}
                             name="competitionName"
 
@@ -365,7 +359,7 @@ class LiveScoreSettingsView extends Component {
 
 
 
-                <div className='contextualHelp-RowDirection' >
+                {/* <div className='contextualHelp-RowDirection' >
 
                     <span className='bulk-match-heading pt-5' >{AppConstants.short_Name}<span style={{ color: 'red' }}>{'*'}</span></span>
                     <div style={{ marginTop: 28 }}>
@@ -373,14 +367,14 @@ class LiveScoreSettingsView extends Component {
                             <span>{AppConstants.shortNameMsg}</span>
                         </Tooltip>
                     </div>
-                </div>
+                </div> */}
                 <Form.Item>
                     {getFieldDecorator('short_name', {
                         rules: [{ required: true, message: ValidationConstants.shortField }]
                     })(
                         <InputWithHead
                             required={"required-field pb-0"}
-                            // heading={AppConstants.short_Name}
+                            heading={AppConstants.short_Name}
                             placeholder={AppConstants.short_Name}
                             name="shortName"
                             conceptulHelp
@@ -394,8 +388,7 @@ class LiveScoreSettingsView extends Component {
                 </Form.Item>
 
                 {/* image and check box view */}
-                {/* <InputWithHead heading={AppConstants.competitionLogo} /> */}
-                <span className='bulk-match-heading pt-5' >{AppConstants.competitionLogo}</span>
+                <InputWithHead heading={AppConstants.competitionLogo} />
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
@@ -455,10 +448,9 @@ class LiveScoreSettingsView extends Component {
                 </div>
 
                 {/* venue muilti selection */}
-                {/* <InputWithHead
+                <InputWithHead
                     required={"required-field pb-0"}
-                    heading={AppConstants.venues} /> */}
-                <span className='bulk-match-heading pt-5' >{AppConstants.venues}<span style={{ color: 'red' }}>{'*'}</span></span>
+                    heading={AppConstants.venues} />
                 <div>
                     <Form.Item>
                         {getFieldDecorator('venue', {
@@ -539,18 +531,7 @@ class LiveScoreSettingsView extends Component {
                 </div>
 
                 {/* Record Umpire dropdown view */}
-                {/* <InputWithHead conceptulHelp conceptulHelpMsg={AppConstants.recordUmpireMsg} marginTop={5} heading={AppConstants.recordUmpire} /> */}
-
-                <div className='contextualHelp-RowDirection' >
-
-                    <span className='bulk-match-heading pt-5' >{AppConstants.recordUmpire}</span>
-                    <div style={{ marginTop: 28 }}>
-                        <Tooltip background='#ff8237'>
-                            <span>{AppConstants.recordUmpireMsg}</span>
-                        </Tooltip>
-                    </div>
-                </div>
-
+                <InputWithHead conceptulHelp conceptulHelpMsg={AppConstants.recordUmpireMsg} marginTop={5} heading={AppConstants.recordUmpire} />
                 <div className="row" >
                     <div className="col-sm" >
                         <Select
@@ -604,8 +585,8 @@ class LiveScoreSettingsView extends Component {
 
 
                 {/*Attendance Recording Time*/}
-                {/* <InputWithHead heading={AppConstants.attendence_Recording_Time} /> */}
-                <span className='bulk-match-heading pt-5' >{AppConstants.attendence_Recording_Time}</span>
+                <InputWithHead heading={AppConstants.attendence_Recording_Time} />
+                {/* <span className='bulk-match-heading pt-5' >{AppConstants.attendence_Recording_Time}</span> */}
                 <div className="row" >
                     <div className="col-sm" >
                         <InputWithHead
@@ -713,8 +694,8 @@ class LiveScoreSettingsView extends Component {
                 </div>}
 
                 {/* radion button view */}
-                {/* <span className="applicable-to-heading">{AppConstants.scoring}</span> */}
-                <span className='bulk-match-heading pt-5' >{AppConstants.scoring}</span>
+                <span className="applicable-to-heading">{AppConstants.scoring}</span>
+                {/* <span className='bulk-match-heading pt-5' >{AppConstants.scoring}</span> */}
                 <div className='contextualHelp-RowDirection' >
 
                     <Radio.Group
@@ -766,8 +747,8 @@ class LiveScoreSettingsView extends Component {
 
 
                 {/* timer view */}
-                {/* <InputWithHead conceptulHelp conceptulHelpMsg={AppConstants.timerMsg} required={"required-field"} heading={AppConstants.timer} /> */}
-                <div className='contextualHelp-RowDirection' >
+                <InputWithHead conceptulHelp conceptulHelpMsg={AppConstants.timerMsg} required={"required-field"} heading={AppConstants.timer} />
+                {/* <div className='contextualHelp-RowDirection' >
 
                     <span className='bulk-match-heading pt-5' >{AppConstants.timer}<span style={{ color: 'red' }}>{'*'}</span></span>
                     <div style={{ marginTop: 28 }}>
@@ -775,7 +756,7 @@ class LiveScoreSettingsView extends Component {
                             <span>{AppConstants.timerMsg}</span>
                         </Tooltip>
                     </div>
-                </div>
+                </div> */}
                 <div>
                     <Form.Item>
                         {getFieldDecorator('time', {
@@ -802,8 +783,8 @@ class LiveScoreSettingsView extends Component {
 
                 {/* Buzzer button view */}
                 {/* <span className="applicable-to-heading">{AppConstants.buzzer}</span> */}
-                {/* <InputWithHead conceptulHelp conceptulHelpMsg={AppConstants.buzzerMsg} marginTop={5} heading={AppConstants.buzzer} /> */}
-                <div className='contextualHelp-RowDirection' >
+                <InputWithHead conceptulHelp conceptulHelpMsg={AppConstants.buzzerMsg} marginTop={5} heading={AppConstants.buzzer} />
+                {/* <div className='contextualHelp-RowDirection' >
 
                     <span className='bulk-match-heading pt-5' >{AppConstants.buzzer}</span>
                     <div style={{ marginTop: 28 }}>
@@ -811,7 +792,7 @@ class LiveScoreSettingsView extends Component {
                             <span>{AppConstants.buzzerMsg}</span>
                         </Tooltip>
                     </div>
-                </div>
+                </div> */}
                 <div className="row mt-0 ml-1" >
 
                     <Checkbox style={{
@@ -842,8 +823,6 @@ class LiveScoreSettingsView extends Component {
 
     //// On change Invitees
     onInviteesChange(value) {
-        console.log(value, 'onInviteesChange')
-
         this.props.onChangeSettingForm({ key: "anyOrgSelected", data: value })
         if (value == 7) {
             this.onInviteeSearch("", 3)
@@ -854,7 +833,6 @@ class LiveScoreSettingsView extends Component {
     }
 
     onInviteeSearch = (value, inviteesType) => {
-        console.log(value, "**** value")
         this.props.onInviteesSearchAction(value, inviteesType)
     }
     ////////reg invitees search view for any organisation
@@ -884,7 +862,6 @@ class LiveScoreSettingsView extends Component {
                     // loading={detailsData.searchLoad}
                     >
                         {associationAffilites.map((item) => {
-                            console.log(item, 'associationAffilites')
                             return (
                                 <Option
                                     key={item.id}
@@ -935,7 +912,6 @@ class LiveScoreSettingsView extends Component {
     regInviteesView = () => {
         const { affiliateSelected, anyOrgSelected, otherSelected, nonSelected, affiliateNonSelected, anyOrgNonSelected, registrationInvitees } = this.props.liveScoreSetting
         let invitees = isArrayNotEmpty(registrationInvitees) ? registrationInvitees : [];
-        console.log(registrationInvitees, 'registrationInvitees')
         return (
             <div >
                 <div>

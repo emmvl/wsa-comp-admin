@@ -14,7 +14,7 @@ import { umpireCompetitionListAction } from "../../store/actions/umpireAction/um
 import { entityTypes } from '../../util/entityTypes'
 import { refRoleTypes } from '../../util/refRoles'
 import { getUmpireCompetiton, setUmpireCompition } from '../../util/sessionStorage'
-
+import { exportFilesAction } from "../../store/actions/appAction"
 const { Content } = Layout;
 const { SubMenu } = Menu;
 const { Option } = Select;
@@ -234,6 +234,10 @@ class Umpire extends Component {
         }
     }
 
+    onExport() {
+        let url = AppConstants.umpireListExport + `entityTypeId=${1}&entityId=${this.state.selectedComp}&roleId=${15}`  
+        this.props.exportFilesAction(url)
+    }
 
     ///////view for breadcrumb
     headerView = () => {
@@ -280,7 +284,7 @@ class Umpire extends Component {
                                             justifyContent: "flex-end"
                                         }}
                                     >
-                                        <Button className="primary-add-comp-form" type="primary">
+                                        <Button onClick={() => this.onExport()}  className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">
                                                     <img
@@ -388,7 +392,8 @@ class Umpire extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         umpireCompetitionListAction,
-        umpireListAction
+        umpireListAction,
+        exportFilesAction
     }, dispatch)
 }
 
