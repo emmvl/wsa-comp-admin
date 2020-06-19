@@ -1332,6 +1332,11 @@ const AppConstants = {
   lineUpSelectionMsg: "We can’t enable lineup selection without position tracking",
   disabilityCareNumber: "Disability care Number",
   typeOfDisability: "Type of Disability",
+  pickUpAddress: "Pick up address",
+  productTypes: "Product Types",
+  addType: "Add Type",
+  topSellers: "Top Sellers",
+  productType: "Product Type",
 };
 
 export default AppConstants;

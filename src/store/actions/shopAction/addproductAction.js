@@ -1,27 +1,19 @@
 import ApiConstants from "../../../themes/apiConstants";
 // competition dashboard
-function testCall() {
+function getProduct() {
     const action = {
-        type: ApiConstants.testApi,
+        type: ApiConstants.API_SHOP_API_LOAD,
 
     };
     return action;
 }
 
 
-function testCall2() {
-    const action = {
-        type: ApiConstants.testApi2,
 
-    };
-    return action;
-}
 
 
 
 
 export {
-    testCall,
-    testCall2
-
+    getProduct,
 }

@@ -10,7 +10,6 @@ import { bindActionCreators } from 'redux';
 import AppImages from "../../themes/appImages";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { currencyFormat } from "../../util/currencyFormat";
-import { stringTONumber } from "../../util/helpers"
 import { getPaymentList } from "../../store/actions/stripeAction/stripeAction"
 
 const { confirm } = Modal;
@@ -25,68 +24,6 @@ function tableSort(a, b, key) {
     let stringA = JSON.stringify(a[key])
     let stringB = JSON.stringify(b[key])
     return stringA.localeCompare(stringB)
-}
-
-function totalSeasonalFees(seasonalFees1, record) {
-    let affiliateFeeStatus = false;
-    if (record.childSeasonalFee == null && record.childSeasonalGst == null && record.parentCreator === false) {
-        affiliateFeeStatus = true;  ////need to verify to change
-    } else {
-        affiliateFeeStatus = false;
-    }
-
-    let childSeasonalFee = stringTONumber(record.childSeasonalFee);
-    let childSeasonalGst = stringTONumber(record.childSeasonalGst);
-    let mSeasonalfee = stringTONumber(record.mSeasonalfee);
-    let mSeasonalgst = stringTONumber(record.mSeasonalgst);
-    let seasonalGST = stringTONumber(record.seasonalGST);
-    let seasonalFees = stringTONumber(record.seasonalFees);
-    let parentFees = (seasonalFees + seasonalGST + mSeasonalfee + mSeasonalgst);
-    let childFees = parentFees + (childSeasonalFee + childSeasonalGst)
-    let fee = record.parentCreator ? parentFees : childFees
-    return (
-        affiliateFeeStatus ?
-            <span>{record.feeOrgId == null ? "N/A" : (record.seasonalFees == null && record.seasonalGST == null) ? "N/A" : "Affiliate fee not set!"}</span>
-            :
-            <span>
-                {(record.seasonalFees == null && record.seasonalGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
-            </span>
-        // <span>
-        //     {(record.seasonalFees == null && record.seasonalGST == null) && record.parentCreator === true ? "" : currencyFormat(fee)}
-        // </span>
-    )
-}
-
-function totalCasualFees(casualFees1, record) {
-    let affiliateFeeStatus = false;
-    if (record.childCasualFee == null && record.childCasualGst == null && record.parentCreator === false) {
-        affiliateFeeStatus = true;/////need to verify to change
-    } else {
-        affiliateFeeStatus = false;
-    }
-    let childCasualFee = stringTONumber(record.childCasualFee);
-    let childCasualGst = stringTONumber(record.childCasualGst);
-    let mCasualfee = stringTONumber(record.mCasualfee);
-    let mCasualgst = stringTONumber(record.mCasualgst);
-    let casualGST = stringTONumber(record.casualGST);
-    let casualFees = stringTONumber(record.casualFees);
-
-    let parentFees = (casualFees + casualGST + mCasualfee + mCasualgst);
-    let childFees = parentFees + (childCasualFee + childCasualGst)
-
-    let fee = record.parentCreator ? parentFees : childFees
-
-    return (
-        affiliateFeeStatus ?
-            <span>{record.feeOrgId == null ? "N/A" : (record.casualFees == null && record.casualGST == null) ? "N/A" : "Affiliate fee not set!"}</span>
-            :
-            <span>
-                {(record.casualFees == null && record.casualGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
-            </span>
-        // <span>
-        //     {(record.casualFees == null && record.casualGST == null) && record.parentCreator === true ? "" : currencyFormat(fee)}
-        // </span>
-    )
 }
 
 
@@ -126,15 +63,17 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "feeType")
     },
     {
-        title: "Total Fee",
-        dataIndex: "invoiceFeeTotal",
-        key: "invoiceFeeTotal",
-        sorter: (a, b) => tableSort(a, b, "invoiceFeeTotal")
+        title: "Total Fee (inc GST)",
+        dataIndex: "invoiceTotal",
+        key: "invoiceTotal",
+        render: (invoiceTotal, record) => currencyFormat(invoiceTotal),
+        sorter: (a, b) => tableSort(a, b, "invoiceTotal")
     },
     {
-        title: "Affiliate Portion",
+        title: "Our Portion",
         dataIndex: "affiliatePortion",
         key: "affiliatePortion",
+        render: (affiliatePortion, record) => currencyFormat(affiliatePortion),
         sorter: (a, b) => tableSort(a, b, "affiliatePortion")
     },
     {
