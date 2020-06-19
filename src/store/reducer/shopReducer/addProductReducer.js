@@ -15,7 +15,7 @@ const initialState = {
 function addProductReducer(state = initialState, action) {
     switch (action.type) {
         //////get the Dashboard list in registration
-        case ApiConstants.testApi:
+        case ApiConstants.API_SHOP_API_LOAD:
             return { ...state, onLoad: true, error: null };
 
 

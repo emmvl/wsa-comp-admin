@@ -84,12 +84,12 @@
 }
 
 .chart-container-view {
-  padding: 24px;
-  margin-top: 11%;
+  padding: 20px;
+  margin-top: 3%;
   border-radius: 10px;
   box-shadow: 0px 8px 16px 0 rgba(27, 27, 52, 0.06);
   background-color: var(--app-white);
-  overflow: hidden;
+  overflow: auto;
 }
 
 .user-dashboard-table-view {

@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Loader from '../../customComponents/loader';
 import history from "../../util/history";
-import { testCall } from "../../store/actions/shopAction/addproductAction"
+import { getProduct } from "../../store/actions/shopAction/addproductAction"
 import InputWithHead from "../../customComponents/InputWithHead";
 import { isArrayNotEmpty, captializedString } from "../../util/helpers";
 import { Editor } from 'react-draft-wysiwyg';
@@ -34,7 +34,7 @@ class AddProduct extends Component {
 
 
     componentDidMount() {
-        this.props.testCall()
+        this.props.getProduct()
     }
 
     ///////view for breadcrumb
@@ -322,7 +322,7 @@ class AddProduct extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        testCall
+        getProduct
     }, dispatch)
 }
 

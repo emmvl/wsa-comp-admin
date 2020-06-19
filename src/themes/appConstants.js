@@ -1329,7 +1329,12 @@ const AppConstants = {
   _hours: "Hours",
   _minutes: "Minutes",
 
-  lineUpSelectionMsg: "We can’t enable lineup selection without position tracking"
+  lineUpSelectionMsg: "We can’t enable lineup selection without position tracking",
+  pickUpAddress: "Pick up address",
+  productTypes: "Product Types",
+  addType: "Add Type",
+  topSellers: "Top Sellers",
+  productType: "Product Type",
 };
 
 export default AppConstants;

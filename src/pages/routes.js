@@ -135,6 +135,7 @@ import PaymentDashboard from "../components/registration/paymentDashboard"
 
 import OrderSummary from "../components/shop/orderSummary"
 import ShopOrderStatus from "../components/shop/shopOrderStatus"
+import ShopSettings from '../components/shop/shopSettings'
 const lazyLoad = Component => {
   const lazy = props => {
     return (
@@ -705,7 +706,10 @@ class Routes extends React.Component {
           path="/orderStatus"
           component={lazyLoad(ShopOrderStatus)}
         />
-
+        <PrivateRoute
+          path="/shopSettings"
+          component={lazyLoad(ShopSettings)}
+        />
         <Route path="/" component={lazyLoad(NotFound)} />
 
         <Redirect from="*" to="/404" />
