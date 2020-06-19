@@ -1329,7 +1329,9 @@ const AppConstants = {
   _hours: "Hours",
   _minutes: "Minutes",
 
-  lineUpSelectionMsg: "We can’t enable lineup selection without position tracking"
+  lineUpSelectionMsg: "We can’t enable lineup selection without position tracking",
+  disabilityCareNumber: "Disability care Number",
+  typeOfDisability: "Type of Disability",
 };
 
 export default AppConstants;

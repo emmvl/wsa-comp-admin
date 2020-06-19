@@ -46,6 +46,7 @@ const initialState = {
     affiliateToOnLoad: false,
     affiliateOurOrgOnLoad: false,
     onTextualLoad: false,
+    onUpUpdateLoad: false,
     error: null,
     result: [],
     status: 0,
@@ -325,7 +326,8 @@ function userReducer(state = initialState, action) {
             if (personalData != null) {
                 let obj = {
                     emergencyContactName: personalData.emergencyContactName,
-                    emergencyContactNumber: personalData.emergencyContactNumber
+                    emergencyContactNumber: personalData.emergencyContactNumber,
+                    userId: personalData.userId
                 };
                 arr.push(obj);
             }
@@ -545,12 +547,12 @@ function userReducer(state = initialState, action) {
     
            
             case ApiConstants.API_USER_PROFILE_UPDATE_LOAD:  
-            return { ...state, onLoad: true };
+            return { ...state, onUpUpdateLoad: true };
 
             case ApiConstants.API_USER_PROFILE_UPDATE_SUCCESS:
             return {
                 ...state,
-                onLoad: false,
+                onUpUpdateLoad: false,
             };
         default:
             return state;
