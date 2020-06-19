@@ -1331,6 +1331,8 @@ const AppConstants = {
 
   lineUpSelectionMsg: "We can’t enable lineup selection without position tracking",
   umpireListExport :"https://users-api-dev.worldsportaction.com/users/byRole/export/org?",
+  disabilityCareNumber: "Disability care Number",
+  typeOfDisability: "Type of Disability",
   pickUpAddress: "Pick up address",
   productTypes: "Product Types",
   addType: "Add Type",

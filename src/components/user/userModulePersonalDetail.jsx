@@ -22,6 +22,7 @@ import history from '../../util/history'
 import { liveScore_formateDate } from '../../themes/dateformate';
 import InputWithHead from "../../customComponents/InputWithHead";
 
+
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -317,8 +318,8 @@ const columnsPersonalAddress = [
     },
     {
         title: 'Postcode',
-        dataIndex: 'postalcode',
-        key: 'postalcode'
+        dataIndex: 'postalCode',
+        key: 'postalCode'
     },
     {
         title: 'Email',
@@ -339,7 +340,7 @@ const columnsPersonalAddress = [
                             alt="" width="16" height="16" />}
                     >
                     <Menu.Item key="1">
-                        <NavLink to={{ pathname: `/userProfileEdit`, state: { userData : record , modulefrom:"1"}}} >
+                        <NavLink to={{ pathname: `/userProfileEdit`, state: { userData : record , moduleFrom:"1"}}} >
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
@@ -372,8 +373,8 @@ const columnsPersonalPrimaryContacts = [
     },
     {
         title: 'Postcode',
-        dataIndex: 'postalcode',
-        key: 'postalcode'
+        dataIndex: 'postalCode',
+        key: 'postalCode'
     },
     {
         title: 'Phone Number',
@@ -399,7 +400,7 @@ const columnsPersonalPrimaryContacts = [
                            alt="" width="16" height="16"/>
                   }>
                    <Menu.Item key="1">
-                       <NavLink to={{ pathname: `/userProfileEdit`,state: { userData : record , modulefrom:"2" }}} >
+                       <NavLink to={{ pathname: `/userProfileEdit`,state: { userData : record , moduleFrom:"2" }}} >
                            <span>Edit</span>
                        </NavLink>
                    </Menu.Item>
@@ -436,7 +437,7 @@ const columnsPersonalEmergency = [
                            src={AppImages.moreTripleDot} alt="" width="16" height="16"/>
                    }>
                    <Menu.Item key="1">
-                       <NavLink to={{ pathname: `/userProfileEdit`,state: { userData : record , modulefrom:"3" }}} >
+                       <NavLink to={{ pathname: `/userProfileEdit`,state: { userData : record , moduleFrom:"3" }}} >
                            <span>Edit</span>
                        </NavLink>
                    </Menu.Item>
@@ -559,13 +560,15 @@ class UserModulePersonalDetail extends Component {
         this.props.getOnlyYearListAction();
     }
 
-   componentDidMount() {
+   async componentDidMount() {
         console.log("componentDidMount")
         if (this.props.location.state != null && this.props.location.state != undefined) {
             let userId = this.props.location.state.userId;
             let screenKey = this.props.location.state.screenKey;
             let screen = this.props.location.state.screen;
-             this.setState({ userId: userId, screenKey: screenKey, screen: screen });
+            console.log("****((((((" + this.props.location.state.tabKey);
+            let tabKey = this.props.location.state.tabKey!= undefined ? this.props.location.state.tabKey : '1';
+           await this.setState({ userId: userId, screenKey: screenKey, screen: screen, tabKey: tabKey });
             this.apiCalls(userId);
             if (this.state.tabKey == "1") {
                 this.hanleActivityTableList(1, userId, this.state.competition, "parent");
@@ -1060,7 +1063,7 @@ class UserModulePersonalDetail extends Component {
                     <div className="col-sm user-module-row-heading" style={{ marginTop: '30px' }}>{AppConstants.otherInformation}</div>
                     <div className="col-sm" style={{ marginTop: '7px' , marginRight: '15px'}}>
                         <div className="comp-buttons-view">
-                            <NavLink to={{ pathname: `/userProfileEdit`,state: {userData : personalByCompData[0] , modulefrom:"4"}}} >
+                            <NavLink to={{ pathname: `/userProfileEdit`,state: {userData : personalByCompData[0] , moduleFrom:"4"}}} >
                                 <Button className="other-info-edit-btn" type="primary" >
                                     {AppConstants.edit}
                                 </Button>
@@ -1098,15 +1101,21 @@ class UserModulePersonalDetail extends Component {
 
     medicalView = () => {
         let userState = this.props.userState;
-        let medical = userState.medicalData;
+        let medical  = userState.medicalData;
+        // let medical = [];
+        // if(medData != null && medData.length > 0){
+        //     medData[0]["userId"] = this.state.userId;
+        //     medical = medData;
+        // }
+    
         return (
             <div>
                 {
                     (medical || []).map((item, index) => (
-                        <div key={item.id} className="table-responsive home-dash-table-view">
+                        <div key={item.userRegistrationId} className="table-responsive home-dash-table-view">
                             <div className="col-sm" style={{ marginTop: '7px' , marginRight: '15px'}}>
                                 <div className="comp-buttons-view">
-                                    <NavLink to={{ pathname: `/userProfileEdit`,state: {userData : medical, modulefrom:"5"}}} >
+                                    <NavLink to={{ pathname: `/userProfileEdit`,state: {userData : item, moduleFrom:"5"}}} >
                                         <Button className="other-info-edit-btn" type="primary" >
                                             {AppConstants.edit}
                                         </Button>
@@ -1311,7 +1320,7 @@ class UserModulePersonalDetail extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
-                <InnerHorizontalMenu menu={"user"} userSelectedKey={"5"} />
+                <InnerHorizontalMenu menu={"user"} userSelectedKey={"1"} />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">
                         <div className="fluid-width" >
@@ -1323,7 +1332,7 @@ class UserModulePersonalDetail extends Component {
                                 <div className="col-sm-9" style={{ backgroundColor: "#f7fafc", }}>
                                     <div>{this.headerView()}</div>
                                     <div className="inside-table-view mt-4" >
-                                        <Tabs defaultActiveKey="1" onChange={(e) => this.onChangeTab(e)}>
+                                        <Tabs activeKey={this.state.tabKey}  onChange={(e) => this.onChangeTab(e)}>
                                             <TabPane tab={AppConstants.activity} key="1">
                                                 {activityPlayerList!= null && activityPlayerList.length > 0 && this.playerActivityView()}
                                                 {activityManagerList!= null && activityManagerList.length > 0 && this.managerActivityView()}

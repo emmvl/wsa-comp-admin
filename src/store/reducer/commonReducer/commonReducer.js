@@ -48,7 +48,8 @@ const initialState = {
     finalFixtureTemplateData: [], courtLoad: false, courtList: [],
 	inviteTypeData:[],
 	allowTeamRegistration: [],	
-    registrationTypeData:[],	  
+    registrationTypeData:[],
+    disabilityList: []	  
 };
 
 
@@ -264,7 +265,17 @@ function commonReducerState(state = initialState, action) {
                 status: action.status
             }
 
+        case ApiConstants.API_DISABILITY_REFERENCE_LOAD:
+            return { ...state, onLoad: true, error: null };
 
+        case ApiConstants.API_DISABILITY_REFERENCE_SUCCESS:
+            return {
+                ...state,
+                status: action.status,
+                disabilityList: isArrayNotEmpty(action.result) ? action.result : [],
+                onLoad: false,
+                error: null
+            };    
 
         case ApiConstants.API_GET_PHOTO_TYPE_LOAD:
             return {
