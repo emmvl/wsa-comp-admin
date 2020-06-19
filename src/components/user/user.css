@@ -240,3 +240,26 @@
 .user-prof-filter-select .ant-select-selection{
   min-height: 40px !important;
 }
+
+.table-responsive-other-info {
+  width: 100%;
+  overflow-x: hidden;
+  /* overflow: visible; */
+  -webkit-overflow-scrolling: touch;
+}
+
+.other-info-edit-btn
+{
+    background-color: var(--app-color);
+    border-color: var(--app-color);
+    font-weight: 300;
+    font-stretch: normal;
+    margin-top: 15px;
+    font-style: normal;
+    font-family: inter-semi-bold;
+    font-size: 14px;
+    width: 65px;
+    height: 30px;
+    border-radius: 5px;
+    background-image: var(--app-gradient-right);
+}

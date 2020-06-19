@@ -539,6 +539,19 @@ function userReducer(state = initialState, action) {
                 status: action.status,
                 error: null
             };
+
+            case ApiConstants.API_USER_PROFILE_UPDATE_PLAYER:
+                return { ...state, onExpAffiliateDirLoad: true };
+    
+           
+            case ApiConstants.API_USER_PROFILE_UPDATE_LOAD:  
+            return { ...state, onLoad: true };
+
+            case ApiConstants.API_USER_PROFILE_UPDATE_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+            };
         default:
             return state;
     }

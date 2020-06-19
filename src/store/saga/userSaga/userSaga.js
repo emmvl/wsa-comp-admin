@@ -556,3 +556,20 @@ export function* exportAffiliateDirectorySaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+export function* updateUserProfileSaga(action) {
+    try {
+        const result = yield call(userHttpApi.updateUserProfile, action.data);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_USER_PROFILE_UPDATE_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
