@@ -9,7 +9,7 @@ import ValidationConstants from "../../themes/validationConstant";
 import InputWithHead from "../../customComponents/InputWithHead";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getUmpireCompetiton } from '../../util/sessionStorage'
+import { getUmpireCompId } from '../../util/sessionStorage'
 import { isArrayNotEmpty, captializedString } from "../../util/helpers";
 import Loader from '../../customComponents/loader'
 import {
@@ -47,8 +47,7 @@ class AddUmpire extends Component {
     }
 
     componentDidMount() {
-        const compId = JSON.parse(getUmpireCompetiton())
-        console.log(compId, 'getUmpireCompetiton')
+        const compId = JSON.parse(getUmpireCompId())
         this.props.umpireListAction({ refRoleId: 5, entityTypes: 1, compId: compId, offset: 0 })
 
         if (compId !== null) {

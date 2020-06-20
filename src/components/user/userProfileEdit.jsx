@@ -244,9 +244,10 @@ class UserProfileEdit extends Component {
                         </Form.Item>
                     </div>
                 </div>
-                <div className="row">
+                <div className="row" style={{paddingTop: "11px"}}>
                     <div className="col-sm" >
                         <InputWithHead
+						style={{marginTop: "9px"}}						  
                         heading={AppConstants.middleName}
                         placeholder={AppConstants.middleName}
                         onChange={(e) => this.onChangeSetValue(e.target.value, "middleName")} 
@@ -261,7 +262,7 @@ class UserProfileEdit extends Component {
                         })(
                         <DatePicker
                             size="large"
-                            style={{ width: "100%" }}
+                            style={{ width: "100%" , marginTop: "9px"}}
                             onChange={e => this.onChangeSetValue(e, "dateOfBirth") }
                             format={"DD-MM-YYYY"}
                             showTime={false}
@@ -323,9 +324,9 @@ class UserProfileEdit extends Component {
                     )}
                     </Form.Item>
                     </div>
-                    <div className="col-sm" >  
+                    <div className="col-sm" style={{paddingTop: "11px"}}>  
                         <InputWithHead
-                            style={{marginTop: '20px'}}
+                            style={{marginTop: '9px'}}
                             heading={AppConstants.addressTwo}
                             placeholder={AppConstants.addressTwo}
                             name={'street2'}
@@ -353,13 +354,15 @@ class UserProfileEdit extends Component {
                     </Form.Item>
                     </div>
                     <div className="col-sm" >
-                        <InputWithHead required={"required-field"} heading={AppConstants.stateHeading}/>
+						<div style={{paddingTop: "10px", paddingBottom: "10px"}}>
+                            <InputWithHead required={"required-field"} heading={AppConstants.stateHeading}/>
+                        </div> 
                         <Form.Item >
                             {getFieldDecorator("stateRefId", {
                                 rules: [{ required: true, message: ValidationConstants.stateField[0]}],
                             })(
                                 <Select
-                                    style={{ width: "100%", paddingRight: 1, minWidth: 182, marginTop: '20px' }}
+                                    style={{ width: "100%", paddingRight: 1, minWidth: 182,}}
                                     placeholder={AppConstants.select}
                                     setFieldsValue={userData.stateRefId}
                                     name={'stateRefId'}
@@ -457,9 +460,9 @@ class UserProfileEdit extends Component {
                     )}
                     </Form.Item>
                     </div>
-                    <div className="col-sm" >  
+                    <div className="col-sm" style={{paddingTop: "11px"}}> 
                         <InputWithHead
-                            style={{marginTop: '20px'}}
+                            style={{marginTop: "9px"}}
                             heading={AppConstants.addressTwo}
                             placeholder={AppConstants.addressTwo}
                             name={'street2'}
@@ -489,7 +492,7 @@ class UserProfileEdit extends Component {
                     </div>
                     <div className="col-sm" >
                     
-                        <div style={{paddingTop: "11px", paddingBottom: "9px"}}>
+                        <div style={{paddingTop: "10px", paddingBottom: "10px"}}>
                             <InputWithHead required={"required-field"} heading={AppConstants.stateHeading} />
                         </div>
                         <Form.Item >

@@ -91,12 +91,12 @@ function homeReducer(state = initialState, action) {
             }
 
         case ApiConstants.API_UPDATE_ACTION_BOX_LOAD:
-            return { ...state, onLoad: true };
+            return { ...state, onActionBoxLoad: true };
 
         case ApiConstants.API_UPDATE_ACTION_BOX_SUCCESS:
             return {
                 ...state,
-                onLoad: false,
+                onActionBoxLoad: false,
                 status: action.status,
                 error: null
             };

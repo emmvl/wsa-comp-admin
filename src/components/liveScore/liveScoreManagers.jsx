@@ -76,10 +76,8 @@ const columns = [
                     {linkedEntity.length > 0 && linkedEntity.map((item) => (
                         teamListData(item.entityId) ?
                             <NavLink to={{
-                                // pathname: '/liveScoreManagerView',
-                                // state: { tableRecord: record }
-                                pathname: '/userPersonal',
-                                state: { userId: record.id, screenKey: "livescore" }
+                                pathname: '/liveScoreTeamView',
+                                state: { teamId: item.entityId, screenKey: "livescore" }
                             }}>
                                 <span style={{ color: '#ff8237', cursor: 'pointer' }} className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
                             </NavLink>

@@ -180,7 +180,7 @@ const AppConstants = {
   coach: 'Coach',
   addMembershipType: 'Add Membership Type',
   membershipFees: 'Membership Fees',
-  applyMembershipFee: 'Apply Seasonal Membership Fees to',
+  applyMembershipFee: 'Apply Membership Fees to',
   casualFee: 'Casual Fee',
   gst: 'GST',
   seasonalFee: 'Seasonal fee',
@@ -561,8 +561,8 @@ const AppConstants = {
   enterUmpire1name: 'Enter Umpire 1 Name',
   umpire2Name: 'Umpire 2 Name',
   enterUmpire2name: 'Enter Umpire 2 Name',
-  umpire1Club: 'Umpire 1 Club',
-  umpire2Club: 'Umpire 2 Club',
+  umpire1Club: 'Umpire 1 Organisation',
+  umpire2Club: 'Umpire 2 Organisation',
   scorer1: 'Scorer 1',
   scorer2: 'Scorer 2',
   umpireName: 'Umpire Name',
@@ -1338,6 +1338,9 @@ const AppConstants = {
   addType: "Add Type",
   topSellers: "Top Sellers",
   productType: "Product Type",
+  umpireDashboardExport :"https://livescores-api-dev.worldsportaction.com/matchUmpire/dashboard/export?",
+  updateAction: "Update Action",
+  actionBoxConfirmMsg: "Are you sure you want to complete this activity?",
 };
 
 export default AppConstants;

@@ -22,7 +22,12 @@ function* errorSaga(error) {
 //// get manager list
 export function* getUmpireCompSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.getFixtureCompList, action.orgId)
+        const result = yield call(LiveScoreAxiosApi.liveScoreCompetition,
+            action.data,
+            action.yearId,
+            action.orgId,
+            action.recordUmpireTypes
+        )
         if (result.status == 1) {
             yield put({
                 type: ApiConstants.API_UMPIRE_COMPETITION_LIST_SUCCESS,

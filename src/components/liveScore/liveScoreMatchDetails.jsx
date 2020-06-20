@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { liveScoreDeleteMatch, liveScoreGetMatchDetailInitiate } from "../../store/actions/LiveScoreAction/liveScoreMatchAction";
 import Loader from '../../customComponents/loader'
 import { isArrayNotEmpty } from '../../util/helpers'
-import { getLiveScoreCompetiton } from '../../util/sessionStorage';
+import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage';
 import history from "../../util/history";
 const { Content } = Layout;
 const { confirm } = Modal;
@@ -83,7 +83,9 @@ class LiveScoreMatchDetails extends Component {
             team1: "WSA 1",
             team2: "WSA 2",
             matchId: this.props.location.state ? this.props.location.state.matchId : null,
-            key: this.props.location.state ? this.props.location.state.key ? this.props.location.state.key : null : null
+            key: this.props.location.state ? this.props.location.state.key ? this.props.location.state.key : null : null,
+            umpireKey: this.props.location ? this.props.location.state ? this.props.location.state.umpireKey : null : null,
+            scoringType: null
         }
         this.umpireScore_View = this.umpireScore_View.bind(this)
         this.team_View = this.team_View.bind(this)
@@ -92,6 +94,7 @@ class LiveScoreMatchDetails extends Component {
     componentDidMount() {
         // console.log(this.props.location.state.matchId)
         this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId)
+        // console.log(JSON.parse(getUmpireCompetitonData()), 'JSON.parse(getUmpireCompetitonData())')
 
     }
     componentDidUpdate(nextProps) {
@@ -158,7 +161,7 @@ class LiveScoreMatchDetails extends Component {
                                 >
                                     <NavLink to={{
                                         pathname: "/liveScoreAddMatch",
-                                        state: { isEdit: true, matchId: this.state.matchId, key: this.state.key }
+                                        state: { isEdit: true, matchId: this.state.matchId, key: this.state.key, umpireKey: this.state.umpireKey }
 
                                     }}>
                                         <Button className="primary-add-comp-form" type="primary">
@@ -200,7 +203,19 @@ class LiveScoreMatchDetails extends Component {
         const { match, umpires } = this.props.liveScoreMatchState.matchDetails
         const length = match ? match.length : 0
         let UmpireData = isArrayNotEmpty(umpires) ? umpires : []
-        const { scoringType } = JSON.parse(getLiveScoreCompetiton())
+
+        let scoreType = ''
+
+        if (this.state.umpireKey == 'umpire') {
+            const { scoringType } = JSON.parse(getUmpireCompetitonData())
+            scoreType = scoringType
+        } else {
+            const { scoringType } = JSON.parse(getLiveScoreCompetiton())
+            scoreType = scoringType
+
+        }
+
+        console.log(scoreType, 'scoreType')
         return (
 
             <div className="comp-dash-table-view row mt-5">
@@ -248,7 +263,7 @@ class LiveScoreMatchDetails extends Component {
                     <div style={{ display: "flex", alignContent: "center" }} >
                         <span className="inbox-name-text pt-2" >S1: {length >= 1 ? match ? match[0].scorer1 ? match[0].scorer1.firstName + ' ' + match[0].scorer1.lastName : '' : '' : ''}</span>
                     </div>
-                    {scoringType !== 'SINGLE' && <div style={{ display: "flex", alignContent: "center" }} >
+                    {scoreType !== 'SINGLE' && <div style={{ display: "flex", alignContent: "center" }} >
                         <span className="inbox-name-text pt-2" >S2: {length >= 1 ? match ? match[0].scorer2 ? match[0].scorer2.firstName + ' ' + match[0].scorer2.lastName : '' : '' : ''}</span>
                     </div>}
                 </div>
@@ -329,8 +344,20 @@ class LiveScoreMatchDetails extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"2"} />
+
+                {
+                    this.state.umpireKey ?
+                        <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
+                        :
+                        <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                }
+
+                {
+                    this.state.umpireKey ?
+                        <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"1"} />
+                        :
+                        <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"2"} />
+                }
                 <Loader visible={this.props.liveScoreMatchState.onLoad} />
                 <Layout>
                     {this.headerView()}

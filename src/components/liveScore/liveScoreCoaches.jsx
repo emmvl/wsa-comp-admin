@@ -25,6 +25,7 @@ import { bindActionCreators } from 'redux';
 import { isArrayNotEmpty } from '../../util/helpers'
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 import { exportFilesAction } from "../../store/actions/appAction"
+import { teamListData } from "../../util/helpers";
 const { Content } = Layout;
 const { SubMenu } = Menu;
 function tableSort(a, b, key) {
@@ -77,18 +78,24 @@ const columns = [
     dataIndex: "linkedEntity",
     key: "linkedEntity",
     sorter: (a, b) => tableSort(a, b, "linkedEntity"),
-    render: (linkedEntity, record) =>
-      <NavLink to={{
-        // pathname: '/liveScoreManagerView',
-        // state: { tableRecord: record }
-        pathname: '/userPersonal',
-        state: { userId: record.id, screenKey: "livescore" }
-      }}>
-        {linkedEntity.length > 0 && linkedEntity.map((item) => (
-          <span style={{ color: '#ff8237', cursor: 'pointer' }} className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
-        ))
-        }
-      </NavLink>
+    render: (linkedEntity, record) => {
+
+      return (
+          <div>
+              {linkedEntity.length > 0 && linkedEntity.map((item) => (
+                  teamListData(item.entityId) ?
+                      <NavLink to={{
+                          pathname: '/liveScoreTeamView',
+                          state: { teamId: item.entityId, screenKey: "livescore" }
+                      }}>
+                          <span style={{ color: '#ff8237', cursor: 'pointer' }} className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
+                      </NavLink>
+                      :
+                      <span  >{item.name}</span>
+              ))
+              }
+          </div>)
+  },
   },
   {
     title: 'Action',
@@ -284,9 +291,6 @@ class LiveScoreCoaches extends Component {
 
    // on Export
    onExport(){
-
-    // let url = AppConstants.managerExport + this.state.competitionId
-
     let url = AppConstants.coachExport + this.state.competitionId
     this.props.exportFilesAction(url)
 }

@@ -33,11 +33,20 @@ export const liveScoreClearIncident = () => {
     }
 }
 
+function liveScoreUpdateIncidentData(data, key) {
+    const action = {
+        type: ApiConstatnts.API_LIVE_SCORE_UPDATE_INCIDENT_DATA,
+        key: key,
+        data: data
+    };
+
+    return action;
+} 
 
 
 
 export {
     liveScoreIncidentList,
     liveScoreUpdateIncident,
-    // liveScoreClearIncident
+    liveScoreUpdateIncidentData
 }

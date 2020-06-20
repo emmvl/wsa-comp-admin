@@ -13,9 +13,9 @@ import { getUmpireDashboardList, getUmpireDashboardVenueList, getUmpireDashboard
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { entityTypes } from '../../util/entityTypes'
 import { refRoleTypes } from '../../util/refRoles'
-import { getUmpireCompetiton, setUmpireCompition, getOrganisationData } from '../../util/sessionStorage'
+import { getUmpireCompetiton, setUmpireCompition, getOrganisationData, setUmpireCompitionData, getUmpireCompetitonData } from '../../util/sessionStorage'
 import moment, { utc } from "moment";
-
+import { exportFilesAction } from "../../store/actions/appAction"
 const { Content } = Layout;
 const { SubMenu } = Menu;
 const { Option } = Select;
@@ -30,6 +30,7 @@ function tableSort(a, b, key) {
 let this_obj = null;
 
 
+
 const columns = [
 
     {
@@ -37,6 +38,16 @@ const columns = [
         dataIndex: 'id',
         key: 'id',
         sorter: (a, b) => tableSort(a, b, "id"),
+        render: (id) => {
+            return (
+                <NavLink to={{
+                    pathname: '/liveScoreMatchDetails',
+                    state: { matchId: id, umpireKey: 'umpire' }
+                }} >
+                    <span class="input-heading-add-another pt-0" >{id}</span>
+                </NavLink>
+            )
+        }
     },
     {
         title: 'Start Time',
@@ -78,8 +89,14 @@ const columns = [
         render: (umpires, record) => {
             return (
 
-                umpires &&
-                <span style={{ color: (umpires[0].verifiedBy !== null || umpires[0].status == 'YES') ? 'green' : (umpires[0].verifiedBy !== null || umpires[0].status == 'NO') ? 'red' : 'grey' }} >{umpires[0].umpireName}</span>
+                umpires ?
+                    umpires[0] ?
+
+                        <span style={{ color: (umpires[0].verifiedBy !== null || umpires[0].status == 'YES') ? 'green' : (umpires[0].verifiedBy !== null || umpires[0].status == 'NO') ? 'red' : 'grey' }} >{umpires[0].umpireName}</span>
+                        :
+                        <span>{''}</span>
+                    :
+                    <span>{''}</span>
 
             )
         }
@@ -91,13 +108,25 @@ const columns = [
         dataIndex: 'umpires',
         key: 'umpires',
         sorter: (a, b) => tableSort(a, b, "umpires"),
-        render: (umpires, record) => <span >
+        render: (umpires, record) => {
 
-            {isArrayNotEmpty(umpires) && umpires[0].organisations.map((item) => (
-                <span className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
-            ))
-            }
-        </span>
+            return (
+                <>
+                    {
+                        umpires ?
+                            umpires[0] ?
+                                isArrayNotEmpty(umpires[0].organisations) && umpires[0].organisations.map((item) => (
+                                    <span className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
+                                ))
+
+                                :
+                                <span>{''}</span>
+                            :
+                            <span>{''}</span>}
+
+                </>
+            )
+        }
     },
     {
         title: 'Umpire 2',
@@ -107,8 +136,13 @@ const columns = [
         render: (umpires, record) => {
             return (
 
-                umpires &&
-                <span style={{ color: (umpires[1].verifiedBy !== null || umpires[1].status == 'YES') ? 'green' : (umpires[1].verifiedBy !== null || umpires[1].status == 'NO') ? 'red' : 'grey' }} >{umpires[1].umpireName}</span>
+                umpires ?
+                    umpires[1] ?
+                        <span style={{ color: (umpires[1].verifiedBy !== null || umpires[1].status == 'YES') ? 'green' : (umpires[1].verifiedBy !== null || umpires[1].status == 'NO') ? 'red' : 'grey' }} >{umpires[1].umpireName}</span>
+                        :
+                        <span>{''}</span>
+                    :
+                    <span>{''}</span>
 
             )
         }
@@ -118,17 +152,30 @@ const columns = [
         dataIndex: 'umpires',
         key: 'umpires',
         sorter: (a, b) => tableSort(a, b, "umpires"),
-        render: (umpires, record) => <span >
+        render: (umpires, record) => {
+            return (
+                <>
+                    {
+                        umpires ?
+                            umpires[1] ?
+                                isArrayNotEmpty(umpires[1].organisations) && umpires[1].organisations.map((item) => (
+                                    <span className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
+                                ))
 
-            {isArrayNotEmpty(umpires) && umpires[1].organisations.map((item) => (
-                <span className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
-            ))
-            }
-        </span>
+                                :
+                                <span>{''}</span>
+                            :
+                            <span>{''}</span>}
+
+                </>
+            )
+        }
     },
     {
         title: "Action",
-        render: (data, record) => <Menu
+        dataIndex: 'umpires',
+        key: 'umpires',
+        render: (umpires, record) => <Menu
             className="action-triple-dot-submenu"
             theme="light"
             mode="horizontal"
@@ -140,14 +187,29 @@ const columns = [
                     <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                 }
             >
-                <Menu.Item key={'1'}>
-                    {/* <NavLink to={{
-                        pathname: '/addUmpire',
-                        state: { isEdit: true, tableRecord: record }
-                    }}> */}
-                    <span >Edit</span>
-                    {/* </NavLink> */}
-                </Menu.Item>
+
+                {
+                    umpires ?
+                        umpires[0] ?
+                            umpires[0].verifiedBy == null ?
+                                <Menu.Item key={'1'}>
+                                    <NavLink to={{
+                                        pathname: '/liveScoreMatchDetails',
+                                        state: { matchId: record.id, umpireKey: 'umpire' }
+                                    }} >
+                                        <span >Edit</span>
+                                    </NavLink>
+                                </Menu.Item>
+                                :
+                                null
+                            :
+                            null
+                        :
+                        null
+                }
+
+
+
                 <Menu.Item key="2" >
                     {/* <NavLink to={{
                         pathname: "./liveScoreAssignMatch",
@@ -182,13 +244,14 @@ class UmpireDashboard extends Component {
             selectedComp: null,
             loading: false,
             competitionUniqueKey: null,
-            venue: null,
+            venue: "",
             venueLoad: false,
-            division: null,
+            division: "",
             divisionLoad: false,
             venueSuccess: false,
             divisionSuccess: false,
-            orgId: null
+            orgId: null,
+            compArray: []
         }
         this_obj = this
     }
@@ -197,8 +260,7 @@ class UmpireDashboard extends Component {
         let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
         let orgId = getOrganisationData().organisationId;
         this.setState({ loading: true, orgId: orgId })
-
-        this.props.umpireCompetitionListAction(organisationId)
+        this.props.umpireCompetitionListAction(null, null, organisationId)
 
     }
 
@@ -208,78 +270,73 @@ class UmpireDashboard extends Component {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
 
+                let compData = compList.length > 0 && compList[0]
 
                 if (getUmpireCompetiton()) {
                     let compId = JSON.parse(getUmpireCompetiton())
                     firstComp = compId
+
+                    let compObj = JSON.parse(getUmpireCompetitonData())
+                    compData = compObj
                 } else {
                     setUmpireCompition(firstComp)
+                    setUmpireCompitionData(JSON.stringify(compData))
+
                 }
 
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey
 
-                // const body =
-                // {
-                //     "paging": {
-                //         "limit": 10,
-                //         "offset": 0
-                //     }
-                // }
 
-                // this.props.getUmpireDashboardList({compId: firstComp,divisionid:this.state.division,venueId:this.state.venue,pageData:body})
                 this.props.getUmpireDashboardVenueList(firstComp)
                 this.props.getUmpireDashboardDivisionList(firstComp)
 
-                this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey, venueLoad: true, divisionLoad: true })
+                this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey, compArray: compList, venueLoad: true, divisionLoad: true })
             }
         }
 
         if (nextProps.umpireDashboardState !== this.props.umpireDashboardState) {
-            if (this.props.umpireDashboardState.onVenueLoad !== this.state.venueLoad) {
-                let venueList = isArrayNotEmpty(this.props.umpireDashboardState.umpireVenueList) ? this.props.umpireDashboardState.umpireVenueList : []
-                let firstVenue = venueList.length > 0 && venueList[0].venueId
-                this.setState({ venue: firstVenue, venueLoad: false, venueSuccess: firstVenue && true })
+            if (this.props.umpireDashboardState.onVenueLoad === false && this.state.venueLoad === true) {
+                this.setState({ venueLoad: false, divisionLoad: true })
             }
         }
 
         if (nextProps.umpireDashboardState !== this.props.umpireDashboardState) {
-            if (this.props.umpireDashboardState.onDivisionLoad !== this.state.divisionLoad) {
-                let divisionList = isArrayNotEmpty(this.props.umpireDashboardState.umpireDivisionList) ? this.props.umpireDashboardState.umpireDivisionList : []
-                let firstDivision = divisionList.length > 0 && divisionList[0].id
-                this.setState({ division: firstDivision, divisionLoad: false, divisionSuccess: firstDivision && true })
-            }
-        }
-
-        if (this.state.venueSuccess && this.state.divisionSuccess) {
-            console.log('checking')
-            const body =
-            {
-                "paging": {
-                    "limit": 10,
-                    "offset": 0
+            if (this.props.umpireDashboardState.onDivisionLoad === false && this.state.divisionLoad === true) {
+                const body =
+                {
+                    "paging": {
+                        "limit": 10,
+                        "offset": 0
+                    }
                 }
-            }
+                this.setState({ divisionLoad: false })
+                this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division, venueId: this.state.venue, orgId: this.state.orgId, pageData: body })
 
-            this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division, venueId: this.state.venue, orgId: this.state.orgId, pageData: body })
-            this.setState({ venueSuccess: false, divisionSuccess: false })
+            }
         }
+
     }
 
     /// Handle Page change
     handlePageChnage(page) {
-        console.log(page, 'page')
         let offset = page ? 10 * (page - 1) : 0;
+        const body =
+        {
+            "paging": {
+                "limit": 10,
+                "offset": offset
+            }
+        }
 
-        this.props.getUmpireDashboardList({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: this.state.selectedComp, offset: offset })
+        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division, venueId: this.state.venue, orgId: this.state.orgId, pageData: body })
 
     }
 
 
     ////////form content view
     contentView = () => {
-        const { umpireDashboardList } = this.props.umpireDashboardState
+        const { umpireDashboardList, totalPages } = this.props.umpireDashboardState
         let umpireListResult = isArrayNotEmpty(umpireDashboardList) ? umpireDashboardList : []
-        console.log(umpireListResult, 'umpireListResult')
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
@@ -304,8 +361,7 @@ class UmpireDashboard extends Component {
                     <div className="d-flex justify-content-end">
                         <Pagination
                             className="antd-pagination"
-                            current={1}
-                            total={10}
+                            total={totalPages}
                             defaultPageSize={10}
                             onChange={(page) => this.handlePageChnage(page)}
                         />
@@ -317,14 +373,25 @@ class UmpireDashboard extends Component {
 
 
 
+
     onChangeComp(compID) {
+
         let selectedComp = compID.comp
         setUmpireCompition(selectedComp)
         let compKey = compID.competitionUniqueKey
         this.props.getUmpireDashboardVenueList(selectedComp)
         this.props.getUmpireDashboardDivisionList(selectedComp)
-        this.props.getUmpireDashboardList({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: selectedComp, offset: 0 })
-        this.setState({ selectedComp, competitionUniqueKey: compKey, venueLoad: true, divisionLoad: true })
+        // this.props.getUmpireDashboardList({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: selectedComp, offset: 0 })
+        this.setState({ selectedComp, competitionUniqueKey: compKey, venueLoad: true, divisionLoad: true, venue: "", division: "" })
+
+        let compObj = null
+        for (let i in this.state.compArray) {
+            if (compID.comp == this.state.compArray[i].id) {
+                compObj = this.state.compArray[i]
+                break;
+            }
+        }
+        setUmpireCompitionData(JSON.stringify(compObj))
 
     }
 
@@ -382,7 +449,11 @@ class UmpireDashboard extends Component {
         this.setState({ division: divisionid })
     }
 
-
+    // on Export
+    onExport() {
+        let url = AppConstants.umpireDashboardExport + `competitionId=${this.state.selectedComp}&organisationId=${this.state.orgId}`
+        this.props.exportFilesAction(url)
+    }
     ///////view for breadcrumb
     headerView = () => {
 
@@ -399,7 +470,7 @@ class UmpireDashboard extends Component {
                         <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
                             <div className="row">
 
-                                <div className="col-sm pt-1">
+                                {/* <div className="col-sm pt-1">
                                     <div
                                         className="comp-dashboard-botton-view-mobile"
                                         style={{
@@ -410,13 +481,13 @@ class UmpireDashboard extends Component {
                                             justifyContent: "flex-end"
                                         }}
                                     >
-                                        {/* <NavLink to={`/addUmpire`} className="text-decoration-none"> */}
+                                        <NavLink to={`/addUmpire`} className="text-decoration-none">
                                         <Button className="primary-add-comp-form" type="primary">
                                             + {AppConstants.addUmpire}
                                         </Button>
-                                        {/* </NavLink> */}
+                                        </NavLink>
                                     </div>
-                                </div>
+                                </div> */}
                                 <div className="col-sm pt-1">
                                     <div
                                         className="comp-dashboard-botton-view-mobile"
@@ -428,7 +499,7 @@ class UmpireDashboard extends Component {
                                             justifyContent: "flex-end"
                                         }}
                                     >
-                                        <Button className="primary-add-comp-form" type="primary">
+                                        <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">
                                                     <img
@@ -543,6 +614,7 @@ class UmpireDashboard extends Component {
         const { umpireVenueList, umpireDivisionList } = this.props.umpireDashboardState
         let venueList = isArrayNotEmpty(umpireVenueList) ? umpireVenueList : []
         let divisionList = isArrayNotEmpty(umpireDivisionList) ? umpireDivisionList : []
+        console.log(competition, 'competition')
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
                 <div className="fluid-width" >
@@ -667,7 +739,8 @@ function mapDispatchToProps(dispatch) {
         umpireCompetitionListAction,
         getUmpireDashboardVenueList,
         getUmpireDashboardDivisionList,
-        getUmpireDashboardList
+        getUmpireDashboardList,
+        exportFilesAction
     }, dispatch)
 }
 

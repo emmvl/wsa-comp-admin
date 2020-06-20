@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Select, Spin, Pagination, Menu } from 'antd';
+import { Layout, Button, Table, Select, Spin, Pagination, Menu,Modal } from 'antd';
 import './home.css';
 import { NavLink } from 'react-router-dom';
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -24,10 +24,10 @@ let this_Obj = null;
 const columnsInbox = [
     {
         title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
-        render: name => (
-            <span className="inbox-name-text">{name}</span>
+        dataIndex: 'organisationName',
+        key: 'organisationName',
+        render: (organisationName, e) => (
+            <span className="inbox-name-text">{organisationName}</span>
         )
     },
     {
@@ -50,7 +50,7 @@ const columnsInbox = [
         dataIndex: "isActionRequired",
         key: "isActionRequired",
         render: (isActionRequired, e) => (
-            isActionRequired === true ? <Menu
+            isActionRequired === 1 ? <Menu
                 className="action-triple-dot-submenu"
                 theme="light"
                 mode="horizontal"
@@ -68,8 +68,8 @@ const columnsInbox = [
                         />
                     }
                 >
-                    <Menu.Item key="2" onClick={() => this_Obj.updateActionBox(e.affiliateId)}>
-                        <span>Delete</span>
+                    <Menu.Item key="1" onClick={() => this_Obj.showConfirm(e)}>
+                        <span>Complete</span>
                     </Menu.Item>
                 </SubMenu>
             </Menu> : null
@@ -95,8 +95,6 @@ const dataInbox = [
 
     },
 ]
-
-
 
 const columnsOwned = [
     {
@@ -260,7 +258,9 @@ class HomeDashboard extends Component {
             yearRefId: null,
             loading: true,
             userCountLoading: false,
-            organisationId: null //getOrganisationData().organisationUniqueKey
+            organisationId: null,
+            updateActionBoxLoad: false,
+            actions: null
         }
         this_Obj = this;
 
@@ -270,12 +270,12 @@ class HomeDashboard extends Component {
     componentDidMount() {
         this.props.getRoleAction()
         this.props.getUreAction()
-        //this.handleActionBoxList(1);
+       
         // this.props.getOnlyYearListAction(this.props.appState.yearList)
         // this.props.getUserCount(1)
     }
 
-    componentDidUpdate(nextProps) {
+    async componentDidUpdate(nextProps) {
         const { yearList } = this.props.appState
         let userOrganisation = this.props.userState.getUserOrganisation
         if (this.state.userCountLoading == true && this.props.appState.onLoad == false) {
@@ -292,6 +292,7 @@ class HomeDashboard extends Component {
         if (this.state.loading == true && this.props.userState.onOrgLoad == false) {
             if (nextProps.userOrganisation !== userOrganisation) {
                 if (userOrganisation.length > 0) {
+
                     if (this.props.appState.yearList == 0) {
                         this.props.getOnlyYearListAction(this.props.appState.yearList)
                         this.setState({ userCountLoading: true, loading: false })
@@ -304,8 +305,15 @@ class HomeDashboard extends Component {
                             this.setState({ loading: false })
                         }
                     }
+                    await this.setState({organisationId: userOrganisation[0].organisationUniqueKey})
+                    this.handleActionBoxList(1);
                 }
             }
+        }
+
+        if(this.state.updateActionBoxLoad == true && this.props.homeDashboardState.onActionBoxLoad == false){
+            this.setState({updateActionBoxLoad: false});
+            this.handleActionBoxList(1);
         }
     }
 
@@ -328,9 +336,34 @@ class HomeDashboard extends Component {
         this.props.getActionBoxAction(payload);
     }
 
-    updateActionBox = () => {
-
+    showConfirm = async (e) => {
+        await this.setState({
+            modalVisible: true,
+            actions: e
+        });
     }
+
+    handleUpdateActionBoxOk = (key) => {
+      
+        if(key == "ok"){
+            this.updateActionBox(this.state.actions);
+        }
+
+        this.setState({ modalVisible: false, actions: null });
+    }
+
+    updateActionBox = (e) => {
+        console.log("updateActionBox::" + JSON.stringify(e));
+        let obj = {
+            actionsId: e.actionsId,
+            actionMasterId: e.actionMasterId
+        }
+       // console.log("********" + JSON.stringify(obj));
+        this.props.updateActionBoxAction(obj);
+        this.setState({updateActionBoxLoad: true});
+    }
+
+    
 
     actionboxHeadingView = () => {
         return (
@@ -351,8 +384,9 @@ class HomeDashboard extends Component {
         return (
             <div>
                 {this.actionboxHeadingView()}
-                <span className='input-heading'>{"This feature is not implemented yet"}</span>
-                {/* <div className="home-table-view" > 
+                 {/*  */}
+                {/* <span className='input-heading'>{"This feature is not implemented yet"}</span> */}
+                <div className="home-table-view" style={{boxShadow: 'none',background:'none'}}> 
                     <div className="table-responsive home-dash-table-view">
                         <Table className="home-dashboard-table" 
                             columns={columnsInbox} 
@@ -366,12 +400,21 @@ class HomeDashboard extends Component {
                     <div className="d-flex justify-content-end">
                         <Pagination
                         className="antd-pagination"
-                        current={this.props.homeDashboardState.actionBoxPage}
-                        total={this.props.homeDashboardState.actionBoxTotalCount}
+                        current={actionBoxPage}
+                        total={actionBoxTotalCount}
                         onChange={(page) => this.handleActionBoxList(page)}
                     />
                     </div>
-                </div> */}
+                </div>
+
+                <Modal
+                    className="add-membership-type-modal"
+                    title={AppConstants.updateAction}
+                    visible={this.state.modalVisible}
+                    onOk={ () => this.handleUpdateActionBoxOk("ok")}
+                    onCancel={() => this.handleUpdateActionBoxOk("cancel")}>
+                    <p>{AppConstants.actionBoxConfirmMsg}</p>
+                </Modal>
             </div>
         )
     }

@@ -141,16 +141,19 @@ class LiveScoreSettingsView extends Component {
         this.setState({ competitionTabKey: key })
     }
 
-    getRecordingTime(days, hours, minutes, ) {
-        let dayToMinutes, hoursToMinutes, _minutes, totalMinutes
-        if (days != null) {
-            dayToMinutes = days * 24 * 60
-            hoursToMinutes = hours * 60
-            _minutes = minutes * 1
-            totalMinutes = dayToMinutes + hoursToMinutes + _minutes
-            return totalMinutes
+    getRecordingTime(days, hours, minutes) {
+        let _days = days ? days : 0
+        let _hours = hours ? hours : 0
+        let _minutes = minutes ? minutes : 0
 
-        }
+        let dayToMinutes, hoursToMinutes, _mints, totalMinutes
+        dayToMinutes = _days * 24 * 60
+        hoursToMinutes = _hours * 60
+        _mints = _minutes * 1
+
+        totalMinutes = dayToMinutes + hoursToMinutes + _mints
+        return totalMinutes
+
 
     }
 
@@ -205,8 +208,9 @@ class LiveScoreSettingsView extends Component {
                 let lineUpSelectionTime = null
                 if (lineupSelection) {
                     lineUpSelectionTime = this.getRecordingTime(lineupSelectionDays, lineupSelectionHours, lineupSelectionMins)
+
                 }
-           
+
                 let orgId = null
                 if (this.props.location.state === 'add') {
                     let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
@@ -233,10 +237,10 @@ class LiveScoreSettingsView extends Component {
                 formData.append('organisationId', orgId ? orgId : this.props.liveScoreSetting.data.organisationId)
                 formData.append('buzzerEnabled', buzzerEnabled)
                 formData.append('warningBuzzerEnabled', warningBuzzerEnabled)
-                if(attendenceRecordingTime){
+                if (attendenceRecordingTime) {
                     formData.append('attendanceSelectionTime', attendenceRecordingTime)
                 }
-               
+
 
                 if (lineupSelection) {
                     formData.append('lineupSelectionEnabled', lineupSelection)
@@ -257,7 +261,7 @@ class LiveScoreSettingsView extends Component {
                 //     formData.append('warningBuzzerEnabled', warningBuzzerEnabled)
                 // }
 
-                this.props.settingDataPostInititae({ body: formData, venue: venue, settingView: this.props.location.state })
+                 this.props.settingDataPostInititae({ body: formData, venue: venue, settingView: this.props.location.state })
                 // this.props.clearLiveScoreSetting()
                 // this.props.history.push('/liveScoreCompetitions')
                 // this.props.clearLiveScoreSetting()
