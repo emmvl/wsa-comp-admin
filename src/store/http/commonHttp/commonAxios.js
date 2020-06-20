@@ -206,7 +206,14 @@ let AxiosApi = {
         let url = `/api/venueCourt?venueId=${venueId}`;
         return Method.dataGet(url, token)
     },
-
+    getActionBoxList(payload) {
+        let url = `/api/actions`;
+        return Method.dataPost(url, token, payload)
+    },
+    updateActionBox(payload) {
+        let url = `/api/actions/update`;
+        return Method.dataPost(url, token, payload)
+    },
 };
 const Method = {
     async dataPost(newurl, authorization, body) {

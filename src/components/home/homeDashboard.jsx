@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Select, Spin } from 'antd';
+import { Layout, Button, Table, Select, Spin, Pagination, Menu,Modal } from 'antd';
 import './home.css';
 import { NavLink } from 'react-router-dom';
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -9,21 +9,25 @@ import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getUreAction, getRoleAction } from '../../store/actions/userAction/userAction'
-import { getUserCount, clearHomeDashboardData, setHomeDashboardYear } from "../../store/actions/homeAction/homeAction"
+import { getUserCount, clearHomeDashboardData, setHomeDashboardYear,
+        getActionBoxAction, updateActionBoxAction } from "../../store/actions/homeAction/homeAction"
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 import Loader from '../../customComponents/loader';
 import history from "../../util/history";
+import { getOrganisationData } from "../../util/sessionStorage";
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
+const { SubMenu } = Menu;
+let this_Obj = null;
 
 const columnsInbox = [
     {
         title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
-        render: name => (
-            <span className="inbox-name-text">{name}</span>
+        dataIndex: 'organisationName',
+        key: 'organisationName',
+        render: (organisationName, e) => (
+            <span className="inbox-name-text">{organisationName}</span>
         )
     },
     {
@@ -32,15 +36,45 @@ const columnsInbox = [
         key: 'description',
 
     },
+    // {
+    //     title: 'Time',
+    //     dataIndex: 'time',
+    //     key: 'time',
+    //     width: "25%",
+    //     render: time => (
+    //         <span className="inbox-time-text">{time}</span>
+    //     )
+    // },
     {
-        title: 'Time',
-        dataIndex: 'time',
-        key: 'time',
-        width: "25%",
-        render: time => (
-            <span className="inbox-time-text">{time}</span>
+        title: "Action",
+        dataIndex: "isActionRequired",
+        key: "isActionRequired",
+        render: (isActionRequired, e) => (
+            isActionRequired === 1 ? <Menu
+                className="action-triple-dot-submenu"
+                theme="light"
+                mode="horizontal"
+                style={{ lineHeight: "25px" }}
+            >
+                <SubMenu
+                    key="sub1"
+                    title={
+                        <img
+                            className="dot-image"
+                            src={AppImages.moreTripleDot}
+                            alt=""
+                            width="16"
+                            height="16"
+                        />
+                    }
+                >
+                    <Menu.Item key="1" onClick={() => this_Obj.showConfirm(e)}>
+                        <span>Complete</span>
+                    </Menu.Item>
+                </SubMenu>
+            </Menu> : null
         )
-    },
+    }
 
 ]
 
@@ -61,8 +95,6 @@ const dataInbox = [
 
     },
 ]
-
-
 
 const columnsOwned = [
     {
@@ -225,8 +257,12 @@ class HomeDashboard extends Component {
         this.state = {
             yearRefId: null,
             loading: true,
-            userCountLoading: false
+            userCountLoading: false,
+            organisationId: null,
+            updateActionBoxLoad: false,
+            actions: null
         }
+        this_Obj = this;
 
     }
 
@@ -234,11 +270,12 @@ class HomeDashboard extends Component {
     componentDidMount() {
         this.props.getRoleAction()
         this.props.getUreAction()
+       
         // this.props.getOnlyYearListAction(this.props.appState.yearList)
         // this.props.getUserCount(1)
     }
 
-    componentDidUpdate(nextProps) {
+    async componentDidUpdate(nextProps) {
         const { yearList } = this.props.appState
         let userOrganisation = this.props.userState.getUserOrganisation
         if (this.state.userCountLoading == true && this.props.appState.onLoad == false) {
@@ -255,6 +292,7 @@ class HomeDashboard extends Component {
         if (this.state.loading == true && this.props.userState.onOrgLoad == false) {
             if (nextProps.userOrganisation !== userOrganisation) {
                 if (userOrganisation.length > 0) {
+
                     if (this.props.appState.yearList == 0) {
                         this.props.getOnlyYearListAction(this.props.appState.yearList)
                         this.setState({ userCountLoading: true, loading: false })
@@ -267,8 +305,15 @@ class HomeDashboard extends Component {
                             this.setState({ loading: false })
                         }
                     }
+                    await this.setState({organisationId: userOrganisation[0].organisationUniqueKey})
+                    this.handleActionBoxList(1);
                 }
             }
+        }
+
+        if(this.state.updateActionBoxLoad == true && this.props.homeDashboardState.onActionBoxLoad == false){
+            this.setState({updateActionBoxLoad: false});
+            this.handleActionBoxList(1);
         }
     }
 
@@ -279,8 +324,48 @@ class HomeDashboard extends Component {
         this.props.getUserCount(yearRefId)
     }
 
+    handleActionBoxList = (page) =>{
+        let payload =
+        {
+            organisationId: this.state.organisationId,
+            paging: {
+                limit: 10,
+                offset: (page ? (10 * (page - 1)) : 0)
+            }
+        }
+        this.props.getActionBoxAction(payload);
+    }
 
-    inboxHeadingView = () => {
+    showConfirm = async (e) => {
+        await this.setState({
+            modalVisible: true,
+            actions: e
+        });
+    }
+
+    handleUpdateActionBoxOk = (key) => {
+      
+        if(key == "ok"){
+            this.updateActionBox(this.state.actions);
+        }
+
+        this.setState({ modalVisible: false, actions: null });
+    }
+
+    updateActionBox = (e) => {
+        console.log("updateActionBox::" + JSON.stringify(e));
+        let obj = {
+            actionsId: e.actionsId,
+            actionMasterId: e.actionMasterId
+        }
+       // console.log("********" + JSON.stringify(obj));
+        this.props.updateActionBoxAction(obj);
+        this.setState({updateActionBoxLoad: true});
+    }
+
+    
+
+    actionboxHeadingView = () => {
         return (
             <div className="row text-view mt-5 pt-2">
                 <div className="col-sm" >
@@ -293,27 +378,46 @@ class HomeDashboard extends Component {
         )
     }
 
-    //////inboxView for table
-    inboxView = () => {
+    //////actionboxView for table
+    actionboxView = () => {
+        let {actionBoxList, actionBoxPage, actionBoxTotalCount} = this.props.homeDashboardState;
         return (
             <div>
-                {this.inboxHeadingView()}
-                {/* <div className="home-table-view" > */}
-                {/* <div className="table-responsive"> */}
-                {/* <Table className="home-inbox-table" columns={columnsInbox} dataSource={dataInbox} pagination={false}
+                {this.actionboxHeadingView()}
+                 {/*  */}
+                {/* <span className='input-heading'>{"This feature is not implemented yet"}</span> */}
+                <div className="home-table-view" style={{boxShadow: 'none',background:'none'}}> 
+                    <div className="table-responsive home-dash-table-view">
+                        <Table className="home-dashboard-table" 
+                            columns={columnsInbox} 
+                            dataSource={actionBoxList} 
+                            pagination={false}
                             showHeader={false}
-                        /> */}
-                <span className='input-heading'>{"This feature is not implemented yet"}</span>
-                {/* </div> */}
-                {/* </div> */}
+                            loading={this.props.homeDashboardState.onActionBoxLoad === true && true}
+                        />
+               
+                    </div>
+                    <div className="d-flex justify-content-end">
+                        <Pagination
+                        className="antd-pagination"
+                        current={actionBoxPage}
+                        total={actionBoxTotalCount}
+                        onChange={(page) => this.handleActionBoxList(page)}
+                    />
+                    </div>
+                </div>
+
+                <Modal
+                    className="add-membership-type-modal"
+                    title={AppConstants.updateAction}
+                    visible={this.state.modalVisible}
+                    onOk={ () => this.handleUpdateActionBoxOk("ok")}
+                    onCancel={() => this.handleUpdateActionBoxOk("cancel")}>
+                    <p>{AppConstants.actionBoxConfirmMsg}</p>
+                </Modal>
             </div>
         )
     }
-
-
-
-
-
 
     compOverviewHeading = () => {
         const { yearRefId } = this.props.homeDashboardState
@@ -349,7 +453,6 @@ class HomeDashboard extends Component {
             </div >
         )
     }
-
 
     /////competition Overview 
     compOverview = () => {
@@ -477,8 +580,6 @@ class HomeDashboard extends Component {
         )
     }
 
-
-
     ownedHeadingView = () => {
         return (
             <div className="row text-view">
@@ -530,9 +631,6 @@ class HomeDashboard extends Component {
         )
     }
 
-
-
-
     render() {
 
         return (
@@ -542,7 +640,7 @@ class HomeDashboard extends Component {
                 <Layout>
                     {/* <Content className="container"> */}
                     <Content className="comp-dash-table-view">
-                        {this.inboxView()}
+                        {this.actionboxView()}
                         {this.compOverview()}
                         {/* {this.ownedView()}
                         {this.participatedView()} */}
@@ -563,7 +661,8 @@ function mapDispatchToProps(dispatch) {
         getUserCount,
         getOnlyYearListAction,
         clearHomeDashboardData,
-        setHomeDashboardYear
+        setHomeDashboardYear,
+        getActionBoxAction, updateActionBoxAction
     }, dispatch)
 }
 

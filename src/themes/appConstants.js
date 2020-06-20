@@ -1339,6 +1339,8 @@ const AppConstants = {
   topSellers: "Top Sellers",
   productType: "Product Type",
   umpireDashboardExport :"https://livescores-api-dev.worldsportaction.com/matchUmpire/dashboard/export?",
+  updateAction: "Update Action",
+  actionBoxConfirmMsg: "Are you sure you want to complete this activity?",
 };
 
 export default AppConstants;

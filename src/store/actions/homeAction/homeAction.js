@@ -25,12 +25,30 @@ function setHomeDashboardYear(year) {
     return action
 }
 
+function getActionBoxAction(payload){
+    const action = {
+        type: ApiConstants.API_GET_ACTION_BOX_LOAD,
+        payload: payload
+    }
+
+    return action;
+}
+
+function updateActionBoxAction(payload){
+    const action = {
+        type: ApiConstants.API_UPDATE_ACTION_BOX_LOAD,
+        payload: payload
+    }
+    return action;
+}
+
 
 
 
 export {
     getUserCount,
     clearHomeDashboardData,
-    setHomeDashboardYear
-
+    setHomeDashboardYear,
+    getActionBoxAction,
+    updateActionBoxAction
 }
