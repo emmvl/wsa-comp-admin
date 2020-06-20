@@ -115,6 +115,21 @@ let AxiosApi = {
         }
         let url = `/api/invoice`
         return Method.dataPost(url, token, body)
+    },
+
+    //get payment list 
+    async  getPaymentList(offset) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        let body = {
+            organisationUniqueKey: organisationUniqueKey,
+            paging: {
+                offset: offset,
+                limit: 10
+            }
+        };
+        var url = `/api/payments/transactions`;
+        return Method.dataPost(url, token, body);
     }
 
 };

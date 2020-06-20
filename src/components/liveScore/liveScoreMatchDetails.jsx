@@ -201,8 +201,6 @@ class LiveScoreMatchDetails extends Component {
         const length = match ? match.length : 0
         let UmpireData = isArrayNotEmpty(umpires) ? umpires : []
         const { scoringType } = JSON.parse(getLiveScoreCompetiton())
-        console.log(UmpireData, 'UmpireData')
-
         return (
 
             <div className="comp-dash-table-view row mt-5">
@@ -259,7 +257,8 @@ class LiveScoreMatchDetails extends Component {
                         <span className="event-time-start-text" >{AppConstants.score}</span>
                     </div>
                     <div style={{ display: "flex", alignContent: "center" }} >
-                        <span className="inbox-name-text pt-2" >{length >= 1 ? match ? match[0] ? match[0].team1Score + ' : ' + match[0].team2Score : '' : '' : ''}</span>
+                        {/* <span className="inbox-name-text pt-2" >{length >= 1 ? match ? match[0] ? match[0].team1Score + ' : ' + match[0].team2Score : '' : '' : ''}</span> */}
+                        <span className="inbox-name-text pt-2" >{length >=1 ?this.setMatchStatus(match):""}</span>
                     </div>
                 </div>
             </div >
@@ -310,8 +309,23 @@ class LiveScoreMatchDetails extends Component {
             </div>
         )
     }
-
-
+    
+    setMatchStatus(match){
+     if(match[0].team1ResultId !== null){
+            if(match[0].team1ResultId === 4 || match[0].team1ResultId === 6 || match[0].team1ResultId === 6){
+                return "Forfeit"
+            }else if(match[0].team1ResultId === 8 || match[0].team1ResultId === 9 ){
+                return "Abandoned"
+            }else {
+                return  match[0].team1Score + ' : ' + match[0].team2Score
+            }
+        }else{
+            return match[0].team1Score + ' : ' + match[0].team2Score
+        }   
+  
+    //    return record ?  record.team1ResultId == null ?   "abc" : record.team1ResultId === 4 || 5 || 6 ? "def" : record.matchStatus : record.matchStatus
+}
+    
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>

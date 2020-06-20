@@ -49,22 +49,26 @@ class LiveScoreAddManager extends Component {
     }
 
     componentDidMount() {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.props.liveScoreManagerListAction(5, 1, id)
+       
 
-        if (id !== null) {
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            this.props.liveScoreManagerListAction(5, 1, id)
+            
             this.props.getliveScoreTeams(id)
+            if (this.state.isEdit === true) {
+                this.props.liveScoreUpdateManagerDataAction(this.state.tableRecord, 'isEditManager')
+                this.setState({ loader: true })
+            } else {
+                this.props.liveScoreUpdateManagerDataAction('', 'isAddManager')
+            }
+            this.setState({ load: true, competition_id: id })
+
         } else {
-            history.push('/')
+            history.push('/liveScoreCompetitions')
         }
 
-        if (this.state.isEdit === true) {
-            this.props.liveScoreUpdateManagerDataAction(this.state.tableRecord, 'isEditManager')
-            this.setState({ loader: true })
-        } else {
-            this.props.liveScoreUpdateManagerDataAction('', 'isAddManager')
-        }
-        this.setState({ load: true, competition_id: id })
+      
     }
 
     componentDidUpdate(nextProps) {

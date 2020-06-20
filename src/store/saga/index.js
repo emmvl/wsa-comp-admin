@@ -110,7 +110,7 @@ import {
   venueByIdSaga, venueDeleteSaga,
   getGenderSaga, getPhotoTypeSaga, getAppyToSaga, getExtraTimeDrawSaga,
   getFinalsFixtureTemplateSaga, courtListSaga, getSendInvitesSaga, RegistrationRestrictionType,
-  getAllowTeamRegistrationTypeSaga
+  getAllowTeamRegistrationTypeSaga, disabilityReferenceSaga
 } from "./commonSaga/commonSaga";
 
 import { fixtureTemplateSaga } from '../saga/competitionManagementSaga/competitionManagementSaga';
@@ -151,7 +151,7 @@ import {
 
 // UserSaga
 import * as userSaga from '../saga/userSaga/userSaga';
-import { homeDashboardSaga } from "./homeDashboardSaga/homeDashboardSaga"
+import { homeDashboardSaga, actionBoxListSaga, updateActionBoxSaga } from "./homeDashboardSaga/homeDashboardSaga"
 
 ////////competition draws 
 import {
@@ -188,6 +188,8 @@ import { liveScoreCoachSaga, liveScoreAddCoachSaga, liveScoreCoachImportSaga } f
 
 import * as umpireDashboardSaga from "../saga/umpireSaga/umpireDashboardSaga"
 import * as umpireCompSaga from "../saga/umpireSaga/umpireCompetitionSaga"
+import * as umpireRoasterSaga from "../saga/umpireSaga/umpireRoasterSaga"
+import * as umpireSaga from "../saga/umpireSaga/umpireSaga"
 
 
 export default function* root_saga() {
@@ -724,11 +726,11 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_GET_COMMENT_LIST_LOAD, playerCommentList)
 
   //// Umpire Module
-  yield takeEvery(ApiConstants.API_UMPIRE_DASHBOARD_LIST_LOAD, umpireDashboardSaga.umpireDashboardListSaga)
+  yield takeEvery(ApiConstants.API_UMPIRE_LIST_LOAD, umpireSaga.umpireListSaga)
   yield takeEvery(ApiConstants.API_UMPIRE_COMPETITION_LIST_LOAD, umpireCompSaga.getUmpireCompSaga)
-  yield takeEvery(ApiConstants.API_GET_UMPIRE_AFFILIATE_LIST_LOAD, umpireDashboardSaga.getAffiliateSaga)
-  yield takeEvery(ApiConstants.API_UMPIRE_SEARCH_LOAD, umpireDashboardSaga.umpireSearchSaga)
-  yield takeEvery(ApiConstants.API_ADD_UMPIRE_LOAD, umpireDashboardSaga.addEditUmpireSaga)
+  yield takeEvery(ApiConstants.API_GET_UMPIRE_AFFILIATE_LIST_LOAD, umpireSaga.getAffiliateSaga)
+  yield takeEvery(ApiConstants.API_UMPIRE_SEARCH_LOAD, umpireSaga.umpireSearchSaga)
+  yield takeEvery(ApiConstants.API_ADD_UMPIRE_LOAD, umpireSaga.addEditUmpireSaga)
 
   yield takeEvery(ApiConstants.SETTING_REGISTRATION_INVITEES_LOAD, settingRegInviteesSaga)
   yield takeEvery(ApiConstants.API_LIVE_SCORE_COACH_IMPORT_LOAD, liveScoreCoachImportSaga)
@@ -738,6 +740,26 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_REGISTRATION_RESTRICTIONTYPE_LOAD, RegistrationRestrictionType)
 
   yield takeEvery(ApiConstants.API_FIXTURE_TEMPLATE_ROUNDS_LOAD, fixtureTemplateSaga)
+  yield takeEvery(ApiConstants.API_PAYMENT_TYPE_LIST_LOAD, stripeSaga.getPaymentListSaga)
 
+  yield takeEvery(ApiConstants.API_UMPIRE_ROASTER_LIST_LOAD, umpireRoasterSaga.umpireRoasterListSaga)
+
+  yield takeEvery(ApiConstants.API_GET_UMPIRE_DASHBOARD_VENUE_LIST_LOAD, umpireDashboardSaga.umpireVenueListSaga)
+
+  yield takeEvery(ApiConstants.API_UMPIRE_ROASTER_ACTION_CLICK_LOAD, umpireRoasterSaga.umpireActionPerofomSaga)
+
+  yield takeEvery(ApiConstants.API_GET_UMPIRE_DASHBOARD_DIVISION_LIST_LOAD, umpireDashboardSaga.umpireDivisionListSaga)
+  yield takeEvery(ApiConstants.API_GET_UMPIRE_DASHBOARD_LIST_LOAD, umpireDashboardSaga.umpireListDashboardSaga)
+
+  yield takeEvery(ApiConstants.API_USER_PROFILE_UPDATE_LOAD, userSaga.updateUserProfileSaga)
+
+  /// Disability Reference Saga
+  yield takeEvery(ApiConstants.API_DISABILITY_REFERENCE_LOAD, disabilityReferenceSaga)
+
+  ///Action Box List
+  yield takeEvery(ApiConstants.API_GET_ACTION_BOX_LOAD, actionBoxListSaga)
+
+  ///Update Action Box
+  yield takeEvery(ApiConstants.API_UPDATE_ACTION_BOX_LOAD, updateActionBoxSaga)
 
 }

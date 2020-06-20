@@ -212,7 +212,15 @@ function registrationRestrictionTypeAction(){
     };
 
     return action;
-}		 		
+}		 
+
+
+function disabilityReferenceAction() {
+    const action = {
+        type: ApiConstants.API_DISABILITY_REFERENCE_LOAD,
+    };
+    return action;
+}
 
 export {
     timeSlotInit,
@@ -239,5 +247,6 @@ export {
     courtListAction,
     inviteTypeAction,
 	getAllowTeamRegistrationTypeAction,
-	registrationRestrictionTypeAction	
+    registrationRestrictionTypeAction,
+    disabilityReferenceAction
 }

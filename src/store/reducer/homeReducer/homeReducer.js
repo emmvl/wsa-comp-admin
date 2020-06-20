@@ -4,6 +4,7 @@ import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 
 const initialState = {
     onLoad: false,
+    onActionBoxLoad: false,
     error: null,
     result: null,
     status: 0,
@@ -11,8 +12,10 @@ const initialState = {
     registrationCount: null,
     liveScoreCompetitionCount: null,
     registrationCompetitionCount: null,
-    yearRefId: 1
-
+    yearRefId: 1,
+    actionBoxList: [],
+    actionBoxPage: 1,
+    actionBoxTotalCount: 1
 };
 
 
@@ -74,7 +77,29 @@ function homeReducer(state = initialState, action) {
                 yearRefId: action.year
             }
 
+        case ApiConstants.API_GET_ACTION_BOX_LOAD:
+            return { ...state, onActionBoxLoad: true, error: null }
 
+        case ApiConstants.API_GET_ACTION_BOX_SUCCESS:
+            let actionData = action.result;
+            return {
+                ...state,
+                onActionBoxLoad: false,
+                actionBoxList: actionData.actions,
+                actionBoxPage: actionData.page ? actionData.page.currentPage : 1,
+                actionBoxTotalCount: actionData.page ? actionData.page.totalCount: 1,
+            }
+
+        case ApiConstants.API_UPDATE_ACTION_BOX_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_UPDATE_ACTION_BOX_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
 
         default:
             return state;

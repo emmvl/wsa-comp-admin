@@ -1,67 +1,31 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-function umpireListAction(refRoleId, entityTypeId, competitionID, serachText) {
+function getUmpireDashboardList(data) {
     const action = {
-        type: ApiConstants.API_UMPIRE_DASHBOARD_LIST_LOAD,
-        refRoleId,
-        entityTypeId,
-        competitionID,
-        serachText
-    };
-    console.log(action, 'umpireListAction')
-    return action;
-}
-
-function addUmpireAction(data, affiliateId, exsitingUmpireId) {
-    const action = {
-        type: ApiConstants.API_ADD_UMPIRE_LOAD,
-        data,
-        affiliateId,
-        exsitingUmpireId
+        type: ApiConstants.API_GET_UMPIRE_DASHBOARD_LIST_LOAD,
+        data
     };
     return action;
 }
 
-function updateAddUmpireData(data, key) {
+function getUmpireDashboardVenueList(compId) {
     const action = {
-        type: ApiConstants.UPDATE_ADD_UMPIRE_DATA,
-        data,
-        key
+        type: ApiConstants.API_GET_UMPIRE_DASHBOARD_VENUE_LIST_LOAD,
+        compId
     };
     return action;
 }
 
-function getUmpireAffiliateList(data) {
+function getUmpireDashboardDivisionList(competitionID) {
     const action = {
-        type: ApiConstants.API_GET_UMPIRE_AFFILIATE_LIST_LOAD,
-        data,
+        type: ApiConstants.API_GET_UMPIRE_DASHBOARD_DIVISION_LIST_LOAD,
+        competitionID
     };
     return action;
-}
-
-function umpireSearchAction(refRoleId, competitionID, entityTypeId, userName) {
-    const action = {
-        type: ApiConstants.API_UMPIRE_SEARCH_LOAD,
-        refRoleId,
-        competitionID,
-        entityTypeId,
-        userName
-    }
-    return action
-}
-
-function umpireClear() {
-    const action = {
-        type: ApiConstants.CLEAR_UMPIRE_SEARCH
-    }
-    return action
 }
 
 export {
-    umpireListAction,
-    addUmpireAction,
-    updateAddUmpireData,
-    getUmpireAffiliateList,
-    umpireSearchAction,
-    umpireClear
+    getUmpireDashboardList,
+    getUmpireDashboardVenueList,
+    getUmpireDashboardDivisionList
 } 

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Checkbox, Select, Breadcrumb } from 'antd';
+import { Layout, Button, Checkbox, Select, Breadcrumb, InputNumber } from 'antd';
 import './shop.css';
 import { NavLink } from 'react-router-dom';
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Loader from '../../customComponents/loader';
 import history from "../../util/history";
-import { testCall } from "../../store/actions/shopAction/addproductAction"
+import { getProduct } from "../../store/actions/shopAction/addproductAction"
 import InputWithHead from "../../customComponents/InputWithHead";
 import { isArrayNotEmpty, captializedString } from "../../util/helpers";
 import { Editor } from 'react-draft-wysiwyg';
@@ -34,7 +34,7 @@ class AddProduct extends Component {
 
 
     componentDidMount() {
-        this.props.testCall()
+        this.props.getProduct()
     }
 
     ///////view for breadcrumb
@@ -176,7 +176,31 @@ class AddProduct extends Component {
     pricingView = () => {
         return (
             <div className="fees-view pt-5">
-                <span>Pricing</span>
+                <span className="form-heading">{AppConstants.pricing}</span>
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm">
+                            <InputWithHead
+                                heading={AppConstants.price}
+                                placeholder={AppConstants.price}
+                            />
+                        </div>
+                        <div className="col-sm">
+                            <InputWithHead
+                                heading={AppConstants.costPerItem}
+                                placeholder={AppConstants.costPerItem}
+                            />
+                        </div>
+                    </div>
+                    <div className="pt-4">
+                        <Checkbox
+                            className="single-checkbox mt-0"
+                            checked={true}
+                        >
+                            {AppConstants.chargeTaxesOnProduct}
+                        </Checkbox>
+                    </div>
+                </div>
             </div >
         );
     };
@@ -187,7 +211,52 @@ class AddProduct extends Component {
     inventoryView = () => {
         return (
             <div className="fees-view pt-5">
-                <span>Inventory</span>
+                <span className="form-heading">{AppConstants.inventory}</span>
+                <div className="fluid-width">
+                    <div >
+                        <Checkbox
+                            className="single-checkbox mt-0"
+                            checked={true}
+                        >
+                            {AppConstants.enableInventoryTracking}
+                        </Checkbox>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm">
+                            <InputWithHead
+                                heading={AppConstants.skuHeader}
+                                placeholder={AppConstants.SKU}
+                            />
+                        </div>
+                        <div className="col-sm">
+                            <InputWithHead
+                                heading={AppConstants.barcodeHeading}
+                                placeholder={AppConstants.barcode}
+                            />
+                        </div>
+                    </div>
+                    <div >
+                        <span className="input-heading" >{AppConstants.quantity}</span>
+                        <InputNumber
+                            style={{ width: 70, }}
+                            // value={addEditMatch.matchDuration}
+                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                            parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                            onChange={(matchDuration) => console.log(matchDuration)}
+                            placeholder={'0'}
+                            min={0}
+                        />
+                    </div>
+                    <div className="pt-4">
+                        <Checkbox
+                            className="single-checkbox mt-0"
+                            checked={true}
+                        >
+                            {AppConstants.allowCustToPurchase}
+                        </Checkbox>
+                    </div>
+
+                </div>
             </div >
         );
     };
@@ -195,20 +264,25 @@ class AddProduct extends Component {
     ////////Varients content view
     varientsView = () => {
         return (
+
             <div className="fees-view pt-5">
-                <span>Varients</span>
+                <span className="form-heading">{AppConstants.varients}</span>
+                <div className="fluid-width">
+                    <div >
+                        <Checkbox
+                            className="single-checkbox mt-0"
+                            checked={true}
+                        >
+                            {AppConstants.enableVarients}
+                        </Checkbox>
+                    </div>
+
+
+                </div>
             </div >
         );
     };
 
-    ////////Varients content view
-    varientsView = () => {
-        return (
-            <div className="fees-view pt-5">
-                <span>Varients</span>
-            </div >
-        );
-    };
 
     ////////Shipping content view
     shippingView = () => {
@@ -248,7 +322,7 @@ class AddProduct extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        testCall
+        getProduct
     }, dispatch)
 }
 

@@ -9,11 +9,11 @@ import AppConstants from "../../themes/appConstants";
 // import UserAxiosApi from "../http/userHttp/userAxiosApi.js";
 ////get the common year list reference
 export function* getOnlyYearListSaga(action) {
-  
+
   try {
     const result = isArrayNotEmpty(action.yearsArray) ? { status: 1, result: { data: action.yearsArray } } : yield call(AxiosApi.getYearList, action);
     if (result.status === 1) {
-  
+
       yield put({
         type: ApiConstants.API_ONLY_YEAR_LIST_SUCCESS,
         result: result.result.data,
@@ -439,14 +439,13 @@ export function* getCompetitionFormatTypesSaga(action) {
   }
 }
 
-////get the common year list reference
 export function* getOnlyYearAndCompetitionListSaga(action) {
   console.log(action, 'YearSaga')
   try {
-    const result = isArrayNotEmpty(action.yearData) ? { status: 1, result: { data: action.yearData } } : yield call(CommonAxiosApi.getYearList, action);
+    const result = isArrayNotEmpty(action.yearData) ? { status: 1, result: { data: action.yearData, key: "old" } } : yield call(CommonAxiosApi.getYearList, action);
     if (result.status === 1) {
-      let yearId = action.yearId == null ? result.result.data[0].id : action.yearId
-      const resultCompetition = yield call(RegistrationAxiosApi.getCompetitionTypeList, yearId);
+      let yearId = action.yearId == null ? -1 : action.yearId
+      const resultCompetition = yield call(RegistrationAxiosApi.getAllCompetitionList, yearId);
       if (resultCompetition.status === 1) {
         yield put({
           type: ApiConstants.API_GET_YEAR_COMPETITION_SUCCESS,
@@ -454,7 +453,7 @@ export function* getOnlyYearAndCompetitionListSaga(action) {
           competetionListResult: resultCompetition.result.data,
           status: result.status,
           selectedYearId: yearId,
-          key: action.key
+          data: result.result.key ? result.result.key : "new"
         });
       }
     } else {

@@ -110,7 +110,7 @@ class LiveScoreAddMatch extends Component {
         }
 
         if (nextProps.liveScoreMatchState !== this.props.liveScoreMatchState) {
-            if (this.props.liveScoreMatchState.matchLoad == false && this.state.roundLoad == true) {
+            if (this.props.liveScoreMatchState.rounLoad == false && this.state.roundLoad == true) {
                 this.setState({ roundLoad: false })
                 let addedRound = this.props.liveScoreMatchState.addEditMatch.roundId
                 this.props.form.setFieldsValue({
@@ -1004,7 +1004,7 @@ class LiveScoreAddMatch extends Component {
                         <div className="row">
                             <div className="col-sm">
                                 <div className="reg-add-save-button">
-                                    <Button onClick={() => history.push(this.state.key == 'dashboard' ? 'liveScoreDashboard' : '/liveScoreMatches')} type="cancel-button">{AppConstants.cancel}</Button>
+                                    <Button onClick={() => history.push(this.state.key == 'dashboard' ? 'liveScoreDashboard' : this.state.key == 'umpireRoaster' ? 'umpireRoaster' : '/liveScoreMatches')} type="cancel-button">{AppConstants.cancel}</Button>
                                     {this.state.isEdit == true && <Button onClick={() => this.setState({ forfeitVisible: true })} className="ml-3" type="cancel-button">{AppConstants.forfiet}</Button>}
                                     {this.state.isEdit == true && <Button onClick={() => this.setState({ abandonVisible: true })} className="ml-3" type="cancel-button">{AppConstants.abandon}</Button>}
                                     {this.state.isEdit == true && <Button onClick={() => this.endMatchResult()} className="ml-3" type="cancel-button">{AppConstants.endMatch}</Button>}

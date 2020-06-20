@@ -1,6 +1,7 @@
 import ApiConstants from "../../../themes/apiConstants";
 import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 import { setOrganisationData, getOrganisationData } from "../../../util/sessionStorage";
+import AppConstants from "../../../themes/appConstants";
 
 const initialState = {
     onLoad: false,
@@ -20,8 +21,13 @@ const initialState = {
     stripeTransactionPayoutListPage: 1,
     getInvoicedata: [],
     charityRoundUpFilter: [],
-    subTotalFees:0,
-    subTotalGst:0,
+    subTotalFees: 0,
+    subTotalGst: 0,
+    paymentListData: [],
+    paymentListPage: 1,
+    paymentListTotalCount: 1
+
+
 }
 
 
@@ -234,6 +240,22 @@ function stripe(state = initialState, action) {
                 ...state,
                 onLoad: false,
             }
+
+        ///payment listing 
+        case ApiConstants.API_PAYMENT_TYPE_LIST_LOAD:
+            return { ...state, onLoad: true }
+
+        case ApiConstants.API_PAYMENT_TYPE_LIST_SUCCESS:
+            let paymentData = action.result;
+            return {
+                ...state, onLoad: false,
+                paymentListData: paymentData.transactions,
+                paymentListTotalCount: paymentData.page.totalCount,
+                paymentListPage: paymentData.page
+                    ? paymentData.page.currentPage
+                    : 1,
+            }
+
         default:
             return state;
     }

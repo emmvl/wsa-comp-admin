@@ -51,6 +51,7 @@ import UserEditAffiliates from "../components/user/userEditAffiliates";
 import UserOurOragnization from "../components/user/userOurOragnization";
 import UserTextualDashboard from "../components/user/userTextualDashboard";
 import UserModulePersonalDetail from "../components/user/userModulePersonalDetail";
+import UserProfileEdit from "../components/user/userProfileEdit"																
 import VenuesList from '../components/user/venuesList';
 import AppRegistrationForm from "../components/registration/appRegistrationForm";
 import NotFound from "./404";
@@ -126,9 +127,16 @@ import AddUmpire from "../components/umpire/addUmpire"
 
 import LiveScoreMatchSheet from "../components/liveScore/liveScoreMatchSheet";
 import ShopDashboard from "../components/shop/shopDashboard";
+import UmpireRoaster from "../components/umpire/umpireRoaster"
+import UmpireImport from "../components/umpire/umpireImport"
+import Umpire from "../components/umpire/umpire"
 import ListProducts from "../components/shop/listProducts";
 import AddProduct from "../components/shop/addproduct";
+import PaymentDashboard from "../components/registration/paymentDashboard"
 
+import OrderSummary from "../components/shop/orderSummary"
+import ShopOrderStatus from "../components/shop/shopOrderStatus"
+import ShopSettings from '../components/shop/shopSettings'
 const lazyLoad = Component => {
   const lazy = props => {
     return (
@@ -663,6 +671,20 @@ class Routes extends React.Component {
         />
 
         <PrivateRoute
+          path="/umpireRoster"
+          component={lazyLoad(UmpireRoaster)}
+        />
+
+        <PrivateRoute
+          path="/umpireImport"
+          component={lazyLoad(UmpireImport)}
+        />
+
+        <PrivateRoute
+          path="/umpire"
+          component={lazyLoad(Umpire)}
+        />
+        <PrivateRoute
           path="/listProducts"
           component={lazyLoad(ListProducts)}
         />
@@ -671,6 +693,30 @@ class Routes extends React.Component {
           path="/addProduct"
           component={lazyLoad(AddProduct)}
         />
+
+        <PrivateRoute
+          path="/paymentDashboard"
+          component={lazyLoad(PaymentDashboard)}
+        />
+        <PrivateRoute
+          path="/orderSummary"
+          component={lazyLoad(OrderSummary)}
+        />
+
+        <PrivateRoute
+          path="/orderStatus"
+          component={lazyLoad(ShopOrderStatus)}
+        />
+        <PrivateRoute
+          path="/shopSettings"
+          component={lazyLoad(ShopSettings)}
+        />
+		
+      <PrivateRoute
+            path="/userProfileEdit"
+            component={lazyLoad(UserProfileEdit)}
+        />
+
         <Route path="/" component={lazyLoad(NotFound)} />
 
         <Redirect from="*" to="/404" />

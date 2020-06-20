@@ -1025,7 +1025,7 @@ function createProductFeeArr(data) {
 
     let removeDuplicacyFeeArray = removeDuplicacyInFeeArray(getFeeData)
     getFeeData = removeDuplicacyFeeArray
-   // console.log("Test Array**************", getFeeData)
+    // console.log("Test Array**************", getFeeData)
 
     let productArray = []
     for (let i in divisions) {
@@ -1128,10 +1128,9 @@ function createProductFeeArr(data) {
                     "membershipGst": memberShipProductType[j].mSeasonalGst
                 }
             }
-            
-             //// SEASONAL OBJECT Team
-            if(memberShipProductType[j].allowTeamRegistrationTypeRefId == 1)
-            {
+
+            //// SEASONAL OBJECT Team
+            if (memberShipProductType[j].allowTeamRegistrationTypeRefId == 1) {
                 if (statusteamSeasonal.status == true) {
                     let mFeesSeasonal = Number(memberShipProductType[j].mSeasonalFee) + Number(memberShipProductType[j].mSeasonalGst)
 
@@ -1184,7 +1183,7 @@ function createProductFeeArr(data) {
                 let statusSeasonal = checkStatus(getDivisionsArray, memberShipProductType[k], divisionProductType[j].competitionMembershipProductDivisionId, 2)
                 let statusCasual = checkStatus(getDivisionsArray, memberShipProductType[k], divisionProductType[j].competitionMembershipProductDivisionId, 1)
                 let statusTeamSeasonal = checkStatus(getDivisionsArray, memberShipProductType[k], divisionProductType[j].competitionMembershipProductDivisionId, 3)
-                
+
                 let type_Object_casual = null
                 let type_Object_seasonal = null
                 let type_object_team_seasonal = null;
@@ -1269,7 +1268,7 @@ function createProductFeeArr(data) {
                     }
                 }
 
-                if(memberShipProductType[k].allowTeamRegistrationTypeRefId == 1){
+                if (memberShipProductType[k].allowTeamRegistrationTypeRefId == 1) {
                     if (statusTeamSeasonal.status == true) {
                         let mFeesCasualPer = Number(memberShipProductType[k].mSeasonalFee) + Number(memberShipProductType[k].mSeasonalGst)
                         console.log(memberShipProductType[k])
@@ -1296,9 +1295,9 @@ function createProductFeeArr(data) {
                             "competitionMembershipProductTypeId": memberShipProductType[k].competitionMembershipProductTypeId,
                             "competitionMembershipProductDivisionId": divisionProductType[j].competitionMembershipProductDivisionId,
                             "fee": memberShipProductType[k].isPlaying == 1 ? 0 : null,
-                            "gst":  memberShipProductType[k].isPlaying == 1 ? 0 : null,
-                            "affiliateFee":  memberShipProductType[k].isPlaying == 1 ? 0 : null,
-                            "affiliateGst":  memberShipProductType[k].isPlaying == 1 ? 0 : null,
+                            "gst": memberShipProductType[k].isPlaying == 1 ? 0 : null,
+                            "affiliateFee": memberShipProductType[k].isPlaying == 1 ? 0 : null,
+                            "affiliateGst": memberShipProductType[k].isPlaying == 1 ? 0 : null,
                             "feeTypeRefId": 3,
                             "membershipProductTypeName": memberShipProductType[k].membershipProductTypeName,
                             "divisionName": memberShipProductType[k].isPlaying == 1 ? divisionProductType[j].divisionName : "N/A",
@@ -1361,7 +1360,7 @@ function createProductFeeArr(data) {
             "isSeasonal": isSeasonalFeeTypeAvailable,
             "isCasual": isCasualFeeTypeAvailable,
             "isTeamSeasonal": isSeasonalTeamFeeTypeAvailable,
-            "isIndividualReg": (isSeasonalFeeTypeAvailable == true || isCasualFeeTypeAvailable == true) ?  true : false
+            "isIndividualReg": (isSeasonalFeeTypeAvailable == true || isCasualFeeTypeAvailable == true) ? true : false
         }
 
         productArray.push(object)
@@ -1542,6 +1541,7 @@ function competitionFees(state = initialState, action) {
                     }
 
                 } else {
+                    state.affiliateArray = allData.competitiondetail.invitees
                     state.otherSelected = selectedInvitees[o]
                 }
             }
@@ -1566,7 +1566,6 @@ function competitionFees(state = initialState, action) {
                 let competitionFeeProducts = createProductFeeArr(allData)
                 state.competitionFeesData = competitionFeeProducts
             }
-
             if (isArrayNotEmpty(allData.competitiondiscounts.competitionDiscounts)) {
                 let selectDiscountArray = allData.competitiondiscounts.competitionDiscounts[0].discounts
                 let discountslist = state.competionDiscountValue.competitionDiscounts[0].discounts
@@ -2021,19 +2020,19 @@ function competitionFees(state = initialState, action) {
 
         case ApiConstants.CHECK_UNCHECK_COMPETITION_FEES_SECTION:
 
-            if(action.key == "isIndividualReg"){
+            if (action.key == "isIndividualReg") {
                 state.competitionFeesData[action.parentIndex]["isSeasonal"] = action.data
                 state.competitionFeesData[action.parentIndex]["isCasual"] = action.data
             }
-            
+
             state.competitionFeesData[action.parentIndex][action.key] = action.data
 
-            if(action.key == "isSeasonal" || action.key == "isCasual"){
+            if (action.key == "isSeasonal" || action.key == "isCasual") {
                 let isCasual = state.competitionFeesData[action.parentIndex]["isCasual"];
                 let isSeasonal = state.competitionFeesData[action.parentIndex]["isSeasonal"];
-                if(isSeasonal == true && isCasual == true)
+                if (isSeasonal == true && isCasual == true)
                     state.competitionFeesData[action.parentIndex]["isIndividualReg"] = true
-                else if(isSeasonal == false && isCasual == false)
+                else if (isSeasonal == false && isCasual == false)
                     state.competitionFeesData[action.parentIndex]["isIndividualReg"] = false
             }
 
@@ -2046,7 +2045,7 @@ function competitionFees(state = initialState, action) {
 
         case ApiConstants.API_ADD_EDIT_COMPETITION_FEES_SECTION:
             let array = JSON.parse(JSON.stringify(state.competitionFeesData))
-           // console.log("action.record" + JSON.stringify(action.record));
+            // console.log("action.record" + JSON.stringify(action.record));
             let index = array.findIndex(x => x.membershipProductUniqueKey == action.record.membershipProductUniqueKey)
             console.log("TableIndex:::" + action.tableIndex + "ArrayKEy::" + action.arrayKey + "index::" + index + "action.data::" + action.data);
 
@@ -2234,7 +2233,7 @@ function competitionFees(state = initialState, action) {
             }
 
         case ApiConstants.API_ADD_VENUE_SUCCESS:
-           // console.log( 'Competition Fee Venue Success', action.result)
+            // console.log( 'Competition Fee Venue Success', action.result)
             let venueSuccess = action.result
             if (venueSuccess != null) {
                 let updatedVenue = JSON.parse(JSON.stringify(state.newVenueObj))
@@ -2257,7 +2256,7 @@ function competitionFees(state = initialState, action) {
                 }
                 state.postVenues.push(defaultPostVenueObject)
             }
-            
+
             console.log(state.selectedVenues)
             return { ...state }
 

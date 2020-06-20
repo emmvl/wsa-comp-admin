@@ -1782,29 +1782,45 @@ class RegistrationCompetitionForm extends Component {
                         {AppConstants.please_Sel_mem_pro}
                     </span>
                 )}
-                {divisionArray.map((item, index) =>
+                {divisionArray.map((item, index) => (
                     <div>
                         <div className="inside-container-view">
                             <span className="form-heading pt-2 pl-2">
                                 {item.membershipProductName}
                             </span>
-                            <div className="table-responsive">
-                                <Table
-                                    className="fees-table"
-                                    columns={this.state.divisionTable}
-                                    dataSource={item.divisions}
-                                    pagination={false}
-                                    Divider="false"
-                                    key={index}
-
-                                />
-                            </div>
-                            <a>
-                                <span className="input-heading-add-another" onClick={() => !divisionsDisable ? this.addRemoveDivision(index, item, "add") : null}>+ {AppConstants.addDivision}</span>
-                            </a>
+                            {item.isPlayingStatus == true ? (
+                                <div>
+                                    <div className="table-responsive">
+                                        <Table
+                                            className="fees-table"
+                                            columns={this.state.divisionTable}
+                                            dataSource={item.divisions}
+                                            pagination={false}
+                                            Divider="false"
+                                            key={index}
+                                        />
+                                    </div>
+                                    <a>
+                                        <span
+                                            className="input-heading-add-another"
+                                            onClick={() =>
+                                                !divisionsDisable
+                                                    ? this.addRemoveDivision(index, item, 'add')
+                                                    : null
+                                            }
+                                        >
+                                            + {AppConstants.addDivision}
+                                        </span>
+                                    </a>
+                                </div>
+                            ) : (
+                                    <span className="applicable-to-heading pt-0 pl-2">
+                                        {AppConstants.nonPlayerDivisionMessage}
+                                    </span>
+                                )}
                         </div>
                     </div>
-                )}
+                ))}
 
                 <Modal
                     className="add-membership-type-modal"

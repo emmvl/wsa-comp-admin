@@ -84,12 +84,12 @@
 }
 
 .chart-container-view {
-  padding: 24px;
-  margin-top: 11%;
+  padding: 20px;
+  margin-top: 3%;
   border-radius: 10px;
   box-shadow: 0px 8px 16px 0 rgba(27, 27, 52, 0.06);
   background-color: var(--app-white);
-  overflow: hidden;
+  overflow: auto;
 }
 
 .user-dashboard-table-view {
@@ -235,4 +235,31 @@
 .affiliate-dir-srch .ant-input{
   box-shadow: 0px 8px 16px 0 rgba(27, 27, 52, 0.06);
   background-color: var(--app-white);
+}
+
+.user-prof-filter-select .ant-select-selection{
+  min-height: 40px !important;
+}
+
+.table-responsive-other-info {
+  width: 100%;
+  overflow-x: hidden;
+  /* overflow: visible; */
+  -webkit-overflow-scrolling: touch;
+}
+
+.other-info-edit-btn
+{
+    background-color: var(--app-color);
+    border-color: var(--app-color);
+    font-weight: 300;
+    font-stretch: normal;
+    margin-top: 15px;
+    font-style: normal;
+    font-family: inter-semi-bold;
+    font-size: 14px;
+    width: 65px;
+    height: 30px;
+    border-radius: 5px;
+    background-image: var(--app-gradient-right);
 }

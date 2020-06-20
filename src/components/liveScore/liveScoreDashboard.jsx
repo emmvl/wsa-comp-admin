@@ -46,6 +46,21 @@ function getLastName(incidentPlayers) {
     return lastName
 }
 
+function setMatchResult(record){
+    if(record.team1ResultId !== null){
+        if(record.team1ResultId === 4 || record.team1ResultId === 6 || record.team1ResultId === 6){
+            return "Forfeit"
+        }else if(record.team1ResultId === 8 || record.team1ResultId === 9 ){
+            return "Abandoned"
+        }else {
+            return  record.team1Score + " : " + record.team2Score
+        }
+    }else{
+        return record.team1Score + " : " + record.team2Score
+    }   
+}
+
+
 const columnActiveNews = [
     {
         title: "Title",
@@ -193,7 +208,7 @@ const columnsTodaysMatch = [
             <NavLink to={{
                 pathname: '/liveScoreMatchDetails',
                 state: { matchId: records.id, key: 'dashboard' }
-            }} ><span nowrap class="input-heading-add-another pt-0" >{records.team1Score + " : " + records.team2Score} </span></NavLink>
+            }} ><span nowrap class="input-heading-add-another pt-0" >{setMatchResult(records)} </span></NavLink>
     }, {
         title: "Umpire",
         dataIndex: 'competition',
@@ -410,24 +425,13 @@ class LiveScoreDashboard extends Component {
         let startDay = this.getStartofDay()
 
         let currentTime = moment.utc().format()
-
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        if (id !== null) {
+       
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
             this.props.liveScoreDashboardListAction(id, startDay, currentTime)
         } else {
-            history.push('/')
+            history.push('/liveScoreCompetitions')
         }
-    }
-
-    checkUserId(record) {
-        console.log(record, 'checkUserId')
-        // if (record.userId == null) {
-        //     message.config({ duration: 1.5, maxCount: 1 })
-        //     message.warn(ValidationConstants.playerMessage)
-        // }
-        // else {
-        //     history.push("/userPersonal", { userId: record.userId, screenKey: "livescore", screen: "/liveScorePlayerList" })
-        // }
     }
 
 
@@ -701,7 +705,7 @@ class LiveScoreDashboard extends Component {
                     <Content >
                         {this.addNewsView()}
                         {this.matchView()}
-                        {this.playersToPayView()}
+                        {/* {this.playersToPayView()} */}
                         {this.incidenceView()}
                     </Content>
                 </Layout>

@@ -8,8 +8,9 @@ import history from "../../../util/history";
 function* failSaga(result) {
     yield put({ type: ApiConstants.API_LIVE_SCORE_COACH_FAIL });
     setTimeout(() => {
-        message.error(result.message)
+        message.error(result.result.data)
     }, 800);
+    console.log(result, 'result')
 }
 
 function* errorSaga(error) {
@@ -18,7 +19,8 @@ function* errorSaga(error) {
         error: error,
         status: error.status
     });
-    message.error("Something went wrong.")
+    console.log(error, 'error')
+    message.error(error ? error.error : 'Something went wrong!!')
 }
 
 export function* liveScoreCoachSaga(action) {
@@ -42,6 +44,7 @@ export function* liveScoreCoachSaga(action) {
 }
 
 export function* liveScoreAddCoachSaga(action) {
+    console.log(action, 'liveScoreCoachSaga')
 
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreAddCoach, action.data, action.teamId, action.exsitingManagerId);

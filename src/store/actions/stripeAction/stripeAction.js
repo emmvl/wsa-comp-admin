@@ -7,8 +7,7 @@ function accountBalanceAction() {
     };
     return action;
 }
-
-////////For stripe charging payment API
+//For stripe charging payment API
 function chargingPaymentAction(competitionId, stripeToken) {
     const action = {
         type: ApiConstants.API_STRIPE_CHARGING_PAYMENT_API_LOAD,
@@ -17,8 +16,7 @@ function chargingPaymentAction(competitionId, stripeToken) {
     };
     return action;
 }
-
-////save stripe account
+//save stripe account
 function saveStripeAccountAction(code) {
     const action = {
         type: ApiConstants.API_SAVE_STRIPE_ACCOUNT_API_LOAD,
@@ -81,6 +79,14 @@ function getInvoice(registrationid) {
     return action
 }
 
+/// payment dashboard
+function getPaymentList(offset) {
+    const action = {
+        type: ApiConstants.API_PAYMENT_TYPE_LIST_LOAD,
+        offset
+    }
+    return action
+}
 
 export {
     accountBalanceAction,
@@ -90,5 +96,5 @@ export {
     getStripeTransferListAction,
     getStripePayoutListAction,
     getTransactionPayoutListAction,
-    getInvoice,
+    getInvoice, getPaymentList
 }

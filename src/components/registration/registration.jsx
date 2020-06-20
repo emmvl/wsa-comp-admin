@@ -359,9 +359,24 @@ class Registration extends Component {
                     competitionClick={() => this.clickCompetition()}
                     registrationClick={() => this.state.publishStatus == 2 && this.onClickRegistration()}
                     registrationStatus={this.regStatus()}
+                    competitionStatus={this.competitionStatus()}
                 />
             </div >
         )
+    }
+
+    competitionStatus() {
+        let feeStatus = false
+        if (this.state.compFeeStatus == 1) {
+            return true
+
+        }
+        else if (this.state.inviteeStatus == 1) {
+            return true
+        }
+        else {
+            return false
+        }
     }
 
 

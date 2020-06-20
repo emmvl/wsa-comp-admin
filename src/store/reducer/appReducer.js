@@ -45,6 +45,8 @@ const initialState = {
   helpMessage: [AppConstants.knockOutMsg, AppConstants.roundRobinMsg, AppConstants.doubleRoundRobinMsg, AppConstants.enhancedRoundRobinMsg],
   regInviteesMsg: [AppConstants.regInviteesAffiliatesMsg, AppConstants.regInviteesAnyOrgMsg, AppConstants.regInviteesDirectMsg],
   membershipProductFeeMsg: [AppConstants.firstComRegOnlyMsg, AppConstants.allCompRegMsg],
+  allYearList: [],
+  allCompetitionTypeList: []
 
 };
 function arraymove(arr, fromIndex, toIndex) {
@@ -365,25 +367,38 @@ function appState(state = initialState, action) {
       };
 
     /////////
+
     case ApiConstants.API_GET_YEAR_COMPETITION_LOAD:
       return { ...state, onLoad: true };
 
     case ApiConstants.API_GET_YEAR_COMPETITION_SUCCESS:
+      console.log(action)
+      let yearResult = JSON.parse(JSON.stringify(action.yearList))
+      let competitionResult = JSON.parse(JSON.stringify(action.competetionListResult))
+      let yearobject = {
+        description: "All",
+        id: -1,
+        name: "All",
+        sortOrder: 1,
+        subReferences: null,
+      }
+      let competitionobject = {
+        competitionId: "0",
+        competitionName: "All",
+        id: 0,
+      }
+      competitionResult.unshift(competitionobject)
+      if (action.data == "new") {
+        yearResult.unshift(yearobject)
+      }
+
       return {
         ...state,
         onLoad: false,
-        // own_YearArr: action.key === 'own_competition' ? action.yearList : state.own_YearArr,
-        // own_CompetitionArr: action.key === 'own_competition' ? action.competetionListResult : state.own_CompetitionArr,
-        // participate_CompetitionArr: action.key === "participate_competition" ? action.competetionListResult : state.participate_CompetitionArr,
-        // participate_YearArr: action.key === "participate_competition" ? action.yearList : state.participate_YearArr,
-        yearList: action.yearList,
-        competitionList: action.competetionListResult,
+        allYearList: yearResult,
+        allCompetitionTypeList: competitionResult,
         status: action.status,
-        selectedYear: action.selectedYearId,
-        selectedCompetition: action.competetionListResult.length > 0 && action.competetionListResult[0].competitionId
       };
-
-
 
     case ApiConstants.API_UPDATE_COMPETITION_LIST:
       console.log(action.data, 'UpdateList')

@@ -202,7 +202,11 @@ class InnerHorizontalMenu extends React.Component {
                             <span>Payments</span>
                         }
                     >
-                        <Menu.Item key="8">Payment Dashboard</Menu.Item>
+                        <Menu.Item key="8">
+                            <NavLink to='/paymentDashboard' >
+                                <span >Payment Dashboard</span>
+                            </NavLink>
+                        </Menu.Item>
                         <Menu.Item key="4">
                             <NavLink to="/registrationPayments" >
                                 <span >Payment Gateway</span>
@@ -400,9 +404,20 @@ class InnerHorizontalMenu extends React.Component {
 
                     </Menu.Item>
                     <Menu.Item key="2">
-                        <NavLink to="/umpireAllocation" >
-                            <span >Umpire Allocation</span>
+                        <NavLink to="/umpire" >
+                            <span >Umpires</span>
                         </NavLink>
+
+                    </Menu.Item>
+                    <Menu.Item key="3">
+                        <NavLink to="/umpireRoster" >
+                            <span >Umpire Roster</span>
+                        </NavLink>
+                    </Menu.Item>
+                    <Menu.Item key="4">
+                        {/* <NavLink to="/umpireAllocation" > */}
+                        <span >Umpire Allocation</span>
+                        {/* </NavLink> */}
                     </Menu.Item>
                 </Menu>
                 }
@@ -532,8 +547,29 @@ class InnerHorizontalMenu extends React.Component {
 
                             </Menu.Item>
                         </SubMenu>
+                        <SubMenu
+                            key="sub2"
+                            title={<span>{AppConstants.orders}</span>}>
+                            <Menu.Item key="3">
+                                <NavLink to="/orderSummary" >
+                                    <span >{AppConstants.orderSummary}</span>
+                                </NavLink>
+                            </Menu.Item>
+                            <Menu.Item key="5">
+                                <NavLink to="/orderStatus" >
+                                    <span >{AppConstants.orderStatus}</span>
+                                </NavLink>
+                            </Menu.Item>
+                        </SubMenu>
+
+                        <Menu.Item key="4">
+                            <NavLink to="/shopSettings" >
+                                <span >{AppConstants.settings}</span>
+                            </NavLink>
+                        </Menu.Item>
                     </Menu>
                 }
+
             </div>
 
         );

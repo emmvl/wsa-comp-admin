@@ -864,7 +864,7 @@ class UmpireAllocation extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
-                <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"2"} />
+                <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"4"} />
                 <Layout className="container">
                     <div className="comp-draw-head-content-view">
                         {this.headerView()}
