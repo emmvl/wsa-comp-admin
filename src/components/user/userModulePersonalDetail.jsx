@@ -325,6 +325,7 @@ const columnsPersonalAddress = [
         title: 'Email',
         dataIndex: 'email',
         key: 'email',
+		width: 300		  
     },
     {
         title: 'Action',

@@ -28,13 +28,13 @@ class DashboardLayout extends React.Component {
     };
   }
 
-  componentDidUpdate(nextProps) {
+  async componentDidUpdate(nextProps) {
     if (this.props.userState.onLoad == false && this.state.dataOnload == true) {
       let organisationData = this.props.userState.getUserOrganisation
       if (organisationData.length > 0) {
         let orgData = getOrganisationData()
         let organisationItem = orgData ? orgData : organisationData[0]
-        setOrganisationData(organisationItem)
+        await setOrganisationData(organisationItem)
         this.props.onOrganisationChangeAction(organisationItem, "organisationChange")
         this.setState({ dataOnload: false })
       }
