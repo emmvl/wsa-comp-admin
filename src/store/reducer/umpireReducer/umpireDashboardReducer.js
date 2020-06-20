@@ -9,7 +9,8 @@ const initialState = {
     onVenueLoad: false,
     umpireDivisionList: [],
     onDivisionLoad: false,
-    umpireDashboardList: []
+    umpireDashboardList: [],
+    totalPages:null
 };
 
 function umpireDashboardState(state = initialState, action) {
@@ -25,6 +26,7 @@ function umpireDashboardState(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 umpireDashboardList: action.result.results,
+                totalPages:action.result.page.totalCount,
                 status: action.status
             };
 

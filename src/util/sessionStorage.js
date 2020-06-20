@@ -112,6 +112,24 @@ const setUmpireCompition = umpireCompetitionId => {
     localStorage.setItem("umpireCompetitionId", umpireCompetitionId)
 }
 
+const getUmpireCompetitonData = () => {
+    return localStorage.umpireCompetitionData
+}
+
+const setUmpireCompitionData = umpireCompetitionData => {
+    localStorage.setItem("umpireCompetitionData", umpireCompetitionData)
+}
+
+const getUmpireCompId = () => {
+    return localStorage.umpireCompId
+}
+
+const setUmpireCompId = umpireCompId => {
+    localStorage.setItem("umpireCompId", umpireCompId)
+}
+
+
+
 
 
 module.exports = {
@@ -138,5 +156,9 @@ module.exports = {
     setDraws_division_grade,
     getDraws_division_grade,
     getUmpireCompetiton,
-    setUmpireCompition
+    setUmpireCompition,
+    setUmpireCompitionData,
+    getUmpireCompetitonData,
+    getUmpireCompId,
+    setUmpireCompId
 }

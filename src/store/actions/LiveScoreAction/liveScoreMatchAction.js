@@ -37,7 +37,7 @@ function liveScoreUpdateMatchAction(data, key, contentType) {
     return action;
 }
 
-function liveScoreCreateMatchAction(data, competitionId, key, isEdit, team1resultId, team2resultId, matchStatus, endTime) {
+function liveScoreCreateMatchAction(data, competitionId, key, isEdit, team1resultId, team2resultId, matchStatus, endTime, umpireKey, umpireArr, scorerData) {
     const action = {
         type: ApiConstants.API_LIVE_SCORE_CREATE_MATCH_LOAD,
         data,
@@ -47,7 +47,10 @@ function liveScoreCreateMatchAction(data, competitionId, key, isEdit, team1resul
         team1resultId,
         team2resultId,
         matchStatus,
-        endTime
+        endTime,
+        umpireKey,
+        umpireArr,
+        scorerData
     }
     return action;
 }

@@ -105,7 +105,7 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, null, data.body)
     },
     liveScoreSettingView(data) {
-        const url = `/Competitions/id/${data}`;
+        const url = `/competitions/id/${data}`;
         return Method.dataGet(url, null)
 
     },
@@ -113,16 +113,25 @@ let LiveScoreAxiosApi = {
         const url = `/competitions/id/${data}`
         return Method.dataDelete(url, localStorage.token)
     },
-    liveScoreCompetition(data, year, orgKey) {
+    liveScoreCompetition(data, year, orgKey, recordUmpireTypes) {
         var url = null;
         if (orgKey) {
-            url = `/competitions/admin?organisationId=${orgKey}`;
+            if (recordUmpireTypes) {
+                url = `/competitions/admin?organisationId=${orgKey}&recordUmpireTypes=${recordUmpireTypes}`;
+            } else {
+                url = `/competitions/admin?organisationId=${orgKey}`;
+            }
+
         } else {
             url = `/competitions/admin`;
         }
 
-        // const url = `/competitions/admin?organisationid=${81}`;
-        return Method.dataPost(url, null, data)
+        if (data) {
+            return Method.dataPost(url, null, data)
+        } else {
+            return Method.dataPost(url, null)
+        }
+
     },
     liveScorePlayerList(competitionID) {
         var url = `/players?competitionId=${competitionID}`;
@@ -193,16 +202,15 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, token)
     },
 
-    liveScoreCreateMatch(data, competitionId, key, isEdit, team1resultId, team2resultId, matchStatus, endTime) {
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-        console.log(isEdit, 'matchKey')
+    liveScoreCreateMatch(data, competitionId, key, isEdit, team1resultId, team2resultId, matchStatus, endTime, umpireArr, scorerData) {
+        // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
 
         let body = {
             "id": data.id ? data.id : 0,
             "startTime": data.startTime,
             "divisionId": data.divisionId,
             "type": data.type,
-            "competitionId": id,
+            "competitionId": competitionId,
             "mnbMatchId": data.mnbMatchId,
             "team1Id": data.team1id,
             "team2Id": data.team2id,
@@ -218,6 +226,8 @@ let LiveScoreAxiosApi = {
             "team2ResultId": isEdit && team2resultId,
             "matchStatus": isEdit && matchStatus,
             "endTime": isEdit && endTime,
+            "umpires": umpireArr,
+            "Scorers": scorerData
             // "breakDuration": data.breakDuration
         }
 

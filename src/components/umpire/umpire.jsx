@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Input, Layout, Button, Table, Select, Menu, Icon, Pagination } from 'antd';
+import { Input, Layout, Button, Table, Select, Menu, Icon, Pagination, message } from 'antd';
 import './umpire.css';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -13,8 +13,10 @@ import { umpireListAction } from "../../store/actions/umpireAction/umpireAction"
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { entityTypes } from '../../util/entityTypes'
 import { refRoleTypes } from '../../util/refRoles'
-import { getUmpireCompetiton, setUmpireCompition } from '../../util/sessionStorage'
+import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage'
 import { exportFilesAction } from "../../store/actions/appAction"
+import ValidationConstants from "../../themes/validationConstant";
+import history from "../../util/history";
 const { Content } = Layout;
 const { SubMenu } = Menu;
 const { Option } = Select;
@@ -36,12 +38,18 @@ const columns = [
         dataIndex: 'firstName',
         key: 'firstsName',
         sorter: (a, b) => tableSort(a, b, "firstName"),
+        render: (firstName, record) =>
+        <span class="input-heading-add-another pt-0"
+                onClick={() => this_obj.checkUserId(record)}>{firstName}</span>
     },
     {
         title: 'Last Name',
         dataIndex: 'lastName',
         key: 'lastName',
         sorter: (a, b) => tableSort(a, b, "lastName"),
+        render: (lastName, record) =>
+        <span class="input-heading-add-another pt-0"
+                onClick={() => this_obj.checkUserId(record)}>{lastName}</span>
     },
     {
         title: 'Email',
@@ -123,7 +131,7 @@ class Umpire extends Component {
     componentDidMount() {
         let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
         this.setState({ loading: true })
-        this.props.umpireCompetitionListAction(organisationId)
+        this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS')
     }
 
     componentDidUpdate(nextProps) {
@@ -133,17 +141,27 @@ class Umpire extends Component {
                 let firstComp = compList.length > 0 && compList[0].id
 
 
-                if (getUmpireCompetiton()) {
-                    let compId = JSON.parse(getUmpireCompetiton())
+                if (getUmpireCompId()) {
+                    let compId = JSON.parse(getUmpireCompId())
                     firstComp = compId
                 } else {
-                    setUmpireCompition(firstComp)
+                    setUmpireCompId(firstComp)
                 }
 
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey
                 this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: firstComp, offset: 0 })
                 this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey })
             }
+        }
+    }
+
+    checkUserId(record) {
+        if (record.userId == null) {
+            message.config({ duration: 1.5, maxCount: 1 })
+            message.warn(ValidationConstants.umpireMessage)
+        }
+        else {
+            history.push("/userPersonal", { userId: record.userId, screenKey: "umpireRoaster", screen: "/umpire" })
         }
     }
 
@@ -200,7 +218,7 @@ class Umpire extends Component {
 
     onChangeComp(compID) {
         let selectedComp = compID.comp
-        setUmpireCompition(selectedComp)
+        setUmpireCompId(selectedComp)
         let compKey = compID.competitionUniqueKey
 
         this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: selectedComp, offset: 0 })
@@ -235,7 +253,7 @@ class Umpire extends Component {
     }
 
     onExport() {
-        let url = AppConstants.umpireListExport + `entityTypeId=${1}&entityId=${this.state.selectedComp}&roleId=${15}`  
+        let url = AppConstants.umpireListExport + `entityTypeId=${1}&entityId=${this.state.selectedComp}&roleId=${15}`
         this.props.exportFilesAction(url)
     }
 
@@ -284,7 +302,7 @@ class Umpire extends Component {
                                             justifyContent: "flex-end"
                                         }}
                                     >
-                                        <Button onClick={() => this.onExport()}  className="primary-add-comp-form" type="primary">
+                                        <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">
                                                     <img

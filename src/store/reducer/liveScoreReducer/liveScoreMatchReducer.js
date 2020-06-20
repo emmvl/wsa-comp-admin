@@ -3,6 +3,7 @@ import { getMatchListSettings } from '../../../store/objectModel/getMatchTeamLis
 import { formateTime, liveScore_formateDate, formatDateTime } from '../../../themes/dateformate'
 import moment from "moment";
 import liveScoreMatchModal from "../../objectModel/liveScoreMatchModal";
+import { isArrayNotEmpty } from '../../../util/helpers';
 
 
 var object = {
@@ -175,7 +176,17 @@ const initialState = {
     rounLoad: false,
     matchResult: [],
     forfietedTeam: undefined,
-    abandoneReason: undefined
+    abandoneReason: undefined,
+    recordUmpireType: null,
+    scorer1: null,
+    scorer2: null,
+    umpire1Name: null,
+    umpire2Name: null,
+    umpire1TextField: null,
+    umpire2TextField: null,
+    umpire1Orag: [],
+    umpire2Orag: [],
+    umpires: []
 };
 
 function setMatchData(data) {
@@ -217,7 +228,16 @@ function generateCourtsArray(venuesData) {
 
 }
 
+function getOrganisation(data) {
 
+    let arr = []
+
+    for (let i in data) {
+        arr.push(data[i].id)
+    }
+
+    return arr
+}
 
 function liveScoreMatchReducer(state = initialState, action) {
     switch (action.type) {
@@ -279,8 +299,8 @@ function liveScoreMatchReducer(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 error: null,
-
-                status: action.status
+                status: action.status,
+                recordUmpireType: data.competition.recordUmpireType
             };
 
         case ApiConstants.API_LIVE_SCORE_ADD_EDIT_MATCH_FAIL:
@@ -332,6 +352,31 @@ function liveScoreMatchReducer(state = initialState, action) {
             } else if (action.key == 'clearData') {
                 state.forfietedTeam = null
                 state.abandoneReason = null
+
+            } else if (action.key == 'scorer1') {
+                state.scorer1 = action.data
+
+            } else if (action.key == 'scorer2') {
+                state.scorer2 = action.data
+
+            }
+            else if (action.key == 'umpire1NameSelection') {
+                state.umpire1Name = action.data
+
+            } else if (action.key == 'umpire2NameSelection') {
+                state.umpire2Name = action.data
+
+            } else if (action.key == 'umpire1TextField') {
+                state.umpire1TextField = action.data
+
+            } else if (action.key == 'umpire2TextField') {
+                state.umpire2TextField = action.data
+
+            } else if (action.key == 'umpire1Orag') {
+                state.umpire1Orag = action.data
+
+            } else if (action.key == 'umpire2Orag') {
+                state.umpire2Orag = action.data
 
             } else {
 
@@ -411,13 +456,36 @@ function liveScoreMatchReducer(state = initialState, action) {
         case ApiConstants.API_GET_LIVESCOREMATCH_DETAIL_SUCCESS:
             let team1Player = liveScoreMatchModal.getMatchViewData(action.payload.team1players)
             let team2Player = liveScoreMatchModal.getMatchViewData(action.payload.team2players)
+            console.log(action.payload, 'payload')
+            let match = action.payload.match[0]
+            let umpires_1 = isArrayNotEmpty(action.payload.umpires) ? action.payload.umpires[0] : []
+            let umpires_2 = isArrayNotEmpty(action.payload.umpires) ? action.payload.umpires[1] : []
+            console.log(umpires_2, 'orgamisation_1~~~~')
+            // organisation_1 = isArrayNotEmpty(umpires_1.organisations) ? umpires_1.organisations : []
+            let organisation_1 = getOrganisation(umpires_1.organisations)
+            let organisation_2 = getOrganisation(umpires_2.organisations)
+            state.umpire1Orag = organisation_1
+            state.umpire2Orag = organisation_2
+            // organisation_2 = isArrayNotEmpty(umpires_2.organisations) ? umpires_2.organisations[1].id : []
+
+            console.log(state.umpire2Orag, 'orgamisation_1')
 
             return {
                 ...state,
                 onLoad: false,
                 matchDetails: action.payload,
                 team1Players: team1Player,
-                team2Players: team2Player
+                team2Players: team2Player,
+                scorer1: match.scorer1 && match.scorer1.id,
+                scorer2: match.scorer2 && match.scorer2.id,
+                umpire1Name: umpires_1.userId,
+                umpire2Name: umpires_2.userId,
+                umpire1TextField: umpires_1.umpireName,
+                umpire2TextField: umpires_2.umpireName,
+                // umpire1Orag: orgamisation_1.id,
+                // umpire2Orag: orgamisation_2.id,
+
+
             }
         case ApiConstants.API_GET_LIVESCOREMATCH_DETAIL_ERROR:
             return {

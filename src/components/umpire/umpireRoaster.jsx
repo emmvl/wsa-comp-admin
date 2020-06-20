@@ -12,7 +12,7 @@ import { isArrayNotEmpty } from "../../util/helpers";
 import { umpireRoasterListAction, umpireRoasterOnActionClick } from "../../store/actions/umpireAction/umpirRoasterAction"
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { refRoleTypes } from '../../util/refRoles'
-import { getUmpireCompetiton, setUmpireCompition } from '../../util/sessionStorage'
+import { setUmpireCompId, getUmpireCompId } from '../../util/sessionStorage'
 import moment, { utc } from "moment";
 import ValidationConstants from "../../themes/validationConstant";
 import history from "../../util/history";
@@ -151,7 +151,7 @@ class UmpireRoaster extends Component {
     componentDidMount() {
         let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
         this.setState({ loading: true })
-        this.props.umpireCompetitionListAction(organisationId)
+        this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS')
     }
 
     componentDidUpdate(nextProps) {
@@ -161,11 +161,11 @@ class UmpireRoaster extends Component {
                 let firstComp = compList.length > 0 && compList[0].id
 
 
-                if (getUmpireCompetiton()) {
-                    let compId = JSON.parse(getUmpireCompetiton())
+                if (getUmpireCompId()) {
+                    let compId = JSON.parse(getUmpireCompId())
                     firstComp = compId
                 } else {
-                    setUmpireCompition(firstComp)
+                    setUmpireCompId(firstComp)
                 }
 
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey
@@ -275,7 +275,7 @@ class UmpireRoaster extends Component {
 
     onChangeComp(compID) {
         let selectedComp = compID.comp
-        setUmpireCompition(selectedComp)
+        setUmpireCompId(selectedComp)
         let compKey = compID.competitionUniqueKey
 
         const body =

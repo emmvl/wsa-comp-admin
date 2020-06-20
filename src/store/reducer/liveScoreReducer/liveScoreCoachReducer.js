@@ -128,19 +128,18 @@ function liveScoreCoachState(state = initialState, action) {
                 state.exsitingManagerId = null
             } else if (action.key == "coachSearch") {
 
-
                 state.exsitingManagerId = action.data
-                let index = state.coachesResult.findIndex(x => x.id == action.data)
+                // let index = state.coachesResult.findIndex(x => x.id == action.data)
 
-                let selectedTeam = []
-                if (index > -1) {
-                    selectedTeam = state.coachesResult[index].linkedEntity
-                }
-                // state.selectedteam = getSelectedTeam(action.data,state.coachesResult)
-                let teamIds = genrateTeamId(selectedTeam)
-                state.teamId = teamIds
-                let coach_TeamObj = getTeamObj(teamIds, state.teamResult)
-                state.coachdata['teams'] = coach_TeamObj
+                // let selectedTeam = []
+                // if (index > -1) {
+                //     selectedTeam = state.coachesResult[index].linkedEntity
+                // }
+                // // state.selectedteam = getSelectedTeam(action.data,state.coachesResult)
+                // let teamIds = genrateTeamId(selectedTeam)
+                // state.teamId = teamIds
+                // let coach_TeamObj = getTeamObj(teamIds, state.teamResult)
+                // state.coachdata['teams'] = coach_TeamObj
 
 
             } else if (action.key == 'isEditCoach') {

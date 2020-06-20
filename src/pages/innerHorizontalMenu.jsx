@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import './layout.css';
 import AppConstants from "../themes/appConstants";
 import { checkOrganisationLevel } from "../util/permissions";
+import { getLiveScoreCompetiton } from "../util/sessionStorage"
 
 const { SubMenu } = Menu;
 class InnerHorizontalMenu extends React.Component {
@@ -220,7 +221,7 @@ class InnerHorizontalMenu extends React.Component {
                             </NavLink>
                         </Menu.Item>
                     </SubMenu>
-                    <Menu.Item key="9">De-registration forms</Menu.Item>
+                    {/* <Menu.Item key="9">De-registration forms</Menu.Item> */}
                 </Menu>
                 }
 
@@ -245,7 +246,9 @@ class InnerHorizontalMenu extends React.Component {
                         }
                     >
                         <Menu.Item key="2">
-                            <NavLink to="/liveScoreMatches">
+                            <NavLink to={{
+                                pathname: '/liveScoreMatches',
+                            }}>
                                 <span>Matches</span>
                             </NavLink>
                         </Menu.Item>

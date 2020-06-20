@@ -48,41 +48,39 @@ const initialState = {
 
 //minutes to hour (and days) converter
 function recordingTimeDays(num) {
+    let d, h, m
     if (num != null) {
-        let d, h, m
         d = Math.floor(num / 1440); // 60*24
         h = Math.floor((num - (d * 1440)) / 60);
         m = Math.round(num % 60);
-        if (d > 0) {
-            return d
-        }
     }
+    return d
 }
 
 //minutes to hour (and days) converter
 function recordingTimeHours(num) {
+    let d, h, m
     if (num != null) {
-        let d, h, m
+
         d = Math.floor(num / 1440); // 60*24
         h = Math.floor((num - (d * 1440)) / 60);
         m = Math.round(num % 60);
-        if (d > 0) {
-            return h
-        }
+
     }
+    return h
 }
 
 //minutes to hour (and days) converter
 function recordingTimeMins(num) {
+    let d, h, m
     if (num != null) {
-        let d, h, m
+
         d = Math.floor(num / 1440); // 60*24
         h = Math.floor((num - (d * 1440)) / 60);
         m = Math.round(num % 60);
-        if (d > 0) {
-            return m
-        }
+
     }
+    return m
 }
 
 export default function liveScoreSettingsViewReducer(state = initialState, { type, payload, }) {
@@ -124,7 +122,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 return memo
             }, [])
             const venueData = payload.competitionVenues.map(item => (item.venueId))
-            console.log(venueData, 'venueData')
+
             return {
                 ...state,
                 loader: false,

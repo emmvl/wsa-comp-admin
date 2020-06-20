@@ -11,10 +11,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { liveScoreMatchListAction } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
 import history from "../../util/history";
-import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { getCompetitonId, getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage'
 import { liveScore_MatchFormate } from '../../themes/dateformate'
 import { exportFilesAction } from "../../store/actions/appAction"
 import { isArrayNotEmpty, teamListData } from "../../util/helpers";
+
 const { Content } = Layout;
 /////function to sort table column
 function tableSort(a, b, key) {
@@ -23,19 +24,19 @@ function tableSort(a, b, key) {
     return stringA.localeCompare(stringB)
 }
 
-
-function setMatchResult(record){
-    if(record.team1ResultId !== null){
-        if(record.team1ResultId === 4 || record.team1ResultId === 6 || record.team1ResultId === 6){
+var _this = null
+function setMatchResult(record) {
+    if (record.team1ResultId !== null) {
+        if (record.team1ResultId === 4 || record.team1ResultId === 6 || record.team1ResultId === 6) {
             return "Forfeit"
-        }else if(record.team1ResultId === 8 || record.team1ResultId === 9 ){
+        } else if (record.team1ResultId === 8 || record.team1ResultId === 9) {
             return "Abandoned"
-        }else {
-            return  record.score
+        } else {
+            return record.score
         }
-    }else{
+    } else {
         return record.score
-    }   
+    }
 }
 
 
@@ -45,12 +46,11 @@ const columns = [
         dataIndex: 'id',
         key: 'id',
         sorter: (a, b) => tableSort(a, b, "id"),
-        render: (id) => <NavLink to={{
-            pathname: '/liveScoreMatchDetails',
-            state: { matchId: id }
-        }} >
-            <span class="input-heading-add-another pt-0" >{id}</span>
-        </NavLink>
+        render: (id) => {
+            return (
+                _this.onMatchClick(id, '/liveScoreMatchDetails')
+            )
+        }
     },
     {
         title: 'Start Time',
@@ -141,20 +141,44 @@ class LiveScoreMatchesList extends Component {
         super(props);
         this.state = {
             competitionId: null,
-            searchText: ""
+            searchText: "",
+            umpireKey: this.props.location ? this.props.location.state ? this.props.location.state.umpireKey : null : null,
         }
+        _this = this
     }
 
     componentDidMount() {
-        // let competitionID = getCompetitonId()
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ competitionId: id })
-        if (id !== null) {
-            this.handleMatchTableList(1, id)
+
+        if (this.state.umpireKey == 'umpire') {
+            const { id } = JSON.parse(getUmpireCompetitonData())
+            this.setState({ competitionId: id })
+            if (id !== null) {
+                this.handleMatchTableList(1, id)
+            } else {
+                history.push('/')
+            }
         } else {
-            history.push('/')
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            this.setState({ competitionId: id })
+            if (id !== null) {
+                this.handleMatchTableList(1, id)
+            } else {
+                history.push('/')
+            }
         }
     }
+
+    onMatchClick(data, screenName) {
+        return (
+            <NavLink to={{
+                pathname: screenName,
+                state: { matchId: data, umpireKey: this.state.umpireKey }
+            }} >
+                <span class="input-heading-add-another pt-0" >{data}</span>
+            </NavLink>
+        )
+    }
+
 
     handleMatchTableList(page, competitionID) {
         let offset = page ? 10 * (page - 1) : 0;
@@ -220,7 +244,9 @@ class LiveScoreMatchesList extends Component {
                                         justifyContent: "flex-end",
                                     }}
                                 >
-                                    <NavLink to="/liveScoreAddMatch">
+                                    <NavLink to={{
+                                        pathname: '/liveScoreAddMatch',
+                                    }}>
                                         <Button className="primary-add-comp-form" type="primary">
                                             + {AppConstants.addMatches}
                                         </Button>
@@ -306,7 +332,7 @@ class LiveScoreMatchesList extends Component {
     tableView = () => {
         const { liveScoreMatchListState } = this.props;
         let DATA = liveScoreMatchListState ? liveScoreMatchListState.liveScoreMatchListData : []
-        const { id } = JSON.parse(getLiveScoreCompetiton())
+        // const { id } = JSON.parse(getLiveScoreCompetiton())
         let total = liveScoreMatchListState.liveScoreMatchListTotalCount;
 
         return (
@@ -324,7 +350,7 @@ class LiveScoreMatchesList extends Component {
                         className="antd-pagination"
                         current={liveScoreMatchListState.liveScoreMatchListPage}
                         total={total}
-                        onChange={(page) => this.handleMatchTableList(page, id)}
+                        onChange={(page) => this.handleMatchTableList(page, this.state.competitionId)}
                         defaultPageSize={10}
                     />
                 </div>
@@ -335,8 +361,19 @@ class LiveScoreMatchesList extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"2"} />
+                {
+                    this.state.umpireKey ?
+                        <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
+                        :
+                        <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                }
+
+                {
+                    this.state.umpireKey ?
+                        <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"1"} />
+                        :
+                        <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"2"} />
+                }
                 <Layout>
                     {this.headerView()}
                     <Content>
