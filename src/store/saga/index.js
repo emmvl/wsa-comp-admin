@@ -151,7 +151,7 @@ import {
 
 // UserSaga
 import * as userSaga from '../saga/userSaga/userSaga';
-import { homeDashboardSaga } from "./homeDashboardSaga/homeDashboardSaga"
+import { homeDashboardSaga, actionBoxListSaga, updateActionBoxSaga } from "./homeDashboardSaga/homeDashboardSaga"
 
 ////////competition draws 
 import {
@@ -751,10 +751,15 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_GET_UMPIRE_DASHBOARD_DIVISION_LIST_LOAD, umpireDashboardSaga.umpireDivisionListSaga)
   yield takeEvery(ApiConstants.API_GET_UMPIRE_DASHBOARD_LIST_LOAD, umpireDashboardSaga.umpireListDashboardSaga)
 
-yield takeEvery(ApiConstants.API_USER_PROFILE_UPDATE_LOAD, userSaga.updateUserProfileSaga)
+  yield takeEvery(ApiConstants.API_USER_PROFILE_UPDATE_LOAD, userSaga.updateUserProfileSaga)
 
   /// Disability Reference Saga
   yield takeEvery(ApiConstants.API_DISABILITY_REFERENCE_LOAD, disabilityReferenceSaga)
 
+  ///Action Box List
+  yield takeEvery(ApiConstants.API_GET_ACTION_BOX_LOAD, actionBoxListSaga)
+
+  ///Update Action Box
+  yield takeEvery(ApiConstants.API_UPDATE_ACTION_BOX_LOAD, updateActionBoxSaga)
 
 }
