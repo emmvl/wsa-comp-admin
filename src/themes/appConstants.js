@@ -1338,6 +1338,8 @@ const AppConstants = {
   addType: "Add Type",
   topSellers: "Top Sellers",
   productType: "Product Type",
+  updateAction: "Update Action",
+  actionBoxConfirmMsg: "Are you sure you want to complete this activity?"
 };
 
 export default AppConstants;

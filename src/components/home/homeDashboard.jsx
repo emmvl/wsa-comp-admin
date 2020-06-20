@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Select, Spin, Pagination, Menu } from 'antd';
+import { Layout, Button, Table, Select, Spin, Pagination, Menu,Modal } from 'antd';
 import './home.css';
 import { NavLink } from 'react-router-dom';
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -68,8 +68,8 @@ const columnsInbox = [
                         />
                     }
                 >
-                    <Menu.Item key="1" onClick={() => this_Obj.updateActionBox(e)}>
-                        <span>Completed</span>
+                    <Menu.Item key="1" onClick={() => this_Obj.showConfirm(e)}>
+                        <span>Complete</span>
                     </Menu.Item>
                 </SubMenu>
             </Menu> : null
@@ -259,7 +259,8 @@ class HomeDashboard extends Component {
             loading: true,
             userCountLoading: false,
             organisationId: null,
-            updateActionBoxLoad: false
+            updateActionBoxLoad: false,
+            actions: null
         }
         this_Obj = this;
 
@@ -311,6 +312,7 @@ class HomeDashboard extends Component {
         }
 
         if(this.state.updateActionBoxLoad == true && this.props.homeDashboardState.onActionBoxLoad == false){
+            this.setState({updateActionBoxLoad: false});
             this.handleActionBoxList(1);
         }
     }
@@ -334,16 +336,34 @@ class HomeDashboard extends Component {
         this.props.getActionBoxAction(payload);
     }
 
+    showConfirm = async (e) => {
+        await this.setState({
+            modalVisible: true,
+            actions: e
+        });
+    }
+
+    handleUpdateActionBoxOk = (key) => {
+      
+        if(key == "ok"){
+            this.updateActionBox(this.state.actions);
+        }
+
+        this.setState({ modalVisible: false, actions: null });
+    }
+
     updateActionBox = (e) => {
         console.log("updateActionBox::" + JSON.stringify(e));
         let obj = {
             actionsId: e.actionsId,
             actionMasterId: e.actionMasterId
         }
-
+       // console.log("********" + JSON.stringify(obj));
         this.props.updateActionBoxAction(obj);
         this.setState({updateActionBoxLoad: true});
     }
+
+    
 
     actionboxHeadingView = () => {
         return (
@@ -386,6 +406,15 @@ class HomeDashboard extends Component {
                     />
                     </div>
                 </div>
+
+                <Modal
+                    className="add-membership-type-modal"
+                    title={AppConstants.updateAction}
+                    visible={this.state.modalVisible}
+                    onOk={ () => this.handleUpdateActionBoxOk("ok")}
+                    onCancel={() => this.handleUpdateActionBoxOk("cancel")}>
+                    <p>{AppConstants.actionBoxConfirmMsg}</p>
+                </Modal>
             </div>
         )
     }

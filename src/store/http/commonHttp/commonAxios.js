@@ -211,7 +211,7 @@ let AxiosApi = {
         return Method.dataPost(url, token, payload)
     },
     updateActionBox(payload) {
-        let url = `/api/action/update`;
+        let url = `/api/actions/update`;
         return Method.dataPost(url, token, payload)
     },
 };
