@@ -268,6 +268,7 @@ class HomeDashboard extends Component {
 
 
     componentDidMount() {
+        console.log("componentDidMount" + this.state.organisationId)
         this.props.getRoleAction()
         this.props.getUreAction()
        
@@ -305,8 +306,11 @@ class HomeDashboard extends Component {
                             this.setState({ loading: false })
                         }
                     }
-                    await this.setState({organisationId: userOrganisation[0].organisationUniqueKey})
-                    this.handleActionBoxList(1);
+                    
+                    if(this.props.homeDashboardState.actionBoxList == null || this.state.organisationId == null){
+                        await this.setState({organisationId: userOrganisation[0].organisationUniqueKey})
+                        this.handleActionBoxList(1);
+                    }
                 }
             }
         }
