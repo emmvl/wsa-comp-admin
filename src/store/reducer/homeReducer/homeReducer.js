@@ -13,7 +13,7 @@ const initialState = {
     liveScoreCompetitionCount: null,
     registrationCompetitionCount: null,
     yearRefId: 1,
-    actionBoxList: [],
+    actionBoxList: null,
     actionBoxPage: 1,
     actionBoxTotalCount: 1
 };
@@ -85,7 +85,7 @@ function homeReducer(state = initialState, action) {
             return {
                 ...state,
                 onActionBoxLoad: false,
-                actionBoxList: actionData.actions,
+                actionBoxList: actionData.actions!= null ? actionData.actions : [],
                 actionBoxPage: actionData.page ? actionData.page.currentPage : 1,
                 actionBoxTotalCount: actionData.page ? actionData.page.totalCount: 1,
             }
