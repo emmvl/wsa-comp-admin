@@ -163,7 +163,7 @@ class UserProfileEdit extends Component {
     setOtherInfoFormField = () => {
         let userData  = this.state.userData;
         this.props.form.setFieldsValue({
-            genderRefId: parseInt(userData.genderRefId)
+            genderRefId: userData.genderRefId!= null ?  parseInt(userData.genderRefId) : 0
         })
     }
 
