@@ -22,7 +22,7 @@ import { isEmptyArray } from "formik";
 import WizardModel from "../../customComponents/registrationWizardModel"
 import history from "../../util/history";
 import StripeKeys from "../stripe/stripeKeys";
-
+import { currencyFormat } from "../../util/currencyFormat";
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
@@ -75,10 +75,17 @@ const columns = [
         }
     },
     {
-        title: 'Fee',
+        title: 'Fee (incl. GST)',
         dataIndex: 'fee',
         key: 'fee',
         sorter: (a, b) => a.fee.localeCompare(b.fee),
+        render: (fee, record, index) => {
+            return (
+                <div>
+                    {fee != null ? currencyFormat(fee) : ""}
+                </div>
+            )
+        }
     },
     {
         title: "Action",
