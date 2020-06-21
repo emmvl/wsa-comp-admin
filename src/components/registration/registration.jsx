@@ -635,6 +635,7 @@ class Registration extends Component {
         let userRegistrationState = this.props.userRegistrationState;
         let userRegDashboardList = userRegistrationState.userRegDashboardListData;
         let total = userRegistrationState.userRegDashboardListTotalCount;
+        let feesPaid = userRegistrationState.feesPaid;
         return (
             <div className="comp-dash-table-view mt-2">
                 <div>
@@ -648,7 +649,7 @@ class Registration extends Component {
                         <div className="col-sm-6" >
                             <div className="registration-count">
                                 <div className="reg-payment-paid-reg-text">Value of Registrations</div>
-                                <div className="reg-payment-price-text">$0</div>
+                                <div className="reg-payment-price-text">${feesPaid}</div>
                             </div>
                         </div>
                     </div>
