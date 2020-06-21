@@ -84,7 +84,8 @@ export function* liveScoreCreateMatchSaga(action) {
             action.matchStatus,
             action.endTime,
             action.umpireArr,
-            action.scorerData
+            action.scorerData,
+            action.recordUmpireType
 
         );
         if (result.status === 1) {
@@ -170,21 +171,15 @@ export function* liveScoreMatchImportSaga(action) {
         yield call(errorSaga, error)
     }
 }
-export function* liveScoreMatchSaga({ payload }) {
-    console.log("colleddddddd")
+export function* liveScoreMatchSaga({ payload, isLineup }) {
     try {
-        // yield console.log(payload)
-        const result = yield call(LiveScoreAxiosApi.livescoreMatchDetails, payload)
+        const result = yield call(LiveScoreAxiosApi.livescoreMatchDetails, payload, isLineup)
         if (result.status === 1) {
             yield put({ type: ApiConstants.API_GET_LIVESCOREMATCH_DETAIL_SUCCESS, payload: result.result.data })
         } else {
-            // yield setTimeout(() => { message.error('Something went wrong.') }, 800)
-
             yield call(failSaga, result)
         }
     } catch (error) {
-        // yield put({ type: ApiConstants.API_GET_LIVESCOREMATCH_DETAIL_ERROR, payload: e })
-        // yield setTimeout(() => { message.error('Something went wrong') }, 800)
         yield call(errorSaga, error)
 
     }
@@ -194,9 +189,29 @@ export function* liveScoreClubListSaga(action) {
         const result = yield call(LiveScoreAxiosApi.liveScoreClubList, action.competitionId);
         if (result.status === 1) {
             yield put({
+                type: ApiConstants.API_CHNAGE_LINEUP_STATUS_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+export function* playerLineUpStatusChnage(action) {
+    console.log(action , "ddddd")
+    try {
+        const result = yield call(LiveScoreAxiosApi.playerLineUpApi, action.data, action.value);
+        if (result.status === 1) {
+            yield put({
                 type: ApiConstants.API_LIVE_SCORE_CLUB_LIST_SUCCESS,
                 result: result.result.data,
                 status: result.status,
+                index:action.index
             });
 
         } else {

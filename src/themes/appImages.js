@@ -43,6 +43,7 @@ const AppImages = {
   product1: require("../images/product1.png"),
   product2: require("../images/product2.png"),
   tick: require("../images/tick.png"),
+  crossImage: require("../images/close.png"),
 };
 
 export default AppImages;

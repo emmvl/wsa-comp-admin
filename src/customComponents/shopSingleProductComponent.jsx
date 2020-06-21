@@ -31,7 +31,7 @@ class ShopSingleProductComponent extends React.Component {
                             <Menu.Item >
                                 <span>Edit</span>
                             </Menu.Item>
-                            <Menu.Item >
+                            <Menu.Item onClick={this.props.deleteOnclick} >
                                 <span>Delete</span>
                             </Menu.Item>
                         </SubMenu>

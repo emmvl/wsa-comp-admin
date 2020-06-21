@@ -24,8 +24,17 @@ function getUmpireDashboardDivisionList(competitionID) {
     return action;
 }
 
+function umpireDashboardImportAction(data) {
+    const action = {
+        type: ApiConstants.API_UMPIRE_IMPORT_LOAD,
+        data
+    }
+    return action
+}
+
 export {
     getUmpireDashboardList,
     getUmpireDashboardVenueList,
-    getUmpireDashboardDivisionList
+    getUmpireDashboardDivisionList,
+    umpireDashboardImportAction
 } 

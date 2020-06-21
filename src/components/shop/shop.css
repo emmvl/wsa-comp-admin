@@ -27,6 +27,13 @@
     background-color: var(--app-white);
   }
 
+.remove-cross-img-div{
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 21px;
+    justify-content: center;
+}
+
 @media (max-width: 767px) {
     .shop-product-content-div{
         justify-content: center;

@@ -10,7 +10,7 @@ const initialState = {
     umpireDivisionList: [],
     onDivisionLoad: false,
     umpireDashboardList: [],
-    totalPages:null
+    totalPages: null
 };
 
 function umpireDashboardState(state = initialState, action) {
@@ -26,7 +26,7 @@ function umpireDashboardState(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 umpireDashboardList: action.result.results,
-                totalPages:action.result.page.totalCount,
+                totalPages: action.result.page.totalCount,
                 status: action.status
             };
 
@@ -56,6 +56,18 @@ function umpireDashboardState(state = initialState, action) {
                 onDivisionLoad: false,
                 umpireDivisionList: action.result,
                 status: action.status
+            };
+
+        //// Umpire Import
+        case ApiConstants.API_UMPIRE_IMPORT_LOAD:
+
+
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_UMPIRE_IMPORT_SUCCESS:
+            return {
+                ...state,
+                onLoad: false
             };
 
         //// Fail and Error case

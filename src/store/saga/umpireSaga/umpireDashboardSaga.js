@@ -9,7 +9,7 @@ import history from "../../../util/history";
 function* failSaga(result) {
     yield put({ type: ApiConstants.API_UMPIRE_FAIL });
     setTimeout(() => {
-        message.error(result.message)
+        message.error(result.result.data)
     }, 800);
 }
 
@@ -73,6 +73,26 @@ export function* umpireDivisionListSaga(action) {
                 result: result.result.data,
                 status: result.status,
             });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+export function* umpireImportSaga(action) {
+    try {
+        const result = yield call(LiveScoreAxiosApi.umpireImport, action.data);
+        if (result.status === 1) {
+            // console.log('saga', result)
+            yield put({
+                type: ApiConstants.API_UMPIRE_IMPORT_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+            history.push(action.data == 'umpireDashboard' ? '/umpireDashboard' : 'umpire')
+            message.success(action.data == 'umpireDashboard' ? 'Umpire Dashboard Imported Successfully.' : 'Umpire Imported Successfully.')
         } else {
             yield call(failSaga, result)
         }

@@ -7,9 +7,11 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { liveScoreCoachImportAction } from '../../store/actions/LiveScoreAction/liveScoreCoachAction'
+import { umpireDashboardImportAction } from '../../store/actions/umpireAction/umpireDashboardAction'
 import Loader from '../../customComponents/loader'
 import { getUmpireCompetiton } from '../../util/sessionStorage'
+import { message } from "antd";
+import ValidationConstants from '../../themes/validationConstant'
 
 
 const { Content, Header, Footer } = Layout;
@@ -51,19 +53,20 @@ class UmpireImport extends Component {
     };
 
     onUploadBtn() {
+
         let compId = JSON.parse(getUmpireCompetiton())
 
         if (this.state.csvdata) {
-            // this.props.liveScoreCoachImportAction({ id: id, csvFile: this.state.csvdata })
+            this.props.umpireDashboardImportAction({ id: compId, csvFile: this.state.csvdata, screenName: this.state.screenName })
         } else {
-            // message.config({ duration: 0.9, maxCount: 1 })
-            // message.error(ValidationConstants.csvField)
+            message.config({ duration: 0.9, maxCount: 1 })
+            message.error(ValidationConstants.csvField)
         }
     }
 
 
     contentView = () => {
-        console.log(this.state.csvdata, 'csvdataPlayer')
+        console.log(this.state.screenName, 'screenName')
         return (
             <div className="content-view pt-4">
                 <span className={`input-heading`}>{AppConstants.fileInput}</span>
@@ -107,7 +110,7 @@ class UmpireImport extends Component {
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={this.state.screenName == 'umpire' ? '2' : this.state.screenName == 'umpireRoaster' ? '3' : "1"} />
-                <Loader visible={this.props.umpireRoasterdState.onLoad} />
+                <Loader visible={this.props.umpireDashboardState.onLoad} />
                 <Layout>
                     {this.headerView()}
                     <Content>
@@ -122,12 +125,12 @@ class UmpireImport extends Component {
     }
 }
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScoreCoachImportAction }, dispatch)
+    return bindActionCreators({ umpireDashboardImportAction }, dispatch)
 }
 
 function mapStateToProps(state) {
     return {
-        umpireRoasterdState: state.UmpireRoasterdState,
+        umpireDashboardState: state.UmpireDashboardState,
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)((UmpireImport));
