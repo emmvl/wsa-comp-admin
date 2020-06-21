@@ -268,6 +268,7 @@ class HomeDashboard extends Component {
 
 
     componentDidMount() {
+        console.log("componentDidMount" + this.state.organisationId)
         this.props.getRoleAction()
         this.props.getUreAction()
        
@@ -305,8 +306,11 @@ class HomeDashboard extends Component {
                             this.setState({ loading: false })
                         }
                     }
-                    await this.setState({organisationId: userOrganisation[0].organisationUniqueKey})
-                    this.handleActionBoxList(1);
+                    
+                    if(this.props.homeDashboardState.actionBoxList == null || this.state.organisationId == null){
+                        await this.setState({organisationId: userOrganisation[0].organisationUniqueKey})
+                        this.handleActionBoxList(1);
+                    }
                 }
             }
         }
@@ -467,7 +471,7 @@ class HomeDashboard extends Component {
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center" }}>
                                     <div className="reg-payment-regist-view">
 
-                                        <img src={AppImages.activeRegist} alt="" height="25" width="25" />
+                                        <img src={AppImages.activeUserIcon} alt="" height="25" width="25" />
                                     </div>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
@@ -525,7 +529,7 @@ class HomeDashboard extends Component {
                             <div className="row " >
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center" }}>
                                     <div className="reg-payment-regist-view">
-                                        <img src={AppImages.activeRegist} alt="" height="25" width="25" />
+                                        <img src={AppImages.activeCompIcon} alt="" height="25" width="25" />
                                     </div>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
@@ -553,7 +557,7 @@ class HomeDashboard extends Component {
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center" }}>
                                     <div className="reg-payment-regist-view">
 
-                                        <img src={AppImages.activeRegist} alt="" height="25" width="25" />
+                                        <img src={AppImages.activeLiveScoreIcon} alt="" height="25" width="25" />
                                     </div>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >

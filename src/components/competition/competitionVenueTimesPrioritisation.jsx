@@ -967,7 +967,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                             onChange={(time) => this.onChangeSetMPValue(time.format("HH:mm"), 'startTime', index)}
                                             //value={moment(item.endTime, "HH:mm")}
                                             format={"HH:mm "}
-                                            minuteStep={15}
+                                            //minuteStep={15}
                                             use12Hours={false}
                                         />
                                     )}
@@ -1143,7 +1143,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                                     onChange={(time) => this.onChangeSetLDValue(time.format("HH:mm"), 'startTime', index)}
                                                     //value={moment(item.endTime, "HH:mm")}
                                                     format={"HH:mm "}
-                                                    minuteStep={15}
+                                                    //minuteStep={15}
                                                     use12Hours={false}
                                                 />
                                             )}

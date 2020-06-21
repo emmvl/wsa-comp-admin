@@ -349,10 +349,10 @@ class CompetitionVenueAndTimesEdit extends Component {
     }
 
     getDisabledMinutes = (selectedHour, startTime) => {
-        console.log("&&&&&&&&&&&" + startTime);
-        console.log("selectedHour::" + startTime.split(":")[0]);
-        console.log("Current Minute::" + startTime.split(":")[1]);
-        console.log("*****selectedHour:::" + selectedHour);
+        // console.log("&&&&&&&&&&&" + startTime);
+        // console.log("selectedHour::" + startTime.split(":")[0]);
+        // console.log("Current Minute::" + startTime.split(":")[1]);
+        // console.log("*****selectedHour:::" + selectedHour);
         let hour = Number(startTime.split(":")[0]);
         let min = Number(startTime.split(":")[1]);
         var minutes= [];
@@ -603,7 +603,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         onChange={(time) => time !== null && this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, 'startTime', "gameTimeslot")}
                         value={moment(item.startTime, "HH:mm")}
                         format={"HH:mm "}
-                        minuteStep={15}
+                        // minuteStep={15}
                         use12Hours={false}
                     />
                     {/* )}
@@ -627,7 +627,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         onChange={(time) => time !== null && this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, 'endTime', "gameTimeslot")}
                         value={moment(item.endTime, "HH:mm")}
                         format={"HH:mm "}
-                        minuteStep={15}
+                        // minuteStep={15}
                         use12Hours={false}
                     />
                     {/* )}
@@ -705,7 +705,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         onChange={(time) => time !== null && this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, 'startTime', "addTimeSlotField", tableIndex)}
                         value={moment(item.startTime, "HH:mm")}
                         format={"HH:mm "}
-                        minuteStep={15}
+                        // minuteStep={15}
                         use12Hours={false}
                     />
                     {/* )}
@@ -728,7 +728,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         onChange={(time) => time !== null && this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, 'endTime', "addTimeSlotField", tableIndex)}
                         value={moment(item.endTime, "HH:mm")}
                         format={"HH:mm "}
-                        minuteStep={15}
+                        // minuteStep={15}
                         use12Hours={false}
                     />
                     {/* )}

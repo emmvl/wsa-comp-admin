@@ -44,6 +44,9 @@ const AppImages = {
   product2: require("../images/product2.png"),
   tick: require("../images/tick.png"),
   crossImage: require("../images/close.png"),
+  activeUserIcon: require("../images/active-user.svg"),
+  activeCompIcon: require("../images/active-competition.svg"),
+  activeLiveScoreIcon: require("../images/active-livescore.svg"),
 };
 
 export default AppImages;

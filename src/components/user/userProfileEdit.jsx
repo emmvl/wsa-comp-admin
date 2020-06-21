@@ -163,7 +163,7 @@ class UserProfileEdit extends Component {
     setOtherInfoFormField = () => {
         let userData  = this.state.userData;
         this.props.form.setFieldsValue({
-            genderRefId: parseInt(userData.genderRefId)
+            genderRefId: userData.genderRefId!= null ?  parseInt(userData.genderRefId) : 0
         })
     }
 
@@ -174,6 +174,9 @@ class UserProfileEdit extends Component {
                 data["disabilityCareNumber"] = null;
                 data["disabilityTypeRefId"] = null;
             }
+        }
+        else if (key == "dateOfBirth"){
+            value = (moment(value).format("YYYY-MM-DD"))
         }
         data[key] = value;
       
