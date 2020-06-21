@@ -175,6 +175,9 @@ class UserProfileEdit extends Component {
                 data["disabilityTypeRefId"] = null;
             }
         }
+        else if (key == "dateOfBirth"){
+            value = (moment(value).format("YYYY-MM-DD"))
+        }
         data[key] = value;
       
         this.setState({userData: data});

@@ -21,6 +21,7 @@ import moment from 'moment';
 import history from '../../util/history'
 import { liveScore_formateDate } from '../../themes/dateformate';
 import InputWithHead from "../../customComponents/InputWithHead";
+import Loader from '../../customComponents/loader';
 
 
 const { Header, Footer, Content } = Layout;
@@ -34,27 +35,23 @@ const columns = [
     {
         title: 'Affiliate',
         dataIndex: 'affiliate',
-        key: 'affiliate',
-        sorter: (a, b) => a.affiliate.localeCompare(b.affiliate),
+        key: 'affiliate'
     },
     {
         title: 'Membership Product',
         dataIndex: 'membershipProduct',
-        key: 'membershipProduct',
-        sorter: (a, b) => a.membershipProduct.localeCompare(b.membershipProduct),
+        key: 'membershipProduct'
     },
     {
         title: 'Membership Type',
         dataIndex: 'membershipType',
-        key: 'membershipType',
-        sorter: (a, b) => a.membershipType.localeCompare(b.membershipType),
+        key: 'membershipType'
     },
     {
         title: 'Fees Paid (Incl. GST)',
         dataIndex: 'feesPaid',
         key: 'feesPaid',
-        width: 150,
-        sorter: (a, b) => a.feesPaid.localeCompare(b.feesPaid),
+        width: 120,
         render: (feesPaid, record, index) => {
             return (
                 <div>
@@ -66,14 +63,12 @@ const columns = [
     {
         title: 'Payment Method',
         dataIndex: 'vouchers',
-        key: 'vouchers',
-        sorter: (a, b) => a.vouchers.localeCompare(b.vouchers),
+        key: 'vouchers'
     },
     {
         title: 'Shop Purchases',
         dataIndex: 'shopPurchases',
-        key: 'shopPurchases',
-        sorter: (a, b) => a.shopPurchases.localeCompare(b.shopPurchases),
+        key: 'shopPurchases'
     },
     {
         title: "Reg.Form",
@@ -1048,6 +1043,7 @@ class UserModulePersonalDetail extends Component {
                         columns={columnsPersonalAddress}
                         dataSource={personalByCompData}
                         pagination={false}
+                        loading={userState.onPersonLoad == true && true}
                     />
                 </div>
 
@@ -1057,6 +1053,7 @@ class UserModulePersonalDetail extends Component {
                         columns={columnsPersonalPrimaryContacts}
                         dataSource={primaryContacts}
                         pagination={false}
+                        loading={userState.onPersonLoad == true && true}
                     />
                 </div>
 
@@ -1066,6 +1063,7 @@ class UserModulePersonalDetail extends Component {
                         columns={columnsPersonalEmergency}
                         dataSource={userState.personalEmergency}
                         pagination={false}
+                        loading={userState.onPersonLoad == true && true}
                     />
                 </div>
                 <div className="row ">
@@ -1371,6 +1369,7 @@ class UserModulePersonalDetail extends Component {
                                 </div>
                             </div>
                         </div>
+                        <Loader visible={this.props.userState.onMedicalLoad} />
                     </Content>
                 </Layout>
             </div>
