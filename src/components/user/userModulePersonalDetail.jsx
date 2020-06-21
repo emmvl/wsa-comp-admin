@@ -53,6 +53,7 @@ const columns = [
         title: 'Fees Paid (Incl. GST)',
         dataIndex: 'feesPaid',
         key: 'feesPaid',
+        width: 150,
         sorter: (a, b) => a.feesPaid.localeCompare(b.feesPaid),
     },
     {
