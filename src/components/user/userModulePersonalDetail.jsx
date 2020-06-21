@@ -50,13 +50,13 @@ const columns = [
         sorter: (a, b) => a.membershipType.localeCompare(b.membershipType),
     },
     {
-        title: 'Fees Paid',
+        title: 'Fees Paid (Incl. GST)',
         dataIndex: 'feesPaid',
         key: 'feesPaid',
         sorter: (a, b) => a.feesPaid.localeCompare(b.feesPaid),
     },
     {
-        title: 'Vouchers',
+        title: 'Payment Method',
         dataIndex: 'vouchers',
         key: 'vouchers',
         sorter: (a, b) => a.vouchers.localeCompare(b.vouchers),
