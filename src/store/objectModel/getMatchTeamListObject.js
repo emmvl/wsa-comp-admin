@@ -73,8 +73,8 @@ function team1(data) {
         nameFilter: data.nameFilter,
         clubId: data.clubId,
         gameTimeTrackingOverride: data.gameTimeTrackingOverride,
-        positionTracking: data.positionTracking
-
+        positionTracking: data.positionTracking,
+     
     }
 }
 
@@ -89,7 +89,8 @@ function team2(data) {
         nameFilter: data.nameFilter,
         clubId: data.clubId,
         gameTimeTrackingOverride: data.gameTimeTrackingOverride,
-        positionTracking: data.positionTracking
+        positionTracking: data.positionTracking,
+       
     }
 }
 

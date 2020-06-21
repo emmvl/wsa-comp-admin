@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Modal } from 'antd';
+import { Layout, Button, Table, Modal, Checkbox } from 'antd';
 import './liveScore.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -8,7 +8,7 @@ import AppImages from "../../themes/appImages";
 import { NavLink } from "react-router-dom";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { liveScoreDeleteMatch, liveScoreGetMatchDetailInitiate } from "../../store/actions/LiveScoreAction/liveScoreMatchAction";
+import { liveScoreDeleteMatch, liveScoreGetMatchDetailInitiate, changePlayerLineUpAction } from "../../store/actions/LiveScoreAction/liveScoreMatchAction";
 import Loader from '../../customComponents/loader'
 import { isArrayNotEmpty } from '../../util/helpers'
 import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage';
@@ -23,7 +23,7 @@ function tableSort(a, b, key) {
     let stringB = JSON.stringify(b[key])
     return stringA.localeCompare(stringB)
 }
-
+var this_ = null
 
 
 
@@ -34,7 +34,6 @@ const columns = [
         key: 'photoUrl',
         sorter: (a, b) => tableSort(a, b, "photoUrl"),
         render: (photoUrl) =>
-            // <img className="live-score-user-image" src={AppImages.playerDp} alt="" height="70" width="70" />
             photoUrl ?
                 <img className="live-score-user-image" src={photoUrl} alt="" height="70" width="70" />
                 :
@@ -59,7 +58,6 @@ const columns = [
         dataIndex: 'team',
         key: 'team',
         sorter: (a, b) => tableSort(a, b, "team"),
-        // render: (record) => <span class="input-heading-add-another pt-0" >{record.team.name}</span>
     },
     {
         title: 'Played?',
@@ -76,6 +74,94 @@ const columns = [
 ];
 
 
+const columnsTeam1 = [
+    {
+        title: 'Profile Picture',
+        dataIndex: 'photoUrl',
+        key: 'photoUrl',
+        sorter: (a, b) => tableSort(a, b, "photoUrl"),
+        render: (photoUrl) =>
+            photoUrl ?
+                <img className="live-score-user-image" src={photoUrl} alt="" height="70" width="70" />
+                :
+                <span>{'No Image'}</span>
+    },
+    {
+        title: 'Name',
+        dataIndex: 'name',
+        key: 'name',
+        sorter: (a, b) => tableSort(a, b, "name"),
+    },
+    {
+        title: 'Team',
+        dataIndex: 'team',
+        key: 'team',
+        sorter: (a, b) => tableSort(a, b, "team"),
+    },
+    {
+        title: 'Playing?',
+        dataIndex: 'attended',
+        key: 'attended',
+        sorter: (a, b) => tableSort(a, b, "attended"),
+        render: (attended,record, index) => {
+            return(
+            <Checkbox
+              className="single-checkbox mt-1"
+               checked={record.lineup.playing === 1 ? true :false}
+              onChange={(e) =>{
+                this_.props.changePlayerLineUpAction(record, e.target.checked, index, "team1Players")  }    
+              }
+            ></Checkbox>
+          )
+        },
+    },
+];
+
+
+const columnsTeam2 = [
+    {
+        title: 'Profile Picture',
+        dataIndex: 'photoUrl',
+        key: 'photoUrl',
+        sorter: (a, b) => tableSort(a, b, "photoUrl"),
+        render: (photoUrl) =>
+            photoUrl ?
+                <img className="live-score-user-image" src={photoUrl} alt="" height="70" width="70" />
+                :
+                <span>{'No Image'}</span>
+    },
+    {
+        title: 'Name',
+        dataIndex: 'name',
+        key: 'name',
+        sorter: (a, b) => tableSort(a, b, "name"),
+    },
+    {
+        title: 'Team',
+        dataIndex: 'team',
+        key: 'team',
+        sorter: (a, b) => tableSort(a, b, "team"),
+    },
+    {
+        title: 'Playing?',
+        dataIndex: 'attended',
+        key: 'attended',
+        sorter: (a, b) => tableSort(a, b, "attended"),
+        render: (attended,record, index) => {
+            console.log(record , "**** record")
+            return(
+            <Checkbox
+              className="single-checkbox mt-1"
+               checked={record.lineup.playing === 1 ? true :false}
+              onChange={(e) =>
+                this_.props.changePlayerLineUpAction(index,e.target.checked,"team2Players")     
+              }
+            ></Checkbox>
+          )
+        },
+    },
+];
+
 class LiveScoreMatchDetails extends Component {
     constructor(props) {
         super(props);
@@ -85,22 +171,40 @@ class LiveScoreMatchDetails extends Component {
             matchId: this.props.location.state ? this.props.location.state.matchId : null,
             key: this.props.location.state ? this.props.location.state.key ? this.props.location.state.key : null : null,
             umpireKey: this.props.location ? this.props.location.state ? this.props.location.state.umpireKey : null : null,
-            scoringType: null
+            scoringType: null,
+            isLineUp :0
         }
         this.umpireScore_View = this.umpireScore_View.bind(this)
         this.team_View = this.team_View.bind(this)
+        this_ = this
     }
 
     componentDidMount() {
-        // console.log(this.props.location.state.matchId)
-        this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId)
-        // console.log(JSON.parse(getUmpireCompetitonData()), 'JSON.parse(getUmpireCompetitonData())')
+        let isLineUpEnable = null
+        let match_status = null
+
+        if (this.state.umpireKey == 'umpire') {
+            const {lineupSelectionEnabled, status } = JSON.parse(getUmpireCompetitonData())
+            isLineUpEnable = lineupSelectionEnabled
+            match_status = status
+        } else {
+            const {lineupSelectionEnabled, status} = JSON.parse(getLiveScoreCompetiton())
+            isLineUpEnable = lineupSelectionEnabled
+            match_status = status
+
+        }
+
+        if(isLineUpEnable == 1 && match_status !== "ENDED"){
+            this.setState({isLineUp:1})
+            this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 1)
+        }else{
+            this.setState({isLineUp:0})
+            this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 0)
+        }
+        
 
     }
-    componentDidUpdate(nextProps) {
-        if (nextProps != this.props.liveScoreMatchState.matchDetails) {
-        }
-    }
+    
     onChange = e => {
         this.setState({
             value: e.target.value,
@@ -113,7 +217,7 @@ class LiveScoreMatchDetails extends Component {
     }
 
     showDeleteConfirm = (matchId) => {
-        let this_ = this
+         this_ = this
         confirm({
             title: 'Are you sure you want to delete this match?',
             okText: 'Yes',
@@ -205,7 +309,6 @@ class LiveScoreMatchDetails extends Component {
         let UmpireData = isArrayNotEmpty(umpires) ? umpires : []
 
         let scoreType = ''
-
         if (this.state.umpireKey == 'umpire') {
             const { scoringType } = JSON.parse(getUmpireCompetitonData())
             scoreType = scoringType
@@ -215,7 +318,6 @@ class LiveScoreMatchDetails extends Component {
 
         }
 
-        console.log(scoreType, 'scoreType')
         return (
 
             <div className="comp-dash-table-view row mt-5">
@@ -223,29 +325,35 @@ class LiveScoreMatchDetails extends Component {
                     <div className="match-score-detail">
                         <span className="event-time-start-text" >{AppConstants.umpireName}</span>
                     </div>
-                    <div style={{ display: "flex", alignContent: "center" }} >
-                        {/* <span className="inbox-name-text pt-2" >{'U1: '}</span> */}
-                        {UmpireData.map((item) => (
-                            <span className="inbox-name-text pt-2" >U1: {item.umpire1FullName}</span>
+                    <div style={{ display: "flex", alignContent: "center", flexDirection: 'column' }} >
+                        {UmpireData.map((item, index) => (
+                            <span className="live-score-desc-text side-bar-profile-data pt-2" >{`U${index + 1}`}: {item.umpireName}</span>
                         ))
                         }
 
                     </div>
-                    <div style={{ display: "flex", alignContent: "center" }} >
-                        {/* <span className="inbox-name-text pt-2" >{'U2: '}</span> */}
+
+                    {/* <div style={{ display: "flex", alignContent: "center" }} >
                         {UmpireData.map((item) => (
                             <span className="inbox-name-text pt-2" >U2: {item.umpire2FullName}</span>
                         ))
                         }
-                    </div>
+                    </div> */}
+
                 </div>
                 <div className="col-sm">
                     <div className="match-score-detail">
                         <span className="event-time-start-text" >{AppConstants.umpireClubName}</span>
                     </div>
-                    <div style={{ display: "flex", alignContent: "center" }} >
+                    <div style={{ display: "flex", alignContent: "center", flexDirection: 'column' }} >
                         {UmpireData.map((item) => (
-                            <span className="inbox-name-text pt-2" >{item.umpire1Club && item.umpire1Club.name}</span>
+                            // <span className="inbox-name-text pt-2" >{item.name}</span>
+                            <>
+                                {isArrayNotEmpty(item.organisations) && item.organisations.map((item) => (
+                                    <span className="inbox-name-text pt-2" >{item.name}</span>
+                                ))
+                                }
+                            </>
                         ))
                         }
                     </div>
@@ -273,7 +381,7 @@ class LiveScoreMatchDetails extends Component {
                     </div>
                     <div style={{ display: "flex", alignContent: "center" }} >
                         {/* <span className="inbox-name-text pt-2" >{length >= 1 ? match ? match[0] ? match[0].team1Score + ' : ' + match[0].team2Score : '' : '' : ''}</span> */}
-                        <span className="inbox-name-text pt-2" >{length >=1 ?this.setMatchStatus(match):""}</span>
+                        <span className="inbox-name-text pt-2" >{length >= 1 ? this.setMatchStatus(match) : ""}</span>
                     </div>
                 </div>
             </div >
@@ -287,7 +395,7 @@ class LiveScoreMatchDetails extends Component {
         const { match, umpires } = this.props.liveScoreMatchState.matchDetails
         const { team1Players, team2Players } = this.props.liveScoreMatchState
         const length = match ? match.length : 0
-        console.log(this.props.liveScoreMatchState, 'team1players')
+        console.log(team1Players, 'team1players')
 
         return (
             <div className="match-details-rl-padding row mt-5">
@@ -302,7 +410,7 @@ class LiveScoreMatchDetails extends Component {
                         <span className="live-score-profile-user-name">{AppConstants.players}</span>
                         <div>
                             {/* <Table className="home-dashboard-table pt-2" columns={columns} dataSource={team1players ? team1players : data} pagination={false}/> */}
-                            <Table className="home-dashboard-table pt-2" columns={columns} dataSource={team1Players} pagination={false} />
+                            <Table className="home-dashboard-table pt-2" columns={this.state.isLineUp === 1?columnsTeam1 : columns} dataSource={team1Players} pagination={false} />
                         </div>
                     </div>
                 </div>
@@ -316,7 +424,7 @@ class LiveScoreMatchDetails extends Component {
                     <div className="comp-dash-table-view mt-2">
                         <span className="live-score-profile-user-name">{AppConstants.players}</span>
                         <div>
-                            <Table className="home-dashboard-table pt-2" columns={columns} dataSource={team2Players} pagination={false}
+                            <Table className="home-dashboard-table pt-2" columns={this.state.isLineUp === 1?columnsTeam2 : columns} dataSource={team2Players} pagination={false}
                             />
                         </div>
                     </div>
@@ -324,23 +432,23 @@ class LiveScoreMatchDetails extends Component {
             </div>
         )
     }
-    
-    setMatchStatus(match){
-     if(match[0].team1ResultId !== null){
-            if(match[0].team1ResultId === 4 || match[0].team1ResultId === 6 || match[0].team1ResultId === 6){
+
+    setMatchStatus(match) {
+        if (match[0].team1ResultId !== null) {
+            if (match[0].team1ResultId === 4 || match[0].team1ResultId === 6 || match[0].team1ResultId === 6) {
                 return "Forfeit"
-            }else if(match[0].team1ResultId === 8 || match[0].team1ResultId === 9 ){
+            } else if (match[0].team1ResultId === 8 || match[0].team1ResultId === 9) {
                 return "Abandoned"
-            }else {
-                return  match[0].team1Score + ' : ' + match[0].team2Score
+            } else {
+                return match[0].team1Score + ' : ' + match[0].team2Score
             }
-        }else{
+        } else {
             return match[0].team1Score + ' : ' + match[0].team2Score
-        }   
-  
-    //    return record ?  record.team1ResultId == null ?   "abc" : record.team1ResultId === 4 || 5 || 6 ? "def" : record.matchStatus : record.matchStatus
-}
-    
+        }
+
+        //    return record ?  record.team1ResultId == null ?   "abc" : record.team1ResultId === 4 || 5 || 6 ? "def" : record.matchStatus : record.matchStatus
+    }
+
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
@@ -375,7 +483,8 @@ class LiveScoreMatchDetails extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         liveScoreDeleteMatch,
-        liveScoreGetMatchDetailInitiate
+        liveScoreGetMatchDetailInitiate,
+        changePlayerLineUpAction
     }, dispatch)
 }
 

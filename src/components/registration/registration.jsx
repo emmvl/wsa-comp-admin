@@ -22,7 +22,7 @@ import { isEmptyArray } from "formik";
 import WizardModel from "../../customComponents/registrationWizardModel"
 import history from "../../util/history";
 import StripeKeys from "../stripe/stripeKeys";
-
+import { currencyFormat } from "../../util/currencyFormat";
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
@@ -75,10 +75,17 @@ const columns = [
         }
     },
     {
-        title: 'Fee',
+        title: 'Fee (incl. GST)',
         dataIndex: 'fee',
         key: 'fee',
         sorter: (a, b) => a.fee.localeCompare(b.fee),
+        render: (fee, record, index) => {
+            return (
+                <div>
+                    {fee != null ? currencyFormat(fee) : ""}
+                </div>
+            )
+        }
     },
     {
         title: "Action",
@@ -635,6 +642,7 @@ class Registration extends Component {
         let userRegistrationState = this.props.userRegistrationState;
         let userRegDashboardList = userRegistrationState.userRegDashboardListData;
         let total = userRegistrationState.userRegDashboardListTotalCount;
+        let feesPaid = userRegistrationState.feesPaid;
         return (
             <div className="comp-dash-table-view mt-2">
                 <div>
@@ -648,7 +656,7 @@ class Registration extends Component {
                         <div className="col-sm-6" >
                             <div className="registration-count">
                                 <div className="reg-payment-paid-reg-text">Value of Registrations</div>
-                                <div className="reg-payment-price-text">$0</div>
+                                <div className="reg-payment-price-text">${feesPaid}</div>
                             </div>
                         </div>
                     </div>

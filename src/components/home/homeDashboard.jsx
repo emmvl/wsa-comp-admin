@@ -471,7 +471,7 @@ class HomeDashboard extends Component {
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center" }}>
                                     <div className="reg-payment-regist-view">
 
-                                        <img src={AppImages.activeRegist} alt="" height="25" width="25" />
+                                        <img src={AppImages.activeUserIcon} alt="" height="25" width="25" />
                                     </div>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
@@ -529,7 +529,7 @@ class HomeDashboard extends Component {
                             <div className="row " >
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center" }}>
                                     <div className="reg-payment-regist-view">
-                                        <img src={AppImages.activeRegist} alt="" height="25" width="25" />
+                                        <img src={AppImages.activeCompIcon} alt="" height="25" width="25" />
                                     </div>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
@@ -557,7 +557,7 @@ class HomeDashboard extends Component {
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center" }}>
                                     <div className="reg-payment-regist-view">
 
-                                        <img src={AppImages.activeRegist} alt="" height="25" width="25" />
+                                        <img src={AppImages.activeLiveScoreIcon} alt="" height="25" width="25" />
                                     </div>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >

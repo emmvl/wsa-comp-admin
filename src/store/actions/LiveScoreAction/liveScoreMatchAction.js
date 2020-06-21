@@ -37,7 +37,7 @@ function liveScoreUpdateMatchAction(data, key, contentType) {
     return action;
 }
 
-function liveScoreCreateMatchAction(data, competitionId, key, isEdit, team1resultId, team2resultId, matchStatus, endTime, umpireKey, umpireArr, scorerData) {
+function liveScoreCreateMatchAction(data, competitionId, key, isEdit, team1resultId, team2resultId, matchStatus, endTime, umpireKey, umpireArr, scorerData, recordUmpireType) {
     const action = {
         type: ApiConstants.API_LIVE_SCORE_CREATE_MATCH_LOAD,
         data,
@@ -50,7 +50,8 @@ function liveScoreCreateMatchAction(data, competitionId, key, isEdit, team1resul
         endTime,
         umpireKey,
         umpireArr,
-        scorerData
+        scorerData,
+        recordUmpireType
     }
     return action;
 }
@@ -91,13 +92,11 @@ function liveScoreMatchImportAction(competitionID, csvFile) {
     return action
 }
 
-function liveScoreGetMatchDetailInitiate(data) {
-    //     API_GET_LIVESCOREMATCH_DETAIL_INITAITE: 'API_GET_LIVESCOREMATCH_DETAIL_INITAITE',
-    //   API_GET_LIVESCOREMATCH_DETAIL_SUCCESS: 'API_GET_LIVESCOREMATCH_DETAIL_SUCCESS',
-    //   API_GET_LIVESCOREMATCH_DETAIL_ERROR: 'API_GET_LIVESCOREMATCH_DETAIL_ERROR'
+function liveScoreGetMatchDetailInitiate(data, isLineup) {
     return {
         type: ApiConstants.API_GET_LIVESCOREMATCH_DETAIL_INITAITE,
-        payload: data
+        payload: data,
+        isLineup:isLineup
     }
 }
 
@@ -117,7 +116,17 @@ function searchFilterAction(search, key) {
     return action
 }
 
-
+function changePlayerLineUpAction(data, value, index, key){
+    const action = {
+        type: ApiConstants.CHANGE_PLAYER_LINEUP_LOAD,
+        index: index,
+        value:value,
+        key:key,
+        data:data
+    }
+    console.log("action",action)
+    return action
+}
 
 export {
     liveScoreMatchListAction,
@@ -131,5 +140,6 @@ export {
     liveScoreMatchImportAction,
     liveScoreGetMatchDetailInitiate,
     liveScoreClubListAction,
-    searchFilterAction
+    searchFilterAction,
+    changePlayerLineUpAction
 };

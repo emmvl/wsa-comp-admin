@@ -183,16 +183,18 @@ class AddProduct extends Component {
                             <InputWithHead
                                 heading={AppConstants.price}
                                 placeholder={AppConstants.price}
+                                prefix="$"
                             />
                         </div>
                         <div className="col-sm">
                             <InputWithHead
                                 heading={AppConstants.costPerItem}
                                 placeholder={AppConstants.costPerItem}
+                                prefix="$"
                             />
                         </div>
                     </div>
-                    <div className="pt-4">
+                    <div className="pt-5">
                         <Checkbox
                             className="single-checkbox mt-0"
                             checked={true}
@@ -213,7 +215,7 @@ class AddProduct extends Component {
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.inventory}</span>
                 <div className="fluid-width">
-                    <div >
+                    <div className="pt-4">
                         <Checkbox
                             className="single-checkbox mt-0"
                             checked={true}
@@ -247,7 +249,7 @@ class AddProduct extends Component {
                             min={0}
                         />
                     </div>
-                    <div className="pt-4">
+                    <div className="pt-5">
                         <Checkbox
                             className="single-checkbox mt-0"
                             checked={true}
@@ -261,24 +263,82 @@ class AddProduct extends Component {
         );
     };
 
-    ////////Varients content view
-    varientsView = () => {
+    ////////Variants content view
+    variantsView = () => {
         return (
-
             <div className="fees-view pt-5">
-                <span className="form-heading">{AppConstants.varients}</span>
+                <span className="form-heading">{AppConstants.variants}</span>
                 <div className="fluid-width">
-                    <div >
+                    <div className="pt-4">
                         <Checkbox
                             className="single-checkbox mt-0"
                             checked={true}
                         >
-                            {AppConstants.enableVarients}
+                            {AppConstants.enableVariants}
                         </Checkbox>
                     </div>
-
-
+                    <div className="row">
+                        <div className="col-sm-5">
+                            <InputWithHead
+                                heading={AppConstants.variantName}
+                                placeholder={AppConstants.size}
+                            />
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm">
+                            <InputWithHead
+                                heading={AppConstants.option}
+                                placeholder={AppConstants.option}
+                            />
+                        </div>
+                        <div className="col-sm">
+                            <InputWithHead
+                                heading={AppConstants.price}
+                                placeholder={AppConstants.price}
+                                prefix="$"
+                            />
+                        </div>
+                        <div className="col-sm">
+                            <InputWithHead
+                                heading={AppConstants.sku}
+                                placeholder={AppConstants.sku}
+                            />
+                        </div>
+                        <div className="col-sm">
+                            <InputWithHead
+                                heading={AppConstants.barcode}
+                                placeholder={AppConstants.barcode}
+                            />
+                        </div>
+                        <div className="col-sm-1">
+                            <span className="input-heading" >{AppConstants.quantity}</span>
+                            <InputNumber
+                                style={{ width: 70, }}
+                                // value={addEditMatch.matchDuration}
+                                formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                onChange={(matchDuration) => console.log(matchDuration)}
+                                placeholder={'0'}
+                                min={0}
+                            />
+                        </div>
+                        <div className="col-sm-1 remove-cross-img-div">
+                            <div
+                                style={{ cursor: 'pointer' }}>
+                                <img
+                                    className="dot-image"
+                                    src={AppImages.redCross}
+                                    alt=""
+                                    width="16"
+                                    height="16"
+                                // onClick={() => this.addTimeManualPerVenue(timeIndex, venueIndex, "removeTimeSlotManualPerVenue", index)}
+                                />
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                <span className="input-heading-add-another">+{AppConstants.addvariantoption}</span>
             </div >
         );
     };
@@ -288,32 +348,133 @@ class AddProduct extends Component {
     shippingView = () => {
         return (
             <div className="fees-view pt-5">
-                <span>Shipping</span>
+                <span className="form-heading">{AppConstants.shipping}</span>
+                <div className="row pt-4">
+                    <div className="col-sm-4" >
+                        <Checkbox
+                            className="single-checkbox mt-0"
+                            checked={true}
+                        >
+                            {AppConstants.shipping}
+                        </Checkbox>
+                    </div>
+                    <div className="col-sm-8" >
+                        <Checkbox
+                            className="single-checkbox mt-0"
+                            checked={true}
+                        >
+                            {AppConstants.pickup}
+                        </Checkbox>
+                    </div>
+                </div>
+                <span className="form-heading mt-5">{AppConstants.productDimensionsWeight}</span>
+                <InputWithHead
+                    heading={AppConstants.dimensions}
+                    required="pt-3"
+                />
+                <div className="row">
+                    <div className="col-sm">
+                        <InputWithHead
+                            placeholder={"Length"}
+                            suffix="cm"
+                        />
+                    </div>
+                    <div className="col-sm-1 remove-cross-img-div">
+                        <div
+                            style={{ cursor: 'pointer' }}>
+                            <img
+                                className="dot-image"
+                                src={AppImages.crossImage}
+                                alt=""
+                                width="16"
+                                height="16"
+                            />
+                        </div>
+                    </div>
+                    <div className="col-sm">
+                        <InputWithHead
+                            placeholder={"Width"}
+                            suffix="cm"
+                        />
+                    </div>
+                    <div className="col-sm-1 remove-cross-img-div">
+                        <div
+                            style={{ cursor: 'pointer' }}>
+                            <img
+                                className="dot-image"
+                                src={AppImages.crossImage}
+                                alt=""
+                                width="16"
+                                height="16"
+                            />
+                        </div>
+                    </div>
+                    <div className="col-sm">
+                        <InputWithHead
+                            placeholder={"Height"}
+                            suffix="cm"
+                        />
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-sm-4">
+                        <InputWithHead
+                            heading={AppConstants.dimensions}
+                            placeholder={"Weight"}
+                            suffix="kg"
+                        />
+                    </div>
+                </div>
             </div >
         );
     };
 
-    render() {
 
+
+    //////footer view containing all the buttons like submit and cancel
+    footerView = () => {
+        return (
+            <div className="footer-view">
+                <div className="row">
+                    <div className="col-sm">
+                        <div className="reg-add-save-button">
+                            <Button
+                                type="cancel-button"
+                                onClick={() => console.log("Cancel")}>{AppConstants.cancel}</Button>
+                        </div>
+                    </div>
+                    <div className="col-sm">
+                        <div className="comp-buttons-view">
+                            <Button className="publish-button" type="primary"
+                                htmlType="submit" onClick={() => console.log("Save")}
+                            >
+                                {AppConstants.save}
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.shop} menuName={AppConstants.shop} />
                 <InnerHorizontalMenu menu={"shop"} shopSelectedKey={"2"} />
                 <Layout>
-
-                    <Content className="comp-dash-table-view">
+                    <Content >
                         {this.headerView()}
                         <div className="formView">{this.contentView()}</div>
                         <div className="formView">{this.imageView()}</div>
                         <div className="formView">{this.pricingView()}</div>
                         <div className="formView">{this.inventoryView()}</div>
-                        <div className="formView">{this.varientsView()}</div>
+                        <div className="formView">{this.variantsView()}</div>
                         <div className="formView">{this.shippingView()}</div>
                     </Content>
-
                     {/* <Loader
                         visible={this.props.appState.onLoad} /> */}
-                    <Footer></Footer>
+                    <Footer>{this.footerView()}</Footer>
                 </Layout>
             </div>
         );

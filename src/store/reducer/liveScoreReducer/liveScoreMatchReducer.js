@@ -186,7 +186,9 @@ const initialState = {
     umpire2TextField: null,
     umpire1Orag: [],
     umpire2Orag: [],
-    umpires: []
+    umpires: [],
+    teamLineUpPostObject:null,
+
 };
 
 function setMatchData(data) {
@@ -461,12 +463,13 @@ function liveScoreMatchReducer(state = initialState, action) {
             let umpires_1 = isArrayNotEmpty(action.payload.umpires) ? action.payload.umpires[0] : []
             let umpires_2 = isArrayNotEmpty(action.payload.umpires) ? action.payload.umpires[1] : []
             console.log(umpires_2, 'orgamisation_1~~~~')
-            // organisation_1 = isArrayNotEmpty(umpires_1.organisations) ? umpires_1.organisations : []
-            let organisation_1 = getOrganisation(umpires_1.organisations)
-            let organisation_2 = getOrganisation(umpires_2.organisations)
+            let organisation_1 = isArrayNotEmpty(umpires_1.organisations) ? umpires_1.organisations[0].id : []
+            let organisation_2 = isArrayNotEmpty(umpires_2.organisations) ? umpires_2.organisations[0].id : []
+            // let organisation_1 = getOrganisation(umpires_1.organisations)
+            // let organisation_2 = getOrganisation(umpires_2.organisations)
             state.umpire1Orag = organisation_1
             state.umpire2Orag = organisation_2
-            // organisation_2 = isArrayNotEmpty(umpires_2.organisations) ? umpires_2.organisations[1].id : []
+
 
             console.log(state.umpire2Orag, 'orgamisation_1')
 
@@ -620,7 +623,9 @@ function liveScoreMatchReducer(state = initialState, action) {
             else {
                 state.roundList = []
             }
-
+            return {
+                ...state,
+            }
         //// Match Result Api
 
         case ApiConstants.API_LADDER_SETTING_MATCH_RESULT_SUCCESS:
@@ -628,12 +633,17 @@ function liveScoreMatchReducer(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 matchResult: action.result,
+                error:null,
+                state:action.status
             };
 
 
-            return {
-                ...state,
-            }
+    case ApiConstants.CHANGE_PLAYER_LINEUP:
+    // state[action.key][action.index].lineup.playing = action.value === true?1:0
+    // state.teamLineUpPostObject = state[action.key][action.index].lineup.playing
+    return {
+        ...state
+    }
 
     };
 

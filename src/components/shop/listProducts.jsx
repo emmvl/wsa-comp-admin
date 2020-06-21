@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Breadcrumb, Input, Icon, Select } from 'antd';
+import { Layout, Button, Breadcrumb, Input, Icon, Select,Modal } from 'antd';
 import './shop.css';
 import { NavLink } from 'react-router-dom';
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -13,6 +13,7 @@ import history from "../../util/history";
 import ShopSingleProductComponent from "../../customComponents/shopSingleProductComponent";
 
 const { Footer, Content } = Layout;
+const { confirm } = Modal;
 
 const dummyProductListData = [{
     productName: "Vixens Warm Up Shirt",
@@ -139,6 +140,27 @@ class ListProducts extends Component {
 
     }
 
+
+     //////delete the product
+     showDeleteConfirm = () => {
+        let this_ = this
+        confirm({
+            title: AppConstants.deleteProduct,
+            content: AppConstants.deleteProductDescription,
+            okText: 'Confirm',
+            okType: 'danger',
+            cancelText: 'Cancel',
+            onOk() {
+                // if (competitionId.length > 0) {
+                //     this_.deleteProduct(competitionId)
+                // }
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
+    }
+
     ///////view for screen heading
     headerView = () => {
         return (
@@ -180,23 +202,8 @@ class ListProducts extends Component {
                     <div className="row" >
                         <div className="col-sm">
                             <div className="com-year-select-heading-view">
-
                             </div>
                         </div>
-                        {/* <div style={{ marginRight: "25px", display: "flex", alignItems: 'center' }} >
-                            <div className="comp-product-search-inp-width" >
-                                <Input className="product-reg-search-input"
-                                    // onChange={(e) => this.onChangeSearchText(e)}
-                                    placeholder="Search..."
-                                    // onKeyPress={(e) => this.onKeyEnterSearchText(e)}
-                                    prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                    // onClick={() => this.onClickSearchIcon()}
-                                    />}
-                                    allowClear
-                                />
-                            </div>
-                        </div> */}
-
                         <div style={{ display: "flex", alignItems: 'center',justifyContent:"flex-end" }}>
                             <div className="d-flex flex-row-reverse button-with-search"
                             // onClick={() => this.props.clearCompReducerDataAction("all")}>
@@ -219,7 +226,6 @@ class ListProducts extends Component {
 
     ////////content view of the screen
     contentView = () => {
-
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="shop-product-content-div">
@@ -228,6 +234,7 @@ class ListProducts extends Component {
                             <div>
                             <ShopSingleProductComponent
                                 productItem={item}
+                                deleteOnclick={()=>this.showDeleteConfirm()}
                             />
                             </div>
                         )

@@ -63,7 +63,7 @@ import {
 
 ////**************************Live Score***************************Start
 // import { liveScorePlayerSaga } from "./liveScoreSaga/liveScorePlayerSaga";
-import { liveScoreMatchListSaga, liveScoreAddMatchSaga, liveScoreCreateMatchSaga, liveScoreDeleteMatchSaga, liveScoreCompetitionVenuesList, liveScoreMatchImportSaga, liveScoreMatchSaga, liveScoreClubListSaga } from './liveScoreSaga/liveScoreMatchSaga';
+import { liveScoreMatchListSaga, liveScoreAddMatchSaga, liveScoreCreateMatchSaga, liveScoreDeleteMatchSaga, liveScoreCompetitionVenuesList, liveScoreMatchImportSaga, liveScoreMatchSaga, liveScoreClubListSaga, playerLineUpStatusChnage } from './liveScoreSaga/liveScoreMatchSaga';
 
 import { liveScoreDivisionSaga, getLiveScoreScorerSaga } from "./liveScoreSaga/liveScoreSaga";
 import {
@@ -762,4 +762,7 @@ export default function* root_saga() {
   ///Update Action Box
   yield takeEvery(ApiConstants.API_UPDATE_ACTION_BOX_LOAD, updateActionBoxSaga)
 
+  yield takeEvery(ApiConstants.API_UMPIRE_IMPORT_LOAD, umpireDashboardSaga.umpireImportSaga)
+
+  yield takeEvery(ApiConstants.CHANGE_PLAYER_LINEUP_LOAD , playerLineUpStatusChnage)
 }

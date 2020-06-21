@@ -33,7 +33,7 @@ const columns = [
         render: (matchId) =>
             <NavLink to={{
                 pathname: '/liveScoreMatchDetails',
-                state: { matchId: matchId }
+                state: { matchId: matchId, umpireKey: null }
             }}>
                 <span className="input-heading-add-another pt-0">{matchId}</span>
             </NavLink>

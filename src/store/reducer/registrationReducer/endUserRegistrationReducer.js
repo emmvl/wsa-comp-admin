@@ -41,7 +41,8 @@ const initialState = {
     competitions:[],
     membershipProductTypes: [],
     membershipProducts:[],
-    postalCodes: []
+    postalCodes: [],
+    feesPaid: 0
 }
 
 
@@ -123,6 +124,7 @@ function  endUserRegistrationReducer(state = initialState, action)
                 membershipProductTypes: dashboardListData.membershipProductTypes,
                 membershipProducts: dashboardListData.membershipProducts,
                 postalCodes: dashboardListData.postalCodes,
+                feesPaid: dashboardListData.feesPaid,
                 status: action.status,
                 error: null
             };
