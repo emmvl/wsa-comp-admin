@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Table, Select, Menu, Pagination,Button } from 'antd';
+import { Layout, Breadcrumb, Table, Select, Menu, Pagination,Button, Input,Icon, } from 'antd';
 import './user.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -222,6 +222,26 @@ class UserTextualDashboard extends Component{
         }
     }
 
+    onKeyEnterSearchText = async(e) =>{
+        var code = e.keyCode || e.which;
+        if(code === 13) { //13 is the enter keycode
+            this.handleTextualTableList(1);
+        } 
+    }
+
+    onChangeSearchText = async(e) =>{
+        let value = e.target.value;
+        await this.setState({searchText: e.target.value})
+        if(value == null || value == "")
+        {
+            this.handleTextualTableList(1); 
+        }
+    }
+
+    onClickSearchIcon = async() =>{
+        this.handleTextualTableList(1);
+    }
+
 
     handleTextualTableList = (page) => {
         console.log("RoleId:;" + this.state.roleId);
@@ -269,12 +289,20 @@ class UserTextualDashboard extends Component{
                             < Breadcrumb.Item className="breadcrumb-add">{AppConstants.userProfile}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                    <div className="col-sm" style={{
-                        display: "flex", flexDirection: 'row', alignItems: "center",
-                        justifyContent: "flex-end", width: "100%"
-                    }}>
+                    <div className="col-sm search-flex" >
                         <div className="row">
-                            <div className="col-sm">
+                            <div style={{marginRight: "25px", marginTop: '-14px'}} >
+                                <div className="reg-product-search-inp-width">
+                                    <Input className="product-reg-search-input" 
+                                        onChange={(e) => this.onChangeSearchText(e)}
+                                        placeholder="Search..." onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                        prefix={ <Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16}}
+                                            onClick={() => this.onClickSearchIcon()} />}
+                                        allowClear
+                                    />
+                                </div>
+                            </div>
+                            <div>
                                 <div className="comp-dashboard-botton-view-mobile">
                                     <Button className="primary-add-comp-form" type="primary" onClick={()=> this.exportOrgRegistrationQuestions()}>
                                             <div className="row">
