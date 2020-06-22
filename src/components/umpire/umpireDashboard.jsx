@@ -92,7 +92,12 @@ const columns = [
                 umpires ?
                     umpires[0] ?
 
-                        <span style={{ color: (umpires[0].verifiedBy !== null || umpires[0].status == 'YES') ? 'green' : (umpires[0].verifiedBy !== null || umpires[0].status == 'NO') ? 'red' : 'grey' }} >{umpires[0].umpireName}</span>
+                        <NavLink to={{
+                            pathname: '/userPersonal',
+                            state: { userId: umpires[0].matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" }
+                        }}>
+                            <span style={{ color: (umpires[0].verifiedBy !== null || umpires[0].status == 'YES') ? 'green' : (umpires[0].verifiedBy !== null || umpires[0].status == 'NO') ? 'red' : 'grey' }} >{umpires[0].umpireName}</span>
+                        </NavLink>
                         :
                         <span>{''}</span>
                     :
@@ -115,6 +120,7 @@ const columns = [
                     {
                         umpires ?
                             umpires[0] ?
+
                                 isArrayNotEmpty(umpires[0].organisations) && umpires[0].organisations.map((item) => (
                                     <span className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
                                 ))
@@ -138,7 +144,13 @@ const columns = [
 
                 umpires ?
                     umpires[1] ?
-                        <span style={{ color: (umpires[1].verifiedBy !== null || umpires[1].status == 'YES') ? 'green' : (umpires[1].verifiedBy !== null || umpires[1].status == 'NO') ? 'red' : 'grey' }} >{umpires[1].umpireName}</span>
+                        <NavLink to={{
+                            pathname: '/userPersonal',
+                            state: { userId: umpires[1].matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" }
+                        }}>
+                            <span style={{ color: (umpires[1].verifiedBy !== null || umpires[1].status == 'YES') ? 'green' : (umpires[1].verifiedBy !== null || umpires[1].status == 'NO') ? 'red' : 'grey' }} >{umpires[1].umpireName}</span>
+                        </NavLink>
+
                         :
                         <span>{''}</span>
                     :
@@ -233,8 +245,6 @@ const columns = [
 
 ];
 
-const data = []
-
 class UmpireDashboard extends Component {
     constructor(props) {
         super(props);
@@ -288,14 +298,15 @@ class UmpireDashboard extends Component {
 
 
                 this.props.getUmpireDashboardVenueList(firstComp)
-                this.props.getUmpireDashboardDivisionList(firstComp)
 
-                this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey, compArray: compList, venueLoad: true, divisionLoad: true })
+
+                this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey, compArray: compList, venueLoad: true })
             }
         }
 
         if (nextProps.umpireDashboardState !== this.props.umpireDashboardState) {
             if (this.props.umpireDashboardState.onVenueLoad === false && this.state.venueLoad === true) {
+                this.props.getUmpireDashboardDivisionList(this.state.selectedComp)
                 this.setState({ venueLoad: false, divisionLoad: true })
             }
         }

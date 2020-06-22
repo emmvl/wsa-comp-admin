@@ -39,8 +39,15 @@ const columns = [
         key: 'firstsName',
         sorter: (a, b) => tableSort(a, b, "firstName"),
         render: (firstName, record) =>
-        <span class="input-heading-add-another pt-0"
-                onClick={() => this_obj.checkUserId(record)}>{firstName}</span>
+
+            // <span class="input-heading-add-another pt-0"
+            //     onClick={() => this_obj.checkUserId(record)}>{firstName}</span>
+            <NavLink to={{
+                pathname: '/userPersonal',
+                state: { userId: record.id, screenKey: "umpire", screen: "/umpire" }
+            }}>
+                <span class="input-heading-add-another pt-0">{firstName}</span>
+            </NavLink>
     },
     {
         title: 'Last Name',
@@ -48,8 +55,15 @@ const columns = [
         key: 'lastName',
         sorter: (a, b) => tableSort(a, b, "lastName"),
         render: (lastName, record) =>
-        <span class="input-heading-add-another pt-0"
-                onClick={() => this_obj.checkUserId(record)}>{lastName}</span>
+            // <span class="input-heading-add-another pt-0"
+            //     onClick={() => this_obj.checkUserId(record)}>{lastName}</span>
+
+            <NavLink to={{
+                pathname: '/userPersonal',
+                state: { userId: record.id, screenKey: "umpire", screen: "/umpire" }
+            }}>
+                <span class="input-heading-add-another pt-0">{lastName}</span>
+            </NavLink>
     },
     {
         title: 'Email',
@@ -100,12 +114,12 @@ const columns = [
                         state: { isEdit: true, tableRecord: record }
                     }}><span >Edit</span></NavLink>
                 </Menu.Item>
-                {/* <Menu.Item key="2" >
+                <Menu.Item key="2" >
                     <NavLink to={{
-                        pathname: "./liveScoreAssignMatch",
+                        pathname: "./assignUmpire",
                         state: { record: record }
                     }}><span >Assign to match</span></NavLink>
-                </Menu.Item> */}
+                </Menu.Item>
             </Menu.SubMenu>
         </Menu>
     }
@@ -161,7 +175,7 @@ class Umpire extends Component {
             message.warn(ValidationConstants.umpireMessage)
         }
         else {
-            history.push("/userPersonal", { userId: record.userId, screenKey: "umpireRoaster", screen: "/umpire" })
+            history.push("/userPersonal", { userId: record.userId, screenKey: "umpire", screen: "/umpire" })
         }
     }
 
@@ -169,9 +183,7 @@ class Umpire extends Component {
     handlePageChnage(page) {
         console.log(page, 'page')
         let offset = page ? 10 * (page - 1) : 0;
-
         this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: this.state.selectedComp, offset: offset })
-
     }
 
 

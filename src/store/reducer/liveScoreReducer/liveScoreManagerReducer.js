@@ -156,12 +156,12 @@ function liveScoreMangerState(state = initialState, action) {
                 state.exsitingManagerId = action.data
                 state.selectedTeam = getSelectedTeam(action.data, state.managerListResult)
 
-                let getTeamId = genrateSelectedTeamId( state.selectedTeam, state.teamResult)
-                state.teamId = getTeamId
+                // let getTeamId = genrateSelectedTeamId( state.selectedTeam, state.teamResult)
+                // state.teamId = getTeamId
 
-                let managerTeamObj = getTeamObj(state.teamId, state.teamResult)
-                // let managerTeamObj1 = getSelectedTeamObj(state.getSelectedTeam)
-                 state.managerData['teams'] = managerTeamObj
+                // let managerTeamObj = getTeamObj(state.teamId, state.teamResult)
+                // // let managerTeamObj1 = getSelectedTeamObj(state.getSelectedTeam)
+                //  state.managerData['teams'] = managerTeamObj
 
             } else if (action.key == 'isEditManager') {
                 state.managerData.id = action.data.id

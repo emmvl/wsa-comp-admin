@@ -18,6 +18,7 @@ class ShopSingleProductComponent extends React.Component {
                     >
                         <SubMenu
                             key="sub1"
+                            style={{ borderBottomStyle: "solid", borderBottom: 0 }}
                             title={
                                 <img
                                     className="dot-image"

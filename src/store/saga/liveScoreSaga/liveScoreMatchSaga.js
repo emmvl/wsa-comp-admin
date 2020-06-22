@@ -189,7 +189,7 @@ export function* liveScoreClubListSaga(action) {
         const result = yield call(LiveScoreAxiosApi.liveScoreClubList, action.competitionId);
         if (result.status === 1) {
             yield put({
-                type: ApiConstants.API_CHNAGE_LINEUP_STATUS_SUCCESS,
+                type: ApiConstants.API_LIVE_SCORE_CLUB_LIST_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });
@@ -203,12 +203,11 @@ export function* liveScoreClubListSaga(action) {
 }
 
 export function* playerLineUpStatusChnage(action) {
-    console.log(action , "ddddd")
     try {
         const result = yield call(LiveScoreAxiosApi.playerLineUpApi, action.data, action.value);
         if (result.status === 1) {
             yield put({
-                type: ApiConstants.API_LIVE_SCORE_CLUB_LIST_SUCCESS,
+                type: ApiConstants.API_CHNAGE_LINEUP_STATUS_SUCCESS,
                 result: result.result.data,
                 status: result.status,
                 index:action.index

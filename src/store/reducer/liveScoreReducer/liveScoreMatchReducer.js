@@ -187,7 +187,7 @@ const initialState = {
     umpire1Orag: [],
     umpire2Orag: [],
     umpires: [],
-    teamLineUpPostObject:null,
+    teamLineUpPostObject: null,
 
 };
 
@@ -633,17 +633,23 @@ function liveScoreMatchReducer(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 matchResult: action.result,
-                error:null,
-                state:action.status
+                error: null,
+                state: action.status
             };
 
+        case ApiConstants.CHANGE_PLAYER_LINEUP_LOAD:
+            return {
+                ...state, onLoad: true
+            }
 
-    case ApiConstants.CHANGE_PLAYER_LINEUP:
-    // state[action.key][action.index].lineup.playing = action.value === true?1:0
-    // state.teamLineUpPostObject = state[action.key][action.index].lineup.playing
-    return {
-        ...state
-    }
+        case ApiConstants.API_CHNAGE_LINEUP_STATUS_SUCCESS:
+
+            return {
+                ...state,
+                onLoad: false,
+                error: null,
+                state: action.status
+            }
 
     };
 

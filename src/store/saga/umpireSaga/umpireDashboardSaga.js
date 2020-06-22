@@ -91,8 +91,8 @@ export function* umpireImportSaga(action) {
                 result: result.result.data,
                 status: result.status,
             });
-            history.push(action.data == 'umpireDashboard' ? '/umpireDashboard' : 'umpire')
-            message.success(action.data == 'umpireDashboard' ? 'Umpire Dashboard Imported Successfully.' : 'Umpire Imported Successfully.')
+            history.push(action.data.screenName == 'umpireDashboard' ? '/umpireDashboard' : 'umpire')
+            message.success(action.data.screenName == 'umpireDashboard' ? 'Umpire Dashboard Imported Successfully.' : 'Umpire Imported Successfully.')
         } else {
             yield call(failSaga, result)
         }

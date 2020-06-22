@@ -840,16 +840,33 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
+    ///////get all the assign umpire list on the basis of competitionId
+    getAssignUmpiresList(competitionId, body) {
+        var url = `/matches/admin?competitionId=${competitionId}&roleId=15`
+        return Method.dataPost(url, token, body)
+    },
+
+    /////////////assign umpire to a match
+    assignUmpire(payload) {
+        let body = payload
+        var url = `/roster/admin/assign`
+        return Method.dataPost(url, token, body)
+    },
+
+    /////////unassign umpire from the match(delete)
+    unassignUmpire(rosterId) {
+        var url = `/roster/admin?id=${rosterId}`
+        return Method.dataDelete(url, token)
+    },
 
     playerLineUpApi(payload, value) {
-
         let body = payload.lineup
-
-        body.playing = value === true ? 1 : 0
+        body.playing = value
         var url = `/matches/lineup/status`;
-
         return Method.dataPatch(url, token, body)
-    }
+    },
+
+
 };
 
 

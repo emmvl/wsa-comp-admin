@@ -103,16 +103,17 @@ const columnsTeam1 = [
         dataIndex: 'attended',
         key: 'attended',
         sorter: (a, b) => tableSort(a, b, "attended"),
-        render: (attended,record, index) => {
-            return(
-            <Checkbox
-              className="single-checkbox mt-1"
-               checked={record.lineup.playing === 1 ? true :false}
-              onChange={(e) =>{
-                this_.props.changePlayerLineUpAction(record, e.target.checked, index, "team1Players")  }    
-              }
-            ></Checkbox>
-          )
+        render: (attended, record, index) => {
+            return (
+                <Checkbox
+                    className="single-checkbox mt-1"
+                    checked={record.lineup.playing}
+                    onChange={(e) => {
+                        this_.props.changePlayerLineUpAction(record, e.target.checked, index, "team1Players")
+                    }
+                    }
+                ></Checkbox>
+            )
         },
     },
 ];
@@ -147,17 +148,17 @@ const columnsTeam2 = [
         dataIndex: 'attended',
         key: 'attended',
         sorter: (a, b) => tableSort(a, b, "attended"),
-        render: (attended,record, index) => {
-            console.log(record , "**** record")
-            return(
-            <Checkbox
-              className="single-checkbox mt-1"
-               checked={record.lineup.playing === 1 ? true :false}
-              onChange={(e) =>
-                this_.props.changePlayerLineUpAction(index,e.target.checked,"team2Players")     
-              }
-            ></Checkbox>
-          )
+        render: (attended, record, index) => {
+            return (
+                <Checkbox
+                    className="single-checkbox mt-1"
+                    checked={record.lineup.playing}
+                    onChange={(e) => {
+                        this_.props.changePlayerLineUpAction(record, e.target.checked, index, "team2Players")
+                    }
+                    }
+                ></Checkbox>
+            )
         },
     },
 ];
@@ -172,7 +173,7 @@ class LiveScoreMatchDetails extends Component {
             key: this.props.location.state ? this.props.location.state.key ? this.props.location.state.key : null : null,
             umpireKey: this.props.location ? this.props.location.state ? this.props.location.state.umpireKey : null : null,
             scoringType: null,
-            isLineUp :0
+            isLineUp: 0
         }
         this.umpireScore_View = this.umpireScore_View.bind(this)
         this.team_View = this.team_View.bind(this)
@@ -184,27 +185,27 @@ class LiveScoreMatchDetails extends Component {
         let match_status = null
 
         if (this.state.umpireKey == 'umpire') {
-            const {lineupSelectionEnabled, status } = JSON.parse(getUmpireCompetitonData())
+            const { lineupSelectionEnabled, status } = JSON.parse(getUmpireCompetitonData())
             isLineUpEnable = lineupSelectionEnabled
             match_status = status
         } else {
-            const {lineupSelectionEnabled, status} = JSON.parse(getLiveScoreCompetiton())
+            const { lineupSelectionEnabled, status } = JSON.parse(getLiveScoreCompetiton())
             isLineUpEnable = lineupSelectionEnabled
             match_status = status
 
         }
 
-        if(isLineUpEnable == 1 && match_status !== "ENDED"){
-            this.setState({isLineUp:1})
+        if (isLineUpEnable == 1 && match_status !== "ENDED") {
+            this.setState({ isLineUp: 1 })
             this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 1)
-        }else{
-            this.setState({isLineUp:0})
+        } else {
+            this.setState({ isLineUp: 0 })
             this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 0)
         }
-        
+
 
     }
-    
+
     onChange = e => {
         this.setState({
             value: e.target.value,
@@ -217,7 +218,7 @@ class LiveScoreMatchDetails extends Component {
     }
 
     showDeleteConfirm = (matchId) => {
-         this_ = this
+        this_ = this
         confirm({
             title: 'Are you sure you want to delete this match?',
             okText: 'Yes',
@@ -410,7 +411,7 @@ class LiveScoreMatchDetails extends Component {
                         <span className="live-score-profile-user-name">{AppConstants.players}</span>
                         <div>
                             {/* <Table className="home-dashboard-table pt-2" columns={columns} dataSource={team1players ? team1players : data} pagination={false}/> */}
-                            <Table className="home-dashboard-table pt-2" columns={this.state.isLineUp === 1?columnsTeam1 : columns} dataSource={team1Players} pagination={false} />
+                            <Table className="home-dashboard-table pt-2" columns={this.state.isLineUp === 1 ? columnsTeam1 : columns} dataSource={team1Players} pagination={false} />
                         </div>
                     </div>
                 </div>
@@ -424,7 +425,7 @@ class LiveScoreMatchDetails extends Component {
                     <div className="comp-dash-table-view mt-2">
                         <span className="live-score-profile-user-name">{AppConstants.players}</span>
                         <div>
-                            <Table className="home-dashboard-table pt-2" columns={this.state.isLineUp === 1?columnsTeam2 : columns} dataSource={team2Players} pagination={false}
+                            <Table className="home-dashboard-table pt-2" columns={this.state.isLineUp === 1 ? columnsTeam2 : columns} dataSource={team2Players} pagination={false}
                             />
                         </div>
                     </div>

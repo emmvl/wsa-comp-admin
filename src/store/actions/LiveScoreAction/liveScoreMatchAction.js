@@ -124,7 +124,6 @@ function changePlayerLineUpAction(data, value, index, key){
         key:key,
         data:data
     }
-    console.log("action",action)
     return action
 }
 
