@@ -94,9 +94,18 @@ class UmpireImport extends Component {
                     style={{ marginTop: 10 }}>
                     <div className="row">
                         <div className="reg-add-save-button">
-                            <Button onClick={() => this.onUploadBtn()} className="primary-add-comp-form" type="primary">
-                                {AppConstants.upload}
-                            </Button>
+                            {
+                                this.state.screenName == 'umpireRoaster' ?
+
+                                    <Button
+                                        className="primary-add-comp-form" type="primary">
+                                        {AppConstants.upload}
+                                    </Button>
+
+                                    : <Button onClick={() => this.onUploadBtn()} className="primary-add-comp-form" type="primary">
+                                        {AppConstants.upload}
+                                    </Button>
+                            }
                         </div>
                     </div>
                 </div>

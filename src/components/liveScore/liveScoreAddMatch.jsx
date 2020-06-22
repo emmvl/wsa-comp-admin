@@ -82,7 +82,7 @@ class LiveScoreAddMatch extends Component {
             const { id } = JSON.parse(getUmpireCompetitonData())
             const { scoringType } = JSON.parse(getUmpireCompetitonData())
             this.setState({ compId: id, scoringType: scoringType })
-          
+
             if (id !== null) {
                 this.props.getCompetitonVenuesList(id, "");
                 this.props.getLiveScoreDivisionList(id)
@@ -122,21 +122,21 @@ class LiveScoreAddMatch extends Component {
             this.props.liveScoreUpdateMatchAction('', "clearData")
 
             if (this.state.umpireKey == 'umpire') {
-                const {lineupSelectionEnabled, status } = JSON.parse(getUmpireCompetitonData())
+                const { lineupSelectionEnabled, status } = JSON.parse(getUmpireCompetitonData())
                 isLineUpEnable = lineupSelectionEnabled
                 match_status = status
             } else {
-                const {lineupSelectionEnabled, status} = JSON.parse(getLiveScoreCompetiton())
+                const { lineupSelectionEnabled, status } = JSON.parse(getLiveScoreCompetiton())
                 isLineUpEnable = lineupSelectionEnabled
                 match_status = status
-    
+
             }
-    
-            if(isLineUpEnable == 1 && match_status !== "ENDED"){
-                this.setState({isLineUp:1})
+
+            if (isLineUpEnable == 1 && match_status !== "ENDED") {
+                this.setState({ isLineUp: 1 })
                 this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 1)
-            }else{
-                this.setState({isLineUp:0})
+            } else {
+                this.setState({ isLineUp: 0 })
                 this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 0)
             }
 
@@ -1103,8 +1103,14 @@ class LiveScoreAddMatch extends Component {
                         roleId: 4,
                     }
 
+                    if (this.state.scoringType !== 'SINGLE') {
+                        scorerData = [scorers_1, scorers_2]
 
-                    scorerData = [scorers_1, scorers_2]
+                    } else {
+                        scorerData = [scorers_1]
+
+                    }
+
 
 
                     umpireData = [umpire_1_Obj, umpire_2_Obj]
@@ -1137,7 +1143,15 @@ class LiveScoreAddMatch extends Component {
                         roleId: 4,
                     }
 
-                    umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1, scorers_2]
+                    if (this.state.scoringType !== 'SINGLE') {
+                        umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1, scorers_2]
+
+                    } else {
+                        umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1]
+
+                    }
+
+
                 }
 
                 // const { id } = JSON.parse(getLiveScoreCompetiton())

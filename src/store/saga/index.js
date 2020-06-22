@@ -190,7 +190,7 @@ import * as umpireDashboardSaga from "../saga/umpireSaga/umpireDashboardSaga"
 import * as umpireCompSaga from "../saga/umpireSaga/umpireCompetitionSaga"
 import * as umpireRoasterSaga from "../saga/umpireSaga/umpireRoasterSaga"
 import * as umpireSaga from "../saga/umpireSaga/umpireSaga"
-
+import * as assignUmpireSaga from "../saga/umpireSaga/assignUmpireSaga";
 
 export default function* root_saga() {
   yield takeEvery(ApiConstants.API_LOGIN_LOAD, loginApiSaga);
@@ -763,6 +763,12 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_UPDATE_ACTION_BOX_LOAD, updateActionBoxSaga)
 
   yield takeEvery(ApiConstants.API_UMPIRE_IMPORT_LOAD, umpireDashboardSaga.umpireImportSaga)
+  //////assign umpire get list
+  yield takeEvery(ApiConstants.API_GET_ASSIGN_UMPIRE_LIST_LOAD, assignUmpireSaga.getAssignUmpireListSaga)
+  //////assign umpire get list
+  yield takeEvery(ApiConstants.API_ASSIGN_UMPIRE_FROM_LIST_LOAD, assignUmpireSaga.assignUmpireSaga)
+  /////unassign umpire from the match(delete)
+  yield takeEvery(ApiConstants.API_UNASSIGN_UMPIRE_FROM_LIST_LOAD, assignUmpireSaga.unassignUmpireSaga)
 
   yield takeEvery(ApiConstants.CHANGE_PLAYER_LINEUP_LOAD , playerLineUpStatusChnage)
 }
