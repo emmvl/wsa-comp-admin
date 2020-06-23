@@ -1328,7 +1328,8 @@ class RegistrationForm extends Component {
                                         className="year-select reg-filter-select1"
                                         disabled={isPublished}
                                         onChange={e => (this.props.updateRegistrationForm(e, "inviteCompetitionId"))}
-                                        value={registrationFormData.inviteCompetitionId}>
+                                        value={registrationFormData.inviteCompetitionId!= null ? 
+                                            registrationFormData.inviteCompetitionId.toString() : '0'}>
                                         {this.props.appState.allCompetitionTypeList.map(item => {
                                             return (
                                                 <Option key={"competition" + item.competitionId} value={item.competitionId}>
