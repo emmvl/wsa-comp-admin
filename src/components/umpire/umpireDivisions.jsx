@@ -163,7 +163,7 @@ class UmpireDivisions extends Component {
                     })}
                 </Radio.Group>
 
-                <span className='bulk-match-heading pt-5' >{AppConstants.umpirePools}</span>
+                <span className='text-heading-large pt-5' >{AppConstants.umpirePools}</span>
 
                 <InputWithHead marginTop={5} heading={AppConstants.badgeAA} />
                 <div className="row" >

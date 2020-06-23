@@ -542,7 +542,12 @@ let LiveScoreAxiosApi = {
             },
             "search": searchText
         }
-        var url = `/stats/gametime?competitionId=${competitionId}&aggregate=${aggregate.toUpperCase()}`;
+        var url
+        if (aggregate) {
+            url = `/stats/gametime?competitionId=${competitionId}&aggregate=${aggregate.toUpperCase()}`;
+        } else {
+            url = `/stats/gametime?competitionId=${competitionId}&aggregate=""`;
+        }
         return Method.dataPost(url, localStorage.token, Body)
     },
     ///live score match result
@@ -609,7 +614,13 @@ let LiveScoreAxiosApi = {
     },
 
     liveScoreAttendanceList(competitionId, body, select_status) {
-        let url = `/players/activity?competitionId=${competitionId}&status=${select_status}`
+
+        let url
+        if (select_status) {
+            url = `/players/activity?competitionId=${competitionId}&status=${select_status}`
+        } else {
+            url = `/players/activity?competitionId=${competitionId}`
+        }
         return Method.dataPost(url, token, body)
     },
     liveScoreGetTeamData(teamId) {
@@ -801,13 +812,17 @@ let LiveScoreAxiosApi = {
     },
 
     umpireRoasterList(competitionID, status, refRoleId, paginationBody) {
+        var url=null
         let body = paginationBody
         let id = JSON.parse(localStorage.getItem('umpireCompetitionId'))
-        var url = `/roster/list?competitionId=${id}&status=${status}&roleId=${refRoleId}`;
+        if(status === "All"){
+            url = `/roster/list?competitionId=${id}&roleId=${refRoleId}`;
+        }else{
+            url = `/roster/list?competitionId=${id}&status=${status}&roleId=${refRoleId}`;
+        }
         return Method.dataPost(url, token, body)
     },
     umpireRoasterActionPerform(data) {
-
         var url = `/roster?rosterId=${data.roasterId}&status=${data.status}&category=${data.category}`;
         return Method.dataPatch(url, token)
     },
@@ -868,8 +883,6 @@ let LiveScoreAxiosApi = {
 
 
 };
-
-
 
 
 const Method = {

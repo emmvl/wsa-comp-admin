@@ -14,7 +14,7 @@ import { umpireCompetitionListAction } from "../../store/actions/umpireAction/um
 import { entityTypes } from '../../util/entityTypes'
 import { refRoleTypes } from '../../util/refRoles'
 import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage'
-import { exportFilesAction } from "../../store/actions/appAction"
+import { userExportFilesAction } from "../../store/actions/appAction"
 import ValidationConstants from "../../themes/validationConstant";
 import history from "../../util/history";
 const { Content } = Layout;
@@ -266,7 +266,7 @@ class Umpire extends Component {
 
     onExport() {
         let url = AppConstants.umpireListExport + `entityTypeId=${1}&entityId=${this.state.selectedComp}&roleId=${15}`
-        this.props.exportFilesAction(url)
+        this.props.userExportFilesAction(url)
     }
 
     ///////view for breadcrumb
@@ -423,7 +423,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         umpireCompetitionListAction,
         umpireListAction,
-        exportFilesAction
+        userExportFilesAction
     }, dispatch)
 }
 

@@ -24,7 +24,8 @@ const initialState = {
     onLoadSearch: false,
     selectedAffiliate: null,
     onAffiliateLoad: false,
-    selectedAffiliateId: null
+    selectedAffiliateId: null,
+    onSaveLoad: false
 };
 
 function getAffiliateData(selectedAffiliateId, affiliateArray) {
@@ -110,12 +111,12 @@ function umpireState(state = initialState, action) {
         case ApiConstants.API_ADD_UMPIRE_LOAD:
 
 
-            return { ...state, onLoad: true };
+            return { ...state, onSaveLoad: true };
 
         case ApiConstants.API_ADD_UMPIRE_SUCCESS:
             return {
                 ...state,
-                onLoad: false,
+                onSaveLoad: false,
                 status: action.status
             };
 

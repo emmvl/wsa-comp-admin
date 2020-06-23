@@ -9,6 +9,7 @@ function umpireRoasterListAction(competitionID, status, refRoleId, paginationBod
         paginationBody
 
     };
+    console.log(action , "actionactionaction")
     return action;
 }
 

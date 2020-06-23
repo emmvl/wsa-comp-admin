@@ -6,7 +6,7 @@ import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
 import RegistrationAxiosApi from "../http/registrationHttp/registrationAxios";
 import CommonAxiosApi from "../http/commonHttp/commonAxios";
 import AppConstants from "../../themes/appConstants";
-// import UserAxiosApi from "../http/userHttp/userAxiosApi.js";
+import UserAxiosApi from "../http/userHttp/userAxiosApi.js";
 ////get the common year list reference
 export function* getOnlyYearListSaga(action) {
 
@@ -566,6 +566,31 @@ export function* exportFilesSaga(action) {
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_EXPORT_FILES_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield put({ type: ApiConstants.API_EXPORT_FILES_FAIL });
+      setTimeout(() => {
+        alert(result.data.message);
+      }, 800);
+    }
+  } catch (error) {
+    yield put({
+      type: ApiConstants.API_EXPORT_FILES_ERROR,
+      error: error,
+      status: error.status
+    });
+  }
+}
+
+export function* userExportFilesSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.userExportFiles, action.URL);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_USER_EXPORT_FILES_SUCCESS,
         result: result.result.data,
         status: result.status
       });

@@ -499,7 +499,7 @@ class AddUmpire extends Component {
 
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <Loader visible={this.props.umpireState.onLoad} />
+                <Loader visible={this.props.umpireState.onSaveLoad} />
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"2"} />
                 <Layout>

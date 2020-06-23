@@ -44,6 +44,8 @@ import { message } from "antd";
 const { Header, Footer } = Layout;
 const { Option } = Select;
 
+
+
 class LiveScoreSettingsView extends Component {
     constructor(props) {
         super(props);
@@ -261,7 +263,7 @@ class LiveScoreSettingsView extends Component {
                 //     formData.append('warningBuzzerEnabled', warningBuzzerEnabled)
                 // }
 
-                 this.props.settingDataPostInititae({ body: formData, venue: venue, settingView: this.props.location.state })
+                this.props.settingDataPostInititae({ body: formData, venue: venue, settingView: this.props.location.state })
                 // this.props.clearLiveScoreSetting()
                 // this.props.history.push('/liveScoreCompetitions')
                 // this.props.clearLiveScoreSetting()
@@ -330,6 +332,7 @@ class LiveScoreSettingsView extends Component {
 
     }
 
+
     ////////form content view
     contentView = (getFieldDecorator) => {
         const { competitionName, competitionLogo, scoring, days, hours, minutes, lineupSelectionDays, lineupSelectionHours, lineupSelectionMins, record1, venue, Logo } = this.props.liveScoreSetting.form
@@ -365,7 +368,7 @@ class LiveScoreSettingsView extends Component {
 
                 {/* <div className='contextualHelp-RowDirection' >
 
-                    <span className='bulk-match-heading pt-5' >{AppConstants.short_Name}<span style={{ color: 'red' }}>{'*'}</span></span>
+                    <span className='text-heading-large pt-5' >{AppConstants.short_Name}<span style={{ color: 'red' }}>{'*'}</span></span>
                     <div style={{ marginTop: 28 }}>
                         <Tooltip background='#ff8237'>
                             <span>{AppConstants.shortNameMsg}</span>
@@ -488,7 +491,7 @@ class LiveScoreSettingsView extends Component {
 
                 {/* match settings check boxes */}
                 {/* <InputWithHead heading={AppConstants.matchSettings} /> */}
-                <span className='bulk-match-heading pt-5' >{AppConstants.wouldLikeRecord}</span>
+                <span className='text-heading-large pt-5' >{AppConstants.wouldLikeRecord}</span>
                 {/* <span className="applicable-to-heading"> {AppConstants.wouldLikeRecord}</span> */}
                 <div className="fluid-width" style={{ marginTop: -10 }}>
                     <div className="row">
@@ -553,7 +556,7 @@ class LiveScoreSettingsView extends Component {
 
                 {/* dropdown view */}
                 {/* <InputWithHead heading={AppConstants.attendence_reord_report} /> */}
-                <span className='bulk-match-heading pt-5' >{AppConstants.attendence_reord_report}</span>
+                <span className='text-heading-large pt-5' >{AppConstants.attendence_reord_report}</span>
                 <div className="row" >
                     <div className="col-sm" >
                         <InputWithHead required={"pt-0"} marginTop={-15} conceptulHelp conceptulHelpMsg={AppConstants.recordMsg} heading={AppConstants.record} />
@@ -590,7 +593,7 @@ class LiveScoreSettingsView extends Component {
 
                 {/*Attendance Recording Time*/}
                 <InputWithHead heading={AppConstants.attendence_Recording_Time} />
-                {/* <span className='bulk-match-heading pt-5' >{AppConstants.attendence_Recording_Time}</span> */}
+                {/* <span className='text-heading-large pt-5' >{AppConstants.attendence_Recording_Time}</span> */}
                 <div className="row" >
                     <div className="col-sm" >
                         <InputWithHead
@@ -652,7 +655,7 @@ class LiveScoreSettingsView extends Component {
                     // onChange={(e) => this.props.onChangeSettingForm({ key: "lineupSelection", data: e.target.checked })}
                     checked={lineupSelection}
                 >
-                    {AppConstants.lineupSelection}
+                    {AppConstants.sqadSelection}
                 </Checkbox>
 
                 {lineupSelection && <div className="row" >
@@ -699,7 +702,7 @@ class LiveScoreSettingsView extends Component {
 
                 {/* radion button view */}
                 <span className="applicable-to-heading">{AppConstants.scoring}</span>
-                {/* <span className='bulk-match-heading pt-5' >{AppConstants.scoring}</span> */}
+                {/* <span className='text-heading-large pt-5' >{AppConstants.scoring}</span> */}
                 <div className='contextualHelp-RowDirection' >
 
                     <Radio.Group
@@ -754,7 +757,7 @@ class LiveScoreSettingsView extends Component {
                 <InputWithHead conceptulHelp conceptulHelpMsg={AppConstants.timerMsg} required={"required-field"} heading={AppConstants.timer} />
                 {/* <div className='contextualHelp-RowDirection' >
 
-                    <span className='bulk-match-heading pt-5' >{AppConstants.timer}<span style={{ color: 'red' }}>{'*'}</span></span>
+                    <span className='text-heading-large pt-5' >{AppConstants.timer}<span style={{ color: 'red' }}>{'*'}</span></span>
                     <div style={{ marginTop: 28 }}>
                         <Tooltip background='#ff8237'>
                             <span>{AppConstants.timerMsg}</span>
@@ -790,7 +793,7 @@ class LiveScoreSettingsView extends Component {
                 <InputWithHead conceptulHelp conceptulHelpMsg={AppConstants.buzzerMsg} marginTop={5} heading={AppConstants.buzzer} />
                 {/* <div className='contextualHelp-RowDirection' >
 
-                    <span className='bulk-match-heading pt-5' >{AppConstants.buzzer}</span>
+                    <span className='text-heading-large pt-5' >{AppConstants.buzzer}</span>
                     <div style={{ marginTop: 28 }}>
                         <Tooltip background='#ff8237'>
                             <span>{AppConstants.buzzerMsg}</span>
