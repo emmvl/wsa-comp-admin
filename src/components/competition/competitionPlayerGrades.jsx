@@ -637,7 +637,7 @@ class CompetitionPlayerGrades extends Component {
                                                                     <NavLink to={{ pathname: `/userPersonal`, state: { userId: playerItem.userId } }}
                                                                     >
                                                                         <span style={{ cursor: "pointer" }}
-                                                                            className="player-grading-haeding-player-name-text">{playerItem.playerName}</span>
+                                                                            className="player-grading-player-name-text">{playerItem.playerName}</span>
                                                                     </NavLink>
                                                                 </div>
                                                                 <div
@@ -833,7 +833,7 @@ class CompetitionPlayerGrades extends Component {
                                                     <NavLink to={{ pathname: `/userPersonal`, state: { userId: playerItem.userId } }}
                                                     >
                                                         <span style={{ cursor: "pointer" }}
-                                                            className="player-grading-haeding-player-name-text">{playerItem.playerName}</span>
+                                                            className="player-grading-player-name-text">{playerItem.playerName}</span>
                                                     </NavLink>
                                                 </div>
                                                 <div
