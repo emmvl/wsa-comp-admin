@@ -221,14 +221,12 @@ class RegistrationForm extends Component {
     onYearChange = (allYearRefId) => {
         this.setState({ allCompetition: null, allYearRefId: allYearRefId, })
         this.props.getYearAndCompetitionAction(this.props.appState.allYearList, allYearRefId)
+        this.props.updateRegistrationForm(allYearRefId, "inviteYearRefId")
     }
 
     onCompetitionChange = (allCompetition) => {
         this.setState({ allCompetition: allCompetition })
     }
-
-
-
 
     setFieldDecoratorValues = () => {
         let registrationFormData = this.props.registrationState.registrationFormData[0]
@@ -1270,136 +1268,141 @@ class RegistrationForm extends Component {
         let isPublished = this.state.isPublished;
         return (
             <div className="discount-view pt-5">
-                <span className="form-heading">{AppConstants.sendInvitesTo}</span>
-                <div className="fluid-width">
-                    <div className="row">
-                        <div className="col-sm-3">
-                            <div
-                                style={{
-                                    width: "fit-content",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center"
-                                }}
-                            >
-                                <span className="year-select-heading">
-                                    {AppConstants.year}:
-            </span>
-                                <Select
-                                    name={"yearRefId"}
-                                    className="year-select"
-                                    style={{ minWidth: 100 }}
-                                    disabled={isPublished}
-                                    onChange={yearRefId => this.onYearChange(yearRefId)}
-                                    value={this.state.allYearRefId}
-                                // value={formDataValue ? formDataValue.yearRefId ? formDataValue.yearRefId : 1 : 1}
+                <span className="form-heading pb-2">{AppConstants.sendInvitesTo}</span>
+                <InputWithHead heading={AppConstants.invite} />
+                <Radio.Group className="reg-competition-radio pb-5" disabled={isPublished} 
+                    onChange={(e) => (this.props.updateRegistrationForm(e.target.value, "canInviteSend"))} 
+                    value={registrationFormData.canInviteSend}>
+                    <Radio key={1} value={1}>{AppConstants.send}</Radio>
+                    <Radio key={0} value={0}>{AppConstants.noSend}</Radio>
+                </Radio.Group>
+                {registrationFormData.canInviteSend == 1 ?
+                <div>
+                    <div className="fluid-width">
+                        <div className="row">
+                            <div className="col-sm-3" style={{marginRight:'25px'}}>
+                                <div
+                                    style={{width: "fit-content",display: "flex",flexDirection: "row",
+                                        alignItems: "center"
+                                    }}
                                 >
-                                    {this.props.appState.allYearList.map(item => {
-                                        return (
-                                            <Option key={"yearRefId" + item.id} value={item.id}>
-                                                {item.description}
-                                            </Option>
-                                        );
-                                    })}
-                                </Select>
-                            </div>
+                                    <span className="year-select-heading">
+                                        {AppConstants.year}:
+                                    </span>
+                                    <Select
+                                        name={"yearRefId"}
+                                        className="year-select  reg-filter-select"
+                                        style={{ marginLeft:"25px", minWidth: 100 }}
+                                        disabled={isPublished}
+                                        onChange={yearRefId => this.onYearChange(yearRefId)}
+                                        value={registrationFormData.inviteYearRefId}
+                                    // value={formDataValue ? formDataValue.yearRefId ? formDataValue.yearRefId : 1 : 1}
+                                    >
+                                        {this.props.appState.allYearList.map(item => {
+                                            return (
+                                                <Option key={"yearRefId" + item.id} value={item.id}>
+                                                    {item.description}
+                                                </Option>
+                                            );
+                                        })}
+                                    </Select>
+                                </div>
 
-                        </div>
-                        <div className="col-sm-3">
-                            <div
-                                style={{
-                                    width: "fit-content",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    marginRight: 50
-                                }}
-                            >
-                                <span className="year-select-heading">
-                                    {AppConstants.competition}:
-                </span>
-                                <Select
-                                    style={{ minWidth: 160 }}
-                                    name={"competition"}
-                                    className="year-select"
-                                    disabled={isPublished}
-                                    onChange={competitionUniqueKeyId => this.onCompetitionChange(competitionUniqueKeyId)
-                                    }
-                                    value={this.state.allCompetition}
-                                // value={formDataValue ? formDataValue.competitionUniqueKeyId ? formDataValue.competitionUniqueKeyId : "" : ""}
+                            </div>
+                            <div className="col-sm-3">
+                                <div
+                                    style={{
+                                        width: "fit-content",
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        marginRight: 50
+                                    }}
                                 >
-                                    {this.props.appState.allCompetitionTypeList.map(item => {
-                                        return (
-                                            <Option key={"competition" + item.competitionId} value={item.competitionId}>
-                                                {item.competitionName}
-                                            </Option>
-                                        );
-                                    })}
-                                </Select>
+                                    <span className="year-select-heading">
+                                        {AppConstants.competition}:
+                                    </span>
+                                    <Select
+                                        style={{ marginLeft:"25px", minWidth: 160 }}
+                                        name={"competition"}
+                                        className="year-select reg-filter-select1"
+                                        disabled={isPublished}
+                                        onChange={e => (this.props.updateRegistrationForm(e, "inviteCompetitionId"))}
+                                        value={registrationFormData.inviteCompetitionId!= null ? 
+                                            registrationFormData.inviteCompetitionId.toString() : '0'}>
+                                        {this.props.appState.allCompetitionTypeList.map(item => {
+                                            return (
+                                                <Option key={"competition" + item.competitionId} value={item.competitionId}>
+                                                    {item.competitionName}
+                                                </Option>
+                                            );
+                                        })}
+                                    </Select>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <InputWithHead heading={AppConstants.inviteType} />
-                <Radio.Group className="reg-competition-radio" disabled={isPublished} onChange={(e) => (this.props.updateRegistrationForm(e.target.value, "inviteTypeRefId"))} value={registrationFormData.inviteTypeRefId}>
-                    {(inviteTypeData || []).map((fix) => (
-                        <Radio key={fix.id} value={fix.id}>{fix.description}</Radio>
-                    ))}
-                </Radio.Group>
-                <InputWithHead heading={AppConstants.gender} />
-                <Radio.Group className="reg-competition-radio" disabled={isPublished} value={registrationFormData.genderRefId}
-                    onChange={(e) => (this.props.updateRegistrationForm(e.target.value, "genderRefId"))}>
-                    <Radio value={2}>{AppConstants.male}</Radio>
-                    <Radio value={1}> {AppConstants.female}</Radio>
-                    <Radio value={3}>{AppConstants.both}</Radio>
-                </Radio.Group>
-                <InputWithHead heading={AppConstants.dOB} />
-                <Radio.Group className="reg-competition-radio" disabled={isPublished}
-                    value={registrationFormData.dobPreferenceRefId} onChange={(e) => (this.props.updateRegistrationForm(e.target.value, "dobPreferenceRefId"))}>
-                    <Radio className="dob-pref-radio-inner-heading" style={{ marginBottom: 10 }} value={1}>{AppConstants.NoDobPreference}</Radio>
-                    <Radio className="dob-pref-radio-inner-heading" value={2}>{AppConstants.DobPreference}</Radio>
-                </Radio.Group>
-                {(registrationFormData.dobPreferenceRefId == 2) ?
-                    <div>
-                        <div style={{ display: "flex", marginLeft: 23 }}>
-                            <span className="applicable-to-datepicker-col">{AppConstants.DobMoreThan}</span>
-                            <div className="dob-pref-date-picker">
-                                <DatePicker
-                                    size="large"
-                                    placeholder={"Select Date"}
-                                    style={{ width: "100%" }}
-                                    onChange={(e) => this.dateChange(e, "dobPreferenceMoreThan")}
-                                    name={"dobPreferenceMoreThan"}
-                                    format={"DD-MM-YYYY"}
-                                    showTime={false}
-                                    disabled={isPublished}
-                                    disabledDate={(registrationFormData.dobPreferenceLessThan == null) ? false : d => !d || d.isAfter(registrationFormData.dobPreferenceLessThan)}
-                                    value={(registrationFormData.dobPreferenceMoreThan == null || registrationFormData.dobPreferenceMoreThan == "") ? "" : moment(registrationFormData.dobPreferenceMoreThan, "YYYY-MM-DD")}
-                                />
+                    <InputWithHead heading={AppConstants.inviteType} />
+                    <Radio.Group className="reg-competition-radio" disabled={isPublished} onChange={(e) => (this.props.updateRegistrationForm(e.target.value, "inviteTypeRefId"))} value={registrationFormData.inviteTypeRefId}>
+                        {(inviteTypeData || []).map((fix) => (
+                            <Radio key={fix.id} value={fix.id}>{fix.description}</Radio>
+                        ))}
+                    </Radio.Group>
+                    <InputWithHead heading={AppConstants.gender} />
+                    <Radio.Group className="reg-competition-radio" disabled={isPublished} value={registrationFormData.genderRefId}
+                        onChange={(e) => (this.props.updateRegistrationForm(e.target.value, "genderRefId"))}>
+                        <Radio value={2}>{AppConstants.male}</Radio>
+                        <Radio value={1}> {AppConstants.female}</Radio>
+                        <Radio value={3}>{AppConstants.both}</Radio>
+                    </Radio.Group>
+                    <InputWithHead heading={AppConstants.dOB} />
+                    <Radio.Group className="reg-competition-radio" disabled={isPublished}
+                        value={registrationFormData.dobPreferenceRefId} onChange={(e) => (this.props.updateRegistrationForm(e.target.value, "dobPreferenceRefId"))}>
+                        <Radio className="dob-pref-radio-inner-heading" style={{ marginBottom: 10 }} value={1}>{AppConstants.NoDobPreference}</Radio>
+                        <Radio className="dob-pref-radio-inner-heading" value={2}>{AppConstants.DobPreference}</Radio>
+                    </Radio.Group>
+                    {(registrationFormData.dobPreferenceRefId == 2) ?
+                        <div>
+                            <div style={{ display: "flex", marginLeft: 23 }}>
+                                <span className="applicable-to-datepicker-col">{AppConstants.DobMoreThan}</span>
+                                <div className="dob-pref-date-picker">
+                                    <DatePicker
+                                        size="large"
+                                        placeholder={"Select Date"}
+                                        style={{ width: "100%" }}
+                                        onChange={(e) => this.dateChange(e, "dobPreferenceMoreThan")}
+                                        name={"dobPreferenceMoreThan"}
+                                        format={"DD-MM-YYYY"}
+                                        showTime={false}
+                                        disabled={isPublished}
+                                        disabledDate={(registrationFormData.dobPreferenceLessThan == null) ? false : d => !d || d.isAfter(registrationFormData.dobPreferenceLessThan)}
+                                        value={(registrationFormData.dobPreferenceMoreThan == null || registrationFormData.dobPreferenceMoreThan == "") ? "" : moment(registrationFormData.dobPreferenceMoreThan, "YYYY-MM-DD")}
+                                    />
+                                </div>
+                            </div>
+                            <div style={{ display: "flex", marginLeft: 23 }}>
+                                <span className="applicable-to-datepicker-col">{AppConstants.DobLessThan}</span>
+                                <div className="dob-pref-date-picker" style={{ marginLeft: 9 }}>
+                                    <DatePicker
+                                        size="large"
+                                        style={{ width: "100%" }}
+                                        placeholder={"Select Date"}
+                                        onChange={(e) => this.dateChange(e, "dobPreferenceLessThan")}
+                                        name={"dobPreferenceLessThan"}
+                                        disabledTime={this.disabledTime}
+                                        format={"DD-MM-YYYY"}
+                                        disabled={isPublished}
+                                        showTime={false}
+                                        disabledDate={(registrationFormData.dobPreferenceMoreThan == null) ? false : d => !d || d.isSameOrBefore(registrationFormData.dobPreferenceMoreThan)}
+                                        // || d.isSameOrBefore(dateOpen)                                      
+                                        //  value={closeDate ? moment(closeDate, "YYYY-MM-DD") : ""}
+                                        value={(registrationFormData.dobPreferenceLessThan == null || registrationFormData.dobPreferenceLessThan == "") ? "" : moment(registrationFormData.dobPreferenceLessThan, "YYYY-MM-DD")}
+                                    />
+                                </div>
                             </div>
                         </div>
-                        <div style={{ display: "flex", marginLeft: 23 }}>
-                            <span className="applicable-to-datepicker-col">{AppConstants.DobLessThan}</span>
-                            <div className="dob-pref-date-picker" style={{ marginLeft: 9 }}>
-                                <DatePicker
-                                    size="large"
-                                    style={{ width: "100%" }}
-                                    placeholder={"Select Date"}
-                                    onChange={(e) => this.dateChange(e, "dobPreferenceLessThan")}
-                                    name={"dobPreferenceLessThan"}
-                                    disabledTime={this.disabledTime}
-                                    format={"DD-MM-YYYY"}
-                                    disabled={isPublished}
-                                    showTime={false}
-                                    disabledDate={(registrationFormData.dobPreferenceMoreThan == null) ? false : d => !d || d.isSameOrBefore(registrationFormData.dobPreferenceMoreThan)}
-                                    // || d.isSameOrBefore(dateOpen)                                      
-                                    //  value={closeDate ? moment(closeDate, "YYYY-MM-DD") : ""}
-                                    value={(registrationFormData.dobPreferenceLessThan == null || registrationFormData.dobPreferenceLessThan == "") ? "" : moment(registrationFormData.dobPreferenceLessThan, "YYYY-MM-DD")}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    : null}
+                        : null}
+                </div> : null }
             </div>
         )
     }

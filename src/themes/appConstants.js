@@ -1373,6 +1373,9 @@ const AppConstants = {
   umpirePools: "Umpire Pools",
   sqadSelection: 'Squad Selection',
   umpireExport: `/umpire/export?competitionId=`,
+  invite: "Invite",
+  send: "Send",
+  noSend: "No Send",
 };
 
 export default AppConstants;
