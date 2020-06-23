@@ -1370,7 +1370,10 @@ const AppConstants = {
   badgeC: "Badge C",
   umpireCoach: "Umpire Coach",
   juniorUnbadge: "Junior Unbadge",
-  umpirePools: "Umpire Pools"
+  umpirePools: "Umpire Pools",
+  invite: "Invite",
+  send: "Send",
+  noSend: "No Send"
 };
 
 export default AppConstants;
