@@ -1371,6 +1371,7 @@ const AppConstants = {
   umpireCoach: "Umpire Coach",
   juniorUnbadge: "Junior Unbadge",
   umpirePools: "Umpire Pools",
+  competitionVenueAllocation:"Competition Venue allocation",
   sqadSelection: 'Squad Selection',
   umpireExport: `/umpire/export?competitionId=`,
   invite: "Invite",
