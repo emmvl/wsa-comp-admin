@@ -253,7 +253,16 @@ class LiveScoreAddScorer extends Component {
                     <div className="col-sm" >
                         <Form.Item>
                             {getFieldDecorator(AppConstants.emailAdd, {
-                                rules: [{ required: true, message: ValidationConstants.emailField[0] }]
+                                rules: [
+                                    { required: true, 
+                                       message: ValidationConstants.emailField[0] 
+                                    },
+                                    {
+                                        type: "email",
+                                        pattern: new RegExp(AppConstants.emailExp),
+                                        message: ValidationConstants.email_validation
+                                    }
+                                ]
                             })(
                                 <InputWithHead
                                     required={"required-field pb-0 pt-0"}

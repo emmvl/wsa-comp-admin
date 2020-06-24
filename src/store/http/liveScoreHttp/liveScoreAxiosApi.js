@@ -330,6 +330,7 @@ let LiveScoreAxiosApi = {
     },
 
     liveScoreGoalList(compId, goaltype, search) {
+
         let url = null
         if (goaltype === "By Match") {
             url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}`
@@ -812,12 +813,12 @@ let LiveScoreAxiosApi = {
     },
 
     umpireRoasterList(competitionID, status, refRoleId, paginationBody) {
-        var url=null
+        var url = null
         let body = paginationBody
         let id = JSON.parse(localStorage.getItem('umpireCompetitionId'))
-        if(status === "All"){
+        if (status === "All") {
             url = `/roster/list?competitionId=${id}&roleId=${refRoleId}`;
-        }else{
+        } else {
             url = `/roster/list?competitionId=${id}&status=${status}&roleId=${refRoleId}`;
         }
         return Method.dataPost(url, token, body)
@@ -831,8 +832,11 @@ let LiveScoreAxiosApi = {
         return Method.dataDelete(url, localStorage.token)
     },
     umpireListDashboard(data) {
+        console.log(data, 'data')
         let body = data.pageData
-        var url = `/matchUmpire/dashboard?competitionId=${data.compId}&divisionId=${data.divisionid}&venueId=${data.venueId}&organisationId=${data.orgId}`;
+        let url
+        url = `/matchUmpire/dashboard?competitionId=${data.compId}&divisionId=${data.divisionid}&venueId=${data.venueId}&organisationId=${data.orgId}`;
+
         // var url = `/matchUmpire/dashboard?competitionId=${1}&divisionId=${3}&venueId=${233}&organisationId=${3}`;
         return Method.dataPost(url, token, body)
 
@@ -848,6 +852,9 @@ let LiveScoreAxiosApi = {
             url = `/matchUmpire/dashboard/import?competitionId=${data.id}`;
 
         } else if (data.screenName == 'umpire') {
+            url = `/users/import?competitionId=${data.id}&roleId=${15}`;
+
+        } else if (data.screenName == 'liveScoreUmpireList') {
             url = `/users/import?competitionId=${data.id}&roleId=${15}`;
 
         }

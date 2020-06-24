@@ -157,6 +157,7 @@ const ValidationConstants = {
     selectAbandonMatchReason: 'Please Select Reason.',
     umpireSearch: "Umpire search is required.",
     umpireMessage: "This umpire has not been linked to a user profile",
+    email_validation:"Please enter valid email address!"
 };
 
 export default ValidationConstants;

@@ -9,6 +9,18 @@ function liveScoreUmpiresListAction(competitionId, body) {
 
     return action
 }
+
+function liveScoreUmpireImportAction(payload){
+    const action = {
+        type:ApiConstants.API_LIVE_SCORE_UMPIRES_IMPORT_LOAD,
+       payload
+    }
+    console.log(payload,"impAct");
+    
+    return action
+}
+
 export {
     liveScoreUmpiresListAction,
+    liveScoreUmpireImportAction
 }

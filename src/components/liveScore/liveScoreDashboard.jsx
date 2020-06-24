@@ -59,7 +59,17 @@ function setMatchResult(record){
         return record.team1Score + " : " + record.team2Score
     }   
 }
+function getVenueName(data) {
+ 
+    let venue_name = ""
+    if(data.venue.shortName){
+        venue_name = data.venue.shortName + " - " + data.name
+    }else{
+        venue_name = data.venue.name + " - " + data.name
+    }
 
+    return venue_name
+}
 
 const columnActiveNews = [
     {
@@ -186,8 +196,9 @@ const columnsTodaysMatch = [
         key: 'venueCourt',
         //  sorter: (a, b) => a.venueCourt.name.length - b.venueCourt.name.length,
         sorter: (a, b, venueCourt) => checkSorting(a, b, venueCourt.name),
-        render: (venueCourt) =>
-            <span >{venueCourt.name}</span>
+        // render: (venueCourt) =>
+        //     <span>{venueCourt.venue.shortName + " - " + venueCourt.name}</span>
+        render : (venueCourt, record)=><span>{getVenueName(venueCourt)}</span>
 
     },
     {
@@ -425,7 +436,7 @@ class LiveScoreDashboard extends Component {
         let startDay = this.getStartofDay()
 
         let currentTime = moment.utc().format()
-       
+
         if (getLiveScoreCompetiton()) {
             const { id } = JSON.parse(getLiveScoreCompetiton())
             this.props.liveScoreDashboardListAction(id, startDay, currentTime)

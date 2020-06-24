@@ -91,7 +91,7 @@ class LiveScoreManagerView extends Component {
 
                 <span className="live-score-desc-text side-bar-profile-data pt-0">{AppConstants.aboutManager}</span>
 
-                <div className="live-score-profile-img-view">
+                <div className="profile-img-view-style">
 
                     <div className="live-score-side-desc-view">
                         <div className="live-score-title-icon-view">
@@ -211,7 +211,7 @@ class LiveScoreManagerView extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"4"} />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">

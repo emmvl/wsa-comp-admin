@@ -137,7 +137,7 @@ class LiveScoreAddIncident extends Component {
     //// Form View
     contentView = (getFieldDecorator) => {
         const { incidentData,teamResult, playerResult, teamId } = this.props.liveScoreIncidentState
-            
+            console.log(incidentData,"incidentData")
         let playerData = isArrayNotEmpty(playerResult) ? playerResult  :[]
         
         return (
@@ -226,7 +226,7 @@ class LiveScoreAddIncident extends Component {
                                     loading={this.props.liveScoreState.onLoad == true && true}
                                     mode="multiple"
                                     showSearch={true}
-                                    placeholder={AppConstants.selectTeam}
+                                    placeholder={AppConstants.selectPlayer}
                                     style={{ width: "100%", }}
                                     onChange={(playerId) => this.props.liveScoreUpdateIncidentData(playerId, "playerId")}
                                 >
@@ -243,10 +243,23 @@ class LiveScoreAddIncident extends Component {
                        
                               <InputWithHead
                             type='text'
-                            heading={AppConstants.injury}
-                            onChange={(e) => { this.props.liveScoreUpdateIncidentData(this.Capitalize(e.target.value), 'injury') }}
-                            value={incidentData? incidentData.injury :""}
-                            placeholder={AppConstants.injury} />
+                            heading={AppConstants.incident}
+                         
+                            />
+                              <Select
+                                    // loading={this.props.liveScoreState.onLoad == true && true}
+                                    showSearch={true}
+                                    placeholder={AppConstants.selectIncident}
+                                    style={{ width: "100%", }}
+                                    onChange={(incident) => this.props.liveScoreUpdateIncidentData(incident, "injury")}
+                                    value={incidentData.injury? incidentData.injury :undefined}
+                                >
+                                   <Option value="SPECTATOR">{AppConstants._spectator}</Option>
+                                   <Option value="DISCIPLINE">{AppConstants.discipline}</Option>
+                                   <Option value="INJURY AMBULANCE">{AppConstants.injuryAmbulance}</Option>
+                                   <Option value="INJURY-FIRST ADD">{AppConstants.injuryFirstAdd}</Option>
+                                   
+                                </Select>
                     </div>
                 </div>
                 <div className="row">

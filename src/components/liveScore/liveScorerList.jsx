@@ -91,7 +91,10 @@ const columns = [
                                 // pathname: '/userPersonal',
                                 state: { tableRecord: record, userId: record.id }
                             }}>
-                                <span class="input-heading-add-another pt-0" >{item.name}</span>
+                                {/* <span class="input-heading-add-another pt-0" >{item.name}</span> */}
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <span class="input-heading-add-another pt-0" >{item.name}</span>
+                                </div>
                             </NavLink>
                             :
                             <span >{item.name}</span>

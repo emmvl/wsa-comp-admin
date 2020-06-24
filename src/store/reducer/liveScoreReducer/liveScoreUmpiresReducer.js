@@ -1,4 +1,5 @@
 import ApiConstants from "../../../themes/apiConstants"
+import { FastField } from "formik"
 
 const initialState = {
     onLoad: false,
@@ -44,6 +45,18 @@ function liveScoreUmpiresState(state = initialState, action) {
                 status: action.status,
                 error: action.error
             }
+
+        case ApiConstants.API_LIVE_SCORE_UMPIRES_IMPORT_LOAD:
+            return{
+                ...state,
+                onLoad:true
+            }
+
+        case ApiConstants.API_LIVE_SCORE_UMPIRES_IMPORT_SUCCESS:  
+        return {
+            onLoad:false,
+            status:action.status
+        }  
 
         default: return state
     }

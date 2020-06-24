@@ -36,18 +36,18 @@ class UmpirePoolAllocation extends Component {
             selectedComp: null,
 
             assignedData: [
-            {
-                teamId: 112, teamName: "a", playerCount: 0, isChecked: false, gradeRefId: null, players: [
-                    { playerId: 1, playerName: "Jhon", playerHistory: [], position1: 2, position2: null, isCommentsAvailable: 1 },
-                    { playerId: 2, playerName: "Mike Martin", playerHistory: [], position1: 1, position2: null, isCommentsAvailable: 0 },
-                ]
-            },
-            {
-                teamId: 114, teamName: "b", playerCount: 0, isChecked: false, gradeRefId: null, position1: null, position2: null, isCommentsAvailable: 0, players: [
-                    { playerId: 3, playerName: "Test", isChecked: true, playerHistory: [{ teamId: 22, teamText: 'ABC' }] },
-                    { playerId: 4, playerName: "Johny", isChecked: false, playerHistory: [], position1: 1, position2: 3, isCommentsAvailable: 1 },
-                ]
-            },
+                {
+                    teamId: 112, teamName: "a", playerCount: 0, isChecked: false, gradeRefId: null, players: [
+                        { playerId: 1, playerName: "Jhon", playerHistory: [], position1: 2, position2: null, isCommentsAvailable: 1 },
+                        { playerId: 2, playerName: "Mike Martin", playerHistory: [], position1: 1, position2: null, isCommentsAvailable: 0 },
+                    ]
+                },
+                {
+                    teamId: 114, teamName: "b", playerCount: 0, isChecked: false, gradeRefId: null, position1: null, position2: null, isCommentsAvailable: 0, players: [
+                        { playerId: 3, playerName: "Test", isChecked: true, playerHistory: [{ teamId: 22, teamText: 'ABC' }] },
+                        { playerId: 4, playerName: "Johny", isChecked: false, playerHistory: [], position1: 1, position2: 3, isCommentsAvailable: 1 },
+                    ]
+                },
             ],
 
             unassignedData: [

@@ -28,13 +28,13 @@ function tableSort(a, b, key) {
 }
 
 
-function checkScorerMatch(data){
+function checkScorerMatch(data) {
     let scorerID = this_obj.props.location.state ? this_obj.props.location.state.record.id : null
     console.log(scorerID, data)
     // if(data && data.id == scorerID){
-    if(data){
+    if (data) {
         return "Unassign"
-    }else{
+    } else {
         return "Assign"
     }
 }
@@ -66,14 +66,14 @@ const columns1 = [
         title: 'Team 1',
         dataIndex: 'team1',
         key: 'team1',
-        width:"80%",
+        width: "80%",
         sorter: (a, b) => tableSort(a, b, "team1"),
         render: (team1, records, index) => {
             return (
                 <div className="row" style={{ display: 'flex', justifyContent: 'center' }}>
                     <div className="col-sm-1">
                         <img className="dot-image"
-                            src={records.scorer1 ? records.scorer1.rosterStatus ? records.scorer1.rosterStatus = "YES" ? AppImages.greenDot : AppImages.redDot : AppImages.yellowDot : AppImages.greyDot}
+                            src={records.scorer1 ? records.scorer1.rosterStatus ? records.scorer1.rosterStatus = "YES" ? AppImages.greenDot : AppImages.redDot : AppImages.blueDot : AppImages.greyDot}
                             alt="" width="12" height="12" />
                     </div>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
@@ -122,7 +122,7 @@ const columns2 = [
                 <div className="row" style={{ display: 'flex', justifyContent: 'center' }}>
                     <div className="col-sm-1">
                         <img className="dot-image"
-                            src={records.scorer1 ? records.scorer1.rosterStatus ? records.scorer1.rosterStatus = "YES" ? AppImages.greenDot : AppImages.redDot : AppImages.yellowDot : AppImages.greyDot}
+                            src={records.scorer1 ? records.scorer1.rosterStatus ? records.scorer1.rosterStatus = "YES" ? AppImages.greenDot : AppImages.redDot : AppImages.blueDot : AppImages.greyDot}
                             alt="" width="12" height="12" />
                     </div>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
@@ -147,7 +147,7 @@ const columns2 = [
                 <div className="row" style={{ display: 'flex', justifyContent: 'center' }}>
                     <div className="col-sm-1">
                         <img className="dot-image"
-                            src={records.scorer2 ? records.scorer2.rosterStatus ? records.scorer2.rosterStatus = "YES" ? AppImages.greenDot : AppImages.redDot : AppImages.yellowDot : AppImages.greyDot}
+                            src={records.scorer2 ? records.scorer2.rosterStatus ? records.scorer2.rosterStatus = "YES" ? AppImages.greenDot : AppImages.redDot : AppImages.blueDot : AppImages.greyDot}
                             alt="" width="12" height="12" />
                     </div>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
@@ -181,12 +181,12 @@ class LiveScoreAssignMatch extends Component {
             competitionId: 0,
             teamID: null,
             // columns: scoringType == "SINGLE" ? columns1 : columns2,
-            columns:columns2,
+            columns: columns2,
             lodding: false,
-            scoring_Type : scoringType
+            scoring_Type: scoringType
         };
         this_obj = this
-    
+
     }
 
     componentDidMount() {
@@ -224,14 +224,14 @@ class LiveScoreAssignMatch extends Component {
     onChangeStatus(index, data, scorerKey, teamKey, isScorer) {
         let scorerID = this.props.location.state ? this.props.location.state.record.id : null
         if (!isScorer) {
-            this.props.changeAssignStatus(index, data, 4, this.state.teamID, scorerKey, teamKey,scorerID)
+            this.props.changeAssignStatus(index, data, 4, this.state.teamID, scorerKey, teamKey, scorerID)
         } else {
             // if(isScorer.id == scorerID){
-                this.props.unAssignMatcheStatus(index, isScorer, scorerKey, teamKey, scorerID)
+            this.props.unAssignMatcheStatus(index, isScorer, scorerKey, teamKey, scorerID)
             // }else{
             //     this.props.changeAssignStatus(index, data, 4, this.state.teamID, scorerKey, teamKey,scorerID)
             // }
-           
+
         }
 
     }
@@ -270,7 +270,7 @@ class LiveScoreAssignMatch extends Component {
     headerView = () => {
 
         let teamData = isArrayNotEmpty(this.props.liveScoreScorerState.allTeamData) ? this.props.liveScoreScorerState.allTeamData : []
-    
+
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 < div className="row" >
@@ -365,7 +365,7 @@ class LiveScoreAssignMatch extends Component {
 
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"5"} />
                 <Layout>
                     {this.headerView()}

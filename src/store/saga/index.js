@@ -175,7 +175,7 @@ import * as divisionsaga from "../saga/liveScoreSaga/liveScoreDivisionSaga"
 
 import { liveScoreGameTimeStatisticsSaga } from '../saga/liveScoreSaga/liveScoreGameTimeStatisticsSaga'
 import { liveScoreSettingSaga, liveScorePostSaga, settingRegInviteesSaga } from './liveScoreSaga/liveScoreSettingSaga'
-import { liveScoreUmpiresSaga } from './liveScoreSaga/liveScoreUmpiresSaga'
+import { liveScoreUmpiresSaga, liveScoreUmpiresImportSaga } from './liveScoreSaga/liveScoreUmpiresSaga'
 
 import { liveScoreTeamAttendanceListSaga } from './liveScoreSaga/liveScoreTeamAttendanceSaga'
 
@@ -774,4 +774,5 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.CHANGE_PLAYER_LINEUP_LOAD, playerLineUpStatusChnage)
 
   yield takeEvery(ApiConstants.API_USER_EXPORT_FILES_LOAD, userExportFilesSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_UMPIRES_IMPORT_LOAD, liveScoreUmpiresImportSaga)
 }
