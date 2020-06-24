@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Table, Select, Menu, Pagination,Button, Input,Icon, } from 'antd';
+import { Layout, Breadcrumb, Table, Select, Menu, Pagination,Button, Input,Icon, DatePicker} from 'antd';
 import './user.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -149,6 +149,8 @@ class UserTextualDashboard extends Component{
             postalCode: '',
             searchText: '',
             deleteLoading: false,
+            dobFrom: '-1',
+            dobTo: '-1',
         }
         this_Obj = this;
     }
@@ -194,6 +196,17 @@ class UserTextualDashboard extends Component{
         }
         else if (key == "roleId"){
             await  this.setState({roleId: value});
+            this.handleTextualTableList(1);
+        }
+        else if (key == "dobFrom") {
+            let d = moment(value, 'YYYY-mm-dd');
+            console.log("DDDD" + d);
+            await this.setState({ dobFrom: d });
+            this.handleTextualTableList(1);
+        }
+        else if (key == "dobTo") {
+            let d = moment(value, 'YYYY-mm-dd');
+            await this.setState({ dobTo: d });
             this.handleTextualTableList(1);
         }
         else if(key == "postalCode"){
@@ -253,6 +266,8 @@ class UserTextualDashboard extends Component{
             roleId: this.state.roleId,
             genderRefId: this.state.genderRefId,
             linkedEntityId: this.state.linkedEntityId,
+            dobFrom: (this.state.dobFrom != '-1' && !isNaN(this.state.dobFrom)) ? moment(this.state.dobFrom).format('YYYY-MM-DD') : '-1',
+            dobTo: (this.state.dobTo != '-1' && !isNaN(this.state.dobTo)) ? moment(this.state.dobTo).format('YYYY-MM-DD') : '-1',
             postCode: (this.state.postalCode!= '' && this.state.postalCode!= null) ? this.state.postalCode.toString() : '-1',
             searchText: this.state.searchText,
             paging : {
@@ -410,14 +425,14 @@ class UserTextualDashboard extends Component{
                             </div>
                         </div>
                     </div>
-                    <div className="row reg-filter-row" >
-                        <div className="reg-col" >
-                            <div  className="reg-filter-col-cont" >
+                    <div className="row user-filter-row" >
+                        <div className="user-col" >
+                            <div  className="user-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.linked}</div>
                                 <Select
                                     showSearch
                                     optionFilterProp="children"
-                                    className="year-select reg-filter-select"
+                                    className="year-select user-filter-select"
                                     style={{ minWidth: 100 }}
                                     onChange={(e) => this.onChangeDropDownValue(e, 'linkedEntityId')}
                                     value={this.state.linkedEntityId}>
@@ -428,13 +443,40 @@ class UserTextualDashboard extends Component{
                                 </Select>
                             </div>
                         </div>
-                        <div className="reg-col" >
-                            <div  className="reg-filter-col-cont" >
+                        <div className="user-col" >
+                            <div  className="user-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.postCode}</div>
                                 <InputWithHead
                                     placeholder={AppConstants.postCode}
                                     onChange={(e) => this.onChangeDropDownValue(e.target.value, 'postalCode')}
                                     value={this.state.postalCode}
+                                />
+                            </div>
+                        </div>
+                        <div className="user-col">
+                            <div className="user-filter-col-cont" style={{ marginRight: '30px', marginLeft: '25px' }}>
+                                <div className='year-select-heading'>{AppConstants.dobFrom}</div>
+                                <DatePicker
+                                    size="default"
+                                    className="year-select user-filter-select"
+                                    onChange={e => this.onChangeDropDownValue(e, 'dobFrom')}
+                                    format={"DD-MM-YYYY"}
+                                    showTime={false}
+                                    name={'dobFrom'}
+                                />
+                            </div>
+                        </div>
+                        <div className="user-col">
+                            <div className="user-filter-col-cont" >
+                                <div className='year-select-heading'>{AppConstants.dobTo}</div>
+                                <DatePicker
+                                    size="large"
+                                    className="year-select user-filter-select"
+                                    onChange={e => this.onChangeDropDownValue(e, 'dobTo')}
+                                    //onChange={e => this.setState({dobTo: moment(e, "YYYY-MM-DD")}) }
+                                    format={"DD-MM-YYYY"}
+                                    showTime={false}
+                                    name={'dobTo'}
                                 />
                             </div>
                         </div>
