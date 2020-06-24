@@ -2,19 +2,11 @@ import React, { Component } from "react";
 import {
     Layout,
     Breadcrumb,
-    Input,
     Select,
-    Checkbox,
     Button,
-    DatePicker,
-    Table,
-    Tree,
     Radio,
-    Tabs,
     Form,
-    Modal,
-    message,
-    Tooltip
+    TimePicker
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -23,7 +15,6 @@ import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from "moment";
-import history from "../../util/history";
 import { isArrayNotEmpty } from "../../util/helpers";
 import ValidationConstants from "../../themes/validationConstant";
 import { NavLink } from "react-router-dom";
@@ -183,7 +174,7 @@ class UmpireSetting extends Component {
 
         return (
             <div>
-                <span className='bulk-match-heading pt-2' >{AppConstants.howUmpiresAllocated}</span>
+                <span className='text-heading-large pt-2' >{AppConstants.howUmpiresAllocated}</span>
                 <Radio.Group
                     className="reg-competition-radio"
                 // onChange={(e) => { this.setState({ evenRotationFlag: false }); this.props.updateVenueConstraintsData(e.target.value, null, "courtPreferences", "courtParentSelection") }}
@@ -232,7 +223,7 @@ class UmpireSetting extends Component {
 
                 {this.umpireAllocationRadioView()}
 
-                <span className='bulk-match-heading pt-5' >{AppConstants.umpirePrefences}</span>
+                <span className='text-heading-large pt-5' >{AppConstants.umpirePrefences}</span>
 
 
                 <div className="row" >
@@ -242,22 +233,28 @@ class UmpireSetting extends Component {
                             placeholder={'Select'}
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         >
+
+                            <Option value={"1"}>{'1'}</Option>
+                            <Option value={"2"}>{'2'}</Option>
+                            <Option value={"3"}>{'3'}</Option>
                         </Select>
                     </div>
                     <div className="col-sm" >
                         <InputWithHead required={"pt-0"} heading={AppConstants.timeBetweenUmpireMatch} />
-                        <Select
-                            placeholder={'Select'}
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        >
+                        <TimePicker
+                            className="comp-venue-time-timepicker"
+                            style={{ width: "100%" }}
+                            defaultOpenValue={moment("00:00", "HH:mm")}
+                            defaultValue={moment()}
+                            format={"HH:mm"}
 
+                        />
 
-                        </Select>
                     </div>
                 </div>
 
 
-                <span className='bulk-match-heading pt-5' >{AppConstants.umpireReservePref}</span>
+                <span className='text-heading-large pt-5' >{AppConstants.umpireReservePref}</span>
                 <div className='row'>
 
                     <div className="col-sm" >
@@ -287,7 +284,7 @@ class UmpireSetting extends Component {
                 </div>
 
 
-                <span className='bulk-match-heading pt-5' >{AppConstants.umpireCoach}</span>
+                <span className='text-heading-large pt-5' >{AppConstants.umpireCoach}</span>
                 <Radio >{AppConstants.activeUmpireCoach}</Radio>
 
 
@@ -308,6 +305,9 @@ class UmpireSetting extends Component {
                             placeholder={'Select'}
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         >
+                            <Option value={"1"}>{'1'}</Option>
+                            <Option value={"2"}>{'2'}</Option>
+                            <Option value={"3"}>{'3'}</Option>
                         </Select>
                     </div>
 
@@ -328,7 +328,7 @@ class UmpireSetting extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
-                <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"5"} />
+                <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"6"} />
                 <Layout>
                     <Form
                         onSubmit={this.saveAPIsActionCall}

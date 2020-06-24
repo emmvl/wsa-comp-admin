@@ -1014,10 +1014,10 @@ const AppConstants = {
   turnOff_30Second: '30 second warning',
   payouts: 'Payouts',
 
-  coachExport: `https://users-api-dev.worldsportaction.com/users/byRole/export?roleId=17&entityTypeId=1&entityId=`,
-  managerExport: `https://users-api-dev.worldsportaction.com/users/byRole/export?roleId=3&entityTypeId=1&entityId=`,
-  scorerExport: `https://livescores-api-dev.worldsportaction.com/roster/exportScorer?competitionId=`,
-  teamExport: `https://livescores-api-dev.worldsportaction.com/teams/export?competitionId=`,
+  coachExport: `/users/byRole/export?roleId=17&entityTypeId=1&entityId=`,
+  managerExport: `/users/byRole/export?roleId=3&entityTypeId=1&entityId=`,
+  scorerExport: `/roster/exportScorer?competitionId=`,
+  teamExport: `/teams/export?competitionId=`,
   playersToPay: 'Players to Pay',
   exportTeams: 'Export Teams',
   exportPlayers: 'Export Players',
@@ -1330,7 +1330,7 @@ const AppConstants = {
   _minutes: "Minutes",
 
   lineUpSelectionMsg: "We can’t enable lineup selection without position tracking",
-  umpireListExport: "https://users-api-dev.worldsportaction.com/users/byRole/export/org?",
+  umpireListExport: "users/byRole/export/org?",
   disabilityCareNumber: "Disability care Number",
   typeOfDisability: "Type of Disability",
   pickUpAddress: "Pick up address",
@@ -1371,9 +1371,12 @@ const AppConstants = {
   umpireCoach: "Umpire Coach",
   juniorUnbadge: "Junior Unbadge",
   umpirePools: "Umpire Pools",
+  competitionVenueAllocation:"Competition Venue allocation",
+  sqadSelection: 'Squad Selection',
+  umpireExport: `/umpire/export?competitionId=`,
   invite: "Invite",
   send: "Send",
-  noSend: "No Send"
+  noSend: "No Send",
 };
 
 export default AppConstants;

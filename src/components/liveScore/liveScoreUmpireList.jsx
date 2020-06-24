@@ -106,7 +106,8 @@ class LiveScoreUmpireList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            searchText: ""
+            searchText: "",
+            competitionId: null
         };
     }
 
@@ -126,6 +127,8 @@ class LiveScoreUmpireList extends Component {
         } else {
             history.push("/")
         }
+
+        this.setState({ competitionId: id })
     }
 
     handleUmpireTableList(page, competitionId) {

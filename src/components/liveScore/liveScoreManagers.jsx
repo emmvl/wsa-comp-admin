@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getLiveScoreCompetiton, getUserId } from '../../util/sessionStorage'
 import history from "../../util/history";
-import { exportFilesAction } from "../../store/actions/appAction"
+import { userExportFilesAction } from "../../store/actions/appAction"
 import { teamListData } from "../../util/helpers";
 
 
@@ -197,7 +197,7 @@ class LiveScoreManagerList extends Component {
     onExport = () => {
         // let url = AppConstants.managerExport + this.state.competitionId
         let url = AppConstants.managerExport + this.state.competitionId
-        this.props.exportFilesAction(url)
+        this.props.userExportFilesAction(url)
     }
 
     ///////view for breadcrumb
@@ -366,7 +366,7 @@ class LiveScoreManagerList extends Component {
 
 
 function mapDispatchtoprops(dispatch) {
-    return bindActionCreators({ liveScoreManagerListAction, exportFilesAction }, dispatch)
+    return bindActionCreators({ liveScoreManagerListAction, userExportFilesAction }, dispatch)
 }
 
 function mapStatetoProps(state) {

@@ -24,7 +24,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { isArrayNotEmpty } from '../../util/helpers'
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
-import { exportFilesAction } from "../../store/actions/appAction"
+import { userExportFilesAction } from "../../store/actions/appAction"
 import { teamListData } from "../../util/helpers";
 const { Content } = Layout;
 const { SubMenu } = Menu;
@@ -81,21 +81,21 @@ const columns = [
     render: (linkedEntity, record) => {
 
       return (
-          <div>
-              {linkedEntity.length > 0 && linkedEntity.map((item) => (
-                  teamListData(item.entityId) ?
-                      <NavLink to={{
-                          pathname: '/liveScoreTeamView',
-                          state: { teamId: item.entityId, screenKey: "livescore" }
-                      }}>
-                          <span style={{ color: '#ff8237', cursor: 'pointer' }} className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
-                      </NavLink>
-                      :
-                      <span  >{item.name}</span>
-              ))
-              }
-          </div>)
-  },
+        <div>
+          {linkedEntity.length > 0 && linkedEntity.map((item) => (
+            teamListData(item.entityId) ?
+              <NavLink to={{
+                pathname: '/liveScoreTeamView',
+                state: { teamId: item.entityId, screenKey: "livescore" }
+              }}>
+                <span style={{ color: '#ff8237', cursor: 'pointer' }} className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
+              </NavLink>
+              :
+              <span  >{item.name}</span>
+          ))
+          }
+        </div>)
+    },
   },
   {
     title: 'Action',
@@ -134,13 +134,13 @@ class LiveScoreCoaches extends Component {
     super(props);
     this.state = {
       searchText: "",
-      competitionId:null
+      competitionId: null
     };
   }
 
   componentDidMount() {
     const { id } = JSON.parse(getLiveScoreCompetiton())
-    this.setState({competitionId:id})
+    this.setState({ competitionId: id })
     this.props.liveScoreCoachListAction(17, 1, id, this.state.searchText)
 
     if (id !== null) {
@@ -227,7 +227,7 @@ class LiveScoreCoaches extends Component {
                     justifyContent: "flex-end"
                   }}
                 >
-                  <Button onClick={()=>this.onExport()} className="primary-add-comp-form" type="primary">
+                  <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
 
                     <div className="row">
                       <div className="col-sm">
@@ -253,19 +253,19 @@ class LiveScoreCoaches extends Component {
                     justifyContent: "flex-end"
                   }}
                 >
-                    <NavLink to="/liveScoreCoachImport">
-                    <Button  className="primary-add-comp-form" type="primary">
-                    <div className="row">
-                      <div className="col-sm">
-                        <img
-                          src={AppImages.import}
-                          alt=""
-                          className="export-image"
-                        />
-                        {AppConstants.import}
+                  <NavLink to="/liveScoreCoachImport">
+                    <Button className="primary-add-comp-form" type="primary">
+                      <div className="row">
+                        <div className="col-sm">
+                          <img
+                            src={AppImages.import}
+                            alt=""
+                            className="export-image"
+                          />
+                          {AppConstants.import}
+                        </div>
                       </div>
-                    </div>
-                  </Button>
+                    </Button>
                   </NavLink>
                 </div>
               </div>
@@ -289,11 +289,11 @@ class LiveScoreCoaches extends Component {
     )
   }
 
-   // on Export
-   onExport(){
+  // on Export
+  onExport() {
     let url = AppConstants.coachExport + this.state.competitionId
-    this.props.exportFilesAction(url)
-}
+    this.props.userExportFilesAction(url)
+  }
 
   // on change search text
   onChangeSearchText = (e) => {
@@ -350,8 +350,8 @@ function mapDispatchtoprops(dispatch) {
   return bindActionCreators({
     liveScoreCoachListAction,
     getliveScoreTeams,
-    exportFilesAction
-    
+    userExportFilesAction
+
   }, dispatch)
 }
 

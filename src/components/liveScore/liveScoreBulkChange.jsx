@@ -113,7 +113,7 @@ class LiveScoreBulkChange extends Component {
         return (
             <div>
                 {/* date picker row */}
-                <span className='bulk-match-heading mt-5 mb-0' >{AppConstants.whichMatchChange}</span>
+                <span className='text-heading-large mt-5 mb-0' >{AppConstants.whichMatchChange}</span>
                 <div >
                     <InputWithHead heading={AppConstants.matchOnDate}
                         required={"required-field"} />
@@ -234,7 +234,7 @@ class LiveScoreBulkChange extends Component {
             <div className="content-view pt-4">
 
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <span className='bulk-match-heading' >{AppConstants.whatDoWantDO}</span>
+                    <span className='text-heading-large' >{AppConstants.whatDoWantDO}</span>
                     <div style={{ marginTop: -10 }}>
                         <Tooltip placement="top" background='#ff8237'>
                             <span>{AppConstants.bulkMatchMsg}</span>
@@ -372,7 +372,7 @@ class LiveScoreBulkChange extends Component {
         return (
             <div>
                 {/* start time date and time picker row */}
-                <span className='bulk-match-heading mt-5 mb-0' >{AppConstants.changeMatchCriteria}</span>
+                <span className='text-heading-large mt-5 mb-0' >{AppConstants.changeMatchCriteria}</span>
                 <InputWithHead heading={AppConstants.startTime}
                     required={"required-field"} />
                 <div className="fluid-width">
@@ -532,7 +532,7 @@ class LiveScoreBulkChange extends Component {
 
                 {/* Push back options */}
                 <div className="fluid-width">
-                    <span className='bulk-match-heading mt-5 mb-0' >{AppConstants.pushBack}</span>
+                    <span className='text-heading-large mt-5 mb-0' >{AppConstants.pushBack}</span>
                     {this.radioBtnContainer()}
 
                     {bulkRadioBtn == 'fixedDuration' && this.fixedDurationView(pushBackData)}
@@ -556,7 +556,7 @@ class LiveScoreBulkChange extends Component {
             <div>
 
                 {/* start time date and time picker row */}
-                <span className='bulk-match-heading mt-5 mb-0' >{AppConstants.changeMatchCriteria}</span>
+                <span className='text-heading-large mt-5 mb-0' >{AppConstants.changeMatchCriteria}</span>
                 <InputWithHead heading={AppConstants.startTime}
                     required={"required-field"} />
                 <div className="fluid-width">
@@ -712,7 +712,7 @@ class LiveScoreBulkChange extends Component {
 
                 {/* bring forward options */}
                 <div className="fluid-width">
-                    <span className='bulk-match-heading mt-5 mb-0' >{AppConstants.bringForward}</span>
+                    <span className='text-heading-large mt-5 mb-0' >{AppConstants.bringForward}</span>
                     {this.radioBtnContainer()}
 
                     {bulkRadioBtn == 'fixedDuration' && this.fixedDurationView(bringForwardData)}
@@ -731,7 +731,7 @@ class LiveScoreBulkChange extends Component {
         return (
             <div>
                 {/* start time date and time picker row */}
-                <span className='bulk-match-heading mt-5 mb-0' >{AppConstants.changeMatchCriteria}</span>
+                <span className='text-heading-large mt-5 mb-0' >{AppConstants.changeMatchCriteria}</span>
                 <InputWithHead heading={AppConstants.startTime}
                     required={"required-field"} />
                 <div className="fluid-width">
@@ -1007,7 +1007,7 @@ class LiveScoreBulkChange extends Component {
             <div>
                 <div>
                     {/* start time date and time picker row */}
-                    <span className='bulk-match-heading mt-5 mb-0' >{AppConstants.changeMatchCriteria}</span>
+                    <span className='text-heading-large mt-5 mb-0' >{AppConstants.changeMatchCriteria}</span>
                     <InputWithHead heading={AppConstants.startTime}
                         required={"required-field"} />
                     <div className="fluid-width">
@@ -1188,7 +1188,7 @@ class LiveScoreBulkChange extends Component {
                     </div>
 
                 </div>
-                <span className='bulk-match-heading mt-5 mb-0' >{AppConstants.abandon}</span>
+                <span className='text-heading-large mt-5 mb-0' >{AppConstants.abandon}</span>
                 <InputWithHead heading={AppConstants.selectReason}
                     required={"required-field"}
                 />

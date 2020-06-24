@@ -157,7 +157,6 @@ const ValidationConstants = {
     selectAbandonMatchReason: 'Please Select Reason.',
     umpireSearch: "Umpire search is required.",
     umpireMessage: "This umpire has not been linked to a user profile",
-    umpireMessage: "This umpire has not been linked to a user profile",
 };
 
 export default ValidationConstants;

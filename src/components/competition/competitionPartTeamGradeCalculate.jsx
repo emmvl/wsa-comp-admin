@@ -40,13 +40,17 @@ const default_coloumns =
         },
         {
             title: 'Status',
-            dataIndex: 'finalGradeOrganisationCount',
-            key: 'finalGradeOrganisationCount',
-            render: (finalGradeOrganisationCount, record) =>
-                <span>{finalGradeOrganisationCount}/{record.totalOrganisationCount} graded</span>,
-            sorter: (a, b) => tableSort(a, b, "finalGradeOrganisationCount")
-
-        },
+            dataIndex: 'statusData',
+            key: 'statusData',
+            // sorter: (a, b) => tableSort(a, b, "finalGradeOrganisationCount"),
+            render: (statusData, record) => {
+                return (
+                    <div>
+                        <span>{statusData}</span>
+                    </div>
+                )
+            },
+        }
     ]
 
 
@@ -78,11 +82,11 @@ class CompetitionPartTeamGradeCalculate extends Component {
                 },
                 {
                     title: 'Status',
-                    dataIndex: 'finalGradeOrganisationCount',
-                    key: 'finalGradeOrganisationCount',
-                    render: (finalGradeOrganisationCount, record) =>
-                        <span>{finalGradeOrganisationCount}/{record.totalOrganisationCount} graded</span>,
-                    sorter: (a, b) => tableSort(a, b, "finalGradeOrganisationCount")
+                    dataIndex: 'statusData',
+                    key: 'statusData',
+                    render: (statusData, record) =>
+                        <span>{statusData}</span>,
+                    // sorter: (a, b) => tableSort(a, b, "finalGradeOrganisationCount")
 
                 },
             ]

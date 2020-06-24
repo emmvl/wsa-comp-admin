@@ -37,7 +37,8 @@ import {
   getParticipateYearAndCompetitionListSaga,
   getOwnYearAndCompetitionListSaga,
   getEnhancedRoundRobinTypesSaga,
-  exportFilesSaga
+  exportFilesSaga,
+  userExportFilesSaga
 } from "./appSaga";
 
 import {
@@ -770,5 +771,7 @@ export default function* root_saga() {
   /////unassign umpire from the match(delete)
   yield takeEvery(ApiConstants.API_UNASSIGN_UMPIRE_FROM_LIST_LOAD, assignUmpireSaga.unassignUmpireSaga)
 
-  yield takeEvery(ApiConstants.CHANGE_PLAYER_LINEUP_LOAD , playerLineUpStatusChnage)
+  yield takeEvery(ApiConstants.CHANGE_PLAYER_LINEUP_LOAD, playerLineUpStatusChnage)
+
+  yield takeEvery(ApiConstants.API_USER_EXPORT_FILES_LOAD, userExportFilesSaga)
 }

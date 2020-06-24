@@ -186,7 +186,7 @@ class LiveScoreGameTimeList extends Component {
         super(props);
         this.state = {
             selectStatus: "Select Status",
-            filter: "Period",
+            filter: "All",
             competitionId: null,
             searchText: ''
         };
@@ -197,7 +197,7 @@ class LiveScoreGameTimeList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ competitionId: id })
         if (id !== null) {
-            this.props.gameTimeStatisticsListAction(id, this.state.filter, 0, this.state.searchText)
+            this.props.gameTimeStatisticsListAction(id, this.state.filter == 'All' ? "" : this.state.filter, 0, this.state.searchText)
         } else {
             history.push("/")
         }
@@ -206,7 +206,7 @@ class LiveScoreGameTimeList extends Component {
     handleGameTimeTableList(page, competitionId, aggergate) {
         let offset = page ? 10 * (page - 1) : 0
 
-        this.props.gameTimeStatisticsListAction(competitionId, aggergate, offset, this.state.searchText)
+        this.props.gameTimeStatisticsListAction(competitionId, aggergate == 'All' ? "" : aggergate, offset, this.state.searchText)
 
     }
 
@@ -215,7 +215,7 @@ class LiveScoreGameTimeList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         let offset = 1 ? 10 * (1 - 1) : 0
         this.setState({ filter: data.filter })
-        this.props.gameTimeStatisticsListAction(id, data.filter, offset, this.state.searchText)
+        this.props.gameTimeStatisticsListAction(id, data.filter == 'All' ? "" : data.filter, offset, this.state.searchText)
     }
 
     onExport() {
@@ -229,7 +229,7 @@ class LiveScoreGameTimeList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ searchText: e.target.value })
         if (e.target.value == null || e.target.value == "") {
-            this.props.gameTimeStatisticsListAction(id, this.state.filter, 0, e.target.value)
+            this.props.gameTimeStatisticsListAction(id, this.state.filter == 'All' ? "" : this.state.filter, 0, e.target.value)
         }
     }
 
@@ -239,7 +239,7 @@ class LiveScoreGameTimeList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         // this.setState({ searchText: e.target.value })
         if (code === 13) { //13 is the enter keycode
-            this.props.gameTimeStatisticsListAction(id, this.state.filter, 0, this.state.searchText)
+            this.props.gameTimeStatisticsListAction(id, this.state.filter == 'All' ? "" : this.state.filter, 0, this.state.searchText)
         }
     }
 
@@ -249,7 +249,7 @@ class LiveScoreGameTimeList extends Component {
         if (this.state.searchText == null || this.state.searchText == "") {
         }
         else {
-            this.props.gameTimeStatisticsListAction(id, this.state.filter, 0, this.state.searchText)
+            this.props.gameTimeStatisticsListAction(id, this.state.filter == 'All' ? "" : this.state.filter, 0, this.state.searchText)
         }
     }
 
@@ -278,6 +278,7 @@ class LiveScoreGameTimeList extends Component {
                                 // onChange={(selectStatus) => this.setState({ selectStatus })}
                                 onChange={(filter) => this.setFilterValue({ filter })}
                                 value={this.state.filter} >
+                                <Option value={'All'}>{'All'}</Option>
                                 <Option value={AppConstants.period}>{AppConstants.periods}</Option>
                                 <Option value={AppConstants.minute}>{AppConstants.minutes}</Option>
                                 <Option value={AppConstants.matches}>{AppConstants.totalGames}</Option>

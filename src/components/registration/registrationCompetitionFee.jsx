@@ -1926,10 +1926,13 @@ class RegistrationCompetitionFee extends Component {
       }
     }
 
-    if (this.state.divisionState === true) {
+    if (competitionFeesState.onLoad === false && this.state.divisionState === true) {
+      setTimeout(() => {
+        this.setDetailsFieldValue();
+      }, 100);
       this.setState({ divisionState: false });
-      this.setDetailsFieldValue();
     }
+
   }
 
   callAnyorgSearchApi = (registrationInviteesRefId) => {
@@ -2706,7 +2709,7 @@ class RegistrationCompetitionFee extends Component {
             payload,
             competitionId
           );
-          this.setState({ loading: true });
+          this.setState({ loading: true, divisionState: true });
         } else if (tabKey == '3') {
           let divisionArrayData = compFeesState.competitionDivisionsData;
           let finalDivisionArray = [];

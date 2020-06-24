@@ -117,7 +117,7 @@ class LiveScoreTeamAttendance extends Component {
         this.state = {
             year: "2020",
             teamSelection: "WSA 1",
-            selectStatus: "Borrowed",
+            selectStatus: "All",
             competitionId: null,
             searchText: ""
         }
@@ -135,7 +135,7 @@ class LiveScoreTeamAttendance extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ competitionId: id })
         if (id !== null) {
-            this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus)
+            this.props.liveScoreTeamAttendanceListAction(id, paginationBody)
         } else {
             history.pushState('/')
         }
@@ -153,7 +153,12 @@ class LiveScoreTeamAttendance extends Component {
         }
         let { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
-            this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus)
+            if (this.state.selectStatus == 'All') {
+                this.props.liveScoreTeamAttendanceListAction(id, paginationBody)
+            } else {
+                this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus)
+            }
+
         } else {
             history.pushState('/')
         }
@@ -168,11 +173,23 @@ class LiveScoreTeamAttendance extends Component {
             },
         }
         let { id } = JSON.parse(getLiveScoreCompetiton())
-        this.props.liveScoreTeamAttendanceListAction(id, paginationBody, status)
+        if (status == 'All') {
+            this.props.liveScoreTeamAttendanceListAction(id, paginationBody)
+        } else {
+            this.props.liveScoreTeamAttendanceListAction(id, paginationBody, status)
+        }
+
     }
 
     onExport() {
-        let url = AppConstants.teamAttendaneExport + this.state.competitionId + `&status=${this.state.selectStatus}`
+
+        let url
+        if (this.state.selectStatus == 'All') {
+            url = AppConstants.teamAttendaneExport + this.state.competitionId
+        } else {
+            url = AppConstants.teamAttendaneExport + this.state.competitionId + `&status=${this.state.selectStatus}`
+        }
+
         this.props.exportFilesAction(url)
     }
 
@@ -189,8 +206,12 @@ class LiveScoreTeamAttendance extends Component {
                 },
                 "search": e.target.value
             }
+            if (this.state.selectStatus == 'All') {
+                this.props.liveScoreTeamAttendanceListAction(id, body)
+            } else {
+                this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
+            }
 
-            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
         }
     }
 
@@ -207,7 +228,11 @@ class LiveScoreTeamAttendance extends Component {
                 },
                 "search": e.target.value
             }
-            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
+            if (this.state.selectStatus == 'All') {
+                this.props.liveScoreTeamAttendanceListAction(id, body)
+            } else {
+                this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
+            }
         }
     }
 
@@ -225,7 +250,11 @@ class LiveScoreTeamAttendance extends Component {
                 },
                 "search": this.state.searchText
             }
-            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
+            if (this.state.selectStatus == 'All') {
+                this.props.liveScoreTeamAttendanceListAction(id, body)
+            } else {
+                this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
+            }
         }
     }
 
@@ -253,9 +282,10 @@ class LiveScoreTeamAttendance extends Component {
 
                             <Select
                                 className="year-select"
-                                style={{ display: "flex", alignItems: "flex-start" }}
+                                style={{ display: "flex", alignItems: "flex-start", minWidth:140 }}
                                 onChange={(selectStatus) => this.onChnageStatus(selectStatus)}
                                 value={this.state.selectStatus} >
+                                <Option value={"All"}>{'All'}</Option>
                                 <Option value={"Borrowed"}>{'Borrowed Player'}</Option>
                                 <Option value={"Did Not Play"}>{'Did Not Play'}</Option>
                                 <Option value={"Played"}>{'Played'}</Option>

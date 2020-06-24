@@ -437,6 +437,12 @@ class InnerHorizontalMenu extends React.Component {
                         </Menu.Item>
 
                         <Menu.Item key="5">
+                            <NavLink to="/umpirePoolAllocation">
+                                <span>Pool</span>
+                            </NavLink>
+                        </Menu.Item>
+
+                        <Menu.Item key="6">
                             <NavLink to="/umpireSetting">
                                 <span>Settings</span>
                             </NavLink>

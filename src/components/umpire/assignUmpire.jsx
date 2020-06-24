@@ -205,7 +205,7 @@ class AssignUmpire extends Component {
             "matchId": record.id,
             "roleId": 15,
             "userId": umpireUserId,
-            "rosterId": userData ? userData : 0
+            "rosterId": userData ? userData : null
         }
         if (statusText == "Assign") {
             this.props.assignUmpireAction(assignBody, index, umpireKey)
@@ -269,7 +269,6 @@ class AssignUmpire extends Component {
 
     /// Handle Page change
     handlePageChnage(page) {
-        console.log(page, 'page')
         let offset = page ? 10 * (page - 1) : 0;
         const body = {
             "paging": {
@@ -283,8 +282,6 @@ class AssignUmpire extends Component {
     ////////tableView view for all the umpire assigned matches list
     tableView = () => {
         const { assignUmpireList, totalAssignUmpireCount, onLoad } = this.props.assignUmpireState
-        console.log(this.props.umpireCompetitionState, "umpireCompetitionState")
-        console.log(this.props.assignUmpireState, "assignUmpireState")
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">

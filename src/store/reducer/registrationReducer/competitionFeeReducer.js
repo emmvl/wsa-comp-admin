@@ -1645,9 +1645,9 @@ function competitionFees(state = initialState, action) {
                 let competitionFee_Products = createProductFeeArr(savemembershipAllData)
                 state.competitionFeesData = competitionFee_Products
             }
+            state.onLoad = false
             return {
                 ...state,
-                onLoad: false,
                 status: action.status,
                 competitionId: savemembershipAllData.competitiondetail.competitionUniqueKey,
                 competitionMembershipProductData: savemembershipAllData.competitionmembershipproduct,
@@ -1775,9 +1775,9 @@ function competitionFees(state = initialState, action) {
             state.postInvitees = detailsSuccessData.competitiondetail.invitees
             let divisionGetSucces_Data = getDivisionTableData(detailsSuccessData)
             state.competitionDivisionsData = divisionGetSucces_Data
+            state.onLoad = false
             return {
                 ...state,
-                onLoad: false,
                 status: action.status,
                 competitionDetailData: detailsSuccessData.competitiondetail,
                 competitionMembershipProductData: detailsSuccessData.competitionmembershipproduct,

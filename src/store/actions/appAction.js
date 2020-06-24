@@ -196,6 +196,15 @@ function CLEAR_OWN_COMPETITION_DATA(key) {
   return action
 }
 
+function userExportFilesAction(URL) {
+  const action = {
+    type: ApiConstants.API_USER_EXPORT_FILES_LOAD,
+    URL: URL
+  };
+  console.log(URL, 'URL')
+  return action;
+}
+
 export {
   getYearListAction,
   getOnlyYearListAction,
@@ -218,5 +227,6 @@ export {
   clearFilter,
   getEnhancedRoundRobinAction,
   exportFilesAction,
-  CLEAR_OWN_COMPETITION_DATA
+  CLEAR_OWN_COMPETITION_DATA,
+  userExportFilesAction
 };

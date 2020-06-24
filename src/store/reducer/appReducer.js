@@ -541,6 +541,16 @@ function appState(state = initialState, action) {
         status: action.status
       };
 
+    case ApiConstants.API_USER_EXPORT_FILES_LOAD:
+      return { ...state, onLoad: true };
+
+    case ApiConstants.API_USER_EXPORT_FILES_SUCCESS:
+      return {
+        ...state,
+        onLoad: false,
+        status: action.status
+      };
+
 
     default:
       return state;

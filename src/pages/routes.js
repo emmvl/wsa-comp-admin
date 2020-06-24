@@ -140,6 +140,7 @@ import ShopSettings from '../components/shop/shopSettings'
 import AssignUmpire from "../components/umpire/assignUmpire";
 import UmpireSetting from "../components/umpire/umpireSetting";
 import UmpireDivisions from "../components/umpire/umpireDivisions"
+import UmpirePoolAllocation from "../components/umpire/umpirePoolAllocation"
 
 const lazyLoad = Component => {
   const lazy = props => {
@@ -734,6 +735,11 @@ class Routes extends React.Component {
         <PrivateRoute
           path="/umpireDivisions"
           component={lazyLoad(UmpireDivisions)}
+        />
+
+        <PrivateRoute
+          path="/umpirePoolAllocation"
+          component={lazyLoad(UmpirePoolAllocation)}
         />
 
         <Route path="/" component={lazyLoad(NotFound)} />
