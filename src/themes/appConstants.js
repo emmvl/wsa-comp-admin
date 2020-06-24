@@ -1385,6 +1385,7 @@ const AppConstants = {
   injuryAmbulance: "Injury Ambulance",
   injuryFirstAdd: "Injury- First Add",
   emailExp:"/^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/",
+  childDetails: "Child Details"
 };
 
 export default AppConstants;
