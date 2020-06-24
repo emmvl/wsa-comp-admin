@@ -47,6 +47,7 @@ const AppImages = {
   activeUserIcon: require("../images/active-user.svg"),
   activeCompIcon: require("../images/active-competition.svg"),
   activeLiveScoreIcon: require("../images/active-livescore.svg"),
+  blueDot: require("../images/blueDot.png"),
 };
 
 export default AppImages;

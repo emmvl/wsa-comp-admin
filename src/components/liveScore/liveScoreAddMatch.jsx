@@ -48,6 +48,7 @@ import { entityTypes } from '../../util/entityTypes'
 import { refRoleTypes } from '../../util/refRoles'
 import { umpireListAction } from "../../store/actions/umpireAction/umpireAction"
 import { liveScoreGetMatchDetailInitiate } from "../../store/actions/LiveScoreAction/liveScoreMatchAction";
+import { copyFileSync } from "fs";
 
 const { Footer, Content, Header } = Layout;
 const { Option } = Select;
@@ -73,6 +74,7 @@ class LiveScoreAddMatch extends Component {
             compId: null,
             scoringType: null
         }
+        console.log(this.state.matchId, 'matchId', this.state.umpireKey)
         this.props.clearMatchAction()
     }
 
@@ -80,9 +82,10 @@ class LiveScoreAddMatch extends Component {
 
         if (this.state.umpireKey == 'umpire') {
             const { id } = JSON.parse(getUmpireCompetitonData())
+
             const { scoringType } = JSON.parse(getUmpireCompetitonData())
             this.setState({ compId: id, scoringType: scoringType })
-
+            console.log(id, 'scoringType', scoringType)
             if (id !== null) {
                 this.props.getCompetitonVenuesList(id, "");
                 this.props.getLiveScoreDivisionList(id)
@@ -1107,7 +1110,10 @@ class LiveScoreAddMatch extends Component {
                         scorerData = [scorers_1, scorers_2]
 
                     } else {
-                        scorerData = [scorers_1]
+                        if (scorer1) {
+                            scorerData = [scorers_1]
+                        }
+
 
                     }
 
@@ -1206,18 +1212,18 @@ class LiveScoreAddMatch extends Component {
                 {!this.state.membershipIsUsed &&
                     <div className="footer-view">
                         <div className="row">
-                            <div className="col-sm">
-                                <div className="reg-add-save-button">
-                                    <Button onClick={() => history.push(this.state.key == 'dashboard' ? 'liveScoreDashboard' : this.state.key == 'umpireRoaster' ? 'umpireRoaster' : this.state.umpireKey == 'umpire' ? 'umpireDashboard' : '/liveScoreMatches')} type="cancel-button">{AppConstants.cancel}</Button>
-                                    {this.state.isEdit == true && <Button onClick={() => this.setState({ forfeitVisible: true })} className="ml-3" type="cancel-button">{AppConstants.forfiet}</Button>}
-                                    {this.state.isEdit == true && <Button onClick={() => this.setState({ abandonVisible: true })} className="ml-3" type="cancel-button">{AppConstants.abandon}</Button>}
-                                    {this.state.isEdit == true && <Button onClick={() => this.endMatchResult()} className="ml-3" type="cancel-button">{AppConstants.endMatch}</Button>}
+                            <div class="col-sm-10 col-md-9">
+                                <div className="reg-add-save-button p-0">
+                                    <Button className="button-spacing-style ml-2 mr-2" onClick={() => history.push(this.state.key == 'dashboard' ? 'liveScoreDashboard' : this.state.key == 'umpireRoaster' ? 'umpireRoaster' : this.state.umpireKey == 'umpire' ? 'umpireDashboard' : '/liveScoreMatches')} type="cancel-button">{AppConstants.cancel}</Button>
+                                    {this.state.isEdit == true && <Button className="button-spacing-style ml-2 mr-2" onClick={() => this.setState({ forfeitVisible: true })} type="cancel-button">{AppConstants.forfiet}</Button>}
+                                    {this.state.isEdit == true && <Button className="button-spacing-style ml-2 mr-2" onClick={() => this.setState({ abandonVisible: true })} type="cancel-button">{AppConstants.abandon}</Button>}
+                                    {this.state.isEdit == true && <Button className="button-spacing-style ml-2 mr-2" onClick={() => this.endMatchResult()} type="cancel-button">{AppConstants.endMatch}</Button>}
                                 </div>
                             </div>
-                            <div className="col-sm">
-                                <div className="comp-buttons-view">
+                            <div class="col-sm-2 col-md-3 ">
+                                <div className="comp-buttons-view mt-0">
                                     <Button
-                                        className="user-approval-button" type="primary" htmlType="submit" >
+                                        className="user-approval-button  mt-0" type="primary" htmlType="submit" >
                                         {AppConstants.save}
                                     </Button>
                                 </div>
@@ -1228,7 +1234,6 @@ class LiveScoreAddMatch extends Component {
             </div>
         )
     };
-
 
     /////// render function
     render() {

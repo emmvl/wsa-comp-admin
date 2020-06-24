@@ -27,7 +27,6 @@ function* errorSaga(error) {
 ////*********************** */
 
 export function* umpireListDashboardSaga(action) {
-    console.log(action, 'getUmpireDashboardList')
     try {
         const result = yield call(LiveScoreAxiosApi.umpireListDashboard, action.data);
         if (result.status === 1) {

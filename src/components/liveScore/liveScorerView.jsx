@@ -78,11 +78,11 @@ class LiveScorerView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data:props.location.state? props.location.state.tableRecord:null
+            data: props.location.state ? props.location.state.tableRecord : null
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         console.log(this.state.data)
     }
     ////view for profile image
@@ -101,7 +101,7 @@ class LiveScorerView extends Component {
 
                 <span className="live-score-desc-text side-bar-profile-data pt-0">{AppConstants.aboutScorer}</span>
 
-                <div className="live-score-profile-img-view">
+                <div className="profile-img-view-style">
 
                     <div className="live-score-side-desc-view">
                         <div className="live-score-title-icon-view">
@@ -180,7 +180,7 @@ class LiveScorerView extends Component {
                                 >
                                     <NavLink to={{
                                         pathname: "/liveScoreAddScorer",
-                                        state: { isEdit: true,tableRecord:this.state.data }
+                                        state: { isEdit: true, tableRecord: this.state.data }
                                     }}>
                                         <Button className="primary-add-comp-form" type="primary">
                                             + {AppConstants.edit}
@@ -234,7 +234,7 @@ class LiveScorerView extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"5"} />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">

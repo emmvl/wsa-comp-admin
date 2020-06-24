@@ -159,7 +159,7 @@ class LiveScorePlayerView extends Component {
                 </div>
 
 
-                <div className="live-score-profile-img-view">
+                <div className="profile-img-view-style">
                     <div className="live-score-side-desc-view">
                         <div className="live-score-title-icon-view">
                             <div className="live-score-icon-view">

@@ -29,7 +29,7 @@ const { Option } = Select;
 const { TabPane } = Tabs;
 const { SubMenu } = Menu;
 let this_Obj = null;
-let section = null ;
+let section = null;
 const columns = [
 
     {
@@ -55,7 +55,7 @@ const columns = [
         render: (feesPaid, record, index) => {
             return (
                 <div>
-                    {feesPaid != null ? '$'+feesPaid : ""}
+                    {feesPaid != null ? '$' + feesPaid : ""}
                 </div>
             )
         }
@@ -327,24 +327,24 @@ const columnsPersonalAddress = [
     {
         title: 'Email',
         dataIndex: 'email',
-        key: 'email'	  
+        key: 'email'
     },
     {
         title: 'Action',
         dataIndex: 'isUsed',
         key: 'isUsed',
-        width:80,
+        width: 80,
         render: (data, record) => (
-             <Menu
+            <Menu
                 className="action-triple-dot-submenu" theme="light" mode="horizontal"
                 style={{ lineHeight: "25px" }}>
                 <SubMenu
                     key="sub1"
                     title={<img className="dot-image" src={AppImages.moreTripleDot}
-                            alt="" width="16" height="16" />}
-                    >
+                        alt="" width="16" height="16" />}
+                >
                     <Menu.Item key="1">
-                        <NavLink to={{ pathname: `/userProfileEdit`, state: { userData : record , moduleFrom:"1"}}} >
+                        <NavLink to={{ pathname: `/userProfileEdit`, state: { userData: record, moduleFrom: "1" } }} >
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
@@ -394,24 +394,24 @@ const columnsPersonalPrimaryContacts = [
         title: 'Action',
         dataIndex: 'isUser',
         key: 'isUser',
-        width:80,
+        width: 80,
         render: (data, record) => (
             <Menu className="action-triple-dot-submenu" theme="light"
-               mode="horizontal" style={{ lineHeight: "25px" }}>
-               <SubMenu
-                   key="sub1"
-                   title={<img className="dot-image" src={AppImages.moreTripleDot}
-                           alt="" width="16" height="16"/>
-                  }>
-                   <Menu.Item key="1">
-                       <NavLink to={{ pathname: `/userProfileEdit`,state: { userData : record , moduleFrom:"2" }}} >
-                           <span>Edit</span>
-                       </NavLink>
-                   </Menu.Item>
-               </SubMenu>
-           </Menu>
-       )
-   }
+                mode="horizontal" style={{ lineHeight: "25px" }}>
+                <SubMenu
+                    key="sub1"
+                    title={<img className="dot-image" src={AppImages.moreTripleDot}
+                        alt="" width="16" height="16" />
+                    }>
+                    <Menu.Item key="1">
+                        <NavLink to={{ pathname: `/userProfileEdit`, state: { userData: record, moduleFrom: "2" } }} >
+                            <span>Edit</span>
+                        </NavLink>
+                    </Menu.Item>
+                </SubMenu>
+            </Menu>
+        )
+    }
 ];
 
 const columnsPersonalEmergency = [
@@ -419,7 +419,7 @@ const columnsPersonalEmergency = [
         title: 'Name',
         dataIndex: 'emergencyContactName',
         key: 'emergencyContactName',
-        width:300
+        width: 300
     },
     {
         title: 'Phone Number',
@@ -430,24 +430,24 @@ const columnsPersonalEmergency = [
         title: 'Action',
         dataIndex: 'isUser',
         key: 'isUser',
-        width:80,
+        width: 80,
         render: (data, record) => (
             <Menu
-               className="action-triple-dot-submenu" theme="light"
-               mode="horizontal" style={{ lineHeight: "25px" }}>
-               <SubMenu
-                   key="sub1"
-                   title={<img className="dot-image"
-                           src={AppImages.moreTripleDot} alt="" width="16" height="16"/>
-                   }>
-                   <Menu.Item key="1">
-                       <NavLink to={{ pathname: `/userProfileEdit`,state: { userData : record , moduleFrom:"3" }}} >
-                           <span>Edit</span>
-                       </NavLink>
-                   </Menu.Item>
-               </SubMenu>
-           </Menu>
-       )
+                className="action-triple-dot-submenu" theme="light"
+                mode="horizontal" style={{ lineHeight: "25px" }}>
+                <SubMenu
+                    key="sub1"
+                    title={<img className="dot-image"
+                        src={AppImages.moreTripleDot} alt="" width="16" height="16" />
+                    }>
+                    <Menu.Item key="1">
+                        <NavLink to={{ pathname: `/userProfileEdit`, state: { userData: record, moduleFrom: "3" } }} >
+                            <span>Edit</span>
+                        </NavLink>
+                    </Menu.Item>
+                </SubMenu>
+            </Menu>
+        )
     }
 ];
 
@@ -557,22 +557,22 @@ class UserModulePersonalDetail extends Component {
         }
     }
 
-    componentWillMount(){
+    componentWillMount() {
         console.log("componentWillMount")
-        let competition =  this.getEmptyCompObj();
-        this.setState({competition: competition});
+        let competition = this.getEmptyCompObj();
+        this.setState({ competition: competition });
         this.props.getOnlyYearListAction();
     }
 
-   async componentDidMount() {
+    async componentDidMount() {
         console.log("componentDidMount")
         if (this.props.location.state != null && this.props.location.state != undefined) {
             let userId = this.props.location.state.userId;
             let screenKey = this.props.location.state.screenKey;
             let screen = this.props.location.state.screen;
             console.log("****((((((" + this.props.location.state.tabKey);
-            let tabKey = this.props.location.state.tabKey!= undefined ? this.props.location.state.tabKey : '1';
-           await this.setState({ userId: userId, screenKey: screenKey, screen: screen, tabKey: tabKey });
+            let tabKey = this.props.location.state.tabKey != undefined ? this.props.location.state.tabKey : '1';
+            await this.setState({ userId: userId, screenKey: screenKey, screen: screen, tabKey: tabKey });
             this.apiCalls(userId);
             if (this.state.tabKey == "1") {
                 this.hanleActivityTableList(1, userId, this.state.competition, "parent");
@@ -595,26 +595,26 @@ class UserModulePersonalDetail extends Component {
         }
 
         if ((this.state.competition.competitionUniqueKey == null || this.state.competition.competitionUniqueKey == '-1'
-            ) && personal.competitions != undefined &&
-            personal.competitions.length > 0 
-            && this.props.userState.personalData!= nextProps.userState.personalData) {
-                //let years = [];
-                //let competitions = [];
-                // (personal.competitions || []).map((item, index) => {
-                //     let obj = {
-                //         id: item.yearRefId
-                //     }
-                //     years.push(obj);
-                // });
-                console.log("personal.competitions::" + JSON.stringify(personal.competitions));
-                 let yearRefId = -1;
-                this.setState({yearRefId: -1});
-                if(personal.competitions!=null && personal.competitions.length > 0 && yearRefId!= null){
-                    let competitions = personal.competitions;
-                    this.generateCompInfo(competitions, yearRefId);
-                    // this.setState({competitions: competitions, competition: this.getEmptyCompObj()});
-                    // this.tabApiCalls(this.state.tabKey, this.getEmptyCompObj(), this.state.userId);
-                }
+        ) && personal.competitions != undefined &&
+            personal.competitions.length > 0
+            && this.props.userState.personalData != nextProps.userState.personalData) {
+            //let years = [];
+            //let competitions = [];
+            // (personal.competitions || []).map((item, index) => {
+            //     let obj = {
+            //         id: item.yearRefId
+            //     }
+            //     years.push(obj);
+            // });
+            console.log("personal.competitions::" + JSON.stringify(personal.competitions));
+            let yearRefId = -1;
+            this.setState({ yearRefId: -1 });
+            if (personal.competitions != null && personal.competitions.length > 0 && yearRefId != null) {
+                let competitions = personal.competitions;
+                this.generateCompInfo(competitions, yearRefId);
+                // this.setState({competitions: competitions, competition: this.getEmptyCompObj()});
+                // this.tabApiCalls(this.state.tabKey, this.getEmptyCompObj(), this.state.userId);
+            }
         }
     }
 
@@ -632,54 +632,56 @@ class UserModulePersonalDetail extends Component {
         let personal = userState.personalData;
         let competitions = [];
 
-        if(value != -1){
+        if (value != -1) {
             competitions = personal.competitions.filter(x => x.yearRefId === value);
         }
-        else{
+        else {
             competitions = personal.competitions;
         }
-       
+
         this.generateCompInfo(competitions, value);
     }
 
     generateCompInfo = (competitions, yearRefId) => {
-        let teams = []; 
+        let teams = [];
         let divisions = [];
         console.log("competitions::" + JSON.stringify(competitions));
         (competitions || []).map((item, index) => {
-            if(item.teams!= null && item.teams.length > 0){
+            if (item.teams != null && item.teams.length > 0) {
                 (item.teams || []).map((i, ind) => {
                     let obj = {
                         teamId: i.teamId,
                         teamName: i.teamName
                     }
-                    if(i.teamId!= null)
+                    if (i.teamId != null)
                         teams.push(obj);
                 })
             }
-            
+
             let div = {
                 divisionId: item.divisionId,
-                divisionName : item.divisionName
+                divisionName: item.divisionName
             }
 
-            if(item.divisionName!= null)
+            if (item.divisionName != null)
                 divisions.push(div);
         });
-        
+
         let competition = this.getEmptyCompObj();
-        if(competitions!= null && competitions.length > 0){
+        if (competitions != null && competitions.length > 0) {
             competition = this.getEmptyCompObj();
         }
-            
-        this.setState({ competitions: competitions, competition: competition,
-        yearRefId: yearRefId, teams: teams, divisions: divisions });
+
+        this.setState({
+            competitions: competitions, competition: competition,
+            yearRefId: yearRefId, teams: teams, divisions: divisions
+        });
 
         this.tabApiCalls(this.state.tabKey, competition, this.state.userId, yearRefId);
     }
 
-    getEmptyCompObj = () =>{
-        let competition =  {
+    getEmptyCompObj = () => {
+        let competition = {
             team: { teamId: 0, teamName: "" },
             divisionName: "", competitionUniqueKey: '-1',
             competitionName: "All", year: 0
@@ -691,38 +693,38 @@ class UserModulePersonalDetail extends Component {
     onChangeSetValue = (value) => {
         let userState = this.props.userState;
         let personal = userState.personalData;
-        if(value!= -1){
+        if (value != -1) {
             let teams = [];
             let divisions = [];
-    
+
             let competition = personal.competitions.find(x => x.competitionUniqueKey === value);
-       
-            if(competition.teams!= null && competition.teams.length > 0){
+
+            if (competition.teams != null && competition.teams.length > 0) {
                 (competition.teams || []).map((i, ind) => {
                     let obj = {
                         teamId: i.teamId,
                         teamName: i.teamName
                     }
-                    if(i.teamId!= null)
+                    if (i.teamId != null)
                         teams.push(obj);
                 })
             }
-    
+
             let div = {
                 divisionId: competition.divisionId,
-                divisionName : competition.divisionName
+                divisionName: competition.divisionName
             }
-    
-            if(competition.divisionName!= null)
+
+            if (competition.divisionName != null)
                 divisions.push(div);
-    
+
             this.setState({ competition: competition, divisions: divisions, teams: teams });
             this.tabApiCalls(this.state.tabKey, competition, this.state.userId, this.state.yearRefId);
         }
-        else{
-            this.generateCompInfo(personal.competitions,  this.state.yearRefId);
+        else {
+            this.generateCompInfo(personal.competitions, this.state.yearRefId);
         }
-       
+
     }
 
     onChangeTab = (key) => {
@@ -813,7 +815,7 @@ class UserModulePersonalDetail extends Component {
     leftHandSideView = () => {
         let userState = this.props.userState;
         let personal = userState.personalData;
-        let compititionId = this.state.competition!= null ? this.state.competition.competitionUniqueKey : null;
+        let compititionId = this.state.competition != null ? this.state.competition.competitionUniqueKey : null;
 
         return (
             <div className="fluid-width mt-2" >
@@ -832,7 +834,7 @@ class UserModulePersonalDetail extends Component {
                 </div>
 
 
-                <div className="live-score-profile-img-view">
+                <div className="profile-img-view-style">
                     <div className="live-score-side-desc-view">
                         <div className="live-score-title-icon-view">
                             <div className="live-score-icon-view">
@@ -864,7 +866,7 @@ class UserModulePersonalDetail extends Component {
                             style={{ width: "100%", paddingRight: 1, paddingTop: '15px' }}
                             onChange={yearRefId => this.onChangeYear(yearRefId)}
                             value={this.state.yearRefId}>
-                                 <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                            <Option key={-1} value={-1}>{AppConstants.all}</Option>
                             {this.props.appState.yearList.map(item => {
                                 return (
                                     <Option key={"yearRefId" + item.id} value={item.id}>
@@ -878,7 +880,7 @@ class UserModulePersonalDetail extends Component {
                             style={{ width: "100%", paddingRight: 1, paddingTop: '15px' }}
                             onChange={(e) => this.onChangeSetValue(e)}
                             value={compititionId}>
-                                <Option key={-1} value={'-1'}>{AppConstants.all}</Option>
+                            <Option key={-1} value={'-1'}>{AppConstants.all}</Option>
                             {(this.state.competitions || []).map((comp, index) => (
                                 <Option key={comp.competitionUniqueKey} value={comp.competitionUniqueKey}>{comp.competitionName}</Option>
                             ))}
@@ -891,7 +893,7 @@ class UserModulePersonalDetail extends Component {
                             </div>
                             <span className='year-select-heading ml-3'>{AppConstants.team}</span>
                         </div>
-                        {(this.state.teams!= null && this.state.teams || []).map((item, index) => (
+                        {(this.state.teams != null && this.state.teams || []).map((item, index) => (
                             <div key={item.teamId} className="live-score-desc-text side-bar-profile-data">{item.teamName}</div>
                         ))}
 
@@ -903,7 +905,7 @@ class UserModulePersonalDetail extends Component {
                             </div>
                             <span className='year-select-heading ml-3'>{AppConstants.division}</span>
                         </div>
-                        {(this.state.divisions!= null && this.state.divisions || []).map((item, index) => (
+                        {(this.state.divisions != null && this.state.divisions || []).map((item, index) => (
                             <div key={item.divisionId} className="live-score-desc-text side-bar-profile-data">{item.divisionName}</div>
                         ))}
                         {/* <span className="live-score-desc-text side-bar-profile-data">{this.state.competition!= null ? this.state.competition.divisionName : null}</span> */}
@@ -1068,9 +1070,9 @@ class UserModulePersonalDetail extends Component {
                 </div>
                 <div className="row ">
                     <div className="col-sm user-module-row-heading" style={{ marginTop: '30px' }}>{AppConstants.otherInformation}</div>
-                    <div className="col-sm" style={{ marginTop: '7px' , marginRight: '15px'}}>
+                    <div className="col-sm" style={{ marginTop: '7px', marginRight: '15px' }}>
                         <div className="comp-buttons-view">
-                            <NavLink to={{ pathname: `/userProfileEdit`,state: {userData : personalByCompData[0] , moduleFrom:"4"}}} >
+                            <NavLink to={{ pathname: `/userProfileEdit`, state: { userData: personalByCompData[0], moduleFrom: "4" } }} >
                                 <Button className="other-info-edit-btn" type="primary" >
                                     {AppConstants.edit}
                                 </Button>
@@ -1079,50 +1081,50 @@ class UserModulePersonalDetail extends Component {
                     </div>
                 </div>
                 <div className="table-responsive home-dash-table-view" >
-					<div style={{ marginTop: '7px' , marginRight: '15px'}}>
-						<div className="other-info-row" style={{ paddingTop: '10px' }}>
-							<div className="year-select-heading other-info-label" >{AppConstants.gender}</div>
-							<div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].gender : null}</div>	  
-						</div>
-                        <div className="other-info-row">														   
-							<div className="year-select-heading other-info-label" >{AppConstants.countryOfBirth}</div>
-							<div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].countryName : null}</div>
-						</div>
-						<div className="other-info-row">
-							<div className="year-select-heading other-info-label">{AppConstants.nationalityReference}</div>
-							<div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].nationalityName : null}</div>	  			  
-						</div>
-						<div className="other-info-row">
-							<div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.childLangSpoken}</div>
-							<div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].languages : null}</div>
-						</div>
-						{/* <div className="other-info-row">
+                    <div style={{ marginTop: '7px', marginRight: '15px' }}>
+                        <div className="other-info-row" style={{ paddingTop: '10px' }}>
+                            <div className="year-select-heading other-info-label" >{AppConstants.gender}</div>
+                            <div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].gender : null}</div>
+                        </div>
+                        <div className="other-info-row">
+                            <div className="year-select-heading other-info-label" >{AppConstants.countryOfBirth}</div>
+                            <div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].countryName : null}</div>
+                        </div>
+                        <div className="other-info-row">
+                            <div className="year-select-heading other-info-label">{AppConstants.nationalityReference}</div>
+                            <div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].nationalityName : null}</div>
+                        </div>
+                        <div className="other-info-row">
+                            <div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.childLangSpoken}</div>
+                            <div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].languages : null}</div>
+                        </div>
+                        {/* <div className="other-info-row">
 							<div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.disability}</div>
 							<div className="live-score-desc-text side-bar-profile-data other-info-font">{personal.isDisability == 0 ? "No" : "Yes"}</div>
 						</div> */}
-					</div>
-				</div>
-			</div>
+                    </div>
+                </div>
+            </div>
         )
     }
 
     medicalView = () => {
         let userState = this.props.userState;
-        let medical  = userState.medicalData;
+        let medical = userState.medicalData;
         // let medical = [];
         // if(medData != null && medData.length > 0){
         //     medData[0]["userId"] = this.state.userId;
         //     medical = medData;
         // }
-    
+
         return (
             <div>
                 {
                     (medical || []).map((item, index) => (
                         <div key={item.userRegistrationId} className="table-responsive home-dash-table-view">
-                            <div className="col-sm" style={{ marginTop: '7px' , marginRight: '15px'}}>
+                            <div className="col-sm" style={{ marginTop: '7px', marginRight: '15px' }}>
                                 <div className="comp-buttons-view">
-                                    <NavLink to={{ pathname: `/userProfileEdit`,state: {userData : item, moduleFrom:"5"}}} >
+                                    <NavLink to={{ pathname: `/userProfileEdit`, state: { userData: item, moduleFrom: "5" } }} >
                                         <Button className="other-info-edit-btn" type="primary" >
                                             {AppConstants.edit}
                                         </Button>
@@ -1285,7 +1287,7 @@ class UserModulePersonalDetail extends Component {
 
     noDataAvailable = () => {
         return (
-            <div style={{display: 'flex'}}>
+            <div style={{ display: 'flex' }}>
                 <span className="inside-table-view mt-4">{AppConstants.noDataAvailable}</span>
             </div>
         )
@@ -1322,7 +1324,7 @@ class UserModulePersonalDetail extends Component {
     }
 
     render() {
-        let {activityPlayerList, activityManagerList, activityScorerList, activityParentList} = this.props.userState;
+        let { activityPlayerList, activityManagerList, activityScorerList, activityParentList } = this.props.userState;
 
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
@@ -1339,15 +1341,15 @@ class UserModulePersonalDetail extends Component {
                                 <div className="col-sm-9" style={{ backgroundColor: "#f7fafc", }}>
                                     <div>{this.headerView()}</div>
                                     <div className="inside-table-view mt-4" >
-                                        <Tabs activeKey={this.state.tabKey}  onChange={(e) => this.onChangeTab(e)}>
+                                        <Tabs activeKey={this.state.tabKey} onChange={(e) => this.onChangeTab(e)}>
                                             <TabPane tab={AppConstants.activity} key="1">
-                                                {activityPlayerList!= null && activityPlayerList.length > 0 && this.playerActivityView()}
-                                                {activityManagerList!= null && activityManagerList.length > 0 && this.managerActivityView()}
-                                                {activityScorerList!= null && activityScorerList.length > 0 && this.scorerActivityView()}
-                                                {activityParentList!= null && activityParentList.length > 0 && this.parentActivityView()}
+                                                {activityPlayerList != null && activityPlayerList.length > 0 && this.playerActivityView()}
+                                                {activityManagerList != null && activityManagerList.length > 0 && this.managerActivityView()}
+                                                {activityScorerList != null && activityScorerList.length > 0 && this.scorerActivityView()}
+                                                {activityParentList != null && activityParentList.length > 0 && this.parentActivityView()}
                                                 {activityPlayerList.length == 0 && activityManagerList.length == 0
-                                                 &&  activityScorerList.length == 0 && activityParentList.length == 0
-                                                         && this.noDataAvailable()}
+                                                    && activityScorerList.length == 0 && activityParentList.length == 0
+                                                    && this.noDataAvailable()}
                                             </TabPane>
                                             <TabPane tab={AppConstants.statistics} key="2">
                                                 {this.statisticsView()}

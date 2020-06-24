@@ -100,7 +100,7 @@ class LiveScoreGoalList extends Component {
                     key: 'miss',
                     sorter: (a, b) => tableSort(a, b, "miss"),
                 },
-              
+
                 {
                     title: 'Goals',
                     dataIndex: 'goal',
@@ -108,7 +108,7 @@ class LiveScoreGoalList extends Component {
                     sorter: (a, b) => tableSort(a, b, "goal"),
 
                 },
-                  {
+                {
                     title: 'Attempts',
                     dataIndex: 'attempts',
                     key: 'attempts',
@@ -217,7 +217,7 @@ class LiveScoreGoalList extends Component {
     // search key 
     onKeyEnterSearchText = (e) => {
         var code = e.keyCode || e.which;
-      
+
         if (code === 13) { //13 is the enter keycode
             this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, e.target.value)
         }
@@ -225,7 +225,7 @@ class LiveScoreGoalList extends Component {
 
     // on click of search icon
     onClickSearchIcon = () => {
-       
+
         if (this.state.searchText == null || this.state.searchText == "") {
         }
         else {

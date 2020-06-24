@@ -9,7 +9,7 @@ import ValidationConstants from "../../themes/validationConstant";
 import InputWithHead from "../../customComponents/InputWithHead";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getUmpireCompId } from '../../util/sessionStorage'
+import { getUmpireCompId, getUmpireCompetiton } from '../../util/sessionStorage'
 import { isArrayNotEmpty, captializedString } from "../../util/helpers";
 import Loader from '../../customComponents/loader'
 import {
@@ -41,13 +41,22 @@ class AddUmpire extends Component {
             showOption: false,
             competition_id: null,
             teamLoad: false,
-            affiliateLoader: false
+            affiliateLoader: false,
+            screenName: props.location ? props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null : null
         }
 
     }
 
     componentDidMount() {
-        const compId = JSON.parse(getUmpireCompId())
+
+        let compId = null
+
+        if (this.state.screenName == 'umpireDashboard') {
+            compId = JSON.parse(getUmpireCompetiton())
+        } else {
+            compId = JSON.parse(getUmpireCompId())
+        }
+
         this.props.umpireListAction({ refRoleId: 5, entityTypes: 1, compId: compId, offset: 0 })
 
         if (compId !== null) {
@@ -279,7 +288,17 @@ class AddUmpire extends Component {
                     <div className="col-sm" >
                         <Form.Item>
                             {getFieldDecorator(AppConstants.emailAdd, {
-                                rules: [{ required: true, message: ValidationConstants.emailField[0] }]
+                                rules: [
+                                    { 
+                                        required: true, 
+                                        message: ValidationConstants.emailField[0] 
+                                    },
+                                    {
+                                        type: "email",
+                                        pattern: new RegExp(AppConstants.emailExp),
+                                        message: ValidationConstants.email_validation
+                                    }
+                                ]
                             })(
                                 <InputWithHead
                                     required={"required-field pb-0 pt-0"}
@@ -480,13 +499,13 @@ class AddUmpire extends Component {
                             "affiliates": umpireData.affiliates
                         }
                     }
-                    this.props.addUmpireAction(body, affiliateId, exsitingUmpireId)
+                    this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName })
                 } else if (umpireRadioBtn == 'existing') {
                     body = {
                         "id": exsitingUmpireId,
                         "affiliates": umpireData.affiliates
                     }
-                    this.props.addUmpireAction(body, affiliateId, exsitingUmpireId)
+                    this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName })
                 }
 
             }
@@ -501,7 +520,7 @@ class AddUmpire extends Component {
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <Loader visible={this.props.umpireState.onSaveLoad} />
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
-                <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"2"} />
+                <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={this.state.screenName == 'umpireDashboard' ? '1' : "2"} />
                 <Layout>
                     {this.headerView()}
                     <Form onSubmit={this.onSaveClick} className="login-form" noValidate="noValidate">

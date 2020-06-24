@@ -151,7 +151,7 @@ class LiveScoreTeamView extends Component {
                     <span className="user-contact-heading">{name ? name : ''}</span>
                 </div>
 
-                <div className="live-score-profile-img-view">
+                <div className="profile-img-view-style">
                     <span className="user-contact-heading">{AppConstants.manager}</span>
                     <div className="live-score-side-desc-view">
                         <div className="live-score-title-icon-view">

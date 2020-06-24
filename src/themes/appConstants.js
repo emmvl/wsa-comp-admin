@@ -1371,12 +1371,20 @@ const AppConstants = {
   umpireCoach: "Umpire Coach",
   juniorUnbadge: "Junior Unbadge",
   umpirePools: "Umpire Pools",
-  competitionVenueAllocation:"Competition Venue allocation",
+  competitionVenueAllocation: "Competition Venue allocation",
   sqadSelection: 'Squad Selection',
   umpireExport: `/umpire/export?competitionId=`,
   invite: "Invite",
   send: "Send",
   noSend: "No Send",
+  coachSearch: 'Coach Search',
+  incident: "Incident",
+  selectIncident: "Select Incident",
+  _spectator: "Spectator",
+  discipline: "Discipline",
+  injuryAmbulance: "Injury Ambulance",
+  injuryFirstAdd: "Injury- First Add",
+  emailExp:"/^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/",
 };
 
 export default AppConstants;

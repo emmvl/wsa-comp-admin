@@ -216,6 +216,7 @@ function umpireState(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
+                onSaveLoad: false,
                 error: action.error,
                 status: action.status
             };
@@ -223,6 +224,7 @@ function umpireState(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
+                onSaveLoad: false,
                 error: action.error,
                 status: action.status
             };

@@ -116,7 +116,7 @@ class LiveScorePlayerProfile extends Component {
                     <span className="user-contact-heading">{this.playerName}</span>
                 </div>
 
-                <div className="live-score-profile-img-view">
+                <div className="profile-img-view-style">
                     <div className="live-score-side-desc-view">
                         <div className="live-score-title-icon-view">
                             <div className="live-score-icon-view">
@@ -173,23 +173,23 @@ class LiveScorePlayerProfile extends Component {
     tableView = () => {
         return (
             <div >
-                <div className="live-score-heading-text-view">
+                <div className="heading-text-view">
                     <div className="fluid-width"  >
                         <div className="row" >
                             <div className="col-sm" >
-                                <span className="live-score-heading-text">{AppConstants.activity}</span>
+                                <span className="heading-text">{AppConstants.activity}</span>
                             </div>
                             <div className="col-sm" >
-                                <span className="live-score-heading-text">{AppConstants.statistics}</span>
+                                <span className="heading-text">{AppConstants.statistics}</span>
                             </div>
                             <div className="col-sm"  >
-                                <span className="live-score-heading-text" >{AppConstants.personalDetails}</span>
+                                <span className="heading-text" >{AppConstants.personalDetails}</span>
                             </div>
                             <div className="col-sm" >
-                                <span className="live-score-heading-text">{AppConstants.medical}</span>
+                                <span className="heading-text">{AppConstants.medical}</span>
                             </div>
                             <div className="col-sm"  >
-                                <span className="live-score-heading-text">{AppConstants.registration}</span>
+                                <span className="heading-text">{AppConstants.registration}</span>
                             </div>
                         </div>
                     </div>
@@ -268,7 +268,7 @@ class LiveScorePlayerProfile extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"2"} />
                 <Layout className="live-score-player-profile-layout">
                     {/* {this.headerView()} */}

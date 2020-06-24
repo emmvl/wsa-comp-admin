@@ -39,6 +39,18 @@ function setMatchResult(record) {
     }
 }
 
+function getVenueName(data) {
+ 
+    let venue_name = ""
+    if(data.venue.shortName){
+        venue_name = data.venue.shortName + " - " + data.name
+    }else{
+        venue_name = data.venue.name + " - " + data.name
+    }
+
+    return venue_name
+}
+
 
 const columns = [
     {
@@ -94,7 +106,8 @@ const columns = [
         dataIndex: 'venueCourt',
         key: 'venueCourt',
         sorter: (a, b) => tableSort(a, b, "venueCourt"),
-        render: (venueCourt, record) => <span>{venueCourt.name}</span>
+        // render: (venueCourt, record) => <span>{venueCourt.venue.shortName + " - " + venueCourt.name}</span>
+        render : (venueCourt, record)=><span>{getVenueName(venueCourt)}</span>
     },
     {
         title: 'Division',
