@@ -358,7 +358,11 @@ const columnsPersonalPrimaryContacts = [
     {
         title: 'Name',
         dataIndex: 'parentName',
-        key: 'parentName'
+        key: 'parentName',
+         render: (parentName, record) =>
+        <NavLink to={{ pathname: `/userPersonal`, state: {userId: record.parentUserId} }}>
+            <span className="input-heading-add-another pt-0" >{parentName}</span>
+        </NavLink>
     },
     {
         title: 'Street',
@@ -405,6 +409,70 @@ const columnsPersonalPrimaryContacts = [
                   }>
                    <Menu.Item key="1">
                        <NavLink to={{ pathname: `/userProfileEdit`,state: { userData : record , moduleFrom:"2" }}} >
+                           <span>Edit</span>
+                       </NavLink>
+                   </Menu.Item>
+               </SubMenu>
+           </Menu>
+       )
+   }
+];
+
+const columnsPersonalChildContacts = [
+    {
+        title: 'Name',
+        dataIndex: 'childName',
+        key: 'childName',
+        render: (childName, record) =>
+        <NavLink to={{ pathname: `/userPersonal`, state: {userId: record.childUserId} }}>
+            <span className="input-heading-add-another pt-0" >{childName}</span>
+        </NavLink>
+    },
+    {
+        title: 'Street',
+        dataIndex: 'street',
+        key: 'street'
+    },
+    {
+        title: 'Suburb',
+        dataIndex: 'suburb',
+        key: 'suburb'
+    },
+    {
+        title: 'State',
+        dataIndex: 'state',
+        key: 'state'
+    },
+    {
+        title: 'Postcode',
+        dataIndex: 'postalCode',
+        key: 'postalCode'
+    },
+    {
+        title: 'Phone Number',
+        dataIndex: 'mobileNumber',
+        key: 'mobileNumber'
+    },
+    {
+        title: 'Email',
+        dataIndex: 'email',
+        key: 'email'
+    },
+    {
+        title: 'Action',
+        dataIndex: 'isUser',
+        key: 'isUser',
+        width:80,
+        render: (data, record) => (
+            <Menu className="action-triple-dot-submenu" theme="light"
+               mode="horizontal" style={{ lineHeight: "25px" }}>
+               <SubMenu
+                   key="sub1"
+                   title={<img className="dot-image" src={AppImages.moreTripleDot}
+                           alt="" width="16" height="16"/>
+                  }>
+                   <Menu.Item key="1">
+                       <NavLink to={{ pathname: `/userProfileEdit`,state: { userData : record , moduleFrom:"6" }}} >
                            <span>Edit</span>
                        </NavLink>
                    </Menu.Item>
@@ -1035,6 +1103,7 @@ class UserModulePersonalDetail extends Component {
         let personal = userState.personalData;
         let personalByCompData = userState.personalByCompData != null ? userState.personalByCompData : [];
         let primaryContacts = personalByCompData.length > 0 ? personalByCompData[0].primaryContacts : [];
+        let childContacts = personalByCompData.length > 0 ? personalByCompData[0].childContacts : [];
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="user-module-row-heading">{AppConstants.address}</div>
@@ -1046,17 +1115,32 @@ class UserModulePersonalDetail extends Component {
                         loading={userState.onPersonLoad == true && true}
                     />
                 </div>
-
-                <div className="user-module-row-heading" style={{ marginTop: '30px' }}>{AppConstants.parentOrGuardianDetail}</div>
-                <div className="table-responsive home-dash-table-view">
-                    <Table className="home-dashboard-table"
-                        columns={columnsPersonalPrimaryContacts}
-                        dataSource={primaryContacts}
-                        pagination={false}
-                        loading={userState.onPersonLoad == true && true}
-                    />
+                {primaryContacts!= null && primaryContacts.length > 0 && 
+                <div>
+                    <div className="user-module-row-heading" style={{ marginTop: '30px' }}>{AppConstants.parentOrGuardianDetail}</div>
+                    <div className="table-responsive home-dash-table-view">
+                        <Table className="home-dashboard-table"
+                            columns={columnsPersonalPrimaryContacts}
+                            dataSource={primaryContacts}
+                            pagination={false}
+                            loading={userState.onPersonLoad == true && true}
+                        />
+                    </div>
                 </div>
-
+                }
+                {childContacts!= null && childContacts.length > 0 &&
+                <div>
+                    <div className="user-module-row-heading" style={{ marginTop: '30px' }}>{AppConstants.childDetails}</div>
+                    <div className="table-responsive home-dash-table-view">
+                        <Table className="home-dashboard-table"
+                            columns={columnsPersonalChildContacts}
+                            dataSource={childContacts}
+                            pagination={false}
+                            loading={userState.onPersonLoad == true && true}
+                        />
+                    </div>
+                </div>
+                }
                 <div className="user-module-row-heading" style={{ marginTop: '30px' }}>{AppConstants.emergencyContacts}</div>
                 <div className="table-responsive home-dash-table-view">
                     <Table className="home-dashboard-table"

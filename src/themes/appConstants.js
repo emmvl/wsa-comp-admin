@@ -1377,6 +1377,7 @@ const AppConstants = {
   invite: "Invite",
   send: "Send",
   noSend: "No Send",
+  childDetails: "Child Details"
 };
 
 export default AppConstants;
