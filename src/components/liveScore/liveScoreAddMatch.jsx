@@ -48,6 +48,7 @@ import { entityTypes } from '../../util/entityTypes'
 import { refRoleTypes } from '../../util/refRoles'
 import { umpireListAction } from "../../store/actions/umpireAction/umpireAction"
 import { liveScoreGetMatchDetailInitiate } from "../../store/actions/LiveScoreAction/liveScoreMatchAction";
+// import { copyFileSync } from "fs";
 
 const { Footer, Content, Header } = Layout;
 const { Option } = Select;
@@ -80,9 +81,10 @@ class LiveScoreAddMatch extends Component {
 
         if (this.state.umpireKey == 'umpire') {
             const { id } = JSON.parse(getUmpireCompetitonData())
+
             const { scoringType } = JSON.parse(getUmpireCompetitonData())
             this.setState({ compId: id, scoringType: scoringType })
-          
+
             if (id !== null) {
                 this.props.getCompetitonVenuesList(id, "");
                 this.props.getLiveScoreDivisionList(id)
@@ -122,21 +124,21 @@ class LiveScoreAddMatch extends Component {
             this.props.liveScoreUpdateMatchAction('', "clearData")
 
             if (this.state.umpireKey == 'umpire') {
-                const {lineupSelectionEnabled, status } = JSON.parse(getUmpireCompetitonData())
+                const { lineupSelectionEnabled, status } = JSON.parse(getUmpireCompetitonData())
                 isLineUpEnable = lineupSelectionEnabled
                 match_status = status
             } else {
-                const {lineupSelectionEnabled, status} = JSON.parse(getLiveScoreCompetiton())
+                const { lineupSelectionEnabled, status } = JSON.parse(getLiveScoreCompetiton())
                 isLineUpEnable = lineupSelectionEnabled
                 match_status = status
-    
+
             }
-    
-            if(isLineUpEnable == 1 && match_status !== "ENDED"){
-                this.setState({isLineUp:1})
+
+            if (isLineUpEnable == 1 && match_status !== "ENDED") {
+                this.setState({ isLineUp: 1 })
                 this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 1)
-            }else{
-                this.setState({isLineUp:0})
+            } else {
+                this.setState({ isLineUp: 0 })
                 this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 0)
             }
 
@@ -266,7 +268,6 @@ class LiveScoreAddMatch extends Component {
 
         let { addEditMatch, matchData, start_date, start_time, matchResult, forfietedTeam } = this.props.liveScoreMatchState
 
-        console.log(matchResult, 'matchResult')
         let date = new Date()
         let endMatchDate = moment(date).format("YYYY-MMM-DD")
         let endMatchTime = moment(date).format("HH:mm")
@@ -321,9 +322,7 @@ class LiveScoreAddMatch extends Component {
     ////modal view
     forfietModalView(getFieldDecorator) {
         let { addEditMatch, forfietedTeam } = this.props.liveScoreMatchState
-        console.log(this.props.liveScoreMatchState, 'this.props.liveScoreMatchState~~~~')
-
-
+     
         return (
             <Modal
                 visible={this.state.forfeitVisible}
@@ -362,8 +361,6 @@ class LiveScoreAddMatch extends Component {
     abandonReasonResult = () => {
 
         let { addEditMatch, matchData, start_date, start_time, matchResult, abandoneReason } = this.props.liveScoreMatchState
-
-        console.log(matchResult, 'matchResult')
         let date = new Date()
         let endMatchDate = moment(date).format("YYYY-MMM-DD")
         let endMatchTime = moment(date).format("HH:mm")
@@ -411,9 +408,6 @@ class LiveScoreAddMatch extends Component {
 
     abandonMatchView() {
         let { addEditMatch, abandoneReason } = this.props.liveScoreMatchState
-        console.log(this.props.liveScoreMatchState, 'this.props.liveScoreMatchState~~~~')
-
-
         return (
             <Modal
                 visible={this.state.abandonVisible}
@@ -1103,9 +1097,35 @@ class LiveScoreAddMatch extends Component {
                         roleId: 4,
                     }
 
+                    if (this.state.scoringType !== 'SINGLE') {
 
-                    scorerData = [scorers_1, scorers_2]
+                        if (scorer1 && scorer2) {
+                            scorerData = [scorers_1, scorers_2]
+                        } else if (scorer1) {
+                            scorerData = [scorers_1]
+                        } else if (scorer2) {
+                            scorerData = [scorers_2]
+                        }
 
+
+                    } else {
+                        if (scorer1) {
+                            scorerData = [scorers_1]
+                        }
+
+
+                    }
+
+                    // if (umpire1TextField && umpire2TextField) {
+                    //     umpireData = [umpire_1_Obj, umpire_2_Obj]
+
+                    // } else if (umpire1TextField) {
+                    //     umpireData = [umpire_1_Obj]
+
+                    // } else if (umpire2TextField) {
+                    //     umpireData = [umpire_2_Obj]
+
+                    // }
 
                     umpireData = [umpire_1_Obj, umpire_2_Obj]
 
@@ -1137,7 +1157,38 @@ class LiveScoreAddMatch extends Component {
                         roleId: 4,
                     }
 
-                    umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1, scorers_2]
+                    if (this.state.scoringType !== 'SINGLE') {
+                        if (umpire1Name && umpire2Name && scorer1 && scorer2) {
+                            umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1, scorers_2]
+                        } else if (umpire1Name && umpire2Name && scorer1) {
+                            umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1]
+                        } else if (umpire1Name && umpire2Name && scorer2) {
+                            umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_2]
+                        } else if (umpire1Name && scorer1) {
+
+                            umpireData = [umpire_1_Obj, scorers_1]
+                        } else if (umpire2Name && scorer1) {
+
+                            umpireData = [umpire_2_Obj, scorers_1]
+                        } else if (umpire1Name && scorer2) {
+
+                            umpireData = [umpire_1_Obj, scorers_1]
+                        } else if (umpire2Name && scorer2) {
+
+                            umpireData = [umpire_2_Obj, scorers_2]
+                        }
+
+
+                    } else {
+                        if (scorers_1) {
+                            umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1]
+                        } else {
+                            umpireData = [umpire_1_Obj, umpire_2_Obj]
+                        }
+
+                    }
+
+
                 }
 
                 // const { id } = JSON.parse(getLiveScoreCompetiton())
@@ -1192,18 +1243,18 @@ class LiveScoreAddMatch extends Component {
                 {!this.state.membershipIsUsed &&
                     <div className="footer-view">
                         <div className="row">
-                            <div className="col-sm">
-                                <div className="reg-add-save-button">
-                                    <Button onClick={() => history.push(this.state.key == 'dashboard' ? 'liveScoreDashboard' : this.state.key == 'umpireRoaster' ? 'umpireRoaster' : this.state.umpireKey == 'umpire' ? 'umpireDashboard' : '/liveScoreMatches')} type="cancel-button">{AppConstants.cancel}</Button>
-                                    {this.state.isEdit == true && <Button onClick={() => this.setState({ forfeitVisible: true })} className="ml-3" type="cancel-button">{AppConstants.forfiet}</Button>}
-                                    {this.state.isEdit == true && <Button onClick={() => this.setState({ abandonVisible: true })} className="ml-3" type="cancel-button">{AppConstants.abandon}</Button>}
-                                    {this.state.isEdit == true && <Button onClick={() => this.endMatchResult()} className="ml-3" type="cancel-button">{AppConstants.endMatch}</Button>}
+                            <div class="col-sm-10 col-md-9">
+                                <div className="reg-add-save-button p-0">
+                                    <Button className="button-spacing-style ml-2 mr-2" onClick={() => history.push(this.state.key == 'dashboard' ? 'liveScoreDashboard' : this.state.key == 'umpireRoaster' ? 'umpireRoaster' : this.state.umpireKey == 'umpire' ? 'umpireDashboard' : '/liveScoreMatches')} type="cancel-button">{AppConstants.cancel}</Button>
+                                    {this.state.isEdit == true && <Button className="button-spacing-style ml-2 mr-2" onClick={() => this.setState({ forfeitVisible: true })} type="cancel-button">{AppConstants.forfiet}</Button>}
+                                    {this.state.isEdit == true && <Button className="button-spacing-style ml-2 mr-2" onClick={() => this.setState({ abandonVisible: true })} type="cancel-button">{AppConstants.abandon}</Button>}
+                                    {this.state.isEdit == true && <Button className="button-spacing-style ml-2 mr-2" onClick={() => this.endMatchResult()} type="cancel-button">{AppConstants.endMatch}</Button>}
                                 </div>
                             </div>
-                            <div className="col-sm">
-                                <div className="comp-buttons-view">
+                            <div class="col-sm-2 col-md-3 ">
+                                <div className="comp-buttons-view mt-0">
                                     <Button
-                                        className="user-approval-button" type="primary" htmlType="submit" >
+                                        className="user-approval-button  mt-0" type="primary" htmlType="submit" >
                                         {AppConstants.save}
                                     </Button>
                                 </div>
@@ -1214,7 +1265,6 @@ class LiveScoreAddMatch extends Component {
             </div>
         )
     };
-
 
     /////// render function
     render() {

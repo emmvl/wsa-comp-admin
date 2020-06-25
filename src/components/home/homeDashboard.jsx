@@ -308,7 +308,10 @@ class HomeDashboard extends Component {
                     }
                     
                     if(this.props.homeDashboardState.actionBoxList == null || this.state.organisationId == null){
-                        await this.setState({organisationId: userOrganisation[0].organisationUniqueKey})
+                        console.log("getOrganisationData::" + JSON.stringify(getOrganisationData()));
+                        let organisationUniqueKey = getOrganisationData() == null ? userOrganisation[0].organisationUniqueKey : 
+                                                getOrganisationData().organisationUniqueKey
+                        await this.setState({organisationId: organisationUniqueKey})
                         this.handleActionBoxList(1);
                     }
                 }

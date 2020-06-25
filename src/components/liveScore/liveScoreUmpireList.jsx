@@ -29,7 +29,7 @@ function tableSort(a, b, key) {
 ////columens data
 const columns = [
     {
-        title: 'Date',
+        title: 'Date', 
         dataIndex: 'match',
         key: 'match',
         sorter: (a, b) => tableSort(a, b, "match"),
@@ -106,7 +106,8 @@ class LiveScoreUmpireList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            searchText: ""
+            searchText: "",
+            competitionId: null
         };
     }
 
@@ -126,6 +127,8 @@ class LiveScoreUmpireList extends Component {
         } else {
             history.push("/")
         }
+
+        this.setState({ competitionId: id })
     }
 
     handleUmpireTableList(page, competitionId) {
@@ -213,9 +216,8 @@ class LiveScoreUmpireList extends Component {
                     </div>
 
 
-                    <div className="col-sm" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
+                    <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
                         <div className="row">
-
                             <div className="col-sm">
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
@@ -227,20 +229,7 @@ class LiveScoreUmpireList extends Component {
                                         justifyContent: "flex-end"
                                     }}
                                 >
-                                    {/* search box */}
-                                    <div className="col-sm pt-0 " style={{ display: "flex", justifyContent: 'flex-end', }} >
-                                        <div className="comp-product-search-inp-width" >
-                                            <Input className="product-reg-search-input"
-                                                onChange={(e) => this.onChangeSearchText(e)}
-                                                placeholder="Search..."
-                                                onKeyPress={(e) => this.onKeyEnterSearchText(e)}
-                                                prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                                    onClick={() => this.onClickSearchIcon()}
-                                                />}
-                                                allowClear
-                                            />
-                                        </div>
-                                    </div>
+                                   
                                     <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
@@ -255,10 +244,53 @@ class LiveScoreUmpireList extends Component {
                                     </Button>
                                 </div>
                             </div>
+                               <div className="col-sm">
+                                    <div
+                                        className="comp-dashboard-botton-view-mobile"
+                                        style={{
+                                            width: "100%",
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            alignItems: "center",
+                                            justifyContent: "flex-end"
+                                        }}
+                                    >
+                                        <NavLink to={{ 
+                                            pathname: `/liveScoreUmpireImport`,
+                                            state: { screenName: 'liveScoreUmpireList' }
+                                        }} className="text-decoration-none">
+                                            <Button className="primary-add-comp-form" type="primary">
+                                                <div className="row">
+                                                    <div className="col-sm">
+                                                        <img 
+                                                            src={AppImages.import}
+                                                            alt=""
+                                                            className="export-image"
+                                                        />
+                                                        {AppConstants.import}
+                                                    </div>
+                                                </div>
+                                            </Button>
+                                        </NavLink>
+                                    </div>
+                                </div>
                         </div>
                     </div>
                 </div>
-
+                {/* search box */}
+                <div className="mt-5" style={{ display: "flex", justifyContent: 'flex-end' }} >
+                                        <div className="comp-product-search-inp-width" >
+                                            <Input className="product-reg-search-input"
+                                                onChange={(e) => this.onChangeSearchText(e)}
+                                                placeholder="Search..."
+                                                onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                                prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                                    onClick={() => this.onClickSearchIcon()}
+                                                />}
+                                                allowClear
+                                            />
+                                        </div>
+                                    </div>
             </div>
         )
     }

@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 import React, { Component } from "react";
 import { Layout, Breadcrumb, Button, Form, Select, Radio, Spin, AutoComplete } from 'antd';
 import './umpire.css';
@@ -9,8 +10,8 @@ import ValidationConstants from "../../themes/validationConstant";
 import InputWithHead from "../../customComponents/InputWithHead";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getUmpireCompId } from '../../util/sessionStorage'
-import { isArrayNotEmpty, captializedString } from "../../util/helpers";
+import { getUmpireCompId, getUmpireCompetiton } from '../../util/sessionStorage'
+import { isArrayNotEmpty, captializedString, regexNumberExpression } from "../../util/helpers";
 import Loader from '../../customComponents/loader'
 import {
     umpireListAction,
@@ -41,13 +42,22 @@ class AddUmpire extends Component {
             showOption: false,
             competition_id: null,
             teamLoad: false,
-            affiliateLoader: false
+            affiliateLoader: false,
+            screenName: props.location ? props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null : null
         }
 
     }
 
     componentDidMount() {
-        const compId = JSON.parse(getUmpireCompId())
+
+        let compId = null
+
+        if (this.state.screenName == 'umpireDashboard') {
+            compId = JSON.parse(getUmpireCompetiton())
+        } else {
+            compId = JSON.parse(getUmpireCompId())
+        }
+
         this.props.umpireListAction({ refRoleId: 5, entityTypes: 1, compId: compId, offset: 0 })
 
         if (compId !== null) {
@@ -215,7 +225,7 @@ class AddUmpire extends Component {
                                     placeholder={AppConstants.selectAffiliate}
                                     style={{ width: "100%", }}
                                     onChange={(affiliateId) => this.props.updateAddUmpireData(affiliateId, 'affiliateId')}
-                                    value={affiliateId}
+                                    // value={affiliateId}
                                     notFoundContent={onAffiliateLoad == true ? <Spin size="small" /> : null}
                                     optionFilterProp="children"
                                 >
@@ -251,7 +261,7 @@ class AddUmpire extends Component {
                                     heading={AppConstants.firstName}
                                     placeholder={AppConstants.firstName}
                                     onChange={(firstName) => this.props.updateAddUmpireData(captializedString(firstName.target.value), 'firstName')}
-                                    value={umpireData.firstName}
+                                // value={umpireData.firstName}
                                 />
                             )}
 
@@ -268,7 +278,7 @@ class AddUmpire extends Component {
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.lastName}
                                     onChange={(lastName) => this.props.updateAddUmpireData(captializedString(lastName.target.value), 'lastName')}
-                                    value={umpireData.lastName}
+                                // value={umpireData.lastName}
                                 />
                             )}
                         </Form.Item>
@@ -279,14 +289,24 @@ class AddUmpire extends Component {
                     <div className="col-sm" >
                         <Form.Item>
                             {getFieldDecorator(AppConstants.emailAdd, {
-                                rules: [{ required: true, message: ValidationConstants.emailField[0] }]
+                                rules: [
+                                    {
+                                        required: true,
+                                        message: ValidationConstants.emailField[0]
+                                    },
+                                    {
+                                        type: "email",
+                                        pattern: new RegExp(AppConstants.emailExp),
+                                        message: ValidationConstants.email_validation
+                                    }
+                                ]
                             })(
                                 <InputWithHead
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.emailAdd}
                                     placeholder={AppConstants.enterEmail}
                                     onChange={(email) => this.props.updateAddUmpireData(email.target.value, 'email')}
-                                    value={umpireData.email}
+                                    // value={umpireData.email}
                                     disabled={this.state.isEdit == true && true}
                                 />
                             )}
@@ -302,9 +322,9 @@ class AddUmpire extends Component {
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.contactNO}
                                     placeholder={AppConstants.enterContactNo}
-                                    maxLength={15}
+                                    maxLength={10}
                                     onChange={(mobileNumber) => this.props.updateAddUmpireData(mobileNumber.target.value, 'mobileNumber')}
-                                    value={umpireData.mobileNumber}
+                                // value={umpireData.mobileNumber}
                                 />
                             )}
                         </Form.Item>
@@ -328,7 +348,7 @@ class AddUmpire extends Component {
                                     placeholder={AppConstants.selectAffiliate}
                                     style={{ width: "100%", }}
                                     onChange={(affiliateId) => this.props.updateAddUmpireData(affiliateId, 'affiliateId')}
-                                    value={affiliateId}
+                                    // value={affiliateId}
                                     optionFilterProp="children"
                                 // onSearch={(name) => this.props.getUmpireAffiliateList({ id: this.state.competition_id, name: name })}
                                 // notFoundContent={onAffiliateLoad == true ? <Spin size="small" /> : null}
@@ -467,7 +487,7 @@ class AddUmpire extends Component {
                             "id": umpireData.id,
                             "firstName": umpireData.firstName,
                             "lastName": umpireData.lastName,
-                            "mobileNumber": umpireData.mobileNumber,
+                            "mobileNumber": regexNumberExpression(umpireData.mobileNumber),
                             "email": umpireData.email,
                             "affiliates": umpireData.affiliates
                         }
@@ -475,18 +495,18 @@ class AddUmpire extends Component {
                         body = {
                             "firstName": umpireData.firstName,
                             "lastName": umpireData.lastName,
-                            "mobileNumber": umpireData.mobileNumber,
+                            "mobileNumber": regexNumberExpression(umpireData.mobileNumber),
                             "email": umpireData.email,
                             "affiliates": umpireData.affiliates
                         }
                     }
-                    this.props.addUmpireAction(body, affiliateId, exsitingUmpireId)
+                    this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName })
                 } else if (umpireRadioBtn == 'existing') {
                     body = {
                         "id": exsitingUmpireId,
                         "affiliates": umpireData.affiliates
                     }
-                    this.props.addUmpireAction(body, affiliateId, exsitingUmpireId)
+                    this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName })
                 }
 
             }
@@ -499,9 +519,9 @@ class AddUmpire extends Component {
 
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <Loader visible={this.props.umpireState.onLoad} />
+                <Loader visible={this.props.umpireState.onSaveLoad} />
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
-                <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"2"} />
+                <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={this.state.screenName == 'umpireDashboard' ? '1' : "2"} />
                 <Layout>
                     {this.headerView()}
                     <Form onSubmit={this.onSaveClick} className="login-form" noValidate="noValidate">

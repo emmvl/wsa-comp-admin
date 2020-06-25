@@ -37,7 +37,8 @@ import {
   getParticipateYearAndCompetitionListSaga,
   getOwnYearAndCompetitionListSaga,
   getEnhancedRoundRobinTypesSaga,
-  exportFilesSaga
+  exportFilesSaga,
+  userExportFilesSaga
 } from "./appSaga";
 
 import {
@@ -110,7 +111,7 @@ import {
   venueByIdSaga, venueDeleteSaga,
   getGenderSaga, getPhotoTypeSaga, getAppyToSaga, getExtraTimeDrawSaga,
   getFinalsFixtureTemplateSaga, courtListSaga, getSendInvitesSaga, RegistrationRestrictionType,
-  getAllowTeamRegistrationTypeSaga, disabilityReferenceSaga
+  getAllowTeamRegistrationTypeSaga, disabilityReferenceSaga, getCommonInitSaga
 } from "./commonSaga/commonSaga";
 
 import { fixtureTemplateSaga } from '../saga/competitionManagementSaga/competitionManagementSaga';
@@ -174,7 +175,7 @@ import * as divisionsaga from "../saga/liveScoreSaga/liveScoreDivisionSaga"
 
 import { liveScoreGameTimeStatisticsSaga } from '../saga/liveScoreSaga/liveScoreGameTimeStatisticsSaga'
 import { liveScoreSettingSaga, liveScorePostSaga, settingRegInviteesSaga } from './liveScoreSaga/liveScoreSettingSaga'
-import { liveScoreUmpiresSaga } from './liveScoreSaga/liveScoreUmpiresSaga'
+import { liveScoreUmpiresSaga, liveScoreUmpiresImportSaga } from './liveScoreSaga/liveScoreUmpiresSaga'
 
 import { liveScoreTeamAttendanceListSaga } from './liveScoreSaga/liveScoreTeamAttendanceSaga'
 
@@ -190,7 +191,7 @@ import * as umpireDashboardSaga from "../saga/umpireSaga/umpireDashboardSaga"
 import * as umpireCompSaga from "../saga/umpireSaga/umpireCompetitionSaga"
 import * as umpireRoasterSaga from "../saga/umpireSaga/umpireRoasterSaga"
 import * as umpireSaga from "../saga/umpireSaga/umpireSaga"
-
+import * as assignUmpireSaga from "../saga/umpireSaga/assignUmpireSaga";
 
 export default function* root_saga() {
   yield takeEvery(ApiConstants.API_LOGIN_LOAD, loginApiSaga);
@@ -755,6 +756,7 @@ export default function* root_saga() {
 
   /// Disability Reference Saga
   yield takeEvery(ApiConstants.API_DISABILITY_REFERENCE_LOAD, disabilityReferenceSaga)
+  yield takeEvery(ApiConstants.API_GET_COMMON_INIT_LOAD, getCommonInitSaga)
 
   ///Action Box List
   yield takeEvery(ApiConstants.API_GET_ACTION_BOX_LOAD, actionBoxListSaga)
@@ -763,6 +765,15 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_UPDATE_ACTION_BOX_LOAD, updateActionBoxSaga)
 
   yield takeEvery(ApiConstants.API_UMPIRE_IMPORT_LOAD, umpireDashboardSaga.umpireImportSaga)
+  //////assign umpire get list
+  yield takeEvery(ApiConstants.API_GET_ASSIGN_UMPIRE_LIST_LOAD, assignUmpireSaga.getAssignUmpireListSaga)
+  //////assign umpire get list
+  yield takeEvery(ApiConstants.API_ASSIGN_UMPIRE_FROM_LIST_LOAD, assignUmpireSaga.assignUmpireSaga)
+  /////unassign umpire from the match(delete)
+  yield takeEvery(ApiConstants.API_UNASSIGN_UMPIRE_FROM_LIST_LOAD, assignUmpireSaga.unassignUmpireSaga)
 
-  yield takeEvery(ApiConstants.CHANGE_PLAYER_LINEUP_LOAD , playerLineUpStatusChnage)
+  yield takeEvery(ApiConstants.CHANGE_PLAYER_LINEUP_LOAD, playerLineUpStatusChnage)
+
+  yield takeEvery(ApiConstants.API_USER_EXPORT_FILES_LOAD, userExportFilesSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_UMPIRES_IMPORT_LOAD, liveScoreUmpiresImportSaga)
 }

@@ -633,7 +633,9 @@ class RegistrationMembershipFee extends Component {
 													})(
 														<Radio.Group className="reg-competition-radio" 
 															onChange={(e) => this.allowTeamRegistrationPlayer(e.target.value, index, 'allowTeamRegistrationTypeRefId')} 
-															setFieldsValue={item.allowTeamRegistrationTypeRefId}>
+                                                            setFieldsValue={item.allowTeamRegistrationTypeRefId}
+                                                            disabled={this.state.membershipIsUsed}
+                                                            >
 																{(allowTeamRegistration || []).map((fix, fixIndex) => (
 																	<Radio key={fix.id} value={fix.id}>{fix.description}</Radio>
 																))}

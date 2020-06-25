@@ -506,10 +506,12 @@ class CompetitionOpenRegForm extends Component {
                 }
             }
         }
-        if (this.state.divisionState === true) {
-            this.setState({ divisionState: false })
-            this.setDetailsFieldValue()
-        }
+        if (competitionFeesState.onLoad === false && this.state.divisionState === true) {
+            setTimeout(() => {
+              this.setDetailsFieldValue();
+            }, 100);
+            this.setState({ divisionState: false });
+          }
     }
 
     ////disable or enable particular fields
@@ -799,7 +801,7 @@ class CompetitionOpenRegForm extends Component {
                         }
                         formData.append("logoIsDefault", postData.logoIsDefault)
                         this.props.saveCompetitionFeesDetailsAction(formData, compFeesState.defaultCompFeesOrgLogoData.id, this.state.sourceModule)
-                        this.setState({ loading: true })
+                        this.setState({ loading: true, divisionState: true });
                     } else {
                         message.error(ValidationConstants.competitionLogoIsRequired)
                     }

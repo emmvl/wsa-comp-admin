@@ -183,7 +183,8 @@ class UserOurOragnization extends Component {
             addressOne: affiliate.street1,
             suburb: affiliate.suburb,
             stateRefId: affiliate.stateRefId,
-            postcode: affiliate.postalCode
+            postcode: affiliate.postalCode,
+            orgEmail:affiliate.email
         })
         let contacts = affiliate.contacts;
         // console.log("contacts::" + contacts);
@@ -723,12 +724,23 @@ class UserOurOragnization extends Component {
                     value={affiliate.phoneNo}
                     disabled={!this.state.isEditable}
                 />
-
-                <InputWithHead heading={AppConstants.email} placeholder={AppConstants.email}
-                    onChange={(e) => this.onChangeSetValue(e.target.value, "email")}
-                    value={affiliate.email}
-                    disabled={!this.state.isEditable}
-                />
+                <Form.Item >
+                    {getFieldDecorator('orgEmail', {
+                        rules: [
+                            {
+                                type: "email",
+                                pattern: new RegExp(AppConstants.emailExp),
+                                message: ValidationConstants.email_validation
+                            }
+                        ],
+                    })(
+                        <InputWithHead heading={AppConstants.email} placeholder={AppConstants.email}
+                            onChange={(e) => this.onChangeSetValue(e.target.value, "email")}
+                            value={affiliate.email}
+                            disabled={!this.state.isEditable}
+                        />
+                    )}
+                </Form.Item>
             </div>
         )
     }
@@ -795,7 +807,17 @@ class UserOurOragnization extends Component {
 
                         <Form.Item >
                             {getFieldDecorator(`email${index}`, {
-                                rules: [{ required: true, message: ValidationConstants.emailField[0] }],
+                                rules: [
+                                    { 
+                                        required: true, 
+                                        message: ValidationConstants.emailField[0] 
+                                    },
+                                    {
+                                        type: "email",
+                                        pattern: new RegExp(AppConstants.emailExp),
+                                        message: ValidationConstants.email_validation
+                                    }
+                                ],
                             })(
                                 <InputWithHead
                                     required={"required-field pt-0 pb-0"}

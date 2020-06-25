@@ -27,7 +27,6 @@ function* errorSaga(error) {
 ////*********************** */
 
 export function* umpireListDashboardSaga(action) {
-    console.log(action, 'getUmpireDashboardList')
     try {
         const result = yield call(LiveScoreAxiosApi.umpireListDashboard, action.data);
         if (result.status === 1) {
@@ -91,8 +90,8 @@ export function* umpireImportSaga(action) {
                 result: result.result.data,
                 status: result.status,
             });
-            history.push(action.data == 'umpireDashboard' ? '/umpireDashboard' : 'umpire')
-            message.success(action.data == 'umpireDashboard' ? 'Umpire Dashboard Imported Successfully.' : 'Umpire Imported Successfully.')
+            history.push(action.data.screenName == 'umpireDashboard' ? '/umpireDashboard' : 'umpire')
+            message.success(action.data.screenName == 'umpireDashboard' ? 'Umpire Dashboard Imported Successfully.' : 'Umpire Imported Successfully.')
         } else {
             yield call(failSaga, result)
         }

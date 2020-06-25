@@ -63,6 +63,7 @@ import UmpireDashboardState from "./umpireReducer/umpireDashboardReducer"
 import UmpireCompetitionState from "./umpireReducer/umpireCompetitionReducer"
 import UmpireRoasterdState from "./umpireReducer/umpireRoasterReducer"
 import UmpireState from "./umpireReducer/umpireReducer"
+import AssignUmpireState from "./umpireReducer/assignUmpireReducer";
 
 const rootReducer = combineReducers({
   LoginState,
@@ -120,7 +121,8 @@ const rootReducer = combineReducers({
   UmpireCompetitionState,
   CompetitionManagementState,
   UmpireRoasterdState,
-  UmpireState
+  UmpireState,
+  AssignUmpireState,
 });
 
 export default rootReducer;

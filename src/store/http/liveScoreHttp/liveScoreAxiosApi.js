@@ -5,6 +5,7 @@ import history from "../../../util/history";
 import { message } from "antd";
 import ValidationConstants from "../../../themes/validationConstant";
 import { isArrayNotEmpty } from "../../../util/helpers";
+import { regexNumberExpression } from "../../../util/helpers";
 
 const internetStatus = navigator.onLine ? true : false;
 async function logout() {
@@ -330,6 +331,7 @@ let LiveScoreAxiosApi = {
     },
 
     liveScoreGoalList(compId, goaltype, search) {
+
         let url = null
         if (goaltype === "By Match") {
             url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}`
@@ -542,7 +544,12 @@ let LiveScoreAxiosApi = {
             },
             "search": searchText
         }
-        var url = `/stats/gametime?competitionId=${competitionId}&aggregate=${aggregate.toUpperCase()}`;
+        var url
+        if (aggregate) {
+            url = `/stats/gametime?competitionId=${competitionId}&aggregate=${aggregate.toUpperCase()}`;
+        } else {
+            url = `/stats/gametime?competitionId=${competitionId}&aggregate=""`;
+        }
         return Method.dataPost(url, localStorage.token, Body)
     },
     ///live score match result
@@ -582,9 +589,10 @@ let LiveScoreAxiosApi = {
     },
 
     getLiveScoreScorerList(comID, roleId, body) {
-        let competitionID = localStorage.getItem("competitionId");
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-        var url = `/roster/users?competitionId=${id}&roleId=${roleId}`;
+        console.log(comID , "comIDcomIDcomIDcomID")
+        // let competitionID = localStorage.getItem("competitionId");
+        // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        var url = `/roster/users?competitionId=${comID}&roleId=${roleId}`;
         return Method.dataGet(url, token, body)
     },
 
@@ -609,7 +617,13 @@ let LiveScoreAxiosApi = {
     },
 
     liveScoreAttendanceList(competitionId, body, select_status) {
-        let url = `/players/activity?competitionId=${competitionId}&status=${select_status}`
+
+        let url
+        if (select_status) {
+            url = `/players/activity?competitionId=${competitionId}&status=${select_status}`
+        } else {
+            url = `/players/activity?competitionId=${competitionId}`
+        }
         return Method.dataPost(url, token, body)
     },
     liveScoreGetTeamData(teamId) {
@@ -629,7 +643,6 @@ let LiveScoreAxiosApi = {
 
 
     liveScoreAddEditScorer(scorerData, existingScorerId, scorerRadioBtn) {
-        let competitionID = localStorage.getItem("competitionId");
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
 
         let body = null
@@ -639,33 +652,24 @@ let LiveScoreAxiosApi = {
                     "id": scorerData.id,
                     "firstName": scorerData.firstName,
                     "lastName": scorerData.lastName,
-                    "mobileNumber": scorerData.mobileNumber,
+                    "mobileNumber": regexNumberExpression(scorerData.mobileNumber),
                     "email": scorerData.email,
-                    // "teams": scorerData.teams
                 }
             } else {
                 body = {
                     "firstName": scorerData.firstName,
                     "lastName": scorerData.lastName,
-                    "mobileNumber": scorerData.contactNo,
+                    "mobileNumber": regexNumberExpression(scorerData.contactNo),
                     "email": scorerData.emailAddress,
-                    // "teams": scorerData.teams
                 }
             }
-            // var url = `/users/member?&competitionId=${id}`;
-            // return Method.dataPost(url, token, body)
 
         } else if (scorerRadioBtn == "existing") {
-
-            // if (existingScorerId) {
             body = {
                 "id": existingScorerId,
-                // "teams": scorerData.teams
             }
-            // }
 
         }
-        console.log(body)
         var url = `/users/member?competitionId=${id}`;
         return Method.dataPost(url, token, body)
     },
@@ -801,13 +805,17 @@ let LiveScoreAxiosApi = {
     },
 
     umpireRoasterList(competitionID, status, refRoleId, paginationBody) {
+        var url = null
         let body = paginationBody
         let id = JSON.parse(localStorage.getItem('umpireCompetitionId'))
-        var url = `/roster/list?competitionId=${id}&status=${status}&roleId=${refRoleId}`;
+        if (status === "All") {
+            url = `/roster/list?competitionId=${id}&roleId=${refRoleId}`;
+        } else {
+            url = `/roster/list?competitionId=${id}&status=${status}&roleId=${refRoleId}`;
+        }
         return Method.dataPost(url, token, body)
     },
     umpireRoasterActionPerform(data) {
-
         var url = `/roster?rosterId=${data.roasterId}&status=${data.status}&category=${data.category}`;
         return Method.dataPatch(url, token)
     },
@@ -816,8 +824,11 @@ let LiveScoreAxiosApi = {
         return Method.dataDelete(url, localStorage.token)
     },
     umpireListDashboard(data) {
+        console.log(data, 'data')
         let body = data.pageData
-        var url = `/matchUmpire/dashboard?competitionId=${data.compId}&divisionId=${data.divisionid}&venueId=${data.venueId}&organisationId=${data.orgId}`;
+        let url
+        url = `/matchUmpire/dashboard?competitionId=${data.compId}&divisionId=${data.divisionid}&venueId=${data.venueId}&organisationId=${data.orgId}`;
+
         // var url = `/matchUmpire/dashboard?competitionId=${1}&divisionId=${3}&venueId=${233}&organisationId=${3}`;
         return Method.dataPost(url, token, body)
 
@@ -835,24 +846,42 @@ let LiveScoreAxiosApi = {
         } else if (data.screenName == 'umpire') {
             url = `/users/import?competitionId=${data.id}&roleId=${15}`;
 
+        } else if (data.screenName == 'liveScoreUmpireList') {
+            url = `/users/import?competitionId=${data.id}&roleId=${15}`;
+
         }
 
         return Method.dataPost(url, token, body)
     },
 
+    ///////get all the assign umpire list on the basis of competitionId
+    getAssignUmpiresList(competitionId, body) {
+        var url = `/matches/admin?competitionId=${competitionId}&roleId=15`
+        return Method.dataPost(url, token, body)
+    },
+
+    /////////////assign umpire to a match
+    assignUmpire(payload) {
+        let body = payload
+        var url = `/roster/admin/assign`
+        return Method.dataPost(url, token, body)
+    },
+
+    /////////unassign umpire from the match(delete)
+    unassignUmpire(rosterId) {
+        var url = `/roster/admin?id=${rosterId}`
+        return Method.dataDelete(url, token)
+    },
 
     playerLineUpApi(payload, value) {
-
         let body = payload.lineup
-
-        body.playing = value === true ? 1 : 0
+        body.playing = value
         var url = `/matches/lineup/status`;
-
         return Method.dataPatch(url, token, body)
-    }
+    },
+
+
 };
-
-
 
 
 const Method = {

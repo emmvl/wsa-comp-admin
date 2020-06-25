@@ -60,7 +60,7 @@ const columns = [
             return (
                 <div>
                     {record.user.userRoleEntities.length > 0 && record.user.userRoleEntities.map((item) => (
-                        <span className="live-score-desc-text side-bar-profile-data" >{item.organisation.name}</span>
+                        <span className='multi-column-text-aligned'>{item.organisation.name}</span>
                     ))
                     }
                 </div>)
@@ -73,7 +73,7 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "matchId"),
         render: (matchId) => <NavLink to={{
             pathname: '/liveScoreMatchDetails',
-            state: { matchId: matchId, key: 'umpireRoaster' }
+            state: { matchId: matchId, key: 'umpireRoster' }
         }} >
             <span className="input-heading-add-another pt-0">{matchId}</span>
         </NavLink>
@@ -142,7 +142,7 @@ class UmpireRoaster extends Component {
             selectedComp: null,
             loading: false,
             competitionUniqueKey: null,
-            status: 'YES',
+            status: 'All',
             roasterLoad: false
         }
         this_obj = this
@@ -216,7 +216,6 @@ class UmpireRoaster extends Component {
 
     /// Handle Page change
     handlePageChnage(page) {
-        console.log(page, 'page')
         let offset = page ? 10 * (page - 1) : 0;
 
         const body =
@@ -227,7 +226,7 @@ class UmpireRoaster extends Component {
             },
         }
 
-        this.props.umpireRoasterListAction(this.state.selectedComp, this.state.status, refRoleTypes('umpire'), offset, body)
+        this.props.umpireRoasterListAction(this.state.selectedComp, this.state.status, refRoleTypes('umpire'), body)
 
     }
 
@@ -236,7 +235,6 @@ class UmpireRoaster extends Component {
     contentView = () => {
         const { umpireRoasterList, umpireCurrentPage, umpireTotalCount } = this.props.umpireRoasterdState
         let umpireListResult = isArrayNotEmpty(umpireRoasterList) ? umpireRoasterList : []
-        console.log(umpireListResult, 'umpireListResult')
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
@@ -261,7 +259,6 @@ class UmpireRoaster extends Component {
                     <div className="d-flex justify-content-end">
                         <Pagination
                             className="antd-pagination"
-                            defaultCurrent={umpireCurrentPage}
                             total={umpireTotalCount}
                             onChange={(page) => this.handlePageChnage(page)}
                         />
@@ -413,6 +410,7 @@ class UmpireRoaster extends Component {
                                 onChange={(status) => this.onChangeStatus(status)}
                                 value={this.state.status}
                             >
+                                <Option value={'All'}>{'All'}</Option>
                                 <Option value={'YES'}>{'Accepted'}</Option>
                                 <Option value={'NO'}>{'Declined'}</Option>
                                 <Option value={'NONE'}>{'No Response'}</Option>

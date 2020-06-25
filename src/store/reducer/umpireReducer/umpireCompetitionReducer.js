@@ -17,7 +17,6 @@ function umpireCompetitionState(state = initialState, action) {
 
         case ApiConstants.API_UMPIRE_COMPETITION_LIST_SUCCESS:
             let result = action.result
-            console.log(result, "API_UMPIRE_COMPETITION_LIST_SUCCESS")
             return {
                 ...state,
                 onLoad: false,

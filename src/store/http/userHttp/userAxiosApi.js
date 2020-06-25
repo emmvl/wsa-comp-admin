@@ -9,7 +9,6 @@ import { getUserId, getAuthToken, getOrganisationData } from "../../../util/sess
 let token = getAuthToken();
 let userId = getUserId()
 const internetStatus = navigator.onLine ? true : false;
-console.log(internetStatus, 'internetStatus')
 async function logout() {
   await localStorage.clear();
   history.push("/");
@@ -204,7 +203,7 @@ let userHttpApi = {
     if (data.userName) {
       url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}&offset=${data.offset}&limit=${10}`
     } else {
-      url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&offset=${data.offset}&limit=${10}`
+      url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&offset=${0}&limit=${10}`
     }
 
     return Method.dataGet(url, localStorage.token);
@@ -213,6 +212,11 @@ let userHttpApi = {
   updateUserProfile(payload) {
     var url = `api/userprofile/update?section=${payload.section}`;
     return Method.dataPost(url, token, payload);
+  },
+
+  userExportFiles(url) {
+    console.log("url&^%^&%^", url);
+    return Method.dataGetDownload(url, localStorage.token);
   },
 }
 
@@ -419,6 +423,12 @@ let Method = {
                   message.error(ValidationConstants.messageStatus401)
                 }
               }
+              else if(err.response.status == 404){
+                return reject({
+                  status: 6,
+                  error: err
+                })
+              }
               else {
                 return reject({
                   status: 5,
@@ -455,6 +465,85 @@ let Method = {
 
         .then(result => {
           if (result.status === 200) {
+            return resolve({
+              status: 1,
+              result: result
+            });
+          }
+          else if (result.status == 212) {
+            return resolve({
+              status: 4,
+              result: result
+            });
+          }
+          else {
+            if (result) {
+              return reject({
+                status: 3,
+                error: result.data.message,
+              });
+            } else {
+              return reject({
+                status: 4,
+                error: "Something went wrong."
+              });
+            }
+          }
+        })
+        .catch(err => {
+          if (err.response) {
+            if (err.response.status !== null && err.response.status !== undefined) {
+              if (err.response.status == 401) {
+                let unauthorizedStatus = err.response.status
+                if (unauthorizedStatus == 401) {
+                  logout()
+                  message.error(ValidationConstants.messageStatus401)
+                }
+              }
+              else {
+                return reject({
+                  status: 5,
+                  error: err
+                })
+
+              }
+            }
+          }
+          else {
+            return reject({
+              status: 5,
+              error: err
+            });
+
+          }
+        });
+    });
+  },
+
+  async dataGetDownload(newurl, authorization) {
+    const url = newurl;
+    return await new Promise((resolve, reject) => {
+      userHttp
+        .get(url, {
+          responseType: 'arraybuffer',
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/csv",
+            Authorization: "BWSA " + authorization,
+            "Access-Control-Allow-Origin": "*",
+            "SourceSystem": "WebAdmin"
+          }
+        })
+
+        .then(result => {
+          if (result.status === 200) {
+            console.log("*************" + JSON.stringify(result.data));
+            const url = window.URL.createObjectURL(new Blob([result.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'filecsv.csv'); //or any other extension
+            document.body.appendChild(link);
+            link.click();
             return resolve({
               status: 1,
               result: result

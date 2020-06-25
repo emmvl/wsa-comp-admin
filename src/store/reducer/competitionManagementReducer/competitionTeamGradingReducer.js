@@ -56,6 +56,8 @@ function ownTeamGradingSummaryFunction(ownTeamGradingSummaryData, sortOrderArray
         let gradesArray = []
         for (let j in sortOrderArray) {
             let checkGradesArray = checkGradesValue(sortOrderArray[j], ownTeamGradingSummaryData[i].grades)
+            let newValue = ownTeamGradingSummaryData[i].finalGradeOrganisationCount + "/" + ownTeamGradingSummaryData[i].totalOrganisationCount + "graded"
+            ownTeamGradingSummaryData[i].statusData = newValue
             if (checkGradesArray.status) {
                 defaultObj = {
                     competitionDivisionGradeId: checkGradesArray.result.competitionDivisionGradeId,

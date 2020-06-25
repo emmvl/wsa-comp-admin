@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Table, Select, Menu, Pagination,Button } from 'antd';
+import { Layout, Breadcrumb, Table, Select, Menu, Pagination,Button, Input,Icon, DatePicker} from 'antd';
 import './user.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -149,6 +149,8 @@ class UserTextualDashboard extends Component{
             postalCode: '',
             searchText: '',
             deleteLoading: false,
+            dobFrom: '-1',
+            dobTo: '-1',
         }
         this_Obj = this;
     }
@@ -196,6 +198,17 @@ class UserTextualDashboard extends Component{
             await  this.setState({roleId: value});
             this.handleTextualTableList(1);
         }
+        else if (key == "dobFrom") {
+            let d = moment(value, 'YYYY-mm-dd');
+            console.log("DDDD" + d);
+            await this.setState({ dobFrom: d });
+            this.handleTextualTableList(1);
+        }
+        else if (key == "dobTo") {
+            let d = moment(value, 'YYYY-mm-dd');
+            await this.setState({ dobTo: d });
+            this.handleTextualTableList(1);
+        }
         else if(key == "postalCode"){
             const regex = /,/gi;
             let canCall = false;
@@ -222,6 +235,26 @@ class UserTextualDashboard extends Component{
         }
     }
 
+    onKeyEnterSearchText = async(e) =>{
+        var code = e.keyCode || e.which;
+        if(code === 13) { //13 is the enter keycode
+            this.handleTextualTableList(1);
+        } 
+    }
+
+    onChangeSearchText = async(e) =>{
+        let value = e.target.value;
+        await this.setState({searchText: e.target.value})
+        if(value == null || value == "")
+        {
+            this.handleTextualTableList(1); 
+        }
+    }
+
+    onClickSearchIcon = async() =>{
+        this.handleTextualTableList(1);
+    }
+
 
     handleTextualTableList = (page) => {
         console.log("RoleId:;" + this.state.roleId);
@@ -233,6 +266,8 @@ class UserTextualDashboard extends Component{
             roleId: this.state.roleId,
             genderRefId: this.state.genderRefId,
             linkedEntityId: this.state.linkedEntityId,
+            dobFrom: (this.state.dobFrom != '-1' && !isNaN(this.state.dobFrom)) ? moment(this.state.dobFrom).format('YYYY-MM-DD') : '-1',
+            dobTo: (this.state.dobTo != '-1' && !isNaN(this.state.dobTo)) ? moment(this.state.dobTo).format('YYYY-MM-DD') : '-1',
             postCode: (this.state.postalCode!= '' && this.state.postalCode!= null) ? this.state.postalCode.toString() : '-1',
             searchText: this.state.searchText,
             paging : {
@@ -269,12 +304,20 @@ class UserTextualDashboard extends Component{
                             < Breadcrumb.Item className="breadcrumb-add">{AppConstants.userProfile}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                    <div className="col-sm" style={{
-                        display: "flex", flexDirection: 'row', alignItems: "center",
-                        justifyContent: "flex-end", width: "100%"
-                    }}>
+                    <div className="col-sm search-flex" >
                         <div className="row">
-                            <div className="col-sm">
+                            <div style={{marginRight: "25px", marginTop: '-14px'}} >
+                                <div className="reg-product-search-inp-width">
+                                    <Input className="product-reg-search-input" 
+                                        onChange={(e) => this.onChangeSearchText(e)}
+                                        placeholder="Search..." onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                        prefix={ <Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16}}
+                                            onClick={() => this.onClickSearchIcon()} />}
+                                        allowClear
+                                    />
+                                </div>
+                            </div>
+                            <div>
                                 <div className="comp-dashboard-botton-view-mobile">
                                     <Button className="primary-add-comp-form" type="primary" onClick={()=> this.exportOrgRegistrationQuestions()}>
                                             <div className="row">
@@ -382,14 +425,14 @@ class UserTextualDashboard extends Component{
                             </div>
                         </div>
                     </div>
-                    <div className="row reg-filter-row" >
-                        <div className="reg-col" >
-                            <div  className="reg-filter-col-cont" >
+                    <div className="row user-filter-row" >
+                        <div className="user-col" >
+                            <div  className="user-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.linked}</div>
                                 <Select
                                     showSearch
                                     optionFilterProp="children"
-                                    className="year-select reg-filter-select"
+                                    className="year-select user-filter-select"
                                     style={{ minWidth: 100 }}
                                     onChange={(e) => this.onChangeDropDownValue(e, 'linkedEntityId')}
                                     value={this.state.linkedEntityId}>
@@ -400,13 +443,40 @@ class UserTextualDashboard extends Component{
                                 </Select>
                             </div>
                         </div>
-                        <div className="reg-col" >
-                            <div  className="reg-filter-col-cont" >
+                        <div className="user-col" >
+                            <div  className="user-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.postCode}</div>
                                 <InputWithHead
                                     placeholder={AppConstants.postCode}
                                     onChange={(e) => this.onChangeDropDownValue(e.target.value, 'postalCode')}
                                     value={this.state.postalCode}
+                                />
+                            </div>
+                        </div>
+                        <div className="user-col">
+                            <div className="user-filter-col-cont" style={{ marginRight: '30px', marginLeft: '25px' }}>
+                                <div className='year-select-heading'>{AppConstants.dobFrom}</div>
+                                <DatePicker
+                                    size="default"
+                                    className="year-select user-filter-select"
+                                    onChange={e => this.onChangeDropDownValue(e, 'dobFrom')}
+                                    format={"DD-MM-YYYY"}
+                                    showTime={false}
+                                    name={'dobFrom'}
+                                />
+                            </div>
+                        </div>
+                        <div className="user-col">
+                            <div className="user-filter-col-cont" >
+                                <div className='year-select-heading'>{AppConstants.dobTo}</div>
+                                <DatePicker
+                                    size="large"
+                                    className="year-select user-filter-select"
+                                    onChange={e => this.onChangeDropDownValue(e, 'dobTo')}
+                                    //onChange={e => this.setState({dobTo: moment(e, "YYYY-MM-DD")}) }
+                                    format={"DD-MM-YYYY"}
+                                    showTime={false}
+                                    name={'dobTo'}
                                 />
                             </div>
                         </div>

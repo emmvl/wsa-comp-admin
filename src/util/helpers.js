@@ -55,7 +55,6 @@ const captializedString = (value) => {
 }
 
 const teamListData = (value) => {
-    console.log(value, "teamListData")
     if (value == 1) {
         return false
     } else {
@@ -63,4 +62,12 @@ const teamListData = (value) => {
     }
 }
 
-module.exports = { isArrayNotEmpty, isNotNullOrEmptyString, getAge, deepCopyFunction, stringTONumber, captializedString, teamListData }
+const regexNumberExpression = (number) => {
+    if (number) {
+        let output = number.replace(/[^\d]/g, '');
+
+        return output
+    }
+}
+
+module.exports = { isArrayNotEmpty, isNotNullOrEmptyString, getAge, deepCopyFunction, stringTONumber, captializedString, teamListData, regexNumberExpression }

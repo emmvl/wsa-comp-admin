@@ -221,14 +221,12 @@ class RegistrationForm extends Component {
     onYearChange = (allYearRefId) => {
         this.setState({ allCompetition: null, allYearRefId: allYearRefId, })
         this.props.getYearAndCompetitionAction(this.props.appState.allYearList, allYearRefId)
+        this.props.updateRegistrationForm(allYearRefId, "inviteYearRefId")
     }
 
     onCompetitionChange = (allCompetition) => {
         this.setState({ allCompetition: allCompetition })
     }
-
-
-
 
     setFieldDecoratorValues = () => {
         let registrationFormData = this.props.registrationState.registrationFormData[0]
@@ -236,6 +234,7 @@ class RegistrationForm extends Component {
         this.props.form.setFieldsValue({
             registrationOpenDate: registrationFormData.registrationOpenDate !== '' ? moment(registrationFormData.registrationOpenDate, "YYYY-MM-DD") : null,
             registrationCloseDate: registrationFormData.registrationCloseDate !== '' ? moment(registrationFormData.registrationCloseDate, "YYYY-MM-DD") : null,
+            email:registrationFormData.replyEmail !==''?registrationFormData.replyEmail:""
         });
         disclaimerData.map((item, index) => {
             let disclaimerText = `disclaimerText${index}`
@@ -774,10 +773,11 @@ class RegistrationForm extends Component {
 
     ///reply to contact details view
     replyContactDetailsView = (
-
+        getFieldDecorator
     ) => {
         let defaultChecked = this.props.registrationState.defaultChecked
         let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
+        
         return (
             <div className="fees-view">
                 <div className='row ml-1' style={{ display: 'flex', alignItems: 'center' }}>
@@ -865,112 +865,124 @@ class RegistrationForm extends Component {
                                 </div>
                                 {defaultChecked.replyEmail === true && (
                                     <div className="col-sm">
-                                        <InputWithHead
-                                            placeholder={AppConstants.email}
-                                            name={"replyEmail"}
+                                        <Form.Item >
+                                            {getFieldDecorator(`email`, {
+                                                rules: [
+                                                    {
+                                                        type: "email",
+                                                        pattern: new RegExp(AppConstants.emailExp),
+                                                        message: ValidationConstants.email_validation
+                                                    }
+                                                ],
+                                            })(
+                                                <InputWithHead
+                                                    placeholder={AppConstants.email}
+                                                    name={"replyEmail"}
+                                                    onChange={e =>
+                                                        this.props.updateRegistrationForm(e.target.value, "replyEmail")
+                                                    }
+                                                    value={formDataValue ? formDataValue.replyEmail : ""}
+                                                />
+                                            )}
+                                            </Form.Item>
+                                    </div>
+                                        )}
+                            </div>
+                        </div>
+                            <div className="fluid-width" style={{ marginTop: 15 }}>
+                                <div className="row" style={{ height: 56 }}>
+                                    <div className="col-sm" style={{ display: "flex" }}>
+                                        <Checkbox
+                                            className="single-checkbox"
+                                            checked={defaultChecked.replyPhone}
                                             onChange={e =>
-                                                this.props.updateRegistrationForm(e.target.value, "replyEmail")
+                                                this.checkReplyTocontact(e.target.checked, "replyPhone")
                                             }
-                                            value={formDataValue ? formDataValue.replyEmail : ""}
-                                        />
+                                        >
+                                            {AppConstants.phone}
+                                        </Checkbox>
                                     </div>
-                                )}
-                            </div>
-                        </div>
-                        <div className="fluid-width" style={{ marginTop: 15 }}>
-                            <div className="row" style={{ height: 56 }}>
-                                <div className="col-sm" style={{ display: "flex" }}>
-                                    <Checkbox
-                                        className="single-checkbox"
-                                        checked={defaultChecked.replyPhone}
-                                        onChange={e =>
-                                            this.checkReplyTocontact(e.target.checked, "replyPhone")
-                                        }
-                                    >
-                                        {AppConstants.phone}
-                                    </Checkbox>
+                                    {defaultChecked.replyPhone === true && (
+                                        <div className="col-sm">
+                                            <InputWithHead
+                                                placeholder={AppConstants.phone}
+                                                name={"replyPhone"}
+                                                onChange={(e) => this.props.updateRegistrationForm(e.target.value, "replyPhone")}
+                                                value={formDataValue ? formDataValue.replyPhone : ''}
+                                            />
+                                        </div>
+                                    )}
                                 </div>
-                                {defaultChecked.replyPhone === true && (
-                                    <div className="col-sm">
-                                        <InputWithHead
-                                            placeholder={AppConstants.phone}
-                                            name={"replyPhone"}
-                                            onChange={(e) => this.props.updateRegistrationForm(e.target.value, "replyPhone")}
-                                            value={formDataValue ? formDataValue.replyPhone : ''}
-                                        />
-                                    </div>
-                                )}
                             </div>
                         </div>
-                    </div>
-                )}
+                        )}
             </div>
-        );
-    };
-
+                );
+            };
+        
     onChangeRegistrationMethod = (value, index) => {
         if (this.props.registrationState.registrationFormData.length > 0) {
-            let formDataValue = this.props.registrationState.registrationFormData[0]
+                    let formDataValue = this.props.registrationState.registrationFormData[0]
             if (formDataValue.registerMethods !== null) {
-                let matchIndex = formDataValue.registerMethods.findIndex(
+                    let matchIndex = formDataValue.registerMethods.findIndex(
                     x => x.registrationMethodRefId == value.id)
                 if (matchIndex > -1) {
                     return true
-                }
+            }
                 else {
                     return false
-                }
             }
+        }
             else {
                 return false
             }
         } else {
             return false
+            }
         }
-    }
-
-    ///how user register view
-    UserRegisterView = (
+    
+        ///how user register view
+        UserRegisterView = (
     ) => {
-        let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
-        let registrationMethod = this.props.appState.regMethod.length !== 0 ? this.props.appState.regMethod : []
-        let isPublished = this.state.isPublished
-        return (
+                    let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
+                let registrationMethod = this.props.appState.regMethod.length !== 0 ? this.props.appState.regMethod : []
+                let isPublished = this.state.isPublished
+                return (
             <div className="discount-view pt-5">
-                <div className='row ml-1'>
-                    <span className="form-heading">{AppConstants.how_users_Register}</span>
-                    <div style={{ marginTop: 5, marginLeft: -2 }}>
-                        <CustomTooltip background='#ff8237'>
-                            <span>{AppConstants.howUserRegisterMsg}</span>
-                        </CustomTooltip>
+                    <div className='row ml-1'>
+                        <span className="form-heading">{AppConstants.how_users_Register}</span>
+                        <div style={{ marginTop: 5, marginLeft: -2 }}>
+                            <CustomTooltip background='#ff8237'>
+                                <span>{AppConstants.howUserRegisterMsg}</span>
+                            </CustomTooltip>
+                        </div>
                     </div>
-                </div>
-                <div className="checkbox-row-wise">
-                    {registrationMethod.length > 0 && registrationMethod.map((item, index) => (
-                        <Checkbox
-                            className="single-checkbox"
-                            name='registerMethods'
-                            checked={this.onChangeRegistrationMethod(item, index)}
-                            onChange={(e) => this.methodSelection(e, item, formDataValue)
+                    <div className="checkbox-row-wise">
+                        {registrationMethod.length > 0 && registrationMethod.map((item, index) => (
+                            <Checkbox
+                                className="single-checkbox"
+                                name='registerMethods'
+                                checked={this.onChangeRegistrationMethod(item, index)}
+                                onChange={(e) => this.methodSelection(e, item, formDataValue)
 
-                            }
-                            key={"methods" + index}
-                            disabled={isPublished}
-                        >
-                            {item.description}
-                        </Checkbox>))
-                    }
-                </div>
-            </div >
-        );
-    };
-
-    // for change and update tree props
+                                }
+                                key={"methods" + index}
+                                disabled={isPublished}
+                            >
+                                {item.description}
+                            </Checkbox>))
+                        }
+                    </div>
+                </div >
+                );
+            };
+        
+            // for change and update tree props
     onTreeSelected(itemValue, selectedInvitees) {
-        // let selectedInvitees = this.props.registrationState.selectedInvitees
-        let upcomingData = [...itemValue]
-        let mainValueIndex = upcomingData.findIndex(x => x == "1")
-
+                    // let selectedInvitees = this.props.registrationState.selectedInvitees
+                    let upcomingData = [...itemValue]
+                let mainValueIndex = upcomingData.findIndex(x => x == "1")
+        
         if (mainValueIndex > -1) {
             for (let i in upcomingData) {
                 if (upcomingData[i] == "2") {
@@ -985,12 +997,12 @@ class RegistrationForm extends Component {
                 if (upcomingData[i] == "1") {
                     upcomingData.splice([i], 1)
                 }
+                }
             }
-        }
         if (upcomingData.includes("2") && upcomingData.includes("3") || upcomingData.includes("3") && upcomingData.includes("4") || upcomingData.includes("2") && upcomingData.includes("4")) {
-            let selectedIndex = selectedInvitees.findIndex(x => x == "4")
+                    let selectedIndex = selectedInvitees.findIndex(x => x == "4")
             if (selectedIndex > -1) {
-                let index = upcomingData.findIndex(x => x == "4")
+                    let index = upcomingData.findIndex(x => x == "4")
                 if (index > -1) {
                     upcomingData.splice(index, 1)
                 }
@@ -998,11 +1010,11 @@ class RegistrationForm extends Component {
                 if (mainIndex > -1) {
                     upcomingData.splice(mainIndex, 1)
                 }
-            }
-
-            let selectedMainIndex = selectedInvitees.findIndex(x => x == "3")
+                }
+    
+                let selectedMainIndex = selectedInvitees.findIndex(x => x == "3")
             if (selectedMainIndex > -1) {
-                let index = upcomingData.findIndex(x => x == "3")
+                    let index = upcomingData.findIndex(x => x == "3")
                 if (index > -1) {
                     upcomingData.splice(index, 1)
                 }
@@ -1010,10 +1022,10 @@ class RegistrationForm extends Component {
                 if (mainIndex > -1) {
                     upcomingData.splice(mainIndex, 1)
                 }
-            }
-            let selectedSubIndex = selectedInvitees.findIndex(x => x == "2")
+                }
+                let selectedSubIndex = selectedInvitees.findIndex(x => x == "2")
             if (selectedSubIndex > -1) {
-                let index = upcomingData.findIndex(x => x == "2")
+                    let index = upcomingData.findIndex(x => x == "2")
                 if (index > -1) {
                     upcomingData.splice(index, 1)
                 }
@@ -1021,556 +1033,562 @@ class RegistrationForm extends Component {
                 if (mainIndex > -1) {
                     upcomingData.splice(mainIndex, 1)
                 }
+                }
             }
+            this.props.updateRegistrationForm(upcomingData, "registrationSettings")
         }
-        this.props.updateRegistrationForm(upcomingData, "registrationSettings")
-    }
-
-
+    
+    
     onDemoTreeSelected(itemValue, selectedInvitees) {
-        let upcomingData = [...itemValue]
-        this.props.updateRegistrationForm(upcomingData, "demographicSettings")
-    }
+                    let upcomingData = [...itemValue]
+                this.props.updateRegistrationForm(upcomingData, "demographicSettings")
+            }
     onNetballTreeSelected(itemValue, selectedInvitees) {
-        let upcomingData = [...itemValue]
-        let mainValueIndex = upcomingData.findIndex(x => x == "5")
+                    let upcomingData = [...itemValue]
+                let mainValueIndex = upcomingData.findIndex(x => x == "5")
         if (mainValueIndex > -1) {
-            upcomingData.splice(mainValueIndex, 1)
-        }
-        this.props.updateRegistrationForm(upcomingData, "NetballQuestions")
-    }
+                    upcomingData.splice(mainValueIndex, 1)
+                }
+                this.props.updateRegistrationForm(upcomingData, "NetballQuestions")
+            }
     onOtherTreeSelected(itemValue, selectedInvitees) {
-        let upcomingData = [...itemValue]
-
-        this.props.updateRegistrationForm(upcomingData, "OtherQuestions")
-    }
-
+                    let upcomingData = [...itemValue]
+        
+                this.props.updateRegistrationForm(upcomingData, "OtherQuestions")
+            }
+        
     makeSeletedArr(formDataValue) {
         if (formDataValue) {
-            let arr = formDataValue.registrationSettings
-            let selectedInvitees = []
+                    let arr = formDataValue.registrationSettings
+                let selectedInvitees = []
             if (arr.length > 0) {
                 for (let i in arr) {
                     selectedInvitees.push(arr[i].registrationSettingsRefId)
                 }
-            }
-
-            return selectedInvitees
+                }
+    
+                return selectedInvitees
         } else {
             return []
+            }
+    
         }
-
-    }
-
-    ///advance  setting view
+    
+        ///advance  setting view
     advancedSettingView = () => {
-        let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
-        let registrationAdvanceSetting = this.props.appState.formSettings !== 0 ? this.props.appState.formSettings : []
-        let demographicSetting = this.props.appState.demographicSetting !== 0 ? this.props.appState.demographicSetting : []
-        let netballQuestionsSetting = this.props.appState.netballQuestionsSetting !== 0 ? this.props.appState.netballQuestionsSetting : []
-        let otherQuestionsSetting = this.props.appState.otherQuestionsSetting !== 0 ? this.props.appState.otherQuestionsSetting : []
-        const { selectedInvitees, selectedDemographic, SelectedOtherQuestions, selectedNetballQuestions } = this.props.registrationState
-        let isPublished = this.state.isPublished
-        let inviteesExpend = (selectedInvitees.includes("2") || selectedInvitees.includes("3") || selectedInvitees.includes("4") || selectedInvitees.includes(2) || selectedInvitees.includes(3) || selectedInvitees.includes(4)) ? "1" : null
-        let netballExpend = (selectedNetballQuestions.includes("7") || selectedNetballQuestions.includes(7)) ? "5" : null
-
-        return (
+                    let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
+                let registrationAdvanceSetting = this.props.appState.formSettings !== 0 ? this.props.appState.formSettings : []
+                let demographicSetting = this.props.appState.demographicSetting !== 0 ? this.props.appState.demographicSetting : []
+                let netballQuestionsSetting = this.props.appState.netballQuestionsSetting !== 0 ? this.props.appState.netballQuestionsSetting : []
+                let otherQuestionsSetting = this.props.appState.otherQuestionsSetting !== 0 ? this.props.appState.otherQuestionsSetting : []
+        const {selectedInvitees, selectedDemographic, SelectedOtherQuestions, selectedNetballQuestions} = this.props.registrationState
+                let isPublished = this.state.isPublished
+                let inviteesExpend = (selectedInvitees.includes("2") || selectedInvitees.includes("3") || selectedInvitees.includes("4") || selectedInvitees.includes(2) || selectedInvitees.includes(3) || selectedInvitees.includes(4)) ? "1" : null
+                let netballExpend = (selectedNetballQuestions.includes("7") || selectedNetballQuestions.includes(7)) ? "5" : null
+        
+                return (
             <div className="discount-view pt-5">
-                <div className='row ml-1'>
-                    <span className="form-heading">{AppConstants.additionalQuestions}</span>
-                    <div style={{ marginTop: 5, marginLeft: -2 }}>
-                        <CustomTooltip background='#ff8237'>
-                            <span>{AppConstants.additionQuesMsg}</span>
-                        </CustomTooltip>
+                    <div className='row ml-1'>
+                        <span className="form-heading">{AppConstants.additionalQuestions}</span>
+                        <div style={{ marginTop: 5, marginLeft: -2 }}>
+                            <CustomTooltip background='#ff8237'>
+                                <span>{AppConstants.additionQuesMsg}</span>
+                            </CustomTooltip>
+                        </div>
                     </div>
-                </div>
 
-                <div className="inside-container-view">
-                    <span className="setting-heading">{AppConstants.demographicQuestions}</span>
-                    <Tree
-                        className="tree-government-rebate"
-                        style={{ flexDirection: 'column' }}
-                        checkable
-                        defaultExpandParent={true}
-                        disabled={isPublished}
-                        defaultCheckedKeys={[]}
-                        checkedKeys={[...selectedDemographic]}
-                        onCheck={(e) => this.onDemoTreeSelected(e, selectedDemographic)}
-                    >
-                        {this.ShowAdvancedSettingSettingTree(demographicSetting)}
-                    </Tree>
-                </div>
-                <div className="inside-container-view">
-                    <span className="setting-heading">{AppConstants.netballQuestions}</span>
-                    <Tree
-                        className="tree-government-rebate tree-selection-icon"
-                        style={{ flexDirection: 'column' }}
-                        checkable
-                        expandedKeys={[netballExpend]}
-                        defaultExpandParent={true}
-                        disabled={isPublished}
-                        defaultCheckedKeys={[]}
-                        checkedKeys={[...selectedNetballQuestions]}
-                        onCheck={(e) => this.onNetballTreeSelected(e, selectedNetballQuestions)}
-                    >
-                        {this.ShowAdvancedSettingSettingTree(netballQuestionsSetting)}
-                    </Tree>
-                </div>
-                <div className="inside-container-view">
-                    <span className="setting-heading">{AppConstants.otherQuestions}</span>
-                    <Tree
-                        className="tree-government-rebate"
-                        style={{ flexDirection: 'column' }}
-                        checkable
-                        defaultExpandParent={true}
-                        disabled={isPublished}
-                        defaultCheckedKeys={[]}
-                        checkedKeys={[...SelectedOtherQuestions]}
-                        onCheck={(e) => this.onOtherTreeSelected(e, SelectedOtherQuestions)}
-                    >
-                        {this.ShowAdvancedSettingSettingTree(otherQuestionsSetting)}
-                    </Tree>
-                </div>
-
+                    <div className="inside-container-view">
+                        <span className="setting-heading">{AppConstants.demographicQuestions}</span>
+                        <Tree
+                            className="tree-government-rebate"
+                            style={{ flexDirection: 'column' }}
+                            checkable
+                            defaultExpandParent={true}
+                            disabled={isPublished}
+                            defaultCheckedKeys={[]}
+                            checkedKeys={[...selectedDemographic]}
+                            onCheck={(e) => this.onDemoTreeSelected(e, selectedDemographic)}
+                        >
+                            {this.ShowAdvancedSettingSettingTree(demographicSetting)}
+                        </Tree>
+                    </div>
+                    <div className="inside-container-view">
+                        <span className="setting-heading">{AppConstants.netballQuestions}</span>
+                        <Tree
+                            className="tree-government-rebate tree-selection-icon"
+                            style={{ flexDirection: 'column' }}
+                            checkable
+                            expandedKeys={[netballExpend]}
+                            defaultExpandParent={true}
+                            disabled={isPublished}
+                            defaultCheckedKeys={[]}
+                            checkedKeys={[...selectedNetballQuestions]}
+                            onCheck={(e) => this.onNetballTreeSelected(e, selectedNetballQuestions)}
+                        >
+                            {this.ShowAdvancedSettingSettingTree(netballQuestionsSetting)}
+                        </Tree>
+                    </div>
+                    <div className="inside-container-view">
+                        <span className="setting-heading">{AppConstants.otherQuestions}</span>
+                        <Tree
+                            className="tree-government-rebate"
+                            style={{ flexDirection: 'column' }}
+                            checkable
+                            defaultExpandParent={true}
+                            disabled={isPublished}
+                            defaultCheckedKeys={[]}
+                            checkedKeys={[...SelectedOtherQuestions]}
+                            onCheck={(e) => this.onOtherTreeSelected(e, SelectedOtherQuestions)}
+                        >
+                            {this.ShowAdvancedSettingSettingTree(otherQuestionsSetting)}
+                        </Tree>
+                    </div>
 
 
 
-                <span className="form-heading pt-5">{AppConstants.advancedSettings}</span>
-                <div className="inside-container-view">
-                    <Tree
-                        className="tree-government-rebate tree-selection-icon"
-                        style={{ flexDirection: 'column' }}
-                        checkable
-                        expandedKeys={[inviteesExpend]}
-                        disabled={isPublished}
-                        defaultCheckedKeys={[]}
-                        checkedKeys={[...selectedInvitees]}
-                        onCheck={(e) => this.onTreeSelected(e, selectedInvitees)}
-                    >
-                        {this.ShowAdvancedSettingSettingTree(registrationAdvanceSetting)}
-                    </Tree>
-                </div>
-            </div >
-        );
-    };
+
+                    <span className="form-heading pt-5">{AppConstants.advancedSettings}</span>
+                    <div className="inside-container-view">
+                        <Tree
+                            className="tree-government-rebate tree-selection-icon"
+                            style={{ flexDirection: 'column' }}
+                            checkable
+                            expandedKeys={[inviteesExpend]}
+                            disabled={isPublished}
+                            defaultCheckedKeys={[]}
+                            checkedKeys={[...selectedInvitees]}
+                            onCheck={(e) => this.onTreeSelected(e, selectedInvitees)}
+                        >
+                            {this.ShowAdvancedSettingSettingTree(registrationAdvanceSetting)}
+                        </Tree>
+                    </div>
+                </div >
+                );
+            };
     ShowAdvancedSettingSettingTree = tree => {
-        const { TreeNode } = Tree;
+        const {TreeNode} = Tree;
         return tree.map((item, catIndex) => {
             return (
                 <TreeNode title={this.advancedNode(item)} key={item.id} >
                     {this.showSubAdvancedNode(item, catIndex)}
                 </TreeNode >
-            );
-        });
-    };
-
+                );
+            });
+        };
+    
     advancedNode = item => {
         return <span>{item.description}</span>;
-    };
-
+            };
+        
     showSubAdvancedNode(item, catIndex) {
-        const { TreeNode } = Tree;
+        const {TreeNode} = Tree;
         return item.subReferences.map((inItem, scatIndex) => {
             return (
                 <TreeNode
                     title={this.makeSubAdvancedNode(inItem)}
                     key={inItem.id}
                 ></TreeNode>
-            );
-        });
-    }
-
+                );
+            });
+        }
+    
     makeSubAdvancedNode(item) {
         return <span>{item.description}</span>;
-    }
+            }
     disclamerText(textBody, index, key) {
-        this.props.updateDisclamerText(textBody, index, key)
-    }
+                    this.props.updateDisclamerText(textBody, index, key)
+                }
 
-    //disclaimer view
-    disclaimerView = (
-        getFieldDecorator
+                //disclaimer view
+                disclaimerView = (
+                    getFieldDecorator
     ) => {
-        let registrationData = this.props.registrationState.registrationFormData.length > 0 ? this.props.registrationState.registrationFormData[0] : [];
-        let disclaimerData = registrationData.registrationDisclaimer !== null ? isArrayNotEmpty(registrationData.registrationDisclaimer) ? registrationData.registrationDisclaimer : [] : []
-        let isPublished = this.state.isPublished
-        return (
+                    let registrationData = this.props.registrationState.registrationFormData.length > 0 ? this.props.registrationState.registrationFormData[0] : [];
+                let disclaimerData = registrationData.registrationDisclaimer !== null ? isArrayNotEmpty(registrationData.registrationDisclaimer) ? registrationData.registrationDisclaimer : [] : []
+                let isPublished = this.state.isPublished
+                return (
             <div className="discount-view pt-5">
-                <span className="form-heading">{AppConstants.disclaimers}</span>
+                    <span className="form-heading">{AppConstants.disclaimers}</span>
 
-                {disclaimerData.map((item, index) =>
-                    <div className="inside-container-view">
-                        <div className="transfer-image-view pt-0" onClick={(e) => !isPublished ? this.removeDisclaimer(e, index) : null} >
-                            <span class="user-remove-btn" ><i class="fa fa-trash-o" aria-hidden="true"></i></span>
-                            <span className="user-remove-text">
-                                {AppConstants.remove}
-                            </span>
-                        </div>
-                        <Form.Item>
-                            {getFieldDecorator(
-                                `disclaimerText${index}`,
-                                {
-                                    rules: [
-                                        {
-                                            required: true,
-                                            message: ValidationConstants.disclaimersIsRequired
-                                        }
-                                    ]
-                                },
-                            )(
-                                <InputWithHead
-                                    required={"required-field pb-0 pt-0"}
-                                    heading={AppConstants.disclaimers}
-                                    placeholder={AppConstants.disclaimers}
-                                    onChange={(e) => this.disclamerText(e.target.value, index, "disclaimerText")}
-                                    disabled={isPublished}
-                                // value={disclaimerData.registrationDisclaimer[index].disclaimerText}
-                                />
-                            )}
-                        </Form.Item>
-                        <Form.Item>
-                            {getFieldDecorator(
-                                `disclaimerLink${index}`,
-                                {
-                                    rules: [
-                                        {
-                                            required: true,
-                                            message: ValidationConstants.DisclaimerLinkIsRequired
-                                        }
-                                    ]
-                                },
-                            )(
-                                <InputWithHead
-                                    required={"required-field pb-0 "}
-                                    heading={AppConstants.disclaimerLink}
-                                    placeholder={AppConstants.disclaimerLink}
-                                    onChange={(e) => this.disclamerText(e.target.value, index, "disclaimerLink")}
-                                    disabled={isPublished}
-                                // value={disclaimerData.registrationDisclaimer[index].disclaimerLink}
-
-                                />
-                            )}
-                        </Form.Item>
-                    </div>
-                )}
-                <span
-                    className="input-heading-add-another"
-                    onClick={() => !isPublished ? this.addDisclaimerLink() : null}
-                >
-                    + {AppConstants.addAnotherDisclaimerLink}
-                </span>
-            </div>
-        );
-    };
-    // Send invite to
-    sendInviteToView = () => {
-        console.log("commonReducerState" + JSON.stringify(this.props.registrationState.registrationFormData[0].inviteTypeRefId));
-        const registrationFormData = this.props.registrationState.registrationFormData[0]
-        let { inviteTypeData } = this.props.commonReducerState;
-        let isPublished = this.state.isPublished;
-        return (
-            <div className="discount-view pt-5">
-                <span className="form-heading">{AppConstants.sendInvitesTo}</span>
-                <div className="fluid-width">
-                    <div className="row">
-                        <div className="col-sm-3">
-                            <div
-                                style={{
-                                    width: "fit-content",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center"
-                                }}
-                            >
-                                <span className="year-select-heading">
-                                    {AppConstants.year}:
-            </span>
-                                <Select
-                                    name={"yearRefId"}
-                                    className="year-select"
-                                    style={{ minWidth: 100 }}
-                                    disabled={isPublished}
-                                    onChange={yearRefId => this.onYearChange(yearRefId)}
-                                    value={this.state.allYearRefId}
-                                // value={formDataValue ? formDataValue.yearRefId ? formDataValue.yearRefId : 1 : 1}
-                                >
-                                    {this.props.appState.allYearList.map(item => {
-                                        return (
-                                            <Option key={"yearRefId" + item.id} value={item.id}>
-                                                {item.description}
-                                            </Option>
-                                        );
-                                    })}
-                                </Select>
+                    {disclaimerData.map((item, index) =>
+                        <div className="inside-container-view">
+                            <div className="transfer-image-view pt-0" onClick={(e) => !isPublished ? this.removeDisclaimer(e, index) : null} >
+                                <span class="user-remove-btn" ><i class="fa fa-trash-o" aria-hidden="true"></i></span>
+                                <span className="user-remove-text">
+                                    {AppConstants.remove}
+                                </span>
                             </div>
+                            <Form.Item>
+                                {getFieldDecorator(
+                                    `disclaimerText${index}`,
+                                    {
+                                        rules: [
+                                            {
+                                                required: true,
+                                                message: ValidationConstants.disclaimersIsRequired
+                                            }
+                                        ]
+                                    },
+                                )(
+                                    <InputWithHead
+                                        required={"required-field pb-0 pt-0"}
+                                        heading={AppConstants.disclaimers}
+                                        placeholder={AppConstants.disclaimers}
+                                        onChange={(e) => this.disclamerText(e.target.value, index, "disclaimerText")}
+                                        disabled={isPublished}
+                                    // value={disclaimerData.registrationDisclaimer[index].disclaimerText}
+                                    />
+                                )}
+                            </Form.Item>
+                            <Form.Item>
+                                {getFieldDecorator(
+                                    `disclaimerLink${index}`,
+                                    {
+                                        rules: [
+                                            {
+                                                required: true,
+                                                message: ValidationConstants.DisclaimerLinkIsRequired
+                                            }
+                                        ]
+                                    },
+                                )(
+                                    <InputWithHead
+                                        required={"required-field pb-0 "}
+                                        heading={AppConstants.disclaimerLink}
+                                        placeholder={AppConstants.disclaimerLink}
+                                        onChange={(e) => this.disclamerText(e.target.value, index, "disclaimerLink")}
+                                        disabled={isPublished}
+                                    // value={disclaimerData.registrationDisclaimer[index].disclaimerLink}
 
+                                    />
+                                )}
+                            </Form.Item>
                         </div>
-                        <div className="col-sm-3">
-                            <div
-                                style={{
-                                    width: "fit-content",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    marginRight: 50
-                                }}
-                            >
-                                <span className="year-select-heading">
-                                    {AppConstants.competition}:
-                </span>
-                                <Select
-                                    style={{ minWidth: 160 }}
-                                    name={"competition"}
-                                    className="year-select"
-                                    disabled={isPublished}
-                                    onChange={competitionUniqueKeyId => this.onCompetitionChange(competitionUniqueKeyId)
-                                    }
-                                    value={this.state.allCompetition}
-                                // value={formDataValue ? formDataValue.competitionUniqueKeyId ? formDataValue.competitionUniqueKeyId : "" : ""}
-                                >
-                                    {this.props.appState.allCompetitionTypeList.map(item => {
-                                        return (
-                                            <Option key={"competition" + item.competitionId} value={item.competitionId}>
-                                                {item.competitionName}
-                                            </Option>
-                                        );
-                                    })}
-                                </Select>
-                            </div>
-                        </div>
-                    </div>
+                    )}
+                    <span
+                        className="input-heading-add-another"
+                        onClick={() => !isPublished ? this.addDisclaimerLink() : null}
+                    >
+                        + {AppConstants.addAnotherDisclaimerLink}
+                    </span>
                 </div>
-                <InputWithHead heading={AppConstants.inviteType} />
-                <Radio.Group className="reg-competition-radio" disabled={isPublished} onChange={(e) => (this.props.updateRegistrationForm(e.target.value, "inviteTypeRefId"))} value={registrationFormData.inviteTypeRefId}>
-                    {(inviteTypeData || []).map((fix) => (
-                        <Radio key={fix.id} value={fix.id}>{fix.description}</Radio>
-                    ))}
-                </Radio.Group>
-                <InputWithHead heading={AppConstants.gender} />
-                <Radio.Group className="reg-competition-radio" disabled={isPublished} value={registrationFormData.genderRefId}
-                    onChange={(e) => (this.props.updateRegistrationForm(e.target.value, "genderRefId"))}>
-                    <Radio value={2}>{AppConstants.male}</Radio>
-                    <Radio value={1}> {AppConstants.female}</Radio>
-                    <Radio value={3}>{AppConstants.both}</Radio>
-                </Radio.Group>
-                <InputWithHead heading={AppConstants.dOB} />
-                <Radio.Group className="reg-competition-radio" disabled={isPublished}
-                    value={registrationFormData.dobPreferenceRefId} onChange={(e) => (this.props.updateRegistrationForm(e.target.value, "dobPreferenceRefId"))}>
-                    <Radio className="dob-pref-radio-inner-heading" style={{ marginBottom: 10 }} value={1}>{AppConstants.NoDobPreference}</Radio>
-                    <Radio className="dob-pref-radio-inner-heading" value={2}>{AppConstants.DobPreference}</Radio>
-                </Radio.Group>
-                {(registrationFormData.dobPreferenceRefId == 2) ?
-                    <div>
-                        <div style={{ display: "flex", marginLeft: 23 }}>
-                            <span className="applicable-to-datepicker-col">{AppConstants.DobMoreThan}</span>
-                            <div className="dob-pref-date-picker">
-                                <DatePicker
-                                    size="large"
-                                    placeholder={"Select Date"}
-                                    style={{ width: "100%" }}
-                                    onChange={(e) => this.dateChange(e, "dobPreferenceMoreThan")}
-                                    name={"dobPreferenceMoreThan"}
-                                    format={"DD-MM-YYYY"}
-                                    showTime={false}
-                                    disabled={isPublished}
-                                    disabledDate={(registrationFormData.dobPreferenceLessThan == null) ? false : d => !d || d.isAfter(registrationFormData.dobPreferenceLessThan)}
-                                    value={(registrationFormData.dobPreferenceMoreThan == null || registrationFormData.dobPreferenceMoreThan == "") ? "" : moment(registrationFormData.dobPreferenceMoreThan, "YYYY-MM-DD")}
-                                />
-                            </div>
-                        </div>
-                        <div style={{ display: "flex", marginLeft: 23 }}>
-                            <span className="applicable-to-datepicker-col">{AppConstants.DobLessThan}</span>
-                            <div className="dob-pref-date-picker" style={{ marginLeft: 9 }}>
-                                <DatePicker
-                                    size="large"
-                                    style={{ width: "100%" }}
-                                    placeholder={"Select Date"}
-                                    onChange={(e) => this.dateChange(e, "dobPreferenceLessThan")}
-                                    name={"dobPreferenceLessThan"}
-                                    disabledTime={this.disabledTime}
-                                    format={"DD-MM-YYYY"}
-                                    disabled={isPublished}
-                                    showTime={false}
-                                    disabledDate={(registrationFormData.dobPreferenceMoreThan == null) ? false : d => !d || d.isSameOrBefore(registrationFormData.dobPreferenceMoreThan)}
-                                    // || d.isSameOrBefore(dateOpen)                                      
-                                    //  value={closeDate ? moment(closeDate, "YYYY-MM-DD") : ""}
-                                    value={(registrationFormData.dobPreferenceLessThan == null || registrationFormData.dobPreferenceLessThan == "") ? "" : moment(registrationFormData.dobPreferenceLessThan, "YYYY-MM-DD")}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    : null}
-            </div>
-        )
-    }
+                );
+            };
+            // Send invite to
+    sendInviteToView = () => {
+                    console.log("commonReducerState" + JSON.stringify(this.props.registrationState.registrationFormData[0].inviteTypeRefId));
+                const registrationFormData = this.props.registrationState.registrationFormData[0]
+        let {inviteTypeData} = this.props.commonReducerState;
+                let isPublished = this.state.isPublished;
+                return (
+            <div className="discount-view pt-5">
+                    <span className="form-heading pb-2">{AppConstants.sendInvitesTo}</span>
+                    <InputWithHead heading={AppConstants.invite} />
+                    <Radio.Group className="reg-competition-radio pb-5" disabled={isPublished}
+                        onChange={(e) => (this.props.updateRegistrationForm(e.target.value, "canInviteSend"))}
+                        value={registrationFormData.canInviteSend}>
+                        <Radio key={1} value={1}>{AppConstants.send}</Radio>
+                        <Radio key={0} value={0}>{AppConstants.noSend}</Radio>
+                    </Radio.Group>
+                    {registrationFormData.canInviteSend == 1 ?
+                        <div>
+                            <div className="fluid-width">
+                                <div className="row">
+                                    <div className="col-sm-3" style={{ marginRight: '25px' }}>
+                                        <div
+                                            style={{
+                                                width: "fit-content", display: "flex", flexDirection: "row",
+                                                alignItems: "center"
+                                            }}
+                                        >
+                                            <span className="year-select-heading">
+                                                {AppConstants.year}:
+                                    </span>
+                                            <Select
+                                                name={"yearRefId"}
+                                                className="year-select  reg-filter-select"
+                                                style={{ marginLeft: "25px", minWidth: 100 }}
+                                                disabled={isPublished}
+                                                onChange={yearRefId => this.onYearChange(yearRefId)}
+                                                value={registrationFormData.inviteYearRefId}
+                                            // value={formDataValue ? formDataValue.yearRefId ? formDataValue.yearRefId : 1 : 1}
+                                            >
+                                                {this.props.appState.allYearList.map(item => {
+                                                    return (
+                                                        <Option key={"yearRefId" + item.id} value={item.id}>
+                                                            {item.description}
+                                                        </Option>
+                                                    );
+                                                })}
+                                            </Select>
+                                        </div>
 
-    //////footer view containing all the buttons like submit and cancel
+                                    </div>
+                                    <div className="col-sm-3">
+                                        <div
+                                            style={{
+                                                width: "fit-content",
+                                                display: "flex",
+                                                flexDirection: "row",
+                                                alignItems: "center",
+                                                marginRight: 50
+                                            }}
+                                        >
+                                            <span className="year-select-heading">
+                                                {AppConstants.competition}:
+                                    </span>
+                                            <Select
+                                                style={{ marginLeft: "25px", minWidth: 160 }}
+                                                name={"competition"}
+                                                className="year-select reg-filter-select1"
+                                                disabled={isPublished}
+                                                onChange={e => (this.props.updateRegistrationForm(e, "inviteCompetitionId"))}
+                                                value={registrationFormData.inviteCompetitionId != null ?
+                                                    registrationFormData.inviteCompetitionId.toString() : '0'}>
+                                                {this.props.appState.allCompetitionTypeList.map(item => {
+                                                    return (
+                                                        <Option key={"competition" + item.competitionId} value={item.competitionId}>
+                                                            {item.competitionName}
+                                                        </Option>
+                                                    );
+                                                })}
+                                            </Select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <InputWithHead heading={AppConstants.inviteType} />
+                            <Radio.Group className="reg-competition-radio" disabled={isPublished} onChange={(e) => (this.props.updateRegistrationForm(e.target.value, "inviteTypeRefId"))} value={registrationFormData.inviteTypeRefId}>
+                                {(inviteTypeData || []).map((fix) => (
+                                    <Radio key={fix.id} value={fix.id}>{fix.description}</Radio>
+                                ))}
+                            </Radio.Group>
+                            <InputWithHead heading={AppConstants.gender} />
+                            <Radio.Group className="reg-competition-radio" disabled={isPublished} value={registrationFormData.genderRefId}
+                                onChange={(e) => (this.props.updateRegistrationForm(e.target.value, "genderRefId"))}>
+                                <Radio value={2}>{AppConstants.male}</Radio>
+                                <Radio value={1}> {AppConstants.female}</Radio>
+                                <Radio value={3}>{AppConstants.both}</Radio>
+                            </Radio.Group>
+                            <InputWithHead heading={AppConstants.dOB} />
+                            <Radio.Group className="reg-competition-radio" disabled={isPublished}
+                                value={registrationFormData.dobPreferenceRefId} onChange={(e) => (this.props.updateRegistrationForm(e.target.value, "dobPreferenceRefId"))}>
+                                <Radio className="dob-pref-radio-inner-heading" style={{ marginBottom: 10 }} value={1}>{AppConstants.NoDobPreference}</Radio>
+                                <Radio className="dob-pref-radio-inner-heading" value={2}>{AppConstants.DobPreference}</Radio>
+                            </Radio.Group>
+                            {(registrationFormData.dobPreferenceRefId == 2) ?
+                                <div>
+                                    <div style={{ display: "flex", marginLeft: 23 }}>
+                                        <span className="applicable-to-datepicker-col">{AppConstants.DobMoreThan}</span>
+                                        <div className="dob-pref-date-picker">
+                                            <DatePicker
+                                                size="large"
+                                                placeholder={"Select Date"}
+                                                style={{ width: "100%" }}
+                                                onChange={(e) => this.dateChange(e, "dobPreferenceMoreThan")}
+                                                name={"dobPreferenceMoreThan"}
+                                                format={"DD-MM-YYYY"}
+                                                showTime={false}
+                                                disabled={isPublished}
+                                                disabledDate={(registrationFormData.dobPreferenceLessThan == null) ? false : d => !d || d.isAfter(registrationFormData.dobPreferenceLessThan)}
+                                                value={(registrationFormData.dobPreferenceMoreThan == null || registrationFormData.dobPreferenceMoreThan == "") ? "" : moment(registrationFormData.dobPreferenceMoreThan, "YYYY-MM-DD")}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div style={{ display: "flex", marginLeft: 23 }}>
+                                        <span className="applicable-to-datepicker-col">{AppConstants.DobLessThan}</span>
+                                        <div className="dob-pref-date-picker" style={{ marginLeft: 9 }}>
+                                            <DatePicker
+                                                size="large"
+                                                style={{ width: "100%" }}
+                                                placeholder={"Select Date"}
+                                                onChange={(e) => this.dateChange(e, "dobPreferenceLessThan")}
+                                                name={"dobPreferenceLessThan"}
+                                                disabledTime={this.disabledTime}
+                                                format={"DD-MM-YYYY"}
+                                                disabled={isPublished}
+                                                showTime={false}
+                                                disabledDate={(registrationFormData.dobPreferenceMoreThan == null) ? false : d => !d || d.isSameOrBefore(registrationFormData.dobPreferenceMoreThan)}
+                                                // || d.isSameOrBefore(dateOpen)                                      
+                                                //  value={closeDate ? moment(closeDate, "YYYY-MM-DD") : ""}
+                                                value={(registrationFormData.dobPreferenceLessThan == null || registrationFormData.dobPreferenceLessThan == "") ? "" : moment(registrationFormData.dobPreferenceLessThan, "YYYY-MM-DD")}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                : null}
+                        </div> : null}
+                </div>
+                )
+            }
+        
+            //////footer view containing all the buttons like submit and cancel
     footerView = () => {
-        let registrationData = this.props.registrationState.registrationFormData.length > 0 ? this.props.registrationState.registrationFormData[0] : [];
-        let statusRefId = registrationData.statusRefId
-        return (
+                    let registrationData = this.props.registrationState.registrationFormData.length > 0 ? this.props.registrationState.registrationFormData[0] : [];
+                let statusRefId = registrationData.statusRefId
+                return (
             <div className="fluid-width">
-                <div className="footer-view">
-                    <div className="row">
-                        <div className="col-sm-3">
-                            <div className="reg-add-save-button">
-                                {/* <Button type="cancel-button">{AppConstants.delete}</Button> */}
+                    <div className="footer-view">
+                        <div className="row">
+                            <div className="col-sm-3">
+                                <div className="reg-add-save-button">
+                                    {/* <Button type="cancel-button">{AppConstants.delete}</Button> */}
+                                </div>
                             </div>
-                        </div>
-                        <div className="col-sm-9">
-                            <div className="comp-buttons-view">
-                                <Tooltip style={{ height: "100%" }}
-                                    onMouseEnter={() => this.setState({ tooltipVisibleDraft: statusRefId == 2 ? true : false })}
-                                    onMouseLeave={() => this.setState({ tooltipVisibleDraft: false })}
-                                    visible={this.state.tooltipVisibleDraft}
-                                    title={ValidationConstants.compRegHaveBeenSent}>
-                                    <Button
-                                        className="save-draft-text"
-                                        type="save-draft-text"
-                                        htmlType="submit"
-                                        disabled={statusRefId == 2 ? true : false}
-                                        onClick={() => this.setState({ statusRefId: 1 })}
-                                    >
-                                        {AppConstants.saveAsDraft}
-                                    </Button>
-                                </Tooltip>
+                            <div className="col-sm-9">
+                                <div className="comp-buttons-view">
+                                    <Tooltip style={{ height: "100%" }}
+                                        onMouseEnter={() => this.setState({ tooltipVisibleDraft: statusRefId == 2 ? true : false })}
+                                        onMouseLeave={() => this.setState({ tooltipVisibleDraft: false })}
+                                        visible={this.state.tooltipVisibleDraft}
+                                        title={ValidationConstants.compRegHaveBeenSent}>
+                                        <Button
+                                            className="save-draft-text"
+                                            type="save-draft-text"
+                                            htmlType="submit"
+                                            disabled={statusRefId == 2 ? true : false}
+                                            onClick={() => this.setState({ statusRefId: 1 })}
+                                        >
+                                            {AppConstants.saveAsDraft}
+                                        </Button>
+                                    </Tooltip>
 
-                                <Button className="save-draft-text" type="save-draft-text">
-                                    {AppConstants.preview}
-                                </Button>
-                                {/* <Tooltip style={{ height: "100%" }}
+                                    <Button className="save-draft-text" type="save-draft-text">
+                                        {AppConstants.preview}
+                                    </Button>
+                                    {/* <Tooltip style={{ height: "100%" }}
                                     onMouseEnter={() => this.setState({ tooltipVisiblePublish: statusRefId == 2 ? true : false })}
                                     onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
                                     visible={this.state.tooltipVisiblePublish}
                                     title={ValidationConstants.compRegHaveBeenSent}> */}
-                                <Button
-                                    className="open-reg-button"
-                                    htmlType="submit"
-                                    type="primary"
-                                    onClick={() => this.setState({ statusRefId: 2 })}
-                                // disabled={statusRefId == 2 ? true : false}
-                                // style={{ height: statusRefId == 2 ? "100%" : null, borderRadius: statusRefId == 2 ? 5 : null }}
-                                // style={{ height: statusRefId == 2 ? "100%" : null, borderRadius: statusRefId == 2 ? 5 : null }}
-                                >
-                                    {AppConstants.openRegistrations}
-                                </Button>
-                                {/* </Tooltip> */}
+                                    <Button
+                                        className="open-reg-button"
+                                        htmlType="submit"
+                                        type="primary"
+                                        onClick={() => this.setState({ statusRefId: 2 })}
+                                    // disabled={statusRefId == 2 ? true : false}
+                                    // style={{ height: statusRefId == 2 ? "100%" : null, borderRadius: statusRefId == 2 ? 5 : null }}
+                                    // style={{ height: statusRefId == 2 ? "100%" : null, borderRadius: statusRefId == 2 ? 5 : null }}
+                                    >
+                                        {AppConstants.openRegistrations}
+                                    </Button>
+                                    {/* </Tooltip> */}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        );
-    };
-
-    navigateToExternalUrl = (url) =>
-        window.open(url, "_blank");
-
+                );
+            };
+        
+            navigateToExternalUrl = (url) =>
+                window.open(url, "_blank");
+        
     userRegisrationLinkView = () => {
-        let formDataValue = this.props.registrationState.registrationFormData !== 0 ?
-            this.props.registrationState.registrationFormData[0] : [];
-        let statusRefId = formDataValue.statusRefId
-        return (
+                    let formDataValue = this.props.registrationState.registrationFormData !== 0 ?
+                    this.props.registrationState.registrationFormData[0] : [];
+                let statusRefId = formDataValue.statusRefId
+                return (
             <div>
-                {statusRefId == 2 ?
-                    <div className="formView">
-                        <div className="content-view pt-4" style={{ marginBottom: '20px' }}>
-                            <div className="row">
-                                <div className="col-sm">
-                                    <InputWithHead heading={AppConstants.endUserRegistrationUrl} />
-                                    <div>
-                                        <a className="userRegLink" href={formDataValue.userRegistrationUrl} target='_blank' >
-                                            {formDataValue.userRegistrationUrl}
-                                        </a>
+                    {statusRefId == 2 ?
+                        <div className="formView">
+                            <div className="content-view pt-4" style={{ marginBottom: '20px' }}>
+                                <div className="row">
+                                    <div className="col-sm">
+                                        <InputWithHead heading={AppConstants.endUserRegistrationUrl} />
+                                        <div>
+                                            <a className="userRegLink" href={formDataValue.userRegistrationUrl} target='_blank' >
+                                                {formDataValue.userRegistrationUrl}
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div> : null
-                }
-            </div>
+                        </div> : null
+                    }
+                </div>
 
-        )
-    }
-
+                )
+            }
+        
     render() {
-        const { getFieldDecorator } = this.props.form;
-        return (
+        const {getFieldDecorator} = this.props.form;
+                return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout
-                    menuHeading={AppConstants.registration}
-                    menuName={AppConstants.registration}
-                />
-                <InnerHorizontalMenu menu={"registration"} regSelectedKey={"3"} />
-                <Layout>
-                    {this.headerView()}
-                    <Form onSubmit={this.registrationSubmit}
-                        noValidate="noValidate"
-                    >
-                        {/* {this.dropdownView(
+                    <DashboardLayout
+                        menuHeading={AppConstants.registration}
+                        menuName={AppConstants.registration}
+                    />
+                    <InnerHorizontalMenu menu={"registration"} regSelectedKey={"3"} />
+                    <Layout>
+                        {this.headerView()}
+                        <Form onSubmit={this.registrationSubmit}
+                            noValidate="noValidate"
+                        >
+                            {/* {this.dropdownView(
                             getFieldDecorator
                         )} */}
-                        <Content>
-                            {this.userRegisrationLinkView()}
-                            <div className="formView">
-                                {this.contentView(
+                            <Content>
+                                {this.userRegisrationLinkView()}
+                                <div className="formView">
+                                    {this.contentView(
+                                        getFieldDecorator
+                                    )}
+                                </div>
+                                <div className="formView">
+                                    {this.replyContactDetailsView(
+                                        getFieldDecorator
+                                    )}
+                                </div>
+                                <div className="formView">{this.UserRegisterView(
                                     getFieldDecorator
-                                )}
-                            </div>
-                            <div className="formView">
-                                {this.replyContactDetailsView(
-                                    getFieldDecorator
-                                )}
-                            </div>
-                            <div className="formView">{this.UserRegisterView(
-                                getFieldDecorator
-                            )}</div>
-                            <div className="formView">{this.advancedSettingView()}</div>
-                            <div className="formView">{this.sendInviteToView()}</div>
-                            <div className="formView">
-                                {this.disclaimerView(
-                                    getFieldDecorator
-                                )}
-                            </div>
-                            <Loader visible={this.state.onRegistrationLoad || this.props.appState.onLoad
-                                || this.props.registrationState.onLoad} />
-                        </Content>
-                        <Footer>{this.footerView()}</Footer>
-                    </Form>
-                </Layout>
-            </div>
-        );
-    }
-}
+                                )}</div>
+                                <div className="formView">{this.advancedSettingView()}</div>
+                                <div className="formView">{this.sendInviteToView()}</div>
+                                <div className="formView">
+                                    {this.disclaimerView(
+                                        getFieldDecorator
+                                    )}
+                                </div>
+                                <Loader visible={this.state.onRegistrationLoad || this.props.appState.onLoad
+                                    || this.props.registrationState.onLoad} />
+                            </Content>
+                            <Footer>{this.footerView()}</Footer>
+                        </Form>
+                    </Layout>
+                </div>
+                );
+            }
+        }
 function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
-            getYearAndCompetitionAction,
-            getVenuesTypeAction,
-            getCompetitionTypeListAction,
-            regSaveRegistrationForm,
-            getRegFormAdvSettings,
-            getRegistrationMethod,
-            getMembershipproduct,
-            getRegistrationForm,
-            updateRegistrationForm,
-            clearReducerDataAction,
-            changeMembershipProduct,
-            updateProductSelection,
-            updateRegistrationLock,
-            updateDisclamerText,
-            isCheckedVisible,
-            isReplyCheckVisible,
-            inviteTypeAction
-        },
-        dispatch
-    );
-}
+                    getYearAndCompetitionAction,
+                    getVenuesTypeAction,
+                    getCompetitionTypeListAction,
+                    regSaveRegistrationForm,
+                    getRegFormAdvSettings,
+                    getRegistrationMethod,
+                    getMembershipproduct,
+                    getRegistrationForm,
+                    updateRegistrationForm,
+                    clearReducerDataAction,
+                    changeMembershipProduct,
+                    updateProductSelection,
+                    updateRegistrationLock,
+                    updateDisclamerText,
+                    isCheckedVisible,
+                    isReplyCheckVisible,
+                    inviteTypeAction
+                },
+                dispatch
+            );
+        }
 function mapStatetoProps(state) {
     return {
-        appState: state.AppState,
-        registrationState: state.RegistrationState,
-        commonReducerState: state.CommonReducerState
-    };
-}
-export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(RegistrationForm));
+                    appState: state.AppState,
+                registrationState: state.RegistrationState,
+                commonReducerState: state.CommonReducerState
+            };
+        }
+        export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(RegistrationForm));

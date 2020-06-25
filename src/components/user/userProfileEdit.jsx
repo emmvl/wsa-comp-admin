@@ -92,6 +92,10 @@ class UserProfileEdit extends Component {
                   }
               }
             }
+            else if(moduleFrom = "6"){
+                titleLabel= AppConstants.edit + ' ' +  AppConstants.child;
+                section = "child";
+            }
             console.log("DATA:::" + JSON.stringify(data));
             await this.setState({displaySection: moduleFrom,
                 userData: data,
@@ -112,6 +116,8 @@ class UserProfileEdit extends Component {
                 this.setEmergencyFormField();
             else if(this.state.displaySection == "4")
                 this.setOtherInfoFormField();
+            else if(this.state.displaySection == "6")
+                this.setPrimaryContactFormFields();
            
         }
         let userState  = this.props.userState;
@@ -151,6 +157,8 @@ class UserProfileEdit extends Component {
             postalCode: userData.postalCode
         })
     }
+
+   
 
     setEmergencyFormField = () => {
         let userData  = this.state.userData;
@@ -296,7 +304,16 @@ class UserProfileEdit extends Component {
                      <div className="col-sm" >
                         <Form.Item >
                         {getFieldDecorator('email', {
-                            rules: [{ required: true, message: ValidationConstants.emailField[0]}],
+                            rules: [
+                                { 
+                                    required: true, message: ValidationConstants.emailField[0]
+                                },
+                                {
+                                    type: "email",
+                                    pattern: new RegExp(AppConstants.emailExp),
+                                    message: ValidationConstants.email_validation
+                                }
+                            ],
                         })(
                             <InputWithHead
                                 required={"required-field"}
@@ -765,7 +782,7 @@ class UserProfileEdit extends Component {
                 <div>{this.addressEdit(getFieldDecorator)}</div>
             :null}
 
-            {this.state.displaySection=="2"?
+            {(this.state.displaySection=="2" || this.state.displaySection=="6")?
                 <div>{this.primaryContactEdit(getFieldDecorator)}</div>
             :null} 
 

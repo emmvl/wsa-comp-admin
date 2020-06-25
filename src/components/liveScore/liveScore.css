@@ -11,7 +11,7 @@
     padding: 0 3%;
 }
 
-.live-score-heading-text {
+.heading-text {
     display: flex;
     justify-content: center;
     font-size: 22px;
@@ -25,7 +25,7 @@
     padding-top: 3%;
 }
 
-.live-score-profile-img-view {
+.profile-img-view-style {
     display: flex;
     flex-direction: column;
     padding-top: 15px;
@@ -150,7 +150,7 @@
     font-size: 15px
 }
 
-.bulk-match-heading {
+.text-heading-large {
     font-weight: bold;
     font-size: 17px;
     display: flex;
@@ -283,6 +283,11 @@
     display: flex;
 }
 
+.button-spacing-style{
+    margin-bottom: 10px;
+    
+}
+
 @media(min-width: 768px) and (max-width: 1024px) {
     .live-score-edit-match-buttons {
         display: flex;
@@ -328,5 +333,10 @@
         width: 200px;
         margin-right: 5px;
         /* height: 300px; */
+    }
+
+    .button-spacing-style{
+        margin-bottom: 10px;
+        
     }
 }

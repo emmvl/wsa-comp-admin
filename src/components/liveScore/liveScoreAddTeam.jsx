@@ -36,7 +36,7 @@ import Loader from '../../customComponents/loader'
 import { setTimeout } from "timers";
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import ImageLoader from '../../customComponents/ImageLoader'
-import { isArrayNotEmpty, captializedString } from '../../util/helpers';
+import { isArrayNotEmpty, captializedString, regexNumberExpression } from '../../util/helpers';
 import Tooltip from 'react-png-tooltip'
 
 const { Header, Footer, Content } = Layout;
@@ -500,7 +500,17 @@ if(x[0].charCodeAt()>=97)
                     <div className="col-sm" >
                         <Form.Item>
                             {getFieldDecorator("email", {
-                                rules: [{ required: true, message: ValidationConstants.emailField[0] }],
+                                rules: [
+                                    {
+                                        required: true,
+                                        message: ValidationConstants.emailField[0]
+                                    },
+                                    {
+                                        type: "email",
+                                        pattern: new RegExp(AppConstants.emailExp),
+                                        message: ValidationConstants.email_validation
+                                    }
+                                ],
                             })(
                                 <InputWithHead
                                     required={"required-field pt-0 pb-0"}
@@ -526,6 +536,7 @@ if(x[0].charCodeAt()>=97)
                                 heading={AppConstants.contactNO}
                                 placeholder={AppConstants.enterContactNo}
                                 name={'contactNo'}
+                                maxLength={10}
                                 onChange={(event) => {
                                     this.props.liveScoreAddTeamform({ key: 'mobileNumber', data: event.target.value })
                                 }}
@@ -611,7 +622,7 @@ if(x[0].charCodeAt()>=97)
                     if (firstName && lastName && mobileNumber && email) {
                         formData.append('firstName', firstName)
                         formData.append('lastName', lastName)
-                        formData.append('mobileNumber', mobileNumber)
+                        formData.append('mobileNumber', regexNumberExpression(mobileNumber))
                         formData.append('email', email)
 
                     }
@@ -639,7 +650,7 @@ if(x[0].charCodeAt()>=97)
                     formData.append('divisionId', divisionId)
                     formData.append('firstName', firstName)
                     formData.append('lastName', lastName)
-                    formData.append('mobileNumber', mobileNumber)
+                    formData.append('mobileNumber', regexNumberExpression(mobileNumber))
                     formData.append('email', email)
                     if (userIds.length > 0) {
                         formData.append('userIds', usersArray)

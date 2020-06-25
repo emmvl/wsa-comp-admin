@@ -3,6 +3,7 @@ import "./App.css";
 import "./customStyles/customStyles.css";
 import "./customStyles/antdStyles.css";
 import Routes from "./pages/routes";
+import FullStory from 'react-fullstory';
 import {
   MemoryRouter,
   Router,
@@ -17,6 +18,7 @@ import { Skeleton } from "antd";
 import PrivateRoute from "./util/protectedRoute";
 import ForgotPassword from "./components/forgotPassword"
 
+const ORG_ID = 'Netball';
 function App() {
   const lazyLoad = Component => {
     const lazy = props => {
@@ -31,6 +33,7 @@ function App() {
 
   return (
     <div className="App">
+       <FullStory org={ORG_ID} />
       {/* <MemoryRouter> */}
       <Router history={history} >
         <Switch>

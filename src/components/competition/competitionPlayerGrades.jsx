@@ -35,6 +35,10 @@ const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 let this_obj = null;
 
+var colors = JSON.parse(JSON.stringify(ColorsArray))
+let reverseColors = colors.reverse()
+
+
 const menu = (
     <Menu>
         <Menu.Item onClick={() => this_obj.changeDivisionModal()}>
@@ -637,7 +641,7 @@ class CompetitionPlayerGrades extends Component {
                                                                     <NavLink to={{ pathname: `/userPersonal`, state: { userId: playerItem.userId } }}
                                                                     >
                                                                         <span style={{ cursor: "pointer" }}
-                                                                            className="player-grading-haeding-player-name-text">{playerItem.playerName}</span>
+                                                                            className="player-grading-player-name-text">{playerItem.playerName}</span>
                                                                     </NavLink>
                                                                 </div>
                                                                 <div
@@ -656,12 +660,12 @@ class CompetitionPlayerGrades extends Component {
                                                                     </div>
                                                                     <div>
                                                                         {playerItem.position1 &&
-                                                                            <Tag className="comp-player-table-tag" style={{ background: playerIndex < 37 ? ColorsArray[playerIndex + 1] : '#ee3346', color: "#ffffff" }} key={playerItem.position1}>
+                                                                            <Tag className="comp-player-table-tag" style={{ background: playerItem.position1Color, color: "#ffffff" }} key={playerItem.position1}>
                                                                                 {playerItem.position1}
                                                                             </Tag>
                                                                         }
                                                                         {playerItem.position2 &&
-                                                                            <Tag className="comp-player-table-tag" style={{ background: playerIndex < 36 ? ColorsArray[(playerIndex + 2)] : '#1658ef', color: "#ffffff" }} key={playerItem.position2}>
+                                                                            <Tag className="comp-player-table-tag" style={{ background: playerItem.position2Color, color: "#ffffff" }} key={playerItem.position2}>
                                                                                 {playerItem.position2}
                                                                             </Tag>
                                                                         }
@@ -833,7 +837,7 @@ class CompetitionPlayerGrades extends Component {
                                                     <NavLink to={{ pathname: `/userPersonal`, state: { userId: playerItem.userId } }}
                                                     >
                                                         <span style={{ cursor: "pointer" }}
-                                                            className="player-grading-haeding-player-name-text">{playerItem.playerName}</span>
+                                                            className="player-grading-player-name-text">{playerItem.playerName}</span>
                                                     </NavLink>
                                                 </div>
                                                 <div
@@ -851,17 +855,17 @@ class CompetitionPlayerGrades extends Component {
                                                     </div>
                                                     <div>
                                                         {playerItem.position1 &&
-                                                            <Tag className="comp-player-table-tag" style={{ background: playerIndex <= 38 ? ColorsArray[playerIndex] : '#ee3346', color: "#ffffff" }} key={playerItem.position1}>
+                                                            <Tag className="comp-player-table-tag" style={{ background: playerItem.position1Color, color: "#ffffff" }} key={playerItem.position1}>
                                                                 {playerItem.position1}
                                                             </Tag>
                                                         }
                                                         {playerItem.position2 &&
-                                                            <Tag className="comp-player-table-tag" style={{ background: playerIndex <= 37 ? ColorsArray[(playerIndex + 1)] : '#1658ef', color: "#ffffff" }} key={playerItem.position2}>
+                                                            <Tag className="comp-player-table-tag" style={{ background: playerItem.position2Color, color: "#ffffff" }} key={playerItem.position2}>
                                                                 {playerItem.position2}
                                                             </Tag>
                                                         }
                                                         <img className="comp-player-table-img" src={
-                                                              playerItem.isCommentsAvailable == 1 ?  AppImages.commentFilled :
+                                                            playerItem.isCommentsAvailable == 1 ? AppImages.commentFilled :
                                                                 AppImages.commentEmpty} alt="" height="20" width="20"
                                                             style={{ cursor: "pointer" }}
                                                             onClick={() => this.onClickComment(playerItem, null)}

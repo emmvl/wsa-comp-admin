@@ -253,7 +253,17 @@ class LiveScoreAddScorer extends Component {
                     <div className="col-sm" >
                         <Form.Item>
                             {getFieldDecorator(AppConstants.emailAdd, {
-                                rules: [{ required: true, message: ValidationConstants.emailField[0] }]
+                                rules: [
+                                    {
+                                        required: true,
+                                        message: ValidationConstants.emailField[0]
+                                    },
+                                    {
+                                        type: "email",
+                                        pattern: new RegExp(AppConstants.emailExp),
+                                        message: ValidationConstants.email_validation
+                                    }
+                                ]
                             })(
                                 <InputWithHead
                                     required={"required-field pb-0 pt-0"}
@@ -275,7 +285,7 @@ class LiveScoreAddScorer extends Component {
                                     heading={AppConstants.contactNO}
                                     placeholder={AppConstants.enterContactNo}
                                     onChange={(contactNo) => this.props.liveScoreScorerUpdate(contactNo.target.value, "contactNo")}
-                                    maxLength={15} />
+                                    maxLength={10} />
                             )}
                         </Form.Item>
                     </div>
@@ -433,7 +443,6 @@ class LiveScoreAddScorer extends Component {
 
     onSaveClick = e => {
         const { scorerData, scorerRadioBtn, existingScorerId } = this.props.liveScoreScorerState
-        console.log(existingScorerId, "existingScorerId")
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {

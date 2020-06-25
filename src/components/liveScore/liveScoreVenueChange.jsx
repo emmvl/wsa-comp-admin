@@ -100,7 +100,7 @@ class LiveScoreVenueChange extends Component {
     contentView = (getFieldDecorator) => {
         return (
             <div className="content-view pt-4">
-                {/* <span className='bulk-match-heading' >{AppConstants.whatDoWantDO}</span> */}
+                {/* <span className='text-heading-large' >{AppConstants.whatDoWantDO}</span> */}
                 {this.venueChangeView(getFieldDecorator)}
             </div>
         );
@@ -144,7 +144,7 @@ class LiveScoreVenueChange extends Component {
             <div>
                 {/* start time date and time picker row */}
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <span className='bulk-match-heading mt-0 mb-0' >{AppConstants.changeMatchCriteria}</span>
+                    <span className='text-heading-large mt-0 mb-0' >{AppConstants.changeMatchCriteria}</span>
                     <Tooltip background='#ff8237'>
                         <span>{AppConstants.courtChangeMsg}</span>
                     </Tooltip>
@@ -310,7 +310,7 @@ class LiveScoreVenueChange extends Component {
             <div className="content-view mt-5">
 
                 {/* venue drop down view */}
-                <span className='bulk-match-heading' >{'Change To'}</span>
+                <span className='text-heading-large' >{'Change To'}</span>
                 <InputWithHead required={"required-field"} heading={AppConstants.venue} />
                 <div>
                     <Form.Item>

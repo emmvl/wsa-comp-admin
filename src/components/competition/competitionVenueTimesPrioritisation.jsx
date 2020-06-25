@@ -570,7 +570,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
         return (
             <div>
                 <span className="applicable-to-heading required-field">
-                    {AppConstants.homeTeamRotation}
+                    {AppConstants.competitionVenueAllocation + ":"}
                 </span>
 
                 <Radio.Group

@@ -263,3 +263,11 @@
     border-radius: 5px;
     background-image: var(--app-gradient-right);
 }
+
+.search-flex {
+  display: flex;
+  flex: row;
+  align-items: center;
+  justify-content: flex-end;
+   width: 100%
+}

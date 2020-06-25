@@ -14,7 +14,8 @@ import {
   setAuthToken, getAuthToken,
   setUserId, getUserId,
 } from "../util/sessionStorage";
-import { clearHomeDashboardData, } from "../store/actions/homeAction/homeAction"
+import { clearHomeDashboardData, } from "../store/actions/homeAction/homeAction";
+import { identify, setUserVars } from 'react-fullstory';
 
 
 const { Option } = Select;
@@ -34,6 +35,7 @@ class DashboardLayout extends React.Component {
       if (organisationData.length > 0) {
         let orgData = getOrganisationData()
         let organisationItem = orgData ? orgData : organisationData[0]
+        this.setFullStory(organisationItem);
         await setOrganisationData(organisationItem)
         this.props.onOrganisationChangeAction(organisationItem, "organisationChange")
         this.setState({ dataOnload: false })
@@ -108,10 +110,25 @@ class DashboardLayout extends React.Component {
 
   onOrganisationChange = async (organisationData) => {
     this.props.onOrganisationChangeAction(organisationData, "organisationChange")
+    this.setFullStory(organisationData)
     setOrganisationData(organisationData)
     this.props.clearHomeDashboardData("user")
     history.push("./")
     window.location.reload();
+  }
+
+  setFullStory = (organisationData) =>{
+    if(organisationData!= null ){
+      let exOrgData = getOrganisationData();
+      if(exOrgData == null || organisationData.organisationUniqueKey!= exOrgData.organisationUniqueKey){
+        setUserVars({
+          "displayName" : organisationData.firstName + " " + organisationData.lastName,
+          "email" : organisationData.userEmail,
+          "organisation" : organisationData.name
+         });
+      }
+    }
+   
   }
 
   ///////user profile dropdown
