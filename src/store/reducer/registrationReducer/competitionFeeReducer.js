@@ -735,12 +735,19 @@ function checkVoucherArray(voucherArr, defaultGovtVoucher) {
 //     return invitessObjectArr
 // }
 
+function removeDirect(affiliateArray){
+
+    if(affiliateArray!= null && affiliateArray.length > 0){
+        return affiliateArray.filter(x=>x.registrationInviteesRefId!= 5);
+    }
+}
+
 function createInviteesPostArray(selectedInvitees, getInvitees) {
     let invitessObjectArr = []
     if (isArrayNotEmpty(getInvitees)) {
         for (let i in getInvitees) {
             let selectedInviteesArray = checkExistingInvitees(getInvitees, selectedInvitees)
-            console.log("selectedInviteesArray", selectedInviteesArray)
+           // console.log("selectedInviteesArray", selectedInviteesArray)
             let inviteesObject = null
             if (selectedInviteesArray.status == true) {
                 inviteesObject = {
@@ -769,7 +776,6 @@ function createInviteesPostArray(selectedInvitees, getInvitees) {
         }
         invitessObjectArr.push(invitees_Object)
     }
-    console.log("invitessObjectArr", invitessObjectArr)
     return invitessObjectArr
 }
 function checkOrgKeysSelection(key, orgArray) {
@@ -1835,6 +1841,7 @@ function competitionFees(state = initialState, action) {
                     state.anyOrgAffiliateArr = createInviteesPostArray(action.data, state.competitionDetailData.invitees)
                     state.otherSelected = null
                     state.anyOrgNonSelected = null
+                    state.affiliateArray = removeDirect(state.affiliateArray)
                 }
 
                 if (action.key == 'otherSelected') {
@@ -1863,6 +1870,8 @@ function competitionFees(state = initialState, action) {
                     state.anyOrgNonSelected = action.data
                     state.anyOrgAffiliateArr = []
                 }
+
+               // console.log("state.affiliateArray:: " + JSON.stringify(state.affiliateArray));
             } else if (action.key == 'associationAffilite' || action.key == 'clubAffilite') {
                 if (action.key == 'associationAffilite') {
                     state.associationLeague = action.data
