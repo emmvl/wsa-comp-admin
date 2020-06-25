@@ -4394,7 +4394,7 @@ class RegistrationCompetitionFee extends Component {
       affiliateNonSelected,
       anyOrgNonSelected,
     } = this.props.competitionFeesState;
-    console.log(this.props.appState.registrationInvitees, 'invitees');
+    //console.log(this.props.appState.registrationInvitees, 'invitees');
     let orgLevelId = JSON.stringify(this.state.organisationTypeRefId);
     let regInviteesDisable = this.state.permissionState.regInviteesDisable;
     return (
@@ -4666,7 +4666,7 @@ class RegistrationCompetitionFee extends Component {
       selectedCasualFeeKey.includes(8)
         ? '5'
         : null;
-    console.log(seasonalExpendeKey);
+   // console.log(seasonalExpendeKey);
     return (
       <div className="fees-view pt-5">
         <span className="form-heading">{AppConstants.paymentOptions}</span>
@@ -5423,7 +5423,7 @@ class RegistrationCompetitionFee extends Component {
         ? this.props.competitionFeesState.competitionMembershipProductData
         : [];
     let discountsDisable = this.state.permissionState.discountsDisable;
-    console.log('discountData', discountData);
+   // console.log('discountData', discountData);
     return (
       <div className="discount-view pt-5">
         <div className="contextualHelp-RowDirection">
@@ -5802,7 +5802,7 @@ class RegistrationCompetitionFee extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { ...props } = this.props;
-    console.log(this.props.competitionFeesState);
+   // console.log(this.props.competitionFeesState);
     return (
       <div className="fluid-width" style={{ backgroundColor: '#f7fafc' }}>
         <DashboardLayout
