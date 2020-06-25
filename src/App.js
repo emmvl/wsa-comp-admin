@@ -33,7 +33,7 @@ function App() {
 
   return (
     <div className="App">
-       <FullStory org={ORG_ID} />
+       {/* <FullStory org={ORG_ID} /> */}
       {/* <MemoryRouter> */}
       <Router history={history} >
         <Switch>
