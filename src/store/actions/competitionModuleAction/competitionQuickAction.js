@@ -8,8 +8,32 @@ function updateQuickCompetitionData(item) {
     return action;
 }
 
+function updateTimeSlot(key, index, timeindex, value) {
+    const action = {
+        type: ApiConstants.API_UPDATE_QUICKCOMPETITION_TIMESLOT,
+        key,
+        index,
+        timeindex,
+        value
+    }
+    return action
+}
+
+function updateDivision(key, index, gradeIndex, value) {
+    const action = {
+        type: ApiConstants.API_UPDATE_QUICKCOMPETITION_Division,
+        key,
+        index,
+        gradeIndex,
+        value
+    }
+    return action
+}
+
 
 export {
     updateQuickCompetitionData,
+    updateTimeSlot,
+    updateDivision
 
 }

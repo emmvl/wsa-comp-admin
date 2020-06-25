@@ -1330,6 +1330,7 @@ const AppConstants = {
   _minutes: "Minutes",
 
   lineUpSelectionMsg: "We can’t enable lineup selection without position tracking",
+  umpireListExport: "https://users-api-dev.worldsportaction.com/users/byRole/export/org?",
   umpireListExport: "users/byRole/export/org?",
   disabilityCareNumber: "Disability care Number",
   typeOfDisability: "Type of Disability",
@@ -1338,6 +1339,9 @@ const AppConstants = {
   addType: "Add Type",
   topSellers: "Top Sellers",
   productType: "Product Type",
+  divisionGradeAndTeams: "Division, Grade and Teams",
+  numbersOfTeams: "Number of teams",
+
   shipping: "Shipping",
   pickup: "Pickup",
   productDimensionsWeight: "Product dimensions and weight",

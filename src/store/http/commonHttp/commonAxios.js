@@ -114,6 +114,10 @@ let AxiosApi = {
         var url = '/common/reference/gender';
         return Method.dataGet(url, token)
     },
+    getCommonReferenceCall(body) {
+        var url = "/common/references";
+        return Method.dataPost(url, token, body);
+    },
 
     ////Add Venue Api
     async  addVenue(venuData) {
@@ -206,6 +210,12 @@ let AxiosApi = {
         let url = `/api/venueCourt?venueId=${venueId}`;
         return Method.dataGet(url, token)
     },
+
+    getCommonInit(body) {
+        var url = "/common/references";
+        return Method.dataPost(url, token, body);
+    },
+
     getActionBoxList(payload) {
         let url = `/api/actions`;
         return Method.dataPost(url, token, payload)
