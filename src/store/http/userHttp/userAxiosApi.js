@@ -423,6 +423,12 @@ let Method = {
                   message.error(ValidationConstants.messageStatus401)
                 }
               }
+              else if(err.response.status == 404){
+                return reject({
+                  status: 6,
+                  error: err
+                })
+              }
               else {
                 return reject({
                   status: 5,

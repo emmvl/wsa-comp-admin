@@ -27,7 +27,22 @@ export function* loginApiSaga(action) {
       error: error,
       status: error.status
     });
-    message.error(AppConstants.usernamePasswordIncorrect, 0.8);
+    if(error.status == 6){
+      if(error.error.response!= null && error.error.response!= undefined){
+        if(error.error.response.data!= null && error.error.response.data!= undefined){
+            message.error(error.error.response.data.message, 3.0);
+        }
+        else{
+          message.error(AppConstants.usernamePasswordIncorrect, 0.8);
+        }
+      }
+      else{
+        message.error(AppConstants.usernamePasswordIncorrect, 0.8);
+      }
+    }
+    else{
+      message.error(AppConstants.usernamePasswordIncorrect, 0.8);
+    }
   }
 }
 

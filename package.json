@@ -24,6 +24,7 @@
     "react-csv-reader": "^2.0.2",
     "react-dom": "^16.11.0",
     "react-draft-wysiwyg": "^1.14.4",
+    "react-fullstory": "^1.4.0",
     "react-player": "^1.14.2",
     "react-png-tooltip": "^1.2.0",
     "react-redux": "^7.1.3",
