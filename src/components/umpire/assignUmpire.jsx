@@ -17,6 +17,7 @@ import {
     assignUmpireAction,
     unassignUmpireAction,
 } from "../../store/actions/umpireAction/assignUmpireAction";
+import AppColor from "../../themes/appColor";
 
 
 
@@ -52,13 +53,13 @@ function checkUmpireAssignStatus(data) {
 function checkUmpireRosterStatus(data) {
     let rosterStatus = data ? data.rosterStatus : "N/A"
     if (rosterStatus == "Yes") {
-        return "#00d78d"
+        return AppColor.umpireTextGreen;
     }
     if (rosterStatus == "No") {
-        return "#ff093d"
+        return AppColor.umpireTextRed;
     }
     else {
-        return "#18bbff"
+        return AppColor.standardTxtColor
     }
 }
 
@@ -119,7 +120,7 @@ const column = [
                 <div className="row" style={{ display: 'flex', justifyContent: 'center' }}>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
                         <span class="pt-0 "
-                            style={{ fontWeight: 'bold', color: checkUmpireRosterStatus(user1) }}
+                            style={{ color: checkUmpireRosterStatus(user1) }}
                         >{user1 && (user1.firstName + " " + user1.lastName)}</span>
                     </div>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -141,7 +142,7 @@ const column = [
             return (
                 <div className="row" style={{ display: 'flex', justifyContent: 'center' }}>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
-                        <span style={{ fontWeight: 'bold', color: checkUmpireRosterStatus(user2) }}
+                        <span style={{ color: checkUmpireRosterStatus(user2) }}
                             class="pt-0 " >{user2 && (user2.firstName + " " + user2.lastName)}</span>
                     </div>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -205,7 +206,7 @@ class AssignUmpire extends Component {
             "matchId": record.id,
             "roleId": 15,
             "userId": umpireUserId,
-            "rosterId": userData ? userData : null
+            "rosterId": userData ? userData.rosterId : null
         }
         if (statusText == "Assign") {
             this.props.assignUmpireAction(assignBody, index, umpireKey)

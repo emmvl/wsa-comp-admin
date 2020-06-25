@@ -82,7 +82,7 @@ export function* getAffiliateSaga(action) {
 
 export function* umpireSearchSaga(action) {
     try {
-        const result = yield call(UserAxiosApi.umpireDashboardList, action.data);
+        const result = yield call(UserAxiosApi.umpireList, action.data);
         if (result.status === 1) {
             // console.log('saga', result)
             yield put({

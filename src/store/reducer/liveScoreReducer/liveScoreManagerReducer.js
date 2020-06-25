@@ -71,32 +71,32 @@ function getTeamObj(teamSelectId, teamArr) {
 
 }
 
-function getSelectedTeam(managerSelectedId, managerArr){
+function getSelectedTeam(managerSelectedId, managerArr) {
     let teamObjArr
-    console.log(managerSelectedId,"managerSelectedId")
+    console.log(managerSelectedId, "managerSelectedId")
 
-    for(let i in managerArr){
-        if(managerSelectedId == managerArr[i].id){
-            teamObjArr =  managerArr[i].linkedEntity
-         console.log(teamObjArr,"teamObjArr")
-         return teamObjArr
+    for (let i in managerArr) {
+        if (managerSelectedId == managerArr[i].id) {
+            teamObjArr = managerArr[i].linkedEntity
+            console.log(teamObjArr, "teamObjArr")
+            return teamObjArr
         }
-         
+
     }
 }
-function genrateSelectedTeamId(linkedEntityArr , teamArray){
+function genrateSelectedTeamId(linkedEntityArr, teamArray) {
     let teamIds = []
     let teamsIds
-    console.log(linkedEntityArr,teamArray,"ididid")
+    console.log(linkedEntityArr, teamArray, "ididid")
 
-    for(let i in teamArray){
-        for(let j in linkedEntityArr){
-            if(linkedEntityArr[j].entityId == teamArray[i].id){
+    for (let i in teamArray) {
+        for (let j in linkedEntityArr) {
+            if (linkedEntityArr[j].entityId == teamArray[i].id) {
                 teamIds.push(linkedEntityArr[j].entityId)
             }
         }
     }
-    console.log(teamIds,"teams11")
+    console.log(teamIds, "teams11")
     return teamIds
 }
 function liveScoreMangerState(state = initialState, action) {
@@ -197,6 +197,7 @@ function liveScoreMangerState(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
+                loading: false,
                 error: action.error,
                 status: action.status
             };
@@ -204,6 +205,7 @@ function liveScoreMangerState(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
+                loading: false,
                 error: action.error,
                 status: action.status
             };

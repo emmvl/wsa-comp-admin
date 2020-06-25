@@ -60,7 +60,7 @@ const columns = [
             return (
                 <div>
                     {record.user.userRoleEntities.length > 0 && record.user.userRoleEntities.map((item) => (
-                        <span className="live-score-desc-text side-bar-profile-data" >{item.organisation.name}</span>
+                        <span className='multi-column-text-aligned'>{item.organisation.name}</span>
                     ))
                     }
                 </div>)

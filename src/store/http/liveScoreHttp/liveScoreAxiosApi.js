@@ -5,6 +5,7 @@ import history from "../../../util/history";
 import { message } from "antd";
 import ValidationConstants from "../../../themes/validationConstant";
 import { isArrayNotEmpty } from "../../../util/helpers";
+import { regexNumberExpression } from "../../../util/helpers";
 
 const internetStatus = navigator.onLine ? true : false;
 async function logout() {
@@ -588,9 +589,10 @@ let LiveScoreAxiosApi = {
     },
 
     getLiveScoreScorerList(comID, roleId, body) {
-        let competitionID = localStorage.getItem("competitionId");
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-        var url = `/roster/users?competitionId=${id}&roleId=${roleId}`;
+        console.log(comID , "comIDcomIDcomIDcomID")
+        // let competitionID = localStorage.getItem("competitionId");
+        // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        var url = `/roster/users?competitionId=${comID}&roleId=${roleId}`;
         return Method.dataGet(url, token, body)
     },
 
@@ -641,7 +643,6 @@ let LiveScoreAxiosApi = {
 
 
     liveScoreAddEditScorer(scorerData, existingScorerId, scorerRadioBtn) {
-        let competitionID = localStorage.getItem("competitionId");
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
 
         let body = null
@@ -651,33 +652,24 @@ let LiveScoreAxiosApi = {
                     "id": scorerData.id,
                     "firstName": scorerData.firstName,
                     "lastName": scorerData.lastName,
-                    "mobileNumber": scorerData.mobileNumber,
+                    "mobileNumber": regexNumberExpression(scorerData.mobileNumber),
                     "email": scorerData.email,
-                    // "teams": scorerData.teams
                 }
             } else {
                 body = {
                     "firstName": scorerData.firstName,
                     "lastName": scorerData.lastName,
-                    "mobileNumber": scorerData.contactNo,
+                    "mobileNumber": regexNumberExpression(scorerData.contactNo),
                     "email": scorerData.emailAddress,
-                    // "teams": scorerData.teams
                 }
             }
-            // var url = `/users/member?&competitionId=${id}`;
-            // return Method.dataPost(url, token, body)
 
         } else if (scorerRadioBtn == "existing") {
-
-            // if (existingScorerId) {
             body = {
                 "id": existingScorerId,
-                // "teams": scorerData.teams
             }
-            // }
 
         }
-        console.log(body)
         var url = `/users/member?competitionId=${id}`;
         return Method.dataPost(url, token, body)
     },

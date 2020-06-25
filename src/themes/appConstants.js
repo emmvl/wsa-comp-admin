@@ -1388,8 +1388,10 @@ const AppConstants = {
   discipline: "Discipline",
   injuryAmbulance: "Injury Ambulance",
   injuryFirstAdd: "Injury- First Add",
-  emailExp:"/^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/",
-  childDetails: "Child Details"
+  emailExp: "/^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/",
+  childDetails: "Child Details",
+  downLoadImportHeading: "Download the matches list first then populate umpires details to upload ",
+  assignUmpireToMatch: "Assign Umpires To Matches"
 };
 
 export default AppConstants;

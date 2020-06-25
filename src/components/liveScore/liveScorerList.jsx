@@ -68,20 +68,6 @@ const columns = [
         key: 'teams',
         sorter: (a, b) => a.teams.length - b.teams.length,
         render: (teams, record) => {
-            // teamListArr(teams.length > 0 && teams.map((item) => item.id)) ?
-            //     <NavLink to={{
-            //         pathname: '/liveScorerView',
-            //         // pathname: '/userPersonal',
-            //         state: { tableRecord: record, userId: record.id }
-            //     }}>
-            //         {teams.length > 0 && teams.map((item) => (
-            //             <span class="input-heading-add-another pt-0" >{item.name}</span>
-            //         ))
-            //         }
-            //     </NavLink>:
-            //     teams.length > 0 && teams.map((item) => (
-            //         <span class="input-heading-add-another pt-0" >{item.name}</span>
-            //     ))
             return (
                 <div>
                     {teams.length > 0 && teams.map((item) => (
@@ -91,9 +77,8 @@ const columns = [
                                 // pathname: '/userPersonal',
                                 state: { tableRecord: record, userId: record.id }
                             }}>
-                                {/* <span class="input-heading-add-another pt-0" >{item.name}</span> */}
                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                    <span class="input-heading-add-another pt-0" >{item.name}</span>
+                                    <span className="input-heading-add-another pt-0" >{item.name}</span>
                                 </div>
                             </NavLink>
                             :

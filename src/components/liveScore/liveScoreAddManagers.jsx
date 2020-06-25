@@ -20,7 +20,7 @@ import {
     liveScoreManagerFilter,
     liveScoreManagerSearch
 } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
-import { isArrayNotEmpty, captializedString } from "../../util/helpers";
+import { isArrayNotEmpty, captializedString, regexNumberExpression } from "../../util/helpers";
 
 import Loader from '../../customComponents/loader'
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
@@ -293,8 +293,9 @@ class LiveScoreAddManager extends Component {
                         <Form.Item>
                             {getFieldDecorator(AppConstants.emailAdd, {
                                 rules: [
-                                    {  required: true, 
-                                       message: ValidationConstants.emailField[0] 
+                                    {
+                                        required: true,
+                                        message: ValidationConstants.emailField[0]
                                     },
                                     {
                                         type: "email",
@@ -324,7 +325,7 @@ class LiveScoreAddManager extends Component {
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.contactNO}
                                     placeholder={AppConstants.enterContactNo}
-                                    maxLength={15}
+                                    maxLength={10}
                                     onChange={(mobileNumber) => this.props.liveScoreUpdateManagerDataAction(mobileNumber.target.value, 'mobileNumber')}
                                     value={managerData.mobileNumber} />
                             )}
@@ -465,8 +466,9 @@ class LiveScoreAddManager extends Component {
     };
 
     onSaveClick = e => {
-
         const { managerData, teamId, managerRadioBtn, exsitingManagerId } = this.props.liveScoreMangerState
+
+        console.log(managerData, 'managerData')
 
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -478,7 +480,7 @@ class LiveScoreAddManager extends Component {
                             "id": managerData.id,
                             "firstName": managerData.firstName,
                             "lastName": managerData.lastName,
-                            "mobileNumber": managerData.mobileNumber,
+                            "mobileNumber": regexNumberExpression(managerData.mobileNumber),
                             "email": managerData.email,
                             "teams": managerData.teams
                         }
@@ -486,7 +488,7 @@ class LiveScoreAddManager extends Component {
                         body = {
                             "firstName": managerData.firstName,
                             "lastName": managerData.lastName,
-                            "mobileNumber": managerData.mobileNumber,
+                            "mobileNumber": regexNumberExpression(managerData.mobileNumber),
                             "email": managerData.email,
                             "teams": managerData.teams
                         }

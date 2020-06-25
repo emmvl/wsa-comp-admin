@@ -23,9 +23,9 @@ import history from '../../util/history'
 import Loader from '../../customComponents/loader'
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
-import { isArrayNotEmpty, isNotNullOrEmptyString, captializedString } from '../../util/helpers';
+import { isArrayNotEmpty, captializedString, regexNumberExpression } from '../../util/helpers';
 import ImageLoader from '../../customComponents/ImageLoader'
- 
+
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -77,7 +77,7 @@ class LiveScoreAddPlayer extends Component {
             this.props.liveScoreUpdatePlayerDataAction('', 'addplayerScreen')
             let teamsId = this.state.teamId ? this.state.teamId : this.props.location.state ? this.props.location.state.teamId : null
             const { playerData } = this.props.liveScorePlayerState
-         
+
             playerData.phoneNumber = ""
             playerData.dateOfBirth = ""
 
@@ -152,7 +152,7 @@ class LiveScoreAddPlayer extends Component {
         const { playerData, teamResult } = this.props.liveScorePlayerState
         // const teamResult = this.props.liveScoreTeamState;
         // const teamData = teamResult.teamResult;
-        let teamData = isArrayNotEmpty(teamResult) ?teamResult : []
+        let teamData = isArrayNotEmpty(teamResult) ? teamResult : []
 
         return (
             <div className="content-view pt-0">
@@ -161,7 +161,8 @@ class LiveScoreAddPlayer extends Component {
                 <div className='row'>
                     <div className="col-sm" >
                         <Form.Item >
-                        {getFieldDecorator('firstName', {  normalize : (input) => captializedString(input),
+                            {getFieldDecorator('firstName', {
+                                normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
@@ -170,7 +171,7 @@ class LiveScoreAddPlayer extends Component {
                                     placeholder={AppConstants.enter_firstName}
                                     name={'firstName'}
                                     // onChange={(firstName) => this.props.liveScoreUpdatePlayerDataAction(firstName.target.value? firstName.target.value[0].toUpperCase() + firstName.target.value.slice(1).toLowerCase():"", 'firstName')}
-                                     onChange={(firstName) => this.props.liveScoreUpdatePlayerDataAction(captializedString(firstName.target.value),firstName.target.name)}
+                                    onChange={(firstName) => this.props.liveScoreUpdatePlayerDataAction(captializedString(firstName.target.value), firstName.target.name)}
 
                                     value={playerData.firstName}
                                 />
@@ -180,7 +181,8 @@ class LiveScoreAddPlayer extends Component {
                     </div>
                     <div className="col-sm" >
                         <Form.Item >
-                        {getFieldDecorator('lastName', {  normalize : (input) => captializedString(input),
+                            {getFieldDecorator('lastName', {
+                                normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
@@ -217,6 +219,7 @@ class LiveScoreAddPlayer extends Component {
                             heading={AppConstants.contactNO}
                             placeholder={AppConstants.enterContactNo}
                             name={'contactNo'}
+                            maxLength={10}
                             onChange={(phoneNumber) => this.props.liveScoreUpdatePlayerDataAction(phoneNumber.target.value, 'phoneNumber')}
                             value={playerData.phoneNumber}
                         />
@@ -330,7 +333,7 @@ class LiveScoreAddPlayer extends Component {
                 body.append('firstName', firstName)
                 body.append('lastName', lastName);
                 body.append("dateOfBirth", dateOfBirth);
-                body.append("phoneNumber", phoneNumber);
+                body.append("phoneNumber", regexNumberExpression(phoneNumber));
                 body.append("mnbPlayerId", mnbPlayerId);
                 body.append("teamId", selectedTeamId);
                 body.append("competitionId", id)
@@ -379,7 +382,7 @@ class LiveScoreAddPlayer extends Component {
 
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <Loader visible={this.props.liveScorePlayerState.onLoad} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.screenName == 'fromTeamList' ? '3' : this.state.screenName == 'fromMatchList' ? '2' : "7"} />
                 <Layout>

@@ -80,7 +80,7 @@ const columns = [
     {
         title: 'Manager',
         dataIndex: 'managers',
-        key: 'managers',
+        key: 'managers_1',
         sorter: (a, b) => tableSort(a, b, "managers"),
         render: (managers, record) => <span >
 
@@ -93,7 +93,7 @@ const columns = [
     {
         title: 'Contact',
         dataIndex: 'managers',
-        key: 'managers',
+        key: 'managers_2',
         sorter: (a, b) => tableSort(a, b, "managers"),
 
         render: (managers, record) => <span>
@@ -107,7 +107,7 @@ const columns = [
     {
         title: 'Email',
         dataIndex: 'managers',
-        key: 'managers',
+        key: 'managers_3',
         sorter: (a, b) => tableSort(a, b, "managers"),
         render: (managers, record) => <span>
             {isArrayNotEmpty(managers) && managers.map((item) => (
