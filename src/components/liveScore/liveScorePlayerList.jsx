@@ -61,7 +61,7 @@ const columns = [
             //     pathname: '/liveScorePlayerView',
             //     state: { tableRecord: record }
             // }}>
-            <span class="input-heading-add-another pt-0" onClick={() => this_obj.checkUserId(record)} >{firstName}</span>
+            <span className="input-heading-add-another pt-0" onClick={() => this_obj.checkUserId(record)} >{firstName}</span>
         // </NavLink>
     },
     {
@@ -74,7 +74,7 @@ const columns = [
             //     pathname: '/liveScorePlayerView',
             //     state: { tableRecord: record }
             // }}>
-            <span class="input-heading-add-another pt-0"
+            <span className="input-heading-add-another pt-0"
                 onClick={() => this_obj.checkUserId(record)}
             > {lastName}</span >
         // </NavLink>
@@ -117,6 +117,7 @@ const columns = [
     },
     {
         title: "Action",
+        key: 'action',
         render: (data, record) => <Menu
             className="action-triple-dot-submenu"
             theme="light"

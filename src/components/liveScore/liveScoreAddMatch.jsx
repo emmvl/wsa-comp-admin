@@ -48,7 +48,7 @@ import { entityTypes } from '../../util/entityTypes'
 import { refRoleTypes } from '../../util/refRoles'
 import { umpireListAction } from "../../store/actions/umpireAction/umpireAction"
 import { liveScoreGetMatchDetailInitiate } from "../../store/actions/LiveScoreAction/liveScoreMatchAction";
-import { copyFileSync } from "fs";
+// import { copyFileSync } from "fs";
 
 const { Footer, Content, Header } = Layout;
 const { Option } = Select;
@@ -74,7 +74,6 @@ class LiveScoreAddMatch extends Component {
             compId: null,
             scoringType: null
         }
-        console.log(this.state.matchId, 'matchId', this.state.umpireKey)
         this.props.clearMatchAction()
     }
 
@@ -85,7 +84,7 @@ class LiveScoreAddMatch extends Component {
 
             const { scoringType } = JSON.parse(getUmpireCompetitonData())
             this.setState({ compId: id, scoringType: scoringType })
-            console.log(id, 'scoringType', scoringType)
+
             if (id !== null) {
                 this.props.getCompetitonVenuesList(id, "");
                 this.props.getLiveScoreDivisionList(id)
@@ -269,7 +268,6 @@ class LiveScoreAddMatch extends Component {
 
         let { addEditMatch, matchData, start_date, start_time, matchResult, forfietedTeam } = this.props.liveScoreMatchState
 
-        console.log(matchResult, 'matchResult')
         let date = new Date()
         let endMatchDate = moment(date).format("YYYY-MMM-DD")
         let endMatchTime = moment(date).format("HH:mm")
@@ -324,9 +322,7 @@ class LiveScoreAddMatch extends Component {
     ////modal view
     forfietModalView(getFieldDecorator) {
         let { addEditMatch, forfietedTeam } = this.props.liveScoreMatchState
-        console.log(this.props.liveScoreMatchState, 'this.props.liveScoreMatchState~~~~')
-
-
+     
         return (
             <Modal
                 visible={this.state.forfeitVisible}
@@ -365,8 +361,6 @@ class LiveScoreAddMatch extends Component {
     abandonReasonResult = () => {
 
         let { addEditMatch, matchData, start_date, start_time, matchResult, abandoneReason } = this.props.liveScoreMatchState
-
-        console.log(matchResult, 'matchResult')
         let date = new Date()
         let endMatchDate = moment(date).format("YYYY-MMM-DD")
         let endMatchTime = moment(date).format("HH:mm")
@@ -414,9 +408,6 @@ class LiveScoreAddMatch extends Component {
 
     abandonMatchView() {
         let { addEditMatch, abandoneReason } = this.props.liveScoreMatchState
-        console.log(this.props.liveScoreMatchState, 'this.props.liveScoreMatchState~~~~')
-
-
         return (
             <Modal
                 visible={this.state.abandonVisible}
@@ -1107,7 +1098,15 @@ class LiveScoreAddMatch extends Component {
                     }
 
                     if (this.state.scoringType !== 'SINGLE') {
-                        scorerData = [scorers_1, scorers_2]
+
+                        if (scorer1 && scorer2) {
+                            scorerData = [scorers_1, scorers_2]
+                        } else if (scorer1) {
+                            scorerData = [scorers_1]
+                        } else if (scorer2) {
+                            scorerData = [scorers_2]
+                        }
+
 
                     } else {
                         if (scorer1) {
@@ -1117,7 +1116,16 @@ class LiveScoreAddMatch extends Component {
 
                     }
 
+                    // if (umpire1TextField && umpire2TextField) {
+                    //     umpireData = [umpire_1_Obj, umpire_2_Obj]
 
+                    // } else if (umpire1TextField) {
+                    //     umpireData = [umpire_1_Obj]
+
+                    // } else if (umpire2TextField) {
+                    //     umpireData = [umpire_2_Obj]
+
+                    // }
 
                     umpireData = [umpire_1_Obj, umpire_2_Obj]
 
@@ -1150,10 +1158,33 @@ class LiveScoreAddMatch extends Component {
                     }
 
                     if (this.state.scoringType !== 'SINGLE') {
-                        umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1, scorers_2]
+                        if (umpire1Name && umpire2Name && scorer1 && scorer2) {
+                            umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1, scorers_2]
+                        } else if (umpire1Name && umpire2Name && scorer1) {
+                            umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1]
+                        } else if (umpire1Name && umpire2Name && scorer2) {
+                            umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_2]
+                        } else if (umpire1Name && scorer1) {
+
+                            umpireData = [umpire_1_Obj, scorers_1]
+                        } else if (umpire2Name && scorer1) {
+
+                            umpireData = [umpire_2_Obj, scorers_1]
+                        } else if (umpire1Name && scorer2) {
+
+                            umpireData = [umpire_1_Obj, scorers_1]
+                        } else if (umpire2Name && scorer2) {
+
+                            umpireData = [umpire_2_Obj, scorers_2]
+                        }
+
 
                     } else {
-                        umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1]
+                        if (scorers_1) {
+                            umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1]
+                        } else {
+                            umpireData = [umpire_1_Obj, umpire_2_Obj]
+                        }
 
                     }
 

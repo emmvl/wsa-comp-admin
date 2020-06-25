@@ -12,6 +12,7 @@ import Loader from '../../customComponents/loader'
 import { getUmpireCompetiton } from '../../util/sessionStorage'
 import { message } from "antd";
 import ValidationConstants from '../../themes/validationConstant'
+import { exportFilesAction } from "../../store/actions/appAction"
 
 
 const { Content, Header, Footer } = Layout;
@@ -22,32 +23,66 @@ class UmpireImport extends Component {
         super(props);
         this.state = {
             csvdata: null,
-            screenName: props.location ? props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null : null
+            screenName: props.location ? props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null : null,
+            organisationId: null,
+            competitionId: null
         }
     }
 
+    componentDidMount() {
+        let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
+        let compId = JSON.parse(getUmpireCompetiton())
+        this.setState({ organisationId: organisationId, competitionId: compId })
+    }
+
+    onExport() {
+        let url = AppConstants.umpireDashboardExport + `competitionId=${this.state.competitionId}&organisationId=${this.state.organisationId}`
+        this.props.exportFilesAction(url)
+    }
 
     ///////view for breadcrumb
     headerView = () => {
+
         return (
             <div className="header-view">
-                <Header className="form-header-view" style={{
-                    backgroundColor: "transparent",
-                    display: "flex",
-                    alignItems: "center",
-                }} >
-                    <div className="row" >
-                        <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
-                            <Breadcrumb separator=" > ">
-                                <Breadcrumb.Item className="breadcrumb-add">{AppConstants.importUmpire}</Breadcrumb.Item>
-                            </Breadcrumb>
+                <Header
+                    className="form-header-view"
+                    style={{
+                        backgroundColor: "transparent",
+                        display: "flex",
+                        alignItems: "center"
+                    }}
+                >
+                    <Breadcrumb separator=">">
+                        <Breadcrumb.Item className="breadcrumb-add">{this.state.screenName == "umpireDashboard" ? AppConstants.assignUmpireToMatch : AppConstants.importUmpire}</Breadcrumb.Item>
+                    </Breadcrumb>
+                </Header>
+            </div>
+        );
+    };
+
+    titleView = () => {
+        return (
+            <div className="comp-venue-courts-dropdown-view mt-0">
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm">
+                            <div
+                                style={{
+                                    width: "fit-content",
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                }}
+                            >
+                                <span className={`input-heading`}>{AppConstants.downLoadImportHeading}</span>
+                            </div>
                         </div>
                     </div>
-                </Header >
+                </div>
             </div>
-        )
-    }
-
+        );
+    };
     handleForce = data => {
         this.setState({ csvdata: data.target.files[0] })
     };
@@ -93,7 +128,7 @@ class UmpireImport extends Component {
                 <div className="col-sm"
                     style={{ marginTop: 10 }}>
                     <div className="row">
-                        <div className="reg-add-save-button">
+                        <div className="reg-add-save-button " style={{ marginRight: 10 }}>
                             {
                                 this.state.screenName == 'umpireRoaster' ?
 
@@ -107,6 +142,11 @@ class UmpireImport extends Component {
                                     </Button>
                             }
                         </div>
+                        {this.state.screenName == "umpireDashboard" && <div className="reg-add-save-button"  >
+                            <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
+                                {AppConstants.downloadTemplate}
+                            </Button>
+                        </div>}
                     </div>
                 </div>
             </div>
@@ -119,9 +159,10 @@ class UmpireImport extends Component {
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={this.state.screenName == 'umpire' ? '2' : this.state.screenName == 'umpireRoaster' ? '3' : "1"} />
-                <Loader visible={this.props.umpireDashboardState.onLoad} />
+                <Loader visible={this.props.umpireDashboardState.onLoad || this.props.appState.onLoad} />
                 <Layout>
                     {this.headerView()}
+                    {this.state.screenName == "umpireDashboard" && this.titleView()}
                     <Content>
                         <div className="formView">
                             {this.contentView()}
@@ -134,12 +175,16 @@ class UmpireImport extends Component {
     }
 }
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ umpireDashboardImportAction }, dispatch)
+    return bindActionCreators({
+        umpireDashboardImportAction,
+        exportFilesAction
+    }, dispatch)
 }
 
 function mapStateToProps(state) {
     return {
         umpireDashboardState: state.UmpireDashboardState,
+        appState: state.AppState
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)((UmpireImport));

@@ -16,6 +16,9 @@ import { refRoleTypes } from '../../util/refRoles'
 import { getUmpireCompetiton, setUmpireCompition, getOrganisationData, setUmpireCompitionData, getUmpireCompetitonData } from '../../util/sessionStorage'
 import moment, { utc } from "moment";
 import { exportFilesAction } from "../../store/actions/appAction"
+import AppColor from "../../themes/appColor";
+
+
 const { Content } = Layout;
 const { SubMenu } = Menu;
 const { Option } = Select;
@@ -27,7 +30,17 @@ function tableSort(a, b, key) {
     let stringB = JSON.stringify(b[key])
     return stringA.localeCompare(stringB)
 }
-let this_obj = null;
+
+function validateColor(data) {
+
+    if (data.verifiedBy !== null || data.status == 'YES') {
+        return AppColor.umpireTextGreen;
+    } else if (data.verifiedBy !== null || data.status == 'NO') {
+        return AppColor.umpireTextRed;
+    } else {
+        return AppColor.standardTxtColor
+    }
+}
 
 
 
@@ -96,7 +109,7 @@ const columns = [
                             pathname: '/userPersonal',
                             state: { userId: umpires[0].matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" }
                         }}>
-                            <span style={{ fontWeight: 'bold', color: (umpires[0].verifiedBy !== null || umpires[0].status == 'YES') ? '#00d78d' : (umpires[0].verifiedBy !== null || umpires[0].status == 'NO') ? '#ff093d' : '#18bbff' }} >{umpires[0].umpireName}</span>
+                            <span style={{ color: validateColor(umpires[0]) }}>{umpires[0].umpireName}</span>
                         </NavLink>
                         :
                         <span>{''}</span>
@@ -122,10 +135,7 @@ const columns = [
                             umpires[0] ?
 
                                 isArrayNotEmpty(umpires[0].organisations) && umpires[0].organisations.map((item) => (
-                                    // <span className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
-                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                        <span  >{item.name}</span>
-                                    </div>
+                                    <span className='multi-column-text-aligned' >{item.name}</span>
                                 ))
 
                                 :
@@ -151,7 +161,7 @@ const columns = [
                             pathname: '/userPersonal',
                             state: { userId: umpires[1].matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" }
                         }}>
-                            <span style={{ fontWeight: 'bold', color: (umpires[1].verifiedBy !== null || umpires[1].status == 'YES') ? '#00d78d' : (umpires[1].verifiedBy !== null || umpires[1].status == 'NO') ? '#ff093d' : '#18bbff' }} >{umpires[1].umpireName}</span>
+                            <span style={{ color: validateColor(umpires[1]) }} >{umpires[1].umpireName}</span>
                         </NavLink>
 
                         :
@@ -174,9 +184,7 @@ const columns = [
                         umpires ?
                             umpires[1] ?
                                 isArrayNotEmpty(umpires[1].organisations) && umpires[1].organisations.map((item) => (
-                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                        <span  >{item.name}</span>
-                                    </div>
+                                    <span className='multi-column-text-aligned' >{item.name}</span>
                                 ))
 
                                 :
@@ -231,19 +239,15 @@ const columns = [
                             :
                             null
                         :
-                        null
+                        <Menu.Item key={'1'}>
+                            <NavLink to={{
+                                pathname: '/liveScoreAddMatch',
+                                state: { matchId: record.id, umpireKey: 'umpire', isEdit: true }
+                            }} >
+                                <span >Edit</span>
+                            </NavLink>
+                        </Menu.Item>
                 }
-
-
-
-                <Menu.Item key="2" >
-                    {/* <NavLink to={{
-                        pathname: "./liveScoreAssignMatch",
-                        state: { record: record }
-                    }}> */}
-                    <span >Delete</span>
-                    {/* </NavLink> */}
-                </Menu.Item>
             </Menu.SubMenu>
         </Menu>
     }
@@ -269,7 +273,6 @@ class UmpireDashboard extends Component {
             orgId: null,
             compArray: []
         }
-        this_obj = this
     }
 
     componentDidMount() {

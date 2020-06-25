@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 import React, { Component } from "react";
 import { Layout, Breadcrumb, Button, Form, Select, Radio, Spin, AutoComplete } from 'antd';
 import './umpire.css';
@@ -10,7 +11,7 @@ import InputWithHead from "../../customComponents/InputWithHead";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getUmpireCompId, getUmpireCompetiton } from '../../util/sessionStorage'
-import { isArrayNotEmpty, captializedString } from "../../util/helpers";
+import { isArrayNotEmpty, captializedString, regexNumberExpression } from "../../util/helpers";
 import Loader from '../../customComponents/loader'
 import {
     umpireListAction,
@@ -224,7 +225,7 @@ class AddUmpire extends Component {
                                     placeholder={AppConstants.selectAffiliate}
                                     style={{ width: "100%", }}
                                     onChange={(affiliateId) => this.props.updateAddUmpireData(affiliateId, 'affiliateId')}
-                                    value={affiliateId}
+                                    // value={affiliateId}
                                     notFoundContent={onAffiliateLoad == true ? <Spin size="small" /> : null}
                                     optionFilterProp="children"
                                 >
@@ -260,7 +261,7 @@ class AddUmpire extends Component {
                                     heading={AppConstants.firstName}
                                     placeholder={AppConstants.firstName}
                                     onChange={(firstName) => this.props.updateAddUmpireData(captializedString(firstName.target.value), 'firstName')}
-                                    value={umpireData.firstName}
+                                // value={umpireData.firstName}
                                 />
                             )}
 
@@ -277,7 +278,7 @@ class AddUmpire extends Component {
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.lastName}
                                     onChange={(lastName) => this.props.updateAddUmpireData(captializedString(lastName.target.value), 'lastName')}
-                                    value={umpireData.lastName}
+                                // value={umpireData.lastName}
                                 />
                             )}
                         </Form.Item>
@@ -289,9 +290,9 @@ class AddUmpire extends Component {
                         <Form.Item>
                             {getFieldDecorator(AppConstants.emailAdd, {
                                 rules: [
-                                    { 
-                                        required: true, 
-                                        message: ValidationConstants.emailField[0] 
+                                    {
+                                        required: true,
+                                        message: ValidationConstants.emailField[0]
                                     },
                                     {
                                         type: "email",
@@ -305,7 +306,7 @@ class AddUmpire extends Component {
                                     heading={AppConstants.emailAdd}
                                     placeholder={AppConstants.enterEmail}
                                     onChange={(email) => this.props.updateAddUmpireData(email.target.value, 'email')}
-                                    value={umpireData.email}
+                                    // value={umpireData.email}
                                     disabled={this.state.isEdit == true && true}
                                 />
                             )}
@@ -321,9 +322,9 @@ class AddUmpire extends Component {
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.contactNO}
                                     placeholder={AppConstants.enterContactNo}
-                                    maxLength={15}
+                                    maxLength={10}
                                     onChange={(mobileNumber) => this.props.updateAddUmpireData(mobileNumber.target.value, 'mobileNumber')}
-                                    value={umpireData.mobileNumber}
+                                // value={umpireData.mobileNumber}
                                 />
                             )}
                         </Form.Item>
@@ -347,7 +348,7 @@ class AddUmpire extends Component {
                                     placeholder={AppConstants.selectAffiliate}
                                     style={{ width: "100%", }}
                                     onChange={(affiliateId) => this.props.updateAddUmpireData(affiliateId, 'affiliateId')}
-                                    value={affiliateId}
+                                    // value={affiliateId}
                                     optionFilterProp="children"
                                 // onSearch={(name) => this.props.getUmpireAffiliateList({ id: this.state.competition_id, name: name })}
                                 // notFoundContent={onAffiliateLoad == true ? <Spin size="small" /> : null}
@@ -486,7 +487,7 @@ class AddUmpire extends Component {
                             "id": umpireData.id,
                             "firstName": umpireData.firstName,
                             "lastName": umpireData.lastName,
-                            "mobileNumber": umpireData.mobileNumber,
+                            "mobileNumber": regexNumberExpression(umpireData.mobileNumber),
                             "email": umpireData.email,
                             "affiliates": umpireData.affiliates
                         }
@@ -494,7 +495,7 @@ class AddUmpire extends Component {
                         body = {
                             "firstName": umpireData.firstName,
                             "lastName": umpireData.lastName,
-                            "mobileNumber": umpireData.mobileNumber,
+                            "mobileNumber": regexNumberExpression(umpireData.mobileNumber),
                             "email": umpireData.email,
                             "affiliates": umpireData.affiliates
                         }

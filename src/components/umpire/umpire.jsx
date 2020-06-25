@@ -88,7 +88,8 @@ const columns = [
                 <div>
                     {linkedEntity.length > 0 && linkedEntity.map((item) => (
 
-                        <span style={{ color: '#ff8237', cursor: 'pointer' }} className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
+                        // <span style={{ color: '#ff8237', cursor: 'pointer', display: 'flex', flexDirection: 'column' }}  >{item.name}</span>
+                        <span style={{ color: '#ff8237', cursor: 'pointer' }} className='multi-column-text-aligned' >{item.name}</span>
                     ))
                     }
                 </div>)

@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import history from "../../util/history";
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
-import { isArrayNotEmpty, captializedString } from "../../util/helpers";
+import { isArrayNotEmpty, captializedString, regexNumberExpression } from "../../util/helpers";
 import Loader from '../../customComponents/loader'
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 import {
@@ -253,7 +253,7 @@ class LiveScoreAddEditCoach extends Component {
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.contactNO}
                                     placeholder={AppConstants.enterContactNo}
-                                    maxLength={15}
+                                    maxLength={10}
                                     onChange={(mobileNumber) => this.props.liveScoreUpdateCoach(mobileNumber.target.value, 'mobileNumber')}
                                     value={coachdata.mobileNumber}
                                 />
@@ -423,7 +423,7 @@ class LiveScoreAddEditCoach extends Component {
                             "id": coachdata.id,
                             "firstName": coachdata.firstName,
                             "lastName": coachdata.lastName,
-                            "mobileNumber": coachdata.mobileNumber,
+                            "mobileNumber": regexNumberExpression(coachdata.mobileNumber),
                             "email": coachdata.email,
                             "teams": coachdata.teams
                         }
@@ -432,7 +432,7 @@ class LiveScoreAddEditCoach extends Component {
                         body = {
                             "firstName": coachdata.firstName,
                             "lastName": coachdata.lastName,
-                            "mobileNumber": coachdata.mobileNumber,
+                            "mobileNumber": regexNumberExpression(coachdata.mobileNumber),
                             "email": coachdata.email,
                             "teams": coachdata.teams
                         }

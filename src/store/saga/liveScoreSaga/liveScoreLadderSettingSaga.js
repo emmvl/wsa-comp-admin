@@ -21,7 +21,7 @@ function* errorSaga(error) {
         status: error.status
     });
     setTimeout(() => {
-        message.error("Something went wrong.");
+        // message.error("Something went wrong.");
     }, 800);
 }
 
