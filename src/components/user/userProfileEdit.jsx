@@ -304,7 +304,16 @@ class UserProfileEdit extends Component {
                      <div className="col-sm" >
                         <Form.Item >
                         {getFieldDecorator('email', {
-                            rules: [{ required: true, message: ValidationConstants.emailField[0]}],
+                            rules: [
+                                { 
+                                    required: true, message: ValidationConstants.emailField[0]
+                                },
+                                {
+                                    type: "email",
+                                    pattern: new RegExp(AppConstants.emailExp),
+                                    message: ValidationConstants.email_validation
+                                }
+                            ],
                         })(
                             <InputWithHead
                                 required={"required-field"}
