@@ -473,7 +473,17 @@ class UserAddAffiliates extends Component {
 
                         <Form.Item >
                             {getFieldDecorator(`email${index}`, {
-                                rules: [{ required: true, message: ValidationConstants.emailField[0] }],
+                                rules: [
+                                    {  
+                                        required: true, 
+                                        message: ValidationConstants.emailField[0] 
+                                    },
+                                    {
+                                        type: "email",
+                                        pattern: new RegExp(AppConstants.emailExp),
+                                        message: ValidationConstants.email_validation
+                                    }
+                                ],
                             })(
                                 <InputWithHead
                                     required={"required-field pt-0 pb-0"}
