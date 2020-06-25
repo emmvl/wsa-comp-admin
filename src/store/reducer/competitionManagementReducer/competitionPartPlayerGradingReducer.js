@@ -1,7 +1,6 @@
 import ApiConstants from "../../../themes/apiConstants";
 import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
-
-
+import ColorsArray from '../../../util/colorsArray';
 
 const initialState = {
     onLoad: false,
@@ -27,7 +26,8 @@ const initialState = {
     commentLoad: false
 };
 
-
+var positionColorArray = [];
+const colorsArray = ColorsArray;
 
 function unassignedListDataFormation(data, ) {
     let assignedPartPlayerGradingListData = []
@@ -52,7 +52,6 @@ function unassignedListDataFormation(data, ) {
         assignedPartPlayerGradingListData
     }
 }
-
 
 function updatedAssignData(assignArr, source, destination) {
     let match_Index = assignArr.findIndex(x => x.teamId == null)
@@ -81,6 +80,51 @@ function updatedAssignData(assignArr, source, destination) {
     return {
         updatedplayerAssignData,
         assignArr
+    }
+}
+
+function getPositionColor(position) {
+
+    let teamColorTempArray = JSON.parse(JSON.stringify(positionColorArray));
+    let index = teamColorTempArray.findIndex((x) => x.position === position);
+    var color = "#999999";
+    if (index !== -1) {
+        color = teamColorTempArray[index].colorCode;
+    } else {
+        for (var i in colorsArray) {
+            let colorIndex = teamColorTempArray.findIndex(
+                (x) => x.colorCode === colorsArray[i]
+            );
+            if (colorIndex === -1) {
+                positionColorArray.push({ position: position, colorCode: colorsArray[i] });
+                color = colorsArray[i];
+                break;
+            }
+        }
+    }
+    return color;
+}
+function updateColor(data) {
+    console.log(data)
+    if (data.length > 0) {
+        for (let i in data) {
+            let team = data[i].players
+            for (let j in team) {
+                if (team[j].position1 !== null) {
+                    team[j].position1Color = getPositionColor(team[j].position1)
+                }
+                if (team[j].position2 !== null) {
+                    team[j].position2Color = getPositionColor(team[j].position2)
+                }
+                console.log(team[j])
+
+            }
+
+        }
+        return data
+    }
+    else {
+        return data
     }
 }
 
@@ -165,11 +209,10 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
 
         case ApiConstants.API_GET_COMPETITION_PART_PLAYER_GRADING_LIST_SUCCESS:
             let partPlayerGradingListData = isArrayNotEmpty(action.result) ? action.result : []
-            // let assignedPartPlayerGradingListData = partPlayerGradingListData
-            // console.log(partPlayerGradingListData)
-            state.AllPartPlayerGradingListData = JSON.parse(JSON.stringify(partPlayerGradingListData))
+            let updatedPlayers = updateColor(JSON.parse(JSON.stringify(partPlayerGradingListData)))
+            state.AllPartPlayerGradingListData = JSON.parse(JSON.stringify(updatedPlayers))
 
-            let teamData = unassignedListDataFormation(JSON.parse(JSON.stringify(partPlayerGradingListData)));
+            let teamData = unassignedListDataFormation(JSON.parse(JSON.stringify(updatedPlayers)));
             state.unassignedPartPlayerGradingListData = teamData.unassignedPartPlayerGradingListData
             state.assignedPartPlayerGradingListData = teamData.assignedPartPlayerGradingListData
             console.log(state.unassignedPartPlayerGradingListData, "partPlayerGradingListData", state.assignedPartPlayerGradingListData)

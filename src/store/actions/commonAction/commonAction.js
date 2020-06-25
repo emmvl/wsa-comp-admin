@@ -187,32 +187,32 @@ function courtListAction(venueId) {
     return action;
 }
 // Send invite to
-function inviteTypeAction(){
+function inviteTypeAction() {
     const action = {
         type: ApiConstants.API_GET_INVITE_TYPE_LOAD,
     }
     return action;
-}	
+}
 
 function getAllowTeamRegistrationTypeAction() {
-								   
+
     const action = {
         type: ApiConstants.API_ALLOW_TEAM_REGISTRATION_TYPE_LOAD,
 
     };
 
     return action
-}	
+}
 // Registration RegistrationRestrictionType
 
-function registrationRestrictionTypeAction(){
+function registrationRestrictionTypeAction() {
     const action = {
         type: ApiConstants.API_REGISTRATION_RESTRICTIONTYPE_LOAD,
 
     };
 
     return action;
-}		 
+}
 
 
 function disabilityReferenceAction() {
@@ -220,6 +220,15 @@ function disabilityReferenceAction() {
         type: ApiConstants.API_DISABILITY_REFERENCE_LOAD,
     };
     return action;
+}
+
+
+function quickCompetitionInit(body) {
+    const action = {
+        type: ApiConstants.API_GET_COMMON_INIT_LOAD,
+        body
+    }
+    return action
 }
 
 export {
@@ -246,7 +255,8 @@ export {
     getFinalFixtureTemplateAction,
     courtListAction,
     inviteTypeAction,
-	getAllowTeamRegistrationTypeAction,
+    getAllowTeamRegistrationTypeAction,
     registrationRestrictionTypeAction,
-    disabilityReferenceAction
+    disabilityReferenceAction,
+    quickCompetitionInit
 }

@@ -46,10 +46,11 @@ const initialState = {
     applyToData: [],
     extraTimeDrawData: [],
     finalFixtureTemplateData: [], courtLoad: false, courtList: [],
-	inviteTypeData:[],
-	allowTeamRegistration: [],	
-    registrationTypeData:[],
-    disabilityList: []	  
+    inviteTypeData: [],
+    allowTeamRegistration: [],
+    registrationTypeData: [],
+    disabilityList: [],
+    days: []
 };
 
 
@@ -275,7 +276,7 @@ function commonReducerState(state = initialState, action) {
                 disabilityList: isArrayNotEmpty(action.result) ? action.result : [],
                 onLoad: false,
                 error: null
-            };    
+            };
 
         case ApiConstants.API_GET_PHOTO_TYPE_LOAD:
             return {
@@ -346,7 +347,7 @@ function commonReducerState(state = initialState, action) {
                 courtLoad: false
             };
         // Send invite to
-       
+
         case ApiConstants.API_GET_INVITE_TYPE_LOAD:
             return {
                 ...state,
@@ -360,23 +361,23 @@ function commonReducerState(state = initialState, action) {
                 inviteTypeData: action.result,
                 status: action.status
             }
-		case ApiConstants.API_ALLOW_TEAM_REGISTRATION_TYPE_LOAD:								   
-                return {
-                    ...state,
-                    onLoad: true
-                }
-    
-            case ApiConstants.API_ALLOW_TEAM_REGISTRATION_TYPE_SUCCESS:
-                return {
-                    ...state,
-                    onLoad: true,
-                    allowTeamRegistration: action.result,
-                    status: action.status
-                }
-				
-		case ApiConstants.API_REGISTRATION_RESTRICTIONTYPE_LOAD:
-						
-            return { ...state}; 
+        case ApiConstants.API_ALLOW_TEAM_REGISTRATION_TYPE_LOAD:
+            return {
+                ...state,
+                onLoad: true
+            }
+
+        case ApiConstants.API_ALLOW_TEAM_REGISTRATION_TYPE_SUCCESS:
+            return {
+                ...state,
+                onLoad: true,
+                allowTeamRegistration: action.result,
+                status: action.status
+            }
+
+        case ApiConstants.API_REGISTRATION_RESTRICTIONTYPE_LOAD:
+
+            return { ...state };
 
         case ApiConstants.API_REGISTRATION_RESTRICTIONTYPE_SUCCESS:
             return {
@@ -385,6 +386,12 @@ function commonReducerState(state = initialState, action) {
                 registrationTypeData: action.result,
                 status: action.status
             };
+
+
+        case ApiConstants.API_GET_COMMON_INIT_LOAD:
+            return { ...state, }
+        case ApiConstants.API_GET_COMMON_INIT_SUCCESS:
+            return { ...state, onLoad: false, days: action.result.Day }
         default:
             return state;
     }
