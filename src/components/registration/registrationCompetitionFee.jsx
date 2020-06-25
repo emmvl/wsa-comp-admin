@@ -2664,6 +2664,7 @@ class RegistrationCompetitionFee extends Component {
               }
             }
             formData.append('logoIsDefault', postData.logoIsDefault);
+            console.log("Invitees::" + JSON.stringify(invitees));
             this.props.saveCompetitionFeesDetailsAction(
               formData,
               compFeesState.defaultCompFeesOrgLogoData.id
