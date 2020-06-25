@@ -1057,7 +1057,7 @@ function createProductFeeArr(data) {
             let type_Object_casual = null
             let type_Object_seasonal = null
             let type_object_team_seasonal = null;
-            //console.log(" All statusCasual, statusSeasonal, statusteamSeasonal", statusCasual, statusSeasonal, statusteamSeasonal)
+            console.log(" All statusCasual, statusSeasonal, statusteamSeasonal", statusCasual, statusSeasonal, statusteamSeasonal)
             ////// CASUAL OBJECT
             if (statusCasual.status == true) {
                 let mFeesCasual = Number(memberShipProductType[j].mCasualFee) + Number(memberShipProductType[j].mCasualGst)
@@ -1869,6 +1869,7 @@ function competitionFees(state = initialState, action) {
                     state.otherSelected = null
                     state.anyOrgNonSelected = action.data
                     state.anyOrgAffiliateArr = []
+                    state.affiliateArray = removeDirect(state.affiliateArray)
                 }
 
                // console.log("state.affiliateArray:: " + JSON.stringify(state.affiliateArray));
