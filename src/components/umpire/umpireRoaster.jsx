@@ -16,6 +16,7 @@ import { setUmpireCompId, getUmpireCompId } from '../../util/sessionStorage'
 import moment, { utc } from "moment";
 import ValidationConstants from "../../themes/validationConstant";
 import history from "../../util/history";
+import { exportFilesAction } from "../../store/actions/appAction"
 
 const { Content } = Layout;
 const { SubMenu } = Menu;
@@ -149,7 +150,7 @@ class UmpireRoaster extends Component {
     }
 
     componentDidMount() {
-        let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
+        let { organisationId, } = JSON.parse(localStorage.getItem('setOrganisationData'))
         this.setState({ loading: true })
         this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS')
     }
@@ -301,6 +302,21 @@ class UmpireRoaster extends Component {
         this.setState({ status })
     }
 
+    // on Export
+    onExport() {
+
+        let url = AppConstants.rosterExport + `competitionId=${this.state.selectedComp}&roleId=${15}`
+
+        // if(this.state.status=='All'){
+
+        //     url = `/roster/export/umpire?competitionId=${this.state.selectedComp}&roleId=${15}`
+        // }else{
+        //     url = `/roster/export/umpire?competitionId=${this.state.selectedComp}&status=${this.state.status}&roleId=${15}`
+        // }
+        console.log(url, "ertyu")
+        this.props.exportFilesAction(url)
+    }
+
 
     ///////view for breadcrumb
     headerView = () => {
@@ -329,7 +345,7 @@ class UmpireRoaster extends Component {
                                             justifyContent: "flex-end"
                                         }}
                                     >
-                                        <Button className="primary-add-comp-form" type="primary">
+                                        <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">
                                                     <img
@@ -443,7 +459,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         umpireCompetitionListAction,
         umpireRoasterListAction,
-        umpireRoasterOnActionClick
+        umpireRoasterOnActionClick,
+        exportFilesAction
     }, dispatch)
 }
 

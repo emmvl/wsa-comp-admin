@@ -1391,7 +1391,11 @@ const AppConstants = {
   emailExp: "/^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/",
   childDetails: "Child Details",
   downLoadImportHeading: "Download the matches list first then populate umpires details to upload ",
-  assignUmpireToMatch: "Assign Umpires To Matches"
+  assignUmpireToMatch: "Assign Umpires To Matches",
+  participateInCompReg: 'Participating-In Competition Registrations',
+  ownedCompetitionsReg: 'Owned Competition Registrations',
+  newCompetitionReg: 'New Competition Registration',
+  rosterExport: '/roster/export/umpire?'
 };
 
 export default AppConstants;

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Input, Layout, Button, Table, Select, Menu, Icon, Pagination } from 'antd';
+import { Input, Layout, Button, Table, Select, Menu, Icon, Pagination, message } from 'antd';
 import './umpire.css';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -17,7 +17,10 @@ import { getUmpireCompetiton, setUmpireCompition, getOrganisationData, setUmpire
 import moment, { utc } from "moment";
 import { exportFilesAction } from "../../store/actions/appAction"
 import AppColor from "../../themes/appColor";
+import history from "../../util/history";
+import ValidationConstants from "../../themes/validationConstant";
 
+let this_obj = null
 
 const { Content } = Layout;
 const { SubMenu } = Menu;
@@ -105,12 +108,12 @@ const columns = [
                 umpires ?
                     umpires[0] ?
 
-                        <NavLink to={{
-                            pathname: '/userPersonal',
-                            state: { userId: umpires[0].matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" }
-                        }}>
-                            <span style={{ color: validateColor(umpires[0]) }}>{umpires[0].umpireName}</span>
-                        </NavLink>
+                        // <NavLink to={{
+                        //     pathname: '/userPersonal',
+                        //     state: { userId: umpires[0].matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" }
+                        // }}>
+                        <span style={{ color: validateColor(umpires[0]) }} onClick={() => this_obj.checkUserIdUmpire(record.umpires[0])} >{umpires[0].umpireName}</span>
+                        // </NavLink>
                         :
                         <span>{''}</span>
                     :
@@ -157,12 +160,12 @@ const columns = [
 
                 umpires ?
                     umpires[1] ?
-                        <NavLink to={{
-                            pathname: '/userPersonal',
-                            state: { userId: umpires[1].matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" }
-                        }}>
-                            <span style={{ color: validateColor(umpires[1]) }} >{umpires[1].umpireName}</span>
-                        </NavLink>
+                        // <NavLink to={{
+                        //     pathname: '/userPersonal',
+                        //     state: { userId: umpires[1].matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" }
+                        // }}>
+                        <span style={{ color: validateColor(umpires[1]) }} onClick={() => this_obj.checkUserIdUmpire(record.umpires[1])} >{umpires[1].umpireName}</span>
+                        // </NavLink>
 
                         :
                         <span>{''}</span>
@@ -271,8 +274,10 @@ class UmpireDashboard extends Component {
             venueSuccess: false,
             divisionSuccess: false,
             orgId: null,
-            compArray: []
+            compArray: [],
+            compititionObj: null
         }
+        this_obj = this
     }
 
     componentDidMount() {
@@ -309,7 +314,7 @@ class UmpireDashboard extends Component {
                 this.props.getUmpireDashboardVenueList(firstComp)
 
 
-                this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey, compArray: compList, venueLoad: true })
+                this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey, compArray: compList, venueLoad: true, compititionObj: compData })
             }
         }
 
@@ -335,6 +340,18 @@ class UmpireDashboard extends Component {
             }
         }
 
+    }
+
+    checkUserIdUmpire(record) {
+        
+        if (record.userId) {
+            history.push("/userPersonal", { userId: record.userId, screenKey: "umpire", screen: "/umpireDashboard" })
+        } else if (record.matchUmpiresId) {
+            history.push("/userPersonal", { userId: record.matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" })
+        } else {
+            message.config({ duration: 1.5, maxCount: 1 })
+            message.warn(ValidationConstants.umpireMessage)
+        }
     }
 
     /// Handle Page change
@@ -411,6 +428,8 @@ class UmpireDashboard extends Component {
             }
         }
         setUmpireCompitionData(JSON.stringify(compObj))
+
+        console.log(this.state.compititionObj, 'compititionObj')
 
     }
 
