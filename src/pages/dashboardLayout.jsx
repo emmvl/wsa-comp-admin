@@ -118,16 +118,16 @@ class DashboardLayout extends React.Component {
   }
 
   setFullStory = (organisationData) =>{
-    if(organisationData!= null ){
-      let exOrgData = getOrganisationData();
-      if(exOrgData == null || organisationData.organisationUniqueKey!= exOrgData.organisationUniqueKey){
-        setUserVars({
-          "displayName" : organisationData.firstName + " " + organisationData.lastName,
-          "email" : organisationData.userEmail,
-          "organisation" : organisationData.name
-         });
-      }
-    }
+    // if(organisationData!= null ){
+    //   let exOrgData = getOrganisationData();
+    //   if(exOrgData == null || organisationData.organisationUniqueKey!= exOrgData.organisationUniqueKey){
+    //     setUserVars({
+    //       "displayName" : organisationData.firstName + " " + organisationData.lastName,
+    //       "email" : organisationData.userEmail,
+    //       "organisation" : organisationData.name
+    //      });
+    //   }
+    // }
    
   }
 
