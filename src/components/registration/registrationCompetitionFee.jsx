@@ -2066,12 +2066,12 @@ class RegistrationCompetitionFee extends Component {
     let postCharityRoundUpData = JSON.parse(
       JSON.stringify(paymentDataArr.charityRoundUp)
     );
-    console.log(
-      'paymentDataArr',
-      paymentDataArr.charityRoundUp,
-      charityTitle,
-      charityDescription
-    );
+    // console.log(
+    //   'paymentDataArr',
+    //   paymentDataArr.charityRoundUp,
+    //   charityTitle,
+    //   charityDescription
+    // );
     postCharityRoundUpData.map((item) => {
       item.charityRoundUpName = charityTitle;
       item.charityRoundUpDescription = charityDescription;
@@ -2125,14 +2125,14 @@ class RegistrationCompetitionFee extends Component {
       }
       return item;
     });
-    console.log('discountDataArr', discountDataArr);
+   // console.log('discountDataArr', discountDataArr);
     let finalOrgPostDiscountData = JSON.parse(JSON.stringify(discountDataArr));
     let orgData = getOrganisationData();
     let currentOrganisationId = orgData ? orgData.organisationId : 0;
     let filterOrgPostDiscountData = finalOrgPostDiscountData.filter(
       (x) => x.organisationId == currentOrganisationId
     );
-    console.log('filterOrgPostDiscountData', filterOrgPostDiscountData);
+   // console.log('filterOrgPostDiscountData', filterOrgPostDiscountData);
     let discountBody = {
       competitionId: competitionId,
       statusRefId: this.state.statusRefId,
@@ -2146,7 +2146,7 @@ class RegistrationCompetitionFee extends Component {
     let compFeesState = this.props.competitionFeesState;
     let fee_data = compFeesState.competitionFeesData;
     let divisionArrayData = compFeesState.competitionDivisionsData;
-    console.log("fee_data", fee_data, divisionArrayData)
+   // console.log("fee_data", fee_data, divisionArrayData)
     if (this.state.statusRefId == 1) {
       this.props.regSaveCompetitionFeeDiscountAction(discountBody, competitionId);
       this.setState({ loading: true });
@@ -2222,10 +2222,10 @@ class RegistrationCompetitionFee extends Component {
       });
     let divisionData = this.props.competitionFeesState.competitionDivisionsData;
     let divisionArray = divisionData !== null ? divisionData : [];
-    console.log('divisionArray', divisionArray);
+   // console.log('divisionArray', divisionArray);
     divisionArray.length > 0 &&
       divisionArray.map((item, index) => {
-        console.log(item);
+       // console.log(item);
         item.divisions.map((divItem, divIndex) => {
           let divisionName = `divisionName${index}${divIndex}`;
           let genderRefId = `genderRefId${index}${divIndex}`;
@@ -2252,6 +2252,7 @@ class RegistrationCompetitionFee extends Component {
         let feeCasualData = [];
         let feeSeasonalTeamData = [];
         let finalpostarray = [];
+       
         // console.log("fee_data::" + JSON.stringify(fee_data));
         for (let i in fee_data) {
           if (fee_data[i].isSeasonal == true && fee_data[i].isCasual == true) {
@@ -2277,10 +2278,12 @@ class RegistrationCompetitionFee extends Component {
                       feeSeasonalData[j].affiliateFee;
                     feeSeasonalData[j]['affiliateSeasonalGST'] =
                       feeSeasonalData[j].affiliateGst;
+                   
                     break;
                   }
                 }
               }
+              
               if (fee_data[i].isTeamSeasonal == true) {
                 feeSeasonalTeamData = fee_data[i].seasonalTeam.allType;
                 for (let j in feeSeasonalData) {
@@ -2302,6 +2305,7 @@ class RegistrationCompetitionFee extends Component {
                   }
                 }
               }
+              
               finalPostData = [...feeSeasonalData];
             } else {
               feeSeasonalData = fee_data[i].seasonal.perType;
@@ -2316,14 +2320,10 @@ class RegistrationCompetitionFee extends Component {
                     feeSeasonalData[j]['casualGST'] = feeCasualData[j].gst;
                     feeSeasonalData[j]['seasonalFees'] = feeSeasonalData[j].fee;
                     feeSeasonalData[j]['seasonalGST'] = feeSeasonalData[j].gst;
-                    feeSeasonalData[j]['affiliateCasualFees'] =
-                      feeCasualData[j].affiliateFee;
-                    feeSeasonalData[j]['affiliateCasualGST'] =
-                      feeCasualData[j].affiliateGst;
-                    feeSeasonalData[j]['affiliateSeasonalFees'] =
-                      feeSeasonalData[j].affiliateFee;
-                    feeSeasonalData[j]['affiliateSeasonalGST'] =
-                      feeSeasonalData[j].affiliateGst;
+                    feeSeasonalData[j]['affiliateCasualFees'] = feeCasualData[j].affiliateFee;
+                    feeSeasonalData[j]['affiliateCasualGST'] = feeCasualData[j].affiliateGst;
+                    feeSeasonalData[j]['affiliateSeasonalFees'] = feeSeasonalData[j].affiliateFee;
+                    feeSeasonalData[j]['affiliateSeasonalGST'] = feeSeasonalData[j].affiliateGst;
                     break;
                   }
                 }
@@ -2449,6 +2449,7 @@ class RegistrationCompetitionFee extends Component {
 
               if (fee_data[i].isTeamSeasonal == true) {
                 feeSeasonalTeamData = fee_data[i].seasonalTeam.allType;
+                //console.log("&&&&&&" + JSON.stringify(feeSeasonalTeamData) )
                 for (let j in feeCasualData) {
                   for (let k in feeSeasonalTeamData) {
                     if (
@@ -2473,7 +2474,7 @@ class RegistrationCompetitionFee extends Component {
                     }
                   }
                 }
-                finalPostData = [...feeSeasonalData];
+                finalPostData = [...feeCasualData];
               } else {
                 finalPostData = [...feeCasualData];
                 finalPostData.map((item) => {
@@ -2543,9 +2544,27 @@ class RegistrationCompetitionFee extends Component {
             });
           } else {
             // alert("check fees")
+
           }
-          let modifyArr = [...finalpostarray, ...finalPostData];
-          finalpostarray = modifyArr;
+
+          console.log("^^^^^^^^^^^^^" + JSON.stringify(finalPostData));
+          console.log("^^^^^^^^^^^^^1" + fee_data[i].isSeasonal);
+          console.log("^^^^^^^^^^^^^2" + fee_data[i].isCasual);
+          console.log("^^^^^^^^^^^^^3" + fee_data[i].isTeamSeasonal);
+
+          if(finalPostData!= null && finalPostData.length > 0 && (fee_data[i].isSeasonal == true || fee_data[i].isCasual == true ||
+                                      fee_data[i].isTeamSeasonal == true)){
+
+            finalPostData.map((item, index) => {
+              finalPostData[index]["isSeasonal"] = fee_data[i].isSeasonal;
+              finalPostData[index]["isCasual"] = fee_data[i].isCasual;
+              finalPostData[index]["isTeamSeasonal"] = fee_data[i].isTeamSeasonal;
+            })
+          
+
+            let modifyArr = [...finalpostarray, ...finalPostData];
+            finalpostarray = modifyArr;
+          }
         }
 
         console.log('finalpostarray::' + JSON.stringify(finalpostarray));
@@ -2574,7 +2593,7 @@ class RegistrationCompetitionFee extends Component {
         let invitees = compFeesState.affiliateArray.concat(
           compFeesState.anyOrgAffiliateArr
         );
-        console.log(invitees, 'compFeesState');
+       // console.log(invitees, 'compFeesState');
         if (tabKey == '1') {
           if (
             compFeesState.competitionDetailData.competitionLogoUrl !== null &&
@@ -2664,7 +2683,7 @@ class RegistrationCompetitionFee extends Component {
               }
             }
             formData.append('logoIsDefault', postData.logoIsDefault);
-            console.log("Invitees::" + JSON.stringify(invitees));
+            //console.log("Invitees::" + JSON.stringify(invitees));
             this.props.saveCompetitionFeesDetailsAction(
               formData,
               compFeesState.defaultCompFeesOrgLogoData.id
@@ -2730,7 +2749,7 @@ class RegistrationCompetitionFee extends Component {
                 ? 1
                 : postData.registrationRestrictionTypeRefId,
           };
-          console.log('payload', finalDivisionPayload);
+          //console.log('payload', finalDivisionPayload);
 
           if (this.checkDivisionEmpty(divisionArrayData) == true) {
             message.error(
@@ -2756,7 +2775,7 @@ class RegistrationCompetitionFee extends Component {
   };
 
   onChange(checkedValues) {
-    console.log('checked = ', checkedValues);
+   // console.log('checked = ', checkedValues);
   }
 
   divisionTableDataOnchange(checked, record, index, keyword) {
@@ -3101,7 +3120,7 @@ class RegistrationCompetitionFee extends Component {
 
   //// On change Invitees
   onInviteesChange(value) {
-    console.log(value, 'value');
+    //console.log(value, 'value');
     let regInviteesselectedData = this.props.competitionFeesState
       .selectedInvitees;
     let arr = [value];
@@ -4165,7 +4184,7 @@ class RegistrationCompetitionFee extends Component {
   };
 
   onInviteeSearch = (value, inviteesType) => {
-    console.log(value, '**** value');
+    //console.log(value, '**** value');
     this.props.onInviteesSearchAction(value, inviteesType);
   };
 
@@ -4325,7 +4344,7 @@ class RegistrationCompetitionFee extends Component {
             loading={detailsData.searchLoad}
           >
             {associationAffilites.map((item) => {
-              console.log(item, 'associationAffilites');
+             // console.log(item, 'associationAffilites');
               return (
                 <Option key={item.organisationId} value={item.organisationId}>
                   {item.name}
