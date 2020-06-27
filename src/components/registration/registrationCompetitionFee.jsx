@@ -2567,9 +2567,16 @@ class RegistrationCompetitionFee extends Component {
         let nonPlayingDate = JSON.stringify(postData.nonPlayingDates);
         let venue = JSON.stringify(compFeesState.postVenues);
         // let invitees = compFeesState.postInvitees
-        let invitees = compFeesState.affiliateArray.concat(
-          compFeesState.anyOrgAffiliateArr
-        );
+        let invitees = [];
+        if(compFeesState.affiliateArray!= null && compFeesState.affiliateArray.length > 0){
+          invitees = compFeesState.affiliateArray.concat(
+            compFeesState.anyOrgAffiliateArr
+          );
+        }
+        else if(compFeesState.anyOrgAffiliateArr!= null && compFeesState.anyOrgAffiliateArr.length > 0){
+            invitees =  compFeesState.anyOrgAffiliateArr
+        }
+       
         if (tabKey == '1') {
           if (
             compFeesState.competitionDetailData.competitionLogoUrl !== null &&
