@@ -26,6 +26,7 @@ const columnsInbox = [
         title: 'Name',
         dataIndex: 'organisationName',
         key: 'organisationName',
+        width: "20%",
         render: (organisationName, e) => (
             <span className="inbox-name-text">{organisationName}</span>
         )
@@ -36,15 +37,15 @@ const columnsInbox = [
         key: 'description',
 
     },
-    // {
-    //     title: 'Time',
-    //     dataIndex: 'time',
-    //     key: 'time',
-    //     width: "25%",
-    //     render: time => (
-    //         <span className="inbox-time-text">{time}</span>
-    //     )
-    // },
+    {
+        title: 'Time',
+        dataIndex: 'createdOn',
+        key: 'createdOn',
+        width: "15%",
+        render: createdOn => (
+            <span className="inbox-time-text">{createdOn}</span>
+        )
+    },
     {
         title: "Action",
         dataIndex: "isActionRequired",
