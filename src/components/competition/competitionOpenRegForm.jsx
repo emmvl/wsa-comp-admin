@@ -383,6 +383,7 @@ class CompetitionOpenRegForm extends Component {
                                             onChange={date => this.divisionTableDataOnchange(moment(date).format("YYYY-MM-DD"), record, index, "fromDate")}
                                             format={"DD-MM-YYYY"}
                                             showTime={false}
+                                            placeholder={"dd-mm-yyyy"}
                                             disabled={!record.ageRestriction || this.state.permissionState.divisionsDisable}
                                             setFieldsValue={fromDate !== null && moment(fromDate)}
                                             disabledDate={d => !d || d.isSameOrAfter(record.toDate)
@@ -410,6 +411,7 @@ class CompetitionOpenRegForm extends Component {
                                             style={{ width: "100%", minWidth: 135 }}
                                             onChange={date => this.divisionTableDataOnchange(moment(date).format("YYYY-MM-DD"), record, index, "toDate")}
                                             format={"DD-MM-YYYY"}
+                                            placeholder={"dd-mm-yyyy"}
                                             showTime={false}
                                             disabled={!record.ageRestriction || this.state.permissionState.divisionsDisable}
                                             setFieldsValue={toDate !== null && moment(toDate)}
@@ -1214,6 +1216,7 @@ class CompetitionOpenRegForm extends Component {
                         <DatePicker
                             className="comp-dashboard-botton-view-mobile"
                             size="large"
+                            placeholder={"dd-mm-yyyy"}
                             style={{ width: "100%" }}
                             onChange={date => this.updateNonPlayingNames(date, index, "date")}
                             format={"DD-MM-YYYY"}
@@ -1500,6 +1503,7 @@ class CompetitionOpenRegForm extends Component {
                                             style={{ width: "100%" }}
                                             onChange={date => this.dateOnChangeFrom(date, "startDate")}
                                             format={"DD-MM-YYYY"}
+                                            placeholder={"dd-mm-yyyy"}
                                             showTime={false}
                                             // value={detailsData.competitionDetailData.startDate && moment(detailsData.competitionDetailData.startDate, "YYYY-MM-DD")}
                                             disabled={compDetailDisable}
@@ -1517,6 +1521,7 @@ class CompetitionOpenRegForm extends Component {
                                             style={{ width: "100%" }}
                                             onChange={date => this.dateOnChangeFrom(date, "endDate")}
                                             format={"DD-MM-YYYY"}
+                                            placeholder={"dd-mm-yyyy"}
                                             showTime={false}
                                             disabledDate={d => !d || d.isBefore(detailsData.competitionDetailData.startDate)}
                                             disabled={compDetailDisable}

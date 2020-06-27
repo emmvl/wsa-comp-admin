@@ -364,6 +364,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                         size="large"
                                         style={{ width: "100%" }}
                                         format={"DD/MM/YYYY"}
+                                        placeholder={"dd-mm-yyyy"}
                                         showTime={false}
                                         onChange={date => this.props.updateVenueConstraintsData(moment(date).format('YYYY-MM-DD'), index, 'nonPlayingDate', 'nonPlayingDates')}
                                         value={item.nonPlayingDate && moment(item.nonPlayingDate)}
@@ -945,7 +946,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     })(
                                         <DatePicker
                                             size="large"
-                                            placeholder={"Select Date"}
+                                            placeholder={"dd-mm-yyyy"}
                                             style={{ width: "100%" }}
                                             onChange={(e) => this.onChangeSetMPValue(e, 'matchDate', index)}
                                             name={"matchDate"}
@@ -1121,7 +1122,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                             })(
                                                 <DatePicker
                                                     size="large"
-                                                    placeholder={"Select Date"}
+                                                    placeholder={"dd-mm-yyyy"}
                                                     style={{ width: "100%" }}
                                                     onChange={(e) => this.onChangeSetLDValue(e, 'matchDate', index)}
                                                     name={"matchDate"}

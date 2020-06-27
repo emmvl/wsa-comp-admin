@@ -329,7 +329,7 @@ class DashboardLayout extends React.Component {
                             }
                           >
                             <div className="registration-menu menu-wrap">
-                              <NavLink to="/registration">
+                              <NavLink to="/registeredUser">
                                 <span className="icon"></span>
                                 {AppConstants.registration}
                               </NavLink>

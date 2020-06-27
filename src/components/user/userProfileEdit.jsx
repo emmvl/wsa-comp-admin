@@ -277,6 +277,7 @@ class UserProfileEdit extends Component {
                             onChange={e => this.onChangeSetValue(e, "dateOfBirth") }
                             format={"DD-MM-YYYY"}
                             showTime={false}
+                            placeholder={"dd-mm-yyyy"}
                             name={'dateOfBirth'}
                         />
                         )}

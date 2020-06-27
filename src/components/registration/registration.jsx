@@ -515,6 +515,7 @@ class Registration extends Component {
                                     className="year-select reg-filter-select"
                                     onChange={e => this.onChangeDropDownValue(e, 'dobFrom')}
                                     format={"DD-MM-YYYY"}
+                                    placeholder={"dd-mm-yyyy"}
                                     showTime={false}
                                     name={'dobFrom'}
                                 />
@@ -525,6 +526,7 @@ class Registration extends Component {
                                 <div className='year-select-heading'>{AppConstants.dobTo}</div>
                                 <DatePicker
                                     size="large"
+                                    placeholder={"dd-mm-yyyy"}
                                     className="year-select reg-filter-select"
                                     onChange={e => this.onChangeDropDownValue(e, 'dobTo')}
                                     //onChange={e => this.setState({dobTo: moment(e, "YYYY-MM-DD")}) }
@@ -657,8 +659,8 @@ class Registration extends Component {
                             <div className="registration-count">
                                 <div className="reg-payment-paid-reg-text">Value of Registrations</div>
                                 {feesPaid != null ?
-                                <div className="reg-payment-price-text">${feesPaid}</div>
-                                : <div className="reg-payment-price-text">0</div> }
+                                    <div className="reg-payment-price-text">${feesPaid}</div>
+                                    : <div className="reg-payment-price-text">0</div>}
                             </div>
                         </div>
                     </div>
@@ -698,7 +700,7 @@ class Registration extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
-                <InnerHorizontalMenu menu={"registration"} regSelectedKey={"1"} />
+                <InnerHorizontalMenu menu={"registration"} regSelectedKey={"2"} />
                 <Layout>
                     {this.headerView()}
                     <Content>

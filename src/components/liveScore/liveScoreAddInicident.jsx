@@ -26,7 +26,7 @@ import history from "../../util/history";
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 import { isArrayNotEmpty, captializedString } from "../../util/helpers";
 import { getLiveScoreCompetiton } from '../../util/sessionStorage';
-import {liveScorePlayerListAction} from '../../store/actions/LiveScoreAction/liveScorePlayerAction'
+import { liveScorePlayerListAction } from '../../store/actions/LiveScoreAction/liveScorePlayerAction'
 
 
 const { Footer, Content, Header } = Layout;
@@ -129,17 +129,17 @@ class LiveScoreAddIncident extends Component {
         )
     }
 
-    Capitalize(str){
-        let text = str.slice(0,1).toUpperCase() + str.slice(1, str.length);
+    Capitalize(str) {
+        let text = str.slice(0, 1).toUpperCase() + str.slice(1, str.length);
         return text
         // return str.charAt(0).toUpperCase() + str.slice(1);
-        }
+    }
     //// Form View
     contentView = (getFieldDecorator) => {
-        const { incidentData,teamResult, playerResult, teamId } = this.props.liveScoreIncidentState
-            console.log(incidentData,"incidentData")
-        let playerData = isArrayNotEmpty(playerResult) ? playerResult  :[]
-        
+        const { incidentData, teamResult, playerResult, teamId } = this.props.liveScoreIncidentState
+        console.log(incidentData, "incidentData")
+        let playerData = isArrayNotEmpty(playerResult) ? playerResult : []
+
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -150,28 +150,28 @@ class LiveScoreAddIncident extends Component {
                         <DatePicker
                             size="large"
                             style={{ width: "100%" }}
-                            onChange={(date) => {this.props.liveScoreUpdateIncidentData(moment(date).format('MM/DD/YYYY'), "date")}}
+                            onChange={(date) => { this.props.liveScoreUpdateIncidentData(moment(date).format('MM/DD/YYYY'), "date") }}
                             format={"DD-MM-YYYY"}
                             showTime={false}
                             name={'registrationOepn'}
-                            placeholder='Select Date'
+                            placeholder={"dd-mm-yyyy"}
                             value={incidentData ? incidentData.date ? moment(incidentData.date) : '' : ''}
-                      
+
                         />
 
                     </div>
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.time} />
 
-                            <TimePicker
-                                    className="comp-venue-time-timepicker"
-                                    style={{ width: "100%" }}
-                                    onChange={(time) => this.props.liveScoreUpdateIncidentData(time, 'time  ')}
-                                    format={"HH:mm"}
-                                    placeholder='Select Time'
-                                    defaultOpenValue={moment("00:00", "HH:mm")}
-                                    use12Hours={false}
-                                />
+                        <TimePicker
+                            className="comp-venue-time-timepicker"
+                            style={{ width: "100%" }}
+                            onChange={(time) => this.props.liveScoreUpdateIncidentData(time, 'time  ')}
+                            format={"HH:mm"}
+                            placeholder='Select Time'
+                            defaultOpenValue={moment("00:00", "HH:mm")}
+                            use12Hours={false}
+                        />
                     </div>
                 </div>
 
@@ -181,10 +181,10 @@ class LiveScoreAddIncident extends Component {
                             heading={AppConstants.matchID}
                             placeholder={AppConstants.matchID}
                             onChange={(event) => this.props.liveScoreUpdateIncidentData(event.target.value, "mnbMatchId")}
-                            value={incidentData ? incidentData.mnbMatchId :''} />
+                            value={incidentData ? incidentData.mnbMatchId : ''} />
                     </div>
                     <div className="col-sm" >
-                    <Form.Item className="slct-in-add-manager-livescore">
+                        <Form.Item className="slct-in-add-manager-livescore">
                             <InputWithHead
                                 required={"required-field "}
                                 heading={AppConstants.team} />
@@ -193,21 +193,21 @@ class LiveScoreAddIncident extends Component {
                             })(
 
                                 <Select
-                                showSearch
-                                mode="multiple"
-                                className="reg-form-multple-select"
-                                placeholder='Select Home Team'
-                                style={{ width: "100%" }}
-                                onChange={(homeTeam) => this.props.liveScoreUpdateIncidentData(homeTeam, "team1id")}
-                                value={incidentData.team1Id ? incidentData.team1Id : ''}
-                                
-                                optionFilterProp="children"
-                            >
-                                {isArrayNotEmpty(teamResult) && teamResult.map((item) => (
-                                    < Option value={item.id} > {item.name}</Option>
-                                ))
-                                }
-                            </Select>
+                                    showSearch
+                                    mode="multiple"
+                                    className="reg-form-multple-select"
+                                    placeholder='Select Home Team'
+                                    style={{ width: "100%" }}
+                                    onChange={(homeTeam) => this.props.liveScoreUpdateIncidentData(homeTeam, "team1id")}
+                                    value={incidentData.team1Id ? incidentData.team1Id : ''}
+
+                                    optionFilterProp="children"
+                                >
+                                    {isArrayNotEmpty(teamResult) && teamResult.map((item) => (
+                                        < Option value={item.id} > {item.name}</Option>
+                                    ))
+                                    }
+                                </Select>
                             )}
 
                         </Form.Item>
@@ -215,7 +215,7 @@ class LiveScoreAddIncident extends Component {
                 </div>
                 <div className="row" >
                     <div className="col-sm" >
-                    <Form.Item className="slct-in-add-manager-livescore">
+                        <Form.Item className="slct-in-add-manager-livescore">
                             <InputWithHead
                                 required={"required-field "}
                                 heading={AppConstants.players} />
@@ -230,36 +230,36 @@ class LiveScoreAddIncident extends Component {
                                     style={{ width: "100%", }}
                                     onChange={(playerId) => this.props.liveScoreUpdateIncidentData(playerId, "playerId")}
                                 >
-                                      {isArrayNotEmpty(playerResult) && playerResult.map((item) => (
-                                    < Option value={item.playerId} > {item.firstName + " " + item.lastName}</Option>
-                                ))
-                                }
+                                    {isArrayNotEmpty(playerResult) && playerResult.map((item) => (
+                                        < Option value={item.playerId} > {item.firstName + " " + item.lastName}</Option>
+                                    ))
+                                    }
                                 </Select>
                             )}
 
-                         </Form.Item> 
+                        </Form.Item>
                     </div>
                     <div className="col-sm">
-                       
-                              <InputWithHead
+
+                        <InputWithHead
                             type='text'
                             heading={AppConstants.incident}
-                         
-                            />
-                              <Select
-                                    // loading={this.props.liveScoreState.onLoad == true && true}
-                                    showSearch={true}
-                                    placeholder={AppConstants.selectIncident}
-                                    style={{ width: "100%", }}
-                                    onChange={(incident) => this.props.liveScoreUpdateIncidentData(incident, "injury")}
-                                    value={incidentData.injury? incidentData.injury :undefined}
-                                >
-                                   <Option value="SPECTATOR">{AppConstants._spectator}</Option>
-                                   <Option value="DISCIPLINE">{AppConstants.discipline}</Option>
-                                   <Option value="INJURY AMBULANCE">{AppConstants.injuryAmbulance}</Option>
-                                   <Option value="INJURY-FIRST ADD">{AppConstants.injuryFirstAdd}</Option>
-                                   
-                                </Select>
+
+                        />
+                        <Select
+                            // loading={this.props.liveScoreState.onLoad == true && true}
+                            showSearch={true}
+                            placeholder={AppConstants.selectIncident}
+                            style={{ width: "100%", }}
+                            onChange={(incident) => this.props.liveScoreUpdateIncidentData(incident, "injury")}
+                            value={incidentData.injury ? incidentData.injury : undefined}
+                        >
+                            <Option value="SPECTATOR">{AppConstants._spectator}</Option>
+                            <Option value="DISCIPLINE">{AppConstants.discipline}</Option>
+                            <Option value="INJURY AMBULANCE">{AppConstants.injuryAmbulance}</Option>
+                            <Option value="INJURY-FIRST ADD">{AppConstants.injuryFirstAdd}</Option>
+
+                        </Select>
                     </div>
                 </div>
                 <div className="row">
@@ -268,7 +268,7 @@ class LiveScoreAddIncident extends Component {
                             heading={AppConstants.claim}
                             placeholder={AppConstants.yesNo}
                             onChange={(event) => this.props.liveScoreUpdateIncidentData(event.target.value, "claim")}
-                            value={incidentData ?incidentData.claim :""}
+                            value={incidentData ? incidentData.claim : ""}
                         />
                     </div>
                 </div>
@@ -277,7 +277,7 @@ class LiveScoreAddIncident extends Component {
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.description} />
                         <TextArea allowClear
-                               onChange={(event) => this.props.liveScoreUpdateIncidentData(captializedString(event.target.value), "description")}
+                            onChange={(event) => this.props.liveScoreUpdateIncidentData(captializedString(event.target.value), "description")}
                             // dangerouslySetInnerHTML={{ _html: editData.body }}
                             // dangerouslySetInnerHTML={{ __html: editData.body }}
                             // value={this.html2text(editData.body)}
@@ -344,7 +344,7 @@ class LiveScoreAddIncident extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <Button  onClick={() => history.push("/liveScoreIncidentList")} type="cancel-button">{AppConstants.cancel}</Button>
+                                <Button onClick={() => history.push("/liveScoreIncidentList")} type="cancel-button">{AppConstants.cancel}</Button>
                             </div>
                         </div>
                         <div className="col-sm">
@@ -368,7 +368,7 @@ class LiveScoreAddIncident extends Component {
         const { getFieldDecorator } = this.props.form
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"17"} />
 
                 <Layout>
