@@ -5,7 +5,7 @@ import ColorsArray from '../../util/colorsArray'
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { NavLink } from "react-router-dom";
-import { getOrganisationData } from "../../util/sessionStorage"
+import { getOrganisationData, setLiveScoreUmpireCompition, setLiveScoreUmpireCompitionData } from "../../util/sessionStorage"
 import { connect } from 'react-redux';
 import { liveScoreCompetionActioninitiate, liveScoreCompetitionDeleteInitate } from '../../store/actions/LiveScoreAction/liveScoreCompetitionAction';
 import Loader from '../../customComponents/loader'
@@ -14,6 +14,7 @@ import {
     getOnlyYearListAction
 } from "../../store/actions/appAction";
 import { isArrayNotEmpty } from "../../util/helpers";
+
 const { Content } = Layout;
 const { Option } = Select;
 const { confirm } = Modal
@@ -206,7 +207,11 @@ class LiveScoreCompetitions extends Component {
 
 
     setCompetitionID = (competitiondata) => {
+        console.log(competitiondata, 'competitiondata')
         localStorage.setItem("LiveScoreCompetiton", JSON.stringify(competitiondata))
+
+        setLiveScoreUmpireCompition(competitiondata.id)
+        setLiveScoreUmpireCompitionData(JSON.stringify(competitiondata))
     }
 
     CompetitonDelete = (data) => {

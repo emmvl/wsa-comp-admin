@@ -1397,7 +1397,8 @@ const AppConstants = {
   participateInCompReg: 'Participating-In Competition Registrations',
   ownedCompetitionsReg: 'Owned Competition Registrations',
   newCompetitionReg: 'New Competition Registration',
-  rosterExport: '/roster/export/umpire?'
+  rosterExport: '/roster/export/umpire?',
+  Registrations: "Registrations",
 };
 
 export default AppConstants;

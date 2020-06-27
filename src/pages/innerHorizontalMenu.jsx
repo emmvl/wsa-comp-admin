@@ -278,7 +278,10 @@ class InnerHorizontalMenu extends React.Component {
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="6">
-                            <NavLink to="/liveScoreUmpireList">
+                            <NavLink to={{
+                                pathname: "/umpireDashboard",
+                                state: { liveScoreUmpire: 'liveScoreUmpire' }
+                            }}>
                                 <span>Umpires</span>
                             </NavLink>
                         </Menu.Item>

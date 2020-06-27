@@ -185,7 +185,7 @@ class RegisteredUser extends Component {
             >
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm-4" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                        <div className="col-sm-6" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                             <span className="form-heading">
                                 {AppConstants.participateInCompReg}
                             </span>
@@ -195,7 +195,7 @@ class RegisteredUser extends Component {
                                 </Tooltip>
                             </div> */}
                         </div>
-                        <div className="col-sm-8">
+                        <div className="col-sm-6">
                             <div className="year-select-heading-view">
                                 <span className="year-select-heading">
                                     {AppConstants.year}:
@@ -225,7 +225,7 @@ class RegisteredUser extends Component {
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                        <div className="col-sm-4" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                             <span className="form-heading">
                                 {AppConstants.ownedCompetitionsReg}
                             </span>

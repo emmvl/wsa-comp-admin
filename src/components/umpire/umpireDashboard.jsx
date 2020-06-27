@@ -13,7 +13,17 @@ import { getUmpireDashboardList, getUmpireDashboardVenueList, getUmpireDashboard
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { entityTypes } from '../../util/entityTypes'
 import { refRoleTypes } from '../../util/refRoles'
-import { getUmpireCompetiton, setUmpireCompition, getOrganisationData, setUmpireCompitionData, getUmpireCompetitonData } from '../../util/sessionStorage'
+import {
+    getUmpireCompetiton,
+    setUmpireCompition,
+    getOrganisationData,
+    setUmpireCompitionData,
+    getUmpireCompetitonData,
+    getLiveScoreUmpireCompition,
+    getLiveScoreUmpireCompitionData,
+    setLiveScoreUmpireCompition,
+    setLiveScoreUmpireCompitionData
+} from '../../util/sessionStorage'
 import moment, { utc } from "moment";
 import { exportFilesAction } from "../../store/actions/appAction"
 import AppColor from "../../themes/appColor";
@@ -211,6 +221,7 @@ const columns = [
         >
             <Menu.SubMenu
                 key="sub1"
+                style={{ borderBottomStyle: "solid", borderBottom: 0 }}
                 title={
                     <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                 }
@@ -275,7 +286,8 @@ class UmpireDashboard extends Component {
             divisionSuccess: false,
             orgId: null,
             compArray: [],
-            compititionObj: null
+            compititionObj: null,
+            liveScoreUmpire: props.location ? props.location.state ? props.location.state.liveScoreUmpire ? props.location.state.liveScoreUmpire : null : null : null
         }
         this_obj = this
     }
@@ -308,13 +320,30 @@ class UmpireDashboard extends Component {
 
                 }
 
-                let compKey = compList.length > 0 && compList[0].competitionUniqueKey
+                if (firstComp !== false) {
+                    if (this.state.liveScoreUmpire === 'liveScoreUmpire') {
+                        let compId = JSON.parse(getLiveScoreUmpireCompition())
+                        this.props.getUmpireDashboardVenueList(compId)
+
+                        const { uniqueKey } = JSON.parse(getLiveScoreUmpireCompitionData())
+                        let compObjData = JSON.parse(getUmpireCompetitonData())
+
+                        this.setState({ selectedComp: compId, loading: false, competitionUniqueKey: uniqueKey, compArray: compList, venueLoad: true, compititionObj: compObjData })
+
+                    } else {
+                        this.props.getUmpireDashboardVenueList(firstComp)
+                        let compKey = compList.length > 0 && compList[0].competitionUniqueKey
+
+                        this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey, compArray: compList, venueLoad: true, compititionObj: compData })
+
+                    }
+                }
+                else {
+                    this.setState({ loading: false })
+                }
 
 
-                this.props.getUmpireDashboardVenueList(firstComp)
 
-
-                this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey, compArray: compList, venueLoad: true, compititionObj: compData })
             }
         }
 
@@ -343,7 +372,7 @@ class UmpireDashboard extends Component {
     }
 
     checkUserIdUmpire(record) {
-        
+
         if (record.userId) {
             history.push("/userPersonal", { userId: record.userId, screenKey: "umpire", screen: "/umpireDashboard" })
         } else if (record.matchUmpiresId) {
@@ -414,7 +443,6 @@ class UmpireDashboard extends Component {
     onChangeComp(compID) {
 
         let selectedComp = compID.comp
-        setUmpireCompition(selectedComp)
         let compKey = compID.competitionUniqueKey
         this.props.getUmpireDashboardVenueList(selectedComp)
         this.props.getUmpireDashboardDivisionList(selectedComp)
@@ -427,7 +455,11 @@ class UmpireDashboard extends Component {
                 break;
             }
         }
+        setUmpireCompition(selectedComp)
         setUmpireCompitionData(JSON.stringify(compObj))
+
+        setLiveScoreUmpireCompition(selectedComp)
+        setLiveScoreUmpireCompitionData(JSON.stringify(compObj))
 
         console.log(this.state.compititionObj, 'compititionObj')
 
