@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { regCompetitionListAction, clearCompReducerDataAction, regCompetitionListDeleteAction } from "../../store/actions/registrationAction/competitionFeeAction";
 import AppImages from "../../themes/appImages";
-import { getOnlyYearListAction,CLEAR_OWN_COMPETITION_DATA } from "../../store/actions/appAction";
+import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from "../../store/actions/appAction";
 import { checkUserRole } from "../../util/permissions";
 import { currencyFormat } from "../../util/currencyFormat";
 import { stringTONumber } from "../../util/helpers"
@@ -129,7 +129,7 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "membershipProductTypeName")
     },
     {
-        title: "Division",
+        title: "Registration Division",
         dataIndex: "divisionName",
         key: "divisionName",
         render: divisionName => (

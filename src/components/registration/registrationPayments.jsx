@@ -224,7 +224,7 @@ class RegistrationPayments extends Component {
                             onChange={date => this.dateOnChangeFrom(date)}
                             format={'DD-MM-YYYY'}
                             showTime={false}
-                            placeholder="dd/mm/yyyy"
+                            placeholder={"dd-mm-yyyy"}
                         />
                     </div>
                     <div className="col-sm" >
@@ -236,7 +236,7 @@ class RegistrationPayments extends Component {
                             onChange={date => this.dateOnChangeTo(date)}
                             format={'DD-MM-YYYY'}
                             showTime={false}
-                            placeholder="dd/mm/yyyy"
+                            placeholder={"dd-mm-yyyy"}
 
                         />
                     </div>

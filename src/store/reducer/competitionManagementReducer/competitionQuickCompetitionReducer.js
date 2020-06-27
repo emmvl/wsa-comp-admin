@@ -66,9 +66,8 @@ const initialState = {
 
         }]
     }
-
-
-    ]
+    ],
+    competitionName: ""
 };
 
 
@@ -76,6 +75,20 @@ const initialState = {
 function QuickCompetitionState(state = initialState, action) {
 
     switch (action.type) {
+
+
+        case ApiConstants.API_UPDATE_QUICKCOMPETITION_COMPETITION:
+            if (action.key == 'add') {
+                state.competitionName = action.value
+            }
+            else {
+                state.competitionName = ""
+            }
+
+            return {
+                ...state
+            }
+
 
         ////Competition Dashboard Case
         case ApiConstants.Update_QuickCompetition_Data:

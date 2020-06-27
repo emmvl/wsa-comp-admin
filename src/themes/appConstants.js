@@ -1390,6 +1390,8 @@ const AppConstants = {
   injuryFirstAdd: "Injury- First Add",
   emailExp: "/^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/",
   childDetails: "Child Details",
+  registrationDivision: "Registration Division",
+  addRegDivision: 'Add Registration Division',
   downLoadImportHeading: "Download the matches list first then populate umpires details to upload ",
   assignUmpireToMatch: "Assign Umpires To Matches",
   participateInCompReg: 'Participating-In Competition Registrations',

@@ -392,6 +392,7 @@ class RegistrationCompetitionForm extends Component {
                                             style={{ width: "100%", minWidth: 135 }}
                                             onChange={date => this.divisionTableDataOnchange(moment(date).format("YYYY-MM-DD"), record, index, "fromDate")}
                                             format={"DD-MM-YYYY"}
+                                            placeholder={"dd-mm-yyyy"}
                                             showTime={false}
                                             disabled={!record.ageRestriction || this.state.permissionState.divisionsDisable}
                                             setFieldsValue={fromDate !== null && moment(fromDate)}
@@ -420,6 +421,7 @@ class RegistrationCompetitionForm extends Component {
                                             style={{ width: "100%", minWidth: 135 }}
                                             onChange={date => this.divisionTableDataOnchange(moment(date).format("YYYY-MM-DD"), record, index, "toDate")}
                                             format={"DD-MM-YYYY"}
+                                            placeholder={"dd-mm-yyyy"}
                                             showTime={false}
                                             disabled={!record.ageRestriction || this.state.permissionState.divisionsDisable}
                                             setFieldsValue={toDate !== null && moment(toDate)}
@@ -508,10 +510,10 @@ class RegistrationCompetitionForm extends Component {
         }
         if (competitionFeesState.onLoad === false && this.state.divisionState === true) {
             setTimeout(() => {
-              this.setDetailsFieldValue();
+                this.setDetailsFieldValue();
             }, 100);
             this.setState({ divisionState: false });
-          }
+        }
 
     }
 
@@ -1219,6 +1221,7 @@ class RegistrationCompetitionForm extends Component {
                             style={{ width: "100%" }}
                             onChange={date => this.updateNonPlayingNames(date, index, "date")}
                             format={"DD-MM-YYYY"}
+                            placeholder={"dd-mm-yyyy"}
                             showTime={false}
                             value={item.nonPlayingDate && moment(item.nonPlayingDate, "YYYY-MM-DD")}
                             disabled={compDetailDisable}
@@ -1525,6 +1528,7 @@ class RegistrationCompetitionForm extends Component {
                                             style={{ width: "100%" }}
                                             onChange={date => this.dateOnChangeFrom(date, "startDate")}
                                             format={"DD-MM-YYYY"}
+                                            placeholder={"dd-mm-yyyy"}
                                             showTime={false}
                                             // value={detailsData.competitionDetailData.startDate && moment(detailsData.competitionDetailData.startDate, "YYYY-MM-DD")}
                                             disabled={compDetailDisable}
@@ -1543,6 +1547,7 @@ class RegistrationCompetitionForm extends Component {
                                             style={{ width: "100%" }}
                                             onChange={date => this.dateOnChangeFrom(date, "endDate")}
                                             format={"DD-MM-YYYY"}
+                                            placeholder={"dd-mm-yyyy"}
                                             showTime={false}
                                             disabledDate={d => !d || d.isBefore(detailsData.competitionDetailData.startDate)}
                                             disabled={compDetailDisable}

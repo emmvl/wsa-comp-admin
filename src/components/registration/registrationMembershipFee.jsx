@@ -568,6 +568,7 @@ class RegistrationMembershipFee extends Component {
                                                                 style={{ width: "100%" }}
                                                                 onChange={date => this.dateOnChangeFrom(date, index)}
                                                                 format={"DD-MM-YYYY"}
+                                                                placeholder={"dd-mm-yyyy"}
                                                                 showTime={false}
                                                                 // defaultValue={item.dobFrom !== null ? moment(item.dobFrom) : null}
                                                                 disabled={this.state.membershipIsUsed}
@@ -596,6 +597,7 @@ class RegistrationMembershipFee extends Component {
                                                                 style={{ width: "100%" }}
                                                                 onChange={date => this.dateOnChangeTo(date, index)}
                                                                 format={"DD-MM-YYYY"}
+                                                                placeholder={"dd-mm-yyyy"}
                                                                 showTime={false}
                                                                 defaultValue={item.dobTo !== null ? moment(item.dobTo) : null}
                                                                 disabled={this.state.membershipIsUsed}
@@ -846,6 +848,7 @@ class RegistrationMembershipFee extends Component {
                                     style={{ width: "100%" }}
                                     onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
                                     format={"DD-MM-YYYY"}
+                                    placeholder={"dd-mm-yyyy"}
                                     showTime={false}
                                     value={item.availableFrom !== null && moment(item.availableFrom)}
                                     disabled={this.state.membershipIsUsed}
@@ -860,6 +863,7 @@ class RegistrationMembershipFee extends Component {
                                     disabledTime={this.disabledTime}
                                     onChange={date => this.onChangeDiscountAvailableTo(date, index)}
                                     format={"DD-MM-YYYY"}
+                                    placeholder={"dd-mm-yyyy"}
                                     showTime={false}
                                     value={item.availableTo !== null && moment(item.availableTo)}
                                     disabled={this.state.membershipIsUsed}
@@ -927,6 +931,7 @@ class RegistrationMembershipFee extends Component {
                                     style={{ width: "100%" }}
                                     onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
                                     format={"DD-MM-YYYY"}
+                                    placeholder={"dd-mm-yyyy"}
                                     showTime={false}
                                     value={item.availableFrom !== null && moment(item.availableFrom)}
                                     disabled={this.state.membershipIsUsed}
@@ -941,6 +946,7 @@ class RegistrationMembershipFee extends Component {
                                     disabledTime={this.disabledTime}
                                     onChange={date => this.onChangeDiscountAvailableTo(date, index)}
                                     format={"DD-MM-YYYY"}
+                                    placeholder={"dd-mm-yyyy"}
                                     showTime={false}
                                     value={item.availableTo !== null && moment(item.availableTo)}
                                     disabled={this.state.membershipIsUsed}
@@ -1035,6 +1041,7 @@ class RegistrationMembershipFee extends Component {
                                     style={{ width: "100%" }}
                                     onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
                                     format={"DD-MM-YYYY"}
+                                    placeholder={"dd-mm-yyyy"}
                                     showTime={false}
                                     value={item.availableFrom !== null && moment(item.availableFrom)}
                                     disabled={this.state.membershipIsUsed}
@@ -1045,6 +1052,7 @@ class RegistrationMembershipFee extends Component {
                                 <DatePicker
                                     size="large"
                                     style={{ width: "100%" }}
+                                    placeholder={"dd-mm-yyyy"}
                                     disabledDate={this.disabledDate}
                                     disabledTime={this.disabledTime}
                                     onChange={date => this.onChangeDiscountAvailableTo(date, index)}

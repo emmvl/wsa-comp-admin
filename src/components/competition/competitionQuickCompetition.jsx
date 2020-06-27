@@ -20,7 +20,7 @@ import TimeSlotModal from "../../customComponents/timslotModal"
 import CompetitionModal from "../../customComponents/competiitonModal"
 import DivisionGradeModal from "../../customComponents/divisionGradeModal"
 import {
-    updateQuickCompetitionData, updateTimeSlot, updateDivision
+    updateQuickCompetitionData, updateTimeSlot, updateDivision, updateCompetition
 } from "../../store/actions/competitionModuleAction/competitionQuickAction"
 import { quickCompetitionInit } from "../../store/actions/commonAction/commonAction"
 
@@ -64,6 +64,7 @@ class CompetitionQuickCompetition extends Component {
 
     //visible competition modal
     visibleCompetitionModal() {
+        this.props.updateCompetition("", "clear")
         this.setState({
             visibleCompModal: true
         })
@@ -73,6 +74,7 @@ class CompetitionQuickCompetition extends Component {
     headerView = (getFieldDecorator) => {
         let timeSlotData = this.props.quickCompetitionState.timeSlot
         let division = this.props.quickCompetitionState.division
+        let compName = this.props.quickCompetitionState.competitionName
         return (<div className="fluid-width">
             <Header className="comp-draws-header-view mt-5" >
                 <div className="row" >
@@ -131,6 +133,7 @@ class CompetitionQuickCompetition extends Component {
             <TimeSlotModal
                 visible={this.state.timeSlotVisible}
                 onCancel={this.handleCancel}
+                timeSlotOK={() => this.closeTimeSlotModal()}
                 modalTitle={AppConstants.timeSlot}
                 timeslots={timeSlotData}
                 weekDays={this.props.commonState.days}
@@ -143,10 +146,13 @@ class CompetitionQuickCompetition extends Component {
             />
 
             <CompetitionModal
+                handleOK={() => this.closeCompModal()}
                 visible={this.state.visibleCompModal}
                 onCancel={this.compModalClose}
                 modalTitle={AppConstants.competition}
-                qucickCompetition={[]}
+                competitionChange={(e) => this.props.updateCompetition(e.target.value, "add")}
+                competitionName={compName}
+
             />
 
             <DivisionGradeModal
@@ -176,6 +182,13 @@ class CompetitionQuickCompetition extends Component {
         )
     }
 
+    //close timeslot modal 
+    closeTimeSlotModal = () => {
+        this.setState({
+            timeSlotVisible: false
+        })
+    }
+
     //close division modal
     divisionModalClose = () => {
         this.setState({
@@ -183,8 +196,16 @@ class CompetitionQuickCompetition extends Component {
         })
     }
 
+
     //close compModalClose
     compModalClose = () => {
+        this.setState({
+            visibleCompModal: false
+        })
+    }
+
+
+    closeCompModal = () => {
         this.setState({
             visibleCompModal: false
         })
@@ -248,9 +269,7 @@ class CompetitionQuickCompetition extends Component {
                                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                     onChange={venueSelection => {
                                         this.onSelectValues(venueSelection, quickCompetitionState.selectedVenues)
-
                                     }}
-
                                     value={quickCompetitionState.selectedVenues}
                                     placeholder={AppConstants.selectVenue}
                                     filterOption={false}
@@ -272,11 +291,10 @@ class CompetitionQuickCompetition extends Component {
 
                         </div>
                     </div>
-                    <div className="col-sm-9 comp-draw-edit-btn-view" >
+                    <div className="col-sm-8 comp-draw-edit-btn-view" >
                         <div className="row">
-                            <div className="col-sm mt-1">
 
-
+                            <div className="col-sm mt-2">
                                 <Button className="open-reg-button" onClick={() => this.visibleTimeModal()} type="primary">+ {AppConstants.add_TimeSlot}</Button>
 
                                 {/* <div className="col-sm mt-1"> */}
@@ -284,11 +302,11 @@ class CompetitionQuickCompetition extends Component {
                                 {/* </div> */}
 
                             </div>
-                            <div className="col-sm mt-1">
+                            <div className="col-sm mt-2">
                                 <Button className="open-reg-button" type="primary" onClick={() => this.visibleDivisonModal()}>+ {AppConstants.addDivisionsAndGrades}</Button>
                             </div>
-
                         </div>
+
 
                     </div>
                 </div>
@@ -888,7 +906,8 @@ function mapDispatchToProps(dispatch) {
         getYearAndCompetitionOwnAction,
         updateTimeSlot,
         quickCompetitionInit,
-        updateDivision
+        updateDivision,
+        updateCompetition
     }, dispatch)
 }
 

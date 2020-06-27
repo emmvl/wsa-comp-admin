@@ -12,12 +12,12 @@ function getCompetitionVenue(competitionId) {
 
 
 /////get competition draws
-function getCompetitionDrawsAction(yearRefId, competitionId, venueId, roundId, ) {
+function getCompetitionDrawsAction(yearRefId, competitionId, venueId, roundId,orgId ) {
     const action = {
         type: ApiConstants.API_GET_COMPETITION_DRAWS_LOAD,
-        yearRefId, competitionId, venueId, roundId
+        yearRefId, competitionId, venueId, roundId,
+        orgId
     };
-    console.log("is colled")
     return action;
 }
 

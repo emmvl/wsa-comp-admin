@@ -24,7 +24,8 @@ const initialState = {
   fixtureArray: [],
   updateFixtureLoad: false,
   getRoundsDrawsdata: [],
-  spinLoad: false
+  spinLoad: false,
+  drawOrganisations: []
   // colorsArray: []
 
 };
@@ -904,7 +905,7 @@ function CompetitionDraws(state = initialState, action) {
 
     //competition part player grade calculate player grading summmary get API
     case ApiConstants.API_GET_COMPETITION_DRAWS_LOAD:
-      return { ...state, onLoad: true, error: null, spinLoad: true };
+      return { ...state, onLoad: true, error: null, spinLoad: true, };
 
     case ApiConstants.API_GET_COMPETITION_DRAWS_SUCCESS:
 
@@ -912,10 +913,10 @@ function CompetitionDraws(state = initialState, action) {
       let resultData = roundstructureData(drawsResultData)
       state.publishStatus = action.result.drawsPublish
       state.isTeamInDraw = action.result.isTeamNotInDraws
-
       return {
         ...state,
         getRoundsDrawsdata: resultData.roundsdata,
+        drawOrganisations: state.drawOrganisations.length == 0 ? action.result.organisations : state.drawOrganisations,
         onLoad: false,
         error: null,
         spinLoad: false
@@ -923,7 +924,7 @@ function CompetitionDraws(state = initialState, action) {
 
     /////get rounds in the competition draws
     case ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_LOAD:
-      return { ...state, onLoad: true, updateLoad: true, error: null };
+      return { ...state, onLoad: true, updateLoad: true, error: null, drawOrganisations: [] };
 
     case ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_SUCCESS:
       state.competitionVenues = JSON.parse(JSON.stringify(action.Venue_Result))
@@ -1084,6 +1085,7 @@ function CompetitionDraws(state = initialState, action) {
         state.divisionGradeNameList = [];
         state.legendsArray = [];
         legendsArray = []
+
       }
       return { ...state };
 

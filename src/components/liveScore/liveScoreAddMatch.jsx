@@ -607,7 +607,7 @@ class LiveScoreAddMatch extends Component {
                                     format={"DD-MM-YYYY"}
                                     showTime={false}
                                     name={'registrationOepn'}
-                                    placeholder='Select Date'
+                                    placeholder={"dd-mm-yyyy"}
                                 />
                             )}
                         </Form.Item>

@@ -208,6 +208,7 @@ class LiveScoreAddPlayer extends Component {
                             style={{ width: "100%" }}
                             onChange={(dateOfBirth) => dateOfBirth && this.props.liveScoreUpdatePlayerDataAction(moment(dateOfBirth).format('DD-MM-YYYY'), 'dateOfBirth')}
                             format={"DD-MM-YYYY"}
+                            placeholder={"dd-mm-yyyy"}
                             showTime={false}
                             name={'date'}
                             value={playerData.dateOfBirth && moment(playerData.dateOfBirth, "DD-MM-YYYY")}

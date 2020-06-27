@@ -146,7 +146,8 @@ let CompetitionAxiosApi = {
     },
 
     ////competition draws get 
-    async getCompetitionDraws(yearRefId, competitionId, venueId, roundId) {
+    async getCompetitionDraws(yearRefId, competitionId, venueId, roundId, orgId) {
+
         let orgItem = await getOrganisationData()
         let userId = await getUserId()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
@@ -154,6 +155,7 @@ let CompetitionAxiosApi = {
             yearRefId: yearRefId,
             competitionUniqueKey: competitionId,
             organisationId: organisationUniqueKey,
+            filterOrganisationId: orgId != null ? orgId : -1,
             // organisationId: "sd-gdf45df-09486-sdg5sfd-546sdf",
             venueId: venueId,
             roundId: roundId
@@ -512,7 +514,7 @@ let CompetitionAxiosApi = {
         var url = `/api/grading/comments`
         return Method.dataPost(url, token, body);
     },
-	 async fixtureTemplateRounds() {       																
+    async fixtureTemplateRounds() {
         var url = `/api/fixturetemplate/rounds`
         return Method.dataGet(url, token);
     }

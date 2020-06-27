@@ -1067,12 +1067,12 @@ const playerSeasonalTableTeamAssociation = [
           }
         />
       ) : (
-        <Input
-          disabled={true}
-          className="input-inside-table-fees"
-          value={'N/A'}
-        />
-      ),
+          <Input
+            disabled={true}
+            className="input-inside-table-fees"
+            value={'N/A'}
+          />
+        ),
   },
   {
     title: 'Competition GST',
@@ -1097,12 +1097,12 @@ const playerSeasonalTableTeamAssociation = [
           }
         />
       ) : (
-        <Input
-          disabled={true}
-          className="input-inside-table-fees"
-          value={'N/A'}
-        />
-      ),
+          <Input
+            disabled={true}
+            className="input-inside-table-fees"
+            value={'N/A'}
+          />
+        ),
   },
   {
     title: 'Association Fees (excl. GST)',
@@ -1127,12 +1127,12 @@ const playerSeasonalTableTeamAssociation = [
           }
         />
       ) : (
-        <Input
-          disabled={true}
-          className="input-inside-table-fees"
-          value={'N/A'}
-        />
-      ),
+          <Input
+            disabled={true}
+            className="input-inside-table-fees"
+            value={'N/A'}
+          />
+        ),
   },
   {
     title: 'Association GST',
@@ -1157,12 +1157,12 @@ const playerSeasonalTableTeamAssociation = [
           }
         />
       ) : (
-        <Input
-          disabled={true}
-          className="input-inside-table-fees"
-          value={'N/A'}
-        />
-      ),
+          <Input
+            disabled={true}
+            className="input-inside-table-fees"
+            value={'N/A'}
+          />
+        ),
   },
 
   {
@@ -1258,12 +1258,12 @@ const playerSeasonalTableTeamClub = [
           }
         />
       ) : (
-        <Input
-          disabled={true}
-          className="input-inside-table-fees"
-          value={'N/A'}
-        />
-      ),
+          <Input
+            disabled={true}
+            className="input-inside-table-fees"
+            value={'N/A'}
+          />
+        ),
   },
   {
     title: 'Competition GST',
@@ -1288,12 +1288,12 @@ const playerSeasonalTableTeamClub = [
           }
         />
       ) : (
-        <Input
-          disabled={true}
-          className="input-inside-table-fees"
-          value={'N/A'}
-        />
-      ),
+          <Input
+            disabled={true}
+            className="input-inside-table-fees"
+            value={'N/A'}
+          />
+        ),
   },
   {
     title: 'Club Fees (excl. GST)',
@@ -1318,12 +1318,12 @@ const playerSeasonalTableTeamClub = [
           }
         />
       ) : (
-        <Input
-          disabled={true}
-          className="input-inside-table-fees"
-          value={'N/A'}
-        />
-      ),
+          <Input
+            disabled={true}
+            className="input-inside-table-fees"
+            value={'N/A'}
+          />
+        ),
   },
   {
     title: 'Club GST',
@@ -1348,12 +1348,12 @@ const playerSeasonalTableTeamClub = [
           }
         />
       ) : (
-        <Input
-          disabled={true}
-          className="input-inside-table-fees"
-          value={'N/A'}
-        />
-      ),
+          <Input
+            disabled={true}
+            className="input-inside-table-fees"
+            value={'N/A'}
+          />
+        ),
   },
 
   {
@@ -1449,12 +1449,12 @@ const playerSeasoTeamTable = [
           }
         />
       ) : (
-        <Input
-          disabled={true}
-          className="input-inside-table-fees"
-          value={'N/A'}
-        />
-      ),
+          <Input
+            disabled={true}
+            className="input-inside-table-fees"
+            value={'N/A'}
+          />
+        ),
   },
   {
     title: 'Competition GST',
@@ -1479,12 +1479,12 @@ const playerSeasoTeamTable = [
           }
         />
       ) : (
-        <Input
-          disabled={true}
-          className="input-inside-table-fees"
-          value={'N/A'}
-        />
-      ),
+          <Input
+            disabled={true}
+            className="input-inside-table-fees"
+            value={'N/A'}
+          />
+        ),
   },
 
   {
@@ -1739,6 +1739,7 @@ class RegistrationCompetitionFee extends Component {
                 })(
                   <DatePicker
                     size="large"
+                    placeholder={"dd-mm-yyyy"}
                     className="comp-venue-time-datepicker"
                     style={{ width: '100%', minWidth: 135 }}
                     onChange={(date) =>
@@ -1782,6 +1783,7 @@ class RegistrationCompetitionFee extends Component {
                 })(
                   <DatePicker
                     size="large"
+                    placeholder={"dd-mm-yyyy"}
                     className="comp-venue-time-datepicker"
                     style={{ width: '100%', minWidth: 135 }}
                     onChange={(date) =>
@@ -2066,12 +2068,6 @@ class RegistrationCompetitionFee extends Component {
     let postCharityRoundUpData = JSON.parse(
       JSON.stringify(paymentDataArr.charityRoundUp)
     );
-    // console.log(
-    //   'paymentDataArr',
-    //   paymentDataArr.charityRoundUp,
-    //   charityTitle,
-    //   charityDescription
-    // );
     postCharityRoundUpData.map((item) => {
       item.charityRoundUpName = charityTitle;
       item.charityRoundUpDescription = charityDescription;
@@ -2080,7 +2076,7 @@ class RegistrationCompetitionFee extends Component {
     this.props.competitionPaymentApi(paymentDataArr, competitionId);
   };
 
- ////check the division objects does not contain empty division array
+  ////check the division objects does not contain empty division array
   checkDivisionEmpty(data) {
     if (isArrayNotEmpty(data) == true) {
       for (let i in data) {
@@ -2125,14 +2121,12 @@ class RegistrationCompetitionFee extends Component {
       }
       return item;
     });
-   // console.log('discountDataArr', discountDataArr);
     let finalOrgPostDiscountData = JSON.parse(JSON.stringify(discountDataArr));
     let orgData = getOrganisationData();
     let currentOrganisationId = orgData ? orgData.organisationId : 0;
     let filterOrgPostDiscountData = finalOrgPostDiscountData.filter(
       (x) => x.organisationId == currentOrganisationId
     );
-   // console.log('filterOrgPostDiscountData', filterOrgPostDiscountData);
     let discountBody = {
       competitionId: competitionId,
       statusRefId: this.state.statusRefId,
@@ -2146,7 +2140,6 @@ class RegistrationCompetitionFee extends Component {
     let compFeesState = this.props.competitionFeesState;
     let fee_data = compFeesState.competitionFeesData;
     let divisionArrayData = compFeesState.competitionDivisionsData;
-   // console.log("fee_data", fee_data, divisionArrayData)
     if (this.state.statusRefId == 1) {
       this.props.regSaveCompetitionFeeDiscountAction(discountBody, competitionId);
       this.setState({ loading: true });
@@ -2222,10 +2215,8 @@ class RegistrationCompetitionFee extends Component {
       });
     let divisionData = this.props.competitionFeesState.competitionDivisionsData;
     let divisionArray = divisionData !== null ? divisionData : [];
-   // console.log('divisionArray', divisionArray);
     divisionArray.length > 0 &&
       divisionArray.map((item, index) => {
-       // console.log(item);
         item.divisions.map((divItem, divIndex) => {
           let divisionName = `divisionName${index}${divIndex}`;
           let genderRefId = `genderRefId${index}${divIndex}`;
@@ -2252,7 +2243,6 @@ class RegistrationCompetitionFee extends Component {
         let feeCasualData = [];
         let feeSeasonalTeamData = [];
         let finalpostarray = [];
-       
         // console.log("fee_data::" + JSON.stringify(fee_data));
         for (let i in fee_data) {
           if (fee_data[i].isSeasonal == true && fee_data[i].isCasual == true) {
@@ -2278,12 +2268,10 @@ class RegistrationCompetitionFee extends Component {
                       feeSeasonalData[j].affiliateFee;
                     feeSeasonalData[j]['affiliateSeasonalGST'] =
                       feeSeasonalData[j].affiliateGst;
-                   
                     break;
                   }
                 }
               }
-              
               if (fee_data[i].isTeamSeasonal == true) {
                 feeSeasonalTeamData = fee_data[i].seasonalTeam.allType;
                 for (let j in feeSeasonalData) {
@@ -2305,7 +2293,6 @@ class RegistrationCompetitionFee extends Component {
                   }
                 }
               }
-              
               finalPostData = [...feeSeasonalData];
             } else {
               feeSeasonalData = fee_data[i].seasonal.perType;
@@ -2449,7 +2436,6 @@ class RegistrationCompetitionFee extends Component {
 
               if (fee_data[i].isTeamSeasonal == true) {
                 feeSeasonalTeamData = fee_data[i].seasonalTeam.allType;
-                //console.log("&&&&&&" + JSON.stringify(feeSeasonalTeamData) )
                 for (let j in feeCasualData) {
                   for (let k in feeSeasonalTeamData) {
                     if (
@@ -2546,28 +2532,19 @@ class RegistrationCompetitionFee extends Component {
             // alert("check fees")
 
           }
-
-          console.log("^^^^^^^^^^^^^" + JSON.stringify(finalPostData));
-          console.log("^^^^^^^^^^^^^1" + fee_data[i].isSeasonal);
-          console.log("^^^^^^^^^^^^^2" + fee_data[i].isCasual);
-          console.log("^^^^^^^^^^^^^3" + fee_data[i].isTeamSeasonal);
-
-          if(finalPostData!= null && finalPostData.length > 0 && (fee_data[i].isSeasonal == true || fee_data[i].isCasual == true ||
-                                      fee_data[i].isTeamSeasonal == true)){
-
+          if (finalPostData != null && finalPostData.length > 0 && (fee_data[i].isSeasonal == true || fee_data[i].isCasual == true ||
+            fee_data[i].isTeamSeasonal == true)) {
             finalPostData.map((item, index) => {
               finalPostData[index]["isSeasonal"] = fee_data[i].isSeasonal;
               finalPostData[index]["isCasual"] = fee_data[i].isCasual;
               finalPostData[index]["isTeamSeasonal"] = fee_data[i].isTeamSeasonal;
             })
-          
 
             let modifyArr = [...finalpostarray, ...finalPostData];
             finalpostarray = modifyArr;
           }
         }
 
-        console.log('finalpostarray::' + JSON.stringify(finalpostarray));
         if (finalpostarray.length > 0) {
           this.props.saveCompetitionFeeSection(finalpostarray, competitionId);
           this.setState({ loading: true });
@@ -2593,7 +2570,6 @@ class RegistrationCompetitionFee extends Component {
         let invitees = compFeesState.affiliateArray.concat(
           compFeesState.anyOrgAffiliateArr
         );
-       // console.log(invitees, 'compFeesState');
         if (tabKey == '1') {
           if (
             compFeesState.competitionDetailData.competitionLogoUrl !== null &&
@@ -2683,7 +2659,6 @@ class RegistrationCompetitionFee extends Component {
               }
             }
             formData.append('logoIsDefault', postData.logoIsDefault);
-            //console.log("Invitees::" + JSON.stringify(invitees));
             this.props.saveCompetitionFeesDetailsAction(
               formData,
               compFeesState.defaultCompFeesOrgLogoData.id
@@ -2749,7 +2724,6 @@ class RegistrationCompetitionFee extends Component {
                 ? 1
                 : postData.registrationRestrictionTypeRefId,
           };
-          //console.log('payload', finalDivisionPayload);
 
           if (this.checkDivisionEmpty(divisionArrayData) == true) {
             message.error(
@@ -2775,7 +2749,7 @@ class RegistrationCompetitionFee extends Component {
   };
 
   onChange(checkedValues) {
-   // console.log('checked = ', checkedValues);
+    // console.log('checked = ', checkedValues);
   }
 
   divisionTableDataOnchange(checked, record, index, keyword) {
@@ -3045,6 +3019,7 @@ class RegistrationCompetitionFee extends Component {
             <DatePicker
               className="comp-dashboard-botton-view-mobile"
               size="large"
+              placeholder={"dd-mm-yyyy"}
               style={{ width: '100%' }}
               onChange={(date) =>
                 this.updateNonPlayingNames(date, index, 'date')
@@ -3062,9 +3037,9 @@ class RegistrationCompetitionFee extends Component {
             onClick={() =>
               !compDetailDisable
                 ? this.props.add_editcompetitionFeeDeatils(
-                    index,
-                    'nonPlayingDataRemove'
-                  )
+                  index,
+                  'nonPlayingDataRemove'
+                )
                 : null
             }
           >
@@ -3120,7 +3095,6 @@ class RegistrationCompetitionFee extends Component {
 
   //// On change Invitees
   onInviteesChange(value) {
-    //console.log(value, 'value');
     let regInviteesselectedData = this.props.competitionFeesState
       .selectedInvitees;
     let arr = [value];
@@ -3162,7 +3136,7 @@ class RegistrationCompetitionFee extends Component {
       <div className="content-view pt-4">
         <Form.Item>
           {getFieldDecorator('competition_name', {
-             normalize: (input) => captializedString(input),
+            normalize: (input) => captializedString(input),
             rules: [
               {
                 required: true,
@@ -3202,7 +3176,7 @@ class RegistrationCompetitionFee extends Component {
                   <img
                     src={
                       detailsData.competitionDetailData.competitionLogoUrl ==
-                      null
+                        null
                         ? AppImages.circleImage
                         : detailsData.competitionDetailData.competitionLogoUrl
                     }
@@ -3448,6 +3422,7 @@ class RegistrationCompetitionFee extends Component {
                 })(
                   <DatePicker
                     size="large"
+                    placeholder={"dd-mm-yyyy"}
                     style={{ width: '100%' }}
                     onChange={(date) =>
                       this.dateOnChangeFrom(date, 'startDate')
@@ -3476,6 +3451,7 @@ class RegistrationCompetitionFee extends Component {
                 })(
                   <DatePicker
                     size="large"
+                    placeholder={"dd-mm-yyyy"}
                     style={{ width: '100%' }}
                     onChange={(date) => this.dateOnChangeFrom(date, 'endDate')}
                     format={'DD-MM-YYYY'}
@@ -3588,7 +3564,7 @@ class RegistrationCompetitionFee extends Component {
           })(
             <DatePicker
               size="large"
-              placeholder={'Select Date'}
+              placeholder={"dd-mm-yyyy"}
               style={{ width: '100%' }}
               onChange={(date) =>
                 this.dateOnChangeFrom(date, 'registrationCloseDate')
@@ -3783,7 +3759,7 @@ class RegistrationCompetitionFee extends Component {
     let detailsData = this.props.competitionFeesState.competitionDetailData;
     return (
       <div className="fees-view pt-5">
-        <span className="form-heading">{AppConstants.divisions}</span>
+        <span className="form-heading">{AppConstants.registrationDivision}</span>
         {divisionArray.length == 0 && (
           <span className="applicable-to-heading pt-0">
             {AppConstants.please_Sel_mem_pro}
@@ -3816,15 +3792,15 @@ class RegistrationCompetitionFee extends Component {
                           : null
                       }
                     >
-                      + {AppConstants.addDivision}
+                      + {AppConstants.addRegDivision}
                     </span>
                   </a>
                 </div>
               ) : (
-                <span className="applicable-to-heading pt-0 pl-2">
-                  {AppConstants.nonPlayerDivisionMessage}
-                </span>
-              )}
+                  <span className="applicable-to-heading pt-0 pl-2">
+                    {AppConstants.nonPlayerDivisionMessage}
+                  </span>
+                )}
             </div>
           </div>
         ))}
@@ -4103,46 +4079,46 @@ class RegistrationCompetitionFee extends Component {
                     ? item.seasonalTeam.perType
                     : item.seasonalTeam.allType
                   ).length > 0 && (
-                    <div style={{ marginTop: 25 }}>
-                      <div style={{ marginTop: 5 }}>
-                        <Checkbox
-                          checked={item.isTeamSeasonal}
-                          className="single-checkbox"
-                          style={{ fontSize: '16px' }}
-                          disabled={feesTableDisable}
-                          onChange={(e) => {
-                            this.props.checkUncheckcompetitionFeeSction(
-                              e.target.checked,
-                              index,
-                              'isTeamSeasonal'
-                            );
-                          }}
-                        >
-                          {AppConstants.teamRegistration}
-                        </Checkbox>
-                      </div>
-
-                      {item.isTeamSeasonal && (
-                        <div className="table-responsive mt-2">
-                          <div className="comp-fee-sub-heading-txt">
-                            {' '}
-                            {AppConstants.seasonalFee}
-                          </div>
-                          <Table
-                            className="fees-table"
-                            columns={this.seasonalFeesTeamOnOrgTLevel()}
-                            dataSource={
-                              item.isAllType != 'allDivisions'
-                                ? item.seasonalTeam.perType
-                                : item.seasonalTeam.allType
-                            }
-                            pagination={false}
-                            Divider="false"
-                          />
+                      <div style={{ marginTop: 25 }}>
+                        <div style={{ marginTop: 5 }}>
+                          <Checkbox
+                            checked={item.isTeamSeasonal}
+                            className="single-checkbox"
+                            style={{ fontSize: '16px' }}
+                            disabled={feesTableDisable}
+                            onChange={(e) => {
+                              this.props.checkUncheckcompetitionFeeSction(
+                                e.target.checked,
+                                index,
+                                'isTeamSeasonal'
+                              );
+                            }}
+                          >
+                            {AppConstants.teamRegistration}
+                          </Checkbox>
                         </div>
-                      )}
-                    </div>
-                  )}
+
+                        {item.isTeamSeasonal && (
+                          <div className="table-responsive mt-2">
+                            <div className="comp-fee-sub-heading-txt">
+                              {' '}
+                              {AppConstants.seasonalFee}
+                            </div>
+                            <Table
+                              className="fees-table"
+                              columns={this.seasonalFeesTeamOnOrgTLevel()}
+                              dataSource={
+                                item.isAllType != 'allDivisions'
+                                  ? item.seasonalTeam.perType
+                                  : item.seasonalTeam.allType
+                              }
+                              pagination={false}
+                              Divider="false"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )}
                 </div>
               </div>
             );
@@ -4184,7 +4160,6 @@ class RegistrationCompetitionFee extends Component {
   };
 
   onInviteeSearch = (value, inviteesType) => {
-    //console.log(value, '**** value');
     this.props.onInviteesSearchAction(value, inviteesType);
   };
 
@@ -4344,7 +4319,7 @@ class RegistrationCompetitionFee extends Component {
             loading={detailsData.searchLoad}
           >
             {associationAffilites.map((item) => {
-             // console.log(item, 'associationAffilites');
+              // console.log(item, 'associationAffilites');
               return (
                 <Option key={item.organisationId} value={item.organisationId}>
                   {item.name}
@@ -4440,62 +4415,62 @@ class RegistrationCompetitionFee extends Component {
                     {item.subReferences.length == 0 ? (
                       <Radio value={item.id}>{item.description}</Radio>
                     ) : (
-                      <div>
-                        {(orgLevelId == '4' && item.id == 1) == false ? (
-                          <div className="contextualHelp-RowDirection">
-                            <div class="applicable-to-heading invitees-main">
-                              {item.description}
-                            </div>
-                            <div style={{ marginTop: 2 }}>
-                              <CustumToolTip background="#ff8237">
-                                <span>{item.helpMsg}</span>
-                              </CustumToolTip>
-                            </div>
-                          </div>
-                        ) : null}
-                        {item.subReferences.map((subItem, subIndex) =>
-                          subItem.id == 2 ? (
-                            <>
-                              <div style={{ marginLeft: '20px' }}>
-                                {this.disableInvitee(subItem) && (
-                                  <Radio key={subItem.id} value={subItem.id}>
-                                    {subItem.description}
-                                  </Radio>
-                                )}
+                        <div>
+                          {(orgLevelId == '4' && item.id == 1) == false ? (
+                            <div className="contextualHelp-RowDirection">
+                              <div class="applicable-to-heading invitees-main">
+                                {item.description}
                               </div>
-                            </>
-                          ) : (
-                            <>
-                              <div style={{ marginLeft: '20px' }}>
-                                {this.disableInvitee(subItem) && (
-                                  <Radio key={subItem.id} value={subItem.id}>
-                                    {subItem.description}
-                                  </Radio>
-                                )}
+                              <div style={{ marginTop: 2 }}>
+                                <CustumToolTip background="#ff8237">
+                                  <span>{item.helpMsg}</span>
+                                </CustumToolTip>
                               </div>
-                              <div style={{ marginLeft: 20 }}>
-                                {this.disableInvitee(subItem) && (
-                                  <Radio.Group
-                                    onChange={(e) =>
-                                      this.props.add_editcompetitionFeeDeatils(
-                                        e.target.value,
-                                        'affiliateNonSelected'
-                                      )
-                                    }
-                                    disabled={regInviteesDisable}
-                                    value={affiliateNonSelected}
-                                  >
-                                    <Radio key={'none1'} value={'none1'}>
-                                      {'None'}
+                            </div>
+                          ) : null}
+                          {item.subReferences.map((subItem, subIndex) =>
+                            subItem.id == 2 ? (
+                              <>
+                                <div style={{ marginLeft: '20px' }}>
+                                  {this.disableInvitee(subItem) && (
+                                    <Radio key={subItem.id} value={subItem.id}>
+                                      {subItem.description}
                                     </Radio>
-                                  </Radio.Group>
-                                )}
-                              </div>
-                            </>
-                          )
-                        )}
-                      </div>
-                    )}
+                                  )}
+                                </div>
+                              </>
+                            ) : (
+                                <>
+                                  <div style={{ marginLeft: '20px' }}>
+                                    {this.disableInvitee(subItem) && (
+                                      <Radio key={subItem.id} value={subItem.id}>
+                                        {subItem.description}
+                                      </Radio>
+                                    )}
+                                  </div>
+                                  <div style={{ marginLeft: 20 }}>
+                                    {this.disableInvitee(subItem) && (
+                                      <Radio.Group
+                                        onChange={(e) =>
+                                          this.props.add_editcompetitionFeeDeatils(
+                                            e.target.value,
+                                            'affiliateNonSelected'
+                                          )
+                                        }
+                                        disabled={regInviteesDisable}
+                                        value={affiliateNonSelected}
+                                      >
+                                        <Radio key={'none1'} value={'none1'}>
+                                          {'None'}
+                                        </Radio>
+                                      </Radio.Group>
+                                    )}
+                                  </div>
+                                </>
+                              )
+                          )}
+                        </div>
+                      )}
                   </div>
                 )
             )}
@@ -4520,46 +4495,46 @@ class RegistrationCompetitionFee extends Component {
                     {item.subReferences.length == 0 ? (
                       <Radio value={item.id}>{item.description}</Radio>
                     ) : (
-                      <div>
-                        <div className="contextualHelp-RowDirection">
-                          <div class="applicable-to-heading invitees-main">
-                            {item.description}
+                        <div>
+                          <div className="contextualHelp-RowDirection">
+                            <div class="applicable-to-heading invitees-main">
+                              {item.description}
+                            </div>
+                            <div style={{ marginTop: 2 }}>
+                              <CustumToolTip background="#ff8237">
+                                <span>{item.helpMsg}</span>
+                              </CustumToolTip>
+                            </div>
                           </div>
-                          <div style={{ marginTop: 2 }}>
-                            <CustumToolTip background="#ff8237">
-                              <span>{item.helpMsg}</span>
-                            </CustumToolTip>
+                          {item.subReferences.map((subItem, subIndex) => (
+                            <div style={{ marginLeft: '20px' }}>
+                              <Radio key={subItem.id} value={subItem.id}>
+                                {subItem.description}
+                              </Radio>
+                              {this.affiliatesSearchInvitee(
+                                subItem,
+                                anyOrgSelected
+                              )}
+                            </div>
+                          ))}
+                          <div style={{ marginLeft: 20 }}>
+                            <Radio.Group
+                              onChange={(e) =>
+                                this.props.add_editcompetitionFeeDeatils(
+                                  e.target.value,
+                                  'anyOrgNonSelected'
+                                )
+                              }
+                              value={anyOrgNonSelected}
+                              disabled={regInviteesDisable}
+                            >
+                              <Radio key={'none2'} value={'none2'}>
+                                {'None'}
+                              </Radio>
+                            </Radio.Group>
                           </div>
                         </div>
-                        {item.subReferences.map((subItem, subIndex) => (
-                          <div style={{ marginLeft: '20px' }}>
-                            <Radio key={subItem.id} value={subItem.id}>
-                              {subItem.description}
-                            </Radio>
-                            {this.affiliatesSearchInvitee(
-                              subItem,
-                              anyOrgSelected
-                            )}
-                          </div>
-                        ))}
-                        <div style={{ marginLeft: 20 }}>
-                          <Radio.Group
-                            onChange={(e) =>
-                              this.props.add_editcompetitionFeeDeatils(
-                                e.target.value,
-                                'anyOrgNonSelected'
-                              )
-                            }
-                            value={anyOrgNonSelected}
-                            disabled={regInviteesDisable}
-                          >
-                            <Radio key={'none2'} value={'none2'}>
-                              {'None'}
-                            </Radio>
-                          </Radio.Group>
-                        </div>
-                      </div>
-                    )}
+                      )}
                   </div>
                 )
             )}
@@ -4590,29 +4565,29 @@ class RegistrationCompetitionFee extends Component {
                         </div>
                       </div>
                     ) : (
-                      <div>
-                        <div class="applicable-to-heading invitees-main">
-                          {item.description}
-                        </div>
-                        {item.subReferences.map((subItem, subIndex) => (
-                          <div style={{ marginLeft: '20px' }}>
-                            <Radio
-                              disabled={regInviteesDisable}
-                              onChange={(e) =>
-                                this.props.add_editcompetitionFeeDeatils(
-                                  e.target.value,
-                                  'none'
-                                )
-                              }
-                              key={subItem.id}
-                              value={subItem.id}
-                            >
-                              {subItem.description}
-                            </Radio>
+                        <div>
+                          <div class="applicable-to-heading invitees-main">
+                            {item.description}
                           </div>
-                        ))}
-                      </div>
-                    )}
+                          {item.subReferences.map((subItem, subIndex) => (
+                            <div style={{ marginLeft: '20px' }}>
+                              <Radio
+                                disabled={regInviteesDisable}
+                                onChange={(e) =>
+                                  this.props.add_editcompetitionFeeDeatils(
+                                    e.target.value,
+                                    'none'
+                                  )
+                                }
+                                key={subItem.id}
+                                value={subItem.id}
+                              >
+                                {subItem.description}
+                              </Radio>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                   </div>
                 )
             )}
@@ -4669,23 +4644,23 @@ class RegistrationCompetitionFee extends Component {
     let paymentsDisable = this.state.permissionState.paymentsDisable;
     let seasonalExpendeKey =
       selectedSeasonalFeeKey.includes('6') ||
-      selectedSeasonalFeeKey.includes('7') ||
-      selectedSeasonalFeeKey.includes('8') ||
-      selectedSeasonalFeeKey.includes(6) ||
-      selectedSeasonalFeeKey.includes(7) ||
-      selectedSeasonalFeeKey.includes(8)
+        selectedSeasonalFeeKey.includes('7') ||
+        selectedSeasonalFeeKey.includes('8') ||
+        selectedSeasonalFeeKey.includes(6) ||
+        selectedSeasonalFeeKey.includes(7) ||
+        selectedSeasonalFeeKey.includes(8)
         ? '5'
         : null;
     let casuallExpendeKey =
       selectedCasualFeeKey.includes('6') ||
-      selectedCasualFeeKey.includes('7') ||
-      selectedCasualFeeKey.includes('8') ||
-      selectedCasualFeeKey.includes(6) ||
-      selectedCasualFeeKey.includes(7) ||
-      selectedCasualFeeKey.includes(8)
+        selectedCasualFeeKey.includes('7') ||
+        selectedCasualFeeKey.includes('8') ||
+        selectedCasualFeeKey.includes(6) ||
+        selectedCasualFeeKey.includes(7) ||
+        selectedCasualFeeKey.includes(8)
         ? '5'
         : null;
-   // console.log(seasonalExpendeKey);
+    // console.log(seasonalExpendeKey);
     return (
       <div className="fees-view pt-5">
         <span className="form-heading">{AppConstants.paymentOptions}</span>
@@ -4976,6 +4951,7 @@ class RegistrationCompetitionFee extends Component {
                   <InputWithHead heading={AppConstants.availableFrom} />
                   <DatePicker
                     size="large"
+                    placeholder={"dd-mm-yyyy"}
                     style={{ width: '100%' }}
                     onChange={(date) =>
                       this.onChangeDiscountAvailableFrom(date, index)
@@ -4992,6 +4968,7 @@ class RegistrationCompetitionFee extends Component {
                   <InputWithHead heading={AppConstants.availableTo} />
                   <DatePicker
                     size="large"
+                    placeholder={"dd-mm-yyyy"}
                     style={{ width: '100%' }}
                     disabledDate={this.disabledDate}
                     disabledTime={this.disabledTime}
@@ -5073,6 +5050,7 @@ class RegistrationCompetitionFee extends Component {
                 <div className="col-sm">
                   <InputWithHead heading={AppConstants.availableFrom} />
                   <DatePicker
+                    placeholder={"dd-mm-yyyy"}
                     size="large"
                     style={{ width: '100%' }}
                     onChange={(date) =>
@@ -5091,6 +5069,7 @@ class RegistrationCompetitionFee extends Component {
                 <div className="col-sm">
                   <InputWithHead heading={AppConstants.availableTo} />
                   <DatePicker
+                    placeholder={"dd-mm-yyyy"}
                     size="large"
                     style={{ width: '100%' }}
                     disabledDate={this.disabledDate}
@@ -5158,10 +5137,10 @@ class RegistrationCompetitionFee extends Component {
                     onClick={() =>
                       !this.checkDiscountDisable(item.organisationId)
                         ? this.addRemoveChildDiscount(
-                            index,
-                            'delete',
-                            childindex
-                          )
+                          index,
+                          'delete',
+                          childindex
+                        )
                         : null
                     }
                   >
@@ -5239,6 +5218,7 @@ class RegistrationCompetitionFee extends Component {
                 <div className="col-sm">
                   <InputWithHead heading={AppConstants.availableFrom} />
                   <DatePicker
+                    placeholder={"dd-mm-yyyy"}
                     size="large"
                     style={{ width: '100%' }}
                     onChange={(date) =>
@@ -5255,6 +5235,7 @@ class RegistrationCompetitionFee extends Component {
                 <div className="col-sm">
                   <InputWithHead heading={AppConstants.availableTo} />
                   <DatePicker
+                    placeholder={"dd-mm-yyyy"}
                     size="large"
                     style={{ width: '100%' }}
                     disabledDate={this.disabledDate}
@@ -5442,7 +5423,7 @@ class RegistrationCompetitionFee extends Component {
         ? this.props.competitionFeesState.competitionMembershipProductData
         : [];
     let discountsDisable = this.state.permissionState.discountsDisable;
-   // console.log('discountData', discountData);
+    // console.log('discountData', discountData);
     return (
       <div className="discount-view pt-5">
         <div className="contextualHelp-RowDirection">
@@ -5643,7 +5624,7 @@ class RegistrationCompetitionFee extends Component {
           this_.deleteProduct(competitionId);
         }
       },
-      onCancel() {},
+      onCancel() { },
     });
   };
 
@@ -5747,9 +5728,9 @@ class RegistrationCompetitionFee extends Component {
                       htmlType="submit"
                       disabled={
                         tabKey === '1' ||
-                        tabKey === '4' ||
-                        tabKey === '5' ||
-                        tabKey === '6'
+                          tabKey === '4' ||
+                          tabKey === '5' ||
+                          tabKey === '6'
                           ? allDisable
                           : isPublished
                       }
@@ -5759,8 +5740,8 @@ class RegistrationCompetitionFee extends Component {
                             tabKey == '6' && isPublished == true
                               ? 3
                               : tabKey == '6'
-                              ? 2
-                              : 1,
+                                ? 2
+                                : 1,
                           buttonPressed: tabKey == '6' ? 'publish' : 'next',
                         })
                       }
@@ -5769,39 +5750,39 @@ class RegistrationCompetitionFee extends Component {
                       {tabKey === '6' && isPublished == false
                         ? AppConstants.publish
                         : tabKey === '6' && isPublished == true
-                        ? AppConstants.save
-                        : AppConstants.next}
+                          ? AppConstants.save
+                          : AppConstants.next}
                     </Button>
                   </Tooltip>
                 </div>
               </div>
             </div>
           ) : (
-            (tabKey == '4' || tabKey == '6') && (
-              <div className="row">
-                <div className="col-sm">
-                  <div className="comp-buttons-view">
-                    <Button
-                      className="publish-button"
-                      type="primary"
-                      // disabled={allDisable}
-                      htmlType="submit"
-                      onClick={() =>
-                        this.setState({
-                          statusRefId:
-                            tabKey == '6' && isPublished == true ? 3 : 2,
-                          // buttonPressed: "publish"
-                          buttonPressed: tabKey == '6' ? 'publish' : 'next',
-                        })
-                      }
-                    >
-                      {AppConstants.save}
-                    </Button>
+              (tabKey == '4' || tabKey == '6') && (
+                <div className="row">
+                  <div className="col-sm">
+                    <div className="comp-buttons-view">
+                      <Button
+                        className="publish-button"
+                        type="primary"
+                        // disabled={allDisable}
+                        htmlType="submit"
+                        onClick={() =>
+                          this.setState({
+                            statusRefId:
+                              tabKey == '6' && isPublished == true ? 3 : 2,
+                            // buttonPressed: "publish"
+                            buttonPressed: tabKey == '6' ? 'publish' : 'next',
+                          })
+                        }
+                      >
+                        {AppConstants.save}
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )
-          )}
+              )
+            )}
         </div>
       </div>
     );
@@ -5821,7 +5802,7 @@ class RegistrationCompetitionFee extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { ...props } = this.props;
-   // console.log(this.props.competitionFeesState);
+    // console.log(this.props.competitionFeesState);
     return (
       <div className="fluid-width" style={{ backgroundColor: '#f7fafc' }}>
         <DashboardLayout
@@ -5855,7 +5836,7 @@ class RegistrationCompetitionFee extends Component {
                       {this.membershipTypeView(getFieldDecorator)}
                     </div>
                   </TabPane>
-                  <TabPane tab={AppConstants.divisions} key={'3'}>
+                  <TabPane tab={AppConstants.registrationDivision} key={'3'}>
                     <div className="tab-formView">
                       {this.divisionsView(getFieldDecorator)}
                     </div>

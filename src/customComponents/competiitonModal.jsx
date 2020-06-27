@@ -9,7 +9,7 @@ import AppImages from "../themes/appImages"
 const { Option } = Select
 class CompetitionModal extends React.Component {
     render() {
-        const { modalTitle, onOK, onCancel, qucickCompetition, competitionChange, competitionId } = this.props
+        const { modalTitle, handleOK, onCancel, competitionChange, competitionName } = this.props
         return (
             <div style={{ backgroundColor: "red" }}>
                 <Modal
@@ -17,11 +17,8 @@ class CompetitionModal extends React.Component {
                     className="add-membership-type-modal"
                     title={modalTitle}
                     visible={this.props.visible}
-                    onOk={onOK}
-                    onCancel={onCancel}
-                // cancelButtonProps={{ style: { display: "none", } }}
-                // okButtonProps={{ style: { display: "none", } }}
-                >
+                    onOk={handleOK}
+                    onCancel={onCancel}>
                     <div style={{ display: 'flex' }}>
                         < span style={{ fontSize: 16 }} className={`comment-heading`}>{'"Enter competition Name"'} {" "} {'or'}{" "}   {'Select an existing competition'}   </span>
                     </div>
@@ -29,6 +26,8 @@ class CompetitionModal extends React.Component {
                         <InputWithHead
                             heading={"Competition Name"}
                             placeholder={"Enter competition Name"}
+                            onChange={(e) => competitionChange(e)}
+                            value={competitionName}
                         ></InputWithHead>
                     </div>
 
