@@ -235,10 +235,7 @@ class RegisteredUser extends Component {
                                 </Tooltip>
                             </div> */}
                         </div>
-                        <div className="col-sm" style={{
-                            display: "flex", maxWidth: "99%",
-                            justifyContent: "flex-end"
-                        }}>
+                        <div className="col-sm">
                             <div className="row">
                                 <div className="col-sm">
                                     <div
