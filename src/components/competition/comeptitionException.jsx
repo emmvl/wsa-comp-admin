@@ -226,6 +226,7 @@ class CompetitionException extends Component {
                                 size="large"
                                 style={{ width: "100%" }}
                                 format={"DD-MM-YYYY"}
+                                placeholder={"dd-mm-yyyy"}
                                 onChange={(startDate) => this.onChangeDate(moment(startDate).format("YYYY-MM-DD"))}
                                 value={moment(this.state.matchDate)}
                             />

@@ -12,7 +12,7 @@ import {
   setOrganisationData,
   getOrganisationData,
   setAuthToken, getAuthToken,
-  setUserId, getUserId,
+  setUserId, getUserId,clearUmpireStorage
 } from "../util/sessionStorage";
 import { clearHomeDashboardData, } from "../store/actions/homeAction/homeAction";
 import { identify, setUserVars } from 'react-fullstory';
@@ -113,21 +113,22 @@ class DashboardLayout extends React.Component {
     this.setFullStory(organisationData)
     setOrganisationData(organisationData)
     this.props.clearHomeDashboardData("user")
+    clearUmpireStorage()
     history.push("./")
     window.location.reload();
   }
 
   setFullStory = (organisationData) =>{
-    if(organisationData!= null ){
-      let exOrgData = getOrganisationData();
-      if(exOrgData == null || organisationData.organisationUniqueKey!= exOrgData.organisationUniqueKey){
-        setUserVars({
-          "displayName" : organisationData.firstName + " " + organisationData.lastName,
-          "email" : organisationData.userEmail,
-          "organisation" : organisationData.name
-         });
-      }
-    }
+    // if(organisationData!= null ){
+    //   let exOrgData = getOrganisationData();
+    //   if(exOrgData == null || organisationData.organisationUniqueKey!= exOrgData.organisationUniqueKey){
+    //     setUserVars({
+    //       "displayName" : organisationData.firstName + " " + organisationData.lastName,
+    //       "email" : organisationData.userEmail,
+    //       "organisation" : organisationData.name
+    //      });
+    //   }
+    // }
    
   }
 
@@ -329,7 +330,7 @@ class DashboardLayout extends React.Component {
                             }
                           >
                             <div className="registration-menu menu-wrap">
-                              <NavLink to="/registration">
+                              <NavLink to="/registeredUser">
                                 <span className="icon"></span>
                                 {AppConstants.registration}
                               </NavLink>

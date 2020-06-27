@@ -108,6 +108,7 @@ const getDraws_division_grade = () => {
 const getUmpireCompetiton = () => {
     return localStorage.umpireCompetitionId
 }
+
 const setUmpireCompition = umpireCompetitionId => {
     localStorage.setItem("umpireCompetitionId", umpireCompetitionId)
 }
@@ -128,7 +129,30 @@ const setUmpireCompId = umpireCompId => {
     localStorage.setItem("umpireCompId", umpireCompId)
 }
 
+const clearUmpireStorage = () => {
+    let keysToRemove = ["umpireCompId", "umpireCompetitionData", "umpireCompetitionId"];
+       for (let key of keysToRemove) {
+        localStorage.removeItem(key);
+    }
+}
+const getLiveScoreUmpireCompitionData = () => {
+    return localStorage.liveScoreUmpireCompetitionData
+}
 
+const setLiveScoreUmpireCompitionData = liveScoreUmpireCompetitionData => {
+    localStorage.setItem("liveScoreUmpireCompetitionData", liveScoreUmpireCompetitionData)
+}
+
+const setLiveScoreUmpireCompition = liveScoreUmpireCompetitionId => {
+    localStorage.setItem("liveScoreUmpireCompetitionId", liveScoreUmpireCompetitionId)
+}
+
+const getLiveScoreUmpireCompition = () => {
+    return localStorage.liveScoreUmpireCompetitionId
+}
+
+
+ 
 
 
 
@@ -160,5 +184,10 @@ module.exports = {
     setUmpireCompitionData,
     getUmpireCompetitonData,
     getUmpireCompId,
-    setUmpireCompId
+    setUmpireCompId,
+    clearUmpireStorage,
+    getLiveScoreUmpireCompitionData,
+    setLiveScoreUmpireCompitionData,
+    setLiveScoreUmpireCompition,
+    getLiveScoreUmpireCompition
 }

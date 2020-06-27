@@ -9,7 +9,7 @@ const { TextArea } = Input;
 const { Option } = Select
 class TimeSlotModal extends React.Component {
     render() {
-        const { weekDays, timeslots, modalTitle, onOK, onCancel, addTimeSlot, addStartTime, removetimeSlotDay, changeDay, removeStartTime, UpdateTimeSlotsDataManual } = this.props
+        const { weekDays, timeslots, modalTitle, timeSlotOK, onCancel, addTimeSlot, addStartTime, removetimeSlotDay, changeDay, removeStartTime, UpdateTimeSlotsDataManual } = this.props
         return (
             <div style={{ backgroundColor: "red" }}>
                 <Modal
@@ -17,7 +17,7 @@ class TimeSlotModal extends React.Component {
                     className="add-membership-type-modal"
                     title={modalTitle}
                     visible={this.props.visible}
-                    onOk={onOK}
+                    onOk={timeSlotOK}
                     onCancel={onCancel}
                     okText={AppConstants.save}
                     cancelButtonProps={{ style: { position: "absolute", left: 15 } }}

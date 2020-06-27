@@ -105,6 +105,7 @@ const columns = [
         >
             <Menu.SubMenu
                 key="sub1"
+                style={{ borderBottomStyle: "solid", borderBottom: 0 }}
                 title={
                     <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                 }
@@ -164,8 +165,12 @@ class Umpire extends Component {
                 }
 
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey
+                if(firstComp !== false){
                 this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: firstComp, offset: 0 })
                 this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey })
+                }else{
+                    this.setState({  loading: false })
+                }
             }
         }
     }

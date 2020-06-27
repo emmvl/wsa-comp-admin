@@ -126,6 +126,7 @@ class LiveScoreBulkChange extends Component {
                                 style={{ width: "100%" }}
                                 onChange={date => this.setState(date)}
                                 format={"DD-MM-YYYY"}
+                                placeholder={"dd-mm-yyyy"}
                                 showTime={false}
                                 name={'registrationOepn'}
                             />
@@ -327,6 +328,7 @@ class LiveScoreBulkChange extends Component {
                             size="large"
                             style={{ width: "100%" }}
                             format={"DD-MM-YYYY"}
+                            placeholder={"dd-mm-yyyy"}
                             showTime={false}
                             onChange={(date) => date && this.props.liveScoreUpdateBulkAction(date, "optionalDate")}
                             value={data.optionalDate && moment(data.optionalDate, "DD-MM-YYYY")}
@@ -386,6 +388,7 @@ class LiveScoreBulkChange extends Component {
                                         size="large"
                                         style={{ width: "100%" }}
                                         format={"DD-MM-YYYY"}
+                                        placeholder={"dd-mm-yyyy"}
                                         showTime={false}
                                         // onChange={(date) => this.props.liveScoreUpdateBulkAction(moment(date).format('YYYY-MM-DD'), "startDate")}
                                         onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "startDate")}
@@ -430,6 +433,7 @@ class LiveScoreBulkChange extends Component {
                                         size="large"
                                         style={{ width: "100%" }}
                                         format={"DD-MM-YYYY"}
+                                        placeholder={"dd-mm-yyyy"}
                                         showTime={false}
                                         name={'registrationOepn'}
                                         onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "endDate")}
@@ -572,6 +576,7 @@ class LiveScoreBulkChange extends Component {
                                         onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "startDate")}
                                         value={bringForwardData.startDate}
                                         format={"DD-MM-YYYY"}
+                                        placeholder={"dd-mm-yyyy"}
                                         showTime={false}
                                     />
                                 )}
@@ -614,6 +619,7 @@ class LiveScoreBulkChange extends Component {
                                         onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "endDate")}
                                         value={bringForwardData.endDate}
                                         format={"DD-MM-YYYY"}
+                                        placeholder={"dd-mm-yyyy"}
                                         showTime={false}
                                         name={'registrationOepn'}
                                     />
@@ -745,6 +751,7 @@ class LiveScoreBulkChange extends Component {
                                         size="large"
                                         style={{ width: "100%" }}
                                         format={"DD-MM-YYYY"}
+                                        placeholder={"dd-mm-yyyy"}
                                         showTime={false}
                                         onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "startDate")}
                                         value={endMatchData.startDate}
@@ -786,6 +793,7 @@ class LiveScoreBulkChange extends Component {
                                         size="large"
                                         style={{ width: "100%" }}
                                         format={"DD-MM-YYYY"}
+                                        placeholder={"dd-mm-yyyy"}
                                         showTime={false}
                                         name={'registrationOepn'}
                                         onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "endDate")}
@@ -1021,6 +1029,7 @@ class LiveScoreBulkChange extends Component {
                                             size="large"
                                             style={{ width: "100%" }}
                                             format={"DD-MM-YYYY"}
+                                            placeholder={"dd-mm-yyyy"}
                                             showTime={false}
                                             name={'registrationOepn'}
                                             onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "startDate")}
@@ -1060,6 +1069,7 @@ class LiveScoreBulkChange extends Component {
                                             size="large"
                                             style={{ width: "100%" }}
                                             format={"DD-MM-YYYY"}
+                                            placeholder={"dd-mm-yyyy"}
                                             showTime={false}
                                             name={'registrationOepn'}
                                             onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "endDate")}

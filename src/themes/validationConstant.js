@@ -158,7 +158,9 @@ const ValidationConstants = {
     umpireSearch: "Umpire search is required.",
     umpireMessage: "This umpire has not been linked to a user profile",
     SelectNumberTeam: "Please add number of Teams",
-    email_validation:"Please enter valid email address!"
+    email_validation: "Please enter valid email address!",
+    matchDeleteMsg: 'This match cannot be deleted as it has already ended.',
+    userNotFound: "Please select an existing user for this competition."
 };
 
 export default ValidationConstants;

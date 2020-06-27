@@ -31,9 +31,19 @@ function updateDivision(key, index, gradeIndex, value) {
 }
 
 
+function updateCompetition(value, key) {
+    const action = {
+        type: ApiConstants.API_UPDATE_QUICKCOMPETITION_COMPETITION,
+        value, key
+    }
+    console.log(action)
+    return action
+}
+
 export {
     updateQuickCompetitionData,
     updateTimeSlot,
-    updateDivision
+    updateDivision,
+    updateCompetition
 
 }

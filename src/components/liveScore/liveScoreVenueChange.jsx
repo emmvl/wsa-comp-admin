@@ -164,6 +164,7 @@ class LiveScoreVenueChange extends Component {
                                         size="large"
                                         style={{ width: "100%" }}
                                         format={"DD-MM-YYYY"}
+                                        placeholder={"dd-mm-yyyy"}
                                         showTime={false}
                                         onChange={(startDate) => this.props.liveScoreUpdateVenueChange(startDate, "startDate")}
                                         value={venueChangeData.startDate}
@@ -207,6 +208,7 @@ class LiveScoreVenueChange extends Component {
                                         size="large"
                                         style={{ width: "100%" }}
                                         format={"DD-MM-YYYY"}
+                                        placeholder={"dd-mm-yyyy"}
                                         showTime={false}
                                         name={'registrationOepn'}
                                         onChange={(endDate) => this.props.liveScoreUpdateVenueChange(endDate, "endDate")}

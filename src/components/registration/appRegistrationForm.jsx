@@ -808,6 +808,7 @@ class AppRegistrationForm extends Component {
                     style={{ width: "100%" }}
                     onChange={e => this.onChangeSetParticipantValue(e, "dateOfBirth", index) }
                     format={"DD-MM-YYYY"}
+                    placeholder={"dd-mm-yyyy"}
                     showTime={false}
                     name={'Dob'}
                 />

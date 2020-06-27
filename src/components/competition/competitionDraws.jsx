@@ -74,15 +74,18 @@ class CompetitionDraws extends Component {
       competitionDivisionGradeId: '',
       organisationId: getOrganisationData().organisationUniqueKey,
       updateLoad: false,
+      organisation_Id: null
     };
   }
 
   componentDidUpdate(nextProps) {
+    let userState = this.props.userState
     let competitionModuleState = this.props.competitionModuleState;
     let drawsRoundData = this.props.drawsState.getDrawsRoundsData;
+    let drawOrganisations = this.props.drawsState.drawOrganisations
     let venueData = this.props.drawsState.competitionVenues;
     let divisionGradeNameList = this.props.drawsState.divisionGradeNameList;
-
+    console.log(drawOrganisations)
     if (
       this.state.venueLoad == true &&
       this.props.drawsState.updateLoad == false
@@ -103,7 +106,7 @@ class CompetitionDraws extends Component {
                 this.state.yearRefId,
                 this.state.firstTimeCompId,
                 venueId,
-                roundId
+                roundId, null
               );
               this.setState({
                 roundId,
@@ -120,7 +123,7 @@ class CompetitionDraws extends Component {
                 this.state.yearRefId,
                 this.state.firstTimeCompId,
                 venueId,
-                roundId
+                roundId, null
               );
               this.setState({
                 roundId,
@@ -186,14 +189,15 @@ class CompetitionDraws extends Component {
       }
     }
 
-    // if (this.state.updateLoad == true && this.props.drawsState.updateLoad == false) {
-    //   this.setState({updateLoad: false})
-    //   this.reGenerateDraw();
-    // }
+    if (nextProps.drawsState.drawOrganisations != drawOrganisations) {
+      if (drawOrganisations.length > 0) {
+        let organisation_Id = drawOrganisations[0].organisationUniqueKey;
+        this.setState({ organisation_Id })
+      }
+    }
   }
 
   componentDidMount() {
-    console.log("*************************componentDidMount")
     loadjs('assets/js/custom.js');
     this.apiCalls();
   }
@@ -233,7 +237,7 @@ class CompetitionDraws extends Component {
           yearId,
           storedCompetitionId,
           venueId,
-          roundId
+          roundId, null
         );
 
         this.setState({
@@ -492,6 +496,20 @@ class CompetitionDraws extends Component {
     );
   };
 
+  onchangeOrganisation = (organisation_Id) => {
+    this.setState({
+      organisation_Id
+    })
+    this.props.clearDraws();
+    this.props.getCompetitionDrawsAction(
+      this.state.yearRefId,
+      this.state.firstTimeCompId,
+      this.state.venueId,
+      this.state.roundId,
+      organisation_Id
+    );
+  }
+
   //////year change onchange
   onYearChange = (yearId) => {
     this.props.clearDraws('rounds');
@@ -504,6 +522,7 @@ class CompetitionDraws extends Component {
       roundTime: null,
       venueId: null,
       competitionDivisionGradeId: null,
+      organisation_Id: null
     });
     this.props.getYearAndCompetitionOwnAction(
       this.props.appState.own_YearArr,
@@ -523,6 +542,7 @@ class CompetitionDraws extends Component {
       roundTime: null,
       venueLoad: true,
       competitionDivisionGradeId: null,
+      organisation_Id: null
     });
     // this.props.getCompetitionVenue(competitionId);
     this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId);
@@ -565,7 +585,7 @@ class CompetitionDraws extends Component {
             </Select>
           </div>
         </div>
-        <div className="col-sm-4">
+        <div className="col-sm-3">
           <div
             style={{
               width: '100%',
@@ -600,7 +620,7 @@ class CompetitionDraws extends Component {
             </Select>
           </div>
         </div>
-        <div className="col-sm-5">
+        <div className="col-sm-3">
           <div
             style={{
               width: '100%',
@@ -638,8 +658,48 @@ class CompetitionDraws extends Component {
               })}
             </Select>
           </div>
+
         </div>
-      </div>
+        <div className="col-sm-3">
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              // marginRight: 50
+            }}
+          >
+            <span className="year-select-heading">
+              {AppConstants.organisation}:
+            </span>
+            <Select
+              style={{ minWidth: 160 }}
+              name={'competition'}
+              className="year-select"
+              onChange={(oragnisationId) =>
+                this.onchangeOrganisation(oragnisationId)
+              }
+              value={this.state.organisation_Id}
+            >
+              {
+                this.props.drawsState.drawOrganisations.map((item) => {
+                  return (
+                    <Option
+                      key={
+                        'orgId' + item.organisationUniqueKey
+                      }
+                      value={item.organisationUniqueKey}
+                    >
+                      {item.organisationName}
+                    </Option>
+                  );
+                })
+              }
+            </Select>
+          </div>
+        </div>
+      </div >
     );
   };
 
@@ -652,7 +712,7 @@ class CompetitionDraws extends Component {
       this.state.yearRefId,
       this.state.firstTimeCompId,
       venueId,
-      this.state.roundId
+      this.state.roundId, this.state.organisation_Id
     );
   };
 
@@ -670,7 +730,8 @@ class CompetitionDraws extends Component {
       this.state.yearRefId,
       this.state.firstTimeCompId,
       this.state.venueId,
-      roundId
+      roundId,
+      this.state.organisation_Id
     );
   };
 
@@ -696,13 +757,13 @@ class CompetitionDraws extends Component {
 
   ////////form content view
   contentView = () => {
+    console.log()
     let roundTime = '';
     if (this.state.roundTime) {
       if (this.state.roundTime.length > 0) {
         roundTime = moment(this.state.roundTime).format('ddd DD/MM');
       }
     }
-    console.log(this.props.drawsState.spinLoad);
     return (
       <div className="comp-draw-content-view">
         <div className="row comp-draw-list-top-head">
@@ -827,29 +888,29 @@ class CompetitionDraws extends Component {
                 )}
             </div>
           ) : (
-            <div className="draggable-wrap draw-data-table">
-              {this.props.drawsState.getRoundsDrawsdata.length > 0 &&
-                this.props.drawsState.getRoundsDrawsdata.map(
-                  (dateItem, dateIndex) => {
-                    return (
-                      <div>
-                        <div className="draws-round-view">
-                          <span className="draws-round">
-                            {dateItem.roundName}
-                          </span>
+              <div className="draggable-wrap draw-data-table">
+                {this.props.drawsState.getRoundsDrawsdata.length > 0 &&
+                  this.props.drawsState.getRoundsDrawsdata.map(
+                    (dateItem, dateIndex) => {
+                      return (
+                        <div>
+                          <div className="draws-round-view">
+                            <span className="draws-round">
+                              {dateItem.roundName}
+                            </span>
+                          </div>
+                          {this.draggableView(dateItem)}
+                          <div style={{ display: 'table' }}>
+                            <LegendComponent
+                              legendArray={dateItem.legendsArray}
+                            />
+                          </div>
                         </div>
-                        {this.draggableView(dateItem)}
-                        <div style={{ display: 'table' }}>
-                          <LegendComponent
-                            legendArray={dateItem.legendsArray}
-                          />
-                        </div>
-                      </div>
-                    );
-                  }
-                )}
-            </div>
-          )}
+                      );
+                    }
+                  )}
+              </div>
+            )}
         </div>
       </div>
     );
@@ -950,7 +1011,7 @@ class CompetitionDraws extends Component {
                           backgroundColor:
                             slotObject.competitionDivisionGradeId ==
                               this.state.competitionDivisionGradeId ||
-                            this.state.competitionDivisionGradeId == 0
+                              this.state.competitionDivisionGradeId == 0
                               ? slotObject.colorCode
                               : '#999999',
                           left: leftMargin,
@@ -971,7 +1032,7 @@ class CompetitionDraws extends Component {
                           swappable={
                             slotObject.competitionDivisionGradeId ==
                               this.state.competitionDivisionGradeId ||
-                            this.state.competitionDivisionGradeId == 0
+                              this.state.competitionDivisionGradeId == 0
                               ? true
                               : false
                           }
@@ -990,8 +1051,8 @@ class CompetitionDraws extends Component {
                               {slotObject.awayTeamName}
                             </span>
                           ) : (
-                            <span>Free</span>
-                          )}
+                              <span>Free</span>
+                            )}
                         </Swappable>
                       </div>
                       {slotObject.drawsId !== null && (
@@ -1038,16 +1099,16 @@ class CompetitionDraws extends Component {
                                     />
                                   </div>
                                 ) : (
-                                  <div>
-                                    <img
-                                      className="dot-image"
-                                      src={AppImages.moreTripleDot}
-                                      alt=""
-                                      width="16"
-                                      height="10"
-                                    />
-                                  </div>
-                                )
+                                    <div>
+                                      <img
+                                        className="dot-image"
+                                        src={AppImages.moreTripleDot}
+                                        alt=""
+                                        width="16"
+                                        height="10"
+                                      />
+                                    </div>
+                                  )
                               }
                             >
                               {slotObject.isLocked == 1 && (

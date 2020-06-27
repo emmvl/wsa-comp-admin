@@ -288,6 +288,20 @@
     
 }
 
+.disable-button-style {
+    font-weight: 600;
+    font-family: inter-semi-bold;
+    font-size: 13px;
+    color: var(--app-f7fafc);
+    border-radius: 7px;
+    background-image: var(--app-gradient-right);
+    justify-content: center;
+    display: flex;
+    background-color: var(--app-ff6c4f);
+    border-color: var(--app-ff6c4f);
+    align-items: center;
+}
+
 @media(min-width: 768px) and (max-width: 1024px) {
     .live-score-edit-match-buttons {
         display: flex;

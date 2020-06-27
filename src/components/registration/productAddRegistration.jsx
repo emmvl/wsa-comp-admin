@@ -64,6 +64,7 @@ const columns = [
                 className="date-picker-inside-table-fees"
                 onChange={date => this_Obj.dateOnChangeFrom(date)}
                 format={"DD-MM-YYYY"}
+                placeholder={"dd-mm-yyyy"}
                 showTime={false}
                 defaultValue={moment()}
             />
@@ -79,6 +80,7 @@ const columns = [
                 className="date-picker-inside-table-fees"
                 onChange={date => this_Obj.dateOnChangeTo(date)}
                 format={"DD-MM-YYYY"}
+                placeholder={"dd-mm-yyyy"}
                 showTime={false}
                 defaultValue={moment()}
             />
@@ -281,6 +283,7 @@ class ProductAddRegistration extends Component {
                                 style={{ width: "100%" }}
                                 onChange={date => this.dateOnChangeFrom(date)}
                                 format={"DD-MM-YYYY"}
+                                placeholder={"dd-mm-yyyy"}
                                 showTime={false}
                                 name={'registrationOepn'}
                             />
@@ -297,6 +300,7 @@ class ProductAddRegistration extends Component {
                                 disabledTime={this.disabledTime}
                                 onChange={date => this.dateOnChangeTo(date)}
                                 format={"DD-MM-YYYY"}
+                                placeholder={"dd-mm-yyyy"}
                                 showTime={false}
                                 name={'registrationClose'}
                             />
@@ -404,6 +408,7 @@ class ProductAddRegistration extends Component {
                                     style={{ width: "100%" }}
                                     onChange={date => this.dateOnChangeFrom(date)}
                                     format={"DD-MM-YYYY"}
+                                    placeholder={"dd-mm-yyyy"}
                                     showTime={false}
                                 />
                             </div>
@@ -416,6 +421,7 @@ class ProductAddRegistration extends Component {
                                     disabledTime={this.disabledTime}
                                     onChange={date => this.dateOnChangeTo(date)}
                                     format={"DD-MM-YYYY"}
+                                    placeholder={"dd-mm-yyyy"}
                                     showTime={false}
                                 />
                             </div>
@@ -454,6 +460,7 @@ class ProductAddRegistration extends Component {
                                     style={{ width: "100%" }}
                                     onChange={date => this.dateOnChangeFrom(date)}
                                     format={"DD-MM-YYYY"}
+                                    placeholder={"dd-mm-yyyy"}
                                     showTime={false}
                                 />
                             </div>
@@ -462,6 +469,7 @@ class ProductAddRegistration extends Component {
                                 <DatePicker
                                     size="large"
                                     style={{ width: "100%" }}
+                                    placeholder={"dd-mm-yyyy"}
                                     disabledDate={this.disabledDate}
                                     disabledTime={this.disabledTime}
                                     onChange={date => this.dateOnChangeTo(date)}

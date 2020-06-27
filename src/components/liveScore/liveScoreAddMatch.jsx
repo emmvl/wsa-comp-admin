@@ -143,7 +143,7 @@ class LiveScoreAddMatch extends Component {
             }
 
         } else {
-
+            this.props.liveScoreUpdateMatchAction('', "addMatch")
         }
     }
 
@@ -322,7 +322,7 @@ class LiveScoreAddMatch extends Component {
     ////modal view
     forfietModalView(getFieldDecorator) {
         let { addEditMatch, forfietedTeam } = this.props.liveScoreMatchState
-     
+
         return (
             <Modal
                 visible={this.state.forfeitVisible}
@@ -587,6 +587,8 @@ class LiveScoreAddMatch extends Component {
         const { umpireList } = this.props.umpireState
         let umpireListResult = isArrayNotEmpty(umpireList) ? umpireList : []
 
+        console.log(addEditMatch, 'contentView~~~~~')
+
         console.log(umpire2Orag, 'matchDetails')
         return (
             <div className="content-view pt-4">
@@ -605,7 +607,7 @@ class LiveScoreAddMatch extends Component {
                                     format={"DD-MM-YYYY"}
                                     showTime={false}
                                     name={'registrationOepn'}
-                                    placeholder='Select Date'
+                                    placeholder={"dd-mm-yyyy"}
                                 />
                             )}
                         </Form.Item>
@@ -883,7 +885,7 @@ class LiveScoreAddMatch extends Component {
                                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                                 // onChange={(umpire1Club) => this.setUmpireClub(umpire1Club)}
                                                 onChange={(umpire1Orag) => { this.props.liveScoreUpdateMatchAction(umpire1Orag, 'umpire1Orag') }}
-                                                value={umpire1Orag}
+                                                value={umpire1Orag ? umpire1Orag : undefined}
                                                 placeholder={'Select Umpire 1 Organisation'}
                                             >
 
@@ -1051,12 +1053,12 @@ class LiveScoreAddMatch extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                let { addEditMatch, matchData, start_date, start_time, start_post_date, umpire1Orag, umpire1TextField, umpire2Orag, umpire2TextField, umpire1Name, umpire2Name, scorer1, scorer2, recordUmpireType } = this.props.liveScoreMatchState
+                let { addEditMatch, matchData, start_date, start_time, start_post_date, umpire1Orag, umpire1TextField, umpire2Orag, umpire2TextField, umpire1Name, umpire2Name, scorer1, scorer2, recordUmpireType, matchUmpireId_1, matchUmpireId_2, scorerRosterId_1, scorerRosterId_2, umpireRosterId_1, umpireRosterId_2, team1id, team2id } = this.props.liveScoreMatchState
 
                 let match_date_ = moment(start_date, "DD-MM-YYYY")
                 let startDate = moment(match_date_).format("YYYY-MMM-DD")
                 let start = moment(start_time).format("HH:mm")
-
+                console.log(team1id, 'matchUmpireId_1', team2id)
 
                 let datetimeA = moment(startDate + " " + start);
                 let formated__Date = new Date(datetimeA).toISOString()
@@ -1065,125 +1067,251 @@ class LiveScoreAddMatch extends Component {
 
                 let umpireData
                 let scorerData
+                let umpire_1_Obj, umpire_2_Obj, scorers_1, scorers_2
 
                 if (recordUmpireType == 'NAMES') {
-                    let umpire_1_Obj = {
-                        matchId: this.state.matchId,
-                        organisationId: umpire1Orag,
-                        umpireName: umpire1TextField,
-                        umpireType: recordUmpireType,
-                        sequence: 1
-                    }
 
-                    let umpire_2_Obj = {
-                        matchId: this.state.matchId,
-                        organisationId: umpire2Orag,
-                        umpireName: umpire2TextField,
-                        umpireType: recordUmpireType,
-                        sequence: 2
-                    }
-
-                    let scorers_1 = {
-                        matchId: this.state.matchId,
-                        teamId: addEditMatch.team1Id,
-                        userId: scorer1,
-                        roleId: 4,
-                    }
-
-                    let scorers_2 = {
-                        matchId: this.state.matchId,
-                        teamId: addEditMatch.team2Id,
-                        userId: scorer2,
-                        roleId: 4,
-                    }
-
-                    if (this.state.scoringType !== 'SINGLE') {
-
-                        if (scorer1 && scorer2) {
-                            scorerData = [scorers_1, scorers_2]
-                        } else if (scorer1) {
-                            scorerData = [scorers_1]
-                        } else if (scorer2) {
-                            scorerData = [scorers_2]
+                    if (matchUmpireId_1) {
+                        umpire_1_Obj = {
+                            matchId: this.state.matchId,
+                            organisationId: umpire1Orag,
+                            umpireName: umpire1TextField,
+                            umpireType: recordUmpireType,
+                            sequence: 1,
+                            matchUmpiresId: matchUmpireId_1
+                        }
+                    } else {
+                        umpire_1_Obj = {
+                            matchId: this.state.matchId,
+                            organisationId: umpire1Orag,
+                            umpireName: umpire1TextField,
+                            umpireType: recordUmpireType,
+                            sequence: 1,
                         }
 
+                    }
+
+                    if (matchUmpireId_2) {
+                        umpire_2_Obj = {
+                            matchId: this.state.matchId,
+                            organisationId: umpire2Orag,
+                            umpireName: umpire2TextField,
+                            umpireType: recordUmpireType,
+                            sequence: 2,
+                            matchUmpiresId: matchUmpireId_2
+                        }
+                    } else {
+                        umpire_2_Obj = {
+                            matchId: this.state.matchId,
+                            organisationId: umpire2Orag,
+                            umpireName: umpire2TextField,
+                            umpireType: recordUmpireType,
+                            sequence: 2,
+                        }
+
+                    }
+
+                    if (scorerRosterId_1) {
+                        scorers_1 = {
+                            matchId: this.state.matchId,
+                            teamId: team1id,
+                            userId: scorer1,
+                            roleId: 4,
+                            rosterId: scorerRosterId_1
+                        }
 
                     } else {
+                        scorers_1 = {
+                            matchId: this.state.matchId,
+                            teamId: team1id,
+                            userId: scorer1,
+                            roleId: 4,
+                        }
+                    }
+
+                    if (scorerRosterId_2) {
+                        scorers_2 = {
+                            matchId: this.state.matchId,
+                            teamId: team2id,
+                            userId: scorer2,
+                            roleId: 4,
+                            rosterId: scorerRosterId_2
+                        }
+
+                    } else {
+                        scorers_2 = {
+                            matchId: this.state.matchId,
+                            teamId: team2id,
+                            userId: scorer2,
+                            roleId: 4,
+                        }
+
+                    }
+
+
+
+                    if (this.state.scoringType === 'SINGLE') {
                         if (scorer1) {
                             scorerData = [scorers_1]
+
                         }
-
-
-                    }
-
-                    // if (umpire1TextField && umpire2TextField) {
-                    //     umpireData = [umpire_1_Obj, umpire_2_Obj]
-
-                    // } else if (umpire1TextField) {
-                    //     umpireData = [umpire_1_Obj]
-
-                    // } else if (umpire2TextField) {
-                    //     umpireData = [umpire_2_Obj]
-
-                    // }
-
-                    umpireData = [umpire_1_Obj, umpire_2_Obj]
-
-                } else if (recordUmpireType == 'USERS') {
-                    let umpire_1_Obj = {
-                        matchId: this.state.matchId,
-                        userId: umpire1Name,
-                        roleId: 15
-                    }
-
-                    let umpire_2_Obj = {
-                        matchId: this.state.matchId,
-                        userId: umpire2Name,
-                        roleId: 15
-                    }
-
-
-                    let scorers_1 = {
-                        matchId: this.state.matchId,
-                        teamId: addEditMatch.team1Id,
-                        userId: scorer1,
-                        roleId: 4,
-                    }
-
-                    let scorers_2 = {
-                        matchId: this.state.matchId,
-                        teamId: addEditMatch.team2Id,
-                        userId: scorer2,
-                        roleId: 4,
-                    }
-
-                    if (this.state.scoringType !== 'SINGLE') {
-                        if (umpire1Name && umpire2Name && scorer1 && scorer2) {
-                            umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1, scorers_2]
-                        } else if (umpire1Name && umpire2Name && scorer1) {
-                            umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1]
-                        } else if (umpire1Name && umpire2Name && scorer2) {
-                            umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_2]
-                        } else if (umpire1Name && scorer1) {
-
-                            umpireData = [umpire_1_Obj, scorers_1]
-                        } else if (umpire2Name && scorer1) {
-
-                            umpireData = [umpire_2_Obj, scorers_1]
-                        } else if (umpire1Name && scorer2) {
-
-                            umpireData = [umpire_1_Obj, scorers_1]
-                        } else if (umpire2Name && scorer2) {
-
-                            umpireData = [umpire_2_Obj, scorers_2]
-                        }
-
 
                     } else {
+                        if (scorer1 && scorer2) {
+                            scorerData = [scorers_1, scorers_2]
+
+                        } else if (scorer1) {
+                            scorerData = [scorers_1]
+
+                        } else if (scorer2) {
+                            scorerData = [scorers_2]
+
+                        }
+
+                    }
+
+                    if (umpire1TextField && umpire2TextField) {
+                        umpireData = [umpire_1_Obj, umpire_2_Obj]
+
+                    } else if (umpire1TextField) {
+                        umpireData = [umpire_1_Obj]
+
+                    } else if (umpire2TextField) {
+                        umpireData = [umpire_2_Obj]
+
+                    }
+
+                    // umpireData = [umpire_1_Obj, umpire_2_Obj]
+
+                } else if (recordUmpireType == 'USERS') {
+
+
+                    if (umpireRosterId_1) {
+                        umpire_1_Obj = {
+                            matchId: this.state.matchId,
+                            userId: umpire1Name,
+                            roleId: 15,
+                            rosterId: umpireRosterId_1
+
+                        }
+
+                    } else {
+                        umpire_1_Obj = {
+                            matchId: this.state.matchId,
+                            userId: umpire1Name,
+                            roleId: 15,
+
+                        }
+                    }
+
+                    if (umpireRosterId_2) {
+                        umpire_2_Obj = {
+                            matchId: this.state.matchId,
+                            userId: umpire2Name,
+                            roleId: 15,
+                            rosterId: umpireRosterId_2
+                        }
+                    } else {
+                        umpire_2_Obj = {
+                            matchId: this.state.matchId,
+                            userId: umpire2Name,
+                            roleId: 15,
+                        }
+                    }
+
+
+                    if (scorerRosterId_1) {
+                        scorers_1 = {
+                            matchId: this.state.matchId,
+                            teamId: team1id,
+                            userId: scorer1,
+                            roleId: 4,
+                            rosterId: scorerRosterId_1
+                        }
+                    } else {
+                        scorers_1 = {
+                            matchId: this.state.matchId,
+                            teamId: team1id,
+                            userId: scorer1,
+                            roleId: 4,
+                        }
+                    }
+
+
+                    if (scorerRosterId_2) {
+                        scorers_2 = {
+                            matchId: this.state.matchId,
+                            teamId: team2id,
+                            userId: scorer2,
+                            roleId: 4,
+                            rosterId: scorerRosterId_2
+                        }
+                    } else {
+                        scorers_2 = {
+                            matchId: this.state.matchId,
+                            teamId: team2id,
+                            userId: scorer2,
+                            roleId: 4,
+                        }
+                    }
+
+
+                    if (this.state.scoringType === 'SINGLE') {
+
                         if (scorers_1) {
                             umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1]
+
                         } else {
                             umpireData = [umpire_1_Obj, umpire_2_Obj]
+
+                        }
+
+                    } else {
+                        if (umpire1Name && umpire2Name && scorer1 && scorer2) {
+                            umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1, scorers_2]
+
+                        } else if (umpire1Name && umpire2Name && scorer1) {
+                            umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1]
+
+                        } else if (umpire1Name && umpire2Name && scorer2) {
+                            umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_2]
+
+                        } else if (umpire1Name && scorer1 && scorer2) {
+                            umpireData = [umpire_1_Obj, scorers_1, scorers_2]
+
+                        } else if (umpire2Name && scorer1 && scorer2) {
+                            umpireData = [umpire_2_Obj, scorers_1, scorers_2]
+
+                        } else if (umpire1Name && scorer1) {
+                            umpireData = [umpire_1_Obj, scorers_1]
+
+                        } else if (umpire2Name && scorer1) {
+                            umpireData = [umpire_2_Obj, scorers_1]
+
+                        } else if (umpire1Name && scorer2) {
+                            umpireData = [umpire_1_Obj, scorers_2]
+
+                        } else if (umpire2Name && scorer2) {
+                            umpireData = [umpire_2_Obj, scorers_2]
+
+                        } else if (umpire1Name && umpire2Name) {
+                            umpireData = [umpire_1_Obj, umpire_2_Obj]
+
+                        } else if (umpire1Name) {
+                            umpireData = [umpire_1_Obj]
+
+                        } else if (umpire2Name) {
+                            umpireData = [umpire_2_Obj]
+
+                        } else if (scorer1 && scorer2) {
+                            umpireData = [scorers_1, scorers_2]
+
+                        } else if (scorer1) {
+                            umpireData = [scorers_1]
+
+                        } else if (scorer2) {
+                            umpireData = [scorers_2]
+
                         }
 
                     }

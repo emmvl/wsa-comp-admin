@@ -589,7 +589,7 @@ let LiveScoreAxiosApi = {
     },
 
     getLiveScoreScorerList(comID, roleId, body) {
-        console.log(comID , "comIDcomIDcomIDcomID")
+        console.log(comID, "comIDcomIDcomIDcomID")
         // let competitionID = localStorage.getItem("competitionId");
         // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
         var url = `/roster/users?competitionId=${comID}&roleId=${roleId}`;
@@ -807,11 +807,11 @@ let LiveScoreAxiosApi = {
     umpireRoasterList(competitionID, status, refRoleId, paginationBody) {
         var url = null
         let body = paginationBody
-        let id = JSON.parse(localStorage.getItem('umpireCompetitionId'))
+
         if (status === "All") {
-            url = `/roster/list?competitionId=${id}&roleId=${refRoleId}`;
+            url = `/roster/list?competitionId=${competitionID}&roleId=${refRoleId}`;
         } else {
-            url = `/roster/list?competitionId=${id}&status=${status}&roleId=${refRoleId}`;
+            url = `/roster/list?competitionId=${competitionID}&status=${status}&roleId=${refRoleId}`;
         }
         return Method.dataPost(url, token, body)
     },

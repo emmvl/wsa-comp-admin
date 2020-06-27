@@ -34,7 +34,7 @@ import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, ContentState, convertFromHTML, } from 'draft-js';
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { getLiveScoreCompetiton } from '../../util/sessionStorage';
-import { isArrayNotEmpty, captializedString} from "../../util/helpers";
+import { isArrayNotEmpty, captializedString } from "../../util/helpers";
 import { liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 // import LoaderImg from 'react-loader-spinner'
 import ImageLoader from '../../customComponents/ImageLoader'
@@ -53,7 +53,7 @@ class LiveScoreAddNews extends Component {
             newsTitle: null,
             author: '',
             managerData: [],
-            scorerData: [], 
+            scorerData: [],
             imageSelection: AppImages.circleImage,
             videoSelection: '',
             date: null,
@@ -103,7 +103,7 @@ class LiveScoreAddNews extends Component {
     }
 
     onChangeEditorData = (event) => {
-console.log(event,"event")
+        console.log(event, "event")
         this.props.liveScoreUpdateNewsAction(event, "body")
         // this.setState({ editorState: event })
     }
@@ -313,7 +313,7 @@ console.log(event,"event")
     scorerView = () => {
         const { scorerListResult } = this.props.liveScoreState
         let scorerList = isArrayNotEmpty(scorerListResult) ? scorerListResult : []
-     
+
         return (
             <div className="row" >
                 <div className="col-sm" >
@@ -385,7 +385,8 @@ console.log(event,"event")
         return (
             <div className="content-view pt-4">
                 <Form.Item >
-                {getFieldDecorator('news_Title', { normalize :(input) => captializedString(input),
+                    {getFieldDecorator('news_Title', {
+                        normalize: (input) => captializedString(input),
                         rules: [{ required: true, message: ValidationConstants.newsValidation[0] }],
                     })(
                         <InputWithHead
@@ -405,7 +406,8 @@ console.log(event,"event")
                 {this.EditorView()}
 
                 <Form.Item >
-                {getFieldDecorator('author', { normalize :(input) => captializedString(input),
+                    {getFieldDecorator('author', {
+                        normalize: (input) => captializedString(input),
                         rules: [{ required: true, message: ValidationConstants.newsValidation[1] }],
                     })(
                         <InputWithHead
@@ -497,7 +499,7 @@ console.log(event,"event")
                             format={"DD-MM-YYYY"}
                             value={expiryDate ? moment(expiryDate) : ''}
                             showTime={false}
-                            placeholder='Select Date'
+                            placeholder={"dd-mm-yyyy"}
                             name={'registrationOepn'}
                         />
                     </div>

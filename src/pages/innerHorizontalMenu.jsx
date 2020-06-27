@@ -165,37 +165,42 @@ class InnerHorizontalMenu extends React.Component {
                     selectedKeys={[this.props.regSelectedKey]}
                 >
                     <Menu.Item key="1">
-                        <NavLink to="/registration" >
+                        <NavLink to="/registeredUser" >
                             <span >Dashboard</span>
                         </NavLink>
                     </Menu.Item>
-
+                    <Menu.Item key="2">
+                        <NavLink to="/registration" >
+                            <span >Registrations</span>
+                        </NavLink>
+                    </Menu.Item>
+                    {orgLevel == AppConstants.national || orgLevel == AppConstants.state ?
+                        <Menu.Item key="6">
+                            <NavLink to="/registrationMembershipList"  >
+                                <span >Membership</span>
+                            </NavLink>
+                        </Menu.Item>
+                        : null}
                     <SubMenu
                         key="sub1"
                         title={
-                            <span>Fees</span>
+                            <span>Competition</span>
                         }
                     >
-                        {orgLevel == AppConstants.national || orgLevel == AppConstants.state ?
-                            <Menu.Item key="6" >
-                                <NavLink to="/registrationMembershipList"  >
-                                    <span >Membership Fees</span>
-                                </NavLink>
-                            </Menu.Item>
-                            : null}
                         <Menu.Item key="7">
                             <NavLink to="/registrationCompetitionList" >
-                                <span >Competition Fees</span>
+                                <span >Competition</span>
+                            </NavLink>
+                        </Menu.Item>
+                        <Menu.Item key="3">
+                            <NavLink to="/registrationFormList" >
+                                <span >Registration Form</span>
                             </NavLink>
                         </Menu.Item>
                     </SubMenu>
 
 
-                    <Menu.Item key="3">
-                        <NavLink to="/registrationFormList" >
-                            <span >Registration Form</span>
-                        </NavLink>
-                    </Menu.Item>
+
 
                     <SubMenu
                         key="sub2"
@@ -273,7 +278,10 @@ class InnerHorizontalMenu extends React.Component {
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="6">
-                            <NavLink to="/liveScoreUmpireList">
+                            <NavLink to={{
+                                pathname: "/umpireDashboard",
+                                state: { liveScoreUmpire: 'liveScoreUmpire' }
+                            }}>
                                 <span>Umpires</span>
                             </NavLink>
                         </Menu.Item>

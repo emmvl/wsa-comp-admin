@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Modal, Checkbox } from 'antd';
+import { Layout, Button, Table, Modal, Checkbox, Tooltip } from 'antd';
 import './liveScore.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -13,6 +13,8 @@ import Loader from '../../customComponents/loader'
 import { isArrayNotEmpty } from '../../util/helpers'
 import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage';
 import history from "../../util/history";
+import ValidationConstants from '../../themes/validationConstant';
+
 const { Content } = Layout;
 const { confirm } = Modal;
 
@@ -173,7 +175,8 @@ class LiveScoreMatchDetails extends Component {
             key: this.props.location.state ? this.props.location.state.key ? this.props.location.state.key : null : null,
             umpireKey: this.props.location ? this.props.location.state ? this.props.location.state.umpireKey : null : null,
             scoringType: null,
-            isLineUp: 0
+            isLineUp: 0,
+            toolTipVisible: false
         }
         this.umpireScore_View = this.umpireScore_View.bind(this)
         this.team_View = this.team_View.bind(this)
@@ -237,6 +240,8 @@ class LiveScoreMatchDetails extends Component {
     headerView = () => {
         const { match } = this.props.liveScoreMatchState.matchDetails
         const length = match ? match.length : 0
+        let isMatchStatus = length > 0 ? match[0].matchStatus === "ENDED" ? true : false : false
+        console.log(match, 'matchDelete')
 
         return (
             <div className="comp-player-grades-header-drop-down-view mb-5">
@@ -287,9 +292,39 @@ class LiveScoreMatchDetails extends Component {
                                         justifyContent: "flex-end"
                                     }}
                                 >
-                                    <Button onClick={() => this.showDeleteConfirm(this.state.matchId)} className="primary-add-comp-form" type="primary">
+                                    {/* <Button onClick={() => this.showDeleteConfirm(this.state.matchId)} className="primary-add-comp-form" type="primary">
                                         {AppConstants.delete}
-                                    </Button>
+                                    </Button> */}
+
+                                    <Tooltip
+                                        style={{ height: '100%' }}
+                                        onMouseEnter={() =>
+                                            this.setState({
+                                                toolTipVisible: isMatchStatus ? true : false,
+                                            })
+                                        }
+                                        onMouseLeave={() =>
+                                            this.setState({ toolTipVisible: false })
+                                        }
+                                        visible={this.state.toolTipVisible}
+                                        title={ValidationConstants.matchDeleteMsg}
+                                    >
+                                        <Button
+                                            // className="save-draft-text"
+                                            // type="save-draft-text"
+                                            className={isMatchStatus ? "disable-button-style" : "primary-add-comp-form"}
+                                            type="primary"
+                                            disabled={isMatchStatus}
+                                            htmlType="submit"
+                                            onClick={() => this.showDeleteConfirm(this.state.matchId)}
+                                        //   onClick={() =>
+                                        //     this.setState({ statusRefId: 1, buttonPressed: 'save' })
+                                        //   }
+                                        >
+                                            {AppConstants.delete}
+                                        </Button>
+                                    </Tooltip>
+
 
                                 </div>
                             </div>

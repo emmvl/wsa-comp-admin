@@ -360,6 +360,7 @@ class ProductAdd extends Component {
                                     style={{ width: "100%" }}
                                     onChange={date => this.dateOnChangeFrom(date)}
                                     format={'DD-MM-YYYY'}
+                                    placeholder={"dd-mm-yyyy"}
                                     showTime={false}
                                 />
                             </div>
@@ -368,6 +369,7 @@ class ProductAdd extends Component {
                                 <DatePicker
                                     size="large"
                                     style={{ width: "100%" }}
+                                    placeholder={"dd-mm-yyyy"}
                                     disabledDate={this.disabledDate}
                                     disabledTime={this.disabledTime}
                                     onChange={date => this.dateOnChangeTo(date)}
@@ -401,6 +403,7 @@ class ProductAdd extends Component {
                                     style={{ width: "100%" }}
                                     onChange={date => this.dateOnChangeFrom(date)}
                                     format={'DD-MM-YYYY'}
+                                    placeholder={"dd-mm-yyyy"}
                                     showTime={false}
                                 />
                             </div>
@@ -408,6 +411,7 @@ class ProductAdd extends Component {
                                 <span className='input-heading'>Available To</span>
                                 <DatePicker
                                     size="large"
+                                    placeholder={"dd-mm-yyyy"}
                                     style={{ width: "100%" }}
                                     disabledDate={this.disabledDate}
                                     disabledTime={this.disabledTime}

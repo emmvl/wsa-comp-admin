@@ -387,6 +387,7 @@ textarea.ant-input {
   color: var(--app-4c4c6d);
   font-size: 15px;
   font-family: inter;
+  padding-bottom: 100px
 }
 
 .ant-pagination-item {

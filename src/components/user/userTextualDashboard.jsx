@@ -463,6 +463,7 @@ class UserTextualDashboard extends Component{
                                     format={"DD-MM-YYYY"}
                                     showTime={false}
                                     name={'dobFrom'}
+                                    placeholder={"dd-mm-yyyy"}
                                 />
                             </div>
                         </div>
@@ -470,6 +471,7 @@ class UserTextualDashboard extends Component{
                             <div className="user-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.dobTo}</div>
                                 <DatePicker
+                                    placeholder={"dd-mm-yyyy"}
                                     size="large"
                                     className="year-select user-filter-select"
                                     onChange={e => this.onChangeDropDownValue(e, 'dobTo')}

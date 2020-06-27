@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Input, Layout, Button, Table, Select, Menu, Icon, Pagination } from 'antd';
+import { Input, Layout, Button, Table, Select, Menu, Icon, Pagination, message } from 'antd';
 import './umpire.css';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -13,11 +13,24 @@ import { getUmpireDashboardList, getUmpireDashboardVenueList, getUmpireDashboard
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { entityTypes } from '../../util/entityTypes'
 import { refRoleTypes } from '../../util/refRoles'
-import { getUmpireCompetiton, setUmpireCompition, getOrganisationData, setUmpireCompitionData, getUmpireCompetitonData } from '../../util/sessionStorage'
+import {
+    getUmpireCompetiton,
+    setUmpireCompition,
+    getOrganisationData,
+    setUmpireCompitionData,
+    getUmpireCompetitonData,
+    getLiveScoreUmpireCompition,
+    getLiveScoreUmpireCompitionData,
+    setLiveScoreUmpireCompition,
+    setLiveScoreUmpireCompitionData
+} from '../../util/sessionStorage'
 import moment, { utc } from "moment";
 import { exportFilesAction } from "../../store/actions/appAction"
 import AppColor from "../../themes/appColor";
+import history from "../../util/history";
+import ValidationConstants from "../../themes/validationConstant";
 
+let this_obj = null
 
 const { Content } = Layout;
 const { SubMenu } = Menu;
@@ -105,12 +118,12 @@ const columns = [
                 umpires ?
                     umpires[0] ?
 
-                        <NavLink to={{
-                            pathname: '/userPersonal',
-                            state: { userId: umpires[0].matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" }
-                        }}>
-                            <span style={{ color: validateColor(umpires[0]) }}>{umpires[0].umpireName}</span>
-                        </NavLink>
+                        // <NavLink to={{
+                        //     pathname: '/userPersonal',
+                        //     state: { userId: umpires[0].matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" }
+                        // }}>
+                        <span style={{ color: validateColor(umpires[0]) }} onClick={() => this_obj.checkUserIdUmpire(record.umpires[0])} >{umpires[0].umpireName}</span>
+                        // </NavLink>
                         :
                         <span>{''}</span>
                     :
@@ -157,12 +170,12 @@ const columns = [
 
                 umpires ?
                     umpires[1] ?
-                        <NavLink to={{
-                            pathname: '/userPersonal',
-                            state: { userId: umpires[1].matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" }
-                        }}>
-                            <span style={{ color: validateColor(umpires[1]) }} >{umpires[1].umpireName}</span>
-                        </NavLink>
+                        // <NavLink to={{
+                        //     pathname: '/userPersonal',
+                        //     state: { userId: umpires[1].matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" }
+                        // }}>
+                        <span style={{ color: validateColor(umpires[1]) }} onClick={() => this_obj.checkUserIdUmpire(record.umpires[1])} >{umpires[1].umpireName}</span>
+                        // </NavLink>
 
                         :
                         <span>{''}</span>
@@ -208,6 +221,7 @@ const columns = [
         >
             <Menu.SubMenu
                 key="sub1"
+                style={{ borderBottomStyle: "solid", borderBottom: 0 }}
                 title={
                     <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                 }
@@ -271,8 +285,11 @@ class UmpireDashboard extends Component {
             venueSuccess: false,
             divisionSuccess: false,
             orgId: null,
-            compArray: []
+            compArray: [],
+            compititionObj: null,
+            liveScoreUmpire: props.location ? props.location.state ? props.location.state.liveScoreUmpire ? props.location.state.liveScoreUmpire : null : null : null
         }
+        this_obj = this
     }
 
     componentDidMount() {
@@ -303,13 +320,30 @@ class UmpireDashboard extends Component {
 
                 }
 
-                let compKey = compList.length > 0 && compList[0].competitionUniqueKey
+                if (firstComp !== false) {
+                    if (this.state.liveScoreUmpire === 'liveScoreUmpire') {
+                        let compId = JSON.parse(getLiveScoreUmpireCompition())
+                        this.props.getUmpireDashboardVenueList(compId)
+
+                        const { uniqueKey } = JSON.parse(getLiveScoreUmpireCompitionData())
+                        let compObjData = JSON.parse(getUmpireCompetitonData())
+
+                        this.setState({ selectedComp: compId, loading: false, competitionUniqueKey: uniqueKey, compArray: compList, venueLoad: true, compititionObj: compObjData })
+
+                    } else {
+                        this.props.getUmpireDashboardVenueList(firstComp)
+                        let compKey = compList.length > 0 && compList[0].competitionUniqueKey
+
+                        this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey, compArray: compList, venueLoad: true, compititionObj: compData })
+
+                    }
+                }
+                else {
+                    this.setState({ loading: false })
+                }
 
 
-                this.props.getUmpireDashboardVenueList(firstComp)
 
-
-                this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey, compArray: compList, venueLoad: true })
             }
         }
 
@@ -335,6 +369,18 @@ class UmpireDashboard extends Component {
             }
         }
 
+    }
+
+    checkUserIdUmpire(record) {
+
+        if (record.userId) {
+            history.push("/userPersonal", { userId: record.userId, screenKey: "umpire", screen: "/umpireDashboard" })
+        } else if (record.matchUmpiresId) {
+            history.push("/userPersonal", { userId: record.matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" })
+        } else {
+            message.config({ duration: 1.5, maxCount: 1 })
+            message.warn(ValidationConstants.umpireMessage)
+        }
     }
 
     /// Handle Page change
@@ -397,7 +443,6 @@ class UmpireDashboard extends Component {
     onChangeComp(compID) {
 
         let selectedComp = compID.comp
-        setUmpireCompition(selectedComp)
         let compKey = compID.competitionUniqueKey
         this.props.getUmpireDashboardVenueList(selectedComp)
         this.props.getUmpireDashboardDivisionList(selectedComp)
@@ -410,7 +455,13 @@ class UmpireDashboard extends Component {
                 break;
             }
         }
+        setUmpireCompition(selectedComp)
         setUmpireCompitionData(JSON.stringify(compObj))
+
+        setLiveScoreUmpireCompition(selectedComp)
+        setLiveScoreUmpireCompitionData(JSON.stringify(compObj))
+
+        console.log(this.state.compititionObj, 'compititionObj')
 
     }
 
