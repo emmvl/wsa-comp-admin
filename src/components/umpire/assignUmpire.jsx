@@ -240,14 +240,14 @@ class AssignUmpire extends Component {
                             </span>
                         </div>
                     </div>
-                    <div className="mt-5" style={{ display: "flex", justifyContent: 'space-between', }} >
+                    <div style={{ display: "flex", justifyContent: 'space-between', }} >
                         {/* <div className="mt-5" > */}
-                        <div style={{
+                        {/* <div style={{
                             width: "100%", display: "flex",
                             flexDirection: "row",
-                            alignItems: "center", marginRight: 50,
-                        }} >
-                            <span className='year-select-heading'>{AppConstants.competition}:</span>
+                            alignItems: "center",
+                        }} > */}
+                        {/* <span className='year-select-heading'>{AppConstants.competition}:</span>
                             <Select
                                 className="year-select"
                                 style={{ minWidth: 160 }}
@@ -260,8 +260,19 @@ class AssignUmpire extends Component {
                                     })
                                 }
 
-                            </Select>
+                            </Select> */}
+
+                        {/* <div className="col-sm"> */}
+                        <div className="reg-add-save-button">
+                            <span style={{ cursor: "pointer" }}
+                                onClick={() => history.push('/umpire')}
+                                className="input-heading-add-another">
+                                {AppConstants.backToUmpire}
+                            </span>
                         </div>
+                        {/* </div> */}
+
+                        {/* </div> */}
                     </div>
                 </div>
             </div >
@@ -301,9 +312,9 @@ class AssignUmpire extends Component {
                             width: "100%",
                             display: "flex",
                             flexDirection: "row",
-                            justifyContent: "center"
+                            justifyContent: "flex-end"
                         }} >
-                        <div className="col-sm">
+                        {/* <div className="col-sm">
                             <div className="reg-add-save-button">
                                 <span style={{ cursor: "pointer" }}
                                     onClick={() => history.push('/umpire')}
@@ -311,7 +322,7 @@ class AssignUmpire extends Component {
                                     {AppConstants.backToUmpire}
                                 </span>
                             </div>
-                        </div>
+                        </div> */}
                         <div className="d-flex justify-content-end">
                             <Pagination
                                 className="antd-pagination"

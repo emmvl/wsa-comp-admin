@@ -43,7 +43,9 @@ class AddUmpire extends Component {
             competition_id: null,
             teamLoad: false,
             affiliateLoader: false,
-            screenName: props.location ? props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null : null
+            screenName: props.location ? props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null : null,
+            isUserNotFound: false,
+            exsitingValue: ''
         }
 
     }
@@ -180,12 +182,12 @@ class AddUmpire extends Component {
                                         const umpireId = JSON.parse(option.key)
                                         this.props.umpireClear()
                                         this.props.updateAddUmpireData(umpireId, 'umnpireSearch')
-                                        this.setState({ affiliateLoader: true })
+                                        this.setState({ affiliateLoader: true, isUserNotFound: false })
                                     }}
                                     notFoundContent={onLoadSearch == true ? <Spin size="small" /> : null}
 
                                     onSearch={(value) => {
-
+                                        this.setState({ isUserNotFound: false, exsitingValue: value })
                                         value ?
                                             // this.props.umpireSearchAction(refRoleTypes('member'), entityTypes('COMPETITION'), this.state.competition_id, value)
                                             this.props.umpireSearchAction({ refRoleId: refRoleTypes('member'), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id, userName: value, offset: 0 })
@@ -205,6 +207,7 @@ class AddUmpire extends Component {
                             )}
 
                         </Form.Item>
+                        <span style={{ color: 'red' }} >{(this.state.exsitingValue.length > 0 && (this.state.isUserNotFound || umpireList.length == 0)) && ValidationConstants.userNotFound}</span>
                     </div>
 
 
@@ -475,7 +478,10 @@ class AddUmpire extends Component {
 
     onSaveClick = e => {
 
-        const { umpireData, affiliateId, umpireRadioBtn, exsitingUmpireId } = this.props.umpireState
+        const { umpireData, affiliateId, umpireRadioBtn, exsitingUmpireId, umpireListResult } = this.props.umpireState
+        let umpireList = isArrayNotEmpty(umpireListResult) ? umpireListResult : []
+
+
 
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -502,11 +508,20 @@ class AddUmpire extends Component {
                     }
                     this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName })
                 } else if (umpireRadioBtn == 'existing') {
+
+
+
                     body = {
                         "id": exsitingUmpireId,
                         "affiliates": umpireData.affiliates
                     }
-                    this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName })
+
+                    if (umpireList.length === 0) {
+                        this.setState({ isUserNotFound: true })
+                    } else {
+                        this.setState({ isUserNotFound: false })
+                        this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName })
+                    }
                 }
 
             }

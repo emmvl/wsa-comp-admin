@@ -913,10 +913,18 @@ function CompetitionDraws(state = initialState, action) {
       let resultData = roundstructureData(drawsResultData)
       state.publishStatus = action.result.drawsPublish
       state.isTeamInDraw = action.result.isTeamNotInDraws
+
+      let orgData = JSON.parse(JSON.stringify(action.result.organisations))
+      let orgObject = {
+        organisationName: "All",
+        organisationUniqueKey: "-1"
+      }
+      orgData.unshift(orgObject)
+
       return {
         ...state,
         getRoundsDrawsdata: resultData.roundsdata,
-        drawOrganisations: state.drawOrganisations.length == 0 ? action.result.organisations : state.drawOrganisations,
+        drawOrganisations: state.drawOrganisations.length == 0 ? orgData : state.drawOrganisations,
         onLoad: false,
         error: null,
         spinLoad: false

@@ -4326,7 +4326,7 @@ class RegistrationCompetitionFee extends Component {
             loading={detailsData.searchLoad}
           >
             {associationAffilites.map((item) => {
-              // console.log(item, 'associationAffilites');
+              console.log(item, 'associationAffilites');
               return (
                 <Option key={item.organisationId} value={item.organisationId}>
                   {item.name}

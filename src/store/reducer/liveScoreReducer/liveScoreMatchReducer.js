@@ -505,6 +505,12 @@ function liveScoreMatchReducer(state = initialState, action) {
                 state.matchUmpireId_1 = umpires_1.matchUmpiresId
                 state.umpireRosterId_1 = umpires_1.rosterId
 
+            } else {
+                state.umpire1Orag = null
+                state.umpire1Name = null
+                state.umpire1TextField = null
+                state.matchUmpireId_1 = null
+                state.umpireRosterId_1 = null
             }
 
             if (umpires_2) {
@@ -514,6 +520,12 @@ function liveScoreMatchReducer(state = initialState, action) {
                 state.matchUmpireId_2 = umpires_2.matchUmpiresId
                 state.umpireRosterId_2 = umpires_2.rosterId
 
+            } else {
+                state.umpire2Orag = null
+                state.umpire2Name = null
+                state.umpire2TextField = null
+                state.matchUmpireId_2 = null
+                state.umpireRosterId_2 = null
             }
 
             if (match) {
@@ -521,11 +533,17 @@ function liveScoreMatchReducer(state = initialState, action) {
                 if (match.scorer1 !== null) {
                     state.scorer1 = match.scorer1.id
                     state.scorerRosterId_1 = match.scorer1.rosterId
+                } else {
+                    state.scorer1 = null
+                    state.scorerRosterId_1 = null
                 }
 
                 if (match.scorer2 !== null) {
                     state.scorer2 = match.scorer2.id
                     state.scorerRosterId_2 = match.scorer2.rosterId
+                } else {
+                    state.scorer2 = null
+                    state.scorerRosterId_2 = null
                 }
             }
 

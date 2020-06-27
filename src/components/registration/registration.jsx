@@ -338,7 +338,7 @@ class Registration extends Component {
                 <div className="row" >
                     <div className="col-sm-8" style={{ display: "flex", alignContent: "center" }} >
                         <Breadcrumb separator=" > ">
-                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.dashboard}</Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.Registrations}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                     <div className="col-sm-4" style={{ display: "flex", alignContent: "center", justifyContent: 'center' }} >

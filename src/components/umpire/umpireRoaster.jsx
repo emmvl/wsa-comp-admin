@@ -72,12 +72,12 @@ const columns = [
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: (a, b) => tableSort(a, b, "matchId"),
-        render: (matchId) => <NavLink to={{
-            pathname: '/liveScoreMatchDetails',
-            state: { matchId: matchId, key: 'umpireRoster' }
-        }} >
-            <span className="input-heading-add-another pt-0">{matchId}</span>
-        </NavLink>
+        // render: (matchId) => <NavLink to={{
+        //     pathname: '/liveScoreMatchDetails',
+        //     state: { matchId: matchId, key: 'umpireRoster' }
+        // }} >
+        render:(matchId) =>   <span className="input-heading-add-another pt-0">{matchId}</span>
+        // </NavLink>
 
     },
     {
@@ -104,6 +104,7 @@ const columns = [
         >
             <Menu.SubMenu
                 key="sub1"
+                style={{ borderBottomStyle: "solid", borderBottom: 0 }}
                 title={
                     <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                 }
@@ -177,8 +178,12 @@ class UmpireRoaster extends Component {
                         "offset": 0
                     }
                 }
-                this.props.umpireRoasterListAction(firstComp, this.state.status, refRoleTypes('umpire'), body)
-                this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey })
+                if(firstComp !== false){
+                    this.props.umpireRoasterListAction(firstComp, this.state.status, refRoleTypes('umpire'), body)
+                    this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey })
+                }else{ 
+                    this.setState({ loading: false })
+                }
             }
         }
 
@@ -298,7 +303,10 @@ class UmpireRoaster extends Component {
             },
         }
 
-        this.props.umpireRoasterListAction(this.state.selectedComp, status, refRoleTypes('umpire'), body)
+        if(this.state.selectedComp){
+            this.props.umpireRoasterListAction(this.state.selectedComp, status, refRoleTypes('umpire'), body)
+           
+        }
         this.setState({ status })
     }
 
@@ -359,7 +367,7 @@ class UmpireRoaster extends Component {
                                         </Button>
                                     </div>
                                 </div>
-                                <div className="col-sm pt-1">
+                                {/* <div className="col-sm pt-1">
                                     <div
                                         className="comp-dashboard-botton-view-mobile"
                                         style={{
@@ -388,7 +396,7 @@ class UmpireRoaster extends Component {
                                             </Button>
                                         </NavLink>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>
