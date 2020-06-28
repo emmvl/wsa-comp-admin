@@ -1,21 +1,16 @@
 import React, { Component } from "react";
 import { Layout, Button, Table, Select, Tag, Modal } from "antd";
-import { NavLink } from "react-router-dom";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import history from "../../util/history";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 import { isArrayNotEmpty } from "../../util/helpers";
-import moment from "moment";
-import { checkRegistrationType } from "../../util/permissions";
-import Tooltip from 'react-png-tooltip'
+
 
 const { Content } = Layout;
 const { Option } = Select;
-const { confirm } = Modal;
 
 /////function to sort table column
 function tableSort(a, b, key) {
@@ -127,7 +122,7 @@ const columnsOwned = [
         sorter: (a, b) => tableSort(a, b, "statusName")
 
     },
-   
+
 ];
 
 const data = []
@@ -136,7 +131,7 @@ class RegisteredUser extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            year: "2019",
+            year: 1,
             loading: false
         };
     }
