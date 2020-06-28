@@ -637,7 +637,7 @@ class UmpireDashboard extends Component {
                     <Table
                         loading={this.props.umpireDashboardState.onLoad}
                         className="home-dashboard-table"
-                        columns={umpireType == "USERS" ? columns : columns_Invite}
+                        columns={umpireType == "USERS" ? columns_Invite : columns}
                         // columns={ columns_Invite}
                         dataSource={umpireListResult}
                         pagination={false} />
