@@ -57,7 +57,7 @@ function validateColor(data) {
 
 
 
-const columns = [
+const columns_Invite = [
 
     {
         title: 'Match ID',
@@ -269,6 +269,221 @@ const columns = [
 
 ];
 
+
+const columns = [
+
+    {
+        title: 'Match ID',
+        dataIndex: 'id',
+        key: 'id',
+        sorter: (a, b) => tableSort(a, b, "id"),
+        render: (id) => {
+            return (
+                <NavLink to={{
+                    pathname: '/liveScoreMatchDetails',
+                    state: { matchId: id, umpireKey: 'umpire' }
+                }} >
+                    <span className="input-heading-add-another pt-0" >{id}</span>
+                </NavLink>
+            )
+        }
+    },
+    {
+        title: 'Start Time',
+        dataIndex: 'startTime',
+        key: 'startTime',
+        sorter: (a, b) => tableSort(a, b, "startTime"),
+        render: (startTime, record) =>
+            <span >{moment(startTime).format("DD/MM/YYYY HH:mm")}</span>
+    },
+    {
+        title: 'Home',
+        dataIndex: 'team1',
+        key: 'team1',
+        sorter: (a, b) => tableSort(a, b, "team1"),
+        render: (team1, record) =>
+            <span >{team1.name}</span>
+    },
+    {
+        title: 'Away',
+        dataIndex: 'team2',
+        key: 'team2',
+        sorter: (a, b) => tableSort(a, b, "team2"),
+        render: (team2, record) =>
+            <span >{team2.name}</span>
+    },
+    {
+        title: 'Round',
+        dataIndex: 'round',
+        key: 'round',
+        sorter: (a, b) => tableSort(a, b, "round"),
+        render: (round, record) =>
+            <span >{round.name}</span>
+    },
+    {
+        title: 'Umpire 1',
+        dataIndex: 'umpires',
+        key: 'umpires_1',
+        sorter: (a, b) => tableSort(a, b, "umpires"),
+        render: (umpires, record) => {
+            return (
+
+                umpires ?
+                    umpires[0] ?
+
+                        // <NavLink to={{
+                        //     pathname: '/userPersonal',
+                        //     state: { userId: umpires[0].matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" }
+                        // }}>
+                        <span style={{ color: validateColor(umpires[0]) }} onClick={() => this_obj.checkUserIdUmpire(record.umpires[0])} >{umpires[0].umpireName}</span>
+                        // </NavLink>
+                        :
+                        <span>{''}</span>
+                    :
+                    <span>{''}</span>
+
+            )
+        }
+
+
+    },
+    {
+        title: 'Umpire 1 Organisation',
+        dataIndex: 'umpires',
+        key: 'umpires1_Org',
+        sorter: (a, b) => tableSort(a, b, "umpires"),
+        render: (umpires, record) => {
+
+            return (
+                <>
+                    {
+                        umpires ?
+                            umpires[0] ?
+
+                                isArrayNotEmpty(umpires[0].organisations) && umpires[0].organisations.map((item) => (
+                                    <span className='multi-column-text-aligned' >{item.name}</span>
+                                ))
+
+                                :
+                                <span>{''}</span>
+                            :
+                            <span>{''}</span>}
+
+                </>
+            )
+        }
+    },
+    {
+        title: 'Umpire 2',
+        dataIndex: 'umpires',
+        key: 'umpires_2',
+        sorter: (a, b) => tableSort(a, b, "umpires"),
+        render: (umpires, record) => {
+            return (
+
+                umpires ?
+                    umpires[1] ?
+                        // <NavLink to={{
+                        //     pathname: '/userPersonal',
+                        //     state: { userId: umpires[1].matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" }
+                        // }}>
+                        <span style={{ color: validateColor(umpires[1]) }} onClick={() => this_obj.checkUserIdUmpire(record.umpires[1])} >{umpires[1].umpireName}</span>
+                        // </NavLink>
+
+                        :
+                        <span>{''}</span>
+                    :
+                    <span>{''}</span>
+
+            )
+        }
+    },
+    {
+        title: 'Umpire 2 Organisation',
+        dataIndex: 'umpires',
+        key: 'umpires2_Org',
+        sorter: (a, b) => tableSort(a, b, "umpires"),
+        render: (umpires, record) => {
+            return (
+                <>
+                    {
+                        umpires ?
+                            umpires[1] ?
+                                isArrayNotEmpty(umpires[1].organisations) && umpires[1].organisations.map((item) => (
+                                    <span className='multi-column-text-aligned' >{item.name}</span>
+                                ))
+
+                                :
+                                <span>{''}</span>
+                            :
+                            <span>{''}</span>}
+
+                </>
+            )
+        }
+    },
+    {
+        title: "Action",
+        dataIndex: 'umpires',
+        key: 'umpires',
+        render: (umpires, record) => <Menu
+            className="action-triple-dot-submenu"
+            theme="light"
+            mode="horizontal"
+            style={{ lineHeight: '25px' }}
+        >
+            <Menu.SubMenu
+                key="sub1"
+                style={{ borderBottomStyle: "solid", borderBottom: 0 }}
+                title={
+                    <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
+                }
+            >
+
+                {/* <Menu.Item key="3" >
+                    <NavLink to={{
+                        pathname: "./addUmpire",
+                        state: { record: record, screenName: 'umpireDashboard' }
+                    }}>
+                        <span >Invite</span>
+                    </NavLink>
+                </Menu.Item> */}
+
+                {
+                    umpires ?
+                        umpires[0] ?
+                            umpires[0].verifiedBy == null ?
+                                <Menu.Item key={'1'}>
+                                    <NavLink to={{
+                                        pathname: '/liveScoreAddMatch',
+                                        state: { matchId: record.id, umpireKey: 'umpire', isEdit: true }
+                                    }} >
+                                        <span >Edit</span>
+                                    </NavLink>
+                                </Menu.Item>
+                                :
+                                null
+                            :
+                            null
+                        :
+                        <Menu.Item key={'1'}>
+                            <NavLink to={{
+                                pathname: '/liveScoreAddMatch',
+                                state: { matchId: record.id, umpireKey: 'umpire', isEdit: true }
+                            }} >
+                                <span >Edit</span>
+                            </NavLink>
+                        </Menu.Item>
+                }
+            </Menu.SubMenu>
+        </Menu>
+    }
+
+
+];
+
+
+
 class UmpireDashboard extends Component {
     constructor(props) {
         super(props);
@@ -309,11 +524,19 @@ class UmpireDashboard extends Component {
                 let compData = compList.length > 0 && compList[0]
 
                 if (getUmpireCompetiton()) {
-                    let compId = JSON.parse(getUmpireCompetiton())
-                    firstComp = compId
+                    if (this.state.liveScoreUmpire === 'liveScoreUmpire') {
+                        let compId = JSON.parse(getUmpireCompetiton())
+                        firstComp = compId
 
-                    let compObj = JSON.parse(getUmpireCompetitonData())
-                    compData = compObj
+                        let compObj = JSON.parse(getUmpireCompetitonData())
+                        compData = compObj
+                    } else {
+                        let compId = JSON.parse(getLiveScoreUmpireCompition())
+                        firstComp = compId
+
+                        let compObj = JSON.parse(getLiveScoreUmpireCompitionData())
+                        compData = compObj
+                    }
                 } else {
                     setUmpireCompition(firstComp)
                     setUmpireCompitionData(JSON.stringify(compData))
@@ -322,11 +545,13 @@ class UmpireDashboard extends Component {
 
                 if (firstComp !== false) {
                     if (this.state.liveScoreUmpire === 'liveScoreUmpire') {
+
                         let compId = JSON.parse(getLiveScoreUmpireCompition())
+
                         this.props.getUmpireDashboardVenueList(compId)
 
                         const { uniqueKey } = JSON.parse(getLiveScoreUmpireCompitionData())
-                        let compObjData = JSON.parse(getUmpireCompetitonData())
+                        let compObjData = JSON.parse(getLiveScoreUmpireCompitionData())
 
                         this.setState({ selectedComp: compId, loading: false, competitionUniqueKey: uniqueKey, compArray: compList, venueLoad: true, compititionObj: compObjData })
 
@@ -403,13 +628,17 @@ class UmpireDashboard extends Component {
     contentView = () => {
         const { umpireDashboardList, totalPages } = this.props.umpireDashboardState
         let umpireListResult = isArrayNotEmpty(umpireDashboardList) ? umpireDashboardList : []
+
+        let umpireType = this.state.compititionObj ? this.state.compititionObj.recordUmpireType : ""
+        console.log(this.state.compititionObj, "onjnj")
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         loading={this.props.umpireDashboardState.onLoad}
                         className="home-dashboard-table"
-                        columns={columns}
+                        columns={umpireType == "USERS" ? columns : columns_Invite}
+                        // columns={ columns_Invite}
                         dataSource={umpireListResult}
                         pagination={false} />
                 </div>
@@ -441,12 +670,11 @@ class UmpireDashboard extends Component {
 
 
     onChangeComp(compID) {
-
         let selectedComp = compID.comp
         let compKey = compID.competitionUniqueKey
         this.props.getUmpireDashboardVenueList(selectedComp)
         this.props.getUmpireDashboardDivisionList(selectedComp)
-        this.setState({ selectedComp, competitionUniqueKey: compKey, venueLoad: true, divisionLoad: true, venue: "All", division: "All" })
+
 
         let compObj = null
         for (let i in this.state.compArray) {
@@ -460,8 +688,7 @@ class UmpireDashboard extends Component {
 
         setLiveScoreUmpireCompition(selectedComp)
         setLiveScoreUmpireCompitionData(JSON.stringify(compObj))
-
-        console.log(this.state.compititionObj, 'compititionObj')
+        this.setState({ selectedComp, competitionUniqueKey: compKey, venueLoad: true, divisionLoad: true, venue: "All", division: "All", compititionObj: compObj })
 
     }
 

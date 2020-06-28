@@ -119,7 +119,7 @@ let LiveScoreAxiosApi = {
         var url = null;
         if (orgKey) {
             if (recordUmpireTypes) {
-                url = `/competitions/admin?organisationId=${orgKey}&recordUmpireTypes=${recordUmpireTypes}`;
+                url = `/competitions/admin?organisationId=${orgKey}&recordUmpireType=${recordUmpireTypes}`;
             } else {
                 url = `/competitions/admin?organisationId=${orgKey}`;
             }
