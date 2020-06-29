@@ -489,7 +489,7 @@ class HomeDashboard extends Component {
                                     <span className="reg-payment-paid-reg-text">{AppConstants.totalUsers}</span>
                                 </div>
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}
-                                    onClick={() => history.push("/userGraphicalDashboard")}    >
+                                    onClick={() => history.push("/userTextualDashboard")}    >
                                     <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true"></i></a>
                                 </div>
                             </div>
