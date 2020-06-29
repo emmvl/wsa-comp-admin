@@ -255,7 +255,7 @@ class LiveScoreGoalList extends Component {
                             <div className="col-sm">
                                 <Select
                                     className="year-select"
-                                    style={{ display: "flex", alignItems: "flex-start" }}
+                                    style={{ display: "flex", alignItems: "flex-start", minWidth: 100 }}
                                     onChange={(filter) => {
                                         this.setState({ filter })
                                         this.props.liveScoreGoalListAction(this.state.competitionId, filter, this.state.searchText)

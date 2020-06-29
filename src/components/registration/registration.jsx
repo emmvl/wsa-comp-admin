@@ -56,7 +56,7 @@ const columns = [
         sorter: (a, b) => a.affiliate.localeCompare(b.affiliate),
     },
     {
-        title: 'Division',
+        title: 'Registration Divisions',
         dataIndex: 'divisionName',
         key: 'divisionName',
         sorter: (a, b) => a.divisionName.localeCompare(b.divisionName),

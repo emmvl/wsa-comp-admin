@@ -3766,7 +3766,7 @@ class RegistrationCompetitionFee extends Component {
     let detailsData = this.props.competitionFeesState.competitionDetailData;
     return (
       <div className="fees-view pt-5">
-        <span className="form-heading">{AppConstants.registrationDivision}</span>
+        <span className="form-heading">{AppConstants.registrationDivisions}</span>
         {divisionArray.length == 0 && (
           <span className="applicable-to-heading pt-0">
             {AppConstants.please_Sel_mem_pro}
@@ -5843,7 +5843,7 @@ class RegistrationCompetitionFee extends Component {
                       {this.membershipTypeView(getFieldDecorator)}
                     </div>
                   </TabPane>
-                  <TabPane tab={AppConstants.registrationDivision} key={'3'}>
+                  <TabPane tab={AppConstants.registrationDivisions} key={'3'}>
                     <div className="tab-formView">
                       {this.divisionsView(getFieldDecorator)}
                     </div>

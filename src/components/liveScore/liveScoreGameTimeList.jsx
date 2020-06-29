@@ -274,7 +274,7 @@ class LiveScoreGameTimeList extends Component {
                         <div className="row">
                             <Select
                                 className="year-select"
-                                style={{ display: "flex", alignItems: "flex-start" }}
+                                style={{ display: "flex", alignItems: "flex-start", minWidth: 140 }}
                                 // onChange={(selectStatus) => this.setState({ selectStatus })}
                                 onChange={(filter) => this.setFilterValue({ filter })}
                                 value={this.state.filter} >

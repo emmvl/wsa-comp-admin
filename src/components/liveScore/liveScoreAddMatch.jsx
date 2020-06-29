@@ -587,9 +587,6 @@ class LiveScoreAddMatch extends Component {
         const { umpireList } = this.props.umpireState
         let umpireListResult = isArrayNotEmpty(umpireList) ? umpireList : []
 
-        console.log(addEditMatch, 'contentView~~~~~')
-
-        console.log(umpire2Orag, 'matchDetails')
         return (
             <div className="content-view pt-4">
                 <div className="row" >

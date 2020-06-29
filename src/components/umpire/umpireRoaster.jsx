@@ -12,7 +12,7 @@ import { isArrayNotEmpty } from "../../util/helpers";
 import { umpireRoasterListAction, umpireRoasterOnActionClick } from "../../store/actions/umpireAction/umpirRoasterAction"
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { refRoleTypes } from '../../util/refRoles'
-import { setUmpireCompId, getUmpireCompId } from '../../util/sessionStorage'
+import { setUmpireCompId, getUmpireCompId, getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData  } from '../../util/sessionStorage'
 import moment, { utc } from "moment";
 import ValidationConstants from "../../themes/validationConstant";
 import history from "../../util/history";
@@ -76,7 +76,7 @@ const columns = [
         //     pathname: '/liveScoreMatchDetails',
         //     state: { matchId: matchId, key: 'umpireRoster' }
         // }} >
-        render:(matchId) =>   <span className="input-heading-add-another pt-0">{matchId}</span>
+        render: (matchId) => <span className="input-heading-add-another pt-0">{matchId}</span>
         // </NavLink>
 
     },
@@ -93,6 +93,13 @@ const columns = [
         dataIndex: 'status',
         key: 'status',
         sorter: (a, b) => tableSort(a, b, "status"),
+    },
+    {
+        title: 'Verified By',
+        dataIndex: 'verifiedBy',
+        key: 'verifiedBy',
+        sorter: (a, b) => tableSort(a, b, "verifiedBy"),
+        render: (user, record) => <span className="input-heading-add-another pt-0" onClick={() => this_obj.checkUserId(record)}>{record.user.firstName + " " + record.user.lastName}</span>
     },
     {
         title: "Action",
@@ -161,13 +168,24 @@ class UmpireRoaster extends Component {
             if (this.state.loading == true && this.props.umpireCompetitionState.onLoad == false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
+                let compData = compList.length > 0 && compList[0]
 
-
-                if (getUmpireCompId()) {
-                    let compId = JSON.parse(getUmpireCompId())
-                    firstComp = compId
+                if (getUmpireCompetiton()) {
+                    let compId = JSON.parse(getUmpireCompetiton())
+                    let index = compList.findIndex(x => x.id === compId)
+                    if (index > -1) {
+                        firstComp = compList[index].id
+                        compData = compList[index]
+                    } else {
+                     
+                        setUmpireCompition(firstComp)
+                        setUmpireCompitionData(JSON.stringify(compData))
+                    }
                 } else {
-                    setUmpireCompId(firstComp)
+                    // setUmpireCompId(firstComp)
+                    setUmpireCompition(firstComp)
+                    setUmpireCompitionData(JSON.stringify(compData))
+
                 }
 
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey
@@ -178,10 +196,10 @@ class UmpireRoaster extends Component {
                         "offset": 0
                     }
                 }
-                if(firstComp !== false){
+                if (firstComp !== false) {
                     this.props.umpireRoasterListAction(firstComp, this.state.status, refRoleTypes('umpire'), body)
                     this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey })
-                }else{ 
+                } else {
                     this.setState({ loading: false })
                 }
             }
@@ -278,7 +296,21 @@ class UmpireRoaster extends Component {
 
     onChangeComp(compID) {
         let selectedComp = compID.comp
-        setUmpireCompId(selectedComp)
+        // setUmpireCompId(selectedComp)
+
+
+        let compObj = null
+        for (let i in this.state.compArray) {
+            if (compID.comp == this.state.compArray[i].id) {
+                compObj = this.state.compArray[i]
+                break;
+            }
+        }
+        setUmpireCompition(selectedComp)
+        setUmpireCompitionData(JSON.stringify(compObj))
+
+
+
         let compKey = compID.competitionUniqueKey
 
         const body =
@@ -303,9 +335,9 @@ class UmpireRoaster extends Component {
             },
         }
 
-        if(this.state.selectedComp){
+        if (this.state.selectedComp) {
             this.props.umpireRoasterListAction(this.state.selectedComp, status, refRoleTypes('umpire'), body)
-           
+
         }
         this.setState({ status })
     }
@@ -335,7 +367,7 @@ class UmpireRoaster extends Component {
                     <div className="row">
                         <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
                             <span className="form-heading">
-                                {AppConstants.umpireList}
+                                {AppConstants.umpireRoster}
                             </span>
                         </div>
 

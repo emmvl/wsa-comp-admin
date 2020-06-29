@@ -56,7 +56,7 @@ import QuickCompetitionState from "./competitionManagementReducer/competitionQui
 import LiveScoreCoachState from "./liveScoreReducer/liveScoreCoachReducer"
 
 import LiveScoreMatchSheetState from "./liveScoreReducer/liveScoreMatcheSheet"
-import AddProductReducer from "./shopReducer/addProductReducer"
+import ShopProductState from "./shopReducer/productReducer"
 
 //// Umpire Module
 import UmpireDashboardState from "./umpireReducer/umpireDashboardReducer"
@@ -116,7 +116,7 @@ const rootReducer = combineReducers({
   LiveScoreCoachState,
   LiveScoreMatchSheetState,
   CompetitionManagementState,
-  AddProductReducer,
+  ShopProductState,
   UmpireDashboardState,
   UmpireCompetitionState,
   CompetitionManagementState,

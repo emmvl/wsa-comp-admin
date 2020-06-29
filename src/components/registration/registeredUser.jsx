@@ -28,7 +28,7 @@ const columns = [
 
     },
     {
-        title: "Registration Division",
+        title: "Registration Divisions",
         dataIndex: "divisions",
         key: "divisions",
         render: divisions => {
@@ -81,7 +81,7 @@ const columnsOwned = [
         sorter: (a, b) => tableSort(a, b, "competitionName")
     },
     {
-        title: "Registration Division",
+        title: "Registration Divisions",
         dataIndex: "divisions",
         key: "divisions",
         render: divisions => {

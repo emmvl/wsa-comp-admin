@@ -525,17 +525,23 @@ class UmpireDashboard extends Component {
 
                 if (getUmpireCompetiton()) {
                     if (this.state.liveScoreUmpire === 'liveScoreUmpire') {
+
+                        let compId = JSON.parse(getLiveScoreUmpireCompition())
+                        firstComp = compId
+                        let compObj = JSON.parse(getLiveScoreUmpireCompitionData())
+                        compData = compObj
+                        
+                        setUmpireCompition(firstComp)
+                        setUmpireCompitionData(JSON.stringify(compData))
+
+                    } else {
+
                         let compId = JSON.parse(getUmpireCompetiton())
                         firstComp = compId
 
                         let compObj = JSON.parse(getUmpireCompetitonData())
                         compData = compObj
-                    } else {
-                        let compId = JSON.parse(getLiveScoreUmpireCompition())
-                        firstComp = compId
 
-                        let compObj = JSON.parse(getLiveScoreUmpireCompitionData())
-                        compData = compObj
                     }
                 } else {
                     setUmpireCompition(firstComp)
@@ -630,7 +636,6 @@ class UmpireDashboard extends Component {
         let umpireListResult = isArrayNotEmpty(umpireDashboardList) ? umpireDashboardList : []
 
         let umpireType = this.state.compititionObj ? this.state.compititionObj.recordUmpireType : ""
-        console.log(this.state.compititionObj, "onjnj")
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
@@ -885,6 +890,9 @@ class UmpireDashboard extends Component {
         const { umpireVenueList, umpireDivisionList } = this.props.umpireDashboardState
         let venueList = isArrayNotEmpty(umpireVenueList) ? umpireVenueList : []
         let divisionList = isArrayNotEmpty(umpireDivisionList) ? umpireDivisionList : []
+
+        let umpireType = this.state.compititionObj ? this.state.compititionObj.recordUmpireType : null
+
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
                 <div className="fluid-width" >
@@ -955,6 +963,21 @@ class UmpireDashboard extends Component {
 
 
                     </div>
+                    {
+                        umpireType && umpireType !== 'USERS' ? 
+                        <div>
+                            <NavLink to={{
+                                pathname: '/liveScoreSettingsView',
+                                state: { selectedComp: this.state.selectedComp, screenName: 'umpireDashboard', edit: 'edit' }
+                            }}>
+                                <span class="input-heading-add-another pt-0">
+                                    {AppConstants.competitionEnabled}
+                                </span>
+                            </NavLink>
+                        </div>
+                        :
+                        <></>
+                    }
 
 
                 </div>
@@ -1022,5 +1045,6 @@ function mapStatetoProps(state) {
         umpireCompetitionState: state.UmpireCompetitionState
     }
 }
+
 export default connect(mapStatetoProps, mapDispatchToProps)((UmpireDashboard));
 

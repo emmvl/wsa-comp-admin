@@ -5,7 +5,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { NavLink } from "react-router-dom";
 import { liveScore_MatchFormate } from '../../themes/dateformate'
-import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage'
+import { getUmpireCompId, setUmpireCompId,getUmpireCompetiton } from '../../util/sessionStorage'
 import AppImages from "../../themes/appImages";
 import history from "../../util/history";
 import { connect } from 'react-redux';
@@ -183,8 +183,8 @@ class AssignUmpire extends Component {
             if (this.state.loading == true && this.props.umpireCompetitionState.onLoad == false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
-                if (getUmpireCompId()) {
-                    let compId = JSON.parse(getUmpireCompId())
+                if (getUmpireCompetiton()) {
+                    let compId = JSON.parse(getUmpireCompetiton())
                     firstComp = compId
                 }
                 const body = {

@@ -1381,6 +1381,9 @@ const AppConstants = {
   invite: "Invite",
   send: "Send",
   noSend: "No Send",
+  tax: "Tax",
+  dragImageToUpload: "Drag image to upload",
+  addType: "Add type",
   coachSearch: 'Coach Search',
   incident: "Incident",
   selectIncident: "Select Incident",
@@ -1390,8 +1393,8 @@ const AppConstants = {
   injuryFirstAdd: "Injury- First Add",
   emailExp: "/^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/",
   childDetails: "Child Details",
-  registrationDivision: "Registration Division",
-  addRegDivision: 'Add Registration Division',
+  registrationDivision: "Registration Divisions",
+  addRegDivision: 'Add Registration Divisions',
   downLoadImportHeading: "Download the matches list first then populate umpires details to upload ",
   assignUmpireToMatch: "Assign Umpires To Matches",
   participateInCompReg: 'Participating-In Competition Registrations',
@@ -1401,7 +1404,12 @@ const AppConstants = {
   Registrations: "Registrations",
   ladderAllDivisionRmvMsg: "This will remove the other ladder formats.",
   ladderFormat: "Ladder Format",
-  ladderRemoveMsg: "Are you sure you want to remove ladder format?"
+  ladderRemoveMsg: "Are you sure you want to remove ladder format?",
+  competitionEnabled: 'Competition not enabled for Integrated Umpires, Click here to enable.',
+  bulkScoreUpload: 'Bulk Scores Upload',
+  umpireRoster: 'Umpire Roster',
+  registrationDivisions: "Registration Divisions",
+  competitionEnabled: 'Competition not enabled for Integrated Umpires, Click here to enable.'
 };
 
 export default AppConstants;

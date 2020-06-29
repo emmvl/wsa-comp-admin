@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Input, Layout, Breadcrumb, Button, Table, Pagination, Icon } from 'antd';
+import { Input, Layout, Breadcrumb, Button, Table, Pagination, Icon, Select } from 'antd';
 import './liveScore.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -15,8 +15,12 @@ import { getCompetitonId, getLiveScoreCompetiton, getUmpireCompetitonData } from
 import { liveScore_MatchFormate } from '../../themes/dateformate'
 import { exportFilesAction } from "../../store/actions/appAction"
 import { isArrayNotEmpty, teamListData } from "../../util/helpers";
+import { getLiveScoreDivisionList } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction'
+import { liveScoreRoundListAction } from '../../store/actions/LiveScoreAction/liveScoreRoundAction'
 
 const { Content } = Layout;
+const { Option } = Select;
+
 /////function to sort table column
 function tableSort(a, b, key) {
     let stringA = JSON.stringify(a[key])
@@ -40,11 +44,11 @@ function setMatchResult(record) {
 }
 
 function getVenueName(data) {
- 
+
     let venue_name = ""
-    if(data.venue.shortName){
+    if (data.venue.shortName) {
         venue_name = data.venue.shortName + " - " + data.name
-    }else{
+    } else {
         venue_name = data.venue.name + " - " + data.name
     }
 
@@ -107,7 +111,7 @@ const columns = [
         key: 'venueCourt',
         sorter: (a, b) => tableSort(a, b, "venueCourt"),
         // render: (venueCourt, record) => <span>{venueCourt.venue.shortName + " - " + venueCourt.name}</span>
-        render : (venueCourt, record)=><span>{getVenueName(venueCourt)}</span>
+        render: (venueCourt, record) => <span>{getVenueName(venueCourt)}</span>
     },
     {
         title: 'Division',
@@ -121,7 +125,12 @@ const columns = [
         dataIndex: 'score',
         key: 'score',
         sorter: (a, b) => tableSort(a, b, "score"),
-        render: (score, records) => <span nowrap>{setMatchResult(records)}</span>
+        // render: (score, records) => <span nowrap>{setMatchResult(records)}</span>
+        render: (score, records) => {
+            return (
+                _this.scoreView(score, records)
+            )
+        }
     },
     {
         title: 'Type',
@@ -156,6 +165,9 @@ class LiveScoreMatchesList extends Component {
             competitionId: null,
             searchText: "",
             umpireKey: this.props.location ? this.props.location.state ? this.props.location.state.umpireKey : null : null,
+            selectedDivision: 'All',
+            selectedRound: 'All',
+            isBulkUpload: false
         }
         _this = this
     }
@@ -175,6 +187,8 @@ class LiveScoreMatchesList extends Component {
             this.setState({ competitionId: id })
             if (id !== null) {
                 this.handleMatchTableList(1, id)
+                this.props.getLiveScoreDivisionList(id)
+                this.props.liveScoreRoundListAction(id)
             } else {
                 history.push('/')
             }
@@ -196,7 +210,7 @@ class LiveScoreMatchesList extends Component {
     handleMatchTableList(page, competitionID) {
         let offset = page ? 10 * (page - 1) : 0;
         let start = 1
-        this.props.liveScoreMatchListAction(competitionID, start, offset, this.state.searchText)
+        this.props.liveScoreMatchListAction(competitionID, start, offset, this.state.searchText, this.state.selectedDivision == 'All' ? null : this.state.selectedDivision, this.state.selectedRound == 'All' ? null : this.state.selectedRound)
 
     }
 
@@ -209,7 +223,7 @@ class LiveScoreMatchesList extends Component {
     onChangeSearchText = (e) => {
         this.setState({ searchText: e.target.value })
         if (e.target.value == null || e.target.value == "") {
-            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value)
+            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value, this.state.selectedDivision == 'All' ? null : this.state.selectedDivision, this.state.selectedRound == 'All' ? null : this.state.selectedRound)
         }
     }
 
@@ -218,7 +232,7 @@ class LiveScoreMatchesList extends Component {
         var code = e.keyCode || e.which;
 
         if (code === 13) { //13 is the enter keycode
-            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value)
+            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value, this.state.selectedDivision == 'All' ? null : this.state.selectedDivision, this.state.selectedRound == 'All' ? null : this.state.selectedRound)
         }
     }
 
@@ -228,8 +242,25 @@ class LiveScoreMatchesList extends Component {
         if (this.state.searchText == null || this.state.searchText == "") {
         }
         else {
-            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, this.state.searchText)
+            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, this.state.searchText, this.state.selectedDivision == 'All' ? null : this.state.selectedDivision, this.state.selectedRound == 'All' ? null : this.state.selectedRound)
         }
+    }
+
+    scoreView(score, records) {
+        return (
+            <div >
+                {
+                    this.state.isBulkUpload ?
+                        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                            <Input className="table-input-box-style" />
+                            <Input className="table-input-box-style" />
+                        </div>
+                        :
+                        <span nowrap>{setMatchResult(records)}</span>
+                }
+
+            </div>
+        )
     }
 
 
@@ -257,6 +288,27 @@ class LiveScoreMatchesList extends Component {
                                         justifyContent: "flex-end",
                                     }}
                                 >
+                                    {/* <NavLink to={{
+                                        pathname: '/liveScoreAddMatch',
+                                    }}> */}
+                                    <Button onClick={() => this.setState({ isBulkUpload: true })} className="primary-add-comp-form" type="primary">
+                                        {AppConstants.bulkScoreUpload}
+                                    </Button>
+                                    {/* </NavLink> */}
+                                </div>
+                            </div>
+
+                            <div className="col-sm">
+                                <div
+                                    className="comp-dashboard-botton-view-mobile"
+                                    style={{
+                                        width: "100%",
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        justifyContent: "flex-end",
+                                    }}
+                                >
                                     <NavLink to={{
                                         pathname: '/liveScoreAddMatch',
                                     }}>
@@ -266,6 +318,7 @@ class LiveScoreMatchesList extends Component {
                                     </NavLink>
                                 </div>
                             </div>
+
                             <div className="col-sm">
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
@@ -324,7 +377,7 @@ class LiveScoreMatchesList extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="mt-5" style={{ display: "flex", justifyContent: 'flex-end' }} >
+                {/* <div className="mt-5" style={{ display: "flex", justifyContent: 'flex-end' }} >
                     <div className="comp-product-search-inp-width" >
                         <Input className="product-reg-search-input"
                             onChange={(e) => this.onChangeSearchText(e)}
@@ -336,7 +389,7 @@ class LiveScoreMatchesList extends Component {
                             allowClear
                         />
                     </div>
-                </div>
+                </div> */}
             </div>
         )
     }
@@ -360,13 +413,126 @@ class LiveScoreMatchesList extends Component {
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
-                        className="antd-pagination"
+                        className="antd-pagination pb-5"
                         current={liveScoreMatchListState.liveScoreMatchListPage}
                         total={total}
                         onChange={(page) => this.handleMatchTableList(page, this.state.competitionId)}
                         defaultPageSize={10}
                     />
                 </div>
+
+                <div className="d-flex justify-content-end">
+                    <div className="pagination-button-div" >
+                        {/* <span style={{ color: "#9b9bad" }}
+                            className="pagination-button-text">{AppConstants.save}</span> */}
+                        <Button className="primary-add-comp-form" type="primary">
+                            {AppConstants.save}
+                        </Button>
+                    </div>
+                    <div className="pagination-button-div">
+                        <span onClick={() => this.setState({ isBulkUpload: false })} style={{ color: "#9b9bad" }}
+                            className="pagination-button-text">{AppConstants.cancel}</span>
+                    </div>
+                </div>
+
+            </div>
+        )
+    }
+
+    onChangeDivision(division) {
+        let offset = 0;
+        let start = 1
+        this.props.liveScoreMatchListAction(this.state.competitionId, start, offset, this.state.searchText, division == 'All' ? null : division, this.state.selectedRound == 'All' ? null : this.state.selectedRound)
+        this.setState({ selectedDivision: division })
+    }
+
+    onChangeRound(roundName) {
+        let offset = 0;
+        let start = 1
+        this.props.liveScoreMatchListAction(this.state.competitionId, start, offset, this.state.searchText, this.state.selectedDivision == 'All' ? null : this.state.selectedDivision, roundName == 'All' ? null : roundName)
+        this.setState({ selectedRound: roundName })
+    }
+
+    ///dropdown view containing all the dropdown of header
+    dropdownView = () => {
+        let { divisionList, roundList } = this.props.liveScoreMatchListState
+        let divisionListArr = isArrayNotEmpty(divisionList) ? divisionList : []
+        let roundListArr = isArrayNotEmpty(roundList) ? roundList : []
+        return (
+            <div className="comp-player-grades-header-drop-down-view">
+                {/* // <div className="fluid-width" > 
+            //      <div className="row"  >  */}
+                {/* <div style={{ display: "flex", width: "100%", justifyContent: 'space-between' }}> */}
+                <div style={{ display: "flex", width: "100%", justifyContent: 'space-between' }}>
+                    <div className="mt-5" style={{ display: "flex", }} >
+                        <div style={{
+                            width: "100%", display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center", marginRight: 50,
+                        }} >
+                            <span className='year-select-heading'>{AppConstants.division}:</span>
+                            <Select
+                                className="year-select"
+                                style={{ minWidth: 160 }}
+                                onChange={(divisionId) => this.onChangeDivision(divisionId)}
+                                value={this.state.selectedDivision}
+                            >
+                                <Option value={'All'}>{'All'}</Option>
+                                {
+                                    divisionListArr.map((item) => {
+                                        return <Option value={item.id}>{item.name}</Option>
+                                    })
+                                }
+
+                            </Select>
+                        </div>
+
+                        <div style={{
+                            width: "100%", display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center", marginRight: 50,
+                        }} >
+                            <span className='year-select-heading'>{AppConstants.round}:</span>
+                            <Select
+                                className="year-select"
+                                style={{ minWidth: 160 }}
+                                onChange={(roundName) => this.onChangeRound(roundName)}
+                                value={this.state.selectedRound}
+                            >
+                                <Option value={'All'}>{'All'}</Option>
+                                {
+                                    roundListArr.map((item) => {
+                                        return <Option value={item.name}>{item.name}</Option>
+                                    })
+                                }
+
+                            </Select>
+                        </div>
+
+
+                    </div>
+
+                    <div className="mt-5" style={{ display: "flex", justifyContent: 'flex-end' }} >
+                        <div className="comp-product-search-inp-width" >
+                            <Input className="product-reg-search-input"
+                                onChange={(e) => this.onChangeSearchText(e)}
+                                placeholder="Search..."
+                                onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                    onClick={() => this.onClickSearchIcon()}
+                                />}
+                                allowClear
+                            />
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+                {/* //    </div> 
+
+            //      </div>  */}
             </div>
         )
     }
@@ -389,6 +555,7 @@ class LiveScoreMatchesList extends Component {
                 }
                 <Layout>
                     {this.headerView()}
+                    {this.dropdownView()}
                     <Content>
                         {this.tableView()}
                     </Content>
@@ -399,7 +566,12 @@ class LiveScoreMatchesList extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScoreMatchListAction, exportFilesAction }, dispatch)
+    return bindActionCreators({
+        liveScoreMatchListAction,
+        exportFilesAction,
+        getLiveScoreDivisionList,
+        liveScoreRoundListAction
+    }, dispatch)
 }
 
 function mapStateToProps(state) {
