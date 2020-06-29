@@ -407,7 +407,7 @@ class HomeDashboard extends Component {
                     </div>
                     <div className="d-flex justify-content-end">
                         <Pagination
-                        className="antd-pagination"
+                        className="antd-pagination action-box-pagination"
                         current={actionBoxPage}
                         total={actionBoxTotalCount}
                         onChange={(page) => this.handleActionBoxList(page)}
@@ -430,7 +430,7 @@ class HomeDashboard extends Component {
     compOverviewHeading = () => {
         const { yearRefId } = this.props.homeDashboardState
         return (
-            <div className="row text-view">
+            <div className="row text-view" style={{paddingTop: '3%'}}>
                 <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }} >
                     <span className='home-dash-left-text' >{AppConstants.competitionsOverview}</span>
                 </div>
