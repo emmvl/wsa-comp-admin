@@ -1399,6 +1399,7 @@ const AppConstants = {
   newCompetitionReg: 'New Competition Registration',
   rosterExport: '/roster/export/umpire?',
   Registrations: "Registrations",
+  competitionEnabled: 'Competition not enabled for Integrated Umpires, Click here to enable.'
 };
 
 export default AppConstants;
