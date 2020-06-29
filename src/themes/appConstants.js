@@ -283,7 +283,7 @@ const AppConstants = {
   /*******competition Ladder */
   mwnaPointScheme: 'MWNA Points Scheme',
   applyLadderFormatTo: 'Apply Ladder Format to',
-  addNewLadderScheme: 'Add New Ladder Scheme',
+  addNewLadderScheme: 'Add New Ladder Format',
   useDefaultSettings: 'Use default settings',
   ladderAdjustment: 'Ladder Adjustment',
   addNewAdjustment: 'Add new Adjustment',
@@ -1399,6 +1399,9 @@ const AppConstants = {
   newCompetitionReg: 'New Competition Registration',
   rosterExport: '/roster/export/umpire?',
   Registrations: "Registrations",
+  ladderAllDivisionRmvMsg: "This will remove the other ladder formats.",
+  ladderFormat: "Ladder Format",
+  ladderRemoveMsg: "Are you sure you want to remove ladder format?"
 };
 
 export default AppConstants;

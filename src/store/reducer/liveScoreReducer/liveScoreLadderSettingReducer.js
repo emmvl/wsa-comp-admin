@@ -9,7 +9,10 @@ const initialState = {
     status: 0,
     matchResult: [],
     postData: [],
-    loader: false
+    loader: false,
+    ladders: [],
+    divisions: [],
+    defaultLadders: []
 };
 
 function getResultValues(data, matchData) {
@@ -75,6 +78,60 @@ function setPostData(selectedData, matcheResults, compId) {
 
 
 
+
+function disableAddedDivisions(ladders, divisions){
+    //console.log("ladders ::", ladders);
+    resetDivisionDisabled(ladders, divisions);
+    for(let item in ladders){
+        let itemDivisions = ladders[item].divisions;
+        let ladderFormatId =  ladders[item].ladderFormatId;
+        let remainingFormatDiv =  ladders.
+                filter(x=>x.ladderFormatId!= ladderFormatId);
+
+        for(let remDiv in remainingFormatDiv)
+        {
+            let selectedDivisions = remainingFormatDiv[remDiv].selectedDivisions;
+            for(let i in selectedDivisions){
+                for(let j in itemDivisions){
+                    if(itemDivisions[j].divisionId === selectedDivisions[i])
+                    {
+                        itemDivisions[j].isDisabled = true;
+                        let division = divisions.find(x=>x.divisionId ==  itemDivisions[j].divisionId);
+                        division["isDisabled"] = true;
+                    }
+                }
+            }
+        }
+
+        let currSelDivisions = ladders[item].selectedDivisions;
+        for(let i in currSelDivisions){
+            for(let j in divisions){
+                if(divisions[j].divisionId === currSelDivisions[i])
+                {
+                    divisions[j]["isDisabled"] = true;
+                }
+            }
+        }
+    }
+
+    //console.log("ladders1 :: divisions", ladders, divisions);
+
+}
+
+function resetDivisionDisabled(ladders, divisions){
+    for(let item in ladders){
+        let itemDivisions = ladders[item].divisions;
+        for(let j in itemDivisions){
+            itemDivisions[j].isDisabled = false;
+        }
+    }
+
+    for(let item in divisions){
+        divisions[item]["isDisabled"] = false;
+    }
+}
+
+
 function liveScoreLadderSettingReducer(state = initialState, action) {
 
     switch (action.type) {
@@ -99,20 +156,50 @@ function liveScoreLadderSettingReducer(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LADDER_SETTING_GET_DATA_SUCCESS:
-            const { id } = JSON.parse(getLiveScoreCompetiton())
-            let data = getResultValues(action.result, state.matchResult)
-            let post_Array = setPostData(action.result, state.matchResult, id)
-            state.postData = post_Array
+            let ladderRes = action.result;
+            disableAddedDivisions(ladderRes.ladders, ladderRes.divisions);
             return {
                 ...state,
                 onLoad: false,
-                matchResult: data
+                ladders: ladderRes.ladders,
+                divisions: ladderRes.divisions,
+                defaultLadders: ladderRes.defaultLadders
             };
 
         //// Update Ladder Setting
         case ApiConstants.UPDATE_LADDER_SETTING:
-            state.matchResult[action.index]['points'] = action.data
-            state.postData[action.index]['points'] = action.data
+            if(action.key == "addLadder"){
+                let ladder = state.defaultLadders.find(x=>x);
+                ladder.ladderFormatId = -(state.ladders.length)
+                ladder.isAllDivision = Number(0);
+                state.ladders.push(ladder);
+                disableAddedDivisions(state.ladders, state.divisions);
+            }
+            else if(action.key == "isAllDivision"){
+                let ladder = state.ladders[action.index];
+                if(action.data == true){
+                    ladder.selectedDivisions = [];
+                    state.ladders = [];
+                    state.ladders.push(ladder);
+                }
+                ladder[action.key] = action.data;
+                disableAddedDivisions(state.ladders, state.divisions);
+            }
+            else if(action.key == "deleteLadder"){
+                state.ladders.splice(action.index, 1);
+                disableAddedDivisions(state.ladders, state.divisions);
+            }
+            else if(action.key == "selectedDivisions"){
+                state.ladders[action.index][action.key] = action.data;
+                disableAddedDivisions(state.ladders, state.divisions);
+            }
+            else if(action.key == "resultTypes"){
+                state.ladders[action.index]["settings"][action.subIndex]["points"] = action.data;  
+            }
+            else{
+                state.ladders[action.index][action.key] = action.data;
+            }
+           
             return {
                 ...state,
             };
