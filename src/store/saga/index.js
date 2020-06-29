@@ -192,6 +192,7 @@ import * as umpireCompSaga from "../saga/umpireSaga/umpireCompetitionSaga"
 import * as umpireRoasterSaga from "../saga/umpireSaga/umpireRoasterSaga"
 import * as umpireSaga from "../saga/umpireSaga/umpireSaga"
 import * as assignUmpireSaga from "../saga/umpireSaga/assignUmpireSaga";
+import * as shopProductSaga from "../saga/shopSaga/productSaga";
 
 export default function* root_saga() {
   yield takeEvery(ApiConstants.API_LOGIN_LOAD, loginApiSaga);
@@ -775,5 +776,11 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.CHANGE_PLAYER_LINEUP_LOAD, playerLineUpStatusChnage)
 
   yield takeEvery(ApiConstants.API_USER_EXPORT_FILES_LOAD, userExportFilesSaga)
+
+  //////shop product listing
+  yield takeEvery(ApiConstants.API_GET_SHOP_PRODUCT_LISTING_LOAD, shopProductSaga.getProductListingSaga)
+  /////shop add product
+  yield takeEvery(ApiConstants.API_ADD_SHOP_PRODUCT_LOAD, shopProductSaga.addProductActionSaga)
+
   yield takeEvery(ApiConstants.API_LIVE_SCORE_UMPIRES_IMPORT_LOAD, liveScoreUmpiresImportSaga)
 }
