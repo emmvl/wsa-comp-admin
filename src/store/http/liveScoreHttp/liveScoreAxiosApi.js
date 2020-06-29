@@ -161,9 +161,20 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token)
     },
 
-    liveScoreMatchList(competitionID, start, offset, search) {
-        // start=<1 year in past>&limit=<limit>&offset=<offset></offset>
-        var url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}`;
+    liveScoreMatchList(competitionID, start, offset, search, divisionId, roundName) {
+
+        var url
+
+        if (divisionId && roundName) {
+            url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}&divisionIds=${divisionId}&roundName=${roundName}`;
+        } else if (divisionId) {
+            url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}&divisionIds=${divisionId}`;
+        } else if (roundName) {
+            url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}&roundName=${roundName}`;
+        } else {
+            url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}`;
+        }
+
         return Method.dataGet(url, localStorage.token)
     },
 
@@ -619,10 +630,10 @@ let LiveScoreAxiosApi = {
     liveScoreAttendanceList(competitionId, body, select_status) {
 
         let url
-        if (select_status) {
-            url = `/players/activity?competitionId=${competitionId}&status=${select_status}`
+        if (select_status == 'All') {
+            url = `/players/activity?competitionId=${competitionId}&status=${""}`
         } else {
-            url = `/players/activity?competitionId=${competitionId}`
+            url = `/players/activity?competitionId=${competitionId}&status=${select_status}`
         }
         return Method.dataPost(url, token, body)
     },

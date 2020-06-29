@@ -1402,6 +1402,9 @@ const AppConstants = {
   newCompetitionReg: 'New Competition Registration',
   rosterExport: '/roster/export/umpire?',
   Registrations: "Registrations",
+  competitionEnabled: 'Competition not enabled for Integrated Umpires, Click here to enable.',
+  bulkScoreUpload: 'Bulk Scores Upload',
+  umpireRoster: 'Umpire Roster',
   registrationDivisions: "Registration Divisions",
   competitionEnabled: 'Competition not enabled for Integrated Umpires, Click here to enable.'
 };

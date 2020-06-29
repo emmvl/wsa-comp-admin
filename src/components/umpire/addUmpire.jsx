@@ -54,11 +54,15 @@ class AddUmpire extends Component {
 
         let compId = null
 
-        if (this.state.screenName == 'umpireDashboard') {
+        if(getUmpireCompetiton()){
             compId = JSON.parse(getUmpireCompetiton())
-        } else {
-            compId = JSON.parse(getUmpireCompId())
         }
+
+        // if (this.state.screenName == 'umpireDashboard') {
+        //     compId = JSON.parse(getUmpireCompetiton())
+        // } else {
+        //     compId = JSON.parse(getUmpireCompId())
+        // }
 
         this.props.umpireListAction({ refRoleId: 5, entityTypes: 1, compId: compId, offset: 0 })
 

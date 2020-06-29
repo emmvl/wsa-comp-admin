@@ -1,12 +1,14 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-function liveScoreMatchListAction(competitionID, start, offset, search) {
+function liveScoreMatchListAction(competitionID, start, offset, search, divisionId, roundName) {
     const action = {
         type: ApiConstants.API_LIVE_SCORE_MATCH_LIST_LOAD,
         competitionID,
         start,
         offset,
-        search
+        search,
+        divisionId,
+        roundName
     }
     return action;
 }
@@ -96,7 +98,7 @@ function liveScoreGetMatchDetailInitiate(data, isLineup) {
     return {
         type: ApiConstants.API_GET_LIVESCOREMATCH_DETAIL_INITAITE,
         payload: data,
-        isLineup:isLineup
+        isLineup: isLineup
     }
 }
 
@@ -116,13 +118,13 @@ function searchFilterAction(search, key) {
     return action
 }
 
-function changePlayerLineUpAction(data, value, index, key){
+function changePlayerLineUpAction(data, value, index, key) {
     const action = {
         type: ApiConstants.CHANGE_PLAYER_LINEUP_LOAD,
         index: index,
-        value:value,
-        key:key,
-        data:data
+        value: value,
+        key: key,
+        data: data
     }
     return action
 }
