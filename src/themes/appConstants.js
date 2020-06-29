@@ -1393,8 +1393,8 @@ const AppConstants = {
   injuryFirstAdd: "Injury- First Add",
   emailExp: "/^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/",
   childDetails: "Child Details",
-  registrationDivision: "Registration Division",
-  addRegDivision: 'Add Registration Division',
+  registrationDivision: "Registration Divisions",
+  addRegDivision: 'Add Registration Divisions',
   downLoadImportHeading: "Download the matches list first then populate umpires details to upload ",
   assignUmpireToMatch: "Assign Umpires To Matches",
   participateInCompReg: 'Participating-In Competition Registrations',
@@ -1402,6 +1402,7 @@ const AppConstants = {
   newCompetitionReg: 'New Competition Registration',
   rosterExport: '/roster/export/umpire?',
   Registrations: "Registrations",
+  registrationDivisions: "Registration Divisions",
   competitionEnabled: 'Competition not enabled for Integrated Umpires, Click here to enable.'
 };
 

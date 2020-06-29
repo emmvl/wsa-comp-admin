@@ -568,7 +568,7 @@ class CompetitionDraws extends Component {
               marginRight: 50,
             }}
           >
-            <span className="year-select-heading">{AppConstants.draws}:</span>
+            <span className="year-select-heading">{AppConstants.year}:</span>
             <Select
               name={'yearRefId'}
               className="year-select"

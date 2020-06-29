@@ -73,7 +73,7 @@ const columns = [
         key: "membershipProductTypeName",
     },
     {
-        title: "Registration Division",
+        title: "Registration Divisions",
         dataIndex: "divisionName",
         key: "divisionName",
         width: "25%",

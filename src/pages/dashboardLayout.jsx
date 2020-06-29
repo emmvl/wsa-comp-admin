@@ -64,6 +64,7 @@ class DashboardLayout extends React.Component {
   logout = async () => {
     await localStorage.clear();
     history.push("/");
+    window.location.reload();
   };
 
   menuImageChange = menuName => {
