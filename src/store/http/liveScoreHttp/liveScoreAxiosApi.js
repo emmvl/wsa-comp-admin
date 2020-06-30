@@ -734,16 +734,16 @@ let LiveScoreAxiosApi = {
     },
     laddersSettingGetData(competitionId) {
 
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-        var url = `/competitions/ladderSettings?competitionId=${id}`
+        let { uniqueKey } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        var url = `/competitions/ladderSettings?competitionId=${uniqueKey}`
         return Method.dataGet(url, token)
     },
     laddersSettingPostData(data) {
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let { uniqueKey } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
 
         let body = data
 
-        var url = `/competitions/ladderSettings?competitionId=${id}`
+        var url = `/competitions/ladderSettings?competitionId=${uniqueKey}`
         return Method.dataPost(url, token, body)
     },
     // Get Teams with paggination
