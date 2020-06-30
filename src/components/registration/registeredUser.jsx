@@ -245,43 +245,6 @@ class RegisteredUser extends Component {
                                     >
                                         <Button className="primary-add-comp-form" type="primary"
                                         >
-                                            + {AppConstants.newCompetition}
-                                        </Button>
-
-                                    </div>
-                                </div>
-                                <div className="col-sm">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: "100%",
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
-                                        {/* <NavLink to="/competitionReplicate"> */}
-                                        <Button className="primary-add-comp-form" type="primary">
-                                            + {AppConstants.replicateCompetition}
-                                        </Button>
-                                        {/* </NavLink> */}
-                                    </div>
-                                </div>
-
-                                <div className="col-sm">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: "100%",
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
-                                        <Button className="primary-add-comp-form" type="primary"
-                                        >
                                             + {AppConstants.newCompetitionReg}
                                         </Button>
 
