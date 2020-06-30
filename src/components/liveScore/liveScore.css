@@ -302,7 +302,7 @@
     align-items: center;
 }
 
-.table-input-box-style {
+/* .table-input-box-style {
     height: 44px;
     width: 50.5px;
     font-size: 13px;
@@ -310,7 +310,20 @@
     font-family: inter;
     font-weight: normal;
     margin-left: 5px
-  }
+  } */
+
+  .table-input-box-style {
+    height: 40px;
+    width: 40px;
+    font-size: 13px;
+    color: var(--app-1b1b34);
+    font-family: inter;
+    font-weight: normal;
+    /* padding:5px; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 @media(min-width: 768px) and (max-width: 1024px) {
     .live-score-edit-match-buttons {

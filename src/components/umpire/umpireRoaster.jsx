@@ -12,7 +12,7 @@ import { isArrayNotEmpty } from "../../util/helpers";
 import { umpireRoasterListAction, umpireRoasterOnActionClick } from "../../store/actions/umpireAction/umpirRoasterAction"
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { refRoleTypes } from '../../util/refRoles'
-import { setUmpireCompId, getUmpireCompId, getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData  } from '../../util/sessionStorage'
+import { setUmpireCompId, getUmpireCompId, getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData } from '../../util/sessionStorage'
 import moment, { utc } from "moment";
 import ValidationConstants from "../../themes/validationConstant";
 import history from "../../util/history";
@@ -76,8 +76,17 @@ const columns = [
         //     pathname: '/liveScoreMatchDetails',
         //     state: { matchId: matchId, key: 'umpireRoster' }
         // }} >
-        render: (matchId) => <span className="input-heading-add-another pt-0">{matchId}</span>
-        // </NavLink>
+
+        render: (matchId) => {
+            return (
+                <NavLink to={{
+                    pathname: '/liveScoreMatchDetails',
+                    state: { matchId: matchId, umpireKey: 'umpire' }
+                }} >
+                    <span className="input-heading-add-another pt-0">{matchId}</span>
+                </NavLink>
+            )
+        }
 
     },
     {
@@ -99,7 +108,7 @@ const columns = [
         dataIndex: 'verifiedBy',
         key: 'verifiedBy',
         sorter: (a, b) => tableSort(a, b, "verifiedBy"),
-        render: (user, record) => <span className="input-heading-add-another pt-0" onClick={() => this_obj.checkUserId(record)}>{record.user.firstName + " " + record.user.lastName}</span>
+        // render: (user, record) => <span className="input-heading-add-another pt-0" onClick={() => this_obj.checkUserId(record)}>{record.user.firstName + " " + record.user.lastName}</span>
     },
     {
         title: "Action",
@@ -152,7 +161,8 @@ class UmpireRoaster extends Component {
             loading: false,
             competitionUniqueKey: null,
             status: 'All',
-            roasterLoad: false
+            roasterLoad: false,
+            compArray: []
         }
         this_obj = this
     }
@@ -177,7 +187,7 @@ class UmpireRoaster extends Component {
                         firstComp = compList[index].id
                         compData = compList[index]
                     } else {
-                     
+
                         setUmpireCompition(firstComp)
                         setUmpireCompitionData(JSON.stringify(compData))
                     }
@@ -198,7 +208,7 @@ class UmpireRoaster extends Component {
                 }
                 if (firstComp !== false) {
                     this.props.umpireRoasterListAction(firstComp, this.state.status, refRoleTypes('umpire'), body)
-                    this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey })
+                    this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey, compArray: compList })
                 } else {
                     this.setState({ loading: false })
                 }

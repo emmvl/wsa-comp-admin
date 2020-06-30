@@ -225,3 +225,21 @@ export function* playerLineUpStatusChnage(action) {
         yield call(errorSaga, error)
     }
 }
+
+
+export function* bulkScoreChange(action) {
+    try {
+        const result = yield call(LiveScoreAxiosApi.bulkScoreChangeApi, action.data)
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.BULK_SCORE_UPDATE_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            })
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

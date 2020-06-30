@@ -6,6 +6,7 @@ import liveScoreMatchModal from "../../objectModel/liveScoreMatchModal";
 import { isArrayNotEmpty } from '../../../util/helpers';
 
 
+
 var object = {
     id: '',
     team1Score: 0,
@@ -196,7 +197,7 @@ const initialState = {
     umpireRosterId_2: null,
     team1id: null,
     team2id: null,
-
+    liveScoreBulkScoreList: []
 };
 
 function setMatchData(data) {
@@ -249,6 +250,19 @@ function getOrganisation(data) {
     return arr
 }
 
+function createBulkScoreMatchArray(list) {
+    let bulkScoreList = []
+    for (let i in list) {
+        let request = {
+            "id": 1,
+            "team1Score": 1,
+            "team2Score": 3
+        }
+        bulkScoreList.push(request)
+    }
+    return bulkScoreList
+}
+
 function liveScoreMatchReducer(state = initialState, action) {
     switch (action.type) {
         //LIVESCORE Match LIST
@@ -258,7 +272,7 @@ function liveScoreMatchReducer(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_MATCH_LIST_SUCCESS:
 
             const result = getMatchListSettings(action.result.matches)
-
+            // state.liveScoreBulkScoreList
             // state.liveScoreMatchListData = result
 
             return {
@@ -267,7 +281,8 @@ function liveScoreMatchReducer(state = initialState, action) {
                 liveScoreMatchListPage: action.result.page ? action.result.page.currentPage : 1,
                 liveScoreMatchListTotalCount: action.result.page.totalCount,
                 status: action.status,
-                liveScoreMatchListData: result
+                liveScoreMatchListData: result,
+                liveScoreBulkScoreList: result
             };
 
         case ApiConstants.API_LIVE_SCORE_MATCH_LIST_FAIL:
@@ -716,6 +731,39 @@ function liveScoreMatchReducer(state = initialState, action) {
                 error: null,
                 state: action.status
             }
+
+        case ApiConstants.CHANGE_BULK_MATCH_SCORE:
+            let matchListArray = JSON.parse(JSON.stringify(state.liveScoreMatchListData))
+            matchListArray[action.index][action.key] = action.value
+            state.liveScoreMatchListData = matchListArray
+            return {
+                ...state,
+                onLoad: false,
+                error: null,
+                state: action.status
+            }
+
+
+        case ApiConstants.BULK_SCORE_UPDATE_LOAD:
+            return {
+                ...state,
+                onLoad: true
+            }
+        case ApiConstants.BULK_SCORE_UPDATE_SUCCESS:
+          
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status
+
+            }
+        case ApiConstants.BULK_SCORE_UPDATE_CANCEL:
+                state.liveScoreMatchListData = state.liveScoreBulkScoreList
+            return {
+                ...state,
+                onLoad: false
+            }
+
 
     };
 

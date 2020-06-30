@@ -64,7 +64,7 @@ import {
 
 ////**************************Live Score***************************Start
 // import { liveScorePlayerSaga } from "./liveScoreSaga/liveScorePlayerSaga";
-import { liveScoreMatchListSaga, liveScoreAddMatchSaga, liveScoreCreateMatchSaga, liveScoreDeleteMatchSaga, liveScoreCompetitionVenuesList, liveScoreMatchImportSaga, liveScoreMatchSaga, liveScoreClubListSaga, playerLineUpStatusChnage } from './liveScoreSaga/liveScoreMatchSaga';
+import { liveScoreMatchListSaga, liveScoreAddMatchSaga, liveScoreCreateMatchSaga, liveScoreDeleteMatchSaga, liveScoreCompetitionVenuesList, liveScoreMatchImportSaga, liveScoreMatchSaga, liveScoreClubListSaga, playerLineUpStatusChnage ,bulkScoreChange} from './liveScoreSaga/liveScoreMatchSaga';
 
 import { liveScoreDivisionSaga, getLiveScoreScorerSaga } from "./liveScoreSaga/liveScoreSaga";
 import {
@@ -783,6 +783,7 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_ADD_SHOP_PRODUCT_LOAD, shopProductSaga.addProductActionSaga)
 
   yield takeEvery(ApiConstants.API_LIVE_SCORE_UMPIRES_IMPORT_LOAD, liveScoreUmpiresImportSaga)
+  yield takeEvery(ApiConstants.BULK_SCORE_UPDATE_LOAD, bulkScoreChange)
 
   //////////////////////registration main dashboard listing owned and participate registration
   yield takeEvery(ApiConstants.API_GET_REGISTRATION_MAIN_DASHBOARD_LISTING_LOAD, registrationMainDashboardListSaga)

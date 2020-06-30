@@ -106,16 +106,16 @@ const columnsTeam1 = [
         key: 'attended',
         sorter: (a, b) => tableSort(a, b, "attended"),
         render: (attended, record, index) => {
-            return (
-                <Checkbox
-                    className="single-checkbox mt-1"
-                    checked={record.lineup.playing}
-                    onChange={(e) => {
-                        this_.props.changePlayerLineUpAction(record, e.target.checked, index, "team1Players")
-                    }
-                    }
-                ></Checkbox>
-            )
+            // return (
+            //     <Checkbox
+            //         className="single-checkbox mt-1"
+            //         checked={record.lineup.playing}
+            //         onChange={(e) => {
+            //             this_.props.changePlayerLineUpAction(record, e.target.checked, index, "team1Players")
+            //         }
+            //         }
+            //     ></Checkbox>
+            // )
         },
     },
 ];
@@ -151,16 +151,16 @@ const columnsTeam2 = [
         key: 'attended',
         sorter: (a, b) => tableSort(a, b, "attended"),
         render: (attended, record, index) => {
-            return (
-                <Checkbox
-                    className="single-checkbox mt-1"
-                    checked={record.lineup.playing}
-                    onChange={(e) => {
-                        this_.props.changePlayerLineUpAction(record, e.target.checked, index, "team2Players")
-                    }
-                    }
-                ></Checkbox>
-            )
+            // return (
+            //     <Checkbox
+            //         className="single-checkbox mt-1"
+            //         checked={record.lineup.playing}
+            //         onChange={(e) => {
+            //             this_.props.changePlayerLineUpAction(record, e.target.checked, index, "team2Players")
+            //         }
+            //         }
+            //     ></Checkbox>
+            // )
         },
     },
 ];

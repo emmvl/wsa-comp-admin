@@ -891,6 +891,11 @@ let LiveScoreAxiosApi = {
         return Method.dataPatch(url, token, body)
     },
 
+    bulkScoreChangeApi(data) {
+        let body = data
+        var url = `/matches/bulk/update`;
+        return Method.dataPost(url, token, body)
+    }
 
 };
 

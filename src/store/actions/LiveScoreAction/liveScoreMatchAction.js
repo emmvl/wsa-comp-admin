@@ -80,7 +80,6 @@ function getCompetitonVenuesList(competitionID, searchValue) {
         competitionID,
         searchValue
     }
-    console.log(action, "action")
     return action
 
 }
@@ -129,6 +128,36 @@ function changePlayerLineUpAction(data, value, index, key) {
     return action
 }
 
+
+function changeMatchBulkScore(value, key, index) {
+    const action = {
+        type: ApiConstants.CHANGE_BULK_MATCH_SCORE,
+        value: value,
+        key: key,
+        index: index
+    }
+    return action
+}
+
+
+function bulkScoreUpdate(data) {
+    const action = {
+        type: ApiConstants.BULK_SCORE_UPDATE_LOAD,
+        data: data
+    }
+
+    return action
+
+}
+
+function onCancelBulkScoreUpdate(){
+    const action = {
+        type: ApiConstants.BULK_SCORE_UPDATE_CANCEL,
+    }
+
+    return action
+}
+
 export {
     liveScoreMatchListAction,
     liveScoreAddEditMatchAction,
@@ -142,5 +171,8 @@ export {
     liveScoreGetMatchDetailInitiate,
     liveScoreClubListAction,
     searchFilterAction,
-    changePlayerLineUpAction
+    changePlayerLineUpAction,
+    changeMatchBulkScore,
+    bulkScoreUpdate,
+    onCancelBulkScoreUpdate
 };

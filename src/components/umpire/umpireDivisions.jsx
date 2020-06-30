@@ -165,8 +165,26 @@ class UmpireDivisions extends Component {
 
                 <span className='text-heading-large pt-5' >{AppConstants.umpirePools}</span>
 
-                <InputWithHead marginTop={5} heading={AppConstants.badgeAA} />
-                <div className="row" >
+                <div className="row pt-3" >
+                    <div className='col-sm-3 division-table-field-view'>
+                        <InputWithHead heading={AppConstants.badgeAA} />
+                    </div>
+                    <div className="col-sm" >
+                        <Select
+                            placeholder={"Select"}
+                            mode="multiple"
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
+                        >
+                            <Option value={"a"}>{'A Grade'}</Option>
+                            <Option value={"b"}>{'B Grade'}</Option>
+                            <Option value={"c"}>{'C Grade'}</Option>
+                        </Select>
+                    </div>
+                </div>
+                <div className="row  pt-3" >
+                    <div className='col-sm-3 division-table-field-view'>
+                        <InputWithHead heading={AppConstants.badgeA} />
+                    </div>
                     <div className="col-sm" >
                         <Select
                             placeholder={"Select"}
@@ -182,26 +200,10 @@ class UmpireDivisions extends Component {
                     </div>
                 </div>
 
-                <InputWithHead marginTop={5} heading={AppConstants.badgeA} />
-
-                <div className="row" >
-                    <div className="col-sm" >
-                        <Select
-                            placeholder={"Select"}
-                            mode="multiple"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
-                        // onChange={umpirePool => this.onChangeUmpirePools({ key: "recordUmpire", data: umpirePool })}
-                        // value={this.state.umpPool}
-                        >
-                            <Option value={"a"}>{'A Grade'}</Option>
-                            <Option value={"b"}>{'B Grade'}</Option>
-                            <Option value={"c"}>{'C Grade'}</Option>
-                        </Select>
+                <div className="row  pt-3" >
+                    <div className='col-sm-3 division-table-field-view'>
+                        <InputWithHead heading={AppConstants.badgeB} />
                     </div>
-                </div>
-
-                <InputWithHead marginTop={5} heading={AppConstants.badgeB} />
-                <div className="row" >
                     <div className="col-sm" >
                         <Select
                             placeholder={"Select"}
@@ -217,8 +219,10 @@ class UmpireDivisions extends Component {
                     </div>
                 </div>
 
-                <InputWithHead marginTop={5} heading={AppConstants.badgeC} />
-                <div className="row" >
+                <div className="row  pt-3" >
+                    <div className='col-sm-3 division-table-field-view'>
+                        <InputWithHead heading={AppConstants.badgeC} />
+                    </div>
                     <div className="col-sm" >
                         <Select
                             placeholder={"Select"}
@@ -234,8 +238,10 @@ class UmpireDivisions extends Component {
                     </div>
                 </div>
 
-                <InputWithHead marginTop={5} heading={AppConstants.umpireCoach} />
-                <div className="row" >
+                <div className="row  pt-3" >
+                    <div className='col-sm-3 division-table-field-view'>
+                        <InputWithHead heading={AppConstants.umpireCoach} />
+                    </div>
                     <div className="col-sm" >
                         <Select
                             placeholder={"Select"}
@@ -251,8 +257,11 @@ class UmpireDivisions extends Component {
                     </div>
                 </div>
 
-                <InputWithHead marginTop={5} heading={AppConstants.juniorUnbadge} />
-                <div className="row" >
+
+                <div className="row  pt-3" >
+                    <div className='col-sm-3 division-table-field-view'>
+                        <InputWithHead heading={AppConstants.juniorUnbadge} />
+                    </div>
                     <div className="col-sm" >
                         <Select
                             placeholder={"Select"}
@@ -267,7 +276,28 @@ class UmpireDivisions extends Component {
                         </Select>
                     </div>
                 </div>
-
+                <span className="text-heading-large pt-5">{AppConstants.simultaneousMatchAllocations}</span>
+                <div className="row  pt-3" >
+                    <div className='col-sm-3 '>
+                        <InputWithHead heading={AppConstants.poolName}
+                            placeholder={"a"}
+                            onChange={(e) => console.log(e)}
+                            value={""}
+                        />
+                    </div>
+                    <div className='col-sm-3 '>
+                        <InputWithHead heading={AppConstants.umpireReserve}
+                            placeholder={"umpireReserve"}
+                            onChange={(e) => console.log(e)}
+                        />
+                    </div>
+                    <div className='col-sm-3 '>
+                        <InputWithHead heading={AppConstants.umpireCoach}
+                            placeholder={"a"}
+                            onChange={(e) => console.log(e)}
+                        />
+                    </div>
+                </div>
             </div>
         )
     }
