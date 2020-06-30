@@ -44,7 +44,7 @@ const columnsInbox = [
         key: 'createdOn',
         width: "15%",
         render: createdOn => (
-            <span className="inbox-time-text">{moment(createdOn).format("DD-MM-YYYY HH:mm")}</span>
+            <span className="inbox-time-text">{moment(createdOn).format("DD/MM/YYYY HH:mm")}</span>
         )
     },
     {
