@@ -257,41 +257,11 @@ class CompetitionQuickCompetition extends Component {
         return (
             <div className="comp-draw-content-view mt-0 ">
                 <div className="row comp-draw-list-top-head">
-                    <div className="col-sm-3">
-                        <span className='form-heading'>{AppConstants.winter2019}</span>
-                        <div className="row"  >
-                            <div className="col-sm" style={{ marginTop: 15 }} >
-                                <InputWithHead required={"required-field pb-0 "} heading={AppConstants.venue} />
-                                {/* <Form.Item  >
-                                    {getFieldDecorator('selectedVenues', { rules: [{ required: true, message: ValidationConstants.pleaseSelectvenue }] })( */}
-                                <Select
-                                    mode="multiple"
-                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                    onChange={venueSelection => {
-                                        this.onSelectValues(venueSelection, quickCompetitionState.selectedVenues)
-                                    }}
-                                    value={quickCompetitionState.selectedVenues}
-                                    placeholder={AppConstants.selectVenue}
-                                    filterOption={false}
-                                    onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
-                                >
-                                    {appState.venueList.length > 0 && appState.venueList.map((item) => {
-                                        return (
-                                            <Option
-                                                key={item.id}
-                                                value={item.id}>
-                                                {item.name}</Option>
-                                        )
-                                    })}
-                                </Select>
-                                {/* )} */}
-                                {/* </Form.Item> */}
-                            </div>
+                    <div className="col-sm-3 "style={{display:'flex',alignItems:'center'}}>
+                        <span className='form-heading mt-2'>{AppConstants.winter2019}</span>
 
-
-                        </div>
                     </div>
-                    <div className="col-sm-8 comp-draw-edit-btn-view" >
+                    <div className="col-sm-9 comp-draw-edit-btn-view" >
                         <div className="row">
 
                             <div className="col-sm mt-2">
@@ -310,9 +280,39 @@ class CompetitionQuickCompetition extends Component {
 
                     </div>
                 </div>
+                <div className="row  ml-4">
+                    <div className="col-sm-3" >
+                        <InputWithHead required={"required-field pb-0 pt-0 "} heading={AppConstants.venue} />
+                        {/* <Form.Item  >
+                                    {getFieldDecorator('selectedVenues', { rules: [{ required: true, message: ValidationConstants.pleaseSelectvenue }] })( */}
+                        <Select
+                            mode="multiple"
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            onChange={venueSelection => {
+                                this.onSelectValues(venueSelection, quickCompetitionState.selectedVenues)
+                            }}
+                            value={quickCompetitionState.selectedVenues}
+                            placeholder={AppConstants.selectVenue}
+                            filterOption={false}
+                            onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
+                        >
+                            {appState.venueList.length > 0 && appState.venueList.map((item) => {
+                                return (
+                                    <Option
+                                        key={item.id}
+                                        value={item.id}>
+                                        {item.name}</Option>
+                                )
+                            })}
+                        </Select>
+                        {/* )} */}
+                        {/* </Form.Item> */}
+                    </div>
 
+
+                </div>
                 {this.dragableView()}
-            </div>
+            </div >
         )
     }
 
@@ -887,7 +887,7 @@ class CompetitionQuickCompetition extends Component {
                             {this.contentView(getFieldDecorator)}
                         </Content>
                         {/* </div> */}
-                        <Footer>
+                        <Footer >
                             {this.footerView()}
                         </Footer>
                     </Form>

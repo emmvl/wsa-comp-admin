@@ -142,7 +142,7 @@ import UmpireSetting from "../components/umpire/umpireSetting";
 import UmpireDivisions from "../components/umpire/umpireDivisions"
 import UmpirePoolAllocation from "../components/umpire/umpirePoolAllocation"
 import LiveScoreUmpireImport from "../components/liveScore/liveScoreUmpireImport"
-import RegisteredUser from "../components/registration/registeredUser"
+import RegistrationMainDashboard from "../components/registration/registrationMainDashboard"
 const lazyLoad = Component => {
   const lazy = props => {
     return (
@@ -749,8 +749,8 @@ class Routes extends React.Component {
         />
 
         <PrivateRoute
-          path="/registeredUser"
-          component={lazyLoad(RegisteredUser)}
+          path="/registrationDashboard"
+          component={lazyLoad(RegistrationMainDashboard)}
         />
 
         <Route path="/" component={lazyLoad(NotFound)} />

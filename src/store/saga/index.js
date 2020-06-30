@@ -163,7 +163,7 @@ import {
   getDivisionSaga, competitionFixtureSaga, updateCompetitionFixtures, updateDrawsLock
 } from './competitionManagementSaga/competitionDrawsSaga';
 
-import { regDashboardListSaga, getCompetitionSaga } from "./registrationSaga/registrationDashboardSaga"
+import { regDashboardListSaga, getCompetitionSaga, registrationMainDashboardListSaga } from "./registrationSaga/registrationDashboardSaga"
 ////Competition Dashboard Saga
 import { competitionDashboardSaga } from './competitionManagementSaga/competitionDashboardSaga';
 // import { liveScoreAddEditManagerSaga } from './liveScoreSaga/liveScoreManagerSaga';
@@ -783,4 +783,8 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_ADD_SHOP_PRODUCT_LOAD, shopProductSaga.addProductActionSaga)
 
   yield takeEvery(ApiConstants.API_LIVE_SCORE_UMPIRES_IMPORT_LOAD, liveScoreUmpiresImportSaga)
+
+  //////////////////////registration main dashboard listing owned and participate registration
+  yield takeEvery(ApiConstants.API_GET_REGISTRATION_MAIN_DASHBOARD_LISTING_LOAD, registrationMainDashboardListSaga)
+
 }
