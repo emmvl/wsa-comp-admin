@@ -15,6 +15,7 @@ import { getOnlyYearListAction } from '../../store/actions/appAction'
 import Loader from '../../customComponents/loader';
 import history from "../../util/history";
 import { getOrganisationData } from "../../util/sessionStorage";
+import moment from "moment"
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
@@ -43,7 +44,7 @@ const columnsInbox = [
         key: 'createdOn',
         width: "15%",
         render: createdOn => (
-            <span className="inbox-time-text">{createdOn}</span>
+            <span className="inbox-time-text">{moment(createdOn).format("DD-MM-YYYY HH:mm")}</span>
         )
     },
     {
