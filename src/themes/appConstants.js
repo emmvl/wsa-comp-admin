@@ -1409,7 +1409,9 @@ const AppConstants = {
   bulkScoreUpload: 'Bulk Scores Upload',
   umpireRoster: 'Umpire Roster',
   registrationDivisions: "Registration Divisions",
-  competitionEnabled: 'Competition not enabled for Integrated Umpires, Click here to enable.'
+  competitionEnabled: 'Competition not enabled for Integrated Umpires, Click here to enable.',
+  fileUploadPdf: "File Upload (File Type: PDF)",
+  link: "Link"
 };
 
 export default AppConstants;
