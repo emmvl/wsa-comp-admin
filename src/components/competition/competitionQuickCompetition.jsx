@@ -257,14 +257,12 @@ class CompetitionQuickCompetition extends Component {
         return (
             <div className="comp-draw-content-view mt-0 ">
                 <div className="row comp-draw-list-top-head">
-                    <div className="col-sm-3 "style={{display:'flex',alignItems:'center'}}>
+                    <div className="col-sm-3 " style={{ display: 'flex', alignItems: 'center' }}>
                         <span className='form-heading mt-2'>{AppConstants.winter2019}</span>
-
                     </div>
-                    <div className="col-sm-9 comp-draw-edit-btn-view" >
+                    <div className="col-sm-9" >
                         <div className="row">
-
-                            <div className="col-sm mt-2">
+                            <div className="col-sm-8 mt-2" style={{ display: "flex", justifyContent: "flex-end" }}>
                                 <Button className="open-reg-button" onClick={() => this.visibleTimeModal()} type="primary">+ {AppConstants.add_TimeSlot}</Button>
 
                                 {/* <div className="col-sm mt-1"> */}
@@ -272,12 +270,10 @@ class CompetitionQuickCompetition extends Component {
                                 {/* </div> */}
 
                             </div>
-                            <div className="col-sm mt-2">
+                            <div className="col-sm mt-2" style={{ display: "flex", justifyContent: "center" }}>
                                 <Button className="open-reg-button" type="primary" onClick={() => this.visibleDivisonModal()}>+ {AppConstants.addDivisionsAndGrades}</Button>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
                 <div className="row  ml-4">
