@@ -444,9 +444,20 @@ let AxiosApi = {
         let organisationUniqueKey = orgItem.organisationUniqueKey
         // var url = `/api/orgregistration/competitionyear/${year}`;
         var url = `/api/competitionfee/registrationWizard?organisationUniqueKey=${organisationUniqueKey}&yearId=${yearId}`;
-        return Method.dataGet(url, token);			   
-    }
+        return Method.dataGet(url, token);
+    },
 
+    ////////////get the membership fee list in registration
+    async registrationMainDashboardList(yearId) {
+        let orgItem = await getOrganisationData()
+        let organisationKey = orgItem.organisationUniqueKey
+        let body = {
+            organisationUniqueKey: organisationKey,
+            yearRefId: yearId
+        }
+        var url = `/api/homedashboard/registration`;
+        return Method.dataPost(url, token, body);
+    }
 };
 
 const Method = {

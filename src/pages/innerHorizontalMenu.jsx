@@ -165,7 +165,7 @@ class InnerHorizontalMenu extends React.Component {
                     selectedKeys={[this.props.regSelectedKey]}
                 >
                     <Menu.Item key="1">
-                        <NavLink to="/registeredUser" >
+                        <NavLink to="/registrationDashboard" >
                             <span >Dashboard</span>
                         </NavLink>
                     </Menu.Item>
