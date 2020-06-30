@@ -401,7 +401,7 @@ const AppConstants = {
   preferenceSettings: 'Preference Settings',
   addAnother: 'Add another',
   courtDetails: 'Court Details',
-  inbox: 'Inbox',
+  inbox: 'Actionbox',
   viewAll: 'View All',
   eventsToday: 'Events Today',
   competitionsOverview: 'Competitions Overview',
