@@ -78,7 +78,7 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "mobileNumber"),
     },
     {
-        title: 'Affiliate',
+        title: 'Organisation',
         dataIndex: 'linkedEntity',
         key: 'linkedEntity',
         sorter: (a, b) => tableSort(a, b, "linkedEntity"),
@@ -87,9 +87,7 @@ const columns = [
             return (
                 <div>
                     {linkedEntity.length > 0 && linkedEntity.map((item) => (
-
-                        // <span style={{ color: '#ff8237', cursor: 'pointer', display: 'flex', flexDirection: 'column' }}  >{item.name}</span>
-                        <span style={{ color: '#ff8237', cursor: 'pointer' }} className='multi-column-text-aligned' >{item.name}</span>
+                        <span className='multi-column-text-aligned' >{item.name}</span>
                     ))
                     }
                 </div>)
@@ -139,7 +137,8 @@ class Umpire extends Component {
             searchText: "",
             selectedComp: null,
             loading: false,
-            competitionUniqueKey: null
+            competitionUniqueKey: null,
+            compArray: []
         }
         this_obj = this
     }
@@ -156,7 +155,6 @@ class Umpire extends Component {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
                 let compData = compList.length > 0 && compList[0]
-
                 // let compId = JSON.parse(getUmpireCompetiton())
                 // firstComp = compId
 
@@ -171,7 +169,7 @@ class Umpire extends Component {
                         firstComp = compList[index].id
                         compData = compList[index]
                     } else {
-                     
+
                         setUmpireCompition(firstComp)
                         setUmpireCompitionData(JSON.stringify(compData))
                     }
@@ -185,7 +183,7 @@ class Umpire extends Component {
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey
                 if (firstComp !== false) {
                     this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: firstComp, offset: 0 })
-                    this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey })
+                    this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey, compArray: compList })
                 } else {
                     this.setState({ loading: false })
                 }

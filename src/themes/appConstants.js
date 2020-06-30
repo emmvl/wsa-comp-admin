@@ -1362,10 +1362,10 @@ const AppConstants = {
   umpirePrefences: "Umpire Preferences:",
   noOfMatches: 'Number of Matches they can ',
   timeBetweenUmpireMatch: 'Time between Umpiring Matches',
-  umpireReservePref: 'Umpire Reserve Preferences:',
+  umpireReservePref: 'Umpire Reserve',
   reserveAllocationTiming: 'Reserve Allocation timing',
   umpireCoach: "Umpire Coach:",
-  activeUmpireCoach: "Active Umpire Coach",
+  activeUmpireCoach: "Activate Umpire Coaches",
   umpirePoolsDivision: "Umpire Pools Allocation To Divisions/Grades",
   allocatePools: "Allocate Pools To",
   badgeAA: "Badge AA",
@@ -1409,7 +1409,11 @@ const AppConstants = {
   bulkScoreUpload: 'Bulk Scores Upload',
   umpireRoster: 'Umpire Roster',
   registrationDivisions: "Registration Divisions",
-  competitionEnabled: 'Competition not enabled for Integrated Umpires, Click here to enable.'
+  competitionEnabled: 'Competition not enabled for Integrated Umpires, Click here to enable.',
+  activeUmpireReserves: "Activate Umpire reserves",
+  simultaneousMatchAllocations: "Simultaneous match allocations",
+  poolName: "Pool Name",
+  umpireReserve: "Umpire Reserve"
 };
 
 export default AppConstants;
