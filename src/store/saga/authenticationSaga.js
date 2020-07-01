@@ -10,7 +10,7 @@ export function* loginApiSaga(action) {
     const result = yield call(userAxiosApi.Login, action.payload);
     if (result.status === 1) {
       yield put({
-        type: ApiConstants.API_LOGIN_SUCCESS,
+        type: result.result.data.authToken ? ApiConstants.API_QR_CODE_SUCCESS : ApiConstants.API_LOGIN_SUCCESS,
         result: result.result.data,
         status: result.status,
         loginData: action
