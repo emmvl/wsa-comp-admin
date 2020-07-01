@@ -359,7 +359,7 @@ class UserOurOragnization extends Component {
                                 affiliate.organisationLogoId = 0;
                             }
                             formData.append("email", affiliate.email);
-                            formData.append("organisationLogo", this.state.image!= null ? this.state.image : "");
+                            formData.append("organisationLogo", this.state.image);
                             formData.append("organisationLogoId", affiliate.organisationLogoId);
                             formData.append("affiliateId", affiliate.affiliateId);
                             formData.append("affiliateOrgId", affiliate.affiliateOrgId)
@@ -380,6 +380,7 @@ class UserOurOragnization extends Component {
                             formData.append("termsAndConditionsRefId", affiliate.termsAndConditionsRefId);
                             formData.append("termsAndConditions", affiliate.termsAndConditions);
                             formData.append("organisationLogo", this.state.termsAndCondititionFile);
+                            formData.append("termsAndConditionId", this.state.termsAndCondititionFile == null ? 1 : 0);
 
                             this.setState({ loading: true });
 
@@ -932,7 +933,7 @@ class UserOurOragnization extends Component {
                             </label>
                             <div className="pt-4">
                                 <div className="row">
-                                    <div className="col-sm">
+                                    <div className="col-sm"  style={{whiteSpace: 'break-spaces'}}>
                                         <a className="userRegLink" href={affiliate.termsAndConditions} target='_blank' >
                                             {affiliate.termsAndConditions}
                                         </a>

@@ -161,7 +161,7 @@ class UserEditAffiliates extends Component {
         }
 
         if(key == "termsAndConditionsRefId"){
-            this.props.updateOrgAffiliateAction(null, "termsAndConditions");
+            this.props.updateAffiliateAction(null, "termsAndConditions");
         }
         this.props.updateAffiliateAction(val,key);
     }
@@ -310,6 +310,7 @@ class UserEditAffiliates extends Component {
                             affiliate.organisationId = this.state.organisationId;
                         }
                         formData.append("organisationLogo", null);
+                        formData.append("organisationLogoId", 1);
                         formData.append("affiliateId", affiliate.affiliateId);
                         formData.append("affiliateOrgId", affiliate.affiliateOrgId)
                         formData.append("organisationTypeRefId", affiliate.organisationTypeRefId)
@@ -328,7 +329,7 @@ class UserEditAffiliates extends Component {
                         formData.append("termsAndConditionsRefId", affiliate.termsAndConditionsRefId);
                         formData.append("termsAndConditions", affiliate.termsAndConditions);
                         formData.append("organisationLogo", this.state.termsAndCondititionFile);
-        
+                        formData.append("termsAndConditionId", this.state.termsAndCondititionFile == null ? 1 : 0);
                         console.log("Req Body ::" + JSON.stringify(affiliate));
                         this.setState({ loading: true });
                         this.props.saveAffiliateAction(formData);
@@ -674,7 +675,7 @@ class UserEditAffiliates extends Component {
                             </label>
                             <div className="pt-4">
                                 <div className="row">
-                                    <div className="col-sm">
+                                    <div className="col-sm" style={{whiteSpace: 'break-spaces'}}>
                                         <a className="userRegLink" href={affiliate.termsAndConditions} target='_blank' >
                                             {affiliate.termsAndConditions}
                                         </a>
