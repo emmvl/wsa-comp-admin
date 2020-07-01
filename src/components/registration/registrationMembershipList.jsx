@@ -258,6 +258,7 @@ class RegistrationMembershipList extends Component {
                         dataSource={registrationState.regMembershipFeeListData}
                         pagination={false}
                         loading={this.props.registrationState.onLoad == true && true}
+                        rowKey={(record, index) => record.membershipProductId + index}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
