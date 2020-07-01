@@ -117,13 +117,7 @@ const columns_Invite = [
 
                 umpires ?
                     umpires[0] ?
-
-                        // <NavLink to={{
-                        //     pathname: '/userPersonal',
-                        //     state: { userId: umpires[0].matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" }
-                        // }}>
                         <span style={{ color: validateColor(umpires[0]) }} onClick={() => this_obj.checkUserIdUmpire(record.umpires[0])} >{umpires[0].umpireName}</span>
-                        // </NavLink>
                         :
                         <span>{''}</span>
                     :
@@ -150,7 +144,6 @@ const columns_Invite = [
                                 isArrayNotEmpty(umpires[0].organisations) && umpires[0].organisations.map((item) => (
                                     <span className='multi-column-text-aligned' >{item.name}</span>
                                 ))
-
                                 :
                                 <span>{''}</span>
                             :
@@ -167,21 +160,13 @@ const columns_Invite = [
         sorter: (a, b) => tableSort(a, b, "umpires"),
         render: (umpires, record) => {
             return (
-
                 umpires ?
                     umpires[1] ?
-                        // <NavLink to={{
-                        //     pathname: '/userPersonal',
-                        //     state: { userId: umpires[1].matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" }
-                        // }}>
                         <span style={{ color: validateColor(umpires[1]) }} onClick={() => this_obj.checkUserIdUmpire(record.umpires[1])} >{umpires[1].umpireName}</span>
-                        // </NavLink>
-
                         :
                         <span>{''}</span>
                     :
                     <span>{''}</span>
-
             )
         }
     },
@@ -210,6 +195,13 @@ const columns_Invite = [
         }
     },
     {
+        title: 'Verified By',
+        dataIndex: 'umpires',
+        key: 'umpires',
+        sorter: (a, b) => tableSort(a, b, "umpires"),
+        render: (umpires, record) => <span className='multi-column-text-aligned'>{isArrayNotEmpty(record.umpires) ? record.umpires[0].verifiedBy : ""}</span>
+    },
+    {
         title: "Action",
         dataIndex: 'umpires',
         key: 'umpires',
@@ -226,7 +218,6 @@ const columns_Invite = [
                     <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                 }
             >
-
                 <Menu.Item key="3" >
                     <NavLink to={{
                         pathname: "./addUmpire",
@@ -235,7 +226,6 @@ const columns_Invite = [
                         <span >Invite</span>
                     </NavLink>
                 </Menu.Item>
-
                 {
                     umpires ?
                         umpires[0] ?
@@ -423,6 +413,13 @@ const columns = [
         }
     },
     {
+        title: 'Verified By',
+        dataIndex: 'umpires',
+        key: 'umpires',
+        sorter: (a, b) => tableSort(a, b, "umpires"),
+        render: (umpires, record) => <span className='multi-column-text-aligned'>{isArrayNotEmpty(record.umpires) ? record.umpires[0].verifiedBy : ""}</span>
+    },
+    {
         title: "Action",
         dataIndex: 'umpires',
         key: 'umpires',
@@ -439,16 +436,6 @@ const columns = [
                     <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                 }
             >
-
-                {/* <Menu.Item key="3" >
-                    <NavLink to={{
-                        pathname: "./addUmpire",
-                        state: { record: record, screenName: 'umpireDashboard' }
-                    }}>
-                        <span >Invite</span>
-                    </NavLink>
-                </Menu.Item> */}
-
                 {
                     umpires ?
                         umpires[0] ?
@@ -530,7 +517,7 @@ class UmpireDashboard extends Component {
                         firstComp = compId
                         let compObj = JSON.parse(getLiveScoreUmpireCompitionData())
                         compData = compObj
-                        
+
                         setUmpireCompition(firstComp)
                         setUmpireCompitionData(JSON.stringify(compData))
 
@@ -964,19 +951,19 @@ class UmpireDashboard extends Component {
 
                     </div>
                     {
-                        umpireType && umpireType !== 'USERS' ? 
-                        <div>
-                            <NavLink to={{
-                                pathname: '/liveScoreSettingsView',
-                                state: { selectedComp: this.state.selectedComp, screenName: 'umpireDashboard', edit: 'edit' }
-                            }}>
-                                <span class="input-heading-add-another pt-0">
-                                    {AppConstants.competitionEnabled}
-                                </span>
-                            </NavLink>
-                        </div>
-                        :
-                        <></>
+                        umpireType && umpireType !== 'USERS' ?
+                            <div>
+                                <NavLink to={{
+                                    pathname: '/liveScoreSettingsView',
+                                    state: { selectedComp: this.state.selectedComp, screenName: 'umpireDashboard', edit: 'edit' }
+                                }}>
+                                    <span class="input-heading-add-another pt-0">
+                                        {AppConstants.competitionEnabled}
+                                    </span>
+                                </NavLink>
+                            </div>
+                            :
+                            <></>
                     }
 
 

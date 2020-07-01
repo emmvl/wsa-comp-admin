@@ -12,7 +12,7 @@ import { isArrayNotEmpty } from "../../util/helpers";
 import { umpireRoasterListAction, umpireRoasterOnActionClick } from "../../store/actions/umpireAction/umpirRoasterAction"
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { refRoleTypes } from '../../util/refRoles'
-import { setUmpireCompId, getUmpireCompId, getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData } from '../../util/sessionStorage'
+import { getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData } from '../../util/sessionStorage'
 import moment, { utc } from "moment";
 import ValidationConstants from "../../themes/validationConstant";
 import history from "../../util/history";
@@ -39,7 +39,6 @@ const columns = [
         key: 'First Name',
         sorter: (a, b) => tableSort(a, b, 'user'),
         render: (firstName, record) =>
-
             <span className="input-heading-add-another pt-0" onClick={() => this_obj.checkUserId(record)}>{record.user.firstName}</span>
     },
     {
@@ -57,7 +56,6 @@ const columns = [
         key: 'Organisation',
         sorter: (a, b) => a.user.length - b.user.length,
         render: (user, record) => {
-
             return (
                 <div>
                     {record.user.userRoleEntities.length > 0 && record.user.userRoleEntities.map((item) => (
@@ -72,11 +70,6 @@ const columns = [
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: (a, b) => tableSort(a, b, "matchId"),
-        // render: (matchId) => <NavLink to={{
-        //     pathname: '/liveScoreMatchDetails',
-        //     state: { matchId: matchId, key: 'umpireRoster' }
-        // }} >
-
         render: (matchId) => {
             return (
                 <NavLink to={{
@@ -102,13 +95,6 @@ const columns = [
         dataIndex: 'status',
         key: 'status',
         sorter: (a, b) => tableSort(a, b, "status"),
-    },
-    {
-        title: 'Verified By',
-        dataIndex: 'verifiedBy',
-        key: 'verifiedBy',
-        sorter: (a, b) => tableSort(a, b, "verifiedBy"),
-        // render: (user, record) => <span className="input-heading-add-another pt-0" onClick={() => this_obj.checkUserId(record)}>{record.user.firstName + " " + record.user.lastName}</span>
     },
     {
         title: "Action",
@@ -307,9 +293,6 @@ class UmpireRoaster extends Component {
 
     onChangeComp(compID) {
         let selectedComp = compID.comp
-        // setUmpireCompId(selectedComp)
-
-
         let compObj = null
         for (let i in this.state.compArray) {
             if (compID.comp == this.state.compArray[i].id) {
@@ -355,15 +338,7 @@ class UmpireRoaster extends Component {
 
     // on Export
     onExport() {
-
         let url = AppConstants.rosterExport + `competitionId=${this.state.selectedComp}&roleId=${15}`
-
-        // if(this.state.status=='All'){
-
-        //     url = `/roster/export/umpire?competitionId=${this.state.selectedComp}&roleId=${15}`
-        // }else{
-        //     url = `/roster/export/umpire?competitionId=${this.state.selectedComp}&status=${this.state.status}&roleId=${15}`
-        // }
         this.props.exportFilesAction(url)
     }
 

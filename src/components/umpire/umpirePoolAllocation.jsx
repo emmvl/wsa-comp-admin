@@ -38,21 +38,18 @@ class UmpirePoolAllocation extends Component {
             assignedData: [
                 {
                     teamId: 112, teamName: "a", playerCount: 0, isChecked: false, gradeRefId: null, players: [
-                        { playerId: 1, playerName: "Jhon", Badge: "Badge A", years: "2 Years", matches: "3005", isCommentsAvailable: 1 },
-                        { playerId: 2, playerName: "Mike Martin", Badge: "Unbadged", years: "9 Years", matches: "2005", isCommentsAvailable: 0 },
+                        { playerId: 1, playerName: "Jhon", Badge: "Badge A", years: "2 Years", matches: "3005", rank: 1 },
+
                     ]
                 },
-                {
-                    teamId: 114, teamName: "b", playerCount: 0, isChecked: false, gradeRefId: null, position1: null, position2: null, isCommentsAvailable: 0, players: [
-                        { playerId: 3, playerName: "Test", Badge: "Badge D", years: "7 Years", matches: "4005", },
-                        { playerId: 4, playerName: "Johny", Badge: "Badge L", years: "3 Years", matches: "1005", isCommentsAvailable: 1 },
-                    ]
-                },
+                // {
+                //     teamId: 114, teamName: "b", playerCount: 0, isChecked: false, gradeRefId: null, position1: null, position2: null, isCommentsAvailable: 0, players: [
+                //     ]
+                // },
             ],
 
             unassignedData: [
-                { playerId: 5, playerName: "Kristn", Badge: "Badge F", years: "1 Years", matches: "905", isCommentsAvailable: 0 },
-                { playerId: 6, playerName: "Adom Crish", Badge: "Badge O", years: "4 Years", matches: "2519", isCommentsAvailable: 1 },
+                { playerId: 5, playerName: "Kristn", Badge: "Badge F", years: "1 Years", matches: "905", rank: 2 },
             ]
 
         }
@@ -319,11 +316,12 @@ class UmpirePoolAllocation extends Component {
                                 >
                                     <div className="player-grading-droppable-heading-view" >
                                         <div className="row" >
-                                            {/* <Checkbox
+                                            <Checkbox
                                                 className="single-checkbox mt-1 check-box-player"
-                                                checked={teamItem.isChecked}
+                                                checked={this.state.assignedcheckbox}
+                                                onChange={(e) => this.setState({ assignedcheckbox: e.target.checked })}
                                             >
-                                            </Checkbox> */}
+                                            </Checkbox>
                                             <div className="col-sm d-flex align-items-center">
                                                 <span className="player-grading-haeding-team-name-text">{teamItem.teamName}</span>
                                                 <span className="player-grading-haeding-player-count-text ml-2">
@@ -357,25 +355,25 @@ class UmpirePoolAllocation extends Component {
                                                             className="player-grading-draggable-view"
                                                         >
                                                             <div className="row" >
-                                                                {/* <Checkbox
-                                                                    checked={playerItem.isChecked}
-                                                                    className="single-checkbox mt-1 check-box-player"
-                                                                // onChange={e => this.onChangeChildDivCheckbox(e.target.checked, teamIndex, playerIndex, "assigned")}
+                                                                <Checkbox
+                                                                    checked={this.state.assignedcheckbox}
+                                                                    className="single-checkbox mt-0 check-box-player"
+                                                                    onChange={(e) => this.setState({ assignedcheckbox: e.target.checked })}
                                                                 >
-                                                                </Checkbox> */}
-                                                                <div className="col-sm d-flex justify-content-flex-start"  >
+                                                                </Checkbox>
+                                                                <div className="col-sm d-flex justify-content-flex-start align-items-center"  >
                                                                     <span style={{ cursor: "pointer" }}
-                                                                        className="player-grading-haeding-player-name-text">{playerItem.playerName}</span>
+                                                                        className="player-grading-haeding-player-name-text">{playerItem.rank}{" "}{playerItem.playerName}</span>
                                                                 </div>
-                                                                <div className="col-sm d-flex justify-content-center"  >
+                                                                <div className="col-sm d-flex justify-content-center align-items-center"  >
                                                                     <span style={{ cursor: "pointer" }}
                                                                         className="player-grading-haeding-player-name-text">{playerItem.Badge}</span>
                                                                 </div>
-                                                                <div className="col-sm d-flex justify-content-center"  >
+                                                                <div className="col-sm d-flex justify-content-center align-items-center"  >
                                                                     <span style={{ cursor: "pointer" }}
                                                                         className="player-grading-haeding-player-name-text">{playerItem.years}</span>
                                                                 </div>
-                                                                <div className="col-sm d-flex justify-content-center"  >
+                                                                <div className="col-sm d-flex justify-content-center align-items-center"  >
                                                                     <span style={{ cursor: "pointer" }}
                                                                         className="player-grading-haeding-player-name-text">{playerItem.matches}</span>
                                                                 </div>
@@ -437,10 +435,12 @@ class UmpirePoolAllocation extends Component {
                             className="player-grading-droppable-view">
                             <div className="player-grading-droppable-heading-view">
                                 <div className="row" >
-                                    {/* <Checkbox
+                                    <Checkbox
                                         className="single-checkbox mt-1 check-box-player"
-                                        checked={unassignedData.isChecked}>
-                                    </Checkbox> */}
+                                        checked={this.state.unassignedcheckbox}
+                                        onChange={(e) => this.setState({ unassignedcheckbox: e.target.checked })}
+                                    >
+                                    </Checkbox>
                                     <div className="col-sm d-flex align-items-center"  >
                                         <span className="player-grading-haeding-team-name-text">{AppConstants.unassigned}</span>
                                         <span className="player-grading-haeding-player-count-text ml-2">
@@ -470,23 +470,24 @@ class UmpirePoolAllocation extends Component {
                                             className="player-grading-draggable-view">
 
                                             <div className="row" >
-                                                {/* <Checkbox
-                                                    checked={playerItem.isChecked}
-                                                    className="single-checkbox mt-1 check-box-player" >
-                                                </Checkbox> */}
-                                                <div className="col-sm d-flex justify-content-flex-start"  >
+                                                <Checkbox
+                                                    checked={this.state.unassignedcheckbox}
+                                                    onChange={(e) => this.setState({ unassignedcheckbox: e.target.checked })}
+                                                    className="single-checkbox mt-0 check-box-player" >
+                                                </Checkbox>
+                                                <div className="col-sm d-flex justify-content-flex-start align-items-center"  >
                                                     <span style={{ cursor: "pointer" }}
-                                                        className="player-grading-haeding-player-name-text">{playerItem.playerName}</span>
+                                                        className="player-grading-haeding-player-name-text">{playerItem.rank}{" "}{playerItem.playerName}</span>
                                                 </div>
-                                                <div className="col-sm d-flex justify-content-center"  >
+                                                <div className="col-sm d-flex justify-content-center align-items-center"  >
                                                     <span style={{ cursor: "pointer" }}
                                                         className="player-grading-haeding-player-name-text">{playerItem.Badge}</span>
                                                 </div>
-                                                <div className="col-sm d-flex justify-content-center"  >
+                                                <div className="col-sm d-flex justify-content-center align-items-center"  >
                                                     <span style={{ cursor: "pointer" }}
                                                         className="player-grading-haeding-player-name-text">{playerItem.years}</span>
                                                 </div>
-                                                <div className="col-sm d-flex justify-content-center"  >
+                                                <div className="col-sm d-flex justify-content-center align-items-center"  >
                                                     <span style={{ cursor: "pointer" }}
                                                         className="player-grading-haeding-player-name-text">{playerItem.matches}</span>
                                                 </div>
