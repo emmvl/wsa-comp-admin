@@ -917,4 +917,19 @@ align-items: flex-end;
   font-weight: 500;
   font-family: inter-medium;
 }
- 
+
+.qr-code-form {
+  width: 60%;
+  margin: 0 auto;
+  padding: 0 20px 20px;
+}
+
+.qr-code-form p {
+  font-weight: bold;
+}
+
+.qr-code-form input {
+  width: 100%;
+  margin-bottom: 20px;
+  text-align: center;
+}

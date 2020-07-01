@@ -1,5 +1,5 @@
-import { takeEvery, takeLatest } from "redux-saga/effects";
-import { loginApiSaga, forgotPasswordSaga } from "./authenticationSaga";
+import { takeEvery } from "redux-saga/effects";
+import { loginApiSaga, qrApiSaga, forgotPasswordSaga } from "./authenticationSaga";
 
 import ApiConstants from "../../themes/apiConstants";
 import {
@@ -195,6 +195,7 @@ import * as assignUmpireSaga from "../saga/umpireSaga/assignUmpireSaga";
 
 export default function* root_saga() {
   yield takeEvery(ApiConstants.API_LOGIN_LOAD, loginApiSaga);
+  yield takeEvery(ApiConstants.API_QR_CODE_LOAD, qrApiSaga);
   yield takeEvery(ApiConstants.API_ROLE_LOAD, userSaga.getRoleSaga);
   yield takeEvery(ApiConstants.API_URE_LOAD, userSaga.getUreSaga);
   yield takeEvery(ApiConstants.API_REG_COMPETITION_LIST_LOAD, regCompetitionFeeListSaga);
