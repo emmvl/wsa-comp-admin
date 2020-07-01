@@ -13,7 +13,7 @@ class InputWithHead extends React.Component {
                     <span className={`input-heading ${this.props.required}`}>{heading}</span>
                     {
                         conceptulHelp &&
-                        <div className='Content_Cancel__VinjW_withCrossBtn' style={{ marginTop: marginTop }}>
+                        <div className={`Content_Cancel__VinjW_withCrossBtn ${this.props.tooltiprequired}`} style={{ marginTop: marginTop }}>
                             <Tooltip background='#ff8237'>
                                 <span>{conceptulHelpMsg}</span>
                             </Tooltip>

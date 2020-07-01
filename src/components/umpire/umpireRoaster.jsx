@@ -36,7 +36,7 @@ const columns = [
     {
         title: 'First Name',
         dataIndex: 'user',
-        key: 'user',
+        key: 'First Name',
         sorter: (a, b) => tableSort(a, b, 'user'),
         render: (firstName, record) =>
 
@@ -45,23 +45,23 @@ const columns = [
     {
         title: 'Last Name',
         dataIndex: 'user',
-        key: 'user',
+        key: 'Last Name',
         sorter: (a, b) => tableSort(a, b, "user"),
         render: (lastName, record) =>
 
             <span className="input-heading-add-another pt-0" onClick={() => this_obj.checkUserId(record)}>{record.user.lastName}</span>
     },
     {
-        title: 'Affiliate',
+        title: 'Organisation',
         dataIndex: 'user',
-        key: 'user',
+        key: 'Organisation',
         sorter: (a, b) => a.user.length - b.user.length,
         render: (user, record) => {
 
             return (
                 <div>
                     {record.user.userRoleEntities.length > 0 && record.user.userRoleEntities.map((item) => (
-                        <span className='multi-column-text-aligned'>{item.organisation.name}</span>
+                        <span key={"userRoleEntities" + item.organisation.id} className='multi-column-text-aligned'>{item.organisation.name}</span>
                     ))
                     }
                 </div>)
@@ -92,7 +92,7 @@ const columns = [
     {
         title: 'Start Time',
         dataIndex: 'match',
-        key: 'match',
+        key: 'Start Time',
         sorter: (a, b) => tableSort(a, b, "match"),
         render: (startTime, record) =>
             <span >{moment(record.match.startTime).format("DD/MM/YYYY HH:mm")}</span>
@@ -277,7 +277,8 @@ class UmpireRoaster extends Component {
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={umpireListResult}
-                        pagination={false} />
+                        pagination={false}
+                        rowKey={(record, index) => record.id + index} />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
                     <div
@@ -363,7 +364,6 @@ class UmpireRoaster extends Component {
         // }else{
         //     url = `/roster/export/umpire?competitionId=${this.state.selectedComp}&status=${this.state.status}&roleId=${15}`
         // }
-        console.log(url, "ertyu")
         this.props.exportFilesAction(url)
     }
 
@@ -457,7 +457,7 @@ class UmpireRoaster extends Component {
                             >
                                 {
                                     competition.map((item) => {
-                                        return <Option value={item.id}>{item.longName}</Option>
+                                        return <Option key={"competition" + item.id} value={item.id}>{item.longName}</Option>
                                     })
                                 }
 
