@@ -14,6 +14,7 @@ import {getliveScoreTeams} from '../../store/actions/LiveScoreAction/liveScoreTe
 import Loader from '../../customComponents/loader';
 import InputWithHead from '../../customComponents/InputWithHead';
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
+import LiveScoreMatchSheetPreviewModal from './matchsheets/LiveScoreMatchSheetPreviewModal';
 
 import './liveScore.css';
 
@@ -37,6 +38,7 @@ class LiveScoreMatchSheet extends Component {
             onDivisionLoad: false,
             teamLoad: false,
             teamsList: [],
+            showPreview: false,
         };
     }
 
@@ -88,6 +90,18 @@ class LiveScoreMatchSheet extends Component {
         }
     }
 
+    showPreview = (show) => {
+        this.setState({showPreview: show});
+    };
+
+    handleModalOk = () => {
+        this.showPreview(false);
+    };
+
+    handleModalCancel = () => {
+        this.showPreview(false);
+    };
+
     onChange = (e) => {
         this.setState({
             value: e.target.value,
@@ -115,7 +129,7 @@ class LiveScoreMatchSheet extends Component {
         });
     }
 
-    /// ////view for breadcrumb
+    /// view for breadcrumb
     headerView = () => (
         <Header className="comp-venue-courts-header-view">
             <div className="row">
@@ -166,7 +180,7 @@ class LiveScoreMatchSheet extends Component {
         );
     };
 
-    /// /////form content view
+    /// form content view
     contentView = () => {
         const {liveScoreMatchSheetState} = this.props;
         const division = isArrayNotEmpty(liveScoreMatchSheetState.allDivisionData)
@@ -246,15 +260,26 @@ class LiveScoreMatchSheet extends Component {
         );
     };
 
-    /// ///footer view containing all the buttons like submit and cancel
+    /// footer view containing all the buttons like submit and cancel
     footerView = () => (
         <div className="fluid-width">
             <div className="footer-view">
                 <div className="row">
                     <div className="col-sm">
                         <div style={{display: 'flex', justifyContent: 'flex-end'}}>
-                            <Button className="save-draft-text" type="save-draft-text">{AppConstants.preview}</Button>
-                            <Button className="open-reg-button" type="primary">{AppConstants.print}</Button>
+                            <Button
+                                className="save-draft-text"
+                                type="save-draft-text"
+                                onClick={() => this.showPreview(true)}
+                            >
+                                {AppConstants.preview}
+                            </Button>
+                            <Button
+                                className="open-reg-button"
+                                type="primary"
+                            >
+                                {AppConstants.print}
+                            </Button>
                         </div>
                     </div>
                 </div>
@@ -280,12 +305,18 @@ class LiveScoreMatchSheet extends Component {
                         {this.footerView()}
                     </Footer>
                 </Layout>
+                <LiveScoreMatchSheetPreviewModal
+                    visible={this.state.showPreview}
+                    modalTitle="LiveScores Match Sheet"
+                    handleOK={this.handleModalOk}
+                    onCancel={this.handleModalCancel}
+                />
             </div>
         );
     }
 }
 
-// export default CompetitionMatchSheets;
+// export default LiveScoreMatchSheet;
 function mapDispatchtoprops(dispatch) {
     return bindActionCreators({
         fixtureCompetitionListAction,
