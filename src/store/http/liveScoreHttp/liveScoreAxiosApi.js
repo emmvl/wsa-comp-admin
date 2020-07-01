@@ -151,14 +151,23 @@ let LiveScoreAxiosApi = {
     // },
 
     liveScoreLadderList(divisionId, competitionID, compKey) {
-        var url = null
-        if (compKey) {
-            url = `/teams/ladder?divisionIds=${divisionId}&competitionKey=${compKey}`;
-        } else {
-            url = `/teams/ladder?divisionIds=${divisionId}&competitionIds=${competitionID}`;
-        }
+        //var url = null
+        // if (compKey) {
+        //     url = `/teams/ladder?divisionIds=${divisionId}&competitionKey=${compKey}`;
+        // } else {
+        //     url = `/teams/ladder?divisionIds=${divisionId}&competitionIds=${competitionID}`;
+        // }
 
-        return Method.dataGet(url, localStorage.token)
+        // return Method.dataGet(url, localStorage.token)
+
+        let payload = {
+            competitionId: compKey,
+            divisionId: divisionId
+        }
+        let url = `/teams/ladder`
+        return Method.dataPost(url, localStorage.token, payload)
+
+
     },
 
     liveScoreMatchList(competitionID, start, offset, search, divisionId, roundName) {

@@ -156,10 +156,10 @@ class LiveScoreLadderList extends Component {
     componentDidUpdate(nextProps){
         if(nextProps.liveScoreLadderState.liveScoreLadderDivisionData !== this.props.liveScoreLadderState.liveScoreLadderDivisionData){
             if(this.state.loadding == true && this.props.liveScoreLadderState.onLoad == false){
-                const { id } = JSON.parse(getLiveScoreCompetiton())
+                const { id, uniqueKey } = JSON.parse(getLiveScoreCompetiton())
                 let divisionArray = this.props.liveScoreLadderState.liveScoreLadderDivisionData
                 let divisionId  = isArrayNotEmpty(divisionArray)? divisionArray[0].id : null
-                this.props.liveScoreLaddersListAction(id, divisionId)
+                this.props.liveScoreLaddersListAction(id, divisionId, uniqueKey)
                 this.setState({loadding : false})
             }
         }
@@ -170,9 +170,9 @@ class LiveScoreLadderList extends Component {
     divisionChange = (value) => {
 
         // let competitionID = getCompetitonId()
-        const { id } = JSON.parse(getLiveScoreCompetiton())
+        const { id, uniqueKey } = JSON.parse(getLiveScoreCompetiton())
         // this.props.liveScoreLaddersListAction(competitionID, value.division)
-        this.props.liveScoreLaddersListAction(id, value.division)
+        this.props.liveScoreLaddersListAction(id, value.division, uniqueKey)
     }
     ///dropdown view containing dropdown
     dropdownView = () => {
