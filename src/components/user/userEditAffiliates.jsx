@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Select, Form, Modal, message } from 'antd';
+import { Layout, Breadcrumb, Button, Select, Form, Modal, message,Radio } from 'antd';
 import './user.css';
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -36,8 +36,9 @@ class UserEditAffiliates extends Component {
             currentIndex: 0,
             organisationName: "",
             isSameUserEmailId: "",
-            isSameUserEmailChanged: false
-
+            isSameUserEmailChanged: false,
+            termsAndCondititionFile: null,
+            termAndConditionTemp: null
         }
         this.props.getCommonRefData();
         //this.props.getUreAction();
@@ -158,6 +159,10 @@ class UserEditAffiliates extends Component {
                     })
                 }
         }
+
+        if(key == "termsAndConditionsRefId"){
+            this.props.updateOrgAffiliateAction(null, "termsAndConditions");
+        }
         this.props.updateAffiliateAction(val,key);
     }
 
@@ -274,6 +279,10 @@ class UserEditAffiliates extends Component {
         
         this.props.updateAffiliateAction(contacts,"contacts");
     };
+
+    handleForce = data => {
+        this.setState({ termsAndCondititionFile: data.target.files[0]})
+    };
     
     saveAffiliate = (e) => {
         e.preventDefault();
@@ -300,7 +309,7 @@ class UserEditAffiliates extends Component {
                             affiliate.affiliatedToOrgId = this.state.organisationId;
                             affiliate.organisationId = this.state.organisationId;
                         }
-                       // formData.append("organisationLogo", null);
+                        formData.append("organisationLogo", null);
                         formData.append("affiliateId", affiliate.affiliateId);
                         formData.append("affiliateOrgId", affiliate.affiliateOrgId)
                         formData.append("organisationTypeRefId", affiliate.organisationTypeRefId)
@@ -316,6 +325,9 @@ class UserEditAffiliates extends Component {
                         formData.append("stateRefId", affiliate.stateRefId);
                         formData.append("whatIsTheLowestOrgThatCanAddChild", affiliate.whatIsTheLowestOrgThatCanAddChild);
                         formData.append("contacts", contacts);
+                        formData.append("termsAndConditionsRefId", affiliate.termsAndConditionsRefId);
+                        formData.append("termsAndConditions", affiliate.termsAndConditions);
+                        formData.append("organisationLogo", this.state.termsAndCondititionFile);
         
                         console.log("Req Body ::" + JSON.stringify(affiliate));
                         this.setState({ loading: true });
@@ -632,6 +644,60 @@ class UserEditAffiliates extends Component {
         )
     }
 
+    termsAndConditionsView = (getFieldDecorator) => {
+        let affiliate = this.props.userState.affiliateEdit;
+        return (
+            <div className="discount-view pt-5">
+                <span className="form-heading">{AppConstants.termsAndConditions}</span>
+                <Radio.Group
+                    className="reg-competition-radio"
+                    onChange={(e) => this.onChangeSetValue(e.target.value, "termsAndConditionsRefId")}
+                    value={affiliate.termsAndConditionsRefId}>
+                    <Radio value={2}>{AppConstants.fileUploadPdf}</Radio>
+                        {affiliate.termsAndConditionsRefId == 2 && 
+                        <div className=" pl-5 pb-5 pt-4">
+                           
+                            <label className="pt-2">
+                                <input
+                                    type="file"
+                                    id="teamImport"
+                                    ref={(input) => { this.filesInput = input }}
+                                    name="file"
+                                    icon='file text outline'
+                                    iconPosition='left'
+                                    label='Upload PDF'
+                                    labelPosition='right'
+                                    placeholder='UploadPDF...'
+                                    onChange={this.handleForce}
+                                    accept=".pdf"
+                                />
+                            </label>
+                            <div className="pt-4">
+                                <div className="row">
+                                    <div className="col-sm">
+                                        <a className="userRegLink" href={affiliate.termsAndConditions} target='_blank' >
+                                            {affiliate.termsAndConditions}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    <Radio value={1}>{AppConstants.link}</Radio>
+                    {affiliate.termsAndConditionsRefId == 1 && 
+                        <div className=" pl-5 pb-5">
+                        <InputWithHead  placeholder={AppConstants.termsAndConditions}
+                            value={affiliate.termsAndConditions}
+                            onChange={(e) => this.onChangeSetValue(e.target.value, "termsAndConditions")}
+                            />
+                        </div>
+                    }
+                </Radio.Group>
+               
+            </div >
+        )
+    }
+
     deleteConfirmModalView = () => {
         return (
            <div>
@@ -691,6 +757,9 @@ class UserEditAffiliates extends Component {
                             </div>
                             <div className="formView" >
                                 {this.contacts(getFieldDecorator)}
+                            </div>
+                            <div className="formView" >
+                                {this.termsAndConditionsView(getFieldDecorator)}
                             </div>
                             <Loader visible={userState.onLoad} />
                         </Content>
