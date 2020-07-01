@@ -933,7 +933,7 @@ class UserOurOragnization extends Component {
                             </label>
                             <div className="pt-4">
                                 <div className="row">
-                                    <div className="col-sm">
+                                    <div className="col-sm"  style={{whiteSpace: 'break-spaces'}}>
                                         <a className="userRegLink" href={affiliate.termsAndConditions} target='_blank' >
                                             {affiliate.termsAndConditions}
                                         </a>
