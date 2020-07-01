@@ -603,7 +603,7 @@ class LiveScoreSettingsView extends Component {
                             value={this.props.liveScoreSetting.form.attendanceRecordingPeriod}
                         // value={this.props.liveScoreSetting.form.attendanceRecordingPeriod}
                         >
-                            <Option value={"PEROID"}>{'Period'}</Option>
+                            <Option value={"PERIOD"}>{'Period'}</Option>
                             <Option value={"MINUTE"}>{'Minute'}</Option>
                             <Option value={"MATCH"}>{'Games'}</Option>
 

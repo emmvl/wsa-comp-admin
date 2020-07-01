@@ -750,7 +750,7 @@ function liveScoreMatchReducer(state = initialState, action) {
                 onLoad: true
             }
         case ApiConstants.BULK_SCORE_UPDATE_SUCCESS:
-          
+            state.liveScoreBulkScoreList =  state.liveScoreMatchListData
             return {
                 ...state,
                 onLoad: false,
