@@ -1,8 +1,7 @@
 import axios from "axios";
 
 const competitionManagementHttp = axios.create({
-
-    baseURL: "https://competition-api-dev.worldsportaction.com",
+    baseURL: process.env.REACT_APP_COMPETITION_MANAGEMENT_API_URL,
 });
 competitionManagementHttp.defaults.timeout = 180000;
 
