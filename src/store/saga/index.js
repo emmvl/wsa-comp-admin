@@ -111,7 +111,8 @@ import {
   venueByIdSaga, venueDeleteSaga,
   getGenderSaga, getPhotoTypeSaga, getAppyToSaga, getExtraTimeDrawSaga,
   getFinalsFixtureTemplateSaga, courtListSaga, getSendInvitesSaga, RegistrationRestrictionType,
-  getAllowTeamRegistrationTypeSaga, disabilityReferenceSaga, getCommonInitSaga
+  getAllowTeamRegistrationTypeSaga, disabilityReferenceSaga, getCommonInitSaga,
+  getRegistrationPaymentStatusSaga
 } from "./commonSaga/commonSaga";
 
 import { fixtureTemplateSaga } from '../saga/competitionManagementSaga/competitionManagementSaga';
@@ -787,5 +788,7 @@ export default function* root_saga() {
 
   //////////////////////registration main dashboard listing owned and participate registration
   yield takeEvery(ApiConstants.API_GET_REGISTRATION_MAIN_DASHBOARD_LISTING_LOAD, registrationMainDashboardListSaga)
+
+  yield takeEvery(ApiConstants.API_REGISTRATION_PAYMENT_STATUS_LOAD, getRegistrationPaymentStatusSaga)
 
 }

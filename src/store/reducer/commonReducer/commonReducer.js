@@ -50,7 +50,8 @@ const initialState = {
     allowTeamRegistration: [],
     registrationTypeData: [],
     disabilityList: [],
-    days: []
+    days: [],
+    paymentStatus: []
 };
 
 
@@ -392,6 +393,20 @@ function commonReducerState(state = initialState, action) {
             return { ...state, }
         case ApiConstants.API_GET_COMMON_INIT_SUCCESS:
             return { ...state, onLoad: false, days: action.result.Day }
+
+        case ApiConstants.API_REGISTRATION_PAYMENT_STATUS_LOAD:
+            return {
+                ...state,
+                onLoad: true
+            }
+
+        case ApiConstants.API_REGISTRATION_PAYMENT_STATUS_SUCCESS:
+            return {
+                ...state,
+                onLoad: true,
+                paymentStatus: action.result,
+                status: action.status
+            }
         default:
             return state;
     }

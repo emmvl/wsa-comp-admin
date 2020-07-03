@@ -231,6 +231,15 @@ function quickCompetitionInit(body) {
     return action
 }
 
+
+function registrationPaymentStatusAction() {
+    const action = {
+        type: ApiConstants.API_REGISTRATION_PAYMENT_STATUS_LOAD,
+    };
+    return action;
+}
+
+
 export {
     timeSlotInit,
     getCommonRefData,
@@ -258,5 +267,6 @@ export {
     getAllowTeamRegistrationTypeAction,
     registrationRestrictionTypeAction,
     disabilityReferenceAction,
-    quickCompetitionInit
+    quickCompetitionInit,
+    registrationPaymentStatusAction
 }

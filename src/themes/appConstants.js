@@ -1414,7 +1414,8 @@ const AppConstants = {
   poolName: "Pool Name",
   umpireReserve: "Umpire Reserve",
   fileUploadPdf: "File Upload (File Type: PDF)",
-  link: "Link"
+  link: "Link",
+  paymentStatusReference: 'PaymentStatus',
 };
 
 export default AppConstants;
