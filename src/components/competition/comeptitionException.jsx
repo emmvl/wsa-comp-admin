@@ -49,7 +49,6 @@ class CompetitionException extends Component {
         if (this.props.location.state && this.props.location.state.drawsObj) {
             this.props.venueListAction();
             let drawsData = this.state.drawsObj
-            console.log(drawsData)
             let venueId = drawsData.venueId
             let venueCourtId = drawsData.venueCourtId
             let startDate = moment(drawsData.matchDate).format("DD-MM-YYYY")
@@ -70,7 +69,6 @@ class CompetitionException extends Component {
             this.props.courtListAction(venueId)
         }
         else {
-            console.log("(((((((");
             history.push("/competitionDraws")
         }
     }
@@ -93,16 +91,16 @@ class CompetitionException extends Component {
             }
         }
 
-        if(nextProps.drawsState!= drawsState){
-            if(drawsState.updateLoad == false && this.state.exceptionUpdateLoad == true){
-                this.setState({exceptionUpdateLoad: false});
+        if (nextProps.drawsState != drawsState) {
+            if (drawsState.updateLoad == false && this.state.exceptionUpdateLoad == true) {
+                this.setState({ exceptionUpdateLoad: false });
                 this.reGenerateDraw();
             }
         }
 
-        if(nextProps.competitionModuleState != competitionModuleState){
-            if(competitionModuleState.drawGenerateLoad == false && this.state.reGenerateDrawLoad == true){
-                this.setState({reGenerateDrawLoad: false});
+        if (nextProps.competitionModuleState != competitionModuleState) {
+            if (competitionModuleState.drawGenerateLoad == false && this.state.reGenerateDrawLoad == true) {
+                this.setState({ reGenerateDrawLoad: false });
                 history.push('/competitionDraws');
             }
         }
@@ -206,7 +204,6 @@ class CompetitionException extends Component {
                         onChange={(venueCourtId) => this.changeVenueCourtId(venueCourtId)}
                     >
                         {courtData.map((item) => {
-                            console.log(item)
                             return (
                                 <Option key={'court' + item.id}
                                     value={item.id}>
@@ -261,16 +258,14 @@ class CompetitionException extends Component {
 
     onChangeTime(endtime) {
         let time = endtime.format("HH:mm")
-        console.log(time)
         this.setState({ time })
     }
 
 
     onChangeDate(value) {
-        console.log(value)
         this.setState({ matchDate: value })
     }
-/// for post api of court timming
+    /// for post api of court timming
     courttiming() {
         if (this.state.venueCourtId == null) {
             message.config({ duration: 0.9, maxCount: 1 })
@@ -294,13 +289,13 @@ class CompetitionException extends Component {
 
     reGenerateDraw = () => {
         let payload = {
-          yearRefId: this.state.yearRefId,
-          competitionUniqueKey: this.state.competitionId,
-          organisationId: this.state.organisationId
+            yearRefId: this.state.yearRefId,
+            competitionUniqueKey: this.state.competitionId,
+            organisationId: this.state.organisationId
         }
         this.props.generateDrawAction(payload);
         this.setState({ reGenerateDrawLoad: true });
-      }
+    }
 
 
     //////footer view containing all the buttons like submit and cancel
@@ -318,7 +313,7 @@ class CompetitionException extends Component {
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button className="user-approval-button" type="primary"  onClick={() => this.courttiming()} >
+                                <Button className="user-approval-button" type="primary" onClick={() => this.courttiming()} >
                                     {AppConstants.save}
                                 </Button>
                             </div>
@@ -348,7 +343,7 @@ class CompetitionException extends Component {
                         noValidate="noValidate">
                         <Content>
                             <div className="formView">{this.contentView(getFieldDecorator)}</div>
-                                   <Loader visible={this.props.competitionModuleState.drawGenerateLoad} />
+                            <Loader visible={this.props.competitionModuleState.drawGenerateLoad} />
                         </Content>
                         <Footer >{this.footerView()}</Footer>
                     </Form>

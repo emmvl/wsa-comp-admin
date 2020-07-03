@@ -224,6 +224,11 @@ let AxiosApi = {
         let url = `/api/actions/update`;
         return Method.dataPost(url, token, payload)
     },
+
+    getStateReference(body) {
+        var url = "/common/references";
+        return Method.dataPost(url, token, body);
+    }
 };
 const Method = {
     async dataPost(newurl, authorization, body) {

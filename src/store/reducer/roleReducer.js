@@ -11,7 +11,6 @@ const initialState = {
 };
 
 function role(state = initialState, action) {
-  console.log(action.type, "usertypres");
   switch (action.type) {
     // Reference for Roles
     case ApiConstants.API_ROLE_LOAD:

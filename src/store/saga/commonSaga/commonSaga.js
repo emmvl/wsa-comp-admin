@@ -604,6 +604,24 @@ export function* getCommonInitSaga(action) {
     }
 }
 
+///////////get state reference data
+export function* getStateReferenceSaga(action) {
+    try {
+        const result = yield call(CommonAxiosApi.getStateReference, action.body);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_STATE_REFERENCE_DATA_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
 
 // Get the Registration payment status
 export function* getRegistrationPaymentStatusSaga(action) {

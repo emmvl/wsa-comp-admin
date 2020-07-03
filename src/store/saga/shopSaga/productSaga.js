@@ -36,7 +36,7 @@ function* errorSaga(error) {
 //////////product listing get API 
 export function* getProductListingSaga(action) {
     try {
-        const result = yield call(AxiosApi.getProductListing, action.sorterBy, action.order, action.offset, action.filter);
+        const result = yield call(AxiosApi.getProductListing, action.sorterBy, action.order, action.offset, action.filter, action.limit);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_GET_SHOP_PRODUCT_LISTING_SUCCESS,
@@ -61,6 +61,7 @@ export function* addProductActionSaga(action) {
                 result: result.result.data,
                 status: result.status
             });
+            message.success(result.result.data.message);
         } else {
             yield call(failSaga, result)
         }
@@ -69,3 +70,39 @@ export function* addProductActionSaga(action) {
     }
 }
 
+//////////get reference type in the add product screen
+export function* getTypesOfProductSaga(action) {
+    try {
+        const result = yield call(AxiosApi.getTypesOfProduct);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_TYPES_LIST_IN_ADD_PROUCT_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+//////////////////delete product from the product listing API 
+export function* deleteProductSaga(action) {
+    try {
+        const result = yield call(AxiosApi.deleteProduct, action.productId);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_DELETE_SHOP_PRODUCT_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+            message.success(result.result.data.message);
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

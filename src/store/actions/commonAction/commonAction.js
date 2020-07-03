@@ -231,6 +231,15 @@ function quickCompetitionInit(body) {
     return action
 }
 
+////get state reference data
+function getStateReferenceAction(body) {
+    const action = {
+        type: ApiConstants.API_GET_STATE_REFERENCE_DATA_LOAD,
+        body
+    }
+    return action
+}
+
 
 function registrationPaymentStatusAction() {
     const action = {
@@ -268,5 +277,6 @@ export {
     registrationRestrictionTypeAction,
     disabilityReferenceAction,
     quickCompetitionInit,
+    getStateReferenceAction,
     registrationPaymentStatusAction
 }
