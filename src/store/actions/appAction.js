@@ -204,6 +204,7 @@ function userExportFilesAction(URL) {
   return action;
 }
 
+
 export {
   getYearListAction,
   getOnlyYearListAction,
@@ -227,5 +228,5 @@ export {
   getEnhancedRoundRobinAction,
   exportFilesAction,
   CLEAR_OWN_COMPETITION_DATA,
-  userExportFilesAction
+  userExportFilesAction,
 };

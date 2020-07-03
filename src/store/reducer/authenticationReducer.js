@@ -60,7 +60,6 @@ function login(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_FORGOT_PASSWORD_SUCCESS:
-      console.log("action.result", action.result)
       return {
         ...state,
         forgotPasswordMessage: action.result.message ? action.result.message : "",

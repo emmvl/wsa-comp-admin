@@ -10,9 +10,14 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Loader from '../../customComponents/loader';
 import history from "../../util/history";
-import { addProductAction, onChangeProductDetails } from "../../store/actions/shopAction/productAction"
+import {
+    addProductAction,
+    onChangeProductDetails,
+    getTypesOfProductAction,
+    addNewTypeAction,
+} from "../../store/actions/shopAction/productAction"
 import InputWithHead from "../../customComponents/InputWithHead";
-import { isArrayNotEmpty, captializedString } from "../../util/helpers";
+import { isArrayNotEmpty } from "../../util/helpers";
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, ContentState, convertFromHTML, } from 'draft-js';
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -38,7 +43,6 @@ class AddProduct extends Component {
             isDragging: false,
             newProductType: "",
             visible: false,
-            typeArray: [{ id: 1, name: "Merchandise" }, { id: 2, name: "T-shirt" }, { id: 3, name: "Pants" }]
         }
 
     }
@@ -46,7 +50,12 @@ class AddProduct extends Component {
 
     componentDidMount() {
         this.setDetailsFieldValue();
+        this.apiCalls();
         // this.setEditorFieldValue();
+    }
+
+    apiCalls = () => {
+        this.props.getTypesOfProductAction()
     }
 
     addProductPostAPI = (e) => {
@@ -149,16 +158,10 @@ class AddProduct extends Component {
     }
 
     handleOk = e => {
-        let newTypeObject = {
-            id: (this.state.typeArray.length) + 1,
-            name: this.state.newProductType
-        }
-        let stateArray = this.state.typeArray
-        stateArray.push(newTypeObject)
+        this.props.addNewTypeAction(this.state.newProductType)
         this.setState({
             visible: false,
             newProductType: "",
-            typeArray: stateArray
         });
     };
 
@@ -210,7 +213,7 @@ class AddProduct extends Component {
 
     ////////form content view
     contentView = (getFieldDecorator) => {
-        let { productDeatilData } = this.props.shopProductState
+        let { productDeatilData, typesProductList } = this.props.shopProductState
         console.log("productDeatilData", productDeatilData)
         let affiliateArray = [
             { id: 1, name: "Direct" },
@@ -263,14 +266,14 @@ class AddProduct extends Component {
                     placeholder="Select"
                     value={productDeatilData.types}
                 >
-                    {this.state.typeArray.map(
+                    {isArrayNotEmpty(typesProductList) && typesProductList.map(
                         (item, index) => {
                             return (
                                 <Option
                                     key={'type' + item.id}
-                                    value={item.name}
+                                    value={item.typeName}
                                 >
-                                    {item.name}
+                                    {item.typeName}
                                 </Option>
                             );
                         }
@@ -1021,8 +1024,8 @@ class AddProduct extends Component {
                             <div className="formView">{this.variantsView(getFieldDecorator)}</div>
                             <div className="formView">{this.shippingView(getFieldDecorator)}</div>
                         </Content>
-                        {/* <Loader
-                        visible={this.props.appState.onLoad} /> */}
+                        <Loader
+                            visible={this.props.shopProductState.onLoad} />
                         <Footer>{this.footerView()}</Footer>
                     </Form>
                 </Layout>
@@ -1035,6 +1038,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         addProductAction,
         onChangeProductDetails,
+        getTypesOfProductAction,
+        addNewTypeAction,
     }, dispatch)
 }
 

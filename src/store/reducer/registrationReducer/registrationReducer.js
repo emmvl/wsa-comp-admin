@@ -121,7 +121,6 @@ function checkSlectedMethod(array) {
 
 //get selected invitees 
 function checkSlectedInvitees(result, reg_demoSetting, reg_NetballSetting, reg_QuestionsSetting, reg_settings) {
-  console.log(result)
   let selectedAdvanceSettings = []
   let selectedDemographic = []
   let selectedNetballQuestions = []
@@ -211,7 +210,6 @@ function checkExistingMethod(reg_method, selectedMethodId) {
 
 //checkExistingSettings
 function checkExistingSettings(settingArr, settingID) {
-  console.log(settingArr)
   let object = {
     status: false,
     result: []
@@ -236,10 +234,8 @@ function checkExistingSettings(settingArr, settingID) {
 
 //get registration form setting 
 function getResitrationFormSettings(selectedSettings, reg_settings) {
-  console.log(reg_settings, selectedSettings)
   let postArr = []
   for (let i in selectedSettings) {
-    console.log(selectedSettings)
     let selected_settings = checkExistingSettings(reg_settings, selectedSettings[i])
     let settingObject = null
 
@@ -249,16 +245,12 @@ function getResitrationFormSettings(selectedSettings, reg_settings) {
         "registrationSettingsRefId": selectedSettings[i]
       }
     } else {
-      console.log(selected_settings)
       settingObject = {
         "registrationSettingsId": selected_settings.result.registrationSettingsId,
         "registrationSettingsRefId": selectedSettings[i]
       }
     }
-    console.log(settingObject, postArr)
-
     postArr.push(settingObject)
-
   }
   return postArr;
 }
@@ -528,7 +520,6 @@ function discountDataObject(data) {
 }
 
 function updatedSettingsData(result) {
-  console.log(result)
   let updatedAdvanceSettings = []
   let updatedDemographic = []
   let updatedNetballQuestions = []
@@ -796,11 +787,9 @@ function registration(state = initialState, action) {
       return { ...state, onLoad: true, error: null };
 
     case ApiConstants.API_GET_REG_FORM_SUCCESS:
-      console.log(state)
       let productList = action.MembershipProductList.id ? action.MembershipProductList.id : [];
       let objValue = JSON.parse(JSON.stringify([newObjvalue]))
       let formData = action.result.length > 0 ? action.result : objValue
-      console.log(state)
       state.defaultRegistrationSettings = formData[0].registrationSettings !== null ? formData[0].registrationSettings : []
       state.defaultRegistrationMethod = formData[0].registerMethods !== null ? JSON.parse(JSON.stringify(formData[0].registerMethods)) : []
       let selected_Method = checkSlectedMethod(JSON.parse(JSON.stringify(formData[0].registerMethods)))
@@ -817,21 +806,17 @@ function registration(state = initialState, action) {
         productList,
         formData[0].membershipProductTypes
       );
-      console.log(productListValue)
       let SelectedProduct = getFillteredData(
         formData,
         productListValue,
         state.selectedMemberShipType
       );
-      console.log("SelectedProduct", SelectedProduct)
       let trainingSelection = getSelectedCheck(
         regFormChecked, formData
       )
-      console.log("trainingSelection", trainingSelection)
       state.defaultChecked = trainingSelection
       newObjvalue.competitionUniqueKeyId = state.defaultCompetitionID
       state.sendRegistrationFormData = JSON.parse(JSON.stringify([newObjvalue]))
-      console.log("state")
       return {
         ...state,
         onLoad: false,
@@ -913,7 +898,6 @@ function registration(state = initialState, action) {
         state.membershipProductDiscountData.membershipProductDiscounts[0].discounts = [];
       }
       if (action.dataName == "getRegistrationFormDetails") {
-        console.log(newObjvalue)
         state.selectedMemberShipType = [];
         state.selectedMemberShipType = [];
         state.membershipProductTypes = [];

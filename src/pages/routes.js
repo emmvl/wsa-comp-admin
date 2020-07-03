@@ -317,7 +317,7 @@ class Routes extends React.Component {
           component={lazyLoad(CompetitionFixtures)}
         />
         <PrivateRoute
-          path="/competitionQuickCompetition"
+          path="/quickCompetition"
           component={lazyLoad(CompetitionQuickCompetition)}
         />
         <PrivateRoute

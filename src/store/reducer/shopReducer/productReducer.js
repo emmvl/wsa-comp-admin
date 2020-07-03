@@ -53,6 +53,7 @@ const initialState = {
     productDeatilData: defaultAddProductObject,
     productListingData: [],
     productListingTotalCount: 1,
+    typesProductList: [], //////reference types in add product screen for the type dropdown
 };
 
 
@@ -95,7 +96,6 @@ function shopProductState(state = initialState, action) {
             return { ...state, onLoad: true, error: null };
 
         case ApiConstants.API_ADD_SHOP_PRODUCT_SUCCESS:
-            console.log(action.result)
             return {
                 ...state,
                 onLoad: false,
@@ -122,6 +122,46 @@ function shopProductState(state = initialState, action) {
             return {
                 ...state,
             };
+
+        //////////get reference type in the add product screen
+        case ApiConstants.API_GET_TYPES_LIST_IN_ADD_PROUCT_LOAD:
+            return { ...state, onLoad: true, error: null };
+
+        case ApiConstants.API_GET_TYPES_LIST_IN_ADD_PROUCT_SUCCESS:
+            return {
+                ...state,
+                typesProductList: isArrayNotEmpty(action.result) ? action.result : [],
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
+
+        /////////add type in the typelist array in reducer
+        case ApiConstants.SHOP_ADD_TYPE_IN_TYPELIST_REDUCER:
+            let newTypeObject = {
+                id: (state.typesProductList.length) + 1,
+                typeName: action.data,
+                isDeleted: 0
+            }
+            // let typesProductListArray = state.typesProductList
+            // let TypeArray = JSON.parse(JSON.stringify(typesProductList))
+            state.typesProductList.push(newTypeObject)
+            return {
+                ...state,
+            };
+
+        //////////////////delete product from the product listing API 
+        case ApiConstants.API_DELETE_SHOP_PRODUCT_LOAD:
+            return { ...state, onLoad: true, error: null };
+
+        case ApiConstants.API_DELETE_SHOP_PRODUCT_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
+
         default:
             return state;
     }

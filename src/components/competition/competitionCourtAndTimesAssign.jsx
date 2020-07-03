@@ -117,7 +117,6 @@ class CompetitionCourtAndTimesAssign extends Component {
         })
         let timeSlotMatchDuration = competitionTimeSlots.getcompetitionTimeSlotData.competitionVenueTimeslotsDayTime ? competitionTimeSlots.getcompetitionTimeSlotData.competitionVenueTimeslotsDayTime : []
         timeSlotMatchDuration.length > 0 && timeSlotMatchDuration.map((item, index) => {
-            console.log(item)
             let dayRefId = `dayRefId${index}`
             this.props.form.setFieldsValue({
                 [dayRefId]: item.dayRefId,
@@ -329,7 +328,6 @@ class CompetitionCourtAndTimesAssign extends Component {
                     message.error(ValidationConstants.pleaseSelectCompetition)
                 }
                 else {
-                    // console.log(timeSlotData)
                     this.props.addTimeSlotDataPost(timeSlotData)
                 }
             }
@@ -576,9 +574,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                             setFieldsValue={timeSlotData.mainTimeRotationID}
                         >
                             {commonState.timeSlotRotation.length > 0 && commonState.timeSlotRotation.map((item, index) => {
-                                console.log(item, 'timeSlotRotation')
                                 return (
-                                    <div>
+                                    <div key={"timeSlot" + index}>
                                         <div className='contextualHelp-RowDirection' >
                                             <Radio key={item.id} value={item.id}> {item.description}</Radio>
                                             <div style={{ marginLeft: -22, marginTop: -5 }}>
@@ -621,9 +618,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                             // setFieldsValue={timeSlotData.timeslotGenerationRefId}
                             >
                                 {commonState.timeSlotGeneration.length > 0 && commonState.timeSlotGeneration.map((item, index) => {
-                                    console.log(item, 'timeSlotGeneration')
                                     return (
-                                        <div>
+                                        <div key={"slot" + index}>
                                             <div className='contextualHelp-RowDirection' >
                                                 <Radio key={item.id} value={item.id}> {item.description}</Radio>
                                                 <div style={{ marginLeft: -22, marginTop: -5 }}>
@@ -1015,8 +1011,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         let daysList = this.props.competitionTimeSlots
         let division = this.props.competitionTimeSlots.getcompetitionTimeSlotData
         return (
-
-            <div className="row">
+            <div className="row" key={"addSlot" + index} >
                 <div className="col-sm-3" style={{ marginTop: index == 0 ? null : 18 }}>
                     <InputWithHead heading={index == 0 ? AppConstants.dayOfTheWeek : ' '} />
                     <Form.Item>
@@ -1036,8 +1031,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 onChange={(dayOfTheWeek) => this.props.UpdateTimeSlotsDataManual(dayOfTheWeek, 'dayRefId', 'competitionTimeslotManual', index, null, null)}
                                 placeholder="Select Week Day"
                             >
-                                {daysList.weekDays.length > 0 && daysList.weekDays.map((item) => (
-                                    < Option value={item.id}> {item.description}</Option>
+                                {daysList.weekDays.length > 0 && daysList.weekDays.map((item, index) => (
+                                    < Option key={"days" + index} value={item.id}> {item.description}</Option>
                                 ))
                                 }
                             </Select>
@@ -1048,7 +1043,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                     {item.startTime.length > 0 && item.startTime.map((timeItem, timeIndex) => {
                         return (
 
-                            <div className="row">
+                            <div className="row" key={"timeSlotindex" + timeIndex}>
                                 {/* <div className="col-sm"> */}
                                 {/* <div className={"col-sm"} > */}
                                 <div className={mainId == 8 ? "col-sm" : "col-sm"} >
@@ -1133,8 +1128,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                         onChange={(divisions) => this.props.UpdateTimeSlotsDataManual(divisions, 'venuePreferenceTypeRefId', 'competitionTimeslotManual', timeIndex, mainId, id, index)}
                                                     >
 
-                                                        {division.grades && division.grades.map((item) => (
-                                                            < Option value={item.competitionDivisionGradeId}> {item.gradeName}</Option>
+                                                        {division.grades && division.grades.map((item, index) => (
+                                                            < Option key={"grades" + index} value={item.competitionDivisionGradeId}> {item.gradeName}</Option>
                                                         ))
                                                         }
                                                     </Select >
