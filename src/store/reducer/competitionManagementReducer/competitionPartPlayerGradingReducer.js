@@ -105,7 +105,6 @@ function getPositionColor(position) {
     return color;
 }
 function updateColor(data) {
-    console.log(data)
     if (data.length > 0) {
         for (let i in data) {
             let team = data[i].players
@@ -116,8 +115,6 @@ function updateColor(data) {
                 if (team[j].position2 !== null) {
                     team[j].position2Color = getPositionColor(team[j].position2)
                 }
-                console.log(team[j])
-
             }
 
         }
@@ -215,7 +212,6 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             let teamData = unassignedListDataFormation(JSON.parse(JSON.stringify(updatedPlayers)));
             state.unassignedPartPlayerGradingListData = teamData.unassignedPartPlayerGradingListData
             state.assignedPartPlayerGradingListData = teamData.assignedPartPlayerGradingListData
-            console.log(state.unassignedPartPlayerGradingListData, "partPlayerGradingListData", state.assignedPartPlayerGradingListData)
             return {
                 ...state,
                 onLoad: false,
@@ -301,7 +297,6 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             }
 
         case ApiConstants.API_PLAYER_GRADING_COMMENT_SUCCESS:
-            console.log(action)
             if (action.teamIndex == null) {
                 let matchIndex = state.unassignedPartPlayerGradingListData.players.findIndex(x => x.playerId == action.playerId)
                 if (matchIndex > -1) {
@@ -327,7 +322,6 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             return { ...state, onLoad: true, error: null }
 
         case ApiConstants.API_PLAYER_GRADING_SUMMARY_COMMENT_SUCCESS:
-            console.log(action)
             let matchindexData = state.getCompPartPlayerGradingSummaryData.findIndex(x => x.competitionMembershipProductDivisionId == action.divisionId)
             if (matchindexData > -1) {
                 state.getCompPartPlayerGradingSummaryData[matchindexData].comments = action.comment

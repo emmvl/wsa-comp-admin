@@ -50,7 +50,8 @@ const initialState = {
     allowTeamRegistration: [],
     registrationTypeData: [],
     disabilityList: [],
-    days: []
+    days: [],
+    stateData: [],
 };
 
 
@@ -88,7 +89,6 @@ function commonReducerState(state = initialState, action) {
             return { ...state, onVenueDataLoad: true };
 
         case ApiConstants.API_ADD_VENUE_SUCCESS:
-            console.log(action, 'VenueResult')
             if (action.result != null) {
                 state.venueList.push(action.result)
                 state.searchVenueList.push(action.result)
@@ -108,7 +108,6 @@ function commonReducerState(state = initialState, action) {
             return { ...state, onVenueDataLoad: true };
 
         case ApiConstants.API_VENUE_LIST_SUCCESS:
-            console.log(action, 'VenueListResult')
             return {
                 ...state,
                 status: action.status,
@@ -122,7 +121,6 @@ function commonReducerState(state = initialState, action) {
             return { ...state, onLoad: true, error: null };
 
         case ApiConstants.API_GRADES_REFERENCE_LIST_SUCCESS:
-            console.log(action, 'gradesReferenceData')
             return {
                 ...state,
                 status: action.status,
@@ -339,7 +337,6 @@ function commonReducerState(state = initialState, action) {
             return { ...state, onLoad: true, courtLoad: true, courtList: [] };
 
         case ApiConstants.API_COURT_LIST_SUCCESS:
-            console.log(action, 'VenueListResult')
             return {
                 ...state,
                 status: action.status,
@@ -389,9 +386,23 @@ function commonReducerState(state = initialState, action) {
 
 
         case ApiConstants.API_GET_COMMON_INIT_LOAD:
-            return { ...state, }
+            return { ...state, onLoad: true, error: null }
+
         case ApiConstants.API_GET_COMMON_INIT_SUCCESS:
             return { ...state, onLoad: false, days: action.result.Day }
+
+        ///////////get state reference data
+        case ApiConstants.API_GET_STATE_REFERENCE_DATA_LOAD:
+            return { ...state, onLoad: true, error: null }
+
+        case ApiConstants.API_GET_STATE_REFERENCE_DATA_SUCCESS:
+            return {
+                ...state,
+                stateData: isArrayNotEmpty(action.result.State) ? action.result.State : [],
+                onLoad: false,
+                error: null
+            }
+            
         default:
             return state;
     }

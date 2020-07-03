@@ -435,20 +435,16 @@ function checkVenueID(courtID, updatedCourtsArray) {
 }
 
 function getCourtRotationHelpMsg(data, helpMsg) {
-    console.log(data, 'datadata')
     for (let i in data) {
         data[i]['helpMsg'] = helpMsg[i]
     }
-    console.log(data, 'datadata~~')
     return data;
 }
 
 function getHomeTeamRotationHelpMsg(data, helpMsg) {
-    console.log(data, 'datadata')
     for (let i in data) {
         data[i]['helpMsg'] = helpMsg[i]
     }
-    console.log(data, 'datadata~~')
     return data;
 }
 
@@ -470,7 +466,6 @@ function VenueTimeState(state = initialState, action) {
 
             const courtRotationHelpMsg = getCourtRotationHelpMsg(state.courtRotation, state.courtPrefHelpMsg)
             state.courtRotation = courtRotationHelpMsg
-            console.log(action.result, 'API_VENUE_CONSTRAINTS_LIST_SUCCESS')
 
             state.evenRotation = action.commResult.CourtRotation[0].subReferences[0].id
             state.radioButton = action.commResult.CourtRotation[2].id
@@ -480,7 +475,6 @@ function VenueTimeState(state = initialState, action) {
             state.divisionList = action.result.divisions
             state.gradeList = action.result.grades
             state.homeRotation = action.result.homeTeamRotationRefId
-            console.log(state.homeRotation, 'state.homeRotation')
 
             let selecetdVenueListId = []
 
@@ -506,11 +500,8 @@ function VenueTimeState(state = initialState, action) {
                     competitionVenueId: 0,
                     venueId: state.createVenue.venueId
                 }
-                console.log(state.createVenue, 'state.createVenue')
                 state.venuePost.push(venueObj)
             }
-
-            console.log(state.venuePost, 'API_VENUE_CONSTRAINTS_LIST_SUCCESS', action.result)
 
             // let setVenueObj = getVenueObj(action.result)
             // state.venueConstrainstData = setVenueObj
@@ -520,7 +511,6 @@ function VenueTimeState(state = initialState, action) {
             // state.venuePost = selectedVenues
 
             let courtRotationRefId = action.result.courtRotationRefId;
-            console.log("courtRotationRefId" + courtRotationRefId);
             state.evenRotation = action.result.courtRotationRefId
             if (courtRotationRefId == 2 || courtRotationRefId == 3 || courtRotationRefId == 4) {
                 state.courtRotation[0].selectedPrefrence = 1
@@ -540,10 +530,7 @@ function VenueTimeState(state = initialState, action) {
             state.onVenueSuccess = false
 
             const homeTeamRotationHelpMsg = getHomeTeamRotationHelpMsg(action.commResult.HomeTeamRotation, state.homeTeamRotationHelpMsg)
-            console.log(homeTeamRotationHelpMsg, 'homeTeamRotationHelpMsg')
             state.courtRotation = courtRotationHelpMsg
-            console.log(state.courtRotation, 'state.courtRotation')
-
             return {
                 ...state,
                 result: action.result,
@@ -606,8 +593,6 @@ function VenueTimeState(state = initialState, action) {
 
             }
             else if (action.index == 'addGameAndCourt') {
-                console.log("addGameAndCourt" + state.venuData[action.key].length);
-
                 let setKey = generateTableKey(state.venuData.venueCourts)
                 var court_obj = {
                     key: setKey.toString(),
@@ -655,8 +640,6 @@ function VenueTimeState(state = initialState, action) {
                 }
             }
             else if (action.key == 'overideSlot') {
-                // console.log("venueCourts::" + JSON.stringify(state.venuData.venueCourts));
-                console.log("&&&&&&&&&&&&&" + state.venuData.venueCourts[action.index]["availabilities"]);
                 let changeData = state.venuData.venueCourts
                 if (changeData[action.index]["availabilities"].length == 0) {
                     let timSlotObj = {
@@ -669,12 +652,9 @@ function VenueTimeState(state = initialState, action) {
                     changeData[action.index]["availabilities"].push(timSlotObj)
                 }
 
-                //  console.log("venueCourts@@@@@::" + JSON.stringify(changeData));
-
                 changeData[action.index][action.key] = action.data
                 state.venuData.venueCourts = changeData
                 let expandedRowKey = changeData[action.index]['key'];
-                console.log("expandedRowKey" + expandedRowKey + "action.data" + action.data);
                 if (action.data == true) {
                     state.venuData.expandedRowKeys.push(expandedRowKey.toString())
                 } else {
@@ -713,8 +693,6 @@ function VenueTimeState(state = initialState, action) {
                 state.venuData['affiliateData'] = action.data;
                 let organisations = getEditOrganisation(action.data, state.venuData.organisations);
                 state.venuData['organisations'] = organisations;
-                console.log("action.data" + JSON.stringify(action.data));
-                console.log("organisations" + JSON.stringify(organisations));
             }
             else if (action.key == "venueIsUsed") {
                 state[action.key] = action.data;
@@ -1203,7 +1181,6 @@ function VenueTimeState(state = initialState, action) {
             };
 
         case ApiConstants.API_ADD_VENUE_SUCCESS:
-            console.log('venuePost Success', action.result)
             if (action.result != null) {
                
                 state.selectedVenueIdAdd = "addVenue"

@@ -218,8 +218,6 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
         case ApiConstants.ONCHANGE_COMPETITION_OWN_PROPOSED_TEAM_GRADING_DATA:
             let finalGradingOnChangeData = JSON.parse(JSON.stringify(state.getCompOwnProposedTeamGradingData));
             let finalGrades = state.compFinalTeamGradingFinalGradesData;
-            //console.log("finalGrades::" + JSON.stringify(finalGrades));
-            console.log("Index" + action.index + "Value" + action.value);
             let obj = finalGrades.find(x => x.gradeRefId == action.value);
             if (action.key == "sortOrder") {
                 //finalGradingOnChangeData[action.index][action.key] = action.value == 1 ? action.value - 1 : action.value + 1;
@@ -276,7 +274,6 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
 
         //////// /clear competition  team grading reducer data
         case ApiConstants.OWN_COMP_TEAM_GRADING_CLEARING_PARTICULAR_REDUCER_DATA:
-            console.log(action)
             if (action.key == "finalTeamGrading") {
                 state.getCompOwnProposedTeamGradingData = []
                 state.compFinalTeamGradingFinalGradesData = []

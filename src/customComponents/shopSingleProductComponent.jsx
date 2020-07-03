@@ -43,7 +43,7 @@ class ShopSingleProductComponent extends React.Component {
                 </div>
                 <div className="product-img-view">
                     <img
-                        src={productItem.image}
+                        src={isArrayNotEmpty(productItem.images) ? productItem.images[0].url : AppImages.squareImage}
                         height="150"
                         width="150"
                         name={'image'}

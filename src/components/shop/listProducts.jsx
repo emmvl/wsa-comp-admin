@@ -11,7 +11,7 @@ import { bindActionCreators } from 'redux';
 import Loader from '../../customComponents/loader';
 import history from "../../util/history";
 import ShopSingleProductComponent from "../../customComponents/shopSingleProductComponent";
-import { getProductListingAction } from "../../store/actions/shopAction/productAction"
+import { getProductListingAction, deleteProductAction } from "../../store/actions/shopAction/productAction"
 
 const { Footer, Content } = Layout;
 const { confirm } = Modal;
@@ -24,6 +24,7 @@ class ListProducts extends Component {
             order: "",
             offset: 0,
             searchText: "",
+            limit: 8,
         }
 
     }
@@ -31,14 +32,16 @@ class ListProducts extends Component {
 
     componentDidMount() {
         const widthWindow = window.innerWidth;
-        let limit = Math.round(widthWindow / 270) * 2
+        let windowLimit = Math.round(widthWindow / 270) * 2
+        let limit = windowLimit < 6 ? 6 : windowLimit
+        this.setState({ limit })
         let { sorterBy, order, offset, searchText } = this.state
-        this.props.getProductListingAction(sorterBy, order, offset, searchText)
+        this.props.getProductListingAction(sorterBy, order, offset, searchText, limit)
     }
 
 
     //////delete the product
-    showDeleteConfirm = () => {
+    showDeleteConfirm = (id) => {
         let this_ = this
         confirm({
             title: AppConstants.deleteProduct,
@@ -47,9 +50,9 @@ class ListProducts extends Component {
             okType: 'danger',
             cancelText: 'Cancel',
             onOk() {
-                // if (competitionId.length > 0) {
-                //     this_.deleteProduct(competitionId)
-                // }
+                if (id) {
+                    this_.props.deleteProductAction(id)
+                }
             },
             onCancel() {
             },
@@ -60,9 +63,9 @@ class ListProducts extends Component {
     onChangeSearchText = (e) => {
         this.setState({ searchText: e.target.value })
         if (e.target.value === null || e.target.value === "") {
-            let { sorterBy, order } = this.state
+            let { sorterBy, order, limit } = this.state
             this.setState({ offset: 0 })
-            this.props.getProductListingAction(sorterBy, order, 0, e.target.value)
+            this.props.getProductListingAction(sorterBy, order, 0, e.target.value, limit)
         }
     }
 
@@ -70,9 +73,9 @@ class ListProducts extends Component {
     onKeyEnterSearchText = (e) => {
         var code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
-            let { sorterBy, order, searchText } = this.state
+            let { sorterBy, order, searchText, limit } = this.state
             this.setState({ offset: 0 })
-            this.props.getProductListingAction(sorterBy, order, 0, searchText)
+            this.props.getProductListingAction(sorterBy, order, 0, searchText, limit)
         }
     }
 
@@ -81,9 +84,9 @@ class ListProducts extends Component {
         if (this.state.searchText === null || this.state.searchText === "") {
         }
         else {
-            let { sorterBy, order, searchText } = this.state
+            let { sorterBy, order, searchText, limit } = this.state
             this.setState({ offset: 0 })
-            this.props.getProductListingAction(sorterBy, order, 0, searchText)
+            this.props.getProductListingAction(sorterBy, order, 0, searchText, limit)
         }
     }
 
@@ -148,10 +151,10 @@ class ListProducts extends Component {
     };
 
     handlePagination = (page) => {
-        let offset = page ? 8 * (page - 1) : 0;
+        let offset = page ? (this.state.limit) * (page - 1) : 0;
         this.setState({ offset })
-        let { sorterBy, order, searchText } = this.state
-        this.props.getProductListingAction(sorterBy, order, offset, searchText)
+        let { sorterBy, order, searchText, limit } = this.state
+        this.props.getProductListingAction(sorterBy, order, offset, searchText, limit)
     };
 
     ////////content view of the screen
@@ -165,7 +168,7 @@ class ListProducts extends Component {
                             <div key={"productListingData" + index}>
                                 <ShopSingleProductComponent
                                     productItem={item}
-                                    deleteOnclick={() => this.showDeleteConfirm()}
+                                    deleteOnclick={() => this.showDeleteConfirm(item.id)}
                                 />
                             </div>
                         )
@@ -176,7 +179,7 @@ class ListProducts extends Component {
                         className="antd-pagination"
                         total={productListingTotalCount}
                         onChange={(page) => this.handlePagination(page)}
-                        defaultPageSize={8}
+                        pageSize={this.state.limit}
                     />
                 </div>
             </div>
@@ -208,7 +211,8 @@ class ListProducts extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getProductListingAction
+        getProductListingAction,
+        deleteProductAction,
     }, dispatch)
 }
 

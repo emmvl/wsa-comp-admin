@@ -1413,6 +1413,7 @@ const AppConstants = {
   simultaneousMatchAllocations: "Simultaneous match allocations",
   poolName: "Pool Name",
   umpireReserve: "Umpire Reserve",
+  addCompetitionFormat: 'Add Competition Format',
   fileUploadPdf: "File Upload (File Type: PDF)",
   link: "Link"
 };

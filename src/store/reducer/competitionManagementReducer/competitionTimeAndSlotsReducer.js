@@ -139,7 +139,6 @@ function getTimeslotPerVenuePerDay(timeslotData) {
 
 //getTimeslotAllVenuePerDay
 function getTimeslotAllVenuePerDay(timeslotData) {
-    console.log(timeslotData)
     // timeslotData
     let allVenuetimeSlotArr = []
     for (let i in timeslotData) {
@@ -327,9 +326,7 @@ function updateManualTimeSlotEntity(data, value, mainId, index) {
 function getSelectedTimeRotation(defaultData, data) {
     let parentId
     let subParentId
-    console.log(defaultData)
     for (let i in defaultData) {
-        console.log(defaultData)
         if (defaultData[i].id !== data.timeslotRotationRefId) {
             if (defaultData[i].subReferences !== null) {
                 let subReferencesArr = defaultData[i].subReferences
@@ -355,7 +352,6 @@ function getSelectedTimeRotation(defaultData, data) {
             }
         }
     }
-    console.log(parentId, subParentId)
     return {
         parentId,
         subParentId
@@ -535,20 +531,16 @@ function updatedTimeslotsDayTime(result) {
 }
 
 function getTimeSlotRotationWithHelpMsg(data, helpMsg) {
-    console.log(data, 'datadata')
     for (let i in data) {
         data[i]['helpMsg'] = helpMsg[i]
     }
-    console.log(data, 'datadata~~')
     return data;
 }
 
 function getTimeSlotGenerationWithHelpMsg(data, helpMsg) {
-    console.log(data, 'DataForMSg')
     for (let i in data) {
         data[i]['helpMsg'] = helpMsg[i]
     }
-    console.log(data, 'datadata@@@@')
     return data;
 }
 
@@ -562,26 +554,15 @@ function CompetitionTimeSlots(state = initialState, action) {
         case ApiConstants.API_GET_COMPETITION_WITH_TIME_SLOTS_LOAD:
             return { ...state, onLoad: true, onGetTimeSlotLoad: true, error: null };
         case ApiConstants.API_GET_COMPETITION_WITH_TIME_SLOTS_SUCCESS:
-
-
             let refData = action.refResult
-
-            ////Added By Abhishek for Conceptual Help
             const timeSlotRotationWithHelpMsg = getTimeSlotRotationWithHelpMsg(refData.TimeslotRotation, state.timeSlotRotationHelpMessage)
-            console.log(timeSlotRotationWithHelpMsg, 'timeSlotRotationWithHelpMsg')
             const timeSlotGenerationWithHelpMsg = getTimeSlotGenerationWithHelpMsg(refData.TimeslotGeneration, state.timeSlotGenerationHelpMessage)
-            console.log(timeSlotGenerationWithHelpMsg, 'timeSlotGenerationWithHelpMsg')
-            ////Added By Abhishek for Conceptual Help
-
             state.allrefernceData = action.result
             let venueData = getVenueData(refData.ApplyToVenue)
             let timeSlotGeneration = getVenueData(refData.TimeslotGeneration)
-            // let rotationData = getRotationData(action.result.TimeslotRotation)
             state.applyVenue = venueData
-            // state.timeSlotRotation = refData.TimeslotRotation
             state.timeSlotRotation = timeSlotRotationWithHelpMsg
             state.timeSlotGeneration = timeSlotGenerationWithHelpMsg
-            // state.timeSlotGeneration = timeSlotGeneration
             state.weekDays = refData.Day
             let resultData = JSON.parse(JSON.stringify(action.result))
             let selectedTimeGeneration = getSelectedTimeGeneration(state.timeSlotGeneration, action.result)
@@ -812,7 +793,6 @@ function CompetitionTimeSlots(state = initialState, action) {
                 state.timeSlotManualAllVenue[action.index].timeslots.push(timeSlotManaualAllVenueObj)
             }
             else if (action.key == "competitionVenueTimeslotsDayTimedelete") {
-                console.log(action)
                 state.getcompetitionTimeSlotData['competitionVenueTimeslotsDayTime'].splice(action.index, 1)
             }
             else if (action.key == "competitionTimeslotsEntitydelete") {
@@ -820,11 +800,9 @@ function CompetitionTimeSlots(state = initialState, action) {
                 state.getcompetitionTimeSlotData['competitionTimeslotsEntity'].splice(action.index, 1)
             }
             else if (action.key == "competitionTimeslotManualAllVenuedelete") {
-                console.log(action)
                 state.timeSlotManualAllVenue[action.item].timeslots.splice(action.index, 1)
             }
             else if (action.key == "competitionTimeslotManualdelete") {
-                console.log(action)
                 state.getcompetitionTimeSlotData["competitionTimeslotManual"][0].timeslots.splice(action.index, 1)
             }
             return { ...state }
@@ -862,7 +840,6 @@ function CompetitionTimeSlots(state = initialState, action) {
                     state.getcompetitionTimeSlotData.competitionTimeslotManual = changeTimeSlotDataManualAllVenue
                 }
                 else {
-                    console.log(action, changeTimeSlotDataManualAllVenue[action.parentIndex].timeslots[action.id])
                     let timeSlotEntityManualAll = updateManualTimeSlotEntity(changeTimeSlotDataManualAllVenue[action.parentIndex].timeslots[action.id].startTime[action.index].competitionTimeslotsEntity, action.value, action.mainId, 0)
                     if (action.mainId == 4) {
                         changeTimeSlotDataManualAllVenue[action.parentIndex].timeslots[action.id].startTime[action.index].competitionTimeslotsEntity = timeSlotEntityManualAll
@@ -878,9 +855,7 @@ function CompetitionTimeSlots(state = initialState, action) {
                 }
             }
             if (action.contentType == "competitionTimeslotManualTime") {
-                console.log(action)
                 let changeTimeSlotDataManualTime = state.getcompetitionTimeSlotData.competitionTimeslotManual
-                console.log(changeTimeSlotDataManualTime[0].timeslots[action.id])
                 changeTimeSlotDataManualTime[0].timeslots[action.id].startTime[action.index].startTime = action.value
             }
 
