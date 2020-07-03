@@ -20,8 +20,17 @@ function getAllCompetitionAction(yearRefId) {
     return action
 }
 
+///////registration main dashboard listing owned and participate registration
+function registrationMainDashboardListAction(yearRefId) {
+    const action = {
+        type: ApiConstants.API_GET_REGISTRATION_MAIN_DASHBOARD_LISTING_LOAD,
+        yearRefId
+    }
+    return action
+}
 
 export {
     regDashboardListAction,
-    getAllCompetitionAction
+    getAllCompetitionAction,
+    registrationMainDashboardListAction,
 };

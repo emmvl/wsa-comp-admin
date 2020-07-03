@@ -223,6 +223,12 @@
   width: 100%;
 }
 
+.search-prefix-icon-style{
+  color: rgba(0,0,0,.25);
+  height: 16px;
+  width: 16px;
+}
+
 @media (max-width: 767px) {
   .form-header-view.ant-layout-header {
     padding: 0 0px;

@@ -13,7 +13,7 @@ import { umpireListAction } from "../../store/actions/umpireAction/umpireAction"
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { entityTypes } from '../../util/entityTypes'
 import { refRoleTypes } from '../../util/refRoles'
-import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage'
+import { getUmpireCompId, setUmpireCompId, getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData } from '../../util/sessionStorage'
 import { userExportFilesAction } from "../../store/actions/appAction"
 import ValidationConstants from "../../themes/validationConstant";
 import history from "../../util/history";
@@ -78,7 +78,7 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "mobileNumber"),
     },
     {
-        title: 'Affiliate',
+        title: 'Organisation',
         dataIndex: 'linkedEntity',
         key: 'linkedEntity',
         sorter: (a, b) => tableSort(a, b, "linkedEntity"),
@@ -87,9 +87,7 @@ const columns = [
             return (
                 <div>
                     {linkedEntity.length > 0 && linkedEntity.map((item) => (
-
-                        // <span style={{ color: '#ff8237', cursor: 'pointer', display: 'flex', flexDirection: 'column' }}  >{item.name}</span>
-                        <span style={{ color: '#ff8237', cursor: 'pointer' }} className='multi-column-text-aligned' >{item.name}</span>
+                        <span className='multi-column-text-aligned' >{item.name}</span>
                     ))
                     }
                 </div>)
@@ -139,7 +137,8 @@ class Umpire extends Component {
             searchText: "",
             selectedComp: null,
             loading: false,
-            competitionUniqueKey: null
+            competitionUniqueKey: null,
+            compArray: []
         }
         this_obj = this
     }
@@ -155,21 +154,38 @@ class Umpire extends Component {
             if (this.state.loading == true && this.props.umpireCompetitionState.onLoad == false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
+                let compData = compList.length > 0 && compList[0]
+                // let compId = JSON.parse(getUmpireCompetiton())
+                // firstComp = compId
 
+                // let compObj = JSON.parse(getUmpireCompetitonData())
+                // compData = compObj
 
-                if (getUmpireCompId()) {
-                    let compId = JSON.parse(getUmpireCompId())
-                    firstComp = compId
+                if (getUmpireCompetiton()) {
+                    let compId = JSON.parse(getUmpireCompetiton())
+                    let index = compList.findIndex(x => x.id === compId)
+                    console.log("indexindex", index)
+                    if (index > -1) {
+                        firstComp = compList[index].id
+                        compData = compList[index]
+                    } else {
+
+                        setUmpireCompition(firstComp)
+                        setUmpireCompitionData(JSON.stringify(compData))
+                    }
                 } else {
-                    setUmpireCompId(firstComp)
+                    // setUmpireCompId(firstComp)
+                    setUmpireCompition(firstComp)
+                    setUmpireCompitionData(JSON.stringify(compData))
+
                 }
 
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey
-                if(firstComp !== false){
-                this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: firstComp, offset: 0 })
-                this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey })
-                }else{
-                    this.setState({  loading: false })
+                if (firstComp !== false) {
+                    this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: firstComp, offset: 0 })
+                    this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey, compArray: compList })
+                } else {
+                    this.setState({ loading: false })
                 }
             }
         }
@@ -187,7 +203,6 @@ class Umpire extends Component {
 
     /// Handle Page change
     handlePageChnage(page) {
-        console.log(page, 'page')
         let offset = page ? 10 * (page - 1) : 0;
         this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: this.state.selectedComp, offset: offset })
     }
@@ -236,7 +251,20 @@ class Umpire extends Component {
 
     onChangeComp(compID) {
         let selectedComp = compID.comp
-        setUmpireCompId(selectedComp)
+        // setUmpireCompId(selectedComp)
+
+        let compObj = null
+        for (let i in this.state.compArray) {
+            if (compID.comp == this.state.compArray[i].id) {
+                compObj = this.state.compArray[i]
+                break;
+            }
+        }
+        setUmpireCompition(selectedComp)
+        setUmpireCompitionData(JSON.stringify(compObj))
+
+
+
         let compKey = compID.competitionUniqueKey
 
         this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: selectedComp, offset: 0 })

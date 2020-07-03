@@ -1,15 +1,6 @@
 import React, { Component } from "react";
 import {
-    Layout,
-    Breadcrumb,
-    Select,
-    Checkbox,
-    Button,
-    Radio,
-    Tabs,
-    Table,
-    Input,
-    Form
+    Layout,Breadcrumb,Select,Checkbox,Button,Radio,Tabs,Table,Input,Form, Modal
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -34,57 +25,187 @@ const { Option } = Select;
 
 let _this = ""
 
-const columns = [
-    {
-        title: 'Result type/Byes',
-        dataIndex: 'resultTypeId',
-        key: 'resultTypeId',
-    },
-    {
-        title: 'Points',
-        dataIndex: 'points',
-        key: 'points',
-        render: (points, record, index) => <Input className="input-inside-table-fees" onChange={(e) => _this.props.updateLadderSetting(e.target.value, record, index)} value={points} />,
-        width: "10%"
-    },
-];
-
-
 class LiveScoreLadderSettings extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            venueData: []
+            venueData: [],
+            deleteModalVisible: false,
+            handleAllDivisionModal: false,
+            ladderIndex: null,
+            saveLoad: false
         };
         _this = this
     }
 
     componentDidMount() {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.props.ladderSettingGetMatchResultAction()
-        this.props.ladderSettingGetDATA(id)
+        const { uniqueKey } = JSON.parse(getLiveScoreCompetiton())
+        //this.props.ladderSettingGetMatchResultAction()
+        this.props.ladderSettingGetDATA(uniqueKey)
     }
 
+    componentDidUpdate(nextProps){
+        let ladderSettingState = this.props.ladderSettingState;
+        if(nextProps.ladderSettingState != ladderSettingState){
+            if(ladderSettingState.loader == false && this.state.saveLoad == true){
+                this.setState({saveLoad: false})
+                this.props.ladderSettingGetDATA();
+            }
+        }
+    }
+
+    onChangeLadderSetting = (value, index, key, subIndex, subKey) => {
+        if(key == "isAllDivision" && value == true){
+            let ladders = this.props.ladderSettingState.ladders;
+            if(ladders.length > 1 ){
+                this.setState({allDivisionVisible: true, ladderIndex: index});
+            }
+            else{
+                this.props.updateLadderSetting(value, index, key, subIndex, subKey);
+            }
+        }
+        else{
+            this.props.updateLadderSetting(value, index, key, subIndex, subKey);
+        }
+    }
+
+    deleteModal = (index) =>{
+        this.setState({deleteModalVisible: true, ladderIndex: index});
+    }
+
+    handleDeleteModal = (key) => {
+        if(key == "ok"){
+            this.props.updateLadderSetting(null, this.state.ladderIndex, "deleteLadder");
+        }
+        this.setState({deleteModalVisible: false, ladderIndex: null});
+    }
+
+    handleAllDivisionModal = (key) => {
+        if(key == "ok"){
+            this.props.updateLadderSetting(true, this.state.ladderIndex, "isAllDivision");
+        }
+        this.setState({allDivisionVisible: false, ladderIndex: null});
+    }
+
+    onSaveClick() {
+        const { ladders } = this.props.ladderSettingState;
+        ladders.map((item, index) => {
+            if(item.ladderFormatId < 0){
+                item.ladderFormatId = 0;
+            }
+            delete item.divisions;
+        });
+        console.log("ladders::" + JSON.stringify(ladders))
+       this.props.ladderSettingPostDATA(ladders)
+       this.setState({saveLoad: true});
+    }
+
+
     contentView = () => {
-        const { matchResult } = this.props.ladderSettingState
-        let matchResultData = isArrayNotEmpty(matchResult) ? matchResult : []
+        const { ladders, divisions } = this.props.ladderSettingState
+        let ladderData = isArrayNotEmpty(ladders) ? ladders : [];
+        let isAllDivision = ladderData.find(x=>x.isAllDivision == true);
+        let isAllDivisionChecked = isAllDivision!= null ? true : false;
+        let allDivision = divisions.find(x=>x.isDisabled == false);
+        let allDivAdded = allDivision!= null ? false : true;
+
         return (
             <div className="content-view pt-4">
-                {/* ladder setting view */}
-
-                <div className="inside-container-view" >
-                    <div className="table-responsive">
-                        <Table
-                            loading={this.props.ladderSettingState.onLoad}
-                            className="fees-table"
-                            columns={columns}
-                            dataSource={matchResultData}
-                            pagination={false} Divider=" false" />
+               {(ladderData || []).map((ladder, index) => (
+                <div className="inside-container-view" style={{paddingTop:"14px"}}>
+                    {ladderData.length > 1 && 
+                    <div style={{display:"flex"}}>
+                        <div className="transfer-image-view pt-0 pointer" style = {{marginLeft:'auto'}} onClick ={ () => this.deleteModal(index)}>
+                            <span className="user-remove-btn" ><i className="fa fa-trash-o" aria-hidden="true"></i></span>
+                            <span className="user-remove-text">
+                                {AppConstants.remove}
+                            </span>
+                        </div>
+                    </div> }
+                    <Checkbox className="single-checkbox pt-2" checked={ladder.isAllDivision}  
+                            onChange={(e) => this.onChangeLadderSetting(e.target.checked, index, "isAllDivision")}>
+                                    {AppConstants.allDivisions}</Checkbox> 
+                    {ladder.isAllDivision == 0 ? 
+                        <div className="fluid-width" >
+                            <div className="row" >
+                                <div className="col-sm">
+                                    <Select
+                                        mode="multiple"
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={(e) =>this.onChangeLadderSetting(e, index, "selectedDivisions")}
+                                        value={ladder.selectedDivisions}>   
+                                        {(ladder.divisions || []).map((division, divIndex)  => (
+                                            <Option key={division.divisionId} value={division.divisionId}
+                                           disabled={division.isDisabled}>
+                                                {division.divisionName} 
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                </div>
+                            </div>
+                        </div> : null}
+                        <div className="inside-container-view" >
+                            <div className="table-responsive">
+                                <div style={{display: 'flex', paddingLeft: '10px'}}>
+                                    <div style={{width: '89%'}}><InputWithHead heading={"Result type/Byes"} /></div>
+                                    <div><InputWithHead heading={"Points"} /></div>
+                                </div>
+                                {(ladder.settings || []).map((res, resIndex) => (
+                                    <div style={{display: 'flex', paddingLeft: '10px'}}>
+                                        <div style={{width: '89%'}}><InputWithHead heading={res.name} /></div>
+                                        <div>
+                                            <InputWithHead className="input-inside-table-fees" value={res.points} 
+                                                placeholder={"Points"} 
+                                                onChange={(e) => this.onChangeLadderSetting(e.target.value, index, "resultTypes", resIndex, "points")}>
+                                            </InputWithHead>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
-                </div>
+                ))}
+                { (isAllDivisionChecked == false && allDivAdded == false)? 
+                 <div className="row" >
+                    <div className="col-sm" onClick={(e) => this.onChangeLadderSetting(null, null, "addLadder")}>
+                        <span className='input-heading-add-another pointer'>+ {AppConstants.addNewLadderScheme}</span>
+                    </div>
+                </div> : null}
+                {this.deleteConfirmModalView()}
+                {this.allDivisionModalView()}
             </div>
         )
 
+    }
+
+    deleteConfirmModalView = () => {
+        return (
+           <div>
+             <Modal
+              className="add-membership-type-modal"
+               title={AppConstants.ladderFormat}
+               visible={this.state.deleteModalVisible}
+               onOk={() => this.handleDeleteModal("ok")}
+               onCancel={() => this.handleDeleteModal("cancel")}>
+                 <p>{AppConstants.ladderRemoveMsg}</p>
+             </Modal>
+           </div>
+         );
+    }
+
+    allDivisionModalView = () => {
+    return (
+        <div>
+          <Modal
+           className="add-membership-type-modal"
+            title={AppConstants.ladderFormat}
+            visible={this.state.allDivisionVisible}
+            onOk={() => this.handleAllDivisionModal("ok")}
+            onCancel={() => this.handleAllDivisionModal("cancel")}>
+              <p>{AppConstants.ladderAllDivisionRmvMsg}</p>
+          </Modal>
+        </div>
+      );
     }
 
 
@@ -118,19 +239,13 @@ class LiveScoreLadderSettings extends Component {
                 <div className="footer-view">
                     <div className="row">
                         <div className="col-sm">
-                            {/* <div className="reg-add-save-button">
-                                <Button type="cancel-button">{AppConstants.delete}</Button>
-                            </div> */}
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                {/* <Button className="save-draft-text" type="save-draft-text">
-                                    {AppConstants.saveAsDraft}
-                                </Button> */}
                                 <Button
                                     onClick={() => this.onSaveClick()}
                                     className="publish-button" type="primary">
-                                    {this.state.competitionTabKey == 6 ? AppConstants.publish : AppConstants.save}
+                                    {AppConstants.save}
                                 </Button>
                             </div>
                         </div>
@@ -141,11 +256,7 @@ class LiveScoreLadderSettings extends Component {
 
     };
 
-    onSaveClick() {
-        const { postData } = this.props.ladderSettingState
-        this.props.ladderSettingPostDATA(postData)
-    }
-
+    
     publicLadderLink = () => {
         let { organisationUniqueKey } = JSON.parse(localStorage.getItem('setOrganisationData'))
 
@@ -195,7 +306,8 @@ class LiveScoreLadderSettings extends Component {
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"19"} />
-                <Loader visible={this.props.ladderSettingState.loader} />
+                <Loader visible={this.props.ladderSettingState.loader || 
+                            this.props.ladderSettingState.onLoad} />
                 <Layout>
                     {this.headerView()}
                     {/* <Content> */}

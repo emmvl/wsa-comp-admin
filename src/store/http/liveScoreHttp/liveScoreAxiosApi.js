@@ -1,5 +1,5 @@
 // import { DataManager } from './../../Components';
-import http from "./liveScorehttp";
+import http from "./liveScoreHttp";
 import { getUserId, getAuthToken, getOrganisationData, getLiveScoreCompetiton } from "../../../util/sessionStorage"
 import history from "../../../util/history";
 import { message } from "antd";
@@ -151,19 +151,39 @@ let LiveScoreAxiosApi = {
     // },
 
     liveScoreLadderList(divisionId, competitionID, compKey) {
-        var url = null
-        if (compKey) {
-            url = `/teams/ladder?divisionIds=${divisionId}&competitionKey=${compKey}`;
-        } else {
-            url = `/teams/ladder?divisionIds=${divisionId}&competitionIds=${competitionID}`;
-        }
+        //var url = null
+        // if (compKey) {
+        //     url = `/teams/ladder?divisionIds=${divisionId}&competitionKey=${compKey}`;
+        // } else {
+        //     url = `/teams/ladder?divisionIds=${divisionId}&competitionIds=${competitionID}`;
+        // }
 
-        return Method.dataGet(url, localStorage.token)
+        // return Method.dataGet(url, localStorage.token)
+
+        let payload = {
+            competitionId: compKey,
+            divisionId: divisionId
+        }
+        let url = `/teams/ladder`
+        return Method.dataPost(url, localStorage.token, payload)
+
+
     },
 
-    liveScoreMatchList(competitionID, start, offset, search) {
-        // start=<1 year in past>&limit=<limit>&offset=<offset></offset>
-        var url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}`;
+    liveScoreMatchList(competitionID, start, offset, search, divisionId, roundName) {
+
+        var url
+
+        if (divisionId && roundName) {
+            url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}&divisionIds=${divisionId}&roundName=${roundName}`;
+        } else if (divisionId) {
+            url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}&divisionIds=${divisionId}`;
+        } else if (roundName) {
+            url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}&roundName=${roundName}`;
+        } else {
+            url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}`;
+        }
+
         return Method.dataGet(url, localStorage.token)
     },
 
@@ -619,10 +639,10 @@ let LiveScoreAxiosApi = {
     liveScoreAttendanceList(competitionId, body, select_status) {
 
         let url
-        if (select_status) {
-            url = `/players/activity?competitionId=${competitionId}&status=${select_status}`
+        if (select_status == 'All') {
+            url = `/players/activity?competitionId=${competitionId}&status=${""}`
         } else {
-            url = `/players/activity?competitionId=${competitionId}`
+            url = `/players/activity?competitionId=${competitionId}&status=${select_status}`
         }
         return Method.dataPost(url, token, body)
     },
@@ -723,16 +743,16 @@ let LiveScoreAxiosApi = {
     },
     laddersSettingGetData(competitionId) {
 
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-        var url = `/competitions/ladderSettings?competitionId=${id}`
+        let { uniqueKey } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        var url = `/competitions/ladderSettings?competitionId=${uniqueKey}`
         return Method.dataGet(url, token)
     },
     laddersSettingPostData(data) {
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let { uniqueKey } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
 
         let body = data
 
-        var url = `/competitions/ladderSettings?competitionId=${id}`
+        var url = `/competitions/ladderSettings?competitionId=${uniqueKey}`
         return Method.dataPost(url, token, body)
     },
     // Get Teams with paggination
@@ -880,6 +900,11 @@ let LiveScoreAxiosApi = {
         return Method.dataPatch(url, token, body)
     },
 
+    bulkScoreChangeApi(data) {
+        let body = data
+        var url = `/matches/bulk/update`;
+        return Method.dataPost(url, token, body)
+    }
 
 };
 

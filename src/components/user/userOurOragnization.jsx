@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Select, Form, Modal, Checkbox, message, Tabs, Table } from 'antd';
+import { Layout, Breadcrumb, Button, Select, Form, Modal, 
+    Checkbox, message, Tabs, Table, Radio } from 'antd';
 import './user.css';
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -71,7 +72,8 @@ class UserOurOragnization extends Component {
             isEditView: false,
             orgPhotoModalVisible: false,
             isEditable: true,
-            sourcePage: "AFF"
+            sourcePage: "AFF",
+            termsAndCondititionFile: null
         }
         _this = this;
         this.props.getCommonRefData();
@@ -186,6 +188,7 @@ class UserOurOragnization extends Component {
             postcode: affiliate.postalCode,
             orgEmail:affiliate.email
         })
+
         let contacts = affiliate.contacts;
         // console.log("contacts::" + contacts);
         if (contacts == null || contacts == undefined || contacts == "") {
@@ -348,6 +351,14 @@ class UserOurOragnization extends Component {
                                 affiliate.organisationLogo = this.state.image;
                                 affiliate.organisationLogoId = 0;
                             }
+                            let termsAndConditionsValue = null;
+                            if(affiliate.termsAndConditionsRefId == 1){
+                                termsAndConditionsValue = affiliate.termsAndConditionsLink;
+                            }
+                            if(this.state.termsAndCondititionFile == null && affiliate.termsAndConditionsRefId == 2){
+                                termsAndConditionsValue = affiliate.termsAndConditionsFile;
+                            }
+
                             formData.append("email", affiliate.email);
                             formData.append("organisationLogo", this.state.image);
                             formData.append("organisationLogoId", affiliate.organisationLogoId);
@@ -367,10 +378,15 @@ class UserOurOragnization extends Component {
                             formData.append("whatIsTheLowestOrgThatCanAddChild", affiliate.whatIsTheLowestOrgThatCanAddChild);
                             formData.append("logoIsDefault", affiliate.logoIsDefault == true ? 1 : 0);
                             formData.append("contacts", contacts);
-
+                            formData.append("termsAndConditionsRefId", affiliate.termsAndConditionsRefId);
+                            formData.append("termsAndConditions", termsAndConditionsValue);
+                            formData.append("organisationLogo", this.state.termsAndCondititionFile);
+                            formData.append("termsAndConditionId", this.state.termsAndCondititionFile == null ? 1 : 0);
 
                             this.setState({ loading: true });
-                            //this.props.saveAffiliateAction(affiliate);
+
+                            console.log("formData:::"+termsAndConditionsValue);
+                           
                             this.props.saveAffiliateAction(formData);
                         }
                     }
@@ -384,8 +400,6 @@ class UserOurOragnization extends Component {
                     formData.append("photoUrl", tableRowData.photoUrl);
                     formData.append("organisationId", getOrganisationData().organisationUniqueKey);
 
-                    console.log("&&&&&&& 2222222" + JSON.stringify(tableRowData));
-                    console.log("&&&&&&& 2222222" + this.state.orgPhotosImgSend);
                     this.setState({ loading: true });
                     this.props.saveOrganiationPhotoAction(formData);
                 }
@@ -505,6 +519,10 @@ class UserOurOragnization extends Component {
 
         this.setState({ orgPhotoModalVisible: false });
     }
+
+    handleForce = data => {
+        this.setState({ termsAndCondititionFile: data.target.files[0]})
+    };
 
     ///////view for breadcrumb
     headerView = () => {
@@ -885,6 +903,61 @@ class UserOurOragnization extends Component {
         )
     }
 
+    termsAndConditionsView = (getFieldDecorator) => {
+        let userState = this.props.userState;
+        let affiliate = this.props.userState.affiliateOurOrg;
+        return (
+            <div className="discount-view pt-5">
+                <span className="form-heading">{AppConstants.termsAndConditions}</span>
+                <Radio.Group
+                    className="reg-competition-radio"
+                    onChange={(e) => this.onChangeSetValue(e.target.value, "termsAndConditionsRefId")}
+                    value={affiliate.termsAndConditionsRefId}>
+                    <Radio value={2}>{AppConstants.fileUploadPdf}</Radio>
+                        {affiliate.termsAndConditionsRefId == 2 && 
+                        <div className=" pl-5 pb-5 pt-4">
+                           
+                            <label className="pt-2">
+                                <input
+                                    type="file"
+                                    id="teamImport"
+                                    ref={(input) => { this.filesInput = input }}
+                                    name="file"
+                                    icon='file text outline'
+                                    iconPosition='left'
+                                    label='Upload PDF'
+                                    labelPosition='right'
+                                    placeholder='UploadPDF...'
+                                    onChange={this.handleForce}
+                                    accept=".pdf"
+                                />
+                            </label>
+                            <div className="pt-4">
+                                <div className="row">
+                                    <div className="col-sm"  style={{whiteSpace: 'break-spaces'}}>
+                                        <a className="userRegLink" href={affiliate.termsAndConditions} target='_blank' >
+                                            {affiliate.termsAndConditionsFile}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    <Radio value={1}>{AppConstants.link}</Radio>
+                    {affiliate.termsAndConditionsRefId == 1 && 
+                        <div className=" pl-5 pb-5">
+                        <InputWithHead  placeholder={AppConstants.termsAndConditions}
+                            value={affiliate.termsAndConditionsLink}
+                            onChange={(e) => this.onChangeSetValue(e.target.value, "termsAndConditionsLink")}
+                            />
+                        </div>
+                    }
+                </Radio.Group>
+               
+            </div >
+        )
+    }
+
     deleteConfirmModalView = () => {
         return (
             <div>
@@ -1174,6 +1247,9 @@ class UserOurOragnization extends Component {
                                         </div>
                                         <div className="tab-formView mt-5" >
                                             {this.contacts(getFieldDecorator)}
+                                        </div>
+                                        <div className="tab-formView mt-5" >
+                                            {this.termsAndConditionsView(getFieldDecorator)}
                                         </div>
                                     </TabPane>
                                     <TabPane tab={AppConstants.photos} key="2">

@@ -5,3 +5,8 @@
     flex-direction: column;
     justify-content: center;
 }
+
+.division-table-field-view{
+    display: flex;
+    align-items: center
+}

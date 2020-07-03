@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Layout, Button, Table, Select, Tag, Modal } from "antd";
+import { NavLink } from "react-router-dom";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -7,7 +8,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 import { isArrayNotEmpty } from "../../util/helpers";
-
+import { registrationMainDashboardListAction } from "../../store/actions/registrationAction/registrationDashboardAction";
+import { checkRegistrationType } from "../../util/permissions";
+import { clearCompReducerDataAction } from "../../store/actions/registrationAction/competitionFeeAction";
+import history from "../../util/history";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -28,20 +32,19 @@ const columns = [
 
     },
     {
-        title: "Registration Division",
+        title: "Registration Divisions",
         dataIndex: "divisions",
         key: "divisions",
         render: divisions => {
             let divisionList = isArrayNotEmpty(divisions) ? divisions : []
             return (
-
-                < span >
+                < span key={"part1"}>
                     {
                         divisionList.map(item => (
                             <Tag
                                 className="comp-dashboard-table-tag"
                                 color={item.color}
-                                key={item.id}
+                                key={"part" + item.id}
                             >
                                 {item.divisionName}
                             </Tag>
@@ -52,24 +55,26 @@ const columns = [
         },
         sorter: (a, b) => tableSort(a, b, "divisions")
     },
-
     {
         title: "Registration Type",
-        dataIndex: "teamCount",
-        key: "teamCount",
-        sorter: (a, b) => tableSort(a, b, "teamCount"),
-        render: teamCount => (
-            <span>{teamCount == null || teamCount == "" ? "N/A" : teamCount}</span>
-        )
+        dataIndex: "invitees",
+        key: "invitees",
+        render: invitees => {
+            let inviteesRegType = isArrayNotEmpty(invitees) ? invitees : []
+            let registrationInviteesRefId = isArrayNotEmpty(inviteesRegType) ? inviteesRegType[0].registrationInviteesRefId : 0
+            return (
+                < span >
+                    {checkRegistrationType(registrationInviteesRefId)}
+                </span >
+            )
+        },
+        sorter: (a, b) => tableSort(a, b, "invitees")
     },
     {
         title: "Status",
-        dataIndex: "status",
-        key: "status",
-        sorter: (a, b) => tableSort(a, b, "playersCount"),
-        render: playersCount => (
-            <span>{playersCount == null || playersCount == "" ? "N/A" : playersCount}</span>
-        )
+        dataIndex: "statusName",
+        key: "statusName",
+        sorter: (a, b) => tableSort(a, b, "statusName"),
     },
 ];
 
@@ -81,19 +86,19 @@ const columnsOwned = [
         sorter: (a, b) => tableSort(a, b, "competitionName")
     },
     {
-        title: "Registration Division",
+        title: "Registration Divisions",
         dataIndex: "divisions",
         key: "divisions",
         render: divisions => {
             let divisionList = isArrayNotEmpty(divisions) ? divisions : []
             return (
-                < span >
+                < span key={"owned1"} >
                     {
                         divisionList.map(item => (
                             <Tag
                                 className="comp-dashboard-table-tag"
                                 color={item.color}
-                                key={item.id}
+                                key={"owned" + item.id}
                             >
                                 {item.divisionName}
                             </Tag>
@@ -104,17 +109,21 @@ const columnsOwned = [
         },
         sorter: (a, b) => tableSort(a, b, "divisions")
     },
-
     {
         title: "Registration Type",
-        dataIndex: "teamCount",
-        key: "teamCount",
-        sorter: (a, b) => tableSort(a, b, "teamCount"),
-        render: teamCount => (
-            <span>{teamCount == null || teamCount == "" ? "N/A" : teamCount}</span>
-        )
+        dataIndex: "invitees",
+        key: "invitees",
+        render: invitees => {
+            let inviteesRegType = isArrayNotEmpty(invitees) ? invitees : []
+            let registrationInviteesRefId = isArrayNotEmpty(inviteesRegType) ? inviteesRegType[0].registrationInviteesRefId : 0
+            return (
+                < span >
+                    {checkRegistrationType(registrationInviteesRefId)}
+                </span >
+            )
+        },
+        sorter: (a, b) => tableSort(a, b, "invitees")
     },
-
     {
         title: "Status",
         dataIndex: "statusName",
@@ -125,9 +134,7 @@ const columnsOwned = [
 
 ];
 
-const data = []
-
-class RegisteredUser extends Component {
+class RegistrationMainDashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -137,9 +144,9 @@ class RegisteredUser extends Component {
     }
 
     componentDidMount() {
-
         this.props.getOnlyYearListAction(this.props.appState.yearList)
         this.setState({ loading: true })
+        this.props.registrationMainDashboardListAction(this.state.year)
     }
 
     componentDidUpdate(nextProps) {
@@ -166,6 +173,7 @@ class RegisteredUser extends Component {
     onYearClick(yearId) {
         localStorage.setItem("yearId", yearId)
         this.setState({ year: yearId })
+        this.props.registrationMainDashboardListAction(yearId)
     }
 
     ///dropdown view containing all the dropdown of header
@@ -242,52 +250,19 @@ class RegisteredUser extends Component {
                                             alignItems: "center",
                                             justifyContent: "flex-end"
                                         }}
+                                        onClick={() => this.props.clearCompReducerDataAction("all")}
                                     >
-                                        <Button className="primary-add-comp-form" type="primary"
+                                        <NavLink
+                                            to={{ pathname: `/registrationCompetitionFee`, state: { id: null } }}
+                                            className="text-decoration-none"
                                         >
-                                            + {AppConstants.newCompetition}
-                                        </Button>
-
+                                            <Button className="primary-add-comp-form" type="primary"
+                                            >
+                                                + {AppConstants.newCompetitionReg}
+                                            </Button>
+                                        </NavLink>
                                     </div>
                                 </div>
-                                <div className="col-sm">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: "100%",
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
-                                        {/* <NavLink to="/competitionReplicate"> */}
-                                        <Button className="primary-add-comp-form" type="primary">
-                                            + {AppConstants.replicateCompetition}
-                                        </Button>
-                                        {/* </NavLink> */}
-                                    </div>
-                                </div>
-
-                                <div className="col-sm">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: "100%",
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
-                                        <Button className="primary-add-comp-form" type="primary"
-                                        >
-                                            + {AppConstants.newCompetitionReg}
-                                        </Button>
-
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
                     </div>
@@ -302,15 +277,15 @@ class RegisteredUser extends Component {
             <div className="comp-dash-table-view">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        // loading={this.props.competitionDashboardState.onLoad == true && true}
+                        loading={this.props.registrationDashboardState.onLoad == true && true}
                         className="home-dashboard-table"
                         columns={columns}
-                        dataSource={data}
+                        dataSource={this.props.registrationDashboardState.participatingInRegistrations}
                         pagination={false}
-                    // onRow={(record) => ({
-                    //     onClick: () =>
-                    //         this.compScreenDeciderCheck(record)
-                    // })}
+                        rowKey={record => "participatingInRegistrations" + record.competitionId}
+                        onRow={(record) => ({
+                            onClick: () => history.push("/registrationCompetitionFee", { id: record.competitionId })
+                        })}
                     />
 
                 </div>
@@ -320,19 +295,20 @@ class RegisteredUser extends Component {
 
     ////////ownedView view for competition
     ownedView = () => {
+        console.log(this.props.registrationDashboardState)
         return (
             <div className="comp-dash-table-view">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        // loading={this.props.competitionDashboardState.onLoad === true && true}
+                        loading={this.props.registrationDashboardState.onLoad === true && true}
                         className="home-dashboard-table"
                         columns={columnsOwned}
-                        dataSource={data}
+                        dataSource={this.props.registrationDashboardState.ownedRegistrations}
                         pagination={false}
-                    // onRow={(record) => ({
-                    //     onClick: () =>
-                    //         this.compScreenDeciderCheck(record)
-                    // })}
+                        rowKey={record => "ownedRegistrations" + record.competitionId}
+                        onRow={(record) => ({
+                            onClick: () => history.push("/registrationCompetitionFee", { id: record.competitionId })
+                        })}
                     />
                 </div>
             </div>
@@ -359,12 +335,15 @@ class RegisteredUser extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getOnlyYearListAction,
+        registrationMainDashboardListAction,
+        clearCompReducerDataAction,
     }, dispatch)
 }
 
 function mapStatetoProps(state) {
     return {
         appState: state.AppState,
+        registrationDashboardState: state.RegistrationDashboardState,
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)((RegisteredUser));
+export default connect(mapStatetoProps, mapDispatchToProps)((RegistrationMainDashboard));

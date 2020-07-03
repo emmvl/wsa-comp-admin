@@ -47,7 +47,7 @@ import moment from "moment";
 import history from "../../util/history";
 import ValidationConstants from "../../themes/validationConstant";
 import { message } from "antd";
-import { isArrayNotEmpty } from "../../util/helpers";
+import { isArrayNotEmpty,isNotNullOrEmptyString } from "../../util/helpers";
 import Loader from '../../customComponents/loader';
 import { routePermissionForOrgLevel } from "../../util/permissions";
 import Tooltip from 'react-png-tooltip'
@@ -308,10 +308,9 @@ class RegistrationMembershipFee extends Component {
 
 
     setFieldDecoratorValues = () => {
-        console.log("setFieldDecoratorValues");
         let allData = this.props.registrationState.getMembershipProductDetails
         let membershipProductData = allData !== null ? allData.membershipproduct : []
-        this.props.form.validateFields((err, values) => console.log("values266", Object.keys(values)))
+        // this.props.form.validateFields((err, values) => console.log("values266", Object.keys(values)))
         this.props.form.setFieldsValue({
             yearRefId: membershipProductData.yearRefId ? membershipProductData.yearRefId : 1,
             membershipProductName: membershipProductData.membershipProductName,
@@ -319,15 +318,20 @@ class RegistrationMembershipFee extends Component {
         });
         let typesData = membershipProductData.membershipProductTypes ? membershipProductData.membershipProductTypes : []
         typesData.length > 0 && typesData.map((item, index) => {
-            console.log("item, index", item, index)
             let dobFrom = `dobFrom${index}`
             let dobTo = `dobTo${index}`
             let allowTeamRegistrationTypeRefId = `allowTeamRegistrationTypeRefId${index}`
-            this.props.form.setFieldsValue({
-                [dobFrom]: moment(item.dobFrom),
-                [dobTo]: moment(item.dobTo),
-                [allowTeamRegistrationTypeRefId]: item.allowTeamRegistrationTypeRefId
-            })
+            if (isNotNullOrEmptyString(item.dobFrom)) {
+                this.props.form.setFieldsValue({
+                    [dobFrom]: moment(item.dobFrom),
+                    [dobTo]: moment(item.dobTo),
+                })
+            }
+            if (isNotNullOrEmptyString(item.allowTeamRegistrationTypeRefId)) {
+                this.props.form.setFieldsValue({
+                    [allowTeamRegistrationTypeRefId]: item.allowTeamRegistrationTypeRefId
+                })
+            }
         })
         let data = this.props.registrationState.membershipProductDiscountData
         let discountData = data && data.membershipProductDiscounts !== null ? data.membershipProductDiscounts[0].discounts : []
@@ -485,7 +489,6 @@ class RegistrationMembershipFee extends Component {
         const defaultTypes = registrationState.getDefaultMembershipProductTypes !== null ? registrationState.getDefaultMembershipProductTypes : []
         let allData = this.props.registrationState.getMembershipProductDetails
         let {allowTeamRegistration} = this.props.commonReducerState;
-        console.log("defaultTypes::" + JSON.stringify(defaultTypes));															
         return (
             <div>
                 <span className="applicable-to-heading">
@@ -599,7 +602,7 @@ class RegistrationMembershipFee extends Component {
                                                                 format={"DD-MM-YYYY"}
                                                                 placeholder={"dd-mm-yyyy"}
                                                                 showTime={false}
-                                                                defaultValue={item.dobTo !== null ? moment(item.dobTo) : null}
+                                                                // defaultValue={item.dobTo !== null ? moment(item.dobTo) : null}
                                                                 disabled={this.state.membershipIsUsed}
                                                                 // disabledDate={d => d.isSameOrBefore(item.dobFrom)
                                                                 // }
@@ -700,7 +703,8 @@ class RegistrationMembershipFee extends Component {
                                 disabled={this.state.membershipIsUsed}
                                 conceptulHelp
                                 conceptulHelpMsg={AppConstants.membershipProductNameMsg}
-                                marginTop={12}
+                                tooltiprequired={"mt-3"}
+                                // marginTop={12}
                             />
                         )}
                 </Form.Item>
@@ -724,7 +728,7 @@ class RegistrationMembershipFee extends Component {
                         >
                             {appState.productValidityList.map(item => {
                                 return (
-                                    <div>
+                                    <div key={"productValidityList" + item.id}>
                                         {item.id == "2" &&
                                             <Radio key={"validityRefId" + item.id} value={item.id}> {item.description}</Radio>
                                         }
@@ -753,7 +757,7 @@ class RegistrationMembershipFee extends Component {
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.membershipFees}</span>
                 {feesData.length > 0 && feesData.map((item, index) => (
-                    <div className="inside-container-view">
+                    <div className="inside-container-view" key={"feesData" + index}>
                         <div className="table-responsive">
                             <Table
                                 className="fees-table"
@@ -775,7 +779,7 @@ class RegistrationMembershipFee extends Component {
                             {this.props.appState.membershipProductFeesTypes.map((item, typeindex) => {
                                 return (
 
-                                    <div className='row'>
+                                    <div className='row' key={"membershipProductFeesTypes" + typeindex} >
                                         <Radio key={"validityRefId" + typeindex} value={item.id}> {item.description}</Radio>
 
                                         <div style={{ marginLeft: -18, }}>
@@ -797,7 +801,6 @@ class RegistrationMembershipFee extends Component {
 
     discountViewChange = (item, index, getFieldDecorator) => {
         let childDiscounts = item.childDiscounts !== null && item.childDiscounts.length > 0 ? item.childDiscounts : []
-        console.log("item", item)
         switch (item.membershipPrdTypeDiscountTypeRefId) {
             case 1:
                 return <div>
@@ -1410,7 +1413,7 @@ function mapDispatchToProps(dispatch) {
         membershipFeesTableInputChangeAction, getCommonDiscountTypeTypeAction, membershipProductDiscountTypesAction,
         addNewMembershipTypeAction, addRemoveDiscountAction, updatedDiscountDataAction,
         membershipFeesApplyRadioAction, onChangeAgeCheckBoxAction, updatedMembershipTypeDataAction,
-        removeCustomMembershipTypeAction, regMembershipListDeleteAction,regMembershipListDeleteAction,getAllowTeamRegistrationTypeAction
+        removeCustomMembershipTypeAction, regMembershipListDeleteAction, getAllowTeamRegistrationTypeAction
     }, dispatch)
 }
 

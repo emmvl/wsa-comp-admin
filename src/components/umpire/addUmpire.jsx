@@ -13,6 +13,7 @@ import { bindActionCreators } from 'redux';
 import { getUmpireCompId, getUmpireCompetiton } from '../../util/sessionStorage'
 import { isArrayNotEmpty, captializedString, regexNumberExpression } from "../../util/helpers";
 import Loader from '../../customComponents/loader'
+import history from "../../util/history";
 import {
     umpireListAction,
     updateAddUmpireData,
@@ -51,21 +52,14 @@ class AddUmpire extends Component {
     }
 
     componentDidMount() {
-
         let compId = null
-
-        if (this.state.screenName == 'umpireDashboard') {
+        if (getUmpireCompetiton()) {
             compId = JSON.parse(getUmpireCompetiton())
-        } else {
-            compId = JSON.parse(getUmpireCompId())
         }
-
         this.props.umpireListAction({ refRoleId: 5, entityTypes: 1, compId: compId, offset: 0 })
-
         if (compId !== null) {
             this.props.getUmpireAffiliateList({ id: compId })
         }
-
         if (this.state.isEdit === true) {
             this.props.updateAddUmpireData(this.state.tableRecord, 'isEditUmpire')
             this.setState({ loader: true })
@@ -76,9 +70,7 @@ class AddUmpire extends Component {
     }
 
     componentDidUpdate(nextProps) {
-
         if (this.props.umpireState.umpireList !== nextProps.umpireState.umpireList) {
-
             if (this.state.loader === true && this.props.umpireState.onLoad === false) {
                 this.filterUmpireList()
                 if (this.state.isEdit === true) {
@@ -86,7 +78,6 @@ class AddUmpire extends Component {
                 }
                 this.setState({ load: false, loader: false })
             }
-
         }
 
         if (this.props.umpireState.affiliateId !== nextProps.umpireState.affiliateId) {
@@ -94,14 +85,11 @@ class AddUmpire extends Component {
                 const { affiliateId } = this.props.umpireState
                 this.setSelectedAffiliateValue(affiliateId)
                 this.setState({ affiliateLoader: false })
-
             }
         }
-
     }
 
     setSelectedAffiliateValue(affiliateId) {
-
         this.props.form.setFieldsValue({
             'umpireAffiliateName': affiliateId
         })
@@ -109,7 +97,6 @@ class AddUmpire extends Component {
     setInitalFiledValue() {
         const { umpireData, affiliateId } = this.props.umpireState
         let data = this.state.tableRecord
-
         this.props.form.setFieldsValue({
             'First Name': umpireData.firstName,
             'Last Name': umpireData.lastName,
@@ -122,13 +109,10 @@ class AddUmpire extends Component {
     filterUmpireList() {
         const { umpireListResult } = this.props.umpireState
         let umpireList = isArrayNotEmpty(umpireListResult) ? umpireListResult : []
-
         for (let i in umpireList) {
             OPTIONS.push(umpireList[i].firstName + " " + umpireList[i].lastName)
         }
     }
-
-
 
     ///////view for breadcrumb
     headerView = () => {
@@ -189,15 +173,11 @@ class AddUmpire extends Component {
                                     onSearch={(value) => {
                                         this.setState({ isUserNotFound: false, exsitingValue: value })
                                         value ?
-                                            // this.props.umpireSearchAction(refRoleTypes('member'), entityTypes('COMPETITION'), this.state.competition_id, value)
                                             this.props.umpireSearchAction({ refRoleId: refRoleTypes('member'), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id, userName: value, offset: 0 })
                                             :
-                                            // this.props.umpireListAction(refRoleTypes('member'), entityTypes('COMPETITION'), this.state.competition_id)
                                             this.props.umpireListAction({ refRoleId: refRoleTypes('member'), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id, offset: 0 })
 
                                     }}
-
-
                                 >{umpireList.map((item) => {
                                     return <Option key={item.id} value={item.firstName + " " + item.lastName}>
                                         {item.firstName + " " + item.lastName}
@@ -209,8 +189,6 @@ class AddUmpire extends Component {
                         </Form.Item>
                         <span style={{ color: 'red' }} >{(this.state.exsitingValue.length > 0 && (this.state.isUserNotFound || umpireList.length == 0)) && ValidationConstants.userNotFound}</span>
                     </div>
-
-
                 </div>
                 <div className="row" >
                     <div className="col-sm" >
@@ -221,7 +199,6 @@ class AddUmpire extends Component {
                             {getFieldDecorator("umpireAffiliateName", {
                                 rules: [{ required: true, message: ValidationConstants.affiliateField }],
                             })(
-
                                 <Select
                                     mode="multiple"
                                     showSearch
@@ -249,7 +226,6 @@ class AddUmpire extends Component {
     umpireNewRadioBtnView(getFieldDecorator) {
         const { affilateList, umpireData, affiliateId, onAffiliateLoad } = this.props.umpireState
         let affiliateListResult = isArrayNotEmpty(affilateList) ? affilateList : []
-        console.log(umpireData, 'umpireData')
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -395,30 +371,6 @@ class AddUmpire extends Component {
                         <Radio value={"new"}>{AppConstants.new}</Radio>
                         <Radio value={"existing"}>{AppConstants.existing} </Radio>
                     </div>
-
-                    {/* radio button with tooltip */}
-
-                    {/* <div className="row ml-2" style={{ marginTop: 18 }} >
-
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"new"}>{AppConstants.new}</Radio>
-                            <div style={{ marginLeft: -10, width: 50 }}>
-                                <Tooltip background='#ff8237'>
-                                    <span>{AppConstants.newMsgForScorerManager}</span>
-                                </Tooltip>
-                            </div>
-                        </div>
-
-                        <div style={{ display: 'flex', alignItems: 'center', marginLeft: -10 }}>
-                            <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"existing"}>{AppConstants.existing} </Radio>
-                            <div style={{ marginLeft: -10 }}>
-                                <Tooltip background='#ff8237' >
-                                    <span>{AppConstants.existingMsgForScorerManager}</span>
-                                </Tooltip>
-                            </div>
-                        </div>
-                    </div> */}
-
                 </Radio.Group>
 
             </div>

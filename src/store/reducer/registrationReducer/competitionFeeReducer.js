@@ -132,7 +132,7 @@ const initialState = {
     clubSchool: [],
 
     affiliateNonSelected: null,
-    anyOrgNonSelected: null,
+    anyOrgNonSelected: "none2",
 
     affiliateArray: [],
     anyOrgAffiliateArr: [],
@@ -1387,7 +1387,7 @@ function createProductFeeArr(data) {
             "competitionMembershipProductId": product[i].competitionMembershipProductId,
             "membershipProductUniqueKey": product[i].membershipProductUniqueKey,
             "seasonal": { allType: alltypeArraySeasonal, perType: perTypeArraySeasonal },
-            "casual": { allType: alltypeArrayCasual, perType: perTypeArrayCasual, perType: perTypeArrayCasual },
+            "casual": { allType: alltypeArrayCasual, perType: perTypeArrayCasual },
             "seasonalTeam": { allType: allTypeTeamArraySeasonal, perType: perTypeTeamArraySeasonal },
             "isAllType": product[i].isProductTypeALL === false ? "allDivisions" : "perDivision",
             "isSeasonal": isSeasonalFeeTypeAvailable,
@@ -1545,6 +1545,7 @@ function competitionFees(state = initialState, action) {
                         "inviteesOrg": []
                     }
                     state.affiliateArray = [affiliate_Object]
+                    state.anyOrgNonSelected = "none2"
                 } else if (selectedInvitees[o] == 7 || selectedInvitees[o] == 8) {
                     state.anyOrgSelected = selectedInvitees[o]
                     let affiliateObject = null
@@ -1559,6 +1560,7 @@ function competitionFees(state = initialState, action) {
                             "inviteesOrg": affiliateOrgSelectedArr.selecetdOrgArray
                         }
                         state.anyOrgAffiliateArr = [affiliateObject]
+                        state.anyOrgNonSelected = null
                     }
                     else {
                         // club
@@ -2239,7 +2241,7 @@ function competitionFees(state = initialState, action) {
                 state.clubSchool = []
 
                 state.affiliateNonSelected = null
-                state.anyOrgNonSelected = null
+                state.anyOrgNonSelected = "none2"
 
                 state.affiliateArray = []
                 state.anyOrgAffiliateArr = []

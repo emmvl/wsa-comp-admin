@@ -38,21 +38,18 @@ class UmpirePoolAllocation extends Component {
             assignedData: [
                 {
                     teamId: 112, teamName: "a", playerCount: 0, isChecked: false, gradeRefId: null, players: [
-                        { playerId: 1, playerName: "Jhon", playerHistory: [], position1: 2, position2: null, isCommentsAvailable: 1 },
-                        { playerId: 2, playerName: "Mike Martin", playerHistory: [], position1: 1, position2: null, isCommentsAvailable: 0 },
+                        { playerId: 1, playerName: "Jhon", Badge: "Badge A", years: "2 Years", matches: "3005", rank: 1 },
+
                     ]
                 },
-                {
-                    teamId: 114, teamName: "b", playerCount: 0, isChecked: false, gradeRefId: null, position1: null, position2: null, isCommentsAvailable: 0, players: [
-                        { playerId: 3, playerName: "Test", isChecked: true, playerHistory: [{ teamId: 22, teamText: 'ABC' }] },
-                        { playerId: 4, playerName: "Johny", isChecked: false, playerHistory: [], position1: 1, position2: 3, isCommentsAvailable: 1 },
-                    ]
-                },
+                // {
+                //     teamId: 114, teamName: "b", playerCount: 0, isChecked: false, gradeRefId: null, position1: null, position2: null, isCommentsAvailable: 0, players: [
+                //     ]
+                // },
             ],
 
             unassignedData: [
-                { playerId: 5, playerName: "Kristn", isChecked: true, playerHistory: [], position1: null, isCommentsAvailable: 0 },
-                { playerId: 6, playerName: "Adom Crish", isChecked: false, playerHistory: [], position1: 55, isCommentsAvailable: 1 },
+                { playerId: 5, playerName: "Kristn", Badge: "Badge F", years: "1 Years", matches: "905", rank: 2 },
             ]
 
         }
@@ -100,7 +97,7 @@ class UmpirePoolAllocation extends Component {
                             </span>
                         </div>
 
-                        <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
+                        {/* <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
                             <div className="row">
 
                                 <div className="col-sm pt-1">
@@ -139,10 +136,7 @@ class UmpirePoolAllocation extends Component {
                                             justifyContent: "flex-end"
                                         }}
                                     >
-                                        {/* <NavLink to={{
-                                            pathname: `/umpireImport`,
-                                            state: { screenName: 'umpireRoaster' }
-                                        }} className="text-decoration-none"> */}
+                                       
                                         <Button className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">
@@ -155,11 +149,10 @@ class UmpirePoolAllocation extends Component {
                                                 </div>
                                             </div>
                                         </Button>
-                                        {/* </NavLink> */}
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                     {/* <div className="mt-5" style={{ display: "flex", width: 'fit-content' }} >
                         <div style={{
@@ -225,17 +218,6 @@ class UmpirePoolAllocation extends Component {
                                     }
 
                                 </Select>
-                            </div>
-                        </div>
-
-                        <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end", alignSelf: "center" }} >
-                            {/* <NavLink to="/competitionPartPlayerGradeCalculate" > */}
-                            <span className='input-heading-add-another pt-0'>{AppConstants.playerGradingToggle}</span>
-                            {/* </NavLink> */}
-                            <div style={{ marginTop: 4 }}>
-                                <Tooltip placement="top" background='#ff8237'>
-                                    <span>{AppConstants.playerGradingToggleMsg}</span>
-                                </Tooltip>
                             </div>
                         </div>
                     </div>
@@ -336,13 +318,14 @@ class UmpirePoolAllocation extends Component {
                                         <div className="row" >
                                             <Checkbox
                                                 className="single-checkbox mt-1 check-box-player"
-                                                checked={teamItem.isChecked}
+                                                checked={this.state.assignedcheckbox}
+                                                onChange={(e) => this.setState({ assignedcheckbox: e.target.checked })}
                                             >
                                             </Checkbox>
                                             <div className="col-sm d-flex align-items-center">
                                                 <span className="player-grading-haeding-team-name-text">{teamItem.teamName}</span>
                                                 <span className="player-grading-haeding-player-count-text ml-2">
-                                                    {teamItem.players.length > 1 ? teamItem.players.length + " Players" : teamItem.players.length + " Player"} </span>
+                                                    {teamItem.players.length > 1 ? teamItem.players.length + " Umpires" : teamItem.players.length + " Umpire"} </span>
                                             </div>
                                             <div className="col-sm d-flex justify-content-end ">
                                                 <img className="comp-player-table-img team-delete-link" src={AppImages.deleteImage}
@@ -373,55 +356,31 @@ class UmpirePoolAllocation extends Component {
                                                         >
                                                             <div className="row" >
                                                                 <Checkbox
-                                                                    checked={playerItem.isChecked}
-                                                                    className="single-checkbox mt-1 check-box-player"
-                                                                // onChange={e => this.onChangeChildDivCheckbox(e.target.checked, teamIndex, playerIndex, "assigned")}
+                                                                    checked={this.state.assignedcheckbox}
+                                                                    className="single-checkbox mt-0 check-box-player"
+                                                                    onChange={(e) => this.setState({ assignedcheckbox: e.target.checked })}
                                                                 >
                                                                 </Checkbox>
-                                                                <div className="col-sm d-flex align-items-center"  >
-                                                                    {/* <NavLink to={{ pathname: `/userPersonal`, state: { userId: playerItem.userId } }}
-                                                                    > */}
+                                                                <div className="col-sm d-flex justify-content-flex-start align-items-center"  >
                                                                     <span style={{ cursor: "pointer" }}
-                                                                        className="player-grading-haeding-player-name-text">{playerItem.playerName}</span>
-                                                                    {/* </NavLink> */}
+                                                                        className="player-grading-haeding-player-name-text">{playerItem.rank}{" "}{playerItem.playerName}</span>
                                                                 </div>
-                                                                <div
-                                                                    className="col-sm d-flex justify-content-end "
-                                                                    style={{ flexFlow: 'wrap' }}>
-                                                                    <div className="col-sm">
-                                                                        {playerItem.playerHistory.map((item, index) => {
-
-                                                                            return (
-                                                                                <Tag className="comp-player-table-tag" key={item.teamId}>
-                                                                                    {item.teamText}
-                                                                                </Tag>
-
-                                                                            )
-                                                                        })}
-                                                                    </div>
-                                                                    <div>
-                                                                        {playerItem.position1 &&
-                                                                            <Tag className="comp-player-table-tag" style={{ background: playerIndex < 38 ? ColorsArray[playerIndex] : '#ee3346', color: "#ffffff" }} key={playerItem.position1}>
-                                                                                {playerItem.position1}
-                                                                            </Tag>
-                                                                        }
-                                                                        {playerItem.position2 &&
-                                                                            <Tag className="comp-player-table-tag" style={{ background: playerIndex < 36 ? ColorsArray[(playerIndex + 2)] : '#1658ef', color: "#ffffff" }} key={playerItem.position2}>
-                                                                                {playerItem.position2}
-                                                                            </Tag>
-                                                                        }
-                                                                        <img className="comp-player-table-img" src={
-                                                                            playerItem.isCommentsAvailable == 1 ? AppImages.commentFilled :
-                                                                                AppImages.commentEmpty} alt="" height="20" width="20"
-                                                                            style={{ cursor: "pointer" }}
-                                                                            onClick={() => this.onClickComment(playerItem, teamIndex)}
-                                                                        />
-                                                                        {/* </div> */}
-                                                                    </div>
+                                                                <div className="col-sm d-flex justify-content-center align-items-center"  >
+                                                                    <span style={{ cursor: "pointer" }}
+                                                                        className="player-grading-haeding-player-name-text">{playerItem.Badge}</span>
+                                                                </div>
+                                                                <div className="col-sm d-flex justify-content-center align-items-center"  >
+                                                                    <span style={{ cursor: "pointer" }}
+                                                                        className="player-grading-haeding-player-name-text">{playerItem.years}</span>
+                                                                </div>
+                                                                <div className="col-sm d-flex justify-content-center align-items-center"  >
+                                                                    <span style={{ cursor: "pointer" }}
+                                                                        className="player-grading-haeding-player-name-text">{playerItem.matches}</span>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    )}
+                                                    )
+                                                    }
 
                                                 </Draggable>
 
@@ -478,12 +437,14 @@ class UmpirePoolAllocation extends Component {
                                 <div className="row" >
                                     <Checkbox
                                         className="single-checkbox mt-1 check-box-player"
-                                        checked={unassignedData.isChecked}>
+                                        checked={this.state.unassignedcheckbox}
+                                        onChange={(e) => this.setState({ unassignedcheckbox: e.target.checked })}
+                                    >
                                     </Checkbox>
                                     <div className="col-sm d-flex align-items-center"  >
                                         <span className="player-grading-haeding-team-name-text">{AppConstants.unassigned}</span>
                                         <span className="player-grading-haeding-player-count-text ml-2">
-                                            {unassignedData.length > 1 ? unassignedData.length + " Players" : unassignedData.length + " Player"}
+                                            {unassignedData.length > 1 ? unassignedData.length + " Umpires" : unassignedData.length + " Umpire"}
                                         </span>
                                     </div>
 
@@ -510,48 +471,25 @@ class UmpirePoolAllocation extends Component {
 
                                             <div className="row" >
                                                 <Checkbox
-                                                    checked={playerItem.isChecked}
-                                                    className="single-checkbox mt-1 check-box-player" >
+                                                    checked={this.state.unassignedcheckbox}
+                                                    onChange={(e) => this.setState({ unassignedcheckbox: e.target.checked })}
+                                                    className="single-checkbox mt-0 check-box-player" >
                                                 </Checkbox>
-                                                <div className="col-sm d-flex align-items-center"  >
-                                                    {/* <NavLink to={{ pathname: `/userPersonal`, state: { userId: playerItem.userId } }}
-                                                    > */}
+                                                <div className="col-sm d-flex justify-content-flex-start align-items-center"  >
                                                     <span style={{ cursor: "pointer" }}
-                                                        className="player-grading-haeding-player-name-text">{playerItem.playerName}</span>
-                                                    {/* </NavLink> */}
+                                                        className="player-grading-haeding-player-name-text">{playerItem.rank}{" "}{playerItem.playerName}</span>
                                                 </div>
-                                                <div
-                                                    className="col-sm d-flex justify-content-end "
-                                                    style={{ flexFlow: 'wrap' }}>
-                                                    <div className="col-sm">
-                                                        {playerItem.playerHistory.map((item, index) => {
-                                                            return (
-                                                                <Tag className="comp-player-table-tag" key={item.teamId}>
-                                                                    {item.teamText}
-                                                                </Tag>
-
-                                                            )
-                                                        })}
-                                                    </div>
-                                                    <div>
-                                                        {playerItem.position1 &&
-                                                            <Tag className="comp-player-table-tag" style={{ background: playerIndex <= 38 ? ColorsArray[playerIndex] : '#ee3346', color: "#ffffff" }} key={playerItem.position1}>
-                                                                {playerItem.position1}
-                                                            </Tag>
-                                                        }
-                                                        {playerItem.position2 &&
-                                                            <Tag className="comp-player-table-tag" style={{ background: playerIndex <= 37 ? ColorsArray[(playerIndex + 1)] : '#1658ef', color: "#ffffff" }} key={playerItem.position2}>
-                                                                {playerItem.position2}
-                                                            </Tag>
-                                                        }
-                                                        <img className="comp-player-table-img" src={
-                                                            playerItem.isCommentsAvailable == 1 ? AppImages.commentFilled :
-                                                                AppImages.commentEmpty} alt="" height="20" width="20"
-                                                            style={{ cursor: "pointer" }}
-                                                            onClick={() => this.onClickComment(playerItem, null)}
-                                                        />
-                                                        {/* </div> */}
-                                                    </div>
+                                                <div className="col-sm d-flex justify-content-center align-items-center"  >
+                                                    <span style={{ cursor: "pointer" }}
+                                                        className="player-grading-haeding-player-name-text">{playerItem.Badge}</span>
+                                                </div>
+                                                <div className="col-sm d-flex justify-content-center align-items-center"  >
+                                                    <span style={{ cursor: "pointer" }}
+                                                        className="player-grading-haeding-player-name-text">{playerItem.years}</span>
+                                                </div>
+                                                <div className="col-sm d-flex justify-content-center align-items-center"  >
+                                                    <span style={{ cursor: "pointer" }}
+                                                        className="player-grading-haeding-player-name-text">{playerItem.matches}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -590,7 +528,7 @@ class UmpirePoolAllocation extends Component {
     contentView = () => {
         return (
             <div className="comp-dash-table-view mt-2">
-                <DragDropContext onDragEnd={this.onDragEnd}>
+                <DragDropContext onDragEnd={console.log('value')}>
                     <div className="d-flex flex-row justify-content-between">
                         {this.assignedView()}
                         {this.unassignedView()}

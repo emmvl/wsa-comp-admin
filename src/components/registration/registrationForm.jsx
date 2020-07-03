@@ -73,7 +73,7 @@ const columns = [
         key: "membershipProductTypeName",
     },
     {
-        title: "Registration Division",
+        title: "Registration Divisions",
         dataIndex: "divisionName",
         key: "divisionName",
         width: "25%",
@@ -1547,11 +1547,11 @@ class RegistrationForm extends Component {
                                 )}</div>
                                 <div className="formView">{this.advancedSettingView()}</div>
                                 <div className="formView">{this.sendInviteToView()}</div>
-                                <div className="formView">
+                                {/* <div className="formView">
                                     {this.disclaimerView(
                                         getFieldDecorator
                                     )}
-                                </div>
+                                </div> */}
                                 <Loader visible={this.state.onRegistrationLoad || this.props.appState.onLoad
                                     || this.props.registrationState.onLoad} />
                             </Content>

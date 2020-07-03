@@ -15,12 +15,14 @@ function ladderSettingGetDATA(competitionId) {
     return action;
 }
 
-function updateLadderSetting(data, tableRecord, index) {
+function updateLadderSetting(data, index, key, subIndex, subKey) {
     const action = {
         type: ApiConstants.UPDATE_LADDER_SETTING,
         data,
-        tableRecord,
-        index
+        key,
+        index,
+        subIndex,
+        subKey
     };
     return action;
 }

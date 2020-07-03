@@ -6,7 +6,8 @@ import {
     Button,
     Radio,
     Form,
-    TimePicker
+    TimePicker,
+    Checkbox
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -21,6 +22,7 @@ import { NavLink } from "react-router-dom";
 import Loader from '../../customComponents/loader';
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage'
+import { updateUmpireDataAction } from '../../store/actions/umpireAction/umpireSettingAction'
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -217,7 +219,7 @@ class UmpireSetting extends Component {
 
     ////////form content view
     contentView = () => {
-
+        let defaultChecked = this.props.umpireSettingState.defaultChecked
         return (
             <div className="content-view pt-4">
 
@@ -255,63 +257,78 @@ class UmpireSetting extends Component {
 
 
                 <span className='text-heading-large pt-5' >{AppConstants.umpireReservePref}</span>
-                <div className='row'>
 
-                    <div className="col-sm" >
-                        <InputWithHead required={"pt-0"} heading={AppConstants.noOfMatches + 'Reserve/day'} />
-                        <Select
-                            placeholder={'Select'}
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        >
-                            <Option value={"1"}>{'1'}</Option>
-                            <Option value={"2"}>{'2'}</Option>
-                            <Option value={"3"}>{'3'}</Option>
-                        </Select>
+                <Checkbox
+                    className="single-checkbox pt-2"
+                    checked={defaultChecked.reserveChecked}
+                    onChange={(e) => this.props.updateUmpireDataAction(e.target.checked, "reserveChecked")}
+                >
+                    {AppConstants.activeUmpireReserves}
+                </Checkbox>
+                {defaultChecked.reserveChecked == true &&
+                    <div className='row'>
+
+                        <div className="col-sm" >
+                            <InputWithHead required={"pt-5"} heading={AppConstants.noOfMatches + 'Reserve/day'} />
+                            <Select
+                                placeholder={'Select'}
+                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            >
+                                <Option value={"1"}>{'1'}</Option>
+                                <Option value={"2"}>{'2'}</Option>
+                                <Option value={"3"}>{'3'}</Option>
+                            </Select>
+                        </div>
+
+                        <div className="col-sm" >
+                            <InputWithHead required={"pt-5"} heading={AppConstants.reserveAllocationTiming} />
+                            <Select
+                                placeholder={'Select'}
+                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            >
+                                <Option value={"before"}>{'Before'}</Option>
+                                <Option value={"inBetween"}>{'In-between'}</Option>
+                                <Option value={"after"}>{'After'}</Option>
+                            </Select>
+
+                        </div>
                     </div>
-
-                    <div className="col-sm" >
-                        <InputWithHead required={"pt-0"} heading={AppConstants.reserveAllocationTiming} />
-                        <Select
-                            placeholder={'Select'}
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        >
-                            <Option value={"before"}>{'Before'}</Option>
-                            <Option value={"inBetween"}>{'In-between'}</Option>
-                            <Option value={"after"}>{'After'}</Option>
-                        </Select>
-
-                    </div>
-                </div>
-
+                }
 
                 <span className='text-heading-large pt-5' >{AppConstants.umpireCoach}</span>
-                <Radio >{AppConstants.activeUmpireCoach}</Radio>
+                <Checkbox
+                    className="single-checkbox pt-2"
+                    checked={defaultChecked.coachChecked}
+                    onChange={(e) => this.props.updateUmpireDataAction(e.target.checked, "coachChecked")}
+                >
+                    {AppConstants.activeUmpireCoach}
+                </Checkbox>
+                {defaultChecked.coachChecked == true &&
+                    <div className='row'>
 
+                        <div className="col-sm" >
+                            <InputWithHead required={"pt-5"} heading={AppConstants.noOfMatches + 'Coach/day'} />
+                            <Select
+                                placeholder={'Select'}
+                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            >
+                            </Select>
+                        </div>
 
-                <div className='row'>
+                        <div className="col-sm" >
+                            <InputWithHead required={"pt-5"} heading={'Number of Matches an Umpire coach can perform in a row'} />
+                            <Select
+                                placeholder={'Select'}
+                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            >
+                                <Option value={"1"}>{'1'}</Option>
+                                <Option value={"2"}>{'2'}</Option>
+                                <Option value={"3"}>{'3'}</Option>
+                            </Select>
+                        </div>
 
-                    <div className="col-sm" >
-                        <InputWithHead required={"pt-5"} heading={AppConstants.noOfMatches + 'Coach/day'} />
-                        <Select
-                            placeholder={'Select'}
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        >
-                        </Select>
                     </div>
-
-                    <div className="col-sm" >
-                        <InputWithHead required={"pt-5"} heading={'Number of Matches an Umpire coach can perform in a row'} />
-                        <Select
-                            placeholder={'Select'}
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        >
-                            <Option value={"1"}>{'1'}</Option>
-                            <Option value={"2"}>{'2'}</Option>
-                            <Option value={"3"}>{'3'}</Option>
-                        </Select>
-                    </div>
-
-                </div>
+                }
 
 
             </div >
@@ -350,13 +367,15 @@ class UmpireSetting extends Component {
 }
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        umpireCompetitionListAction
+        umpireCompetitionListAction,
+        updateUmpireDataAction
     }, dispatch)
 }
 
 function mapStatetoProps(state) {
     return {
-        umpireCompetitionState: state.UmpireCompetitionState
+        umpireCompetitionState: state.UmpireCompetitionState,
+        umpireSettingState: state.UmpireSettingState
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(UmpireSetting));

@@ -114,7 +114,6 @@
 }
 
 .match-score-detail {
-    border-bottom-style: "Solid";
     border-bottom: 0.5px solid var(--app-e1e1f5);
     padding: 3px 0 10px 0;
 }
@@ -300,6 +299,29 @@
     background-color: var(--app-ff6c4f);
     border-color: var(--app-ff6c4f);
     align-items: center;
+}
+
+/* .table-input-box-style {
+    height: 44px;
+    width: 50.5px;
+    font-size: 13px;
+    color: var(--app-1b1b34);
+    font-family: inter;
+    font-weight: normal;
+    margin-left: 5px
+  } */
+
+  .table-input-box-style {
+    height: 40px;
+    width: 40px;
+    font-size: 13px;
+    color: var(--app-1b1b34);
+    font-family: inter;
+    font-weight: normal;
+    /* padding:5px; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 @media(min-width: 768px) and (max-width: 1024px) {

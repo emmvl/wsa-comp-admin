@@ -115,7 +115,7 @@ class QuickCompetitionInvitations extends Component {
                             <div className="comp-buttons-view">
                                 <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveAsDraft}</Button>
 
-                                <NavLink to="/competitionOpenRegForm" >
+                                <NavLink to="/competitionFormat" >
                                     <Button className="open-reg-button" type="primary">{AppConstants.addCompetitionDetails}</Button>
                                 </NavLink>
                             </div>

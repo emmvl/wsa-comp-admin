@@ -64,6 +64,7 @@ class DashboardLayout extends React.Component {
   logout = async () => {
     await localStorage.clear();
     history.push("/");
+    window.location.reload();
   };
 
   menuImageChange = menuName => {
@@ -330,7 +331,7 @@ class DashboardLayout extends React.Component {
                             }
                           >
                             <div className="registration-menu menu-wrap">
-                              <NavLink to="/registeredUser">
+                              <NavLink to="/registrationDashboard">
                                 <span className="icon"></span>
                                 {AppConstants.registration}
                               </NavLink>

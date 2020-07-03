@@ -29,7 +29,6 @@ const initialState = {
   enhancedRoundRobinTypes: [],
 
   ////******************Venue and time
-  yearList: [],
   competitionList: [],
   selectedCompetition: null,
   selectedYear: 1,
@@ -75,7 +74,6 @@ function filteredSettingArray(result) {
   let netballQuestions = []
   let otherQuestions = []
   let advanceSettings = []
-  console.log(result)
   for (let i in result) {
     if (result[i].id == 13 || result[i].id == 14 || result[i].id == 15 || result[i].id == 16) {
       demographic.push(result[i])
@@ -102,8 +100,6 @@ function filteredSettingArray(result) {
 }
 
 function getCompetitionFormatTypeWithHelpMsg(data, helpMsg) {
-  console.log(data, 'getCompetitionFormatTypeWithHelpMsg', helpMsg)
-
   for (let i in data) {
     data[i]['helpMsg'] = helpMsg[i]
   }
@@ -111,8 +107,6 @@ function getCompetitionFormatTypeWithHelpMsg(data, helpMsg) {
 }
 
 function getRegInviteesWithHelpMsg(data, helpMsg) {
-  console.log(data, 'getCompetitionFormatTypeWithHelpMsg', helpMsg)
-
   for (let i in data) {
     data[i]['helpMsg'] = helpMsg[i]
   }
@@ -120,8 +114,6 @@ function getRegInviteesWithHelpMsg(data, helpMsg) {
 }
 
 function getMembershipProductFeesTypesWithHelpMsg(data, helpMsg) {
-  console.log(data, 'getCompetitionFormatTypeWithHelpMsg', helpMsg)
-
   for (let i in data) {
     data[i]['helpMsg'] = helpMsg[i]
   }
@@ -286,8 +278,6 @@ function appState(state = initialState, action) {
     case ApiConstants.API_REG_FORM_SETTINGS_SUCCESS:
       const result = getRegistrationSetting(action.result);
       let multipleSettingsArray = filteredSettingArray(result)
-      console.log(multipleSettingsArray)
-
       return {
         ...state,
         onLoad: false,
@@ -306,7 +296,6 @@ function appState(state = initialState, action) {
     case ApiConstants.API_REG_COMPETITION_FEE_INIT_SUCCESS:
       const invitees = getRegistrationSetting(action.inviteesResult)
       const regInviteesWithHelpMsg = getRegInviteesWithHelpMsg(invitees, state.regInviteesMsg)
-      console.log(invitees, 'invitees~~~~')
       let notApplicableIndex = invitees.findIndex(
         x =>
           x.name ==
@@ -315,7 +304,6 @@ function appState(state = initialState, action) {
       invitees.splice(notApplicableIndex, 1)
       const casualPayment = getRegistrationSetting(action.paymentOptionResult)
       // const seasonalPayment = getRegistrationSetting(action.paymentOptionResult[1])
-      console.log(action.competitionFormat, 'competitionFormat~~~~')
       const competitionFormatTypeWithHelpMsg = getCompetitionFormatTypeWithHelpMsg(action.competitionFormat, state.helpMessage)
       return {
         ...state,
@@ -347,7 +335,6 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_COMPETITION_FORMAT_TYPES_SUCCESS:
-      console.log(action.result, 'competitionFormatTypes')
       return {
         ...state,
         onLoad: false,
@@ -372,7 +359,6 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_GET_YEAR_COMPETITION_SUCCESS:
-      console.log(action)
       let yearResult = JSON.parse(JSON.stringify(action.yearList))
       let competitionResult = JSON.parse(JSON.stringify(action.competetionListResult))
       let yearobject = {
@@ -401,7 +387,6 @@ function appState(state = initialState, action) {
       };
 
     case ApiConstants.API_UPDATE_COMPETITION_LIST:
-      console.log(action.data, 'UpdateList')
       state.selectedCompetition = action.data
       return {
         ...state,
