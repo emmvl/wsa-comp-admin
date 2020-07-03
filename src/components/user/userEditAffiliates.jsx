@@ -160,9 +160,6 @@ class UserEditAffiliates extends Component {
                 }
         }
 
-        if(key == "termsAndConditionsRefId"){
-            this.props.updateAffiliateAction(null, "termsAndConditions");
-        }
         this.props.updateAffiliateAction(val,key);
     }
 
@@ -309,6 +306,14 @@ class UserEditAffiliates extends Component {
                             affiliate.affiliatedToOrgId = this.state.organisationId;
                             affiliate.organisationId = this.state.organisationId;
                         }
+                        let termsAndConditionsValue = null;
+                        if(affiliate.termsAndConditionsRefId == 1){
+                            termsAndConditionsValue = affiliate.termsAndConditionsLink;
+                        }
+                        if(this.state.termsAndCondititionFile == null && affiliate.termsAndConditionsRefId == 2){
+                            termsAndConditionsValue = affiliate.termsAndConditionsFile;
+                        }
+
                         formData.append("organisationLogo", null);
                         formData.append("organisationLogoId", 1);
                         formData.append("affiliateId", affiliate.affiliateId);
@@ -327,10 +332,10 @@ class UserEditAffiliates extends Component {
                         formData.append("whatIsTheLowestOrgThatCanAddChild", affiliate.whatIsTheLowestOrgThatCanAddChild);
                         formData.append("contacts", contacts);
                         formData.append("termsAndConditionsRefId", affiliate.termsAndConditionsRefId);
-                        formData.append("termsAndConditions", affiliate.termsAndConditions);
+                        formData.append("termsAndConditions", termsAndConditionsValue);
                         formData.append("organisationLogo", this.state.termsAndCondititionFile);
                         formData.append("termsAndConditionId", this.state.termsAndCondititionFile == null ? 1 : 0);
-                        console.log("Req Body ::" + JSON.stringify(affiliate));
+                       // console.log("Req Body ::" + JSON.stringify(affiliate));
                         this.setState({ loading: true });
                         this.props.saveAffiliateAction(formData);
                     }
@@ -372,8 +377,6 @@ class UserEditAffiliates extends Component {
      
         let affiliateToData = this.props.userState.affiliateTo;
         let affiliate = this.props.userState.affiliateEdit;
-        console.log("&&&&&&& affiliate" + JSON.stringify(affiliate));
-        console.log("&&&&&&& affiliateToData" + JSON.stringify(affiliateToData));
         const { stateList } = this.props.commonReducerState;
         if(affiliate.organisationTypeRefId === 0){
             if(affiliateToData.organisationTypes!= undefined && affiliateToData.organisationTypes.length > 0){
@@ -677,7 +680,7 @@ class UserEditAffiliates extends Component {
                                 <div className="row">
                                     <div className="col-sm" style={{whiteSpace: 'break-spaces'}}>
                                         <a className="userRegLink" href={affiliate.termsAndConditions} target='_blank' >
-                                            {affiliate.termsAndConditions}
+                                            {affiliate.termsAndConditionsFile}
                                         </a>
                                     </div>
                                 </div>
@@ -688,8 +691,8 @@ class UserEditAffiliates extends Component {
                     {affiliate.termsAndConditionsRefId == 1 && 
                         <div className=" pl-5 pb-5">
                         <InputWithHead  placeholder={AppConstants.termsAndConditions}
-                            value={affiliate.termsAndConditions}
-                            onChange={(e) => this.onChangeSetValue(e.target.value, "termsAndConditions")}
+                            value={affiliate.termsAndConditionsLink}
+                            onChange={(e) => this.onChangeSetValue(e.target.value, "termsAndConditionsLink")}
                             />
                         </div>
                     }

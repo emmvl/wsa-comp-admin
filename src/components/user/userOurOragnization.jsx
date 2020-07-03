@@ -73,9 +73,7 @@ class UserOurOragnization extends Component {
             orgPhotoModalVisible: false,
             isEditable: true,
             sourcePage: "AFF",
-            termsAndCondititionFile: null,
-            termAndConditionTemp: null,
-            termAndConditionRefIdTemp: null
+            termsAndCondititionFile: null
         }
         _this = this;
         this.props.getCommonRefData();
@@ -191,8 +189,6 @@ class UserOurOragnization extends Component {
             orgEmail:affiliate.email
         })
 
-        this.setState({termAndConditionTemp: affiliate.termsAndConditions,
-            termAndConditionRefIdTemp: affiliate.termsAndConditionsRefId})
         let contacts = affiliate.contacts;
         // console.log("contacts::" + contacts);
         if (contacts == null || contacts == undefined || contacts == "") {
@@ -219,9 +215,6 @@ class UserOurOragnization extends Component {
     }
 
     onChangeSetValue = (val, key) => {
-        if(key == "termsAndConditionsRefId"){
-            this.props.updateOrgAffiliateAction(null, "termsAndConditions");
-        }
         this.props.updateOrgAffiliateAction(val, key);
     }
 
@@ -358,6 +351,14 @@ class UserOurOragnization extends Component {
                                 affiliate.organisationLogo = this.state.image;
                                 affiliate.organisationLogoId = 0;
                             }
+                            let termsAndConditionsValue = null;
+                            if(affiliate.termsAndConditionsRefId == 1){
+                                termsAndConditionsValue = affiliate.termsAndConditionsLink;
+                            }
+                            if(this.state.termsAndCondititionFile == null && affiliate.termsAndConditionsRefId == 2){
+                                termsAndConditionsValue = affiliate.termsAndConditionsFile;
+                            }
+
                             formData.append("email", affiliate.email);
                             formData.append("organisationLogo", this.state.image);
                             formData.append("organisationLogoId", affiliate.organisationLogoId);
@@ -378,13 +379,13 @@ class UserOurOragnization extends Component {
                             formData.append("logoIsDefault", affiliate.logoIsDefault == true ? 1 : 0);
                             formData.append("contacts", contacts);
                             formData.append("termsAndConditionsRefId", affiliate.termsAndConditionsRefId);
-                            formData.append("termsAndConditions", affiliate.termsAndConditions);
+                            formData.append("termsAndConditions", termsAndConditionsValue);
                             formData.append("organisationLogo", this.state.termsAndCondititionFile);
                             formData.append("termsAndConditionId", this.state.termsAndCondititionFile == null ? 1 : 0);
 
                             this.setState({ loading: true });
 
-                            //console.log("formData:::" + JSON.stringify(formData));
+                            console.log("formData:::"+termsAndConditionsValue);
                            
                             this.props.saveAffiliateAction(formData);
                         }
@@ -935,7 +936,7 @@ class UserOurOragnization extends Component {
                                 <div className="row">
                                     <div className="col-sm"  style={{whiteSpace: 'break-spaces'}}>
                                         <a className="userRegLink" href={affiliate.termsAndConditions} target='_blank' >
-                                            {affiliate.termsAndConditions}
+                                            {affiliate.termsAndConditionsFile}
                                         </a>
                                     </div>
                                 </div>
@@ -946,8 +947,8 @@ class UserOurOragnization extends Component {
                     {affiliate.termsAndConditionsRefId == 1 && 
                         <div className=" pl-5 pb-5">
                         <InputWithHead  placeholder={AppConstants.termsAndConditions}
-                            value={affiliate.termsAndConditions}
-                            onChange={(e) => this.onChangeSetValue(e.target.value, "termsAndConditions")}
+                            value={affiliate.termsAndConditionsLink}
+                            onChange={(e) => this.onChangeSetValue(e.target.value, "termsAndConditionsLink")}
                             />
                         </div>
                     }
