@@ -28,6 +28,7 @@ import {
     quickCompetitionTimeSlotData, updateQuickCompetitionAction,
 } from "../../store/actions/competitionModuleAction/competitionQuickAction"
 import { quickCompetitionInit } from "../../store/actions/commonAction/commonAction"
+import { captializedString } from "../../util/helpers";
 
 
 const { Header, Footer, Content } = Layout;
@@ -420,8 +421,8 @@ class CompetitionQuickCompetition extends Component {
         }
     }
 
-    ////////form content view
-    contentView = (getFieldDecorator) => {
+     ////////form content view
+     contentView = (getFieldDecorator) => {
         let appState = this.props.appState
         let quickCompetitionState = this.props.quickCompetitionState
 
@@ -431,36 +432,28 @@ class CompetitionQuickCompetition extends Component {
                     <div className="col-sm-3 " >
                         <Form.Item >
                             {getFieldDecorator('competition_name',
-                                { rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }] })(
+                                { normalize: (input) => captializedString(input), rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }] })(
                                     <InputWithHead
                                         required={"required-field pb-0 pt-0"}
                                         placeholder={AppConstants.competition_name}
-                                    // value={detailsData.competitionDetailData.competitionName}
-                                    // onChange={(e) => this.props.add_editcompetitionFeeDeatils(captializedString(
-                                    //     e.target.value), "competitionName")}
-                                    // disabled={compDetailDisable}
+                                        onChange={(e) => this.props.updateQuickCompetitionData(captializedString(
+                                            e.target.value), "competitionName")}
                                     />
                                 )}
                         </Form.Item>
 
                     </div>
-                    <div className="col-sm-9 comp-draw-edit-btn-view" >
-                        <div className="row">
 
-                            <div className="col-sm mt-2">
-                                <Button className="open-reg-button" onClick={() => this.visibleTimeModal()} type="primary">+ {AppConstants.add_TimeSlot}</Button>
-
-                            </div>
-                            <div className="col-sm mt-2">
-                                <Button className="open-reg-button" type="primary" onClick={() => this.visibleDivisonModal()}>+ {AppConstants.addDivisionsAndGrades}</Button>
-                            </div>
-                        </div>
-
-
+                    <div className="col-sm mt-2  comp-draw-edit-btn-view">
+                        <Button className="open-reg-button" onClick={() => this.visibleTimeModal()} type="primary">+ {AppConstants.add_TimeSlot}</Button>
                     </div>
+                    <div className="col-sm-3 mt-2  comp-draw-edit-btn-view">
+                        <Button className="open-reg-button" type="primary" onClick={() => this.visibleDivisonModal()}>+ {AppConstants.addDivisionsAndGrades}</Button>
+                    </div>
+
                 </div>
-                <div className="row  ml-4">
-                    <div className="col-sm-3" >
+                <div className="row  ml-4 pb-5">
+                    <div className="col-sm-3 division" >
                         <InputWithHead required={"required-field pb-0 pt-0 "} heading={AppConstants.venue} />
                         <Form.Item  >
                             {getFieldDecorator('selectedVenues', { rules: [{ required: true, message: ValidationConstants.pleaseSelectvenue }] })(
@@ -472,6 +465,7 @@ class CompetitionQuickCompetition extends Component {
                                     }}
                                     placeholder={AppConstants.selectVenue}
                                     filterOption={false}
+                                    onBlur={() => console.log("called")}
                                     onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
                                 >
                                     {appState.venueList.length > 0 && appState.venueList.map((item) => {
