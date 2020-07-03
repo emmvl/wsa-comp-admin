@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { createRef } from 'react';
 
 const PDFContainer = (props) => {
-    const bodyRef = React.createRef();
-    const createPdf = () => props.createPdf(bodyRef.current);
+    const { handleCreatePdf } = props;
+
+    const bodyRef = createRef();
+    const createPdf = () => handleCreatePdf(bodyRef.current);
 
     return (
         <section className="pdf-container">
