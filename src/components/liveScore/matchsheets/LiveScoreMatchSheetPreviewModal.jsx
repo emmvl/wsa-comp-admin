@@ -6,8 +6,9 @@ import {
 
 import './styles.css';
 
-import PDFDocument from './PDFDocument';
 import CustomPDFViewer from './PDFViewer';
+import PDFDocument from './PDFDocument';
+import MatchSheetTemplate from "./MatchSheetTemplate";
 
 const LiveScoreMatchSheetPreviewModal = (props) => {
     const { visible, modalTitle, handleOK, handleCancel } = props;
@@ -23,9 +24,16 @@ const LiveScoreMatchSheetPreviewModal = (props) => {
             okText="Print"
             cancelText="Download"
             width="900px"
+            footer={false}
         >
             <CustomPDFViewer>
-                <PDFDocument pages={[<h1>Page1</h1>, 'Page2', 'Page3', 'Page4', 'Page5', 'Page6']}/>
+                <PDFDocument
+                    pages={[
+                        <MatchSheetTemplate />,
+                        <MatchSheetTemplate templateType='Carnival' />,
+                        <MatchSheetTemplate templateType='Social' />,
+                    ]}
+                />
             </CustomPDFViewer>
         </Modal>
     );
