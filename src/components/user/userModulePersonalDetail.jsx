@@ -71,6 +71,11 @@ const columns = [
         key: 'shopPurchases'
     },
     {
+        title: 'Status',
+        dataIndex: 'statusRefId',
+        key: 'statusRefId'
+    },
+    {
         title: "Reg.Form",
         dataIndex: "regForm",
         key: "regForm",

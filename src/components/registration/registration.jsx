@@ -16,6 +16,7 @@ import { endUserRegDashboardListAction } from
 import { getCommonRefData, getGenderAction, registrationPaymentStatusAction } from
     '../../store/actions/commonAction/commonAction';
 import { getAffiliateToOrganisationAction } from "../../store/actions/userAction/userAction";
+import { getAllCompetitionAction } from "../../store/actions/registrationAction/registrationDashboardAction"
 import { getOnlyYearListAction, } from '../../store/actions/appAction'
 import { isEmptyArray } from "formik";
 import WizardModel from "../../customComponents/registrationWizardModel"
