@@ -39,7 +39,7 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "profilePicture"),
         render: (profilePicture) => {
             return (
-                profilePicture ? <img className="live-score-user-image" src={profilePicture} alt="" height="70" width="70" /> : <span>{AppConstants.noImage}</span>
+                profilePicture ? <img className="user-image" src={profilePicture} alt="" height="70" width="70" /> : <span>{AppConstants.noImage}</span>
             )
         }
 

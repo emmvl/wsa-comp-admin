@@ -21,7 +21,6 @@ function liveScoreGameTimeStatisticsState(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_GAME_TIME_STATISTICS_LIST_SUCCESS:
             let result = action.result
-            console.log(result)
             state.gameTimeStatisticsListResult = result
             return {
                 ...state,

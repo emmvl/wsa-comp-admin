@@ -33,34 +33,34 @@ function checkSorting(a, b, key) {
 }
 
 function getFirstName(incidentPlayers) {
-    let firstName = incidentPlayers.length > 0 ? incidentPlayers[0].player.firstName : ""
+    let firstName = incidentPlayers ? incidentPlayers[0].player.firstName : ""
     return firstName
 }
 
 function getLastName(incidentPlayers) {
-    let lastName = incidentPlayers.length > 0 ? incidentPlayers[0].player.lastName : ""
+    let lastName = incidentPlayers ? incidentPlayers[0].player.lastName : ""
     return lastName
 }
 
-function setMatchResult(record){
-    if(record.team1ResultId !== null){
-        if(record.team1ResultId === 4 || record.team1ResultId === 6 || record.team1ResultId === 6){
+function setMatchResult(record) {
+    if (record.team1ResultId !== null) {
+        if (record.team1ResultId === 4 || record.team1ResultId === 6 || record.team1ResultId === 6) {
             return "Forfeit"
-        }else if(record.team1ResultId === 8 || record.team1ResultId === 9 ){
+        } else if (record.team1ResultId === 8 || record.team1ResultId === 9) {
             return "Abandoned"
-        }else {
-            return  record.team1Score + " : " + record.team2Score
+        } else {
+            return record.team1Score + " : " + record.team2Score
         }
-    }else{
+    } else {
         return record.team1Score + " : " + record.team2Score
-    }   
+    }
 }
 function getVenueName(data) {
- 
+
     let venue_name = ""
-    if(data.venue.shortName){
+    if (data.venue.shortName) {
         venue_name = data.venue.shortName + " - " + data.name
-    }else{
+    } else {
         venue_name = data.venue.name + " - " + data.name
     }
 
@@ -186,7 +186,7 @@ const columnsTodaysMatch = [
         dataIndex: 'venueCourt',
         key: 'venueCourt',
         sorter: (a, b, venueCourt) => checkSorting(a, b, venueCourt.name),
-        render : (venueCourt, record)=><span>{getVenueName(venueCourt)}</span>
+        render: (venueCourt, record) => <span>{getVenueName(venueCourt)}</span>
 
     },
     {
@@ -279,14 +279,17 @@ const columnsTodaysIncient = [
         dataIndex: 'incidentPlayers',
         key: 'First Name',
         render: (incidentPlayers, record) =>
-            <NavLink to={{
-                pathname: '/liveScorePlayerView',
-                state: { tableRecord: incidentPlayers[0].player }
-            }}>
-                <span className="input-heading-add-another pt-0">{getFirstName(incidentPlayers)}</span>
-            </NavLink>
-        ,
-        sorter: (a, b) => tableSort(a, b, "incidentPlayers")
+
+            isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
+
+                <NavLink to={{
+                    pathname: '/liveScorePlayerView',
+                    state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null }
+                }}>
+                    <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.player.firstName}</span>
+                </NavLink>
+            )),
+        sorter: (a, b) => tableSort(a, b, "firstName")
 
     },
     {
@@ -294,12 +297,16 @@ const columnsTodaysIncient = [
         dataIndex: 'incidentPlayers',
         key: 'Last Name',
         render: (incidentPlayers, record) =>
-            <NavLink to={{
-                pathname: '/liveScorePlayerView',
-                state: { tableRecord: incidentPlayers[0].player }
-            }}>
-                <span className="input-heading-add-another pt-0">{getLastName(incidentPlayers)}</span>
-            </NavLink>
+
+            isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
+
+                <NavLink to={{
+                    pathname: '/liveScorePlayerView',
+                    state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null }
+                }}>
+                    <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.player.lastName}</span>
+                </NavLink>
+            ))
     },
     {
         title: "Association",
@@ -307,19 +314,19 @@ const columnsTodaysIncient = [
         key: 'association',
         sorter: (a, b) => checkSorting(a, b, "association"),
     },
-    {
-        title: "Club",
-        dataIndex: 'club',
-        key: 'club',
-        sorter: (a, b) => checkSorting(a, b, "club"),
-    },
+    // {
+    //     title: "Club",
+    //     dataIndex: 'club',
+    //     key: 'club',
+    //     sorter: (a, b) => checkSorting(a, b, "club"),
+    // },
     {
         title: "Team",
         dataIndex: 'team',
         key: 'team',
         sorter: (a, b) => checkSorting(a, b, "team"),
         render: (team) =>
-            <span class="input-heading-add-another pt-0">{team}</span>
+            <span className="input-heading-add-another pt-0">{team}</span>
     },
     {
         title: "Description",
@@ -429,7 +436,7 @@ class LiveScoreDashboard extends Component {
                         className="home-dashboard-table" columns={columnsTodaysIncient}
                         dataSource={dashboardIncidentList}
                         pagination={false}
-                        rowKey={(record, index) => "dashboardIncidentList"+record.id + index} />
+                        rowKey={(record, index) => "dashboardIncidentList" + record.id + index} />
                 </div>
             </div>
         )
@@ -543,11 +550,11 @@ class LiveScoreDashboard extends Component {
                 {this.matchHeading()}
                 <div className="table-responsive home-dash-table-view">
                     <Table loading={this.props.liveScoreDashboardState.onLoad == true && true}
-                        className="home-dashboard-table" 
+                        className="home-dashboard-table"
                         columns={columnsTodaysMatch}
                         dataSource={dashboardMatchList}
                         pagination={false}
-                        rowKey={(record, index) => "dashboardMatchList"+record.id + index} />
+                        rowKey={(record, index) => "dashboardMatchList" + record.id + index} />
                 </div>
             </div>
         )
@@ -607,13 +614,13 @@ class LiveScoreDashboard extends Component {
             <div className="comp-dash-table-view mt-4">
                 {this.addNewsHeading()}
                 <div className="table-responsive home-dash-table-view">
-                    <Table 
-                    loading={this.props.liveScoreDashboardState.onLoad == true && true} 
-                    className="home-dashboard-table" 
-                    columns={columnActiveNews} 
-                    dataSource={dashboardNewsList} 
-                    pagination={false}
-                    rowKey={(record, index) => "dashboardNewsList"+record.id + index}
+                    <Table
+                        loading={this.props.liveScoreDashboardState.onLoad == true && true}
+                        className="home-dashboard-table"
+                        columns={columnActiveNews}
+                        dataSource={dashboardNewsList}
+                        pagination={false}
+                        rowKey={(record, index) => "dashboardNewsList" + record.id + index}
                     />
                 </div>
             </div>
@@ -641,12 +648,12 @@ class LiveScoreDashboard extends Component {
                 {this.playersToPayHeading()}
                 <div className="table-responsive home-dash-table-view">
                     <Table loading={this.props.liveScoreDashboardState.onLoad == true && true}
-                        className="home-dashboard-table" 
+                        className="home-dashboard-table"
                         columns={columnsPlayersToPay}
                         dataSource={playerTopay}
-                        pagination={false} 
-                        rowKey={(record, index) => "playerTopay"+record.id + index}
-                         />
+                        pagination={false}
+                        rowKey={(record, index) => "playerTopay" + record.id + index}
+                    />
                 </div>
             </div>
         )

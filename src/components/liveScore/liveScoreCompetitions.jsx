@@ -44,7 +44,7 @@ const columnsOwned = [
                 <span style={{ cursor: "pointer" }} onClick={() => {
                     this_Obj.setCompetitionID(record)
                     this_Obj.props.history.push('/liveScoreDashboard')
-                }} class="input-heading-add-another pt-0" >{longName}</span>
+                }} className="input-heading-add-another pt-0" >{longName}</span>
 
             )
         }
@@ -91,11 +91,10 @@ const columnsOwned = [
         sorter: (a, b) => tableSort(a, b, "teamCount"),
 
         render: (teams, record) =>
-            // <NavLink to={"/liveScoreDashboard"}><span class="input-heading-add-another pt-0">{teams}</span></NavLink>
             <span style={{ cursor: "pointer" }} onClick={() => {
                 this_Obj.setCompetitionID(record)
                 this_Obj.props.history.push('/liveScoreDashboard')
-            }} class="input-heading-add-another pt-0" >{teams}</span>
+            }} className="input-heading-add-another pt-0" >{teams}</span>
     },
     {
         title: "Players",
@@ -104,11 +103,10 @@ const columnsOwned = [
         // sorter: (a, b) => a.players - b.players,
         sorter: (a, b) => tableSort(a, b, "playerCount"),
         render: (players, record) =>
-            //  <NavLink to={"/liveScoreDashboard"}><span class="input-heading-add-another pt-0">{players}</span></NavLink>
             <span style={{ cursor: "pointer" }} onClick={() => {
                 this_Obj.setCompetitionID(record)
                 this_Obj.props.history.push('/liveScoreDashboard')
-            }} class="input-heading-add-another pt-0" >{players}</span>
+            }} className="input-heading-add-another pt-0" >{players}</span>
     },
     {
         title: "Status",
@@ -117,11 +115,10 @@ const columnsOwned = [
         // sorter: (a, b) => a.status - b.status,
         sorter: (a, b) => tableSort(a, b, "status"),
         render: (status, record) =>
-            // <NavLink to={"/liveScoreDashboard"}><span class="input-heading-add-another pt-0">{status}</span></NavLink>
             <span style={{ cursor: "pointer" }} onClick={() => {
                 this_Obj.setCompetitionID(record)
                 this_Obj.props.history.push('/liveScoreDashboard')
-            }} class="input-heading-add-another pt-0" >{status}</span>
+            }} className="input-heading-add-another pt-0" >{status}</span>
     },
     {
         title: "Action",
@@ -160,12 +157,12 @@ class LiveScoreCompetitions extends Component {
             orgKey: getOrganisationData() ? getOrganisationData().organisationId : null
         }
         this_Obj = this
-        // this.orgKey = getOrganisationData().organisationUniqueKey
+
     }
 
 
     componentDidMount() {
-        // console.log( this.orgKey , "****")
+
         if (isArrayNotEmpty(this.props.liveScoreCompetition.yearList)) {
 
             let selectedYear = this.props.liveScoreCompetition.yearList[0].id
@@ -175,11 +172,6 @@ class LiveScoreCompetitions extends Component {
             this.props.getOnlyYearListAction(this.props.liveScoreCompetition.yearList)
             this.setState({ onLoad: true })
         }
-
-
-        // this.props.liveScoreCompetionActioninitiate(body)
-        // setTimeout(() => { console.log('uhhhhh', this.props.liveScoreCompetition) }, 5000)
-        // console.log('uhhhhh', this.props.liveScoreCompetition)
     }
 
 
@@ -225,7 +217,7 @@ class LiveScoreCompetitions extends Component {
                 this_.CompetitonDelete(record)
             },
             onCancel() {
-                console.log('Cancel');
+
             },
         });
     }

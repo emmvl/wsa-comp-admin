@@ -11,7 +11,7 @@ import { bindActionCreators } from 'redux';
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { NavLink } from 'react-router-dom';
 import { exportFilesAction } from "../../store/actions/appAction"
-import { isArrayNotEmpty, teamListData } from "../../util/helpers";
+import { teamListData } from "../../util/helpers";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -48,31 +48,31 @@ function checkPlay(record) {
 //// Check play time
 function checkPlayTime(record) {
     if (record.playTime !== null) {
-        if (this_obj.state.filter == "MATCH") {
-            if (record.playTime == 0) {
+        if (this_obj.state.filter === "MATCH") {
+            if (record.playTime === 0) {
                 return record.playTime + " Games"
-            } else if (record.playTime == 1) {
+            } else if (record.playTime === 1) {
                 return record.playTime + " Game"
             } else {
                 return record.playTime + " Games"
             }
-        } else if (this_obj.state.filter == AppConstants.minute) {
+        } else if (this_obj.state.filter === AppConstants.minute) {
             let d = Number(record.playTime);
             var h = Math.floor(d / 3600);
             var m = Math.floor(d % 3600 / 60);
             var s = Math.floor(d % 3600 % 60);
 
-            var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
-            var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
-            var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+            var hDisplay = h > 0 ? h + (h === 1 ? " hour, " : " hours, ") : "";
+            var mDisplay = m > 0 ? m + (m === 1 ? " minute, " : " minutes, ") : "";
+            var sDisplay = s > 0 ? s + (s === 1 ? " second" : " seconds") : "";
             let time_value = hDisplay + mDisplay + sDisplay;
 
             return time_value
 
         } else {
-            if (record.playTime == 0) {
+            if (record.playTime === 0) {
                 return record.playTime + " Periods"
-            } else if (record.playTime == 1) {
+            } else if (record.playTime === 1) {
                 return record.playTime + " Period"
             } else {
                 return record.playTime + " Periods"
@@ -197,7 +197,7 @@ class LiveScoreGameTimeList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ competitionId: id })
         if (id !== null) {
-            this.props.gameTimeStatisticsListAction(id, this.state.filter == 'All' ? "" : this.state.filter, 0, this.state.searchText)
+            this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, this.state.searchText)
         } else {
             history.push("/")
         }
@@ -206,16 +206,15 @@ class LiveScoreGameTimeList extends Component {
     handleGameTimeTableList(page, competitionId, aggergate) {
         let offset = page ? 10 * (page - 1) : 0
 
-        this.props.gameTimeStatisticsListAction(competitionId, aggergate == 'All' ? "" : aggergate, offset, this.state.searchText)
+        this.props.gameTimeStatisticsListAction(competitionId, aggergate === 'All' ? "" : aggergate, offset, this.state.searchText)
 
     }
 
     setFilterValue = (data) => {
-        var dataFilter = data.filter
         const { id } = JSON.parse(getLiveScoreCompetiton())
         let offset = 1 ? 10 * (1 - 1) : 0
         this.setState({ filter: data.filter })
-        this.props.gameTimeStatisticsListAction(id, data.filter == 'All' ? "" : data.filter, offset, this.state.searchText)
+        this.props.gameTimeStatisticsListAction(id, data.filter === 'All' ? "" : data.filter, offset, this.state.searchText)
     }
 
     onExport() {
@@ -228,8 +227,8 @@ class LiveScoreGameTimeList extends Component {
     onChangeSearchText = (e) => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ searchText: e.target.value })
-        if (e.target.value == null || e.target.value == "") {
-            this.props.gameTimeStatisticsListAction(id, this.state.filter == 'All' ? "" : this.state.filter, 0, e.target.value)
+        if (e.target.value === null || e.target.value === "") {
+            this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, e.target.value)
         }
     }
 
@@ -239,17 +238,17 @@ class LiveScoreGameTimeList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         // this.setState({ searchText: e.target.value })
         if (code === 13) { //13 is the enter keycode
-            this.props.gameTimeStatisticsListAction(id, this.state.filter == 'All' ? "" : this.state.filter, 0, this.state.searchText)
+            this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, this.state.searchText)
         }
     }
 
     // on click of search icon
     onClickSearchIcon = () => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        if (this.state.searchText == null || this.state.searchText == "") {
+        if (this.state.searchText === null || this.state.searchText === "") {
         }
         else {
-            this.props.gameTimeStatisticsListAction(id, this.state.filter == 'All' ? "" : this.state.filter, 0, this.state.searchText)
+            this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, this.state.searchText)
         }
     }
 
@@ -345,7 +344,7 @@ class LiveScoreGameTimeList extends Component {
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.liveScoreGameTimeStatisticsState.onLoad == true && true}
+                        loading={this.props.liveScoreGameTimeStatisticsState.onLoad === true && true}
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={dataSource}

@@ -583,7 +583,7 @@ class LiveScoreMatchesList extends Component {
                                 <Option value={'All'}>{'All'}</Option>
                                 {
                                     divisionListArr.map((item, index) => {
-                                        return <Option value={item.id}>{item.name}</Option>
+                                        return <Option key={"division" + item.id} value={item.id}>{item.name}</Option>
                                     })
                                 }
                             </Select>
@@ -599,7 +599,7 @@ class LiveScoreMatchesList extends Component {
                                 <Option value={'All'}>{'All'}</Option>
                                 {
                                     roundListArr.map((item) => {
-                                        return <Option value={item.name}>{item.name}</Option>
+                                        return <Option key ={"round" + item.id} value={item.name}>{item.name}</Option>
                                     })
                                 }
                             </Select>

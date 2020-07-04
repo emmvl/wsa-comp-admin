@@ -41,10 +41,10 @@ export function* liveScoreUmpiresSaga(action) {
 
 
 export function* liveScoreUmpiresImportSaga(action) {
-    console.log(action, "asaga")
+
     try {
         const result = yield call(LiveScoreAxiosApi.umpireImport, action.payload)
-        console.log(result, "umpImp")
+
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_UMPIRES_IMPORT_SUCCESS,

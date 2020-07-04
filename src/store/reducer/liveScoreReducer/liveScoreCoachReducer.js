@@ -61,7 +61,6 @@ function genrateTeamId(teamIdArr) {
 
 }
 function getSelectedTeam(coachId, CoachListArray) {
-    console.log(coachId, CoachListArray, "64646")
     let teamObj = null
     for (let i in CoachListArray) {
         if (coachId == CoachListArray[i].id) {

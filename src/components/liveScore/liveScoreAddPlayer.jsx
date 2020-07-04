@@ -56,7 +56,7 @@ class LiveScoreAddPlayer extends Component {
         // this.props.getliveScoreDivisions(id)
         this.props.getliveScoreTeams(id)
         // this.setInitalFiledValue()
-        console.log(this.state.playerData, 'this.state.playerData')
+
         if (this.state.isEdit == true) {
             if (this.props.location.state.screen === 'editTeam') {
                 this.props.liveScoreUpdatePlayerDataAction({
@@ -154,7 +154,7 @@ class LiveScoreAddPlayer extends Component {
         // const teamResult = this.props.liveScoreTeamState;
         // const teamData = teamResult.teamResult;
         let teamData = isArrayNotEmpty(teamResult) ? teamResult : []
-        console.log(playerData, 'playerData')
+
 
         return (
             <div className="content-view pt-0">

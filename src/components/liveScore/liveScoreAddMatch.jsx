@@ -135,7 +135,7 @@ class LiveScoreAddMatch extends Component {
 
             }
 
-            if (isLineUpEnable == 1 && match_status !== "ENDED") {
+            if (isLineUpEnable == 1) {
                 this.setState({ isLineUp: 1 })
                 this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 1)
             } else {
@@ -472,7 +472,7 @@ class LiveScoreAddMatch extends Component {
     /// Duration & Break View
     duration_break = (getFieldDecorator) => {
         let { addEditMatch } = this.props.liveScoreMatchState
-        let {allDisabled}=this.state
+        let { allDisabled } = this.state
         return (
 
             <div className="row">
@@ -1074,7 +1074,6 @@ class LiveScoreAddMatch extends Component {
                 let match_date_ = moment(start_date, "DD-MM-YYYY")
                 let startDate = moment(match_date_).format("YYYY-MMM-DD")
                 let start = moment(start_time).format("HH:mm")
-                console.log(team1id, 'matchUmpireId_1', team2id)
 
                 let datetimeA = moment(startDate + " " + start);
                 let formated__Date = new Date(datetimeA).toISOString()

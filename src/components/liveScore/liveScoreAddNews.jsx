@@ -103,7 +103,7 @@ class LiveScoreAddNews extends Component {
     }
 
     onChangeEditorData = (event) => {
-        console.log(event, "event")
+
         this.props.liveScoreUpdateNewsAction(event, "body")
         // this.setState({ editorState: event })
     }
@@ -144,7 +144,7 @@ class LiveScoreAddNews extends Component {
 
     setInitalFiledValue(data, author) {
         const authorData = JSON.parse(getLiveScoreCompetiton())
-        console.log(authorData, 'authorDataauthorData')
+
         this.props.form.setFieldsValue({
             'news_Title': data.title,
             'author': author ? author : authorData.longName

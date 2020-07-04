@@ -7,8 +7,6 @@ import {
     DatePicker,
     TimePicker,
     Select,
-    InputNumber,
-    Modal,
     Input,
 } from 'antd';
 import './liveScore.css';
@@ -19,7 +17,7 @@ import ValidationConstants from "../../themes/validationConstant";
 import moment from "moment";
 import InputWithHead from "../../customComponents/InputWithHead";
 import AppImages from "../../themes/appImages";
-import { liveScoreUpdateIncidentData } from '../../store/actions/LiveScoreAction/liveScoreIncidentAction'
+import { liveScoreUpdateIncidentData, liveScoreAddEditIncident, liveScoreIncidentTypeAction } from '../../store/actions/LiveScoreAction/liveScoreIncidentAction'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import history from "../../util/history";
@@ -27,6 +25,8 @@ import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScore
 import { isArrayNotEmpty, captializedString } from "../../util/helpers";
 import { getLiveScoreCompetiton } from '../../util/sessionStorage';
 import { liveScorePlayerListAction } from '../../store/actions/LiveScoreAction/liveScorePlayerAction'
+import Loader from '../../customComponents/loader'
+import ImageLoader from '../../customComponents/ImageLoader'
 
 
 const { Footer, Content, Header } = Layout;
@@ -46,24 +46,87 @@ class LiveScoreAddIncident extends Component {
             video: null,
             imageSelection: '',
             videoSelection: '',
-            date: null,
-            time: null,
             incidentImage: '',
             incidentVideo: '',
-            editorData: ""
+            editorData: "",
+            imageTimeout: null,
+            videoTimeout: null,
+            isEdit: this.props.location.state ? this.props.location.state.isEdit ? this.props.location.state.isEdit : false : false,
+            tableRecord: this.props.location.state ? this.props.location.state.tableRecord ? this.props.location.state.tableRecord : false : false,
+            load: false,
+            incidentId: null
         }
     }
 
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton())
-
-        // this.props.liveScoreClearIncident();
-
+        this.props.liveScoreIncidentTypeAction();
         if (id !== null) {
             this.props.getliveScoreTeams(id);
             this.props.liveScorePlayerListAction(id);
         }
+        if (this.state.isEdit === true) {
+            this.props.liveScoreUpdateIncidentData(this.state.tableRecord, "isEdit")
+            this.setInitalFiledValue()
+            let imgUrl = isArrayNotEmpty(this.state.tableRecord.incidentMediaList) ? this.state.tableRecord.incidentMediaList[0] ? this.state.tableRecord.incidentMediaList[0].mediaUrl : null : null
+            let videoUrl = isArrayNotEmpty(this.state.tableRecord.incidentMediaList) ? this.state.tableRecord.incidentMediaList[1] ? this.state.tableRecord.incidentMediaList[1].mediaUrl : null : null
+            this.setState({ incidentId: this.state.tableRecord.id, image: imgUrl, video: videoUrl })
+        } else {
+            this.props.liveScoreUpdateIncidentData(this.state.tableRecord, "isAdd")
+        }
+
+        this.setState({ load: true })
     }
+
+    componentDidUpdate(nextProps) {
+        const { liveScoreIncidentState } = this.props
+        const { successResult } = liveScoreIncidentState
+        if (nextProps.liveScoreIncidentState !== this.props.liveScoreIncidentState) {
+            if (liveScoreIncidentState.success === true && this.state.load === true) {
+                let mediaArry
+                if (this.state.image !== null || this.state.video !== null) {
+
+                    if (this.state.image !== null && this.state.video !== null) {
+                        mediaArry = [
+                            this.state.image,
+                            this.state.video
+                        ]
+                        this.props.liveScoreAddEditIncident({ mediaArry: mediaArry, incidentId: successResult.incidentId, key: 'media', isEdit: this.state.isEdit })
+
+                    } else if (this.state.image !== null) {
+                        mediaArry = [
+                            this.state.image
+                        ]
+                        this.props.liveScoreAddEditIncident({ mediaArry: mediaArry, incidentId: successResult.incidentId, key: 'media', isEdit: this.state.isEdit })
+                    }
+                    else if (this.state.video !== null) {
+                        mediaArry = [
+                            this.state.video
+                        ]
+                        this.props.liveScoreAddEditIncident({ mediaArry: mediaArry, incidentId: successResult.incidentId, key: 'media', isEdit: this.state.isEdit })
+                    }
+
+
+                }
+                this.setState({ load: false, incidentId: successResult.incidentId })
+            }
+        }
+
+    }
+
+    ////set initial value for all validated fields
+    setInitalFiledValue() {
+        const { incidentData, playerIds } = this.props.liveScoreIncidentState
+        this.props.form.setFieldsValue({
+
+            'incidentTeamName': incidentData.teamId,
+            'incidentPlayerName': incidentData.playerIds,
+            'incidentName': incidentData.injury,
+
+        })
+
+    }
+
 
     //Select Image
     selectImage() {
@@ -86,13 +149,11 @@ class LiveScoreAddIncident extends Component {
     }
 
     setImage = (data) => {
-        const { incidentData } = this.props.liveScoreIncidentState
         if (data.files[0] !== undefined) {
-            if (this.state.isEdit == true) {
+            if (this.state.isEdit === true) {
 
             }
             this.setState({ image: data.files[0], imageSelection: URL.createObjectURL(data.files[0]) })
-            // this.props.liveScoreUpdateNewsAction(data.files[0], "newsImage")
         }
     };
 
@@ -100,7 +161,7 @@ class LiveScoreAddIncident extends Component {
     setVideo = (data) => {
 
         if (data.files[0] !== undefined) {
-            if (this.state.isEdit == true) {
+            if (this.state.isEdit === true) {
                 // this.setState({ incidentVideo = '' })
             }
             this.setState({ video: data.files[0], videoSelection: URL.createObjectURL(data.files[0]) })
@@ -120,7 +181,7 @@ class LiveScoreAddIncident extends Component {
                     <div className="row" >
                         <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
                             <Breadcrumb separator=" > ">
-                                <Breadcrumb.Item className="breadcrumb-add">{this.state.isEdit == true ? AppConstants.editMatch : AppConstants.addIncident}</Breadcrumb.Item>
+                                <Breadcrumb.Item className="breadcrumb-add">{this.state.isEdit === true ? AppConstants.editIncident : AppConstants.addIncident}</Breadcrumb.Item>
                             </Breadcrumb>
                         </div>
                     </div>
@@ -136,15 +197,13 @@ class LiveScoreAddIncident extends Component {
     }
     //// Form View
     contentView = (getFieldDecorator) => {
-        const { incidentData, teamResult, playerResult, teamId } = this.props.liveScoreIncidentState
-        console.log(incidentData, "incidentData")
-        let playerData = isArrayNotEmpty(playerResult) ? playerResult : []
-
+        const { incidentData, teamResult, playerResult, incidentTypeResult, playerIds } = this.props.liveScoreIncidentState
+       console.log(incidentData)
         return (
             <div className="content-view pt-4">
                 <div className="row" >
                     <div className="col-sm" >
-                        <InputWithHead required={"required-field"} heading={AppConstants.date} />
+                        <InputWithHead heading={AppConstants.date} />
 
 
                         <DatePicker
@@ -166,11 +225,12 @@ class LiveScoreAddIncident extends Component {
                         <TimePicker
                             className="comp-venue-time-timepicker"
                             style={{ width: "100%" }}
-                            onChange={(time) => this.props.liveScoreUpdateIncidentData(time, 'time  ')}
+                            onChange={(time) => this.props.liveScoreUpdateIncidentData(time, 'time')}
                             format={"HH:mm"}
                             placeholder='Select Time'
                             defaultOpenValue={moment("00:00", "HH:mm")}
                             use12Hours={false}
+                            value={incidentData ? incidentData.time ? moment(incidentData.time) : '' : ''}
                         />
                     </div>
                 </div>
@@ -193,13 +253,13 @@ class LiveScoreAddIncident extends Component {
                             })(
 
                                 <Select
-                                    showSearch
-                                    mode="multiple"
+                                    // showSearch
+                                    // mode="multiple"
                                     className="reg-form-multple-select"
                                     placeholder='Select Home Team'
                                     style={{ width: "100%" }}
-                                    onChange={(homeTeam) => this.props.liveScoreUpdateIncidentData(homeTeam, "team1id")}
-                                    value={incidentData.team1Id ? incidentData.team1Id : ''}
+                                    onChange={(homeTeam) => this.props.liveScoreUpdateIncidentData(homeTeam, "teamId")}
+                                    // value={incidentData.teamId ? incidentData.teamId : ''}
 
                                     optionFilterProp="children"
                                 >
@@ -223,12 +283,13 @@ class LiveScoreAddIncident extends Component {
                                 rules: [{ required: true, message: ValidationConstants.playerName }],
                             })(
                                 <Select
-                                    loading={this.props.liveScoreState.onLoad == true && true}
+                                    loading={this.props.liveScoreState.onLoad === true && true}
                                     mode="multiple"
                                     showSearch={true}
                                     placeholder={AppConstants.selectPlayer}
                                     style={{ width: "100%", }}
                                     onChange={(playerId) => this.props.liveScoreUpdateIncidentData(playerId, "playerId")}
+                                // value={playerIds}
                                 >
                                     {isArrayNotEmpty(playerResult) && playerResult.map((item) => (
                                         < Option value={item.playerId} > {item.firstName + " " + item.lastName}</Option>
@@ -240,29 +301,32 @@ class LiveScoreAddIncident extends Component {
                         </Form.Item>
                     </div>
                     <div className="col-sm">
+                        <Form.Item className="slct-in-add-manager-livescore">
+                            <InputWithHead
+                                required={"required-field "}
+                                heading={AppConstants.incident} />
+                            {getFieldDecorator("incidentName", {
+                                rules: [{ required: true, message: ValidationConstants.incidentName }],
+                            })(
+                                <Select
+                                    showSearch={true}
+                                    placeholder={AppConstants.selectIncident}
+                                    style={{ width: "100%", }}
+                                    onChange={(incident) => this.props.liveScoreUpdateIncidentData(incident, "injury")}
+                                // value={incidentData.injury ? incidentData.injury : undefined}
+                                >
+                                    {isArrayNotEmpty(incidentTypeResult) && incidentTypeResult.map((item) => (
+                                        < Option value={item.id} > {item.name}</Option>
+                                    ))
+                                    }
 
-                        <InputWithHead
-                            type='text'
-                            heading={AppConstants.incident}
+                                </Select>
+                            )}
 
-                        />
-                        <Select
-                            // loading={this.props.liveScoreState.onLoad == true && true}
-                            showSearch={true}
-                            placeholder={AppConstants.selectIncident}
-                            style={{ width: "100%", }}
-                            onChange={(incident) => this.props.liveScoreUpdateIncidentData(incident, "injury")}
-                            value={incidentData.injury ? incidentData.injury : undefined}
-                        >
-                            <Option value="SPECTATOR">{AppConstants._spectator}</Option>
-                            <Option value="DISCIPLINE">{AppConstants.discipline}</Option>
-                            <Option value="INJURY AMBULANCE">{AppConstants.injuryAmbulance}</Option>
-                            <Option value="INJURY-FIRST ADD">{AppConstants.injuryFirstAdd}</Option>
-
-                        </Select>
+                        </Form.Item>
                     </div>
                 </div>
-                <div className="row">
+                {/* <div className="row">
                     <div className="col-sm-6">
                         <InputWithHead
                             heading={AppConstants.claim}
@@ -271,7 +335,7 @@ class LiveScoreAddIncident extends Component {
                             value={incidentData ? incidentData.claim : ""}
                         />
                     </div>
-                </div>
+                </div> */}
 
                 <div className="row">
                     <div className="col-sm">
@@ -291,44 +355,45 @@ class LiveScoreAddIncident extends Component {
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.addImages} />
                         <div className="reg-competition-logo-view" onClick={this.selectImage}>
-                            <label>
-                                <img
-                                    src={this.state.imageSelection}
-                                    alt=""
-                                    height="120"
-                                    width="120"
-                                    style={{ borderRadius: 60, marginLeft: 0 }}
-                                    name={'image'}
-                                    onError={ev => {
-                                        ev.target.src = AppImages.circleImage;
-                                    }}
-                                />
-                            </label>
+                            <ImageLoader
+                                timeout={this.state.imageTimeout}
+                                src={incidentData.addImages ? incidentData.addImages : this.state.imageSelection} />
+
                         </div>
                         <input
                             type="file"
                             id="user-pic"
                             style={{ display: 'none' }}
-                            onChange={(event) => this.setImage(event.target, 'evt.target')}
+                            onChange={(event) => {
+                                this.setImage(event.target, 'evt.target')
+                                this.setState({ imageTimeout: 2000 })
+                                setTimeout(() => {
+                                    this.setState({ imageTimeout: null })
+                                }, 2000);
+                            }}
                         />
                     </div>
                     <div className="col-sm" >
                         <InputWithHead heading={AppConstants.addVideos} />
                         <div className="reg-competition-logo-view" onClick={this.selectVideo}>
-                            <label>
-                                <video
-                                    src={this.state.videoSelection}
-                                    height='120'
-                                    width='120'
-                                    poster={AppImages.circleImage}
-                                />
-                            </label>
+                            <ImageLoader
+                                timeout={this.state.videoTimeout}
+                                video
+                                src={incidentData.addVideo ? incidentData.addVideo : this.state.videoSelection}
+                                poster={(incidentData.addVideo || this.state.videoSelection != '') ? '' : AppImages.circleImage} />
+
                         </div>
                         <input
                             type="file"
                             id="user-vdo"
                             style={{ display: 'none' }}
-                            onChange={(event) => this.setVideo(event.target, "evt.target")}
+                            onChange={(event) => {
+                                this.setVideo(event.target, "evt.target")
+                                this.setState({ videoTimeout: 2000 })
+                                setTimeout(() => {
+                                    this.setState({ videoTimeout: null })
+                                }, 2000);
+                            }}
                         />
                     </div>
                 </div>
@@ -364,13 +429,56 @@ class LiveScoreAddIncident extends Component {
         );
     };
 
+    onSaveClick = e => {
+
+        const { incidentData, playerIds } = this.props.liveScoreIncidentState
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                const { id } = JSON.parse(getLiveScoreCompetiton())
+
+                let date = moment(incidentData.date).format("YYYY-MMM-DD")
+                let time = moment(incidentData.time).format("HH:mm")
+                let startDateTime = moment(date + " " + time);
+                let formatDateTime = new Date(startDateTime).toISOString()
+
+                let body
+
+                if (this.state.isEdit) {
+                    body = {
+                        "matchId": incidentData.mnbMatchId,
+                        "teamId": incidentData.teamId,
+                        "competitionId": id,
+                        "incidentTime": formatDateTime,
+                        "description": incidentData.description,
+                        "incidentTypeId": incidentData.injury,
+                        "id": this.state.incidentId
+                    }
+                } else {
+                    body = {
+                        "matchId": incidentData.mnbMatchId,
+                        "teamId": incidentData.teamId,
+                        "competitionId": id,
+                        "incidentTime": formatDateTime,
+                        "description": incidentData.description,
+                        "incidentTypeId": incidentData.injury,
+                    }
+                }
+
+                this.props.liveScoreAddEditIncident({ body: body, playerIds: incidentData.playerIds, isEdit: this.state.isEdit })
+
+
+            }
+        });
+    };
+
     render() {
         const { getFieldDecorator } = this.props.form
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"17"} />
-
+                <Loader visible={this.props.liveScoreIncidentState.loading} />
                 <Layout>
                     {this.headerView()}
 
@@ -392,7 +500,9 @@ function mapDispatchToProps(dispatch) {
         liveScoreUpdateIncidentData,
         // liveScoreClearIncident,
         getliveScoreTeams,
-        liveScorePlayerListAction
+        liveScorePlayerListAction,
+        liveScoreAddEditIncident,
+        liveScoreIncidentTypeAction
     }, dispatch)
 }
 function mapStateToProps(state) {

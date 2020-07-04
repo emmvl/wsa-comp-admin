@@ -30,7 +30,7 @@ export function* umpireListDashboardSaga(action) {
     try {
         const result = yield call(LiveScoreAxiosApi.umpireListDashboard, action.data);
         if (result.status === 1) {
-            // console.log('saga', result)
+
             yield put({
                 type: ApiConstants.API_GET_UMPIRE_DASHBOARD_LIST_SUCCESS,
                 result: result.result.data,
@@ -48,7 +48,7 @@ export function* umpireVenueListSaga(action) {
     try {
         const result = yield call(CommonAxiosApi.getVenueList, action.compId);
         if (result.status === 1) {
-            // console.log('saga', result)
+
             yield put({
                 type: ApiConstants.API_GET_UMPIRE_DASHBOARD_VENUE_LIST_SUCCESS,
                 result: result.result.data,
@@ -66,7 +66,7 @@ export function* umpireDivisionListSaga(action) {
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreGetDivision, action.competitionID);
         if (result.status === 1) {
-            // console.log('saga', result)
+
             yield put({
                 type: ApiConstants.API_GET_UMPIRE_DASHBOARD_DIVISION_LIST_SUCCESS,
                 result: result.result.data,
@@ -84,7 +84,7 @@ export function* umpireImportSaga(action) {
     try {
         const result = yield call(LiveScoreAxiosApi.umpireImport, action.data);
         if (result.status === 1) {
-            // console.log('saga', result)
+
             yield put({
                 type: ApiConstants.API_UMPIRE_IMPORT_SUCCESS,
                 result: result.result.data,

@@ -60,7 +60,6 @@ function LiveScorePlayerState(state = initialState, action) {
                 state.playerData = playerObj
             } else if (action.key == 'editplayerScreen') {
                 if (action.data) {
-                    console.log(action.data, 'action.data*#*#*#')
                     var editPlayerObj = {
                         firstName: action.data.firstName,
                         lastName: action.data.lastName,

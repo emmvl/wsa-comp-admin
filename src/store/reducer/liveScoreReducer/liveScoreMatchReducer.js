@@ -742,7 +742,7 @@ function liveScoreMatchReducer(state = initialState, action) {
 
             }
         case ApiConstants.BULK_SCORE_UPDATE_CANCEL:
-                state.liveScoreMatchListData = state.liveScoreBulkScoreList
+            state.liveScoreMatchListData = state.liveScoreBulkScoreList
             return {
                 ...state,
                 onLoad: false

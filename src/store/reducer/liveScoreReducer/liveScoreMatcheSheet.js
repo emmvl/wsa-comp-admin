@@ -33,7 +33,6 @@ function liveScoreMatchSheetState(state = initialState, action) {
 
             state.allDivisionData.unshift(divisionObject)
             state.isLoaderActive = false
-            console.log(action.result, 'arrayMatchSheet', divisionArray)
             return {
                 ...state,
                 onLoad: false,

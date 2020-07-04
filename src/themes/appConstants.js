@@ -1379,11 +1379,19 @@ const AppConstants = {
   simultaneousMatchAllocations: "Simultaneous match allocations",
   poolName: "Pool Name",
   umpireReserve: "Umpire Reserve",
+  ladderAdustment: 'Ladder Adustment',
+  points: "Points",
+  reasonForChange: 'Reason for change',
+  addNewAdjustment: 'Add new Adjustment',
+  editIncident: 'Edit Incident',
   addCompetitionFormat: 'Add Competition Format',
   fileUploadPdf: "File Upload (File Type: PDF)",
   link: "Link",
   qrCodeHeader: 'Code from authenticator',
   paymentStatusReference: 'PaymentStatus',
+  positionTrackReport: "Position Tracking Report",
+  periodFilter: 'Period',
+  byGame: 'By Game'
 };
 
 export default AppConstants;

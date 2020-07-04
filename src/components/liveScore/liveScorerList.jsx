@@ -70,9 +70,9 @@ const columns = [
         render: (teams, record) => {
             return (
                 <div>
-                    {teams.length > 0 && teams.map((item) => (
+                    {teams.length > 0 && teams.map((item,i) => (
                         teamListData(item.id) ?
-                            <NavLink to={{
+                            <div key={`teams${i}`+item.id}><NavLink to={{
                                 pathname: '/liveScorerView',
                                 // pathname: '/userPersonal',
                                 state: { tableRecord: record, userId: record.id }
@@ -80,7 +80,7 @@ const columns = [
                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                                     <span className="input-heading-add-another pt-0" >{item.name}</span>
                                 </div>
-                            </NavLink>
+                            </NavLink></div>
                             :
                             <span >{item.name}</span>
                     ))
@@ -312,16 +312,17 @@ class LiveScorerList extends Component {
         let { liveScoreScorerState } = this.props;
         const { scorerListResult, scorerListCurrentPage, scorerListTotalCount } = this.props.liveScoreScorerState
         let dataSource = scorerListResult ? scorerListResult : []
-        // let currentPage = liveScoreScorerState.scorerListResult ? scorerList.page.currentPage : 0
-        // let totalpage = liveScoreScorerState.scorerListResult ? scorerList.page.totalCount : 0
-
         return (
 
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
-                    <Table className="home-dashboard-table" columns={columns} dataSource={dataSource}
+                    <Table 
+                    className="home-dashboard-table" 
+                    columns={columns} 
+                    dataSource={dataSource}
                         pagination={false}
                         loading={this.props.liveScoreScorerState.onLoad == true ? true : false}
+                        rowKey={(record, index) => "scorerData"+record.id + index}
                     />
                 </div>
                 <div className="d-flex justify-content-end">

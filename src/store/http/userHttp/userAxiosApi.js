@@ -6,9 +6,7 @@ import ValidationConstants from "../../../themes/validationConstant";
 import { getUserId, getAuthToken /* , getOrganisationData */ } from "../../../util/sessionStorage"
 
 let token = getAuthToken();
-let userId = getUserId();
-// const internetStatus = navigator.onLine ? true : false;
-
+let userId = getUserId()
 async function logout() {
   await localStorage.clear();
   history.push("/");
