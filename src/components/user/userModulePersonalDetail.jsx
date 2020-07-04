@@ -72,8 +72,8 @@ const columns = [
     },
     {
         title: 'Status',
-        dataIndex: 'statusRefId',
-        key: 'statusRefId'
+        dataIndex: 'paymentStatus',
+        key: 'paymentStatus'
     },
     {
         title: "Reg.Form",
