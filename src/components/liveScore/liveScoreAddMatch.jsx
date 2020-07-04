@@ -1041,18 +1041,20 @@ class LiveScoreAddMatch extends Component {
         matchData.startTime = formated__Date
 
         // const { id } = JSON.parse(getLiveScoreCompetiton())
-
-        if (addEditMatch.team1ResultId > addEditMatch.team2ResultId) {
+        console.log("matchResult::" + JSON.stringify(matchResult));
+        console.log("addEditMatch.team1ResultId" + addEditMatch.team1ResultId);
+        console.log("addEditMatch.team1ResultId" + addEditMatch.team2ResultId);
+        if (Number(addEditMatch.team1Score) > Number(addEditMatch.team2Score)) {
             let team1resultId = matchResult[0].id
             let team2resultId = matchResult[1].id
             this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
 
-        } else if (addEditMatch.team1ResultId < addEditMatch.team2ResultId) {
+        } else if (Number(addEditMatch.team1Score) < Number(addEditMatch.team2Score)) {
             let team1resultId = matchResult[1].id
             let team2resultId = matchResult[0].id
             this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
 
-        } else if (addEditMatch.team1ResultId == addEditMatch.team2ResultId) {
+        } else if (Number(addEditMatch.team1Score) == Number(addEditMatch.team2Score)) {
             let team1resultId = matchResult[2].id
             let team2resultId = matchResult[2].id
             this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
