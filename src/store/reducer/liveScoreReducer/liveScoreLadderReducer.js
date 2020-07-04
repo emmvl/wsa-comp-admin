@@ -7,11 +7,12 @@ const initialState = {
     status: 0,
     liveScoreLadderDivisionData: [],
     liveScoreLadderListData: [],
+    ladderData: []
 };
 
-function createLadderRank(array){
-    for(let i in array){
-        array[i]["rank"] = JSON.parse(i)+1   
+function createLadderRank(array) {
+    for (let i in array) {
+        array[i]["rank"] = JSON.parse(i) + 1
     }
     return array
 }
@@ -28,7 +29,7 @@ function liveScoreLaddersReducer(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_DIVISION_SUCCESS:
             let divisionDatafromAction = action.divisionList
             let ladderList = action.ladderList ? action.ladderList : []
-            console.log(divisionDatafromAction , ladderList)
+
             return {
                 ...state,
                 onLoad: false,
@@ -38,17 +39,17 @@ function liveScoreLaddersReducer(state = initialState, action) {
             };
 
 
-            /// ONLY LADDER
-            case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_LOAD:
-                return { ...state, onLoad: true };
-            case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_SUCCESS:
-    
-                return {
-                    ...state,
-                    onLoad: false,
-                    liveScoreLadderDivisionData: action.result,
-                    status: action.status
-                };
+        /// ONLY LADDER
+        case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_LOAD:
+            return { ...state, onLoad: true };
+        case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_SUCCESS:
+
+            return {
+                ...state,
+                onLoad: false,
+                liveScoreLadderDivisionData: action.result,
+                status: action.status
+            };
 
 
 
@@ -57,12 +58,12 @@ function liveScoreLaddersReducer(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_LADDERS_LIST_LOAD:
             return { ...state, onLoad: true };
         case ApiConstants.API_LIVE_SCORE_LADDERS_LIST_SUCCESS:
-           
+
             let ladder_List = createLadderRank(action.result)
             return {
                 ...state,
                 onLoad: false,
-                liveScoreLadderListData:ladder_List
+                liveScoreLadderListData: ladder_List
             };
 
         case ApiConstants.API_LIVE_SCORE_LADDERS_LIST_FAIL:
@@ -78,6 +79,35 @@ function liveScoreLaddersReducer(state = initialState, action) {
                 onLoad: false,
                 error: action.error,
                 status: action.status
+            };
+
+        //// Update Ladder Setting
+        case ApiConstants.UPDATE_LADDER_ADJUSTMENT:
+            let key = action.data.key
+            let data = action.data.data
+            let index = action.data.index
+            if (key === "addLadderAdjustment") {
+                var obj = {
+                    teamName: '',
+                    points: '',
+                    reasonforChange: ''
+                }
+                state.ladderData.push(obj)
+            } else if (key === 'refresh') {
+                var obj = {
+                    teamName: '',
+                    points: '',
+                    reasonforChange: ''
+                }
+                state.ladderData = [obj]
+
+            } else {
+                state.ladderData[index][key] = data
+            }
+
+
+            return {
+                ...state,
             };
 
 

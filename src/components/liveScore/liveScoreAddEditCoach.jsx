@@ -71,7 +71,7 @@ class LiveScoreAddEditCoach extends Component {
         if (this.props.liveScoreCoachState !== nextProps.liveScoreCoachState) {
 
             if (this.state.teamLoad == true) {
-                console.log(this.props.liveScoreCoachState.teamId, "Colleddd")
+
                 const { teamId } = this.props.liveScoreCoachState
                 this.setSelectedTeamValue(teamId)
 
@@ -93,7 +93,7 @@ class LiveScoreAddEditCoach extends Component {
     }
 
     setSelectedTeamValue(teamId) {
-        console.log(teamId, "qqq")
+
         this.props.form.setFieldsValue({
             'coachTeamName': teamId
         })
@@ -176,7 +176,7 @@ class LiveScoreAddEditCoach extends Component {
 
         const { coachdata, teamId, teamResult } = this.props.liveScoreCoachState
         let teamData = isArrayNotEmpty(teamResult) ? teamResult : []
-        console.log(teamId, 'coachdata')
+
 
         return (
             <div className="content-view pt-4">
@@ -428,7 +428,7 @@ class LiveScoreAddEditCoach extends Component {
                             "teams": coachdata.teams
                         }
                     } else {
-                        console.log(coachdata, 'coachdata!!!!!!')
+
                         body = {
                             "firstName": coachdata.firstName,
                             "lastName": coachdata.lastName,

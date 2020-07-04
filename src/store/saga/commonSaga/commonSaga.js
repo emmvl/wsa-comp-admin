@@ -49,7 +49,6 @@ export function* getTimeSlotInit(action) {
 export function* getCommonDataSaga(action) {
     try {
         const result = yield call(CommonAxiosApi.getCommonData);
-        console.log(result, 'CommonResult')
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_GET_COMMON_REF_DATA_SUCCESS,
@@ -76,9 +75,7 @@ export function* addVenueSaga(action) {
     try {
         let venueId = action.data.venueId;
         const result = yield call(CommonAxiosApi.addVenue, action.data);
-        console.log(result, 'AddVenueSaga' + venueId);
         if (result.status === 1) {
-            console.log("*******************************&&&&&" + venueId);
             yield put({
                 type: ApiConstants.API_ADD_VENUE_SUCCESS,
                 result: venueId == 0 ? result.result.data : null,
@@ -94,7 +91,6 @@ export function* addVenueSaga(action) {
             }, 800);
         }
     } catch (error) {
-        console.log("Error:" + error);
         setTimeout(() => {
             message.error('Something went wrong!');
         }, 800);
@@ -560,19 +556,19 @@ export function* RegistrationRestrictionType() {
                 alert(result.data.message);
             }, 800);
         }
-        } catch (error) {
-            yield put({
-                type: ApiConstants.API_COMMON_SAGA_ERROR,
-                error: error,
-                status: error.status
-            });
-    }  
+    } catch (error) {
+        yield put({
+            type: ApiConstants.API_COMMON_SAGA_ERROR,
+            error: error,
+            status: error.status
+        });
+    }
 }
 
 // Get the Disability Reference Saga
 export function* disabilityReferenceSaga(action) {
     try {
-        const result = yield call(CommonAxiosApi.getCommonReference,AppConstants.disability);
+        const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.disability);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_DISABILITY_REFERENCE_SUCCESS,
@@ -603,3 +599,41 @@ export function* getCommonInitSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+///////////get state reference data
+export function* getStateReferenceSaga(action) {
+    try {
+        const result = yield call(CommonAxiosApi.getStateReference, action.body);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_STATE_REFERENCE_DATA_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+
+// Get the Registration payment status
+export function* getRegistrationPaymentStatusSaga(action) {
+    try {
+        const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.paymentStatusReference);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_REGISTRATION_PAYMENT_STATUS_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+

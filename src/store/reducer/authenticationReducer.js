@@ -1,7 +1,4 @@
 import ApiConstants from "../../themes/apiConstants";
-import { Encrypt, Decrypt } from "../../util/encryption";
-import { JwtEncrypt, JwtDecrypt } from "../../util/jwt";
-import history from "../../util/history";
 import { setAuthToken, setUserId } from '../../util/sessionStorage'
 
 const initialState = {
@@ -17,25 +14,18 @@ const initialState = {
 function login(state = initialState, action) {
   switch (action.type) {
     case ApiConstants.API_LOGIN_LOAD:
-
       return { ...state, onLoad: true };
 
     case ApiConstants.API_LOGIN_SUCCESS:
-      setUserId(action.result.user.id)
-      setAuthToken(action.result.authToken)
-      // localStorage.setItem("token", action.result.authToken);
-      // let jwtEncrypt = JwtEncrypt(action.result.result.data.user_data)
-      // let encryptText = Encrypt(jwtEncrypt)
-      // let decryptText = Decrypt(encryptText)
-      // let jwtDecrypt = JwtDecrypt(decryptText)
-      // history.push("/");
-      window.location.reload();
       return {
         ...state,
         onLoad: false,
-        result: action.result,
+        result: {
+          ...action.result,
+          userName: action.loginData.payload.userName,
+          password: action.loginData.payload.password,
+        },
         status: action.status,
-        loggedIn: true
       };
 
     case ApiConstants.API_LOGIN_FAIL:
@@ -54,13 +44,42 @@ function login(state = initialState, action) {
         status: action.status
       };
 
-    ///////forgot password
-    case ApiConstants.API_FORGOT_PASSWORD_LOAD:
+    case ApiConstants.API_QR_CODE_LOAD:
+      return { ...state, onLoad: true };
 
+    case ApiConstants.API_QR_CODE_SUCCESS:
+      setUserId(action.result.user.id);
+      setAuthToken(action.result.authToken);
+      window.location.reload();
+
+      return {
+        ...state,
+        onLoad: false,
+        result: action.result,
+        status: action.status,
+      };
+
+    case ApiConstants.API_QR_CODE_FAIL:
+      return {
+        ...state,
+        onLoad: false,
+        error: action.error,
+        status: action.status
+      };
+
+    case ApiConstants.API_QR_CODE_ERROR:
+      return {
+        ...state,
+        onLoad: false,
+        error: action.error,
+        status: action.status
+      };
+
+    // forgot password
+    case ApiConstants.API_FORGOT_PASSWORD_LOAD:
       return { ...state, onLoad: true };
 
     case ApiConstants.API_FORGOT_PASSWORD_SUCCESS:
-      console.log("action.result", action.result)
       return {
         ...state,
         forgotPasswordMessage: action.result.message ? action.result.message : "",
@@ -69,9 +88,9 @@ function login(state = initialState, action) {
         status: action.status,
       };
 
-    ////clear reducer
+    // clear reducer
     case ApiConstants.ACTION_TO_CLEAR_AUTHENTICATION_REDUCER:
-      if (action.key == "forgotPasswordSuccess") {
+      if (action.key === "forgotPasswordSuccess") {
         state.forgotPasswordSuccess = false
       }
       return {

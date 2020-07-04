@@ -109,21 +109,15 @@ const columns_Invite = [
     },
     {
         title: 'Umpire 1',
-        dataIndex: 'umpires',
+        dataIndex: 'umpires_1',
         key: 'umpires_1',
-        sorter: (a, b) => tableSort(a, b, "umpires"),
+        sorter: (a, b) => tableSort(a, b, "umpires_1"),
         render: (umpires, record) => {
             return (
 
                 umpires ?
                     umpires[0] ?
-
-                        // <NavLink to={{
-                        //     pathname: '/userPersonal',
-                        //     state: { userId: umpires[0].matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" }
-                        // }}>
                         <span style={{ color: validateColor(umpires[0]) }} onClick={() => this_obj.checkUserIdUmpire(record.umpires[0])} >{umpires[0].umpireName}</span>
-                        // </NavLink>
                         :
                         <span>{''}</span>
                     :
@@ -136,9 +130,9 @@ const columns_Invite = [
     },
     {
         title: 'Umpire 1 Organisation',
-        dataIndex: 'umpires',
+        dataIndex: 'umpires1_Org',
         key: 'umpires1_Org',
-        sorter: (a, b) => tableSort(a, b, "umpires"),
+        sorter: (a, b) => tableSort(a, b, "umpires1_Org"),
         render: (umpires, record) => {
 
             return (
@@ -147,10 +141,9 @@ const columns_Invite = [
                         umpires ?
                             umpires[0] ?
 
-                                isArrayNotEmpty(umpires[0].organisations) && umpires[0].organisations.map((item) => (
+                                isArrayNotEmpty(umpires[0].organisations) && umpires[0].organisations.map((item, index) => (
                                     <span className='multi-column-text-aligned' >{item.name}</span>
                                 ))
-
                                 :
                                 <span>{''}</span>
                             :
@@ -162,42 +155,34 @@ const columns_Invite = [
     },
     {
         title: 'Umpire 2',
-        dataIndex: 'umpires',
+        dataIndex: 'umpires_2',
         key: 'umpires_2',
-        sorter: (a, b) => tableSort(a, b, "umpires"),
+        sorter: (a, b) => tableSort(a, b, "umpires_2"),
         render: (umpires, record) => {
             return (
-
                 umpires ?
                     umpires[1] ?
-                        // <NavLink to={{
-                        //     pathname: '/userPersonal',
-                        //     state: { userId: umpires[1].matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" }
-                        // }}>
                         <span style={{ color: validateColor(umpires[1]) }} onClick={() => this_obj.checkUserIdUmpire(record.umpires[1])} >{umpires[1].umpireName}</span>
-                        // </NavLink>
-
                         :
                         <span>{''}</span>
                     :
                     <span>{''}</span>
-
             )
         }
     },
     {
         title: 'Umpire 2 Organisation',
-        dataIndex: 'umpires',
+        dataIndex: 'umpires2_Org',
         key: 'umpires2_Org',
-        sorter: (a, b) => tableSort(a, b, "umpires"),
+        sorter: (a, b) => tableSort(a, b, "umpires2_Org"),
         render: (umpires, record) => {
             return (
                 <>
                     {
                         umpires ?
                             umpires[1] ?
-                                isArrayNotEmpty(umpires[1].organisations) && umpires[1].organisations.map((item) => (
-                                    <span className='multi-column-text-aligned' >{item.name}</span>
+                                isArrayNotEmpty(umpires[1].organisations) && umpires[1].organisations.map((item, index) => (
+                                    <span key={index} className='multi-column-text-aligned' >{item.name}</span>
                                 ))
 
                                 :
@@ -210,9 +195,16 @@ const columns_Invite = [
         }
     },
     {
-        title: "Action",
+        title: 'Verified By',
         dataIndex: 'umpires',
         key: 'umpires',
+        sorter: (a, b) => tableSort(a, b, "umpires"),
+        render: (umpires, record) => <span className='multi-column-text-aligned'>{isArrayNotEmpty(record.umpires) ? record.umpires[0].verifiedBy : ""}</span>
+    },
+    {
+        title: "Action",
+        dataIndex: 'action',
+        key: 'action',
         render: (umpires, record) => <Menu
             className="action-triple-dot-submenu"
             theme="light"
@@ -226,7 +218,6 @@ const columns_Invite = [
                     <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                 }
             >
-
                 <Menu.Item key="3" >
                     <NavLink to={{
                         pathname: "./addUmpire",
@@ -235,7 +226,6 @@ const columns_Invite = [
                         <span >Invite</span>
                     </NavLink>
                 </Menu.Item>
-
                 {
                     umpires ?
                         umpires[0] ?
@@ -275,7 +265,7 @@ const columns = [
     {
         title: 'Match ID',
         dataIndex: 'id',
-        key: 'id',
+        key: '_id',
         sorter: (a, b) => tableSort(a, b, "id"),
         render: (id) => {
             return (
@@ -291,7 +281,7 @@ const columns = [
     {
         title: 'Start Time',
         dataIndex: 'startTime',
-        key: 'startTime',
+        key: '_startTime',
         sorter: (a, b) => tableSort(a, b, "startTime"),
         render: (startTime, record) =>
             <span >{moment(startTime).format("DD/MM/YYYY HH:mm")}</span>
@@ -299,7 +289,7 @@ const columns = [
     {
         title: 'Home',
         dataIndex: 'team1',
-        key: 'team1',
+        key: '_team1',
         sorter: (a, b) => tableSort(a, b, "team1"),
         render: (team1, record) =>
             <span >{team1.name}</span>
@@ -307,7 +297,7 @@ const columns = [
     {
         title: 'Away',
         dataIndex: 'team2',
-        key: 'team2',
+        key: '_team2',
         sorter: (a, b) => tableSort(a, b, "team2"),
         render: (team2, record) =>
             <span >{team2.name}</span>
@@ -315,16 +305,16 @@ const columns = [
     {
         title: 'Round',
         dataIndex: 'round',
-        key: 'round',
+        key: '_round',
         sorter: (a, b) => tableSort(a, b, "round"),
         render: (round, record) =>
             <span >{round.name}</span>
     },
     {
         title: 'Umpire 1',
-        dataIndex: 'umpires',
-        key: 'umpires_1',
-        sorter: (a, b) => tableSort(a, b, "umpires"),
+        dataIndex: 'umpires_1',
+        key: '_umpires_1',
+        sorter: (a, b) => tableSort(a, b, "umpires_1"),
         render: (umpires, record) => {
             return (
 
@@ -349,9 +339,9 @@ const columns = [
     },
     {
         title: 'Umpire 1 Organisation',
-        dataIndex: 'umpires',
-        key: 'umpires1_Org',
-        sorter: (a, b) => tableSort(a, b, "umpires"),
+        dataIndex: 'umpires1_Org',
+        key: '_umpires1_Org',
+        sorter: (a, b) => tableSort(a, b, "umpires1_Org"),
         render: (umpires, record) => {
 
             return (
@@ -360,7 +350,7 @@ const columns = [
                         umpires ?
                             umpires[0] ?
 
-                                isArrayNotEmpty(umpires[0].organisations) && umpires[0].organisations.map((item) => (
+                                isArrayNotEmpty(umpires[0].organisations) && umpires[0].organisations.map((item, index) => (
                                     <span className='multi-column-text-aligned' >{item.name}</span>
                                 ))
 
@@ -375,9 +365,9 @@ const columns = [
     },
     {
         title: 'Umpire 2',
-        dataIndex: 'umpires',
-        key: 'umpires_2',
-        sorter: (a, b) => tableSort(a, b, "umpires"),
+        dataIndex: 'umpires_2',
+        key: '_umpires_2',
+        sorter: (a, b) => tableSort(a, b, "umpires_2"),
         render: (umpires, record) => {
             return (
 
@@ -400,16 +390,16 @@ const columns = [
     },
     {
         title: 'Umpire 2 Organisation',
-        dataIndex: 'umpires',
-        key: 'umpires2_Org',
-        sorter: (a, b) => tableSort(a, b, "umpires"),
+        dataIndex: 'umpires2_Org',
+        key: '_umpires2_Org',
+        sorter: (a, b) => tableSort(a, b, "umpires2_Org"),
         render: (umpires, record) => {
             return (
                 <>
                     {
                         umpires ?
                             umpires[1] ?
-                                isArrayNotEmpty(umpires[1].organisations) && umpires[1].organisations.map((item) => (
+                                isArrayNotEmpty(umpires[1].organisations) && umpires[1].organisations.map((item, index) => (
                                     <span className='multi-column-text-aligned' >{item.name}</span>
                                 ))
 
@@ -423,9 +413,16 @@ const columns = [
         }
     },
     {
-        title: "Action",
+        title: 'Verified By',
         dataIndex: 'umpires',
         key: 'umpires',
+        sorter: (a, b) => tableSort(a, b, "umpires"),
+        render: (umpires, record) => <span className='multi-column-text-aligned'>{isArrayNotEmpty(record.umpires) ? record.umpires[0].verifiedBy : ""}</span>
+    },
+    {
+        title: "Action",
+        dataIndex: 'action',
+        key: '_action',
         render: (umpires, record) => <Menu
             className="action-triple-dot-submenu"
             theme="light"
@@ -439,16 +436,6 @@ const columns = [
                     <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                 }
             >
-
-                {/* <Menu.Item key="3" >
-                    <NavLink to={{
-                        pathname: "./addUmpire",
-                        state: { record: record, screenName: 'umpireDashboard' }
-                    }}>
-                        <span >Invite</span>
-                    </NavLink>
-                </Menu.Item> */}
-
                 {
                     umpires ?
                         umpires[0] ?
@@ -525,17 +512,23 @@ class UmpireDashboard extends Component {
 
                 if (getUmpireCompetiton()) {
                     if (this.state.liveScoreUmpire === 'liveScoreUmpire') {
+
+                        let compId = JSON.parse(getLiveScoreUmpireCompition())
+                        firstComp = compId
+                        let compObj = JSON.parse(getLiveScoreUmpireCompitionData())
+                        compData = compObj
+
+                        setUmpireCompition(firstComp)
+                        setUmpireCompitionData(JSON.stringify(compData))
+
+                    } else {
+
                         let compId = JSON.parse(getUmpireCompetiton())
                         firstComp = compId
 
                         let compObj = JSON.parse(getUmpireCompetitonData())
                         compData = compObj
-                    } else {
-                        let compId = JSON.parse(getLiveScoreUmpireCompition())
-                        firstComp = compId
 
-                        let compObj = JSON.parse(getLiveScoreUmpireCompitionData())
-                        compData = compObj
                     }
                 } else {
                     setUmpireCompition(firstComp)
@@ -630,7 +623,6 @@ class UmpireDashboard extends Component {
         let umpireListResult = isArrayNotEmpty(umpireDashboardList) ? umpireDashboardList : []
 
         let umpireType = this.state.compititionObj ? this.state.compititionObj.recordUmpireType : ""
-        console.log(this.state.compititionObj, "onjnj")
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
@@ -640,7 +632,9 @@ class UmpireDashboard extends Component {
                         columns={umpireType == "USERS" ? columns_Invite : columns}
                         // columns={ columns_Invite}
                         dataSource={umpireListResult}
-                        pagination={false} />
+                        pagination={false}
+                        rowKey={(record, index) => "umpireListResult" + record.id + index}
+                    />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
                     <div
@@ -817,63 +811,6 @@ class UmpireDashboard extends Component {
                             </div>
                         </div>
                     </div>
-                    {/* <div className="mt-5 ml-4" style={{ display: "flex", justifyContent: 'space-between' }} >
-                        <div className="row" >
-                            <div >
-                                <span className='year-select-heading'>{AppConstants.competition}:</span>
-                                <Select
-
-                                    className="year-select reg-filter-select"
-                                    style={{ minWidth: 160, marginLeft: 30 }}
-                                    onChange={(comp) => this.onChangeComp({ comp })}
-                                    value={this.state.selectedComp}
-                                >
-                                    {
-                                        competition.map((item) => {
-                                            return <Option value={item.id}>{item.longName}</Option>
-                                        })
-                                    }
-
-                                </Select>
-                            </div>
-
-                            <div style={{ marginLeft: 40 }} >
-                                <span className='year-select-heading'>{AppConstants.venue}:</span>
-                                <Select
-                                    className="year-select"
-                                    className="year-select reg-filter-select"
-                                    style={{ minWidth: 160, marginLeft: 30 }}
-                                    onChange={(venueId) => this.onVenueChange(venueId)}
-                                    value={this.state.venue}
-                                >
-                                    {
-                                        venueList.map((item) => {
-                                            return <Option value={item.venueId}>{item.venueName}</Option>
-                                        })
-                                    }
-
-                                </Select>
-                            </div>
-
-                            <div style={{ marginLeft: 40 }}>
-                                <span className='year-select-heading'>{AppConstants.division}:</span>
-                                <Select
-                                    className="year-select"
-                                    className="year-select reg-filter-select"
-                                    style={{ minWidth: 160, marginLeft: 30 }}
-                                    onChange={(divisionId) => this.onDivisionChange(divisionId)}
-                                    value={this.state.division}
-                                >
-                                    {
-                                        divisionList.map((item) => {
-                                            return <Option value={item.id}>{item.name}</Option>
-                                        })
-                                    }
-
-                                </Select>
-                            </div>
-                        </div>
-                    </div> */}
                 </div>
             </div >
         );
@@ -885,6 +822,9 @@ class UmpireDashboard extends Component {
         const { umpireVenueList, umpireDivisionList } = this.props.umpireDashboardState
         let venueList = isArrayNotEmpty(umpireVenueList) ? umpireVenueList : []
         let divisionList = isArrayNotEmpty(umpireDivisionList) ? umpireDivisionList : []
+
+        let umpireType = this.state.compititionObj ? this.state.compititionObj.recordUmpireType : null
+
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
                 <div className="fluid-width" >
@@ -903,8 +843,8 @@ class UmpireDashboard extends Component {
                                     value={this.state.selectedComp}
                                 >
                                     {
-                                        competition.map((item) => {
-                                            return <Option value={item.id}>{item.longName}</Option>
+                                        competition.map((item, index) => {
+                                            return <Option key={`longName`+index} value={item.id}>{item.longName}</Option>
                                         })
                                     }
                                 </Select>
@@ -922,8 +862,8 @@ class UmpireDashboard extends Component {
                                 >
                                     <Option value={'All'}>{'All'}</Option>
                                     {
-                                        venueList.map((item) => {
-                                            return <Option value={item.venueId}>{item.venueName}</Option>
+                                        venueList.map((item, index) => {
+                                            return <Option key={`venueName`+index} value={item.venueId}>{item.venueName}</Option>
                                         })
                                     }
                                 </Select>
@@ -943,8 +883,8 @@ class UmpireDashboard extends Component {
                                 >
                                     <Option value={'All'}>{'All'}</Option>
                                     {
-                                        divisionList.map((item) => {
-                                            return <Option value={item.id}>{item.name}</Option>
+                                        divisionList.map((item, index) => {
+                                            return <Option key={`division`+index} value={item.id}>{item.name}</Option>
                                         })
                                     }
                                 </Select>
@@ -955,6 +895,21 @@ class UmpireDashboard extends Component {
 
 
                     </div>
+                    {
+                        umpireType && umpireType !== 'USERS' ?
+                            <div>
+                                <NavLink to={{
+                                    pathname: '/liveScoreSettingsView',
+                                    state: { selectedComp: this.state.selectedComp, screenName: 'umpireDashboard', edit: 'edit' }
+                                }}>
+                                    <span class="input-heading-add-another pt-0">
+                                        {AppConstants.competitionEnabled}
+                                    </span>
+                                </NavLink>
+                            </div>
+                            :
+                            <></>
+                    }
 
 
                 </div>
@@ -1022,5 +977,6 @@ function mapStatetoProps(state) {
         umpireCompetitionState: state.UmpireCompetitionState
     }
 }
+
 export default connect(mapStatetoProps, mapDispatchToProps)((UmpireDashboard));
 

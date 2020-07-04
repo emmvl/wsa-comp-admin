@@ -1,6 +1,6 @@
 import ApiConstants from "../../../themes/apiConstants";
-import history from "../../../util/history";
-import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
+import { isArrayNotEmpty } from "../../../util/helpers";
+import ColorsArray from "../../../util/colorsArray";
 
 const initialState = {
     onLoad: false,
@@ -10,9 +10,45 @@ const initialState = {
     regDashboardListData: [], ////////registration Dashboard list
     regDashboardListPage: 1,
     regDashboardListTotalCount: 1,
-    competitionTypeList: []
-
+    competitionTypeList: [],
+    ownedRegistrations: [],////////ownedRegistrations main dashboard listing
+    participatingInRegistrations: [], ////////participatingInRegistrations main dashboard listing
 };
+
+///// Generate owned Registrations Array
+
+function generateOwnedRegistrations(dashboardList) {
+    let ownedCompetitions = JSON.parse(JSON.stringify(dashboardList.ownedCompetitions))
+    if (isArrayNotEmpty(ownedCompetitions)) {
+        for (let i in ownedCompetitions) {
+            let ownDivisionList = ownedCompetitions[i].divisions
+            if (isArrayNotEmpty(ownDivisionList)) {
+                ownDivisionList.map((item, index) => {
+                    item.color = index <= 38 ? ColorsArray[index] : "#a3a3b1";
+                })
+            }
+        }
+    }
+    return ownedCompetitions
+}
+
+
+///// Create participating In Registrations Array
+
+function generateParticipatingInRegistrations(dashboardList) {
+    let participatingComptitions = JSON.parse(JSON.stringify(dashboardList.participatingInComptitions))
+    if (isArrayNotEmpty(participatingComptitions)) {
+        for (let i in participatingComptitions) {
+            let divisionList = participatingComptitions[i].divisions
+            if (isArrayNotEmpty(divisionList)) {
+                divisionList.map((item, index) => {
+                    item.color = index <= 38 ? ColorsArray[index] : "#a3a3b1";
+                })
+            }
+        }
+    }
+    return participatingComptitions
+}
 
 
 function registrationDashboard(state = initialState, action) {
@@ -78,6 +114,22 @@ function registrationDashboard(state = initialState, action) {
                 onLoad: false,
                 competitionTypeList: competitionData,
                 status: action.status
+            };
+
+        /////////////////registration main dashboard listing owned and participate registration
+        case ApiConstants.API_GET_REGISTRATION_MAIN_DASHBOARD_LISTING_LOAD:
+            return { ...state, onLoad: true, error: null };
+
+        case ApiConstants.API_GET_REGISTRATION_MAIN_DASHBOARD_LISTING_SUCCESS:
+            let ownRegArray = generateOwnedRegistrations(action.result)
+            let participatingReg = generateParticipatingInRegistrations(action.result)
+            state.ownedRegistrations = ownRegArray
+            state.participatingInRegistrations = participatingReg
+            state.onLoad = false
+            return {
+                ...state,
+                status: action.status,
+                error: null
             };
 
         default:

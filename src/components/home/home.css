@@ -172,6 +172,10 @@ img.bg {
   z-index: 1;
 }
 
+.action-box-pagination{
+  padding-bottom: 0px !important;
+}
+
 @media screen and (max-width: 1024px) { 
   img.bg {
     left: 50%;

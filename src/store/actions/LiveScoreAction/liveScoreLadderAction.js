@@ -15,11 +15,20 @@ function liveScoreLaddersListAction(competitionID, divisionID, compKey) {
 
         competitionID: competitionID,
         divisionID: divisionID,
-        compKey:compKey
+        compKey: compKey
+    };
+    return action;
+}
+
+function updateLadderSetting(data) {
+    const action = {
+        type: ApiConstants.UPDATE_LADDER_ADJUSTMENT,
+        data
     };
     return action;
 }
 
 export {
-    liveScoreLaddersListAction
+    liveScoreLaddersListAction,
+    updateLadderSetting
 }

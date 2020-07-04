@@ -101,7 +101,7 @@ export function* getAllCompetitionFeesDeatilsSaga(action) {
                 const result = yield call(
                     AxiosApi.getAllCompetitionFeesDeatils,
                     action.competitionId,
-                    action.sourceModule								   
+                    action.sourceModule
                 );
                 if (result.status === 1) {
                     yield put({
@@ -114,7 +114,6 @@ export function* getAllCompetitionFeesDeatilsSaga(action) {
                     yield call(failSaga, result)
 
                 }
-
             }
             else {
                 yield call(failSaga, resultData)
@@ -124,13 +123,9 @@ export function* getAllCompetitionFeesDeatilsSaga(action) {
             yield call(failSaga, resultcharity)
         }
     } catch (error) {
-        console.log("error", error)
         yield call(errorSaga, error)
     }
 }
-
-
-
 
 ////get default competition membershipproduct tab details
 export function* getDefaultCompFeesMembershipProductSaga(action) {
@@ -157,7 +152,7 @@ export function* saveCompetitionFeesDetailsSaga(action) {
         const result = yield call(
             AxiosApi.saveCompetitionFeesDetails,
             action.payload,
-            action.sourceModule							   
+            action.sourceModule
         );
         if (result.status === 1) {
             yield put({
@@ -227,14 +222,11 @@ export function* saveCompetitionFeesDivisionSaga(action) {
 ///////competition format types in the competition fees section from the reference table
 export function* getCasualFeeDefault(action) {
     try {
-
         const casualPaymentOption = yield call(commonAxiosApi.getCasualPayment, action);
-
         if (casualPaymentOption.status === 1) {
             yield put({
                 type: ApiConstants.GET_CASUAL_FEE_DETAIL_API_SUCCESS,
                 casualPaymentOptionResult: casualPaymentOption.result.data,
-                // seasonalPaymentOptionResult: seasonalPaymentOption.result.data,
                 status: casualPaymentOption.status
             });
         } else {
@@ -385,7 +377,7 @@ export function* inviteeSearchSaga(action) {
                 type: ApiConstants.API_COMPETITION_FEE_INVITEES_SEARCH_SUCCESS,
                 result: result.result.data,
                 status: result.status,
-                inviteesType : action.inviteesType
+                inviteesType: action.inviteesType
             });
         } else {
             yield call(failSaga, result)
@@ -416,6 +408,6 @@ export function* deleteCompetitionDivisionSaga(action) {
     } catch (error) {
         yield call(errorSaga, error)
     }
-}														
+}
 
 

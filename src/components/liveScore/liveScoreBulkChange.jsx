@@ -361,7 +361,7 @@ class LiveScoreBulkChange extends Component {
     };
 
     onSearchVenue(searchValue) {
-        console.log(searchValue)
+
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ search: searchValue })
         this.props.getCompetitonVenuesList(id, searchValue);
@@ -370,7 +370,7 @@ class LiveScoreBulkChange extends Component {
     ////this method called after slecting Push Back option from drop down
     pushBackView(getFieldDecorator) {
         const { pushBackData, venueData, pushCourtData, bulkRadioBtn, mainCourtList } = this.props.liveScoreBulkMatchState
-        console.log(this.props.liveScoreBulkMatchState, 'this.props.liveScoreBulkMatchState')
+
         return (
             <div>
                 {/* start time date and time picker row */}
@@ -521,7 +521,7 @@ class LiveScoreBulkChange extends Component {
                         filterOption={false}
                     >
                         {pushCourtData && pushCourtData.map((item) => {
-                            console.log(item)
+
                             return (
                                 <Option key={'court' + item.venueCourtId}
                                     value={item.venueCourtId}>
@@ -555,7 +555,7 @@ class LiveScoreBulkChange extends Component {
     ////this method called slecting Bring Forward option from drop down
     bringForwardView(getFieldDecorator) {
         const { bringForwardData, venueData, bringCourtData, bulkRadioBtn, mainCourtList } = this.props.liveScoreBulkMatchState
-        console.log(bringForwardData, 'bringForwardData@#$%')
+
         return (
             <div>
 

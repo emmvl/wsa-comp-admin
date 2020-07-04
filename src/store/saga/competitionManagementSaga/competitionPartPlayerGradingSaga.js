@@ -25,7 +25,6 @@ export function* getCompPartPlayerGradingSummarySaga(action) {
     try {
         const result = yield call(CompetitionAxiosApi.getCompPartPlayerGradingSummary, action.yearRefId, action.competitionId);
         if (result.status === 1) {
-            console.log(result)
             yield put({
                 type: ApiConstants.API_GET_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMMARY_LIST_SUCCESS,
                 result: result.result.data,
@@ -146,9 +145,7 @@ export function* partPLayerCommentSaga(action) {
 
 
 // / competition  part player grading add  team
-
 export function* partPlayerSummaryCommentSaga(action) {
-    console.log(action)
     try {
         const result = yield call(CompetitionAxiosApi.playerGradingSummaryComment, action.year, action.competitionId,
             action.divisionId, action.gradingOrgId, action.comment);
@@ -253,7 +250,6 @@ export function* deleteTeamSaga(action) {
 export function* playerChangeDivisionSaga(action) {
     try {
         const result = yield call(CompetitionAxiosApi.playerChangeDivisionApi, action.payload);
-        console.log("(*****" + result.status);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_CHANGE_COMPETITION_DIVISION_PLAYER_SUCCESS,
@@ -273,7 +269,6 @@ export function* playerChangeDivisionSaga(action) {
 export function* playerCommentList(action) {
     try {
         const result = yield call(CompetitionAxiosApi.getCommentList, action.competitionId, action.entityId, action.commentType);
-        console.log("(*****" + result.status);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_GET_COMMENT_LIST_SUCCESS,

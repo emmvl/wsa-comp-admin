@@ -15,6 +15,7 @@ import { getOnlyYearListAction } from '../../store/actions/appAction'
 import Loader from '../../customComponents/loader';
 import history from "../../util/history";
 import { getOrganisationData } from "../../util/sessionStorage";
+import moment from "moment"
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
@@ -43,7 +44,7 @@ const columnsInbox = [
         key: 'createdOn',
         width: "15%",
         render: createdOn => (
-            <span className="inbox-time-text">{createdOn}</span>
+            <span className="inbox-time-text">{moment(createdOn).format("DD/MM/YYYY HH:mm")}</span>
         )
     },
     {
@@ -407,7 +408,7 @@ class HomeDashboard extends Component {
                     </div>
                     <div className="d-flex justify-content-end">
                         <Pagination
-                        className="antd-pagination"
+                        className="antd-pagination action-box-pagination"
                         current={actionBoxPage}
                         total={actionBoxTotalCount}
                         onChange={(page) => this.handleActionBoxList(page)}
@@ -430,7 +431,7 @@ class HomeDashboard extends Component {
     compOverviewHeading = () => {
         const { yearRefId } = this.props.homeDashboardState
         return (
-            <div className="row text-view">
+            <div className="row text-view" style={{paddingTop: '3%'}}>
                 <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }} >
                     <span className='home-dash-left-text' >{AppConstants.competitionsOverview}</span>
                 </div>
@@ -489,7 +490,7 @@ class HomeDashboard extends Component {
                                     <span className="reg-payment-paid-reg-text">{AppConstants.totalUsers}</span>
                                 </div>
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}
-                                    onClick={() => history.push("/userGraphicalDashboard")}    >
+                                    onClick={() => history.push("/userTextualDashboard")}    >
                                     <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true"></i></a>
                                 </div>
                             </div>

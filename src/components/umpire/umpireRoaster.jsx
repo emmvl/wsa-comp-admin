@@ -12,14 +12,13 @@ import { isArrayNotEmpty } from "../../util/helpers";
 import { umpireRoasterListAction, umpireRoasterOnActionClick } from "../../store/actions/umpireAction/umpirRoasterAction"
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { refRoleTypes } from '../../util/refRoles'
-import { setUmpireCompId, getUmpireCompId } from '../../util/sessionStorage'
-import moment, { utc } from "moment";
+import { getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData } from '../../util/sessionStorage'
+import moment from "moment";
 import ValidationConstants from "../../themes/validationConstant";
 import history from "../../util/history";
 import { exportFilesAction } from "../../store/actions/appAction"
 
 const { Content } = Layout;
-const { SubMenu } = Menu;
 const { Option } = Select;
 
 let this_obj = null;
@@ -36,32 +35,30 @@ const columns = [
     {
         title: 'First Name',
         dataIndex: 'user',
-        key: 'user',
+        key: 'First Name',
         sorter: (a, b) => tableSort(a, b, 'user'),
         render: (firstName, record) =>
-
             <span className="input-heading-add-another pt-0" onClick={() => this_obj.checkUserId(record)}>{record.user.firstName}</span>
     },
     {
         title: 'Last Name',
         dataIndex: 'user',
-        key: 'user',
+        key: 'Last Name',
         sorter: (a, b) => tableSort(a, b, "user"),
         render: (lastName, record) =>
 
             <span className="input-heading-add-another pt-0" onClick={() => this_obj.checkUserId(record)}>{record.user.lastName}</span>
     },
     {
-        title: 'Affiliate',
+        title: 'Organisation',
         dataIndex: 'user',
-        key: 'user',
+        key: 'Organisation',
         sorter: (a, b) => a.user.length - b.user.length,
         render: (user, record) => {
-
             return (
                 <div>
-                    {record.user.userRoleEntities.length > 0 && record.user.userRoleEntities.map((item) => (
-                        <span className='multi-column-text-aligned'>{item.organisation.name}</span>
+                    {record.user.userRoleEntities.length > 0 && record.user.userRoleEntities.map((item, index) => (
+                        <span key={`organisationName`+index} className='multi-column-text-aligned'>{item.organisation.name}</span>
                     ))
                     }
                 </div>)
@@ -72,18 +69,22 @@ const columns = [
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: (a, b) => tableSort(a, b, "matchId"),
-        // render: (matchId) => <NavLink to={{
-        //     pathname: '/liveScoreMatchDetails',
-        //     state: { matchId: matchId, key: 'umpireRoster' }
-        // }} >
-        render:(matchId) =>   <span className="input-heading-add-another pt-0">{matchId}</span>
-        // </NavLink>
+        render: (matchId) => {
+            return (
+                <NavLink to={{
+                    pathname: '/liveScoreMatchDetails',
+                    state: { matchId: matchId, umpireKey: 'umpire' }
+                }} >
+                    <span className="input-heading-add-another pt-0">{matchId}</span>
+                </NavLink>
+            )
+        }
 
     },
     {
         title: 'Start Time',
         dataIndex: 'match',
-        key: 'match',
+        key: 'Start Time',
         sorter: (a, b) => tableSort(a, b, "match"),
         render: (startTime, record) =>
             <span >{moment(record.match.startTime).format("DD/MM/YYYY HH:mm")}</span>
@@ -96,6 +97,8 @@ const columns = [
     },
     {
         title: "Action",
+        dataIndex: 'action',
+        key: 'action',
         render: (data, record) => <Menu
             className="action-triple-dot-submenu"
             theme="light"
@@ -110,7 +113,6 @@ const columns = [
                 }
             >
                 <Menu.Item key={'1'}>
-
                     <span onClick={() => this_obj.onActionPerform(record, 'YES')} >Accept</span>
                 </Menu.Item>
                 <Menu.Item key="2" >
@@ -119,9 +121,7 @@ const columns = [
 
                 </Menu.Item>
                 <Menu.Item key="3" >
-
                     <span onClick={() => this_obj.onActionPerform(record, 'DELETE')}>Unassign</span>
-
                 </Menu.Item>
             </Menu.SubMenu>
         </Menu>
@@ -129,11 +129,6 @@ const columns = [
 
 
 ];
-
-const data = [
-    {
-    },
-]
 
 class UmpireRoaster extends Component {
     constructor(props) {
@@ -145,7 +140,8 @@ class UmpireRoaster extends Component {
             loading: false,
             competitionUniqueKey: null,
             status: 'All',
-            roasterLoad: false
+            roasterLoad: false,
+            compArray: []
         }
         this_obj = this
     }
@@ -158,16 +154,27 @@ class UmpireRoaster extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
-            if (this.state.loading == true && this.props.umpireCompetitionState.onLoad == false) {
+            if (this.state.loading === true && this.props.umpireCompetitionState.onLoad === false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
+                let compData = compList.length > 0 && compList[0]
 
+                if (getUmpireCompetiton()) {
+                    let compId = JSON.parse(getUmpireCompetiton())
+                    let index = compList.findIndex(x => x.id === compId)
+                    if (index > -1) {
+                        firstComp = compList[index].id
+                        compData = compList[index]
+                    } else {
 
-                if (getUmpireCompId()) {
-                    let compId = JSON.parse(getUmpireCompId())
-                    firstComp = compId
+                        setUmpireCompition(firstComp)
+                        setUmpireCompitionData(JSON.stringify(compData))
+                    }
                 } else {
-                    setUmpireCompId(firstComp)
+                    // setUmpireCompId(firstComp)
+                    setUmpireCompition(firstComp)
+                    setUmpireCompitionData(JSON.stringify(compData))
+
                 }
 
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey
@@ -178,10 +185,10 @@ class UmpireRoaster extends Component {
                         "offset": 0
                     }
                 }
-                if(firstComp !== false){
+                if (firstComp !== false) {
                     this.props.umpireRoasterListAction(firstComp, this.state.status, refRoleTypes('umpire'), body)
-                    this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey })
-                }else{ 
+                    this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey, compArray: compList })
+                } else {
                     this.setState({ loading: false })
                 }
             }
@@ -211,7 +218,7 @@ class UmpireRoaster extends Component {
     }
 
     checkUserId(record) {
-        if (record.userId == null) {
+        if (record.userId === null) {
             message.config({ duration: 1.5, maxCount: 1 })
             message.warn(ValidationConstants.umpireMessage)
         }
@@ -239,7 +246,7 @@ class UmpireRoaster extends Component {
 
     ////////form content view
     contentView = () => {
-        const { umpireRoasterList, umpireCurrentPage, umpireTotalCount } = this.props.umpireRoasterdState
+        const { umpireRoasterList, umpireTotalCount } = this.props.umpireRoasterdState
         let umpireListResult = isArrayNotEmpty(umpireRoasterList) ? umpireRoasterList : []
         return (
             <div className="comp-dash-table-view mt-4">
@@ -249,7 +256,8 @@ class UmpireRoaster extends Component {
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={umpireListResult}
-                        pagination={false} />
+                        pagination={false}
+                        rowKey={(record, index) => "umpireListResult" + record.id + index} />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
                     <div
@@ -278,7 +286,18 @@ class UmpireRoaster extends Component {
 
     onChangeComp(compID) {
         let selectedComp = compID.comp
-        setUmpireCompId(selectedComp)
+        let compObj = null
+        for (let i in this.state.compArray) {
+            if (compID.comp === this.state.compArray[i].id) {
+                compObj = this.state.compArray[i]
+                break;
+            }
+        }
+        setUmpireCompition(selectedComp)
+        setUmpireCompitionData(JSON.stringify(compObj))
+
+
+
         let compKey = compID.competitionUniqueKey
 
         const body =
@@ -303,25 +322,16 @@ class UmpireRoaster extends Component {
             },
         }
 
-        if(this.state.selectedComp){
+        if (this.state.selectedComp) {
             this.props.umpireRoasterListAction(this.state.selectedComp, status, refRoleTypes('umpire'), body)
-           
+
         }
         this.setState({ status })
     }
 
     // on Export
     onExport() {
-
         let url = AppConstants.rosterExport + `competitionId=${this.state.selectedComp}&roleId=${15}`
-
-        // if(this.state.status=='All'){
-
-        //     url = `/roster/export/umpire?competitionId=${this.state.selectedComp}&roleId=${15}`
-        // }else{
-        //     url = `/roster/export/umpire?competitionId=${this.state.selectedComp}&status=${this.state.status}&roleId=${15}`
-        // }
-        console.log(url, "ertyu")
         this.props.exportFilesAction(url)
     }
 
@@ -335,7 +345,7 @@ class UmpireRoaster extends Component {
                     <div className="row">
                         <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
                             <span className="form-heading">
-                                {AppConstants.umpireList}
+                                {AppConstants.umpireRoster}
                             </span>
                         </div>
 
@@ -415,7 +425,7 @@ class UmpireRoaster extends Component {
                             >
                                 {
                                     competition.map((item) => {
-                                        return <Option value={item.id}>{item.longName}</Option>
+                                        return <Option key={"competition" + item.id} value={item.id}>{item.longName}</Option>
                                     })
                                 }
 

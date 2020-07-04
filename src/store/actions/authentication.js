@@ -1,34 +1,38 @@
 import ApiConstants from "../../themes/apiConstants";
 
 function loginAction(payload) {
-  console.log(payload);
-  const action = {
+  return {
     type: ApiConstants.API_LOGIN_LOAD,
     payload: payload
   };
-
-  return action;
 }
 
-///forgot password
+function qrSubmitAction(payload) {
+  return {
+    type: ApiConstants.API_QR_CODE_LOAD,
+    payload: payload
+  };
+}
+
+// forgot password
 function forgotPasswordAction(email) {
-  const action = {
+  return {
     type: ApiConstants.API_FORGOT_PASSWORD_LOAD,
     email
   };
-  return action;
 }
-////clear reducer
+
+// clear reducer
 function clearReducerAction(key) {
-  const action = {
+  return {
     type: ApiConstants.ACTION_TO_CLEAR_AUTHENTICATION_REDUCER,
     key
   };
-  return action;
 }
 
 export {
   loginAction,
+  qrSubmitAction,
   forgotPasswordAction,
   clearReducerAction,
 }

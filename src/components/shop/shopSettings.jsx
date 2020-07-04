@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Select, Breadcrumb, } from 'antd';
+import { Layout, Select, Breadcrumb, Button } from 'antd';
 import './shop.css';
 import DashboardLayout from "../../pages/dashboardLayout";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -8,6 +8,8 @@ import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import InputWithHead from "../../customComponents/InputWithHead";
+import { getStateReferenceAction } from "../../store/actions/commonAction/commonAction"
+import Loader from '../../customComponents/loader';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -20,7 +22,14 @@ class ShopSettings extends Component {
         }
     }
     componentDidMount() {
+        this.apiCalls()
+    }
 
+    apiCalls = () => {
+        let body = {
+            State: "State"
+        }
+        this.props.getStateReferenceAction(body)
     }
 
     ///////view for breadcrumb
@@ -51,9 +60,8 @@ class ShopSettings extends Component {
 
     ////////form content view
     contentView = () => {
-        let stateList = [{
-            id: 1, name: "add venue"
-        }]
+        let stateList = this.props.commonState.stateData
+        console.log("this.props.appState", this.props.commonState.stateData)
         return (
             <div className="content-view pt-4">
                 <span className="form-heading">{AppConstants.pickUpAddress}</span>
@@ -82,7 +90,7 @@ class ShopSettings extends Component {
                 // onChange={(stateRefId) => this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId')}
                 >
                     {stateList.length > 0 && stateList.map((item) => (
-                        < Option key={item.id} value={item.id}> {item.name}</Option>
+                        < Option key={"stateList" + item.id} value={item.id}> {item.name}</Option>
                     ))
                     }
                 </Select>
@@ -105,20 +113,16 @@ class ShopSettings extends Component {
             <div className="discount-view pt-5">
                 <span className="form-heading">{AppConstants.productTypes}</span>
                 <div className="row">
-                    <div className=" col-sm width-95">
-                        <Select
-                            style={{ width: "100%" }}
-                            placeholder={AppConstants.select}
-                        // onChange={(stateRefId) => this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId')}
-                        >
-
-                            {product.length > 0 && product.map((item) => (
-                                < Option key={item.id} value={item.id}> {item.name}</Option>
-                            ))
-                            }
-                        </Select>
+                    <div className=" col-sm">
+                        <InputWithHead
+                            required={"required-field "}
+                            placeholder={AppConstants.productTypes}
+                            // name={AppConstants.description}
+                            onChange={(e) => this.setState({ productTypes: e.target.value })}
+                            value={this.state.productTypes}
+                        />
                     </div>
-                    <div className="width-5" >
+                    <div className="col-sm-2 d-flex justify-content-center align-items-center" >
                         <span className='user-remove-btn pl-2'
                             style={{ cursor: 'pointer', }}>
                             <img
@@ -140,6 +144,31 @@ class ShopSettings extends Component {
         );
     }
 
+    //////footer view containing all the buttons like submit and cancel
+    footerView = () => {
+        return (
+            <div className="footer-view">
+                <div className="row">
+                    <div className="col-sm">
+                        <div className="reg-add-save-button">
+                            <Button
+                                type="cancel-button"
+                                onClick={() => console.log("Cancel")}>{AppConstants.cancel}</Button>
+                        </div>
+                    </div>
+                    <div className="col-sm">
+                        <div className="comp-buttons-view">
+                            <Button className="publish-button" type="primary"
+                                htmlType="submit">
+                                {AppConstants.save}
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
@@ -151,9 +180,9 @@ class ShopSettings extends Component {
                         <div className="formView">{this.contentView()}</div>
                         <div className="formView">{this.productTypes()}</div>
                     </Content>
-                    <Footer>
-
-                    </Footer>
+                    <Loader
+                        visible={this.props.commonState.onLoad} />
+                    <Footer>{this.footerView()}</Footer>
                 </Layout>
             </div>
         );
@@ -162,13 +191,13 @@ class ShopSettings extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
+        getStateReferenceAction
     }, dispatch)
 }
 
 function mapStatetoProps(state) {
     return {
-
-
+        commonState: state.CommonReducerState
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)((ShopSettings));

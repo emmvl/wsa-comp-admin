@@ -33,7 +33,14 @@ function* errorSaga(error) {
 ////Match List
 export function* liveScoreMatchListSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreMatchList, action.competitionID, action.start, action.offset, action.search);
+        const result = yield call(LiveScoreAxiosApi.liveScoreMatchList,
+            action.competitionID,
+            action.start,
+            action.offset,
+            action.search,
+            action.divisionId,
+            action.roundName,
+        );
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_MATCH_LIST_SUCCESS,
@@ -211,6 +218,24 @@ export function* playerLineUpStatusChnage(action) {
                 index: action.index
             });
 
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+
+export function* bulkScoreChange(action) {
+    try {
+        const result = yield call(LiveScoreAxiosApi.bulkScoreChangeApi, action.data)
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.BULK_SCORE_UPDATE_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            })
         } else {
             yield call(failSaga, result)
         }

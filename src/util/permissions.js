@@ -45,7 +45,7 @@ async function checkUserRole() {
 async function routePermissionForOrgLevel(orgLevel1, orgLevel2) {
     let orgLevel = await checkOrganisationLevel()
     if (orgLevel1 == orgLevel || orgLevel2 == orgLevel) {
-        console.log("Route Access == True")
+
     } else {
         history.push('./')
     }

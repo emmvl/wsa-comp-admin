@@ -142,7 +142,12 @@ import UmpireSetting from "../components/umpire/umpireSetting";
 import UmpireDivisions from "../components/umpire/umpireDivisions"
 import UmpirePoolAllocation from "../components/umpire/umpirePoolAllocation"
 import LiveScoreUmpireImport from "../components/liveScore/liveScoreUmpireImport"
-import RegisteredUser from "../components/registration/registeredUser"
+import RegistrationMainDashboard from "../components/registration/registrationMainDashboard"
+
+import LiveScoreLadderAdjustment from "../components/liveScore/liveScoreLadderAdjustment";
+import LiveScorePositionTrackReport from "../components/liveScore/liveScorePositionTrackReport";
+
+
 const lazyLoad = Component => {
   const lazy = props => {
     return (
@@ -317,7 +322,7 @@ class Routes extends React.Component {
           component={lazyLoad(CompetitionFixtures)}
         />
         <PrivateRoute
-          path="/competitionQuickCompetition"
+          path="/quickCompetition"
           component={lazyLoad(CompetitionQuickCompetition)}
         />
         <PrivateRoute
@@ -749,8 +754,18 @@ class Routes extends React.Component {
         />
 
         <PrivateRoute
-          path="/registeredUser"
-          component={lazyLoad(RegisteredUser)}
+          path="/registrationDashboard"
+          component={lazyLoad(RegistrationMainDashboard)}
+        />
+
+        <PrivateRoute
+          path="/liveScoreLadderAdjustment"
+          component={lazyLoad(LiveScoreLadderAdjustment)}
+        />
+
+        <PrivateRoute
+          path="/liveScorePositionTrackReport"
+          component={lazyLoad(LiveScorePositionTrackReport)}
         />
 
         <Route path="/" component={lazyLoad(NotFound)} />

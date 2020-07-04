@@ -35,8 +35,6 @@ const initialState = {
 function getCharityRoundUpArray(allData) {
     let getCharityRoundUpArray = []
     let feesAllData = allData[0].fees
-    console.log("feesAllData", feesAllData)
-
     for (let i in feesAllData) {
         let charityObj = {
             competitionId: feesAllData[i].competitionDetail.competitionId,
@@ -59,14 +57,12 @@ function getCharityRoundUpArray(allData) {
         charityDetail: [],
     }
     getCharityRoundUpArray.push(charityNoneObject)
-    console.log("getCharityRoundUpArray", getCharityRoundUpArray)
     return getCharityRoundUpArray
 }
 
 //for calculating subtotal 
 function calculateSubTotal(allData) {
     let fees_All_Data = allData[0].fees
-    console.log("feesAllData", fees_All_Data)
     let resultData = {
         invoiceSubtotal: 0,
         invoiceGstTotal: 0
@@ -226,16 +222,13 @@ function stripe(state = initialState, action) {
             }
 
         case ApiConstants.API_GET_INVOICE_SUCCESS:
-            console.log("getInvoicedata", action.result)
             let invoicedata = isArrayNotEmpty(action.result) ? action.result : []
             let charityRoundUpData = getCharityRoundUpArray(invoicedata)
             let calculateSubTotalData = calculateSubTotal(invoicedata)
-            console.log("calculateSubTotalData", calculateSubTotalData)
             state.subTotalFees=calculateSubTotalData.invoiceSubtotal
             state.subTotalGst=calculateSubTotalData.invoiceGstTotal
             state.charityRoundUpFilter = charityRoundUpData
             state.getInvoicedata = action.result
-
             return {
                 ...state,
                 onLoad: false,

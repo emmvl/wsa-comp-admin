@@ -201,9 +201,9 @@ function userExportFilesAction(URL) {
     type: ApiConstants.API_USER_EXPORT_FILES_LOAD,
     URL: URL
   };
-  console.log(URL, 'URL')
   return action;
 }
+
 
 export {
   getYearListAction,
@@ -228,5 +228,5 @@ export {
   getEnhancedRoundRobinAction,
   exportFilesAction,
   CLEAR_OWN_COMPETITION_DATA,
-  userExportFilesAction
+  userExportFilesAction,
 };

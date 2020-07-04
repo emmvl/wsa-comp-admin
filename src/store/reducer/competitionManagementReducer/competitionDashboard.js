@@ -76,7 +76,6 @@ function CompetitionDashboardState(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_COMPETITION_DASHBOARD_SUCCESS:
-            console.log("ColorsArray", ColorsArray)
             let ownCompetionArray = genrateOwnedCompArray(action.result)
             let participatingComptitions = genratePaticipatingArray(action.result)
             return {

@@ -1,5 +1,5 @@
 
-import http from "./commonhttp";
+import http from "./commonHttp";
 import { getUserId, getAuthToken, getOrganisationData } from "../../../util/sessionStorage"
 import history from "../../../util/history";
 import { message } from "antd";
@@ -123,7 +123,6 @@ let AxiosApi = {
     async  addVenue(venuData) {
         let userId = await getUserId()
         let organisationId = await getOrganisationData().organisationUniqueKey;
-        console.log(venuData, 'venuData_FetchApi')
         let body = {
             "competitionUniqueKey": venuData.competitionUniqueKey,
             "organisationId": organisationId,
@@ -203,7 +202,6 @@ let AxiosApi = {
         } else {
             url = `/api/venue/organisationVenue?organisationUniquekey=b6eb9c7b-6c74-4657-bc6d-e2222b23c965&search=`;
         }
-        console.log("colled ", url)
         return Method.dataGet(url, token);
     },
     getCourtList(venueId) {
@@ -224,6 +222,11 @@ let AxiosApi = {
         let url = `/api/actions/update`;
         return Method.dataPost(url, token, payload)
     },
+
+    getStateReference(body) {
+        var url = "/common/references";
+        return Method.dataPost(url, token, body);
+    }
 };
 const Method = {
     async dataPost(newurl, authorization, body) {
@@ -267,7 +270,6 @@ const Method = {
                     }
                 })
                 .catch(err => {
-                    console.log(err.response)
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
                             if (err.response.status == 401) {
@@ -343,7 +345,6 @@ const Method = {
                     }
                 })
                 .catch(err => {
-                    console.log(err.response)
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
                             if (err.response.status == 401) {
@@ -415,7 +416,6 @@ const Method = {
                     }
                 })
                 .catch(err => {
-                    console.log(err.response)
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
                             if (err.response.status == 401) {

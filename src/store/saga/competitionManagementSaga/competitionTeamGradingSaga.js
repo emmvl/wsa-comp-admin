@@ -254,7 +254,6 @@ export function* deleteTeamActionSaga(action) {
 export function* finalTeamsExportSaga(action) {
     try {
         const result = yield call(CompetitionAxiosApi.finalTeamsExportApi, action.payload);
-        console.log("(*****" + result.status);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_EXPORT_FINAL_TEAMS_SUCCESS,
@@ -274,7 +273,6 @@ export function* finalTeamsExportSaga(action) {
 export function* finalPlayersExportSaga(action) {
     try {
         const result = yield call(CompetitionAxiosApi.finalPlayersExportApi, action.payload);
-        console.log("(*****" + result.status);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_EXPORT_FINAL_PLAYERS_SUCCESS,

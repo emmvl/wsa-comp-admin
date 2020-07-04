@@ -37,7 +37,7 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "photoUrl"),
         render: (photoUrl) =>
             photoUrl ?
-                <img className="live-score-user-image" src={photoUrl} alt="" height="70" width="70" />
+                <img className="user-image" src={photoUrl} alt="" height="70" width="70" />
                 :
                 <span>{'No Image'}</span>
     },
@@ -84,7 +84,7 @@ const columnsTeam1 = [
         sorter: (a, b) => tableSort(a, b, "photoUrl"),
         render: (photoUrl) =>
             photoUrl ?
-                <img className="live-score-user-image" src={photoUrl} alt="" height="70" width="70" />
+                <img className="user-image" src={photoUrl} alt="" height="70" width="70" />
                 :
                 <span>{'No Image'}</span>
     },
@@ -108,12 +108,14 @@ const columnsTeam1 = [
         render: (attended, record, index) => {
             return (
                 <Checkbox
-                    className="single-checkbox mt-1"
-                    checked={record.lineup.playing}
-                    onChange={(e) => {
-                        this_.props.changePlayerLineUpAction(record, e.target.checked, index, "team1Players")
-                    }
-                    }
+                    className={record.lineup ? record.lineup.playing ? "checkbox-green-color-outline mt-1" : 'single-checkbox mt-1' : 'single-checkbox mt-1'}
+                    // className={"checkbox-green-color-outline mt-1"}
+                    checked={record.attendance && record.attendance.isPlaying}
+                // checked={true}
+                // onChange={(e) => {
+                //     this_.props.changePlayerLineUpAction(record, e.target.checked, index, "team1Players")
+                // }
+                // }
                 ></Checkbox>
             )
         },
@@ -129,7 +131,7 @@ const columnsTeam2 = [
         sorter: (a, b) => tableSort(a, b, "photoUrl"),
         render: (photoUrl) =>
             photoUrl ?
-                <img className="live-score-user-image" src={photoUrl} alt="" height="70" width="70" />
+                <img className="user-image" src={photoUrl} alt="" height="70" width="70" />
                 :
                 <span>{'No Image'}</span>
     },
@@ -153,12 +155,12 @@ const columnsTeam2 = [
         render: (attended, record, index) => {
             return (
                 <Checkbox
-                    className="single-checkbox mt-1"
-                    checked={record.lineup.playing}
-                    onChange={(e) => {
-                        this_.props.changePlayerLineUpAction(record, e.target.checked, index, "team2Players")
-                    }
-                    }
+                    className={record.lineup ? record.lineup.playing ? "checkbox-green-color-outline mt-1" : 'single-checkbox mt-1' : 'single-checkbox mt-1'}
+                    checked={record.attendance && record.attendance.isPlaying}
+                // onChange={(e) => {
+                //     this_.props.changePlayerLineUpAction(record, e.target.checked, index, "team2Players")
+                // }
+                // }
                 ></Checkbox>
             )
         },
@@ -198,7 +200,7 @@ class LiveScoreMatchDetails extends Component {
 
         }
 
-        if (isLineUpEnable == 1 && match_status !== "ENDED") {
+        if (isLineUpEnable == 1) {
             this.setState({ isLineUp: 1 })
             this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 1)
         } else {
@@ -363,7 +365,7 @@ class LiveScoreMatchDetails extends Component {
                     </div>
                     <div style={{ display: "flex", alignContent: "center", flexDirection: 'column' }} >
                         {UmpireData.map((item, index) => (
-                            <span className="live-score-desc-text side-bar-profile-data pt-2" >{`U${index + 1}`}: {item.umpireName}</span>
+                            <span className="desc-text-style side-bar-profile-data pt-2" >{`U${index + 1}`}: {item.umpireName}</span>
                         ))
                         }
 
@@ -437,7 +439,7 @@ class LiveScoreMatchDetails extends Component {
             <div className="match-details-rl-padding row mt-5">
                 <div className="col-sm" style={{ flexDirection: "column", display: "flex", alignContent: "center" }} >
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: 'center' }}>
-                        <img className="live-score-user-image" src={length >= 1 ? match ? match[0].team1.logoUrl : '' : ''} alt="" height="80" width="80" />
+                        <img className="user-image" src={length >= 1 ? match ? match[0].team1.logoUrl : '' : ''} alt="" height="80" width="80" />
                         <span className="live-score-profile-user-name">{length >= 1 ? match ? match[0].team1.name : '' : ''}</span>
                         <span className='year-select-heading' >{AppConstants.homeTeam}</span>
                     </div>
@@ -452,7 +454,7 @@ class LiveScoreMatchDetails extends Component {
                 </div>
                 <div className="col-sm" style={{ flexDirection: "column", display: "flex", alignContent: "center" }} >
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: 'center' }}>
-                        <img className="live-score-user-image" src={length >= 1 ? match ? match[0].team2.logoUrl : '' : ''} alt="" height="80" width="80" />
+                        <img className="user-image" src={length >= 1 ? match ? match[0].team2.logoUrl : '' : ''} alt="" height="80" width="80" />
                         <span className="live-score-profile-user-name">{length >= 1 ? match ? match[0].team2.name : '' : ''}</span>
                         <span className='year-select-heading' >{AppConstants.awayTeam}</span>
                     </div>

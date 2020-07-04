@@ -157,10 +157,22 @@ const ValidationConstants = {
     selectAbandonMatchReason: 'Please Select Reason.',
     umpireSearch: "Umpire search is required.",
     umpireMessage: "This umpire has not been linked to a user profile",
+
+    ///shop
+    enterTitleOfTheProduct: 'Please enter title of the product.',
+    enterLengthOfTheProduct: 'Please enter length of the product.',
+    enterWidthOfTheProduct: 'Please enter width of the product.',
+    enterHeightOfTheProduct: 'Please enter height of the product.',
+    enterWeightOfTheProduct: 'Please enter weight of the product.',
+    pleaseEnterProductType: "Please enter product type.",
+    pleaseEnterVariantName: "Please enter variant name.",
+
     SelectNumberTeam: "Please add number of Teams",
     email_validation: "Please enter valid email address!",
     matchDeleteMsg: 'This match cannot be deleted as it has already ended.',
-    userNotFound: "Please select an existing user for this competition."
+    userNotFound: "Please select an existing user for this competition.",
+
+    incidentName: "Incident name is required."
 };
 
 export default ValidationConstants;

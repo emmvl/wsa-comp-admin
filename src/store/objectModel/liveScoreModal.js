@@ -9,7 +9,6 @@ function getPlayerListData(data) {
 }
 
 function getPlayerListObject(data) {
-    console.log(data, 'playerListData')
     return {
         playerId: data.id,
         firstName: data.firstName,
@@ -19,7 +18,8 @@ function getPlayerListObject(data) {
         dob: data.dateOfBirth,
         team: data.team,
         division: data.team.division,
-        userId: data.userId
+        userId: data.userId,
+        mnbPlayerId: data.mnbPlayerId
     }
 }
 

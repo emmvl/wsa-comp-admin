@@ -57,22 +57,43 @@ class LiveScoreSettingsView extends Component {
             recordSelection: 'Own',
             competitionFormat: null,
             timeOut: null,
-            isEdit: props.location ? props.location.state ? props.location.state : null : null
+            isEdit: props.location ? props.location.state ? props.location.state : null : null,
+            selectedComp: props.location ? props.location.state ? props.location.state.selectedComp ? props.location.state.selectedComp : null : null : null,
+            screenName: props.location ? props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null : null,
+            edit: props.location ? props.location.state ? props.location.state.edit ? props.location.state.edit : null : null : null,
         };
+
+        console.log(this.state.isEdit, 'isEdit')
     }
     componentDidMount() {
-        let comp_id = getLiveScoreCompetiton()
-        this.props.settingRegInvitees()
-        if (comp_id) {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
-            if (this.props.location.state === 'edit' || id) {
-                this.props.getLiveScoreSettingInitiate(id)
-                this.props.getCompetitonVenuesList()
-            } else {
-                this.props.clearLiveScoreSetting()
-                this.props.getCompetitonVenuesList()
+
+        if (this.state.screenName == 'umpireDashboard') {
+
+            if (this.state.selectedComp !== null) {
+                if (this.state.edit === 'edit' || this.state.selectedComp) {
+                    this.props.getLiveScoreSettingInitiate(this.state.selectedComp)
+                    this.props.getCompetitonVenuesList()
+                } else {
+                    this.props.clearLiveScoreSetting()
+                    this.props.getCompetitonVenuesList()
+                }
+            }
+
+        } else {
+            let comp_id = getLiveScoreCompetiton()
+            this.props.settingRegInvitees()
+            if (comp_id) {
+                const { id } = JSON.parse(getLiveScoreCompetiton())
+                if (this.props.location.state === 'edit' || id) {
+                    this.props.getLiveScoreSettingInitiate(id)
+                    this.props.getCompetitonVenuesList()
+                } else {
+                    this.props.clearLiveScoreSetting()
+                    this.props.getCompetitonVenuesList()
+                }
             }
         }
+
         if (this.props.location.state === 'add') {
             this.props.clearLiveScoreSetting()
             this.props.getCompetitonVenuesList()
@@ -582,7 +603,7 @@ class LiveScoreSettingsView extends Component {
                             value={this.props.liveScoreSetting.form.attendanceRecordingPeriod}
                         // value={this.props.liveScoreSetting.form.attendanceRecordingPeriod}
                         >
-                            <Option value={"PEROID"}>{'Period'}</Option>
+                            <Option value={"PERIOD"}>{'Period'}</Option>
                             <Option value={"MINUTE"}>{'Minute'}</Option>
                             <Option value={"MATCH"}>{'Games'}</Option>
 

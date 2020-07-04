@@ -64,3 +64,20 @@ export function* getCompetitionSaga(action) {
     }
 }
 
+///////////////////registration main dashboard listing owned and participate registration
+export function* registrationMainDashboardListSaga(action) {
+    try {
+        const result = yield call(AxiosApi.registrationMainDashboardList, action.yearRefId);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_REGISTRATION_MAIN_DASHBOARD_LISTING_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

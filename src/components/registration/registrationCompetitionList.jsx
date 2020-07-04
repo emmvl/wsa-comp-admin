@@ -129,7 +129,7 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "membershipProductTypeName")
     },
     {
-        title: "Registration Division",
+        title: "Registration Divisions",
         dataIndex: "divisionName",
         key: "divisionName",
         render: divisionName => (

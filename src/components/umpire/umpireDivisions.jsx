@@ -1,7 +1,6 @@
 import React, { Component } from "react"
-import { Layout, Button, Select, Menu, Pagination, message, Breadcrumb, Form, Radio, Tooltip } from 'antd';
+import { Layout, Button, Select, Breadcrumb, Form, Radio, } from 'antd';
 import './umpire.css';
-import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -12,7 +11,7 @@ import { umpireCompetitionListAction } from "../../store/actions/umpireAction/um
 import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage'
 import { isArrayNotEmpty } from "../../util/helpers";
 
-const { Header, Footer, Content } = Layout
+const { Header, Footer, } = Layout
 const { Option } = Select
 
 const allocatePools = [
@@ -23,7 +22,6 @@ class UmpireDivisions extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            selectedComp: "All",
             umpPool: "A Grade",
             selectedComp: null,
             loading: false,
@@ -42,24 +40,21 @@ class UmpireDivisions extends Component {
             if (this.state.loading == true && this.props.umpireCompetitionState.onLoad == false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
-
-
                 if (getUmpireCompId()) {
                     let compId = JSON.parse(getUmpireCompId())
                     firstComp = compId
                 } else {
                     setUmpireCompId(firstComp)
                 }
-
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey
                 this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey })
             }
         }
     }
 
-    onChangeComp(data) {
-        this.setState({ selectedComp: data.comp })
-    }
+    // onChangeComp(data) {
+    //     this.setState({ selectedComp: data.comp })
+    // }
 
     ///////view for breadcrumb
     headerView = () => {
@@ -121,8 +116,8 @@ class UmpireDivisions extends Component {
                                     value={this.state.selectedComp}
                                 >
                                     {
-                                        competition.map((item) => {
-                                            return <Option value={item.id}>{item.longName}</Option>
+                                        competition.map((item, index) => {
+                                            return <Option key={"comp" + index} value={item.id}>{item.longName}</Option>
                                         })
                                     }
 
@@ -137,7 +132,6 @@ class UmpireDivisions extends Component {
     };
 
     onChangeUmpirePools(data) {
-        console.log(data, "printttt")
         this.setState({ umpPool: data.umpirePool })
     }
 
@@ -147,8 +141,6 @@ class UmpireDivisions extends Component {
         return (
             <div className="content-view pt-4">
                 <span className="applicable-to-heading ">{AppConstants.allocatePools}</span>
-
-
                 <Radio.Group
                     className="reg-competition-radio"
                 // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionTypeRefId")}
@@ -156,17 +148,34 @@ class UmpireDivisions extends Component {
                 // setFieldsValue={detailsData.competitionTypeRefId}
                 // disabled={compDetailDisable}
                 >
-                    {allocatePools.map(item => {
+                    {allocatePools.map((item, index) => {
                         return (
-                            <Radio value={item.id}>{item.name}</Radio>
+                            <Radio key={"pools" + index} value={item.id}>{item.name}</Radio>
                         )
                     })}
                 </Radio.Group>
 
                 <span className='text-heading-large pt-5' >{AppConstants.umpirePools}</span>
-
-                <InputWithHead marginTop={5} heading={AppConstants.badgeAA} />
-                <div className="row" >
+                <div className="row pt-3" >
+                    <div className='col-sm-3 division-table-field-view'>
+                        <InputWithHead heading={AppConstants.badgeAA} />
+                    </div>
+                    <div className="col-sm" >
+                        <Select
+                            placeholder={"Select"}
+                            mode="multiple"
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
+                        >
+                            <Option value={"a"}>{'A Grade'}</Option>
+                            <Option value={"b"}>{'B Grade'}</Option>
+                            <Option value={"c"}>{'C Grade'}</Option>
+                        </Select>
+                    </div>
+                </div>
+                <div className="row  pt-3" >
+                    <div className='col-sm-3 division-table-field-view'>
+                        <InputWithHead heading={AppConstants.badgeA} />
+                    </div>
                     <div className="col-sm" >
                         <Select
                             placeholder={"Select"}
@@ -175,33 +184,17 @@ class UmpireDivisions extends Component {
                         // onChange={umpirePool => this.onChangeUmpirePools({ key: "recordUmpire", data: umpirePool })}
                         // value={this.state.umpPool}
                         >
-                            <Option value={"a"}>{'A Grade'}</Option>
-                            <Option value={"b"}>{'B Grade'}</Option>
-                            <Option value={"c"}>{'C Grade'}</Option>
+                            <Option value={"aGrade"}>{'A Grade'}</Option>
+                            <Option value={"bGrade"}>{'B Grade'}</Option>
+                            <Option value={"cGrade"}>{'C Grade'}</Option>
                         </Select>
                     </div>
                 </div>
 
-                <InputWithHead marginTop={5} heading={AppConstants.badgeA} />
-
-                <div className="row" >
-                    <div className="col-sm" >
-                        <Select
-                            placeholder={"Select"}
-                            mode="multiple"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
-                        // onChange={umpirePool => this.onChangeUmpirePools({ key: "recordUmpire", data: umpirePool })}
-                        // value={this.state.umpPool}
-                        >
-                            <Option value={"a"}>{'A Grade'}</Option>
-                            <Option value={"b"}>{'B Grade'}</Option>
-                            <Option value={"c"}>{'C Grade'}</Option>
-                        </Select>
+                <div className="row  pt-3" >
+                    <div className='col-sm-3 division-table-field-view'>
+                        <InputWithHead heading={AppConstants.badgeB} />
                     </div>
-                </div>
-
-                <InputWithHead marginTop={5} heading={AppConstants.badgeB} />
-                <div className="row" >
                     <div className="col-sm" >
                         <Select
                             placeholder={"Select"}
@@ -210,15 +203,17 @@ class UmpireDivisions extends Component {
                         // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
                         // value={this.state.umpPool}
                         >
-                            <Option value={"a"}>{'A Grade'}</Option>
-                            <Option value={"b"}>{'B Grade'}</Option>
-                            <Option value={"c"}>{'C Grade'}</Option>
+                            <Option value={"aGradea"}>{'A Grade'}</Option>
+                            <Option value={"bGradeb"}>{'B Grade'}</Option>
+                            <Option value={"cGradec"}>{'C Grade'}</Option>
                         </Select>
                     </div>
                 </div>
 
-                <InputWithHead marginTop={5} heading={AppConstants.badgeC} />
-                <div className="row" >
+                <div className="row  pt-3" >
+                    <div className='col-sm-3 division-table-field-view'>
+                        <InputWithHead heading={AppConstants.badgeC} />
+                    </div>
                     <div className="col-sm" >
                         <Select
                             placeholder={"Select"}
@@ -227,15 +222,17 @@ class UmpireDivisions extends Component {
                         // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
                         // value={this.state.umpPool}
                         >
-                            <Option value={"a"}>{'A Grade'}</Option>
-                            <Option value={"b"}>{'B Grade'}</Option>
-                            <Option value={"c"}>{'C Grade'}</Option>
+                            <Option value={"aGradeaa"}>{'A Grade'}</Option>
+                            <Option value={"bGradebb"}>{'B Grade'}</Option>
+                            <Option value={"cGradecc"}>{'C Grade'}</Option>
                         </Select>
                     </div>
                 </div>
 
-                <InputWithHead marginTop={5} heading={AppConstants.umpireCoach} />
-                <div className="row" >
+                <div className="row  pt-3" >
+                    <div className='col-sm-3 division-table-field-view'>
+                        <InputWithHead heading={AppConstants.umpireCoach} />
+                    </div>
                     <div className="col-sm" >
                         <Select
                             placeholder={"Select"}
@@ -244,15 +241,18 @@ class UmpireDivisions extends Component {
                         // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
                         // value={this.state.umpPool}
                         >
-                            <Option value={"a"}>{'A Grade'}</Option>
-                            <Option value={"b"}>{'B Grade'}</Option>
-                            <Option value={"c"}>{'C Grade'}</Option>
+                            <Option value={"Gradeaa"}>{'A Grade'}</Option>
+                            <Option value={"Gradebb"}>{'B Grade'}</Option>
+                            <Option value={"Gradecc"}>{'C Grade'}</Option>
                         </Select>
                     </div>
                 </div>
 
-                <InputWithHead marginTop={5} heading={AppConstants.juniorUnbadge} />
-                <div className="row" >
+
+                {/* <div className="row  pt-3" >
+                    <div className='col-sm-3 division-table-field-view'>
+                        <InputWithHead heading={AppConstants.juniorUnbadge} />
+                    </div>
                     <div className="col-sm" >
                         <Select
                             placeholder={"Select"}
@@ -261,10 +261,54 @@ class UmpireDivisions extends Component {
                         // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
                         // value={this.state.umpPool}
                         >
-                            <Option value={"a"}>{'A Grade'}</Option>
-                            <Option value={"b"}>{'B Grade'}</Option>
-                            <Option value={"c"}>{'C Grade'}</Option>
+                            <Option value={"GradeaGrade"}>{'A Grade'}</Option>
+                            <Option value={"GradebGrade"}>{'B Grade'}</Option>
+                            <Option value={"GradecGrade"}>{'C Grade'}</Option>
                         </Select>
+                    </div>
+                </div> */}
+                <span className="text-heading-large pt-5">{AppConstants.simultaneousMatchAllocations}</span>
+                <div className="row  pt-3" >
+                    <div className='col-sm-2 '>
+
+                        <InputWithHead heading={AppConstants.poolName}
+                        />
+                        <InputWithHead heading={"Badge AA"}
+                        />
+                    </div>
+                    <div className='col-sm-3 '>
+                        <InputWithHead heading={AppConstants.umpireReserve}
+                            placeholder={"Umpire Reserve"}
+                            onChange={(e) => this.setState({ umpireReserve: e.target.value })}
+                            value={this.state.umpireReserve}
+                        />
+                    </div>
+                    <div className='col-sm-3 '>
+                        <InputWithHead heading={AppConstants.umpireCoach}
+                            placeholder={"Umpire Coach"}
+                            onChange={(e) => this.setState({ umpireCoach: e.target.value })}
+                            value={this.state.umpireCoach}
+                        />
+                    </div>
+                </div>
+                <div className="row  pt-3" >
+                    <div className='col-sm-2'>
+                        <InputWithHead heading={"Badge A"}
+                        />
+                    </div>
+                    <div className='col-sm-3 '>
+                        <InputWithHead
+                            placeholder={"Umpire Reserve"}
+                            onChange={(e) => this.setState({ umpireReserve2: e.target.value })}
+                            value={this.state.umpireReserve2}
+                        />
+                    </div>
+                    <div className='col-sm-3 '>
+                        <InputWithHead
+                            placeholder={"Umpire Coach"}
+                            onChange={(e) => this.setState({ umpireCoach2: e.target.value })}
+                            value={this.state.umpireCoach2}
+                        />
                     </div>
                 </div>
 

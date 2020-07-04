@@ -440,7 +440,6 @@ export function* getCompetitionFormatTypesSaga(action) {
 }
 
 export function* getOnlyYearAndCompetitionListSaga(action) {
-  console.log(action, 'YearSaga')
   try {
     const result = isArrayNotEmpty(action.yearData) ? { status: 1, result: { data: action.yearData, key: "old" } } : yield call(CommonAxiosApi.getYearList, action);
     if (result.status === 1) {
@@ -474,7 +473,6 @@ export function* getOnlyYearAndCompetitionListSaga(action) {
 
 ////get the OWN competition and  year list reference
 export function* getOwnYearAndCompetitionListSaga(action) {
-  console.log(action, 'YearSaga')
   try {
     const result = isArrayNotEmpty(action.yearData) ? { status: 1, result: { data: action.yearData } } : yield call(CommonAxiosApi.getYearList, action);
     if (result.status === 1) {

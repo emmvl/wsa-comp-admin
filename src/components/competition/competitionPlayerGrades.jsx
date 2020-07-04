@@ -431,7 +431,7 @@ class CompetitionPlayerGrades extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm" >
+                        <div className="col-sm-4" >
                             <div style={{
                                 width: "100%", display: "flex",
                                 flexDirection: "row",
@@ -464,7 +464,7 @@ class CompetitionPlayerGrades extends Component {
                                 }} >
                                     <span className='year-select-heading'>{AppConstants.division}:</span>
                                     <Select
-                                        style={{ minWidth: 120 }}
+                                        style={{ minWidth: 120,marginRight: 65 }}
                                         className="year-select"
                                         onChange={(divisionId) => this.onDivisionChange(divisionId)}
                                         value={JSON.parse(JSON.stringify(this.state.divisionId))}

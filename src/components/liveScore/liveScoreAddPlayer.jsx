@@ -56,16 +56,17 @@ class LiveScoreAddPlayer extends Component {
         // this.props.getliveScoreDivisions(id)
         this.props.getliveScoreTeams(id)
         // this.setInitalFiledValue()
+
         if (this.state.isEdit == true) {
             if (this.props.location.state.screen === 'editTeam') {
                 this.props.liveScoreUpdatePlayerDataAction({
-                    playerId: this.state.playerData.id,
+                    playerId: this.state.playerData.mnbPlayerId,
                     firstName: this.state.playerData.firstName,
                     lastName: this.state.playerData.lastName,
                     profilePicture: this.state.playerData.photoUrl,
                     phoneNumber: this.state.playerData.phoneNumber,
                     dob: this.state.playerData.dateOfBirth,
-                    team: { id: this.state.playerData.teamId },
+                    team: this.state.playerData.teamId,
                     division: { id: 1 }
                 }, 'editplayerScreen')
             } else {
@@ -153,6 +154,7 @@ class LiveScoreAddPlayer extends Component {
         // const teamResult = this.props.liveScoreTeamState;
         // const teamData = teamResult.teamResult;
         let teamData = isArrayNotEmpty(teamResult) ? teamResult : []
+
 
         return (
             <div className="content-view pt-0">
