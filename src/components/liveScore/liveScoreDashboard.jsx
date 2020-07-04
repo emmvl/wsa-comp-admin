@@ -12,7 +12,6 @@ import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStora
 import { liveScore_formateDate } from '../../themes/dateformate'
 import { liveScore_formateDateTime } from '../../themes/dateformate'
 import { NavLink } from 'react-router-dom';
-import AppImages from "../../themes/appImages";
 import moment from "moment";
 import { isArrayNotEmpty } from "../../util/helpers";
 import Tooltip from 'react-png-tooltip'
@@ -22,12 +21,9 @@ let this_obj = null;
 
 /////function to sort table column
 function tableSort(a, b, key) {
-    //if (a[key] && b[key]) {
     let stringA = JSON.stringify(a[key])
     let stringB = JSON.stringify(b[key])
     return stringA.localeCompare(stringB)
-    //}
-
 }
 
 function checkSorting(a, b, key) {
@@ -110,11 +106,6 @@ const columnActiveNews = [
 
         render: isActive =>
             <span>{isActive == 1 ? "Yes" : "NO"}</span>
-        // <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
-        //     <img className="dot-image"
-        //         src={isActive == 1 ? AppImages.greenDot : AppImages.redDot}
-        //         alt="" width="12" height="12" />
-        // </span>,
     },
     {
         title: "Published Date",
@@ -194,10 +185,7 @@ const columnsTodaysMatch = [
         title: 'Venue',
         dataIndex: 'venueCourt',
         key: 'venueCourt',
-        //  sorter: (a, b) => a.venueCourt.name.length - b.venueCourt.name.length,
         sorter: (a, b, venueCourt) => checkSorting(a, b, venueCourt.name),
-        // render: (venueCourt) =>
-        //     <span>{venueCourt.venue.shortName + " - " + venueCourt.name}</span>
         render : (venueCourt, record)=><span>{getVenueName(venueCourt)}</span>
 
     },
@@ -205,8 +193,6 @@ const columnsTodaysMatch = [
         title: "Div",
         dataIndex: 'division',
         key: 'division',
-        //sorter: (a, b) => a.division.name.length - b.division.name.length,
-        // sorter: (a, b, division) => tableSort(a, b, division.name),
         render: (division) =>
             <span >{division.name}</span>
     },
@@ -214,7 +200,6 @@ const columnsTodaysMatch = [
         title: "Score",
         dataIndex: 'score',
         key: 'score',
-        // sorter: (a, b, records) => tableSort(a, b, records.team1Score, records.team2Score),
         render: (score, records) =>
             <NavLink to={{
                 pathname: '/liveScoreMatchDetails',
@@ -224,8 +209,6 @@ const columnsTodaysMatch = [
         title: "Umpire",
         dataIndex: 'competition',
         key: 'competition',
-        //sorter: (a, b) => a.competition.recordUmpire.length - b.competition.recordUmpire.length,
-        // sorter: (a, b, competition) => tableSort(a, b, competition.recordUmpire),
         render: (competition) =>
             <span class="input-heading-add-another pt-0" onClick={() => { console.log('hello clcicked ') }} >{competition.recordUmpire}</span>
     }, {
@@ -243,9 +226,6 @@ const columnsTodaysMatch = [
         sorter: (a, b) => tableSort(a, b, "scorer2Status"),
         render: (scorer2Status, record) =>
             <span >{record.competition.scoringType == 'SINGLE' ? "" : isArrayNotEmpty(scorer2Status) ? scorer2Status[0].r_status == "YES" ? "Accepted" : "Not Accepted" : "  Not SET"}</span>
-
-
-
     },
     {
         title: "Player Attendance Team A",
@@ -254,7 +234,6 @@ const columnsTodaysMatch = [
         sorter: (a, b) => tableSort(a, b, "teamAttendanceCountA"),
         render: (teamAttendanceCountA, record) =>
             <span >{teamAttendanceCountA > 0 ? "Complete" : "Not Complete"}</span>
-
     },
     {
         title: "Player Attendance Team B",
@@ -263,7 +242,6 @@ const columnsTodaysMatch = [
         sorter: (a, b) => tableSort(a, b, "teamAttendanceCountB"),
         render: (teamAttendanceCountB, record) =>
             <span >{teamAttendanceCountB > 0 ? "Complete" : "Not Complete"}</span>
-
     },
     {
         title: "Status",
@@ -299,8 +277,7 @@ const columnsTodaysIncient = [
     {
         title: 'First Name',
         dataIndex: 'incidentPlayers',
-        key: 'incidentPlayers',
-        // sorter: (a, b) => a.incidentPlayers.player.firstName.length - b.incidentPlayers.player.firstName.length,
+        key: 'First Name',
         render: (incidentPlayers, record) =>
             <NavLink to={{
                 pathname: '/liveScorePlayerView',
@@ -315,9 +292,7 @@ const columnsTodaysIncient = [
     {
         title: 'Last Name',
         dataIndex: 'incidentPlayers',
-        key: 'incidentPlayers',
-        //   sorter: (a, b) => a.lastName.length - b.lastName.length,
-        //sorter: (a, b,incidentPlayers) => checkSorting(a, b, incidentPlayers.),
+        key: 'Last Name',
         render: (incidentPlayers, record) =>
             <NavLink to={{
                 pathname: '/liveScorePlayerView',
@@ -346,17 +321,10 @@ const columnsTodaysIncient = [
         render: (team) =>
             <span class="input-heading-add-another pt-0">{team}</span>
     },
-    // {
-    //     title: "Clam",
-    //     dataIndex: 'clam',
-    //     key: 'clam',
-    //     sorter: (a, b) => checkSorting(a, b, "clam"),
-    // },
     {
         title: "Description",
         dataIndex: 'description',
         key: 'description',
-        //sorter: (a, b) => a.description.length - b.description.length,
         sorter: (a, b, description) => checkSorting(a, b, description),
     },
 ];
@@ -367,16 +335,12 @@ const columnsPlayersToPay = [
         dataIndex: 'firstName',
         key: 'firstName',
         sorter: (a, b) => tableSort(a, b, "firstName"),
-        // render: (firstName, record) =>
-        //     <span class="input-heading-add-another pt-0" onClick={() => this_obj.checkUserId(record)}>{firstName}</span>
     },
     {
         title: 'Last Name',
         dataIndex: 'lastName',
         key: 'lastName',
         sorter: (a, b) => checkSorting(a, b, "lastName"),
-        // render: (lastName, record) =>
-        //     <span class="input-heading-add-another pt-0" onClick={() => this_obj.checkUserId(record)}>{lastName}</span>
     },
     {
         title: "Linked",
@@ -465,7 +429,7 @@ class LiveScoreDashboard extends Component {
                         className="home-dashboard-table" columns={columnsTodaysIncient}
                         dataSource={dashboardIncidentList}
                         pagination={false}
-                    />
+                        rowKey={(record, index) => "dashboardIncidentList"+record.id + index} />
                 </div>
             </div>
         )
@@ -579,10 +543,11 @@ class LiveScoreDashboard extends Component {
                 {this.matchHeading()}
                 <div className="table-responsive home-dash-table-view">
                     <Table loading={this.props.liveScoreDashboardState.onLoad == true && true}
-                        className="home-dashboard-table" columns={columnsTodaysMatch}
+                        className="home-dashboard-table" 
+                        columns={columnsTodaysMatch}
                         dataSource={dashboardMatchList}
                         pagination={false}
-                    />
+                        rowKey={(record, index) => "dashboardMatchList"+record.id + index} />
                 </div>
             </div>
         )
@@ -642,7 +607,13 @@ class LiveScoreDashboard extends Component {
             <div className="comp-dash-table-view mt-4">
                 {this.addNewsHeading()}
                 <div className="table-responsive home-dash-table-view">
-                    <Table loading={this.props.liveScoreDashboardState.onLoad == true && true} className="home-dashboard-table" columns={columnActiveNews} dataSource={dashboardNewsList} pagination={false}
+                    <Table 
+                    loading={this.props.liveScoreDashboardState.onLoad == true && true} 
+                    className="home-dashboard-table" 
+                    columns={columnActiveNews} 
+                    dataSource={dashboardNewsList} 
+                    pagination={false}
+                    rowKey={(record, index) => "dashboardNewsList"+record.id + index}
                     />
                 </div>
             </div>
@@ -670,10 +641,12 @@ class LiveScoreDashboard extends Component {
                 {this.playersToPayHeading()}
                 <div className="table-responsive home-dash-table-view">
                     <Table loading={this.props.liveScoreDashboardState.onLoad == true && true}
-                        className="home-dashboard-table" columns={columnsPlayersToPay}
+                        className="home-dashboard-table" 
+                        columns={columnsPlayersToPay}
                         dataSource={playerTopay}
-                        pagination={false}
-                    />
+                        pagination={false} 
+                        rowKey={(record, index) => "playerTopay"+record.id + index}
+                         />
                 </div>
             </div>
         )

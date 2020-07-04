@@ -4,14 +4,13 @@ import './liveScore.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
-import matchList from "../../mocks/liveScoreMatchesList.mock"
 import { NavLink } from "react-router-dom";
 import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { liveScoreMatchListAction, changeMatchBulkScore, bulkScoreUpdate,onCancelBulkScoreUpdate } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
 import history from "../../util/history";
-import { getCompetitonId, getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage'
+import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage'
 import { liveScore_MatchFormate } from '../../themes/dateformate'
 import { exportFilesAction } from "../../store/actions/appAction"
 import { isArrayNotEmpty, teamListData } from "../../util/helpers";
@@ -36,10 +35,10 @@ function setMatchResult(record) {
         } else if (record.team1ResultId === 8 || record.team1ResultId === 9) {
             return "Abandoned"
         } else {
-            return record.score
+            return record.team1Score + " : " + record.team2Score
         }
     } else {
-        return record.score
+        return record.team1Score + " : " + record.team2Score
     }
 }
 
@@ -95,13 +94,12 @@ const columns = [
         dataIndex: 'team1',
         key: 'team1',
         sorter: (a, b) => tableSort(a, b, "team1"),
-        // render: (team1) => <span class="input-heading-add-another pt-0">{team1.name}</span>
         render: (team1, record) => teamListData(team1.id) ?
             <NavLink to={{
                 pathname: '/liveScoreTeamView',
                 state: { tableRecord: team1, screenName: 'fromMatchList' }
             }} >
-                <span class="input-heading-add-another pt-0" >{team1.name}</span>
+                <span className="input-heading-add-another pt-0" >{team1.name}</span>
             </NavLink> : <span  >{team1.name}</span>
     },
     {
@@ -115,7 +113,7 @@ const columns = [
                 pathname: '/liveScoreTeamView',
                 state: { tableRecord: team2, screenName: 'fromMatchList' }
             }} >
-                <span class="input-heading-add-another pt-0" >{team2.name}</span>
+                <span className="input-heading-add-another pt-0" >{team2.name}</span>
             </NavLink> :
             <span  >{team2.name}</span>
     },
@@ -182,7 +180,8 @@ class LiveScoreMatchesList extends Component {
             selectedDivision: 'All',
             selectedRound: 'All',
             isBulkUpload: false,
-            isScoreChanged: false
+            isScoreChanged: false,
+            onScoreUpdate:false
         }
         _this = this
     }
@@ -210,13 +209,23 @@ class LiveScoreMatchesList extends Component {
         }
     }
 
+    componentDidUpdate(nextProps){
+        if(nextProps.liveScoreMatchListState !== this.props.liveScoreMatchListState){
+            if(nextProps.liveScoreMatchListState.onLoad === false && this.state.onScoreUpdate === true){
+                        this.setState({isBulkUpload:false,onScoreUpdate:false})      
+            }
+        }
+       
+    }
+
+
     onMatchClick(data, screenName) {
         return (
             <NavLink to={{
                 pathname: screenName,
                 state: { matchId: data, umpireKey: this.state.umpireKey }
             }} >
-                <span class="input-heading-add-another pt-0" >{data}</span>
+                <span className="input-heading-add-another pt-0" >{data}</span>
             </NavLink>
         )
     }
@@ -288,7 +297,7 @@ class LiveScoreMatchesList extends Component {
                         </div>
 
                         :
-                        <span nowrap>{setMatchResult(records)}</span>
+                        <span className="white-space-nowrap">{setMatchResult(records)}</span>
                 }
 
             </div>
@@ -450,7 +459,8 @@ class LiveScoreMatchesList extends Component {
                         className="home-dashboard-table" columns={columns}
                         dataSource={DATA}
                         pagination={false}
-                    />
+                        rowKey={(record, index) => record.id + index} 
+                        />
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
@@ -526,6 +536,7 @@ class LiveScoreMatchesList extends Component {
         let checkScoreChanged = this.checkIsScoreChanged()
         if (checkScoreChanged === true) {
             let postArray = this.createPostMatchArray()
+            this.setState({onScoreUpdate:true})
             this.props.bulkScoreUpdate(postArray)
         } else {
             this.setState({isBulkUpload:false})
@@ -571,7 +582,7 @@ class LiveScoreMatchesList extends Component {
                             >
                                 <Option value={'All'}>{'All'}</Option>
                                 {
-                                    divisionListArr.map((item) => {
+                                    divisionListArr.map((item, index) => {
                                         return <Option value={item.id}>{item.name}</Option>
                                     })
                                 }

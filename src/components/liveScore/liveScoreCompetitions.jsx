@@ -204,10 +204,7 @@ class LiveScoreCompetitions extends Component {
 
     }
 
-
-
     setCompetitionID = (competitiondata) => {
-        console.log(competitiondata, 'competitiondata')
         localStorage.setItem("LiveScoreCompetiton", JSON.stringify(competitiondata))
 
         setLiveScoreUmpireCompition(competitiondata.id)

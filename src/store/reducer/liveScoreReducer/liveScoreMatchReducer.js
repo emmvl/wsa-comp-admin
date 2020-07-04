@@ -197,7 +197,7 @@ const initialState = {
     umpireRosterId_2: null,
     team1id: null,
     team2id: null,
-    liveScoreBulkScoreList: []
+    liveScoreBulkScoreList: [],
 };
 
 function setMatchData(data) {
@@ -272,9 +272,6 @@ function liveScoreMatchReducer(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_MATCH_LIST_SUCCESS:
 
             const result = getMatchListSettings(action.result.matches)
-            // state.liveScoreBulkScoreList
-            // state.liveScoreMatchListData = result
-
             return {
                 ...state,
                 onLoad: false,
@@ -306,18 +303,12 @@ function liveScoreMatchReducer(state = initialState, action) {
             return { ...state, onLoad: true, matchLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_ADD_EDIT_MATCH_SUCCESS:
-
             let data = action.result
-            console.log(action, 'API_LIVE_SCORE_ADD_EDIT_MATCH_SUCCESS')
-
             state.addEditMatch = action.result;
-
             if (action.result) {
                 state.team1id = action.result.team1Id
                 state.team2id = action.result.team2Id
             }
-
-
             state.start_date = moment(action.result.startTime).format("DD-MM-YYYY")
             state.start_post_date = moment(action.result.startTime, "YYYY-MM-DD")
             state.start_time = action.result.startTime
@@ -448,9 +439,7 @@ function liveScoreMatchReducer(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_CREATE_MATCH_SUCCESS:
-            let createData = action.result
-            // state.matchData = dataObject
-
+            // let createData = action.result
             return {
                 ...state,
                 onLoad: false,
@@ -459,8 +448,6 @@ function liveScoreMatchReducer(state = initialState, action) {
 
 
         case ApiConstants.API_LIVE_SCORE_COMPETITION_VENUES_LIST_SUCCESS:
-
-
             let venueCourts = generateCourtsArray(action.venues)
             state.venueData = venueCourts
             state.courList = venueCourts
@@ -471,9 +458,7 @@ function liveScoreMatchReducer(state = initialState, action) {
                 status: action.status
             };
 
-
         //// Competition venues
-
 
         case ApiConstants.API_LIVE_SCORE_CLEAR_MATCH_DATA:
             state.matchData = matchObj
@@ -568,8 +553,6 @@ function liveScoreMatchReducer(state = initialState, action) {
                 matchDetails: action.payload,
                 team1Players: team1Player,
                 team2Players: team2Player,
-
-
             }
         case ApiConstants.API_GET_LIVESCOREMATCH_DETAIL_ERROR:
             return {
@@ -750,7 +733,8 @@ function liveScoreMatchReducer(state = initialState, action) {
                 onLoad: true
             }
         case ApiConstants.BULK_SCORE_UPDATE_SUCCESS:
-            state.liveScoreBulkScoreList =  state.liveScoreMatchListData
+            let matchUpdatedList = state.liveScoreMatchListData
+            state.liveScoreBulkScoreList =  matchUpdatedList
             return {
                 ...state,
                 onLoad: false,

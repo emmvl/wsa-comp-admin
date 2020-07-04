@@ -112,7 +112,6 @@ const columns = [
                 }
             >
                 <Menu.Item key={'1'}>
-
                     <span onClick={() => this_obj.onActionPerform(record, 'YES')} >Accept</span>
                 </Menu.Item>
                 <Menu.Item key="2" >
@@ -121,9 +120,7 @@ const columns = [
 
                 </Menu.Item>
                 <Menu.Item key="3" >
-
                     <span onClick={() => this_obj.onActionPerform(record, 'DELETE')}>Unassign</span>
-
                 </Menu.Item>
             </Menu.SubMenu>
         </Menu>
