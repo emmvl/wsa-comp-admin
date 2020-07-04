@@ -45,7 +45,7 @@ const columns = [
       //   pathname: '/liveScoreCoachDetail',
       //   state: { userId: record.id, screenKey: "livescore" }
       // }}>
-      <span class="input-heading-add-another pt-0" >{firstName}</span>
+      <span className="input-heading-add-another pt-0" >{firstName}</span>
     //  </NavLink>
   },
   {
@@ -58,7 +58,7 @@ const columns = [
       //   pathname: '/userPersonal',
       //   state: { userId: record.id, screenKey: "livescore" }
       // }}>
-      <span class="input-heading-add-another pt-0" >{lastName}</span>
+      <span className="input-heading-add-another pt-0" >{lastName}</span>
     //  </NavLink>
   },
   {
@@ -76,20 +76,22 @@ const columns = [
   {
     title: "Team",
     dataIndex: "linkedEntity",
-    key: "linkedEntity",
+    key: "Linked Entity Name",
     sorter: (a, b) => tableSort(a, b, "linkedEntity"),
     render: (linkedEntity, record) => {
 
       return (
         <div>
-          {linkedEntity.length > 0 && linkedEntity.map((item) => (
+          {linkedEntity.length > 0 && linkedEntity.map((item,i) => (
             teamListData(item.entityId) ?
+            <div key = {`name${i}`+linkedEntity.entityId}>
               <NavLink to={{
                 pathname: '/liveScoreTeamView',
                 state: { teamId: item.entityId, screenKey: "livescore" }
               }}>
                 <span style={{ color: '#ff8237', cursor: 'pointer' }} className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
               </NavLink>
+              </div>
               :
               <span  >{item.name}</span>
           ))
@@ -163,6 +165,7 @@ class LiveScoreCoaches extends Component {
             dataSource={couchesList}
             pagination={false}
             loading={this.props.liveScoreCoachState.onLoad === true && true}
+            rowKey={(record, index) => "couchesList"+record.id + index}
           />
         </div>
         <div className="comp-dashboard-botton-view-mobile">

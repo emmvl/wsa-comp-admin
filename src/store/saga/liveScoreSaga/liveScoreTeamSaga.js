@@ -5,7 +5,7 @@ import { message } from "antd";
 import history from "../../../util/history";
 
 function* failSaga(result) {
-    console.log(result, 'API_LIVE_SCORE_TEAM_ERROR')
+
     yield put({
         type: ApiConstants.API_LIVE_SCORE_TEAM_FAIL,
         error: result,
@@ -17,7 +17,7 @@ function* failSaga(result) {
 }
 
 function* errorSaga(error) {
-    console.log(error, 'API_LIVE_SCORE_TEAM_ERROR')
+
     yield put({
         type: ApiConstants.API_LIVE_SCORE_TEAM_ERROR,
         error: error,
@@ -88,7 +88,7 @@ export function* liveScoreDeleteTeamSaga(action) {
 export function* liveScoreTeamDivisionSaga(action) {
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreGetDivision, action.payload)
-        console.log('reducer', result)
+
         if (result.status === 1) {
             yield put({ type: ApiConstants.GET_DIVISION_SUCCESS, payload: result.result.data })
         } else {
@@ -102,7 +102,7 @@ export function* liveScoreTeamDivisionSaga(action) {
 export function* liveScoreAffilateSaga(action) {
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreGetAffilate, action.payload)
-        console.log('reducer1', result)
+
         if (result.status === 1) {
             yield put({ type: ApiConstants.GET_AFFILATE_SUCCESS, payload: result.result.data })
         } else {

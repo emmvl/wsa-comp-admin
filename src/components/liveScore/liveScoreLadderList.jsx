@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Pagination, Table, Select } from 'antd';
+import { Layout, Breadcrumb, Button, Table, Select } from 'antd';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -11,6 +11,8 @@ import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { isArrayNotEmpty } from '../../util/helpers'
 import { getLiveScoreDivisionList, liveScoreDeleteDivision } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction'
+import { NavLink } from 'react-router-dom';
+
 const { Content } = Layout;
 const { Option } = Select;
 
@@ -31,13 +33,13 @@ const columns = [
         title: 'Rank',
         dataIndex: 'rank',
         key: 'rank',
-        sorter: (a, b) => tableSort(a,b, "rank"),
+        sorter: (a, b) => tableSort(a, b, "rank"),
     },
     {
         title: 'Team',
         dataIndex: 'name',
         key: 'name',
-        sorter: (a, b) => tableSort(a,b, "name"),
+        sorter: (a, b) => tableSort(a, b, "name"),
 
     },
 
@@ -45,14 +47,14 @@ const columns = [
         title: 'P',
         dataIndex: 'P',
         key: 'P',
-        sorter: (a, b) => tableSort(a,b, "P"),
+        sorter: (a, b) => tableSort(a, b, "P"),
 
     },
     {
         title: 'W',
         dataIndex: 'W',
         key: 'W',
-        sorter: (a, b) => tableSort(a,b, "W"),
+        sorter: (a, b) => tableSort(a, b, "W"),
 
 
     },
@@ -60,13 +62,13 @@ const columns = [
         title: 'L',
         dataIndex: 'L',
         key: 'L',
-        sorter: (a, b) => tableSort(a,b, "L"),
+        sorter: (a, b) => tableSort(a, b, "L"),
     },
     {
         title: 'D',
         dataIndex: 'D',
         key: 'D',
-        sorter: (a, b) => tableSort(a,b, "D"),
+        sorter: (a, b) => tableSort(a, b, "D"),
 
 
     },
@@ -74,27 +76,27 @@ const columns = [
         title: 'FW',
         dataIndex: 'FW',
         key: 'FW',
-        sorter: (a, b) => tableSort(a,b, "FW"),
+        sorter: (a, b) => tableSort(a, b, "FW"),
 
     },
     {
         title: 'FL',
         dataIndex: 'FL',
         key: 'FL',
-        sorter: (a, b) => tableSort(a,b, "FL"),
+        sorter: (a, b) => tableSort(a, b, "FL"),
 
     },
     {
         title: 'F',
         dataIndex: 'F',
         key: 'F',
-        sorter: (a, b) => tableSort(a,b, "F"),
+        sorter: (a, b) => tableSort(a, b, "F"),
     },
     {
         title: 'A',
         dataIndex: 'A',
         key: 'A',
-        sorter: (a, b) => tableSort(a,b, "A"),
+        sorter: (a, b) => tableSort(a, b, "A"),
 
 
     },
@@ -102,13 +104,13 @@ const columns = [
         title: 'PTS',
         dataIndex: 'PTS',
         key: 'PTS',
-        sorter: (a, b) => tableSort(a,b, "PTS"),
+        sorter: (a, b) => tableSort(a, b, "PTS"),
     },
     {
         title: '%',
         dataIndex: 'SMR',
         key: 'SMR',
-        sorter: (a, b) => tableSort(a,b, "SMR"),
+        sorter: (a, b) => tableSort(a, b, "SMR"),
         render: (SMR) => <span>{(JSON.parse(SMR) * 100).toFixed(2) + "%"}</span>
     },
 ];
@@ -119,21 +121,50 @@ class LiveScoreLadderList extends Component {
         super(props);
         this.state = {
             division: "11A",
-            loadding:false
+            loadding: false
         }
     }
 
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-view-design" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <div className="comp-player-grades-header-drop-down-view mt-4">
+                < div className="row" >
+                    <div className="col-sm" >
                         <Breadcrumb separator=" > ">
-                            < Breadcrumb.Item className="breadcrumb-add"> {AppConstants.competitionladders}</Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.competitionladders}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                </div>
+
+                    <div className="col-sm" style={{
+
+                        display: "flex",
+                        flexDirection: 'row',
+                        alignItems: "center",
+                        justifyContent: "flex-end",
+                    }}>
+                        <div className="row">
+                            <div className="col-sm">
+                                <div
+                                    className="comp-dashboard-botton-view-mobile"
+                                    style={{
+                                        width: "100%",
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        justifyContent: "flex-end"
+                                    }}>
+                                    <NavLink to="/liveScoreLadderAdjustment">
+                                        <Button className="primary-add-comp-form" type="primary">
+                                            + {AppConstants.edit}
+                                        </Button>
+                                    </NavLink>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div >
             </div >
         )
     }
@@ -145,22 +176,22 @@ class LiveScoreLadderList extends Component {
         if (id !== null) {
             // this.props.getliveScoreDivisions(competitionID);
             // this.props.getliveScoreDivisions(id);
-            this.setState({loadding : true})
+            this.setState({ loadding: true })
             this.props.getLiveScoreDivisionList(id)
-            
+
         } else {
             history.push('/')
         }
     }
 
-    componentDidUpdate(nextProps){
-        if(nextProps.liveScoreLadderState.liveScoreLadderDivisionData !== this.props.liveScoreLadderState.liveScoreLadderDivisionData){
-            if(this.state.loadding == true && this.props.liveScoreLadderState.onLoad == false){
+    componentDidUpdate(nextProps) {
+        if (nextProps.liveScoreLadderState.liveScoreLadderDivisionData !== this.props.liveScoreLadderState.liveScoreLadderDivisionData) {
+            if (this.state.loadding == true && this.props.liveScoreLadderState.onLoad == false) {
                 const { id, uniqueKey } = JSON.parse(getLiveScoreCompetiton())
                 let divisionArray = this.props.liveScoreLadderState.liveScoreLadderDivisionData
-                let divisionId  = isArrayNotEmpty(divisionArray)? divisionArray[0].id : null
+                let divisionId = isArrayNotEmpty(divisionArray) ? divisionArray[0].id : null
                 this.props.liveScoreLaddersListAction(id, divisionId, uniqueKey)
-                this.setState({loadding : false})
+                this.setState({ loadding: false })
             }
         }
     }
@@ -180,7 +211,7 @@ class LiveScoreLadderList extends Component {
         console.log(liveScoreLadderState)
         // let grade = liveScoreLadderState.liveScoreLadderDivisionData !== [] ? liveScoreLadderState.liveScoreLadderDivisionData : []
         let grade = isArrayNotEmpty(liveScoreLadderState.liveScoreLadderDivisionData) ? liveScoreLadderState.liveScoreLadderDivisionData : []
-    
+
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <span className='year-select-heading'>{AppConstants.filterByDivision}:</span>
@@ -226,7 +257,7 @@ class LiveScoreLadderList extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"11"} />
                 <Layout>
                     {this.headerView()}

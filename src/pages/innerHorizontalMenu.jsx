@@ -356,6 +356,13 @@ class InnerHorizontalMenu extends React.Component {
                                     <span>Goals</span>
                                 </NavLink>
                             </Menu.Item>
+
+                            <Menu.Item key="24">
+                                <NavLink to="/liveScorePositionTrackReport">
+                                    <span>Position Trackting</span>
+                                </NavLink>
+                            </Menu.Item>
+
                         </SubMenu>
 
                         <Menu.Item key="17">

@@ -125,7 +125,7 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, 'isActive'),
 
         render: isActive =>
-            <span>{isActive == 1 ? "Yes" : "NO"}</span>
+            <span>{isActive === 1 ? "Yes" : "NO"}</span>
 
     },
     {
@@ -144,7 +144,7 @@ const columns = [
         key: 'isNotification',
         sorter: (a, b) => checkSorting(a, b, 'isNotification'),
         render: isNotification =>
-            <span>{isNotification == 1 ? "Yes" : "NO"}</span>
+            <span>{isNotification === 1 ? "Yes" : "NO"}</span>
     },
     {
         title: 'Active',

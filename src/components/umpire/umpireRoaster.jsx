@@ -13,13 +13,12 @@ import { umpireRoasterListAction, umpireRoasterOnActionClick } from "../../store
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { refRoleTypes } from '../../util/refRoles'
 import { getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData } from '../../util/sessionStorage'
-import moment, { utc } from "moment";
+import moment from "moment";
 import ValidationConstants from "../../themes/validationConstant";
 import history from "../../util/history";
 import { exportFilesAction } from "../../store/actions/appAction"
 
 const { Content } = Layout;
-const { SubMenu } = Menu;
 const { Option } = Select;
 
 let this_obj = null;
@@ -58,8 +57,8 @@ const columns = [
         render: (user, record) => {
             return (
                 <div>
-                    {record.user.userRoleEntities.length > 0 && record.user.userRoleEntities.map((item) => (
-                        <span key={"userRoleEntities" + item.organisation.id} className='multi-column-text-aligned'>{item.organisation.name}</span>
+                    {record.user.userRoleEntities.length > 0 && record.user.userRoleEntities.map((item, index) => (
+                        <span key={`organisationName`+index} className='multi-column-text-aligned'>{item.organisation.name}</span>
                     ))
                     }
                 </div>)
@@ -98,6 +97,8 @@ const columns = [
     },
     {
         title: "Action",
+        dataIndex: 'action',
+        key: 'action',
         render: (data, record) => <Menu
             className="action-triple-dot-submenu"
             theme="light"
@@ -129,11 +130,6 @@ const columns = [
 
 ];
 
-const data = [
-    {
-    },
-]
-
 class UmpireRoaster extends Component {
     constructor(props) {
         super(props);
@@ -158,7 +154,7 @@ class UmpireRoaster extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
-            if (this.state.loading == true && this.props.umpireCompetitionState.onLoad == false) {
+            if (this.state.loading === true && this.props.umpireCompetitionState.onLoad === false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
                 let compData = compList.length > 0 && compList[0]
@@ -222,7 +218,7 @@ class UmpireRoaster extends Component {
     }
 
     checkUserId(record) {
-        if (record.userId == null) {
+        if (record.userId === null) {
             message.config({ duration: 1.5, maxCount: 1 })
             message.warn(ValidationConstants.umpireMessage)
         }
@@ -250,7 +246,7 @@ class UmpireRoaster extends Component {
 
     ////////form content view
     contentView = () => {
-        const { umpireRoasterList, umpireCurrentPage, umpireTotalCount } = this.props.umpireRoasterdState
+        const { umpireRoasterList, umpireTotalCount } = this.props.umpireRoasterdState
         let umpireListResult = isArrayNotEmpty(umpireRoasterList) ? umpireRoasterList : []
         return (
             <div className="comp-dash-table-view mt-4">
@@ -261,7 +257,7 @@ class UmpireRoaster extends Component {
                         columns={columns}
                         dataSource={umpireListResult}
                         pagination={false}
-                        rowKey={(record, index) => record.id + index} />
+                        rowKey={(record, index) => "umpireListResult" + record.id + index} />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
                     <div
@@ -292,7 +288,7 @@ class UmpireRoaster extends Component {
         let selectedComp = compID.comp
         let compObj = null
         for (let i in this.state.compArray) {
-            if (compID.comp == this.state.compArray[i].id) {
+            if (compID.comp === this.state.compArray[i].id) {
                 compObj = this.state.compArray[i]
                 break;
             }

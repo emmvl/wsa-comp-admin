@@ -30,7 +30,6 @@ function tableSort(a, b, key) {
 
 function checkScorerMatch(data) {
     let scorerID = this_obj.props.location.state ? this_obj.props.location.state.record.id : null
-    console.log(scorerID, data)
     // if(data && data.id == scorerID){
     if (data) {
         return "Unassign"

@@ -105,7 +105,7 @@ function shopProductState(state = initialState, action) {
 
         //////onchange Add/Edit product details
         case ApiConstants.SHOP_PRODUCT_DETAILS_ONCHANGE:
-            if (action.key == "types") {
+            if (action.key === "types") {
                 let typesArray = []
                 typesArray.push(action.data)
                 state.productDeatilData["types"] = typesArray

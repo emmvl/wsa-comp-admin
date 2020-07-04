@@ -17,9 +17,9 @@ function LiveScoreGoalState(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_GOAL_LIST_SUCCESS:
             let result = action.result
-            console.log(result, "result")
+            
             var goalListResult = liveScoreGoalModal.getGoalListData(action.result)
-            console.log(goalListResult, "goalListResult")
+            
             return {
                 ...state,
                 onLoad: false,

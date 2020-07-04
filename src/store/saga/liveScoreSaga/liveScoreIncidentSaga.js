@@ -2,6 +2,7 @@ import { put, call } from '../../../../node_modules/redux-saga/effects'
 import ApiConstants from '../../../themes/apiConstants'
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 import { message } from "antd";
+import history from "../../../util/history";
 
 function* failSaga(result) {
     yield put({
@@ -32,6 +33,42 @@ export function* liveScoreIncidentListSaga(action) {
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_INCIDENT_LIST_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+export function* liveScoreAddEditIncidentSaga(action) {
+    try {
+        const result = yield call(LiveScoreAxiosApi.liveScoreAddEditIncident, action.data);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_INCIDENT_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+            history.push('/liveScoreIncidentList')
+            message.success('Add Incident - Added Successfully')
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+export function* liveScoreIncidentTypeSaga(action) {
+    try {
+        const result = yield call(LiveScoreAxiosApi.liveScoreIncidentType);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_LIVE_SCORE_INCIDENT_TYPE_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });

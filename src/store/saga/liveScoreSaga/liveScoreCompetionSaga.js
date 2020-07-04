@@ -28,13 +28,13 @@ export function* liveScoreCompetitionDelete({ payload }) {
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreCompetitionDelete, payload)
 
-        // console.log('index', 'saga', result, payload)
+
         if (result.status == 1) {
-            // console.log('index')
+
             yield put({ type: ApiConstants.API_LIVESCORE_COMPETION_DELETE_SUCCESS, payload: { id: payload } })
             message.success('deleted Sucessfully')
         } else {
-            // console.log('index')
+
             setTimeout(() => {
                 message.error(result.result.message || "Something Went Wrong ")
             }, 800);
@@ -42,7 +42,7 @@ export function* liveScoreCompetitionDelete({ payload }) {
         }
 
     } catch (e) {
-        // console.log('index')
+
         yield put({ type: ApiConstants.API_LIVESCORE_COMPETION_DELETE_ERROR, payload: e })
         setTimeout(() => {
             message.error("Something Went Wrong")

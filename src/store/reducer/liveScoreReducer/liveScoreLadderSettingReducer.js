@@ -28,22 +28,22 @@ function getResultValues(data, matchData) {
 }
 
 
-function matchPostArray(id, data){
+function matchPostArray(id, data) {
 
     let object = {
-        status:false,
-        result:null,
+        status: false,
+        result: null,
     }
 
-    for(let i in data){
-        if(data[i].resultTypeId == id){
+    for (let i in data) {
+        if (data[i].resultTypeId == id) {
             object = {
-                status:true,
-                result:data[i],
+                status: true,
+                result: data[i],
             }
             break
         }
-       
+
     }
 
     return object
@@ -54,49 +54,47 @@ function setPostData(selectedData, matcheResults, compId) {
     let postArray = []
     let object = null
     for (let i in matcheResults) {
-            let postResultObject= matchPostArray(matcheResults[i].id, selectedData)
-            if(postResultObject.status == true){
-                 object = {
-                    competitionId: postResultObject.result.competitionId,
-                    resultTypeId:  postResultObject.result.resultTypeId,
-                    points:  postResultObject.result.points,
-                }
-            }else{
-                 object = {
-                    competitionId: compId,
-                    resultTypeId:  matcheResults[i].id,
-                    points:  0,
-                }
-
+        let postResultObject = matchPostArray(matcheResults[i].id, selectedData)
+        if (postResultObject.status == true) {
+            object = {
+                competitionId: postResultObject.result.competitionId,
+                resultTypeId: postResultObject.result.resultTypeId,
+                points: postResultObject.result.points,
+            }
+        } else {
+            object = {
+                competitionId: compId,
+                resultTypeId: matcheResults[i].id,
+                points: 0,
             }
 
-            postArray.push(object)
+        }
+
+        postArray.push(object)
     }
- 
+
     return postArray
 }
 
 
 
 
-function disableAddedDivisions(ladders, divisions){
-    //console.log("ladders ::", ladders);
-    resetDivisionDisabled(ladders, divisions);
-    for(let item in ladders){
-        let itemDivisions = ladders[item].divisions;
-        let ladderFormatId =  ladders[item].ladderFormatId;
-        let remainingFormatDiv =  ladders.
-                filter(x=>x.ladderFormatId!= ladderFormatId);
+function disableAddedDivisions(ladders, divisions) {
 
-        for(let remDiv in remainingFormatDiv)
-        {
+    resetDivisionDisabled(ladders, divisions);
+    for (let item in ladders) {
+        let itemDivisions = ladders[item].divisions;
+        let ladderFormatId = ladders[item].ladderFormatId;
+        let remainingFormatDiv = ladders.
+            filter(x => x.ladderFormatId != ladderFormatId);
+
+        for (let remDiv in remainingFormatDiv) {
             let selectedDivisions = remainingFormatDiv[remDiv].selectedDivisions;
-            for(let i in selectedDivisions){
-                for(let j in itemDivisions){
-                    if(itemDivisions[j].divisionId === selectedDivisions[i])
-                    {
+            for (let i in selectedDivisions) {
+                for (let j in itemDivisions) {
+                    if (itemDivisions[j].divisionId === selectedDivisions[i]) {
                         itemDivisions[j].isDisabled = true;
-                        let division = divisions.find(x=>x.divisionId ==  itemDivisions[j].divisionId);
+                        let division = divisions.find(x => x.divisionId == itemDivisions[j].divisionId);
                         division["isDisabled"] = true;
                     }
                 }
@@ -104,29 +102,28 @@ function disableAddedDivisions(ladders, divisions){
         }
 
         let currSelDivisions = ladders[item].selectedDivisions;
-        for(let i in currSelDivisions){
-            for(let j in divisions){
-                if(divisions[j].divisionId === currSelDivisions[i])
-                {
+        for (let i in currSelDivisions) {
+            for (let j in divisions) {
+                if (divisions[j].divisionId === currSelDivisions[i]) {
                     divisions[j]["isDisabled"] = true;
                 }
             }
         }
     }
 
-    //console.log("ladders1 :: divisions", ladders, divisions);
+
 
 }
 
-function resetDivisionDisabled(ladders, divisions){
-    for(let item in ladders){
+function resetDivisionDisabled(ladders, divisions) {
+    for (let item in ladders) {
         let itemDivisions = ladders[item].divisions;
-        for(let j in itemDivisions){
+        for (let j in itemDivisions) {
             itemDivisions[j].isDisabled = false;
         }
     }
 
-    for(let item in divisions){
+    for (let item in divisions) {
         divisions[item]["isDisabled"] = false;
     }
 }
@@ -168,16 +165,16 @@ function liveScoreLadderSettingReducer(state = initialState, action) {
 
         //// Update Ladder Setting
         case ApiConstants.UPDATE_LADDER_SETTING:
-            if(action.key == "addLadder"){
-                let ladder = state.defaultLadders.find(x=>x);
+            if (action.key == "addLadder") {
+                let ladder = state.defaultLadders.find(x => x);
                 ladder.ladderFormatId = -(state.ladders.length)
                 ladder.isAllDivision = Number(0);
                 state.ladders.push(ladder);
                 disableAddedDivisions(state.ladders, state.divisions);
             }
-            else if(action.key == "isAllDivision"){
+            else if (action.key == "isAllDivision") {
                 let ladder = state.ladders[action.index];
-                if(action.data == true){
+                if (action.data == true) {
                     ladder.selectedDivisions = [];
                     state.ladders = [];
                     state.ladders.push(ladder);
@@ -185,21 +182,21 @@ function liveScoreLadderSettingReducer(state = initialState, action) {
                 ladder[action.key] = action.data;
                 disableAddedDivisions(state.ladders, state.divisions);
             }
-            else if(action.key == "deleteLadder"){
+            else if (action.key == "deleteLadder") {
                 state.ladders.splice(action.index, 1);
                 disableAddedDivisions(state.ladders, state.divisions);
             }
-            else if(action.key == "selectedDivisions"){
+            else if (action.key == "selectedDivisions") {
                 state.ladders[action.index][action.key] = action.data;
                 disableAddedDivisions(state.ladders, state.divisions);
             }
-            else if(action.key == "resultTypes"){
-                state.ladders[action.index]["settings"][action.subIndex]["points"] = action.data;  
+            else if (action.key == "resultTypes") {
+                state.ladders[action.index]["settings"][action.subIndex]["points"] = action.data;
             }
-            else{
+            else {
                 state.ladders[action.index][action.key] = action.data;
             }
-           
+
             return {
                 ...state,
             };

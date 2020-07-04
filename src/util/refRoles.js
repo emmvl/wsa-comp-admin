@@ -106,7 +106,7 @@ function refRoleTypes(refRoleName) {
     ]
     let refRoleId = null
     for (let i in refRoleArray) {
-        if (refRoleName == refRoleArray[i].name) {
+        if (refRoleName === refRoleArray[i].name) {
             refRoleId = refRoleArray[i].id
         }
     }

@@ -80,16 +80,16 @@ class LiveScoreManagerView extends Component {
         return (
             <div className="fluid-width mt-2" >
                 {/* <span className="live-score-profile-user-name">{AppConstants.managerProfile}</span>
-                <img className="live-score-user-image" src={'https://content.fortune.com/wp-content/uploads/2019/12/GettyImages-1187428380.jpg'} alt="" height="80" width="80" />
+                <img className="user-image" src={'https://content.fortune.com/wp-content/uploads/2019/12/GettyImages-1187428380.jpg'} alt="" height="80" width="80" />
                 <span className="live-score-profile-user-name">{this.myDada}</span> */}
 
                 <div className='profile-image-view mr-5' >
                     <span className="user-contact-heading">{AppConstants.managerProfile}</span>
-                    <img className="live-score-user-image" src={'https://content.fortune.com/wp-content/uploads/2019/12/GettyImages-1187428380.jpg'} alt="" height="80" width="80" />
+                    <img className="user-image" src={'https://content.fortune.com/wp-content/uploads/2019/12/GettyImages-1187428380.jpg'} alt="" height="80" width="80" />
                     <span className="user-contact-heading">{data.firstName + " " + data.lastName}</span>
                 </div>
 
-                <span className="live-score-desc-text side-bar-profile-data pt-0">{AppConstants.aboutManager}</span>
+                <span className="desc-text-style side-bar-profile-data pt-0">{AppConstants.aboutManager}</span>
 
                 <div className="profile-img-view-style">
 
@@ -100,7 +100,7 @@ class LiveScoreManagerView extends Component {
                             </div>
                             <span className='year-select-heading ml-3'>{AppConstants.emailAddress}</span>
                         </div>
-                        <span className="live-score-desc-text side-bar-profile-data">{data.email}</span>
+                        <span className="desc-text-style side-bar-profile-data">{data.email}</span>
                     </div>
 
                     <div className="live-score-side-desc-view">
@@ -110,7 +110,7 @@ class LiveScoreManagerView extends Component {
                             </div>
                             <span className='year-select-heading ml-3'>{AppConstants.contactNumber}</span>
                         </div>
-                        <span className="live-score-desc-text side-bar-profile-data">{data.mobileNumber}</span>
+                        <span className="desc-text-style side-bar-profile-data">{data.mobileNumber}</span>
                     </div>
 
                     <div className="live-score-side-desc-view">
@@ -122,7 +122,7 @@ class LiveScoreManagerView extends Component {
                         </div>
 
                         {data.linkedEntity.length > 0 && data.linkedEntity.map((item) => (
-                            <span className="live-score-desc-text side-bar-profile-data">{item.name}</span>
+                            <span className="desc-text-style side-bar-profile-data">{item.name}</span>
                         ))
                         }
                     </div>

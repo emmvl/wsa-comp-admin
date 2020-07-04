@@ -1,6 +1,6 @@
 // set competition id
 const setCompetitionID = competitionId => {
-    console.log(competitionId, " is id");
+
     localStorage.setItem("competitionId", competitionId)
 
 }
@@ -13,7 +13,7 @@ const getLiveScoreCompetiton = () => {
 }
 // Set Auth Token
 const setAuthToken = token => {
-    // console.log(token, 'token')
+    // 
     localStorage.setItem("token", token);
 }
 // get Auth Token
@@ -131,7 +131,7 @@ const setUmpireCompId = umpireCompId => {
 
 const clearUmpireStorage = () => {
     let keysToRemove = ["umpireCompId", "umpireCompetitionData", "umpireCompetitionId"];
-       for (let key of keysToRemove) {
+    for (let key of keysToRemove) {
         localStorage.removeItem(key);
     }
 }
@@ -152,7 +152,7 @@ const getLiveScoreUmpireCompition = () => {
 }
 
 
- 
+
 
 
 

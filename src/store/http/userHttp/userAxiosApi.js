@@ -8,7 +8,6 @@ import { getUserId, getAuthToken, getOrganisationData } from "../../../util/sess
 
 let token = getAuthToken();
 let userId = getUserId()
-const internetStatus = navigator.onLine ? true : false;
 async function logout() {
   await localStorage.clear();
   history.push("/");
