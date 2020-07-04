@@ -29,7 +29,6 @@ import {
     quickCompetitionTimeSlotData, updateQuickCompetitionAction,
 } from "../../store/actions/competitionModuleAction/competitionQuickAction"
 import { quickCompetitionInit } from "../../store/actions/commonAction/commonAction"
-import { captializedString } from "../../util/helpers";
 
 
 const { Header, Footer, Content } = Layout;
