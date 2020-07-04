@@ -1415,7 +1415,8 @@ const AppConstants = {
   umpireReserve: "Umpire Reserve",
   addCompetitionFormat: 'Add Competition Format',
   fileUploadPdf: "File Upload (File Type: PDF)",
-  link: "Link"
+  link: "Link",
+  paymentStatusReference: 'PaymentStatus',
 };
 
 export default AppConstants;

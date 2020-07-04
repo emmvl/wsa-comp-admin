@@ -959,6 +959,8 @@ function getTotalFees(feesOwner, data, mFees) {
         totalFees = (dataFees + dataGst + mFees)
         return totalFees.toFixed(2)
     }
+
+    
 }
 
 
@@ -1276,7 +1278,7 @@ function createProductFeeArr(data) {
                             "competitionMembershipProductDivisionId": divisionProductType[j].competitionMembershipProductDivisionId,
                             "fee": memberShipProductType[k].isPlaying == 1 ? statusTeamSeasonal.result.Fees : null,
                             "gst": memberShipProductType[k].isPlaying == 1 ? statusTeamSeasonal.result.GST : null,
-                            "affiliateFee": memberShipProductType[k].isPlaying == 1 ? (statusTeamSeasonal.result.affiliateFee ? statusSeasonal.result.affiliateFee : 0) : null,
+                            "affiliateFee": memberShipProductType[k].isPlaying == 1 ? (statusTeamSeasonal.result.affiliateFee  ? statusSeasonal.result.affiliateFee : 0) : null,
                             "affiliateGst": memberShipProductType[k].isPlaying == 1 ? (statusTeamSeasonal.result.affiliateGst ? statusSeasonal.result.affiliateGst : 0) : null,
                             "feeTypeRefId": 3,
                             "membershipProductTypeName": memberShipProductType[k].membershipProductTypeName,
@@ -1309,6 +1311,8 @@ function createProductFeeArr(data) {
                         }
                     }
 
+                   // console.log("After statusTeamSeasonal.result.affiliateFee" + type_object_team_seasonal.affiliateFee)
+
                     if (memberShipProductType[k].isPlaying == 1) {
                         perTypeTeamArraySeasonal.push(type_object_team_seasonal)
                     } else {
@@ -1316,6 +1320,8 @@ function createProductFeeArr(data) {
                             perTypeTeamArraySeasonal.push(type_object_team_seasonal)
                         }
                     }
+                //    console.log("type_object_team_seasonal", type_object_team_seasonal); 
+                //    console.log("perTypeTeamArraySeasonal", perTypeTeamArraySeasonal); 
                 }
 
                 if (memberShipProductType[k].isPlaying == 1) {

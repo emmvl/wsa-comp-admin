@@ -52,6 +52,7 @@ const initialState = {
     disabilityList: [],
     days: [],
     stateData: [],
+    paymentStatus: []
 };
 
 
@@ -403,6 +404,20 @@ function commonReducerState(state = initialState, action) {
                 error: null
             }
             
+
+        case ApiConstants.API_REGISTRATION_PAYMENT_STATUS_LOAD:
+            return {
+                ...state,
+                onLoad: true
+            }
+
+        case ApiConstants.API_REGISTRATION_PAYMENT_STATUS_SUCCESS:
+            return {
+                ...state,
+                onLoad: true,
+                paymentStatus: action.result,
+                status: action.status
+            }
         default:
             return state;
     }
