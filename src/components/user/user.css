@@ -265,11 +265,11 @@
 }
 
 .search-flex {
+  width: 100%;
   display: flex;
-  flex: row;
+  flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-   width: 100%
 }
 
 .circular--landscape {

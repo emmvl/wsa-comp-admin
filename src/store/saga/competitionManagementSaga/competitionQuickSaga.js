@@ -66,9 +66,6 @@ export function* createQuickComptitionSaga(action) {
                 result: result.result.data,
                 status: result.status
             });
-            setTimeout(() => {
-                message.success(result.result.data.message)
-            }, 500);
         } else {
             yield call(failSaga, result)
         }
@@ -146,14 +143,33 @@ export function* updateQuickCompetitionSaga(action) {
     try {
         const result = yield call(AxiosApi.updateQuickCompetition, action.payload);
         if (result.status === 1) {
-            yield put({
-                type: ApiConstants.API_UPDATE_QUICK_COMPETITION_SUCCESS,
-                result: result.result.data,
-                status: result.status
-            });
-            setTimeout(() => {
-                message.success(result.result.data.message)
-            }, 500);
+            const drawResult = yield call(AxiosApi.competitionGenerateDraw, action.year, action.payload.competitionId)
+            if (drawResult.status === 1) {
+                const detailResult = yield call(AxiosApi.getQuickCompetiitonDetails, action.payload.competitionId);
+                if (detailResult.status === 1) {
+                    yield put({
+                        type: ApiConstants.API_UPDATE_QUICK_COMPETITION_SUCCESS,
+                        result: result.result.data,
+                        drawresult: drawResult.result.data,
+                        detailResult: detailResult.result.data,
+                        status: result.status,
+                        competitionId: action.payload.competitionId,
+                        competitionName: action.payload.competitionName
+                    });
+                }
+            }
+            else {
+                yield put({
+                    type: ApiConstants.API_UPDATE_QUICK_COMPETITION_SUCCESS,
+                    result: result.result.data,
+                    status: result.status,
+                    competitionId: action.payload.competitionId,
+                    competitionName: action.payload.competitionName
+                });
+                setTimeout(() => {
+                    message.success(result.result.data.message)
+                }, 500);
+            }
         } else {
             yield call(failSaga, result)
         }

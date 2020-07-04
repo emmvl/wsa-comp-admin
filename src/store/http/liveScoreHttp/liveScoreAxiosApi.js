@@ -1,5 +1,5 @@
 // import { DataManager } from './../../Components';
-import http from "./liveScorehttp";
+import http from "./liveScoreHttp";
 import { getUserId, getAuthToken, getOrganisationData, getLiveScoreCompetiton } from "../../../util/sessionStorage"
 import history from "../../../util/history";
 import { message } from "antd";
@@ -88,7 +88,7 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, null)
     },
     liveScoreGetAffilate(data) {
-        console.log(data, 'liveScoreGetAffilate')
+
         let url = ''
         if (data.name) {
             url = `organisation/name=${data.name}&competitionId=${data.id}`
@@ -284,6 +284,7 @@ let LiveScoreAxiosApi = {
         }
 
         let url = `/matches`
+        console.log("body::"+ JSON.stringify(body));
         return Method.dataPost(url, token, body)
     },
 
@@ -296,7 +297,7 @@ let LiveScoreAxiosApi = {
     },
 
     liveScoreAddBanner(competitionID, bannerImage, showOnHome, showOnDraws, showOnLadder, bannerLink, bannerId) {
-        console.log(bannerLink, 'bannerLinkbannerLink')
+
         let competitionId = localStorage.getItem("competitionId");
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
         let body = new FormData();
@@ -373,7 +374,7 @@ let LiveScoreAxiosApi = {
     liveScoreScorerList(comID, roleId, body, search) {
         let competitionID = localStorage.getItem("competitionId");
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-        console.log('Hello search', search)
+
 
         var url = `/roster/admin?competitionId=${id}&roleId=${roleId}`;
         return Method.dataPost(url, token, body)
@@ -609,7 +610,7 @@ let LiveScoreAxiosApi = {
     },
 
     getLiveScoreScorerList(comID, roleId, body) {
-        console.log(comID, "comIDcomIDcomIDcomID")
+
         // let competitionID = localStorage.getItem("competitionId");
         // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
         var url = `/roster/users?competitionId=${comID}&roleId=${roleId}`;
@@ -757,7 +758,7 @@ let LiveScoreAxiosApi = {
     },
     // Get Teams with paggination
     getTeamWithPagging(competitionID, offset, limit, search) {
-        console.log(search)
+
         var url = null
         if (search && search.length > 0) {
             url = `/teams/list?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=${search}`;
@@ -784,7 +785,7 @@ let LiveScoreAxiosApi = {
     //// Export Files 
 
     exportFiles(url) {
-        console.log("url", url);
+
         return Method.dataGetDownload(url, localStorage.token);
     },
 
@@ -844,7 +845,7 @@ let LiveScoreAxiosApi = {
         return Method.dataDelete(url, localStorage.token)
     },
     umpireListDashboard(data) {
-        console.log(data, 'data')
+
         let body = data.pageData
         let url
         url = `/matchUmpire/dashboard?competitionId=${data.compId}&divisionId=${data.divisionid}&venueId=${data.venueId}&organisationId=${data.orgId}`;
@@ -904,7 +905,46 @@ let LiveScoreAxiosApi = {
         let body = data
         var url = `/matches/bulk/update`;
         return Method.dataPost(url, token, body)
-    }
+    },
+
+    liveScoreAddEditIncident(data) {
+        console.log(data, 'liveScoreAddEditIncident')
+        if (data.key === 'media') {
+            let media = data.mediaArry
+
+            let body = new FormData()
+
+            for (let i in media) {
+                body.append("media", media[i])
+            }
+            if (data.isEdit) {
+                var url = `/incident/media/edit?incidentId=${data.incidentId}`;
+                return Method.dataPatch(url, token, body)
+            } else {
+                var url = `/incident/media?incidentId=${data.incidentId}`;
+                return Method.dataPost(url, token, body)
+            }
+
+        } else {
+            let body = { "incident": data.body }
+            let players = JSON.stringify(data.playerIds)
+
+            if (data.isEdit) {
+                var url = `/incident/edit?playerIds=${players}`;
+                return Method.dataPatch(url, token, body)
+            } else {
+                var url = `/incident?playerIds=${players}`;
+                return Method.dataPost(url, token, body)
+            }
+        }
+
+
+    },
+
+    liveScoreIncidentType() {
+        var url = `/ref/incidentTypes`;
+        return Method.dataGet(url, token)
+    },
 
 };
 
@@ -965,7 +1005,7 @@ const Method = {
                                 }
                             }
                             else if (err.response.status == 400) {
-                                console.log(err.response, 'err.response')
+
                                 message.config({
                                     duration: 1.5,
                                     maxCount: 1,
@@ -986,7 +1026,7 @@ const Method = {
                         }
                     }
                     else {
-                        console.log(err.response, 'catch')
+
                         return reject({
                             status: 5,
                             error: err.response && err.response.data.message
@@ -1146,7 +1186,7 @@ const Method = {
 
                 .then(result => {
                     if (result.status === 200) {
-                        console.log("*************" + JSON.stringify(result.data));
+
                         const url = window.URL.createObjectURL(new Blob([result.data]));
                         const link = document.createElement('a');
                         link.href = url;
@@ -1264,7 +1304,7 @@ const Method = {
                                 }
                             }
                             else if (err.response.status == 400) {
-                                console.log(err.response, 'err.response')
+
                                 message.config({
                                     duration: 1.5,
                                     maxCount: 1,
@@ -1285,7 +1325,7 @@ const Method = {
                         }
                     }
                     else {
-                        console.log(err.response, 'catch')
+
                         return reject({
                             status: 5,
                             error: err.response && err.response.data.message

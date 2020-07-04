@@ -9,9 +9,7 @@ export function* venueTimeSaga(action) {
     try {
         const commResult = yield call(CommonAxiosApi.getCommonData)
         if (commResult.status === 1) {
-
             const result = yield call(CompetitionAxiosApi.venueConstraintList, action.yearRefId, action.competitionUniqueKey, action.organisationId);
-            console.log(result)
             if (result.status === 1) {
                 yield put({
                     type: ApiConstants.API_VENUE_CONSTRAINTS_LIST_SUCCESS,
@@ -36,7 +34,6 @@ export function* venueTimeSaga(action) {
             }, 800);
         }
     } catch (error) {
-        console.log(error)
         yield put({
             type: ApiConstants.API_VENUE_CONSTRAINTS_LIST_ERROR,
             error: error,
@@ -63,7 +60,6 @@ export function* venueConstraintPostSaga(action) {
         } else {
             yield put({ type: ApiConstants.API_VENUE_CONSTRAINT_POST_FAIL });
             setTimeout(() => {
-                // alert(result.data.message);
             }, 800);
         }
     } catch (error) {

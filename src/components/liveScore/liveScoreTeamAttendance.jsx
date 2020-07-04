@@ -153,7 +153,7 @@ class LiveScoreTeamAttendance extends Component {
         }
         let { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
-            if (this.state.selectStatus == 'All') {
+            if (this.state.selectStatus === 'All') {
                 this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus)
             } else {
                 this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus)
@@ -173,7 +173,7 @@ class LiveScoreTeamAttendance extends Component {
             },
         }
         let { id } = JSON.parse(getLiveScoreCompetiton())
-        if (status == 'All') {
+        if (status === 'All') {
             this.props.liveScoreTeamAttendanceListAction(id, paginationBody, status)
         } else {
             this.props.liveScoreTeamAttendanceListAction(id, paginationBody, status)
@@ -184,7 +184,7 @@ class LiveScoreTeamAttendance extends Component {
     onExport() {
 
         let url
-        if (this.state.selectStatus == 'All') {
+        if (this.state.selectStatus === 'All') {
             url = AppConstants.teamAttendaneExport + this.state.competitionId
         } else {
             url = AppConstants.teamAttendaneExport + this.state.competitionId + `&status=${this.state.selectStatus}`
@@ -197,7 +197,7 @@ class LiveScoreTeamAttendance extends Component {
     onChangeSearchText = (e) => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ searchText: e.target.value })
-        if (e.target.value == null || e.target.value == "") {
+        if (e.target.value === null || e.target.value === "") {
             const body =
             {
                 "paging": {
@@ -243,7 +243,7 @@ class LiveScoreTeamAttendance extends Component {
     // on click of search icon
     onClickSearchIcon = () => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        if (this.state.searchText == null || this.state.searchText == "") {
+        if (this.state.searchText === null || this.state.searchText === "") {
         }
         else {
             const body =
@@ -357,7 +357,7 @@ class LiveScoreTeamAttendance extends Component {
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.liveScoreTeamAttendanceState.onLoad == true && true}
+                        loading={this.props.liveScoreTeamAttendanceState.onLoad === true && true}
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={dataSource}

@@ -21,7 +21,6 @@ function liveScoreUmpiresState(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_UMPIRES_LIST_SUCCESS:
             let result = action.result
-            console.log(result)
             state.umpiresListResult = result
             return {
                 ...state,
@@ -47,16 +46,16 @@ function liveScoreUmpiresState(state = initialState, action) {
             }
 
         case ApiConstants.API_LIVE_SCORE_UMPIRES_IMPORT_LOAD:
-            return{
+            return {
                 ...state,
-                onLoad:true
+                onLoad: true
             }
 
-        case ApiConstants.API_LIVE_SCORE_UMPIRES_IMPORT_SUCCESS:  
-        return {
-            onLoad:false,
-            status:action.status
-        }  
+        case ApiConstants.API_LIVE_SCORE_UMPIRES_IMPORT_SUCCESS:
+            return {
+                onLoad: false,
+                status: action.status
+            }
 
         default: return state
     }

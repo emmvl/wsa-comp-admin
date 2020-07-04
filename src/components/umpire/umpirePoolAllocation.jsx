@@ -212,8 +212,8 @@ class UmpirePoolAllocation extends Component {
                                     value={this.state.selectedComp}
                                 >
                                     {
-                                        competition.map((item) => {
-                                            return <Option value={item.id}>{item.longName}</Option>
+                                        competition.map((item, index) => {
+                                            return <Option key={"longName"+index} value={item.id}>{item.longName}</Option>
                                         })
                                     }
 
@@ -232,7 +232,7 @@ class UmpirePoolAllocation extends Component {
         const { source, destination } = result;
         let assignedPlayerData = this.state.assignedData
         let unassignedPlayerData = this.state.unassignedData
-        console.log(result, 'onDragEnd_1', assignedPlayerData)
+
         let playerId
         // dropped outside the list
         if (!destination) {
@@ -241,16 +241,16 @@ class UmpirePoolAllocation extends Component {
         else if (source.droppableId !== destination.droppableId) {
             let teamId = destination !== null && destination.droppableId == 0 ? null : JSON.parse(destination.droppableId)
             let sourceTeamID = source !== null && source.droppableId == 0 ? null : JSON.parse(source.droppableId)
-            console.log(sourceTeamID, 'onDragEnd_3')
+
             if (teamId !== null) {
-                console.log(teamId, 'onDragEnd_2')
+
                 if (sourceTeamID == null) {
-                    console.log(sourceTeamID, 'onDragEnd_4')
+
                     playerId = unassignedPlayerData[source.index].playerId
                 }
                 else {
                     for (let i in assignedPlayerData) {
-                        console.log(source, 'onDragEnd_5')
+
                         if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
                             playerId = assignedPlayerData[i].players[source.index].playerId
                         }
@@ -334,12 +334,12 @@ class UmpirePoolAllocation extends Component {
                                                     onClick={() => this.onClickDeleteTeam(teamItem, teamIndex)}
                                                 />
                                                 <a className="view-more-btn collapsed" data-toggle="collapse" href={`#${teamIndex}`} role="button" aria-expanded="false" aria-controls={teamIndex}>
-                                                    <i class="fa fa-angle-down" style={{ color: "#ff8237", }} aria-hidden="true" ></i>
+                                                    <i className="fa fa-angle-down" style={{ color: "#ff8237", }} aria-hidden="true" ></i>
                                                 </a>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="collapse" id={teamIndex}>
+                                    <div className="collapse" id={teamIndex}>
                                         {teamItem.players.length > 0 && teamItem.players.map((playerItem, playerIndex) => {
 
                                             return (
@@ -528,7 +528,9 @@ class UmpirePoolAllocation extends Component {
     contentView = () => {
         return (
             <div className="comp-dash-table-view mt-2">
-                <DragDropContext onDragEnd={console.log('value')}>
+                <DragDropContext
+                // onDragEnd={console.log('value')}
+                >
                     <div className="d-flex flex-row justify-content-between">
                         {this.assignedView()}
                         {this.unassignedView()}

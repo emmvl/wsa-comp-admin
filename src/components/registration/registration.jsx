@@ -13,9 +13,10 @@ import InputWithHead from "../../customComponents/InputWithHead";
 import { getOrganisationData } from "../../util/sessionStorage";
 import { endUserRegDashboardListAction } from
     "../../store/actions/registrationAction/endUserRegistrationAction";
-import { getCommonRefData, getGenderAction } from
+import { getCommonRefData, getGenderAction, registrationPaymentStatusAction } from
     '../../store/actions/commonAction/commonAction';
 import { getAffiliateToOrganisationAction } from "../../store/actions/userAction/userAction";
+import { getAllCompetitionAction } from "../../store/actions/registrationAction/registrationDashboardAction"
 import { getOnlyYearListAction, } from '../../store/actions/appAction'
 import { isEmptyArray } from "formik";
 import WizardModel from "../../customComponents/registrationWizardModel"
@@ -151,7 +152,8 @@ class Registration extends Component {
             competitionCreatorOrganisation: 0,
             compFeeStatus: 0,
             compName: "",
-            regStatus: false
+            regStatus: false,
+            paymentStatusRefId: -1
         }
         // this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
@@ -175,6 +177,7 @@ class Registration extends Component {
             affiliate: this.state.affiliate,
             membershipProductId: this.state.membershipProductId,
             paymentId: this.state.paymentId,
+            paymentStatusRefId: this.state.paymentStatusRefId,
             paging: {
                 limit: 10,
                 offset: (page ? (10 * (page - 1)) : 0)
@@ -187,6 +190,7 @@ class Registration extends Component {
         this.props.getAffiliateToOrganisationAction(organisationId);
         this.props.getGenderAction();
         this.props.getOnlyYearListAction();
+        this.props.registrationPaymentStatusAction();
     }
 
     onChangeDropDownValue = async (value, key) => {
@@ -227,6 +231,10 @@ class Registration extends Component {
         }
         else if (key == "paymentId") {
             await this.setState({ paymentId: value });
+            this.handleRegTableList(1);
+        }
+        else if (key == "paymentStatusRefId") {
+            await this.setState({ paymentStatusRefId: value });
             this.handleRegTableList(1);
         }
         else if (key == "postalCode") {
@@ -334,7 +342,7 @@ class Registration extends Component {
                 uniqueValues = [...uniqueValues, ...arr];
             }
         }
-        const { genderData } = this.props.commonReducerState;
+        const { genderData, paymentStatus } = this.props.commonReducerState;
         const { competitions, membershipProductTypes, membershipProducts, postalCodes } = this.props.userRegistrationState;
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
@@ -486,7 +494,7 @@ class Registration extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="reg-col" >
+                        <div className="reg-col" style={{marginRight: '25px'}}>
                             <div className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.postCode}</div>
                                 <InputWithHead
@@ -494,16 +502,22 @@ class Registration extends Component {
                                     onChange={(e) => this.onChangeDropDownValue(e.target.value, 'postalCode')}
                                     value={this.state.postalCode}
                                 />
-                                {/* <Select
-                                    showSearch
-                                     mode="multiple"
-                                     className="year-select reg-filter-select1"
-                                    onChange={(e) => this.onChangeDropDownValue(e, 'postalCode')}
-                                    value={this.state.postalCode}>
-                                    {(postalCodes || []).map((post, index) => (
-                                        <Option key={post} value={post}>{post}</Option>
+                               
+                            </div>
+                        </div>
+                        <div className="reg-col1" >
+                            <div className="reg-filter-col-cont" >
+                                <div className='year-select-heading'>{AppConstants.status}</div>
+                                <Select
+                                    className="year-select reg-filter-select"
+                                    style={{ minWidth: 100 }}
+                                    onChange={(e) => this.onChangeDropDownValue(e, 'paymentStatusRefId')}
+                                    value={this.state.paymentStatusRefId}>
+                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                    {(paymentStatus || []).map((g, index) => (
+                                        <Option key={g.id} value={g.id}>{g.description}</Option>
                                     ))}
-                                </Select> */}
+                                </Select>
                             </div>
                         </div>
                     </div>
@@ -594,6 +608,8 @@ function mapDispatchToProps(dispatch) {
         getCommonRefData,
         getGenderAction,
         getOnlyYearListAction,
+        getAllCompetitionAction,
+        registrationPaymentStatusAction
     }, dispatch);
 }
 

@@ -155,7 +155,7 @@ let CompetitionAxiosApi = {
             yearRefId: yearRefId,
             competitionUniqueKey: competitionId,
             organisationId: organisationUniqueKey,
-            filterOrganisationId: orgId != null ? orgId : -1,
+            // filterOrganisationId: orgId != null ? orgId : -1,
             // organisationId: "sd-gdf45df-09486-sdg5sfd-546sdf",
             venueId: venueId,
             roundId: roundId
@@ -380,7 +380,6 @@ let CompetitionAxiosApi = {
             comments: comment,
         }
         var url = `/api/proposedteamgrading/comment?userId=${userId}`;
-        console.log(url, token, body)
         return Method.dataPost(url, token, body);
     },
 
@@ -564,7 +563,18 @@ let CompetitionAxiosApi = {
         var url = `/api/quickcompetition/update`
         return Method.dataPost(url, token, body);
     },
-
+    //Generate Draw quick competition
+    async  competitionGenerateDraw(yearRefId, competitionUniqueKey) {
+        let organisationId = await getOrganisationData().organisationUniqueKey;
+        let userId = await getUserId()
+        let body = {
+            "yearRefId": yearRefId,
+            "competitionUniqueKey": competitionUniqueKey,
+            "organisationId": organisationId
+        }
+        var url = `/api/generatedraw?userId=${userId}`;
+        return Method.dataPost(url, token, body);
+    },
 
 };
 
@@ -611,7 +621,6 @@ const Method = {
                     }
                 })
                 .catch(err => {
-                    console.log(err.response)
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
                             if (err.response.status == 401) {
@@ -688,7 +697,6 @@ const Method = {
                     }
                 })
                 .catch(err => {
-                    console.log(err.response)
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
                             if (err.response.status == 401) {
@@ -735,7 +743,6 @@ const Method = {
 
                 .then(result => {
                     if (result.status === 200) {
-                        console.log("*************" + JSON.stringify(result.data));
                         const url = window.URL.createObjectURL(new Blob([result.data]));
                         const link = document.createElement('a');
                         link.href = url;
@@ -768,7 +775,6 @@ const Method = {
                     }
                 })
                 .catch(err => {
-                    console.log(err.response)
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
                             if (err.response.status == 401) {
@@ -840,7 +846,6 @@ const Method = {
                     }
                 })
                 .catch(err => {
-                    console.log(err.response)
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
                             if (err.response.status == 401) {
@@ -912,7 +917,6 @@ const Method = {
                     }
                 })
                 .catch(err => {
-                    console.log(err.response)
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
                             if (err.response.status == 401) {

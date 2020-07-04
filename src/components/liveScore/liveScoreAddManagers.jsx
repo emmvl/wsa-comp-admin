@@ -89,7 +89,7 @@ class LiveScoreAddManager extends Component {
             if (this.state.teamLoad === true) {
                 const { teamId } = this.props.liveScoreMangerState
                 this.setSelectedTeamValue(teamId)
-                console.log(teamId, "lkjh")
+
                 this.setState({ teamLoad: false })
 
             }
@@ -105,8 +105,6 @@ class LiveScoreAddManager extends Component {
     }
     setInitalFiledValue() {
         const { managerData, teamId } = this.props.liveScoreMangerState
-        let data = this.state.tableRecord
-
         this.props.form.setFieldsValue({
             'First Name': managerData.firstName,
             'Last Name': managerData.lastName,
@@ -140,7 +138,7 @@ class LiveScoreAddManager extends Component {
                     <div className="row" >
                         <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
                             <Breadcrumb separator=" > ">
-                                <Breadcrumb.Item className="breadcrumb-add">{isEdit == true ? AppConstants.editManager : AppConstants.addManager}</Breadcrumb.Item>
+                                <Breadcrumb.Item className="breadcrumb-add">{isEdit === true ? AppConstants.editManager : AppConstants.addManager}</Breadcrumb.Item>
                             </Breadcrumb>
                         </div>
                     </div>
@@ -150,19 +148,11 @@ class LiveScoreAddManager extends Component {
     }
 
     ////form view
-
     managerExistingRadioButton(getFieldDecorator) {
 
-        const { managerListResult, MainManagerListResult, onLoadSearch, managerSearchResult } = this.props.liveScoreMangerState
-
-        // let managerList = isArrayNotEmpty(managerListResult) ? managerListResult : []
-        // let managerList = isArrayNotEmpty(managerSearchResult) ? managerSearchResult : isArrayNotEmpty(managerListResult) ? managerListResult : []
+        const { managerListResult, onLoadSearch } = this.props.liveScoreMangerState
         let managerList = isArrayNotEmpty(managerListResult) ? managerListResult : []
-
-        // let teamData = this.props.liveScoreState.teamResult ? this.props.liveScoreState.teamResult : []
         const { teamId } = this.props.liveScoreMangerState
-        const { selectedItems } = this.state;
-        const filteredOptions = OPTIONS.filter(o => !selectedItems.includes(o));
         let teamData = isArrayNotEmpty(this.props.liveScoreMangerState.teamResult) ? this.props.liveScoreMangerState.teamResult : []
 
         return (
@@ -187,7 +177,7 @@ class LiveScoreAddManager extends Component {
                                         this.props.liveScoreUpdateManagerDataAction(ManagerId, 'managerSearch')
                                         this.setState({ teamLoad: true })
                                     }}
-                                    notFoundContent={onLoadSearch == true ? <Spin size="small" /> : null}
+                                    notFoundContent={onLoadSearch === true ? <Spin size="small" /> : null}
 
                                     onSearch={(value) => {
 
@@ -223,7 +213,6 @@ class LiveScoreAddManager extends Component {
                             })(
 
                                 <Select
-                                    // loading={this.props.liveScoreState.onLoad == true && true}
                                     mode="multiple"
                                     showSearch
                                     placeholder={AppConstants.selectTeam}
@@ -247,9 +236,8 @@ class LiveScoreAddManager extends Component {
     }
 
     managerNewRadioBtnView(getFieldDecorator) {
-        // let teamData = this.props.liveScoreState.teamResult ? this.props.liveScoreState.teamResult : []
         const { managerData, teamId, teamResult } = this.props.liveScoreMangerState
-        let teamData = isArrayNotEmpty(this.props.liveScoreMangerState.teamResult) ? this.props.liveScoreMangerState.teamResult : []
+        let teamData = isArrayNotEmpty(teamResult) ? teamResult : []
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -310,7 +298,7 @@ class LiveScoreAddManager extends Component {
                                     placeholder={AppConstants.enterEmail}
                                     onChange={(email) => this.props.liveScoreUpdateManagerDataAction(email.target.value, 'email')}
                                     value={managerData.email}
-                                    disabled={this.state.isEdit == true && true}
+                                    disabled={this.state.isEdit === true && true}
                                 />
                             )}
                         </Form.Item>
@@ -343,7 +331,6 @@ class LiveScoreAddManager extends Component {
                                 rules: [{ required: true, message: ValidationConstants.teamName }]
                             })(
                                 <Select
-                                    // loading={this.props.liveScoreState.onLoad == true && true}
                                     mode="multiple"
                                     placeholder={AppConstants.selectTeam}
                                     style={{ width: "100%" }}
@@ -421,7 +408,7 @@ class LiveScoreAddManager extends Component {
             <div >
 
                 {this.radioBtnContainer()}
-                {managerRadioBtn == 'new' ?
+                {managerRadioBtn === 'new' ?
                     this.managerNewRadioBtnView(getFieldDecorator)
                     :
                     this.managerExistingRadioButton(getFieldDecorator)}
@@ -431,7 +418,6 @@ class LiveScoreAddManager extends Component {
     }
 
     contentViewForEditManager = (getFieldDecorator) => {
-        const { managerRadioBtn } = this.props.liveScoreMangerState
         return (
             <div >
                 {this.managerNewRadioBtnView(getFieldDecorator)}
@@ -468,14 +454,14 @@ class LiveScoreAddManager extends Component {
     onSaveClick = e => {
         const { managerData, teamId, managerRadioBtn, exsitingManagerId } = this.props.liveScoreMangerState
 
-        console.log(managerData, 'managerData')
+
 
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             let body = ''
             if (!err) {
-                if (managerRadioBtn == 'new') {
-                    if (this.state.isEdit == true) {
+                if (managerRadioBtn === 'new') {
+                    if (this.state.isEdit === true) {
                         body = {
                             "id": managerData.id,
                             "firstName": managerData.firstName,
@@ -494,7 +480,7 @@ class LiveScoreAddManager extends Component {
                         }
                     }
                     this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
-                } else if (managerRadioBtn == 'existing') {
+                } else if (managerRadioBtn === 'existing') {
                     body = {
                         "id": exsitingManagerId,
                         "teams": managerData.teams
@@ -520,7 +506,7 @@ class LiveScoreAddManager extends Component {
                     <Form onSubmit={this.onSaveClick} className="login-form" noValidate="noValidate">
                         <Content>
                             <div className="formView">
-                                {this.state.isEdit == true ? this.contentViewForEditManager(getFieldDecorator) : this.contentViewForAddManager(getFieldDecorator)}
+                                {this.state.isEdit === true ? this.contentViewForEditManager(getFieldDecorator) : this.contentViewForAddManager(getFieldDecorator)}
                             </div>
                         </Content>
                         <Footer>

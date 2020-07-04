@@ -73,12 +73,9 @@ function getTeamObj(teamSelectId, teamArr) {
 
 function getSelectedTeam(managerSelectedId, managerArr) {
     let teamObjArr
-    console.log(managerSelectedId, "managerSelectedId")
-
     for (let i in managerArr) {
         if (managerSelectedId == managerArr[i].id) {
             teamObjArr = managerArr[i].linkedEntity
-            console.log(teamObjArr, "teamObjArr")
             return teamObjArr
         }
 
@@ -86,9 +83,6 @@ function getSelectedTeam(managerSelectedId, managerArr) {
 }
 function genrateSelectedTeamId(linkedEntityArr, teamArray) {
     let teamIds = []
-    let teamsIds
-    console.log(linkedEntityArr, teamArray, "ididid")
-
     for (let i in teamArray) {
         for (let j in linkedEntityArr) {
             if (linkedEntityArr[j].entityId == teamArray[i].id) {
@@ -96,7 +90,6 @@ function genrateSelectedTeamId(linkedEntityArr, teamArray) {
             }
         }
     }
-    console.log(teamIds, "teams11")
     return teamIds
 }
 function liveScoreMangerState(state = initialState, action) {
@@ -129,7 +122,6 @@ function liveScoreMangerState(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
-            console.log(action.result)
             // let playerData = liveScoreTeamModal.getTeamViewPlayerListData(action.result.players)
             return {
                 ...state,
@@ -228,7 +220,6 @@ function liveScoreMangerState(state = initialState, action) {
             return { ...state, onLoadSearch: true };
 
         case ApiConstants.API_LIVESCORE_MANAGER_SEARCH_SUCCESS:
-            console.log(action, 'API_LIVESCORE_MANAGER_SEARCH_SUCCESS')
             // state.managerListResult = action.result ? action.result : state.managerSearchResult
             return {
                 ...state,

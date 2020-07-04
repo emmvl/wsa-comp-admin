@@ -1,5 +1,5 @@
 // import { DataManager } from './../../Components';
-import http from "./registrationhttp";
+import http from "./registrationHttp";
 import { getUserId, getAuthToken, getOrganisationData } from "../../../util/sessionStorage"
 import history from "../../../util/history";
 import { message } from "antd";
@@ -85,11 +85,11 @@ let AxiosApi = {
     },
 
     //////get the membership  product details
-    regGetMembershipProductDetails(payload) {
-        let productId = payload.productId;
-        var url = `/api/membershipproduct/${productId}`;
-        return Method.dataGet(url, token);
-    },
+    // regGetMembershipProductDetails(payload) {
+    //     let productId = payload.productId;
+    //     var url = `/api/membershipproduct/${productId}`;
+    //     return Method.dataGet(url, token);
+    // },
 
 
     //////get the membership  product details
@@ -502,7 +502,6 @@ const Method = {
                     }
                 })
                 .catch(err => {
-                    console.log(err.response)
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
                             if (err.response.status == 401) {
@@ -578,7 +577,6 @@ const Method = {
                     }
                 })
                 .catch(err => {
-                    console.log(err.response)
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
                             if (err.response.status == 401) {
@@ -650,7 +648,6 @@ const Method = {
                     }
                 })
                 .catch(err => {
-                    console.log(err.response)
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
                             if (err.response.status == 401) {

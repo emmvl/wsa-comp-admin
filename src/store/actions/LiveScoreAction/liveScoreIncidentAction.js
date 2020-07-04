@@ -4,7 +4,7 @@ function liveScoreIncidentList(competitionId, search) {
     const action = {
         type: ApiConstatnts.API_LIVE_SCORE_INCIDENT_LIST_LOAD,
         competitionId: competitionId,
-        search:search
+        search: search
     };
     return action;
 }
@@ -41,12 +41,31 @@ function liveScoreUpdateIncidentData(data, key) {
     };
 
     return action;
-} 
+}
+
+function liveScoreAddEditIncident(data) {
+    const action = {
+        type: ApiConstatnts.API_LIVE_SCORE_ADD_EDIT_INCIDENT_LOAD,
+        data
+    };
+
+    return action;
+}
+
+function liveScoreIncidentTypeAction() {
+    const action = {
+        type: ApiConstatnts.API_LIVE_SCORE_INCIDENT_TYPE_LOAD,
+    };
+
+    return action;
+}
 
 
 
 export {
     liveScoreIncidentList,
     liveScoreUpdateIncident,
-    liveScoreUpdateIncidentData
+    liveScoreUpdateIncidentData,
+    liveScoreAddEditIncident,
+    liveScoreIncidentTypeAction
 }

@@ -33,7 +33,7 @@ const columns = [
                 pathname: '/userPersonal',
                 state: { userId: record.id, screenKey: "livescore", screen: "/liveScoreManagerList" }
             }}>
-                <span class="input-heading-add-another pt-0" >{firstName}</span>
+                <span className="input-heading-add-another pt-0" >{firstName}</span>
             </NavLink>
     },
     {
@@ -48,7 +48,7 @@ const columns = [
                 // pathname: '/liveScoreManagerView',
                 // state: { tableRecord: record }
             }}>
-                <span class="input-heading-add-another pt-0" >{lastName}</span>
+                <span className="input-heading-add-another pt-0" >{lastName}</span>
             </NavLink>
 
     },
@@ -67,22 +67,24 @@ const columns = [
     {
         title: 'Team',
         dataIndex: 'linkedEntity',
-        key: 'linkedEntity',
+        key: 'Linked Entity',
         sorter: (a, b) => a.linkedEntity.length - b.linkedEntity.length,
         render: (linkedEntity, record) => {
 
             return (
                 <div>
-                    {linkedEntity.length > 0 && linkedEntity.map((item) => (
+                    {linkedEntity.length > 0 && linkedEntity.map((item,i) => (
                         teamListData(item.entityId) ?
+                        <div key={`managerName${i}`+item.entityId}>
                             <NavLink to={{
                                 pathname: '/liveScoreTeamView',
                                 state: { teamId: item.entityId, screenKey: "livescore" }
                             }}>
-                                <span style={{ color: '#ff8237', cursor: 'pointer' }} className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
+                                <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.name}</span>
                             </NavLink>
+                            </div>
                             :
-                            <span  >{item.name}</span>
+                            <span key={`managerName${i}`+item.entityId} >{item.name}</span>
                     ))
                     }
                 </div>)
@@ -91,22 +93,22 @@ const columns = [
     {
         title: 'Organisation',
         dataIndex: 'linkedEntity',
-        key: 'linkedEntity',
+        key: 'Linked Entity Parent Name',
         sorter: (a, b) => a.linkedEntity.length - b.linkedEntity.length,
         render: (linkedEntity, record) => {
 
             return (
                 <div>
-                    {linkedEntity.length > 0 && linkedEntity.map((item) => (
+                    {linkedEntity.length > 0 && linkedEntity.map((item,i) => (
                         // teamListData(item.entityId) ?
                         //     <NavLink to={{
                         //         // pathname: '/userPersonal',
                         //         // state: { userId: record.id, screenKey: "livescore" }
                         //     }}>
-                        //         <span style={{ color: '#ff8237', cursor: 'pointer' }} className="live-score-desc-text side-bar-profile-data" >{item.parentName}</span>
+                        //         <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.parentName}</span>
                         //     </NavLink>
                         //     :
-                        <span className="live-score-desc-text side-bar-profile-data">{item.parentName}</span>
+                        <span className="desc-text-style side-bar-profile-data">{item.parentName}</span>
                     ))
                     }
                 </div>)
@@ -168,9 +170,12 @@ class LiveScoreManagerList extends Component {
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
-                    <Table className="home-dashboard-table" columns={columns} dataSource={managerListData}
+                    <Table className="home-dashboard-table" 
+                    columns={columns} 
+                    dataSource={managerListData}
                         pagination={false}
                         loading={this.props.liveScoreMangerState.onLoad == true && true}
+                        rowKey={(record, index) => "managerListData"+record.id + index}
                     />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">

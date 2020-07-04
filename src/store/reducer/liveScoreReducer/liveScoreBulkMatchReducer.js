@@ -263,7 +263,7 @@ function LiveScoreBulkMatchState(state = initialState, action) {
                         state.mainCourtList = courts
                     }
                 } else {
-                    console.log(action, 'action')
+
                     new_object[action.key] = action.data
                 }
                 state.pushBackData = new_object
@@ -355,7 +355,7 @@ function LiveScoreBulkMatchState(state = initialState, action) {
 
 
         case ApiConstants.API_MATCH_RESULT_LOAD:
-            console.log(action)
+
             return {
                 ...state,
                 onLoad: true
@@ -383,7 +383,7 @@ function LiveScoreBulkMatchState(state = initialState, action) {
 
         //// Search Court Data
         case ApiConstants.API_SEARCH_COURT_LIST:
-            console.log(action)
+
             return {
                 ...state,
                 pushCourtData: action.data,

@@ -7,7 +7,6 @@ function venueConstraintListAction(yearRefId, competitionUniqueKey, organisation
         competitionUniqueKey: competitionUniqueKey,
         organisationId: organisationId
     };
-    console.log(action, 'constraintsAction')
     return action;
 }
 
@@ -51,7 +50,6 @@ function updateVenueConstraintsData(data, index, key, contentType, tableIndex) {
         contentType: contentType,
         tableIndex: tableIndex
     };
-    console.log(action, 'updateVenueConstraintsData')
     return action;
 }
 

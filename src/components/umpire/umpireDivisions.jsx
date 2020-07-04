@@ -22,7 +22,6 @@ class UmpireDivisions extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            selectedComp: "All",
             umpPool: "A Grade",
             selectedComp: null,
             loading: false,
@@ -185,9 +184,9 @@ class UmpireDivisions extends Component {
                         // onChange={umpirePool => this.onChangeUmpirePools({ key: "recordUmpire", data: umpirePool })}
                         // value={this.state.umpPool}
                         >
-                            <Option value={"a"}>{'A Grade'}</Option>
-                            <Option value={"b"}>{'B Grade'}</Option>
-                            <Option value={"c"}>{'C Grade'}</Option>
+                            <Option value={"aGrade"}>{'A Grade'}</Option>
+                            <Option value={"bGrade"}>{'B Grade'}</Option>
+                            <Option value={"cGrade"}>{'C Grade'}</Option>
                         </Select>
                     </div>
                 </div>
@@ -204,9 +203,9 @@ class UmpireDivisions extends Component {
                         // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
                         // value={this.state.umpPool}
                         >
-                            <Option value={"a"}>{'A Grade'}</Option>
-                            <Option value={"b"}>{'B Grade'}</Option>
-                            <Option value={"c"}>{'C Grade'}</Option>
+                            <Option value={"aGradea"}>{'A Grade'}</Option>
+                            <Option value={"bGradeb"}>{'B Grade'}</Option>
+                            <Option value={"cGradec"}>{'C Grade'}</Option>
                         </Select>
                     </div>
                 </div>
@@ -223,9 +222,9 @@ class UmpireDivisions extends Component {
                         // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
                         // value={this.state.umpPool}
                         >
-                            <Option value={"a"}>{'A Grade'}</Option>
-                            <Option value={"b"}>{'B Grade'}</Option>
-                            <Option value={"c"}>{'C Grade'}</Option>
+                            <Option value={"aGradeaa"}>{'A Grade'}</Option>
+                            <Option value={"bGradebb"}>{'B Grade'}</Option>
+                            <Option value={"cGradecc"}>{'C Grade'}</Option>
                         </Select>
                     </div>
                 </div>
@@ -242,9 +241,9 @@ class UmpireDivisions extends Component {
                         // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
                         // value={this.state.umpPool}
                         >
-                            <Option value={"a"}>{'A Grade'}</Option>
-                            <Option value={"b"}>{'B Grade'}</Option>
-                            <Option value={"c"}>{'C Grade'}</Option>
+                            <Option value={"Gradeaa"}>{'A Grade'}</Option>
+                            <Option value={"Gradebb"}>{'B Grade'}</Option>
+                            <Option value={"Gradecc"}>{'C Grade'}</Option>
                         </Select>
                     </div>
                 </div>
@@ -262,9 +261,9 @@ class UmpireDivisions extends Component {
                         // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
                         // value={this.state.umpPool}
                         >
-                            <Option value={"a"}>{'A Grade'}</Option>
-                            <Option value={"b"}>{'B Grade'}</Option>
-                            <Option value={"c"}>{'C Grade'}</Option>
+                            <Option value={"GradeaGrade"}>{'A Grade'}</Option>
+                            <Option value={"GradebGrade"}>{'B Grade'}</Option>
+                            <Option value={"GradecGrade"}>{'C Grade'}</Option>
                         </Select>
                     </div>
                 </div> */}

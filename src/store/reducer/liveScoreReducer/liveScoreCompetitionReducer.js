@@ -3,10 +3,10 @@ import ApiConstants from "../../../themes/apiConstants";
 const initialState = {
     loader: false,
     List: null,
-    yearList:[]
+    yearList: []
 
 }
-export default function liveScoreCompetition(state = initialState, payload ) {
+export default function liveScoreCompetition(state = initialState, payload) {
     switch (payload.type) {
         case ApiConstants.API_LIVESCORE_COMPETITION_INITATE:
             return {
@@ -14,7 +14,6 @@ export default function liveScoreCompetition(state = initialState, payload ) {
                 loader: true
             }
         case ApiConstants.API_LIVESCORE_COMPETITION_SUCCESS:
-            console.log(payload)
             return {
                 ...state,
                 loader: false,
@@ -34,14 +33,14 @@ export default function liveScoreCompetition(state = initialState, payload ) {
         case ApiConstants.API_LIVESCORE_COMPETION_DELETE_SUCCESS:
             const index = state.List.competitions.findIndex(data => data.id === payload.payload.id)
             state.List.competitions.splice(index, 1)
-            // console.log('index', index, state.List)
+
 
             return {
                 ...state,
                 loader: false,
             }
         case ApiConstants.API_LIVESCORE_COMPETION_DELETE_ERROR:
-            // console.log('wooooooo')
+
             return {
                 ...state,
                 loader: false,

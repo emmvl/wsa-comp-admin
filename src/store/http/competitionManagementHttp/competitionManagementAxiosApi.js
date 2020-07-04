@@ -16,7 +16,6 @@ let CompManagementAxiosApi = {
 
   async getCompetitionFormat(input) {
     let userId = await getUserId()
-    console.log("payload::" + JSON.stringify(input.payload));
     var url = `/api/competitionformat?userId=${userId}`;
     return Method.dataPost(url, token, input.payload);
   },
@@ -100,7 +99,6 @@ const Method = {
           }
         })
         .catch(err => {
-          console.log(err.response)
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status == 401) {
@@ -177,7 +175,6 @@ const Method = {
           }
         })
         .catch(err => {
-          console.log(err.response)
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status == 401) {
@@ -224,7 +221,6 @@ const Method = {
 
         .then(result => {
           if (result.status === 200) {
-            console.log("*************" + JSON.stringify(result.data));
             const url = window.URL.createObjectURL(new Blob([result.data]));
             const link = document.createElement('a');
             link.href = url;
@@ -257,7 +253,6 @@ const Method = {
           }
         })
         .catch(err => {
-          console.log(err.response)
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status == 401) {
@@ -329,7 +324,6 @@ const Method = {
           }
         })
         .catch(err => {
-          console.log(err.response)
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status == 401) {

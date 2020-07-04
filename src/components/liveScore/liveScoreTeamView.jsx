@@ -30,7 +30,7 @@ const columns = [
         sorter: (a, b) => a.photoUrl.length - b.photoUrl.length,
         render: photoUrl =>
             photoUrl ?
-                <img className="live-score-user-image" src={photoUrl} alt="" height="70" width="70" />
+                <img className="user-image" src={photoUrl} alt="" height="70" width="70" />
                 :
                 <span>{'No Image'}</span>
     },
@@ -142,7 +142,7 @@ class LiveScoreTeamView extends Component {
 
                     {
                         this.props.liveScoreTeamState && this.props.liveScoreTeamState.teamData ?
-                            <img className="live-score-user-image" src={logoUrl ? logoUrl : ''} alt="" height="80" width="80" />
+                            <img className="user-image" src={logoUrl ? logoUrl : ''} alt="" height="80" width="80" />
                             :
                             <span className="user-contact-heading">{'No Image'}</span>
                     }
@@ -162,7 +162,7 @@ class LiveScoreTeamView extends Component {
                         </div>
 
                         {managerDataList.map((item) => (
-                            <span className="live-score-desc-text side-bar-profile-data">{(item.firstName || item.lastName) && item.firstName + " " + item.lastName}</span>
+                            <span className="desc-text-style side-bar-profile-data">{(item.firstName || item.lastName) && item.firstName + " " + item.lastName}</span>
                         ))
                         }
                     </div>
@@ -175,7 +175,7 @@ class LiveScoreTeamView extends Component {
                             <span className='year-select-heading ml-3'>{AppConstants.email}</span>
                         </div>
                         {managerDataList.map((item) => (
-                            <span className="live-score-desc-text side-bar-profile-data">{item.email}</span>
+                            <span className="desc-text-style side-bar-profile-data">{item.email}</span>
                         ))
                         }
                     </div>
@@ -188,7 +188,7 @@ class LiveScoreTeamView extends Component {
                             <span className='year-select-heading ml-3'>{AppConstants.contactNumber}</span>
                         </div>
                         {managerDataList.map((item) => (
-                            <span className="live-score-desc-text side-bar-profile-data">{item.mobileNumber}</span>
+                            <span className="desc-text-style side-bar-profile-data">{item.mobileNumber}</span>
                         ))
                         }
                     </div>
@@ -206,7 +206,7 @@ class LiveScoreTeamView extends Component {
                             </div>
 
                             {coachData.map((item) => (
-                                <span className="live-score-desc-text side-bar-profile-data">{item.name && item.name}</span>
+                                <span className="desc-text-style side-bar-profile-data">{item.name && item.name}</span>
                             ))
                             }
                         </div>
@@ -219,7 +219,7 @@ class LiveScoreTeamView extends Component {
                                 <span className='year-select-heading ml-3'>{AppConstants.email}</span>
                             </div>
                             {coachData.map((item) => (
-                                <span className="live-score-desc-text side-bar-profile-data">{item.email}</span>
+                                <span className="desc-text-style side-bar-profile-data">{item.email}</span>
                             ))
                             }
                         </div>
@@ -232,7 +232,7 @@ class LiveScoreTeamView extends Component {
                                 <span className='year-select-heading ml-3'>{AppConstants.contactNumber}</span>
                             </div>
                             {coachData.map((item) => (
-                                <span className="live-score-desc-text side-bar-profile-data">{item.mobileNumber}</span>
+                                <span className="desc-text-style side-bar-profile-data">{item.mobileNumber}</span>
                             ))
                             }
                         </div>

@@ -23,7 +23,6 @@ function liveScoreManagerListAction(roleId, entityTypeId, entityId, searchText) 
 
 
     }
-    console.log(action)
     return action
 }
 
@@ -56,7 +55,6 @@ function liveScoreManagerSearch(data, competition_Id) {
         data,
         competition_Id
     }
-    console.log(action, '@#$#@')
     return action
 }
 export {

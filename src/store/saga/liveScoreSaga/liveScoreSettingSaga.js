@@ -9,7 +9,6 @@ export function* liveScoreSettingSaga({ payload }) {
     try {
 
         const result = yield call(LiveScoreAxiosApi.liveScoreSettingView, payload)
-        console.log('saga', result)
         if (result.status === 1) {
             yield put({ type: ApiConstants.LiveScore_SETTING_VIEW_SUCCESS, payload: result.result.data })
         } else {

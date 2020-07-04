@@ -56,12 +56,12 @@ class InnerHorizontalMenu extends React.Component {
                             <span>Own Competitions</span>
                         }
                     >
-                        {/* <Menu.Item key="2"> */}
-                        {/* <a href="https://comp-management-test.firebaseapp.com/quick-competitions.html">Quick Competition</a> */}
-                        {/* <NavLink to="competitionQuickCompetition">
+                        <Menu.Item key="2">
+                            {/* <a href="https://comp-management-test.firebaseapp.com/quick-competitions.html">Quick Competition</a> */}
+                            <NavLink to="/quickCompetition">
                                 <span>Quick Competition</span>
                             </NavLink>
-                        </Menu.Item> */}
+                        </Menu.Item>
                         <Menu.Item key="3">
                             <NavLink to="/competitionOpenRegForm" >
                                 <span > Competition Details</span>
@@ -356,6 +356,13 @@ class InnerHorizontalMenu extends React.Component {
                                     <span>Goals</span>
                                 </NavLink>
                             </Menu.Item>
+
+                            <Menu.Item key="24">
+                                <NavLink to="/liveScorePositionTrackReport">
+                                    <span>Position Trackting</span>
+                                </NavLink>
+                            </Menu.Item>
+
                         </SubMenu>
 
                         <Menu.Item key="17">

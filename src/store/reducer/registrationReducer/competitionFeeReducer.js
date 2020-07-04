@@ -959,6 +959,8 @@ function getTotalFees(feesOwner, data, mFees) {
         totalFees = (dataFees + dataGst + mFees)
         return totalFees.toFixed(2)
     }
+
+    
 }
 
 
@@ -1016,8 +1018,12 @@ function createProductFeeArr(data) {
     let product = data.competitionmembershipproduct.membershipProducts
     let divisions = data.competitiondivisions.competitionFeeDivision
 
+   // console.log("getFeeData::",getFeeData);
+
     let removeDuplicacyFeeArray = removeDuplicacyInFeeArray(getFeeData)
     getFeeData = removeDuplicacyFeeArray
+
+   // console.log("getFeeData111::"+JSON.stringify(getFeeData));
     let productArray = []
     for (let i in divisions) {
         let tempDivisionArray = checkFeeDivisionType(getFeeData, divisions[i].membershipProductUniqueKey)
@@ -1025,6 +1031,7 @@ function createProductFeeArr(data) {
 
 
         let memberShipProductType = getMemberShipProductTypes(divisions[i].membershipProductUniqueKey, product)
+       // console.log("&&&&&", memberShipProductType);
         let alltypeArraySeasonal = []
         let perTypeArraySeasonal = []
         let alltypeArrayCasual = []
@@ -1036,7 +1043,7 @@ function createProductFeeArr(data) {
             let statusSeasonal = checkStatus(getDivisionsArray, memberShipProductType[j], null, 2)
             let statusCasual = checkStatus(getDivisionsArray, memberShipProductType[j], null, 1)
             let statusteamSeasonal = checkStatus(getDivisionsArray, memberShipProductType[j], null, 3)
-            
+          //  console.log("statusSeasonal, statusCasual, statusteamSeasonal", statusSeasonal, statusCasual, statusteamSeasonal)
             let type_Object_casual = null
             let type_Object_seasonal = null
             let type_object_team_seasonal = null;
@@ -1173,12 +1180,13 @@ function createProductFeeArr(data) {
 
 
         let divisionProductType = divisions[i].divisions
+       // console.log("divisionProductType", JSON.stringify(divisionProductType));
         for (let j in divisionProductType) {
             for (let k in memberShipProductType) {
                 let statusSeasonal = checkStatus(getDivisionsArray, memberShipProductType[k], divisionProductType[j].competitionMembershipProductDivisionId, 2)
                 let statusCasual = checkStatus(getDivisionsArray, memberShipProductType[k], divisionProductType[j].competitionMembershipProductDivisionId, 1)
                 let statusTeamSeasonal = checkStatus(getDivisionsArray, memberShipProductType[k], divisionProductType[j].competitionMembershipProductDivisionId, 3)
-               
+               // console.log("statusSeasonal, statusCasual, statusteamSeasonal", statusSeasonal, statusCasual, statusTeamSeasonal)
                 let type_Object_casual = null
                 let type_Object_seasonal = null
                 let type_object_team_seasonal = null;
@@ -1276,8 +1284,8 @@ function createProductFeeArr(data) {
                             "competitionMembershipProductDivisionId": divisionProductType[j].competitionMembershipProductDivisionId,
                             "fee": memberShipProductType[k].isPlaying == 1 ? statusTeamSeasonal.result.Fees : null,
                             "gst": memberShipProductType[k].isPlaying == 1 ? statusTeamSeasonal.result.GST : null,
-                            "affiliateFee": memberShipProductType[k].isPlaying == 1 ? (statusTeamSeasonal.result.affiliateFee ? statusSeasonal.result.affiliateFee : 0) : null,
-                            "affiliateGst": memberShipProductType[k].isPlaying == 1 ? (statusTeamSeasonal.result.affiliateGst ? statusSeasonal.result.affiliateGst : 0) : null,
+                            "affiliateFee": memberShipProductType[k].isPlaying == 1 ? (statusTeamSeasonal.result.affiliateFee  ? statusTeamSeasonal.result.affiliateFee : 0) : null,
+                            "affiliateGst": memberShipProductType[k].isPlaying == 1 ? (statusTeamSeasonal.result.affiliateGst ? statusTeamSeasonal.result.affiliateGst : 0) : null,
                             "feeTypeRefId": 3,
                             "membershipProductTypeName": memberShipProductType[k].membershipProductTypeName,
                             "divisionName": memberShipProductType[k].isPlaying == 1 ? divisionProductType[j].divisionName : "N/A",
@@ -1309,6 +1317,8 @@ function createProductFeeArr(data) {
                         }
                     }
 
+                   // console.log("After statusTeamSeasonal.result.affiliateFee" + type_object_team_seasonal.affiliateFee)
+
                     if (memberShipProductType[k].isPlaying == 1) {
                         perTypeTeamArraySeasonal.push(type_object_team_seasonal)
                     } else {
@@ -1316,6 +1326,8 @@ function createProductFeeArr(data) {
                             perTypeTeamArraySeasonal.push(type_object_team_seasonal)
                         }
                     }
+                //    console.log("type_object_team_seasonal", type_object_team_seasonal); 
+                //    console.log("perTypeTeamArraySeasonal", perTypeTeamArraySeasonal); 
                 }
 
                 if (memberShipProductType[k].isPlaying == 1) {
@@ -1359,7 +1371,7 @@ function createProductFeeArr(data) {
             "competitionMembershipProductId": product[i].competitionMembershipProductId,
             "membershipProductUniqueKey": product[i].membershipProductUniqueKey,
             "seasonal": { allType: alltypeArraySeasonal, perType: perTypeArraySeasonal },
-            "casual": { allType: alltypeArrayCasual, perType: perTypeArrayCasual, perType: perTypeArrayCasual },
+            "casual": { allType: alltypeArrayCasual, perType: perTypeArrayCasual },
             "seasonalTeam": { allType: allTypeTeamArraySeasonal, perType: perTypeTeamArraySeasonal },
             "isAllType": product[i].isProductTypeALL === false ? "allDivisions" : "perDivision",
             "isSeasonal": isSeasonalFeeTypeAvailable,
