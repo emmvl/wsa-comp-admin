@@ -2297,6 +2297,7 @@ class RegistrationCompetitionFee extends Component {
             } else {
               feeSeasonalData = fee_data[i].seasonal.perType;
               feeCasualData = fee_data[i].casual.perType;
+  
               for (let j in feeSeasonalData) {
                 for (let k in feeCasualData) {
                   if (
@@ -2323,15 +2324,15 @@ class RegistrationCompetitionFee extends Component {
                       feeSeasonalData[j].competitionMembershipProductTypeId ==
                       feeSeasonalTeamData[k].competitionMembershipProductTypeId
                     ) {
-                      feeSeasonalData[j]['teamSeasonalFees'] =
-                        feeSeasonalTeamData[k].fee;
-                      feeSeasonalData[j]['teamSeasonalGST'] =
-                        feeSeasonalTeamData[k].gst;
-                      feeSeasonalData[j]['affiliateTeamSeasonalFees'] =
-                        feeSeasonalTeamData[k].affiliateFee;
-                      feeSeasonalData[j]['affiliateTeamSeasonalGST'] =
-                        feeSeasonalTeamData[k].affiliateGst;
-                      break;
+                        feeSeasonalData[j]['teamSeasonalFees'] =
+                          feeSeasonalTeamData[j].fee;
+                        feeSeasonalData[j]['teamSeasonalGST'] =
+                          feeSeasonalTeamData[j].gst;
+                        feeSeasonalData[j]['affiliateTeamSeasonalFees'] =
+                          feeSeasonalTeamData[j].affiliateFee;
+                        feeSeasonalData[j]['affiliateTeamSeasonalGST'] =
+                          feeSeasonalTeamData[j].affiliateGst;
+                        break;
                     }
                   }
                 }
@@ -2404,13 +2405,13 @@ class RegistrationCompetitionFee extends Component {
                       feeSeasonalData[j]['affiliateSeasonalGST'] =
                         feeSeasonalData[j].affiliateGst;
                       feeSeasonalData[j]['teamSeasonalFees'] =
-                        feeSeasonalTeamData[k].fee;
+                        feeSeasonalTeamData[j].fee;
                       feeSeasonalData[j]['teamSeasonalGST'] =
-                        feeSeasonalTeamData[k].gst;
+                        feeSeasonalTeamData[j].gst;
                       feeSeasonalData[j]['affiliateTeamSeasonalFees'] =
-                        feeSeasonalTeamData[k].affiliateFee;
+                        feeSeasonalTeamData[j].affiliateFee;
                       feeSeasonalData[j]['affiliateTeamSeasonalGST'] =
-                        feeSeasonalTeamData[k].affiliateGst;
+                        feeSeasonalTeamData[j].affiliateGst;
                       break;
                     }
                   }
@@ -2488,13 +2489,13 @@ class RegistrationCompetitionFee extends Component {
                       feeCasualData[j]['affiliateCasualGST'] =
                         feeCasualData[j].affiliateGst;
                       feeCasualData[j]['teamSeasonalFees'] =
-                        feeSeasonalTeamData[k].fee;
+                        feeSeasonalTeamData[j].fee;
                       feeCasualData[j]['teamSeasonalGST'] =
-                        feeSeasonalTeamData[k].gst;
+                        feeSeasonalTeamData[j].gst;
                       feeCasualData[j]['affiliateTeamSeasonalFees'] =
-                        feeSeasonalTeamData[k].affiliateFee;
+                        feeSeasonalTeamData[j].affiliateFee;
                       feeCasualData[j]['affiliateTeamSeasonalGST'] =
-                        feeSeasonalTeamData[k].affiliateGst;
+                        feeSeasonalTeamData[j].affiliateGst;
                       break;
                     }
                   }

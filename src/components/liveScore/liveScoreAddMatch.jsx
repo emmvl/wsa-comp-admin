@@ -292,8 +292,8 @@ class LiveScoreAddMatch extends Component {
         if (forfietedTeam) {
             if (forfietedTeam == 'team1') {
                 this.setState({ forfeitVisible: false })
-                let team1resultId = matchResult[3].id
-                let team2resultId = matchResult[4].id
+                let team1resultId = matchResult[4].id
+                let team2resultId = matchResult[3].id
                 this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
 
             } else if (forfietedTeam == 'team2') {
