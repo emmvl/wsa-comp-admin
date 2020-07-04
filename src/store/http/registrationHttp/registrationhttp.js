@@ -12,7 +12,8 @@ const http = axios.create({
     // baseURL: "http://192.168.1.103:4000"
     // baseURL: "http://192.168.3.79:3000"
     // baseURL: "https://world-sport-action-socket.appspot.com"
-    baseURL: process.env.REACT_APP_REGISTRATION_API_URL,
+    //baseURL: process.env.REACT_APP_REGISTRATION_API_URL,
+    baseURL: "https://netball-api-stg.worldsportaction.com/registration",
     // baseURL: "http://ec2-54-79-5-68.ap-southeast-2.compute.amazonaws.com:8089"
     // baseURL: "http://192.168.31.141:5000"
 });

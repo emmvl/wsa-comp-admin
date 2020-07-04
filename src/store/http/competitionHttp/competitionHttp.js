@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const competitionHttp = axios.create({
-    baseURL: process.env.REACT_APP_COMPETITION_API_URL,
+    //baseURL: process.env.REACT_APP_COMPETITION_API_URL,
+    baseURL: "https://netball-api-stg.worldsportaction.com/competition",
 });
 
 competitionHttp.defaults.timeout = 180000;
