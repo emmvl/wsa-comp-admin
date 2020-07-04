@@ -1413,7 +1413,7 @@ function mapDispatchToProps(dispatch) {
         membershipFeesTableInputChangeAction, getCommonDiscountTypeTypeAction, membershipProductDiscountTypesAction,
         addNewMembershipTypeAction, addRemoveDiscountAction, updatedDiscountDataAction,
         membershipFeesApplyRadioAction, onChangeAgeCheckBoxAction, updatedMembershipTypeDataAction,
-        removeCustomMembershipTypeAction, regMembershipListDeleteAction,regMembershipListDeleteAction,getAllowTeamRegistrationTypeAction
+        removeCustomMembershipTypeAction, regMembershipListDeleteAction, getAllowTeamRegistrationTypeAction
     }, dispatch)
 }
 

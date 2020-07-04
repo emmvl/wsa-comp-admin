@@ -1365,7 +1365,7 @@ function createProductFeeArr(data) {
             "competitionMembershipProductId": product[i].competitionMembershipProductId,
             "membershipProductUniqueKey": product[i].membershipProductUniqueKey,
             "seasonal": { allType: alltypeArraySeasonal, perType: perTypeArraySeasonal },
-            "casual": { allType: alltypeArrayCasual, perType: perTypeArrayCasual, perType: perTypeArrayCasual },
+            "casual": { allType: alltypeArrayCasual, perType: perTypeArrayCasual },
             "seasonalTeam": { allType: allTypeTeamArraySeasonal, perType: perTypeTeamArraySeasonal },
             "isAllType": product[i].isProductTypeALL === false ? "allDivisions" : "perDivision",
             "isSeasonal": isSeasonalFeeTypeAvailable,

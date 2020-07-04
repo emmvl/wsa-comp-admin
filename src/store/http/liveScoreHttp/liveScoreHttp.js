@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const http = axios.create({
-    baseURL: process.env.REACT_APP_UMPIRE_API_URL,
+    baseURL: process.env.REACT_APP_LIVE_SCORE_API_URL,
 });
 
 http.interceptors.request.use(function (config) {
