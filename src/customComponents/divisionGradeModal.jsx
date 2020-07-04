@@ -1,11 +1,11 @@
 import React from 'react';
 import { Modal, InputNumber, Form, Button } from 'antd';
-import Loader from "./loader"
 import InputWithHead from "./InputWithHead"
-import moment from 'moment'
 import AppConstants from "../themes/appConstants"
 import AppImages from "../themes/appImages"
 import ValidationConstants from '../themes/validationConstant';
+import { captializedString } from "../util/helpers"
+
 class DivisionGradeModal extends React.Component {
     constructor(props) {
         super(props);
@@ -82,6 +82,7 @@ class DivisionGradeModal extends React.Component {
                 >
 
                     <Form
+                        autoComplete="off"
                         onSubmit={this.onOKsubmit}
                         noValidate="noValidate">
                         <div >
@@ -93,6 +94,7 @@ class DivisionGradeModal extends React.Component {
                                                 <Form.Item
                                                 >
                                                     {getFieldDecorator(`division${index}`, {
+                                                        normalize: (input) => captializedString(input),
                                                         rules: [{ required: true, message: ValidationConstants.divisionField },
                                                         ],
                                                     })(
@@ -113,7 +115,7 @@ class DivisionGradeModal extends React.Component {
                                                                 <Form.Item
                                                                 >
                                                                     {getFieldDecorator(`grade${index}${gradeIndex}`, {
-                                                                        rules: [{ required: gradeIndex >= 1 ? true : false, message: ValidationConstants.gradeField },
+                                                                        normalize: (input) => captializedString(input), rules: [{ required: gradeIndex >= 1 ? true : false, message: ValidationConstants.gradeField },
                                                                         ],
                                                                     })(
                                                                         <InputWithHead

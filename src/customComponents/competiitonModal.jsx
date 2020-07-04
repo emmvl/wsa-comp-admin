@@ -3,11 +3,31 @@ import { Modal, DatePicker, Form, Button } from 'antd';
 import InputWithHead from "./InputWithHead"
 import AppConstants from "../themes/appConstants"
 import ValidationConstants from '../themes/validationConstant';
-
+import { captializedString } from "../util/helpers"
 
 class CompetitionModal extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            competitionState: true
+        }
+    }
+
+    componentDidUpdate() {
+        if (this.props.visible === true && this.state.competitionState === true) {
+            this.setState({ competitionState: false })
+            this.setFieldValues()
+        }
+        if (this.props.visible === false && this.state.competitionState === false) {
+            this.setState({ competitionState: true })
+        }
+    }
+
+    setFieldValues = () => {
+        this.props.form.setFieldsValue({
+            compName: this.props.competitionName,
+            date: this.props.selectedDate
+        })
     }
 
     onOKsubmit = (e) => {
@@ -20,7 +40,7 @@ class CompetitionModal extends React.Component {
     }
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { modalTitle, handleOK, onCancel, competitionChange, competitionName, updateDate } = this.props
+        const { modalTitle, handleOK, onCancel, competitionChange, updateDate, competitionName, selectedDate } = this.props
         return (
             <div style={{ backgroundColor: "red" }}>
                 <Modal
@@ -36,6 +56,7 @@ class CompetitionModal extends React.Component {
                     }
                 >
                     <Form
+                        autoComplete="off"
                         onSubmit={this.onOKsubmit}
                         noValidate="noValidate">
 
@@ -47,6 +68,7 @@ class CompetitionModal extends React.Component {
                                 <Form.Item
                                 >
                                     {getFieldDecorator(`compName`, {
+                                        normalize: (input) => captializedString(input),
                                         rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired },
                                         ],
                                     })(

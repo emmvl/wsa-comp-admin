@@ -85,7 +85,6 @@ class CompetitionDraws extends Component {
     let drawOrganisations = this.props.drawsState.drawOrganisations
     let venueData = this.props.drawsState.competitionVenues;
     let divisionGradeNameList = this.props.drawsState.divisionGradeNameList;
-    console.log(drawOrganisations)
     if (
       this.state.venueLoad == true &&
       this.props.drawsState.updateLoad == false
@@ -500,14 +499,14 @@ class CompetitionDraws extends Component {
     this.setState({
       organisation_Id
     })
-    this.props.clearDraws();
-    this.props.getCompetitionDrawsAction(
-      this.state.yearRefId,
-      this.state.firstTimeCompId,
-      this.state.venueId,
-      this.state.roundId,
-      organisation_Id
-    );
+    // this.props.clearDraws();
+    // this.props.getCompetitionDrawsAction(
+    //   this.state.yearRefId,
+    //   this.state.firstTimeCompId,
+    //   this.state.venueId,
+    //   this.state.roundId,
+    //   organisation_Id
+    // );
   }
 
   //////year change onchange
@@ -744,8 +743,9 @@ class CompetitionDraws extends Component {
     this.props.generateDrawAction(payload);
     this.setState({ venueLoad: true });
   };
-  //unlockDraws
 
+
+  //unlockDraws
   unlockDraws(id, round_Id, venueCourtId) {
     this.props.unlockDrawsAction(id, round_Id, venueCourtId);
   }
@@ -757,7 +757,6 @@ class CompetitionDraws extends Component {
 
   ////////form content view
   contentView = () => {
-    console.log()
     let roundTime = '';
     if (this.state.roundTime) {
       if (this.state.roundTime.length > 0) {
@@ -860,7 +859,7 @@ class CompetitionDraws extends Component {
                 alignItems: 'center',
               }}
             >
-              <Spin size="middle" spinning={this.props.drawsState.spinLoad} />
+              <Spin size='default' spinning={this.props.drawsState.spinLoad} />
             </div>
           )}
           {this.props.drawsState.updateLoad ? (
@@ -870,7 +869,7 @@ class CompetitionDraws extends Component {
                 this.props.drawsState.getRoundsDrawsdata.map(
                   (dateItem, dateIndex) => {
                     return (
-                      <div>
+                      <div key={"drawData" + dateIndex}>
                         <div className="draws-round-view">
                           <span className="draws-round">
                             {dateItem.roundName}
@@ -893,7 +892,7 @@ class CompetitionDraws extends Component {
                   this.props.drawsState.getRoundsDrawsdata.map(
                     (dateItem, dateIndex) => {
                       return (
-                        <div>
+                        <div key={"drawData" + dateIndex}>
                           <div className="draws-round-view">
                             <span className="draws-round">
                               {dateItem.roundName}
@@ -915,6 +914,34 @@ class CompetitionDraws extends Component {
       </div>
     );
   };
+
+  checkColor(slot) {
+    if (slot.competitionDivisionGradeId == this.state.competitionDivisionGradeId || this.state.competitionDivisionGradeId == 0) {
+      if (this.state.organisation_Id == slot.awayTeamOrganisationId || this.state.organisation_Id == slot.homeTeamOrganisationId || this.state.organisation_Id == "-1") {
+        return slot.colorCode
+      }
+      else {
+        return "#999999"
+      }
+    }
+    else {
+      return "#999999"
+    }
+  }
+
+  checkSwap(slot) {
+    if (slot.competitionDivisionGradeId == this.state.competitionDivisionGradeId || this.state.competitionDivisionGradeId == 0) {
+      if (this.state.organisation_Id == slot.awayTeamOrganisationId || this.state.organisation_Id == slot.homeTeamOrganisationId || this.state.organisation_Id == "-1") {
+        return true
+      }
+      else {
+        return false
+      }
+    }
+    else {
+      return false
+    }
+  }
 
   //////the gragable content view inside the container
   draggableView = (dateItem) => {
@@ -941,7 +968,7 @@ class CompetitionDraws extends Component {
                     dateMargin = 70;
                   }
                   return (
-                    <span style={{ left: dateMargin }}>
+                    <span key={"day" + index} style={{ left: dateMargin }}>
                       {item.notInDraw == false ? getDayName(item.date) : ''}
                     </span>
                   );
@@ -960,7 +987,7 @@ class CompetitionDraws extends Component {
                     dayMargin = 70;
                   }
                   return (
-                    <span
+                    <span key={"time" + index}
                       style={{
                         left: dayMargin,
                         fontSize: item.notInDraw !== false && 11,
@@ -982,7 +1009,7 @@ class CompetitionDraws extends Component {
               topMargin += 70;
             }
             return (
-              <div>
+              <div key={"court" + index}>
                 <div className="sr-no" style={{ height: 62 }}>
                   <div className="venueCourt-tex-div">
                     <span className="venueCourt-text">
@@ -1000,7 +1027,7 @@ class CompetitionDraws extends Component {
                     leftMargin = 70;
                   }
                   return (
-                    <div>
+                    <div key={"slot" + slotIndex}>
                       <span
                         style={{ left: leftMargin, top: topMargin }}
                         className={'border'}
@@ -1009,11 +1036,7 @@ class CompetitionDraws extends Component {
                         className={'box purple-bg'}
                         style={{
                           backgroundColor:
-                            slotObject.competitionDivisionGradeId ==
-                              this.state.competitionDivisionGradeId ||
-                              this.state.competitionDivisionGradeId == 0
-                              ? slotObject.colorCode
-                              : '#999999',
+                            this.checkColor(slotObject),
                           left: leftMargin,
                           top: topMargin,
                           overflow: 'hidden',
@@ -1030,11 +1053,7 @@ class CompetitionDraws extends Component {
                           }
                           content={1}
                           swappable={
-                            slotObject.competitionDivisionGradeId ==
-                              this.state.competitionDivisionGradeId ||
-                              this.state.competitionDivisionGradeId == 0
-                              ? true
-                              : false
+                            this.checkSwap(slotObject)
                           }
                           onSwap={(source, target) =>
                             this.onSwap(
@@ -1055,51 +1074,42 @@ class CompetitionDraws extends Component {
                             )}
                         </Swappable>
                       </div>
-                      {slotObject.drawsId !== null && (
-                        <div
-                          className="box-exception"
-                          style={{
-                            left: leftMargin,
-                            top: topMargin + 50,
-                            overflow: 'hidden',
-                            whiteSpace: 'nowrap',
-                          }}
-                        >
-                          <Menu
-                            className="action-triple-dot-draws"
-                            theme="light"
-                            mode="horizontal"
-                            style={{ lineHeight: '15px' }}
+                      {
+                        slotObject.drawsId !== null && (
+                          <div
+                            className="box-exception"
+                            style={{
+                              left: leftMargin,
+                              top: topMargin + 50,
+                              overflow: 'hidden',
+                              whiteSpace: 'nowrap',
+                            }}
                           >
-                            <SubMenu
-                              key="sub1"
-                              title={
-                                slotObject.isLocked == 1 ? (
-                                  <div
-                                    style={{
-                                      display: 'flex',
-                                      justifyContent: 'space-between',
-                                      width: 80,
-                                      maxWidth: 80,
-                                    }}
-                                  >
-                                    <img
-                                      className="dot-image"
-                                      src={AppImages.drawsLock}
-                                      alt=""
-                                      width="16"
-                                      height="10"
-                                    />
-                                    <img
-                                      className="dot-image"
-                                      src={AppImages.moreTripleDot}
-                                      alt=""
-                                      width="16"
-                                      height="10"
-                                    />
-                                  </div>
-                                ) : (
-                                    <div>
+                            <Menu
+                              className="action-triple-dot-draws"
+                              theme="light"
+                              mode="horizontal"
+                              style={{ lineHeight: '15px' }}
+                            >
+                              <SubMenu
+                                key="sub1"
+                                title={
+                                  slotObject.isLocked == 1 ? (
+                                    <div
+                                      style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        width: 80,
+                                        maxWidth: 80,
+                                      }}
+                                    >
+                                      <img
+                                        className="dot-image"
+                                        src={AppImages.drawsLock}
+                                        alt=""
+                                        width="16"
+                                        height="10"
+                                      />
                                       <img
                                         className="dot-image"
                                         src={AppImages.moreTripleDot}
@@ -1108,44 +1118,55 @@ class CompetitionDraws extends Component {
                                         height="10"
                                       />
                                     </div>
-                                  )
-                              }
-                            >
-                              {slotObject.isLocked == 1 && (
-                                <Menu.Item
-                                  key="1"
-                                  onClick={() =>
-                                    this.unlockDraws(
-                                      slotObject.drawsId,
-                                      dateItem.roundId,
-                                      courtData.venueCourtId
+                                  ) : (
+                                      <div>
+                                        <img
+                                          className="dot-image"
+                                          src={AppImages.moreTripleDot}
+                                          alt=""
+                                          width="16"
+                                          height="10"
+                                        />
+                                      </div>
                                     )
-                                  }
-                                >
-                                  <div style={{ display: 'flex' }}>
-                                    <span>Unlock</span>
-                                  </div>
+                                }
+                              >
+                                {slotObject.isLocked == 1 && (
+                                  <Menu.Item
+                                    key="1"
+                                    onClick={() =>
+                                      this.unlockDraws(
+                                        slotObject.drawsId,
+                                        dateItem.roundId,
+                                        courtData.venueCourtId
+                                      )
+                                    }
+                                  >
+                                    <div style={{ display: 'flex' }}>
+                                      <span>Unlock</span>
+                                    </div>
+                                  </Menu.Item>
+                                )}
+                                <Menu.Item key="2">
+                                  <NavLink
+                                    to={{
+                                      pathname: `/competitionException`,
+                                      state: {
+                                        drawsObj: slotObject,
+                                        yearRefId: this.state.yearRefId,
+                                        competitionId: this.state.firstTimeCompId,
+                                        organisationId: this.state.organisationId,
+                                      },
+                                    }}
+                                  >
+                                    <span>Exception</span>
+                                  </NavLink>
                                 </Menu.Item>
-                              )}
-                              <Menu.Item key="2">
-                                <NavLink
-                                  to={{
-                                    pathname: `/competitionException`,
-                                    state: {
-                                      drawsObj: slotObject,
-                                      yearRefId: this.state.yearRefId,
-                                      competitionId: this.state.firstTimeCompId,
-                                      organisationId: this.state.organisationId,
-                                    },
-                                  }}
-                                >
-                                  <span>Exception</span>
-                                </NavLink>
-                              </Menu.Item>
-                            </SubMenu>
-                          </Menu>
-                        </div>
-                      )}
+                              </SubMenu>
+                            </Menu>
+                          </div>
+                        )
+                      }
                     </div>
                   );
                 })}

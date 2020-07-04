@@ -115,7 +115,7 @@ let AxiosApi = {
     return Method.dataGet(url, token);
   },
 
- async getVenue() {
+  async getVenue() {
     let organisationId = await getOrganisationData().organisationUniqueKey;
     var url = `/api/venue/all?organisationUniqueKey=${organisationId}`;
     return Method.dataGet(url, token);
@@ -318,7 +318,6 @@ const Method = {
           }
         })
         .catch(err => {
-          console.log(err.response)
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status == 401) {
@@ -394,7 +393,6 @@ const Method = {
           }
         })
         .catch(err => {
-          console.log(err.response)
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status == 401) {
@@ -466,7 +464,6 @@ const Method = {
           }
         })
         .catch(err => {
-          console.log(err.response)
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status == 401) {

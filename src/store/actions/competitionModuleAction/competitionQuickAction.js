@@ -1,9 +1,9 @@
 import ApiConstants from "../../../themes/apiConstants";
 // competition dashboard
-function updateQuickCompetitionData(item) {
+function updateQuickCompetitionData(item, key) {
     const action = {
         type: ApiConstants.Update_QuickCompetition_Data,
-        item
+        item, key
     };
     return action;
 }
@@ -46,7 +46,6 @@ function createQuickCompetitionAction(year, comptitionName, competitionDate) {
         comptitionName,
         competitionDate
     }
-    console.log(action)
     return action
 }
 
@@ -86,10 +85,10 @@ function quickCompetitionTimeSlotData(payload) {
     return action
 }
 ////update quick competition
-function updateQuickCompetitionAction(payload) {
+function updateQuickCompetitionAction(payload, year) {
     const action = {
         type: ApiConstants.API_UPDATE_QUICK_COMPETITION_LOAD,
-        payload
+        payload, year
     }
     return action
 }
