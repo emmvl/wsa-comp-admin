@@ -267,7 +267,6 @@ const AppConstants = {
   standard_round_robin: 'Standard Round Robin',
   double_round_robin: 'Double Round Robin',
   halves: 'Halves',
-  quarters: 'Quarters',
   fixture_template: 'Fixture Template',
   frequency: 'Frequency',
   weekly: 'Weekly',
@@ -353,7 +352,6 @@ const AppConstants = {
   addTeams: 'Add Teams',
   winter_2019: 'Winter 2019',
   how_Add_teams_players: 'How will you add teams and players?',
-  import: 'Import',
   addManually: 'Add Manually',
   Merge_ExistingCompetition: 'Merge with an Existing Competition',
   inviteRegistration: 'Invite Registrations',
@@ -553,7 +551,6 @@ const AppConstants = {
   addMatch: 'Add Match',
   date: 'Date',
   divisionName: 'Division Name',
-  type: 'Type',
   matchID: 'mnbMatchId',
   homeTeam: 'Home Team',
   awayTeam: 'Away Team',
@@ -589,9 +586,8 @@ const AppConstants = {
   selectClub: 'Select Club/Association/State Body',
   managerHeading: 'Manager',
   new: 'New',
-  exsiting: 'Exisiting',
+  exsiting: 'Existing',
   teamList: 'Team List',
-  addPlayer: 'Add Player',
 
   managersList: 'Manager List',
   addManager: 'Add Manager',
@@ -687,7 +683,6 @@ const AppConstants = {
   matchOnDate: 'Matches on this date',
   forTimeRange: 'For this time range',
   byVenue: 'By Venue (optional)',
-  selectVenue: 'Select Venue',
   hour: 'Hours',
   seconds: 'Seconds',
   toThisTime: 'Or to this time',
@@ -703,16 +698,13 @@ const AppConstants = {
   bringForward: 'Bring forward',
   changeMatchCriteria: 'Change matches with the following criteria',
   selectReason: 'Select Reason',
-  todaysMatch: "Today's Match",
   newsPost: 'News Post',
   scorerProfile: 'Scorer Profile',
-  managerSearch: 'Manager Search',
   affiliate: 'Affiliate',
   selectAffiliate: 'Select Affiliate',
   useClubLogo: 'Use Affiliate Logo',
   activeNews: 'Active News',
   addNewRound: 'Add New Round',
-  selectCourt: 'Select Court',
   twoHalves: 'TWO_HALVES',
   fourQuarters: 'FOUR_QUARTERS',
   editBanners: 'Edit Banners',
@@ -730,9 +722,6 @@ const AppConstants = {
   evenRotation: 'Even rotation',
   allocateToSameCourt: 'Allocate to same court',
   noPreference: 'No Preference',
-  evenRotation: 'Even rotation',
-  allocateToSameCourt: 'Allocate to same court',
-  noPreference: 'No Preference',
   statringSaturday: 'Starting Sat 08/02',
   anyGradePreference2:
     'Do you have any court preferences for divisions or grades?',
@@ -747,7 +736,6 @@ const AppConstants = {
   none: 'None',
   timeslotsAllocatedBasedOnMatchs:
     'Timeslots allocated based on match duration',
-  manuallyAddTimeslots: 'Manually add timeslots',
   enterTimeMatchesEachDay: 'Enter time matches should run each day',
   allocateToSametimeslot: 'Allocate to same time slot',
   newCompetition: 'New Competition',
@@ -802,7 +790,6 @@ const AppConstants = {
   areYouRegisteringYourself: 'Are you registering yourself?',
   whoAreYouRegistering: 'Who are you registering?',
   child: 'Child',
-  team: 'Team',
   whatTypeOfRegistration: 'What type of registration?',
   nonPlayer: 'Non Player',
   yesAsAPlayer: 'Yes, as a Player',
@@ -833,7 +820,6 @@ const AppConstants = {
 
   createTeam: 'Create Team',
   unassigned: 'Unassigned',
-  organisation: 'Organisation',
   gameTimeStatistics: 'Game Time Statistics',
   searchManager: 'Search Manager',
   divisionList: 'Division List',
@@ -843,14 +829,11 @@ const AppConstants = {
   notifyAgain: 'Notify again',
   notify: 'Notify',
 
-  gradeName: 'GradeName',
   editDivision: 'Edit Division',
 
   //////Organisation Levels enums
   national: 'national',
   state: 'state',
-  association: 'association',
-  club: 'club',
 
   /////user roles enums
   super_admin: 'super_admin',
@@ -874,7 +857,6 @@ const AppConstants = {
   minute: 'MINUTE',
   matches: 'MATCH',
   totalGame: 'TOTAL GAMES',
-  divisionList: 'Division List',
   voucherDeleteConfirmMsg: 'Are you sure you want to delete this voucher?',
   productDeleteConfirmMsg: 'Are you sure you want to delete this product?',
   participantDeleteConfirmMsg:
@@ -894,7 +876,6 @@ const AppConstants = {
   addVideos: 'Add Video',
   time: 'Time',
   addIncident: 'Add Incident',
-  ladderSettings: 'Ladder',
   selectRound: 'Select Round',
   linked: 'Linked',
   importDivision: 'Import Division',
@@ -907,7 +888,6 @@ const AppConstants = {
 
   short_Name: 'Short Name',
   backToScorer: 'Back to all Scorers',
-  endDate: 'End Date',
   otherInformation: 'Other Information',
   countryOfBirth: 'Country of Birth',
   disability: 'Disability',
@@ -928,7 +908,6 @@ const AppConstants = {
   teamAttendaneExport: '/players/export/teamattendance?competitionId=',
   proceed: 'Skip and Proceed',
   invalidPlayers: 'Invalid Records',
-  importPlayer: 'Import Player',
   matchExport: `/matches/export?competitionId=`,
   courtChange: 'Court Change',
 
@@ -992,7 +971,6 @@ const AppConstants = {
   teamA: 'Team A',
   teamB: 'Team B',
   lockedDraws: 'Specific Match Preference',
-  year2020: '2020',
   addDay: 'Add Day',
   backToLiveScore: 'Back To Live Score',
   venueConstraintModalMsg: 'Do you want to remove fixture?',
@@ -1026,7 +1004,6 @@ const AppConstants = {
   addCoach: 'Add Coach',
   editCoach: 'Edit Coach',
   coachList: 'Coach List',
-  addCoach: 'Add Coach',
   exportRegQuestion: 'Reg. Form Questions',
   noDataAvailable: 'No Data Available',
   recordUmpire: 'Record Umpire',
@@ -1244,9 +1221,6 @@ const AppConstants = {
   Results Admin - can access the Live Scores Platform to upload match results and player information.\n\n
   Finance Admin - can access Payments and the Registration platform.`,
 
-  additionQuesMsg:
-    'Click on the Questions you would like to ask Users who are Registering to your Competition.',
-
   selectedTeams: 'Selected Teams Array',
   importCoach: 'Import Coaches',
   ladderLink: 'Ladder Link',
@@ -1273,7 +1247,6 @@ const AppConstants = {
   umpireSearch: 'Umpire Search',
   nonPlayerDivisionMessage:
     'Divisions are not required for your selected membership type.',
-  matchAbandoned: 'Match Abandoned?',
   drawsLink: 'Draws Link',
   public_draws_Url: `https://netball-registration-dev.worldsportaction.com/livescoreSeasonFixture?`,
   finalsMessage: 'Finals has not been enabled for this Competition',
@@ -1282,13 +1255,9 @@ const AppConstants = {
   individualRegistrations: "Individual Registrations",
 
   /////////shop
-  shop: "Shop",
-  products: "Products",
   listProducts: "List Products",
 
   importUmpire: 'Import Umpire',
-
-  backToUmpire: "Back To Umpire",
 
   addAProduct: 'Add a Product',
   addProduct: 'Add Product',
@@ -1308,7 +1277,6 @@ const AppConstants = {
     "Allow customers to purchase this product when it's out of stock",
   variants: 'Variants',
   enableVariants: 'Enable Variants',
-  shipping: 'Shipping',
   variantName: 'Variant Name',
   orders: 'Orders',
   orderSummary: 'Order Summary',
@@ -1330,13 +1298,12 @@ const AppConstants = {
   _minutes: "Minutes",
 
   lineUpSelectionMsg: "We can’t enable lineup selection without position tracking",
-  umpireListExport: "https://users-api-dev.worldsportaction.com/users/byRole/export/org?",
+  // umpireListExport: "https://users-api-dev.worldsportaction.com/users/byRole/export/org?",
   umpireListExport: "users/byRole/export/org?",
   disabilityCareNumber: "Disability care Number",
   typeOfDisability: "Type of Disability",
   pickUpAddress: "Pick up address",
   productTypes: "Product Types",
-  addType: "Add Type",
   topSellers: "Top Sellers",
   productType: "Product Type",
   divisionGradeAndTeams: "Division, Grade and Teams",
@@ -1364,7 +1331,6 @@ const AppConstants = {
   timeBetweenUmpireMatch: 'Time between Umpiring Matches',
   umpireReservePref: 'Umpire Reserve',
   reserveAllocationTiming: 'Reserve Allocation timing',
-  umpireCoach: "Umpire Coach:",
   activeUmpireCoach: "Activate Umpire Coaches",
   umpirePoolsDivision: "Umpire Pools Allocation To Divisions/Grades",
   allocatePools: "Allocate Pools To",
@@ -1389,8 +1355,8 @@ const AppConstants = {
   selectIncident: "Select Incident",
   _spectator: "Spectator",
   discipline: "Discipline",
-  injuryAmbulance: "Injury Ambulance",
-  injuryFirstAdd: "Injury- First Add",
+  injuryAmbulance: "Injury - Ambulance",
+  injuryFirstAdd: "Injury - First Aid",
   emailExp: "/^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/",
   childDetails: "Child Details",
   registrationDivision: "Registration Divisions",
@@ -1421,6 +1387,7 @@ const AppConstants = {
   addCompetitionFormat: 'Add Competition Format',
   fileUploadPdf: "File Upload (File Type: PDF)",
   link: "Link",
+  qrCodeHeader: 'Code from authenticator',
   paymentStatusReference: 'PaymentStatus',
   positionTrackReport: "Position Tracking Report",
   periodFilter: 'Period',

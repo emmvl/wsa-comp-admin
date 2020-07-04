@@ -30,7 +30,6 @@ const initialState = {
   enhancedRoundRobinTypes: [],
 
   ////******************Venue and time
-  yearList: [],
   competitionList: [],
   selectedCompetition: null,
   selectedYear: 1,

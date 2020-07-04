@@ -22,7 +22,6 @@ class UmpireDivisions extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            selectedComp: "All",
             umpPool: "A Grade",
             selectedComp: null,
             loading: false,

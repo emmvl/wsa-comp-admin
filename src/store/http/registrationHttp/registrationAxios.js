@@ -1,5 +1,5 @@
 // import { DataManager } from './../../Components';
-import http from "./registrationhttp";
+import http from "./registrationHttp";
 import { getUserId, getAuthToken, getOrganisationData } from "../../../util/sessionStorage"
 import history from "../../../util/history";
 import { message } from "antd";
@@ -85,11 +85,11 @@ let AxiosApi = {
     },
 
     //////get the membership  product details
-    regGetMembershipProductDetails(payload) {
-        let productId = payload.productId;
-        var url = `/api/membershipproduct/${productId}`;
-        return Method.dataGet(url, token);
-    },
+    // regGetMembershipProductDetails(payload) {
+    //     let productId = payload.productId;
+    //     var url = `/api/membershipproduct/${productId}`;
+    //     return Method.dataGet(url, token);
+    // },
 
 
     //////get the membership  product details
