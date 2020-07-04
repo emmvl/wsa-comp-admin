@@ -1,5 +1,5 @@
 // import { DataManager } from './../../Components';
-import http from "./liveScorehttp";
+import http from "./liveScoreHttp";
 import { getUserId, getAuthToken, getOrganisationData, getLiveScoreCompetiton } from "../../../util/sessionStorage"
 import history from "../../../util/history";
 import { message } from "antd";

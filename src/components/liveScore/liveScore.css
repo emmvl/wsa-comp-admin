@@ -114,7 +114,6 @@
 }
 
 .match-score-detail {
-    border-bottom-style: "Solid";
     border-bottom: 0.5px solid var(--app-e1e1f5);
     padding: 3px 0 10px 0;
 }

@@ -119,7 +119,6 @@ const rootReducer = combineReducers({
   ShopProductState,
   UmpireDashboardState,
   UmpireCompetitionState,
-  CompetitionManagementState,
   UmpireRoasterdState,
   UmpireState,
   AssignUmpireState,
