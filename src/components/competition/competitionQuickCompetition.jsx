@@ -448,9 +448,6 @@ class CompetitionQuickCompetition extends Component {
                     <div className="col-sm-2.5 mt-2  quick-comp-btn-view paddingview">
                         <Button className="open-reg-button" type="primary" onClick={() => this.visibleDivisonModal()}>+ {AppConstants.addDivisionsAndGrades}</Button>
                     </div>
-                    <div className="col-sm-3 mt-2  comp-draw-edit-btn-view">
-                        <Button className="open-reg-button" type="primary" onClick={() => this.visibleDivisonModal()}>+ {AppConstants.addDivisionsAndGrades}</Button>
-                    </div>
 
                 </div>
                 <div className="row  ml-4 pb-5">
