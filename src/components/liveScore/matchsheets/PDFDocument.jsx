@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
     }
 });
 
+let count = 1;
 const PDFDocument = (props) => {
     const { pages } = props;
 

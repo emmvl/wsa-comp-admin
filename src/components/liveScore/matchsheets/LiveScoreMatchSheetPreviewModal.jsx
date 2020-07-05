@@ -28,12 +28,12 @@ const LiveScoreMatchSheetPreviewModal = (props) => {
         >
             <CustomPDFViewer>
                 <PDFDocument
-                    pages={matchList.length > 0 && matchList.map((match) => (
+                    pages={matchList.length > 0 ? matchList.map((match) => (
                         <MatchSheetTemplate
                             organisation={organisation}
                             match={match}
                         />
-                    ))}
+                    )) : []}
                 />
             </CustomPDFViewer>
         </Modal>
