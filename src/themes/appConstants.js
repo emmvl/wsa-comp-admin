@@ -1389,7 +1389,8 @@ const AppConstants = {
   paymentStatusReference: 'PaymentStatus',
   positionTrackReport: "Position Tracking Report",
   periodFilter: 'Period',
-  byGame: 'By Game'
+  byGame: 'By Game',
+  matchPrintTemplateType: 'Match Print Template Type'
 };
 
 export default AppConstants;

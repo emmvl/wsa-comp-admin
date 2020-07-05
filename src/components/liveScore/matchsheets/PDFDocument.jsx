@@ -18,7 +18,7 @@ const PDFDocument = (props) => {
 
     return (
         <ReactPdfDocument style={styles.document} width="100%" height="100%">
-            {pages.map((page, index) => (
+            {pages.length > 0 && pages.map((page, index) => (
                 <Page size="A4" style={styles.page} key={`page_${index}`}>
                     {page}
                 </Page>

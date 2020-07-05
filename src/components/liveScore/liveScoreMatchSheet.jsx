@@ -11,6 +11,8 @@ import {isArrayNotEmpty} from '../../util/helpers';
 import {fixtureCompetitionListAction} from '../../store/actions/LiveScoreAction/LiveScoreFixtureAction';
 import {getLiveScoreDivisionList} from '../../store/actions/LiveScoreAction/liveScoreDivisionAction';
 import {getliveScoreTeams} from '../../store/actions/LiveScoreAction/liveScoreTeamAction';
+import {getMatchPrintTemplateType} from '../../store/actions/commonAction/commonAction';
+import {liveScoreMatchListAction} from '../../store/actions/LiveScoreAction/liveScoreMatchAction';
 import Loader from '../../customComponents/loader';
 import InputWithHead from '../../customComponents/InputWithHead';
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
@@ -27,7 +29,7 @@ class LiveScoreMatchSheet extends Component {
         this.state = {
             year: '2019',
             competition: '2019winter',
-            division: 'all',
+            division: 'All',
             grade: 'all',
             teams: 'all',
             value: 'periods',
@@ -39,13 +41,17 @@ class LiveScoreMatchSheet extends Component {
             teamLoad: false,
             teamsList: [],
             showPreview: false,
+            selectedTeam: 'All',
+            organisation: null,
         };
     }
 
     componentDidMount() {
         const {organisationId} = JSON.parse(localStorage.getItem('setOrganisationData'));
+        this.setState({organisation: JSON.parse(localStorage.getItem('setOrganisationData'))});
         this.setState({onCompLoad: true});
         this.props.fixtureCompetitionListAction(organisationId);
+        this.props.getMatchPrintTemplateType();
     }
 
     componentDidUpdate(nextProps) {
@@ -62,6 +68,15 @@ class LiveScoreMatchSheet extends Component {
                     onDivisionLoad: true,
                     competitionUniqueKey: compKey,
                 });
+                this.props.liveScoreMatchListAction(
+                    firstComp,
+                    undefined,
+                    undefined,
+                    undefined,
+                    this.state.division === 'All' ? null : this.state.division,
+                    undefined,
+                    this.state.selectedTeam === 'All' ? null : this.state.selectedTeam
+                );
             }
         }
 
@@ -84,7 +99,7 @@ class LiveScoreMatchSheet extends Component {
                     : [];
                 this.setState({
                     teamLoad: false,
-                    selectedTeam: teams
+                    teams,
                 });
             }
         }
@@ -118,6 +133,15 @@ class LiveScoreMatchSheet extends Component {
             division: null,
             competitionUniqueKey: compKey,
         });
+        this.props.liveScoreMatchListAction(
+            selectedComp,
+            undefined,
+            undefined,
+            undefined,
+            this.state.division === 'All' ? null : this.state.division,
+            undefined,
+            this.state.selectedTeam === 'All' ? null : this.state.selectedTeam
+        );
     }
 
     changeDivision(divisionId) {
@@ -127,6 +151,28 @@ class LiveScoreMatchSheet extends Component {
             division,
             teamLoad: true
         });
+        this.props.liveScoreMatchListAction(
+            this.state.selectedComp,
+            undefined,
+            undefined,
+            undefined,
+            division === 'All' ? null : division,
+            undefined,
+            this.state.selectedTeam === 'All' ? null : this.state.selectedTeam
+        );
+    }
+
+    onChangeTeam(selectedTeam) {
+        this.props.liveScoreMatchListAction(
+            this.state.selectedComp,
+            undefined,
+            undefined,
+            undefined,
+            this.state.division === 'All' ? null : this.state.division,
+            undefined,
+            selectedTeam === 'All' ? null : selectedTeam
+        );
+        this.setState({selectedTeam})
     }
 
     /// view for breadcrumb
@@ -217,7 +263,7 @@ class LiveScoreMatchSheet extends Component {
                         <div className="col-sm">
                             <Select
                                 style={{width: '100%', paddingRight: 1, minWidth: 182}}
-                                onChange={(grade) => this.setState({grade})}
+                                onChange={(selectedTeam) => this.onChangeTeam(selectedTeam)}
                                 value={this.state.selectedTeam}
                             >
                                 {teamList.map((item) => <Option value={item.id} key={item.id}>{item.name}</Option>)}
@@ -307,6 +353,9 @@ class LiveScoreMatchSheet extends Component {
                 </Layout>
                 <LiveScoreMatchSheetPreviewModal
                     visible={this.state.showPreview}
+                    matchTemplateTypes={this.props.commonReducerState.matchPrintTemplateType}
+                    organisation={this.state.organisation}
+                    matchList={this.props.liveScoreMatchState.liveScoreMatchList}
                     modalTitle="LiveScores Match Sheet"
                     handleOK={this.handleModalOk}
                     handleCancel={this.handleModalCancel}
@@ -321,7 +370,9 @@ function mapDispatchtoprops(dispatch) {
     return bindActionCreators({
         fixtureCompetitionListAction,
         getLiveScoreDivisionList,
-        getliveScoreTeams
+        getliveScoreTeams,
+        getMatchPrintTemplateType,
+        liveScoreMatchListAction,
     }, dispatch);
 }
 
@@ -329,6 +380,8 @@ function mapStatetoProps(state) {
     return {
         liveScoreFixturCompState: state.LiveScoreFixturCompState,
         liveScoreMatchSheetState: state.LiveScoreMatchSheetState,
+        commonReducerState: state.CommonReducerState,
+        liveScoreMatchState: state.LiveScoreMatchState,
     };
 }
 

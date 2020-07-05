@@ -155,6 +155,7 @@ const initialState = {
     result: null,
     status: 0,
     liveScoreMatchListData: [],
+    liveScoreMatchList: [],
     addEditMatch: object,
     start_date: "",
     start_time: "",
@@ -276,10 +277,11 @@ function liveScoreMatchReducer(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 liveScoreMatchListPage: action.result.page ? action.result.page.currentPage : 1,
-                liveScoreMatchListTotalCount: action.result.page.totalCount,
+                liveScoreMatchListTotalCount: action.result.page ? action.result.page.totalCount : 0,
                 status: action.status,
                 liveScoreMatchListData: result,
-                liveScoreBulkScoreList: result
+                liveScoreBulkScoreList: result,
+                liveScoreMatchList: action.result
             };
 
         case ApiConstants.API_LIVE_SCORE_MATCH_LIST_FAIL:

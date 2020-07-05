@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Text, View, Image, StyleSheet } from '@react-pdf/renderer';
+import moment from 'moment';
 
 const styles = StyleSheet.create({
     page: {
@@ -199,27 +200,31 @@ const styles = StyleSheet.create({
 });
 
 const MatchSheetTemplate = (props) => {
-    const { templateType } = props;
+    const {
+        templateType,
+        organisation,
+        match,
+    } = props;
 
     return (
         <View>
             <View style={styles.header}>
                 <View style={styles.title}>
-                    <Text style={styles.associationName}>Brisbane City Netball Association</Text>
+                    <Text style={styles.associationName}>{organisation.name || 'Association'}</Text>
                     <Text style={styles.templateType}>{templateType} Scoresheet</Text>
                 </View>
-                <Image style={styles.logo} src="https://img.icons8.com/color/myspace"/>
+                <Image style={styles.logo} src={organisation.orgLogoUrl || "https://img.icons8.com/color/myspace"}/>
             </View>
             <View style={styles.matchInfo}>
                 <View style={styles.infoContentLeft}>
-                    <Text style={styles.infoText}>Round: 1</Text>
-                    <Text style={styles.infoText}>Venue: John Fisher Court 1</Text>
-                    <Text style={styles.infoText}>H: Team 1</Text>
+                    <Text style={styles.infoText}>{match.round.name || 'Unknown'}</Text>
+                    <Text style={styles.infoText}>{match.venueCourt.venue.name || 'Unknown'}</Text>
+                    <Text style={styles.infoText}>{match.team1.name || 'Unknown'}</Text>
                 </View>
                 <View style={styles.infoContentRight}>
-                    <Text style={styles.infoText}>Date: 22/05/2020</Text>
-                    <Text style={styles.infoText}>Time: 10:10 am</Text>
-                    <Text style={styles.infoText}>A: Team 2</Text>
+                    <Text style={styles.infoText}>Date: {moment(new Date(match.startTime)).format('DD/MM/YYYY')}</Text>
+                    <Text style={styles.infoText}>Time: {moment(new Date(match.startTime)).format('HH:MM a')}</Text>
+                    <Text style={styles.infoText}>{match.team2.name || 'Unknown'}</Text>
                 </View>
             </View>
             {templateType !== 'Carnival' && (
@@ -411,10 +416,14 @@ const MatchSheetTemplate = (props) => {
 
 MatchSheetTemplate.propTypes = {
     templateType: PropTypes.string,
+    organisation: PropTypes.object,
+    match: PropTypes.object,
 };
 
 MatchSheetTemplate.defaultProps = {
     templateType: 'Fixtures',
+    organisation: null,
+    match: null,
 };
 
 export default MatchSheetTemplate;

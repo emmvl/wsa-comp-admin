@@ -11,7 +11,7 @@ import PDFDocument from './PDFDocument';
 import MatchSheetTemplate from './MatchSheetTemplate';
 
 const LiveScoreMatchSheetPreviewModal = (props) => {
-    const { visible, modalTitle, handleOK, handleCancel } = props;
+    const { visible, matchTemplateTypes, organisation, matchList, modalTitle, handleOK, handleCancel } = props;
 
     return (
         <Modal
@@ -28,11 +28,12 @@ const LiveScoreMatchSheetPreviewModal = (props) => {
         >
             <CustomPDFViewer>
                 <PDFDocument
-                    pages={[
-                        <MatchSheetTemplate />,
-                        <MatchSheetTemplate templateType='Carnival' />,
-                        <MatchSheetTemplate templateType='Social' />,
-                    ]}
+                    pages={matchList.length > 0 && matchList.map((match) => (
+                        <MatchSheetTemplate
+                            organisation={organisation}
+                            match={match}
+                        />
+                    ))}
                 />
             </CustomPDFViewer>
         </Modal>
@@ -41,6 +42,9 @@ const LiveScoreMatchSheetPreviewModal = (props) => {
 
 LiveScoreMatchSheetPreviewModal.propTypes = {
     visible: PropTypes.bool,
+    matchTemplateTypes: PropTypes.array,
+    organisation: PropTypes.object,
+    matchList: PropTypes.array,
     modalTitle: PropTypes.string,
     handleOK: PropTypes.func,
     handleCancel: PropTypes.func
@@ -48,6 +52,9 @@ LiveScoreMatchSheetPreviewModal.propTypes = {
 
 LiveScoreMatchSheetPreviewModal.defaultProps = {
     visible: false,
+    matchTemplateTypes: [],
+    organisation: null,
+    matchList: [],
     modalTitle: 'LiveScores Match Sheet',
     handleOK: () => {},
     handleCancel: () => {}
