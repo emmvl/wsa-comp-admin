@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const http = axios.create({
-  baseURL: "https://netball-api-stg.worldsportaction.com/users/",
+  baseURL: process.env.REACT_APP_USER_API_URL
 });
 
 http.interceptors.request.use(function (config) {
