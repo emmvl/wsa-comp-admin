@@ -822,7 +822,7 @@ class UserModulePersonalDetail extends Component {
         }
         if (tabKey == "1") {
             this.hanleActivityTableList(1, userId, competition, "player", yearRefId);
-            this.hanleActivityTableList(1, userId, competition, "parent", yearRefId);
+           // this.hanleActivityTableList(1, userId, competition, "parent", yearRefId);
             this.hanleActivityTableList(1, userId, competition, "scorer", yearRefId);
             this.hanleActivityTableList(1, userId, competition, "manager", yearRefId);
         }
@@ -1445,9 +1445,9 @@ class UserModulePersonalDetail extends Component {
                                                 {activityPlayerList != null && activityPlayerList.length > 0 && this.playerActivityView()}
                                                 {activityManagerList != null && activityManagerList.length > 0 && this.managerActivityView()}
                                                 {activityScorerList != null && activityScorerList.length > 0 && this.scorerActivityView()}
-                                                {activityParentList != null && activityParentList.length > 0 && this.parentActivityView()}
+                                                {/* {activityParentList != null && activityParentList.length > 0 && this.parentActivityView()} */}
                                                 {activityPlayerList.length == 0 && activityManagerList.length == 0
-                                                    && activityScorerList.length == 0 && activityParentList.length == 0
+                                                    && activityScorerList.length == 0 //&& activityParentList.length == 0
                                                     && this.noDataAvailable()}
                                             </TabPane>
                                             <TabPane tab={AppConstants.statistics} key="2">

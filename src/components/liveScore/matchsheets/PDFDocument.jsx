@@ -6,8 +6,8 @@ import { Document as ReactPdfDocument, Page, Text, View, StyleSheet } from '@rea
 const styles = StyleSheet.create({
     page: {
         width: '100%',
-        flexDirection: 'row',
-        backgroundColor: '#E4E4E4'
+        padding: 16,
+        backgroundColor: '#FFFFFF'
     },
     document: {
         width: '100%',
@@ -22,9 +22,7 @@ const PDFDocument = (props) => {
         <ReactPdfDocument style={styles.document} width="100%" height="100%">
             {pages.map((page, index) => (
                 <Page size="A4" style={styles.page} key={`page_${index}`}>
-                    <View>
-                        <Text>{page}</Text>
-                    </View>
+                    {page}
                 </Page>
             ))}
         </ReactPdfDocument>
