@@ -8,7 +8,7 @@ import './styles.css';
 
 import CustomPDFViewer from './PDFViewer';
 import PDFDocument from './PDFDocument';
-import MatchSheetTemplate from "./MatchSheetTemplate";
+import MatchSheetTemplate from './MatchSheetTemplate';
 
 const LiveScoreMatchSheetPreviewModal = (props) => {
     const { visible, modalTitle, handleOK, handleCancel } = props;

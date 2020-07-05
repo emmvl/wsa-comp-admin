@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Document as ReactPdfDocument, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+import { Document as ReactPdfDocument, Page, StyleSheet } from '@react-pdf/renderer';
 
-// Create styles
 const styles = StyleSheet.create({
     page: {
         width: '100%',
@@ -14,7 +13,6 @@ const styles = StyleSheet.create({
     }
 });
 
-// Create Document Component
 const PDFDocument = (props) => {
     const { pages } = props;
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Document as ReactPdfDocument, Page, Text, View, Image, StyleSheet } from '@react-pdf/renderer';
+import { Text, View, Image, StyleSheet } from '@react-pdf/renderer';
 
 const styles = StyleSheet.create({
     page: {
@@ -37,10 +37,15 @@ const styles = StyleSheet.create({
         padding: 8,
         flexDirection: 'row',
     },
-    infoContent: {
+    infoContentLeft: {
         width: '50%',
         paddingRight: 16,
         paddingLeft: 8,
+    },
+    infoContentRight: {
+        width: '50%',
+        paddingRight: 16,
+        paddingLeft: 12,
     },
     infoText: {
         fontSize: 9,
@@ -206,12 +211,12 @@ const MatchSheetTemplate = (props) => {
                 <Image style={styles.logo} src="https://img.icons8.com/color/myspace"/>
             </View>
             <View style={styles.matchInfo}>
-                <View style={styles.infoContent}>
+                <View style={styles.infoContentLeft}>
                     <Text style={styles.infoText}>Round: 1</Text>
                     <Text style={styles.infoText}>Venue: John Fisher Court 1</Text>
                     <Text style={styles.infoText}>H: Team 1</Text>
                 </View>
-                <View style={styles.infoContent}>
+                <View style={styles.infoContentRight}>
                     <Text style={styles.infoText}>Date: 22/05/2020</Text>
                     <Text style={styles.infoText}>Time: 10:10 am</Text>
                     <Text style={styles.infoText}>A: Team 2</Text>
