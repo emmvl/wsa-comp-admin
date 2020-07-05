@@ -1379,7 +1379,7 @@ const AppConstants = {
   simultaneousMatchAllocations: "Simultaneous match allocations",
   poolName: "Pool Name",
   umpireReserve: "Umpire Reserve",
-  ladderAdustment: 'Ladder Adustment',
+  ladderAdjustment: 'Ladder Adjustment',
   points: "Points",
   reasonForChange: 'Reason for change',
   addNewAdjustment: 'Add new Adjustment',
