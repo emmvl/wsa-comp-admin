@@ -40,7 +40,7 @@ class LiveScoreLadderAdjustment extends Component {
                 >
                     <Breadcrumb separator=">">
                         <Breadcrumb.Item className="breadcrumb-add">
-                            {AppConstants.ladderAdustment}
+                            {AppConstants.ladderAdjustment}
                         </Breadcrumb.Item>
                     </Breadcrumb>
                 </Header>
