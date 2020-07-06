@@ -8,7 +8,7 @@ import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { liveScoreIncidentList } from '../../store/actions/LiveScoreAction/liveScoreIncidentAction'
-import { liveScore_formateDate } from '../../themes/dateformate'
+import { liveScore_formateDate, liveScore_MatchFormate } from '../../themes/dateformate'
 import history from "../../util/history";
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { isArrayNotEmpty } from "../../util/helpers";
@@ -41,15 +41,15 @@ const columns = [
 
     {
         title: 'Date',
-        dataIndex: 'createdAt',
-        key: 'createdAt',
+        dataIndex: 'incidentTime',
+        key: 'incidentTime',
         sorter: (a, b) => checkSorting(a, b, 'matchId'),
-        render: (date, record) =>
+        render: (incidentTime, record) =>
             <NavLink to={{
                 pathname: "/liveScoreIncidentView",
-                state: { item: record }
+                state: { item: record, screenName: 'incident' }
             }}>
-                <span className="input-heading-add-another pt-0">{liveScore_formateDate(date.startTime)}</span>
+                <span className="input-heading-add-another pt-0">{liveScore_MatchFormate(incidentTime)}</span>
             </NavLink>
     },
     {
@@ -60,7 +60,7 @@ const columns = [
         render: (matchId, record) =>
             <NavLink to={{
                 pathname: "/liveScoreMatchDetails",
-                state: { matchId: matchId }
+                state: { matchId: matchId, screenName: 'incident' }
             }}>
                 <span className="input-heading-add-another pt-0">{matchId}</span>
             </NavLink>
@@ -77,12 +77,12 @@ const columns = [
 
         render: (incidentPlayers, record) =>
 
-            isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
+            isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item, index) => (
                 <NavLink to={{
                     pathname: '/liveScorePlayerView',
-                    state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null }
+                    state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null, screenName: 'incident' }
                 }}>
-                    <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.playerId}</span>
+                    <span key={`playerId${index}` + item.playerId} style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.playerId}</span>
                 </NavLink>
             ))
 
@@ -103,14 +103,14 @@ const columns = [
 
         render: (incidentPlayers, record) =>
 
-            isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
+            isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item, index) => (
 
 
                 <NavLink to={{
                     pathname: '/liveScorePlayerView',
-                    state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null }
+                    state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null, screenName: 'incident' }
                 }}>
-                    <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.player.firstName}</span>
+                    <span key={`playerFirstName${index}` + item.playerId} style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.player.firstName}</span>
                 </NavLink>
 
             ))
@@ -131,13 +131,13 @@ const columns = [
         //     </NavLink>
         render: (incidentPlayers, record) =>
 
-            isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
+            isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item, index) => (
 
                 <NavLink to={{
                     pathname: '/liveScorePlayerView',
-                    state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null }
+                    state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null, screenName: 'incident' }
                 }}>
-                    <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.player.lastName}</span>
+                    <span key={`playerLastName${index}` + item.playerId} style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.player.lastName}</span>
                 </NavLink>
             ))
 

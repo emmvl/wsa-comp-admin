@@ -10,7 +10,7 @@ import { liveScoreDashboardListAction } from '../../store/actions/LiveScoreActio
 import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { liveScore_formateDate } from '../../themes/dateformate'
-import { liveScore_formateDateTime } from '../../themes/dateformate'
+import { liveScore_formateDateTime, liveScore_MatchFormate } from '../../themes/dateformate'
 import { NavLink } from 'react-router-dom';
 import moment from "moment";
 import { isArrayNotEmpty } from "../../util/helpers";
@@ -257,15 +257,15 @@ const columnsTodaysMatch = [
 const columnsTodaysIncient = [
     {
         title: "Date",
-        dataIndex: 'createdAt',
-        key: 'createdAt',
+        dataIndex: 'incidentTime',
+        key: 'incidentTime',
         sorter: (a, b) => checkSorting(a, b, 'matchId'),
-        render: (date, record) =>
+        render: (incidentTime, record) =>
             <NavLink to={{
                 pathname: "/liveScoreIncidentView",
-                state: { item: record }
+                state: { item: record, screenName: 'dashboard' }
             }}>
-                <span className="input-heading-add-another pt-0">{liveScore_formateDate(date.startTime)}</span>
+                <span className="input-heading-add-another pt-0">{liveScore_MatchFormate(incidentTime)}</span>
             </NavLink>
     },
     {
@@ -284,7 +284,7 @@ const columnsTodaysIncient = [
 
                 <NavLink to={{
                     pathname: '/liveScorePlayerView',
-                    state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null }
+                    state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null, screenName: 'dashboard' }
                 }}>
                     <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.player.firstName}</span>
                 </NavLink>
@@ -302,7 +302,7 @@ const columnsTodaysIncient = [
 
                 <NavLink to={{
                     pathname: '/liveScorePlayerView',
-                    state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null }
+                    state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null, screenName: 'dashboard' }
                 }}>
                     <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.player.lastName}</span>
                 </NavLink>
@@ -326,7 +326,7 @@ const columnsTodaysIncient = [
         key: 'team',
         sorter: (a, b) => checkSorting(a, b, "team"),
         render: (team) =>
-            <span className="input-heading-add-another pt-0">{team}</span>
+            <span class="input-heading-add-another pt-0">{team}</span>
     },
     {
         title: "Description",
@@ -432,7 +432,7 @@ class LiveScoreDashboard extends Component {
                 {this.incidentHeading()}
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.liveScoreDashboardState.onLoad == true && true}
+                        loading={this.props.liveScoreDashboardState.onLoad}
                         className="home-dashboard-table" columns={columnsTodaysIncient}
                         dataSource={dashboardIncidentList}
                         pagination={false}
@@ -549,7 +549,7 @@ class LiveScoreDashboard extends Component {
             <div className="comp-dash-table-view mt-4">
                 {this.matchHeading()}
                 <div className="table-responsive home-dash-table-view">
-                    <Table loading={this.props.liveScoreDashboardState.onLoad == true && true}
+                    <Table loading={this.props.liveScoreDashboardState.onLoad}
                         className="home-dashboard-table"
                         columns={columnsTodaysMatch}
                         dataSource={dashboardMatchList}
@@ -615,7 +615,7 @@ class LiveScoreDashboard extends Component {
                 {this.addNewsHeading()}
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.liveScoreDashboardState.onLoad == true && true}
+                        loading={this.props.liveScoreDashboardState.onLoad}
                         className="home-dashboard-table"
                         columns={columnActiveNews}
                         dataSource={dashboardNewsList}
@@ -647,7 +647,7 @@ class LiveScoreDashboard extends Component {
             <div className="comp-dash-table-view mt-4">
                 {this.playersToPayHeading()}
                 <div className="table-responsive home-dash-table-view">
-                    <Table loading={this.props.liveScoreDashboardState.onLoad == true && true}
+                    <Table loading={this.props.liveScoreDashboardState.onLoad}
                         className="home-dashboard-table"
                         columns={columnsPlayersToPay}
                         dataSource={playerTopay}

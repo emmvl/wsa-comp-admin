@@ -132,13 +132,16 @@ class LiveScorePlayerView extends Component {
         super(props);
         this.state = {
             playerTabKey: 1,
-            data: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord : null : null
+            data: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord : null : null,
+            screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null
         }
     }
 
     ////view for profile image
     profileImageView = () => {
         let data = this.state.data
+
+        console.log(data, 'datadata')
 
         return (
             <div className="fluid-width mt-2" >
@@ -302,7 +305,7 @@ class LiveScorePlayerView extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"7"} />
+                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.screenName == 'dashboard' ? "1" : this.state.screenName == 'incident' ? '17' : "7"} />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">
                         <div className="fluid-width" >

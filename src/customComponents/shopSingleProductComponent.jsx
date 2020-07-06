@@ -55,24 +55,33 @@ class ShopSingleProductComponent extends React.Component {
                 <div className="product-text-view">
                     <span className="product-name">{productItem.productName}</span>
                     <span className="product-price-text-style">{productItem.price ? currencyFormat(productItem.price) : "N/A"}</span>
-                    {productItem && isArrayNotEmpty(productItem.types) && productItem.types.map((subItem, subIndex) => {
-                        return (
-                            <span key={"types" + subIndex} className="product-grey-detail-text">{subItem}</span>
-                        )
-                    })}
-
+                    <span className="product-grey-detail-text">{productItem.type}</span>
                     <div className="mt-4" >
                         {productItem && isArrayNotEmpty(productItem.variantOptions) && productItem.variantOptions.map((subItem, subIndex) => {
+                            console.log("subItem", subItem)
                             return (
-                                <div className="d-flex flex-row" key={"variantOptions" + subIndex}>
-                                    <div className="col-sm-3 pl-0" >
-                                        <span className="product-grey-detail-text">{subItem.option ? subItem.option.optionName : ""}</span>
+                                <div key={"productItemvariantOptions" + subIndex}>
+                                    <div key={"variantOptions" + subIndex}>
+                                        <span className="product-name">{subItem.variantName ? subItem.variantName : ""}</span>
                                     </div>
-                                    <div className="col-sm-9">
-                                        <span className="product-grey-detail-text">{subItem.option ? subItem.option.quantity : ""}</span>
-                                    </div>
-                                </div>)
-                        })}
+                                    <>
+                                        {subItem && isArrayNotEmpty(subItem.options) && subItem.options.map((subItemOption, subIndexOption) => {
+                                            return (
+                                                <div className="d-flex flex-row" key={"options" + subIndexOption}>
+                                                    <div className="col-sm-3 pl-0" >
+                                                        <span className="product-grey-detail-text">{subItemOption.optionName ? subItemOption.optionName : ""}</span>
+                                                    </div>
+                                                    <div className="col-sm-9">
+                                                        <span className="product-grey-detail-text">{subItemOption.SKU ? subItemOption.SKU.quantity : ""}</span>
+                                                    </div>
+                                                </div>
+                                            )
+                                        })}
+                                    </>
+                                </div>
+                            )
+                        })
+                        }
                     </div>
                 </div>
             </div>
