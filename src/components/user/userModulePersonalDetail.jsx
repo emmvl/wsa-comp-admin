@@ -698,6 +698,7 @@ class UserModulePersonalDetail extends Component {
             organisationId: getOrganisationData().organisationUniqueKey
         }
         this.props.getUserModulePersonalDetailsAction(payload);
+        this.props.getUserModulePersonalByCompetitionAction(payload)
     };
 
     onChangeYear = (value) => {
@@ -1121,6 +1122,18 @@ class UserModulePersonalDetail extends Component {
         let personalByCompData = userState.personalByCompData != null ? userState.personalByCompData : [];
         let primaryContacts = personalByCompData.length > 0 ? personalByCompData[0].primaryContacts : [];
         let childContacts = personalByCompData.length > 0 ? personalByCompData[0].childContacts : [];
+        let countryName = "";
+        let nationalityName = "";
+        let languages = "";
+        let userRegId = null;
+  
+        if(personalByCompData != null && personalByCompData.length > 0){
+            countryName = personalByCompData[0].countryName;
+            nationalityName = personalByCompData[0].nationalityName;
+            languages = personalByCompData[0].languages;
+            userRegId = personalByCompData[0].userRegistrationId
+        }
+
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="user-module-row-heading">{AppConstants.address}</div>
@@ -1180,23 +1193,26 @@ class UserModulePersonalDetail extends Component {
                     </div>
                 </div>
                 <div className="table-responsive home-dash-table-view" >
-                    <div style={{ marginTop: '7px', marginRight: '15px' }}>
+                    <div style={{ marginTop: '7px', marginRight: '15px', marginBottom: '15px' }}>
                         <div className="other-info-row" style={{ paddingTop: '10px' }}>
                             <div className="year-select-heading other-info-label" >{AppConstants.gender}</div>
                             <div className="desc-text-style side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].gender : null}</div>
                         </div>
-                        <div className="other-info-row">
-                            <div className="year-select-heading other-info-label" >{AppConstants.countryOfBirth}</div>
-                            <div className="desc-text-style side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].countryName : null}</div>
-                        </div>
-                        <div className="other-info-row">
-                            <div className="year-select-heading other-info-label">{AppConstants.nationalityReference}</div>
-                            <div className="desc-text-style side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].nationalityName : null}</div>
-                        </div>
-                        <div className="other-info-row">
-                            <div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.childLangSpoken}</div>
-                            <div className="desc-text-style side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].languages : null}</div>
-                        </div>
+                        {userRegId != null &&
+                        <div>
+                            <div className="other-info-row">
+                                <div className="year-select-heading other-info-label" >{AppConstants.countryOfBirth}</div>
+                                <div className="desc-text-style side-bar-profile-data other-info-font">{countryName}</div>
+                            </div>
+                            <div className="other-info-row">
+                                <div className="year-select-heading other-info-label">{AppConstants.nationalityReference}</div>
+                                <div className="desc-text-style side-bar-profile-data other-info-font">{nationalityName}</div>
+                            </div>
+                            <div className="other-info-row">
+                                <div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.childLangSpoken}</div>
+                                <div className="desc-text-style side-bar-profile-data other-info-font">{languages}</div>
+                            </div>
+                        </div> }
                         {/* <div className="other-info-row">
 							<div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.disability}</div>
 							<div className="desc-text-style side-bar-profile-data other-info-font">{personal.isDisability == 0 ? "No" : "Yes"}</div>
@@ -1423,8 +1439,14 @@ class UserModulePersonalDetail extends Component {
     }
 
     render() {
-        let { activityPlayerList, activityManagerList, activityScorerList, activityParentList } = this.props.userState;
+        let { activityPlayerList, activityManagerList, activityScorerList, activityParentList, personalByCompData } = this.props.userState;
+        let personalDetails = personalByCompData != null ? personalByCompData : [];
+        let userRegistrationId = null;
+        if(personalDetails != null && personalDetails.length > 0){
+            userRegistrationId = personalByCompData[0].userRegistrationId
+        }
 
+       
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
@@ -1456,9 +1478,10 @@ class UserModulePersonalDetail extends Component {
                                             <TabPane tab={AppConstants.personalDetails} key="3">
                                                 {this.personalView()}
                                             </TabPane>
+                                            {userRegistrationId!= null &&
                                             <TabPane tab={AppConstants.medical} key="4">
                                                 {this.medicalView()}
-                                            </TabPane>
+                                            </TabPane>}
                                             <TabPane tab={AppConstants.registration} key="5">
                                                 {!this.state.isRegistrationForm ?
                                                     this.registrationView() :
