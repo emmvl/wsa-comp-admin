@@ -1368,7 +1368,7 @@ const AppConstants = {
   newCompetitionReg: 'New Competition Registration',
   rosterExport: '/roster/export/umpire?',
   Registrations: "Registrations",
-  ladderAllDivisionRmvMsg: "This will remove the other ladder formats.",
+  ladderAllDivisionRmvMsg: "Would you like to set this ladder format for 'All Divisions'?",
   ladderFormat: "Ladder Format",
   ladderRemoveMsg: "Are you sure you want to remove ladder format?",
   competitionEnabled: 'Competition not enabled for Integrated Umpires, Click here to enable.',

@@ -2,6 +2,7 @@ import ApiConstants from '../../../themes/apiConstants'
 import liveScoreLadderSettingModal from '../../objectModel/liveScoreLadderSettingModal'
 import { stat } from 'fs';
 import { getLiveScoreCompetiton } from '../../../util/sessionStorage';
+import { deepCopyFunction} from '../../../util/helpers';
 const initialState = {
     onLoad: false,
     error: null,
@@ -80,7 +81,6 @@ function setPostData(selectedData, matcheResults, compId) {
 
 
 function disableAddedDivisions(ladders, divisions) {
-
     resetDivisionDisabled(ladders, divisions);
     for (let item in ladders) {
         let itemDivisions = ladders[item].divisions;
@@ -166,8 +166,10 @@ function liveScoreLadderSettingReducer(state = initialState, action) {
         //// Update Ladder Setting
         case ApiConstants.UPDATE_LADDER_SETTING:
             if (action.key == "addLadder") {
-                let ladder = state.defaultLadders.find(x => x);
-                ladder.ladderFormatId = -(state.ladders.length)
+                let ladder = deepCopyFunction(state.defaultLadders.find(x => x));
+
+                let formatId = state.ladders[state.ladders.length-1].ladderFormatId;
+                ladder.ladderFormatId = -(formatId > 0 ? (formatId + 1) : ((formatId * -1) + 1));
                 ladder.isAllDivision = Number(0);
                 state.ladders.push(ladder);
                 disableAddedDivisions(state.ladders, state.divisions);
@@ -175,7 +177,12 @@ function liveScoreLadderSettingReducer(state = initialState, action) {
             else if (action.key == "isAllDivision") {
                 let ladder = state.ladders[action.index];
                 if (action.data == true) {
+                    let arr = [];
+                    state.divisions.map((item) => {
+                        arr.push(item.divisionId);
+                    })
                     ladder.selectedDivisions = [];
+                    ladder.selectedDivisions.push(...arr);
                     state.ladders = [];
                     state.ladders.push(ladder);
                 }
@@ -188,6 +195,7 @@ function liveScoreLadderSettingReducer(state = initialState, action) {
             }
             else if (action.key == "selectedDivisions") {
                 state.ladders[action.index][action.key] = action.data;
+                state.ladders[action.index]["isAllDivision"] = false;
                 disableAddedDivisions(state.ladders, state.divisions);
             }
             else if (action.key == "resultTypes") {
