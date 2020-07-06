@@ -143,7 +143,7 @@ export function* updateQuickCompetitionSaga(action) {
     try {
         const result = yield call(AxiosApi.updateQuickCompetition, action.payload);
         if (result.status === 1) {
-            const drawResult = yield call(AxiosApi.competitionGenerateDraw, action.year, action.payload.competitionId)
+            const drawResult = yield call(AxiosApi.quickCompetitionGenerateDraw, action.year, action.payload.competitionId)
             if (drawResult.status === 1) {
                 const detailResult = yield call(AxiosApi.getQuickCompetiitonDetails, action.payload.competitionId);
                 if (detailResult.status === 1) {
