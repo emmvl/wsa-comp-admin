@@ -10,7 +10,7 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import ReactPlayer from 'react-player';
-import { liveScore_formateDateTime } from '../../themes/dateformate'
+import { liveScore_formateDateTime, liveScore_formateDate, getTime } from '../../themes/dateformate'
 import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
 import history from "../../util/history";
 const { Header, Content } = Layout;
@@ -22,7 +22,8 @@ class LiveScoreIncidentView extends Component {
             visible: false,
             modaldata: '',
             isVideo: false,
-            incidentItem: props.location.state.item
+            incidentItem: props.location.state.item,
+            screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null
         };
         console.log(this.state.incidentItem, 'incidentItem')
 
@@ -108,17 +109,18 @@ class LiveScoreIncidentView extends Component {
     // Detail List
     detailsView = () => {
         let DATA = this.state.incidentItem
+        console.log(DATA, 'DATA~~~~')
         return (
             <div className="row p-4" >
                 <div className="col-sm" >
-                    <div><span className="year-select-heading">Incident Time</span></div>
-                    <div className="pt-2"><span className="side-bar-profile-data">{liveScore_formateDateTime(DATA.createdAt)}</span>
+                    <div><span className="year-select-heading">Incident Data</span></div>
+                    <div className="pt-2"><span className="side-bar-profile-data">{liveScore_formateDate(DATA.incidentTime)}</span>
                     </div>
                 </div>
 
                 <div className="col-sm" >
                     <div><span className="year-select-heading">Time</span></div>
-                    <div className="pt-2"><span className="side-bar-profile-data">{liveScore_formateDateTime(DATA.createdAt)}</span>
+                    <div className="pt-2"><span className="side-bar-profile-data">{getTime(DATA.incidentTime)}</span>
                     </div>
                 </div>
                 <div className="col-sm" >
@@ -202,8 +204,8 @@ class LiveScoreIncidentView extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")}/>
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"17"} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.screenName == 'dashboard' ? "1" : "17"} />
                 <Layout>
                     {this.headerView()}
                     <Content>

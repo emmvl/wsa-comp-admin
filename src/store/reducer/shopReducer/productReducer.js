@@ -1,35 +1,34 @@
 import ApiConstants from "../../../themes/apiConstants";
 import { isArrayNotEmpty } from "../../../util/helpers";
 
-
 // dummy object of product detail
 const defaultAddProductObject = {
     productName: "",
-    description: "",
-    affiliates: {
-        "_direct": 1,
-        "_first_level": 0,
-        "_second_level": 0
-    },
-    price: 0,
     cost: 0,
+    description: "",
+    price: 0,
+    type: "",
+    affiliates: {
+        "direct": 1,
+        "firstLevel": 0,
+        "secondLevel": 0
+    },
+    image: "",
     tax: 0,
     invetoryTracking: true,
-    barcode: "",
-    SKU: "",
-    quantity: 0,
     deliveryType: "",
-    types: [],
-    width: "",
-    length: "",
-    height: "",
-    weight: "",
+    quantity: 0,
+    width: 0,
+    height: 0,
+    length: 0,
+    weight: 0,
+    createByOrg: 1,
     variants: [
         {
-            "name": "color",
+            "name": "",
             "options": [
                 {
-                    "optionName": "green",
+                    "optionName": "",
                     "properties": {
                         "price": 0,
                         "SKU": "",
@@ -53,6 +52,7 @@ const initialState = {
     productDeatilData: defaultAddProductObject,
     productListingData: [],
     productListingTotalCount: 1,
+    productListingCurrentPage:1,
     typesProductList: [], //////reference types in add product screen for the type dropdown
 };
 
@@ -86,6 +86,7 @@ function shopProductState(state = initialState, action) {
                 ...state,
                 productListingData: isArrayNotEmpty(action.result.result) ? action.result.result : [],
                 productListingTotalCount: action.result.page ? action.result.page.totalCount : 1,
+                productListingCurrentPage:action.result.page ? action.result.page.currentPage : 1,
                 onLoad: false,
                 status: action.status,
                 error: null
@@ -96,6 +97,7 @@ function shopProductState(state = initialState, action) {
             return { ...state, onLoad: true, error: null };
 
         case ApiConstants.API_ADD_SHOP_PRODUCT_SUCCESS:
+            console.log("API_ADD_SHOP_PRODUCT_SUCCESS", action.result)
             return {
                 ...state,
                 onLoad: false,
@@ -105,20 +107,19 @@ function shopProductState(state = initialState, action) {
 
         //////onchange Add/Edit product details
         case ApiConstants.SHOP_PRODUCT_DETAILS_ONCHANGE:
-            if (action.key === "types") {
-                let typesArray = []
-                typesArray.push(action.data)
-                state.productDeatilData["types"] = typesArray
-            }
-            else {
-                state.productDeatilData[action.key] = action.data
-            }
             if (action.key === "variantName") {
                 state.productDeatilData["variants"][action.index]["name"] = action.data
             }
             if (action.key === "variantOption") {
                 state.productDeatilData["variants"][action.index]["options"] = action.data
             }
+            if (action.key == "type") {
+                state.productDeatilData["type"] = action.data
+            }
+            else {
+                state.productDeatilData[action.key] = action.data
+            }
+
             return {
                 ...state,
             };
@@ -155,6 +156,70 @@ function shopProductState(state = initialState, action) {
             return { ...state, onLoad: true, error: null };
 
         case ApiConstants.API_DELETE_SHOP_PRODUCT_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
+
+        ///clearing particular reducer data
+        case ApiConstants.SHOP_PRODUCT_CLEARING_REDUCER_DATA:
+            if (action.dataName === "productDeatilData") {
+                // dummy object of product detail
+                const defaultAddProductObject = {
+                    productName: "",
+                    cost: 0,
+                    description: "",
+                    price: 0,
+                    type: "",
+                    affiliates: {
+                        "direct": 1,
+                        "firstLevel": 0,
+                        "secondLevel": 0
+                    },
+                    image: "",
+                    tax: 0,
+                    invetoryTracking: true,
+                    deliveryType: "",
+                    quantity: 0,
+                    width: 0,
+                    height: 0,
+                    length: 0,
+                    weight: 0,
+                    createByOrg: 1,
+                    variants: [
+                        {
+                            "name": "",
+                            "options": [
+                                {
+                                    "optionName": "",
+                                    "properties": {
+                                        "price": 0,
+                                        "SKU": "",
+                                        "barcode": "",
+                                        "quantity": 0
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    variantsChecked: false,
+                    purchaseOutOfStock: false,
+                    taxApplicable: false,
+                }
+                state.productDeatilData = defaultAddProductObject
+            }
+            return {
+                ...state, error: null
+            };
+
+
+        /////////////////////////delete product variant API
+        case ApiConstants.API_DELETE_SHOP_PRODUCT_VARIANT_LOAD:
+            return { ...state, onLoad: true, error: null };
+
+        case ApiConstants.API_DELETE_SHOP_PRODUCT_VARIANT_SUCCESS:
             return {
                 ...state,
                 onLoad: false,

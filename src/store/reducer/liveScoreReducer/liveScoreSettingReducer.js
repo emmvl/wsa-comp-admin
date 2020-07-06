@@ -43,6 +43,9 @@ const initialState = {
     anyOrgNonSelected: null,
     registrationInvitees: [],
     lineupSelection: false,
+    gameborrowed: false,
+    minutesBorrowed: false,
+    premierCompLink: false
 }
 
 
@@ -175,7 +178,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
             const keys = payload.key
             const Data = payload.data
 
-            if (keys == 'buzzerEnabled' || keys == 'warningBuzzerEnabled' || keys == "lineupSelection") {
+            if (keys == 'buzzerEnabled' || keys == 'warningBuzzerEnabled' || keys == "lineupSelection" || keys == "gameborrowed" || keys == "minutesBorrowed" || keys == 'premierCompLink') {
                 state[keys] = Data
             } else if (keys == 'recordUmpire') {
                 state.recordUmpire = Data

@@ -11,10 +11,10 @@ function getProductListingAction(sorterBy, order, offset, filter, limit) {
 
 
 ////Add product 
-function addProductAction() {
+function addProductAction(payload) {
     const action = {
         type: ApiConstants.API_ADD_SHOP_PRODUCT_LOAD,
-
+        payload
     };
     return action;
 }
@@ -57,6 +57,24 @@ function deleteProductAction(productId) {
     return action;
 }
 
+//////clearing particular reducer data
+function clearProductReducer(dataName) {
+    const action = {
+        type: ApiConstants.SHOP_PRODUCT_CLEARING_REDUCER_DATA,
+        dataName
+    };
+    return action;
+}
+
+////////delete product variant API
+function deleteProductVariantAction(optionId) {
+    const action = {
+        type: ApiConstants.API_DELETE_SHOP_PRODUCT_VARIANT_LOAD,
+        optionId
+    };
+    return action;
+}
+
 export {
     getProductListingAction,
     addProductAction,
@@ -64,4 +82,6 @@ export {
     getTypesOfProductAction,
     addNewTypeAction,
     deleteProductAction,
+    clearProductReducer,
+    deleteProductVariantAction,
 }

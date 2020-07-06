@@ -1391,7 +1391,13 @@ const AppConstants = {
   paymentStatusReference: 'PaymentStatus',
   positionTrackReport: "Position Tracking Report",
   periodFilter: 'Period',
-  byGame: 'By Game'
+  byGame: 'By Game',
+  playerBorrowing: "Player Borrowing",
+  gamesBorrowed: "Games Borrowed",
+  minutesBorrowed: "Minutes Borrowed",
+  premierCompLink: 'Premier Competition Link',
+  productAddedMessage:"Product added successfully.",
+  productDeletedMessage:"Product deleted successfully.",
 };
 
 export default AppConstants;
