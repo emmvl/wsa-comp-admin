@@ -564,7 +564,7 @@ let CompetitionAxiosApi = {
         return Method.dataPost(url, token, body);
     },
     //Generate Draw quick competition
-    async  competitionGenerateDraw(yearRefId, competitionUniqueKey) {
+    async  quickCompetitionGenerateDraw(yearRefId, competitionUniqueKey) {
         let organisationId = await getOrganisationData().organisationUniqueKey;
         let userId = await getUserId()
         let body = {
