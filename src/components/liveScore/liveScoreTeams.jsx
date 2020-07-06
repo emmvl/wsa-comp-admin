@@ -84,7 +84,7 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "managers"),
         render: (managers, record) => <div>
             {isArrayNotEmpty(managers) && managers.map((item, i) => (
-                <span key={`managerName${i}`+item.id} className="desc-text-style side-bar-profile-data" >{item.name}</span>
+                <span key={`managerName${i}` + item.id} className="desc-text-style side-bar-profile-data" >{item.name}</span>
             ))
             }
         </div>
@@ -97,7 +97,7 @@ const columns = [
 
         render: (managers, record) => <div>
             {isArrayNotEmpty(managers) && managers.map((item, i) => (
-                <span key={`managerMobile${i}`+item.id} className="desc-text-style side-bar-profile-data" >{item.mobileNumber}</span>
+                <span key={`managerMobile${i}` + item.id} className="desc-text-style side-bar-profile-data" >{item.mobileNumber}</span>
             ))
             }
         </div>
@@ -109,8 +109,8 @@ const columns = [
         key: 'managers_3',
         sorter: (a, b) => tableSort(a, b, "managers"),
         render: (managers, record) => <div>
-            {isArrayNotEmpty(managers) && managers.map((item, i) => (
-                <span  key={`managerEmail${i}`+item.id} className="desc-text-style side-bar-profile-data" >{item.email}</span>
+            {isArrayNotEmpty(managers) && managers.map((item, index) => (
+                <span key={`managerEmail${index}` + item.id} className="desc-text-style side-bar-profile-data" >{item.email}</span>
             ))
             }
         </div>
@@ -303,7 +303,7 @@ class LiveScoreTeam extends Component {
                         columns={columns}
                         dataSource={teamData}
                         pagination={false}
-                        rowKey={(record, index) => "teamData"+record.id + index}
+                        rowKey={(record, index) => "teamData" + record.id + index}
                     />
                 </div>
                 <div className="d-flex justify-content-end">

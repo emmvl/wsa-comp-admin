@@ -20,7 +20,7 @@ import {
 import InputWithHead from "../../customComponents/InputWithHead";
 import ValidationConstants from "../../themes/validationConstant";
 import TimeSlotModal from "../../customComponents/timslotModal"
-import CompetitionModal from "../../customComponents/competiitonModal"
+import CompetitionModal from "../../customComponents/competitionModal"
 import DivisionGradeModal from "../../customComponents/divisionGradeModal"
 import {
     updateQuickCompetitionData, updateTimeSlot, updateDivision, updateCompetition,

@@ -36,7 +36,14 @@ let AxiosApi = {
     deleteProduct(productId) {
         var url = `/product?id=${productId}`
         return Method.dataDelete(url, token);
-    }
+    },
+
+    ////delete product from the product listing API 
+    deleteProductVariant(optionId) {
+        var url = `/product/variant?id=${optionId}`
+        return Method.dataDelete(url, token);
+    },
+
 
 };
 

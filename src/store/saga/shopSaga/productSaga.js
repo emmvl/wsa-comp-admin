@@ -2,10 +2,11 @@ import { put, call } from "redux-saga/effects";
 import ApiConstants from "../../../themes/apiConstants";
 import AxiosApi from "../../http/shopHttp/shopAxios";
 import { message } from "antd";
+import AppConstants from "../../../themes/appConstants";
 
 function* failSaga(result) {
     yield put({
-        type: ApiConstants.API_SHOP_API_FAIL,
+        type: ApiConstants.API_SHOP_PRODUCT_FAIL,
         error: result,
         status: result.status
     });
@@ -20,7 +21,7 @@ function* failSaga(result) {
 
 function* errorSaga(error) {
     yield put({
-        type: ApiConstants.API_SHOP_API_ERROR,
+        type: ApiConstants.API_SHOP_PRODUCT_ERROR,
         error: error,
         status: error.status
     });
@@ -54,14 +55,14 @@ export function* getProductListingSaga(action) {
 /////////////Add product 
 export function* addProductActionSaga(action) {
     try {
-        const result = yield call(AxiosApi.addProduct);
+        const result = yield call(AxiosApi.addProduct, action.payload);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_ADD_SHOP_PRODUCT_SUCCESS,
                 result: result.result.data,
                 status: result.status
             });
-            message.success(result.result.data.message);
+            message.success(AppConstants.productAddedMessage);
         } else {
             yield call(failSaga, result)
         }
@@ -95,6 +96,25 @@ export function* deleteProductSaga(action) {
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_DELETE_SHOP_PRODUCT_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+            message.success(AppConstants.productDeletedMessage);
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+////////////////////delete product variant API
+export function* deleteProductVariantSaga(action) {
+    try {
+        const result = yield call(AxiosApi.deleteProductVariant, action.optionId);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_DELETE_SHOP_PRODUCT_VARIANT_SUCCESS,
                 result: result.result.data,
                 status: result.status
             });

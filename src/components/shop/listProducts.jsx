@@ -11,7 +11,7 @@ import { bindActionCreators } from 'redux';
 import Loader from '../../customComponents/loader';
 import history from "../../util/history";
 import ShopSingleProductComponent from "../../customComponents/shopSingleProductComponent";
-import { getProductListingAction, deleteProductAction } from "../../store/actions/shopAction/productAction"
+import { getProductListingAction, deleteProductAction, clearProductReducer } from "../../store/actions/shopAction/productAction"
 
 const { Footer, Content } = Layout;
 const { confirm } = Modal;
@@ -25,6 +25,7 @@ class ListProducts extends Component {
             offset: 0,
             searchText: "",
             limit: 8,
+            deleteLoading: false,
         }
 
     }
@@ -39,6 +40,16 @@ class ListProducts extends Component {
         this.props.getProductListingAction(sorterBy, order, offset, searchText, limit)
     }
 
+    componentDidUpdate(nextProps) {
+        if (this.props.shopProductState.onLoad === false && this.state.deleteLoading === true) {
+            this.setState({
+                deleteLoading: false,
+            })
+            let { sorterBy, order, searchText, limit } = this.state
+            this.setState({ offset: 0 })
+            this.props.getProductListingAction(sorterBy, order, 0, searchText, limit)
+        }
+    }
 
     //////delete the product
     showDeleteConfirm = (id) => {
@@ -52,6 +63,9 @@ class ListProducts extends Component {
             onOk() {
                 if (id) {
                     this_.props.deleteProductAction(id)
+                    this_.setState({
+                        deleteLoading: true,
+                    })
                 }
             },
             onCancel() {
@@ -133,8 +147,7 @@ class ListProducts extends Component {
                             </div>
                         </div>
                         <div className="col-sm d-flex align-items-center justify-content-end shop-add-product-btn-div"
-                        // onClick={() => this.props.clearCompReducerDataAction("all")}>
-                        >
+                            onClick={() => this.props.clearProductReducer("productDeatilData")}>
                             <NavLink
                                 to={{ pathname: `/addProduct` }}
                                 className="text-decoration-none"
@@ -159,7 +172,7 @@ class ListProducts extends Component {
 
     ////////content view of the screen
     contentView = () => {
-        let { productListingData, productListingTotalCount } = this.props.shopProductState
+        let { productListingData, productListingTotalCount, productListingCurrentPage } = this.props.shopProductState
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="shop-product-content-div">
@@ -180,6 +193,7 @@ class ListProducts extends Component {
                         total={productListingTotalCount}
                         onChange={(page) => this.handlePagination(page)}
                         pageSize={this.state.limit}
+                        current={productListingCurrentPage}
                     />
                 </div>
             </div>
@@ -213,6 +227,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getProductListingAction,
         deleteProductAction,
+        clearProductReducer,
     }, dispatch)
 }
 

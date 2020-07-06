@@ -198,7 +198,6 @@ class LiveScoreAddIncident extends Component {
     //// Form View
     contentView = (getFieldDecorator) => {
         const { incidentData, teamResult, playerResult, incidentTypeResult, playerIds } = this.props.liveScoreIncidentState
-       console.log(incidentData)
         return (
             <div className="content-view pt-4">
                 <div className="row" >

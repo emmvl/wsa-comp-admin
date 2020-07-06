@@ -178,7 +178,8 @@ class LiveScoreMatchDetails extends Component {
             umpireKey: this.props.location ? this.props.location.state ? this.props.location.state.umpireKey : null : null,
             scoringType: null,
             isLineUp: 0,
-            toolTipVisible: false
+            toolTipVisible: false,
+            screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null
         }
         this.umpireScore_View = this.umpireScore_View.bind(this)
         this.team_View = this.team_View.bind(this)
@@ -502,7 +503,7 @@ class LiveScoreMatchDetails extends Component {
                     this.state.umpireKey ?
                         <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"1"} />
                         :
-                        <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"2"} />
+                        <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.screenName == 'incident' ? '17' : "2"} />
                 }
                 <Loader visible={this.props.liveScoreMatchState.onLoad} />
                 <Layout>
