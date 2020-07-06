@@ -38,8 +38,6 @@ class LiveScoreAddIncident extends Component {
         super(props);
         this.state = {
             isEdit: false,
-            date: null,
-            time: null,
             bodyData: "",
             image: null,
             media: null,
@@ -195,7 +193,7 @@ class LiveScoreAddIncident extends Component {
                                 <Select
                                     showSearch
                                     mode="multiple"
-                                    className="reg-form-multple-select"
+                                    className="reg-form-multiple-select"
                                     placeholder='Select Home Team'
                                     style={{ width: "100%" }}
                                     onChange={(homeTeam) => this.props.liveScoreUpdateIncidentData(homeTeam, "team1id")}

@@ -267,7 +267,7 @@ class LiveScoreLadderSettings extends Component {
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.ladderLink} />
                         <div>
-                            <a className="userRegLink" href={AppConstants.public_Ladder_Url + `organisationKey=${organisationUniqueKey}`} target='_blank' >
+                            <a className="user-reg-link" href={AppConstants.public_Ladder_Url + `organisationKey=${organisationUniqueKey}`} target='_blank' >
                                 {AppConstants.public_Ladder_Url + `organisationKey=${organisationUniqueKey}`}
                             </a>
                         </div>
@@ -289,7 +289,7 @@ class LiveScoreLadderSettings extends Component {
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.drawsLink} />
                         <div>
-                            <a className="userRegLink" href={AppConstants.public_draws_Url + `organisationKey=${organisationUniqueKey}`} target='_blank' >
+                            <a className="user-reg-link" href={AppConstants.public_draws_Url + `organisationKey=${organisationUniqueKey}`} target='_blank' >
                                 {AppConstants.public_draws_Url + `organisationKey=${organisationUniqueKey}`}
                             </a>
                         </div>

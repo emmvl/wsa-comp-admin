@@ -9,25 +9,31 @@ import {
     DatePicker,
     Radio, Form, Modal
 } from "antd";
- import "./product.css";
+ import "./product.scss";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
-import {getUreAction} from 
-                "../../store/actions/userAction/userAction";
+import {getUreAction} from "../../store/actions/userAction/userAction";
 import ValidationConstants from "../../themes/validationConstant";
-import { getCommonRefData,  favouriteTeamReferenceAction,
+import {
+    getCommonRefData,
+    favouriteTeamReferenceAction,
     firebirdPlayerReferenceAction,
     registrationOtherInfoReferenceAction,
     countryReferenceAction,
-    nationalityReferenceAction, heardByReferenceAction,playerPositionReferenceAction } from '../../store/actions/commonAction/commonAction';
-
-import { saveEndUserRegistrationAction,updateEndUserRegisrationAction, orgRegistrationRegSettingsEndUserRegAction,
-    membershipProductEndUserRegistrationAction} from 
-            '../../store/actions/registrationAction/endUserRegistrationAction';
+    nationalityReferenceAction,
+    heardByReferenceAction,
+    playerPositionReferenceAction,
+} from '../../store/actions/commonAction/commonAction';
+import {
+    saveEndUserRegistrationAction,
+    updateEndUserRegisrationAction,
+    orgRegistrationRegSettingsEndUserRegAction,
+    membershipProductEndUserRegistrationAction,
+} from '../../store/actions/registrationAction/endUserRegistrationAction';
 import { getAge,deepCopyFunction} from '../../util/helpers';
 import { bindActionCreators } from "redux";
 const { Header, Footer, Content } = Layout;

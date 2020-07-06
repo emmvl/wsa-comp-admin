@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Layout, Breadcrumb, Select, DatePicker, Button, Table, Menu, Pagination } from 'antd';
-import './product.css';
+import './product.scss';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import InputWithHead from "../../customComponents/InputWithHead";
 import DashboardLayout from "../../pages/dashboardLayout";

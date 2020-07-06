@@ -179,7 +179,7 @@ class LiveScoreBulkChange extends Component {
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 onChange={venueSelection => this.setState({ venueSelection })}
                                 placeholder={AppConstants.selectVenue}
-                                className="reg-form-multple-select"
+                                className="reg-form-multiple-select"
                                 // onChange={(venueId) => this.props.liveScoreUpdateMatchAction(venueId, "venueId")}
                                 onChange={(venueId) => this.props.liveScoreUpdateBulkAction(venueId, "venueId")}
                                 value={selected_Option.venueId}
@@ -475,7 +475,7 @@ class LiveScoreBulkChange extends Component {
                     <Select
                         showSearch
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        className="reg-form-multple-select"
+                        className="reg-form-multiple-select"
                         onChange={(venue) => this.onVenueSelection(venue, 'venueId')}
                         value={pushBackData.venueId ? pushBackData.venueId : []}
                         placeholder={AppConstants.selectVenue}
@@ -659,7 +659,7 @@ class LiveScoreBulkChange extends Component {
                     <Select
                         showSearch
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        className="reg-form-multple-select"
+                        className="reg-form-multiple-select"
                         onChange={(venue) => this.onVenueSelection(venue, 'venueId')}
                         value={bringForwardData.venueId ? bringForwardData.venueId : []}
                         placeholder={AppConstants.selectVenue}
@@ -1104,7 +1104,7 @@ class LiveScoreBulkChange extends Component {
                         <Select
                             showSearch
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                            className="reg-form-multple-select"
+                            className="reg-form-multiple-select"
                             onChange={(venueId) => this.onVenueSelection(venueId, "venueId")}
                             placeholder={AppConstants.selectVenue}
                             value={abandonData.venueId ? abandonData.venueId : []}
@@ -1449,7 +1449,6 @@ function mapStatetoProps(state) {
     return {
         liveScoreState: state.LiveScoreState,
         liveScoreBulkMatchState: state.LiveScoreBulkMatchState,
-        liveScoreState: state.LiveScoreState,
         liveScoreRoundState: state.LiveScoreRoundState
     }
 }

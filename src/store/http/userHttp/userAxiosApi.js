@@ -193,9 +193,9 @@ let userHttpApi = {
   },
 
   ////forgot password
-  forgotPassword(email) {
-    let param = encodeURIComponent(email)
-    const url = `password/forgot?email=${param}`;
+  forgotPassword(email, resetType) {
+    const param = encodeURIComponent(email);
+    const url = `password/forgot?email=${param}&type=${resetType}`;
     return Method.dataGet(url, token);
   },
 

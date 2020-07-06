@@ -15,10 +15,11 @@ function qrSubmitAction(payload) {
 }
 
 // forgot password
-function forgotPasswordAction(email) {
+function forgotPasswordAction(email, resetType) {
   return {
     type: ApiConstants.API_FORGOT_PASSWORD_LOAD,
-    email
+    email,
+    resetType,
   };
 }
 
