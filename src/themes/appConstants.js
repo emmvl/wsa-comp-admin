@@ -1390,7 +1390,7 @@ const AppConstants = {
   positionTrackReport: "Position Tracking Report",
   periodFilter: 'Period',
   byGame: 'By Game',
-  matchPrintTemplateType: 'Match Print Template Type'
+  matchPrintTemplateType: 'Match Print Template Type',
 };
 
 export default AppConstants;

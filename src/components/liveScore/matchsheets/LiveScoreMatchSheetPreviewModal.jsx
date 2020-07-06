@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {
     Modal,
 } from 'antd';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
 import './styles.css';
 
@@ -11,7 +12,16 @@ import PDFDocument from './PDFDocument';
 import MatchSheetTemplate from './MatchSheetTemplate';
 
 const LiveScoreMatchSheetPreviewModal = (props) => {
-    const { visible, matchTemplateTypes, organisation, matchList, modalTitle, handleOK, handleCancel } = props;
+    const {
+        visible,
+        matchDetails,
+        match,
+        matchTemplateTypes,
+        organisation,
+        modalTitle,
+        handleOK,
+        handleCancel
+    } = props;
 
     return (
         <Modal
@@ -28,12 +38,17 @@ const LiveScoreMatchSheetPreviewModal = (props) => {
         >
             <CustomPDFViewer>
                 <PDFDocument
-                    pages={matchList.length > 0 ? matchList.map((match) => (
-                        <MatchSheetTemplate
-                            organisation={organisation}
-                            match={match}
-                        />
-                    )) : []}
+                    pages={
+                        matchTemplateTypes.length > 0
+                            ? matchTemplateTypes.map((type) => (
+                                <MatchSheetTemplate
+                                    templateType={type.description}
+                                    organisation={organisation}
+                                    matchDetails={matchDetails}
+                                    match={match}
+                                />
+                            )) : []
+                    }
                 />
             </CustomPDFViewer>
         </Modal>
@@ -42,6 +57,9 @@ const LiveScoreMatchSheetPreviewModal = (props) => {
 
 LiveScoreMatchSheetPreviewModal.propTypes = {
     visible: PropTypes.bool,
+    matchDetails: PropTypes.object,
+    match: PropTypes.object,
+    matchId: PropTypes.number,
     matchTemplateTypes: PropTypes.array,
     organisation: PropTypes.object,
     matchList: PropTypes.array,
@@ -52,6 +70,9 @@ LiveScoreMatchSheetPreviewModal.propTypes = {
 
 LiveScoreMatchSheetPreviewModal.defaultProps = {
     visible: false,
+    loading: false,
+    matchDetails: null,
+    matchId: null,
     matchTemplateTypes: [],
     organisation: null,
     matchList: [],

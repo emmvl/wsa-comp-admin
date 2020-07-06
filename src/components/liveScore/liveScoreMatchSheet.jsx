@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {
-    Breadcrumb, Button, Layout, Select, Checkbox, Radio,
+    Breadcrumb, Button, Layout, Select, Checkbox, Radio, Table,
 } from 'antd';
 
 import DashboardLayout from '../../pages/dashboardLayout';
@@ -13,15 +13,24 @@ import {getLiveScoreDivisionList} from '../../store/actions/LiveScoreAction/live
 import {getliveScoreTeams} from '../../store/actions/LiveScoreAction/liveScoreTeamAction';
 import {getMatchPrintTemplateType} from '../../store/actions/commonAction/commonAction';
 import {liveScoreMatchListAction} from '../../store/actions/LiveScoreAction/liveScoreMatchAction';
+import {liveScoreGetMatchDetailInitiate} from '../../store/actions/LiveScoreAction/liveScoreMatchAction';
 import Loader from '../../customComponents/loader';
 import InputWithHead from '../../customComponents/InputWithHead';
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
 import LiveScoreMatchSheetPreviewModal from './matchsheets/LiveScoreMatchSheetPreviewModal';
+import {liveScore_MatchFormate} from '../../themes/dateformate';
 
 import './liveScore.css';
 
 const {Header, Footer, Content} = Layout;
 const {Option} = Select;
+
+const tableSort = (a, b, key) => {
+    const stringA = JSON.stringify(a[key]);
+    const stringB = JSON.stringify(b[key]);
+
+    return stringA.localeCompare(stringB)
+};
 
 class LiveScoreMatchSheet extends Component {
     constructor(props) {
@@ -43,6 +52,8 @@ class LiveScoreMatchSheet extends Component {
             showPreview: false,
             selectedTeam: 'All',
             organisation: null,
+            selectedMatchId: null,
+            selectedMatch: null,
         };
     }
 
@@ -105,6 +116,15 @@ class LiveScoreMatchSheet extends Component {
         }
     }
 
+    onClickPreview = (matchId) => {
+        this.setState({selectedMatchId: matchId});
+        const match = this.props.liveScoreMatchState.liveScoreMatchList.find((m) => m.id === matchId);
+
+        this.setState({selectedMatch: match});
+        this.showPreview(true);
+        this.props.liveScoreGetMatchDetailInitiate(matchId, 1);
+    };
+
     showPreview = (show) => {
         this.setState({showPreview: show});
     };
@@ -115,6 +135,7 @@ class LiveScoreMatchSheet extends Component {
 
     handleModalCancel = () => {
         this.showPreview(false);
+        this.setState({selectedMatchId: null});
     };
 
     onChange = (e) => {
@@ -224,6 +245,63 @@ class LiveScoreMatchSheet extends Component {
                 </div>
             </div>
         );
+    };
+
+    columns = [
+        {
+            title: 'Match Id',
+            dataIndex: 'id',
+            key: 'id',
+            sorter: (a, b) => tableSort(a, b, "id"),
+        },
+        {
+            title: 'Start Time',
+            dataIndex: 'startTime',
+            key: 'startTime',
+            sorter: (a, b) => tableSort(a, b, "startTime"),
+            render: (startTime) =>
+                <span>{startTime ? liveScore_MatchFormate(startTime) : ""}</span>
+        },
+        {
+            title: 'Round',
+            dataIndex: 'round',
+            key: 'round',
+            sorter: (a, b) => tableSort(a, b, "round"),
+            render: (round) =><span>{round.name}</span>
+        },
+        {
+            title: '',
+            dataIndex: 'id',
+            key: 'operation',
+            render: (id) => <div className="d-flex">
+                <Button
+                    size="small"
+                    className="table-preview-button"
+                    onClick={() => this.onClickPreview(id)}
+                >
+                    {AppConstants.preview}
+                </Button>
+            </div>
+        },
+    ];
+
+    // Match sheet table
+    tableView = () => {
+        const { liveScoreMatchState } = this.props;
+        let DATA = liveScoreMatchState ? liveScoreMatchState.liveScoreMatchList : [];
+
+        return (
+            <div className="formView mt-4">
+                <div className="table-responsive p-2 home-dash-table-view">
+                    <Table
+                        className="home-dashboard-table"
+                        columns={this.columns}
+                        dataSource={DATA}
+                        rowKey={(record, index) => record.id + index}
+                    />
+                </div>
+            </div>
+        )
     };
 
     /// form content view
@@ -338,7 +416,7 @@ class LiveScoreMatchSheet extends Component {
             <div className="fluid-width" style={{backgroundColor: '#f7fafc'}}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores}/>
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="22"/>
-                <Loader visible={this.props.liveScoreMatchSheetState.isLoaderActive}/>
+                <Loader visible={this.props.liveScoreMatchSheetState.onLoad || this.props.liveScoreMatchState.onLoad}/>
                 <Layout>
                     {this.headerView()}
                     <Content>
@@ -346,16 +424,18 @@ class LiveScoreMatchSheet extends Component {
                         <div className="formView">
                             {this.contentView()}
                         </div>
+                        {this.tableView()}
                     </Content>
                     <Footer>
-                        {this.footerView()}
+                        {/*{this.footerView()}*/}
                     </Footer>
                 </Layout>
                 <LiveScoreMatchSheetPreviewModal
-                    visible={this.state.showPreview}
+                    visible={this.state.showPreview && !this.props.liveScoreMatchState.onLoad}
+                    match={this.state.selectedMatch}
+                    matchDetails={this.props.liveScoreMatchState.matchDetails}
                     matchTemplateTypes={this.props.commonReducerState.matchPrintTemplateType}
                     organisation={this.state.organisation}
-                    matchList={this.props.liveScoreMatchState.liveScoreMatchList}
                     modalTitle="LiveScores Match Sheet"
                     handleOK={this.handleModalOk}
                     handleCancel={this.handleModalCancel}
@@ -373,6 +453,7 @@ function mapDispatchtoprops(dispatch) {
         getliveScoreTeams,
         getMatchPrintTemplateType,
         liveScoreMatchListAction,
+        liveScoreGetMatchDetailInitiate,
     }, dispatch);
 }
 

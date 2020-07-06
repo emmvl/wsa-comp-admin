@@ -165,7 +165,7 @@ const initialState = {
     liveScoreMatchListTotalCount: 1,
     matchData: matchObj,
     matchLoad: false,
-    matchDetails: [],
+    matchDetails: null,
     start_post_date: null,
     displayTime: "",
     team1Players: [],
