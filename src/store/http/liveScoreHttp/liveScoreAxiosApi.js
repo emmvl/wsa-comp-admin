@@ -948,6 +948,11 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, token)
     },
 
+    liveScoreMatchSheetPrint(competitionId, divisionId, teamId) {
+        let url = `/matches/print?competitionId=${competitionId}&divisionIds=${divisionId}&teamIds=${teamId}`;
+
+        return Method.dataGet(url, token)
+    },
 };
 
 

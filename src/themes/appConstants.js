@@ -301,6 +301,7 @@ const AppConstants = {
   shooting: 'Shooting ',
   preview: 'Preview',
   print: 'Print',
+  previewAll: 'Print All',
 
   /**** competition Open Reg form*/
   competitionDetails: 'Competition Details',

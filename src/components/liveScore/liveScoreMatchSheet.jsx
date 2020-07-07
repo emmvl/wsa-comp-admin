@@ -14,6 +14,7 @@ import {getliveScoreTeams} from '../../store/actions/LiveScoreAction/liveScoreTe
 import {getMatchPrintTemplateType} from '../../store/actions/commonAction/commonAction';
 import {liveScoreMatchListAction} from '../../store/actions/LiveScoreAction/liveScoreMatchAction';
 import {liveScoreGetMatchDetailInitiate} from '../../store/actions/LiveScoreAction/liveScoreMatchAction';
+import {liveScoreMatchSheetPrintAction} from '../../store/actions/LiveScoreAction/liveScoreMatchSheetAction';
 import Loader from '../../customComponents/loader';
 import InputWithHead from '../../customComponents/InputWithHead';
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
@@ -136,6 +137,16 @@ class LiveScoreMatchSheet extends Component {
     handleModalCancel = () => {
         this.showPreview(false);
         this.setState({selectedMatchId: null});
+    };
+
+    printAll = () => {
+        if (this.props.liveScoreMatchState.liveScoreMatchList.length > 0) {
+            this.props.liveScoreMatchSheetPrintAction(
+                this.state.selectedComp,
+                this.state.division === 'All' ? null : this.state.division,
+                this.state.selectedTeam === 'All' ? null : this.state.selectedTeam
+            );
+        }
     };
 
     onChange = (e) => {
@@ -392,17 +403,11 @@ class LiveScoreMatchSheet extends Component {
                     <div className="col-sm">
                         <div style={{display: 'flex', justifyContent: 'flex-end'}}>
                             <Button
-                                className="save-draft-text"
-                                type="save-draft-text"
-                                onClick={() => this.showPreview(true)}
-                            >
-                                {AppConstants.preview}
-                            </Button>
-                            <Button
                                 className="open-reg-button"
                                 type="primary"
+                                onClick={() => this.printAll()}
                             >
-                                {AppConstants.print}
+                                {AppConstants.previewAll}
                             </Button>
                         </div>
                     </div>
@@ -427,7 +432,7 @@ class LiveScoreMatchSheet extends Component {
                         {this.tableView()}
                     </Content>
                     <Footer>
-                        {/*{this.footerView()}*/}
+                        {this.footerView()}
                     </Footer>
                 </Layout>
                 <LiveScoreMatchSheetPreviewModal
@@ -454,6 +459,7 @@ function mapDispatchtoprops(dispatch) {
         getMatchPrintTemplateType,
         liveScoreMatchListAction,
         liveScoreGetMatchDetailInitiate,
+        liveScoreMatchSheetPrintAction,
     }, dispatch);
 }
 

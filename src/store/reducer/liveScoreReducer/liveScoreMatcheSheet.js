@@ -1,6 +1,4 @@
 import ApiConstants from '../../../themes/apiConstants'
-import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
-
 
 const initialState = {
     onLoad: false,
@@ -59,6 +57,32 @@ function liveScoreMatchSheetState(state = initialState, action) {
                 teamResult: teamsArray,
             };
 
+        case ApiConstants.API_LIVE_SCORE_MATCH_SHEET_FAIL:
+            return {
+                ...state,
+                onLoad: false,
+                error: action.error,
+                status: action.status,
+            };
+
+        case ApiConstants.API_LIVE_SCORE_MATCH_SHEET_ERROR:
+            return {
+                ...state,
+                onLoad: false,
+                error: action.error,
+                status: action.status,
+            };
+
+        case ApiConstants.API_MATCH_SHEET_PRINT_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_MATCH_SHEET_PRINT_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                liveScoreMatchSheetDownloadLink: action.downloadLink,
+                status: action.status
+            };
 
         default:
             return state;

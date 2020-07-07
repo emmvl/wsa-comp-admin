@@ -195,6 +195,7 @@ import * as umpireSaga from "../saga/umpireSaga/umpireSaga"
 import * as assignUmpireSaga from "../saga/umpireSaga/assignUmpireSaga";
 import * as shopProductSaga from "../saga/shopSaga/productSaga";
 import * as competitionQuickSaga from "../saga/competitionManagementSaga/competitionQuickSaga";
+import * as liveScoreMatchSheetSaga from './liveScoreSaga/liveScoreMatchSheetSaga';
 
 
 export default function* root_saga() {
@@ -755,5 +756,8 @@ export default function* root_saga() {
 
   // Get match print template type
   yield takeEvery(ApiConstants.API_MATCH_PRINT_TEMPLATE_LOAD, getMatchPrintTemplateTypeSaga)
+
+  // Get match sheet download link
+  yield takeEvery(ApiConstants.API_MATCH_SHEET_PRINT_LOAD, liveScoreMatchSheetSaga.liveScoreMatchSheetPrintSaga)
 
 }
