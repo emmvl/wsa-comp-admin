@@ -109,9 +109,9 @@ const columns_Invite = [
     },
     {
         title: 'Umpire 1',
-        dataIndex: 'umpires_1',
+        dataIndex: 'umpires',
         key: 'umpires_1',
-        sorter: (a, b) => tableSort(a, b, "umpires_1"),
+        sorter: (a, b) => tableSort(a, b, "umpires"),
         render: (umpires, record) => {
             return (
 
@@ -130,9 +130,9 @@ const columns_Invite = [
     },
     {
         title: 'Umpire 1 Organisation',
-        dataIndex: 'umpires1_Org',
+        dataIndex: 'umpires',
         key: 'umpires1_Org',
-        sorter: (a, b) => tableSort(a, b, "umpires1_Org"),
+        sorter: (a, b) => tableSort(a, b, "umpires"),
         render: (umpires, record) => {
 
             return (
@@ -155,9 +155,9 @@ const columns_Invite = [
     },
     {
         title: 'Umpire 2',
-        dataIndex: 'umpires_2',
+        dataIndex: 'umpires',
         key: 'umpires_2',
-        sorter: (a, b) => tableSort(a, b, "umpires_2"),
+        sorter: (a, b) => tableSort(a, b, "umpires"),
         render: (umpires, record) => {
             return (
                 umpires ?
@@ -172,9 +172,9 @@ const columns_Invite = [
     },
     {
         title: 'Umpire 2 Organisation',
-        dataIndex: 'umpires2_Org',
+        dataIndex: 'umpires',
         key: 'umpires2_Org',
-        sorter: (a, b) => tableSort(a, b, "umpires2_Org"),
+        sorter: (a, b) => tableSort(a, b, "umpires"),
         render: (umpires, record) => {
             return (
                 <>
@@ -312,9 +312,9 @@ const columns = [
     },
     {
         title: 'Umpire 1',
-        dataIndex: 'umpires_1',
+        dataIndex: 'umpires',
         key: '_umpires_1',
-        sorter: (a, b) => tableSort(a, b, "umpires_1"),
+        sorter: (a, b) => tableSort(a, b, "umpires"),
         render: (umpires, record) => {
             return (
 
@@ -339,9 +339,9 @@ const columns = [
     },
     {
         title: 'Umpire 1 Organisation',
-        dataIndex: 'umpires1_Org',
+        dataIndex: 'umpires',
         key: '_umpires1_Org',
-        sorter: (a, b) => tableSort(a, b, "umpires1_Org"),
+        sorter: (a, b) => tableSort(a, b, "umpires"),
         render: (umpires, record) => {
 
             return (
@@ -365,9 +365,9 @@ const columns = [
     },
     {
         title: 'Umpire 2',
-        dataIndex: 'umpires_2',
+        dataIndex: 'umpires',
         key: '_umpires_2',
-        sorter: (a, b) => tableSort(a, b, "umpires_2"),
+        sorter: (a, b) => tableSort(a, b, "umpires"),
         render: (umpires, record) => {
             return (
 
@@ -390,9 +390,9 @@ const columns = [
     },
     {
         title: 'Umpire 2 Organisation',
-        dataIndex: 'umpires2_Org',
+        dataIndex: 'umpires',
         key: '_umpires2_Org',
-        sorter: (a, b) => tableSort(a, b, "umpires2_Org"),
+        sorter: (a, b) => tableSort(a, b, "umpires"),
         render: (umpires, record) => {
             return (
                 <>
