@@ -180,7 +180,7 @@ const AppConstants = {
   coach: 'Coach',
   addMembershipType: 'Add Membership Type',
   membershipFees: 'Membership Fees',
-  applyMembershipFee: 'Apply Membership Fees to',
+  applyMembershipFee: 'Apply Seasonal Membership Fees to',
   casualFee: 'Casual Fee',
   gst: 'GST',
   seasonalFee: 'Seasonal fee',
