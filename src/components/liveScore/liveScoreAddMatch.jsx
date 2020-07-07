@@ -223,8 +223,8 @@ class LiveScoreAddMatch extends Component {
 
 
     onCreateRound = () => {
-        let { addEditMatch, start_date, start_time } = this.props.liveScoreMatchState
-        let sequence = 1
+        let { addEditMatch, highestSequence } = this.props.liveScoreMatchState
+        let sequence = highestSequence + 1
         // const { id } = JSON.parse(getLiveScoreCompetiton())
         let divisionID = addEditMatch.divisionId
 
@@ -590,6 +590,8 @@ class LiveScoreAddMatch extends Component {
         const { umpireList } = this.props.umpireState
         let umpireListResult = isArrayNotEmpty(umpireList) ? umpireList : []
         let { allDisabled } = this.state
+
+        console.log(umpire1Name, 'umpires_1Value', umpire2Name)
         return (
             <div className="content-view pt-4">
                 <div className="row" >

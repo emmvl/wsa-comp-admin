@@ -284,7 +284,7 @@ let LiveScoreAxiosApi = {
         }
 
         let url = `/matches`
-        console.log("body::"+ JSON.stringify(body));
+        console.log("body::" + JSON.stringify(body));
         return Method.dataPost(url, token, body)
     },
 
@@ -926,7 +926,8 @@ let LiveScoreAxiosApi = {
             }
 
         } else {
-            let body = { "incident": data.body }
+            // let body = { "incident": data.body }
+            let body = data.body
             let players = JSON.stringify(data.playerIds)
 
             if (data.isEdit) {

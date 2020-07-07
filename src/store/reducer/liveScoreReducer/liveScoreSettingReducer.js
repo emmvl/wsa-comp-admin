@@ -44,8 +44,10 @@ const initialState = {
     registrationInvitees: [],
     lineupSelection: false,
     gameborrowed: false,
-    minutesBorrowed: false,
-    premierCompLink: false
+    minutesBorrowed: true,
+    premierCompLink: false,
+    playerBorrowed: '',
+    borrowedPlayer: 'gameborrowed'
 }
 
 
@@ -177,9 +179,20 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
 
             const keys = payload.key
             const Data = payload.data
+            console.log(Data, 'LiveScore_SETTING_CHANGE_FORM')
 
-            if (keys == 'buzzerEnabled' || keys == 'warningBuzzerEnabled' || keys == "lineupSelection" || keys == "gameborrowed" || keys == "minutesBorrowed" || keys == 'premierCompLink') {
+            if (keys == 'buzzerEnabled' || keys == 'warningBuzzerEnabled' || keys == "lineupSelection" || keys == 'premierCompLink') {
                 state[keys] = Data
+            } else if (keys == "borrowedPlayer") {
+                state[keys] = Data
+                // if (keys == "gameborrowed") {
+                //     state[keys] = Data
+                //     state.minutesBorrowed = false
+                // } else if (keys == "minutesBorrowed") {
+                //     state[keys] = Data
+                //     state.gameborrowed = false
+                // }
+
             } else if (keys == 'recordUmpire') {
                 state.recordUmpire = Data
             } else if (keys == 'affiliateSelected' || keys == 'anyOrgSelected' || keys == 'otherSelected' || keys == 'affiliateNonSelected' || keys == 'anyOrgNonSelected') {
