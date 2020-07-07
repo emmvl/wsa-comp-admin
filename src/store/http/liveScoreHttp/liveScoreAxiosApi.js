@@ -951,6 +951,7 @@ let LiveScoreAxiosApi = {
     liveScoreMatchSheetPrint(competitionId, divisionId, teamId) {
         let url = `/matches/print?competitionId=${competitionId}&divisionIds=${divisionId}&teamIds=${teamId}`;
 
+        console.log('>>>>>>>>>normal api call');
         return Method.dataGet(url, token)
     },
 };

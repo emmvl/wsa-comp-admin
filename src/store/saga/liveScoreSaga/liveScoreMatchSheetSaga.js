@@ -2,7 +2,6 @@ import { put, call } from '../../../../node_modules/redux-saga/effects'
 import ApiConstants from "../../../themes/apiConstants";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 import { message } from "antd";
-import history from "../../../util/history";
 
 function* failSaga(result) {
     yield put({
