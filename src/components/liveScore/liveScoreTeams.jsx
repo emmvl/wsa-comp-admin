@@ -82,13 +82,12 @@ const columns = [
         dataIndex: 'managers',
         key: 'managers_1',
         sorter: (a, b) => tableSort(a, b, "managers"),
-        render: (managers, record) => <span >
-
-            {isArrayNotEmpty(managers) && managers.map((item) => (
-                <span className="live-score-desc-text side-bar-profile-data" >{item.name}</span>
+        render: (managers, record) => <div>
+            {isArrayNotEmpty(managers) && managers.map((item, i) => (
+                <span key={`managerName${i}` + item.id} className="desc-text-style side-bar-profile-data" >{item.name}</span>
             ))
             }
-        </span>
+        </div>
     },
     {
         title: 'Contact',
@@ -96,12 +95,12 @@ const columns = [
         key: 'managers_2',
         sorter: (a, b) => tableSort(a, b, "managers"),
 
-        render: (managers, record) => <span>
-            {isArrayNotEmpty(managers) && managers.map((item) => (
-                <span className="live-score-desc-text side-bar-profile-data" >{item.mobileNumber}</span>
+        render: (managers, record) => <div>
+            {isArrayNotEmpty(managers) && managers.map((item, i) => (
+                <span key={`managerMobile${i}` + item.id} className="desc-text-style side-bar-profile-data" >{item.mobileNumber}</span>
             ))
             }
-        </span>
+        </div>
     },
 
     {
@@ -109,12 +108,12 @@ const columns = [
         dataIndex: 'managers',
         key: 'managers_3',
         sorter: (a, b) => tableSort(a, b, "managers"),
-        render: (managers, record) => <span>
-            {isArrayNotEmpty(managers) && managers.map((item) => (
-                <span className="live-score-desc-text side-bar-profile-data" >{item.email}</span>
+        render: (managers, record) => <div>
+            {isArrayNotEmpty(managers) && managers.map((item, index) => (
+                <span key={`managerEmail${index}` + item.id} className="desc-text-style side-bar-profile-data" >{item.email}</span>
             ))
             }
-        </span>
+        </div>
     },
 ];
 
@@ -304,6 +303,7 @@ class LiveScoreTeam extends Component {
                         columns={columns}
                         dataSource={teamData}
                         pagination={false}
+                        rowKey={(record, index) => "teamData" + record.id + index}
                     />
                 </div>
                 <div className="d-flex justify-content-end">

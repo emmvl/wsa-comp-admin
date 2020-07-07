@@ -27,7 +27,7 @@ export default class SortableImage extends React.PureComponent {
     }
 
     itemRenderer = (item, index) => {
-        return ( 
+        return (
             <div onClick={(e) => e.stopPropagation()} >
                 <img src={item.image} width="160" height="160" style={{ margin: 10 }} onClick={(e) => e.stopPropagation()} />
             </div>
@@ -36,6 +36,7 @@ export default class SortableImage extends React.PureComponent {
 
     handleRLDDChange = (reorderedItems) => {
         this.setState({ items: reorderedItems });
+        this.props.reorderedUrls(reorderedItems)
     };
 
 }

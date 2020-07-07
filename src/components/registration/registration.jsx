@@ -13,7 +13,7 @@ import InputWithHead from "../../customComponents/InputWithHead";
 import { getOrganisationData } from "../../util/sessionStorage";
 import { endUserRegDashboardListAction } from
     "../../store/actions/registrationAction/endUserRegistrationAction";
-import { getCommonRefData, getGenderAction } from
+import { getCommonRefData, getGenderAction, registrationPaymentStatusAction } from
     '../../store/actions/commonAction/commonAction';
 import { getAffiliateToOrganisationAction } from "../../store/actions/userAction/userAction";
 import { getAllCompetitionAction } from "../../store/actions/registrationAction/registrationDashboardAction"
@@ -152,7 +152,8 @@ class Registration extends Component {
             competitionCreatorOrganisation: 0,
             compFeeStatus: 0,
             compName: "",
-            regStatus: false
+            regStatus: false,
+            paymentStatusRefId: -1
         }
         // this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
@@ -160,37 +161,6 @@ class Registration extends Component {
     componentDidMount() {
         this.referenceCalls(this.state.organisationId);
         this.handleRegTableList(1);
-        this.props.getAllCompetitionAction(this.state.yearRefId)
-    }
-    componentDidUpdate(nextProps) {
-        let competitionTypeList = this.props.registrationDashboardState.competitionTypeList
-        if (nextProps.registrationDashboardState !== this.props.registrationDashboardState) {
-            if (nextProps.registrationDashboardState.competitionTypeList !== competitionTypeList) {
-                if (competitionTypeList.length > 0) {
-                    let competitionId = competitionTypeList[0].competitionId
-                    let publishStatus = competitionTypeList[0].competitionStatusId
-                    let orgRegistratinId = competitionTypeList[0].orgRegistratinId
-                    let wizardYear = competitionTypeList[0].yearId
-                    let registrationCloseDate = competitionTypeList[0].registrationCloseDate
-                    let inviteeStatus = competitionTypeList[0].inviteeStatus
-                    let competitionCreatorOrganisation = competitionTypeList[0].competitionCreatorOrganisation
-                    let isDirect = competitionTypeList[0].isDirect
-                    let compFeeStatus = competitionTypeList[0].creatorFeeStatus
-                    let compName = competitionTypeList[0].competitionName
-                    let regStatus = competitionTypeList[0].orgRegistrationStatusId
-
-                    this.setState({
-                        competitionId: competitionId,
-                        publishStatus: publishStatus,
-                        orgRegistratinId: orgRegistratinId,
-                        wizardYear: wizardYear, registrationCloseDate: registrationCloseDate,
-                        inviteeStatus: inviteeStatus, competitionCreatorOrganisation: competitionCreatorOrganisation,
-                        isDirect: isDirect, compFeeStatus, compName, regStatus
-                    })
-
-                }
-            }
-        }
     }
 
     handleRegTableList = (page) => {
@@ -207,6 +177,7 @@ class Registration extends Component {
             affiliate: this.state.affiliate,
             membershipProductId: this.state.membershipProductId,
             paymentId: this.state.paymentId,
+            paymentStatusRefId: this.state.paymentStatusRefId,
             paging: {
                 limit: 10,
                 offset: (page ? (10 * (page - 1)) : 0)
@@ -219,12 +190,12 @@ class Registration extends Component {
         this.props.getAffiliateToOrganisationAction(organisationId);
         this.props.getGenderAction();
         this.props.getOnlyYearListAction();
+        this.props.registrationPaymentStatusAction();
     }
 
     onChangeDropDownValue = async (value, key) => {
         if (key == "yearRefId") {
             await this.setState({ yearRefId: value });
-            this.props.getAllCompetitionAction(this.state.yearRefId)
             this.handleRegTableList(1);
         }
         else if (key == "competitionId") {
@@ -262,6 +233,10 @@ class Registration extends Component {
             await this.setState({ paymentId: value });
             this.handleRegTableList(1);
         }
+        else if (key == "paymentStatusRefId") {
+            await this.setState({ paymentStatusRefId: value });
+            this.handleRegTableList(1);
+        }
         else if (key == "postalCode") {
             const regex = /,/gi;
             let canCall = false;
@@ -287,52 +262,51 @@ class Registration extends Component {
         }
     }
 
-    openwizardmodel() {
-        let competitionData = this.props.registrationDashboardState.competitionTypeList
-        if (competitionData.length > 0) {
-            let competitionId = competitionData[0].competitionId
-            let publishStatus = competitionData[0].competitionStatusId
-            let orgRegistrationId = competitionData[0].orgRegistratinId
-            let wizardYear = competitionData[0].yearId
-            let registrationCloseDate = competitionData[0].registrationCloseDate
-            let inviteeStatus = competitionData[0].inviteeStatus
-            let competitionCreatorOrganisation = competitionData[0].competitionCreatorOrganisation
-            let isDirect = competitionData[0].isDirect
-            let compFeeStatus = competitionData[0].creatorFeeStatus
-            let compName = competitionData[0].competitionName
-            let regStatus = competitionData[0].orgRegistrationStatusId
-            this.setState
-                ({
-                    competitionId, publishStatus, orgRegistrationId,
-                    wizardYear, registrationCloseDate, inviteeStatus, competitionCreatorOrganisation, isDirect,
-                    visible: true, compFeeStatus, compName, regStatus
-                })
-        } else {
-            this.setState
-                ({
-                    visible: true
-                })
-        }
+    // openwizardmodel() {
+    //     let competitionData = this.props.registrationDashboardState.competitionTypeList
+    //     if (competitionData.length > 0) {
+    //         let competitionId = competitionData[0].competitionId
+    //         let publishStatus = competitionData[0].competitionStatusId
+    //         let orgRegistrationId = competitionData[0].orgRegistratinId
+    //         let wizardYear = competitionData[0].yearId
+    //         let registrationCloseDate = competitionData[0].registrationCloseDate
+    //         let inviteeStatus = competitionData[0].inviteeStatus
+    //         let competitionCreatorOrganisation = competitionData[0].competitionCreatorOrganisation
+    //         let isDirect = competitionData[0].isDirect
+    //         let compFeeStatus = competitionData[0].creatorFeeStatus
+    //         let compName = competitionData[0].competitionName
+    //         let regStatus = competitionData[0].orgRegistrationStatusId
+    //         this.setState
+    //             ({
+    //                 competitionId, publishStatus, orgRegistrationId,
+    //                 wizardYear, registrationCloseDate, inviteeStatus, competitionCreatorOrganisation, isDirect,
+    //                 visible: true, compFeeStatus, compName, regStatus
+    //             })
+    //     } else {
+    //         this.setState
+    //             ({
+    //                 visible: true
+    //             })
+    //     }
 
-    }
-    userEmail = () => {
-        let orgData = getOrganisationData()
-        let email = orgData && orgData.email ? encodeURIComponent(orgData.email) : ""
-        return email
-    }
-    stripeConnected = () => {
-        let orgData = getOrganisationData()
-        let stripeAccountID = orgData ? orgData.stripeAccountID : null
-        return stripeAccountID
-    }
+    // }
+    // userEmail = () => {
+    //     let orgData = getOrganisationData()
+    //     let email = orgData && orgData.email ? encodeURIComponent(orgData.email) : ""
+    //     return email
+    // }
+    // stripeConnected = () => {
+    //     let orgData = getOrganisationData()
+    //     let stripeAccountID = orgData ? orgData.stripeAccountID : null
+    //     return stripeAccountID
+    // }
 
     ///////view for breadcrumb
     headerView = () => {
-        let stripeConnected = this.stripeConnected()
-        let userEmail = this.userEmail()
-        let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=${StripeKeys.clientId}&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=${StripeKeys.url}/registrationPayments`
-        let registrationCompetition = this.props.registrationDashboardState.competitionTypeList
-        console.log(registrationCompetition, this.props.appState)
+        // let stripeConnected = this.stripeConnected()
+        // let userEmail = this.userEmail()
+        // let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=${StripeKeys.clientId}&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=${StripeKeys.url}/registrationPayments`
+        // let registrationCompetition = this.props.registrationDashboardState.competitionTypeList
         return (
             <div className="comp-player-grades-header-view-design" >
                 <div className="row" >
@@ -341,111 +315,17 @@ class Registration extends Component {
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.Registrations}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                    <div className="col-sm-4" style={{ display: "flex", alignContent: "center", justifyContent: 'center' }} >
-                        <Button
-                            className="open-reg-button"
-                            type="primary"
-                            onClick={() => this.openwizardmodel()}
-                        >
-                            {/* <a href={stripeDashboardUrl} class="stripe-connect"> */}
-                            {AppConstants.registrationWizard}
-                            {/* </a> */}
-                        </Button>
-                    </div>
+
                 </div>
-                <WizardModel
-                    modalTitle={AppConstants.registrationWizard}
-                    visible={this.state.visible}
-                    onCancel={() => this.setState({ visible: false })}
-                    wizardCompetition={registrationCompetition}
-                    competitionChange={(competitionId) => this.changeCompetition(competitionId)}
-                    competitionId={this.state.competitionId}
-                    stripeConnected={stripeConnected}
-                    stripeConnectURL={stripeConnectURL}
-                    publishStatus={this.state.publishStatus}
-                    competitionClick={() => this.clickCompetition()}
-                    registrationClick={() => this.state.publishStatus == 2 && this.onClickRegistration()}
-                    registrationStatus={this.regStatus()}
-                    competitionStatus={this.competitionStatus()}
-                />
+
             </div >
         )
     }
 
-    competitionStatus() {
-        let feeStatus = false
-        if (this.state.compFeeStatus == 1) {
-            return true
-
-        }
-        else if (this.state.inviteeStatus == 1) {
-            return true
-        }
-        else {
-            return false
-        }
-    }
 
 
-    regStatus() {
-        if (this.state.regStatus == 2) {
-            return true
-        }
-        else {
-            return false
-        }
-    }
-
-    //wizard  registration click
-    onClickRegistration() {
-        if (this.state.isDirect == true && this.state.competitionCreatorOrganisation == 1) {
-            history.push("/registrationForm", {
-                id: this.state.competitionId,
-                year: this.state.wizardYear,
-                orgRegId: this.state.orgRegistrationId, compCloseDate: this.state.registrationCloseDate,
-                compName: this.state.compName
-            })
-        } else if (this.state.inviteeStatus == 1) {
-            history.push("/registrationForm", {
-                id: this.state.competitionId,
-                year: this.state.wizardYear,
-                orgRegId: this.state.orgRegistrationId, compCloseDate: this.state.registrationCloseDate,
-                compName: this.state.compName
-            })
-        }
-    }
 
 
-    //wizard competition click
-    clickCompetition() {
-        if (this.state.competitionId !== 0) {
-            history.push("/registrationCompetitionFee", { id: this.state.competitionId })
-        }
-        else {
-            history.push("/registrationCompetitionFee", { id: null })
-        }
-
-    }
-
-    changeCompetition(competitionId) {
-        let competitionData = this.props.registrationDashboardState.competitionTypeList
-        let competitionIndex = competitionData.findIndex((x) => x.competitionId === competitionId)
-        let publishStatus = competitionData[competitionIndex].competitionStatusId
-        let orgRegistrationId = competitionData[competitionIndex].orgRegistratinId
-        let wizardYear = competitionData[competitionIndex].yearId
-        let registrationCloseDate = competitionData[competitionIndex].registrationCloseDate
-        let inviteeStatus = competitionData[competitionIndex].inviteeStatus
-        let competitionCreatorOrganisation = competitionData[competitionIndex].competitionCreatorOrganisation
-        let isDirect = competitionData[competitionIndex].isDirect
-        let compFeeStatus = competitionData[competitionIndex].creatorFeeStatus
-        let compName = competitionData[competitionIndex].competitionName
-        let regStatus = competitionData[competitionIndex].orgRegistrationStatusId
-        this.setState({
-            competitionId, publishStatus, orgRegistrationId,
-            wizardYear, registrationCloseDate, inviteeStatus, competitionCreatorOrganisation,
-            isDirect, compFeeStatus, compName, regStatus
-        })
-    }
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
@@ -462,7 +342,7 @@ class Registration extends Component {
                 uniqueValues = [...uniqueValues, ...arr];
             }
         }
-        const { genderData } = this.props.commonReducerState;
+        const { genderData, paymentStatus } = this.props.commonReducerState;
         const { competitions, membershipProductTypes, membershipProducts, postalCodes } = this.props.userRegistrationState;
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
@@ -614,7 +494,7 @@ class Registration extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="reg-col" >
+                        <div className="reg-col" style={{marginRight: '25px'}}>
                             <div className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.postCode}</div>
                                 <InputWithHead
@@ -622,16 +502,22 @@ class Registration extends Component {
                                     onChange={(e) => this.onChangeDropDownValue(e.target.value, 'postalCode')}
                                     value={this.state.postalCode}
                                 />
-                                {/* <Select
-                                    showSearch
-                                     mode="multiple"
-                                     className="year-select reg-filter-select1"
-                                    onChange={(e) => this.onChangeDropDownValue(e, 'postalCode')}
-                                    value={this.state.postalCode}>
-                                    {(postalCodes || []).map((post, index) => (
-                                        <Option key={post} value={post}>{post}</Option>
+                               
+                            </div>
+                        </div>
+                        <div className="reg-col1" >
+                            <div className="reg-filter-col-cont" >
+                                <div className='year-select-heading'>{AppConstants.status}</div>
+                                <Select
+                                    className="year-select reg-filter-select"
+                                    style={{ minWidth: 100 }}
+                                    onChange={(e) => this.onChangeDropDownValue(e, 'paymentStatusRefId')}
+                                    value={this.state.paymentStatusRefId}>
+                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                    {(paymentStatus || []).map((g, index) => (
+                                        <Option key={g.id} value={g.id}>{g.description}</Option>
                                     ))}
-                                </Select> */}
+                                </Select>
                             </div>
                         </div>
                     </div>
@@ -722,7 +608,8 @@ function mapDispatchToProps(dispatch) {
         getCommonRefData,
         getGenderAction,
         getOnlyYearListAction,
-        getAllCompetitionAction
+        getAllCompetitionAction,
+        registrationPaymentStatusAction
     }, dispatch);
 }
 

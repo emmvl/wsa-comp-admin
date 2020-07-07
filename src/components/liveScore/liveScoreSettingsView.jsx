@@ -7,8 +7,10 @@ import {
     Button,
     Radio,
     Tabs,
+    InputNumber,
+    Form,
     Input,
-    Form
+    Icon
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -357,7 +359,7 @@ class LiveScoreSettingsView extends Component {
     ////////form content view
     contentView = (getFieldDecorator) => {
         const { competitionName, competitionLogo, scoring, days, hours, minutes, lineupSelectionDays, lineupSelectionHours, lineupSelectionMins, record1, venue, Logo } = this.props.liveScoreSetting.form
-        const { loader, buzzerEnabled, warningBuzzerEnabled, recordUmpire, lineupSelection } = this.props.liveScoreSetting
+        const { loader, buzzerEnabled, warningBuzzerEnabled, recordUmpire, lineupSelection, gameborrowed, minutesBorrowed, premierCompLink } = this.props.liveScoreSetting
         let grade = this.state.venueData
         // const applyTo1 = [{ label: 'Record Umpire', value: "recordUmpire" }, { label: ' Game Time Tracking', value: "gameTimeTracking" }, { label: 'Position Tracking', value: "positionTracking" }];
         const applyTo1 = [{ label: ' Game Time Tracking', value: "gameTimeTracking", }, { label: 'Position Tracking', value: "positionTracking", }, { label: 'Record Goal Attempts', value: "recordGoalAttempts", }];
@@ -721,6 +723,78 @@ class LiveScoreSettingsView extends Component {
                     </div>
                 </div>}
 
+                {/* Player borrowing view */}
+                <InputWithHead heading={AppConstants.playerBorrowing} />
+                <div className="row mt-0 ml-1" >
+
+                    <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
+                        <div >
+                            <Checkbox style={{
+                                display: "-ms-flexbox",
+                                flexDirection: "column",
+                                justifyContent: "center"
+                            }}
+                                className="single-checkbox"
+                                onChange={(e) => this.props.onChangeSettingForm({ key: "gameborrowed", data: e.target.checked })}
+                                checked={gameborrowed}
+                            >
+                                {AppConstants.gamesBorrowed}
+                            </Checkbox>
+                        </div>
+
+                        {
+                            gameborrowed &&
+                            <div className='small-steper-style'>
+                                <InputNumber
+
+                                    // value={addEditMatch.matchDuration}
+                                    formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                    parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                    // onChange={(matchDuration) => this.props.liveScoreUpdateMatchAction(matchDuration, "matchDuration")}
+                                    placeholder={'0'}
+                                // style={{ width: '50px', minHeight: '30px' }}
+                                />
+                            </div>
+                        }
+
+                    </div>
+
+                    <div style={{ marginLeft: 40 }}>
+                        <Checkbox
+                            className="single-checkbox"
+                            onChange={(e) => this.props.onChangeSettingForm({ key: "minutesBorrowed", data: e.target.checked })}
+                            checked={minutesBorrowed}
+                        >
+                            {AppConstants.minutesBorrowed}
+                        </Checkbox>
+                    </div>
+                </div>
+
+                <div style={{ marginTop: 20 }} >
+                    <Checkbox style={{
+                        display: "-ms-flexbox",
+                        flexDirection: "column",
+                        justifyContent: "center"
+                    }}
+                        className="single-checkbox"
+                        onChange={(e) => this.props.onChangeSettingForm({ key: "premierCompLink", data: e.target.checked })}
+                        checked={premierCompLink}
+                    >
+                        {AppConstants.premierCompLink}
+                    </Checkbox>
+
+                    {
+                        premierCompLink &&
+                        <Select
+                            mode='multiple'
+                            // style={{ width: "100%", paddingRight: 1, }}
+                            placeholder={"Search Competition"}
+                        >
+                        </Select>
+                    }
+
+                </div>
+
                 {/* radion button view */}
                 <span className="applicable-to-heading">{AppConstants.scoring}</span>
                 {/* <span className='text-heading-large pt-5' >{AppConstants.scoring}</span> */}
@@ -732,23 +806,6 @@ class LiveScoreSettingsView extends Component {
                         value={this.props.liveScoreSetting.form.scoring}
                     >
                         <div className="row ml-2" style={{ marginTop: 0 }} >
-
-                            {/* <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
-                                <Radio value={"SINGLE"}>{AppConstants.single}</Radio>
-                                <div style={{ marginLeft: -20, }}>
-                                    <Tooltip background='#ff8237'>
-                                        <span>{AppConstants.singleScoringMsg}</span>
-                                    </Tooltip>
-                                </div>
-                            </div> */}
-
-
-                            {/* <div >
-                                <Radio value={"50_50"}>{'50/50'} </Radio>
-                                <Tooltip background='#ff8237'>
-                                    <span>{AppConstants.fiftyScoringMsg}</span>
-                                </Tooltip>
-                            </div> */}
 
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"SINGLE"}>{AppConstants.single}</Radio>
@@ -810,17 +867,7 @@ class LiveScoreSettingsView extends Component {
                 </div>
 
                 {/* Buzzer button view */}
-                {/* <span className="applicable-to-heading">{AppConstants.buzzer}</span> */}
                 <InputWithHead conceptulHelp conceptulHelpMsg={AppConstants.buzzerMsg} marginTop={5} heading={AppConstants.buzzer} />
-                {/* <div className='contextualHelp-RowDirection' >
-
-                    <span className='text-heading-large pt-5' >{AppConstants.buzzer}</span>
-                    <div style={{ marginTop: 28 }}>
-                        <Tooltip background='#ff8237'>
-                            <span>{AppConstants.buzzerMsg}</span>
-                        </Tooltip>
-                    </div>
-                </div> */}
                 <div className="row mt-0 ml-1" >
 
                     <Checkbox style={{

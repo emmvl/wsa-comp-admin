@@ -12,6 +12,11 @@ import { registrationMainDashboardListAction } from "../../store/actions/registr
 import { checkRegistrationType } from "../../util/permissions";
 import { clearCompReducerDataAction } from "../../store/actions/registrationAction/competitionFeeAction";
 import history from "../../util/history";
+import WizardModel from "../../customComponents/registrationWizardModel"
+import { getOrganisationData } from "../../util/sessionStorage";
+import StripeKeys from "../stripe/stripeKeys";
+import { getAllCompetitionAction } from "../../store/actions/registrationAction/registrationDashboardAction"
+
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -139,7 +144,19 @@ class RegistrationMainDashboard extends Component {
         super(props);
         this.state = {
             year: 1,
-            loading: false
+            loading: false,
+            visible: false,
+            competitionId: "",
+            publishStatus: 0,
+            orgRegistratinId: 0,
+            registrationCloseDate: '',
+            wizardYear: 1,
+            isDirect: false,
+            inviteeStatus: 0,
+            competitionCreatorOrganisation: 0,
+            compFeeStatus: 0,
+            compName: "",
+            regStatus: false
         };
     }
 
@@ -147,6 +164,7 @@ class RegistrationMainDashboard extends Component {
         this.props.getOnlyYearListAction(this.props.appState.yearList)
         this.setState({ loading: true })
         this.props.registrationMainDashboardListAction(this.state.year)
+        this.props.getAllCompetitionAction(this.state.year)
     }
 
     componentDidUpdate(nextProps) {
@@ -163,6 +181,32 @@ class RegistrationMainDashboard extends Component {
                 this.setState({ loading: false })
             }
         }
+        let competitionTypeList = this.props.registrationDashboardState.competitionTypeList
+        if (nextProps.registrationDashboardState !== this.props.registrationDashboardState) {
+            if (nextProps.registrationDashboardState.competitionTypeList !== competitionTypeList) {
+                if (competitionTypeList.length > 0) {
+                    let competitionId = competitionTypeList[0].competitionId
+                    let publishStatus = competitionTypeList[0].competitionStatusId
+                    let orgRegistratinId = competitionTypeList[0].orgRegistratinId
+                    let wizardYear = competitionTypeList[0].yearId
+                    let registrationCloseDate = competitionTypeList[0].registrationCloseDate
+                    let inviteeStatus = competitionTypeList[0].inviteeStatus
+                    let competitionCreatorOrganisation = competitionTypeList[0].competitionCreatorOrganisation
+                    let isDirect = competitionTypeList[0].isDirect
+                    let compFeeStatus = competitionTypeList[0].creatorFeeStatus
+                    let compName = competitionTypeList[0].competitionName
+                    let regStatus = competitionTypeList[0].orgRegistrationStatusId
+                    this.setState({
+                        competitionId: competitionId,
+                        publishStatus: publishStatus,
+                        orgRegistratinId: orgRegistratinId,
+                        wizardYear: wizardYear, registrationCloseDate: registrationCloseDate,
+                        inviteeStatus: inviteeStatus, competitionCreatorOrganisation: competitionCreatorOrganisation,
+                        isDirect: isDirect, compFeeStatus, compName, regStatus
+                    })
+                }
+            }
+        }
     }
 
     onChange = e => {
@@ -174,6 +218,47 @@ class RegistrationMainDashboard extends Component {
         localStorage.setItem("yearId", yearId)
         this.setState({ year: yearId })
         this.props.registrationMainDashboardListAction(yearId)
+        this.props.getAllCompetitionAction(yearId)
+    }
+
+    openwizardmodel() {
+        let competitionData = this.props.registrationDashboardState.competitionTypeList
+        if (competitionData.length > 0) {
+            let competitionId = competitionData[0].competitionId
+            let publishStatus = competitionData[0].competitionStatusId
+            let orgRegistrationId = competitionData[0].orgRegistratinId
+            let wizardYear = competitionData[0].yearId
+            let registrationCloseDate = competitionData[0].registrationCloseDate
+            let inviteeStatus = competitionData[0].inviteeStatus
+            let competitionCreatorOrganisation = competitionData[0].competitionCreatorOrganisation
+            let isDirect = competitionData[0].isDirect
+            let compFeeStatus = competitionData[0].creatorFeeStatus
+            let compName = competitionData[0].competitionName
+            let regStatus = competitionData[0].orgRegistrationStatusId
+            this.setState
+                ({
+                    competitionId, publishStatus, orgRegistrationId,
+                    wizardYear, registrationCloseDate, inviteeStatus, competitionCreatorOrganisation, isDirect,
+                    visible: true, compFeeStatus, compName, regStatus
+                })
+        } else {
+            this.setState
+                ({
+                    visible: true
+                })
+        }
+
+    }
+
+    userEmail = () => {
+        let orgData = getOrganisationData()
+        let email = orgData && orgData.email ? encodeURIComponent(orgData.email) : ""
+        return email
+    }
+    stripeConnected = () => {
+        let orgData = getOrganisationData()
+        let stripeAccountID = orgData ? orgData.stripeAccountID : null
+        return stripeAccountID
     }
 
     ///dropdown view containing all the dropdown of header
@@ -181,6 +266,10 @@ class RegistrationMainDashboard extends Component {
         const { yearList, selectedYear } = this.props.appState
         let storedYearID = localStorage.getItem("yearId");
         let selectedYearId = (storedYearID == null || storedYearID == 'null') ? 1 : JSON.parse(storedYearID)
+        let stripeConnected = this.stripeConnected()
+        let userEmail = this.userEmail()
+        let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=${StripeKeys.clientId}&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=${StripeKeys.url}/registrationPayments`
+        let registrationCompetition = this.props.registrationDashboardState.competitionTypeList
         return (
             <div
                 className="comp-player-grades-header-drop-down-view"
@@ -192,13 +281,8 @@ class RegistrationMainDashboard extends Component {
                             <span className="form-heading">
                                 {AppConstants.participateInCompReg}
                             </span>
-                            {/* <div style={{ marginTop: -10 }}>
-                                <Tooltip placement="top" background='#ff8237'>
-                                    <span>{AppConstants.participateCompMsg}</span>
-                                </Tooltip>
-                            </div> */}
                         </div>
-                        <div className="col-sm-6">
+                        <div className="col-sm-2">
                             <div className="year-select-heading-view">
                                 <span className="year-select-heading">
                                     {AppConstants.year}:
@@ -215,11 +299,106 @@ class RegistrationMainDashboard extends Component {
                                 </Select>
                             </div>
                         </div>
+                        <div className="col-sm" style={{ display: "flex", alignContent: "center", justifyContent: 'flex-end' }} >
+                            <Button
+                                className="open-reg-button"
+                                type="primary"
+                                onClick={() => this.openwizardmodel()}
+                            >
+                                {AppConstants.registrationWizard}
+                            </Button>
+                        </div>
                     </div>
                 </div>
+                <WizardModel
+                    modalTitle={AppConstants.registrationWizard}
+                    visible={this.state.visible}
+                    onCancel={() => this.setState({ visible: false })}
+                    wizardCompetition={registrationCompetition}
+                    competitionChange={(competitionId) => this.changeCompetition(competitionId)}
+                    competitionId={this.state.competitionId}
+                    stripeConnected={stripeConnected}
+                    stripeConnectURL={stripeConnectURL}
+                    publishStatus={this.state.publishStatus}
+                    competitionClick={() => this.clickCompetition()}
+                    registrationClick={() => this.state.publishStatus == 2 && this.onClickRegistration()}
+                    registrationStatus={this.regStatus()}
+                    competitionStatus={this.competitionStatus()}
+                />
             </div>
         );
     };
+
+    regStatus() {
+        if (this.state.regStatus == 2) {
+            return true
+        }
+        else {
+            return false
+        }
+    }
+    //wizard  registration click
+    onClickRegistration() {
+        if (this.state.isDirect == true && this.state.competitionCreatorOrganisation == 1) {
+            history.push("/registrationForm", {
+                id: this.state.competitionId,
+                year: this.state.wizardYear,
+                orgRegId: this.state.orgRegistrationId, compCloseDate: this.state.registrationCloseDate,
+                compName: this.state.compName
+            })
+        } else if (this.state.inviteeStatus == 1) {
+            history.push("/registrationForm", {
+                id: this.state.competitionId,
+                year: this.state.wizardYear,
+                orgRegId: this.state.orgRegistrationId, compCloseDate: this.state.registrationCloseDate,
+                compName: this.state.compName
+            })
+        }
+    }
+
+    competitionStatus() {
+        let feeStatus = false
+        if (this.state.compFeeStatus == 1) {
+            return true
+
+        }
+        else if (this.state.inviteeStatus == 1) {
+            return true
+        }
+        else {
+            return false
+        }
+    }
+    ///wizard competition click
+    clickCompetition() {
+        if (this.state.competitionId !== 0) {
+            history.push("/registrationCompetitionFee", { id: this.state.competitionId })
+        }
+        else {
+            history.push("/registrationCompetitionFee", { id: null })
+        }
+
+    }
+    changeCompetition(competitionId) {
+        let competitionData = this.props.registrationDashboardState.competitionTypeList
+        let competitionIndex = competitionData.findIndex((x) => x.competitionId === competitionId)
+        let publishStatus = competitionData[competitionIndex].competitionStatusId
+        let orgRegistrationId = competitionData[competitionIndex].orgRegistratinId
+        let wizardYear = competitionData[competitionIndex].yearId
+        let registrationCloseDate = competitionData[competitionIndex].registrationCloseDate
+        let inviteeStatus = competitionData[competitionIndex].inviteeStatus
+        let competitionCreatorOrganisation = competitionData[competitionIndex].competitionCreatorOrganisation
+        let isDirect = competitionData[competitionIndex].isDirect
+        let compFeeStatus = competitionData[competitionIndex].creatorFeeStatus
+        let compName = competitionData[competitionIndex].competitionName
+        let regStatus = competitionData[competitionIndex].orgRegistrationStatusId
+        this.setState({
+            competitionId, publishStatus, orgRegistrationId,
+            wizardYear, registrationCloseDate, inviteeStatus, competitionCreatorOrganisation,
+            isDirect, compFeeStatus, compName, regStatus
+        })
+    }
+
 
     ///dropdown view containing dropdown and next screen navigation button/text
     dropdownButtonView = () => {
@@ -337,6 +516,7 @@ function mapDispatchToProps(dispatch) {
         getOnlyYearListAction,
         registrationMainDashboardListAction,
         clearCompReducerDataAction,
+        getAllCompetitionAction
     }, dispatch)
 }
 

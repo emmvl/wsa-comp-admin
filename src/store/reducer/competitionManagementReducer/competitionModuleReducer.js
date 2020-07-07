@@ -15,7 +15,6 @@ function CompetitionModuleState(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_GET_YEAR_SUCCESS:
-            console.log(action.result, 'action.result')
             return {
                 ...state,
                 onLoad: false,
@@ -24,7 +23,6 @@ function CompetitionModuleState(state = initialState, action) {
             };
 
         case ApiConstants.API_GENERATE_DRAW_LOAD:
-            console.log("API_GENERATE_DRAW_LOAD");
             return { ...state, drawGenerateLoad: true };
 
         case ApiConstants.API_GENERATE_DRAW_SUCCESS:
@@ -37,7 +35,6 @@ function CompetitionModuleState(state = initialState, action) {
             };
 
             case ApiConstants.API_GENERATE_DRAW_FAIL:
-               // console.log("%%%%%%%%%%%%%%%%%55 Red Fail" + action.error);
                 return {
                     ...state,
                     drawGenerateLoad: false,
@@ -46,7 +43,6 @@ function CompetitionModuleState(state = initialState, action) {
                 };
     
             case ApiConstants.API_GENERATE_DRAW_ERROR:
-               // console.log("%%%%%%%%%%%%%%%%%55 Red ERROR" + JSON.stringify(action.error) + "&&&&" + action.status);
                 return {
                     ...state,
                     drawGenerateLoad: false,

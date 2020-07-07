@@ -27,7 +27,7 @@ export function* umpireListSaga(action) {
     try {
         const result = yield call(UserAxiosApi.umpireList, action.data);
         if (result.status === 1) {
-            // console.log('saga', result)
+
             yield put({
                 type: ApiConstants.API_UMPIRE_LIST_SUCCESS,
                 result: result.result.data,
@@ -45,7 +45,7 @@ export function* addEditUmpireSaga(action) {
     try {
         const result = yield call(LiveScoreAxiosApi.addEditUmpire, action.data, action.affiliateId, action.exsitingUmpireId);
         if (result.status === 1) {
-            // console.log('saga', result)
+
             yield put({
                 type: ApiConstants.API_ADD_UMPIRE_SUCCESS,
                 result: result.result.data,
@@ -66,7 +66,7 @@ export function* getAffiliateSaga(action) {
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreGetAffilate, action.data);
         if (result.status === 1) {
-            // console.log('saga', result)
+
             yield put({
                 type: ApiConstants.API_GET_UMPIRE_AFFILIATE_LIST_SUCCESS,
                 result: result.result.data,
@@ -84,7 +84,7 @@ export function* umpireSearchSaga(action) {
     try {
         const result = yield call(UserAxiosApi.umpireList, action.data);
         if (result.status === 1) {
-            // console.log('saga', result)
+
             yield put({
                 type: ApiConstants.API_UMPIRE_SEARCH_SUCCESS,
                 result: result.result.data,

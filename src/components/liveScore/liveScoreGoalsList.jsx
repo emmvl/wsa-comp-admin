@@ -12,9 +12,6 @@ import history from "../../util/history";
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { liveScore_formateDateTime } from '../../themes/dateformate'
 import { exportFilesAction } from "../../store/actions/appAction"
-let this_Obj = null
-
-
 
 /////function to sort table column
 function tableSort(a, b, key) {
@@ -209,7 +206,7 @@ class LiveScoreGoalList extends Component {
     // on change search text
     onChangeSearchText = (e) => {
         this.setState({ searchText: e.target.value })
-        if (e.target.value == null || e.target.value == "") {
+        if (e.target.value === null || e.target.value === "") {
             this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, e.target.value)
         }
     }
@@ -226,7 +223,7 @@ class LiveScoreGoalList extends Component {
     // on click of search icon
     onClickSearchIcon = () => {
 
-        if (this.state.searchText == null || this.state.searchText == "") {
+        if (this.state.searchText === null || this.state.searchText === "") {
         }
         else {
             this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, this.state.searchText)
@@ -322,7 +319,7 @@ class LiveScoreGoalList extends Component {
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
-                    <Table loading={this.props.liveScoreGoalState.onLoad == true && true} className="home-dashboard-table" columns={this.state.filter == "By Match" ? this.state.columns1 : this.state.columns2} dataSource={goalList} pagination={false}
+                    <Table loading={this.props.liveScoreGoalState.onLoad === true && true} className="home-dashboard-table" columns={this.state.filter === "By Match" ? this.state.columns1 : this.state.columns2} dataSource={goalList} pagination={false}
                     />
                 </div>
                 <div className="d-flex justify-content-end">

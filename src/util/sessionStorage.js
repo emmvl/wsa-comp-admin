@@ -1,7 +1,6 @@
 // set competition id
 const setCompetitionID = competitionId => {
-  console.log(competitionId, " is id");
-  localStorage.setItem("competitionId", competitionId)
+  localStorage.setItem("competitionId", competitionId);
 
 }
 

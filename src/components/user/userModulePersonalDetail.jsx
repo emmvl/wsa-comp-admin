@@ -71,6 +71,11 @@ const columns = [
         key: 'shopPurchases'
     },
     {
+        title: 'Status',
+        dataIndex: 'paymentStatus',
+        key: 'paymentStatus'
+    },
+    {
         title: "Reg.Form",
         dataIndex: "regForm",
         key: "regForm",
@@ -693,6 +698,7 @@ class UserModulePersonalDetail extends Component {
             organisationId: getOrganisationData().organisationUniqueKey
         }
         this.props.getUserModulePersonalDetailsAction(payload);
+        this.props.getUserModulePersonalByCompetitionAction(payload)
     };
 
     onChangeYear = (value) => {
@@ -817,7 +823,7 @@ class UserModulePersonalDetail extends Component {
         }
         if (tabKey == "1") {
             this.hanleActivityTableList(1, userId, competition, "player", yearRefId);
-            this.hanleActivityTableList(1, userId, competition, "parent", yearRefId);
+           // this.hanleActivityTableList(1, userId, competition, "parent", yearRefId);
             this.hanleActivityTableList(1, userId, competition, "scorer", yearRefId);
             this.hanleActivityTableList(1, userId, competition, "manager", yearRefId);
         }
@@ -920,7 +926,7 @@ class UserModulePersonalDetail extends Component {
                             </div>
                             <span className='year-select-heading ml-3'>{AppConstants.dateOfBirth}</span>
                         </div>
-                        <span className="live-score-desc-text side-bar-profile-data">{liveScore_formateDate(personal.dateOfBirth) == "Invalid date" ? "" : liveScore_formateDate(personal.dateOfBirth)}</span>
+                        <span className="desc-text-style side-bar-profile-data">{liveScore_formateDate(personal.dateOfBirth) == "Invalid date" ? "" : liveScore_formateDate(personal.dateOfBirth)}</span>
                     </div>
                     <div className="live-score-side-desc-view">
                         <div className="live-score-title-icon-view">
@@ -929,7 +935,7 @@ class UserModulePersonalDetail extends Component {
                             </div>
                             <span className='year-select-heading ml-3'>{AppConstants.contactNumber}</span>
                         </div>
-                        <span className="live-score-desc-text side-bar-profile-data">{personal.mobileNumber}</span>
+                        <span className="desc-text-style side-bar-profile-data">{personal.mobileNumber}</span>
                     </div>
                     <div className="live-score-side-desc-view">
                         <div className="live-score-title-icon-view">
@@ -972,7 +978,7 @@ class UserModulePersonalDetail extends Component {
                             <span className='year-select-heading ml-3'>{AppConstants.team}</span>
                         </div>
                         {(this.state.teams != null && this.state.teams || []).map((item, index) => (
-                            <div key={item.teamId} className="live-score-desc-text side-bar-profile-data">{item.teamName}</div>
+                            <div key={item.teamId} className="desc-text-style side-bar-profile-data">{item.teamName}</div>
                         ))}
 
                     </div>
@@ -984,9 +990,9 @@ class UserModulePersonalDetail extends Component {
                             <span className='year-select-heading ml-3'>{AppConstants.division}</span>
                         </div>
                         {(this.state.divisions != null && this.state.divisions || []).map((item, index) => (
-                            <div key={item.divisionId} className="live-score-desc-text side-bar-profile-data">{item.divisionName}</div>
+                            <div key={item.divisionId} className="desc-text-style side-bar-profile-data">{item.divisionName}</div>
                         ))}
-                        {/* <span className="live-score-desc-text side-bar-profile-data">{this.state.competition!= null ? this.state.competition.divisionName : null}</span> */}
+                        {/* <span className="desc-text-style side-bar-profile-data">{this.state.competition!= null ? this.state.competition.divisionName : null}</span> */}
                     </div>
 
                 </div>
@@ -1116,6 +1122,18 @@ class UserModulePersonalDetail extends Component {
         let personalByCompData = userState.personalByCompData != null ? userState.personalByCompData : [];
         let primaryContacts = personalByCompData.length > 0 ? personalByCompData[0].primaryContacts : [];
         let childContacts = personalByCompData.length > 0 ? personalByCompData[0].childContacts : [];
+        let countryName = "";
+        let nationalityName = "";
+        let languages = "";
+        let userRegId = null;
+  
+        if(personalByCompData != null && personalByCompData.length > 0){
+            countryName = personalByCompData[0].countryName;
+            nationalityName = personalByCompData[0].nationalityName;
+            languages = personalByCompData[0].languages;
+            userRegId = personalByCompData[0].userRegistrationId
+        }
+
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="user-module-row-heading">{AppConstants.address}</div>
@@ -1175,26 +1193,29 @@ class UserModulePersonalDetail extends Component {
                     </div>
                 </div>
                 <div className="table-responsive home-dash-table-view" >
-                    <div style={{ marginTop: '7px', marginRight: '15px' }}>
+                    <div style={{ marginTop: '7px', marginRight: '15px', marginBottom: '15px' }}>
                         <div className="other-info-row" style={{ paddingTop: '10px' }}>
                             <div className="year-select-heading other-info-label" >{AppConstants.gender}</div>
-                            <div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].gender : null}</div>
+                            <div className="desc-text-style side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].gender : null}</div>
                         </div>
-                        <div className="other-info-row">
-                            <div className="year-select-heading other-info-label" >{AppConstants.countryOfBirth}</div>
-                            <div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].countryName : null}</div>
-                        </div>
-                        <div className="other-info-row">
-                            <div className="year-select-heading other-info-label">{AppConstants.nationalityReference}</div>
-                            <div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].nationalityName : null}</div>
-                        </div>
-                        <div className="other-info-row">
-                            <div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.childLangSpoken}</div>
-                            <div className="live-score-desc-text side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].languages : null}</div>
-                        </div>
+                        {userRegId != null &&
+                        <div>
+                            <div className="other-info-row">
+                                <div className="year-select-heading other-info-label" >{AppConstants.countryOfBirth}</div>
+                                <div className="desc-text-style side-bar-profile-data other-info-font">{countryName}</div>
+                            </div>
+                            <div className="other-info-row">
+                                <div className="year-select-heading other-info-label">{AppConstants.nationalityReference}</div>
+                                <div className="desc-text-style side-bar-profile-data other-info-font">{nationalityName}</div>
+                            </div>
+                            <div className="other-info-row">
+                                <div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.childLangSpoken}</div>
+                                <div className="desc-text-style side-bar-profile-data other-info-font">{languages}</div>
+                            </div>
+                        </div> }
                         {/* <div className="other-info-row">
 							<div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.disability}</div>
-							<div className="live-score-desc-text side-bar-profile-data other-info-font">{personal.isDisability == 0 ? "No" : "Yes"}</div>
+							<div className="desc-text-style side-bar-profile-data other-info-font">{personal.isDisability == 0 ? "No" : "Yes"}</div>
 						</div> */}
                     </div>
                 </div>
@@ -1227,19 +1248,19 @@ class UserModulePersonalDetail extends Component {
                             </div>
                             <div style={{ marginBottom: "1%", display: 'flex' }} >
                                 <div className="year-select-heading other-info-label col-sm-2">{AppConstants.existingMedConditions}</div>
-                                <div className="live-score-desc-text side-bar-profile-data other-info-font" style={{ textAlign: 'left' }}>
+                                <div className="desc-text-style side-bar-profile-data other-info-font" style={{ textAlign: 'left' }}>
                                     {item.existingMedicalCondition}
                                 </div>
                             </div>
                             <div style={{ marginBottom: "3%", display: 'flex' }} >
                                 <div className="year-select-heading other-info-label col-sm-2">{AppConstants.redularMedicalConditions}</div>
-                                <div className="live-score-desc-text side-bar-profile-data other-info-font" style={{ textAlign: 'left' }}>
+                                <div className="desc-text-style side-bar-profile-data other-info-font" style={{ textAlign: 'left' }}>
                                     {item.regularMedication}
                                 </div>
                             </div>
                             <div style={{ marginBottom: "3%", display: 'flex' }} >
                                 <div className="year-select-heading other-info-label col-sm-2">{AppConstants.disability}</div>
-                                <div className="live-score-desc-text side-bar-profile-data other-info-font" style={{ textAlign: 'left' }}>
+                                <div className="desc-text-style side-bar-profile-data other-info-font" style={{ textAlign: 'left' }}>
                                     {item.isDisability}
                                 </div>
                             </div>
@@ -1418,8 +1439,14 @@ class UserModulePersonalDetail extends Component {
     }
 
     render() {
-        let { activityPlayerList, activityManagerList, activityScorerList, activityParentList } = this.props.userState;
+        let { activityPlayerList, activityManagerList, activityScorerList, activityParentList, personalByCompData } = this.props.userState;
+        let personalDetails = personalByCompData != null ? personalByCompData : [];
+        let userRegistrationId = null;
+        if(personalDetails != null && personalDetails.length > 0){
+            userRegistrationId = personalByCompData[0].userRegistrationId
+        }
 
+       
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
@@ -1440,9 +1467,9 @@ class UserModulePersonalDetail extends Component {
                                                 {activityPlayerList != null && activityPlayerList.length > 0 && this.playerActivityView()}
                                                 {activityManagerList != null && activityManagerList.length > 0 && this.managerActivityView()}
                                                 {activityScorerList != null && activityScorerList.length > 0 && this.scorerActivityView()}
-                                                {activityParentList != null && activityParentList.length > 0 && this.parentActivityView()}
+                                                {/* {activityParentList != null && activityParentList.length > 0 && this.parentActivityView()} */}
                                                 {activityPlayerList.length == 0 && activityManagerList.length == 0
-                                                    && activityScorerList.length == 0 && activityParentList.length == 0
+                                                    && activityScorerList.length == 0 //&& activityParentList.length == 0
                                                     && this.noDataAvailable()}
                                             </TabPane>
                                             <TabPane tab={AppConstants.statistics} key="2">
@@ -1451,9 +1478,10 @@ class UserModulePersonalDetail extends Component {
                                             <TabPane tab={AppConstants.personalDetails} key="3">
                                                 {this.personalView()}
                                             </TabPane>
+                                            {userRegistrationId!= null &&
                                             <TabPane tab={AppConstants.medical} key="4">
                                                 {this.medicalView()}
-                                            </TabPane>
+                                            </TabPane>}
                                             <TabPane tab={AppConstants.registration} key="5">
                                                 {!this.state.isRegistrationForm ?
                                                     this.registrationView() :

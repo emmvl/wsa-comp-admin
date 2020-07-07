@@ -43,6 +43,9 @@ const initialState = {
     anyOrgNonSelected: null,
     registrationInvitees: [],
     lineupSelection: false,
+    gameborrowed: false,
+    minutesBorrowed: false,
+    premierCompLink: false
 }
 
 
@@ -170,12 +173,12 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 // error: payload
             }
         case ApiConstants.LiveScore_SETTING_CHANGE_FORM:
-            console.log(payload, 'LiveScore_SETTING_CHANGE_FORM')
+
 
             const keys = payload.key
             const Data = payload.data
 
-            if (keys == 'buzzerEnabled' || keys == 'warningBuzzerEnabled' || keys == "lineupSelection") {
+            if (keys == 'buzzerEnabled' || keys == 'warningBuzzerEnabled' || keys == "lineupSelection" || keys == "gameborrowed" || keys == "minutesBorrowed" || keys == 'premierCompLink') {
                 state[keys] = Data
             } else if (keys == 'recordUmpire') {
                 state.recordUmpire = Data
@@ -215,7 +218,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     state.otherSelected = null
                     state.affiliateNonSelected = Data
                     // state.anyOrgNonSelected = null
-                    console.log(state.invitedTo, 'state.invitedTo')
+
                 }
                 if (keys == 'anyOrgNonSelected') {
                     state.invitedTo = []
@@ -230,7 +233,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
             } else if (keys == 'associationAffilite' || keys == 'clubAffilite') {
 
                 if (keys == 'associationAffilite') {
-                    console.log(Data, 'Data~~~~~~')
+
                     state.associationLeague = Data
                     let inviteeArray = []
                     for (let i in Data) {
@@ -277,7 +280,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     state.form.lineupSelectionHours = null
                     state.form.lineupSelectionMins = null
                 }
-                console.log(payload, 'record')
+
 
 
             }
@@ -350,7 +353,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
             return { ...state, loader: false }
 
         case ApiConstants.SETTING_REGISTRATION_INVITEES_SUCCESS:
-            console.log(payload, 'payload')
+
             return {
                 ...state,
                 loader: false,

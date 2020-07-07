@@ -72,17 +72,17 @@ let AxiosApi = {
   },
 
   //////get the membership  product details
-  regGetMembershipProductDetails(payload) {
-    let productId = payload.productId;
-    var url = `/api/membershipproduct/${productId}`;
-    return Method.dataGet(url, token);
-  },
+  // regGetMembershipProductDetails(payload) {
+  //   let productId = payload.productId;
+  //   var url = `/api/membershipproduct/${productId}`;
+  //   return Method.dataGet(url, token);
+  // },
 
 
   //////get the membership  product details
   regGetMembershipProductDetails(payload) {
-    let productId = payload.productId
-    var url = `api/membershipproduct/details/${productId}`;
+    const productId = payload.productId;
+    const url = `api/membershipproduct/details/${productId}`;
     return Method.dataGet(url, token);
   },
 
@@ -115,7 +115,7 @@ let AxiosApi = {
     return Method.dataGet(url, token);
   },
 
- async getVenue() {
+  async getVenue() {
     let organisationId = await getOrganisationData().organisationUniqueKey;
     var url = `/api/venue/all?organisationUniqueKey=${organisationId}`;
     return Method.dataGet(url, token);
@@ -318,7 +318,6 @@ const Method = {
           }
         })
         .catch(err => {
-          console.log(err.response)
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status == 401) {
@@ -394,7 +393,6 @@ const Method = {
           }
         })
         .catch(err => {
-          console.log(err.response)
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status == 401) {
@@ -466,7 +464,6 @@ const Method = {
           }
         })
         .catch(err => {
-          console.log(err.response)
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status == 401) {

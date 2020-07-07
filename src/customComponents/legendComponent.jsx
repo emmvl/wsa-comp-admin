@@ -8,10 +8,10 @@ class LegendComponent extends React.Component {
             <div >
                 {legendArray.length > 0 && legendArray.map((item, index) => {
                     return (
-                        <div className="legend-main-div">
-                            {item.map((subItem) => {
+                        <div key={index + "legend"} className="legend-main-div">
+                            {item.map((subItem, subIndex) => {
                                 return (
-                                    <div className="legend-color-text-div" >
+                                    <div key={subIndex + "subLegend"} className="legend-color-text-div" >
                                         <div>
                                             <div className="legend-color-div" style={{ backgroundColor: subItem.colorCode }} >
                                             </div>

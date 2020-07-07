@@ -65,7 +65,6 @@ class LiveScorerCoachImport extends Component {
 
 
     contentView = () => {
-        console.log(this.state.csvdata, 'csvdataPlayer')
         return (
             <div className="content-view pt-4">
                 <span className={`input-heading`}>{AppConstants.fileInput}</span>

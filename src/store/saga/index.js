@@ -38,7 +38,7 @@ import {
   getOwnYearAndCompetitionListSaga,
   getEnhancedRoundRobinTypesSaga,
   exportFilesSaga,
-  userExportFilesSaga
+  userExportFilesSaga,
 } from "./appSaga";
 
 import {
@@ -64,7 +64,7 @@ import {
 
 ////**************************Live Score***************************Start
 // import { liveScorePlayerSaga } from "./liveScoreSaga/liveScorePlayerSaga";
-import { liveScoreMatchListSaga, liveScoreAddMatchSaga, liveScoreCreateMatchSaga, liveScoreDeleteMatchSaga, liveScoreCompetitionVenuesList, liveScoreMatchImportSaga, liveScoreMatchSaga, liveScoreClubListSaga, playerLineUpStatusChnage ,bulkScoreChange} from './liveScoreSaga/liveScoreMatchSaga';
+import { liveScoreMatchListSaga, liveScoreAddMatchSaga, liveScoreCreateMatchSaga, liveScoreDeleteMatchSaga, liveScoreCompetitionVenuesList, liveScoreMatchImportSaga, liveScoreMatchSaga, liveScoreClubListSaga, playerLineUpStatusChnage, bulkScoreChange } from './liveScoreSaga/liveScoreMatchSaga';
 
 import { liveScoreDivisionSaga, getLiveScoreScorerSaga } from "./liveScoreSaga/liveScoreSaga";
 import {
@@ -79,7 +79,7 @@ import {
   liveScoreTeamPaggingSaga
 } from './liveScoreSaga/liveScoreTeamSaga';
 import { liveScoreLaddersDivisionsaga, liveScoreLaddersListSaga } from './liveScoreSaga/liveScoreLadderSaga';
-import { liveScoreIncidentListSaga } from './liveScoreSaga/liveScoreIncidentSaga';
+import { liveScoreIncidentListSaga, liveScoreAddEditIncidentSaga, liveScoreIncidentTypeSaga } from './liveScoreSaga/liveScoreIncidentSaga';
 import { liveScoreRoundSaga, liveScoreRoundListSaga } from './liveScoreSaga/liveScoreRoundSaga';
 import { liveScoreNewsListSaga, liveScoreAddNewsSaga, liveScoreNewsNotificationSaga, liveScoreNewsDeleteSaga } from './liveScoreSaga/liveScoreNewsSaga';
 import { liveScoreBannerSaga, liveScoreAddBannerSaga, liveScoreRemoveBannerSaga } from './liveScoreSaga/liveScoreBannerSaga';
@@ -111,7 +111,8 @@ import {
   venueByIdSaga, venueDeleteSaga,
   getGenderSaga, getPhotoTypeSaga, getAppyToSaga, getExtraTimeDrawSaga,
   getFinalsFixtureTemplateSaga, courtListSaga, getSendInvitesSaga, RegistrationRestrictionType,
-  getAllowTeamRegistrationTypeSaga, disabilityReferenceSaga, getCommonInitSaga
+  getAllowTeamRegistrationTypeSaga, disabilityReferenceSaga, getCommonInitSaga, getStateReferenceSaga,
+  getRegistrationPaymentStatusSaga
 } from "./commonSaga/commonSaga";
 
 import { fixtureTemplateSaga } from '../saga/competitionManagementSaga/competitionManagementSaga';
@@ -193,6 +194,8 @@ import * as umpireRoasterSaga from "../saga/umpireSaga/umpireRoasterSaga"
 import * as umpireSaga from "../saga/umpireSaga/umpireSaga"
 import * as assignUmpireSaga from "../saga/umpireSaga/assignUmpireSaga";
 import * as shopProductSaga from "../saga/shopSaga/productSaga";
+import * as competitionQuickSaga from "../saga/competitionManagementSaga/competitionQuickSaga";
+
 
 export default function* root_saga() {
   yield takeEvery(ApiConstants.API_LOGIN_LOAD, loginApiSaga);
@@ -598,87 +601,57 @@ export default function* root_saga() {
 
   //Search Scorer saga 
   yield takeEvery(ApiConstants.API_LIVESCORE_SCORER_SEARCH_LOAD, liveScoreScorerSearchSaga)
-
-
   //Club List Saga
   yield takeEvery(ApiConstants.API_LIVE_SCORE_CLUB_LIST_LOAD, liveScoreClubListSaga)
-
   //// Ladder Setting Saga
   yield takeEvery(ApiConstants.API_LADDER_SETTING_MATCH_RESULT_LOAD, laddersSettingGetMatchResult)
-
   yield takeEvery(ApiConstants.API_LADDER_SETTING_GET_DATA_LOAD, laddersSettingGetData)
-
   yield takeEvery(ApiConstants.API_LADDER_SETTING_POST_DATA_LOAD, laddersSettingPostData)
-
   // Tema list with paggination
   yield takeEvery(ApiConstants.API_LIVE_SCORE_TEAM_WITH_PAGGING_LOAD, liveScoreTeamPaggingSaga);
-
   //Player list with paggination
   yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_LOAD, getPlayerListPagginationSaga);
-
   yield takeEvery(ApiConstants.API_USERCOUNT_LOAD, homeDashboardSaga)
-
-
   //// Invitee Search SAGA
   yield takeEvery(ApiConstants.API_COMPETITION_FEE_INVITEES_SEARCH_LOAD, inviteeSearchSaga)
-
   yield takeEvery(ApiConstants.API_COMPETITION_PLAYER_IMPORT_LOAD, importCompetitionPlayer);
   yield takeEvery(ApiConstants.API_COMPETITION_TEAMS_IMPORT_LOAD, importCompetitionTeams);
-
-
   yield takeEvery(ApiConstants.API_EXPORT_FILES_LOAD, exportFilesSaga)
-
   yield takeEvery(ApiConstants.API_SAVE_VENUE_CHANGE_LOAD, liveScoreChangeVenueSaga);
-
   //EndUserRegistrationDashboard List
   yield takeEvery(ApiConstants.API_USER_REG_DASHBOARD_LIST_LOAD, endUserRegSaga.endUserRegDashboardListSaga)
-
   // User Friend List
   yield takeEvery(ApiConstants.API_USER_FRIEND_LOAD, userSaga.getUserFriendListSaga)
-
   // User Refer Friend List
   yield takeEvery(ApiConstants.API_USER_REFER_FRIEND_LOAD, userSaga.getUserReferFriendListSaga)
   yield takeEvery(ApiConstants.API_LIVE_SCORE_GET_FIXTURE_COMP_LOAD, getLiveScoreFixtureCompSaga)
-
   //////////////////draws division grade names list
   yield takeEvery(ApiConstants.API_DRAWS_DIVISION_GRADE_NAME_LIST_LOAD, getDivisionGradeNameListSaga)
-
   //////////stripe payment account balance API
   yield takeEvery(ApiConstants.API_STRIPE_ACCOUNT_BALANCE_API_LOAD, stripeSaga.accountBalanceSaga)
-
   ///////For stripe charging payment API
   yield takeEvery(ApiConstants.API_STRIPE_CHARGING_PAYMENT_API_LOAD, stripeSaga.chargingPaymentSaga)
   yield takeEvery(ApiConstants.API_DRAW_PUBLISH_LOAD, publishDraws)
   //part proposed team grading comment 
   yield takeEvery(ApiConstants.API_COMPETITION_TEAM_DELETE_LOAD, deleteTeamSaga)
-
   //part proposed team grading comment 
   yield takeEvery(ApiConstants.API_COMPETITION_TEAM_DELETE_ACTION_LOAD, deleteTeamActionSaga)
-
   //////////stripe payment account balance API
   yield takeEvery(ApiConstants.API_SAVE_STRIPE_ACCOUNT_API_LOAD, stripeSaga.saveStripeAccountSaga)
-
   // Organisation Photos List
   yield takeEvery(ApiConstants.API_GET_ORG_PHOTO_LOAD, userSaga.getOrgPhotosListSaga)
-
   // Organisation Photos Save
   yield takeEvery(ApiConstants.API_SAVE_ORG_PHOTO_LOAD, userSaga.saveOrgPhotosSaga)
-
   // Organisation Photos Delete
   yield takeEvery(ApiConstants.API_DELETE_ORG_PHOTO_LOAD, userSaga.deleteOrgPhotosSaga)
-
   //Draws Matches List Export
   yield takeEvery(ApiConstants.API_DRAW_MATCHES_LIST_LOAD, drawsMatchesListExportSaga)
-
   //////////stripe login link
   yield takeEvery(ApiConstants.API_GET_STRIPE_LOGIN_LINK_API_LOAD, stripeSaga.getStripeLoginLinkSaga)
-
   /////stripe payments transfer list
   yield takeEvery(ApiConstants.API_GET_STRIPE_PAYMENTS_TRANSFER_LIST_API_LOAD, stripeSaga.getStripeTransferListSaga)
-
   ///forgot password
   yield takeEvery(ApiConstants.API_FORGOT_PASSWORD_LOAD, forgotPasswordSaga);
-
   //////stripe payout list
   yield takeEvery(ApiConstants.API_GET_STRIPE_PAYOUT_LIST_API_LOAD, stripeSaga.getStripePayoutListSaga)
   //Final Teams Export
@@ -686,86 +659,59 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_EXPORT_FINAL_PLAYERS_LOAD, finalPlayersExportSaga)
   yield takeEvery(ApiConstants.API_EXPORT_PROPOSED_TEAMS_LOAD, proposedTeamsExportSaga)
   yield takeEvery(ApiConstants.API_EXPORT_PROPOSED_PLAYERS_LOAD, proposedPlayersExportSaga)
-
   /////stripe single payout transaction list
   yield takeEvery(ApiConstants.API_GET_STRIPE_TRANSACTION_PAYOUT_LIST_API_LOAD, stripeSaga.getTransactionPayoutListSaga)
-
   ////coach saga
   yield takeEvery(ApiConstants.API_LIVE_SCORE_COACH_LIST_LOAD, liveScoreCoachSaga)
   yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_EDIT_COACH_LOAD, liveScoreAddCoachSaga)
-
   // Organisation Contat Delete
   yield takeEvery(ApiConstants.API_DELETE_ORG_CONTACT_LOAD, userSaga.deleteOrgContactSaga)
-
   // Organisation Contat Delete
   yield takeEvery(ApiConstants.API_EXPORT_ORG_REG_QUESTIONS_LOAD, userSaga.exportOrgRegQuestionsSaga)
-
   /////API_GET_INVOICE data
   yield takeEvery(ApiConstants.API_GET_INVOICE_LOAD, stripeSaga.getInvoiceSaga)
-
   //fixtureSaga get division grade api
   yield takeEvery(ApiConstants.API_GET_DIVISION_LOAD, getDivisionSaga)
   yield takeEvery(ApiConstants.API_GET_FIXTURE_LOAD, competitionFixtureSaga)
   yield takeEvery(ApiConstants.API_UPDATE_COMPETITION_FIXTURE_LOAD, updateCompetitionFixtures)
   //// Competition division delete 
   yield takeEvery(ApiConstants.API_COMPETITION_DIVISION_DELETE_LOAD, deleteCompetitionDivisionSaga)
-
   // Team Change division 
   yield takeEvery(ApiConstants.API_CHANGE_COMPETITION_DIVISION_TEAM_LOAD, teamChangeDivisionSaga)
-
   // Player Change division 
   yield takeEvery(ApiConstants.API_CHANGE_COMPETITION_DIVISION_PLAYER_LOAD, playerChangeDivisionSaga)
-
   yield takeEvery(ApiConstants.API_AFFILIATE_DIRECTORY_LOAD, userSaga.getAffiliateDirectorySaga)
-
   yield takeEvery(ApiConstants.API_COURT_LIST_LOAD, courtListSaga)
   yield takeEvery(ApiConstants.API_UPDATE_DRAWS_LOCK_LOAD, updateDrawsLock)
-
   yield takeEvery(ApiConstants.API_EXPORT_AFFILIATE_DIRECTORY_LOAD, userSaga.exportAffiliateDirectorySaga)
-
   // invite send in registration Form
   yield takeEvery(ApiConstants.API_GET_INVITE_TYPE_LOAD, getSendInvitesSaga)
-
   yield takeEvery(ApiConstants.API_GET_COMMENT_LIST_LOAD, playerCommentList)
-
   //// Umpire Module
   yield takeEvery(ApiConstants.API_UMPIRE_LIST_LOAD, umpireSaga.umpireListSaga)
   yield takeEvery(ApiConstants.API_UMPIRE_COMPETITION_LIST_LOAD, umpireCompSaga.getUmpireCompSaga)
   yield takeEvery(ApiConstants.API_GET_UMPIRE_AFFILIATE_LIST_LOAD, umpireSaga.getAffiliateSaga)
   yield takeEvery(ApiConstants.API_UMPIRE_SEARCH_LOAD, umpireSaga.umpireSearchSaga)
   yield takeEvery(ApiConstants.API_ADD_UMPIRE_LOAD, umpireSaga.addEditUmpireSaga)
-
   yield takeEvery(ApiConstants.SETTING_REGISTRATION_INVITEES_LOAD, settingRegInviteesSaga)
   yield takeEvery(ApiConstants.API_LIVE_SCORE_COACH_IMPORT_LOAD, liveScoreCoachImportSaga)
-
   yield takeEvery(ApiConstants.API_GET_ALL_COMPETITION_LOAD, getCompetitionSaga)
-
   yield takeEvery(ApiConstants.API_REGISTRATION_RESTRICTIONTYPE_LOAD, RegistrationRestrictionType)
-
   yield takeEvery(ApiConstants.API_FIXTURE_TEMPLATE_ROUNDS_LOAD, fixtureTemplateSaga)
   yield takeEvery(ApiConstants.API_PAYMENT_TYPE_LIST_LOAD, stripeSaga.getPaymentListSaga)
-
   yield takeEvery(ApiConstants.API_UMPIRE_ROASTER_LIST_LOAD, umpireRoasterSaga.umpireRoasterListSaga)
-
   yield takeEvery(ApiConstants.API_GET_UMPIRE_DASHBOARD_VENUE_LIST_LOAD, umpireDashboardSaga.umpireVenueListSaga)
-
   yield takeEvery(ApiConstants.API_UMPIRE_ROASTER_ACTION_CLICK_LOAD, umpireRoasterSaga.umpireActionPerofomSaga)
-
   yield takeEvery(ApiConstants.API_GET_UMPIRE_DASHBOARD_DIVISION_LIST_LOAD, umpireDashboardSaga.umpireDivisionListSaga)
   yield takeEvery(ApiConstants.API_GET_UMPIRE_DASHBOARD_LIST_LOAD, umpireDashboardSaga.umpireListDashboardSaga)
-
   yield takeEvery(ApiConstants.API_USER_PROFILE_UPDATE_LOAD, userSaga.updateUserProfileSaga)
-
   /// Disability Reference Saga
   yield takeEvery(ApiConstants.API_DISABILITY_REFERENCE_LOAD, disabilityReferenceSaga)
   yield takeEvery(ApiConstants.API_GET_COMMON_INIT_LOAD, getCommonInitSaga)
-
   ///Action Box List
   yield takeEvery(ApiConstants.API_GET_ACTION_BOX_LOAD, actionBoxListSaga)
-
   ///Update Action Box
   yield takeEvery(ApiConstants.API_UPDATE_ACTION_BOX_LOAD, updateActionBoxSaga)
-
   yield takeEvery(ApiConstants.API_UMPIRE_IMPORT_LOAD, umpireDashboardSaga.umpireImportSaga)
   //////assign umpire get list
   yield takeEvery(ApiConstants.API_GET_ASSIGN_UMPIRE_LIST_LOAD, assignUmpireSaga.getAssignUmpireListSaga)
@@ -773,20 +719,38 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_ASSIGN_UMPIRE_FROM_LIST_LOAD, assignUmpireSaga.assignUmpireSaga)
   /////unassign umpire from the match(delete)
   yield takeEvery(ApiConstants.API_UNASSIGN_UMPIRE_FROM_LIST_LOAD, assignUmpireSaga.unassignUmpireSaga)
-
   yield takeEvery(ApiConstants.CHANGE_PLAYER_LINEUP_LOAD, playerLineUpStatusChnage)
-
   yield takeEvery(ApiConstants.API_USER_EXPORT_FILES_LOAD, userExportFilesSaga)
-
   //////shop product listing
   yield takeEvery(ApiConstants.API_GET_SHOP_PRODUCT_LISTING_LOAD, shopProductSaga.getProductListingSaga)
   /////shop add product
   yield takeEvery(ApiConstants.API_ADD_SHOP_PRODUCT_LOAD, shopProductSaga.addProductActionSaga)
-
   yield takeEvery(ApiConstants.API_LIVE_SCORE_UMPIRES_IMPORT_LOAD, liveScoreUmpiresImportSaga)
   yield takeEvery(ApiConstants.BULK_SCORE_UPDATE_LOAD, bulkScoreChange)
-
   //////////////////////registration main dashboard listing owned and participate registration
   yield takeEvery(ApiConstants.API_GET_REGISTRATION_MAIN_DASHBOARD_LISTING_LOAD, registrationMainDashboardListSaga)
+  yield takeEvery(ApiConstants.API_YEAR_AND_QUICK_COMPETITION_LOAD, competitionQuickSaga.getquickYearAndCompetitionListSaga)
+  ////////////////post/save quick competition division
+  yield takeEvery(ApiConstants.API_SAVE_QUICK_COMPETITION_DIVISION_LOAD, competitionQuickSaga.saveQuickCompDivisionSaga)
+  ////////////get reference type in the add product screen
+  yield takeEvery(ApiConstants.API_GET_TYPES_LIST_IN_ADD_PROUCT_LOAD, shopProductSaga.getTypesOfProductSaga)
+  /// create quick competition 
+  yield takeEvery(ApiConstants.API_CREATE_QUICK_COMPETITION_LOAD, competitionQuickSaga.createQuickComptitionSaga)
+  yield takeEvery(ApiConstants.API_GET_QUICK_COMPETITION_LOAD, competitionQuickSaga.getQuickComptitionSaga)
+  // quick competition time slot
+  yield takeEvery(ApiConstants.API_QUICK_COMPETITION_TIMESLOT_POST_LOAD, competitionQuickSaga.quickcompetitoTimeSlotsPostApi)
+  //////update quick competition
+  yield takeEvery(ApiConstants.API_UPDATE_QUICK_COMPETITION_LOAD, competitionQuickSaga.updateQuickCompetitionSaga)
+  ///////////get state reference data
+  yield takeEvery(ApiConstants.API_GET_STATE_REFERENCE_DATA_LOAD, getStateReferenceSaga)
+  //////////////////delete product from the product listing API
+  yield takeEvery(ApiConstants.API_DELETE_SHOP_PRODUCT_LOAD, shopProductSaga.deleteProductSaga)
+
+  yield takeEvery(ApiConstants.API_REGISTRATION_PAYMENT_STATUS_LOAD, getRegistrationPaymentStatusSaga)
+
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_EDIT_INCIDENT_LOAD, liveScoreAddEditIncidentSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_INCIDENT_TYPE_LOAD, liveScoreIncidentTypeSaga)
+  ///////////////////////////delete product variant API
+  yield takeEvery(ApiConstants.API_DELETE_SHOP_PRODUCT_VARIANT_LOAD, shopProductSaga.deleteProductVariantSaga)
 
 }

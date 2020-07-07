@@ -3,7 +3,6 @@ import ApiConstants from "../../../themes/apiConstants";
 import CompetitionAxiosApi from "../../http/competitionHttp/competitionAxiosApi";
 
 export function* competitionDashboardSaga(action) {
-    console.log(action, 'competitionDashboardSaga')
     try {
         const result = yield call(CompetitionAxiosApi.competitionDashboard, action.yearId);
         if (result.status === 1) {

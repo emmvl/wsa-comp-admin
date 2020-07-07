@@ -132,7 +132,8 @@ class LiveScorePlayerView extends Component {
         super(props);
         this.state = {
             playerTabKey: 1,
-            data: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord : null : null
+            data: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord : null : null,
+            screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null
         }
     }
 
@@ -140,16 +141,18 @@ class LiveScorePlayerView extends Component {
     profileImageView = () => {
         let data = this.state.data
 
+        console.log(data, 'datadata')
+
         return (
             <div className="fluid-width mt-2" >
 
                 <div className='profile-image-view mr-5' >
                     <span className="user-contact-heading">{AppConstants.playerProfile}</span>
-                    {/* <img className="live-score-user-image" src={'https://www.si.com/specials/fittest50-2017/img/men/ngolo_kante.jpg'} alt="" height="80" width="80" /> */}
+                    {/* <img className="user-image" src={'https://www.si.com/specials/fittest50-2017/img/men/ngolo_kante.jpg'} alt="" height="80" width="80" /> */}
 
                     {
                         data.profilePicture ?
-                            <img className="live-score-user-image" src={data.profilePicture} alt="" height="80" width="80" />
+                            <img className="user-image" src={data.profilePicture} alt="" height="80" width="80" />
                             :
                             <span className="user-contact-heading">{AppConstants.noImage}</span>
 
@@ -167,7 +170,7 @@ class LiveScorePlayerView extends Component {
                             </div>
                             <span className='year-select-heading ml-3'>{AppConstants.dateOfBirth}</span>
                         </div>
-                        <span className="live-score-desc-text side-bar-profile-data">{liveScore_formateDate(data.dob) == "Invalid date" ? "" : liveScore_formateDate(data.dob)}</span>
+                        <span className="desc-text-style side-bar-profile-data">{liveScore_formateDate(data.dob) == "Invalid date" ? "" : liveScore_formateDate(data.dob)}</span>
                     </div>
                     <div className="live-score-side-desc-view">
                         <div className="live-score-title-icon-view">
@@ -176,7 +179,7 @@ class LiveScorePlayerView extends Component {
                             </div>
                             <span className='year-select-heading ml-3'>{AppConstants.contactNumber}</span>
                         </div>
-                        <span className="live-score-desc-text side-bar-profile-data">{data.phoneNumber}</span>
+                        <span className="desc-text-style side-bar-profile-data">{data.phoneNumber}</span>
                     </div>
                     <div className="live-score-side-desc-view">
                         <div className="live-score-title-icon-view">
@@ -185,7 +188,7 @@ class LiveScorePlayerView extends Component {
                             </div>
                             <span className='year-select-heading ml-3'>{AppConstants.team}</span>
                         </div>
-                        <span className="live-score-desc-text side-bar-profile-data">{data.team ? data.team.name : data.teamName}</span>
+                        <span className="desc-text-style side-bar-profile-data">{data.team ? data.team.name : data.teamName}</span>
                     </div>
                     <div className="live-score-side-desc-view">
                         <div className="live-score-title-icon-view">
@@ -194,7 +197,7 @@ class LiveScorePlayerView extends Component {
                             </div>
                             <span className='year-select-heading ml-3'>{AppConstants.division}</span>
                         </div>
-                        <span className="live-score-desc-text side-bar-profile-data">{data.division ? data.division.name : ""}</span>
+                        <span className="desc-text-style side-bar-profile-data">{data.division ? data.division.name : ""}</span>
                     </div>
                     <div className="live-score-side-desc-view">
                         <div className="live-score-title-icon-view">
@@ -203,7 +206,7 @@ class LiveScorePlayerView extends Component {
                             </div>
                             <span className='year-select-heading ml-3'>{AppConstants.competition}</span>
                         </div>
-                        <span className="live-score-desc-text side-bar-profile-data">{'TWSA'}</span>
+                        <span className="desc-text-style side-bar-profile-data">{'TWSA'}</span>
                     </div>
                 </div>
             </div>
@@ -302,7 +305,7 @@ class LiveScorePlayerView extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"7"} />
+                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.screenName == 'dashboard' ? "1" : this.state.screenName == 'incident' ? '17' : "7"} />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">
                         <div className="fluid-width" >

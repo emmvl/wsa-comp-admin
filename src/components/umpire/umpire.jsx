@@ -13,12 +13,12 @@ import { umpireListAction } from "../../store/actions/umpireAction/umpireAction"
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { entityTypes } from '../../util/entityTypes'
 import { refRoleTypes } from '../../util/refRoles'
-import { getUmpireCompId, setUmpireCompId, getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData } from '../../util/sessionStorage'
+import { getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData } from '../../util/sessionStorage'
 import { userExportFilesAction } from "../../store/actions/appAction"
 import ValidationConstants from "../../themes/validationConstant";
 import history from "../../util/history";
+
 const { Content } = Layout;
-const { SubMenu } = Menu;
 const { Option } = Select;
 
 
@@ -28,8 +28,6 @@ function tableSort(a, b, key) {
     let stringB = JSON.stringify(b[key])
     return stringA.localeCompare(stringB)
 }
-let this_obj = null;
-
 
 const columns = [
 
@@ -39,14 +37,11 @@ const columns = [
         key: 'firstsName',
         sorter: (a, b) => tableSort(a, b, "firstName"),
         render: (firstName, record) =>
-
-            // <span class="input-heading-add-another pt-0"
-            //     onClick={() => this_obj.checkUserId(record)}>{firstName}</span>
             <NavLink to={{
                 pathname: '/userPersonal',
                 state: { userId: record.id, screenKey: "umpire", screen: "/umpire" }
             }}>
-                <span class="input-heading-add-another pt-0">{firstName}</span>
+                <span className="input-heading-add-another pt-0">{firstName}</span>
             </NavLink>
     },
     {
@@ -55,14 +50,11 @@ const columns = [
         key: 'lastName',
         sorter: (a, b) => tableSort(a, b, "lastName"),
         render: (lastName, record) =>
-            // <span class="input-heading-add-another pt-0"
-            //     onClick={() => this_obj.checkUserId(record)}>{lastName}</span>
-
             <NavLink to={{
                 pathname: '/userPersonal',
                 state: { userId: record.id, screenKey: "umpire", screen: "/umpire" }
             }}>
-                <span class="input-heading-add-another pt-0">{lastName}</span>
+                <span className="input-heading-add-another pt-0">{lastName}</span>
             </NavLink>
     },
     {
@@ -86,8 +78,8 @@ const columns = [
 
             return (
                 <div>
-                    {linkedEntity.length > 0 && linkedEntity.map((item) => (
-                        <span className='multi-column-text-aligned' >{item.name}</span>
+                    {linkedEntity.length > 0 && linkedEntity.map((item, index) => (
+                        <span key={`entityName`+index} className='multi-column-text-aligned'>{item.name}</span>
                     ))
                     }
                 </div>)
@@ -95,6 +87,8 @@ const columns = [
     },
     {
         title: "Action",
+        dataIndex: 'action',
+        key: 'action',
         render: (data, record) => <Menu
             className="action-triple-dot-submenu"
             theme="light"
@@ -127,8 +121,6 @@ const columns = [
 
 ];
 
-const data = []
-
 class Umpire extends Component {
     constructor(props) {
         super(props);
@@ -140,7 +132,6 @@ class Umpire extends Component {
             competitionUniqueKey: null,
             compArray: []
         }
-        this_obj = this
     }
 
     componentDidMount() {
@@ -151,7 +142,7 @@ class Umpire extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
-            if (this.state.loading == true && this.props.umpireCompetitionState.onLoad == false) {
+            if (this.state.loading === true && this.props.umpireCompetitionState.onLoad === false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
                 let compData = compList.length > 0 && compList[0]
@@ -164,7 +155,6 @@ class Umpire extends Component {
                 if (getUmpireCompetiton()) {
                     let compId = JSON.parse(getUmpireCompetiton())
                     let index = compList.findIndex(x => x.id === compId)
-                    console.log("indexindex", index)
                     if (index > -1) {
                         firstComp = compList[index].id
                         compData = compList[index]
@@ -192,7 +182,7 @@ class Umpire extends Component {
     }
 
     checkUserId(record) {
-        if (record.userId == null) {
+        if (record.userId === null) {
             message.config({ duration: 1.5, maxCount: 1 })
             message.warn(ValidationConstants.umpireMessage)
         }
@@ -220,7 +210,9 @@ class Umpire extends Component {
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={umpireListResult}
-                        pagination={false} />
+                        pagination={false}
+                        rowKey={(record, index) => "umpireListResult" + record.id + index}
+                    />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
                     <div
@@ -255,7 +247,7 @@ class Umpire extends Component {
 
         let compObj = null
         for (let i in this.state.compArray) {
-            if (compID.comp == this.state.compArray[i].id) {
+            if (compID.comp === this.state.compArray[i].id) {
                 compObj = this.state.compArray[i]
                 break;
             }
@@ -275,7 +267,7 @@ class Umpire extends Component {
     // on change search text
     onChangeSearchText = (e) => {
         this.setState({ searchText: e.target.value })
-        if (e.target.value == null || e.target.value == "") {
+        if (e.target.value === null || e.target.value === "") {
 
             this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: this.state.selectedComp, offset: 0, userName: e.target.value })
         }
@@ -291,7 +283,7 @@ class Umpire extends Component {
 
     // on click of search icon
     onClickSearchIcon = () => {
-        if (this.state.searchText == null || this.state.searchText == "") {
+        if (this.state.searchText === null || this.state.searchText === "") {
         }
         else {
             this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: this.state.selectedComp, userName: this.state.searchText, offset: 0 })
@@ -410,8 +402,8 @@ class Umpire extends Component {
                                 value={this.state.selectedComp}
                             >
                                 {
-                                    competition.map((item) => {
-                                        return <Option value={item.id}>{item.longName}</Option>
+                                    competition.map((item, index) => {
+                                        return <Option key={`competition`+index} value={item.id}>{item.longName}</Option>
                                     })
                                 }
 

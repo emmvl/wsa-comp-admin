@@ -15,7 +15,6 @@ function CompetitionManagementState(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_COMPETITION_DASHBOARD_SUCCESS:
-            console.log(action.result, 'action.result')
             return {
                 ...state,
                 onLoad: false,

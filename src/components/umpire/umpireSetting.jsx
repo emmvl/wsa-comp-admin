@@ -122,8 +122,8 @@ class UmpireSetting extends Component {
                                     value={this.state.selectedComp}
                                 >
                                     {
-                                        competition.map((item) => {
-                                            return <Option value={item.id}>{item.longName}</Option>
+                                        competition.map((item, index) => {
+                                            return <Option key={`longName${index}`+item.id} value={item.id}>{item.longName}</Option>
                                         })
                                     }
 
@@ -185,9 +185,9 @@ class UmpireSetting extends Component {
 
                     {arr.length > 0 && arr.map((item, index) => {
                         return (
-                            <div >
+                            <div key={`name${index}`+item.id}>
                                 <div className='contextualHelp-RowDirection' >
-                                    <Radio value={item.id}>{item.name}</Radio>
+                                    <Radio  value={item.id}>{item.name}</Radio>
 
                                 </div>
                                 {item.id == 2 &&
@@ -199,9 +199,8 @@ class UmpireSetting extends Component {
                                         >
                                             {umpireLinkTeamArr.length > 0 && umpireLinkTeamArr.map((item, index) => {
                                                 return (
-                                                    <Radio value={item.id}>{item.name}</Radio>
+                                                    <Radio key={`name`+index} value={item.id}>{item.name}</Radio>
                                                 )
-
                                             }
                                             )}
 
@@ -236,9 +235,9 @@ class UmpireSetting extends Component {
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         >
 
-                            <Option value={"1"}>{'1'}</Option>
-                            <Option value={"2"}>{'2'}</Option>
-                            <Option value={"3"}>{'3'}</Option>
+                            <Option value={"11111"}>{'1'}</Option>
+                            <Option value={"22222"}>{'2'}</Option>
+                            <Option value={"33333"}>{'3'}</Option>
                         </Select>
                     </div>
                     <div className="col-sm" >
@@ -274,9 +273,9 @@ class UmpireSetting extends Component {
                                 placeholder={'Select'}
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                             >
-                                <Option value={"1"}>{'1'}</Option>
-                                <Option value={"2"}>{'2'}</Option>
-                                <Option value={"3"}>{'3'}</Option>
+                                <Option value={"11"}>{'1'}</Option>
+                                <Option value={"22"}>{'2'}</Option>
+                                <Option value={"33"}>{'3'}</Option>
                             </Select>
                         </div>
 
@@ -321,9 +320,9 @@ class UmpireSetting extends Component {
                                 placeholder={'Select'}
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                             >
-                                <Option value={"1"}>{'1'}</Option>
-                                <Option value={"2"}>{'2'}</Option>
-                                <Option value={"3"}>{'3'}</Option>
+                                <Option value={"111"}>{'1'}</Option>
+                                <Option value={"222"}>{'2'}</Option>
+                                <Option value={"333"}>{'3'}</Option>
                             </Select>
                         </div>
 

@@ -155,7 +155,7 @@ let CompetitionAxiosApi = {
             yearRefId: yearRefId,
             competitionUniqueKey: competitionId,
             organisationId: organisationUniqueKey,
-            filterOrganisationId: orgId != null ? orgId : -1,
+            // filterOrganisationId: orgId != null ? orgId : -1,
             // organisationId: "sd-gdf45df-09486-sdg5sfd-546sdf",
             venueId: venueId,
             roundId: roundId
@@ -380,7 +380,6 @@ let CompetitionAxiosApi = {
             comments: comment,
         }
         var url = `/api/proposedteamgrading/comment?userId=${userId}`;
-        console.log(url, token, body)
         return Method.dataPost(url, token, body);
     },
 
@@ -517,7 +516,65 @@ let CompetitionAxiosApi = {
     async fixtureTemplateRounds() {
         var url = `/api/fixturetemplate/rounds`
         return Method.dataGet(url, token);
-    }
+    },
+    // get own competition list
+    async  getQuickCompetitionList(year) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem.organisationUniqueKey
+        var url = `api/quickcompetition/${year}?organisationId=${organisationUniqueKey}`;
+        return Method.dataGet(url, token);
+    },
+    //////post/save quick competition division
+    async saveQuickCompDivision(competitionUniqueKey, divisions) {
+        let organisationId = await getOrganisationData().organisationUniqueKey;
+        let body = {
+            "competitionUniqueKey": competitionUniqueKey,
+            "organisationUniqueKey": "b540171a-27b3-4c69-991f-b4bf0be28159",
+            "divisions": divisions
+        }
+        var url = `/api/quickcompetition/division`
+        return Method.dataPost(url, token, body);
+    },
+    async createQuickComptition(year, comptitionName, competitionDate) {
+        let organisationId = await getOrganisationData().organisationUniqueKey;
+        let body = {
+            "competitionName": comptitionName,
+            "organisationId": organisationId,
+            "yearRefId": year,
+            "startDate": competitionDate
+        }
+        var url = `/api/quickcompetition/create`
+        return Method.dataPost(url, token, body);
+    },
+
+    async getQuickCompetiitonDetails(competitionUniqueKey) {
+        let organisationId = await getOrganisationData().organisationUniqueKey;
+        let body = {
+            "competitionId": competitionUniqueKey,
+            "organisationId": organisationId
+        }
+        var url = `/api/quickcompetition/details`
+        return Method.dataPost(url, token, body);
+    },
+
+    //////update quick competition
+    async updateQuickCompetition(payload) {
+        let body = payload
+        var url = `/api/quickcompetition/update`
+        return Method.dataPost(url, token, body);
+    },
+    //Generate Draw quick competition
+    async  quickCompetitionGenerateDraw(yearRefId, competitionUniqueKey) {
+        let organisationId = await getOrganisationData().organisationUniqueKey;
+        let userId = await getUserId()
+        let body = {
+            "yearRefId": yearRefId,
+            "competitionUniqueKey": competitionUniqueKey,
+            "organisationId": organisationId
+        }
+        var url = `/api/generatedraw?userId=${userId}`;
+        return Method.dataPost(url, token, body);
+    },
 
 };
 
@@ -564,7 +621,6 @@ const Method = {
                     }
                 })
                 .catch(err => {
-                    console.log(err.response)
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
                             if (err.response.status == 401) {
@@ -641,7 +697,6 @@ const Method = {
                     }
                 })
                 .catch(err => {
-                    console.log(err.response)
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
                             if (err.response.status == 401) {
@@ -688,7 +743,6 @@ const Method = {
 
                 .then(result => {
                     if (result.status === 200) {
-                        console.log("*************" + JSON.stringify(result.data));
                         const url = window.URL.createObjectURL(new Blob([result.data]));
                         const link = document.createElement('a');
                         link.href = url;
@@ -721,7 +775,6 @@ const Method = {
                     }
                 })
                 .catch(err => {
-                    console.log(err.response)
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
                             if (err.response.status == 401) {
@@ -793,7 +846,6 @@ const Method = {
                     }
                 })
                 .catch(err => {
-                    console.log(err.response)
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
                             if (err.response.status == 401) {
@@ -865,7 +917,6 @@ const Method = {
                     }
                 })
                 .catch(err => {
-                    console.log(err.response)
                     if (err.response) {
                         if (err.response.status !== null && err.response.status !== undefined) {
                             if (err.response.status == 401) {

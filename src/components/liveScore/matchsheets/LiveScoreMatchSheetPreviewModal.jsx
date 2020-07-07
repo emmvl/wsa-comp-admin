@@ -1,34 +1,56 @@
-import React, {Component} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
     Modal,
 } from 'antd';
 
-import '../liveScore.css';
+import './styles.css';
 
-class LiveScoreMatchSheetPreviewModal extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
+import CustomPDFViewer from './PDFViewer';
+import PDFDocument from './PDFDocument';
+import MatchSheetTemplate from "./MatchSheetTemplate";
 
-    render() {
-        const { modalTitle, handleOK, onCancel } = this.props;
-        return (
-            <div>
-                <Modal
-                    {...this.props}
-                    className="live-score-match-sheet-modal"
-                    title={modalTitle}
-                    visible={this.props.visible}
-                    onOk={handleOK}
-                    onCancel={onCancel}
-                    width="900px"
-                >
-                    Preview
-                </Modal>
-            </div>
-        )
-    }
-}
+const LiveScoreMatchSheetPreviewModal = (props) => {
+    const { visible, modalTitle, handleOK, handleCancel } = props;
+
+    return (
+        <Modal
+            {...props}
+            className="live-score-match-sheet-modal"
+            title={modalTitle}
+            visible={visible}
+            onOk={handleOK}
+            onCancel={handleCancel}
+            okText="Print"
+            cancelText="Download"
+            width="900px"
+            footer={false}
+        >
+            <CustomPDFViewer>
+                <PDFDocument
+                    pages={[
+                        <MatchSheetTemplate />,
+                        <MatchSheetTemplate templateType='Carnival' />,
+                        <MatchSheetTemplate templateType='Social' />,
+                    ]}
+                />
+            </CustomPDFViewer>
+        </Modal>
+    );
+};
+
+LiveScoreMatchSheetPreviewModal.propTypes = {
+    visible: PropTypes.bool,
+    modalTitle: PropTypes.string,
+    handleOK: PropTypes.func,
+    handleCancel: PropTypes.func
+};
+
+LiveScoreMatchSheetPreviewModal.defaultProps = {
+    visible: false,
+    modalTitle: 'LiveScores Match Sheet',
+    handleOK: () => {},
+    handleCancel: () => {}
+};
 
 export default LiveScoreMatchSheetPreviewModal;

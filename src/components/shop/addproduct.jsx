@@ -10,9 +10,15 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Loader from '../../customComponents/loader';
 import history from "../../util/history";
-import { addProductAction, onChangeProductDetails } from "../../store/actions/shopAction/productAction"
+import {
+    addProductAction,
+    onChangeProductDetails,
+    getTypesOfProductAction,
+    addNewTypeAction,
+    deleteProductVariantAction,
+} from "../../store/actions/shopAction/productAction"
 import InputWithHead from "../../customComponents/InputWithHead";
-import { isArrayNotEmpty, captializedString } from "../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, ContentState, convertFromHTML, } from 'draft-js';
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -22,8 +28,7 @@ import ValidationConstants from '../../themes/validationConstant';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
-
-
+const { confirm } = Modal;
 
 class AddProduct extends Component {
     constructor(props) {
@@ -38,22 +43,65 @@ class AddProduct extends Component {
             isDragging: false,
             newProductType: "",
             visible: false,
-            typeArray: [{ id: 1, name: "Merchandise" }, { id: 2, name: "T-shirt" }, { id: 3, name: "Pants" }]
+            loading: false,
         }
 
     }
 
 
     componentDidMount() {
+        this.apiCalls();
         this.setDetailsFieldValue();
-        // this.setEditorFieldValue();
+        this.setEditorFieldValue();
     }
 
+    apiCalls = () => {
+        this.props.getTypesOfProductAction()
+    }
+
+    componentDidUpdate(nextProps) {
+        let shopProductState = this.props.shopProductState;
+        if (shopProductState.onLoad === false && this.state.loading === true) {
+            this.setState({ loading: false });
+            if (!shopProductState.error) {
+                history.push('/listProducts');
+            }
+        }
+    }
+
+    //////post the product details
     addProductPostAPI = (e) => {
         e.preventDefault();
+        let { productDeatilData } = JSON.parse(JSON.stringify(this.props.shopProductState));
+        let description = JSON.parse(JSON.stringify(productDeatilData.description))
+        let descriptionText = ""
+        if (description) {
+            let descriptionStringArr = []
+            for (let i in description) {
+                descriptionStringArr.push(description[i].text)
+            }
+            descriptionText = descriptionStringArr.join(`<br/>`)
+        }
+        productDeatilData.description = descriptionText
+        let { urls, files } = this.state
+        let imagesFiles = []
+        for (let i in urls) {
+            for (let j in files) {
+                if (urls[i].id == files[j].id) {
+                    imagesFiles.push(files[j].fileObject)
+                }
+            }
+        }
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                // this.props.addProductAction()
+                let formData = new FormData();
+                formData.append('params', JSON.stringify(productDeatilData));
+                if (isArrayNotEmpty(imagesFiles)) {
+                    for (let i in imagesFiles)
+                        formData.append("productPhotos", imagesFiles[i])
+                }
+                this.props.addProductAction(formData);
+                this.setState({ loading: true });
             }
         })
     }
@@ -86,7 +134,7 @@ class AddProduct extends Component {
 
     setEditorFieldValue() {
         let { productDeatilData } = this.props.shopProductState;
-        let body = EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(productDeatilData.description)))
+        let body = isNotNullOrEmptyString(productDeatilData.description) ? EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(productDeatilData.description))) : ""
         this.setState({ editorState: body })
     }
 
@@ -107,10 +155,6 @@ class AddProduct extends Component {
         );
     };
 
-    onChangeEditorData = (event) => {
-        console.log(event, "event")
-        // this.props.liveScoreUpdateNewsAction(event, "body")
-    }
     onEditorStateChange = (editorState) => {
         this.setState({
             editorState,
@@ -149,16 +193,10 @@ class AddProduct extends Component {
     }
 
     handleOk = e => {
-        let newTypeObject = {
-            id: (this.state.typeArray.length) + 1,
-            name: this.state.newProductType
-        }
-        let stateArray = this.state.typeArray
-        stateArray.push(newTypeObject)
+        this.props.addNewTypeAction(this.state.newProductType)
         this.setState({
             visible: false,
             newProductType: "",
-            typeArray: stateArray
         });
     };
 
@@ -179,16 +217,15 @@ class AddProduct extends Component {
     affiliateOnChange = (value, name) => {
         let { productDeatilData } = this.props.shopProductState
         let affiliatePostObject = productDeatilData.affiliates
-        console.log("affiliateOnChange", value, name, affiliatePostObject)
         let assignedValue = value == true ? 1 : 0
         if (name === "Direct") {
-            affiliatePostObject._direct = assignedValue
+            affiliatePostObject.direct = assignedValue
         }
         if (name === "1st Level Affiliates - Association/ League") {
-            affiliatePostObject._first_level = assignedValue
+            affiliatePostObject.firstLevel = assignedValue
         }
         if (name === "2nd Level Affiliates - Club/School") {
-            affiliatePostObject._second_level = assignedValue
+            affiliatePostObject.secondLevel = assignedValue
         }
         this.props.onChangeProductDetails(affiliatePostObject, 'affiliates')
     }
@@ -198,19 +235,19 @@ class AddProduct extends Component {
         let { productDeatilData } = this.props.shopProductState
         let affiliate = productDeatilData.affiliates
         if (name === "Direct") {
-            return affiliate._direct
+            return affiliate.direct
         }
         if (name === "1st Level Affiliates - Association/ League") {
-            return affiliate._first_level
+            return affiliate.firstLevel
         }
         if (name === "2nd Level Affiliates - Club/School") {
-            return affiliate._second_level
+            return affiliate.secondLevel
         }
     }
 
     ////////form content view
     contentView = (getFieldDecorator) => {
-        let { productDeatilData } = this.props.shopProductState
+        let { productDeatilData, typesProductList } = this.props.shopProductState
         console.log("productDeatilData", productDeatilData)
         let affiliateArray = [
             { id: 1, name: "Direct" },
@@ -253,24 +290,23 @@ class AddProduct extends Component {
                 <InputWithHead required="pt-5" heading={AppConstants.type} />
                 <Select
                     className="shop-type-select"
-                    onChange={(value) => console.log("value")}
                     onChange={(value) =>
                         this.props.onChangeProductDetails(
                             value,
-                            'types'
+                            'type'
                         )
                     }
                     placeholder="Select"
-                    value={productDeatilData.types}
+                    value={isNotNullOrEmptyString(productDeatilData.type) ? productDeatilData.type : []}
                 >
-                    {this.state.typeArray.map(
+                    {isArrayNotEmpty(typesProductList) && typesProductList.map(
                         (item, index) => {
                             return (
                                 <Option
-                                    key={'type' + item.id}
-                                    value={item.name}
+                                    key={'type' + item.id + index}
+                                    value={item.typeName}
                                 >
-                                    {item.name}
+                                    {item.typeName}
                                 </Option>
                             );
                         }
@@ -302,10 +338,6 @@ class AddProduct extends Component {
                                 checked={this.checkedAffiliates(item.name) === 1 ? true : false}
                                 onChange={(e) =>
                                     this.affiliateOnChange(e.target.checked, item.name)
-                                    // console.log(
-                                    //     e.target.checked,
-                                    //     index,
-                                    // )
                                 }
                             >
                                 {item.name}
@@ -345,7 +377,7 @@ class AddProduct extends Component {
 
     onChange = (e) => {
         e.preventDefault()
-        const files = e.target.files;
+        let files = e.target.files;
         [].forEach.call(files, this.handleFiles);
     }
 
@@ -370,10 +402,11 @@ class AddProduct extends Component {
                 let reader = new FileReader();
                 reader.onloadend = () => {
                     let imageUrl = window.URL.createObjectURL(file);
+                    let id = Math.random()
                     if (imageUrl) {
                         this.setState({
-                            files: [...this.state.files, file],
-                            urls: [...this.state.urls, { image: imageUrl, id: Math.random() }]
+                            files: [...this.state.files, { fileObject: file, id }],
+                            urls: [...this.state.urls, { image: imageUrl, id }]
                         });
                     }
                 }
@@ -418,7 +451,7 @@ class AddProduct extends Component {
                         <>
                             {
                                 urls.length > 0 ?
-                                    <SortableImage images={urls} /> :
+                                    <SortableImage images={urls} reorderedUrls={(data) => this.setState({ urls: data })} /> :
                                     <div className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: 180 }}>
                                         <InputWithHead heading={AppConstants.dragImageToUpload} />
                                         <div className="d-flex justify-content-center" style={{ width: '100%' }}>
@@ -657,10 +690,34 @@ class AddProduct extends Component {
             varientOptions.push(varientOptionObject)
         }
         if (key === "remove") {
-            varientOptions.splice(subIndex, 1)
+            this.showDeleteConfirm("00", index, subIndex)
+            // varientOptions.splice(subIndex, 1)
         }
         this.props.onChangeProductDetails(varientOptions, 'variantOption', index)
 
+    }
+
+
+    //////delete the product variant
+    showDeleteConfirm = (optionId, index, subIndex) => {
+        let this_ = this
+        confirm({
+            title: AppConstants.deleteProduct,
+            content: AppConstants.deleteProductDescription,
+            okText: 'Confirm',
+            okType: 'danger',
+            cancelText: 'Cancel',
+            onOk() {
+                if (optionId) {
+                    // this_.props.deleteProductVariantAction(optionId)
+                    let varientOptions = this_.props.shopProductState.productDeatilData.variants[index].options
+                    varientOptions.splice(subIndex, 1)
+                    this_.props.onChangeProductDetails(varientOptions, 'variantOption', index)
+                }
+            },
+            onCancel() {
+            },
+        });
     }
 
     ////////Variants content view
@@ -1021,8 +1078,8 @@ class AddProduct extends Component {
                             <div className="formView">{this.variantsView(getFieldDecorator)}</div>
                             <div className="formView">{this.shippingView(getFieldDecorator)}</div>
                         </Content>
-                        {/* <Loader
-                        visible={this.props.appState.onLoad} /> */}
+                        <Loader
+                            visible={this.props.shopProductState.onLoad} />
                         <Footer>{this.footerView()}</Footer>
                     </Form>
                 </Layout>
@@ -1035,6 +1092,9 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         addProductAction,
         onChangeProductDetails,
+        getTypesOfProductAction,
+        addNewTypeAction,
+        deleteProductVariantAction,
     }, dispatch)
 }
 

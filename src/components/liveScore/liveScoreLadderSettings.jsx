@@ -56,13 +56,13 @@ class LiveScoreLadderSettings extends Component {
 
     onChangeLadderSetting = (value, index, key, subIndex, subKey) => {
         if(key == "isAllDivision" && value == true){
-            let ladders = this.props.ladderSettingState.ladders;
-            if(ladders.length > 1 ){
+           // let ladders = this.props.ladderSettingState.ladders;
+           // if(ladders.length > 1 ){
                 this.setState({allDivisionVisible: true, ladderIndex: index});
-            }
-            else{
-                this.props.updateLadderSetting(value, index, key, subIndex, subKey);
-            }
+            //}
+            // else{
+            //     this.props.updateLadderSetting(value, index, key, subIndex, subKey);
+            // }
         }
         else{
             this.props.updateLadderSetting(value, index, key, subIndex, subKey);
@@ -93,6 +93,7 @@ class LiveScoreLadderSettings extends Component {
             if(item.ladderFormatId < 0){
                 item.ladderFormatId = 0;
             }
+            item.isAllDivision = item.isAllDivision == true ? 1 : 0;
             delete item.divisions;
         });
         console.log("ladders::" + JSON.stringify(ladders))
@@ -112,9 +113,9 @@ class LiveScoreLadderSettings extends Component {
         return (
             <div className="content-view pt-4">
                {(ladderData || []).map((ladder, index) => (
-                <div className="inside-container-view" style={{paddingTop:"14px"}}>
+                <div className="inside-container-view" style={{paddingTop:"25px"}}>
                     {ladderData.length > 1 && 
-                    <div style={{display:"flex"}}>
+                    <div style={{display:"flex", float: "right"}}>
                         <div className="transfer-image-view pt-0 pointer" style = {{marginLeft:'auto'}} onClick ={ () => this.deleteModal(index)}>
                             <span className="user-remove-btn" ><i className="fa fa-trash-o" aria-hidden="true"></i></span>
                             <span className="user-remove-text">
@@ -122,13 +123,12 @@ class LiveScoreLadderSettings extends Component {
                             </span>
                         </div>
                     </div> }
-                    <Checkbox className="single-checkbox pt-2" checked={ladder.isAllDivision}  
+                    <Checkbox className="single-checkbox pt-2" style={{marginTop:0}}  checked={ladder.isAllDivision}  
                             onChange={(e) => this.onChangeLadderSetting(e.target.checked, index, "isAllDivision")}>
                                     {AppConstants.allDivisions}</Checkbox> 
-                    {ladder.isAllDivision == 0 ? 
                         <div className="fluid-width" >
-                            <div className="row" >
-                                <div className="col-sm">
+                            <div className="row" style={{display:'block',marginLeft:0}}>
+                                <div className="col-sm" style={{paddingLeft:0,paddingTop:5}}>
                                     <Select
                                         mode="multiple"
                                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
@@ -143,17 +143,17 @@ class LiveScoreLadderSettings extends Component {
                                     </Select>
                                 </div>
                             </div>
-                        </div> : null}
+                        </div> 
                         <div className="inside-container-view" >
                             <div className="table-responsive">
                                 <div style={{display: 'flex', paddingLeft: '10px'}}>
-                                    <div style={{width: '89%'}}><InputWithHead heading={"Result type/Byes"} /></div>
-                                    <div><InputWithHead heading={"Points"} /></div>
+                                    <div style={{width: '89%'}} className="ladder-points-heading"><InputWithHead heading={"Result type/Byes"} /></div>
+                                    <div className="ladder-points-heading"><InputWithHead heading={"Points"} /></div>
                                 </div>
                                 {(ladder.settings || []).map((res, resIndex) => (
                                     <div style={{display: 'flex', paddingLeft: '10px'}}>
                                         <div style={{width: '89%'}}><InputWithHead heading={res.name} /></div>
-                                        <div>
+                                        <div style={{ marginTop: 5}}>
                                             <InputWithHead className="input-inside-table-fees" value={res.points} 
                                                 placeholder={"Points"} 
                                                 onChange={(e) => this.onChangeLadderSetting(e.target.value, index, "resultTypes", resIndex, "points")}>

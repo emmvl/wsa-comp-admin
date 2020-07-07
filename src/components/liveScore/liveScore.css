@@ -31,7 +31,7 @@
     padding-top: 15px;
 }
 
-.live-score-user-image {
+.user-image {
     border-radius: 40px;
 }
 
@@ -44,7 +44,7 @@
     padding-left: 10px;
 }
 
-.live-score-desc-text {
+.desc-text-style {
     display: flex;
     align-content: center;
     text-align: center;
@@ -324,6 +324,53 @@
     justify-content: center;
 }
 
+.checkbox-green-color-outline .ant-checkbox-group-item {
+    /* float: left; */
+    display: flex;
+    margin-right: 0;
+    align-items: center;
+    text-align: center;
+    padding-top: 16px;
+    font-size: 15px;
+    color:  var(--app-green-bg);
+    font-family: "inter";
+    font-weight: normal;
+  }
+  
+  .checkbox-green-color-outline .ant-checkbox-wrapper:hover .ant-checkbox-inner,
+  .checkbox-green-color-outline .ant-checkbox:hover .ant-checkbox-inner,
+  .checkbox-green-color-outline .ant-checkbox-input:focus+.ant-checkbox-inner {
+    border-color: var(--app-green-bg);
+  }
+
+  .checkbox-green-color-outline .ant-checkbox-inner {
+    border-color: var(--app-green-bg);
+  }
+  
+  .checkbox-green-color-outline .ant-checkbox-checked::after {
+    border: 1px solid var(--app-green-bg);
+  }
+  
+  .checkbox-green-color-outline .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: var(--app-green-bg);
+    border-color:var(--app-green-bg);
+  }
+
+  .small-steper-style .ant-input-number {
+    display: flex;
+    padding-top: 0px;
+    /* padding-bottom: 11px; */
+    /* width: 100%; */
+    height: 30px;
+    width: 70px;
+    margin-top:7px
+}
+  .ladder-points-heading .input-heading{
+    font-size: 14px;
+    font-weight: 500;
+    align-self: center;
+  }
+  
 @media(min-width: 768px) and (max-width: 1024px) {
     .live-score-edit-match-buttons {
         display: flex;

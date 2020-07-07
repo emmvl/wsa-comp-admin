@@ -1,6 +1,5 @@
 
 function entityTypes(enitityName) {
-    console.log(enitityName, 'umpireListAction')
     let enitityArray = [
         {
             "id": 1,

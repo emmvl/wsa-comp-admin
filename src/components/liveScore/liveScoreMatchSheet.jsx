@@ -170,7 +170,7 @@ class LiveScoreMatchSheet extends Component {
                                     onChange={(comp) => this.onChangeComp({comp})}
                                     value={this.state.selectedComp}
                                 >
-                                    {competition.map((item) => <Option value={item.id}>{item.longName}</Option>)}
+                                    {competition.map((item) => <Option value={item.id} key={item.id}>{item.longName}</Option>)}
                                 </Select>
                             </div>
                         </div>
@@ -204,7 +204,7 @@ class LiveScoreMatchSheet extends Component {
                                 onChange={(division) => this.changeDivision({division})}
                                 value={this.state.division}
                             >
-                                {division.map((item) => <Option value={item.id}>{item.name}</Option>)}
+                                {division.map((item) => <Option value={item.id} key={item.id}>{item.name}</Option>)}
                             </Select>
                         </div>
                     </div>
@@ -220,7 +220,7 @@ class LiveScoreMatchSheet extends Component {
                                 onChange={(grade) => this.setState({grade})}
                                 value={this.state.selectedTeam}
                             >
-                                {teamList.map((item) => <Option value={item.id}>{item.name}</Option>)}
+                                {teamList.map((item) => <Option value={item.id} key={item.id}>{item.name}</Option>)}
                             </Select>
                         </div>
                     </div>
@@ -309,7 +309,7 @@ class LiveScoreMatchSheet extends Component {
                     visible={this.state.showPreview}
                     modalTitle="LiveScores Match Sheet"
                     handleOK={this.handleModalOk}
-                    onCancel={this.handleModalCancel}
+                    handleCancel={this.handleModalCancel}
                 />
             </div>
         );

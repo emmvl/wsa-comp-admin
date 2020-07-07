@@ -15,12 +15,9 @@ const initialState = {
 
 function umpireDashboardState(state = initialState, action) {
     switch (action.type) {
-
-
         //// Umpire Dashboard List
         case ApiConstants.API_GET_UMPIRE_DASHBOARD_LIST_LOAD:
             return { ...state, onLoad: true };
-
         case ApiConstants.API_GET_UMPIRE_DASHBOARD_LIST_SUCCESS:
             return {
                 ...state,
@@ -29,13 +26,9 @@ function umpireDashboardState(state = initialState, action) {
                 totalPages: action.result.page.totalCount,
                 status: action.status
             };
-
         //// Venue List
         case ApiConstants.API_GET_UMPIRE_DASHBOARD_VENUE_LIST_LOAD:
-
-
             return { ...state, onVenueLoad: true };
-
         case ApiConstants.API_GET_UMPIRE_DASHBOARD_VENUE_LIST_SUCCESS:
             return {
                 ...state,
@@ -43,13 +36,9 @@ function umpireDashboardState(state = initialState, action) {
                 umpireVenueList: action.result,
                 status: action.status
             };
-
         //// Division List
         case ApiConstants.API_GET_UMPIRE_DASHBOARD_DIVISION_LIST_LOAD:
-
-
             return { ...state, onDivisionLoad: true };
-
         case ApiConstants.API_GET_UMPIRE_DASHBOARD_DIVISION_LIST_SUCCESS:
             return {
                 ...state,
@@ -57,19 +46,14 @@ function umpireDashboardState(state = initialState, action) {
                 umpireDivisionList: action.result,
                 status: action.status
             };
-
         //// Umpire Import
         case ApiConstants.API_UMPIRE_IMPORT_LOAD:
-
-
             return { ...state, onLoad: true };
-
         case ApiConstants.API_UMPIRE_IMPORT_SUCCESS:
             return {
                 ...state,
                 onLoad: false
             };
-
         //// Fail and Error case
         case ApiConstants.API_UMPIRE_FAIL:
             return {
@@ -85,10 +69,8 @@ function umpireDashboardState(state = initialState, action) {
                 error: action.error,
                 status: action.status
             };
-
         default:
             return state;
     }
 }
-
 export default umpireDashboardState;

@@ -4,6 +4,7 @@ import { getRegistrationSetting } from "../objectModel/getRegSettingObject";
 import { getUserId, getOrganisationData } from "../../util/sessionStorage"
 import AppConstants from "../../themes/appConstants";
 
+
 const initialState = {
   onLoad: false,
   error: null,
@@ -45,8 +46,8 @@ const initialState = {
   regInviteesMsg: [AppConstants.regInviteesAffiliatesMsg, AppConstants.regInviteesAnyOrgMsg, AppConstants.regInviteesDirectMsg],
   membershipProductFeeMsg: [AppConstants.firstComRegOnlyMsg, AppConstants.allCompRegMsg],
   allYearList: [],
-  allCompetitionTypeList: []
-
+  allCompetitionTypeList: [],
+ 
 };
 function arraymove(arr, fromIndex, toIndex) {
   var element = arr[fromIndex];
@@ -535,6 +536,7 @@ function appState(state = initialState, action) {
         onLoad: false,
         status: action.status
       };
+
 
 
     default:

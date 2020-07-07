@@ -135,7 +135,7 @@ class LiveScoreAddMatch extends Component {
 
             }
 
-            if (isLineUpEnable == 1 && match_status !== "ENDED") {
+            if (isLineUpEnable == 1) {
                 this.setState({ isLineUp: 1 })
                 this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 1)
             } else {
@@ -292,8 +292,8 @@ class LiveScoreAddMatch extends Component {
         if (forfietedTeam) {
             if (forfietedTeam == 'team1') {
                 this.setState({ forfeitVisible: false })
-                let team1resultId = matchResult[3].id
-                let team2resultId = matchResult[4].id
+                let team1resultId = matchResult[4].id
+                let team2resultId = matchResult[3].id
                 this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
 
             } else if (forfietedTeam == 'team2') {
@@ -472,7 +472,7 @@ class LiveScoreAddMatch extends Component {
     /// Duration & Break View
     duration_break = (getFieldDecorator) => {
         let { addEditMatch } = this.props.liveScoreMatchState
-        let {allDisabled}=this.state
+        let { allDisabled } = this.state
         return (
 
             <div className="row">
@@ -1001,7 +1001,7 @@ class LiveScoreAddMatch extends Component {
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 onChange={(value) => this.props.liveScoreUpdateMatchAction(value, "resultStatus")}
                                 placeholder={'Select Result Status'}
-                                value={addEditMatch.resultStatus ? addEditMatch.resultStatus : undefined}
+                                value={addEditMatch.resultStatus == "0" ? null : addEditMatch.resultStatus}
                                 disabled={allDisabled}
                             >
                                 <Option key={'UNCONFIRMED'} value={'UNCONFIRMED'}>{'Unconfirmed'}</Option>
@@ -1041,18 +1041,20 @@ class LiveScoreAddMatch extends Component {
         matchData.startTime = formated__Date
 
         // const { id } = JSON.parse(getLiveScoreCompetiton())
-
-        if (addEditMatch.team1ResultId > addEditMatch.team2ResultId) {
+        console.log("matchResult::" + JSON.stringify(matchResult));
+        console.log("addEditMatch.team1ResultId" + addEditMatch.team1ResultId);
+        console.log("addEditMatch.team1ResultId" + addEditMatch.team2ResultId);
+        if (Number(addEditMatch.team1Score) > Number(addEditMatch.team2Score)) {
             let team1resultId = matchResult[0].id
             let team2resultId = matchResult[1].id
             this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
 
-        } else if (addEditMatch.team1ResultId < addEditMatch.team2ResultId) {
+        } else if (Number(addEditMatch.team1Score) < Number(addEditMatch.team2Score)) {
             let team1resultId = matchResult[1].id
             let team2resultId = matchResult[0].id
             this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
 
-        } else if (addEditMatch.team1ResultId == addEditMatch.team2ResultId) {
+        } else if (Number(addEditMatch.team1Score) == Number(addEditMatch.team2Score)) {
             let team1resultId = matchResult[2].id
             let team2resultId = matchResult[2].id
             this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
@@ -1072,7 +1074,6 @@ class LiveScoreAddMatch extends Component {
                 let match_date_ = moment(start_date, "DD-MM-YYYY")
                 let startDate = moment(match_date_).format("YYYY-MMM-DD")
                 let start = moment(start_time).format("HH:mm")
-                console.log(team1id, 'matchUmpireId_1', team2id)
 
                 let datetimeA = moment(startDate + " " + start);
                 let formated__Date = new Date(datetimeA).toISOString()

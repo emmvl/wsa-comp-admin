@@ -14,8 +14,8 @@ let token = getAuthToken();
 let AxiosApi = {
 
     /////////////////product listing get API 
-    getProductListing(sorterBy, order, offset, filter) {
-        var url = `/product/list?sorterBy=${sorterBy}&order=${order}&offset=${offset}&filter=${filter}`;
+    getProductListing(sorterBy, order, offset, filter, limit) {
+        var url = `/product/list?sorterBy=${sorterBy}&order=${order}&offset=${offset}&filter=${filter}&limit=${limit}`;
         return Method.dataGet(url, token);
     },
 
@@ -25,6 +25,25 @@ let AxiosApi = {
         var url = `/product`;
         return Method.dataPost(url, token, body);
     },
+
+    ////////get reference type in the add product screen
+    getTypesOfProduct() {
+        var url = `/type/list`;
+        return Method.dataGet(url, token);
+    },
+
+    ////delete product from the product listing API 
+    deleteProduct(productId) {
+        var url = `/product?id=${productId}`
+        return Method.dataDelete(url, token);
+    },
+
+    ////delete product from the product listing API 
+    deleteProductVariant(optionId) {
+        var url = `/product/variant?id=${optionId}`
+        return Method.dataDelete(url, token);
+    },
+
 
 };
 
@@ -246,7 +265,78 @@ const Method = {
                     }
                 });
         });
-    }
+    },
+    //Put Method
+    async dataPut(newurl, authorization, body) {
+        const url = newurl;
+        return await new Promise((resolve, reject) => {
+            http
+                .put(url, body, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Origin": "*",
+                        Authorization: "BWSA " + authorization,
+                        "SourceSystem": "WebAdmin"
+                    }
+                })
+
+                .then(result => {
+                    if (result.status === 200) {
+                        return resolve({
+                            status: 1,
+                            result: result
+                        });
+                    }
+                    else if (result.status == 212) {
+                        return resolve({
+                            status: 4,
+                            result: result
+                        });
+                    }
+                    else {
+                        if (result) {
+                            return reject({
+                                status: 3,
+                                error: result.data.message,
+                            });
+                        } else {
+                            return reject({
+                                status: 4,
+                                error: "Something went wrong."
+                            });
+                        }
+                    }
+                })
+                .catch(err => {
+                    console.log(err.response)
+                    if (err.response) {
+                        if (err.response.status !== null && err.response.status !== undefined) {
+                            if (err.response.status == 401) {
+                                let unauthorizedStatus = err.response.status
+                                if (unauthorizedStatus == 401) {
+                                    logout()
+                                    message.error(ValidationConstants.messageStatus401)
+                                }
+                            }
+                            else {
+                                return reject({
+                                    status: 5,
+                                    error: err
+                                })
+
+                            }
+                        }
+                    }
+                    else {
+                        return reject({
+                            status: 5,
+                            error: err
+                        });
+
+                    }
+                });
+        });
+    },
 };
 
 
