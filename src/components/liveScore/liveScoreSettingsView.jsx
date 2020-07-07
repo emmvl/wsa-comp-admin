@@ -359,7 +359,7 @@ class LiveScoreSettingsView extends Component {
     ////////form content view
     contentView = (getFieldDecorator) => {
         const { competitionName, competitionLogo, scoring, days, hours, minutes, lineupSelectionDays, lineupSelectionHours, lineupSelectionMins, record1, venue, Logo } = this.props.liveScoreSetting.form
-        const { loader, buzzerEnabled, warningBuzzerEnabled, recordUmpire, lineupSelection, gameborrowed, minutesBorrowed, premierCompLink } = this.props.liveScoreSetting
+        const { loader, buzzerEnabled, warningBuzzerEnabled, recordUmpire, lineupSelection, gameborrowed, minutesBorrowed, premierCompLink, borrowedPlayer } = this.props.liveScoreSetting
         let grade = this.state.venueData
         // const applyTo1 = [{ label: 'Record Umpire', value: "recordUmpire" }, { label: ' Game Time Tracking', value: "gameTimeTracking" }, { label: 'Position Tracking', value: "positionTracking" }];
         const applyTo1 = [{ label: ' Game Time Tracking', value: "gameTimeTracking", }, { label: 'Position Tracking', value: "positionTracking", }, { label: 'Record Goal Attempts', value: "recordGoalAttempts", }];
@@ -726,48 +726,53 @@ class LiveScoreSettingsView extends Component {
                 {/* Player borrowing view */}
                 <InputWithHead heading={AppConstants.playerBorrowing} />
                 <div className="row mt-0 ml-1" >
+                    <Radio.Group
+                        className="reg-competition-radio"
+                        onChange={(e) => this.props.onChangeSettingForm({ key: "borrowedPlayer", data: e.target.value })}
+                        value={borrowedPlayer}
+                    >
 
-                    <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
-                        <div >
-                            <Checkbox style={{
-                                display: "-ms-flexbox",
-                                flexDirection: "column",
-                                justifyContent: "center"
-                            }}
-                                className="single-checkbox"
-                                onChange={(e) => this.props.onChangeSettingForm({ key: "gameborrowed", data: e.target.checked })}
-                                checked={gameborrowed}
-                            >
-                                {AppConstants.gamesBorrowed}
-                            </Checkbox>
-                        </div>
 
-                        {
-                            gameborrowed &&
-                            <div className='small-steper-style'>
-                                <InputNumber
+                        <div className="row mt-0 ml-1">
+                            <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>
+                                <div >
 
-                                    // value={addEditMatch.matchDuration}
-                                    formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                    parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                                    // onChange={(matchDuration) => this.props.liveScoreUpdateMatchAction(matchDuration, "matchDuration")}
-                                    placeholder={'0'}
-                                // style={{ width: '50px', minHeight: '30px' }}
-                                />
+
+                                    <Radio
+                                        style={{ marginRight: 0, paddingRight: 0 }}
+                                        value={'gameborrowed'}
+                                    // onChange={(e) => this.props.onChangeSettingForm({ key: "gameborrowed", data: e.target.checked })}
+                                    >{AppConstants.gamesBorrowed}</Radio>
+                                </div>
+
+                                {
+                                    borrowedPlayer == 'gameborrowed' &&
+                                    <div className='small-steper-style'>
+                                        <InputNumber
+                                            max={6}
+                                            min={1}
+                                            // value={addEditMatch.matchDuration}
+                                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                            parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                            // onChange={(matchDuration) => this.props.liveScoreUpdateMatchAction(matchDuration, "matchDuration")}
+                                            placeholder={'0'}
+                                        // style={{ width: '50px', minHeight: '30px' }}
+                                        />
+                                    </div>
+                                }
+
                             </div>
-                        }
 
-                    </div>
+                            <div style={{ marginLeft: 40 }}>
+                                <Radio
+                                    style={{ marginRight: 0, paddingRight: 0 }}
+                                    value={'minutesBorrowed'}
+                                // onChange={(e) => this.props.onChangeSettingForm({ key: "minutesBorrowed", data: e.target.checked })}
+                                >{AppConstants.minutesBorrowed}</Radio>
 
-                    <div style={{ marginLeft: 40 }}>
-                        <Checkbox
-                            className="single-checkbox"
-                            onChange={(e) => this.props.onChangeSettingForm({ key: "minutesBorrowed", data: e.target.checked })}
-                            checked={minutesBorrowed}
-                        >
-                            {AppConstants.minutesBorrowed}
-                        </Checkbox>
-                    </div>
+                            </div>
+                        </div>
+                    </Radio.Group>
                 </div>
 
                 <div style={{ marginTop: 20 }} >
