@@ -55,6 +55,16 @@ function validateColor(data) {
     }
 }
 
+function checkUmpireType(umpireArray, key) {
+    let object = null
+    for (let i in umpireArray) {
+        if (umpireArray[i].sequence === key) {
+            object = umpireArray[i]
+        }
+    }
+    return object
+
+}
 
 
 const columns_Invite = [
@@ -113,15 +123,17 @@ const columns_Invite = [
         key: 'umpires_1',
         sorter: (a, b) => tableSort(a, b, "umpires"),
         render: (umpires, record) => {
+            let umpire1 = checkUmpireType(umpires, 1) ? checkUmpireType(umpires, 1) : []
             return (
 
-                umpires ?
-                    umpires[0] ?
-                        <span style={{ color: validateColor(umpires[0]) }} onClick={() => this_obj.checkUserIdUmpire(record.umpires[0])} >{umpires[0].umpireName}</span>
-                        :
-                        <span>{''}</span>
-                    :
-                    <span>{''}</span>
+                // umpires ?
+                //     umpires[0] ?
+                //         <span style={{ color: validateColor(umpire1), cursor: 'pointer' }} onClick={() => this_obj.checkUserIdUmpire(umpire1)} >{umpire1.umpireName}</span>
+                //         :
+                //         <span>{''}</span>
+                //     :
+                //     <span>{''}</span>
+                <span style={{ color: validateColor(umpire1), cursor: 'pointer' }} onClick={() => this_obj.checkUserIdUmpire(umpire1)} >{umpire1.umpireName}</span>
 
             )
         }
@@ -134,20 +146,23 @@ const columns_Invite = [
         key: 'umpires1_Org',
         sorter: (a, b) => tableSort(a, b, "umpires"),
         render: (umpires, record) => {
-
+            let umpire1 = checkUmpireType(umpires, 1) ? checkUmpireType(umpires, 1) : []
             return (
                 <>
-                    {
+                    {/* {
                         umpires ?
                             umpires[0] ?
 
-                                isArrayNotEmpty(umpires[0].organisations) && umpires[0].organisations.map((item, index) => (
-                                    <span className='multi-column-text-aligned' >{item.name}</span>
+                                isArrayNotEmpty(umpire1.organisations) && umpire1.organisations.map((item, index) => (
+                                    <span style={{ color: validateColor(umpire1) }} className='multi-column-text-aligned' >{item.name}</span>
                                 ))
                                 :
                                 <span>{''}</span>
                             :
-                            <span>{''}</span>}
+                            <span>{''}</span>} */}
+                    {isArrayNotEmpty(umpire1.organisations) && umpire1.organisations.map((item, index) => (
+                        <span style={{ color: validateColor(umpire1) }} className='multi-column-text-aligned' >{item.name}</span>
+                    ))}
 
                 </>
             )
@@ -159,14 +174,17 @@ const columns_Invite = [
         key: 'umpires_2',
         sorter: (a, b) => tableSort(a, b, "umpires"),
         render: (umpires, record) => {
+            let umpire2 = checkUmpireType(umpires, 2) ? checkUmpireType(umpires, 2) : []
             return (
-                umpires ?
-                    umpires[1] ?
-                        <span style={{ color: validateColor(umpires[1]) }} onClick={() => this_obj.checkUserIdUmpire(record.umpires[1])} >{umpires[1].umpireName}</span>
-                        :
-                        <span>{''}</span>
-                    :
-                    <span>{''}</span>
+                // umpires ?
+                //     umpires[1] ?
+                //         <span style={{ color: validateColor(umpire2), cursor: 'pointer' }} onClick={() => this_obj.checkUserIdUmpire(umpire2)} >{umpire2.umpireName}</span>
+                //         :
+                //         <span>{''}</span>
+                //     :
+                //     <span>{''}</span>
+
+                <span style={{ color: validateColor(umpire2), cursor: 'pointer' }} onClick={() => this_obj.checkUserIdUmpire(umpire2)} >{umpire2.umpireName}</span>
             )
         }
     },
@@ -176,19 +194,23 @@ const columns_Invite = [
         key: 'umpires2_Org',
         sorter: (a, b) => tableSort(a, b, "umpires"),
         render: (umpires, record) => {
+            let umpire2 = checkUmpireType(umpires, 2) ? checkUmpireType(umpires, 2) : []
             return (
                 <>
-                    {
+                    {/* {
                         umpires ?
                             umpires[1] ?
                                 isArrayNotEmpty(umpires[1].organisations) && umpires[1].organisations.map((item, index) => (
-                                    <span key={index} className='multi-column-text-aligned' >{item.name}</span>
+                                    <span style={{ color: validateColor(umpires[1]) }} key={index} className='multi-column-text-aligned' >{item.name}</span>
                                 ))
 
                                 :
                                 <span>{''}</span>
                             :
-                            <span>{''}</span>}
+                            <span>{''}</span>} */}
+                    {isArrayNotEmpty(umpire2.organisations) && umpire2.organisations.map((item, index) => (
+                        <span style={{ color: validateColor(umpire2) }} key={index} className='multi-column-text-aligned' >{item.name}</span>
+                    ))}
 
                 </>
             )
@@ -316,21 +338,18 @@ const columns = [
         key: '_umpires_1',
         sorter: (a, b) => tableSort(a, b, "umpires"),
         render: (umpires, record) => {
+            let umpire1 = checkUmpireType(umpires, 1) ? checkUmpireType(umpires, 1) : []
             return (
 
-                umpires ?
-                    umpires[0] ?
+                //         umpires ?
+                //             umpires[0] ?
+                // <span style={{ color: validateColor(umpires[0]) }} onClick={() => this_obj.checkUserIdUmpire(record.umpires[0])} >{umpires[0].umpireName}</span>
 
-                        // <NavLink to={{
-                        //     pathname: '/userPersonal',
-                        //     state: { userId: umpires[0].matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" }
-                        // }}>
-                        <span style={{ color: validateColor(umpires[0]) }} onClick={() => this_obj.checkUserIdUmpire(record.umpires[0])} >{umpires[0].umpireName}</span>
-                        // </NavLink>
-                        :
-                        <span>{''}</span>
-                    :
-                    <span>{''}</span>
+                //                 :
+                //                 <span>{''}</span>
+                //             :
+                //             <span>{''}</span>
+                <span style={{ color: validateColor(umpire1) }} onClick={() => this_obj.checkUserIdUmpire(umpire1)} >{umpire1.umpireName}</span>
 
             )
         }
@@ -343,21 +362,24 @@ const columns = [
         key: '_umpires1_Org',
         sorter: (a, b) => tableSort(a, b, "umpires"),
         render: (umpires, record) => {
-
+            let umpire1 = checkUmpireType(umpires, 1) ? checkUmpireType(umpires, 1) : []
             return (
                 <>
-                    {
+                    {/* {
                         umpires ?
                             umpires[0] ?
 
-                                isArrayNotEmpty(umpires[0].organisations) && umpires[0].organisations.map((item, index) => (
+                                isArrayNotEmpty(umpire1.organisations) && umpire1.organisations.map((item, index) => (
                                     <span className='multi-column-text-aligned' >{item.name}</span>
                                 ))
 
                                 :
                                 <span>{''}</span>
                             :
-                            <span>{''}</span>}
+                            <span>{''}</span>} */}
+                    {isArrayNotEmpty(umpire1.organisations) && umpire1.organisations.map((item, index) => (
+                        <span style={{ color: validateColor(umpire1) }} className='multi-column-text-aligned' >{item.name}</span>
+                    ))}
 
                 </>
             )
@@ -369,21 +391,20 @@ const columns = [
         key: '_umpires_2',
         sorter: (a, b) => tableSort(a, b, "umpires"),
         render: (umpires, record) => {
+            let umpire2 = checkUmpireType(umpires, 2) ? checkUmpireType(umpires, 2) : []
             return (
 
-                umpires ?
-                    umpires[1] ?
-                        // <NavLink to={{
-                        //     pathname: '/userPersonal',
-                        //     state: { userId: umpires[1].matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" }
-                        // }}>
-                        <span style={{ color: validateColor(umpires[1]) }} onClick={() => this_obj.checkUserIdUmpire(record.umpires[1])} >{umpires[1].umpireName}</span>
-                        // </NavLink>
+                // umpires ?
+                //     umpires[1] ?
 
-                        :
-                        <span>{''}</span>
-                    :
-                    <span>{''}</span>
+                //         <span style={{ color: validateColor(umpire2) }} onClick={() => this_obj.checkUserIdUmpire(umpire2)} >{umpire2.umpireName}</span>
+
+
+                //         :
+                //         <span>{''}</span>
+                //     :
+                //     <span>{''}</span>
+                <span style={{ color: validateColor(umpire2) }} onClick={() => this_obj.checkUserIdUmpire(umpire2)} >{umpire2.umpireName}</span>
 
             )
         }
@@ -394,19 +415,23 @@ const columns = [
         key: '_umpires2_Org',
         sorter: (a, b) => tableSort(a, b, "umpires"),
         render: (umpires, record) => {
+            let umpire2 = checkUmpireType(umpires, 2) ? checkUmpireType(umpires, 2) : []
             return (
                 <>
-                    {
+                    {/* {
                         umpires ?
                             umpires[1] ?
-                                isArrayNotEmpty(umpires[1].organisations) && umpires[1].organisations.map((item, index) => (
+                                isArrayNotEmpty(umpire1.organisations) && umpire1.organisations.map((item, index) => (
                                     <span className='multi-column-text-aligned' >{item.name}</span>
                                 ))
 
                                 :
                                 <span>{''}</span>
                             :
-                            <span>{''}</span>}
+                            <span>{''}</span>} */}
+                    {isArrayNotEmpty(umpire2.organisations) && umpire2.organisations.map((item, index) => (
+                        <span style={{ color: validateColor(umpire2) }} className='multi-column-text-aligned' >{item.name}</span>
+                    ))}
 
                 </>
             )
@@ -593,11 +618,13 @@ class UmpireDashboard extends Component {
 
         if (record.userId) {
             history.push("/userPersonal", { userId: record.userId, screenKey: "umpire", screen: "/umpireDashboard" })
-        } else if (record.matchUmpiresId) {
-            history.push("/userPersonal", { userId: record.matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" })
-        } else {
-            message.config({ duration: 1.5, maxCount: 1 })
-            message.warn(ValidationConstants.umpireMessage)
+        }
+        // else if (record.matchUmpiresId) {
+        //     history.push("/userPersonal", { userId: record.matchUmpiresId, screenKey: "umpire", screen: "/umpireDashboard" })
+        // }
+        else {
+            // message.config({ duration: 1.5, maxCount: 1 })
+            // message.warn(ValidationConstants.umpireMessage)
         }
     }
 
@@ -844,7 +871,7 @@ class UmpireDashboard extends Component {
                                 >
                                     {
                                         competition.map((item, index) => {
-                                            return <Option key={`longName`+index} value={item.id}>{item.longName}</Option>
+                                            return <Option key={`longName` + index} value={item.id}>{item.longName}</Option>
                                         })
                                     }
                                 </Select>
@@ -863,7 +890,7 @@ class UmpireDashboard extends Component {
                                     <Option value={'All'}>{'All'}</Option>
                                     {
                                         venueList.map((item, index) => {
-                                            return <Option key={`venueName`+index} value={item.venueId}>{item.venueName}</Option>
+                                            return <Option key={`venueName` + index} value={item.venueId}>{item.venueName}</Option>
                                         })
                                     }
                                 </Select>
@@ -884,7 +911,7 @@ class UmpireDashboard extends Component {
                                     <Option value={'All'}>{'All'}</Option>
                                     {
                                         divisionList.map((item, index) => {
-                                            return <Option key={`division`+index} value={item.id}>{item.name}</Option>
+                                            return <Option key={`division` + index} value={item.id}>{item.name}</Option>
                                         })
                                     }
                                 </Select>
