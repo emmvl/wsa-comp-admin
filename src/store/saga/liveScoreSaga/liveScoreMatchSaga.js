@@ -40,6 +40,7 @@ export function* liveScoreMatchListSaga(action) {
             action.search,
             action.divisionId,
             action.roundName,
+            action.teamIds,
         );
         if (result.status === 1) {
             yield put({

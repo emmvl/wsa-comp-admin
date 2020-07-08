@@ -344,6 +344,18 @@
   background-image: var(--app-gradient-right);
 }
 
+.table-preview-button {
+  background-color: var(--app-color);
+  border-color: var(--app-color);
+  color: var(--app-white);
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  font-family: inter-semi-bold;
+  border-radius: 8px;
+  background-image: var(--app-gradient-right);
+}
+
 .date-picker-inside-table-fees .ant-calendar-picker-input.ant-input {
   height: 44px;
 }
