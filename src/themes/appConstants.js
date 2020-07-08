@@ -301,6 +301,7 @@ const AppConstants = {
   shooting: 'Shooting ',
   preview: 'Preview',
   print: 'Print',
+  previewAll: 'Print All',
 
   /**** competition Open Reg form*/
   competitionDetails: 'Competition Details',
@@ -1379,10 +1380,8 @@ const AppConstants = {
   simultaneousMatchAllocations: "Simultaneous match allocations",
   poolName: "Pool Name",
   umpireReserve: "Umpire Reserve",
-  ladderAdjustment: 'Ladder Adjustment',
   points: "Points",
   reasonForChange: 'Reason for change',
-  addNewAdjustment: 'Add new Adjustment',
   editIncident: 'Edit Incident',
   addCompetitionFormat: 'Add Competition Format',
   fileUploadPdf: "File Upload (File Type: PDF)",
@@ -1392,6 +1391,7 @@ const AppConstants = {
   positionTrackReport: "Position Tracking Report",
   periodFilter: 'Period',
   byGame: 'By Game',
+  matchPrintTemplateType: 'Match Print Template Type',
   playerBorrowing: "Player Borrowing",
   gamesBorrowed: "Games Borrowed",
   minutesBorrowed: "Minutes Borrowed",

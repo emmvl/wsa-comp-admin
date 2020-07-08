@@ -55,7 +55,7 @@ import QuickCompetitionState from "./competitionManagementReducer/competitionQui
 
 import LiveScoreCoachState from "./liveScoreReducer/liveScoreCoachReducer"
 
-import LiveScoreMatchSheetState from "./liveScoreReducer/liveScoreMatcheSheet"
+import LiveScoreMatchSheetState from "./liveScoreReducer/liveScoreMatchSheet"
 import ShopProductState from "./shopReducer/productReducer"
 
 //// Umpire Module

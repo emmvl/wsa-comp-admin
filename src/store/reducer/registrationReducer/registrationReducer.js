@@ -424,7 +424,9 @@ function makeFinalProductArr(arr, defaultMembershipProduct) {
             membershipProductTypeId: typesArray[j].membershipProductTypeId,
             membershipProductTypeMappingId:
               typesArray[j].membershipProductTypeMappingId,
-            id: typesArray[j].id
+            id: typesArray[j].id,
+            isIndividualRegistration: typesArray[j].isIndividualRegistration,
+            isTeamRegistration: typesArray[j].isTeamRegistration,
           };
         }
         else {
@@ -437,7 +439,9 @@ function makeFinalProductArr(arr, defaultMembershipProduct) {
             membershipProductTypeId: typesArray[j].membershipProductTypeId,
             membershipProductTypeMappingId:
               typesArray[j].membershipProductTypeMappingId,
-            id: typesArray[j].id
+            id: typesArray[j].id,
+            isIndividualRegistration: typesArray[j].isIndividualRegistration,
+            isTeamRegistration: typesArray[j].isTeamRegistration,
           };
         }
         array.push(selectedObj);
