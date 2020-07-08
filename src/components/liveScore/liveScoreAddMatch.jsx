@@ -224,10 +224,10 @@ class LiveScoreAddMatch extends Component {
 
     onCreateRound = () => {
         let { addEditMatch, highestSequence } = this.props.liveScoreMatchState
-        let sequence = highestSequence + 1
+        let sequence = (highestSequence == -Infinity ? 0 : highestSequence)  + 1
         // const { id } = JSON.parse(getLiveScoreCompetiton())
         let divisionID = addEditMatch.divisionId
-
+        
         this.props.liveScoreCreateRoundAction(this.state.createRound, sequence, this.state.compId, divisionID)
         this.setState({ visible: false, createRound: '', roundLoad: true })
     }
