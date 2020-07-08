@@ -68,51 +68,14 @@ class LiveScoreAddIncident extends Component {
         if (this.state.isEdit === true) {
             this.props.liveScoreUpdateIncidentData(this.state.tableRecord, "isEdit")
             this.setInitalFiledValue()
-            let imgUrl = isArrayNotEmpty(this.state.tableRecord.incidentMediaList) ? this.state.tableRecord.incidentMediaList[0] ? this.state.tableRecord.incidentMediaList[0].mediaUrl : null : null
-            let videoUrl = isArrayNotEmpty(this.state.tableRecord.incidentMediaList) ? this.state.tableRecord.incidentMediaList[1] ? this.state.tableRecord.incidentMediaList[1].mediaUrl : null : null
-            this.setState({ incidentId: this.state.tableRecord.id, image: imgUrl, video: videoUrl })
+            // let imgUrl = isArrayNotEmpty(this.state.tableRecord.incidentMediaList) ? this.state.tableRecord.incidentMediaList[0] ? this.state.tableRecord.incidentMediaList[0].mediaUrl : null : null
+            // let videoUrl = isArrayNotEmpty(this.state.tableRecord.incidentMediaList) ? this.state.tableRecord.incidentMediaList[1] ? this.state.tableRecord.incidentMediaList[1].mediaUrl : null : null
+            // this.setState({ incidentId: this.state.tableRecord.id, image: imgUrl, video: videoUrl })
         } else {
             this.props.liveScoreUpdateIncidentData(this.state.tableRecord, "isAdd")
         }
-
-        this.setState({ load: true })
     }
 
-    componentDidUpdate(nextProps) {
-        const { liveScoreIncidentState } = this.props
-        const { successResult } = liveScoreIncidentState
-        if (nextProps.liveScoreIncidentState !== this.props.liveScoreIncidentState) {
-            if (liveScoreIncidentState.success === true && this.state.load === true) {
-                let mediaArry
-                if (this.state.image !== null || this.state.video !== null) {
-
-                    if (this.state.image !== null && this.state.video !== null) {
-                        mediaArry = [
-                            this.state.image,
-                            this.state.video
-                        ]
-                        this.props.liveScoreAddEditIncident({ mediaArry: mediaArry, incidentId: successResult.incidentId, key: 'media', isEdit: this.state.isEdit })
-
-                    } else if (this.state.image !== null) {
-                        mediaArry = [
-                            this.state.image
-                        ]
-                        this.props.liveScoreAddEditIncident({ mediaArry: mediaArry, incidentId: successResult.incidentId, key: 'media', isEdit: this.state.isEdit })
-                    }
-                    else if (this.state.video !== null) {
-                        mediaArry = [
-                            this.state.video
-                        ]
-                        this.props.liveScoreAddEditIncident({ mediaArry: mediaArry, incidentId: successResult.incidentId, key: 'media', isEdit: this.state.isEdit })
-                    }
-
-
-                }
-                this.setState({ load: false, incidentId: successResult.incidentId })
-            }
-        }
-
-    }
 
     ////set initial value for all validated fields
     setInitalFiledValue() {
@@ -155,6 +118,7 @@ class LiveScoreAddIncident extends Component {
             }
             this.setState({ image: data.files[0], imageSelection: URL.createObjectURL(data.files[0]) })
         }
+        this.props.liveScoreUpdateIncidentData(null, "clearImage")
     };
 
     ////method to setVideo
@@ -165,7 +129,7 @@ class LiveScoreAddIncident extends Component {
                 // this.setState({ incidentVideo = '' })
             }
             this.setState({ video: data.files[0], videoSelection: URL.createObjectURL(data.files[0]) })
-            // this.props.liveScoreUpdateNewsAction(URL.createObjectURL(data.files[0]), "newsVideo")
+            this.props.liveScoreUpdateIncidentData(null, "clearVideo")
         }
     };
 
@@ -279,7 +243,7 @@ class LiveScoreAddIncident extends Component {
                                 required={"required-field "}
                                 heading={AppConstants.players} />
                             {getFieldDecorator("incidentPlayerName", {
-                                rules: [{ required: true, message: ValidationConstants.playerName }],
+                                rules: [{ required: true, message: ValidationConstants.incidentPlayer }],
                             })(
                                 <Select
                                     loading={this.props.liveScoreState.onLoad === true && true}
@@ -430,7 +394,7 @@ class LiveScoreAddIncident extends Component {
 
     onSaveClick = e => {
 
-        const { incidentData, playerIds } = this.props.liveScoreIncidentState
+        const { incidentData, incidentId, incidentMediaIds } = this.props.liveScoreIncidentState
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
@@ -440,8 +404,26 @@ class LiveScoreAddIncident extends Component {
                 let time = moment(incidentData.time).format("HH:mm")
                 let startDateTime = moment(date + " " + time);
                 let formatDateTime = new Date(startDateTime).toISOString()
-
+                let mediaArry
                 let body
+
+                if (this.state.image !== null && this.state.video !== null) {
+                    mediaArry = [
+                        this.state.image,
+                        this.state.video
+                    ]
+
+                } else if (this.state.image !== null) {
+                    mediaArry = [
+                        this.state.image,
+                    ]
+
+                } else if (this.state.video !== null) {
+                    mediaArry = [
+                        this.state.video,
+                    ]
+
+                }
 
                 if (this.state.isEdit) {
                     body = {
@@ -451,7 +433,7 @@ class LiveScoreAddIncident extends Component {
                         "incidentTime": formatDateTime,
                         "description": incidentData.description,
                         "incidentTypeId": incidentData.injury,
-                        "id": this.state.incidentId
+                        "id": incidentId
                     }
                 } else {
                     body = {
@@ -464,7 +446,12 @@ class LiveScoreAddIncident extends Component {
                     }
                 }
 
-                this.props.liveScoreAddEditIncident({ body: body, playerIds: incidentData.playerIds, isEdit: this.state.isEdit })
+                if (this.state.image !== null || this.state.video !== null || incidentMediaIds.length > 0) {
+                    this.props.liveScoreAddEditIncident({ body: body, playerIds: incidentData.playerIds, isEdit: this.state.isEdit, mediaArry: mediaArry, key: 'media', incidentMediaIds: incidentMediaIds })
+                } else {
+                    this.props.liveScoreAddEditIncident({ body: body, playerIds: incidentData.playerIds, isEdit: this.state.isEdit })
+                }
+
 
 
             }

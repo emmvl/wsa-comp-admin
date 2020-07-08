@@ -47,7 +47,9 @@ const initialState = {
     minutesBorrowed: true,
     premierCompLink: false,
     playerBorrowed: '',
-    borrowedPlayer: 'gameborrowed'
+    borrowedPlayer: 'GAMES',
+    gamesBorrowedThreshold: null,
+    linkedCompetitionId: null
 }
 
 
@@ -128,6 +130,12 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
             }, [])
             const venueData = payload.competitionVenues.map(item => (item.venueId))
 
+            if (payload.linkedCompetitionId) {
+                state.premierCompLink = true
+            } else {
+                state.premierCompLink = false
+            }
+
             return {
                 ...state,
                 loader: false,
@@ -153,12 +161,16 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     lineupSelectionHours: recordingTimeHours(payload.lineupSelectionTime),
                     lineupSelectionMins: recordingTimeMins(payload.lineupSelectionTime),
 
+
                 },
                 data: payload,
                 buzzerEnabled: payload.buzzerEnabled,
                 warningBuzzerEnabled: payload.warningBuzzerEnabled,
                 recordUmpire: payload.recordUmpireType,
                 lineupSelection: payload.lineupSelectionEnabled,
+                borrowedPlayer: payload.playerBorrowingType,
+                gamesBorrowedThreshold: payload.gamesBorrowedThreshold,
+                linkedCompetitionId: payload.linkedCompetitionId,
 
             }
         case ApiConstants.LiveScore_SETTING_VIEW_ERROR:
@@ -179,19 +191,28 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
 
             const keys = payload.key
             const Data = payload.data
-            console.log(Data, 'LiveScore_SETTING_CHANGE_FORM')
 
             if (keys == 'buzzerEnabled' || keys == 'warningBuzzerEnabled' || keys == "lineupSelection" || keys == 'premierCompLink') {
                 state[keys] = Data
+
+                if (keys == 'premierCompLink') {
+                    if (Data === false) {
+                        state.linkedCompetitionId = null
+                    }
+                }
             } else if (keys == "borrowedPlayer") {
                 state[keys] = Data
-                // if (keys == "gameborrowed") {
-                //     state[keys] = Data
-                //     state.minutesBorrowed = false
-                // } else if (keys == "minutesBorrowed") {
-                //     state[keys] = Data
-                //     state.gameborrowed = false
-                // }
+
+                if (Data == 'MINUTES') {
+                    state.gamesBorrowedThreshold = null
+                }
+
+            } else if (keys == 'number') {
+                state.gamesBorrowedThreshold = Data
+
+            } else if (keys == 'linkedCompetitionId') {
+                console.log(Data, 'linkedCompetitionId')
+                state.linkedCompetitionId = Data
 
             } else if (keys == 'recordUmpire') {
                 state.recordUmpire = Data
