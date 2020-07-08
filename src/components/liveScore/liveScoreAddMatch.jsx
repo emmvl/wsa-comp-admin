@@ -1003,7 +1003,7 @@ class LiveScoreAddMatch extends Component {
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 onChange={(value) => this.props.liveScoreUpdateMatchAction(value, "resultStatus")}
                                 placeholder={'Select Result Status'}
-                                value={addEditMatch.resultStatus ? addEditMatch.resultStatus : undefined}
+                                value={addEditMatch.resultStatus == "0" ? null : addEditMatch.resultStatus}
                                 disabled={allDisabled}
                             >
                                 <Option key={'UNCONFIRMED'} value={'UNCONFIRMED'}>{'Unconfirmed'}</Option>

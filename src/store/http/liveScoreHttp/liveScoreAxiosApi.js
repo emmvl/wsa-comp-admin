@@ -170,11 +170,13 @@ let LiveScoreAxiosApi = {
 
     },
 
-    liveScoreMatchList(competitionID, start, offset, search, divisionId, roundName) {
+    liveScoreMatchList(competitionID, start, offset, search, divisionId, roundName, teamIds) {
 
-        var url
+        let url;
 
-        if (divisionId && roundName) {
+        if (teamIds !== undefined) {
+            url = `/matches?competitionId=${competitionID}&divisionIds=${divisionId}&teamIds=${teamIds}`;
+        } else if (divisionId && roundName) {
             url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}&divisionIds=${divisionId}&roundName=${roundName}`;
         } else if (divisionId) {
             url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}&divisionIds=${divisionId}`;
@@ -783,9 +785,7 @@ let LiveScoreAxiosApi = {
 
 
     //// Export Files 
-
     exportFiles(url) {
-
         return Method.dataGetDownload(url, localStorage.token);
     },
 
@@ -909,35 +909,48 @@ let LiveScoreAxiosApi = {
 
     liveScoreAddEditIncident(data) {
         console.log(data, 'liveScoreAddEditIncident')
-        if (data.key === 'media') {
-            let media = data.mediaArry
 
-            let body = new FormData()
+        let body = data.body
+        let players = JSON.stringify(data.playerIds)
 
-            for (let i in media) {
-                body.append("media", media[i])
-            }
-            if (data.isEdit) {
-                var url = `/incident/media/edit?incidentId=${data.incidentId}`;
-                return Method.dataPatch(url, token, body)
-            } else {
-                var url = `/incident/media?incidentId=${data.incidentId}`;
-                return Method.dataPost(url, token, body)
-            }
-
+        if (data.isEdit) {
+            var url = `/incident/edit?playerIds=${players}`;
+            return Method.dataPatch(url, token, body)
         } else {
-            // let body = { "incident": data.body }
-            let body = data.body
-            let players = JSON.stringify(data.playerIds)
-
-            if (data.isEdit) {
-                var url = `/incident/edit?playerIds=${players}`;
-                return Method.dataPatch(url, token, body)
-            } else {
-                var url = `/incident?playerIds=${players}`;
-                return Method.dataPost(url, token, body)
-            }
+            var url = `/incident?playerIds=${players}`;
+            return Method.dataPost(url, token, body)
         }
+
+
+        // if (data.key === 'media') {
+        //     let media = data.mediaArry
+
+        //     let body = new FormData()
+
+        //     for (let i in media) {
+        //         body.append("media", media[i])
+        //     }
+        //     if (data.isEdit) {
+        //         var url = `/incident/media/edit?incidentId=${data.incidentId}`;
+        //         return Method.dataPatch(url, token, body)
+        //     } else {
+        //         var url = `/incident/media?incidentId=${data.incidentId}`;
+        //         return Method.dataPost(url, token, body)
+        //     }
+
+        // } else {
+        //     // let body = { "incident": data.body }
+        //     let body = data.body
+        //     let players = JSON.stringify(data.playerIds)
+
+        //     if (data.isEdit) {
+        //         var url = `/incident/edit?playerIds=${players}`;
+        //         return Method.dataPatch(url, token, body)
+        //     } else {
+        //         var url = `/incident?playerIds=${players}`;
+        //         return Method.dataPost(url, token, body)
+        //     }
+        // }
 
 
     },
@@ -947,6 +960,45 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, token)
     },
 
+    liveScoreAddEditIncidentMedia(data, incidentId) {
+        let media = data.mediaArry
+        let body = new FormData()
+
+
+        for (let i in media) {
+            body.append("media", media[i])
+        }
+
+        if (data.isEdit) {
+
+            if (data.incidentMediaIds.length > 0) {
+                let incidentMediaId = JSON.stringify(data.incidentMediaIds)
+
+                if (media) {
+                    var url = `/incident/media/edit?incidentId=${incidentId}&incidentMediaIds=${incidentMediaId}`;
+                    return Method.dataPatch(url, token, body)
+                } else {
+                    var url = `/incident/media/edit?incidentId=${incidentId}&incidentMediaIds=${incidentMediaId}`;
+                    return Method.dataPatch(url, token)
+                }
+
+            } else {
+                var url = `/incident/media/edit?incidentId=${incidentId}`;
+                return Method.dataPatch(url, token, body)
+            }
+
+        } else {
+            var url = `/incident/media?incidentId=${incidentId}`;
+            return Method.dataPost(url, token, body)
+        }
+
+    },
+
+    liveScoreMatchSheetPrint(competitionId, divisionId, teamId) {
+        let url = `/matches/print?competitionId=${competitionId}&divisionIds=${divisionId}&teamIds=${teamId}`;
+
+        return Method.dataGet(url, token)
+    },
 };
 
 

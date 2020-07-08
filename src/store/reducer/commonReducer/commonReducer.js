@@ -52,7 +52,8 @@ const initialState = {
     disabilityList: [],
     days: [],
     stateData: [],
-    paymentStatus: []
+    paymentStatus: [],
+    matchPrintTemplateType: [],
 };
 
 
@@ -418,6 +419,20 @@ function commonReducerState(state = initialState, action) {
                 paymentStatus: action.result,
                 status: action.status
             }
+
+        case ApiConstants.API_MATCH_PRINT_TEMPLATE_LOAD:
+            return {
+                ...state,
+                onLoad: true,
+            };
+
+        case ApiConstants.API_MATCH_PRINT_TEMPLATE_SUCCESS:
+            return {
+                ...state,
+                onLoad: true,
+                matchPrintTemplateType: action.result.MatchPrintTemplate,
+                status: action.status
+            };
         default:
             return state;
     }
