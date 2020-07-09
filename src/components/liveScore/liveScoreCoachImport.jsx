@@ -13,17 +13,25 @@ import { message } from "antd";
 import ValidationConstants from "../../themes/validationConstant";
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import history from "../../util/history";
+import { userExportFilesAction } from "../../store/actions/appAction"
 
 
 const { Content, Header, Footer } = Layout;
 
 
-class LiveScorerCoachImport extends Component {
+class LiveScoreCoachImport extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            csvdata: null
+            csvdata: null,
+            competitionId: null
         }
+    }
+
+    componentDidMount() {
+
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        this.setState({ competitionId: id })
     }
 
 
@@ -63,6 +71,12 @@ class LiveScorerCoachImport extends Component {
         }
     }
 
+    // on Export
+    onExport() {
+        let url = AppConstants.coachExport + this.state.competitionId
+        this.props.userExportFilesAction(url)
+    }
+
 
     contentView = () => {
         return (
@@ -96,6 +110,12 @@ class LiveScorerCoachImport extends Component {
                                 {AppConstants.upload}
                             </Button>
                         </div>
+
+                        <div className="reg-add-save-button ml-3"  >
+                            <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
+                                {AppConstants.downloadTemplate}
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -108,7 +128,7 @@ class LiveScorerCoachImport extends Component {
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"23"} />
-                <Loader visible={this.props.liveScoreCoachState.onLoad} />
+                <Loader visible={this.props.liveScoreCoachState.onLoad || this.props.appState.onLoad} />
                 <Layout>
                     {this.headerView()}
                     <Content>
@@ -123,13 +143,13 @@ class LiveScorerCoachImport extends Component {
     }
 }
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScoreCoachImportAction }, dispatch)
+    return bindActionCreators({ liveScoreCoachImportAction, userExportFilesAction }, dispatch)
 }
 
 function mapStateToProps(state) {
     return {
-        liveScoreCoachState: state.LiveScoreCoachState
+        liveScoreCoachState: state.LiveScoreCoachState,
+        appState: state.AppState
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)((LiveScorerCoachImport));
-// export default LiveScorerCoachImport
+export default connect(mapStateToProps, mapDispatchToProps)((LiveScoreCoachImport));

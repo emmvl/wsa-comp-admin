@@ -1398,6 +1398,8 @@ const AppConstants = {
   premierCompLink: 'Premier Competition Link',
   productAddedMessage:"Product added successfully.",
   productDeletedMessage:"Product deleted successfully.",
+  typeAddedMessage:"Type added successfully.",
+  registrationChange: "Registration Change",
 };
 
 export default AppConstants;
