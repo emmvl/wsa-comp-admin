@@ -164,7 +164,7 @@ class LiveScoreAddPlayer extends Component {
                     <div className="col-sm" >
                         <Form.Item >
                             {getFieldDecorator('firstName', {
-                                normalize: (input) => captializedString(input),
+                                // normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
@@ -172,10 +172,10 @@ class LiveScoreAddPlayer extends Component {
                                     heading={AppConstants.firstName}
                                     placeholder={AppConstants.enter_firstName}
                                     name={'firstName'}
-                                    // onChange={(firstName) => this.props.liveScoreUpdatePlayerDataAction(firstName.target.value? firstName.target.value[0].toUpperCase() + firstName.target.value.slice(1).toLowerCase():"", 'firstName')}
                                     onChange={(firstName) => this.props.liveScoreUpdatePlayerDataAction(captializedString(firstName.target.value), firstName.target.name)}
-
-                                    value={playerData.firstName}
+                                    onBlur={(i)=> this.props.form.setFieldsValue({
+                                        'firstName': captializedString(i.target.value)
+                                    })}
                                 />
                             )}
                         </Form.Item>
@@ -184,7 +184,7 @@ class LiveScoreAddPlayer extends Component {
                     <div className="col-sm" >
                         <Form.Item >
                             {getFieldDecorator('lastName', {
-                                normalize: (input) => captializedString(input),
+                                // normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
@@ -193,7 +193,9 @@ class LiveScoreAddPlayer extends Component {
                                     placeholder={AppConstants.enterLastName}
                                     name={'lastName'}
                                     onChange={(lastName) => this.props.liveScoreUpdatePlayerDataAction(captializedString(lastName.target.value), lastName.target.name)}
-                                    value={playerData.lastName}
+                                    onBlur={(i)=> this.props.form.setFieldsValue({
+                                        'lastName': captializedString(i.target.value)
+                                    })}
                                 />
                             )}
                         </Form.Item>
