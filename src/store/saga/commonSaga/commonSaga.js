@@ -637,3 +637,20 @@ export function* getRegistrationPaymentStatusSaga(action) {
     }
 }
 
+// Get the match print template type
+export function* getMatchPrintTemplateTypeSaga() {
+    try {
+        const result = yield call(CommonAxiosApi.getMatchPrintTemplateType, AppConstants.matchPrintTemplateType);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_MATCH_PRINT_TEMPLATE_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

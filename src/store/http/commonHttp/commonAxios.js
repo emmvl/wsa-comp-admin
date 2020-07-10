@@ -226,7 +226,15 @@ let AxiosApi = {
     getStateReference(body) {
         var url = "/common/references";
         return Method.dataPost(url, token, body);
-    }
+    },
+    getMatchPrintTemplateType() {
+        const body = {
+            MatchPrintTemplate: 'MatchPrintTemplate',
+        };
+        const url = '/common/references';
+
+        return Method.dataPost(url, token, body);
+    },
 };
 const Method = {
     async dataPost(newurl, authorization, body) {

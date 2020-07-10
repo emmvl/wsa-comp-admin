@@ -180,7 +180,7 @@ const AppConstants = {
   coach: 'Coach',
   addMembershipType: 'Add Membership Type',
   membershipFees: 'Membership Fees',
-  applyMembershipFee: 'Apply Membership Fees to',
+  applyMembershipFee: 'Apply Seasonal Membership Fees to',
   casualFee: 'Casual Fee',
   gst: 'GST',
   seasonalFee: 'Seasonal fee',
@@ -301,6 +301,7 @@ const AppConstants = {
   shooting: 'Shooting ',
   preview: 'Preview',
   print: 'Print',
+  previewAll: 'Print All',
 
   /**** competition Open Reg form*/
   competitionDetails: 'Competition Details',
@@ -1390,12 +1391,15 @@ const AppConstants = {
   positionTrackReport: "Position Tracking Report",
   periodFilter: 'Period',
   byGame: 'By Game',
+  matchPrintTemplateType: 'Match Print Template Type',
   playerBorrowing: "Player Borrowing",
   gamesBorrowed: "Games Borrowed",
   minutesBorrowed: "Minutes Borrowed",
   premierCompLink: 'Premier Competition Link',
   productAddedMessage:"Product added successfully.",
   productDeletedMessage:"Product deleted successfully.",
+  typeAddedMessage:"Type added successfully.",
+  registrationChange: "Registration Change",
 };
 
 export default AppConstants;

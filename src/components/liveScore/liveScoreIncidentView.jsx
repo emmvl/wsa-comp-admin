@@ -3,7 +3,7 @@ import {
     Layout,
     Breadcrumb,
     Modal,
-    Table,
+    Button,
 } from "antd";
 import "./liveScore.css";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -13,6 +13,8 @@ import ReactPlayer from 'react-player';
 import { liveScore_formateDateTime, liveScore_formateDate, getTime } from '../../themes/dateformate'
 import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
 import history from "../../util/history";
+import { NavLink } from 'react-router-dom';
+
 const { Header, Content } = Layout;
 
 class LiveScoreIncidentView extends Component {
@@ -25,8 +27,6 @@ class LiveScoreIncidentView extends Component {
             incidentItem: props.location.state.item,
             screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null
         };
-        console.log(this.state.incidentItem, 'incidentItem')
-
     }
 
     ////method to show modal view after click
@@ -55,27 +55,30 @@ class LiveScoreIncidentView extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <Header className="comp-venue-courts-header-view">
-                <div className="row">
-                    <div
-                        className="col-sm"
-                        style={{ display: "flex", alignContent: "center" }}
-                    >
+            <Header className="comp-venue-courts-header-view live-form-view-button-header" >
+                <div className="row" >
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
                         <Breadcrumb separator=" > ">
-                            <Breadcrumb.Item className="breadcrumb-add">
-                                {AppConstants.incidentDetails}
-                            </Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.incidentDetails}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
+                    <div className="col-sm live-form-view-button-container" style={{ display: "flex", justifyContent: "flex-end" }} >
+                        <NavLink to={{
+                            pathname: '/liveScoreAddIncident',
+                            state: { isEdit: true, tableRecord: this.state.incidentItem }
+                        }}>
+                            <Button className="primary-add-comp-form" type="primary">{AppConstants.edit}
+                            </Button>
+                        </NavLink>
+                    </div>
                 </div>
-            </Header>
-        );
-    };
+            </Header >
+        )
+    }
 
 
     //// this method called insside modal view function to show content of the modal 
     innerViewOfModal() {
-        console.log(this.state.modaldata, 'incidentItem**##', this.state.incidentItem)
         return (
             <div className="comp-dashboard-botton-view-mobile" style={{ display: 'flex', justifyContent: 'center', }} onClick={this.showModal}>
                 {
@@ -187,7 +190,13 @@ class LiveScoreIncidentView extends Component {
                         <div className="row pl-3">
                             {mediaPlayer.map((item) => {
                                 return <div className="side-bar-profile-data">
-                                    <img className='col-sum m-2 ' style={{ cursor: 'pointer', }} onClick={() => this.showModal(item.mediaUrl, true)} src={item.mediaUrl} height='70' width='70' />
+                                    {
+                                        item.mediaType == "video/mp4" ?
+                                            <video className='col-sum m-2 ' style={{ cursor: 'pointer', }} onClick={() => this.showModal(item.mediaUrl, true)} src={item.mediaUrl} height='70' width='70' />
+                                            :
+                                            <img className='col-sum m-2 ' style={{ cursor: 'pointer', }} onClick={() => this.showModal(item.mediaUrl, false)} src={item.mediaUrl} height='70' width='70' />
+                                    }
+
                                 </div>
                             }
                             )}

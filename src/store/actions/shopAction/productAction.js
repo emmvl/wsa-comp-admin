@@ -40,10 +40,10 @@ function getTypesOfProductAction() {
 }
 
 ////////add type in the typelist array in reducer
-function addNewTypeAction(data) {
+function addNewTypeAction(typeName) {
     const action = {
-        type: ApiConstants.SHOP_ADD_TYPE_IN_TYPELIST_REDUCER,
-        data
+        type: ApiConstants.API_SHOP_ADD_TYPE_IN_TYPELIST_LOAD,
+        typeName
     };
     return action;
 }
@@ -75,6 +75,16 @@ function deleteProductVariantAction(optionId) {
     return action;
 }
 
+//product details on id API 
+function getProductDetailsByIdAction(productId) {
+    const action = {
+        type: ApiConstants.API_SHOP_GET_PRODUCT_DETAILS_BY_ID_LOAD,
+        productId
+    };
+    return action;
+}
+
+
 export {
     getProductListingAction,
     addProductAction,
@@ -84,4 +94,5 @@ export {
     deleteProductAction,
     clearProductReducer,
     deleteProductVariantAction,
+    getProductDetailsByIdAction,
 }

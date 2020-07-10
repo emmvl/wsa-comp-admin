@@ -2,11 +2,10 @@ import { put, call } from '../../../../node_modules/redux-saga/effects'
 import ApiConstants from "../../../themes/apiConstants";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 import { message } from "antd";
-import history from "../../../util/history";
 
 function* failSaga(result) {
     yield put({
-        type: ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_FAIL,
+        type: ApiConstants.API_LIVE_SCORE_MATCH_SHEET_FAIL,
         error: result,
         status: result.status
     });
@@ -17,7 +16,7 @@ function* failSaga(result) {
 
 function* errorSaga(error) {
     yield put({
-        type: ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_ERROR,
+        type: ApiConstants.API_LIVE_SCORE_MATCH_SHEET_ERROR,
         error: error,
         status: error.status
     });
@@ -70,7 +69,25 @@ export function* liveScoreMatchSheetSaga(action) {
     }
 }
 
+export function* liveScoreMatchSheetPrintSaga(action) {
+    try {
+        const result = yield call(
+            LiveScoreAxiosApi.liveScoreMatchSheetPrint,
+            action.competitionId,
+            action.divisionId,
+            action.teamId
+        );
 
-
-
-
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_MATCH_SHEET_PRINT_SUCCESS,
+                downloadLink: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

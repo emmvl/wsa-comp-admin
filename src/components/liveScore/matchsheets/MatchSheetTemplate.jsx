@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Document as ReactPdfDocument, Page, Text, View, Image, StyleSheet } from '@react-pdf/renderer';
+import { Text, View, Image, StyleSheet } from '@react-pdf/renderer';
+import moment from 'moment';
 
 const styles = StyleSheet.create({
     page: {
@@ -37,10 +38,15 @@ const styles = StyleSheet.create({
         padding: 8,
         flexDirection: 'row',
     },
-    infoContent: {
+    infoContentLeft: {
         width: '50%',
         paddingRight: 16,
         paddingLeft: 8,
+    },
+    infoContentRight: {
+        width: '50%',
+        paddingRight: 16,
+        paddingLeft: 12,
     },
     infoText: {
         fontSize: 9,
@@ -138,7 +144,7 @@ const styles = StyleSheet.create({
         borderBottom: '1px solid black',
     },
     summaryCell: {
-        width: '25%',
+        width: '28%',
         paddingLeft: 12,
         paddingTop: 2,
     },
@@ -148,7 +154,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     signatureCell: {
-        width: '23%',
+        width: '20%',
         paddingTop: 2,
         borderRight: '1px solid black',
     },
@@ -194,27 +200,35 @@ const styles = StyleSheet.create({
 });
 
 const MatchSheetTemplate = (props) => {
-    const { templateType } = props;
+    const {
+        templateType,
+        matchDetails,
+        match,
+        organisation,
+    } = props;
+
+    const {team1players, team2players, umpires} = matchDetails;
+    const matchDetail = matchDetails.match[0];
 
     return (
         <View>
             <View style={styles.header}>
                 <View style={styles.title}>
-                    <Text style={styles.associationName}>Brisbane City Netball Association</Text>
+                    <Text style={styles.associationName}>{organisation.name || 'Association'}</Text>
                     <Text style={styles.templateType}>{templateType} Scoresheet</Text>
                 </View>
-                <Image style={styles.logo} src="https://img.icons8.com/color/myspace"/>
+                <Image style={styles.logo} src={organisation.orgLogoUrl || "https://img.icons8.com/color/myspace"}/>
             </View>
             <View style={styles.matchInfo}>
-                <View style={styles.infoContent}>
-                    <Text style={styles.infoText}>Round: 1</Text>
-                    <Text style={styles.infoText}>Venue: John Fisher Court 1</Text>
-                    <Text style={styles.infoText}>H: Team 1</Text>
+                <View style={styles.infoContentLeft}>
+                    <Text style={styles.infoText}>{match.round ? match.round.name : ''}</Text>
+                    <Text style={styles.infoText}>{match.venueCourt && match.venueCourt.venue ? match.venueCourt.venue.name : ''}</Text>
+                    <Text style={styles.infoText}>{match.team1 ? match.team1.name : ''}</Text>
                 </View>
-                <View style={styles.infoContent}>
-                    <Text style={styles.infoText}>Date: 22/05/2020</Text>
-                    <Text style={styles.infoText}>Time: 10:10 am</Text>
-                    <Text style={styles.infoText}>A: Team 2</Text>
+                <View style={styles.infoContentRight}>
+                    <Text style={styles.infoText}>Date: {moment(new Date(match.startTime)).format('DD/MM/YYYY')}</Text>
+                    <Text style={styles.infoText}>Time: {moment(new Date(match.startTime)).format('HH:MM a')}</Text>
+                    <Text style={styles.infoText}>{match.team2 ? match.team2.name : ''}</Text>
                 </View>
             </View>
             {templateType !== 'Carnival' && (
@@ -230,10 +244,10 @@ const MatchSheetTemplate = (props) => {
                                 <Text style={styles.cell}>3</Text>
                                 <Text style={styles.cell}>4</Text>
                             </View>
-                            {[...Array(15).keys()].map((index) => (
+                            {team1players.length > 0 && team1players.map((player, index) => (
                                 <View style={styles.row} key={`row_${index}`}>
-                                    <Text style={styles.cell}></Text>
-                                    <Text style={styles.largeCell}></Text>
+                                    <Text style={styles.cell}>{index}</Text>
+                                    <Text style={styles.largeCell}>{`${player.firstName} ${player.lastName}`}</Text>
                                     <Text style={styles.largeCell}></Text>
                                     <Text style={styles.cell}></Text>
                                     <Text style={styles.cell}></Text>
@@ -254,10 +268,10 @@ const MatchSheetTemplate = (props) => {
                                 <Text style={styles.cell}>3</Text>
                                 <Text style={styles.cell}>4</Text>
                             </View>
-                            {[...Array(15).keys()].map((rowIndex) => (
-                                <View style={styles.row} key={`row_${rowIndex}`}>
-                                    <Text style={styles.cell}></Text>
-                                    <Text style={styles.largeCell}></Text>
+                            {team2players.length > 0 && team2players.map((player, index) => (
+                                <View style={styles.row} key={`row_${index}`}>
+                                    <Text style={styles.cell}>{index}</Text>
+                                    <Text style={styles.largeCell}>{`${player.firstName} ${player.lastName}`}</Text>
                                     <Text style={styles.largeCell}></Text>
                                     <Text style={styles.cell}></Text>
                                     <Text style={styles.cell}></Text>
@@ -377,14 +391,20 @@ const MatchSheetTemplate = (props) => {
                 <View style={styles.summaryTable}>
                     <View style={styles.table}>
                         <View style={styles.summaryRow}>
-                            <Text style={styles.summaryCell}>Scorer 1</Text>
+                            <Text style={styles.summaryCell}>
+                                Scorer 1
+                                {/*Scorer 1 {matchDetail.scorer1 ? `${matchDetail.scorer1.firstName} ${matchDetail.scorer1.lastName}` : ''}*/}
+                            </Text>
                             <Text style={styles.signatureCell}>Signature</Text>
                             <Text style={styles.gapCell}></Text>
-                            <Text style={styles.summaryCell}>Scorer 2</Text>
+                            <Text style={styles.summaryCell}>
+                                Scorer 2
+                            </Text>
                             <Text style={styles.signatureCell}>Signature</Text>
                         </View>
                         <View style={styles.summaryRow}>
                             <Text style={styles.summaryCell}>Umpire</Text>
+                            {/*<Text style={styles.summaryCell}>Umpire {umpires[0] ? umpires[0].umpireName : ''}</Text>*/}
                             <Text style={styles.signatureCell}>Signature</Text>
                             <Text style={styles.gapCell}></Text>
                             <Text style={styles.summaryCell}>Umpire</Text>
@@ -406,10 +426,16 @@ const MatchSheetTemplate = (props) => {
 
 MatchSheetTemplate.propTypes = {
     templateType: PropTypes.string,
+    matchDetails: PropTypes.object,
+    match: PropTypes.object,
+    organisation: PropTypes.object,
 };
 
 MatchSheetTemplate.defaultProps = {
     templateType: 'Fixtures',
+    matchDetails: null,
+    match: null,
+    organisation: null,
 };
 
 export default MatchSheetTemplate;

@@ -73,6 +73,11 @@ const columns = [
         key: "membershipProductTypeName",
     },
     {
+        title: "Registration Type",
+        dataIndex: "registrationType",
+        key: "registrationType",
+    },
+    {
         title: "Registration Divisions",
         dataIndex: "divisionName",
         key: "divisionName",
@@ -320,8 +325,11 @@ class RegistrationForm extends Component {
                         registration_settings.push(reg_QuestionsSetting[i])
                     }
                     SelectedProduct['registrationSettings'] = registration_settings
-                    SelectedProduct["orgRegistrationId"] = SelectedProduct.orgRegistrationId == 0 || SelectedProduct.orgRegistrationId == null ? this.state.orgRegId : SelectedProduct.orgRegistrationId
-                    console.log(this.state.orgRegId, "SelectedProduct", SelectedProduct)
+                    SelectedProduct["orgRegistrationId"] = SelectedProduct.orgRegistrationId == 0 || SelectedProduct.orgRegistrationId == null ? this.state.orgRegId : SelectedProduct.orgRegistrationId;
+
+                    console.log(this.state.orgRegId, "SelectedProduct",SelectedProduct)
+
+                    //console.log("Final Data" + JSON.stringify(SelectedProduct));
 
                     this.props.regSaveRegistrationForm(SelectedProduct, this.state.statusRefId)
                 }
@@ -513,6 +521,7 @@ class RegistrationForm extends Component {
             this.props.appState.venueList.length !== 0 ? this.props.appState.venueList : [];
         let dateOpen = this.regOpenDate()
         let closeDate = moment(this.state.compCloseDate).format("YYYY-MM-DD")
+        console.log("closeDate" + closeDate);
         let compCLoseDate = moment(this.state.compCloseDate).format("DD-MM-YYYY")
         let defaultChecked = this.props.registrationState.defaultChecked
         let isPublished = this.state.isPublished

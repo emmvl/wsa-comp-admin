@@ -53,7 +53,7 @@ export function* getProductListingSaga(action) {
 }
 
 /////////////Add product 
-export function* addProductActionSaga(action) {
+export function* addProductSaga(action) {
     try {
         const result = yield call(AxiosApi.addProduct, action.payload);
         if (result.status === 1) {
@@ -119,6 +119,43 @@ export function* deleteProductVariantSaga(action) {
                 status: result.status
             });
             message.success(result.result.data.message);
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+/////////////////add type in the typelist array in from the API
+export function* addNewTypeSaga(action) {
+    try {
+        const result = yield call(AxiosApi.addNewType, action.typeName);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_SHOP_ADD_TYPE_IN_TYPELIST_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+            message.success(AppConstants.typeAddedMessage);
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+///////////////////product details on id API
+export function* getProductDetailsByIdSaga(action) {
+    try {
+        const result = yield call(AxiosApi.getProductDetailsById, action.productId);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_SHOP_GET_PRODUCT_DETAILS_BY_ID_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
         } else {
             yield call(failSaga, result)
         }

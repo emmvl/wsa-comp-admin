@@ -249,6 +249,15 @@ function registrationPaymentStatusAction() {
 }
 
 
+function getMatchPrintTemplateType() {
+    const action = {
+        type: ApiConstants.API_MATCH_PRINT_TEMPLATE_LOAD,
+    };
+
+    return action;
+}
+
+
 export {
     timeSlotInit,
     getCommonRefData,
@@ -278,5 +287,6 @@ export {
     disabilityReferenceAction,
     quickCompetitionInit,
     getStateReferenceAction,
-    registrationPaymentStatusAction
+    registrationPaymentStatusAction,
+    getMatchPrintTemplateType,
 }
