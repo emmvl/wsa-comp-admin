@@ -6,7 +6,9 @@ import ValidationConstants from "../../../themes/validationConstant";
 import { getUserId, getAuthToken /* , getOrganisationData */ } from "../../../util/sessionStorage"
 
 let token = getAuthToken();
-let userId = getUserId()
+let userId = getUserId();
+// const internetStatus = navigator.onLine ? true : false;
+
 async function logout() {
   await localStorage.clear();
   history.push("/");
@@ -191,9 +193,9 @@ let userHttpApi = {
   },
 
   ////forgot password
-  forgotPassword(email) {
-    let param = encodeURIComponent(email)
-    const url = `password/forgot?email=${param}`;
+  forgotPassword(email, resetType) {
+    const param = encodeURIComponent(email);
+    const url = `password/forgot?email=${param}&type=${resetType}`;
     return Method.dataGet(url, token);
   },
 

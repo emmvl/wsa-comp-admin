@@ -679,7 +679,7 @@ class UserEditAffiliates extends Component {
                             <div className="pt-4">
                                 <div className="row">
                                     <div className="col-sm" style={{whiteSpace: 'break-spaces'}}>
-                                        <a className="userRegLink" href={affiliate.termsAndConditions} target='_blank' >
+                                        <a className="user-reg-link" href={affiliate.termsAndConditions} target='_blank' >
                                             {affiliate.termsAndConditionsFile}
                                         </a>
                                     </div>
