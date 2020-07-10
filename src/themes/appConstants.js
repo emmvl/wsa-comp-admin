@@ -1408,6 +1408,12 @@ const AppConstants = {
   profileHeader: "Your Profile",
   passwordHeader: "Change your password",
   enterPhoneNumber: "Enter phone number",
+  currentPassword: "Current password",
+  enterCurrentPassword: "Enter current password",
+  newPassword: "New password",
+  enterNewPassword: "Enter new password",
+  confirmPassword: "Confirm password",
+  enterConfirmPassword: "Enter confirm password",
 };
 
 export default AppConstants;

@@ -1,12 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./App";
-import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
-import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-import ConfigureStore from "./configureStore";
 import { Provider } from "react-redux";
+
+import App from "./App";
+import ConfigureStore from "./configureStore";
+import * as serviceWorker from "./serviceWorker";
+
+import "./style.css";
 
 const store = ConfigureStore();
 ReactDOM.render(

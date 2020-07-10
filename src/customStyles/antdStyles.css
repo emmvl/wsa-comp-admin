@@ -127,16 +127,19 @@
   background-color: var(--app-white);
   border-color: white;
   color: var(--app-color);
-  height: 50px;
-  font-weight: 600;
-  font-size: 15px;
   width: 135px;
   height: 48px;
   border-radius: 8px;
-  font-family: inter-semi-bold;
+  font-family: inter-semi-bold, sans-serif;
+  font-size: 15px;
   font-weight: 600;
   font-stretch: normal;
   font-style: normal;
+}
+
+.ant-btn {
+  background-color: var(--app-color);
+  border-color: var(--app-color);
 }
 
 .ant-btn:hover, .ant-btn:focus {
@@ -149,19 +152,12 @@
   background-color: var(--app-e0e1e3);
   border-color: var(--app-e0e1e3);
   color: var(--app-4c4c6d);
-  height: 50px;
   font-weight: 500;
-  font-family: inter-medium;
+  font-family: inter-medium, sans-serif;
   font-size: 15px;
   /* width: 89px; */
   height: 48px;
   border-radius: 8px;
-}
-
-.ant-btn-primary:hover, .ant-btn-primary:focus {
-  color: var(--app-white);
-  background-color: var(--app-color);
-  border-color: var(--app-color);
 }
 
 /* antd tree overrided styles */
