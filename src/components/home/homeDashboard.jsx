@@ -610,7 +610,11 @@ class HomeDashboard extends Component {
             <div>
                 {this.ownedHeadingView()}
                 <div className="table-responsive home-dash-table-view">
-                    <Table className="home-dashboard-table" columns={columnsOwned} dataSource={dataOwned} pagination={false}
+                    <Table
+                      className="home-dashboard-table"
+                      columns={columnsOwned}
+                      dataSource={dataOwned}
+                      pagination={false}
                     />
                 </div>
             </div>
@@ -633,7 +637,11 @@ class HomeDashboard extends Component {
             <div>
                 {this.participatedHeadingView()}
                 <div className="table-responsive home-dash-table-view">
-                    <Table className="home-dashboard-table" columns={columnsParticipate} dataSource={dataParticipate} pagination={false}
+                    <Table
+                      className="home-dashboard-table"
+                      columns={columnsParticipate}
+                      dataSource={dataParticipate}
+                      pagination={false}
                     />
                 </div>
             </div>
@@ -641,9 +649,8 @@ class HomeDashboard extends Component {
     }
 
     render() {
-
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.home} menuName={AppConstants.home} />
                 <InnerHorizontalMenu menu={"home"} userSelectedKey={"1"} />
                 <Layout>
@@ -654,9 +661,8 @@ class HomeDashboard extends Component {
                         {/* {this.ownedView()}
                         {this.participatedView()} */}
                     </Content>
-                    <Loader
-                        visible={this.props.appState.onLoad} />
-                    <Footer></Footer>
+                    <Loader visible={this.props.appState.onLoad} />
+                    <Footer />
                 </Layout>
             </div>
         );
@@ -671,16 +677,17 @@ function mapDispatchToProps(dispatch) {
         getOnlyYearListAction,
         clearHomeDashboardData,
         setHomeDashboardYear,
-        getActionBoxAction, updateActionBoxAction
-    }, dispatch)
+        getActionBoxAction,
+        updateActionBoxAction,
+    }, dispatch);
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         appState: state.AppState,
         homeDashboardState: state.HomeDashboardState,
-        userState: state.UserState
-
-    }
+        userState: state.UserState,
+    };
 }
-export default connect(mapStatetoProps, mapDispatchToProps)((HomeDashboard));
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeDashboard);

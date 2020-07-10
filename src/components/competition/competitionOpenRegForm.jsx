@@ -2839,7 +2839,6 @@ function mapDispatchToProps(dispatch) {
         getYearListAction,
         getCompetitionTypeListAction,
         clearCompReducerDataAction,
-        getDefaultCharity,
         getDefaultCompFeesLogoAction,
         getYearAndCompetitionOwnAction,
         searchVenueList,

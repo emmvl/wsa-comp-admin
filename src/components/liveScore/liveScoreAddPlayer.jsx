@@ -170,7 +170,7 @@ class LiveScoreAddPlayer extends Component {
                                 <InputWithHead
                                     required={"required-field pb-0"}
                                     heading={AppConstants.firstName}
-                                    placeholder={AppConstants.enter_firstName}
+                                    placeholder={AppConstants.enterFirstName}
                                     name={'firstName'}
                                     onChange={(firstName) => this.props.liveScoreUpdatePlayerDataAction(captializedString(firstName.target.value), firstName.target.name)}
                                     onBlur={(i)=> this.props.form.setFieldsValue({

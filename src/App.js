@@ -10,27 +10,15 @@ import {
   Route,
   Redirect,
   Switch,
-  HashRouter
 } from "react-router-dom";
 import history from "./util/history";
 import Login from "./components/login";
-import { Skeleton } from "antd";
 import PrivateRoute from "./util/protectedRoute";
-import ForgotPassword from "./components/forgotPassword"
+import ForgotPassword from "./components/forgotPassword";
+import lazyLoad from "./components/lazyLoad";
 
 const ORG_ID = 'Netball';
 function App() {
-  const lazyLoad = Component => {
-    const lazy = props => {
-      return (
-        <React.Suspense fallback={<Skeleton avatar paragraph={{ rows: 4 }} />}>
-          <Component {...props} />
-        </React.Suspense>
-      );
-    };
-    return lazy;
-  };
-
   return (
     <div className="App">
        {/* <FullStory org={ORG_ID} /> */}
@@ -44,8 +32,8 @@ function App() {
               localStorage.token ? (
                 <Redirect to="/homeDashboard" />
               ) : (
-                  <Redirect to="/login" />
-                )
+                <Redirect to="/login" />
+              )
             }
           />
           <Route path="/login" component={lazyLoad(Login)} />

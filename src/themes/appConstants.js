@@ -49,7 +49,7 @@ const AppConstants = {
   female: 'Female',
   unspecified: 'Unspecified',
   dob: 'Date of Birth',
-  competitionCategoty: 'Competition Categoty',
+  competitionCategory: 'Competition Category',
   participant_firstName: 'Participant First Name',
   participant_middleName: 'Alternative or Middle Name',
   participant_lastName: 'Participant Last Name',
@@ -601,7 +601,7 @@ const AppConstants = {
   emailValue: 'email@gmail.com',
   nameValue: 'test score',
   contactValue: '9646097979',
-  enter_firstName: 'Enter first name',
+  enterFirstName: 'Enter first name',
   enterLastName: 'Enter last name',
   assignToMatch: 'Assign To Match',
   aboutScorer: 'About Scorer',
@@ -1396,10 +1396,18 @@ const AppConstants = {
   gamesBorrowed: "Games Borrowed",
   minutesBorrowed: "Minutes Borrowed",
   premierCompLink: 'Premier Competition Link',
-  productAddedMessage:"Product added successfully.",
-  productDeletedMessage:"Product deleted successfully.",
-  typeAddedMessage:"Type added successfully.",
+  productAddedMessage: "Product added successfully.",
+  productDeletedMessage: "Product deleted successfully.",
+  typeAddedMessage: "Type added successfully.",
   registrationChange: "Registration Change",
+
+  // Account
+  account: "Account",
+  profileMenu: "Profile",
+  passwordMenu: "Password",
+  profileHeader: "Your Profile",
+  passwordHeader: "Change your password",
+  enterPhoneNumber: "Enter phone number",
 };
 
 export default AppConstants;

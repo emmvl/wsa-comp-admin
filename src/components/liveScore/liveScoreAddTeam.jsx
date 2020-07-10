@@ -460,7 +460,7 @@ if(x[0].charCodeAt()>=97)
                             })(<InputWithHead
                                 required={"required-field pt-0 pb-0"}
                                 heading={AppConstants.firstName}
-                                placeholder={AppConstants.enter_firstName}
+                                placeholder={AppConstants.enterFirstName}
                                 name={'firstName'}
                                 onChange={(event) => {
                                     this.props.liveScoreAddTeamform({ key: 'firstName', data: captializedString(event.target.value) })
