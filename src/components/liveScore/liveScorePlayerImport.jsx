@@ -4,7 +4,6 @@ import './liveScore.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
-import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { liveScorePlayerImportAction } from '../../store/actions/LiveScoreAction/liveScorePlayerAction'
@@ -14,6 +13,7 @@ import ValidationConstants from "../../themes/validationConstant";
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import history from "../../util/history";
 import { exportFilesAction } from "../../store/actions/appAction"
+import { NavLink } from 'react-router-dom';
 
 
 const { Content, Header, Footer } = Layout;
@@ -111,9 +111,11 @@ class LiveScorerPlayerImport extends Component {
                         </div>
 
                         <div className="reg-add-save-button ml-3"  >
-                            <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
-                                {AppConstants.downloadTemplate}
-                            </Button>
+                            <NavLink to="/templates/wsa-livescore-import-player.csv" target="_blank" download>
+                                <Button className="primary-add-comp-form" type="primary">
+                                    {AppConstants.downloadTemplate}
+                                </Button>
+                            </NavLink>
                         </div>
                     </div>
                 </div>

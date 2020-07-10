@@ -6,7 +6,7 @@ import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getliveScoreDivisions } from '../../store/actions/LiveScoreAction/liveScoreActions'
-import { liveScoreLaddersListAction } from '../../store/actions/LiveScoreAction/liveScoreLadderAction'
+import { liveScoreLaddersListAction, updateLadderSetting } from '../../store/actions/LiveScoreAction/liveScoreLadderAction'
 import history from "../../util/history";
 import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { isArrayNotEmpty } from '../../util/helpers'
@@ -191,6 +191,7 @@ class LiveScoreLadderList extends Component {
                 let divisionArray = this.props.liveScoreLadderState.liveScoreLadderDivisionData
                 let divisionId = isArrayNotEmpty(divisionArray) ? divisionArray[0].id : null
                 this.props.liveScoreLaddersListAction(id, divisionId, uniqueKey)
+                this.props.updateLadderSetting({ data: divisionId, key: 'divisionId' })
                 this.setState({ loadding: false })
             }
         }
@@ -202,7 +203,7 @@ class LiveScoreLadderList extends Component {
 
         // let competitionID = getCompetitonId()
         const { id, uniqueKey } = JSON.parse(getLiveScoreCompetiton())
-        // this.props.liveScoreLaddersListAction(competitionID, value.division)
+        this.props.updateLadderSetting({ data: value.division, key: 'divisionId' })
         this.props.liveScoreLaddersListAction(id, value.division, uniqueKey)
     }
     ///dropdown view containing dropdown
@@ -218,6 +219,7 @@ class LiveScoreLadderList extends Component {
                 {grade.length > 0 && <Select
                     className="year-select"
                     onChange={(division) => this.divisionChange({ division })}
+                    style={{ minWidth: 80 }}
                     defaultValue={grade[0].name}
                 >
                     {grade.map((item) => (
@@ -272,7 +274,12 @@ class LiveScoreLadderList extends Component {
     }
 }
 function mapDispatchtoprops(dispatch) {
-    return bindActionCreators({ getliveScoreDivisions, liveScoreLaddersListAction, getLiveScoreDivisionList }, dispatch)
+    return bindActionCreators({
+        getliveScoreDivisions,
+        liveScoreLaddersListAction,
+        getLiveScoreDivisionList,
+        updateLadderSetting
+    }, dispatch)
 
 }
 

@@ -147,6 +147,8 @@ import RegistrationMainDashboard from "../components/registration/registrationMa
 import LiveScoreLadderAdjustment from "../components/liveScore/liveScoreLadderAdjustment";
 import LiveScorePositionTrackReport from "../components/liveScore/liveScorePositionTrackReport";
 
+import RegistrationChange from "../components/registration/registrationChange"
+
 
 const lazyLoad = Component => {
   const lazy = props => {
@@ -766,6 +768,11 @@ class Routes extends React.Component {
         <PrivateRoute
           path="/liveScorePositionTrackReport"
           component={lazyLoad(LiveScorePositionTrackReport)}
+        />
+
+        <PrivateRoute
+          path="/registrationChange"
+          component={lazyLoad(RegistrationChange)}
         />
 
         <Route path="/" component={lazyLoad(NotFound)} />
