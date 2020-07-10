@@ -72,17 +72,17 @@ let AxiosApi = {
   },
 
   //////get the membership  product details
-  regGetMembershipProductDetails(payload) {
-    let productId = payload.productId;
-    var url = `/api/membershipproduct/${productId}`;
-    return Method.dataGet(url, token);
-  },
+  // regGetMembershipProductDetails(payload) {
+  //   let productId = payload.productId;
+  //   var url = `/api/membershipproduct/${productId}`;
+  //   return Method.dataGet(url, token);
+  // },
 
 
   //////get the membership  product details
   regGetMembershipProductDetails(payload) {
-    let productId = payload.productId
-    var url = `api/membershipproduct/details/${productId}`;
+    const productId = payload.productId;
+    const url = `api/membershipproduct/details/${productId}`;
     return Method.dataGet(url, token);
   },
 

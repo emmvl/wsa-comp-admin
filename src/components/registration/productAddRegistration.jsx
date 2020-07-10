@@ -13,7 +13,7 @@ import {
 } from "antd";
 import moment from "moment";
 import { NavLink } from "react-router-dom";
-import "./product.css";
+import "./product.scss";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";

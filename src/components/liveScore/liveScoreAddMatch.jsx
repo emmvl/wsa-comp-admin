@@ -710,7 +710,7 @@ class LiveScoreAddMatch extends Component {
                                 })(
                                     <Select
                                         showSearch
-                                        className="reg-form-multple-select"
+                                        className="reg-form-multiple-select"
                                         placeholder='Select Home Team'
                                         style={{ width: "100%" }}
                                         onChange={(homeTeam) => this.props.liveScoreUpdateMatchAction(homeTeam, "team1id")}
@@ -738,7 +738,7 @@ class LiveScoreAddMatch extends Component {
                                         onSearch={(e) => this.onSearchTeams(e, "awayTeam")}
                                         disabled={allDisabled}
                                         optionFilterProp="children"
-                                        className="reg-form-multple-select"
+                                        className="reg-form-multiple-select"
                                         placeholder={'Select Away Team'}
                                         style={{ width: "100%", }}
                                         onChange={(awayTeam) => this.props.liveScoreUpdateMatchAction(awayTeam, "team2id")}
@@ -764,7 +764,7 @@ class LiveScoreAddMatch extends Component {
                             })(
                                 <Select
                                     showSearch
-                                    className="reg-form-multple-select"
+                                    className="reg-form-multiple-select"
                                     placeholder={AppConstants.selectVenue}
                                     style={{ width: "100%", }}
                                     onChange={(venueId) => this.props.liveScoreUpdateMatchAction(venueId, "venueId")}

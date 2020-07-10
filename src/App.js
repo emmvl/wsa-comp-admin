@@ -1,27 +1,30 @@
 import React from "react";
-import "./App.css";
-import "./customStyles/customStyles.css";
-import "./customStyles/antdStyles.css";
-import Routes from "./pages/routes";
-import FullStory from 'react-fullstory';
 import {
-  MemoryRouter,
+  // MemoryRouter,
   Router,
   Route,
   Redirect,
   Switch,
 } from "react-router-dom";
+// import FullStory from "react-fullstory';
+
+import Routes from "./pages/routes";
 import history from "./util/history";
-import Login from "./components/login";
 import PrivateRoute from "./util/protectedRoute";
-import ForgotPassword from "./components/forgotPassword";
+import Login from "./components/login";
+import ForgotPassword from "./components/forgot-password";
 import lazyLoad from "./components/lazyLoad";
 
-const ORG_ID = 'Netball';
+import "./App.css";
+import "./customStyles/customStyles.css";
+import "./customStyles/antdStyles.css";
+
+// const ORG_ID = 'Netball';
+
 function App() {
   return (
     <div className="App">
-       {/* <FullStory org={ORG_ID} /> */}
+      {/* <FullStory org={ORG_ID} /> */}
       {/* <MemoryRouter> */}
       <Router history={history} >
         <Switch>
@@ -36,8 +39,10 @@ function App() {
               )
             }
           />
+
           <Route path="/login" component={lazyLoad(Login)} />
           <Route path="/forgotPassword" component={lazyLoad(ForgotPassword)} />
+
           <PrivateRoute path="/" component={lazyLoad(Routes)} />
         </Switch>
       </Router>

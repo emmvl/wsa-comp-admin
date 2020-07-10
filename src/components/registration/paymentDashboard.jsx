@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Layout, Breadcrumb, Table, Select, Menu, Pagination, Modal } from "antd";
-import "./product.css";
+import "./product.scss";
 import { NavLink } from "react-router-dom";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
