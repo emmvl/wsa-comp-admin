@@ -65,8 +65,6 @@ class LiveScoreSettingsView extends Component {
             screenName: props.location ? props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null : null,
             edit: props.location ? props.location.state ? props.location.state.edit ? props.location.state.edit : null : null : null,
         };
-
-        console.log(this.state.isEdit, 'isEdit')
     }
     componentDidMount() {
         let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
@@ -372,7 +370,6 @@ class LiveScoreSettingsView extends Component {
         const buzzerEnabledArr = [{ label: AppConstants.turnOff_30Second, value: true }];
 
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
-        console.log(premierCompLink, 'premierCompLink')
         return (
             <div className="content-view pt-4">
                 <Form.Item>
@@ -755,7 +752,7 @@ class LiveScoreSettingsView extends Component {
                                     <div className='small-steper-style'>
                                         <InputNumber
                                             max={6}
-                                            min={1}
+                                            min={3}
                                             value={gamesBorrowedThreshold}
                                             formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                             parser={value => value.replace(/\$\s?|(,*)/g, '')}

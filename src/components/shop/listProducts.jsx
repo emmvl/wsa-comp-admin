@@ -182,6 +182,7 @@ class ListProducts extends Component {
                                 <ShopSingleProductComponent
                                     productItem={item}
                                     deleteOnclick={() => this.showDeleteConfirm(item.id)}
+                                    editOnclick={() => history.push("/addProduct", { id: item.id })}
                                 />
                             </div>
                         )

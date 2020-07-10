@@ -28,7 +28,6 @@ import { liveScorePlayerListAction } from '../../store/actions/LiveScoreAction/l
 import Loader from '../../customComponents/loader'
 import ImageLoader from '../../customComponents/ImageLoader'
 
-
 const { Footer, Content, Header } = Layout;
 const { Option } = Select;
 
@@ -37,9 +36,6 @@ class LiveScoreAddIncident extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isEdit: false,
-            date: null,
-            time: null,
             bodyData: "",
             image: null,
             media: null,
@@ -65,6 +61,7 @@ class LiveScoreAddIncident extends Component {
             this.props.getliveScoreTeams(id);
             this.props.liveScorePlayerListAction(id);
         }
+
         if (this.state.isEdit === true) {
             this.props.liveScoreUpdateIncidentData(this.state.tableRecord, "isEdit")
             this.setInitalFiledValue()
@@ -76,20 +73,15 @@ class LiveScoreAddIncident extends Component {
         }
     }
 
-
     ////set initial value for all validated fields
     setInitalFiledValue() {
         const { incidentData, playerIds } = this.props.liveScoreIncidentState
         this.props.form.setFieldsValue({
-
             'incidentTeamName': incidentData.teamId,
             'incidentPlayerName': incidentData.playerIds,
             'incidentName': incidentData.injury,
-
-        })
-
+        });
     }
-
 
     //Select Image
     selectImage() {
@@ -123,7 +115,6 @@ class LiveScoreAddIncident extends Component {
 
     ////method to setVideo
     setVideo = (data) => {
-
         if (data.files[0] !== undefined) {
             if (this.state.isEdit === true) {
                 // this.setState({ incidentVideo = '' })
@@ -137,11 +128,14 @@ class LiveScoreAddIncident extends Component {
     headerView = () => {
         return (
             <div className="header-view">
-                <Header className="form-header-view" style={{
-                    backgroundColor: "transparent",
-                    display: "flex",
-                    alignItems: "center",
-                }} >
+                <Header
+                    className="form-header-view"
+                    style={{
+                        backgroundColor: "transparent",
+                        display: "flex",
+                        alignItems: "center",
+                    }}
+                >
                     <div className="row" >
                         <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
                             <Breadcrumb separator=" > ">
@@ -149,7 +143,7 @@ class LiveScoreAddIncident extends Component {
                             </Breadcrumb>
                         </div>
                     </div>
-                </Header >
+                </Header>
             </div>
         )
     }
@@ -159,6 +153,7 @@ class LiveScoreAddIncident extends Component {
         return text
         // return str.charAt(0).toUpperCase() + str.slice(1);
     }
+
     //// Form View
     contentView = (getFieldDecorator) => {
         const { incidentData, teamResult, playerResult, incidentTypeResult, playerIds } = this.props.liveScoreIncidentState
@@ -167,7 +162,6 @@ class LiveScoreAddIncident extends Component {
                 <div className="row" >
                     <div className="col-sm" >
                         <InputWithHead heading={AppConstants.date} />
-
 
                         <DatePicker
                             size="large"
@@ -178,9 +172,7 @@ class LiveScoreAddIncident extends Component {
                             name={'registrationOepn'}
                             placeholder={"dd-mm-yyyy"}
                             value={incidentData ? incidentData.date ? moment(incidentData.date) : '' : ''}
-
                         />
-
                     </div>
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.time} />
@@ -204,13 +196,15 @@ class LiveScoreAddIncident extends Component {
                             heading={AppConstants.matchID}
                             placeholder={AppConstants.matchID}
                             onChange={(event) => this.props.liveScoreUpdateIncidentData(event.target.value, "mnbMatchId")}
-                            value={incidentData ? incidentData.mnbMatchId : ''} />
+                            value={incidentData ? incidentData.mnbMatchId : ''}
+                        />
                     </div>
                     <div className="col-sm" >
                         <Form.Item className="slct-in-add-manager-livescore">
                             <InputWithHead
                                 required={"required-field "}
-                                heading={AppConstants.team} />
+                                heading={AppConstants.team}
+                            />
                             {getFieldDecorator("incidentTeamName", {
                                 rules: [{ required: true, message: ValidationConstants.teamName }],
                             })(
@@ -218,7 +212,7 @@ class LiveScoreAddIncident extends Component {
                                 <Select
                                     // showSearch
                                     // mode="multiple"
-                                    className="reg-form-multple-select"
+                                    className="reg-form-multiple-select"
                                     placeholder='Select Home Team'
                                     style={{ width: "100%" }}
                                     onChange={(homeTeam) => this.props.liveScoreUpdateIncidentData(homeTeam, "teamId")}
@@ -228,11 +222,9 @@ class LiveScoreAddIncident extends Component {
                                 >
                                     {isArrayNotEmpty(teamResult) && teamResult.map((item) => (
                                         < Option value={item.id} > {item.name}</Option>
-                                    ))
-                                    }
+                                    ))}
                                 </Select>
                             )}
-
                         </Form.Item>
                     </div>
                 </div>
@@ -241,7 +233,8 @@ class LiveScoreAddIncident extends Component {
                         <Form.Item className="slct-in-add-manager-livescore">
                             <InputWithHead
                                 required={"required-field "}
-                                heading={AppConstants.players} />
+                                heading={AppConstants.players}
+                            />
                             {getFieldDecorator("incidentPlayerName", {
                                 rules: [{ required: true, message: ValidationConstants.incidentPlayer }],
                             })(
@@ -256,18 +249,17 @@ class LiveScoreAddIncident extends Component {
                                 >
                                     {isArrayNotEmpty(playerResult) && playerResult.map((item) => (
                                         < Option value={item.playerId} > {item.firstName + " " + item.lastName}</Option>
-                                    ))
-                                    }
+                                    ))}
                                 </Select>
                             )}
-
                         </Form.Item>
                     </div>
                     <div className="col-sm">
                         <Form.Item className="slct-in-add-manager-livescore">
                             <InputWithHead
                                 required={"required-field "}
-                                heading={AppConstants.incident} />
+                                heading={AppConstants.incident}
+                            />
                             {getFieldDecorator("incidentName", {
                                 rules: [{ required: true, message: ValidationConstants.incidentName }],
                             })(
@@ -285,7 +277,6 @@ class LiveScoreAddIncident extends Component {
 
                                 </Select>
                             )}
-
                         </Form.Item>
                     </div>
                 </div>
@@ -320,8 +311,8 @@ class LiveScoreAddIncident extends Component {
                         <div className="reg-competition-logo-view" onClick={this.selectImage}>
                             <ImageLoader
                                 timeout={this.state.imageTimeout}
-                                src={incidentData.addImages ? incidentData.addImages : this.state.imageSelection} />
-
+                                src={incidentData.addImages ? incidentData.addImages : this.state.imageSelection}
+                            />
                         </div>
                         <input
                             type="file"
@@ -343,7 +334,8 @@ class LiveScoreAddIncident extends Component {
                                 timeout={this.state.videoTimeout}
                                 video
                                 src={incidentData.addVideo ? incidentData.addVideo : this.state.videoSelection}
-                                poster={(incidentData.addVideo || this.state.videoSelection != '') ? '' : AppImages.circleImage} />
+                                poster={(incidentData.addVideo || this.state.videoSelection != '') ? '' : AppImages.circleImage}
+                            />
 
                         </div>
                         <input
@@ -379,8 +371,12 @@ class LiveScoreAddIncident extends Component {
                             <div className="comp-buttons-view">
                                 {/* <Form.Item > */}
                                 {/* <Button onClick={(editData.title == '' || editData.author == null) ? this.handleSubmit : this.onSaveButton} className="user-approval-button" */}
-                                <Button className="user-approval-button"
-                                    type="primary" htmlType="submit" disabled={isSubmitting}>
+                                <Button
+                                    className="user-approval-button"
+                                    type="primary"
+                                    htmlType="submit"
+                                    disabled={isSubmitting}
+                                >
                                     {AppConstants.save}
                                 </Button>
                                 {/* </Form.Item> */}
@@ -393,67 +389,73 @@ class LiveScoreAddIncident extends Component {
     };
 
     onSaveClick = e => {
-
-        const { incidentData, incidentId, incidentMediaIds } = this.props.liveScoreIncidentState
         e.preventDefault();
+
+        const { incidentData, incidentId, incidentMediaIds } = this.props.liveScoreIncidentState;
+
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                const { id } = JSON.parse(getLiveScoreCompetiton())
+                const { id } = JSON.parse(getLiveScoreCompetiton());
 
-                let date = moment(incidentData.date).format("YYYY-MMM-DD")
-                let time = moment(incidentData.time).format("HH:mm")
+                let date = moment(incidentData.date).format("YYYY-MMM-DD");
+                let time = moment(incidentData.time).format("HH:mm");
                 let startDateTime = moment(date + " " + time);
-                let formatDateTime = new Date(startDateTime).toISOString()
-                let mediaArry
-                let body
+                let formatDateTime = new Date(startDateTime).toISOString();
+                let mediaArry;
+                let body;
 
                 if (this.state.image !== null && this.state.video !== null) {
                     mediaArry = [
                         this.state.image,
                         this.state.video
-                    ]
-
+                    ];
                 } else if (this.state.image !== null) {
                     mediaArry = [
                         this.state.image,
-                    ]
-
+                    ];
                 } else if (this.state.video !== null) {
                     mediaArry = [
                         this.state.video,
-                    ]
-
+                    ];
                 }
 
                 if (this.state.isEdit) {
                     body = {
-                        "matchId": incidentData.mnbMatchId,
-                        "teamId": incidentData.teamId,
-                        "competitionId": id,
-                        "incidentTime": formatDateTime,
-                        "description": incidentData.description,
-                        "incidentTypeId": incidentData.injury,
-                        "id": incidentId
-                    }
+                        matchId: incidentData.mnbMatchId,
+                        teamId: incidentData.teamId,
+                        competitionId: id,
+                        incidentTime: formatDateTime,
+                        description: incidentData.description,
+                        incidentTypeId: incidentData.injury,
+                        id: incidentId,
+                    };
                 } else {
                     body = {
-                        "matchId": incidentData.mnbMatchId,
-                        "teamId": incidentData.teamId,
-                        "competitionId": id,
-                        "incidentTime": formatDateTime,
-                        "description": incidentData.description,
-                        "incidentTypeId": incidentData.injury,
-                    }
+                        matchId: incidentData.mnbMatchId,
+                        teamId: incidentData.teamId,
+                        competitionId: id,
+                        incidentTime: formatDateTime,
+                        description: incidentData.description,
+                        incidentTypeId: incidentData.injury,
+                    };
                 }
 
                 if (this.state.image !== null || this.state.video !== null || incidentMediaIds.length > 0) {
-                    this.props.liveScoreAddEditIncident({ body: body, playerIds: incidentData.playerIds, isEdit: this.state.isEdit, mediaArry: mediaArry, key: 'media', incidentMediaIds: incidentMediaIds })
+                    this.props.liveScoreAddEditIncident({
+                        body,
+                        playerIds: incidentData.playerIds,
+                        isEdit: this.state.isEdit,
+                        mediaArry: mediaArry,
+                        key: 'media',
+                        incidentMediaIds,
+                    });
                 } else {
-                    this.props.liveScoreAddEditIncident({ body: body, playerIds: incidentData.playerIds, isEdit: this.state.isEdit })
+                    this.props.liveScoreAddEditIncident({
+                        body,
+                        playerIds: incidentData.playerIds,
+                        isEdit: this.state.isEdit,
+                    });
                 }
-
-
-
             }
         });
     };

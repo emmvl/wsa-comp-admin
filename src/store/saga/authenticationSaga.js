@@ -86,7 +86,7 @@ export function* qrApiSaga(action) {
 // forgot password
 export function* forgotPasswordSaga(action) {
   try {
-    const result = yield call(userAxiosApi.forgotPassword, action.email);
+    const result = yield call(userAxiosApi.forgotPassword, action.email, action.resetType);
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_FORGOT_PASSWORD_SUCCESS,

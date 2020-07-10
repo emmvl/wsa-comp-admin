@@ -2,7 +2,7 @@ import { put, call } from "redux-saga/effects";
 import ApiConstants from "../../../themes/apiConstants";
 import AxiosApi from "../../http/competitionHttp/competitionAxiosApi";
 import CommonAxiosApi from "../../http/commonHttp/commonAxios";
-
+import history from "../../../util/history";
 import { message } from "antd";
 import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 
@@ -23,6 +23,7 @@ function* failSaga(result) {
 }
 
 function* errorSaga(error) {
+    console.log(error)
     yield put({
         type: ApiConstants.API_QUICK_COMPETITION_ERROR,
         error: error,
@@ -156,20 +157,38 @@ export function* updateQuickCompetitionSaga(action) {
                         competitionId: action.payload.competitionId,
                         competitionName: action.payload.competitionName
                     });
+                    if (action.buttonPressed == "AddTeam") {
+                        history.push('/quickCompetitionInvitations', { competitionUniqueKey: action.payload.competitionId, year: action.year })
+                    }
+                }
+                else {
+                    yield call(failSaga, result)
                 }
             }
             else {
-                yield put({
-                    type: ApiConstants.API_UPDATE_QUICK_COMPETITION_SUCCESS,
-                    result: result.result.data,
-                    status: result.status,
-                    competitionId: action.payload.competitionId,
-                    competitionName: action.payload.competitionName
-                });
-                setTimeout(() => {
-                    message.success(result.result.data.message)
-                }, 500);
+                yield call(failSaga, result)
             }
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+// competition import player and teams
+export function* quickCompetitionPlayer(action) {
+    try {
+        const result = yield call(AxiosApi.importQuickCompetitionPlayer, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.QUICKCOMP_IMPORT_DATA_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+            setTimeout(() => {
+                message.success(result.result.data.message)
+            }, 500);
         } else {
             yield call(failSaga, result)
         }

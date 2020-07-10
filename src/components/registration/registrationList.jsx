@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Layout, Table, Select } from 'antd';
-import './product.css';
+import './product.scss';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";

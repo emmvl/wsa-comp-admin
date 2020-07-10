@@ -84,7 +84,6 @@ function roundstructureData(data) {
   if (roundsdata.length > 0) {
     for (let i in roundsdata) {
       newStructureDrawsData = structureDrawsData(roundsdata[i].draws)
-
       roundsdata[i].draws = newStructureDrawsData.mainCourtNumberArray
       roundsdata[i].dateNewArray = newStructureDrawsData.sortedDateArray
       roundsdata[i].legendsArray = newStructureDrawsData.legendsArray
@@ -517,6 +516,7 @@ function swapedDrawsArrayFunc(
   // }
   
 */
+console.log(sourceArray, drawsArray,'valled')
   return drawsArray;
 }
 

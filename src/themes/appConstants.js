@@ -1391,6 +1391,8 @@ const AppConstants = {
   positionTrackReport: "Position Tracking Report",
   periodFilter: 'Period',
   byGame: 'By Game',
+  importTeamPlayer: "Import Team and Players",
+  quickCompetitionFormat: "Competition Format (3/3)",
   matchPrintTemplateType: 'Match Print Template Type',
   playerBorrowing: "Player Borrowing",
   gamesBorrowed: "Games Borrowed",
@@ -1398,6 +1400,8 @@ const AppConstants = {
   premierCompLink: 'Premier Competition Link',
   productAddedMessage:"Product added successfully.",
   productDeletedMessage:"Product deleted successfully.",
+  typeAddedMessage:"Type added successfully.",
+  registrationChange: "Registration Change",
 };
 
 export default AppConstants;

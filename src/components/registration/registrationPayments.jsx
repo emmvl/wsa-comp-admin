@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Layout, Breadcrumb, Select, DatePicker, Button, Table, Menu, Pagination } from 'antd';
-import './product.css';
+import './product.scss';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import InputWithHead from "../../customComponents/InputWithHead";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -532,7 +532,7 @@ class RegistrationPayments extends Component {
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
                 <InnerHorizontalMenu menu={"registration"} regSelectedKey={"4"} />
-                <Layout className="reg-payment-layuot-view">
+                <Layout className="reg-payment-layout-view">
                     {this.headerView()}
                     {this.stripeView()}
                     <Content>

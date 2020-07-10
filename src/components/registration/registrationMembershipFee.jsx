@@ -12,7 +12,7 @@ import {
     Form,
     Modal
 } from "antd";
-import "./product.css";
+import "./product.scss";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";

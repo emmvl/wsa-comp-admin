@@ -7,7 +7,11 @@ const initialState = {
     status: 0,
     liveScoreLadderDivisionData: [],
     liveScoreLadderListData: [],
-    ladderData: []
+    ladderData: [],
+    teamResult: [],
+    divisionList: [],
+    divisionId: null,
+    ladderDivisionList: []
 };
 
 function createLadderRank(array) {
@@ -48,13 +52,11 @@ function liveScoreLaddersReducer(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 liveScoreLadderDivisionData: action.result,
+                ladderDivisionList: action.result,
                 status: action.status
             };
 
-
-
         //LIVESCORE LADDER LIST
-
         case ApiConstants.API_LIVE_SCORE_LADDERS_LIST_LOAD:
             return { ...state, onLoad: true };
         case ApiConstants.API_LIVE_SCORE_LADDERS_LIST_SUCCESS:
@@ -86,30 +88,47 @@ function liveScoreLaddersReducer(state = initialState, action) {
             let key = action.data.key
             let data = action.data.data
             let index = action.data.index
+
+
             if (key === "addLadderAdjustment") {
                 var obj = {
-                    teamName: '',
+                    teamId: '',
                     points: '',
                     reasonforChange: ''
                 }
                 state.ladderData.push(obj)
             } else if (key === 'refresh') {
                 var obj = {
-                    teamName: '',
+                    teamId: '',
                     points: '',
                     reasonforChange: ''
                 }
                 state.ladderData = [obj]
 
+            } else if (key === 'divisionId') {
+
+                state.divisionId = data
+
             } else {
                 state.ladderData[index][key] = data
             }
-
 
             return {
                 ...state,
             };
 
+        case ApiConstants.API_LIVE_SCORE_TEAM_LOAD:
+
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
+            console.log(action.result, 'teamSuccess~~~~~')
+            return {
+                ...state,
+                // onLoad: false,
+                // teamResult: action.result,
+
+            };
 
         default:
             return state;

@@ -11,19 +11,45 @@ import { bindActionCreators } from 'redux';
 import AppImages from "../../themes/appImages";
 import { updateLadderSetting } from '../../store/actions/LiveScoreAction/liveScoreLadderAction'
 import { isArrayNotEmpty } from "../../util/helpers";
+import { getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
+import { getLiveScoreDivisionList } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction'
 
 const { Header, Footer } = Layout
+const { Option } = Select;
 
 class LiveScoreLadderAdjustment extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            competitionId: null,
+            loadding: true,
+            divisionId: null
         }
     }
 
     componentDidMount() {
         this.props.updateLadderSetting({ key: 'refresh' })
+
+        // const { id } = JSON.parse(getLiveScoreCompetiton())
+        // this.setState({ competitionId: id })
+        // if (id !== null) {
+        //     this.props.getLiveScoreDivisionList(id)
+        //     this.setState({ loadding: true })
+        // }
     }
+
+    // componentDidUpdate(nextProps) {
+    //     if (nextProps.liveScoreLadderState.liveScoreLadderDivisionData !== this.props.liveScoreLadderState.liveScoreLadderDivisionData) {
+    //         if (this.state.loadding == true && this.props.liveScoreLadderState.onLoad == false) {
+    //             const { id, uniqueKey } = JSON.parse(getLiveScoreCompetiton())
+    //             let divisionArray = this.props.liveScoreLadderState.liveScoreLadderDivisionData
+    //             let divisionId = isArrayNotEmpty(divisionArray) ? divisionArray[0].id : null
+    //             this.props.getliveScoreTeams(id, divisionId)
+    //             this.setState({ loadding: false })
+    //         }
+    //     }
+    // }
 
     ///////view for breadcrumb
     headerView = () => {
@@ -48,7 +74,15 @@ class LiveScoreLadderAdjustment extends Component {
         );
     };
 
+    changeDivision(divisionId) {
+        this.props.updateLadderSetting({ data: divisionId, key: 'divisionId' })
+        this.props.getliveScoreTeams(this.state.competitionId, divisionId)
+
+    }
+
     dropdownView = () => {
+        // const { ladderDivisionList, divisionId } = this.props.liveScoreLadderState
+        // let divisionListArr = isArrayNotEmpty(ladderDivisionList) ? ladderDivisionList : []
         return (
             <div className="comp-venue-courts-dropdown-view mt-0">
                 <div className="fluid-width">
@@ -68,12 +102,15 @@ class LiveScoreLadderAdjustment extends Component {
 
                                 <Select
                                     className="year-select"
-                                // style={{ minWidth: 80 }}
-                                // onChange={(comp) => this.onChangeComp({ comp })}
-                                // value={this.state.selectedComp}
+                                    style={{ minWidth: 80 }}
+                                // onChange={(divisionId) => this.changeDivision(divisionId)}
+                                // value={divisionId}
                                 >
-
-
+                                    {/* {
+                                        divisionListArr.map((item, index) => {
+                                            return <Option key={"division" + item.id} value={item.id}>{item.name}</Option>
+                                        })
+                                    } */}
                                 </Select>
 
                             </div>
@@ -87,8 +124,10 @@ class LiveScoreLadderAdjustment extends Component {
     ////////form content view
     contentView = () => {
 
-        const { ladderAdjustment, ladderData } = this.props.liveScoreLadderState
+        const { ladderData, teamResult } = this.props.liveScoreLadderState
         let addNewLadder = isArrayNotEmpty(ladderData) ? ladderData : [];
+        // let teamList = isArrayNotEmpty(teamResult) ? teamResult : []
+
         return (
             <div className="content-view pt-4">
 
@@ -101,10 +140,28 @@ class LiveScoreLadderAdjustment extends Component {
                                 />
                             </div>
                             <div className="col-sm" >
-                                <InputWithHead placeholder={AppConstants.teamName}
+                                {/* <InputWithHead placeholder={AppConstants.teamName}
                                     onChange={(e) => this.props.updateLadderSetting({ data: e.target.value, index: index, key: 'teamName' })}
                                     value={ladderData[index] && ladderData[index].teamName}
-                                />
+                                /> */}
+
+                                <Select
+
+                                    placeholder={AppConstants.selectTeam}
+                                    style={{ width: "100%" }}
+                                    // onChange={(teamId) => this.props.updateLadderSetting({ data: teamId, index: index, key: 'teamId' })}
+                                    // value={[741, 738]}
+                                    // value={ladderData[index] && ladderData[index].teamId}
+                                    showSearch
+                                    optionFilterProp="children"
+
+                                >
+                                    {/* {teamList.map((item, index) => (
+                                        < Option key={'teamList' + index} value={item.id} > {item.name}</Option>
+                                    ))
+                                    } */}
+                                </Select>
+
                             </div>
                         </div>
 
@@ -196,13 +253,15 @@ class LiveScoreLadderAdjustment extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        updateLadderSetting
+        updateLadderSetting,
+        getliveScoreTeams,
+        getLiveScoreDivisionList
     }, dispatch)
 }
 
 function mapStatetoProps(state) {
     return {
-        liveScoreLadderState: state.LiveScoreLadderState
+        liveScoreLadderState: state.LiveScoreLadderState,
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(LiveScoreLadderAdjustment));

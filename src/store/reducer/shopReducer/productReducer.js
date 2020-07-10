@@ -40,7 +40,7 @@ const defaultAddProductObject = {
         }
     ],
     variantsChecked: false,
-    purchaseOutOfStock: false,
+    availableIfOutOfStock: 0,
     taxApplicable: false,
 }
 
@@ -52,9 +52,23 @@ const initialState = {
     productDeatilData: defaultAddProductObject,
     productListingData: [],
     productListingTotalCount: 1,
-    productListingCurrentPage:1,
+    productListingCurrentPage: 1,
     typesProductList: [], //////reference types in add product screen for the type dropdown
+    getDetailsLoad: false,
 };
+
+////adding extra parameters in the productDeatilData
+function makeDetailDataObject(data) {
+    let productData = data
+    if (isArrayNotEmpty(productData.variants)) {
+        productData['variantsChecked'] = false
+    }
+    else {
+        productData['variantsChecked'] = false
+    }
+    return productData
+}
+
 
 
 function shopProductState(state = initialState, action) {
@@ -86,7 +100,7 @@ function shopProductState(state = initialState, action) {
                 ...state,
                 productListingData: isArrayNotEmpty(action.result.result) ? action.result.result : [],
                 productListingTotalCount: action.result.page ? action.result.page.totalCount : 1,
-                productListingCurrentPage:action.result.page ? action.result.page.currentPage : 1,
+                productListingCurrentPage: action.result.page ? action.result.page.currentPage : 1,
                 onLoad: false,
                 status: action.status,
                 error: null
@@ -97,7 +111,6 @@ function shopProductState(state = initialState, action) {
             return { ...state, onLoad: true, error: null };
 
         case ApiConstants.API_ADD_SHOP_PRODUCT_SUCCESS:
-            console.log("API_ADD_SHOP_PRODUCT_SUCCESS", action.result)
             return {
                 ...state,
                 onLoad: false,
@@ -135,20 +148,6 @@ function shopProductState(state = initialState, action) {
                 onLoad: false,
                 status: action.status,
                 error: null
-            };
-
-        /////////add type in the typelist array in reducer
-        case ApiConstants.SHOP_ADD_TYPE_IN_TYPELIST_REDUCER:
-            let newTypeObject = {
-                id: (state.typesProductList.length) + 1,
-                typeName: action.data,
-                isDeleted: 0
-            }
-            // let typesProductListArray = state.typesProductList
-            // let TypeArray = JSON.parse(JSON.stringify(typesProductList))
-            state.typesProductList.push(newTypeObject)
-            return {
-                ...state,
             };
 
         //////////////////delete product from the product listing API 
@@ -205,7 +204,7 @@ function shopProductState(state = initialState, action) {
                         }
                     ],
                     variantsChecked: false,
-                    purchaseOutOfStock: false,
+                    availableIfOutOfStock: 0,
                     taxApplicable: false,
                 }
                 state.productDeatilData = defaultAddProductObject
@@ -220,6 +219,33 @@ function shopProductState(state = initialState, action) {
             return { ...state, onLoad: true, error: null };
 
         case ApiConstants.API_DELETE_SHOP_PRODUCT_VARIANT_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
+
+        ////////////add type in the typelist array in from the API
+        case ApiConstants.API_SHOP_ADD_TYPE_IN_TYPELIST_LOAD:
+            return { ...state, onLoad: true, error: null };
+
+        case ApiConstants.API_SHOP_ADD_TYPE_IN_TYPELIST_SUCCESS:
+            state.typesProductList.push(action.result)
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
+
+        //////////////product details on id API
+        case ApiConstants.API_SHOP_GET_PRODUCT_DETAILS_BY_ID_LOAD:
+            return { ...state, onLoad: true, getDetailsLoad: true, error: null };
+
+        case ApiConstants.API_SHOP_GET_PRODUCT_DETAILS_BY_ID_SUCCESS:
+            state.productDeatilData = makeDetailDataObject(action.result)
+            state.getDetailsLoad = false
             return {
                 ...state,
                 onLoad: false,

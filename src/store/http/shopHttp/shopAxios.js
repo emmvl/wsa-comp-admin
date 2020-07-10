@@ -44,6 +44,21 @@ let AxiosApi = {
         return Method.dataDelete(url, token);
     },
 
+    //////add type in the typelist array in from the API
+    addNewType(typeName) {
+        let body = {
+            "typeName": typeName
+        }
+        var url = `/type`;
+        return Method.dataPost(url, token, body);
+    },
+
+    /////////////////product listing get API 
+    getProductDetailsById(productId) {
+        var url = `/product?id=${productId}`;
+        return Method.dataGet(url, token);
+    },
+
 
 };
 

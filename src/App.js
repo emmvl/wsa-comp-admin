@@ -1,39 +1,40 @@
 import React from "react";
-import "./App.css";
-import "./customStyles/customStyles.css";
-import "./customStyles/antdStyles.css";
-import Routes from "./pages/routes";
-import FullStory from 'react-fullstory';
 import {
-  MemoryRouter,
+  // MemoryRouter,
   Router,
   Route,
   Redirect,
   Switch,
-  HashRouter
 } from "react-router-dom";
-import history from "./util/history";
-import Login from "./components/login";
 import { Skeleton } from "antd";
-import PrivateRoute from "./util/protectedRoute";
-import ForgotPassword from "./components/forgotPassword"
+// import FullStory from "react-fullstory';
 
-const ORG_ID = 'Netball';
+import Routes from "./pages/routes";
+import history from "./util/history";
+import PrivateRoute from "./util/protectedRoute";
+import Login from "./components/login";
+import ForgotPassword from "./components/forgot-password";
+
+import "./App.css";
+import "./customStyles/customStyles.css";
+import "./customStyles/antdStyles.css";
+
+// const ORG_ID = 'Netball';
+
 function App() {
   const lazyLoad = Component => {
-    const lazy = props => {
+    return (props) => {
       return (
         <React.Suspense fallback={<Skeleton avatar paragraph={{ rows: 4 }} />}>
           <Component {...props} />
         </React.Suspense>
       );
     };
-    return lazy;
   };
 
   return (
     <div className="App">
-       {/* <FullStory org={ORG_ID} /> */}
+      {/* <FullStory org={ORG_ID} /> */}
       {/* <MemoryRouter> */}
       <Router history={history} >
         <Switch>
