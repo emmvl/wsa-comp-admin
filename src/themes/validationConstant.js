@@ -173,6 +173,7 @@ const ValidationConstants = {
     userNotFound: "Please select an existing user for this competition.",
 
     incidentName: "Incident name is required.",
+    divisionAndTimeslot: "Please select Division and Timeslot",
     pleaseSelectAffiliate:"Please select one affiliate.",
     incidentPlayer: "Player Name is required",
 };

@@ -85,10 +85,42 @@ function quickCompetitionTimeSlotData(payload) {
     return action
 }
 ////update quick competition
-function updateQuickCompetitionAction(payload, year) {
+function updateQuickCompetitionAction(payload, year, buttonPressed) {
     const action = {
         type: ApiConstants.API_UPDATE_QUICK_COMPETITION_LOAD,
-        payload, year
+        payload, year, buttonPressed
+    }
+    return action
+}
+
+function updateQuickCompetitionDraws(sourceArray, targetArray, sourceDrawsId, targetDrawsId) {
+    const action = {
+        type: ApiConstants.API_UPDATE_QUICKCOMPETITION_DRAWS,
+        sourceArray, targetArray, sourceDrawsId, targetDrawsId
+    }
+    return action
+}
+function updateSelectedTeamPlayer(value, key) {
+    const action = {
+        type: ApiConstants.API_UPDATE_QUICKCOMPETITION_INVITATIONS,
+        value,
+        key
+    }
+    return action
+}
+
+function quickCompImportDataCleanUpAction(key){
+    const action ={
+        type:ApiConstants.QUICKCOMP_IMPORT_DATA_CLEAN,
+        key
+    }
+    return action
+}
+
+function quickCompetitionPlayerImportAction(payload){
+    const action={
+        type:ApiConstants.QUICKCOMP_IMPORT_DATA_LOAD,
+        payload
     }
     return action
 }
@@ -103,5 +135,9 @@ export {
     getYearAndQuickCompetitionAction,
     getQuickCompetitionAction,
     quickCompetitionTimeSlotData,
-    updateQuickCompetitionAction
+    updateQuickCompetitionAction,
+    updateQuickCompetitionDraws,
+    updateSelectedTeamPlayer,
+    quickCompImportDataCleanUpAction,
+    quickCompetitionPlayerImportAction
 }

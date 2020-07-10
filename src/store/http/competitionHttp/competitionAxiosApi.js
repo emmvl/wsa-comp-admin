@@ -575,6 +575,17 @@ let CompetitionAxiosApi = {
         var url = `/api/generatedraw?userId=${userId}`;
         return Method.dataPost(url, token, body);
     },
+    //importQuickCompetitionPlayer
+    importQuickCompetitionPlayer(payload) {
+        let body = new FormData();
+        // body.append('file', new File([data.csvFile], { type: 'text/csv' }));
+        body.append("file", payload.csvFile, payload.csvFile.name);
+        body.append("competitionUniqueKey", payload.competitionUniqueKey);
+        body.append("organisationId", payload.organisationUniqueKey);
+        body.append("isProceed", payload.isProceed);
+        var url = `/api/quickcompetition/import/player`;
+        return Method.dataPost(url, token, body);
+    }
 
 };
 

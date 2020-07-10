@@ -548,6 +548,13 @@ a.collapsed i {
   font-family: "Inter-Medium";
   border-radius: 5px;
 }
+.quick-comp-canvas{
+  height: 40px;
+    line-height: 40px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
 .fixture-main-canvas.Draws .box {
   min-width: 100px;
   height: 53px;
