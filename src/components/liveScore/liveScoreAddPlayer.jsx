@@ -164,7 +164,6 @@ class LiveScoreAddPlayer extends Component {
                     <div className="col-sm" >
                         <Form.Item >
                             {getFieldDecorator('firstName', {
-                                // normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
