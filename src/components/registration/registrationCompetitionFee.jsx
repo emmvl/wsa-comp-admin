@@ -2034,7 +2034,7 @@ class RegistrationCompetitionFee extends Component {
     this.props.paymentFeeDeafault();
     this.props.paymentSeasonalFee();
     this.props.getCommonDiscountTypeTypeAction();
-    this.props.getVenuesTypeAction();
+    this.props.getVenuesTypeAction("all");
     this.props.registrationRestrictionTypeAction();
     this.props.fixtureTemplateRoundsAction();
     if (competitionId !== null) {

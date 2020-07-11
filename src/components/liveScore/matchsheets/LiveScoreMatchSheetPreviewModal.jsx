@@ -17,7 +17,6 @@ const LiveScoreMatchSheetPreviewModal = (props) => {
         matchDetails,
         match,
         matchTemplateTypes,
-        organisation,
         modalTitle,
         handleOK,
         handleCancel
@@ -43,7 +42,6 @@ const LiveScoreMatchSheetPreviewModal = (props) => {
                             ? matchTemplateTypes.map((type) => (
                                 <MatchSheetTemplate
                                     templateType={type.description}
-                                    organisation={organisation}
                                     matchDetails={matchDetails}
                                     match={match}
                                 />
@@ -61,7 +59,6 @@ LiveScoreMatchSheetPreviewModal.propTypes = {
     match: PropTypes.object,
     matchId: PropTypes.number,
     matchTemplateTypes: PropTypes.array,
-    organisation: PropTypes.object,
     matchList: PropTypes.array,
     modalTitle: PropTypes.string,
     handleOK: PropTypes.func,
@@ -74,7 +71,6 @@ LiveScoreMatchSheetPreviewModal.defaultProps = {
     matchDetails: null,
     matchId: null,
     matchTemplateTypes: [],
-    organisation: null,
     matchList: [],
     modalTitle: 'LiveScores Match Sheet',
     handleOK: () => {},

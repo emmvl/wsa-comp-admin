@@ -784,7 +784,7 @@ let LiveScoreAxiosApi = {
     },
 
 
-    //// Export Files 
+    //// Export Files
     exportFiles(url) {
         return Method.dataGetDownload(url, localStorage.token);
     },
