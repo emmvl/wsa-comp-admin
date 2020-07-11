@@ -765,4 +765,10 @@ export default function* root_saga() {
   // Get match sheet download link
   yield takeEvery(ApiConstants.API_MATCH_SHEET_PRINT_LOAD, liveScoreMatchSheetSaga.liveScoreMatchSheetPrintSaga)
 
+  // Get match print template type
+  yield takeEvery(ApiConstants.API_MATCH_PRINT_TEMPLATE_LOAD, getMatchPrintTemplateTypeSaga)
+
+  // Get match sheet download link
+  yield takeEvery(ApiConstants.API_MATCH_SHEET_PRINT_LOAD, liveScoreMatchSheetSaga.liveScoreMatchSheetPrintSaga)
+
 }
