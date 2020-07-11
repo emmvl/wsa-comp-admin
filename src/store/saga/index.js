@@ -78,7 +78,7 @@ import {
   liveScoreGetTeamSaga,
   liveScoreTeamPaggingSaga
 } from './liveScoreSaga/liveScoreTeamSaga';
-import { liveScoreLaddersDivisionsaga, liveScoreLaddersListSaga } from './liveScoreSaga/liveScoreLadderSaga';
+import { liveScoreLaddersDivisionsaga, liveScoreLaddersListSaga, ladderAdjustmentPostSaga, ladderAdjustmentGetSaga } from './liveScoreSaga/liveScoreLadderSaga';
 import { liveScoreIncidentListSaga, liveScoreAddEditIncidentSaga, liveScoreIncidentTypeSaga } from './liveScoreSaga/liveScoreIncidentSaga';
 import { liveScoreRoundSaga, liveScoreRoundListSaga } from './liveScoreSaga/liveScoreRoundSaga';
 import { liveScoreNewsListSaga, liveScoreAddNewsSaga, liveScoreNewsNotificationSaga, liveScoreNewsDeleteSaga } from './liveScoreSaga/liveScoreNewsSaga';
@@ -765,10 +765,6 @@ export default function* root_saga() {
   // Get match sheet download link
   yield takeEvery(ApiConstants.API_MATCH_SHEET_PRINT_LOAD, liveScoreMatchSheetSaga.liveScoreMatchSheetPrintSaga)
 
-  // Get match print template type
-  yield takeEvery(ApiConstants.API_MATCH_PRINT_TEMPLATE_LOAD, getMatchPrintTemplateTypeSaga)
-
-  // Get match sheet download link
-  yield takeEvery(ApiConstants.API_MATCH_SHEET_PRINT_LOAD, liveScoreMatchSheetSaga.liveScoreMatchSheetPrintSaga)
-
+  yield takeEvery(ApiConstants.API_LADDER_ADJUSTMENT_POST_LOAD, ladderAdjustmentPostSaga)
+  yield takeEvery(ApiConstants.API_LADDER_ADJUSTMENT_GET_LOAD, ladderAdjustmentGetSaga)
 }

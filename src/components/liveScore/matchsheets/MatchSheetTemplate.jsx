@@ -223,10 +223,10 @@ const MatchSheetTemplate = (props) => {
                     <Text style={styles.infoText}>{match.venueCourt && match.venueCourt.venue ? match.venueCourt.venue.name : ''}</Text>
                     <Text style={styles.infoText}>{match.team1 ? match.team1.name : ''}</Text>
                 </View>
-                <View style={styles.infoContentRight}>
-                    <Text style={styles.infoText}>Date: {moment(new Date(match.startTime)).format('DD/MM/YYYY')}</Text>
-                    <Text style={styles.infoText}>Time: {moment(new Date(match.startTime)).format('HH:MM a')}</Text>
-                    <Text style={styles.infoText}>{match.team2 ? match.team2.name : ''}</Text>
+                <View style={styles.infoContent}>
+                    <Text style={styles.infoText}>Date: 22/05/2020</Text>
+                    <Text style={styles.infoText}>Time: 10:10 am</Text>
+                    <Text style={styles.infoText}>A: Team 2</Text>
                 </View>
             </View>
             {templateType !== 'Carnival' && (
@@ -266,10 +266,10 @@ const MatchSheetTemplate = (props) => {
                                 <Text style={styles.cell}>3</Text>
                                 <Text style={styles.cell}>4</Text>
                             </View>
-                            {team2players.length > 0 && team2players.map((player, index) => (
-                                <View style={styles.row} key={`row_${index}`}>
-                                    <Text style={styles.cell}>{index}</Text>
-                                    <Text style={styles.largeCell}>{`${player.firstName} ${player.lastName}`}</Text>
+                            {[...Array(15).keys()].map((rowIndex) => (
+                                <View style={styles.row} key={`row_${rowIndex}`}>
+                                    <Text style={styles.cell}></Text>
+                                    <Text style={styles.largeCell}></Text>
                                     <Text style={styles.largeCell}></Text>
                                     <Text style={styles.cell}></Text>
                                     <Text style={styles.cell}></Text>

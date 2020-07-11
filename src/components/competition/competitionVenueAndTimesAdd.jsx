@@ -426,7 +426,6 @@ class CompetitionVenueAndTimesAdd extends Component {
                 </span>
                 <Form.Item >
                     {getFieldDecorator('name', {
-                        normalize: (input) => captializedString(input),
                         rules: [{ required: true, message: ValidationConstants.nameField[2] }],
                     })(
                         <InputWithHead
@@ -435,12 +434,14 @@ class CompetitionVenueAndTimesAdd extends Component {
                             placeholder={AppConstants.name}
                             onChange={(name) => this.props.updateVenuAndTimeDataAction(captializedString(name.target.value), 'Venue', 'name')}
                             setFieldsValue={venuData.name}
+                            onBlur={(i)=> this.props.form.setFieldsValue({
+                                'name': captializedString(i.target.value)
+                            })}
                         />
                     )}
                 </Form.Item>
                 <Form.Item >
                     {getFieldDecorator('shortName', {
-                        normalize: (input) => captializedString(input),
                         rules: [{ required: true, message: ValidationConstants.nameField[3] }],
                     })(
                         <InputWithHead
@@ -451,6 +452,9 @@ class CompetitionVenueAndTimesAdd extends Component {
                             maxLength={4}
                             onChange={(name) => this.props.updateVenuAndTimeDataAction(captializedString(name.target.value), 'Venue', 'shortName')}
                             setFieldsValue={venuData.shortName}
+                            onBlur={(i)=> this.props.form.setFieldsValue({
+                                'shortName': captializedString(i.target.value)
+                            })}
                         />
                     )}
                 </Form.Item>

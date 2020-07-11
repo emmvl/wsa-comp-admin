@@ -131,7 +131,7 @@ import UmpireRoaster from "../components/umpire/umpireRoaster"
 import UmpireImport from "../components/umpire/umpireImport"
 import Umpire from "../components/umpire/umpire"
 import ListProducts from "../components/shop/listProducts";
-import AddProduct from "../components/shop/addproduct";
+import AddProduct from "../components/shop/addProduct";
 import PaymentDashboard from "../components/registration/paymentDashboard"
 
 import OrderSummary from "../components/shop/orderSummary"

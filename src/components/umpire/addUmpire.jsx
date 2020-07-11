@@ -229,7 +229,6 @@ class AddUmpire extends Component {
                     <div className="col-sm" >
                         <Form.Item>
                             {getFieldDecorator(AppConstants.firstName, {
-                                normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
@@ -237,7 +236,9 @@ class AddUmpire extends Component {
                                     heading={AppConstants.firstName}
                                     placeholder={AppConstants.firstName}
                                     onChange={(firstName) => this.props.updateAddUmpireData(captializedString(firstName.target.value), 'firstName')}
-                                // value={umpireData.firstName}
+                                    onBlur={(i) => this.props.form.setFieldsValue({
+                                        'First Name': captializedString(i.target.value)
+                                    })}
                                 />
                             )}
 
@@ -246,7 +247,6 @@ class AddUmpire extends Component {
                     <div className="col-sm" >
                         <Form.Item>
                             {getFieldDecorator(AppConstants.lastName, {
-                                normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
@@ -254,7 +254,9 @@ class AddUmpire extends Component {
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.lastName}
                                     onChange={(lastName) => this.props.updateAddUmpireData(captializedString(lastName.target.value), 'lastName')}
-                                // value={umpireData.lastName}
+                                    onBlur={(i) => this.props.form.setFieldsValue({
+                                        'Last Name': captializedString(i.target.value)
+                                    })}
                                 />
                             )}
                         </Form.Item>

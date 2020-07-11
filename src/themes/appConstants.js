@@ -1269,7 +1269,7 @@ const AppConstants = {
   chargeTaxesOnProduct: 'Charge taxes on product',
   inventory: 'Inventory',
   enableInventoryTracking: 'Enable inventory tracking',
-  SKU: 'Stock keeping unit',
+  StockKeepingUnit: 'Stock keeping unit',
   skuHeader: 'SKU(stock keeping unit)',
   barcodeHeading: 'Barcode(ISBN,UPC,GTIN,etc)',
   barcode: 'Barcode',
@@ -1398,10 +1398,11 @@ const AppConstants = {
   gamesBorrowed: "Games Borrowed",
   minutesBorrowed: "Minutes Borrowed",
   premierCompLink: 'Premier Competition Link',
-  productAddedMessage:"Product added successfully.",
-  productDeletedMessage:"Product deleted successfully.",
-  typeAddedMessage:"Type added successfully.",
+  productAddedMessage: "Product added successfully.",
+  productDeletedMessage: "Product deleted successfully.",
+  typeAddedMessage: "Type added successfully.",
   registrationChange: "Registration Change",
+  cost: "Cost",
 };
 
 export default AppConstants;

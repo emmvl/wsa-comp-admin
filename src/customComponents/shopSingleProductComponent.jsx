@@ -19,7 +19,7 @@ class ShopSingleProductComponent extends React.Component {
         } else {
             price = productItem.price
         }
-        return currencyFormat(price)
+        return productItem.tax > 0 ? currencyFormat(price + productItem.tax) + " (inc GST)" : currencyFormat(price)
     }
 
     render() {
@@ -74,8 +74,8 @@ class ShopSingleProductComponent extends React.Component {
                             let optionCount = subItem ? subItem.options.length : 0
                             let checkOptionDisplayCount = optionCount <= 3 ? 2 : 1
                             return (
-                                <div key={"productItemvariantOptions" + subIndex}>
-                                    <>
+                                <div key={"productItemvariantOptions" + subIndex} className="text-left">
+                                    {subIndex === 0 && <>
                                         {subItem && isArrayNotEmpty(subItem.options) && subItem.options.map((subItemOption, subIndexOption) => {
                                             return (
                                                 subIndexOption <= checkOptionDisplayCount && <div className="d-flex flex-row" key={"options" + subIndexOption}>
@@ -89,7 +89,7 @@ class ShopSingleProductComponent extends React.Component {
                                             )
                                         })}
                                         {checkOptionDisplayCount === 1 && <span className="product-grey-detail-text">{"More..."}</span>}
-                                    </>
+                                    </>}
                                 </div>
                             )
                         })

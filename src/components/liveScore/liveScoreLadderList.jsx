@@ -121,7 +121,8 @@ class LiveScoreLadderList extends Component {
         super(props);
         this.state = {
             division: "11A",
-            loadding: false
+            loadding: false,
+            divisionId: null
         }
     }
 
@@ -154,9 +155,12 @@ class LiveScoreLadderList extends Component {
                                         alignItems: "center",
                                         justifyContent: "flex-end"
                                     }}>
-                                    <NavLink to="/liveScoreLadderAdjustment">
+                                    <NavLink to={{
+                                        pathname: '/liveScoreLadderAdjustment',
+                                        state: { divisionId: this.state.divisionId }
+                                    }}>
                                         <Button className="primary-add-comp-form" type="primary">
-                                            + {AppConstants.edit}
+                                            {AppConstants.edit}
                                         </Button>
                                     </NavLink>
                                 </div>
@@ -192,7 +196,7 @@ class LiveScoreLadderList extends Component {
                 let divisionId = isArrayNotEmpty(divisionArray) ? divisionArray[0].id : null
                 this.props.liveScoreLaddersListAction(id, divisionId, uniqueKey)
                 this.props.updateLadderSetting({ data: divisionId, key: 'divisionId' })
-                this.setState({ loadding: false })
+                this.setState({ loadding: false, divisionId })
             }
         }
     }
@@ -205,6 +209,7 @@ class LiveScoreLadderList extends Component {
         const { id, uniqueKey } = JSON.parse(getLiveScoreCompetiton())
         this.props.updateLadderSetting({ data: value.division, key: 'divisionId' })
         this.props.liveScoreLaddersListAction(id, value.division, uniqueKey)
+        this.setState({ divisionId: value.division })
     }
     ///dropdown view containing dropdown
     dropdownView = () => {
