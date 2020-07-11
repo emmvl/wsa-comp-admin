@@ -399,18 +399,14 @@ class LiveScoreMatchSheet extends Component {
     footerView = () => (
         <div className="fluid-width">
             <div className="footer-view">
-                <div className="row">
-                    <div className="col-sm">
-                        <div style={{display: 'flex', justifyContent: 'flex-end'}}>
-                            <Button
-                                className="open-reg-button"
-                                type="primary"
-                                onClick={() => this.printAll()}
-                            >
-                                {AppConstants.previewAll}
-                            </Button>
-                        </div>
-                    </div>
+                <div style={{display: 'flex', justifyContent: 'flex-end', marginRight: 15}}>
+                    <Button
+                        className="open-reg-button"
+                        type="primary"
+                        onClick={() => this.printAll()}
+                    >
+                        {AppConstants.previewAll}
+                    </Button>
                 </div>
             </div>
         </div>
