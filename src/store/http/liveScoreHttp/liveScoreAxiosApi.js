@@ -999,6 +999,17 @@ let LiveScoreAxiosApi = {
 
         return Method.dataGet(url, token)
     },
+
+    ladderAdjustmentPostData(data) {
+        var url = `/teams/ladder/adjustment`;
+        return Method.dataPost(url, token, data.body)
+
+    },
+
+    ladderAdjustmentGetData(data) {
+        var url = `/teams/ladder/adjustment?competitionUniqueKey=${data.uniqueKey}&divisionId=${data.divisionId}`;
+        return Method.dataGet(url, token)
+    }
 };
 
 

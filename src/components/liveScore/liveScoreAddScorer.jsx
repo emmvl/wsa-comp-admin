@@ -220,14 +220,16 @@ class LiveScoreAddScorer extends Component {
                     <div className="col-sm" >
                         <Form.Item>
                             {getFieldDecorator(AppConstants.firstName, {
-                                normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.firstName}
                                     onChange={(firstName) => this.props.liveScoreScorerUpdate(captializedString(firstName.target.value), "firstName")}
-                                    placeholder={AppConstants.firstName} />
+                                    placeholder={AppConstants.firstName}
+                                    onBlur={(i) => this.props.form.setFieldsValue({
+                                        'First Name': captializedString(i.target.value)
+                                    })} />
                             )}
 
                         </Form.Item>
@@ -235,7 +237,6 @@ class LiveScoreAddScorer extends Component {
                     <div className="col-sm" >
                         <Form.Item>
                             {getFieldDecorator(AppConstants.lastName, {
-                                normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
@@ -243,6 +244,9 @@ class LiveScoreAddScorer extends Component {
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.lastName}
                                     onChange={(lastName) => this.props.liveScoreScorerUpdate(captializedString(lastName.target.value), "lastName")}
+                                    onBlur={(i) => this.props.form.setFieldsValue({
+                                        'Last Name': captializedString(i.target.value)
+                                    })}
                                 />
                             )}
                         </Form.Item>

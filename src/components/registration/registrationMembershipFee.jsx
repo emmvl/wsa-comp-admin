@@ -694,8 +694,7 @@ class RegistrationMembershipFee extends Component {
                 <span className="form-heading ">{AppConstants.membershipProduct}</span>
                 <Form.Item >
                     {getFieldDecorator('membershipProductName',
-
-                        { normalize: (input) => captializedString(input), rules: [{ required: true, message: ValidationConstants.membershipProductIsRequired }] })(
+                        { rules: [{ required: true, message: ValidationConstants.membershipProductIsRequired }] })(
                             <InputWithHead
                                 required={"required-field pb-0 "}
                                 heading={AppConstants.membershipProductName}
@@ -704,7 +703,9 @@ class RegistrationMembershipFee extends Component {
                                 conceptulHelp
                                 conceptulHelpMsg={AppConstants.membershipProductNameMsg}
                                 tooltiprequired={"mt-3"}
-                                // marginTop={12}
+                                onBlur={(i)=> this.props.form.setFieldsValue({
+                                    'membershipProductName': captializedString(i.target.value)
+                                })}
                             />
                         )}
                 </Form.Item>

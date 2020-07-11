@@ -1352,7 +1352,7 @@ class RegistrationCompetitionForm extends Component {
             <div className="content-view pt-4">
                 <Form.Item >
                     {getFieldDecorator('competition_name',
-                        { normalize: (input) => captializedString(input), rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }] })(
+                        { rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }] })(
                             <InputWithHead
                                 required={"required-field pb-0 "}
                                 heading={AppConstants.competition_name}
@@ -1361,6 +1361,9 @@ class RegistrationCompetitionForm extends Component {
                                 // value={detailsData.competitionDetailData.competitionName}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(captializedString(e.target.value), "competitionName")}
                                 disabled={compDetailDisable}
+                                onBlur={(i)=> this.props.form.setFieldsValue({
+                                    'competition_name': captializedString(i.target.value)
+                                })}
                             />
                         )}
                 </Form.Item>

@@ -184,7 +184,6 @@ class LiveScoreAddEditCoach extends Component {
                     <div className="col-sm" >
                         <Form.Item>
                             {getFieldDecorator(AppConstants.firstName, {
-                                normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
@@ -193,6 +192,9 @@ class LiveScoreAddEditCoach extends Component {
                                     placeholder={AppConstants.firstName}
                                     onChange={(firstName) => this.props.liveScoreUpdateCoach(captializedString(firstName.target.value), 'firstName')}
                                     value={coachdata.firstName}
+                                    onBlur={(i) => this.props.form.setFieldsValue({
+                                        'First Name': captializedString(i.target.value)
+                                    })}
                                 />
                             )}
 
@@ -201,7 +203,6 @@ class LiveScoreAddEditCoach extends Component {
                     <div className="col-sm" >
                         <Form.Item>
                             {getFieldDecorator(AppConstants.lastName, {
-                                normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
@@ -210,6 +211,9 @@ class LiveScoreAddEditCoach extends Component {
                                     placeholder={AppConstants.lastName}
                                     onChange={(lastName) => this.props.liveScoreUpdateCoach(captializedString(lastName.target.value), 'lastName')}
                                     value={coachdata.lastName}
+                                    onBlur={(i) => this.props.form.setFieldsValue({
+                                        'Last Name': captializedString(i.target.value)
+                                    })}
                                 />
                             )}
                         </Form.Item>

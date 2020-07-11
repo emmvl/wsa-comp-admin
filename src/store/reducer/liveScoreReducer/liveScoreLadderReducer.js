@@ -11,7 +11,8 @@ const initialState = {
     teamResult: [],
     divisionList: [],
     divisionId: null,
-    ladderDivisionList: []
+    ladderDivisionList: [],
+    onLoading: false
 };
 
 function createLadderRank(array) {
@@ -45,7 +46,7 @@ function liveScoreLaddersReducer(state = initialState, action) {
 
         /// ONLY LADDER
         case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_LOAD:
-            return { ...state, onLoad: true };
+            return { ...state };
         case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_SUCCESS:
 
             return {
@@ -92,22 +93,28 @@ function liveScoreLaddersReducer(state = initialState, action) {
 
             if (key === "addLadderAdjustment") {
                 var obj = {
-                    teamId: '',
+                    teamLadderId: 0,
+                    teamId: null,
                     points: '',
-                    reasonforChange: ''
+                    adjustmentReason: ''
                 }
                 state.ladderData.push(obj)
             } else if (key === 'refresh') {
                 var obj = {
-                    teamId: '',
+                    teamLadderId: 0,
+                    teamId: null,
                     points: '',
-                    reasonforChange: ''
+                    adjustmentReason: ''
                 }
                 state.ladderData = [obj]
 
             } else if (key === 'divisionId') {
 
                 state.divisionId = data
+
+            } else if (key === 'removeItem') {
+
+                state.ladderData.splice(index, 1)
 
             } else {
                 state.ladderData[index][key] = data
@@ -119,16 +126,38 @@ function liveScoreLaddersReducer(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_TEAM_LOAD:
 
-            return { ...state, onLoad: true };
+            return { ...state, };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
-            console.log(action.result, 'teamSuccess~~~~~')
             return {
                 ...state,
-                // onLoad: false,
-                // teamResult: action.result,
+                onLoad: false,
+                teamResult: action.result,
+            };
+
+        case ApiConstants.API_LADDER_ADJUSTMENT_POST_LOAD:
+            return { ...state, onLoading: true };
+
+        case ApiConstants.API_LADDER_ADJUSTMENT_POST_SUCCESS:
+
+            return {
+                ...state,
+                onLoading: false,
+            };
+
+        case ApiConstants.API_LADDER_ADJUSTMENT_GET_LOAD:
+            return { ...state, onLoading: true };
+
+        case ApiConstants.API_LADDER_ADJUSTMENT_GET_SUCCESS:
+
+
+            return {
+                ...state,
+                onLoading: false,
+                ladderData: action.result
 
             };
+
 
         default:
             return state;
