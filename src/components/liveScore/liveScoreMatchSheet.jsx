@@ -142,7 +142,6 @@ class LiveScoreMatchSheet extends Component {
     printAll = () => {
         if (this.props.liveScoreMatchState.liveScoreMatchList.length > 0) {
             this.props.liveScoreMatchSheetPrintAction(
-
                 this.state.selectedComp,
                 this.state.division === 'All' ? null : this.state.division,
                 this.state.selectedTeam === 'All' ? null : this.state.selectedTeam

@@ -169,11 +169,23 @@ class InnerHorizontalMenu extends React.Component {
                             <span >Dashboard</span>
                         </NavLink>
                     </Menu.Item>
-                    <Menu.Item key="2">
-                        <NavLink to="/registration" >
-                            <span >Registrations</span>
-                        </NavLink>
-                    </Menu.Item>
+                    <SubMenu
+                        key="sub4"
+                        title={
+                            <span>Registrations</span>
+                        }
+                    >
+                        <Menu.Item key="2">
+                            <NavLink to="/registration" >
+                                <span >Registrations</span>
+                            </NavLink>
+                        </Menu.Item>
+                        <Menu.Item key="9">
+                            <NavLink to="/registrationChange" >
+                                <span >Registration Change</span>
+                            </NavLink>
+                        </Menu.Item>
+                    </SubMenu>
                     {orgLevel == AppConstants.national || orgLevel == AppConstants.state ?
                         <Menu.Item key="6">
                             <NavLink to="/registrationMembershipList"  >

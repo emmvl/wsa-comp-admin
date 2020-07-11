@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Checkbox, Select, Breadcrumb, InputNumber, Form, Modal } from 'antd';
+import { Layout, Button, Checkbox, Select, Breadcrumb, InputNumber, Form, Modal, message } from 'antd';
 import './shop.css';
 import { NavLink } from 'react-router-dom';
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -16,6 +16,8 @@ import {
     getTypesOfProductAction,
     addNewTypeAction,
     deleteProductVariantAction,
+    getProductDetailsByIdAction,
+    clearProductReducer,
 } from "../../store/actions/shopAction/productAction"
 import InputWithHead from "../../customComponents/InputWithHead";
 import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
@@ -24,7 +26,7 @@ import { EditorState, ContentState, convertFromHTML, } from 'draft-js';
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import SortableImage from '../../customComponents/sortableImageComponent';
 import ValidationConstants from '../../themes/validationConstant';
-
+import { checkOrganisationLevel } from "../../util/permissions";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -44,8 +46,10 @@ class AddProduct extends Component {
             newProductType: "",
             visible: false,
             loading: false,
+            getLoad: false,
+            orgLevel: AppConstants.state,
         }
-
+        props.clearProductReducer("productDeatilData")
     }
 
 
@@ -53,10 +57,19 @@ class AddProduct extends Component {
         this.apiCalls();
         this.setDetailsFieldValue();
         this.setEditorFieldValue();
+        checkOrganisationLevel().then((value) => (
+            this.setState({ orgLevel: value })
+        ))
     }
 
     apiCalls = () => {
         this.props.getTypesOfProductAction()
+        let productId = null
+        productId = this.props.location.state ? this.props.location.state.id : null
+        if (productId) {
+            this.props.getProductDetailsByIdAction(productId)
+            this.setState({ getLoad: true })
+        }
     }
 
     componentDidUpdate(nextProps) {
@@ -66,6 +79,11 @@ class AddProduct extends Component {
             if (!shopProductState.error) {
                 history.push('/listProducts');
             }
+        }
+        if (shopProductState.getDetailsLoad === false && this.state.getLoad === true) {
+            this.setDetailsFieldValue();
+            this.setEditorFieldValue();
+            this.setState({ getLoad: false });
         }
     }
 
@@ -100,8 +118,14 @@ class AddProduct extends Component {
                     for (let i in imagesFiles)
                         formData.append("productPhotos", imagesFiles[i])
                 }
-                this.props.addProductAction(formData);
-                this.setState({ loading: true });
+                let affiliates = productDeatilData.affiliates
+                let affiliatesNotSelected = Object.keys(affiliates).every(k => affiliates[k] === 0);
+                if (affiliatesNotSelected) {
+                    message.error(ValidationConstants.pleaseSelectAffiliate);
+                } else {
+                    this.props.addProductAction(formData);
+                    this.setState({ loading: true });
+                }
             }
         })
     }
@@ -193,7 +217,9 @@ class AddProduct extends Component {
     }
 
     handleOk = e => {
-        this.props.addNewTypeAction(this.state.newProductType)
+        if (this.state.newProductType.length > 0) {
+            this.props.addNewTypeAction(this.state.newProductType)
+        }
         this.setState({
             visible: false,
             newProductType: "",
@@ -312,7 +338,10 @@ class AddProduct extends Component {
                         }
                     )}
                 </Select>
-                <span className="input-heading-add-another" onClick={this.addAnotherProductType}>+{AppConstants.addType}</span>
+                {
+                    this.state.orgLevel == "state" &&
+                    <span className="input-heading-add-another" onClick={this.addAnotherProductType}>+{AppConstants.addType}</span>
+                }
                 <Modal
                     className="add-membership-type-modal"
                     title={AppConstants.addType}
@@ -336,6 +365,7 @@ class AddProduct extends Component {
                             <Checkbox
                                 className="single-checkbox mt-3"
                                 checked={this.checkedAffiliates(item.name) === 1 ? true : false}
+                                disabled={this.state.orgLevel == "Club" && item.id == 2 ? true : false}
                                 onChange={(e) =>
                                     this.affiliateOnChange(e.target.checked, item.name)
                                 }
@@ -618,11 +648,11 @@ class AddProduct extends Component {
                     <div className="pt-5">
                         <Checkbox
                             className="single-checkbox mt-0"
-                            checked={productDeatilData.purchaseOutOfStock}
+                            checked={productDeatilData.availableIfOutOfStock === 1 ? true : false}
                             onChange={(e) =>
                                 this.props.onChangeProductDetails(
-                                    e.target.checked,
-                                    'purchaseOutOfStock'
+                                    e.target.checked === true ? 1 : 0,
+                                    'availableIfOutOfStock'
                                 )
                             }
                         >
@@ -723,7 +753,7 @@ class AddProduct extends Component {
     ////////Variants content view
     variantsView = (getFieldDecorator) => {
         let { productDeatilData } = this.props.shopProductState
-        let varientOptionArray = productDeatilData.variants[0].options
+        let varientOptionArray = isArrayNotEmpty(productDeatilData.variants) ? productDeatilData.variants[0].options : []
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.variants}</span>
@@ -1095,6 +1125,8 @@ function mapDispatchToProps(dispatch) {
         getTypesOfProductAction,
         addNewTypeAction,
         deleteProductVariantAction,
+        getProductDetailsByIdAction,
+        clearProductReducer,
     }, dispatch)
 }
 

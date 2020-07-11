@@ -286,7 +286,7 @@ let LiveScoreAxiosApi = {
         }
 
         let url = `/matches`
-        console.log("body::"+ JSON.stringify(body));
+        console.log("body::" + JSON.stringify(body));
         return Method.dataPost(url, token, body)
     },
 
@@ -784,10 +784,8 @@ let LiveScoreAxiosApi = {
     },
 
 
-    //// Export Files 
-
+    //// Export Files
     exportFiles(url) {
-
         return Method.dataGetDownload(url, localStorage.token);
     },
 
@@ -911,34 +909,48 @@ let LiveScoreAxiosApi = {
 
     liveScoreAddEditIncident(data) {
         console.log(data, 'liveScoreAddEditIncident')
-        if (data.key === 'media') {
-            let media = data.mediaArry
 
-            let body = new FormData()
+        let body = data.body
+        let players = JSON.stringify(data.playerIds)
 
-            for (let i in media) {
-                body.append("media", media[i])
-            }
-            if (data.isEdit) {
-                var url = `/incident/media/edit?incidentId=${data.incidentId}`;
-                return Method.dataPatch(url, token, body)
-            } else {
-                var url = `/incident/media?incidentId=${data.incidentId}`;
-                return Method.dataPost(url, token, body)
-            }
-
+        if (data.isEdit) {
+            var url = `/incident/edit?playerIds=${players}`;
+            return Method.dataPatch(url, token, body)
         } else {
-            let body = { "incident": data.body }
-            let players = JSON.stringify(data.playerIds)
-
-            if (data.isEdit) {
-                var url = `/incident/edit?playerIds=${players}`;
-                return Method.dataPatch(url, token, body)
-            } else {
-                var url = `/incident?playerIds=${players}`;
-                return Method.dataPost(url, token, body)
-            }
+            var url = `/incident?playerIds=${players}`;
+            return Method.dataPost(url, token, body)
         }
+
+
+        // if (data.key === 'media') {
+        //     let media = data.mediaArry
+
+        //     let body = new FormData()
+
+        //     for (let i in media) {
+        //         body.append("media", media[i])
+        //     }
+        //     if (data.isEdit) {
+        //         var url = `/incident/media/edit?incidentId=${data.incidentId}`;
+        //         return Method.dataPatch(url, token, body)
+        //     } else {
+        //         var url = `/incident/media?incidentId=${data.incidentId}`;
+        //         return Method.dataPost(url, token, body)
+        //     }
+
+        // } else {
+        //     // let body = { "incident": data.body }
+        //     let body = data.body
+        //     let players = JSON.stringify(data.playerIds)
+
+        //     if (data.isEdit) {
+        //         var url = `/incident/edit?playerIds=${players}`;
+        //         return Method.dataPatch(url, token, body)
+        //     } else {
+        //         var url = `/incident?playerIds=${players}`;
+        //         return Method.dataPost(url, token, body)
+        //     }
+        // }
 
 
     },
@@ -946,6 +958,40 @@ let LiveScoreAxiosApi = {
     liveScoreIncidentType() {
         var url = `/ref/incidentTypes`;
         return Method.dataGet(url, token)
+    },
+
+    liveScoreAddEditIncidentMedia(data, incidentId) {
+        let media = data.mediaArry
+        let body = new FormData()
+
+
+        for (let i in media) {
+            body.append("media", media[i])
+        }
+
+        if (data.isEdit) {
+
+            if (data.incidentMediaIds.length > 0) {
+                let incidentMediaId = JSON.stringify(data.incidentMediaIds)
+
+                if (media) {
+                    var url = `/incident/media/edit?incidentId=${incidentId}&incidentMediaIds=${incidentMediaId}`;
+                    return Method.dataPatch(url, token, body)
+                } else {
+                    var url = `/incident/media/edit?incidentId=${incidentId}&incidentMediaIds=${incidentMediaId}`;
+                    return Method.dataPatch(url, token)
+                }
+
+            } else {
+                var url = `/incident/media/edit?incidentId=${incidentId}`;
+                return Method.dataPatch(url, token, body)
+            }
+
+        } else {
+            var url = `/incident/media?incidentId=${incidentId}`;
+            return Method.dataPost(url, token, body)
+        }
+
     },
 
     liveScoreMatchSheetPrint(competitionId, divisionId, teamId) {

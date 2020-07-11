@@ -200,6 +200,7 @@ const initialState = {
     team1id: null,
     team2id: null,
     liveScoreBulkScoreList: [],
+    highestSequence: null
 };
 
 function setMatchData(data) {
@@ -252,6 +253,18 @@ function getOrganisation(data) {
     return arr
 }
 
+function getHighestSequesnce(roundArr) {
+
+    let sequence = []
+
+    for (let i in roundArr) {
+        sequence.push(roundArr[i].sequence)
+    }
+
+    return Math.max.apply(null, sequence);
+
+}
+
 function createBulkScoreMatchArray(list) {
     let bulkScoreList = []
     for (let i in list) {
@@ -263,6 +276,17 @@ function createBulkScoreMatchArray(list) {
         bulkScoreList.push(request)
     }
     return bulkScoreList
+}
+
+function checkUmpireType(umpireArray, key) {
+    let object = null
+    for (let i in umpireArray) {
+        if (umpireArray[i].sequence == key) {
+            object = umpireArray[i]
+        }
+    }
+    return object
+
 }
 
 function liveScoreMatchReducer(state = initialState, action) {
@@ -423,6 +447,7 @@ function liveScoreMatchReducer(state = initialState, action) {
                 state.scorerRosterId_2 = null
                 state.team1id = null
                 state.team2id = null
+                state.addEditMatch['divisionId'] = null
 
             } else {
 
@@ -483,6 +508,7 @@ function liveScoreMatchReducer(state = initialState, action) {
             state.matchData.roundId = action.result.id
             state.addEditMatch.roundId = action.result.id
             state.addEditMatch.round = action.result
+            state.highestSequence = action.result.sequence
             return {
                 ...state,
                 rounLoad: false,
@@ -499,8 +525,9 @@ function liveScoreMatchReducer(state = initialState, action) {
             let team2Player = liveScoreMatchModal.getMatchViewData(action.payload.team2players)
 
             let match = isArrayNotEmpty(action.payload.match) ? action.payload.match[0] : null
-            let umpires_1 = isArrayNotEmpty(action.payload.umpires) ? action.payload.umpires[0] : null
-            let umpires_2 = isArrayNotEmpty(action.payload.umpires) ? action.payload.umpires[1] : null
+            let umpires_1 = isArrayNotEmpty(action.payload.umpires) ? checkUmpireType(action.payload.umpires, 1) : null
+            let umpires_2 = isArrayNotEmpty(action.payload.umpires) ? checkUmpireType(action.payload.umpires, 2) : null
+            console.log(umpires_1, 'umpires_1~~~~', umpires_1)
 
             if (umpires_1) {
                 state.umpire1Orag = isArrayNotEmpty(umpires_1.organisations) ? umpires_1.organisations[0].id : []
@@ -644,6 +671,9 @@ function liveScoreMatchReducer(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_ROUND_LIST_SUCCESS:
 
+            let sequenceValue = getHighestSequesnce(action.result)
+            state.highestSequence = sequenceValue
+
             return {
                 ...state,
                 onLoad: false,
@@ -738,7 +768,7 @@ function liveScoreMatchReducer(state = initialState, action) {
             }
         case ApiConstants.BULK_SCORE_UPDATE_SUCCESS:
             let matchUpdatedList = state.liveScoreMatchListData
-            state.liveScoreBulkScoreList =  matchUpdatedList
+            state.liveScoreBulkScoreList = matchUpdatedList
             return {
                 ...state,
                 onLoad: false,

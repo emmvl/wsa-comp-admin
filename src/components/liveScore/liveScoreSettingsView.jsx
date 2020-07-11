@@ -40,6 +40,7 @@ import { isArrayNotEmpty, captializedString } from "../../util/helpers";
 import Tooltip from 'react-png-tooltip'
 import { onInviteesSearchAction } from "../../store/actions/registrationAction/competitionFeeAction";
 import { message } from "antd";
+import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 
 
 
@@ -64,10 +65,10 @@ class LiveScoreSettingsView extends Component {
             screenName: props.location ? props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null : null,
             edit: props.location ? props.location.state ? props.location.state.edit ? props.location.state.edit : null : null : null,
         };
-
-        console.log(this.state.isEdit, 'isEdit')
     }
     componentDidMount() {
+        let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
+        this.props.umpireCompetitionListAction(null, null, organisationId)
 
         if (this.state.screenName == 'umpireDashboard') {
 
@@ -218,7 +219,11 @@ class LiveScoreSettingsView extends Component {
                     otherSelected,
                     invitedTo,
                     invitedOrganisation,
-                    lineupSelection
+                    lineupSelection,
+                    borrowedPlayer,
+                    gamesBorrowedThreshold,
+                    linkedCompetitionId,
+                    premierCompLink
                 } = this.props.liveScoreSetting
 
                 const umpire = record1.includes("recordUmpire")
@@ -262,6 +267,13 @@ class LiveScoreSettingsView extends Component {
                 formData.append('organisationId', orgId ? orgId : this.props.liveScoreSetting.data.organisationId)
                 formData.append('buzzerEnabled', buzzerEnabled)
                 formData.append('warningBuzzerEnabled', warningBuzzerEnabled)
+                formData.append('playerBorrowingType', borrowedPlayer)
+
+                formData.append('gamesBorrowedThreshold', gamesBorrowedThreshold)
+
+                formData.append('linkedCompetitionId', linkedCompetitionId)
+
+
                 if (attendenceRecordingTime) {
                     formData.append('attendanceSelectionTime', attendenceRecordingTime)
                 }
@@ -278,18 +290,8 @@ class LiveScoreSettingsView extends Component {
                     formData.append('invitedOrganisation', JSON.stringify(invitedOrganisation))
                 }
 
-                // if (buzzerEnabled) {
-                //     formData.append('buzzerEnabled', buzzerEnabled)
-                // }
-
-                // if (warningBuzzerEnabled) {
-                //     formData.append('warningBuzzerEnabled', warningBuzzerEnabled)
-                // }
-
                 this.props.settingDataPostInititae({ body: formData, venue: venue, settingView: this.props.location.state })
-                // this.props.clearLiveScoreSetting()
-                // this.props.history.push('/liveScoreCompetitions')
-                // this.props.clearLiveScoreSetting()
+
             }
         });
     };
@@ -359,7 +361,7 @@ class LiveScoreSettingsView extends Component {
     ////////form content view
     contentView = (getFieldDecorator) => {
         const { competitionName, competitionLogo, scoring, days, hours, minutes, lineupSelectionDays, lineupSelectionHours, lineupSelectionMins, record1, venue, Logo } = this.props.liveScoreSetting.form
-        const { loader, buzzerEnabled, warningBuzzerEnabled, recordUmpire, lineupSelection, gameborrowed, minutesBorrowed, premierCompLink } = this.props.liveScoreSetting
+        const { loader, buzzerEnabled, warningBuzzerEnabled, recordUmpire, lineupSelection, gameborrowed, minutesBorrowed, premierCompLink, borrowedPlayer, gamesBorrowedThreshold, linkedCompetitionId } = this.props.liveScoreSetting
         let grade = this.state.venueData
         // const applyTo1 = [{ label: 'Record Umpire', value: "recordUmpire" }, { label: ' Game Time Tracking', value: "gameTimeTracking" }, { label: 'Position Tracking', value: "positionTracking" }];
         const applyTo1 = [{ label: ' Game Time Tracking', value: "gameTimeTracking", }, { label: 'Position Tracking', value: "positionTracking", }, { label: 'Record Goal Attempts', value: "recordGoalAttempts", }];
@@ -367,6 +369,7 @@ class LiveScoreSettingsView extends Component {
         const turnOffBuzzer = [{ label: AppConstants.turnOffBuzzer, value: true }];
         const buzzerEnabledArr = [{ label: AppConstants.turnOff_30Second, value: true }];
 
+        let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
         return (
             <div className="content-view pt-4">
                 <Form.Item>
@@ -726,48 +729,50 @@ class LiveScoreSettingsView extends Component {
                 {/* Player borrowing view */}
                 <InputWithHead heading={AppConstants.playerBorrowing} />
                 <div className="row mt-0 ml-1" >
+                    <Radio.Group
+                        className="reg-competition-radio"
+                        onChange={(e) => this.props.onChangeSettingForm({ key: "borrowedPlayer", data: e.target.value })}
+                        value={borrowedPlayer}
+                    >
 
-                    <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
-                        <div >
-                            <Checkbox style={{
-                                display: "-ms-flexbox",
-                                flexDirection: "column",
-                                justifyContent: "center"
-                            }}
-                                className="single-checkbox"
-                                onChange={(e) => this.props.onChangeSettingForm({ key: "gameborrowed", data: e.target.checked })}
-                                checked={gameborrowed}
-                            >
-                                {AppConstants.gamesBorrowed}
-                            </Checkbox>
-                        </div>
 
-                        {
-                            gameborrowed &&
-                            <div className='small-steper-style'>
-                                <InputNumber
+                        <div className="row mt-0 ml-1">
+                            <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>
+                                <div >
 
-                                    // value={addEditMatch.matchDuration}
-                                    formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                    parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                                    // onChange={(matchDuration) => this.props.liveScoreUpdateMatchAction(matchDuration, "matchDuration")}
-                                    placeholder={'0'}
-                                // style={{ width: '50px', minHeight: '30px' }}
-                                />
+
+                                    <Radio
+                                        style={{ marginRight: 0, paddingRight: 0 }}
+                                        value={'GAMES'}
+                                    >{AppConstants.gamesBorrowed}</Radio>
+                                </div>
+
+                                {
+                                    borrowedPlayer == 'GAMES' &&
+                                    <div className='small-steper-style'>
+                                        <InputNumber
+                                            max={6}
+                                            min={3}
+                                            value={gamesBorrowedThreshold}
+                                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                            parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                            onChange={(number) => this.props.onChangeSettingForm({ key: "number", data: number })}
+                                            placeholder={'0'}
+                                        />
+                                    </div>
+                                }
+
                             </div>
-                        }
 
-                    </div>
+                            <div style={{ marginLeft: 40 }}>
+                                <Radio
+                                    style={{ marginRight: 0, paddingRight: 0 }}
+                                    value={'MINUTES'}
+                                >{AppConstants.minutesBorrowed}</Radio>
 
-                    <div style={{ marginLeft: 40 }}>
-                        <Checkbox
-                            className="single-checkbox"
-                            onChange={(e) => this.props.onChangeSettingForm({ key: "minutesBorrowed", data: e.target.checked })}
-                            checked={minutesBorrowed}
-                        >
-                            {AppConstants.minutesBorrowed}
-                        </Checkbox>
-                    </div>
+                            </div>
+                        </div>
+                    </Radio.Group>
                 </div>
 
                 <div style={{ marginTop: 20 }} >
@@ -785,12 +790,25 @@ class LiveScoreSettingsView extends Component {
 
                     {
                         premierCompLink &&
-                        <Select
-                            mode='multiple'
-                            // style={{ width: "100%", paddingRight: 1, }}
-                            placeholder={"Search Competition"}
-                        >
-                        </Select>
+                        <div style={{ marginTop: 15 }}>
+                            <Select
+                                showSearch
+                                onChange={(compId) => this.props.onChangeSettingForm({ key: "linkedCompetitionId", data: compId })}
+                                placeholder={"Search Competition"}
+                                value={linkedCompetitionId ? linkedCompetitionId : undefined}
+                                optionFilterProp="children"
+                            >
+                                {competition.map((item, index) => {
+                                    return (
+                                        <Option
+                                            key={`longName` + index}
+                                            value={item.id}>
+                                            {item.longName}</Option>
+                                    )
+                                })}
+
+                            </Select>
+                        </div>
                     }
 
                 </div>
@@ -1224,6 +1242,7 @@ function mapStatetoProps(state) {
         venueList: state.LiveScoreMatchState,
         appState: state.AppState,
         competitionFeesState: state.CompetitionFeesState,
+        umpireCompetitionState: state.UmpireCompetitionState
     }
 }
 export default connect(mapStatetoProps, {
@@ -1235,5 +1254,6 @@ export default connect(mapStatetoProps, {
     searchVenueList,
     clearFilter,
     onInviteesSearchAction,
-    settingRegInvitees
+    settingRegInvitees,
+    umpireCompetitionListAction
 })((Form.create()(LiveScoreSettingsView)));

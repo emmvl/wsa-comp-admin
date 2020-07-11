@@ -223,11 +223,11 @@ class LiveScoreAddMatch extends Component {
 
 
     onCreateRound = () => {
-        let { addEditMatch, start_date, start_time } = this.props.liveScoreMatchState
-        let sequence = 1
+        let { addEditMatch, highestSequence } = this.props.liveScoreMatchState
+        let sequence = (highestSequence == -Infinity ? 0 : highestSequence)  + 1
         // const { id } = JSON.parse(getLiveScoreCompetiton())
         let divisionID = addEditMatch.divisionId
-
+        
         this.props.liveScoreCreateRoundAction(this.state.createRound, sequence, this.state.compId, divisionID)
         this.setState({ visible: false, createRound: '', roundLoad: true })
     }
@@ -590,6 +590,8 @@ class LiveScoreAddMatch extends Component {
         const { umpireList } = this.props.umpireState
         let umpireListResult = isArrayNotEmpty(umpireList) ? umpireList : []
         let { allDisabled } = this.state
+
+        console.log(umpire1Name, 'umpires_1Value', umpire2Name)
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -708,7 +710,7 @@ class LiveScoreAddMatch extends Component {
                                 })(
                                     <Select
                                         showSearch
-                                        className="reg-form-multple-select"
+                                        className="reg-form-multiple-select"
                                         placeholder='Select Home Team'
                                         style={{ width: "100%" }}
                                         onChange={(homeTeam) => this.props.liveScoreUpdateMatchAction(homeTeam, "team1id")}
@@ -736,7 +738,7 @@ class LiveScoreAddMatch extends Component {
                                         onSearch={(e) => this.onSearchTeams(e, "awayTeam")}
                                         disabled={allDisabled}
                                         optionFilterProp="children"
-                                        className="reg-form-multple-select"
+                                        className="reg-form-multiple-select"
                                         placeholder={'Select Away Team'}
                                         style={{ width: "100%", }}
                                         onChange={(awayTeam) => this.props.liveScoreUpdateMatchAction(awayTeam, "team2id")}
@@ -762,7 +764,7 @@ class LiveScoreAddMatch extends Component {
                             })(
                                 <Select
                                     showSearch
-                                    className="reg-form-multple-select"
+                                    className="reg-form-multiple-select"
                                     placeholder={AppConstants.selectVenue}
                                     style={{ width: "100%", }}
                                     onChange={(venueId) => this.props.liveScoreUpdateMatchAction(venueId, "venueId")}

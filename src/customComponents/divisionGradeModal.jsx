@@ -4,7 +4,6 @@ import InputWithHead from "./InputWithHead"
 import AppConstants from "../themes/appConstants"
 import AppImages from "../themes/appImages"
 import ValidationConstants from '../themes/validationConstant';
-import { captializedString } from "../util/helpers"
 
 class DivisionGradeModal extends React.Component {
     constructor(props) {
@@ -94,7 +93,6 @@ class DivisionGradeModal extends React.Component {
                                                 <Form.Item
                                                 >
                                                     {getFieldDecorator(`division${index}`, {
-                                                        normalize: (input) => captializedString(input),
                                                         rules: [{ required: true, message: ValidationConstants.divisionField },
                                                         ],
                                                     })(
@@ -115,7 +113,7 @@ class DivisionGradeModal extends React.Component {
                                                                 <Form.Item
                                                                 >
                                                                     {getFieldDecorator(`grade${index}${gradeIndex}`, {
-                                                                        normalize: (input) => captializedString(input), rules: [{ required: gradeIndex >= 1 ? true : false, message: ValidationConstants.gradeField },
+                                                                        rules: [{ required: gradeIndex >= 1 ? true : false, message: ValidationConstants.gradeField },
                                                                         ],
                                                                     })(
                                                                         <InputWithHead

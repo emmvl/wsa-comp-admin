@@ -14,7 +14,6 @@ var incidentObj = {
     description: "",
     addImages: null,
     addVideo: null,
-    success: false
 }
 
 const initialState = {
@@ -29,7 +28,10 @@ const initialState = {
     loading: false,
     playerIds: [],
     incidentTypeResult: [],
-    successResult: []
+    successResult: [],
+    success: false,
+    incidentId: null,
+    incidentMediaIds: []
 
 }
 
@@ -83,6 +85,54 @@ function getPlayerId(playerArr) {
     return arr
 }
 
+function getMediaIds(mediaArray) {
+
+    let media = []
+
+    for (let i in mediaArray) {
+        media.push(mediaArray[i].id)
+    }
+
+    return media
+}
+
+function removeMediaId(mediaArr, mediaType) {
+
+    let ids = null
+
+    let index = mediaArr.findIndex((x) => x.mediaType === mediaType)
+
+    if (index > -1) {
+        ids = mediaArr[index].id
+    }
+
+
+    // for (let i in mediaArr) {
+
+    //     if (mediaType == mediaArr[i].mediaType) {
+    //         ids = mediaArr[i].id
+    //         index = JSON.parse(i)
+    //     }
+    // }
+
+    return { ids: ids, index: index }
+}
+
+function getMediaUrl(mediaArray, mediaType) {
+
+    let url
+
+    for (let i in mediaArray) {
+
+        if (mediaType == mediaArray[i].mediaType) {
+            url = mediaArray[i].mediaUrl
+        }
+
+    }
+    return url
+
+}
+
 function liveScoreIncidentState(state = initialState, action) {
     switch (action.type) {
         case ApiConstants.API_LIVE_SCORE_INCIDENT_LIST_LOAD:
@@ -120,10 +170,7 @@ function liveScoreIncidentState(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_UPDATE_INCIDENT_DATA:
 
             if (action.key == "teamId") {
-                // let teamObj = getTeamObj(action.data, state.teamResult)  
-                // state.incidentData['teams'] = teamObj
                 state.incidentData['teamId'] = action.data
-
 
             } else if (action.key == "playerId") {
                 let playerObj = getPlayerObj(action.data, state.playerResult)
@@ -132,26 +179,56 @@ function liveScoreIncidentState(state = initialState, action) {
                 state.playerIds = action.data
 
             } else if (action.key === "isEdit") {
-                state.incidentData['date'] = action.data.incidentTime
-                state.incidentData['time'] = action.data.incidentTime
-                state.incidentData['mnbMatchId'] = action.data.match.id
-                state.incidentData['teamId'] = action.data.teamId
-                state.incidentData['injury'] = action.data.incidentType.id
-                state.incidentData['description'] = action.data.description
-                state.incidentData['playerIds'] = getPlayerId(action.data.incidentPlayers)
-                state.incidentData['addImages'] = isArrayNotEmpty(action.data.incidentMediaList) ? action.data.incidentMediaList[0] ? action.data.incidentMediaList[0].mediaUrl : null : null
-                state.incidentData['addVideo'] = isArrayNotEmpty(action.data.incidentMediaList) ? action.data.incidentMediaList[1] ? action.data.incidentMediaList[1].mediaUrl : null : null
+                let data = action.data
 
-                state.playerIds = getPlayerId(action.data.incidentPlayers)
-              
+
+                state.mediaData = action.data
+
+                state.incidentData['date'] = data.incidentTime
+                state.incidentData['time'] = data.incidentTime
+                state.incidentData['mnbMatchId'] = data.match.id
+                state.incidentData['teamId'] = data.teamId
+                state.incidentData['injury'] = data.incidentType.id
+                state.incidentData['description'] = data.description
+                state.incidentData['playerIds'] = getPlayerId(data.incidentPlayers)
+                state.incidentData['addImages'] = isArrayNotEmpty(data.incidentMediaList) ? getMediaUrl(data.incidentMediaList, "image/png") : null
+                state.incidentData['addVideo'] = isArrayNotEmpty(data.incidentMediaList) ? getMediaUrl(data.incidentMediaList, "video/mp4") : null
+                state.playerIds = getPlayerId(data.incidentPlayers)
+                state.incidentMediaIds = getMediaIds(data.incidentMediaList)
+                state.incidentId = data.id
+
+
+
+            } else if (action.key === "clearImage") {
+                state.incidentData['addImages'] = null
+
+                let imageId = removeMediaId(state.mediaData.incidentMediaList, "image/png")
+                let media_Array = state.incidentMediaIds
+                media_Array.splice(imageId.index, 1)
+                state.mediaData.incidentMediaList.splice(imageId.index, 1)
+                state.incidentMediaIds = media_Array
+
+
+
+            } else if (action.key === "clearVideo") {
+                state.incidentData['addVideo'] = null
+
+                let videoId = removeMediaId(state.mediaData.incidentMediaList, "video/mp4")
+
+                let media_Array = state.incidentMediaIds
+                media_Array.splice(videoId.index, 1)
+                state.mediaData.incidentMediaList.splice(videoId.index, 1)
+                state.incidentMediaIds = media_Array
+
+
+
+
             } else if (action.key === "isAdd") {
                 state.incidentData = []
-                // state.playerIds = []
+                state.incidentMediaIds = []
 
             } else {
                 state.incidentData[action.key] = action.data
-
-
             }
 
 

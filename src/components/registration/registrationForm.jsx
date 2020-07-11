@@ -14,7 +14,7 @@ import {
     Radio,
     Tooltip
 } from "antd";
-import "./product.css";
+import "./product.scss";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -71,6 +71,11 @@ const columns = [
         title: "Membership Type",
         dataIndex: "membershipProductTypeName",
         key: "membershipProductTypeName",
+    },
+    {
+        title: "Registration Type",
+        dataIndex: "registrationType",
+        key: "registrationType",
     },
     {
         title: "Registration Divisions",
@@ -320,8 +325,11 @@ class RegistrationForm extends Component {
                         registration_settings.push(reg_QuestionsSetting[i])
                     }
                     SelectedProduct['registrationSettings'] = registration_settings
-                    SelectedProduct["orgRegistrationId"] = SelectedProduct.orgRegistrationId == 0 || SelectedProduct.orgRegistrationId == null ? this.state.orgRegId : SelectedProduct.orgRegistrationId
-                    console.log(this.state.orgRegId, "SelectedProduct", SelectedProduct)
+                    SelectedProduct["orgRegistrationId"] = SelectedProduct.orgRegistrationId == 0 || SelectedProduct.orgRegistrationId == null ? this.state.orgRegId : SelectedProduct.orgRegistrationId;
+
+                    console.log(this.state.orgRegId, "SelectedProduct",SelectedProduct)
+
+                    //console.log("Final Data" + JSON.stringify(SelectedProduct));
 
                     this.props.regSaveRegistrationForm(SelectedProduct, this.state.statusRefId)
                 }
@@ -513,6 +521,7 @@ class RegistrationForm extends Component {
             this.props.appState.venueList.length !== 0 ? this.props.appState.venueList : [];
         let dateOpen = this.regOpenDate()
         let closeDate = moment(this.state.compCloseDate).format("YYYY-MM-DD")
+        console.log("closeDate" + closeDate);
         let compCLoseDate = moment(this.state.compCloseDate).format("DD-MM-YYYY")
         let defaultChecked = this.props.registrationState.defaultChecked
         let isPublished = this.state.isPublished
@@ -521,7 +530,7 @@ class RegistrationForm extends Component {
                 <div className="row " style={{ paddingLeft: 10, paddingBottom: 15 }}>
                     <span className="form-heading pt-2 pl-2">{this.state.compName}</span>
                 </div>
-                <span className="userRegLink">{`Competition Registrations close on ${compCLoseDate}`}</span>
+                <span className="user-reg-link">{`Competition Registrations close on ${compCLoseDate}`}</span>
                 <div className="row">
                     <div className="col-sm">
 
@@ -586,7 +595,7 @@ class RegistrationForm extends Component {
                 <InputWithHead heading={AppConstants.membershipProduct} />
                 <Select
                     mode="multiple"
-                    className="reg-form-multple-select"
+                    className="reg-form-multiple-select"
                     style={{ width: "100%", padding: 1, minWidth: 182 }}
                     onChange={(e) => this.onSelectionMembershipCategory(e)}
                     value={fillteredProduct}
@@ -1499,7 +1508,7 @@ class RegistrationForm extends Component {
                                     <div className="col-sm">
                                         <InputWithHead heading={AppConstants.endUserRegistrationUrl} />
                                         <div>
-                                            <a className="userRegLink" href={formDataValue.userRegistrationUrl} target='_blank' >
+                                            <a className="user-reg-link" href={formDataValue.userRegistrationUrl} target='_blank' >
                                                 {formDataValue.userRegistrationUrl}
                                             </a>
                                         </div>

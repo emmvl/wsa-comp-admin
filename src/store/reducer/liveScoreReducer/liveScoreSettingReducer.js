@@ -44,8 +44,13 @@ const initialState = {
     registrationInvitees: [],
     lineupSelection: false,
     gameborrowed: false,
-    minutesBorrowed: false,
-    premierCompLink: false
+    minutesBorrowed: true,
+    premierCompLink: false,
+    playerBorrowed: '',
+    borrowedPlayer: 'GAMES',
+    gamesBorrowedThreshold: null,
+    linkedCompetitionId: null,
+    inputNumberValue: null
 }
 
 
@@ -126,6 +131,12 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
             }, [])
             const venueData = payload.competitionVenues.map(item => (item.venueId))
 
+            if (payload.linkedCompetitionId) {
+                state.premierCompLink = true
+            } else {
+                state.premierCompLink = false
+            }
+
             return {
                 ...state,
                 loader: false,
@@ -151,12 +162,17 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     lineupSelectionHours: recordingTimeHours(payload.lineupSelectionTime),
                     lineupSelectionMins: recordingTimeMins(payload.lineupSelectionTime),
 
+
                 },
                 data: payload,
                 buzzerEnabled: payload.buzzerEnabled,
                 warningBuzzerEnabled: payload.warningBuzzerEnabled,
                 recordUmpire: payload.recordUmpireType,
                 lineupSelection: payload.lineupSelectionEnabled,
+                borrowedPlayer: payload.playerBorrowingType,
+                gamesBorrowedThreshold: payload.gamesBorrowedThreshold,
+                linkedCompetitionId: payload.linkedCompetitionId,
+                inputNumberValue: payload.gamesBorrowedThreshold
 
             }
         case ApiConstants.LiveScore_SETTING_VIEW_ERROR:
@@ -178,8 +194,28 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
             const keys = payload.key
             const Data = payload.data
 
-            if (keys == 'buzzerEnabled' || keys == 'warningBuzzerEnabled' || keys == "lineupSelection" || keys == "gameborrowed" || keys == "minutesBorrowed" || keys == 'premierCompLink') {
+            if (keys == 'buzzerEnabled' || keys == 'warningBuzzerEnabled' || keys == "lineupSelection" || keys == 'premierCompLink') {
                 state[keys] = Data
+
+                if (keys == 'premierCompLink') {
+                    if (Data === false) {
+                        state.linkedCompetitionId = null
+                    }
+                }
+            } else if (keys == "borrowedPlayer") {
+                state[keys] = Data
+
+                if (Data == 'MINUTES') {
+                    state.gamesBorrowedThreshold = state.inputNumberValue
+                }
+
+            } else if (keys == 'number') {
+                state.gamesBorrowedThreshold = Data
+
+            } else if (keys == 'linkedCompetitionId') {
+                console.log(Data, 'linkedCompetitionId')
+                state.linkedCompetitionId = Data
+
             } else if (keys == 'recordUmpire') {
                 state.recordUmpire = Data
             } else if (keys == 'affiliateSelected' || keys == 'anyOrgSelected' || keys == 'otherSelected' || keys == 'affiliateNonSelected' || keys == 'anyOrgNonSelected') {
