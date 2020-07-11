@@ -204,11 +204,9 @@ const MatchSheetTemplate = (props) => {
         templateType,
         matchDetails,
         match,
-        organisation,
     } = props;
 
-    const {team1players, team2players, umpires} = matchDetails;
-    const matchDetail = matchDetails.match[0];
+    const {team1players, team2players, umpires, organisation} = matchDetails;
 
     return (
         <View>
@@ -217,7 +215,7 @@ const MatchSheetTemplate = (props) => {
                     <Text style={styles.associationName}>{organisation.name || 'Association'}</Text>
                     <Text style={styles.templateType}>{templateType} Scoresheet</Text>
                 </View>
-                <Image style={styles.logo} src={organisation.orgLogoUrl || "https://img.icons8.com/color/myspace"}/>
+                <Image style={styles.logo} src={organisation.logoUrl || "https://img.icons8.com/color/myspace"}/>
             </View>
             <View style={styles.matchInfo}>
                 <View style={styles.infoContentLeft}>
@@ -428,14 +426,12 @@ MatchSheetTemplate.propTypes = {
     templateType: PropTypes.string,
     matchDetails: PropTypes.object,
     match: PropTypes.object,
-    organisation: PropTypes.object,
 };
 
 MatchSheetTemplate.defaultProps = {
     templateType: 'Fixtures',
     matchDetails: null,
     match: null,
-    organisation: null,
 };
 
 export default MatchSheetTemplate;

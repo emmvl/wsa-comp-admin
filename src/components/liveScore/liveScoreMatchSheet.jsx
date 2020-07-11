@@ -80,15 +80,6 @@ class LiveScoreMatchSheet extends Component {
                     onDivisionLoad: true,
                     competitionUniqueKey: compKey,
                 });
-                this.props.liveScoreMatchListAction(
-                    firstComp,
-                    undefined,
-                    undefined,
-                    undefined,
-                    this.state.division === 'All' ? null : this.state.division,
-                    undefined,
-                    this.state.selectedTeam === 'All' ? null : this.state.selectedTeam
-                );
             }
         }
 
@@ -102,6 +93,15 @@ class LiveScoreMatchSheet extends Component {
                         division,
                         teamLoad: true
                     });
+                    this.props.liveScoreMatchListAction(
+                        this.state.selectedComp,
+                        undefined,
+                        undefined,
+                        undefined,
+                        division,
+                        undefined,
+                        this.state.selectedTeam === 'All' ? null : this.state.selectedTeam
+                    );
                 }
             }
 
@@ -142,6 +142,7 @@ class LiveScoreMatchSheet extends Component {
     printAll = () => {
         if (this.props.liveScoreMatchState.liveScoreMatchList.length > 0) {
             this.props.liveScoreMatchSheetPrintAction(
+
                 this.state.selectedComp,
                 this.state.division === 'All' ? null : this.state.division,
                 this.state.selectedTeam === 'All' ? null : this.state.selectedTeam
@@ -421,7 +422,13 @@ class LiveScoreMatchSheet extends Component {
             <div className="fluid-width" style={{backgroundColor: '#f7fafc'}}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores}/>
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="22"/>
-                <Loader visible={this.props.liveScoreMatchSheetState.onLoad || this.props.liveScoreMatchState.onLoad}/>
+                <Loader
+                    visible={
+                        this.props.liveScoreMatchSheetState.onLoad
+                        || this.props.liveScoreMatchState.onLoad
+                        || this.props.liveScoreMatchState.isFetchingMatchList
+                    }
+                />
                 <Layout>
                     {this.headerView()}
                     <Content>
@@ -440,7 +447,6 @@ class LiveScoreMatchSheet extends Component {
                     match={this.state.selectedMatch}
                     matchDetails={this.props.liveScoreMatchState.matchDetails}
                     matchTemplateTypes={this.props.commonReducerState.matchPrintTemplateType}
-                    organisation={this.state.organisation}
                     modalTitle="LiveScores Match Sheet"
                     handleOK={this.handleModalOk}
                     handleCancel={this.handleModalCancel}

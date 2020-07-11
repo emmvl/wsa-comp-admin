@@ -154,6 +154,7 @@ const initialState = {
     error: null,
     result: null,
     status: 0,
+    isFetchingMatchList: false,
     liveScoreMatchListData: [],
     liveScoreMatchList: [],
     addEditMatch: object,
@@ -268,7 +269,7 @@ function liveScoreMatchReducer(state = initialState, action) {
     switch (action.type) {
         //LIVESCORE Match LIST
         case ApiConstants.API_LIVE_SCORE_MATCH_LIST_LOAD:
-            return { ...state, onLoad: true };
+            return { ...state, onLoad: true, isFetchingMatchList: true };
 
         case ApiConstants.API_LIVE_SCORE_MATCH_LIST_SUCCESS:
 
@@ -276,6 +277,7 @@ function liveScoreMatchReducer(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
+                isFetchingMatchList: false,
                 liveScoreMatchListPage: action.result.page ? action.result.page.currentPage : 1,
                 liveScoreMatchListTotalCount: action.result.page ? action.result.page.totalCount : 0,
                 status: action.status,
