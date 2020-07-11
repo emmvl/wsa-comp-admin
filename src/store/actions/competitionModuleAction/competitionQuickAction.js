@@ -93,10 +93,10 @@ function updateQuickCompetitionAction(payload, year, buttonPressed) {
     return action
 }
 
-function updateQuickCompetitionDraws(sourceArray, targetArray, sourceDrawsId, targetDrawsId) {
+function updateQuickCompetitionDraws(sourceArray, targetArray, sourceDrawsId, targetDrawsId, freeObject, key) {
     const action = {
         type: ApiConstants.API_UPDATE_QUICKCOMPETITION_DRAWS,
-        sourceArray, targetArray, sourceDrawsId, targetDrawsId
+        sourceArray, targetArray, sourceDrawsId, targetDrawsId, freeObject, key
     }
     return action
 }
@@ -109,17 +109,17 @@ function updateSelectedTeamPlayer(value, key) {
     return action
 }
 
-function quickCompImportDataCleanUpAction(key){
-    const action ={
-        type:ApiConstants.QUICKCOMP_IMPORT_DATA_CLEAN,
+function quickCompImportDataCleanUpAction(key) {
+    const action = {
+        type: ApiConstants.QUICKCOMP_IMPORT_DATA_CLEAN,
         key
     }
     return action
 }
 
-function quickCompetitionPlayerImportAction(payload){
-    const action={
-        type:ApiConstants.QUICKCOMP_IMPORT_DATA_LOAD,
+function quickCompetitionPlayerImportAction(payload) {
+    const action = {
+        type: ApiConstants.QUICKCOMP_IMPORT_DATA_LOAD,
         payload
     }
     return action

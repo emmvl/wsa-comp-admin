@@ -1,1 +1,1 @@
-photoUrl,id,firstName,lastName,dateOfBirth,division,team,phoneNumber
+id,userId,firstName,lastName,photoUrl,email,competitionId,teamId,dateOfBirth,phoneNumber,mnbPlayerId,nameFilter,positionId,shirt,inviteStatus,team,competition,user
