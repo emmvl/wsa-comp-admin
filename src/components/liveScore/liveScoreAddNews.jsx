@@ -386,7 +386,6 @@ class LiveScoreAddNews extends Component {
             <div className="content-view pt-4">
                 <Form.Item >
                     {getFieldDecorator('news_Title', {
-                        normalize: (input) => captializedString(input),
                         rules: [{ required: true, message: ValidationConstants.newsValidation[0] }],
                     })(
                         <InputWithHead
@@ -396,6 +395,9 @@ class LiveScoreAddNews extends Component {
                             name={'newsTitle'}
                             onChange={(event) => this.props.liveScoreUpdateNewsAction(captializedString(event.target.value), "title")}
                             value={editData.title}
+                            onBlur={(i) => this.props.form.setFieldsValue({
+                                'news_Title': captializedString(i.target.value)
+                            })}
                         />
                     )}
                 </Form.Item>
@@ -407,7 +409,6 @@ class LiveScoreAddNews extends Component {
 
                 <Form.Item >
                     {getFieldDecorator('author', {
-                        normalize: (input) => captializedString(input),
                         rules: [{ required: true, message: ValidationConstants.newsValidation[1] }],
                     })(
                         <InputWithHead
@@ -416,8 +417,9 @@ class LiveScoreAddNews extends Component {
                             placeholder={AppConstants.enterAuthor}
                             name={'authorName'}
                             onChange={(event) => this.props.liveScoreUpdateNewsAction(captializedString(event.target.value), "author")}
-                        // value={'xyz'}
-                        // {editData.author}
+                            onBlur={(i) => this.props.form.setFieldsValue({
+                                'author': captializedString(i.target.value)
+                            })}
                         />
                     )}
                 </Form.Item>

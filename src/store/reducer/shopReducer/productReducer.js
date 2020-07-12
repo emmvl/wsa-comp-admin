@@ -4,58 +4,89 @@ import { isArrayNotEmpty } from "../../../util/helpers";
 // dummy object of product detail
 const defaultAddProductObject = {
     productName: "",
-    cost: 0,
     description: "",
-    price: 0,
-    type: "",
     affiliates: {
         "direct": 1,
         "firstLevel": 0,
         "secondLevel": 0
     },
-    image: "",
+    price: 0,
+    cost: 0,
     tax: 0,
     invetoryTracking: true,
-    deliveryType: "",
+    barcode: "",
+    skuCode: "",
     quantity: 0,
+    deliveryType: "",
+    type: {
+        typeName: "",
+        id: 0,
+    },
     width: 0,
-    height: 0,
     length: 0,
+    height: 0,
     weight: 0,
-    createByOrg: 1,
     variants: [
         {
-            "name": "",
-            "options": [
+            name: "",
+            options: [
                 {
-                    "optionName": "",
-                    "properties": {
-                        "price": 0,
-                        "SKU": "",
-                        "barcode": "",
-                        "quantity": 0
+                    optionName: "",
+                    properties: {
+                        price: 0,
+                        cost: 0,
+                        skuCode: "",
+                        barcode: "",
+                        quantity: 0
                     }
                 }
             ]
         }
     ],
-    variantsChecked: false,
-    purchaseOutOfStock: false,
+    images: [],
+    availableIfOutOfStock: 0,
     taxApplicable: false,
+    variantsChecked: false,
 }
+
 
 const initialState = {
     onLoad: false,
     error: null,
     result: null,
     status: 0,
-    productDeatilData: defaultAddProductObject,
+    productDetailData: defaultAddProductObject,
     productListingData: [],
     productListingTotalCount: 1,
-    productListingCurrentPage:1,
+    productListingCurrentPage: 1,
     typesProductList: [], //////reference types in add product screen for the type dropdown
+    getDetailsLoad: false,
+    getImages: [],
+    imageUrls: [],
 };
 
+////adding extra parameters in the productDetailData
+function makeDetailDataObject(data) {
+    let productData = data
+    productData['variantsChecked'] = isArrayNotEmpty(productData.variants) ? true : false
+    productData['taxApplicable'] = productData.tax > 0 ? true : false
+    return productData
+}
+
+////making image urls to display
+function getImageUrls(images) {
+    let displayImagesUrls = []
+    if (isArrayNotEmpty(images)) {
+        for (let i in images) {
+            let object = {
+                "image": images[i].url,
+                "id": images[i].id
+            }
+            displayImagesUrls.push(object)
+        }
+    }
+    return displayImagesUrls
+}
 
 function shopProductState(state = initialState, action) {
     switch (action.type) {
@@ -86,7 +117,7 @@ function shopProductState(state = initialState, action) {
                 ...state,
                 productListingData: isArrayNotEmpty(action.result.result) ? action.result.result : [],
                 productListingTotalCount: action.result.page ? action.result.page.totalCount : 1,
-                productListingCurrentPage:action.result.page ? action.result.page.currentPage : 1,
+                productListingCurrentPage: action.result.page ? action.result.page.currentPage : 1,
                 onLoad: false,
                 status: action.status,
                 error: null
@@ -97,7 +128,6 @@ function shopProductState(state = initialState, action) {
             return { ...state, onLoad: true, error: null };
 
         case ApiConstants.API_ADD_SHOP_PRODUCT_SUCCESS:
-            console.log("API_ADD_SHOP_PRODUCT_SUCCESS", action.result)
             return {
                 ...state,
                 onLoad: false,
@@ -108,16 +138,29 @@ function shopProductState(state = initialState, action) {
         //////onchange Add/Edit product details
         case ApiConstants.SHOP_PRODUCT_DETAILS_ONCHANGE:
             if (action.key === "variantName") {
-                state.productDeatilData["variants"][action.index]["name"] = action.data
+                state.productDetailData["variants"][action.index]["name"] = action.data
             }
             if (action.key === "variantOption") {
-                state.productDeatilData["variants"][action.index]["options"] = action.data
+                state.productDetailData["variants"][action.index]["options"] = action.data
             }
-            if (action.key == "type") {
-                state.productDeatilData["type"] = action.data
+            if (action.key === "typeOnChange") {
+                let typeListArray = JSON.parse(JSON.stringify(state.typesProductList))
+                let typeIndex = typeListArray.findIndex(x => x.id == action.data)
+                if (typeIndex >= 0) {
+                    let typeObject = typeListArray[typeIndex]
+                    state.productDetailData["type"] = typeObject
+                }
+            }
+            if (action.key === "price") {
+                state.productDetailData[action.key] = action.data
+                state.productDetailData["tax"] = state.productDetailData.taxApplicable === true ? JSON.parse(action.data) * 10 / 100 : 0
+            }
+            if (action.key === "taxApplicable") {
+                state.productDetailData[action.key] = action.data
+                state.productDetailData["tax"] = action.data === true ? JSON.parse(state.productDetailData.price) * 10 / 100 : 0
             }
             else {
-                state.productDeatilData[action.key] = action.data
+                state.productDetailData[action.key] = action.data
             }
 
             return {
@@ -137,20 +180,6 @@ function shopProductState(state = initialState, action) {
                 error: null
             };
 
-        /////////add type in the typelist array in reducer
-        case ApiConstants.SHOP_ADD_TYPE_IN_TYPELIST_REDUCER:
-            let newTypeObject = {
-                id: (state.typesProductList.length) + 1,
-                typeName: action.data,
-                isDeleted: 0
-            }
-            // let typesProductListArray = state.typesProductList
-            // let TypeArray = JSON.parse(JSON.stringify(typesProductList))
-            state.typesProductList.push(newTypeObject)
-            return {
-                ...state,
-            };
-
         //////////////////delete product from the product listing API 
         case ApiConstants.API_DELETE_SHOP_PRODUCT_LOAD:
             return { ...state, onLoad: true, error: null };
@@ -165,50 +194,55 @@ function shopProductState(state = initialState, action) {
 
         ///clearing particular reducer data
         case ApiConstants.SHOP_PRODUCT_CLEARING_REDUCER_DATA:
-            if (action.dataName === "productDeatilData") {
+            if (action.dataName === "productDetailData") {
                 // dummy object of product detail
                 const defaultAddProductObject = {
                     productName: "",
-                    cost: 0,
                     description: "",
-                    price: 0,
-                    type: "",
                     affiliates: {
                         "direct": 1,
                         "firstLevel": 0,
                         "secondLevel": 0
                     },
-                    image: "",
+                    price: 0,
+                    cost: 0,
                     tax: 0,
                     invetoryTracking: true,
-                    deliveryType: "",
+                    barcode: "",
+                    skuCode: "",
                     quantity: 0,
+                    deliveryType: "",
+                    type: {
+                        typeName: "",
+                        id: 0,
+                    },
                     width: 0,
-                    height: 0,
                     length: 0,
+                    height: 0,
                     weight: 0,
-                    createByOrg: 1,
                     variants: [
                         {
-                            "name": "",
-                            "options": [
+                            name: "",
+                            options: [
                                 {
-                                    "optionName": "",
-                                    "properties": {
-                                        "price": 0,
-                                        "SKU": "",
-                                        "barcode": "",
-                                        "quantity": 0
+                                    optionName: "",
+                                    properties: {
+                                        price: 0,
+                                        cost: 0,
+                                        skuCode: "",
+                                        barcode: "",
+                                        quantity: 0
                                     }
                                 }
                             ]
                         }
                     ],
-                    variantsChecked: false,
-                    purchaseOutOfStock: false,
+                    images: [],
+                    availableIfOutOfStock: 0,
                     taxApplicable: false,
+                    variantsChecked: false,
                 }
-                state.productDeatilData = defaultAddProductObject
+                state.productDetailData = defaultAddProductObject
             }
             return {
                 ...state, error: null
@@ -220,6 +254,37 @@ function shopProductState(state = initialState, action) {
             return { ...state, onLoad: true, error: null };
 
         case ApiConstants.API_DELETE_SHOP_PRODUCT_VARIANT_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
+
+        ////////////add type in the typelist array in from the API
+        case ApiConstants.API_SHOP_ADD_TYPE_IN_TYPELIST_LOAD:
+            return { ...state, onLoad: true, error: null };
+
+        case ApiConstants.API_SHOP_ADD_TYPE_IN_TYPELIST_SUCCESS:
+            state.typesProductList.push(action.result)
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
+
+        //////////////product details on id API
+        case ApiConstants.API_SHOP_GET_PRODUCT_DETAILS_BY_ID_LOAD:
+            return { ...state, onLoad: true, getDetailsLoad: true, error: null };
+
+        case ApiConstants.API_SHOP_GET_PRODUCT_DETAILS_BY_ID_SUCCESS:
+            state.productDetailData = makeDetailDataObject(action.result)
+            let images = action.result.images
+            state.getImages = images
+            let displayUrls = getImageUrls(images)
+            state.imageUrls = displayUrls
+            state.getDetailsLoad = false
             return {
                 ...state,
                 onLoad: false,

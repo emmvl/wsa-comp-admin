@@ -131,7 +131,7 @@ import UmpireRoaster from "../components/umpire/umpireRoaster"
 import UmpireImport from "../components/umpire/umpireImport"
 import Umpire from "../components/umpire/umpire"
 import ListProducts from "../components/shop/listProducts";
-import AddProduct from "../components/shop/addproduct";
+import AddProduct from "../components/shop/addProduct";
 import PaymentDashboard from "../components/registration/paymentDashboard"
 
 import OrderSummary from "../components/shop/orderSummary"
@@ -147,6 +147,8 @@ import RegistrationMainDashboard from "../components/registration/registrationMa
 import LiveScoreLadderAdjustment from "../components/liveScore/liveScoreLadderAdjustment";
 import LiveScorePositionTrackReport from "../components/liveScore/liveScorePositionTrackReport";
 
+import RegistrationChange from "../components/registration/registrationChange"
+import MultifiledDraws from "../components/competition/multifiledDraws"
 
 const lazyLoad = Component => {
   const lazy = props => {
@@ -766,6 +768,16 @@ class Routes extends React.Component {
         <PrivateRoute
           path="/liveScorePositionTrackReport"
           component={lazyLoad(LiveScorePositionTrackReport)}
+        />
+
+        <PrivateRoute
+          path="/registrationChange"
+          component={lazyLoad(RegistrationChange)}
+        />
+
+        <PrivateRoute
+          path="/multifiledDraws"
+          component={lazyLoad(MultifiledDraws)}
         />
 
         <Route path="/" component={lazyLoad(NotFound)} />

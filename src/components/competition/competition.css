@@ -70,8 +70,8 @@
 }
 
 .comp-player-table-tag {
-  background-color: var(--app-ebf0f3);
-  color: var(--app-77778f);
+  background-color: var(--app-color);
+  color: var(--app-white);
   font-family: inter-semi-bold;
   font-weight: 600;
   font-size: 10px;
@@ -268,16 +268,14 @@
   border-radius: 10px;
   padding-right: 24px;
   padding-left: 24px;
-  border: 1px solid;
-  border-color: var(--app-d9d9d9);
-  border-width: 1px;
+  border: 1px solid var(--app-d9d9d9);
 }
 
 .com-year-select-heading-view {
-  width: "100%";
-  display: "flex";
-  flex-direction: "row";
-  align-items: "center";
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   margin-left: 5px;
 }
 
@@ -497,10 +495,10 @@ a.collapsed i {
   font-weight: 400;
   line-height: 1.25em;
   color: inherit;
-  margin: 0px;
+  margin: 0;
   cursor: auto;
   background-color: white;
-  white-space:'pre-line'
+  white-space: pre-line;
 }
 
 .Content_Container__xhjD8 {
@@ -522,7 +520,7 @@ a.collapsed i {
 }
 
 .ant-table-thead > tr > th .anticon-filter, .ant-table-thead > tr > th .ant-table-filter-icon {
-  width: 0px;
+  width: 0;
 }
 
 
@@ -550,6 +548,13 @@ a.collapsed i {
   font-family: "Inter-Medium";
   border-radius: 5px;
 }
+.quick-comp-canvas{
+  height: 40px;
+    line-height: 40px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
 .fixture-main-canvas.Draws .box {
   min-width: 100px;
   height: 53px;

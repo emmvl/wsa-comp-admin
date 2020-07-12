@@ -122,7 +122,7 @@ class RegistrationInvoice extends Component {
                     />
                 </div>
 
-                <div className="invoice-col-View-30 pb-0 pl-0 pr-0" >
+                <div className="invoice-col-view-30 pb-0 pl-0 pr-0" >
                     <div>
                         < div className="row" >
                             <div className="col-sm invoice-description"  >
@@ -172,7 +172,7 @@ class RegistrationInvoice extends Component {
                         />
                     }
                 </div>
-                <div className="invoice-col-View-30 pb-0 pl-0 pr-0" >
+                <div className="invoice-col-view-30 pb-0 pl-0 pr-0" >
                     <div>
                         <div className="row">
                             <div className="col-sm invoice-description" >
@@ -220,7 +220,7 @@ class RegistrationInvoice extends Component {
                         />
                     }
                 </div>
-                <div className="invoice-col-View-30 pb-0 pl-0 pr-0" >
+                <div className="invoice-col-view-30 pb-0 pl-0 pr-0" >
                     <div>
                         <div className="row">
                             <div className="col-sm invoice-description" >
@@ -281,7 +281,7 @@ class RegistrationInvoice extends Component {
                             heading={"Description"}
                         />
                     </div>
-                    <div className="invoice-col-View-30 pb-0 pl-0 pr-0" >
+                    <div className="invoice-col-view-30 pb-0 pl-0 pr-0" >
                         <div className="invoice-row-view " >
                             <div className="col-sm invoice-description" >
                                 <InputWithHead
@@ -386,7 +386,7 @@ class RegistrationInvoice extends Component {
                                         heading={"Total"}
                                     />
                                 </div>
-                                <div className="invoice-total-Amount">
+                                <div className="invoice-total-amount">
                                     <InputWithHead
                                         required="invoice"
                                         heading={"$" + totalAmount ? (totalAmount.totalSum).toFixed(2) : "N/A"}
@@ -534,7 +534,7 @@ class RegistrationInvoice extends Component {
 
                 </div>
                 <div className="row">
-                    <div className="col-sm pt-5 invoiceImage">
+                    <div className="col-sm pt-5 invoice-image">
                         <label>
                             <img
                                 src={AppImages.netballImages}
@@ -549,7 +549,7 @@ class RegistrationInvoice extends Component {
                             />
                         </label>
                     </div>
-                    <div className="col-sm pt-5 invoiceImageMain ">
+                    <div className="col-sm pt-5 invoice-image-main ">
                         <label>
                             <img
                                 src={AppImages.netballLogoMain}

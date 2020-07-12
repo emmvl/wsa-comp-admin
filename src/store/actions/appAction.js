@@ -67,9 +67,10 @@ function getCompetitionTypeListAction(year) {
 //   return action;
 // }
 
-function getVenuesTypeAction() {
+function getVenuesTypeAction(key) {
   const action = {
-    type: ApiConstants.API_REG_FORM_VENUE_LOAD
+    type: ApiConstants.API_REG_FORM_VENUE_LOAD,
+    key:key
   };
   return action;
 }

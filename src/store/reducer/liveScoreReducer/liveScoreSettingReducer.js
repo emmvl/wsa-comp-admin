@@ -1,6 +1,6 @@
 import ApiConstants from '../../../themes/apiConstants'
 import { actionChannel } from '@redux-saga/core/effects'
-import { stat } from 'fs';
+import { isArrayNotEmpty, captializedString } from "../../../util/helpers";
 const initialState = {
     loader: false,
     form: {
@@ -49,7 +49,8 @@ const initialState = {
     playerBorrowed: '',
     borrowedPlayer: 'GAMES',
     gamesBorrowedThreshold: null,
-    linkedCompetitionId: null
+    linkedCompetitionId: null,
+    inputNumberValue: null
 }
 
 
@@ -171,6 +172,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 borrowedPlayer: payload.playerBorrowingType,
                 gamesBorrowedThreshold: payload.gamesBorrowedThreshold,
                 linkedCompetitionId: payload.linkedCompetitionId,
+                inputNumberValue: payload.gamesBorrowedThreshold
 
             }
         case ApiConstants.LiveScore_SETTING_VIEW_ERROR:
@@ -204,14 +206,13 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 state[keys] = Data
 
                 if (Data == 'MINUTES') {
-                    state.gamesBorrowedThreshold = null
+                    state.gamesBorrowedThreshold = state.inputNumberValue
                 }
 
             } else if (keys == 'number') {
                 state.gamesBorrowedThreshold = Data
 
             } else if (keys == 'linkedCompetitionId') {
-                console.log(Data, 'linkedCompetitionId')
                 state.linkedCompetitionId = Data
 
             } else if (keys == 'recordUmpire') {

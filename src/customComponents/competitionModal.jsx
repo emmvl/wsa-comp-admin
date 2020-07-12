@@ -60,15 +60,14 @@ class CompetitionModal extends React.Component {
                         onSubmit={this.onOKsubmit}
                         noValidate="noValidate">
 
-                        <div style={{ display: 'flex' }}>
+                        {/* <div style={{ display: 'flex' }}>
                             < span style={{ fontSize: 16 }} className={`comment-heading`}>{'"Enter competition Name"'} {" "} {'or'}{" "}   {'Select an existing competition'}   </span>
-                        </div>
+                        </div> */}
                         <div className="inside-container-view mt-3">
                             < div className="col-sm pl-0 pb-2">
                                 <Form.Item
                                 >
                                     {getFieldDecorator(`compName`, {
-                                        normalize: (input) => captializedString(input),
                                         rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired },
                                         ],
                                     })(
@@ -77,6 +76,9 @@ class CompetitionModal extends React.Component {
                                             heading={AppConstants.competition_name}
                                             placeholder={"Enter competition Name"}
                                             onChange={(e) => competitionChange(e)}
+                                            onBlur={(i) => this.props.form.setFieldsValue({
+                                                'compName': captializedString(i.target.value)
+                                            })}
                                         ></InputWithHead>
                                     )}
                                 </Form.Item>

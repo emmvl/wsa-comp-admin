@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Checkbox, Select, Breadcrumb, InputNumber, Form, Modal } from 'antd';
+import { Layout, Button, Checkbox, Select, Breadcrumb, InputNumber, Form, Modal, message } from 'antd';
 import './shop.css';
 import { NavLink } from 'react-router-dom';
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -16,15 +16,17 @@ import {
     getTypesOfProductAction,
     addNewTypeAction,
     deleteProductVariantAction,
+    getProductDetailsByIdAction,
+    clearProductReducer,
 } from "../../store/actions/shopAction/productAction"
 import InputWithHead from "../../customComponents/InputWithHead";
-import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString, captializedString } from "../../util/helpers";
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, ContentState, convertFromHTML, } from 'draft-js';
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import SortableImage from '../../customComponents/sortableImageComponent';
 import ValidationConstants from '../../themes/validationConstant';
-
+import { checkOrganisationLevel } from "../../util/permissions";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -44,8 +46,10 @@ class AddProduct extends Component {
             newProductType: "",
             visible: false,
             loading: false,
+            getLoad: false,
+            orgLevel: AppConstants.state,
         }
-
+        props.clearProductReducer("productDetailData")
     }
 
 
@@ -53,10 +57,19 @@ class AddProduct extends Component {
         this.apiCalls();
         this.setDetailsFieldValue();
         this.setEditorFieldValue();
+        checkOrganisationLevel().then((value) => (
+            this.setState({ orgLevel: value })
+        ))
     }
 
     apiCalls = () => {
         this.props.getTypesOfProductAction()
+        let productId = null
+        productId = this.props.location.state ? this.props.location.state.id : null
+        if (productId) {
+            this.props.getProductDetailsByIdAction(productId)
+            this.setState({ getLoad: true })
+        }
     }
 
     componentDidUpdate(nextProps) {
@@ -67,13 +80,19 @@ class AddProduct extends Component {
                 history.push('/listProducts');
             }
         }
+        if (shopProductState.getDetailsLoad === false && this.state.getLoad === true) {
+            let imageUrls = shopProductState.imageUrls
+            this.setDetailsFieldValue();
+            this.setEditorFieldValue();
+            this.setState({ getLoad: false, urls: imageUrls });
+        }
     }
 
     //////post the product details
     addProductPostAPI = (e) => {
         e.preventDefault();
-        let { productDeatilData } = JSON.parse(JSON.stringify(this.props.shopProductState));
-        let description = JSON.parse(JSON.stringify(productDeatilData.description))
+        let { productDetailData } = JSON.parse(JSON.stringify(this.props.shopProductState));
+        let description = JSON.parse(JSON.stringify(productDetailData.description))
         let descriptionText = ""
         if (description) {
             let descriptionStringArr = []
@@ -82,7 +101,7 @@ class AddProduct extends Component {
             }
             descriptionText = descriptionStringArr.join(`<br/>`)
         }
-        productDeatilData.description = descriptionText
+        productDetailData.description = descriptionText
         let { urls, files } = this.state
         let imagesFiles = []
         for (let i in urls) {
@@ -92,35 +111,44 @@ class AddProduct extends Component {
                 }
             }
         }
+        if (productDetailData.variantsChecked === false) {
+            productDetailData.variants = []
+        }
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 let formData = new FormData();
-                formData.append('params', JSON.stringify(productDeatilData));
+                formData.append('params', JSON.stringify(productDetailData));
                 if (isArrayNotEmpty(imagesFiles)) {
                     for (let i in imagesFiles)
                         formData.append("productPhotos", imagesFiles[i])
                 }
-                this.props.addProductAction(formData);
-                this.setState({ loading: true });
+                let affiliates = productDetailData.affiliates
+                let affiliatesNotSelected = Object.keys(affiliates).every(k => affiliates[k] === 0);
+                if (affiliatesNotSelected) {
+                    message.error(ValidationConstants.pleaseSelectAffiliate);
+                } else {
+                    this.props.addProductAction(formData);
+                    this.setState({ loading: true });
+                }
             }
         })
     }
 
     setDetailsFieldValue() {
-        let { productDeatilData } = this.props.shopProductState;
+        let { productDetailData } = this.props.shopProductState;
         this.props.form.setFieldsValue({
-            productName: productDeatilData.productName,
+            productName: productDetailData.productName,
         });
-        if (productDeatilData.deliveryType === "shipping") {
+        if (productDetailData.deliveryType === "shipping") {
             this.props.form.setFieldsValue({
-                width: productDeatilData.width,
-                length: productDeatilData.length,
-                height: productDeatilData.height,
-                weight: productDeatilData.weight,
+                width: productDetailData.width,
+                length: productDetailData.length,
+                height: productDetailData.height,
+                weight: productDetailData.weight,
             });
         }
-        let variants = productDeatilData.variants
-        if (productDeatilData.variantsChecked === true) {
+        let variants = productDetailData.variants
+        if (productDetailData.variantsChecked === true) {
             variants.length > 0 &&
                 variants.map((item, index) => {
                     let variantName = `variants${index}name`;
@@ -133,27 +161,11 @@ class AddProduct extends Component {
 
 
     setEditorFieldValue() {
-        let { productDeatilData } = this.props.shopProductState;
-        let body = isNotNullOrEmptyString(productDeatilData.description) ? EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(productDeatilData.description))) : ""
+        let { productDetailData } = this.props.shopProductState;
+        let body = isNotNullOrEmptyString(productDetailData.description) ? EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(productDetailData.description))) : ""
         this.setState({ editorState: body })
     }
 
-    ///////view for breadcrumb
-    headerView = () => {
-        return (
-            <div className="header-view">
-                <Header
-                    className="form-header-view header-transaparent"
-                >
-                    <Breadcrumb separator=">">
-                        <Breadcrumb.Item className="breadcrumb-add">
-                            {AppConstants.productDetails}
-                        </Breadcrumb.Item>
-                    </Breadcrumb>
-                </Header>
-            </div>
-        );
-    };
 
     onEditorStateChange = (editorState) => {
         this.setState({
@@ -161,45 +173,15 @@ class AddProduct extends Component {
         });
     };
 
-    EditorView = () => {
-        const { editorState } = this.state;
-        return (
-            <div className="fluid-width mt-3 shop-decription-editor-main-div">
-                <div className="livescore-editor-news col-sm">
-                    <Editor
-                        editorState={editorState}
-                        wrapperClassName="demo-wrapper"
-                        editorClassName="demo-editor"
-                        toolbarClassName="toolbar-class"
-                        placeholder={AppConstants.description}
-                        onChange={(e) =>
-                            this.props.onChangeProductDetails(
-                                e.blocks,
-                                'description'
-                            )
-                        }
-                        onEditorStateChange={this.onEditorStateChange}
-                        toolbar={{
-                            inline: { inDropdown: true },
-                            list: { inDropdown: true },
-                            textAlign: { inDropdown: true },
-                            link: { inDropdown: true },
-                            history: { inDropdown: true },
-                        }}
-                    />
-                </div>
-            </div>
-        )
-    }
-
     handleOk = e => {
-        this.props.addNewTypeAction(this.state.newProductType)
+        if (this.state.newProductType.length > 0) {
+            this.props.addNewTypeAction(this.state.newProductType)
+        }
         this.setState({
             visible: false,
             newProductType: "",
         });
     };
-
 
     handleCancel = e => {
         this.setState({
@@ -215,8 +197,8 @@ class AddProduct extends Component {
 
     ////affiliateOnChange checkbox
     affiliateOnChange = (value, name) => {
-        let { productDeatilData } = this.props.shopProductState
-        let affiliatePostObject = productDeatilData.affiliates
+        let { productDetailData } = this.props.shopProductState
+        let affiliatePostObject = productDetailData.affiliates
         let assignedValue = value == true ? 1 : 0
         if (name === "Direct") {
             affiliatePostObject.direct = assignedValue
@@ -232,8 +214,8 @@ class AddProduct extends Component {
 
     /////for displaying checked or not checked in affiliate
     checkedAffiliates = (name) => {
-        let { productDeatilData } = this.props.shopProductState
-        let affiliate = productDeatilData.affiliates
+        let { productDetailData } = this.props.shopProductState
+        let affiliate = productDetailData.affiliates
         if (name === "Direct") {
             return affiliate.direct
         }
@@ -244,110 +226,6 @@ class AddProduct extends Component {
             return affiliate.secondLevel
         }
     }
-
-    ////////form content view
-    contentView = (getFieldDecorator) => {
-        let { productDeatilData, typesProductList } = this.props.shopProductState
-        console.log("productDeatilData", productDeatilData)
-        let affiliateArray = [
-            { id: 1, name: "Direct" },
-            { id: 2, name: "1st Level Affiliates - Association/ League" },
-            { id: 3, name: "2nd Level Affiliates - Club/School" }
-        ]
-        return (
-            <div className="content-view pt-4">
-                <Form.Item>
-                    {getFieldDecorator(
-                        `productName`,
-                        {
-                            rules: [
-                                {
-                                    required: true,
-                                    message:
-                                        ValidationConstants.enterTitleOfTheProduct,
-                                },
-                            ],
-                        }
-                    )(
-                        <InputWithHead
-                            required={"required-field "}
-                            heading={AppConstants.title}
-                            placeholder={AppConstants.enterTitle}
-                            onChange={(e) =>
-                                this.props.onChangeProductDetails(
-                                    e.target.value,
-                                    'productName'
-                                )
-                            }
-                        />
-                    )}
-                </Form.Item>
-
-                <InputWithHead heading={AppConstants.description}
-                />
-                {this.EditorView()}
-
-                <InputWithHead required="pt-5" heading={AppConstants.type} />
-                <Select
-                    className="shop-type-select"
-                    onChange={(value) =>
-                        this.props.onChangeProductDetails(
-                            value,
-                            'type'
-                        )
-                    }
-                    placeholder="Select"
-                    value={isNotNullOrEmptyString(productDeatilData.type) ? productDeatilData.type : []}
-                >
-                    {isArrayNotEmpty(typesProductList) && typesProductList.map(
-                        (item, index) => {
-                            return (
-                                <Option
-                                    key={'type' + item.id + index}
-                                    value={item.typeName}
-                                >
-                                    {item.typeName}
-                                </Option>
-                            );
-                        }
-                    )}
-                </Select>
-                <span className="input-heading-add-another" onClick={this.addAnotherProductType}>+{AppConstants.addType}</span>
-                <Modal
-                    className="add-membership-type-modal"
-                    title={AppConstants.addType}
-                    visible={this.state.visible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
-                >
-                    <InputWithHead
-                        required={"pt-0 mt-0"}
-                        heading={AppConstants.addType}
-                        placeholder={ValidationConstants.pleaseEnterProductType}
-                        onChange={(e) => this.setState({ newProductType: e.target.value })}
-                        value={this.state.newProductType}
-                    />
-
-                </Modal>
-                <InputWithHead required="pb-0" heading={AppConstants.affiliates} />
-                {affiliateArray.map((item, index) => {
-                    return (
-                        <div key={"affiliateArray" + index} >
-                            <Checkbox
-                                className="single-checkbox mt-3"
-                                checked={this.checkedAffiliates(item.name) === 1 ? true : false}
-                                onChange={(e) =>
-                                    this.affiliateOnChange(e.target.checked, item.name)
-                                }
-                            >
-                                {item.name}
-                            </Checkbox>
-                        </div>
-                    );
-                })}
-            </div >
-        );
-    };
 
     handleDrags = (e) => {
         e.preventDefault();
@@ -432,6 +310,267 @@ class AddProduct extends Component {
         </>
     )
 
+    ///////on change varients name 
+    onVariantNameChange = (value) => {
+        let varientNameIndex = 0
+        this.props.onChangeProductDetails(value, 'variantName', varientNameIndex)
+    }
+
+    onChangeVariantsCheckBox = async (e) => {
+        await this.props.onChangeProductDetails(
+            e.target.checked,
+            'variantsChecked'
+        );
+        this.setDetailsFieldValue();
+    }
+
+    ///////on change varients name 
+    onVariantOptionOnChange = (value, key, index, subIndex) => {
+        let { productDetailData } = this.props.shopProductState
+        let varientOptions = productDetailData.variants[index].options
+        let varientOptionObject = varientOptions[subIndex]
+        switch (key) {
+            case "optionName":
+                varientOptionObject.optionName = value
+                break;
+            case "price":
+                varientOptionObject.properties.price = value
+                break;
+            case "cost":
+                varientOptionObject.properties.cost = value
+                break;
+            case "skuCode":
+                varientOptionObject.properties.skuCode = value
+                break;
+            case "barcode":
+                varientOptionObject.properties.barcode = value
+                break;
+            case "quantity":
+                varientOptionObject.properties.quantity = value
+                break;
+            default:
+                break;
+        }
+        varientOptions[subIndex] = varientOptionObject
+        this.props.onChangeProductDetails(varientOptions, 'variantOption', index)
+    }
+
+    ///////add new varient option
+    addVariantOption = (index, subIndex, key) => {
+        let varientOptionObject = {
+            "optionName": "",
+            "properties": {
+                "price": 0,
+                "SKU": "",
+                "barcode": "",
+                "quantity": 0
+            }
+        }
+        let { productDetailData } = this.props.shopProductState
+        let varientOptions = productDetailData.variants[index].options
+        if (key === "add") {
+            varientOptions.push(varientOptionObject)
+        }
+        if (key === "remove") {
+            this.showDeleteConfirm("00", index, subIndex)
+            // varientOptions.splice(subIndex, 1)
+        }
+        this.props.onChangeProductDetails(varientOptions, 'variantOption', index)
+
+    }
+
+
+    //////delete the product variant
+    showDeleteConfirm = (optionId, index, subIndex) => {
+        let this_ = this
+        confirm({
+            title: AppConstants.deleteProduct,
+            content: AppConstants.deleteProductDescription,
+            okText: 'Confirm',
+            okType: 'danger',
+            cancelText: 'Cancel',
+            onOk() {
+                if (optionId) {
+                    // this_.props.deleteProductVariantAction(optionId)
+                    let varientOptions = this_.props.shopProductState.productDetailData.variants[index].options
+                    varientOptions.splice(subIndex, 1)
+                    this_.props.onChangeProductDetails(varientOptions, 'variantOption', index)
+                }
+            },
+            onCancel() {
+            },
+        });
+    }
+
+
+
+    onChangeShippingCheckBox = async (e) => {
+        await this.props.onChangeProductDetails(
+            e.target.checked == true ? "shipping" : "",
+            'deliveryType'
+        );
+        this.setDetailsFieldValue();
+    }
+
+    ///////view for breadcrumb
+    headerView = () => {
+        return (
+            <div className="header-view">
+                <Header
+                    className="form-header-view header-transaparent"
+                >
+                    <Breadcrumb separator=">">
+                        <Breadcrumb.Item className="breadcrumb-add">
+                            {AppConstants.productDetails}
+                        </Breadcrumb.Item>
+                    </Breadcrumb>
+                </Header>
+            </div>
+        );
+    };
+
+    editorView = () => {
+        const { editorState } = this.state;
+        return (
+            <div className="fluid-width mt-3 shop-decription-editor-main-div">
+                <div className="livescore-editor-news col-sm">
+                    <Editor
+                        editorState={editorState}
+                        wrapperClassName="demo-wrapper"
+                        editorClassName="demo-editor"
+                        toolbarClassName="toolbar-class"
+                        placeholder={AppConstants.description}
+                        onChange={(e) =>
+                            this.props.onChangeProductDetails(
+                                e.blocks,
+                                'description'
+                            )
+                        }
+                        onEditorStateChange={this.onEditorStateChange}
+                        toolbar={{
+                            inline: { inDropdown: true },
+                            list: { inDropdown: true },
+                            textAlign: { inDropdown: true },
+                            link: { inDropdown: true },
+                            history: { inDropdown: true },
+                        }}
+                    />
+                </div>
+            </div>
+        )
+    }
+
+    ////////form content view
+    contentView = (getFieldDecorator) => {
+        let { productDetailData, typesProductList } = this.props.shopProductState
+        console.log("productDetailData", productDetailData)
+        let affiliateArray = [
+            { id: 1, name: "Direct" },
+            { id: 2, name: "1st Level Affiliates - Association/ League" },
+            { id: 3, name: "2nd Level Affiliates - Club/School" }
+        ]
+        return (
+            <div className="content-view pt-4">
+                <Form.Item>
+                    {getFieldDecorator(
+                        `productName`,
+                        {
+                            rules: [
+                                {
+                                    required: true,
+                                    message:
+                                        ValidationConstants.enterTitleOfTheProduct,
+                                },
+                            ],
+                        }
+                    )(
+                        <InputWithHead
+                            required={"required-field "}
+                            heading={AppConstants.title}
+                            placeholder={AppConstants.enterTitle}
+                            onChange={(e) =>
+                                this.props.onChangeProductDetails(
+                                    captializedString(e.target.value),
+                                    'productName'
+                                )
+                            }
+                            onBlur={(i) => this.props.form.setFieldsValue({
+                                'productName': captializedString(i.target.value)
+                            })}
+                        />
+                    )}
+                </Form.Item>
+
+                <InputWithHead heading={AppConstants.description}
+                />
+                {this.editorView()}
+
+                <InputWithHead required="pt-5" heading={AppConstants.type} />
+                <Select
+                    className="shop-type-select"
+                    onChange={(value) =>
+                        this.props.onChangeProductDetails(
+                            value,
+                            'typeOnChange'
+                        )
+                    }
+                    placeholder="Select"
+                    value={isNotNullOrEmptyString(productDetailData.type.typeName) ? productDetailData.type.id : []}
+                >
+                    {isArrayNotEmpty(typesProductList) && typesProductList.map(
+                        (item, index) => {
+                            return (
+                                <Option
+                                    key={'type' + item.id + index}
+                                    value={item.id}
+                                >
+                                    {item.typeName}
+                                </Option>
+                            );
+                        }
+                    )}
+                </Select>
+                {
+                    this.state.orgLevel == "state" &&
+                    <span className="input-heading-add-another" onClick={this.addAnotherProductType}>+{AppConstants.addType}</span>
+                }
+                <Modal
+                    className="add-membership-type-modal"
+                    title={AppConstants.addType}
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                >
+                    <InputWithHead
+                        required={"pt-0 mt-0"}
+                        heading={AppConstants.addType}
+                        placeholder={ValidationConstants.pleaseEnterProductType}
+                        onChange={(e) => this.setState({ newProductType: e.target.value })}
+                        value={this.state.newProductType}
+                    />
+
+                </Modal>
+                <InputWithHead required="pb-0" heading={AppConstants.affiliates} />
+                {affiliateArray.map((item, index) => {
+                    return (
+                        <div key={"affiliateArray" + index} >
+                            <Checkbox
+                                className="single-checkbox mt-3"
+                                checked={this.checkedAffiliates(item.name) === 1 ? true : false}
+                                disabled={this.state.orgLevel == "Club" && item.id == 2 ? true : false}
+                                onChange={(e) =>
+                                    this.affiliateOnChange(e.target.checked, item.name)
+                                }
+                            >
+                                {item.name}
+                            </Checkbox>
+                        </div>
+                    );
+                })}
+            </div >
+        );
+    };
+
     ////////Image content view
     imageView = () => {
         const { urls, files, isDragging } = this.state;
@@ -472,10 +611,9 @@ class AddProduct extends Component {
 
     };
 
-
     ////////pricing content view
     pricingView = (getFieldDecorator) => {
-        let { productDeatilData } = this.props.shopProductState
+        let { productDetailData } = this.props.shopProductState
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.pricing}</span>
@@ -492,7 +630,7 @@ class AddProduct extends Component {
                                         'price'
                                     )
                                 }
-                                value={productDeatilData.price}
+                                value={productDetailData.price}
                                 type="number"
                             />
                         </div>
@@ -507,7 +645,7 @@ class AddProduct extends Component {
                                         'cost'
                                     )
                                 }
-                                value={productDeatilData.cost}
+                                value={productDetailData.cost}
                                 type="number"
                             />
                         </div>
@@ -515,7 +653,7 @@ class AddProduct extends Component {
                     <div className="pt-5">
                         <Checkbox
                             className="single-checkbox mt-0"
-                            checked={productDeatilData.taxApplicable}
+                            checked={productDetailData.taxApplicable}
                             onChange={(e) =>
                                 this.props.onChangeProductDetails(
                                     e.target.checked,
@@ -526,18 +664,19 @@ class AddProduct extends Component {
                             {AppConstants.chargeTaxesOnProduct}
                         </Checkbox>
                     </div>
-                    {productDeatilData.taxApplicable === true &&
+                    {productDetailData.taxApplicable === true &&
                         <InputWithHead
                             heading={AppConstants.tax}
                             placeholder={AppConstants.tax}
                             prefix="$"
+                            disabled={true}
                             onChange={(e) =>
                                 this.props.onChangeProductDetails(
                                     e.target.value,
                                     'tax'
                                 )
                             }
-                            value={productDeatilData.tax}
+                            value={productDetailData.tax}
                             type="number"
                         />}
                 </div>
@@ -546,10 +685,9 @@ class AddProduct extends Component {
     };
 
 
-
     ////////Inventory content view
     inventoryView = (getFieldDecorator) => {
-        let { productDeatilData } = this.props.shopProductState
+        let { productDetailData } = this.props.shopProductState
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.inventory}</span>
@@ -557,7 +695,7 @@ class AddProduct extends Component {
                     <div className="pt-4">
                         <Checkbox
                             className="single-checkbox mt-0"
-                            checked={productDeatilData.invetoryTracking}
+                            checked={productDetailData.invetoryTracking}
                             onChange={(e) =>
                                 this.props.onChangeProductDetails(
                                     e.target.checked,
@@ -568,19 +706,19 @@ class AddProduct extends Component {
                             {AppConstants.enableInventoryTracking}
                         </Checkbox>
                     </div>
-                    {productDeatilData.invetoryTracking && <>
+                    {productDetailData.invetoryTracking && <>
                         <div className="row">
                             <div className="col-sm">
                                 <InputWithHead
                                     heading={AppConstants.skuHeader}
-                                    placeholder={AppConstants.SKU}
+                                    placeholder={AppConstants.StockKeepingUnit}
                                     onChange={(e) =>
                                         this.props.onChangeProductDetails(
                                             e.target.value,
-                                            'SKU'
+                                            'skuCode'
                                         )
                                     }
-                                    value={productDeatilData.SKU}
+                                    value={productDetailData.skuCode}
                                 />
                             </div>
                             <div className="col-sm">
@@ -593,7 +731,7 @@ class AddProduct extends Component {
                                             'barcode'
                                         )
                                     }
-                                    value={productDeatilData.barcode}
+                                    value={productDetailData.barcode}
                                 />
                             </div>
                         </div>
@@ -610,7 +748,7 @@ class AddProduct extends Component {
                                 )}
                                 placeholder={'0'}
                                 min={0}
-                                value={productDeatilData.quantity}
+                                value={productDetailData.quantity}
                                 type="number"
                             />
                         </div>
@@ -618,11 +756,11 @@ class AddProduct extends Component {
                     <div className="pt-5">
                         <Checkbox
                             className="single-checkbox mt-0"
-                            checked={productDeatilData.purchaseOutOfStock}
+                            checked={productDetailData.availableIfOutOfStock === 1 ? true : false}
                             onChange={(e) =>
                                 this.props.onChangeProductDetails(
-                                    e.target.checked,
-                                    'purchaseOutOfStock'
+                                    e.target.checked === true ? 1 : 0,
+                                    'availableIfOutOfStock'
                                 )
                             }
                         >
@@ -635,95 +773,10 @@ class AddProduct extends Component {
         );
     };
 
-    ///////on change varients name 
-    onVariantNameChange = (value) => {
-        let varientNameIndex = 0
-        this.props.onChangeProductDetails(value, 'variantName', varientNameIndex)
-    }
-
-    onChangeVariantsCheckBox = async (e) => {
-        await this.props.onChangeProductDetails(
-            e.target.checked,
-            'variantsChecked'
-        );
-        this.setDetailsFieldValue();
-    }
-
-    ///////on change varients name 
-    onVariantOptionOnChange = (value, key, index, subIndex) => {
-        let { productDeatilData } = this.props.shopProductState
-        let varientOptions = productDeatilData.variants[index].options
-        let varientOptionObject = varientOptions[subIndex]
-        if (key === "optionName") {
-            varientOptionObject.optionName = value
-        }
-        if (key === "price") {
-            varientOptionObject.properties.price = value
-        }
-        if (key === "SKU") {
-            varientOptionObject.properties.SKU = value
-        }
-        if (key === "barcode") {
-            varientOptionObject.properties.barcode = value
-        }
-        if (key === "quantity") {
-            varientOptionObject.properties.quantity = value
-        }
-        varientOptions[subIndex] = varientOptionObject
-        this.props.onChangeProductDetails(varientOptions, 'variantOption', index)
-    }
-
-    ///////add new varient option
-    addVariantOption = (index, subIndex, key) => {
-        let varientOptionObject = {
-            "optionName": "",
-            "properties": {
-                "price": 0,
-                "SKU": "",
-                "barcode": "",
-                "quantity": 0
-            }
-        }
-        let { productDeatilData } = this.props.shopProductState
-        let varientOptions = productDeatilData.variants[index].options
-        if (key === "add") {
-            varientOptions.push(varientOptionObject)
-        }
-        if (key === "remove") {
-            this.showDeleteConfirm("00", index, subIndex)
-            // varientOptions.splice(subIndex, 1)
-        }
-        this.props.onChangeProductDetails(varientOptions, 'variantOption', index)
-
-    }
-
-
-    //////delete the product variant
-    showDeleteConfirm = (optionId, index, subIndex) => {
-        let this_ = this
-        confirm({
-            title: AppConstants.deleteProduct,
-            content: AppConstants.deleteProductDescription,
-            okText: 'Confirm',
-            okType: 'danger',
-            cancelText: 'Cancel',
-            onOk() {
-                if (optionId) {
-                    // this_.props.deleteProductVariantAction(optionId)
-                    let varientOptions = this_.props.shopProductState.productDeatilData.variants[index].options
-                    varientOptions.splice(subIndex, 1)
-                    this_.props.onChangeProductDetails(varientOptions, 'variantOption', index)
-                }
-            },
-            onCancel() {
-            },
-        });
-    }
-
     ////////Variants content view
     variantsView = (getFieldDecorator) => {
-        let { productDeatilData } = this.props.shopProductState
-        let varientOptionArray = productDeatilData.variants[0].options
+        let { productDetailData } = this.props.shopProductState
+        let varientOptionArray = isArrayNotEmpty(productDetailData.variants) ? productDetailData.variants[0].options : []
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.variants}</span>
@@ -731,13 +784,13 @@ class AddProduct extends Component {
                     <div className="pt-4">
                         <Checkbox
                             className="single-checkbox mt-0"
-                            checked={productDeatilData.variantsChecked}
+                            checked={productDetailData.variantsChecked}
                             onChange={(e) => this.onChangeVariantsCheckBox(e)}
                         >
                             {AppConstants.enableVariants}
                         </Checkbox>
                     </div>
-                    {productDeatilData.variantsChecked === true && <>
+                    {productDetailData.variantsChecked === true && <>
                         <div className="row">
                             <div className="col-sm-5">
                                 <Form.Item>
@@ -785,10 +838,20 @@ class AddProduct extends Component {
                                 </div>
                                 <div className="col-sm">
                                     <InputWithHead
+                                        heading={AppConstants.cost}
+                                        placeholder={AppConstants.cost}
+                                        prefix="$"
+                                        onChange={(e) => this.onVariantOptionOnChange(e.target.value, "cost", 0, subIndex)}
+                                        value={subItem.properties.cost}
+                                        type={"number"}
+                                    />
+                                </div>
+                                <div className="col-sm">
+                                    <InputWithHead
                                         heading={AppConstants.sku}
                                         placeholder={AppConstants.sku}
-                                        onChange={(e) => this.onVariantOptionOnChange(e.target.value, "SKU", 0, subIndex)}
-                                        value={subItem.properties.SKU}
+                                        onChange={(e) => this.onVariantOptionOnChange(e.target.value, "skuCode", 0, subIndex)}
+                                        value={subItem.properties.skuCode}
                                     />
                                 </div>
                                 <div className="col-sm">
@@ -834,26 +897,17 @@ class AddProduct extends Component {
         );
     };
 
-    onChangeShippingCheckBox = async (e) => {
-        await this.props.onChangeProductDetails(
-            e.target.checked == true ? "shipping" : "",
-            'deliveryType'
-        );
-        this.setDetailsFieldValue();
-    }
-
-
     ////////Shipping content view
     shippingView = (getFieldDecorator) => {
-        let { productDeatilData } = this.props.shopProductState
+        let { productDetailData } = this.props.shopProductState
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.shipping}</span>
-                <div className="row pt-4">
+                <div className="row pt-1">
                     <div className="col-sm-4" >
                         <Checkbox
-                            className="single-checkbox mt-0"
-                            checked={productDeatilData.deliveryType == "shipping" ? true : false}
+                            className="single-checkbox mt-3"
+                            checked={productDetailData.deliveryType == "shipping" ? true : false}
                             onChange={(e) => this.onChangeShippingCheckBox(e)}
                         >
                             {AppConstants.shipping}
@@ -861,8 +915,8 @@ class AddProduct extends Component {
                     </div>
                     <div className="col-sm-8" >
                         <Checkbox
-                            className="single-checkbox mt-0"
-                            checked={productDeatilData.deliveryType == "pickup" ? true : false}
+                            className="single-checkbox mt-3"
+                            checked={productDetailData.deliveryType == "pickup" ? true : false}
                             onChange={(e) =>
                                 this.props.onChangeProductDetails(
                                     e.target.checked == true ? "pickup" : "",
@@ -875,7 +929,7 @@ class AddProduct extends Component {
                     </div>
                 </div>
                 {
-                    productDeatilData.deliveryType == "shipping" && <>
+                    productDetailData.deliveryType == "shipping" && <>
                         <span className="form-heading mt-5">{AppConstants.productDimensionsWeight}</span>
                         <InputWithHead
                             heading={AppConstants.dimensions}
@@ -912,16 +966,13 @@ class AddProduct extends Component {
                                 </Form.Item>
                             </div>
                             <div className="col-sm-1 remove-cross-img-div">
-                                <div
-                                    style={{ cursor: 'pointer' }}>
-                                    <img
-                                        className="dot-image"
-                                        src={AppImages.crossImage}
-                                        alt=""
-                                        width="16"
-                                        height="16"
-                                    />
-                                </div>
+                                <img
+                                    className="dot-image"
+                                    src={AppImages.crossImage}
+                                    alt=""
+                                    width="16"
+                                    height="16"
+                                />
                             </div>
                             <div className="col-sm">
                                 <Form.Item>
@@ -953,16 +1004,13 @@ class AddProduct extends Component {
                                 </Form.Item>
                             </div>
                             <div className="col-sm-1 remove-cross-img-div">
-                                <div
-                                    style={{ cursor: 'pointer' }}>
-                                    <img
-                                        className="dot-image"
-                                        src={AppImages.crossImage}
-                                        alt=""
-                                        width="16"
-                                        height="16"
-                                    />
-                                </div>
+                                <img
+                                    className="dot-image"
+                                    src={AppImages.crossImage}
+                                    alt=""
+                                    width="16"
+                                    height="16"
+                                />
                             </div>
                             <div className="col-sm">
                                 <Form.Item>
@@ -1043,7 +1091,7 @@ class AddProduct extends Component {
                         <div className="reg-add-save-button">
                             <Button
                                 type="cancel-button"
-                                onClick={() => console.log("Cancel")}>{AppConstants.cancel}</Button>
+                                onClick={() => history.push('/listProducts')}>{AppConstants.cancel}</Button>
                         </div>
                     </div>
                     <div className="col-sm">
@@ -1095,6 +1143,8 @@ function mapDispatchToProps(dispatch) {
         getTypesOfProductAction,
         addNewTypeAction,
         deleteProductVariantAction,
+        getProductDetailsByIdAction,
+        clearProductReducer,
     }, dispatch)
 }
 

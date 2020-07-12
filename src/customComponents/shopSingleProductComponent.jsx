@@ -8,6 +8,20 @@ import { isArrayNotEmpty } from "../util/helpers";
 const { SubMenu } = Menu;
 class ShopSingleProductComponent extends React.Component {
 
+
+    productItemPriceCheck = (productItem) => {
+        let price = 0
+        let variantOptions = isArrayNotEmpty(productItem.variants) ? productItem.variants[0].options : []
+        if (isArrayNotEmpty(variantOptions)) {
+            price = Math.min.apply(null, variantOptions.map(function (item) {
+                return item.properties.price;
+            }))
+        } else {
+            price = productItem.price
+        }
+        return productItem.tax > 0 ? currencyFormat(price + productItem.tax) + " (inc GST)" : currencyFormat(price)
+    }
+
     render() {
         const { productItem } = this.props
         return (
@@ -32,7 +46,7 @@ class ShopSingleProductComponent extends React.Component {
                                 />
                             }
                         >
-                            <Menu.Item >
+                            <Menu.Item onClick={this.props.editOnclick} >
                                 <span>Edit</span>
                             </Menu.Item>
                             <Menu.Item onClick={this.props.deleteOnclick} >
@@ -44,9 +58,8 @@ class ShopSingleProductComponent extends React.Component {
                 <div className="product-img-view">
                     <img
                         src={isArrayNotEmpty(productItem.images) ? productItem.images[0].url : AppImages.squareImage}
-                        height="150"
-                        width="150"
                         name={'image'}
+                        className="product-img"
                         onError={ev => {
                             ev.target.src = AppImages.squareImage;
                         }}
@@ -54,30 +67,29 @@ class ShopSingleProductComponent extends React.Component {
                 </div>
                 <div className="product-text-view">
                     <span className="product-name">{productItem.productName}</span>
-                    <span className="product-price-text-style">{productItem.price ? currencyFormat(productItem.price) : "N/A"}</span>
-                    <span className="product-grey-detail-text">{productItem.type}</span>
-                    <div className="mt-4" >
-                        {productItem && isArrayNotEmpty(productItem.variantOptions) && productItem.variantOptions.map((subItem, subIndex) => {
-                            console.log("subItem", subItem)
+                    <span className="product-price-text-style">{" From " + this.productItemPriceCheck(productItem)}</span>
+                    <span className="product-type-grey-text">{productItem.type ? productItem.type : "N/A"}</span>
+                    <div className="mt-3" >
+                        {productItem && isArrayNotEmpty(productItem.variants) && productItem.variants.map((subItem, subIndex) => {
+                            let optionCount = subItem ? subItem.options.length : 0
+                            let checkOptionDisplayCount = optionCount <= 3 ? 2 : 1
                             return (
-                                <div key={"productItemvariantOptions" + subIndex}>
-                                    <div key={"variantOptions" + subIndex}>
-                                        <span className="product-name">{subItem.variantName ? subItem.variantName : ""}</span>
-                                    </div>
-                                    <>
+                                <div key={"productItemvariantOptions" + subIndex} className="text-left">
+                                    {subIndex === 0 && <>
                                         {subItem && isArrayNotEmpty(subItem.options) && subItem.options.map((subItemOption, subIndexOption) => {
                                             return (
-                                                <div className="d-flex flex-row" key={"options" + subIndexOption}>
+                                                subIndexOption <= checkOptionDisplayCount && <div className="d-flex flex-row" key={"options" + subIndexOption}>
                                                     <div className="col-sm-3 pl-0" >
                                                         <span className="product-grey-detail-text">{subItemOption.optionName ? subItemOption.optionName : ""}</span>
                                                     </div>
                                                     <div className="col-sm-9">
-                                                        <span className="product-grey-detail-text">{subItemOption.SKU ? subItemOption.SKU.quantity : ""}</span>
+                                                        <span className="product-grey-detail-text">{subItemOption.properties ? subItemOption.properties.quantity : ""}</span>
                                                     </div>
                                                 </div>
                                             )
                                         })}
-                                    </>
+                                        {checkOptionDisplayCount === 1 && <span className="product-grey-detail-text">{"More..."}</span>}
+                                    </>}
                                 </div>
                             )
                         })

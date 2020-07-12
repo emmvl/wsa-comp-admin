@@ -7,7 +7,12 @@ const initialState = {
     status: 0,
     liveScoreLadderDivisionData: [],
     liveScoreLadderListData: [],
-    ladderData: []
+    ladderData: [],
+    teamResult: [],
+    divisionList: [],
+    divisionId: null,
+    ladderDivisionList: [],
+    onLoading: false
 };
 
 function createLadderRank(array) {
@@ -41,20 +46,18 @@ function liveScoreLaddersReducer(state = initialState, action) {
 
         /// ONLY LADDER
         case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_LOAD:
-            return { ...state, onLoad: true };
+            return { ...state };
         case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_SUCCESS:
 
             return {
                 ...state,
                 onLoad: false,
                 liveScoreLadderDivisionData: action.result,
+                ladderDivisionList: action.result,
                 status: action.status
             };
 
-
-
         //LIVESCORE LADDER LIST
-
         case ApiConstants.API_LIVE_SCORE_LADDERS_LIST_LOAD:
             return { ...state, onLoad: true };
         case ApiConstants.API_LIVE_SCORE_LADDERS_LIST_SUCCESS:
@@ -86,28 +89,73 @@ function liveScoreLaddersReducer(state = initialState, action) {
             let key = action.data.key
             let data = action.data.data
             let index = action.data.index
+
+
             if (key === "addLadderAdjustment") {
                 var obj = {
-                    teamName: '',
+                    teamLadderId: 0,
+                    teamId: null,
                     points: '',
-                    reasonforChange: ''
+                    adjustmentReason: ''
                 }
                 state.ladderData.push(obj)
             } else if (key === 'refresh') {
                 var obj = {
-                    teamName: '',
+                    teamLadderId: 0,
+                    teamId: null,
                     points: '',
-                    reasonforChange: ''
+                    adjustmentReason: ''
                 }
                 state.ladderData = [obj]
+
+            } else if (key === 'divisionId') {
+
+                state.divisionId = data
+
+            } else if (key === 'removeItem') {
+
+                state.ladderData.splice(index, 1)
 
             } else {
                 state.ladderData[index][key] = data
             }
 
+            return {
+                ...state,
+            };
+
+        case ApiConstants.API_LIVE_SCORE_TEAM_LOAD:
+
+            return { ...state, };
+
+        case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                teamResult: action.result,
+            };
+
+        case ApiConstants.API_LADDER_ADJUSTMENT_POST_LOAD:
+            return { ...state, onLoading: true };
+
+        case ApiConstants.API_LADDER_ADJUSTMENT_POST_SUCCESS:
 
             return {
                 ...state,
+                onLoading: false,
+            };
+
+        case ApiConstants.API_LADDER_ADJUSTMENT_GET_LOAD:
+            return { ...state, onLoading: true };
+
+        case ApiConstants.API_LADDER_ADJUSTMENT_GET_SUCCESS:
+
+
+            return {
+                ...state,
+                onLoading: false,
+                ladderData: action.result
+
             };
 
 

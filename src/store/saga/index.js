@@ -78,7 +78,7 @@ import {
   liveScoreGetTeamSaga,
   liveScoreTeamPaggingSaga
 } from './liveScoreSaga/liveScoreTeamSaga';
-import { liveScoreLaddersDivisionsaga, liveScoreLaddersListSaga } from './liveScoreSaga/liveScoreLadderSaga';
+import { liveScoreLaddersDivisionsaga, liveScoreLaddersListSaga, ladderAdjustmentPostSaga, ladderAdjustmentGetSaga } from './liveScoreSaga/liveScoreLadderSaga';
 import { liveScoreIncidentListSaga, liveScoreAddEditIncidentSaga, liveScoreIncidentTypeSaga } from './liveScoreSaga/liveScoreIncidentSaga';
 import { liveScoreRoundSaga, liveScoreRoundListSaga } from './liveScoreSaga/liveScoreRoundSaga';
 import { liveScoreNewsListSaga, liveScoreAddNewsSaga, liveScoreNewsNotificationSaga, liveScoreNewsDeleteSaga } from './liveScoreSaga/liveScoreNewsSaga';
@@ -725,7 +725,7 @@ export default function* root_saga() {
   //////shop product listing
   yield takeEvery(ApiConstants.API_GET_SHOP_PRODUCT_LISTING_LOAD, shopProductSaga.getProductListingSaga)
   /////shop add product
-  yield takeEvery(ApiConstants.API_ADD_SHOP_PRODUCT_LOAD, shopProductSaga.addProductActionSaga)
+  yield takeEvery(ApiConstants.API_ADD_SHOP_PRODUCT_LOAD, shopProductSaga.addProductSaga)
   yield takeEvery(ApiConstants.API_LIVE_SCORE_UMPIRES_IMPORT_LOAD, liveScoreUmpiresImportSaga)
   yield takeEvery(ApiConstants.BULK_SCORE_UPDATE_LOAD, bulkScoreChange)
   //////////////////////registration main dashboard listing owned and participate registration
@@ -751,13 +751,24 @@ export default function* root_saga() {
 
   yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_EDIT_INCIDENT_LOAD, liveScoreAddEditIncidentSaga)
   yield takeEvery(ApiConstants.API_LIVE_SCORE_INCIDENT_TYPE_LOAD, liveScoreIncidentTypeSaga)
+  yield takeEvery(ApiConstants.QUICKCOMP_IMPORT_DATA_LOAD, competitionQuickSaga.quickCompetitionPlayer)
   ///////////////////////////delete product variant API
   yield takeEvery(ApiConstants.API_DELETE_SHOP_PRODUCT_VARIANT_LOAD, shopProductSaga.deleteProductVariantSaga)
+  /////////////////////////add type in the typelist array in from the API
+  yield takeEvery(ApiConstants.API_SHOP_ADD_TYPE_IN_TYPELIST_LOAD, shopProductSaga.addNewTypeSaga)
+  ///////////////////product details on id API
+  yield takeEvery(ApiConstants.API_SHOP_GET_PRODUCT_DETAILS_BY_ID_LOAD, shopProductSaga.getProductDetailsByIdSaga)
 
   // Get match print template type
   yield takeEvery(ApiConstants.API_MATCH_PRINT_TEMPLATE_LOAD, getMatchPrintTemplateTypeSaga)
 
   // Get match sheet download link
   yield takeEvery(ApiConstants.API_MATCH_SHEET_PRINT_LOAD, liveScoreMatchSheetSaga.liveScoreMatchSheetPrintSaga)
+
+  yield takeEvery(ApiConstants.API_LADDER_ADJUSTMENT_POST_LOAD, ladderAdjustmentPostSaga)
+  yield takeEvery(ApiConstants.API_LADDER_ADJUSTMENT_GET_LOAD, ladderAdjustmentGetSaga)
+
+  // user history
+  yield takeEvery(ApiConstants.API_USER_MODULE_HISTORY_LOAD, userSaga.getUserHistorySaga)
 
 }

@@ -147,7 +147,7 @@ class ListProducts extends Component {
                             </div>
                         </div>
                         <div className="col-sm d-flex align-items-center justify-content-end shop-add-product-btn-div"
-                            onClick={() => this.props.clearProductReducer("productDeatilData")}>
+                            onClick={() => this.props.clearProductReducer("productDetailData")}>
                             <NavLink
                                 to={{ pathname: `/addProduct` }}
                                 className="text-decoration-none"
@@ -182,6 +182,7 @@ class ListProducts extends Component {
                                 <ShopSingleProductComponent
                                     productItem={item}
                                     deleteOnclick={() => this.showDeleteConfirm(item.id)}
+                                    editOnclick={() => history.push("/addProduct", { id: item.id })}
                                 />
                             </div>
                         )

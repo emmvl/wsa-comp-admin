@@ -510,10 +510,10 @@ class CompetitionOpenRegForm extends Component {
         }
         if (competitionFeesState.onLoad === false && this.state.divisionState === true) {
             setTimeout(() => {
-              this.setDetailsFieldValue();
+                this.setDetailsFieldValue();
             }, 100);
             this.setState({ divisionState: false });
-          }
+        }
     }
 
     ////disable or enable particular fields
@@ -628,7 +628,7 @@ class CompetitionOpenRegForm extends Component {
         this.props.paymentFeeDeafault()
         this.props.paymentSeasonalFee()
         this.props.getCommonDiscountTypeTypeAction()
-        this.props.getVenuesTypeAction();
+        this.props.getVenuesTypeAction('all');
         this.props.fixtureTemplateRoundsAction();
         // this.props.venueListAction();
         if (competitionId !== null) {
@@ -1324,7 +1324,7 @@ class CompetitionOpenRegForm extends Component {
             <div className="content-view pt-4">
                 <Form.Item >
                     {getFieldDecorator('competition_name',
-                        { normalize: (input) => captializedString(input), rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }] })(
+                        { rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }] })(
                             <InputWithHead
                                 required={"required-field pb-0 "}
                                 heading={AppConstants.competition_name}
@@ -1334,6 +1334,9 @@ class CompetitionOpenRegForm extends Component {
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(captializedString(
                                     e.target.value), "competitionName")}
                                 disabled={compDetailDisable}
+                                onBlur={(i)=> this.props.form.setFieldsValue({
+                                    'competition_name': captializedString(i.target.value)
+                                })}
                             />
                         )}
                 </Form.Item>

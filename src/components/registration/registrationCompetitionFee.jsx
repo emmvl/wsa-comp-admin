@@ -2034,7 +2034,7 @@ class RegistrationCompetitionFee extends Component {
     this.props.paymentFeeDeafault();
     this.props.paymentSeasonalFee();
     this.props.getCommonDiscountTypeTypeAction();
-    this.props.getVenuesTypeAction();
+    this.props.getVenuesTypeAction("all");
     this.props.registrationRestrictionTypeAction();
     this.props.fixtureTemplateRoundsAction();
     if (competitionId !== null) {
@@ -3144,7 +3144,6 @@ class RegistrationCompetitionFee extends Component {
       <div className="content-view pt-4">
         <Form.Item>
           {getFieldDecorator('competition_name', {
-            normalize: (input) => captializedString(input),
             rules: [
               {
                 required: true,
@@ -3165,6 +3164,9 @@ class RegistrationCompetitionFee extends Component {
                 )
               }
               disabled={compDetailDisable}
+              onBlur={(i)=> this.props.form.setFieldsValue({
+                'competition_name': captializedString(i.target.value)
+            })}
             />
           )}
         </Form.Item>
@@ -4775,7 +4777,6 @@ class RegistrationCompetitionFee extends Component {
           <div>
             <Form.Item>
               {getFieldDecorator('charityTitle', {
-                normalize: (input) => captializedString(input),
                 rules: [
                   {
                     required: true,
@@ -4795,6 +4796,9 @@ class RegistrationCompetitionFee extends Component {
                       'title'
                     )
                   }
+                  onBlur={(i)=> this.props.form.setFieldsValue({
+                    'charityTitle': captializedString(i.target.value)
+                })}
                 />
               )}
             </Form.Item>

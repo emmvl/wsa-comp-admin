@@ -136,14 +136,14 @@ class Login extends Component {
                     setFieldValue
                   }) => (
                   <Form onSubmit={handleSubmit}>
-                    <div className="login-formView" style={{ zIndex: 15 }}>
+                    <div className="auth-form" style={{ zIndex: 15 }}>
                       {this.contentView(values, errors, setFieldValue, touched, handleChange, handleBlur)}
                     </div>
                   </Form>
                 )}
               </Formik>
             ) : (
-              <div className="login-formView" style={{ fontSize: 14, textAlign: 'center', zIndex: 15 }}>
+              <div className="auth-form" style={{ fontSize: 14, textAlign: 'center', zIndex: 15 }}>
                 {!loginState.result.tfaEnabled && loginState.result.qrCode && (
                   <>
                     <img src={loginState.result.qrCode} alt="" />

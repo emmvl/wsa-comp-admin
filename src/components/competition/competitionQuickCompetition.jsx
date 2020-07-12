@@ -9,13 +9,10 @@ import CompetitionSwappable from '../../customComponents/quickCompetitionCompone
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Loader from "../../customComponents/loader"
-import history from "../../util/history";
-import { captializedString } from "../../util/helpers"
 import {
     getVenuesTypeAction,
     searchVenueList,
     clearFilter,
-
 } from "../../store/actions/appAction";
 import InputWithHead from "../../customComponents/InputWithHead";
 import ValidationConstants from "../../themes/validationConstant";
@@ -26,11 +23,11 @@ import {
     updateQuickCompetitionData, updateTimeSlot, updateDivision, updateCompetition,
     createQuickCompetitionAction,
     saveQuickCompDivisionAction, getYearAndQuickCompetitionAction, getQuickCompetitionAction,
-    quickCompetitionTimeSlotData, updateQuickCompetitionAction,
+    quickCompetitionTimeSlotData, updateQuickCompetitionAction, updateQuickCompetitionDraws
 } from "../../store/actions/competitionModuleAction/competitionQuickAction"
 import { quickCompetitionInit } from "../../store/actions/commonAction/commonAction"
-
-
+import { getDayName, getTime } from '../../themes/dateformate';
+import { captializedString } from "../../util/helpers";
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
@@ -46,7 +43,9 @@ class CompetitionQuickCompetition extends Component {
             visibleCompModal: false,
             visibleDivisionModal: false,
             yearRefId: 1,
-            quickCompetitionLoad: false
+            quickCompetitionLoad: false,
+            onloadData: false,
+            buttonPressed: ""
         }
         this.props.updateCompetition("", "allData")
         this.props.getVenuesTypeAction()
@@ -60,7 +59,7 @@ class CompetitionQuickCompetition extends Component {
         }
         this.props.quickCompetitionInit(body)
         this.props.getYearAndQuickCompetitionAction(
-            this.props.appState.quick_CompetitionYearArr,
+            this.props.quickCompetitionState.quick_CompetitionArr,
             null,
         );
     }
@@ -97,17 +96,27 @@ class CompetitionQuickCompetition extends Component {
 
     saveAPIsActionCall = (e) => {
         let quickCompetitionData = this.props.quickCompetitionState.quickComptitionDetails
+        const { postDivisionData, postTimeslotData, postDraws } = this.props.quickCompetitionState
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 if (this.state.firstTimeCompId.length > 0) {
-                    let payload = {
-                        "competitionId": this.state.firstTimeCompId,
-                        "competitionName": quickCompetitionData.competitionName,
-                        "competitionVenues": quickCompetitionData.competitionVenues
-                    }
+                    if (postDivisionData.length > 0 && postTimeslotData.length > 0) {
+                        let payload = {
+                            "competitionId": this.state.firstTimeCompId,
+                            "competitionName": quickCompetitionData.competitionName,
+                            "competitionVenues": quickCompetitionData.competitionVenues,
+                            "draws": postDraws
+                        }
 
-                    this.props.updateQuickCompetitionAction(payload,this.state.yearRefId)
+                        this.props.updateQuickCompetitionAction(payload, this.state.yearRefId, this.state.buttonPressed)
+                    }
+                    else {
+                        message.config({
+                            maxCount: 1, duration: 1
+                        })
+                        message.warning(ValidationConstants.divisionAndTimeslot)
+                    }
                 }
                 else {
                     message.config({
@@ -117,9 +126,9 @@ class CompetitionQuickCompetition extends Component {
                 }
             }
         })
-
     }
 
+    /// set field values
     setFieldValues() {
         let quickCompetitionData = this.props.quickCompetitionState.quickComptitionDetails
         let selectedVenues = this.props.quickCompetitionState.selectedVenues
@@ -128,12 +137,13 @@ class CompetitionQuickCompetition extends Component {
             selectedVenues: selectedVenues
         })
     }
+    // onChange = e => {
+    //     this.setState({
+    //         value: e.target.value,
+    //     });
+    // };
 
-    onChange = e => {
-        this.setState({
-            value: e.target.value,
-        });
-    };
+    // change selected competition
     onCompetitionChange(competitionId) {
         this.props.updateCompetition("", "allData")
         this.setState({ firstTimeCompId: competitionId, quickCompetitionLoad: true });
@@ -149,18 +159,17 @@ class CompetitionQuickCompetition extends Component {
         })
     }
 
-    //change year 
+    //change selected year 
     onYearChange(yearRefId) {
         this.props.updateCompetition("", "allData")
         this.setState({
             yearRefId, firstTimeCompId: ""
         })
         this.props.getYearAndQuickCompetitionAction(
-            this.props.appState.quick_CompetitionYearArr,
+            this.props.quickCompetitionState.quick_CompetitionArr,
             yearRefId,
         );
         this.setFieldValues()
-
     }
 
     ///////view for breadcrumb
@@ -276,25 +285,24 @@ class CompetitionQuickCompetition extends Component {
                 selectedDate={competitionDate}
                 updateDate={(date) => this.props.updateCompetition(date, "date")}
             />
-
             <DivisionGradeModal
                 visible={this.state.visibleDivisionModal}
                 onCancel={this.divisionModalClose}
                 modalTitle={AppConstants.divisionGradeAndTeams}
                 division={division}
                 onOK={(e) => this.handleOK(e)}
-                changeDivision={(index, e) => this.props.updateDivision("divisionName", index, null, captializedString(e.target.value))}
+                changeDivision={(index, e) => this.props.updateDivision("divisionName", index, null, e.target.value)}
                 changeTeam={(index, gradeIndex, value) => this.props.updateDivision("noOfTeams", index, gradeIndex, value)}
                 addDivision={(index) => this.props.updateDivision("addDivision", index)}
                 addGrade={(index) => this.props.updateDivision("addGrade", index)}
                 removegrade={(index, gradeIndex) => this.props.updateDivision("removeGrade", index, gradeIndex)}
-                changegrade={(index, gradeIndex, e) => this.props.updateDivision("gradeName", index, gradeIndex, captializedString(e.target.value))}
+                changegrade={(index, gradeIndex, e) => this.props.updateDivision("gradeName", index, gradeIndex, e.target.value)}
                 removeDivision={(index, gradeIndex) => this.props.updateDivision("removeDivision", index, gradeIndex)}
             />
         </div >
         )
     }
-
+    // handle divison api
     handleOK = () => {
         let competitionId = this.state.firstTimeCompId
         let division = this.props.quickCompetitionState.division
@@ -305,7 +313,7 @@ class CompetitionQuickCompetition extends Component {
         )
     }
 
-    //close timeslot modal 
+    //close timeslot modal and call timeslot api
     closeTimeSlotModal = () => {
         let timeslot = this.props.quickCompetitionState.timeSlot
         let timeSlotManualperVenueArray = []
@@ -315,11 +323,12 @@ class CompetitionQuickCompetition extends Component {
             for (let k in manualStartTime) {
                 let manualAllVenueObj =
                 {
-                    "competitionVenueTimeslotsDayTimeId": 0,
+                    "competitionVenueTimeslotsDayTimeId": timeslot[j].competitionVenueTimeslotsDayTimeId,
                     "dayRefId": timeslot[j].dayRefId,
                     "startTime": manualStartTime[k].startTime,
                     "sortOrder": JSON.parse(k),
                     "competitionTimeslotsEntity": [],
+
                 }
                 timeSlotManualperVenueArray.push(manualAllVenueObj)
             }
@@ -328,7 +337,7 @@ class CompetitionQuickCompetition extends Component {
         }
         let body = {
             applyToVenueRefId: 1,
-            competitionTimeslotId: 0,
+            competitionTimeslotId: this.props.quickCompetitionState.timeSlotId,
             competitionTimeslotManual: [{
                 timeslots: timeslots,
                 venueId: 0
@@ -347,7 +356,7 @@ class CompetitionQuickCompetition extends Component {
         })
     }
 
-    //close division modal
+    //close division modal on press cancel button in division modal
     divisionModalClose = () => {
         this.props.updateDivision("swap")
         this.setState({
@@ -355,13 +364,13 @@ class CompetitionQuickCompetition extends Component {
         })
     }
 
-    //close compModalClose
+    //close compModalClose on press cancel button
     compModalClose = () => {
         this.setState({
             visibleCompModal: false
         })
     }
-    //close competition modal
+    //close competition modal and call create competition
     closeCompModal = () => {
         const { competitionName, competitionDate } = this.props.quickCompetitionState
         this.props.createQuickCompetitionAction(this.state.yearRefId, competitionName, competitionDate)
@@ -372,6 +381,7 @@ class CompetitionQuickCompetition extends Component {
 
     ///close timeslot modal
     handleCancel = () => {
+        this.props.updateTimeSlot("swapTimeslot")
         this.setState({
             timeSlotVisible: false
         })
@@ -422,6 +432,39 @@ class CompetitionQuickCompetition extends Component {
         }
     }
 
+
+
+    /// on swap grip view component
+    async  onSwap(source, target) {
+        this.setState({ quickCompetitionLoad: true })
+        let sourceIndexArray = source.split(':');
+        let targetIndexArray = target.split(':');
+        let sourceXIndex = sourceIndexArray[0];
+        let sourceYIndex = sourceIndexArray[1];
+        let targetXIndex = targetIndexArray[0];
+        let targetYIndex = targetIndexArray[1];
+        if (sourceXIndex === targetXIndex && sourceYIndex === targetYIndex) {
+            return;
+        }
+        let drawData = this.props.quickCompetitionState.quickComptitionDetails.draws
+        let sourceObejct = drawData[sourceXIndex].slotsArray[sourceYIndex];
+        let targetObject = drawData[targetXIndex].slotsArray[targetYIndex];
+        if (sourceObejct.drawsId !== null && targetObject.drawsId !== null) {
+            await this.props.updateQuickCompetitionDraws(sourceIndexArray, targetIndexArray, sourceObejct.drawsId, targetObject.drawsId)
+        } else {
+            if (sourceObejct.drawsId == null) {
+                await this.props.updateQuickCompetitionDraws(sourceIndexArray, targetIndexArray, sourceObejct.drawsId, targetObject.drawsId, sourceObejct, 'free')
+            }
+            if (targetObject.drawsId == null) {
+                await this.props.updateQuickCompetitionDraws(sourceIndexArray, targetIndexArray, sourceObejct.drawsId, targetObject.drawsId, targetObject, 'free')
+            }
+        }
+
+        setTimeout(() => {
+            this.setState({ quickCompetitionLoad: false })
+        }, 100);
+    }
+
     /////form content view
     contentView = (getFieldDecorator) => {
         let appState = this.props.appState
@@ -432,12 +475,16 @@ class CompetitionQuickCompetition extends Component {
                     <div className="col-sm-3 " >
                         <Form.Item >
                             {getFieldDecorator('competition_name',
-                                { normalize: (input) => captializedString(input), rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }] })(
+                                { rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }] })(
                                     <InputWithHead
                                         required={"required-field pb-0 pt-0"}
                                         placeholder={AppConstants.competition_name}
-                                        onChange={(e) => this.props.updateQuickCompetitionData(captializedString(
-                                            e.target.value), "competitionName")}
+                                        onChange={(e) => this.props.updateQuickCompetitionData(
+                                            captializedString(e.target.value), "competitionName")}
+                                        onBlur={(i) => this.props.form.setFieldsValue({
+                                            'competition_name': captializedString(i.target.value)
+                                        })}
+
                                     />
                                 )}
                         </Form.Item>
@@ -479,485 +526,78 @@ class CompetitionQuickCompetition extends Component {
                         </Form.Item>
                     </div>
                 </div>
-                {this.dragableView()}
+                {
+                    this.state.quickCompetitionLoad ?
+                        <div>
+                            {this.draggableView()}
+                        </div>
+                        :
+                        this.draggableView()
+                }
+
             </div >
         )
     }
-
-    dragableView = () => {
-        var dateMargin = 25;
-        var dayMargin = 25;
+    // grid view 
+    draggableView = () => {
+        var dateMargin = 60;
+        var dayMargin = 60;
         let topMargin = 0;
-        let getStaticDrawsData = [{
-            venueCourtNumber: 1, venueCourtName: "1", venueShortName: "Lots", slotsArray: [{
-                drawsId: 12,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: "3B",
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#25ab85',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: 13,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: "11A",
-                awayTeamId: null,
-                homeTeamName: "11A",
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: 'pink',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: 25,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: "15A",
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: 'blue',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: 14,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: "16A",
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: 'orange',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }]
-        }, {
-            venueCourtNumber: 1, venueCourtName: "1", venueShortName: "Lots", slotsArray: [{
-                drawsId: 12,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: "17A",
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#282828',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: 26,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: "26L",
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#875241',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: null,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: null,
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#999999',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: 27,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: "25T",
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#279792',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }]
-        }, {
-            venueCourtNumber: 1, venueCourtName: "1", venueShortName: "Lots", slotsArray: [{
-                drawsId: 17,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: "17D",
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: 'red',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: 59,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: "25A",
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#859642',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: 84,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: "66A",
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#628549',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: 65,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: "62F",
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#279792',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }]
-        }, {
-            venueCourtNumber: 1, venueCourtName: "1", venueShortName: "Lots", slotsArray: [{
-                drawsId: 20,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: "25S",
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: 'green',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: null,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: null,
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#999999',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: null,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: null,
-                awayTeamId: null,
-                homeTeamName: null,
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: '#999999',
-                teamArray: [
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }, {
-                drawsId: 168,
-                venueCourtNumber: 1,
-                venueCourtName: null,
-                venueShortName: null,
-                matchDate: null,
-                startTime: null,
-                endTime: null,
-                homeTeamId: "A",
-                awayTeamId: null,
-                homeTeamName: "PG8",
-                awayTeamName: null,
-                gradeName: null,
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                isLocked: 0,
-                colorCode: 'red',
-                teamArray: [
-                    {
-                        teamName: "A",
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            }]
-        },
-        ]
-        let dateArray = [{ time: "09:00" }, { time: "10:00" }, { time: "11:00" }, { time: "12:00" }]
+        let getStaticDrawsData = this.props.quickCompetitionState.quickComptitionDetails.draws
+        let dateArray = this.props.quickCompetitionState.quickComptitionDetails.dateNewArray
+        console.log(getStaticDrawsData.length > 0 && getStaticDrawsData[0].slotsArray)
         return (
             <div className="draggable-wrap draw-data-table">
                 <div className="scroll-bar pb-4">
                     <div className="table-head-wrap">
                         <div className="tablehead-row-fixture ">
                             <div className="sr-no empty-bx"></div>
-                            {dateArray.map((date, index) => {
+                            {dateArray.map((dateItem, index) => {
+                                console.log(dateArray)
                                 if (index !== 0) {
-                                    dayMargin += 75;
+                                    dateMargin += 75;
                                 }
                                 return (
-                                    <span key={"key" + index} style={{ left: dayMargin }}>{date.time}</span>
+                                    <span key={"key" + index} style={{ left: dateMargin }}>{getDayName(dateItem.date)}</span>
                                 );
                             })}
+                        </div>
+                        <div className="tablehead-row-fixture ">
+                            <div className="sr-no empty-bx"></div>
+                            {dateArray.length > 0 &&
+                                dateArray.map((item, index) => {
+                                    if (index !== 0) {
+                                        dayMargin += 75;
+                                    }
+                                    return (
+                                        <span key={"time" + index}
+                                            style={{
+                                                left: dayMargin,
+                                            }}
+                                        >
+                                            {getTime(item.date)}
+                                        </span>
+                                    );
+                                })}
                         </div>
                     </div>
                 </div>
 
                 <div className="main-canvas Draws">
                     {getStaticDrawsData.map((courtData, index) => {
-                        let leftMargin = 25;
+                        let leftMargin = 60;
                         if (index !== 0) {
                             topMargin += 50;
                         }
                         return (
                             <div key={index + "courtkey"}>
-                                <div className="fixture-sr-no"> {index + 1}</div>
+                                <div className="quick-comp-canvas" >
+                                    <div className="venueCourt-tex-div" style={{ width: 60 }}>
+                                        <span className="venueCourt-text">
+                                            {courtData.venueShortName + '-' + courtData.venueCourtNumber}
+                                        </span>
+                                    </div>
+                                </div>
                                 {courtData.slotsArray.map((slotObject, slotIndex) => {
                                     if (slotIndex !== 0) {
                                         leftMargin += 75;
@@ -985,16 +625,23 @@ class CompetitionQuickCompetition extends Component {
                                                     id={index.toString() + ':' + slotIndex.toString()}
                                                     content={1}
                                                     swappable={true}
-                                                    onSwap={(source, target) =>
+                                                    onSwap={(source, target, ) => {
                                                         console.log(source, target)
+                                                        return (
+                                                            this.onSwap(
+                                                                source,
+                                                                target,
+                                                            )
+                                                        )
+                                                    }
                                                     }
                                                 >
                                                     {slotObject.drawsId != null ? (
                                                         <span>
-                                                            {slotObject.homeTeamName}
+                                                            {slotObject.divisionName + "-" + slotObject.gradeName}
                                                         </span>
                                                     ) : (
-                                                            <span>N/A</span>
+                                                            <span>Free</span>
                                                         )}
                                                 </CompetitionSwappable>
                                             </div>
@@ -1009,19 +656,24 @@ class CompetitionQuickCompetition extends Component {
             </div >
         );
     };
+
+    // footer view
     footerView = () => {
         return (
             <div className="fluid-width" >
                 <div className="row" >
                     <div className="col-sm-3">
                         <div className="reg-add-save-button">
-                            <Button type="cancel-button">{AppConstants.back}</Button>
+                            {/* <Button type="cancel-button">{AppConstants.back}</Button> */}
                         </div>
                     </div>
                     <div className="col-sm" >
                         <div className="comp-buttons-view">
-                            <Button className="save-draft-text" htmlType="submit" type="save-draft-text">{AppConstants.saveAsDraft}</Button>
-                            <Button className="open-reg-button" type="primary">{AppConstants.addTeams}</Button>
+                            <Button className="save-draft-text" htmlType="submit" type="save-draft-text"
+                                onClick={() => this.setState({ buttonPressed: "saveDraft" })}>{AppConstants.saveAsDraft}</Button>
+                            <Button className="open-reg-button" htmlType="submit" type="primary"
+                                onClick={() => this.setState({ buttonPressed: "AddTeam" })}>
+                                {AppConstants.addTeams}</Button>
                         </div>
                     </div>
                 </div>
@@ -1030,7 +682,7 @@ class CompetitionQuickCompetition extends Component {
     }
 
 
-
+    /// render function 
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
@@ -1039,7 +691,6 @@ class CompetitionQuickCompetition extends Component {
                 <InnerHorizontalMenu menu={"competition"} compSelectedKey={"2"} />
                 <Loader visible={this.props.quickCompetitionState.onQuickCompLoad} />
                 <Layout className="comp-dash-table-view">
-
                     {/* <div className="comp-draw-head-content-view"> */}
                     {this.headerView(getFieldDecorator)}
                     <Form
@@ -1073,7 +724,9 @@ function mapDispatchToProps(dispatch) {
         updateCompetition,
         createQuickCompetitionAction,
         saveQuickCompDivisionAction,
-        getQuickCompetitionAction, updateQuickCompetitionAction, quickCompetitionTimeSlotData,
+        getQuickCompetitionAction,
+        updateQuickCompetitionAction, quickCompetitionTimeSlotData,
+        updateQuickCompetitionDraws
     }, dispatch)
 }
 

@@ -1,65 +1,48 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Radio } from 'antd';
+import { Layout, Breadcrumb, Button, Radio, Select } from 'antd';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import history from "../../util/history";
-
-
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import Loader from "../../customComponents/loader";
+import { updateSelectedTeamPlayer, getYearAndQuickCompetitionAction } from "../../store/actions/competitionModuleAction/competitionQuickAction"
+import ImportTeamPlayerModal from "../../customComponents/importTeamPlayerModal"
+import { getYearAndCompetitionOwnAction } from '../../store/actions/appAction'
+const { Option } = Select;
 const { Header, Footer, Content } = Layout;
-
 
 class QuickCompetitionInvitations extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: "import",
-            value2: "roundRobin",
-            fixTemplate: "standardRoundRobin",
-            finalFixTemplate: "noFinals",
-            matchType: "halves",
-            matchFormat: "allAgesGrades",
-            valueFrequency: "weekly",
-            year: "2019",
             competition: "2019winter",
-            division: "12years"
+            importModalVisible: false,
+            yearRefId: 1,
+            competitionId: null
 
         }
     }
 
+    componentDidMount() {
+        let competitionId = this.props.location.state ? this.props.location.state.competitionUniqueKey : null
+        let year = this.props.location.state && this.props.location.state.year
+        if (competitionId) {
+            this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, year, "own_competition")
+            this.setState({
+                competitionId: competitionId,
+                yearRefId: year
 
-    onChange(checkedValues) {
-        console.log('checked = ', checkedValues);
+            })
+        } else {
+            history.push("/quickCompetition")
+        }
+
     }
 
-    onSelect = (selectedKeys, info) => {
-        console.log('selected', selectedKeys, info);
-    };
 
-    onCheck = (checkedKeys, info) => {
-        console.log('onCheck', checkedKeys, info);
-    };
-
-    onChangeRadio = e => {
-        console.log('radio checked', e.target.value);
-        this.setState({
-            value: e.target.value,
-        });
-    };
-
-    onChangeRadio2 = e => {
-        console.log('radio checked', e.target.value);
-        this.setState({
-            value2: e.target.value,
-        });
-    }
-    onChangeRadioFrequency = e => {
-        console.log('radio checked', e.target.value);
-        this.setState({
-            valueFrequency: e.target.value,
-        });
-    }
     ///////view for breadcrumb
     headerView = () => {
         return (
@@ -67,7 +50,6 @@ class QuickCompetitionInvitations extends Component {
                 <div className="row" >
                     <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
                         <Breadcrumb separator=" > ">
-                            <Breadcrumb.Item className="breadcrumb-product">{AppConstants.winter_2019}</Breadcrumb.Item>
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.quickCompetition2}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
@@ -76,28 +58,90 @@ class QuickCompetitionInvitations extends Component {
         )
     }
 
+    //merge with exsiting competition
+    mergeExistingCompetition = (subItem, seletedOption) => {
+        const { own_CompetitionArr, } = this.props.appState
+        if (subItem.id == 2 && seletedOption == 2) {
+            return (
+                <div>
+                    <Select
+                        style={{ width: '100%', paddingRight: 1, minWidth: 182, maxWidth: 300 }}
+                        //   onChange={(associationAffilite) => {
+                        //     this.props.add_editcompetitionFeeDeatils(
+                        //       associationAffilite,
+                        //       'associationAffilite'
+                        //     );
+                        //   }}
+                        // value={associationLeague}
+                        placeholder={AppConstants.selectComptition}
+                        filterOption={false}
+                        //   onSearch={(value) => {
+                        //     this.onInviteeSearch(value, 3);
+                        //   }}
+                        showSearch={true}
+                    >
+                        {own_CompetitionArr.length > 0 && own_CompetitionArr.map((item, index) => {
+                            return (
+                                <Option key={index + item.competitionId} value={item.competitionId}>
+                                    {item.competitionName}
+                                </Option>
+                            );
+                        })}
+                    </Select>
+                </div>
+            )
 
-    ////////form content view
-    contentView = () => {
-
-        return (
-            <div className="content-view pt-5 mt-0 ">
-                <span className='form-heading'>{AppConstants.how_Add_teams_players}</span>
-                <Radio.Group className="reg-competition-radio" onChange={this.onChangeRadio} value={this.state.value} defaultValue={"4rounds"}>
-                    <Radio value={"import"}>{AppConstants.import}</Radio>
-                    <Radio value={"addManully"}>{AppConstants.addManually}</Radio>
-                    <Radio value={"merge"}>{AppConstants.Merge_ExistingCompetition}</Radio>
-                    <Radio value={"invite"}>{AppConstants.inviteRegistration}</Radio>
-                </Radio.Group>
-
-            </div>
-
-
-        )
+        }
     }
 
 
 
+    ////////form content view
+    contentView = () => {
+        const { teamPlayerArray, SelectedTeamPlayer, importModalVisible } = this.props.quickCompetitionState
+        return (
+            <div className="content-view pt-5 mt-0 ">
+                <span className='form-heading'>{AppConstants.how_Add_teams_players}</span>
+                <Radio.Group
+                    className="reg-competition-radio"
+                    onChange={(e) =>
+                        this.props.updateSelectedTeamPlayer(
+                            e.target.value,
+                            'SelectedTeamPlayer'
+                        )
+                    }
+                    value={SelectedTeamPlayer}
+                >
+                    {(teamPlayerArray || []).map(
+                        (item, index) => {
+                            return (
+                                <div key={"playerArray" + index}>
+                                    <Radio value={item.id}>{item.value}</Radio>
+                                    {this.mergeExistingCompetition(
+                                        item,
+                                        SelectedTeamPlayer
+                                    )}
+                                </div>
+                            )
+                        }
+
+                    )}
+                </Radio.Group>
+                <ImportTeamPlayerModal
+                    onCancel={() => this.props.updateSelectedTeamPlayer("", "importModalVisible")}
+                    visible={importModalVisible}
+                    modalTitle={AppConstants.importTeamPlayer}
+                    competitionId={this.state.competitionId}
+                />
+
+            </div>
+        )
+    }
+
+    //on back button pressed
+    onBackButton = () => {
+        history.push('/quickCompetition');
+    }
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
@@ -107,17 +151,13 @@ class QuickCompetitionInvitations extends Component {
                     <div className="row" >
                         <div className="col-sm-3" >
                             <div className="reg-add-save-button">
-
-                                <Button type="cancel-button" htmlType="submit" onClick={() => this.cancelCall()} >{AppConstants.back}</Button>
+                                <Button type="cancel-button" htmlType="submit" onClick={() => this.onBackButton()} >{AppConstants.back}</Button>
                             </div>
                         </div>
                         <div className="col-sm-9" >
                             <div className="comp-buttons-view">
-                                <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveAsDraft}</Button>
-
-                                <NavLink to="/quickCompetitionMatchFormat" >
-                                    <Button className="open-reg-button" type="primary">{AppConstants.addCompetitionFormat}</Button>
-                                </NavLink>
+                                <Button className="save-draft-text" type="save-draft-text" onClick={() => this.onCompFormatPress()}>{AppConstants.saveAsDraft}</Button>
+                                <Button className="open-reg-button" type="primary" onClick={() => this.onCompFormatPress()}>{AppConstants.addCompetitionFormat}</Button>
                             </div>
                         </div>
                     </div>
@@ -126,8 +166,8 @@ class QuickCompetitionInvitations extends Component {
         )
     }
 
-    cancelCall = () => {
-        history.push('/quickCompetition');
+    onCompFormatPress() {
+        history.push("/quickCompetitionMatchFormat", { competitionUniqueKey: this.state.competitionId, year: this.state.yearRefId })
     }
 
 
@@ -153,4 +193,17 @@ class QuickCompetitionInvitations extends Component {
         );
     }
 }
-export default QuickCompetitionInvitations;
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        updateSelectedTeamPlayer,
+        getYearAndCompetitionOwnAction
+    }, dispatch)
+}
+
+function mapStatetoProps(state) {
+    return {
+        quickCompetitionState: state.QuickCompetitionState,
+        appState: state.AppState,
+    }
+}
+export default connect(mapStatetoProps, mapDispatchToProps)(QuickCompetitionInvitations);
