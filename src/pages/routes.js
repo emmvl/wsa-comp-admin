@@ -148,7 +148,7 @@ import LiveScoreLadderAdjustment from "../components/liveScore/liveScoreLadderAd
 import LiveScorePositionTrackReport from "../components/liveScore/liveScorePositionTrackReport";
 
 import RegistrationChange from "../components/registration/registrationChange"
-import MultifiledDraws from "../components/competition/multifiledDraws"
+import MultifieldDraws from "../components/competition/multifieldDraws"
 
 const lazyLoad = Component => {
   const lazy = props => {
@@ -776,8 +776,8 @@ class Routes extends React.Component {
         />
 
         <PrivateRoute
-          path="/multifiledDraws"
-          component={lazyLoad(MultifiledDraws)}
+          path="/multifieldDraws"
+          component={lazyLoad(MultifieldDraws)}
         />
 
         <Route path="/" component={lazyLoad(NotFound)} />

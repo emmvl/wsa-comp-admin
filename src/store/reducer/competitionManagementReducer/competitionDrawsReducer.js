@@ -124,7 +124,7 @@ function structureDrawsData(data) {
             venueCourtNumber: object.venueCourtNumber,
             venueCourtName: object.venueCourtName,
             venueShortName: object.venueShortName,
-            venueNameCourtName: (object.venueShortName + object.venueCourtNumber),
+            venueNameCourtName: (JSON.stringify(object.venueShortName) + JSON.stringify(object.venueCourtNumber)),
             venueCourtId: object.venueCourtId,
             slotsArray: [],
           });

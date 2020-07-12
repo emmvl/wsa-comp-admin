@@ -1,14 +1,12 @@
 import React, { Component } from "react";
-import { Input, Icon, Layout, Button, Table, Breadcrumb, Pagination, Tooltip } from "antd";
-import { NavLink } from "react-router-dom";
+import { Layout, Button, Breadcrumb, Popover } from "antd";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
-import AppImages from "../../themes/appImages";
 import history from "../../util/history";
 import _ from "lodash";
 import RGL, { WidthProvider } from "react-grid-layout";
-import { locationArr, timeSlots, drawsArray } from '../../mocks/multiDraws'
+import { locationArr, timeSlots, drawsArray,lagendsArray } from '../../mocks/multiDraws'
 import '../../../node_modules/react-grid-layout/css/styles.css'
 import '../../../node_modules/react-resizable/css/styles.css'
 
@@ -16,7 +14,15 @@ const ReactGridLayout = WidthProvider(RGL);
 const screenWidth = (window.innerWidth) * 0.5
 let perColumn = screenWidth / 5
 const { Footer } = Layout;
-class MultifiledDraws extends Component {
+const content = (
+    <div style={{ padding: 10 }}>
+      <p>1-a Waverley V Cromer</p>
+      <p>1-b Peninsula V Harbord</p>
+      <p>1-c Newport V Manly</p>
+      <p>1-d Allambie V Narrabeen</p>
+    </div>
+  );
+class MultifieldDraws extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -81,9 +87,8 @@ class MultifiledDraws extends Component {
                             </div>
                         </div>
                     </div>
-
-
                 </div>
+                <span className="inbox-name-text">Manly Warringah Winter 2020</span>
             </div>
         )
     }
@@ -97,28 +102,48 @@ class MultifiledDraws extends Component {
         this_.setState({ multiDrawsArray: array })
     }
 
-    // slots 
-    generateDOM() {
-        // Generate items with properties from the layout, rather than pass the layout directly
-        const layout = this.generateLayout();
-        let this_ = this
-        return _.map(layout, function (l) {
+    // slots
+  generateDOM() {
+    // Generate items with properties from the layout, rather than pass the layout directly
+    const layout = this.generateLayout();
+    let this_ = this;
+    return _.map(layout, function (l) {
+      return (
+        <div
+          style={{
+            display: 'flex',
+            backgroundColor: l.color,
+            borderRadius: 5,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          className="div-styles"
+          key={l.i}
+          data-grid={l}
+        >
+          
+            
+          
+          {l.whiteArea.map(() => {
             return (
-                <div
-                    key={1}
-                    style={{ display: 'flex', backgroundColor: l.color, borderRadius: 5, justifyContent: 'center', alignItems: 'center' }}
-                    className="div-styles"
-                    key={l.i} data-grid={l}>
-                    {l.whiteArea.map(() => {
-                        return (
-                            <div key={1} style={{ height: 5, width: 15, backgroundColor: '#fff', marginLeft: 5 }}></div>
-                        )
-                    })
-                    }
-                </div >
+              <Popover content={content} trigger={"click"}>
+              <div
+                key={1}
+                style={{
+                  height: 5,
+                  width: 15,
+                  backgroundColor: '#fff',
+                  margin: 2.5,
+                }}
+              ></div>
+              </Popover>
             );
-        });
-    }
+          })}
+          
+        </div>
+      );
+    });
+  }
 
     // drag layout view
     generateLayout() {
@@ -154,60 +179,116 @@ class MultifiledDraws extends Component {
     }
 
     // contauner view
-    containerView() {
-        return (
-            <div>
-                <div style={{ display: 'flex', flexDirection: 'row', height: 50, alignItems: 'flex-end', paddingBottom: 10 }}>
-                    <div style={{ paddingLeft: 110 }}></div>
-                    <div style={{ display: 'flex', width: screenWidth - perColumn, flexDirection: 'row' }}>
-                        {timeSlots.map((item, index) => {
-                            return (
-                                <div style={{ display: 'flex', width: perColumn, alignItems: 'center' }}>
-                                    <div style={{ display: 'flex', flexDirection: 'column', paddingLeft: 10 }}>
-                                        <span>{index === 0 ? item.day : ""}</span>
-                                        <span>{item.time}</span>
+  containerView() {
+    return (
+      <div>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            height: 70,
+            alignItems: 'flex-end',
+            paddingBottom: 10,
+          }}
+        >
+          <div style={{ paddingLeft: 100 }}></div>
+          <div
+            style={{
+              display: 'flex',
+              width: screenWidth - perColumn,
+              flexDirection: 'row',
+            }}
+          >
+            {timeSlots.map((item, index) => {
+              return (
+                <div
+                  style={{
+                    display: 'flex',
+                    width: perColumn,
+                    alignItems: 'center',
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      paddingLeft: 10,
+                    }}
+                  >
+                    {index === 0 ? (
+                      <span>{item.day}</span>
+                    ) : (
+                      <span style={{ paddingTop: 14 }} />
+                    )}
+                    <span>{item.time}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <div
+            style={{
+              display: 'flex',
+              paddingLeft: 50,
+              paddingRight: 10,
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            {locationArr.map((item, index) => {
+              return (
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: 30,
+                    marginTop: index == 0 ? 0 : 10,
+                    backgroundColor: item.color,
+                    paddingLeft: 10,
+                    paddingRight: 10,
+                  }}
+                >
+                  <span>{item.name}</span>
+                </div>
+              );
+            })}
+          </div>
+
+          <div style={{ width: screenWidth - perColumn }}>
+            <ReactGridLayout
+              containerPadding={[0, 0]}
+              margin={[10, 10]}
+              onLayoutChange={this.onLayoutChange}
+              {...this.props}
+              preventCollision={true}
+              compactType={null}
+              rowHeight={30}
+            >
+              {this.generateDOM()}
+            </ReactGridLayout>
+          </div>
+        </div>
+        <div className="mt-5" style={{ display: "flex", flexDirection: 'row', paddingLeft: 50 }}>
+                    {lagendsArray.map((subItem) => {
+                        return (
+                            <div className="legend-color-text-div" >
+                                <div>
+                                    <div className="legend-color-div" style={{ backgroundColor: subItem.colorCode }} >
                                     </div>
                                 </div>
-                            )
-                        })}
-                    </div>
-
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                    <div style={{ display: 'flex', paddingLeft: 50, paddingRight: 10, flexDirection: 'column', alignItems: 'center' }}>
-                        {locationArr.map((item, index) => {
-                            return (
-                                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 30, marginTop: index == 0 ? 0 : 10, backgroundColor: '#DCDCDC', paddingLeft: 10, paddingRight: 10 }}>
-                                    <span>{item}</span>
+                                <div className="legend-text-div">
+                                    <span className="legend-text">{subItem.divisionName}-{subItem.gradeName}</span>
                                 </div>
-                            )
-                        })}
-
-                    </div>
-
-
-                    <div style={{ width: screenWidth - perColumn }}>
-                        <ReactGridLayout
-                            containerPadding={[0, 0]}
-                            margin={[10, 10]}
-                            onLayoutChange={this.onLayoutChange}
-                            {...this.props}
-                            preventCollision={true}
-                            compactType={null}
-                            rowHeight={30}
-                        >
-                            {this.generateDOM()}
-                        </ReactGridLayout>
-                    </div>
-
-
-
+                            </div>
+                        )
+                    })}
                 </div>
-
-
-            </div>
-        );
-    }
+      </div>
+    );
+  }
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
@@ -239,7 +320,7 @@ class MultifiledDraws extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.draws} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"3"} />
+                <InnerHorizontalMenu menu={'competition'} compSelectedKey={'18'} />
                 <Layout>
                     {this.headerView()}
                     {this.containerView()}
@@ -249,4 +330,4 @@ class MultifiledDraws extends Component {
         );
     }
 }
-export default MultifiledDraws;
+export default MultifieldDraws;

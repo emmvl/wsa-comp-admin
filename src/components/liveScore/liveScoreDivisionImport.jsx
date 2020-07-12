@@ -14,7 +14,7 @@ import { message } from "antd";
 import ValidationConstants from "../../themes/validationConstant";
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import history from "../../util/history";
-
+import { NavLink } from 'react-router-dom';
 const { Content, Header, Footer, Input } = Layout;
 
 class LiveScoreDivisionImport extends Component {
@@ -94,6 +94,14 @@ class LiveScoreDivisionImport extends Component {
                                 {AppConstants.upload}
                             </Button>
                         </div>
+
+                        <div className="reg-add-save-button ml-3"  >
+                            <NavLink to="/templates/wsa-import-divisions.csv" target="_blank" download>
+                                <Button className="primary-add-comp-form" type="primary">
+                                    {AppConstants.downloadTemplate}
+                                </Button>
+                            </NavLink>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -104,7 +112,7 @@ class LiveScoreDivisionImport extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick ={()=>history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"9"} />
                 <Loader visible={this.props.liveScoreDivisionState.onLoad} />
                 <Layout>

@@ -273,20 +273,87 @@ const timeSlots = [
 
 
 const locationArr = [
-    'LOC 1',
-    'LOC 2',
-    'LOC 3',
-    'LOC 4',
-    'LOC 5',
-    'LOC 6',
-    'LOC 7',
-    'LOC 8',
-    'LOC 9',
-    'LOC 10',
+    {
+        name: 'LOC 1',
+        color: '#B8B8B8'
+    },
+    {
+        name: 'LOC 1',
+        color: '#B8B8B8'
+    },
+    {
+        name: 'LOC 2',
+        color: '#DCDCDC'
+    },
+    {
+        name: 'LOC 2',
+        color: '#DCDCDC'
+    },
+    {
+        name: 'LOC 3',
+        color: '#B8B8B8'
+    },
+    {
+        name: 'LOC 3',
+        color: '#B8B8B8'
+    },
+    {
+        name: 'Wav 1',
+        color: '#DCDCDC'
+    },
+    {
+        name: 'Wav 1',
+        color: '#DCDCDC'
+    },
+    {
+        name: 'Wav 2',
+        color: '#B8B8B8'
+    },
+    {
+        name: 'Wav 2',
+        color: '#B8B8B8'
+    }
 ]
-
+const lagendsArray = [
+    {
+        colorCode: '#f13199',
+        divisionName: '13/U',
+        gradeName: 'B'
+    },
+    {
+        colorCode: '#7e02ff',
+        divisionName: '13/U',
+        gradeName: 'A'
+    },
+    {
+        colorCode: '#319901',
+        divisionName: '19/U',
+        gradeName: 'A'
+    },
+    {
+        colorCode: '#1f0199',
+        divisionName: '15/U',
+        gradeName: 'A'
+    },
+    {
+        colorCode: '#cccd02',
+        divisionName: '17/U',
+        gradeName: 'B'
+    },
+    {
+        colorCode: '#cc6600',
+        divisionName: 'o35',
+        gradeName: 'A'
+    },
+    {
+        colorCode: '#cd1a00',
+        divisionName: 'W-o40',
+        gradeName: 'A'
+    }
+]
 module.exports = {
     drawsArray,
     locationArr,
-    timeSlots
+    timeSlots,
+    lagendsArray
 }
