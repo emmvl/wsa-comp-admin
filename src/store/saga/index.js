@@ -768,4 +768,7 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_LADDER_ADJUSTMENT_POST_LOAD, ladderAdjustmentPostSaga)
   yield takeEvery(ApiConstants.API_LADDER_ADJUSTMENT_GET_LOAD, ladderAdjustmentGetSaga)
 
+  // user history
+  yield takeEvery(ApiConstants.API_USER_MODULE_HISTORY_LOAD, userSaga.getUserHistorySaga)
+
 }
