@@ -198,8 +198,14 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token)
     },
 
-    liveScoreRound(competitionID) {
-        var url = `/round?competitionId=${competitionID}`;
+    liveScoreRound(competitionID, divisionId) {
+        var url = null
+        if(divisionId){
+             url = `/round?competitionId=${competitionID}&divisionId=${divisionId}`;
+        }else{
+             url = `/round?competitionId=${competitionID}&divisionId=${divisionId}`;
+        }
+       
         return Method.dataGet(url, localStorage.token)
     },
     liveScoreCreateRound(roundName, sequence, competitionID, divisionId) {
