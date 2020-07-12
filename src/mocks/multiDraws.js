@@ -314,9 +314,46 @@ const locationArr = [
         color: '#B8B8B8'
     }
 ]
-
+const lagendsArray = [
+    {
+        colorCode: '#f13199',
+        divisionName: '13/U',
+        gradeName: 'B'
+    },
+    {
+        colorCode: '#7e02ff',
+        divisionName: '13/U',
+        gradeName: 'A'
+    },
+    {
+        colorCode: '#319901',
+        divisionName: '19/U',
+        gradeName: 'A'
+    },
+    {
+        colorCode: '#1f0199',
+        divisionName: '15/U',
+        gradeName: 'A'
+    },
+    {
+        colorCode: '#cccd02',
+        divisionName: '17/U',
+        gradeName: 'B'
+    },
+    {
+        colorCode: '#cc6600',
+        divisionName: 'o35',
+        gradeName: 'A'
+    },
+    {
+        colorCode: '#cd1a00',
+        divisionName: 'W-o40',
+        gradeName: 'A'
+    }
+]
 module.exports = {
     drawsArray,
     locationArr,
-    timeSlots
+    timeSlots,
+    lagendsArray
 }

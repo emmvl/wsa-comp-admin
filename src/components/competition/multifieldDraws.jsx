@@ -6,7 +6,7 @@ import AppConstants from "../../themes/appConstants";
 import history from "../../util/history";
 import _ from "lodash";
 import RGL, { WidthProvider } from "react-grid-layout";
-import { locationArr, timeSlots, drawsArray } from '../../mocks/multiDraws'
+import { locationArr, timeSlots, drawsArray,lagendsArray } from '../../mocks/multiDraws'
 import '../../../node_modules/react-grid-layout/css/styles.css'
 import '../../../node_modules/react-resizable/css/styles.css'
 
@@ -87,9 +87,8 @@ class MultifieldDraws extends Component {
                             </div>
                         </div>
                     </div>
-
-
                 </div>
+                <span className="inbox-name-text">Manly Warringah Winter 2020</span>
             </div>
         )
     }
@@ -122,32 +121,25 @@ class MultifieldDraws extends Component {
           key={l.i}
           data-grid={l}
         >
-          <Popover content={content}>
-            <div
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-              }}
-            >
-              {' '}
-            </div>
-          </Popover>
+          
+            
+          
           {l.whiteArea.map(() => {
             return (
+              <Popover content={content} trigger={"click"}>
               <div
                 key={1}
                 style={{
                   height: 5,
                   width: 15,
                   backgroundColor: '#fff',
-                  marginLeft: 5,
+                  margin: 2.5,
                 }}
               ></div>
+              </Popover>
             );
           })}
+          
         </div>
       );
     });
@@ -194,7 +186,7 @@ class MultifieldDraws extends Component {
           style={{
             display: 'flex',
             flexDirection: 'row',
-            height: 50,
+            height: 70,
             alignItems: 'flex-end',
             paddingBottom: 10,
           }}
@@ -279,6 +271,21 @@ class MultifieldDraws extends Component {
             </ReactGridLayout>
           </div>
         </div>
+        <div className="mt-5" style={{ display: "flex", flexDirection: 'row', paddingLeft: 50 }}>
+                    {lagendsArray.map((subItem) => {
+                        return (
+                            <div className="legend-color-text-div" >
+                                <div>
+                                    <div className="legend-color-div" style={{ backgroundColor: subItem.colorCode }} >
+                                    </div>
+                                </div>
+                                <div className="legend-text-div">
+                                    <span className="legend-text">{subItem.divisionName}-{subItem.gradeName}</span>
+                                </div>
+                            </div>
+                        )
+                    })}
+                </div>
       </div>
     );
   }
