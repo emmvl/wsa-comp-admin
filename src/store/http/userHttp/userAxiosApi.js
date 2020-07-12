@@ -246,6 +246,10 @@ let userHttpApi = {
   userExportFiles(url) {
     return Method.dataGetDownload(url, localStorage.token);
   },
+  getUserHistory(payload) {
+    const url = `api/user/history`;
+    return Method.dataPost(url, token, payload);
+  },
 }
 
 let Method = {

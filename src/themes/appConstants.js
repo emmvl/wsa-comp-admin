@@ -1403,6 +1403,7 @@ const AppConstants = {
   typeAddedMessage: "Type added successfully.",
   registrationChange: "Registration Change",
   cost: "Cost",
+  history: "History"
 };
 
 export default AppConstants;
