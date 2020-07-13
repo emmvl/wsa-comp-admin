@@ -200,12 +200,12 @@ let LiveScoreAxiosApi = {
 
     liveScoreRound(competitionID, divisionId) {
         var url = null
-        if(divisionId){
-             url = `/round?competitionId=${competitionID}&divisionId=${divisionId}`;
-        }else{
-             url = `/round?competitionId=${competitionID}&divisionId=${divisionId}`;
+        if (divisionId) {
+            url = `/round?competitionId=${competitionID}&divisionId=${divisionId}`;
+        } else {
+            url = `/round?competitionId=${competitionID}&divisionId=${divisionId}`;
         }
-       
+
         return Method.dataGet(url, localStorage.token)
     },
     liveScoreCreateRound(roundName, sequence, competitionID, divisionId) {
@@ -900,10 +900,19 @@ let LiveScoreAxiosApi = {
         return Method.dataDelete(url, token)
     },
 
-    playerLineUpApi(payload, value) {
-        let body = payload.lineup
-        body.playing = value
-        var url = `/matches/lineup/status`;
+    playerLineUpApi(payload) {
+        console.log(payload, 'playerLineUpApi')
+
+        let body = {
+            "teamId": payload.teamId,
+            "matchId": payload.matchId,
+            "playing": payload.value,
+            "borrowed": false,
+            "playerId": payload.record.playerId,
+            "competitionId": payload.competitionId
+        }
+        // body.playing = value
+        var url = `/matches/lineup/update?matchId=${payload.matchId}&teamId=${payload.teamId}&updateMatchEvents=1`
         return Method.dataPatch(url, token, body)
     },
 

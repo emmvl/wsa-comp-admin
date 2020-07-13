@@ -32,8 +32,9 @@ function getMatchViewObject(data) {
         photoUrl: data.photoUrl,
         name: data.firstName + " " + data.lastName,
         team: data.team.name,
+        teamId: data.team.id,
         attended: data.played === 0 || data.played === null ? false : true,
-        lineup:data.lineup?data.lineup:null
+        lineup: data.lineup ? data.lineup : null
     }
 }
 module.exports = { getData, getMatchDivisionObject, getMatchViewData, getMatchViewObject }

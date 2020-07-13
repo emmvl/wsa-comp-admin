@@ -26,7 +26,7 @@ function* errorSaga(error) {
     setTimeout(() => {
 
         message.error(error ? error.error ? error.error : "Something went wrong." : "Something went wrong.");
-        message.error("Something went wrong.");
+        // message.error("Something went wrong.");
     }, 800);
 }
 
@@ -210,7 +210,7 @@ export function* liveScoreClubListSaga(action) {
 
 export function* playerLineUpStatusChnage(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.playerLineUpApi, action.data, action.value);
+        const result = yield call(LiveScoreAxiosApi.playerLineUpApi, action.data);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_CHNAGE_LINEUP_STATUS_SUCCESS,

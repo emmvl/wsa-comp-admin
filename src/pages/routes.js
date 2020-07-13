@@ -73,7 +73,7 @@ import LiveScoreTeam from "../components/liveScore/liveScoreTeams"
 import LiveScoreAddTeam from "../components/liveScore/liveScoreAddTeam"
 import LiveScoreManagerList from "../components/liveScore/liveScoreManagers"
 import LiveScoreAddManager from "../components/liveScore/liveScoreAddManagers"
-import LiveScorerManagerImport from "../components/liveScore/liveScorerManagerImport"
+import LiveScoreManagerImport from "../components/liveScore/liveScoreManagerImport"
 import LiveScoreManagerView from "../components/liveScore/liveScoreManagerView"
 import LiveScoreTeamView from "../components/liveScore/liveScoreTeamView"
 import LiveScorerView from "../components/liveScore/liveScorerView"
@@ -423,8 +423,8 @@ class Routes extends React.Component {
         />
 
         <PrivateRoute
-          path="/liveScorerManagerImport"
-          component={lazyLoad(LiveScorerManagerImport)}
+          path="/liveScoreManagerImport"
+          component={lazyLoad(LiveScoreManagerImport)}
         />
 
         <PrivateRoute

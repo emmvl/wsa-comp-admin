@@ -73,18 +73,18 @@ const columns = [
 
             return (
                 <div>
-                    {linkedEntity.length > 0 && linkedEntity.map((item,i) => (
+                    {linkedEntity.length > 0 && linkedEntity.map((item, i) => (
                         teamListData(item.entityId) ?
-                        <div key={`managerName${i}`+item.entityId}>
-                            <NavLink to={{
-                                pathname: '/liveScoreTeamView',
-                                state: { teamId: item.entityId, screenKey: "livescore" }
-                            }}>
-                                <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.name}</span>
-                            </NavLink>
+                            <div key={`managerName${i}` + item.entityId}>
+                                <NavLink to={{
+                                    pathname: '/liveScoreTeamView',
+                                    state: { teamId: item.entityId, screenKey: "livescore" }
+                                }}>
+                                    <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.name}</span>
+                                </NavLink>
                             </div>
                             :
-                            <span key={`managerName${i}`+item.entityId} >{item.name}</span>
+                            <span key={`managerName${i}` + item.entityId} >{item.name}</span>
                     ))
                     }
                 </div>)
@@ -99,7 +99,7 @@ const columns = [
 
             return (
                 <div>
-                    {linkedEntity.length > 0 && linkedEntity.map((item,i) => (
+                    {linkedEntity.length > 0 && linkedEntity.map((item, i) => (
                         // teamListData(item.entityId) ?
                         //     <NavLink to={{
                         //         // pathname: '/userPersonal',
@@ -170,12 +170,12 @@ class LiveScoreManagerList extends Component {
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
-                    <Table className="home-dashboard-table" 
-                    columns={columns} 
-                    dataSource={managerListData}
+                    <Table className="home-dashboard-table"
+                        columns={columns}
+                        dataSource={managerListData}
                         pagination={false}
                         loading={this.props.liveScoreMangerState.onLoad == true && true}
-                        rowKey={(record, index) => "managerListData"+record.id + index}
+                        rowKey={(record, index) => "managerListData" + record.id + index}
                     />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
@@ -270,7 +270,7 @@ class LiveScoreManagerList extends Component {
                                         </Button>
                                     </div>
                                 </div>
-                                {/* <div className="col-sm">
+                                <div className="col-sm">
                                     <div
                                         className="comp-dashboard-botton-view-mobile"
                                         style={{
@@ -281,7 +281,7 @@ class LiveScoreManagerList extends Component {
                                             justifyContent: "flex-end"
                                         }}
                                     >
-                                        <NavLink to={`/liveScorerManagerImport`} className="text-decoration-none">
+                                        <NavLink to={`/liveScoreManagerImport`} className="text-decoration-none">
                                             <Button className="primary-add-comp-form" type="primary">
                                                 <div className="row">
                                                     <div className="col-sm">
@@ -296,7 +296,7 @@ class LiveScoreManagerList extends Component {
                                             </Button>
                                         </NavLink>
                                     </div>
-                                </div> */}
+                                </div>
                             </div>
 
                         </div>

@@ -105,17 +105,14 @@ const columnsTeam1 = [
         dataIndex: 'attended',
         key: 'attended',
         sorter: (a, b) => tableSort(a, b, "attended"),
-        render: (attended, record, index) => {
+        render: (team, record, index) => {
             return (
                 <Checkbox
                     className={record.lineup ? record.lineup.playing ? "checkbox-green-color-outline mt-1" : 'single-checkbox mt-1' : 'single-checkbox mt-1'}
                     // className={"checkbox-green-color-outline mt-1"}
                     checked={record.attendance && record.attendance.isPlaying}
-                // checked={true}
-                // onChange={(e) => {
-                //     this_.props.changePlayerLineUpAction(record, e.target.checked, index, "team1Players")
-                // }
-                // }
+                    // checked={true}
+                    onChange={(e) => this_.playingView(record, e.target.checked)}
                 ></Checkbox>
             )
         },
@@ -157,10 +154,7 @@ const columnsTeam2 = [
                 <Checkbox
                     className={record.lineup ? record.lineup.playing ? "checkbox-green-color-outline mt-1" : 'single-checkbox mt-1' : 'single-checkbox mt-1'}
                     checked={record.attendance && record.attendance.isPlaying}
-                // onChange={(e) => {
-                //     this_.props.changePlayerLineUpAction(record, e.target.checked, index, "team2Players")
-                // }
-                // }
+                    onChange={(e) => this_.playingView(record, e.target.checked)}
                 ></Checkbox>
             )
         },
@@ -179,7 +173,8 @@ class LiveScoreMatchDetails extends Component {
             scoringType: null,
             isLineUp: 0,
             toolTipVisible: false,
-            screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null
+            screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null,
+            competitionId: null
         }
         this.umpireScore_View = this.umpireScore_View.bind(this)
         this.team_View = this.team_View.bind(this)
@@ -191,13 +186,16 @@ class LiveScoreMatchDetails extends Component {
         let match_status = null
 
         if (this.state.umpireKey == 'umpire') {
-            const { lineupSelectionEnabled, status } = JSON.parse(getUmpireCompetitonData())
+            const { lineupSelectionEnabled, status, id } = JSON.parse(getUmpireCompetitonData())
             isLineUpEnable = lineupSelectionEnabled
             match_status = status
+
+            this.setState({ competitionId: id })
         } else {
-            const { lineupSelectionEnabled, status } = JSON.parse(getLiveScoreCompetiton())
+            const { lineupSelectionEnabled, status, id } = JSON.parse(getLiveScoreCompetiton())
             isLineUpEnable = lineupSelectionEnabled
             match_status = status
+            this.setState({ competitionId: id })
 
         }
 
@@ -210,6 +208,9 @@ class LiveScoreMatchDetails extends Component {
         }
 
 
+    }
+    playingView(record, value) {
+        this.props.changePlayerLineUpAction({ record: record, value: value, matchId: this.state.matchId, competitionId: this.state.competitionId, teamId: record.teamId })
     }
 
     onChange = e => {

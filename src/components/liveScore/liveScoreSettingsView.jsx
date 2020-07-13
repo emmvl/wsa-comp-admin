@@ -64,6 +64,7 @@ class LiveScoreSettingsView extends Component {
             selectedComp: props.location ? props.location.state ? props.location.state.selectedComp ? props.location.state.selectedComp : null : null : null,
             screenName: props.location ? props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null : null,
             edit: props.location ? props.location.state ? props.location.state.edit ? props.location.state.edit : null : null : null,
+            competitionId: null
         };
     }
     componentDidMount() {
@@ -84,12 +85,14 @@ class LiveScoreSettingsView extends Component {
 
         } else {
             let comp_id = getLiveScoreCompetiton()
+
             this.props.settingRegInvitees()
             if (comp_id) {
                 const { id } = JSON.parse(getLiveScoreCompetiton())
                 if (this.props.location.state === 'edit' || id) {
                     this.props.getLiveScoreSettingInitiate(id)
                     this.props.getCompetitonVenuesList()
+                    this.setState({ competitionId: id })
                 } else {
                     this.props.clearLiveScoreSetting()
                     this.props.getCompetitonVenuesList()
@@ -251,7 +254,7 @@ class LiveScoreSettingsView extends Component {
 
                 formData.append('id', id)
                 formData.append('longName', captializedString(competitionName))
-                formData.append('name',  captializedString(shortName))
+                formData.append('name', captializedString(shortName))
                 formData.append('logo', competitionLogo)
                 // formData.append('recordUmpire', umpirenum)
                 formData.append('recordUmpireType', recordUmpire)
@@ -290,7 +293,7 @@ class LiveScoreSettingsView extends Component {
                     formData.append('invitedOrganisation', JSON.stringify(invitedOrganisation))
                 }
 
-                this.props.settingDataPostInititae({ body: formData, venue: venue, settingView: this.props.location.state })
+                this.props.settingDataPostInititae({ body: formData, venue: venue, settingView: this.props.location.state, screenName: this.state.screenName, competitionId: this.state.competitionId })
 
             }
         });
