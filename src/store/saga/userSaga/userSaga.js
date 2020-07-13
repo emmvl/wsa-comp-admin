@@ -4,9 +4,11 @@ import userHttpApi from "../../http/userHttp/userAxiosApi";
 import { message } from "antd";
 
 function* failSaga(result) {
-    yield put({ type: ApiConstants.API_USER_FAIL,  
+    yield put({
+        type: ApiConstants.API_USER_FAIL,
         error: result,
-        status: result.status });
+        status: result.status
+    });
     setTimeout(() => {
         message.config({
             duration: 1.5,
@@ -571,5 +573,79 @@ export function* updateUserProfileSaga(action) {
         }
     } catch (error) {
         yield call(errorSaga, error)
+    }
+}
+
+/* Get the User History */
+export function* getUserHistorySaga(action) {
+    try {
+        const result = yield call(userHttpApi.getUserHistory, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_USER_MODULE_HISTORY_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
+/* Save the User Photo */
+export function* saveUserPhotosSaga(action) {
+    try {
+        const result = yield call(userHttpApi.saveUserPhoto, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_USER_PHOTO_UPDATE_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
+/* Save the User Detail */
+export function* saveUserDetailSaga(action) {
+    try {
+        const result = yield call(userHttpApi.saveUserDetail, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_USER_DETAIL_UPDATE_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
+/* Update the User Password */
+export function* updateUserPasswordSaga(action) {
+    try {
+        const result = yield call(userHttpApi.updateUserPassword, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_USER_PASSWORD_UPDATE_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+
+            message.success(result.result.data.message);
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
     }
 }

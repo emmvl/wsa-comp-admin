@@ -74,17 +74,47 @@ function setupGradesArray(gradesArray, gradeId) {
 }
 
 function postSwapedDrawsArrayFunc(drawsArray,
-    sourtdrawsID,
-    targetdrawsID,
+    sourcedrawsId,
+    targetdrawsId, freeObject
 ) {
     let postSourceArray = JSON.parse(JSON.stringify(drawsArray));
     let postTargetArray = JSON.parse(JSON.stringify(drawsArray));
-    let postSourceIndex = postSourceArray.findIndex((x) => x.drawsId == sourtdrawsID)
-    let postTargetIndex = postTargetArray.findIndex((x) => x.drawsId == targetdrawsID);
-    let postTraget = JSON.parse(JSON.stringify(postTargetArray[postTargetIndex]))
-    let postSource = JSON.parse(JSON.stringify(postSourceArray[postSourceIndex]))
-    drawsArray[postSourceIndex].competitionDivisionGradeId = postTraget.competitionDivisionGradeId
-    drawsArray[postTargetIndex].competitionDivisionGradeId = postSource.competitionDivisionGradeId
+    if (sourcedrawsId !== null && targetdrawsId !== null) {
+        let postSourceIndex = postSourceArray.findIndex((x) => x.drawsId == sourcedrawsId)
+        let postTargetIndex = postTargetArray.findIndex((x) => x.drawsId == targetdrawsId);
+        let postTarget = JSON.parse(JSON.stringify(postTargetArray[postTargetIndex]))
+        let postSource = JSON.parse(JSON.stringify(postSourceArray[postSourceIndex]))
+        // drawsArray[postSourceIndex].drawsId = postTarget.drawsId
+        drawsArray[postSourceIndex].venueCourtId = postTarget.venueCourtId
+        drawsArray[postSourceIndex].matchDate = postTarget.matchDate
+        drawsArray[postSourceIndex].startTime = postTarget.startTime
+        drawsArray[postSourceIndex].endTime = postTarget.endTime
+        drawsArray[postSourceIndex].isLocked = 1
+        // drawsArray[postTargetIndex].drawsId = postSource.drawsId
+        drawsArray[postTargetIndex].venueCourtId = postSource.venueCourtId
+        drawsArray[postTargetIndex].matchDate = postSource.matchDate
+        drawsArray[postTargetIndex].startTime = postSource.startTime
+        drawsArray[postTargetIndex].endTime = postSource.endTime
+        drawsArray[postTargetIndex].isLocked = 1
+    }
+    else {
+        if (sourcedrawsId == null) {
+            let freeTargetIndex = postTargetArray.findIndex((x) => x.drawsId == targetdrawsId);
+            drawsArray[freeTargetIndex].matchDate = freeObject.matchDate
+            drawsArray[freeTargetIndex].startTime = freeObject.startTime
+            drawsArray[freeTargetIndex].endTime = freeObject.endTime
+            drawsArray[freeTargetIndex].venueCourtId = freeObject.venueCourtId
+            drawsArray[freeTargetIndex].isLocked = 1
+        }
+        if (targetdrawsId == null) {
+            let freeSourceIndex = postSourceArray.findIndex((x) => x.drawsId == sourcedrawsId);
+            drawsArray[freeSourceIndex].matchDate = freeObject.matchDate
+            drawsArray[freeSourceIndex].startTime = freeObject.startTime
+            drawsArray[freeSourceIndex].endTime = freeObject.endTime
+            drawsArray[freeSourceIndex].venueCourtId = freeObject.venueCourtId
+            drawsArray[freeSourceIndex].isLocked = 1
+        }
+    }
     return drawsArray;
 }
 
@@ -111,21 +141,50 @@ function swapedDrawsArrayFunc(
     let targetCopy = JSON.parse(
         JSON.stringify(targetArray[targetXIndex].slotsArray[targetYIndex])
     );
-    sourceCopy.drawsId = target.drawsId;
-    sourceCopy.competitionDivisionGradeId = target.competitionDivisionGradeId;
-    targetCopy.drawsId = source.drawsId;
-    targetCopy.competitionDivisionGradeId = source.competitionDivisionGradeId;
+    let sourceNew = JSON.parse(
+        JSON.stringify(sourceArray[sourtXIndex].slotsArray[sourceYIndex]))
+    let targetNew = JSON.parse(
+        JSON.stringify(targetArray[targetXIndex].slotsArray[targetYIndex]))
+
+    // sourceCopy.drawsId = targetNew.drawsId;
+    sourceCopy.venueCourtId = targetNew.venueCourtId;
+    sourceCopy.matchDate = targetNew.matchDate;
+    sourceCopy.startTime = targetNew.startTime;
+    sourceCopy.endTime = targetNew.endTime;
+    sourceCopy.isLocked = 1;
+
+    // targetCopy.drawsId = sourceNew.drawsId;
+    targetCopy.venueCourtId = sourceNew.venueCourtId;
+    targetCopy.matchDate = sourceNew.matchDate;
+    targetCopy.startTime = sourceNew.startTime;
+    targetCopy.endTime = sourceNew.endTime;
+    targetCopy.isLocked = 1;
+
+
+    target.startTime = sourceNew.startTime
+    target.endTime = sourceNew.endTime
+    target.venueCourtId = sourceNew.venueCourtId
+    target.matchDate = sourceNew.matchDate
+    target.isLocked = 1
+
+    source.matchDate = targetNew.matchDate
+    source.startTime = targetNew.startTime
+    source.endTime = targetNew.endTime
+    source.venueCourtId = targetNew.venueCourtId
+    source.isLocked = 1
+
     if (source.drawsId === null) {
         drawsArray[sourtXIndex].slotsArray[sourceYIndex] = target;
         drawsArray[targetXIndex].slotsArray[targetYIndex] = source;
-    } else if (target.drawsId === null) {
+    }
+    else if (target.drawsId === null) {
         drawsArray[sourtXIndex].slotsArray[sourceYIndex] = target;
         drawsArray[targetXIndex].slotsArray[targetYIndex] = source;
-    } else {
+    }
+    else {
         drawsArray[sourtXIndex].slotsArray[sourceYIndex] = targetCopy;
         drawsArray[targetXIndex].slotsArray[targetYIndex] = sourceCopy;
     }
-
     return drawsArray;
 }
 
@@ -203,6 +262,7 @@ function drawsDataStructure(drawsData) {
                         venueShortName: object.venueShortName,
                         venueNameCourtName: (JSON.stringify(object.venueShortName) + JSON.stringify(object.venueCourtNumber)),
                         venueCourtId: object.venueCourtId,
+                        venueId: object.venueId,
                         slotsArray: [],
                     });
                 }
@@ -256,7 +316,9 @@ function mapSlotObjectsWithTimeSlots(
                     drawsArray,
                     mainCourtNumberArray[i].venueCourtId,
                     sortedDateArray[j].date,
-                    gradeArray
+                    gradeArray,
+                    mainCourtNumberArray[i].venueId,
+
                 )
             );
         }
@@ -264,13 +326,13 @@ function mapSlotObjectsWithTimeSlots(
     }
     return mainCourtNumberArray;
 }
-function getSlotFromDate(drawsArray, venueCourtId, matchDate, gradeArray) {
-    console.log(drawsArray)
-    let startTime;
-    let endTime;
+function getSlotFromDate(drawsArray, venueCourtId, matchDate, gradeArray, venueId) {
+    let timeIndex = drawsArray.findIndex((x) => x.matchDate == matchDate)
+    let startTime = drawsArray[timeIndex].startTime
+    let endTime = drawsArray[timeIndex].endTime
     for (let i in drawsArray) {
-        startTime = drawsArray[i].startTime;
-        endTime = drawsArray[i].endTime;
+        // startTime = drawsArray[i].startTime;
+        // endTime = drawsArray[i].endTime;
         if (
             drawsArray[i].venueCourtId === venueCourtId &&
             isDateSame(drawsArray[i].matchDate, matchDate)
@@ -283,7 +345,7 @@ function getSlotFromDate(drawsArray, venueCourtId, matchDate, gradeArray) {
 
     return {
         drawsId: null,
-        venueId: null,
+        venueId: venueId,
         venueCourtNumber: null,
         venueCourtName: null,
         venueCourtId: venueCourtId,
@@ -300,8 +362,7 @@ function getSlotFromDate(drawsArray, venueCourtId, matchDate, gradeArray) {
         competitionDivisionId: null,
         dayRefId: null,
         colorCode: '#999999',
-
-
+        isLocked: 0
     };
 }
 
@@ -333,7 +394,7 @@ function createCompetitionVenuesData(value) {
     return selectVenueArray
 }
 // get competition result
-function getCompetitionResult(result, ) {
+function getCompetitionResult(result,) {
     let selectedVenues = []
     let selectVenues = result.competitionVenues
     if (selectVenues.length > 0) {
@@ -691,8 +752,9 @@ function QuickCompetitionState(state = initialState, action) {
             let postDrawDataCase = state.postDraws
             let postSwapedDrawsArray = state.postDraws
             postSwapedDrawsArray = postSwapedDrawsArrayFunc(postDrawDataCase,
-                sourceDrawId, targetDrawId
+                sourceDrawId, targetDrawId, action.freeObject
             )
+            state.postDraws = postSwapedDrawsArray
             swapedDrawsArray = swapedDrawsArrayFunc(
                 drawDataCase,
                 sourceXIndex,
@@ -700,8 +762,9 @@ function QuickCompetitionState(state = initialState, action) {
                 sourceYIndex,
                 targetYIndex
             );
+            console.log(swapedDrawsArray)
             state.quickComptitionDetails.draws = swapedDrawsArray;
-            state.postDraws = postSwapedDrawsArray
+
             return {
                 ...state,
                 onQuickCompLoad: false

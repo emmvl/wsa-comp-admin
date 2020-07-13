@@ -134,7 +134,6 @@ class LiveScoreAddDivision extends Component {
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.gradeName}
                                     placeholder={AppConstants.gradeName}
-                                    maxLength="4"
                                     onChange={(gradeName) => this.props.liveScoreUpdateDivisionAction(captializedString(gradeName.target.value), 'gradeName')}
                                     value={gradeName}
                                     onBlur={(i) => this.props.form.setFieldsValue({

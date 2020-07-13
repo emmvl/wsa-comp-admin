@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 import {
     getAffiliateToOrganisationAction, saveAffiliateAction, updateOrgAffiliateAction,
     getUreAction, getRoleAction, getAffiliateOurOrganisationIdAction,
-    getOrganiationPhotoAction, saveOrganiationPhotoAction, deleteOrganiationPhotoAction,
+    getOrganisationPhotoAction, saveOrganisationPhotoAction, deleteOrganisationPhotoAction,
     deleteOrgContact
 } from
     "../../store/actions/userAction/userAction";
@@ -121,11 +121,11 @@ class UserOurOragnization extends Component {
             if (userState.status == 1 && this.state.buttonPressed == "savePhotos") {
                 this.setState({ isEditView: false, orgPhotosImg: null, orgPhotosImgSend: null });
 
-                this.props.getOrganiationPhotoAction(obj);
+                this.props.getOrganisationPhotoAction(obj);
             }
             if (userState.status == 1 && this.state.buttonPressed == "deletePhotos") {
                 this.setState({ isEditView: false, orgPhotosImg: null, orgPhotosImgSend: null });
-                this.props.getOrganiationPhotoAction(obj);
+                this.props.getOrganisationPhotoAction(obj);
             }
         }
         if (this.state.buttonPressed == "cancel") {
@@ -401,7 +401,7 @@ class UserOurOragnization extends Component {
                     formData.append("organisationId", getOrganisationData().organisationUniqueKey);
 
                     this.setState({ loading: true });
-                    this.props.saveOrganiationPhotoAction(formData);
+                    this.props.saveOrganisationPhotoAction(formData);
                 }
 
             }
@@ -458,7 +458,7 @@ class UserOurOragnization extends Component {
         if (key == "2") {
             let obj = { organisationId: this.state.organisationId }
             this.setState({ isEditView: false });
-            this.props.getOrganiationPhotoAction(obj);
+            this.props.getOrganisationPhotoAction(obj);
         }
     }
 
@@ -514,7 +514,7 @@ class UserOurOragnization extends Component {
                 id: this.state.tableRecord.id
             }
             this.setState({ loading: true, buttonPressed: "deletePhotos" });
-            this.props.deleteOrganiationPhotoAction(payload);
+            this.props.deleteOrganisationPhotoAction(payload);
         }
 
         this.setState({ orgPhotoModalVisible: false });
@@ -1298,19 +1298,20 @@ function mapDispatchToProps(dispatch) {
         getUreAction,
         getRoleAction,
         getPhotoTypeAction,
-        getOrganiationPhotoAction,
-        saveOrganiationPhotoAction,
-        deleteOrganiationPhotoAction,
+        getOrganisationPhotoAction,
+        saveOrganisationPhotoAction,
+        deleteOrganisationPhotoAction,
         deleteOrgContact
     }, dispatch);
 
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         userState: state.UserState,
         appState: state.AppState,
         commonReducerState: state.CommonReducerState
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(UserOurOragnization));
+
+export default connect(mapStateToProps, mapDispatchToProps)(Form.create()(UserOurOragnization));

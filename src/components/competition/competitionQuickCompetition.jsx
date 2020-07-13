@@ -27,6 +27,7 @@ import {
 } from "../../store/actions/competitionModuleAction/competitionQuickAction"
 import { quickCompetitionInit } from "../../store/actions/commonAction/commonAction"
 import { getDayName, getTime } from '../../themes/dateformate';
+import { captializedString } from "../../util/helpers";
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
@@ -48,19 +49,18 @@ class CompetitionQuickCompetition extends Component {
         }
         this.props.updateCompetition("", "allData")
         this.props.getVenuesTypeAction()
+        this.props.getYearAndQuickCompetitionAction(
+            this.props.quickCompetitionState.quick_CompetitionYearArr,
+            null,
+        );
     }
 
 
     componentDidMount() {
-        loadjs('assets/js/custom.js');
         let body = {
             Day: "Day"
         }
         this.props.quickCompetitionInit(body)
-        this.props.getYearAndQuickCompetitionAction(
-            this.props.quickCompetitionState.quick_CompetitionArr,
-            null,
-        );
     }
 
     componentDidUpdate(nextProps) {
@@ -107,6 +107,8 @@ class CompetitionQuickCompetition extends Component {
                             "competitionVenues": quickCompetitionData.competitionVenues,
                             "draws": postDraws
                         }
+
+                        // console.log(postDraws)
                         this.props.updateQuickCompetitionAction(payload, this.state.yearRefId, this.state.buttonPressed)
                     }
                     else {
@@ -278,12 +280,11 @@ class CompetitionQuickCompetition extends Component {
                 visible={this.state.visibleCompModal}
                 onCancel={this.compModalClose}
                 modalTitle={AppConstants.competition}
-                competitionChange={(e) => this.props.updateCompetition(e.target.value, "add")}
+                competitionChange={(e) => this.props.updateCompetition(captializedString(e.target.value), "add")}
                 competitionName={compName}
                 selectedDate={competitionDate}
                 updateDate={(date) => this.props.updateCompetition(date, "date")}
             />
-
             <DivisionGradeModal
                 visible={this.state.visibleDivisionModal}
                 onCancel={this.divisionModalClose}
@@ -434,7 +435,7 @@ class CompetitionQuickCompetition extends Component {
 
 
     /// on swap grip view component
-    async  onSwap(source, target) {
+    async onSwap(source, target) {
         this.setState({ quickCompetitionLoad: true })
         let sourceIndexArray = source.split(':');
         let targetIndexArray = target.split(':');
@@ -448,8 +449,21 @@ class CompetitionQuickCompetition extends Component {
         let drawData = this.props.quickCompetitionState.quickComptitionDetails.draws
         let sourceObejct = drawData[sourceXIndex].slotsArray[sourceYIndex];
         let targetObject = drawData[targetXIndex].slotsArray[targetYIndex];
+
         if (sourceObejct.drawsId !== null && targetObject.drawsId !== null) {
+            console.log(sourceObejct, targetObject)
             await this.props.updateQuickCompetitionDraws(sourceIndexArray, targetIndexArray, sourceObejct.drawsId, targetObject.drawsId)
+        }
+        else if (sourceObejct.drawsId == null && targetObject.drawsId == null) {
+            return
+        }
+        else {
+            if (sourceObejct.drawsId == null) {
+                await this.props.updateQuickCompetitionDraws(sourceIndexArray, targetIndexArray, sourceObejct.drawsId, targetObject.drawsId, sourceObejct, 'free')
+            }
+            if (targetObject.drawsId == null) {
+                await this.props.updateQuickCompetitionDraws(sourceIndexArray, targetIndexArray, sourceObejct.drawsId, targetObject.drawsId, targetObject, 'free')
+            }
         }
 
         setTimeout(() => {
@@ -472,7 +486,11 @@ class CompetitionQuickCompetition extends Component {
                                         required={"required-field pb-0 pt-0"}
                                         placeholder={AppConstants.competition_name}
                                         onChange={(e) => this.props.updateQuickCompetitionData(
-                                            e.target.value, "competitionName")}
+                                            captializedString(e.target.value), "competitionName")}
+                                        onBlur={(i) => this.props.form.setFieldsValue({
+                                            'competition_name': captializedString(i.target.value)
+                                        })}
+
                                     />
                                 )}
                         </Form.Item>
@@ -613,7 +631,7 @@ class CompetitionQuickCompetition extends Component {
                                                     id={index.toString() + ':' + slotIndex.toString()}
                                                     content={1}
                                                     swappable={true}
-                                                    onSwap={(source, target, ) => {
+                                                    onSwap={(source, target,) => {
                                                         console.log(source, target)
                                                         return (
                                                             this.onSwap(

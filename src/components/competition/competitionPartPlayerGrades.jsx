@@ -634,7 +634,7 @@ class CompetitionPartPlayerGrades extends Component {
                                                                 <div
                                                                     className="col-sm d-flex justify-content-end "
                                                                     style={{ flexFlow: 'wrap' }}>
-                                                                    <div className="col-sm">
+                                                                    {/* <div className="col-sm">
                                                                         {playerItem.playerHistory.map((item, index) => {
 
                                                                             return (
@@ -644,8 +644,8 @@ class CompetitionPartPlayerGrades extends Component {
 
                                                                             )
                                                                         })}
-                                                                    </div>
-                                                                    <div>
+                                                                    </div> */}
+                                                                    <div className="d-flex">
                                                                         {playerItem.position1 &&
                                                                             <Tag className="comp-player-table-tag" style={{ background: playerItem.position1Color, color: "#ffffff" }} key={playerItem.position1}>
                                                                                 {playerItem.position1}
@@ -656,6 +656,16 @@ class CompetitionPartPlayerGrades extends Component {
                                                                                 {playerItem.position2}
                                                                             </Tag>
                                                                         }
+                                                                         <div className="col-sm d-flex">
+                                                                            {playerItem.playerHistory.map((item, index) => {
+                                                                            return (
+                                                                                <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
+                                                                                    {item.divisionGrade + '('+ item.ladderResult + ')'}
+                                                                                </Tag>
+
+                                                                            )
+                                                                            })}
+                                                                        </div>
                                                                         <img className="comp-player-table-img" src={
                                                                             playerItem.isCommentsAvailable == 1 ? AppImages.commentFilled :
                                                                                 AppImages.commentEmpty} alt="" height="20" width="20"
@@ -830,7 +840,7 @@ class CompetitionPartPlayerGrades extends Component {
                                                 <div
                                                     className="col-sm d-flex justify-content-end "
                                                     style={{ flexFlow: 'wrap' }}>
-                                                    <div className="col-sm">
+                                                    {/* <div className="col-sm">
                                                         {playerItem.playerHistory.map((item, index) => {
                                                             return (
                                                                 <Tag className="comp-player-table-tag" key={item.teamId}>
@@ -839,8 +849,8 @@ class CompetitionPartPlayerGrades extends Component {
 
                                                             )
                                                         })}
-                                                    </div>
-                                                    <div>
+                                                    </div> */}
+                                                    <div className="d-flex">
                                                         {playerItem.position1 &&
                                                             <Tag className="comp-player-table-tag" style={{ background: playerItem.position1Color, color: "#ffffff" }} key={playerItem.position1}>
                                                                 {playerItem.position1}
@@ -851,6 +861,16 @@ class CompetitionPartPlayerGrades extends Component {
                                                                 {playerItem.position2}
                                                             </Tag>
                                                         }
+                                                         <div className="col-sm d-flex">
+                                                            {playerItem.playerHistory.map((item, index) => {
+                                                            return (
+                                                                <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
+                                                                    {item.divisionGrade + '('+ item.ladderResult + ')'}
+                                                                </Tag>
+
+                                                            )
+                                                            })}
+                                                        </div>
                                                         <img className="comp-player-table-img" src={
                                                             playerItem.isCommentsAvailable == 1 ? AppImages.commentFilled :
                                                                 AppImages.commentEmpty} alt="" height="20" width="20"

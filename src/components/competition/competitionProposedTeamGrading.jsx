@@ -141,9 +141,9 @@ const columns = [
                         title={item.playerName}>
                         <NavLink to={{ pathname: `/userPersonal`, state: { userId: item.userId } }}
                         >
-                            <Tag className="comp-player-table-tag" style={{ cursor: "pointer" }} key={item.historyTeamId}
+                            <Tag className="comp-player-table-tag" style={{ cursor: "pointer" }} key={item.historyPlayerId + index}
                             >
-                                {item.teamText}
+                                {item.divisionGrade + '('+item.ladderResult + ')'}
                             </Tag>
                         </NavLink>
                     </Tooltip>

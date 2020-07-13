@@ -156,7 +156,7 @@ class QuickCompetitionInvitations extends Component {
                         </div>
                         <div className="col-sm-9" >
                             <div className="comp-buttons-view">
-                                <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveAsDraft}</Button>
+                                <Button className="save-draft-text" type="save-draft-text" onClick={() => this.onCompFormatPress()}>{AppConstants.saveAsDraft}</Button>
                                 <Button className="open-reg-button" type="primary" onClick={() => this.onCompFormatPress()}>{AppConstants.addCompetitionFormat}</Button>
                             </div>
                         </div>

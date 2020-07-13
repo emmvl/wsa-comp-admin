@@ -3,6 +3,7 @@ import { Modal, DatePicker, Form, Button } from 'antd';
 import InputWithHead from "./InputWithHead"
 import AppConstants from "../themes/appConstants"
 import ValidationConstants from '../themes/validationConstant';
+import { captializedString } from "../util/helpers"
 
 class CompetitionModal extends React.Component {
     constructor(props) {
@@ -75,6 +76,9 @@ class CompetitionModal extends React.Component {
                                             heading={AppConstants.competition_name}
                                             placeholder={"Enter competition Name"}
                                             onChange={(e) => competitionChange(e)}
+                                            onBlur={(i) => this.props.form.setFieldsValue({
+                                                'compName': captializedString(i.target.value)
+                                            })}
                                         ></InputWithHead>
                                     )}
                                 </Form.Item>

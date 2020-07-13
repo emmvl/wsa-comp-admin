@@ -124,7 +124,7 @@ function structureDrawsData(data) {
             venueCourtNumber: object.venueCourtNumber,
             venueCourtName: object.venueCourtName,
             venueShortName: object.venueShortName,
-            venueNameCourtName: (object.venueShortName + object.venueCourtNumber),
+            venueNameCourtName: (JSON.stringify(object.venueShortName) + JSON.stringify(object.venueCourtNumber)),
             venueCourtId: object.venueCourtId,
             slotsArray: [],
           });
@@ -1125,7 +1125,7 @@ function CompetitionDraws(state = initialState, action) {
       }
 
     case ApiConstants.API_DRAW_MATCHES_LIST_LOAD:
-      return { ...state, onLoad: true, onLoad: true }
+      return { ...state, onLoad: true }
 
     case ApiConstants.API_DRAW_MATCHES_LIST_SUCCESS:
       return {

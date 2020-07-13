@@ -90,7 +90,7 @@ class LiveScoreAddMatch extends Component {
                 this.props.getCompetitonVenuesList(id, "");
                 this.props.getLiveScoreDivisionList(id)
                 this.props.getliveScoreScorerList(id, 4)
-                this.props.liveScoreRoundListAction(id)
+                // this.props.liveScoreRoundListAction(id)
                 this.props.liveScoreClubListAction(id)
                 this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: id })
                 this.setState({ loadvalue: true, allDisabled: true })
@@ -107,7 +107,7 @@ class LiveScoreAddMatch extends Component {
                 this.props.getCompetitonVenuesList(id, "");
                 this.props.getLiveScoreDivisionList(id)
                 this.props.getliveScoreScorerList(id, 4)
-                this.props.liveScoreRoundListAction(id)
+                // this.props.liveScoreRoundListAction(id)
                 this.props.liveScoreClubListAction(id)
                 this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: id })
                 this.setState({ loadvalue: true, allDisabled: false })
@@ -160,6 +160,7 @@ class LiveScoreAddMatch extends Component {
                     let division = this.props.liveScoreMatchState.matchData.divisionId
                     this.setInitalFiledValue(addEditMatch, start_date, start_time, displayTime)
                     this.props.getliveScoreTeams(this.state.compId, division)
+                    this.props.liveScoreRoundListAction(this.state.compId, division)
                     this.setState({ loadvalue: false })
 
                 }
@@ -564,6 +565,7 @@ class LiveScoreAddMatch extends Component {
         this.setState({ selectedDivision: divisionId })
         // const { id } = JSON.parse(getLiveScoreCompetiton())
         this.props.getliveScoreTeams(this.state.compId, divisionId)
+        this.props.liveScoreRoundListAction(this.state.compId, divisionId)
     }
 
     setUmpireClub(clubId) {
@@ -590,8 +592,6 @@ class LiveScoreAddMatch extends Component {
         const { umpireList } = this.props.umpireState
         let umpireListResult = isArrayNotEmpty(umpireList) ? umpireList : []
         let { allDisabled } = this.state
-
-        console.log(umpire1Name, 'umpires_1Value', umpire2Name)
         return (
             <div className="content-view pt-4">
                 <div className="row" >

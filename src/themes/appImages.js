@@ -18,6 +18,7 @@ const AppImages = {
   userImagedashboard: require("../images/dd.png"),
   homeIcon: require("../images/home.svg"),
   userIcon: require("../images/user.svg"),
+  accountIcon: require("../images/user.svg"),
   regIcon: require("../images/regist.svg"),
   compIcon: require("../images/competition.svg"),
   liveScoreIcon: require("../images/livescore.svg"),

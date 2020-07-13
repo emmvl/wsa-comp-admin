@@ -118,13 +118,10 @@ function searchFilterAction(search, key) {
     return action
 }
 
-function changePlayerLineUpAction(data, value, index, key) {
+function changePlayerLineUpAction(data) {
     const action = {
         type: ApiConstants.CHANGE_PLAYER_LINEUP_LOAD,
-        index: index,
-        value: value,
-        key: key,
-        data: data
+        data
     }
     return action
 }

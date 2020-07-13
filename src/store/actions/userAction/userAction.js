@@ -1,293 +1,279 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-//get Role Action
+// Get Role
 function getRoleAction() {
-  const action = {
+  return {
     type: ApiConstants.API_ROLE_LOAD
   };
-  return action;
 }
 
-////get URE Action
+// Get URE
 function getUreAction() {
-  const action = {
+  return {
     type: ApiConstants.API_URE_LOAD
   };
-
-  return action;
 }
 
 /* Affiliates Listing */
 function getAffiliatesListingAction(payload) {
-  const action = {
+  return {
     type: ApiConstants.API_AFFILIATES_LISTING_LOAD,
     payload: payload
   };
-  return action;
 }
 
 /* Save Affiliate */
 function saveAffiliateAction(payload) {
-  const action = {
+  return {
     type: ApiConstants.API_SAVE_AFFILIATE_LOAD,
     payload: payload
   };
-  return action;
 }
-
 
 /* Get Affiliate by Organisation Id */
 function getAffiliateByOrganisationIdAction(organisationId) {
-  const action = {
+  return {
     type: ApiConstants.API_AFFILIATE_BY_ORGANISATION_LOAD,
     payload: organisationId
   };
-  return action;
 }
 
 /* Get Affiliate Our Organisation */
 function getAffiliateOurOrganisationIdAction(organisationId) {
-  const action = {
+  return {
     type: ApiConstants.API_AFFILIATE_OUR_ORGANISATION_LOAD,
     payload: organisationId
   };
-  return action;
 }
 
-/* Get AffiliateTo Organisation*/
+/* Get AffiliateTo Organisation */
 function getAffiliateToOrganisationAction(organisationId) {
-  const action = {
+  return {
     type: ApiConstants.API_AFFILIATE_TO_ORGANISATION_LOAD,
     payload: organisationId
   };
-  return action;
 }
 
 // Update Affiliate
 function updateAffiliateAction(data, key) {
-  const action = {
+  return {
     type: ApiConstants.UPDATE_AFFILIATE,
     updatedData: data,
     key: key
   };
-  return action;
 }
 
 // Update NewAffiliate
 function updateNewAffiliateAction(data, key) {
-  const action = {
+  return {
     type: ApiConstants.UPDATE_NEW_AFFILIATE,
     updatedData: data,
     key: key
   };
-  return action;
 }
 
 // Update Org Affiliate
 function updateOrgAffiliateAction(data, key) {
-  const action = {
+  return {
     type: ApiConstants.UPDATE_ORG_AFFILIATE,
     updatedData: data,
     key: key
   };
-  return action;
 }
 
-////get organisation
+// Get organisation
 function getOrganisationAction() {
-  const action = {
+  return {
     type: ApiConstants.API_ORGANISATION_LOAD
   }
-  return action
 }
 
 function affiliateDeleteAction(affiliateId) {
-  const action = {
+  return {
     type: ApiConstants.API_AFFILIATE_DELETE_LOAD,
     payload: affiliateId
   };
-  return action;
 }
 
-////get particular user organisation 
+// Get particular user organisation
 function getUserOrganisationAction() {
-  const action = {
+  return {
     type: ApiConstants.API_GET_USER_ORGANISATION_LOAD
-  }
-  return action
+  };
 }
 
-//onchange user organisation data
+// onchange user organisation data
 function onOrganisationChangeAction(organisationData, key) {
-  const action = {
+  return {
     type: ApiConstants.ONCHANGE_USER_ORGANISATION,
     organisationData,
     key
-  }
-  return action
+  };
 }
-
 
 /* User Dashboard Textual Listing */
 function getUserDashboardTextualAction(payload) {
-  const action = {
+  return {
     type: ApiConstants.API_USER_DASHBOARD_TEXTUAL_LOAD,
     payload: payload
   };
-  return action;
 }
 
-function getUserModulePersonalDetailsAction(userId){
-  const action = {
+function getUserModulePersonalDetailsAction(userId) {
+  return {
     type: ApiConstants.API_USER_MODULE_PERSONAL_DETAIL_LOAD,
     payload: userId
   };
-  return action;
 }
 
-function getUserModulePersonalByCompetitionAction(payload)
-{
-  const action = {
+function getUserModulePersonalByCompetitionAction(payload) {
+  return {
     type: ApiConstants.API_USER_MODULE_PERSONAL_BY_COMPETITION_LOAD,
     payload: payload
   };
-  return action;
 }
 
-function getUserModuleRegistrationAction(payload)
-{
-  const action = {
+function getUserModuleRegistrationAction(payload) {
+  return {
     type: ApiConstants.API_USER_MODULE_REGISTRATION_LOAD,
     payload: payload
   };
-  return action;
 }
 
-function getUserModuleMedicalInfoAction(userId){
-  const action = {
+function getUserModuleMedicalInfoAction(userId) {
+  return {
     type: ApiConstants.API_USER_MODULE_MEDICAL_INFO_LOAD,
     payload: userId
   };
-  return action;
 }
 
-function getUserModuleActivityPlayerAction(userId){
-  const action = {
+function getUserModuleActivityPlayerAction(userId) {
+  return {
     type: ApiConstants.API_USER_MODULE_ACTIVITY_PLAYER_LOAD,
     payload: userId
   };
-  return action;
 }
 
-function getUserModuleActivityParentAction(userId){
-  const action = {
+function getUserModuleActivityParentAction(userId) {
+  return {
     type: ApiConstants.API_USER_MODULE_ACTIVITY_PARENT_LOAD,
     payload: userId
   };
-  return action;
 }
 
-function getUserModuleActivityScorerAction(userId){
-  const action = {
+function getUserModuleActivityScorerAction(userId) {
+  return {
     type: ApiConstants.API_USER_MODULE_ACTIVITY_SCORER_LOAD,
     payload: userId
   };
-  return action;
 }
 
-function getUserModuleActivityManagerAction(userId){
-  const action = {
+function getUserModuleActivityManagerAction(userId) {
+  return {
     type: ApiConstants.API_USER_MODULE_ACTIVITY_MANAGER_LOAD,
     payload: userId
   };
-  return action;
 }
 
-
-function getUserFriendAction(payload){
-  const action = {
+function getUserFriendAction(payload) {
+  return {
     type: ApiConstants.API_USER_FRIEND_LOAD,
     payload: payload
   };
-  return action;
 }
 
-
-function getUserReferFriendAction(payload){
-  const action = {
+function getUserReferFriendAction(payload) {
+  return {
     type: ApiConstants.API_USER_REFER_FRIEND_LOAD,
     payload: payload
   };
-  return action;
 }
 
-function getOrganiationPhotoAction(payload){
-  const action = {
+function getOrganisationPhotoAction(payload) {
+  return {
     type: ApiConstants.API_GET_ORG_PHOTO_LOAD,
     payload: payload
   };
-  return action;
 }
-function saveOrganiationPhotoAction(payload){
-  const action = {
+
+function saveOrganisationPhotoAction(payload) {
+  return {
     type: ApiConstants.API_SAVE_ORG_PHOTO_LOAD,
     payload: payload
   };
-  return action;
 }
 
-function deleteOrganiationPhotoAction(payload){
-  const action = {
+function deleteOrganisationPhotoAction(payload) {
+  return {
     type: ApiConstants.API_DELETE_ORG_PHOTO_LOAD,
     payload: payload
   };
-  return action;
 }
 
-function deleteOrgContact(payload){
-  const action = {
+function deleteOrgContact(payload) {
+  return {
     type: ApiConstants.API_DELETE_ORG_CONTACT_LOAD,
     payload: payload
   };
-  return action;
 }
-
 
 /* Export Organisation Registration Question */
 function exportOrgRegQuestionAction(payload) {
-  const action = {
+  return {
     type: ApiConstants.API_EXPORT_ORG_REG_QUESTIONS_LOAD,
     payload: payload
   };
-  return action;
 }
-
 
 /* Affiliate Directory Listing */
 function getAffiliateDirectoryAction(payload) {
-  const action = {
+  return {
     type: ApiConstants.API_AFFILIATE_DIRECTORY_LOAD,
     payload: payload
   };
-  return action;
 }
 
 /* Export Affiliate Directory */
 function exportAffiliateDirectoryAction(payload) {
-  const action = {
+  return {
     type: ApiConstants.API_EXPORT_AFFILIATE_DIRECTORY_LOAD,
     payload: payload
   };
-  return action;
 }
 
 function userProfileUpdateAction(data) {
-  const action = {
-      type: ApiConstants.API_USER_PROFILE_UPDATE_LOAD,
-      data,
+  return {
+    type: ApiConstants.API_USER_PROFILE_UPDATE_LOAD,
+    data,
   };
+}
 
-  return action;
+function userPhotoUpdateAction(payload) {
+  return {
+    type: ApiConstants.API_USER_PHOTO_UPDATE_LOAD,
+    payload,
+  }
+}
+
+function userDetailUpdateAction(payload) {
+  return {
+    type: ApiConstants.API_USER_DETAIL_UPDATE_LOAD,
+    payload,
+  }
+}
+
+function userPasswordUpdateAction(payload) {
+  return {
+    type: ApiConstants.API_USER_PASSWORD_UPDATE_LOAD,
+    payload,
+  }
+}
+
+function getUserHistoryAction(userId){
+  return {
+    type: ApiConstants.API_USER_MODULE_HISTORY_LOAD,
+    payload: userId
+  };
 }
 
 export {
@@ -316,12 +302,16 @@ export {
   getUserModuleActivityManagerAction,
   getUserFriendAction,
   getUserReferFriendAction,
-  getOrganiationPhotoAction,
-  saveOrganiationPhotoAction,
-  deleteOrganiationPhotoAction,
+  getOrganisationPhotoAction,
+  saveOrganisationPhotoAction,
+  deleteOrganisationPhotoAction,
   deleteOrgContact,
   exportOrgRegQuestionAction,
   getAffiliateDirectoryAction,
   exportAffiliateDirectoryAction,
-  userProfileUpdateAction						 
+  userProfileUpdateAction,
+  getUserHistoryAction,
+  userPhotoUpdateAction,
+  userDetailUpdateAction,
+  userPasswordUpdateAction,
 }

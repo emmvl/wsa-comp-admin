@@ -1,1 +1,1 @@
-Match Id,Start Time,Home,Away,Venue,Division,Type,Score,Match Duration,Main Break,Quarter Break
+Date,Time,Grade,Home Team,Home Team Score,Away Team,Away Team Score,Venue,type,matchDuration,breakDuration,mnbMatchId,mainBreakDuration,Timezone GMT,Round

@@ -3,19 +3,26 @@ import ApiConstants from "../../../themes/apiConstants";
 import AxiosApi from "../../http/registrationHttp/registrationAxios";
 import { message } from "antd";
 import history from "../../../util/history";
+import AppConstants from "../../../themes/appConstants";
 
 function* failSaga(result) {
+  console.log("failSaga", result.result.data.message)
   yield put({
     type: ApiConstants.API_REGISTRATION_FAIL,
     error: result,
     status: result.status
   });
   setTimeout(() => {
+    message.config({
+      duration: 1.5,
+      maxCount: 1
+    })
     message.error(result.result.data.message);
   }, 800);
 }
 
 function* errorSaga(error) {
+  console.log("errorSaga", error)
   yield put({
     type: ApiConstants.API_REGISTRATION_ERROR,
     error: error,
@@ -23,8 +30,11 @@ function* errorSaga(error) {
   });
 
   setTimeout(() => {
-    // message.error(error.result.data.message);
-    message.error("Something went wrong.");
+    message.config({
+      duration: 1.5,
+      maxCount: 1
+    })
+    message.error(AppConstants.somethingWentWrong);
   }, 800);
 }
 
