@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Input, Button, Table, Breadcrumb } from 'antd';
+import { Layout, Input, Button, Table, message } from 'antd';
 import './liveScore.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -15,6 +15,7 @@ import { NavLink } from 'react-router-dom';
 import moment from "moment";
 import { isArrayNotEmpty } from "../../util/helpers";
 import Tooltip from 'react-png-tooltip'
+import ValidationConstants from "../../themes/validationConstant";
 
 const { Content } = Layout;
 let this_obj = null;
@@ -65,6 +66,44 @@ function getVenueName(data) {
     }
 
     return venue_name
+}
+
+function getTeamName(data) {
+    if (data.player) {
+        if (data.player.team) {
+
+            return data.player.team.name
+        } else {
+
+            return ''
+        }
+    } else {
+
+        return ''
+    }
+
+
+}
+
+function getAssociationName(data) {
+    if (data.player) {
+        if (data.player.team) {
+            if (data.player.team.organisation) {
+                return data.player.team.organisation.name
+
+            } else {
+
+                return ''
+            }
+
+        } else {
+
+            return ''
+        }
+    } else {
+
+        return ''
+    }
 }
 
 const columnActiveNews = [
@@ -259,7 +298,7 @@ const columnsTodaysIncient = [
         title: "Date",
         dataIndex: 'incidentTime',
         key: 'incidentTime',
-        sorter: (a, b) => checkSorting(a, b, 'matchId'),
+        sorter: (a, b) => tableSort(a, b, 'incidentTime'),
         render: (incidentTime, record) =>
             <NavLink to={{
                 pathname: "/liveScoreIncidentView",
@@ -272,47 +311,58 @@ const columnsTodaysIncient = [
         title: 'Match Id',
         dataIndex: 'matchId',
         key: 'matchId',
-        sorter: (a, b) => a.matchId.length - b.matchId.length,
+        sorter: (a, b) => tableSort(a, b, 'matchId'),
     },
     {
         title: 'First Name',
         dataIndex: 'incidentPlayers',
         key: 'First Name',
+        sorter: (a, b) => tableSort(a, b, "incidentPlayers"),
         render: (incidentPlayers, record) =>
 
             isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
 
-                <NavLink to={{
-                    pathname: '/liveScorePlayerView',
-                    state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null, screenName: 'dashboard' }
-                }}>
-                    <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.player.firstName}</span>
-                </NavLink>
-            )),
-        sorter: (a, b) => tableSort(a, b, "firstName")
-
+                // <NavLink to={{
+                //     pathname: '/liveScorePlayerView',
+                //     state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null, screenName: 'dashboard' }
+                // }}>
+                <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.checkUserId(record)} className="desc-text-style side-bar-profile-data" >{item.player.firstName}</span>
+                // </NavLink>
+            ))
+    
     },
     {
         title: 'Last Name',
         dataIndex: 'incidentPlayers',
         key: 'Last Name',
+        sorter: (a, b) => tableSort(a, b, "incidentPlayers"),
         render: (incidentPlayers, record) =>
 
             isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
 
-                <NavLink to={{
-                    pathname: '/liveScorePlayerView',
-                    state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null, screenName: 'dashboard' }
-                }}>
-                    <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.player.lastName}</span>
-                </NavLink>
+                // <NavLink to={{
+                //     pathname: '/liveScorePlayerView',
+                //     state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null, screenName: 'dashboard' }
+                // }}>
+                <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.checkUserId(record)} className="desc-text-style side-bar-profile-data" >{item.player.lastName}</span>
+                // </NavLink>
             ))
     },
     {
-        title: "Association",
-        dataIndex: 'association',
-        key: 'association',
-        sorter: (a, b) => checkSorting(a, b, "association"),
+        title: "Organisation",
+        dataIndex: 'incidentPlayers',
+        key: 'Organisation',
+        sorter: (a, b) => tableSort(a, b, "incidentPlayers"),
+        render: (incidentPlayers, record) =>
+            isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
+
+                // <NavLink to={{
+                //     pathname: '/liveScorePlayerView',
+                //     state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null, screenName: 'dashboard' }
+                // }}>
+                <span className="desc-text-style side-bar-profile-data" >{getAssociationName(item)}</span>
+                // </NavLink>
+            )),
     },
     // {
     //     title: "Club",
@@ -322,17 +372,25 @@ const columnsTodaysIncient = [
     // },
     {
         title: "Team",
-        dataIndex: 'team',
+        dataIndex: 'incidentPlayers',
         key: 'team',
-        sorter: (a, b) => checkSorting(a, b, "team"),
-        render: (team) =>
-            <span class="input-heading-add-another pt-0">{team}</span>
+        sorter: (a, b) => tableSort(a, b, "incidentPlayers"),
+        render: (incidentPlayers, record) =>
+            isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
+
+                <NavLink to={{
+                    pathname: '/liveScoreTeamView',
+                    state: { tableRecord: record, screenName: 'liveScoreDashboard' }
+                }}>
+                    <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{getTeamName(item)}</span>
+                </NavLink>
+            )),
     },
     {
         title: "Description",
         dataIndex: 'description',
         key: 'description',
-        sorter: (a, b, description) => checkSorting(a, b, description),
+        sorter: (a, b, description) => tableSort(a, b, "description"),
     },
 ];
 
@@ -400,6 +458,7 @@ class LiveScoreDashboard extends Component {
         this.state = {
             incidents: "incidents"
         }
+        this_obj = this
     }
 
     componentDidMount() {
@@ -413,6 +472,16 @@ class LiveScoreDashboard extends Component {
             this.props.liveScoreDashboardListAction(id, startDay, currentTime)
         } else {
             history.push('/liveScoreCompetitions')
+        }
+    }
+
+    checkUserId(record) {
+        if (record.userId == null) {
+            message.config({ duration: 1.5, maxCount: 1 })
+            message.warn(ValidationConstants.playerMessage)
+        }
+        else {
+            history.push("/userPersonal", { userId: record.userId, screenKey: "livescore", screen: "/userPersonal" })
         }
     }
 
