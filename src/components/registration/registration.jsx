@@ -242,13 +242,12 @@ class Registration extends Component {
         }
         else if (key == "regFrom") {
             let d = moment(value, 'YYYY-mm-dd');
-     
-            await this.setState({ dobFrom: d });
+            await this.setState({ regFrom: d });
             this.handleRegTableList(1);
         }
-        else if (key == "dobTo") {
+        else if (key == "regTo") {
             let d = moment(value, 'YYYY-mm-dd');
-            await this.setState({ dobTo: d });
+            await this.setState({ regTo: d });
             this.handleRegTableList(1);
         }
         else if (key == "postalCode") {
@@ -533,11 +532,11 @@ class Registration extends Component {
                                 <DatePicker
                                     size="default"
                                     className="year-select reg-filter-select"
-                                    onChange={e => this.onChangeDropDownValue(e, 'dobFrom')}
+                                    onChange={e => this.onChangeDropDownValue(e, 'regFrom')}
                                     format={"DD-MM-YYYY"}
                                     placeholder={"dd-mm-yyyy"}
                                     showTime={false}
-                                    name={'dobFrom'}
+                                    name={'regFrom'}
                                 />
                             </div>
                         </div>
