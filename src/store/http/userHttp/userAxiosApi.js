@@ -261,6 +261,11 @@ let userHttpApi = {
   saveUserDetail(payload) {
     const url = `users/profile`;
     return Method.dataPatch(url, token, payload);
+  },
+
+  updateUserPassword(payload) {
+    const url = `users/updatePassword`;
+    return Method.dataPatch(url, token, payload);
   }
 }
 

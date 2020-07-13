@@ -5,7 +5,6 @@ import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 import { message } from "antd";
 
 function* failSaga(result) {
-    console.log(result)
     yield put({ type: ApiConstants.API_SAVE_VENUE_CHANGE_FAIL });
     setTimeout(() => {
         message.error(result.result.data.message)

@@ -4,9 +4,11 @@ import userHttpApi from "../../http/userHttp/userAxiosApi";
 import { message } from "antd";
 
 function* failSaga(result) {
-    yield put({ type: ApiConstants.API_USER_FAIL,  
+    yield put({
+        type: ApiConstants.API_USER_FAIL,
         error: result,
-        status: result.status });
+        status: result.status
+    });
     setTimeout(() => {
         message.config({
             duration: 1.5,
@@ -620,6 +622,26 @@ export function* saveUserDetailSaga(action) {
                 result: result.result.data,
                 status: result.status
             });
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
+/* Update the User Password */
+export function* updateUserPasswordSaga(action) {
+    try {
+        const result = yield call(userHttpApi.updateUserPassword, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_USER_PASSWORD_UPDATE_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+
+            message.success(result.result.data.message);
         } else {
             yield call(failSaga, result);
         }

@@ -1,13 +1,15 @@
 import React, { useCallback, useState } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Button, Form } from "antd";
+import { Button, Form, message } from "antd";
 
 import AppConstants from "../../themes/appConstants";
 import InputWithHead from "../../customComponents/InputWithHead";
+import { userPasswordUpdateAction } from "../../store/actions/userAction/userAction";
+import Loader from "../../customComponents/loader";
 
 function Password(props) {
-  const { form } = props;
+  const { userState, form, userPasswordUpdateAction } = props;
   
   const [security, setSecurity] = useState({});
 
@@ -23,10 +25,18 @@ function Password(props) {
 
     form.validateFields((err) => {
       if (!err) {
-        console.log(security);
+        if (security.newPassword !== security.confirmPassword) {
+          message.error('Password does not match');
+          return;
+        }
+
+        userPasswordUpdateAction({
+          password: security.password,
+          newPassword: security.newPassword,
+        });
       }
     });
-  }, [security, form]);
+  }, [security, form, userPasswordUpdateAction]);
 
   return (
     <div className="inside-table-view">
@@ -74,12 +84,15 @@ function Password(props) {
           </div>
         </div>
       </Form>
+
+      <Loader visible={userState.userPasswordUpdate} />
     </div>
   );
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
+    userPasswordUpdateAction,
   }, dispatch);
 }
 

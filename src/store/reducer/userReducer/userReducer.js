@@ -20,23 +20,23 @@ let affiliate = {
   email: ''
 };
 
-let affiliateListObj = {
-  affiliateId: 0,
-  affiliateToOrgId: 0,
-  affiliateOrgId: 0,
-  affiliateName: '',
-  affiliatedToName: '',
-  organisationTypeRefName: '',
-  contact1Name: '',
-  contact2Name: '',
-  statusRefName: ''
-};
-
-let affiliateToObj = {
-  affiliateTo: [],
-  organisationTypes: [],
-  organisationName: ''
-};
+// let affiliateListObj = {
+//   affiliateId: 0,
+//   affiliateToOrgId: 0,
+//   affiliateOrgId: 0,
+//   affiliateName: '',
+//   affiliatedToName: '',
+//   organisationTypeRefName: '',
+//   contact1Name: '',
+//   contact2Name: '',
+//   statusRefName: ''
+// };
+//
+// let affiliateToObj = {
+//   affiliateTo: [],
+//   organisationTypes: [],
+//   organisationName: ''
+// };
 
 const initialState = {
   onLoad: false,
@@ -108,6 +108,9 @@ const initialState = {
   userHistoryList: [],
   userHistoryPage: 1,
   userHistoryTotalCount: 1,
+  userDetailUpdate: false,
+  userPhotoUpdate: false,
+  userPasswordUpdate: false,
 };
 
 function userReducer(state = initialState, action) {
@@ -116,6 +119,9 @@ function userReducer(state = initialState, action) {
       return {
         ...state,
         onLoad: false,
+        userDetailUpdate: false,
+        userPhotoUpdate: false,
+        userPasswordUpdate: false,
         error: action.error,
         status: action.status
       };
@@ -124,6 +130,9 @@ function userReducer(state = initialState, action) {
       return {
         ...state,
         onLoad: false,
+        userDetailUpdate: false,
+        userPhotoUpdate: false,
+        userPasswordUpdate: false,
         error: action.error,
         status: action.status
       };
@@ -564,7 +573,7 @@ function userReducer(state = initialState, action) {
       };
 
     case ApiConstants.API_USER_PHOTO_UPDATE_LOAD:
-      return { ...state, onLoad: true };
+      return { ...state, userPhotoUpdate: true };
 
     case ApiConstants.API_USER_PHOTO_UPDATE_SUCCESS:
       return {
@@ -573,13 +582,13 @@ function userReducer(state = initialState, action) {
           ...state.getUserOrganisation,
           photoUrl: action.result.photoUrl,
         },
-        onLoad: false,
+        userPhotoUpdate: false,
         status: action.status,
         error: null
       };
 
     case ApiConstants.API_USER_DETAIL_UPDATE_LOAD:
-      return { ...state, onLoad: true };
+      return { ...state, userDetailUpdate: true };
 
     case ApiConstants.API_USER_DETAIL_UPDATE_SUCCESS:
       return {
@@ -591,7 +600,18 @@ function userReducer(state = initialState, action) {
           lastName: action.result.user.lastName,
           mobileNumber: action.result.user.mobileNumber,
         },
-        onLoad: false,
+        userDetailUpdate: false,
+        status: action.status,
+        error: null
+      };
+
+    case ApiConstants.API_USER_PASSWORD_UPDATE_LOAD:
+      return { ...state, userPasswordUpdate: true };
+
+    case ApiConstants.API_USER_PASSWORD_UPDATE_SUCCESS:
+      return {
+        ...state,
+        userPasswordUpdate: false,
         status: action.status,
         error: null
       };

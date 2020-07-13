@@ -776,4 +776,7 @@ export default function* root_saga() {
 
   // Update User Detail
   yield takeEvery(ApiConstants.API_USER_DETAIL_UPDATE_LOAD, userSaga.saveUserDetailSaga);
+
+  // Update User Password
+  yield takeEvery(ApiConstants.API_USER_PASSWORD_UPDATE_LOAD, userSaga.updateUserPasswordSaga);
 }

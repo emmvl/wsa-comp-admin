@@ -7,21 +7,28 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import InputWithHead from "../../customComponents/InputWithHead";
 import { userPhotoUpdateAction, userDetailUpdateAction } from "../../store/actions/userAction/userAction";
+import Loader from "../../customComponents/loader";
 
 function Profile(props) {
   const { userState, form, userPhotoUpdateAction, userDetailUpdateAction } = props;
 
   const [user, setUser] = useState(userState.getUserOrganisation);
 
+  const { firstName, lastName, mobileNumber, userEmail, photoUrl } = userState.getUserOrganisation;
+
   useEffect(() => {
-    setUser({
-      photoUrl: userState.getUserOrganisation.photoUrl,
-      firstName: userState.getUserOrganisation.firstName,
-      lastName: userState.getUserOrganisation.lastName,
-      mobileNumber: userState.getUserOrganisation.mobileNumber,
-      email: userState.getUserOrganisation.userEmail,
-    });
-  }, [userState.getUserOrganisation]);
+    setUser(prevState => ({
+      ...prevState,
+      firstName,
+      lastName,
+      mobileNumber,
+      email: userEmail,
+    }));
+  }, [firstName, lastName, mobileNumber, userEmail]);
+
+  useEffect(() => {
+    setUser(prevState => ({ ...prevState, photoUrl }));
+  }, [photoUrl]);
 
   const onChangeField = useCallback((e) => {
     setUser({
@@ -159,6 +166,8 @@ function Profile(props) {
           </div>
         </div>
       </Form>
+
+      <Loader visible={userState.userDetailUpdate || userState.userPhotoUpdate} />
     </div>
   );
 }
