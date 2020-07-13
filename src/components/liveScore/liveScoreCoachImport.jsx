@@ -14,6 +14,7 @@ import ValidationConstants from "../../themes/validationConstant";
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import history from "../../util/history";
 import { userExportFilesAction } from "../../store/actions/appAction"
+import { NavLink } from 'react-router-dom';
 
 
 const { Content, Header, Footer } = Layout;
@@ -112,9 +113,11 @@ class LiveScoreCoachImport extends Component {
                         </div>
 
                         <div className="reg-add-save-button ml-3"  >
-                            <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
-                                {AppConstants.downloadTemplate}
-                            </Button>
+                            <NavLink to="/templates/wsa-livescore-import-coach.csv" target="_blank" download>
+                                <Button className="primary-add-comp-form" type="primary">
+                                    {AppConstants.downloadTemplate}
+                                </Button>
+                            </NavLink>
                         </div>
                     </div>
                 </div>

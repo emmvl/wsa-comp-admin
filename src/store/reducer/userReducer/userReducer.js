@@ -104,6 +104,10 @@ const initialState = {
   onExpAffiliateDirLoad: false,
   onMedicalLoad: false,
   onPersonLoad: false,
+  userHistoryLoad: false,
+  userHistoryList: [],
+  userHistoryPage: 1,
+  userHistoryTotalCount: 1,
 };
 
 function userReducer(state = initialState, action) {
@@ -543,6 +547,20 @@ function userReducer(state = initialState, action) {
       return {
         ...state,
         onUpUpdateLoad: false,
+      };
+
+    case ApiConstants.API_USER_MODULE_HISTORY_LOAD:
+      return { ...state, userHistoryLoad: true };
+
+    case ApiConstants.API_USER_MODULE_HISTORY_SUCCESS:
+      let userHistoryData = action.result;
+      return {
+        ...state,
+        userHistoryLoad: false,
+        userHistoryList: userHistoryData.userHistory,
+        userHistoryPage: userHistoryData.page ? userHistoryData.page.currentPage : 1,
+        userHistoryTotalCount: userHistoryData.page.totalCount,
+        status: action.status
       };
 
     case ApiConstants.API_USER_PHOTO_UPDATE_LOAD:

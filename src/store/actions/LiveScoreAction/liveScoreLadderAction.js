@@ -28,7 +28,25 @@ function updateLadderSetting(data) {
     return action;
 }
 
+function ladderAdjustmentPostData(data) {
+    const action = {
+        type: ApiConstants.API_LADDER_ADJUSTMENT_POST_LOAD,
+        data
+    };
+    return action;
+}
+
+function ladderAdjustmentGetData(data) {
+    const action = {
+        type: ApiConstants.API_LADDER_ADJUSTMENT_GET_LOAD,
+        data
+    };
+    return action;
+}
+
 export {
     liveScoreLaddersListAction,
-    updateLadderSetting
+    updateLadderSetting,
+    ladderAdjustmentPostData,
+    ladderAdjustmentGetData
 }

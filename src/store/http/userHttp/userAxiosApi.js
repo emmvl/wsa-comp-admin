@@ -248,6 +248,11 @@ let userHttpApi = {
     return Method.dataGetDownload(url, localStorage.token);
   },
 
+  getUserHistory(payload) {
+    const url = `api/user/history`;
+    return Method.dataPost(url, token, payload);
+  },
+
   saveUserPhoto(payload) {
     const url = `users/photo`;
     return Method.dataPost(url, token, payload);

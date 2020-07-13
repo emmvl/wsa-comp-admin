@@ -262,6 +262,14 @@ function userDetailUpdateAction(payload) {
   }
 }
 
+function getUserHistoryAction(userId){
+  const action = {
+    type: ApiConstants.API_USER_MODULE_HISTORY_LOAD,
+    payload: userId
+  };
+  return action;
+}
+
 export {
   getRoleAction,
   getUreAction,
@@ -296,6 +304,7 @@ export {
   getAffiliateDirectoryAction,
   exportAffiliateDirectoryAction,
   userProfileUpdateAction,
+  getUserHistoryAction,
   userPhotoUpdateAction,
   userDetailUpdateAction,
 }

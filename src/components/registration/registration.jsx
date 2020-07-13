@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Table, Select, Menu, Pagination, Modal, DatePicker } from "antd";
+import { Layout, Breadcrumb, Icon, Table, Select, Menu, Pagination, Modal, DatePicker, Input } from "antd"; import './product.scss';
 import './product.scss';
 import moment from 'moment';
 import { NavLink } from 'react-router-dom';
@@ -19,9 +19,6 @@ import { getAffiliateToOrganisationAction } from "../../store/actions/userAction
 import { getAllCompetitionAction } from "../../store/actions/registrationAction/registrationDashboardAction"
 import { getOnlyYearListAction, } from '../../store/actions/appAction'
 import { isEmptyArray } from "formik";
-import WizardModel from "../../customComponents/registrationWizardModel"
-import history from "../../util/history";
-import StripeKeys from "../stripe/stripeKeys";
 import { currencyFormat } from "../../util/currencyFormat";
 
 const { Footer, Content } = Layout;
@@ -153,7 +150,8 @@ class Registration extends Component {
             compFeeStatus: 0,
             compName: "",
             regStatus: false,
-            paymentStatusRefId: -1
+            paymentStatusRefId: -1,
+            searchText: '',
         }
         // this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
@@ -178,6 +176,7 @@ class Registration extends Component {
             membershipProductId: this.state.membershipProductId,
             paymentId: this.state.paymentId,
             paymentStatusRefId: this.state.paymentStatusRefId,
+            searchText: this.state.searchText,
             paging: {
                 limit: 10,
                 offset: (page ? (10 * (page - 1)) : 0)
@@ -262,51 +261,31 @@ class Registration extends Component {
         }
     }
 
-    // openwizardmodel() {
-    //     let competitionData = this.props.registrationDashboardState.competitionTypeList
-    //     if (competitionData.length > 0) {
-    //         let competitionId = competitionData[0].competitionId
-    //         let publishStatus = competitionData[0].competitionStatusId
-    //         let orgRegistrationId = competitionData[0].orgRegistratinId
-    //         let wizardYear = competitionData[0].yearId
-    //         let registrationCloseDate = competitionData[0].registrationCloseDate
-    //         let inviteeStatus = competitionData[0].inviteeStatus
-    //         let competitionCreatorOrganisation = competitionData[0].competitionCreatorOrganisation
-    //         let isDirect = competitionData[0].isDirect
-    //         let compFeeStatus = competitionData[0].creatorFeeStatus
-    //         let compName = competitionData[0].competitionName
-    //         let regStatus = competitionData[0].orgRegistrationStatusId
-    //         this.setState
-    //             ({
-    //                 competitionId, publishStatus, orgRegistrationId,
-    //                 wizardYear, registrationCloseDate, inviteeStatus, competitionCreatorOrganisation, isDirect,
-    //                 visible: true, compFeeStatus, compName, regStatus
-    //             })
-    //     } else {
-    //         this.setState
-    //             ({
-    //                 visible: true
-    //             })
-    //     }
+    onKeyEnterSearchText = async(e) =>{
+        var code = e.keyCode || e.which;
+        if(code === 13) { //13 is the enter keycode
+            this.handleRegTableList(1);
+        } 
+    }
 
-    // }
-    // userEmail = () => {
-    //     let orgData = getOrganisationData()
-    //     let email = orgData && orgData.email ? encodeURIComponent(orgData.email) : ""
-    //     return email
-    // }
-    // stripeConnected = () => {
-    //     let orgData = getOrganisationData()
-    //     let stripeAccountID = orgData ? orgData.stripeAccountID : null
-    //     return stripeAccountID
-    // }
+    onChangeSearchText = async(e) =>{
+        let value = e.target.value;
+        await this.setState({searchText: e.target.value})
+        if(value == null || value == "")
+        {
+            this.handleRegTableList(1); 
+        }
+    }
+
+    onClickSearchIcon = async() =>{
+        this.handleRegTableList(1);
+    }
+
+
 
     ///////view for breadcrumb
     headerView = () => {
-        // let stripeConnected = this.stripeConnected()
-        // let userEmail = this.userEmail()
-        // let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=${StripeKeys.clientId}&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=${StripeKeys.url}/registrationPayments`
-        // let registrationCompetition = this.props.registrationDashboardState.competitionTypeList
+
         return (
             <div className="comp-player-grades-header-view-design" >
                 <div className="row" >
@@ -314,6 +293,19 @@ class Registration extends Component {
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.Registrations}</Breadcrumb.Item>
                         </Breadcrumb>
+                    </div>
+                    <div className="col-sm d-flex align-items-center justify-content-end mr-5"  >
+                        <div className="comp-product-search-inp-width" >
+                            <Input className="product-reg-search-input"
+                                 onChange={(e) => this.onChangeSearchText(e)}
+                                placeholder="Search..."
+                                onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                    onClick={() => this.onClickSearchIcon()}
+                                />}
+                                allowClear
+                            />
+                        </div>
                     </div>
 
                 </div>
@@ -494,7 +486,7 @@ class Registration extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="reg-col" style={{marginRight: '25px'}}>
+                        <div className="reg-col" style={{ marginRight: '25px' }}>
                             <div className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.postCode}</div>
                                 <InputWithHead
@@ -502,7 +494,7 @@ class Registration extends Component {
                                     onChange={(e) => this.onChangeDropDownValue(e.target.value, 'postalCode')}
                                     value={this.state.postalCode}
                                 />
-                               
+
                             </div>
                         </div>
                         <div className="reg-col1" >

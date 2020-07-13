@@ -86,7 +86,6 @@ class LiveScoreAddDivision extends Component {
                     <div className="col-sm">
                         <Form.Item>
                             {getFieldDecorator("name", {
-                                normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameisrequired }],
                             })(
                                 <InputWithHead
@@ -94,7 +93,10 @@ class LiveScoreAddDivision extends Component {
                                     heading={AppConstants.name}
                                     placeholder={AppConstants.name}
                                     onChange={(name) => this.props.liveScoreUpdateDivisionAction(captializedString(name.target.value), 'name')}
-                                    value={name} />
+                                    value={name}
+                                    onBlur={(i) => this.props.form.setFieldsValue({
+                                        'name': captializedString(i.target.value)
+                                    })} />
                             )}
                         </Form.Item>
                     </div>
@@ -103,7 +105,8 @@ class LiveScoreAddDivision extends Component {
                 <div className="row" >
                     <div className="col-sm">
                         <Form.Item>
-                        {getFieldDecorator("divisionName", { normalize: (input) => captializedString(input),
+                            {getFieldDecorator("divisionName", {
+
                                 rules: [{ required: true, message: ValidationConstants.divisionNameisrequired }],
                             })(
                                 <InputWithHead
@@ -111,7 +114,10 @@ class LiveScoreAddDivision extends Component {
                                     heading={AppConstants.divisionName}
                                     placeholder={AppConstants.divisionName}
                                     onChange={(divisionName) => this.props.liveScoreUpdateDivisionAction(captializedString(divisionName.target.value), 'divisionName')}
-                                    value={divisionName} />
+                                    value={divisionName}
+                                    onBlur={(i) => this.props.form.setFieldsValue({
+                                        'divisionName': captializedString(i.target.value)
+                                    })} />
                             )}
 
                         </Form.Item>
@@ -121,7 +127,7 @@ class LiveScoreAddDivision extends Component {
                 <div className="row" >
                     <div className="col-sm" >
                         <Form.Item>
-                        {getFieldDecorator("gradeName", { normalize: (input) => captializedString(input),
+                            {getFieldDecorator("gradeName", {
                                 rules: [{ required: true, message: ValidationConstants.gradeisrequired }],
                             })(
                                 <InputWithHead
@@ -130,7 +136,10 @@ class LiveScoreAddDivision extends Component {
                                     placeholder={AppConstants.gradeName}
                                     maxLength="4"
                                     onChange={(gradeName) => this.props.liveScoreUpdateDivisionAction(captializedString(gradeName.target.value), 'gradeName')}
-                                    value={gradeName} />
+                                    value={gradeName}
+                                    onBlur={(i) => this.props.form.setFieldsValue({
+                                        'gradeName': captializedString(i.target.value)
+                                    })} />
                             )}
 
                         </Form.Item>

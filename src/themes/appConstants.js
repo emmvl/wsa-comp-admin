@@ -1269,7 +1269,7 @@ const AppConstants = {
   chargeTaxesOnProduct: 'Charge taxes on product',
   inventory: 'Inventory',
   enableInventoryTracking: 'Enable inventory tracking',
-  SKU: 'Stock keeping unit',
+  StockKeepingUnit: 'Stock keeping unit',
   skuHeader: 'SKU(stock keeping unit)',
   barcodeHeading: 'Barcode(ISBN,UPC,GTIN,etc)',
   barcode: 'Barcode',
@@ -1391,6 +1391,8 @@ const AppConstants = {
   positionTrackReport: "Position Tracking Report",
   periodFilter: 'Period',
   byGame: 'By Game',
+  importTeamPlayer: "Import Team and Players",
+  quickCompetitionFormat: "Competition Format (3/3)",
   matchPrintTemplateType: 'Match Print Template Type',
   playerBorrowing: "Player Borrowing",
   gamesBorrowed: "Games Borrowed",
@@ -1400,6 +1402,8 @@ const AppConstants = {
   productDeletedMessage: "Product deleted successfully.",
   typeAddedMessage: "Type added successfully.",
   registrationChange: "Registration Change",
+  cost: "Cost",
+  history: "History",
 
   // Account
   account: "Account",

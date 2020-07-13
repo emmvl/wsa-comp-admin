@@ -12,7 +12,10 @@ import { message } from "antd";
 import ValidationConstants from "../../themes/validationConstant";
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import history from "../../util/history";
+import { NavLink } from 'react-router-dom';
+
 const { Content, Header, Footer } = Layout;
+
 
 class LiveScoreIncidentImport extends Component {
     constructor(props) {
@@ -79,6 +82,14 @@ class LiveScoreIncidentImport extends Component {
                             <Button className="primary-add-comp-form" type="primary">
                                 {AppConstants.upload}
                             </Button>
+                        </div>
+
+                        <div className="reg-add-save-button ml-3"  >
+                            <NavLink to="/templates/wsa-livescore-import-incident.csv" target="_blank" download>
+                                <Button className="primary-add-comp-form" type="primary">
+                                    {AppConstants.downloadTemplate}
+                                </Button>
+                            </NavLink>
                         </div>
                     </div>
                 </div>

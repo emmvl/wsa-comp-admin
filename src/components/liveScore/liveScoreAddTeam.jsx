@@ -186,7 +186,6 @@ class LiveScoreAddTeam extends Component {
             <div className="content-view pt-4">
                 <Form.Item>
                     {getFieldDecorator('teamName', {
-                        normalize: (input) => captializedString(input),
                         rules: [{ required: true, message: ValidationConstants.teamName }],
                     })(
                         <InputWithHead
@@ -198,6 +197,9 @@ class LiveScoreAddTeam extends Component {
                             }
                             }
                             value={captializedString(name)}
+                            onBlur={(i) => this.props.form.setFieldsValue({
+                                'teamName': captializedString(i.target.value)
+                            })}
                         />
                     )}
 
@@ -455,7 +457,6 @@ if(x[0].charCodeAt()>=97)
                     <div className="col-sm" >
                         <Form.Item>
                             {getFieldDecorator('firstName', {
-                                normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(<InputWithHead
                                 required={"required-field pt-0 pb-0"}
@@ -467,6 +468,9 @@ if(x[0].charCodeAt()>=97)
 
                                 }}
                                 value={teamManagerData.firstName}
+                                onBlur={(i) => this.props.form.setFieldsValue({
+                                    'firstName': captializedString(i.target.value)
+                                })}
                             />
                             )}
                         </Form.Item>
@@ -475,7 +479,6 @@ if(x[0].charCodeAt()>=97)
                     <div className="col-sm" >
                         <Form.Item>
                             {getFieldDecorator('lastName', {
-                                normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
@@ -487,6 +490,9 @@ if(x[0].charCodeAt()>=97)
                                         this.props.liveScoreAddTeamform({ key: 'lastName', data: captializedString(event.target.value) })
                                     }}
                                     value={teamManagerData.lastName}
+                                    onBlur={(i) => this.props.form.setFieldsValue({
+                                        'lastName': captializedString(i.target.value)
+                                    })}
                                 />
                             )}
                         </Form.Item>

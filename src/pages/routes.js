@@ -130,7 +130,7 @@ import UmpireRoaster from "../components/umpire/umpireRoaster"
 import UmpireImport from "../components/umpire/umpireImport"
 import Umpire from "../components/umpire/umpire"
 import ListProducts from "../components/shop/listProducts";
-import AddProduct from "../components/shop/addproduct";
+import AddProduct from "../components/shop/addProduct";
 import PaymentDashboard from "../components/registration/paymentDashboard"
 
 import OrderSummary from "../components/shop/orderSummary"
@@ -146,8 +146,11 @@ import RegistrationMainDashboard from "../components/registration/registrationMa
 import LiveScoreLadderAdjustment from "../components/liveScore/liveScoreLadderAdjustment";
 import LiveScorePositionTrackReport from "../components/liveScore/liveScorePositionTrackReport";
 
-import lazyLoad from "../components/lazyLoad";
 import Account from "./Account";
+import RegistrationChange from "../components/registration/registrationChange";
+import MultifieldDraws from "../components/competition/multifieldDraws";
+
+import lazyLoad from "../components/lazyLoad";
 
 class Routes extends React.Component {
   render() {
@@ -767,6 +770,16 @@ class Routes extends React.Component {
         <PrivateRoute
           path="/liveScorePositionTrackReport"
           component={lazyLoad(LiveScorePositionTrackReport)}
+        />
+
+        <PrivateRoute
+          path="/registrationChange"
+          component={lazyLoad(RegistrationChange)}
+        />
+
+        <PrivateRoute
+          path="/multifieldDraws"
+          component={lazyLoad(MultifieldDraws)}
         />
 
         <PrivateRoute path="/account" component={lazyLoad(Account)} />

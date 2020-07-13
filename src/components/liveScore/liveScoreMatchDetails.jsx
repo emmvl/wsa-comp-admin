@@ -241,10 +241,11 @@ class LiveScoreMatchDetails extends Component {
 
     ///////view for breadcrumb
     headerView = () => {
-        const { match } = this.props.liveScoreMatchState.matchDetails
+        // const { match } = this.props.liveScoreMatchState.matchDetails
+        const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match : []
+
         const length = match ? match.length : 0
         let isMatchStatus = length > 0 ? match[0].matchStatus === "ENDED" ? true : false : false
-        console.log(match, 'matchDelete')
 
         return (
             <div className="comp-player-grades-header-drop-down-view mb-5">
@@ -343,7 +344,9 @@ class LiveScoreMatchDetails extends Component {
     //// Umpire & Score details
 
     umpireScore_View = () => {
-        const { match, umpires } = this.props.liveScoreMatchState.matchDetails
+        // const { match, umpires } = this.props.liveScoreMatchState.matchDetails
+        const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match : []
+        const umpires = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.umpires : []
         const length = match ? match.length : 0
         let UmpireData = isArrayNotEmpty(umpires) ? umpires : []
 
@@ -431,11 +434,10 @@ class LiveScoreMatchDetails extends Component {
 
     //// Team details 
     team_View = () => {
-        const { match, umpires } = this.props.liveScoreMatchState.matchDetails
+        // const { match, umpires } = this.props.liveScoreMatchState.matchDetails
+        const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match : []
         const { team1Players, team2Players } = this.props.liveScoreMatchState
         const length = match ? match.length : 0
-        console.log(team1Players, 'team1players')
-
         return (
             <div className="match-details-rl-padding row mt-5">
                 <div className="col-sm" style={{ flexDirection: "column", display: "flex", alignContent: "center" }} >

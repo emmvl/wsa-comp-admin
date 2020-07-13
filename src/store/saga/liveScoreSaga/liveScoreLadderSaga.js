@@ -2,6 +2,7 @@ import { put, call } from '../../../../node_modules/redux-saga/effects'
 import ApiConstants from "../../../themes/apiConstants";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 import { message } from "antd";
+import history from "../../../util/history";
 
 function* failSaga(result) {
     yield put({
@@ -81,6 +82,47 @@ export function* liveScoreLaddersListSaga(action) {
                 result: result.result.data,
                 status: result.status,
             });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+export function* ladderAdjustmentPostSaga(action) {
+    try {
+
+        const result = yield call(LiveScoreAxiosApi.ladderAdjustmentPostData, action.data);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_LADDER_ADJUSTMENT_POST_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+
+            history.push('/liveScoreLadderList')
+            message.success('LadderAdjustment - Updated Successfully.')
+
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+export function* ladderAdjustmentGetSaga(action) {
+    try {
+
+        const result = yield call(LiveScoreAxiosApi.ladderAdjustmentGetData, action.data);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_LADDER_ADJUSTMENT_GET_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+
         } else {
             yield call(failSaga, result)
         }

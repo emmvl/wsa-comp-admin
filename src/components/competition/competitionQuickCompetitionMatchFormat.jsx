@@ -16,7 +16,9 @@ import {
     getMatchTypesAction, getCompetitionFormatTypesAction, getCompetitionTypesAction,
     getYearAndCompetitionOwnAction, clearYearCompetitionAction, getEnhancedRoundRobinAction
 } from "../../store/actions/appAction";
-
+import {
+    getYearAndQuickCompetitionAction
+} from "../../store/actions/competitionModuleAction/competitionQuickAction"
 import { generateDrawAction } from "../../store/actions/competitionModuleAction/competitionModuleAction";
 import Loader from '../../customComponents/loader';
 import {
@@ -52,36 +54,25 @@ class QuickCompetitionMatchFormat extends Component {
     }
 
     componentDidMount() {
-        console.log("Component Did mount");
-        let yearId = getOwnCompetitionYear()
-        let storedCompetitionId = getOwn_competition()
-        let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
-        let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
-
-        if (storedCompetitionId && yearId && propsData && compData) {
+        console.log(this.props.location.state)
+        let competitionId = this.props.location.state ? this.props.location.state.competitionUniqueKey : null
+        let year = this.props.location.state && this.props.location.state.year
+        let propsData = this.props.quickCompetitionState.quick_CompetitionYearArr.length > 0 && this.props.quickCompetitionState.quick_CompetitionYearArr
+        let compData = this.props.quickCompetitionState.quick_CompetitionArr.length > 0 && this.props.quickCompetitionState.quick_CompetitionArr
+        if (year && competitionId && propsData && compData) {
             this.setState({
-                yearRefId: JSON.parse(yearId),
-                firstTimeCompId: storedCompetitionId,
+                yearRefId: JSON.parse(year),
+                firstTimeCompId: competitionId,
                 getDataLoading: true
             })
-            this.apiCalls(storedCompetitionId, yearId);
-        }
-        else if (yearId) {
-            this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
-            this.setState({
-                yearRefId: JSON.parse(yearId)
-            })
+            this.apiCalls(competitionId, year);
         }
         else {
-            this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-            setOwnCompetitionYear(1)
+            this.props.getYearAndQuickCompetitionAction(this.props.quickCompetitionState.quick_CompetitionArr, null);
         }
-
-
     }
 
     componentDidUpdate(nextProps) {
-        console.log("componentDidUpdate");
         try {
             let competitionFormatState = this.props.competitionFormatState;
             let competitionModuleState = this.props.competitionModuleState;
@@ -93,20 +84,16 @@ class QuickCompetitionMatchFormat extends Component {
                     this.setFormFieldValue();
                 }
             }
-            if (nextProps.appState !== this.props.appState) {
-
-                let competitionList = this.props.appState.own_CompetitionArr;
-                if (nextProps.appState.own_CompetitionArr !== competitionList) {
+            if (nextProps.quickCompetitionState !== this.props.quickCompetitionState) {
+                let competitionList = this.props.quickCompetitionState.quick_CompetitionArr;
+                if (nextProps.quickCompetitionState.quick_CompetitionArr !== competitionList) {
                     if (competitionList.length > 0) {
-                        let competitionId = competitionList[0].competitionId
-                        setOwn_competition(competitionId);
-                        console.log("competitionId::" + competitionId);
+                        let competitionId = competitionList[0].competitionId;
+                        this.setState({ firstTimeCompId: competitionId, getDataLoading: true });
                         this.apiCalls(competitionId, this.state.yearRefId);
-                        this.setState({ getDataLoading: true, firstTimeCompId: competitionId })
                     }
                 }
             }
-
             if (nextProps.competitionFormatState != competitionFormatState) {
                 if (competitionFormatState.onLoad == false && this.state.loading === true) {
                     this.setState({ loading: false });
@@ -126,9 +113,6 @@ class QuickCompetitionMatchFormat extends Component {
                                     this.props.generateDrawAction(payload);
                                     this.setState({ loading: true });
                                 }
-
-
-
                             }
                         }
                     }
@@ -139,14 +123,11 @@ class QuickCompetitionMatchFormat extends Component {
             if (nextProps.competitionModuleState != competitionModuleState) {
                 if (competitionFormatState.onLoad == false && competitionModuleState.drawGenerateLoad == false
                     && this.state.loading === true && !this.state.isFinalAvailable) {
-
                     if (!competitionModuleState.error && competitionModuleState.status == 1) {
                         history.push('/competitionDraws');
                     }
-
                     this.setState({ loading: false });
                 }
-                console.log("&&&&&&&&&&&&&&&" + competitionModuleState.status);
                 if (competitionModuleState.status == 5 && competitionModuleState.drawGenerateLoad == false) {
                     this.setState({ loading: false });
                     message.error(ValidationConstants.drawsMessage[0]);
@@ -163,9 +144,7 @@ class QuickCompetitionMatchFormat extends Component {
         }
 
     }
-
     apiCalls = (competitionId, yearRefId) => {
-        console.log("Api Callse");
         let payload = {
             yearRefId: yearRefId,
             competitionUniqueKey: competitionId,
@@ -184,16 +163,12 @@ class QuickCompetitionMatchFormat extends Component {
     }
 
     onYearChange(yearId) {
-        setOwnCompetitionYear(yearId)
-        setOwn_competition(undefined)
-        this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
+        this.props.getYearAndQuickCompetitionAction(this.props.quickCompetitionState.quick_CompetitionArr, yearId)
         this.setState({ firstTimeCompId: null, yearRefId: yearId })
     }
 
     // on Competition change
     onCompetitionChange(competitionId) {
-        console.log("competitionId::" + competitionId);
-        setOwn_competition(competitionId)
         let payload = {
             yearRefId: this.state.yearRefId,
             competitionUniqueKey: competitionId,
@@ -288,16 +263,11 @@ class QuickCompetitionMatchFormat extends Component {
     }
 
     deleteCompetitionFormatDivision = (competionFormatDivisions, index) => {
-        console.log("*****" + JSON.stringify(competionFormatDivisions));
-        console.log("index::" + index);
         let removedFormat = competionFormatDivisions[index];
-
         let remainingFormatDiv = competionFormatDivisions.
             filter(x => x.competitionFormatTemplateId != removedFormat.competitionFormatTemplateId);
-
         for (let remDiv in remainingFormatDiv) {
             let itemDivisions = remainingFormatDiv[remDiv].divisions;
-
             for (let i in removedFormat.selectedDivisions) {
                 for (let j in itemDivisions) {
                     if (itemDivisions[j].competitionMembershipProductDivisionId === removedFormat.selectedDivisions[i]) {
@@ -306,16 +276,12 @@ class QuickCompetitionMatchFormat extends Component {
                 }
             }
         }
-
-        // console.log("*******" + JSON.stringify(competionFormatDivisions));
         competionFormatDivisions.splice(index, 1);
         this.props.updateCompetitionFormatAction(competionFormatDivisions, 'competionFormatDivisions');
     }
 
     onChangeSetValue = (id, fieldName) => {
-        console.log("id::" + id);
         let data = this.props.competitionFormatState.competitionFormatList;
-        console.log("*****" + JSON.stringify(data));
         let fixtureTemplateId = null;
         if (fieldName == "noOfRounds") {
             // data.fixtureTemplates.map((item, index) => {
@@ -485,7 +451,7 @@ class QuickCompetitionMatchFormat extends Component {
                 <div className="row" >
                     <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
                         <Breadcrumb separator=" > ">
-                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.competitionFormat}</Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.quickCompetitionFormat}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                 </div>
@@ -495,7 +461,7 @@ class QuickCompetitionMatchFormat extends Component {
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
-        const { own_YearArr, own_CompetitionArr, } = this.props.appState
+        let quickCompetitionState = this.props.quickCompetitionState
         return (
             <div className="comp-venue-courts-dropdown-view mt-0" >
                 <div className="fluid-width" >
@@ -512,7 +478,7 @@ class QuickCompetitionMatchFormat extends Component {
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
-                                    {own_YearArr.length > 0 && own_YearArr.map(item => {
+                                    {quickCompetitionState.quick_CompetitionYearArr.length > 0 && quickCompetitionState.quick_CompetitionYearArr.map(item => {
                                         return (
                                             <Option key={"yearRefId" + item.id} value={item.id}>
                                                 {item.description}
@@ -537,7 +503,7 @@ class QuickCompetitionMatchFormat extends Component {
                                     }
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {own_CompetitionArr.length > 0 && own_CompetitionArr.map(item => {
+                                    {quickCompetitionState.quick_CompetitionArr.length > 0 && quickCompetitionState.quick_CompetitionArr.map(item => {
                                         return (
                                             <Option key={"competition" + item.competitionId} value={item.competitionId}>
                                                 {item.competitionName}
@@ -882,7 +848,8 @@ function mapDispatchToProps(dispatch) {
         getYearAndCompetitionOwnAction,
         clearYearCompetitionAction,
         generateDrawAction,
-        getEnhancedRoundRobinAction
+        getEnhancedRoundRobinAction,
+        getYearAndQuickCompetitionAction
     }, dispatch);
 
 }
@@ -891,7 +858,8 @@ function mapStatetoProps(state) {
     return {
         competitionFormatState: state.CompetitionFormatState,
         appState: state.AppState,
-        competitionModuleState: state.CompetitionModuleState
+        competitionModuleState: state.CompetitionModuleState,
+        quickCompetitionState: state.QuickCompetitionState,
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(QuickCompetitionMatchFormat));

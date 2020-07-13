@@ -48,7 +48,7 @@ const stringTONumber = (value) => {
 
 const captializedString = (value) => {
     if (value) {
-        let capString = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()
+        let capString = value.charAt(0).toUpperCase() + value.slice(1)
         //    let capString= value.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
         return capString
     }

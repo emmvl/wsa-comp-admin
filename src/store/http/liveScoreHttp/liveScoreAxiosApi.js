@@ -198,8 +198,14 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token)
     },
 
-    liveScoreRound(competitionID) {
-        var url = `/round?competitionId=${competitionID}`;
+    liveScoreRound(competitionID, divisionId) {
+        var url = null
+        if(divisionId){
+             url = `/round?competitionId=${competitionID}&divisionId=${divisionId}`;
+        }else{
+             url = `/round?competitionId=${competitionID}&divisionId=${divisionId}`;
+        }
+       
         return Method.dataGet(url, localStorage.token)
     },
     liveScoreCreateRound(roundName, sequence, competitionID, divisionId) {
@@ -784,7 +790,7 @@ let LiveScoreAxiosApi = {
     },
 
 
-    //// Export Files 
+    //// Export Files
     exportFiles(url) {
         return Method.dataGetDownload(url, localStorage.token);
     },
@@ -999,6 +1005,17 @@ let LiveScoreAxiosApi = {
 
         return Method.dataGet(url, token)
     },
+
+    ladderAdjustmentPostData(data) {
+        var url = `/teams/ladder/adjustment`;
+        return Method.dataPost(url, token, data.body)
+
+    },
+
+    ladderAdjustmentGetData(data) {
+        var url = `/teams/ladder/adjustment?competitionUniqueKey=${data.uniqueKey}&divisionId=${data.divisionId}`;
+        return Method.dataGet(url, token)
+    }
 };
 
 

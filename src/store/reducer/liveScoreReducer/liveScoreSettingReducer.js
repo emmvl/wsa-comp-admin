@@ -1,6 +1,6 @@
 import ApiConstants from '../../../themes/apiConstants'
 import { actionChannel } from '@redux-saga/core/effects'
-import { stat } from 'fs';
+import { isArrayNotEmpty, captializedString } from "../../../util/helpers";
 const initialState = {
     loader: false,
     form: {
@@ -213,7 +213,6 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 state.gamesBorrowedThreshold = Data
 
             } else if (keys == 'linkedCompetitionId') {
-                console.log(Data, 'linkedCompetitionId')
                 state.linkedCompetitionId = Data
 
             } else if (keys == 'recordUmpire') {

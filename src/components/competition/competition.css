@@ -70,8 +70,8 @@
 }
 
 .comp-player-table-tag {
-  background-color: var(--app-ebf0f3);
-  color: var(--app-77778f);
+  background-color: var(--app-color);
+  color: var(--app-white);
   font-family: inter-semi-bold;
   font-weight: 600;
   font-size: 10px;
@@ -548,6 +548,13 @@ a.collapsed i {
   font-family: "Inter-Medium";
   border-radius: 5px;
 }
+.quick-comp-canvas{
+  height: 40px;
+    line-height: 40px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
 .fixture-main-canvas.Draws .box {
   min-width: 100px;
   height: 53px;

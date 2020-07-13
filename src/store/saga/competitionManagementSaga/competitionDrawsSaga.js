@@ -13,6 +13,7 @@ function* failSaga(result) {
 }
 
 function* errorSaga(error) {
+    console.log("Error=======",error)
     yield put({
         type: ApiConstants.API_COMPETITION_DRAWS_ERROR,
         error: error,

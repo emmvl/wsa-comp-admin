@@ -84,7 +84,6 @@ function roundstructureData(data) {
   if (roundsdata.length > 0) {
     for (let i in roundsdata) {
       newStructureDrawsData = structureDrawsData(roundsdata[i].draws)
-
       roundsdata[i].draws = newStructureDrawsData.mainCourtNumberArray
       roundsdata[i].dateNewArray = newStructureDrawsData.sortedDateArray
       roundsdata[i].legendsArray = newStructureDrawsData.legendsArray
@@ -125,7 +124,7 @@ function structureDrawsData(data) {
             venueCourtNumber: object.venueCourtNumber,
             venueCourtName: object.venueCourtName,
             venueShortName: object.venueShortName,
-            venueNameCourtName: (object.venueShortName + object.venueCourtNumber),
+            venueNameCourtName: (JSON.stringify(object.venueShortName) + JSON.stringify(object.venueCourtNumber)),
             venueCourtId: object.venueCourtId,
             slotsArray: [],
           });
@@ -517,6 +516,7 @@ function swapedDrawsArrayFunc(
   // }
   
 */
+console.log(sourceArray, drawsArray,'valled')
   return drawsArray;
 }
 
@@ -1125,7 +1125,7 @@ function CompetitionDraws(state = initialState, action) {
       }
 
     case ApiConstants.API_DRAW_MATCHES_LIST_LOAD:
-      return { ...state, onLoad: true, onLoad: true }
+      return { ...state, onLoad: true }
 
     case ApiConstants.API_DRAW_MATCHES_LIST_SUCCESS:
       return {

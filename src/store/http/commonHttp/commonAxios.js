@@ -55,8 +55,12 @@ let AxiosApi = {
         return Method.dataGet(url, token);
     },
 
-    async getVenue() {
+    async getVenue(action) {
+        console.log("action.key" + action.key);
         let organisationId = await getOrganisationData().organisationUniqueKey;
+        if(action.key == "all"){
+            organisationId = '';
+        }
         var url = `/api/venue/all?organisationUniqueKey=${organisationId}`;
         return Method.dataGet(url, token);
     },

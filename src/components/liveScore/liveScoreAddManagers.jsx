@@ -244,7 +244,6 @@ class LiveScoreAddManager extends Component {
                     <div className="col-sm" >
                         <Form.Item>
                             {getFieldDecorator(AppConstants.firstName, {
-                                normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
@@ -253,6 +252,9 @@ class LiveScoreAddManager extends Component {
                                     placeholder={AppConstants.firstName}
                                     onChange={(firstName) => this.props.liveScoreUpdateManagerDataAction(captializedString(firstName.target.value), 'firstName')}
                                     value={managerData.firstName}
+                                    onBlur={(i) => this.props.form.setFieldsValue({
+                                        'First Name': captializedString(i.target.value)
+                                    })}
                                 />
                             )}
 
@@ -261,7 +263,6 @@ class LiveScoreAddManager extends Component {
                     <div className="col-sm" >
                         <Form.Item>
                             {getFieldDecorator(AppConstants.lastName, {
-                                normalize: (input) => captializedString(input),
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
@@ -270,6 +271,9 @@ class LiveScoreAddManager extends Component {
                                     placeholder={AppConstants.lastName}
                                     onChange={(lastName) => this.props.liveScoreUpdateManagerDataAction(captializedString(lastName.target.value), 'lastName')}
                                     value={managerData.lastName}
+                                    onBlur={(i) => this.props.form.setFieldsValue({
+                                        'Last Name': captializedString(i.target.value)
+                                    })}
                                 />
                             )}
                         </Form.Item>

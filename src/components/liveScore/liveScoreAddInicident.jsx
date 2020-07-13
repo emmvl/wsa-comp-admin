@@ -301,6 +301,9 @@ class LiveScoreAddIncident extends Component {
                             // value={this.html2text(editData.body)}
                             value={incidentData.description}
                             name={'newsTitle'}
+                            onBlur={(i) => this.props.form.setFieldsValue({
+                                'Description': captializedString(i.target.value)
+                            })}
                         />
                     </div>
                 </div>
