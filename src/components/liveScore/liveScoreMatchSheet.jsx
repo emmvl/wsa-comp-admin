@@ -315,6 +315,61 @@ class LiveScoreMatchSheet extends Component {
         )
     };
 
+    dropdownTableColumns = [
+        {
+            title: 'Sheet ID',
+            dataIndex: 'id',
+            key: 'id',
+            sorter: (a, b) => tableSort(a, b, "id"),
+        },
+        {
+            title: 'Competition',
+            dataIndex: 'competitionName',
+            key: 'competitionName',
+            sorter: (a, b) => tableSort(a, b, "competitionName"),
+        },
+        {
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
+            sorter: (a, b) => tableSort(a, b, "name"),
+        },
+        {
+            title: 'Created at',
+            dataIndex: 'createdAt',
+            key: 'createdAt',
+            sorter: (a, b) => tableSort(a, b, "createdAt"),
+            render: (createdAt) =>
+                <span>{createdAt ? liveScore_MatchFormate(createdAt) : ""}</span>
+        },
+        {
+            title: 'Download',
+            dataIndex: 'downloadLink',
+            key: 'downloadLink',
+            render: (downloadLink) => <a href={downloadLink}>
+                {downloadLink}
+            </a>
+        },
+    ];
+
+    // Match sheet table
+    dropdownTableView = () => {
+        let DATA = [];
+
+        return (
+            <div className="formView mt-4 mb-5">
+                <div className="table-responsive p-2 home-dash-table-view">
+                    <Table
+                        className="home-dashboard-table"
+                        columns={this.dropdownTableColumns}
+                        dataSource={DATA}
+                        rowKey={(record, index) => record.id + index}
+                    />
+                </div>
+            </div>
+        )
+    };
+
     /// form content view
     contentView = () => {
         const {liveScoreMatchSheetState} = this.props;
@@ -398,7 +453,7 @@ class LiveScoreMatchSheet extends Component {
     /// footer view containing all the buttons like submit and cancel
     footerView = () => (
         <div className="fluid-width">
-            <div className="footer-view">
+            <div className="match-sheet-footer-view">
                 <div style={{display: 'flex', justifyContent: 'flex-end', marginRight: 15}}>
                     <Button
                         className="open-reg-button"
@@ -432,10 +487,9 @@ class LiveScoreMatchSheet extends Component {
                             {this.contentView()}
                         </div>
                         {this.tableView()}
-                    </Content>
-                    <Footer>
                         {this.footerView()}
-                    </Footer>
+                        {this.dropdownTableView()}
+                    </Content>
                 </Layout>
                 <LiveScoreMatchSheetPreviewModal
                     visible={this.state.showPreview && !this.props.liveScoreMatchState.onLoad}

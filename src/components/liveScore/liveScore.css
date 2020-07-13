@@ -370,6 +370,10 @@
     font-weight: 500;
     align-self: center;
   }
+
+  .match-sheet-footer-view {
+      padding: 24px 15%;
+  }
   
 @media(min-width: 768px) and (max-width: 1024px) {
     .live-score-edit-match-buttons {
