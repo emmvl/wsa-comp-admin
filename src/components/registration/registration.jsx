@@ -150,7 +150,8 @@ class Registration extends Component {
             compFeeStatus: 0,
             compName: "",
             regStatus: false,
-            paymentStatusRefId: -1
+            paymentStatusRefId: -1,
+            searchText: '',
         }
         // this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
@@ -175,6 +176,7 @@ class Registration extends Component {
             membershipProductId: this.state.membershipProductId,
             paymentId: this.state.paymentId,
             paymentStatusRefId: this.state.paymentStatusRefId,
+            searchText: this.state.searchText,
             paging: {
                 limit: 10,
                 offset: (page ? (10 * (page - 1)) : 0)
@@ -259,6 +261,26 @@ class Registration extends Component {
         }
     }
 
+    onKeyEnterSearchText = async(e) =>{
+        var code = e.keyCode || e.which;
+        if(code === 13) { //13 is the enter keycode
+            this.handleRegTableList(1);
+        } 
+    }
+
+    onChangeSearchText = async(e) =>{
+        let value = e.target.value;
+        await this.setState({searchText: e.target.value})
+        if(value == null || value == "")
+        {
+            this.handleRegTableList(1); 
+        }
+    }
+
+    onClickSearchIcon = async() =>{
+        this.handleRegTableList(1);
+    }
+
 
 
     ///////view for breadcrumb
@@ -275,12 +297,12 @@ class Registration extends Component {
                     <div className="col-sm d-flex align-items-center justify-content-end mr-5"  >
                         <div className="comp-product-search-inp-width" >
                             <Input className="product-reg-search-input"
-                                // onChange={(e) => this.onChangeSearchText(e)}
+                                 onChange={(e) => this.onChangeSearchText(e)}
                                 placeholder="Search..."
-                                // onKeyPress={(e) => this.onKeyEnterSearchText(e)}
-                                // prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                //     onClick={() => this.onClickSearchIcon()}
-                                // />}
+                                onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                    onClick={() => this.onClickSearchIcon()}
+                                />}
                                 allowClear
                             />
                         </div>
