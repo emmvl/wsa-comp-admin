@@ -49,19 +49,18 @@ class CompetitionQuickCompetition extends Component {
         }
         this.props.updateCompetition("", "allData")
         this.props.getVenuesTypeAction()
+        this.props.getYearAndQuickCompetitionAction(
+            this.props.quickCompetitionState.quick_CompetitionYearArr,
+            null,
+        );
     }
 
 
     componentDidMount() {
-        loadjs('assets/js/custom.js');
         let body = {
             Day: "Day"
         }
         this.props.quickCompetitionInit(body)
-        this.props.getYearAndQuickCompetitionAction(
-            this.props.quickCompetitionState.quick_CompetitionArr,
-            null,
-        );
     }
 
     componentDidUpdate(nextProps) {
@@ -109,6 +108,7 @@ class CompetitionQuickCompetition extends Component {
                             "draws": postDraws
                         }
 
+                        // console.log(postDraws)
                         this.props.updateQuickCompetitionAction(payload, this.state.yearRefId, this.state.buttonPressed)
                     }
                     else {
@@ -435,7 +435,7 @@ class CompetitionQuickCompetition extends Component {
 
 
     /// on swap grip view component
-    async  onSwap(source, target) {
+    async onSwap(source, target) {
         this.setState({ quickCompetitionLoad: true })
         let sourceIndexArray = source.split(':');
         let targetIndexArray = target.split(':');
@@ -449,9 +449,15 @@ class CompetitionQuickCompetition extends Component {
         let drawData = this.props.quickCompetitionState.quickComptitionDetails.draws
         let sourceObejct = drawData[sourceXIndex].slotsArray[sourceYIndex];
         let targetObject = drawData[targetXIndex].slotsArray[targetYIndex];
+
         if (sourceObejct.drawsId !== null && targetObject.drawsId !== null) {
+            console.log(sourceObejct, targetObject)
             await this.props.updateQuickCompetitionDraws(sourceIndexArray, targetIndexArray, sourceObejct.drawsId, targetObject.drawsId)
-        } else {
+        }
+        else if (sourceObejct.drawsId == null && targetObject.drawsId == null) {
+            return
+        }
+        else {
             if (sourceObejct.drawsId == null) {
                 await this.props.updateQuickCompetitionDraws(sourceIndexArray, targetIndexArray, sourceObejct.drawsId, targetObject.drawsId, sourceObejct, 'free')
             }
@@ -625,7 +631,7 @@ class CompetitionQuickCompetition extends Component {
                                                     id={index.toString() + ':' + slotIndex.toString()}
                                                     content={1}
                                                     swappable={true}
-                                                    onSwap={(source, target, ) => {
+                                                    onSwap={(source, target,) => {
                                                         console.log(source, target)
                                                         return (
                                                             this.onSwap(
