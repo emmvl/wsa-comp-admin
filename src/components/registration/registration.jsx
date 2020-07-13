@@ -548,11 +548,11 @@ class Registration extends Component {
                                     placeholder={"dd-mm-yyyy"}
                                     className="year-select reg-filter-select"
 															 
-                                    onChange={e => this.onChangeDropDownValue(e, 'dobTo')}
+                                    onChange={e => this.onChangeDropDownValue(e, 'regTo')}
                                     //onChange={e => this.setState({dobTo: moment(e, "YYYY-MM-DD")})}
                                     format={"DD-MM-YYYY"}
                                     showTime={false}
-                                    name={'dobTo'}
+                                    name={'regTo'}
                                 />
 										 
                             </div>
