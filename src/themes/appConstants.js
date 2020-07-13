@@ -8,6 +8,8 @@ const AppConstants = {
   status: 'Status',
   administrators: 'Administrators',
   maintain: 'Maintain',
+  Regto:'Reg. To',
+  Regfrom:'Reg. From',				  
   venueAndCourts: 'Venues & Courts',
   graphicalDashboard: 'Graphical Display',
   textualDashboard: 'Textual Display',
