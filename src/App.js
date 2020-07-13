@@ -15,6 +15,9 @@ import Login from "./components/login";
 import ForgotPassword from "./components/forgot-password";
 import lazyLoad from "./components/lazyLoad";
 
+import "./customStyles/customStyles.css";
+import "./customStyles/antdStyles.css";
+
 // const ORG_ID = 'Netball';
 
 function App() {

@@ -8,56 +8,65 @@
 .ant-menu-horizontal > .ant-menu-submenu-open,
 .ant-menu-horizontal > .ant-menu-item-selected,
 .ant-menu-horizontal > .ant-menu-submenu-selected {
-  color: var(--app-color) !important;
-  border-bottom: 2px solid var(--app-color) !important;
+  color: var(--app-color);
+  border-bottom: 2px solid var(--app-color);
 }
 
 .ant-menu {
   font-size: 14px;
   color: var(--app-4c4c6d);
-  font-family: inter, sans-serif;
+  font-family: inter;
   font-weight: normal;
+}
+
+.ant-menu-item:hover,
+.ant-menu-item-active,
+.ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open,
+.ant-menu-submenu-active, .ant-menu-submenu-title:hover {
+  color: var(--app-color);
+}
+
+.ant-menu-item-selected {
+  color: var(--app-color);
+}
+
+.ant-menu-horizontal > .ant-menu-item > a:hover {
+  color: var(--app-color);
+}
+
+.ant-menu-horizontal > .ant-menu-item-selected > a {
+  color: var(--app-color);
 }
 
 /***************/
 
 .ant-menu-item > a:hover {
-  color: var(--app-color) !important;
+  color: var(--app-color);
 }
 
-.ant-menu-item-selected > a,
-.ant-menu-item-selected > a:hover {
-  color: var(--app-color) !important;
+.ant-menu-item-selected > a, .ant-menu-item-selected > a:hover {
+  color: var(--app-color);
 }
 
 .search-wrap input::placeholder {
   font-weight: 500;
-  font-family: inter-medium, sans-serif;
+  font-family: inter-medium;
   font-size: 13px !important;
   color: rgba(27, 27, 52, 0.4) !important;
 }
 
 .search-wrap input {
-  font-family: inter, sans-serif;
+  font-family: inter;
   color: rgba(27, 27, 52, 0.4) !important;
   font-size: 13px;
   font-weight: 500;
 }
 
-.ant-menu-vertical .ant-menu-submenu-selected,
-.ant-menu-vertical-left .ant-menu-submenu-selected,
-.ant-menu-vertical-right .ant-menu-submenu-selected {
+.ant-menu-vertical .ant-menu-submenu-selected, .ant-menu-vertical-left .ant-menu-submenu-selected, .ant-menu-vertical-right .ant-menu-submenu-selected {
   color: var(--app-color);
 }
 
-.ant-menu-submenu-vertical > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::after,
-.ant-menu-submenu-vertical-left > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::after,
-.ant-menu-submenu-vertical-right > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::after,
-.ant-menu-submenu-inline > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::after,
-.ant-menu-submenu-vertical > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::before,
-.ant-menu-submenu-vertical-left > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::before,
-.ant-menu-submenu-vertical-right > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::before,
-.ant-menu-submenu-inline > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::before {
+.ant-menu-submenu-vertical > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::after, .ant-menu-submenu-vertical-left > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::after, .ant-menu-submenu-vertical-right > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::after, .ant-menu-submenu-inline > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::after, .ant-menu-submenu-vertical > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::before, .ant-menu-submenu-vertical-left > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::before, .ant-menu-submenu-vertical-right > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::before, .ant-menu-submenu-inline > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::before {
   background: -webkit-gradient(linear, left top, right top, from(var(--app-color)), to(var(--app-color)));
   background: linear-gradient(to right, var(--app-color), var(--app-color));
 }
@@ -66,14 +75,7 @@
   background-color: transparent;
 }
 
-.ant-menu-submenu-vertical > .ant-menu-submenu-title .ant-menu-submenu-arrow::before,
-.ant-menu-submenu-vertical-left > .ant-menu-submenu-title .ant-menu-submenu-arrow::before,
-.ant-menu-submenu-vertical-right > .ant-menu-submenu-title .ant-menu-submenu-arrow::before,
-.ant-menu-submenu-inline > .ant-menu-submenu-title .ant-menu-submenu-arrow::before,
-.ant-menu-submenu-vertical > .ant-menu-submenu-title .ant-menu-submenu-arrow::after,
-.ant-menu-submenu-vertical-left > .ant-menu-submenu-title .ant-menu-submenu-arrow::after,
-.ant-menu-submenu-vertical-right > .ant-menu-submenu-title .ant-menu-submenu-arrow::after,
-.ant-menu-submenu-inline > .ant-menu-submenu-title .ant-menu-submenu-arrow::after {
+.ant-menu-submenu-vertical > .ant-menu-submenu-title .ant-menu-submenu-arrow::before, .ant-menu-submenu-vertical-left > .ant-menu-submenu-title .ant-menu-submenu-arrow::before, .ant-menu-submenu-vertical-right > .ant-menu-submenu-title .ant-menu-submenu-arrow::before, .ant-menu-submenu-inline > .ant-menu-submenu-title .ant-menu-submenu-arrow::before, .ant-menu-submenu-vertical > .ant-menu-submenu-title .ant-menu-submenu-arrow::after, .ant-menu-submenu-vertical-left > .ant-menu-submenu-title .ant-menu-submenu-arrow::after, .ant-menu-submenu-vertical-right > .ant-menu-submenu-title .ant-menu-submenu-arrow::after, .ant-menu-submenu-inline > .ant-menu-submenu-title .ant-menu-submenu-arrow::after {
   margin-left: 10px;
 }
 
@@ -85,7 +87,7 @@
 }
 
 .dashboard-layout-menu-heading {
-  font-family: inter-medium, sans-serif;
+  font-family: inter-medium;
   font-size: 22px;
   font-weight: 500;
   font-stretch: normal;
@@ -211,7 +213,7 @@
     display: inline-block;
     margin-left: 0;
     width: 108px;
-    padding-left: 0;;
+    padding-left: 0;
     border: 0 solid;
   }
 

@@ -3,11 +3,11 @@ import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 
+import "./style.css";
+
 import App from "./App";
 import ConfigureStore from "./configureStore";
 import * as serviceWorker from "./serviceWorker";
-
-import "./style.css";
 
 const store = ConfigureStore();
 ReactDOM.render(
