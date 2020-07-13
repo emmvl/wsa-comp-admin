@@ -160,6 +160,12 @@
   border-radius: 8px;
 }
 
+.ant-btn-primary:hover, .ant-btn-primary:focus {
+  color: var(--app-white);
+  background-color: var(--app-color);
+  border-color: var(--app-color);
+}
+
 /* antd tree overrided styles */
 
 .ant-tree li span.ant-tree-checkbox {
