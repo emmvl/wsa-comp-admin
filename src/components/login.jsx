@@ -111,7 +111,7 @@ class Login extends Component {
 
         <Layout>
           <Content className="container" style={{ zIndex: 15 }}>
-            {!loginState.result ? (
+            {(!loginState.result || !loginState.result.hasOwnProperty('tfaEnabled')) ? (
               <Formik
                 enableReinitialize
                 initialValues={{

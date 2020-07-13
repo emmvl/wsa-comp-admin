@@ -7,6 +7,7 @@ import { getUserId, getAuthToken /* , getOrganisationData */ } from "../../../ut
 
 let token = getAuthToken();
 let userId = getUserId();
+
 // const internetStatus = navigator.onLine ? true : false;
 
 async function logout() {
@@ -246,15 +247,31 @@ let userHttpApi = {
   userExportFiles(url) {
     return Method.dataGetDownload(url, localStorage.token);
   },
+
   getUserHistory(payload) {
     const url = `api/user/history`;
     return Method.dataPost(url, token, payload);
   },
+
+  saveUserPhoto(payload) {
+    const url = `users/photo`;
+    return Method.dataPost(url, token, payload);
+  },
+
+  saveUserDetail(payload) {
+    const url = `users/profile`;
+    return Method.dataPatch(url, token, payload);
+  },
+
+  updateUserPassword(payload) {
+    const url = `users/updatePassword`;
+    return Method.dataPatch(url, token, payload);
+  }
 }
 
 let Method = {
-  async dataPost(newurl, authorization, body) {
-    const url = newurl;
+  async dataPost(newUrl, authorization, body) {
+    const url = newUrl;
     return await new Promise((resolve, reject) => {
       userHttp
         .post(url, body, {
@@ -316,8 +333,8 @@ let Method = {
     });
   },
 
-  async dataPostDownload(newurl, authorization, body, fileName) {
-    const url = newurl;
+  async dataPostDownload(newUrl, authorization, body, fileName) {
+    const url = newUrl;
     return await new Promise((resolve, reject) => {
       userHttp
         .post(url, body, {
@@ -388,9 +405,82 @@ let Method = {
     });
   },
 
+  async dataPatch(newUrl, authorization, body) {
+    const url = newUrl;
+    return await new Promise((resolve, reject) => {
+      userHttp
+        .patch(url, body, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            Authorization: "BWSA " + authorization,
+            "SourceSystem": "WebAdmin"
+          }
+        })
+        .then(result => {
+          if (result.status === 200) {
+            return resolve({
+              status: 1,
+              result: result
+            });
+          } else if (result.status === 212) {
+            return resolve({
+              status: 4,
+              result: result
+            });
+          } else {
+            if (result) {
+              return reject({
+                status: 3,
+                error: result.data.message,
+              });
+            } else {
+              return reject({
+                status: 4,
+                error: "Something went wrong."
+              });
+            }
+          }
+        })
+        .catch(err => {
+          if (err.response) {
+            if (err.response.status !== null || err.response.status !== undefined) {
+              if (err.response.status === 401) {
+                let unauthorizedStatus = err.response.status
+                if (unauthorizedStatus === 401) {
+                  logout()
+                  message.error(ValidationConstants.messageStatus401)
+                }
+              } else if (err.response.status === 400) {
+                message.config({
+                  duration: 1.5,
+                  maxCount: 1,
+                });
+                message.error(err.response.data.message)
+                return reject({
+                  status: 5,
+                  error: err.response.data.message
+                });
+              } else {
+                return reject({
+                  status: 5,
+                  error: err.response && err.response.data.message
+                });
+              }
+            }
+          } else {
+            return reject({
+              status: 5,
+              error: err.response && err.response.data.message
+            });
+          }
+        });
+    });
+  },
+
   // Method to GET response
-  async dataGet(newurl, authorization) {
-    const url = newurl;
+  async dataGet(newUrl, authorization) {
+    const url = newUrl;
     return await new Promise((resolve, reject) => {
       userHttp
         .get(url, {
@@ -459,8 +549,8 @@ let Method = {
     });
   },
 
-  async dataDelete(newurl, authorization) {
-    const url = newurl;
+  async dataDelete(newUrl, authorization) {
+    const url = newUrl;
     return await new Promise((resolve, reject) => {
       userHttp
         .delete(url, {
@@ -523,8 +613,8 @@ let Method = {
     });
   },
 
-  async dataGetDownload(newurl, authorization) {
-    const url = newurl;
+  async dataGetDownload(newUrl, authorization) {
+    const url = newUrl;
     return await new Promise((resolve, reject) => {
       userHttp
         .get(url, {

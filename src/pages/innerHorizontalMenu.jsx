@@ -1,41 +1,44 @@
 import React from "react";
 import { Menu } from "antd";
 import { NavLink } from "react-router-dom";
-import './layout.css';
+
 import AppConstants from "../themes/appConstants";
 import { checkOrganisationLevel } from "../util/permissions";
-import { getLiveScoreCompetiton } from "../util/sessionStorage"
+import AccountMenu from "./InnerHorizontalMenu/AccountMenu";
+import "./layout.css";
 
 const { SubMenu } = Menu;
+
 class InnerHorizontalMenu extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            organisationLevel: ""
+            organisationLevel: "",
         };
     }
 
     componentDidMount() {
         checkOrganisationLevel().then((value) => (
             this.setState({ organisationLevel: value })
-        ))
+        ));
+
         if (this.props) {
             if (this.props.compSelectedKey !== "18") {
-                localStorage.removeItem("draws_roundTime")
-                localStorage.removeItem("draws_round")
-                localStorage.removeItem("draws_venue")
+                localStorage.removeItem("draws_roundTime");
+                localStorage.removeItem("draws_round");
+                localStorage.removeItem("draws_venue");
             }
         }
-
     }
 
     render() {
-        let orgLevel = this.state.organisationLevel
+        let orgLevel = this.state.organisationLevel;
+        const { menu, selectedKey } = this.props;
 
         return (
             <div>
-                {this.props.menu === "competition" && <Menu
+                {menu === "competition" && <Menu
                     // className="nav-collapse collapse"
                     theme="light"
                     mode="horizontal"
@@ -43,12 +46,11 @@ class InnerHorizontalMenu extends React.Component {
                     style={{ lineHeight: '64px' }}
                     selectedKeys={[this.props.compSelectedKey]}
                 >
-                    <Menu.Item key="1" >
+                    <Menu.Item key="1">
                         <NavLink to="/competitionDashboard">
                             Dashboard
-                    </NavLink>
+                        </NavLink>
                     </Menu.Item>
-
 
                     <SubMenu
                         key="sub1"
@@ -63,56 +65,56 @@ class InnerHorizontalMenu extends React.Component {
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="3">
-                            <NavLink to="/competitionOpenRegForm" >
-                                <span > Competition Details</span>
+                            <NavLink to="/competitionOpenRegForm">
+                                <span> Competition Details</span>
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="4">
-                            <NavLink to="/competitionPlayerGrades" >
-                                <span >Player Grading</span>
+                            <NavLink to="/competitionPlayerGrades">
+                                <span>Player Grading</span>
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="5">
-                            <NavLink to="/competitionPartTeamGradeCalculate" >
-                                <span >Team Grading</span>
+                            <NavLink to="/competitionPartTeamGradeCalculate">
+                                <span>Team Grading</span>
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="6">
-                            <NavLink to="/competitionCourtAndTimesAssign" >
-                                <span >Time Slots</span>
+                            <NavLink to="/competitionCourtAndTimesAssign">
+                                <span>Time Slots</span>
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="7">
-                            <NavLink to="/competitionVenueTimesPrioritisation" >
-                                <span >Venues</span>
+                            <NavLink to="/competitionVenueTimesPrioritisation">
+                                <span>Venues</span>
                             </NavLink>
                         </Menu.Item>
                         {/* <Menu.Item key="8">
-                            <NavLink to="/competitionLadder" >
-                                <span >Ladder</span>
+                            <NavLink to="/competitionLadder">
+                                <span>Ladder</span>
                             </NavLink>
                         </Menu.Item> */}
                         <Menu.Item key="9">
-                            <NavLink to="/competitionFormat" >
-                                <span >Competition Format</span>
+                            <NavLink to="/competitionFormat">
+                                <span>Competition Format</span>
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="10">
-                            <NavLink to="/competitionFinals" >
-                                <span >Finals</span>
+                            <NavLink to="/competitionFinals">
+                                <span>Finals</span>
                             </NavLink>
                         </Menu.Item>
-                        {/* <Menu.Item key="11"> */}
-                        {/* <a href="http://clixlogix.org/test/netball/fixtures.html">Fixtures</a> */}
-                        {/* <NavLink to="competitionFixtures">
+                        {/* <Menu.Item key="11">
+                            <a href="http://clixlogix.org/test/netball/fixtures.html">Fixtures</a>
+                            <NavLink to="competitionFixtures">
                                 Fixtures
                             </NavLink>
                         </Menu.Item> */}
 
-                        <Menu.Item key="18" >
+                        <Menu.Item key="18">
                             {/* <a href="https://comp-management-test.firebaseapp.com/competitions-draws.html">Draws</a> */}
-                            <NavLink to="/competitionDraws" >
-                                <span >Draws</span>
+                            <NavLink to="/competitionDraws">
+                                <span>Draws</span>
                             </NavLink>
                         </Menu.Item>
                         {/* <SubMenu
@@ -121,16 +123,15 @@ class InnerHorizontalMenu extends React.Component {
                                 <span>Draw</span>
                             }
                         >
-
                             <Menu.Item key="13">
-                                <NavLink to="/competitionReGrading" >
-                                    <span >Re-grading</span>
+                                <NavLink to="/competitionReGrading">
+                                    <span>Re-grading</span>
                                 </NavLink>
                             </Menu.Item>
-                            <Menu.Item key="18" > */}
-                        {/* <a href="https://comp-management-test.firebaseapp.com/competitions-draws.html">Draws</a> */}
-                        {/* <NavLink to="/competitionDraws" >
-                                    <span >Draws</span>
+                            <Menu.Item key="18">
+                                <a href="https://comp-management-test.firebaseapp.com/competitions-draws.html">Draws</a>
+                                <NavLink to="/competitionDraws">
+                                    <span>Draws</span>
                                 </NavLink>
                             </Menu.Item>
                         </SubMenu> */}
@@ -143,21 +144,20 @@ class InnerHorizontalMenu extends React.Component {
                         }
                     >
                         <Menu.Item key="14">
-                            <NavLink to="/competitionPartPlayerGrades" >
-                                <span >Player Grading</span>
+                            <NavLink to="/competitionPartPlayerGrades">
+                                <span>Player Grading</span>
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="15">
-                            <NavLink to="/competitionPartProposedTeamGrading" >
-                                <span >Team Grading</span>
+                            <NavLink to="/competitionPartProposedTeamGrading">
+                                <span>Team Grading</span>
                             </NavLink>
                         </Menu.Item>
                     </SubMenu>
-
-
                 </Menu>
                 }
-                {this.props.menu === "registration" && <Menu
+
+                {menu === "registration" && <Menu
                     theme="light"
                     mode="horizontal"
                     defaultSelectedKeys={['1']}
@@ -165,8 +165,8 @@ class InnerHorizontalMenu extends React.Component {
                     selectedKeys={[this.props.regSelectedKey]}
                 >
                     <Menu.Item key="1">
-                        <NavLink to="/registrationDashboard" >
-                            <span >Dashboard</span>
+                        <NavLink to="/registrationDashboard">
+                            <span>Dashboard</span>
                         </NavLink>
                     </Menu.Item>
                     <SubMenu
@@ -176,23 +176,23 @@ class InnerHorizontalMenu extends React.Component {
                         }
                     >
                         <Menu.Item key="2">
-                            <NavLink to="/registration" >
-                                <span >Registrations</span>
+                            <NavLink to="/registration">
+                                <span>Registrations</span>
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="9">
-                            <NavLink to="/registrationChange" >
-                                <span >Registration Change</span>
+                            <NavLink to="/registrationChange">
+                                <span>Registration Change</span>
                             </NavLink>
                         </Menu.Item>
                     </SubMenu>
-                    {orgLevel == AppConstants.national || orgLevel == AppConstants.state ?
+                    {orgLevel === AppConstants.national || orgLevel === AppConstants.state && (
                         <Menu.Item key="6">
-                            <NavLink to="/registrationMembershipList"  >
-                                <span >Membership</span>
+                            <NavLink to="/registrationMembershipList">
+                                <span>Membership</span>
                             </NavLink>
                         </Menu.Item>
-                        : null}
+                    )}
                     <SubMenu
                         key="sub1"
                         title={
@@ -200,20 +200,16 @@ class InnerHorizontalMenu extends React.Component {
                         }
                     >
                         <Menu.Item key="7">
-                            <NavLink to="/registrationCompetitionList" >
-                                <span >Competition</span>
+                            <NavLink to="/registrationCompetitionList">
+                                <span>Competition</span>
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="3">
-                            <NavLink to="/registrationFormList" >
-                                <span >Registration Form</span>
+                            <NavLink to="/registrationFormList">
+                                <span>Registration Form</span>
                             </NavLink>
                         </Menu.Item>
                     </SubMenu>
-
-
-
-
                     <SubMenu
                         key="sub2"
                         title={
@@ -221,20 +217,19 @@ class InnerHorizontalMenu extends React.Component {
                         }
                     >
                         <Menu.Item key="8">
-                            <NavLink to='/paymentDashboard' >
-                                <span >Payment Dashboard</span>
+                            <NavLink to="/paymentDashboard">
+                                <span>Payment Dashboard</span>
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="4">
-                            <NavLink to="/registrationPayments" >
-                                <span >Payment Gateway</span>
+                            <NavLink to="/registrationPayments">
+                                <span>Payment Gateway</span>
                             </NavLink>
                             {/* <a href="https://comp-management-test.firebaseapp.com/payment-dashboard.html">Payments</a> */}
                         </Menu.Item>
-
                         <Menu.Item key="5">
-                            <NavLink to="/registrationSettlements" >
-                                <span >Payouts</span>
+                            <NavLink to="/registrationSettlements">
+                                <span>Payouts</span>
                             </NavLink>
                         </Menu.Item>
                     </SubMenu>
@@ -242,8 +237,7 @@ class InnerHorizontalMenu extends React.Component {
                 </Menu>
                 }
 
-
-                {this.props.menu === "liveScore" && <Menu
+                {menu === "liveScore" && <Menu
                     theme="light"
                     mode="horizontal"
                     defaultSelectedKeys={['1']}
@@ -252,10 +246,9 @@ class InnerHorizontalMenu extends React.Component {
                 >
                     <Menu.Item key="1">
                         <NavLink to="/liveScoreDashboard">
-                            <span >Dashboard</span>
+                            <span>Dashboard</span>
                         </NavLink>
                     </Menu.Item>
-
                     <SubMenu
                         key="sub1"
                         title={
@@ -317,14 +310,12 @@ class InnerHorizontalMenu extends React.Component {
                                 <span>Venues</span>
                             </NavLink>
                         </Menu.Item>
-
                         <Menu.Item key="11">
                             <NavLink to="/liveScoreLadderList">
                                 <span>Ladder</span>
                             </NavLink>
                         </Menu.Item>
                     </SubMenu>
-
                     <SubMenu
                         key="sub2"
                         title={
@@ -346,7 +337,6 @@ class InnerHorizontalMenu extends React.Component {
                                 <span>Team Attendance</span>
                             </NavLink>
                         </Menu.Item>
-
                         <SubMenu
                             key="sub3"
                             title={
@@ -358,25 +348,22 @@ class InnerHorizontalMenu extends React.Component {
                                     <span>Game Time</span>
                                 </NavLink>
                             </Menu.Item>
-                            {/* <Menu.Item key="16"> */}
-                            {/* <NavLink to="/liveScoreShooting"> */}
-                            {/* <span>Shooting</span> */}
-                            {/* </NavLink> */}
-                            {/* </Menu.Item> */}
+                            {/* <Menu.Item key="16">
+                                <NavLink to="/liveScoreShooting">
+                                    <span>Shooting</span>
+                                </NavLink>
+                            </Menu.Item> */}
                             <Menu.Item key="16">
                                 <NavLink to="/liveScoreGoalsList">
                                     <span>Goals</span>
                                 </NavLink>
                             </Menu.Item>
-
                             <Menu.Item key="24">
                                 <NavLink to="/liveScorePositionTrackReport">
                                     <span>Position Tracking</span>
                                 </NavLink>
                             </Menu.Item>
-
                         </SubMenu>
-
                         <Menu.Item key="17">
                             <NavLink to="/liveScoreIncidentList">
                                 <span>Incidents</span>
@@ -405,22 +392,21 @@ class InnerHorizontalMenu extends React.Component {
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="22">
-                            <NavLink to="/liveScoreMatchSheet" >
-                                <span >Match Sheets</span>
+                            <NavLink to="/liveScoreMatchSheet">
+                                <span>Match Sheets</span>
                             </NavLink>
                         </Menu.Item>
                     </SubMenu>
                     <Menu.Item key="21">
                         <NavLink to="/liveScoreNewsList">
-                            {/* <NavLink to="/liveScoreAddEditCoach"> */}
+                        {/* <NavLink to="/liveScoreAddEditCoach"> */}
                             <span>News & Messages</span>
                         </NavLink>
                     </Menu.Item>
-
                 </Menu>
                 }
 
-                {this.props.menu === "umpire" && <Menu
+                {menu === "umpire" && <Menu
                     theme="light"
                     mode="horizontal"
                     defaultSelectedKeys={['1']}
@@ -428,25 +414,23 @@ class InnerHorizontalMenu extends React.Component {
                     selectedKeys={[this.props.umpireSelectedKey]}
                 >
                     <Menu.Item key="1">
-                        <NavLink to="/umpireDashboard" >
-                            <span >Dashboard</span>
+                        <NavLink to="/umpireDashboard">
+                            <span>Dashboard</span>
                         </NavLink>
-
                     </Menu.Item>
                     <Menu.Item key="2">
-                        <NavLink to="/umpire" >
-                            <span >Umpires</span>
+                        <NavLink to="/umpire">
+                            <span>Umpires</span>
                         </NavLink>
-
                     </Menu.Item>
                     <Menu.Item key="3">
-                        <NavLink to="/umpireRoster" >
-                            <span >Umpire Roster</span>
+                        <NavLink to="/umpireRoster">
+                            <span>Umpire Roster</span>
                         </NavLink>
                     </Menu.Item>
                     {/* <Menu.Item key="4">
-                        <NavLink to="/umpireAllocation" >
-                        <span >Umpire Allocation</span>
+                        <NavLink to="/umpireAllocation">
+                            <span>Umpire Allocation</span>
                         </NavLink>
                     </Menu.Item> */}
 
@@ -456,73 +440,72 @@ class InnerHorizontalMenu extends React.Component {
                             <span>Umpire Allocation</span>
                         }
                     >
-
                         <Menu.Item key="4">
                             <NavLink to="/umpireDivisions">
                                 <span>Divisions</span>
                             </NavLink>
                         </Menu.Item>
-
                         <Menu.Item key="5">
                             <NavLink to="/umpirePoolAllocation">
                                 <span>Pool</span>
                             </NavLink>
                         </Menu.Item>
-
                         <Menu.Item key="6">
                             <NavLink to="/umpireSetting">
                                 <span>Settings</span>
                             </NavLink>
                         </Menu.Item>
                     </SubMenu>
-
                 </Menu>
                 }
 
-                {this.props.menu === "user" &&
+                {menu === "user" && (
                     <Menu
                         theme="light"
                         mode="horizontal"
                         defaultSelectedKeys={['1']}
                         style={{ lineHeight: '64px' }}
-                        selectedKeys={[this.props.userSelectedKey]}>
+                        selectedKeys={[this.props.userSelectedKey]}
+                    >
                         <Menu.Item key="1">
-                            {/* <NavLink to="/userGraphicalDashboard" >
-                                <span >{AppConstants.dashboard}</span>
+                            {/* <NavLink to="/userGraphicalDashboard">
+                                <span>{AppConstants.dashboard}</span>
                             </NavLink> */}
-                            <NavLink to="/userTextualDashboard" >
-                                <span >{AppConstants.dashboard}</span>
+                            <NavLink to="/userTextualDashboard">
+                                <span>{AppConstants.dashboard}</span>
                             </NavLink>
                         </Menu.Item>
                         <SubMenu
                             key="sub2"
-                            title={<span>{AppConstants.users}</span>}>
+                            title={<span>{AppConstants.users}</span>}
+                        >
                             {/* <Menu.Item key="4">
-                                <NavLink to="/userTextualDashboard" >
-                                    <span >{AppConstants.users}</span>
+                                <NavLink to="/userTextualDashboard">
+                                    <span>{AppConstants.users}</span>
                                 </NavLink>
                             </Menu.Item> */}
                             <Menu.Item key="5">
-                                <NavLink to="/playWithFriend" >
-                                    <span >{AppConstants.playWithAFriend}</span>
+                                <NavLink to="/playWithFriend">
+                                    <span>{AppConstants.playWithAFriend}</span>
                                 </NavLink>
                             </Menu.Item>
                             <Menu.Item key="6">
-                                <NavLink to="/referFriend" >
-                                    <span >{AppConstants.referaFriend}</span>
+                                <NavLink to="/referFriend">
+                                    <span>{AppConstants.referaFriend}</span>
                                 </NavLink>
                             </Menu.Item>
                         </SubMenu>
 
                         {/* <SubMenu
-                        key="sub2"
-                        title={<span>{AppConstants.maintain}</span>}>
-                        <Menu.Item key="4">
-                            <NavLink to="/venuesList" >
-                                <span >{AppConstants.venueAndCourts}</span>
-                            </NavLink>
-                        </Menu.Item>
-                    </SubMenu> */}
+                            key="sub2"
+                            title={<span>{AppConstants.maintain}</span>}
+                        >
+                            <Menu.Item key="4">
+                                <NavLink to="/venuesList">
+                                    <span>{AppConstants.venueAndCourts}</span>
+                                </NavLink>
+                            </Menu.Item>
+                        </SubMenu> */}
                         <SubMenu
                             key="sub1"
                             title={
@@ -530,108 +513,108 @@ class InnerHorizontalMenu extends React.Component {
                             }
                         >
                             <Menu.Item key="2">
-                                <NavLink to="/userAffiliatesList" >
-                                    <span >{AppConstants.affiliates}</span>
+                                <NavLink to="/userAffiliatesList">
+                                    <span>{AppConstants.affiliates}</span>
                                 </NavLink>
                             </Menu.Item>
                             <Menu.Item key="3">
-                                <NavLink to="/userOurOrganisation" >
-                                    <span >{AppConstants.ourOrganisation}</span>
+                                <NavLink to="/userOurOrganisation">
+                                    <span>{AppConstants.ourOrganisation}</span>
                                 </NavLink>
                             </Menu.Item>
                             <Menu.Item key="4">
-                                <NavLink to="/affiliateDirectory" >
-                                    <span >{AppConstants.affiliateDirectory}</span>
+                                <NavLink to="/affiliateDirectory">
+                                    <span>{AppConstants.affiliateDirectory}</span>
                                 </NavLink>
                             </Menu.Item>
                             {/* <Menu.Item key="3">
-                            <NavLink to="/userAffiliateApproveRejectForm" >
-                                <span >{AppConstants.affiliateApproveReject}</span>
-                            </NavLink>
-                        </Menu.Item> */}
+                                <NavLink to="/userAffiliateApproveRejectForm">
+                                    <span>{AppConstants.affiliateApproveReject}</span>
+                                </NavLink>
+                            </Menu.Item> */}
                         </SubMenu>
-
                     </Menu>
-                }
+                )}
 
-                {this.props.menu === "home" &&
+                {menu === "home" && (
                     <Menu
                         theme="light"
                         mode="horizontal"
                         defaultSelectedKeys={['1']}
                         style={{ lineHeight: '64px' }}
-                        selectedKeys={[this.props.userSelectedKey]}>
+                        selectedKeys={[this.props.userSelectedKey]}
+                    >
                         <Menu.Item key="1">
-                            <NavLink to="/homeDashboard" >
-                                <span >{AppConstants.home}</span>
+                            <NavLink to="/homeDashboard">
+                                <span>{AppConstants.home}</span>
                             </NavLink>
                         </Menu.Item>
                         <SubMenu
                             key="sub1"
-                            title={<span>{AppConstants.maintain}</span>}>
-
+                            title={<span>{AppConstants.maintain}</span>}
+                        >
                             <Menu.Item key="2">
-                                <NavLink to="/venuesList" >
-                                    <span >{AppConstants.venueAndCourts}</span>
+                                <NavLink to="/venuesList">
+                                    <span>{AppConstants.venueAndCourts}</span>
                                 </NavLink>
                             </Menu.Item>
                         </SubMenu>
                     </Menu>
-                }
+                )}
 
-
-
-                {this.props.menu === "shop" &&
+                {menu === "shop" && (
                     <Menu
                         theme="light"
                         mode="horizontal"
                         defaultSelectedKeys={['1']}
                         style={{ lineHeight: '64px' }}
-                        selectedKeys={[this.props.shopSelectedKey]}>
+                        selectedKeys={[this.props.shopSelectedKey]}
+                    >
                         <Menu.Item key="1">
-                            <NavLink to="/shopDashboard" >
-                                <span >{AppConstants.dashboard}</span>
+                            <NavLink to="/shopDashboard">
+                                <span>{AppConstants.dashboard}</span>
                             </NavLink>
                         </Menu.Item>
                         <SubMenu
                             key="sub1"
-                            title={<span>{AppConstants.products}</span>}>
-
+                            title={<span>{AppConstants.products}</span>}
+                        >
                             <Menu.Item key="2">
-                                <NavLink to="/listProducts" >
-                                    <span >{AppConstants.products}</span>
+                                <NavLink to="/listProducts">
+                                    <span>{AppConstants.products}</span>
                                 </NavLink>
-
                             </Menu.Item>
                         </SubMenu>
                         <SubMenu
                             key="sub2"
-                            title={<span>{AppConstants.orders}</span>}>
+                            title={<span>{AppConstants.orders}</span>}
+                        >
                             <Menu.Item key="3">
-                                <NavLink to="/orderSummary" >
-                                    <span >{AppConstants.orderSummary}</span>
+                                <NavLink to="/orderSummary">
+                                    <span>{AppConstants.orderSummary}</span>
                                 </NavLink>
                             </Menu.Item>
                             <Menu.Item key="5">
-                                <NavLink to="/orderStatus" >
-                                    <span >{AppConstants.orderStatus}</span>
+                                <NavLink to="/orderStatus">
+                                    <span>{AppConstants.orderStatus}</span>
                                 </NavLink>
                             </Menu.Item>
                         </SubMenu>
 
                         <Menu.Item key="4">
-                            <NavLink to="/shopSettings" >
-                                <span >{AppConstants.settings}</span>
+                            <NavLink to="/shopSettings">
+                                <span>{AppConstants.settings}</span>
                             </NavLink>
                         </Menu.Item>
                     </Menu>
-                }
+                )}
 
+                {menu === "account" && (
+                    <AccountMenu selectedKey={selectedKey} />
+                )}
             </div>
-
         );
     }
 }
-
 
 export default InnerHorizontalMenu;
