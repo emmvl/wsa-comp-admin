@@ -418,7 +418,7 @@ class CompetitionVenueAndTimesAdd extends Component {
     contentView = (getFieldDecorator) => {
         const { venuData } = this.props.venueTimeState
         const { stateList } = this.props.commonReducerState
-        const { venueOragnasation } = this.props.userState
+        const { venueOrganisation } = this.props.userState
         return (
             <div className="content-view">
                 <span className="form-heading" >
@@ -560,7 +560,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                                     placeholder={'Select '}
                                     optionFilterProp="children"
                                 >
-                                    {venueOragnasation.length > 0 && venueOragnasation.map((item, index) => (
+                                    {venueOrganisation.length > 0 && venueOrganisation.map((item, index) => (
                                         < Option key={item.id} value={item.id}> {item.name}</Option>
                                     ))}
                                 </Select>

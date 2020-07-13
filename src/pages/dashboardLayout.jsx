@@ -250,7 +250,7 @@ class DashboardLayout extends React.Component {
                       onChange={organisationUniqueKey => this.onOrganisationChange(organisationUniqueKey)}
                       value={JSON.parse(JSON.stringify(this.state.organisationUniqueKey))}
                     >
-                      {this.props.userState.venueOragnasation.map(item => {
+                      {this.props.userState.venueOrganisation.map(item => {
                         return (
                           <Option key={"organisationUniqueKey" + item.organisationUniqueKey} value={item.organisationUniqueKey}>
                             {item.name}

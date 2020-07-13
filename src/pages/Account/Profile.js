@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Button, Form, message } from "antd";
@@ -6,12 +6,22 @@ import { Button, Form, message } from "antd";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import InputWithHead from "../../customComponents/InputWithHead";
+import { userPhotoUpdateAction, userDetailUpdateAction } from "../../store/actions/userAction/userAction";
 
 function Profile(props) {
-  const { userState, form } = props;
-  const personal = userState.personalData;
+  const { userState, form, userPhotoUpdateAction, userDetailUpdateAction } = props;
 
-  const [user, setUser] = useState(personal);
+  const [user, setUser] = useState(userState.getUserOrganisation);
+
+  useEffect(() => {
+    setUser({
+      photoUrl: userState.getUserOrganisation.photoUrl,
+      firstName: userState.getUserOrganisation.firstName,
+      lastName: userState.getUserOrganisation.lastName,
+      mobileNumber: userState.getUserOrganisation.mobileNumber,
+      email: userState.getUserOrganisation.userEmail,
+    });
+  }, [userState.getUserOrganisation]);
 
   const onChangeField = useCallback((e) => {
     setUser({
@@ -25,10 +35,21 @@ function Profile(props) {
 
     form.validateFields((err) => {
       if (!err) {
-        console.log(user);
+        if (user.photo && user.photoUrl) {
+          let formData = new FormData();
+          formData.append("profile_photo", user.photo);
+          userPhotoUpdateAction(formData);
+        }
+
+        userDetailUpdateAction({
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          mobileNumber: user.mobileNumber,
+        });
       }
     });
-  }, [user, form]);
+  }, [form, user, userPhotoUpdateAction, userDetailUpdateAction]);
 
   const selectImage = useCallback(() => {
     const fileInput = document.getElementById('user-pic');
@@ -53,8 +74,8 @@ function Profile(props) {
         setUser({
           ...user,
           photoUrl: URL.createObjectURL(data.files[0]),
+          photo: data.files[0],
         });
-        console.log(data.files[0]);
       } else {
         message.error(AppConstants.logoType);
       }
@@ -144,6 +165,8 @@ function Profile(props) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
+    userPhotoUpdateAction,
+    userDetailUpdateAction,
   }, dispatch);
 }
 

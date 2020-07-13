@@ -294,7 +294,7 @@ class CompetitionVenueAndTimesEdit extends Component {
         let venueData = this.props.venueTimeState.venuData;
         let isVenueMapped = venueData.isVenueMapped;
         let affiliateData = venueData.affiliateData;
-        let venueOrganisation = this.props.userState.venueOragnasation;
+        let venueOrganisation = this.props.userState.venueOrganisation;
 
         if(venueOrganisation!= null && venueOrganisation.length > 0)
         {
@@ -407,7 +407,7 @@ class CompetitionVenueAndTimesEdit extends Component {
     contentView = (getFieldDecorator) => {
         const { venuData } = this.props.venueTimeState
         const { stateList } = this.props.commonReducerState
-       // const { venueOragnasation } = this.props.userState
+       // const { venueOrganisation } = this.props.userState
         return (
             <div className="content-view">
                 <span className="form-heading" >

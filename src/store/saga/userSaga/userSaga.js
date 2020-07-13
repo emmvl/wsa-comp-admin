@@ -573,3 +573,39 @@ export function* updateUserProfileSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+/* Save the User Photo */
+export function* saveUserPhotosSaga(action) {
+    try {
+        const result = yield call(userHttpApi.saveUserPhoto, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_USER_PHOTO_UPDATE_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
+/* Save the User Detail */
+export function* saveUserDetailSaga(action) {
+    try {
+        const result = yield call(userHttpApi.saveUserDetail, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_USER_DETAIL_UPDATE_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
