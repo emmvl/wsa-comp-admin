@@ -7,18 +7,31 @@ import AppConstants from "../../../themes/appConstants";
 import AxiosApi from '../../http/registrationHttp/registrationAxios';
 
 function* failSaga(result) {
+    console.log("failSaga", result.message)
     yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
     setTimeout(() => {
-        alert(result.message);
+        message.config({
+            duration: 1.5,
+            maxCount: 1
+        })
+        message.error(result.message);
     }, 800);
 }
 
 function* errorSaga(error) {
+    console.log("errorSaga", error)
     yield put({
         type: ApiConstants.API_COMMON_SAGA_ERROR,
         error: error,
         status: error.status
     });
+    setTimeout(() => {
+        message.config({
+            duration: 1.5,
+            maxCount: 1
+        })
+        message.error(AppConstants.somethingWentWrong);
+    }, 800);
 }
 
 ////get the common year list reference

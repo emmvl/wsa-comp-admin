@@ -67,10 +67,10 @@ function clearProductReducer(dataName) {
 }
 
 ////////delete product variant API
-function deleteProductVariantAction(optionId) {
+function deleteProductVariantAction(optionId, index, subIndex) {
     const action = {
         type: ApiConstants.API_DELETE_SHOP_PRODUCT_VARIANT_LOAD,
-        optionId
+        optionId, index, subIndex
     };
     return action;
 }

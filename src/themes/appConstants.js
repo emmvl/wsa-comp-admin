@@ -1406,6 +1406,8 @@ const AppConstants = {
   registrationChange: "Registration Change",
   cost: "Cost",
   history: "History",
+  somethingWentWrong: "Something went wrong.",
+  variantDeletedMessage: "Variant deleted successfully.",
 
   // Account
   account: "Account",

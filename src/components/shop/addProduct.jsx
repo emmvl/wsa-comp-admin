@@ -355,30 +355,6 @@ class AddProduct extends Component {
         this.props.onChangeProductDetails(varientOptions, 'variantOption', index)
     }
 
-    ///////add new varient option
-    addVariantOption = (index, subIndex, key) => {
-        let varientOptionObject = {
-            "optionName": "",
-            "properties": {
-                "price": 0,
-                "SKU": "",
-                "barcode": "",
-                "quantity": 0
-            }
-        }
-        let { productDetailData } = this.props.shopProductState
-        let varientOptions = productDetailData.variants[index].options
-        if (key === "add") {
-            varientOptions.push(varientOptionObject)
-        }
-        if (key === "remove") {
-            this.showDeleteConfirm("00", index, subIndex)
-            // varientOptions.splice(subIndex, 1)
-        }
-        this.props.onChangeProductDetails(varientOptions, 'variantOption', index)
-
-    }
-
 
     //////delete the product variant
     showDeleteConfirm = (optionId, index, subIndex) => {
@@ -391,7 +367,11 @@ class AddProduct extends Component {
             cancelText: 'Cancel',
             onOk() {
                 if (optionId) {
-                    // this_.props.deleteProductVariantAction(optionId)
+                    if (optionId > 0) {
+                        this_.props.deleteProductVariantAction(optionId, index, subIndex)
+                    }
+                }
+                else {
                     let varientOptions = this_.props.shopProductState.productDetailData.variants[index].options
                     varientOptions.splice(subIndex, 1)
                     this_.props.onChangeProductDetails(varientOptions, 'variantOption', index)
@@ -401,6 +381,33 @@ class AddProduct extends Component {
             },
         });
     }
+
+    ///////add new varient option
+    addVariantOption = (index, subIndex, key, optionId) => {
+        let varientOptionObject = {
+            "optionName": "",
+            "properties": {
+                "price": 0,
+                "SKU": "",
+                "barcode": "",
+                "quantity": 0,
+                "id": 0
+            }
+        }
+        let { productDetailData } = this.props.shopProductState
+        let varientOptions = productDetailData.variants[index].options
+        if (key === "add") {
+            varientOptions.push(varientOptionObject)
+        }
+        if (key === "remove") {
+            this.showDeleteConfirm(optionId, index, subIndex)
+            // varientOptions.splice(subIndex, 1)
+        }
+        this.props.onChangeProductDetails(varientOptions, 'variantOption', index)
+
+    }
+
+
 
 
 
@@ -884,7 +891,7 @@ class AddProduct extends Component {
                                             alt=""
                                             width="16"
                                             height="16"
-                                            onClick={() => this.addVariantOption(0, subIndex, "remove")}
+                                            onClick={() => this.addVariantOption(0, subIndex, "remove", subItem.properties.id)}
                                         />
                                     </div>}
                                 </div>

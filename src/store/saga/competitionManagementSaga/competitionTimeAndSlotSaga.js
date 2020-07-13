@@ -3,24 +3,35 @@ import ApiConstants from "../../../themes/apiConstants";
 import CompetitionAxiosApi from "../../http/competitionHttp/competitionAxiosApi";
 import { message } from 'antd'
 import CommonAxiosApi from "../../http/commonHttp/commonAxios";
-
+import AppConstants from "../../../themes/appConstants";
 
 function* failSaga(result) {
+    console.log("failSaga", result)
     yield put({ type: ApiConstants.API_COMPETITION_TIMESLOT_FAIL });
     setTimeout(() => {
         message.error("Something went wrong")
-        // alert(result.message);
+    }, 800);
+    setTimeout(() => {
+        message.config({
+            duration: 1.5,
+            maxCount: 1
+        })
+        message.error(AppConstants.somethingWentWrong);
     }, 800);
 }
 
 function* errorSaga(error) {
+    console.log("errorSaga", error)
     yield put({
         type: ApiConstants.API_COMPETITION_TIMESLOT_ERROR,
 
     });
     setTimeout(() => {
-        message.error("Something went wrong")
-        // alert(result.message);
+        message.config({
+            duration: 1.5,
+            maxCount: 1
+        })
+        message.error(AppConstants.somethingWentWrong);
     }, 800);
 }
 

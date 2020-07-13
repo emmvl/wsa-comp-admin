@@ -2,21 +2,34 @@ import { put, call } from '../../../../node_modules/redux-saga/effects'
 import ApiConstants from "../../../themes/apiConstants";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 import { message } from "antd";
+import AppConstants from "../../../themes/appConstants";
 
 function* failSaga(result) {
+    console.log("failSaga", result.message)
     yield put({ type: ApiConstants.API_ASSIGN_UMPIRE_FAIL });
     setTimeout(() => {
+        message.config({
+            duration: 1.5,
+            maxCount: 1
+        })
         message.error(result.message)
     }, 800);
 }
 
 function* errorSaga(error) {
+    console.log("errorSaga", error)
     yield put({
         type: ApiConstants.API_ASSIGN_UMPIRE_ERROR,
         error: error,
         status: error.status
     });
-    message.error("Something went wrong.")
+    setTimeout(() => {
+        message.config({
+            duration: 1.5,
+            maxCount: 1
+        })
+        message.error(AppConstants.somethingWentWrong);
+    }, 800);
 }
 
 /////get the umpire assign list

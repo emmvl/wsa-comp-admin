@@ -2,8 +2,10 @@ import { put, call } from "redux-saga/effects";
 import ApiConstants from "../../../themes/apiConstants";
 import AxiosApi from "../../http/stripeHttp/stripeAxios";
 import { message } from "antd";
+import AppConstants from "../../../themes/appConstants";
 
 function* failSaga(result) {
+    console.log("failSaga", result.result.data.message)
     yield put({
         type: ApiConstants.API_STRIPE_API_FAIL,
         error: result,
@@ -19,6 +21,7 @@ function* failSaga(result) {
 }
 
 function* errorSaga(error) {
+    console.log("errorSaga", error)
     yield put({
         type: ApiConstants.API_STRIPE_API_ERROR,
         error: error,
@@ -29,7 +32,7 @@ function* errorSaga(error) {
             duration: 1.5,
             maxCount: 1
         })
-        message.error("Something went wrong.");
+        message.error(AppConstants.somethingWentWrong);
     }, 800);
 }
 
