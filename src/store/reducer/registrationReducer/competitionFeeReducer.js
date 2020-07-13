@@ -1106,7 +1106,7 @@ function createProductFeeArr(data) {
                     "mFees": mFeesSeasonal,
                     "membershipSeasonal": memberShipProductType[j].mSeasonalFee,
                     "membershipGst": memberShipProductType[j].mSeasonalGst,
-                    "checkBoxOption": statusCasual.result.isSeasonal
+                    "checkBoxOption": statusSeasonal.result.isSeasonal
                 }
             } else {
                 type_Object_seasonal = {
@@ -1149,7 +1149,7 @@ function createProductFeeArr(data) {
                         "mFees": mFeesSeasonal,
                         "membershipSeasonal": memberShipProductType[j].mSeasonalFee,
                         "membershipGst": memberShipProductType[j].mSeasonalGst,
-                        "checkBoxOption": statusCasual.result.isTeamSeasonal
+                        "checkBoxOption": statusteamSeasonal.result.isTeamSeasonal
                     }
                 } else {
                     type_object_team_seasonal = {
@@ -1186,7 +1186,7 @@ function createProductFeeArr(data) {
                 let statusSeasonal = checkStatus(getDivisionsArray, memberShipProductType[k], divisionProductType[j].competitionMembershipProductDivisionId, 2)
                 let statusCasual = checkStatus(getDivisionsArray, memberShipProductType[k], divisionProductType[j].competitionMembershipProductDivisionId, 1)
                 let statusTeamSeasonal = checkStatus(getDivisionsArray, memberShipProductType[k], divisionProductType[j].competitionMembershipProductDivisionId, 3)
-               // console.log("statusSeasonal, statusCasual, statusteamSeasonal", statusSeasonal, statusCasual, statusTeamSeasonal)
+              //  console.log("statusSeasonal, statusCasual, statusteamSeasonal", statusSeasonal, statusCasual, statusTeamSeasonal)
                 let type_Object_casual = null
                 let type_Object_seasonal = null
                 let type_object_team_seasonal = null;
@@ -1251,7 +1251,7 @@ function createProductFeeArr(data) {
                         "mFees": mFeesCasualPer,
                         "membershipSeasonal": memberShipProductType[k].mSeasonalFee,
                         "membershipGst": memberShipProductType[k].mSeasonalGst,
-                        "checkBoxOption": statusCasual.result.isSeasonal
+                        "checkBoxOption": statusSeasonal.result.isSeasonal
                     }
                 } else {
                     type_Object_seasonal = {
@@ -1294,7 +1294,7 @@ function createProductFeeArr(data) {
                             "mFees": mFeesCasualPer,
                             "membershipSeasonal": memberShipProductType[k].mSeasonalFee,
                             "membershipGst": memberShipProductType[k].mSeasonalGst,
-                            "checkBoxOption": statusCasual.result.isSeasonal
+                            "checkBoxOption": statusTeamSeasonal.result.isTeamSeasonal
                         }
                     } else {
                         type_object_team_seasonal = {
@@ -1381,6 +1381,8 @@ function createProductFeeArr(data) {
         }
 
         productArray.push(object)
+
+        //console.log("productArray",productArray);
     }
     return productArray
 }

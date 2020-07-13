@@ -366,7 +366,7 @@ class Registration extends Component {
         const { genderData } = this.props.commonReducerState;
         const { competitions, membershipProductTypes, membershipProducts, postalCodes } = this.props.userRegistrationState;
         return (
-            <div className="comp-player-grades-header-drop-down-view mt-1">
+            <div className="comp-player-grades-header-drop-down-view mt-1"  style={{paddingLeft:60.8}}>
                 <div className="fluid-width" >
                     <div className="row reg-filter-row" >
                         <div className="reg-col" >
