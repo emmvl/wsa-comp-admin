@@ -137,11 +137,6 @@
   font-style: normal;
 }
 
-.ant-btn {
-  background-color: var(--app-color);
-  border-color: var(--app-color);
-}
-
 .ant-btn:hover, .ant-btn:focus {
   color: var(--app-white);
   background-color: var(--app-color);
