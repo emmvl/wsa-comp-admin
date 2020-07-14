@@ -37,7 +37,7 @@ class DashboardLayout extends React.Component {
         let organisationItem = orgData ? orgData : organisationData[0]
         this.setFullStory(organisationItem);
         await setOrganisationData(organisationItem)
-        this.props.onOrganisationChangeAction(organisationItem, "organisationChange")
+       // this.props.onOrganisationChangeAction(organisationItem, "organisationChange")
         this.setState({ dataOnload: false })
       }
     }
