@@ -771,4 +771,12 @@ export default function* root_saga() {
   // user history
   yield takeEvery(ApiConstants.API_USER_MODULE_HISTORY_LOAD, userSaga.getUserHistorySaga)
 
+  // Update User Photo
+  yield takeEvery(ApiConstants.API_USER_PHOTO_UPDATE_LOAD, userSaga.saveUserPhotosSaga);
+
+  // Update User Detail
+  yield takeEvery(ApiConstants.API_USER_DETAIL_UPDATE_LOAD, userSaga.saveUserDetailSaga);
+
+  // Update User Password
+  yield takeEvery(ApiConstants.API_USER_PASSWORD_UPDATE_LOAD, userSaga.updateUserPasswordSaga);
 }

@@ -150,7 +150,10 @@ class Registration extends Component {
             compFeeStatus: 0,
             compName: "",
             regStatus: false,
-            paymentStatusRefId: -1
+            paymentStatusRefId: -1,
+            searchText: '',
+            regFrom: '-1',
+            regTo: '-1'
         }
         // this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
@@ -175,6 +178,9 @@ class Registration extends Component {
             membershipProductId: this.state.membershipProductId,
             paymentId: this.state.paymentId,
             paymentStatusRefId: this.state.paymentStatusRefId,
+            searchText: this.state.searchText,
+            regFrom: (this.state.regFrom != '-1' && !isNaN(this.state.regFrom)) ? moment(this.state.regFrom).format('YYYY-MM-DD') : '-1',
+            regTo: (this.state.regTo != '-1' && !isNaN(this.state.regTo)) ? moment(this.state.regTo).format('YYYY-MM-DD') : '-1',
             paging: {
                 limit: 10,
                 offset: (page ? (10 * (page - 1)) : 0)
@@ -234,6 +240,16 @@ class Registration extends Component {
             await this.setState({ paymentStatusRefId: value });
             this.handleRegTableList(1);
         }
+        else if (key == "regFrom") {
+            let d = moment(value, 'YYYY-mm-dd');
+            await this.setState({ regFrom: d });
+            this.handleRegTableList(1);
+        }
+        else if (key == "regTo") {
+            let d = moment(value, 'YYYY-mm-dd');
+            await this.setState({ regTo: d });
+            this.handleRegTableList(1);
+        }
         else if (key == "postalCode") {
             const regex = /,/gi;
             let canCall = false;
@@ -259,28 +275,63 @@ class Registration extends Component {
         }
     }
 
+    onKeyEnterSearchText = async(e) =>{
+        var code = e.keyCode || e.which;
+        if(code === 13) { //13 is the enter keycode
+            this.handleRegTableList(1);
+        } 
+    }
+
+    onChangeSearchText = async(e) =>{
+        let value = e.target.value;
+        await this.setState({searchText: e.target.value})
+        if(value == null || value == "")
+        {
+            this.handleRegTableList(1); 
+        }
+    }
+
+    onClickSearchIcon = async() =>{
+        this.handleRegTableList(1);
+    }
+
 
 
     ///////view for breadcrumb
     headerView = () => {
-
+		const { paymentStatus } = this.props.commonReducerState;
         return (
             <div className="comp-player-grades-header-view-design" >
                 <div className="row" >
-                    <div className="col-sm-8" style={{ display: "flex", alignContent: "center" }} >
+                    <div className="col-sm-7" style={{ display: "flex", alignContent: "center" }} >
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.Registrations}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                    <div className="col-sm d-flex align-items-center justify-content-end mr-5"  >
+					<div className="reg-col1" style={{marginLeft: -54}}>
+                        <div className="reg-filter-col-cont" >
+                            <div className='year-select-heading' style={{width: 95}}>{AppConstants.status}</div>
+                            <Select
+                                className="year-select reg-filter-select"
+                                style={{ minWidth: 100 }}
+                                onChange={(e) => this.onChangeDropDownValue(e, 'paymentStatusRefId')}
+                                value={this.state.paymentStatusRefId}>
+                                <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                {(paymentStatus || []).map((g, index) => (
+                                    <Option key={g.id} value={g.id}>{g.description}</Option>
+                                ))}
+                            </Select>
+                        </div>
+                    </div>						  
+                    <div className="col-sm d-flex align-items-center justify-content-end"   style={{paddingLeft: 0 , marginLeft:-6 ,marginRight: 60}} >
                         <div className="comp-product-search-inp-width" >
                             <Input className="product-reg-search-input"
-                                // onChange={(e) => this.onChangeSearchText(e)}
+                                 onChange={(e) => this.onChangeSearchText(e)}
                                 placeholder="Search..."
-                                // onKeyPress={(e) => this.onKeyEnterSearchText(e)}
-                                // prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                //     onClick={() => this.onClickSearchIcon()}
-                                // />}
+                                onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                    onClick={() => this.onClickSearchIcon()}
+                                />}
                                 allowClear
                             />
                         </div>
@@ -312,10 +363,10 @@ class Registration extends Component {
                 uniqueValues = [...uniqueValues, ...arr];
             }
         }
-        const { genderData, paymentStatus } = this.props.commonReducerState;
+        const { genderData } = this.props.commonReducerState;
         const { competitions, membershipProductTypes, membershipProducts, postalCodes } = this.props.userRegistrationState;
         return (
-            <div className="comp-player-grades-header-drop-down-view mt-1">
+            <div className="comp-player-grades-header-drop-down-view mt-1"  style={{paddingLeft:60.8}}>
                 <div className="fluid-width" >
                     <div className="row reg-filter-row" >
                         <div className="reg-col" >
@@ -475,19 +526,35 @@ class Registration extends Component {
 
                             </div>
                         </div>
-                        <div className="reg-col1" >
-                            <div className="reg-filter-col-cont" >
-                                <div className='year-select-heading'>{AppConstants.status}</div>
-                                <Select
+                        <div className="reg-col">
+                            <div className="reg-filter-col-cont" style={{ marginRight: '30px' }}>
+                                <div className='year-select-heading'>{AppConstants.Regfrom}</div>
+                                <DatePicker
+                                    size="default"
                                     className="year-select reg-filter-select"
-                                    style={{ minWidth: 100 }}
-                                    onChange={(e) => this.onChangeDropDownValue(e, 'paymentStatusRefId')}
-                                    value={this.state.paymentStatusRefId}>
-                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {(paymentStatus || []).map((g, index) => (
-                                        <Option key={g.id} value={g.id}>{g.description}</Option>
-                                    ))}
-                                </Select>
+                                    onChange={e => this.onChangeDropDownValue(e, 'regFrom')}
+                                    format={"DD-MM-YYYY"}
+                                    placeholder={"dd-mm-yyyy"}
+                                    showTime={false}
+                                    name={'regFrom'}
+                                />
+                            </div>
+                        </div>
+                        <div className="reg-col">
+                            <div className="reg-filter-col-cont" >
+                                <div className='year-select-heading'>{AppConstants.Regto}</div>
+                                <DatePicker
+                                    size="large"
+                                    placeholder={"dd-mm-yyyy"}
+                                    className="year-select reg-filter-select"
+															 
+                                    onChange={e => this.onChangeDropDownValue(e, 'regTo')}
+                                    //onChange={e => this.setState({dobTo: moment(e, "YYYY-MM-DD")})}
+                                    format={"DD-MM-YYYY"}
+                                    showTime={false}
+                                    name={'regTo'}
+                                />
+										 
                             </div>
                         </div>
                     </div>

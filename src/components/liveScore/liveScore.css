@@ -47,7 +47,7 @@
 .desc-text-style {
     display: flex;
     align-content: center;
-    text-align: center;
+    text-align: left;
     font-size: 13px;
     color: var(--app-4c4c6d);
     font-weight: 500;
@@ -369,6 +369,10 @@
     font-size: 14px;
     font-weight: 500;
     align-self: center;
+  }
+
+  .match-sheet-footer-view {
+      padding: 24px 15%;
   }
   
 @media(min-width: 768px) and (max-width: 1024px) {

@@ -3,8 +3,10 @@ import ApiConstants from "../../../themes/apiConstants";
 import AxiosApi from "../../http/registrationHttp/registrationAxios";
 import CommonAxiosApi from "../../http/commonHttp/commonAxios";
 import { message } from "antd";
+import AppConstants from "../../../themes/appConstants";
 
 function* failSaga(result) {
+    console.log("failSaga", result.result.data.message)
     yield put({
         type: ApiConstants.API_USERCOUNT_FAIL,
         error: result,
@@ -12,6 +14,10 @@ function* failSaga(result) {
     });
     if (result.result.data.message) {
         setTimeout(() => {
+            message.config({
+                duration: 1.5,
+                maxCount: 1
+            })
             message.error(result.result.data.message);
         }, 800);
     } else {
@@ -20,6 +26,7 @@ function* failSaga(result) {
 }
 
 function* errorSaga(error) {
+    console.log("errorSaga", error)
     yield put({
         type: ApiConstants.API_USERCOUNT_ERROR,
         error: error,
@@ -27,8 +34,11 @@ function* errorSaga(error) {
     });
 
     setTimeout(() => {
-        // message.error(error.result.data.message);
-        message.error("Something went wrong.");
+        message.config({
+            duration: 1.5,
+            maxCount: 1
+        })
+        message.error(AppConstants.somethingWentWrong);
     }, 800);
 }
 

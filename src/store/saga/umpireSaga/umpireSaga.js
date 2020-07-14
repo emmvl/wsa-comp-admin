@@ -6,20 +6,31 @@ import { message } from "antd";
 import history from "../../../util/history";
 
 function* failSaga(result) {
+    console.log("failSaga", result.message)
     yield put({ type: ApiConstants.API_UMPIRE_FAIL });
     setTimeout(() => {
+        message.config({
+            duration: 1.5,
+            maxCount: 1
+        })
         message.error(result.message)
     }, 800);
 }
 
 function* errorSaga(error) {
+    console.log("errorSaga", error)
     yield put({
         type: ApiConstants.API_UMPIRE_ERROR,
         error: error,
         status: error.status
     });
-    message.error(error.error)
-    // message.error('Something went wrong!!')
+    setTimeout(() => {
+        message.config({
+            duration: 1.5,
+            maxCount: 1
+        })
+        message.error(error.error);
+    }, 800);
 
 }
 

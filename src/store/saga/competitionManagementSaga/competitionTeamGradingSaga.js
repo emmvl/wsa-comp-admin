@@ -2,20 +2,34 @@ import { put, call } from 'redux-saga/effects'
 import ApiConstants from "../../../themes/apiConstants";
 import CompetitionAxiosApi from "../../http/competitionHttp/competitionAxiosApi";
 import { message } from "antd";
+import AppConstants from "../../../themes/appConstants";
 
 function* failSaga(result) {
+    console.log("failSaga", result.message)
     yield put({ type: ApiConstants.API_COMPETITION_OWN_TEAM_GRADING_FAIL });
     setTimeout(() => {
-        alert(result.message);
+        message.config({
+            duration: 1.5,
+            maxCount: 1
+        })
+        message.error(result.message)
     }, 800);
 }
 
 function* errorSaga(error) {
+    console.log("errorSaga", error)
     yield put({
         type: ApiConstants.API_COMPETITION_OWN_TEAM_GRADING_ERROR,
         error: error,
         status: error.status
     });
+    setTimeout(() => {
+        message.config({
+            duration: 1.5,
+            maxCount: 1
+        })
+        message.error(AppConstants.somethingWentWrong);
+    }, 800);
 }
 
 //competition own proposed team grading get api
@@ -149,11 +163,13 @@ export function* publishGradeTeamSummarySaga(action) {
                 status: result.status,
             });
             message.success(result.result.data.message)
-        } 
-        else if(result.status === 4){
+        }
+        else if (result.status === 4) {
             let res = JSON.parse(JSON.stringify(result));
-            yield put({ type: ApiConstants.API_COMPETITION_OWN_TEAM_GRADING_FAIL,
-                status: result.status });
+            yield put({
+                type: ApiConstants.API_COMPETITION_OWN_TEAM_GRADING_FAIL,
+                status: result.status
+            });
             setTimeout(() => {
                 message.config({
                     duration: 4,

@@ -37,7 +37,7 @@ class DashboardLayout extends React.Component {
         let organisationItem = orgData ? orgData : organisationData[0]
         this.setFullStory(organisationItem);
         await setOrganisationData(organisationItem)
-        this.props.onOrganisationChangeAction(organisationItem, "organisationChange")
+       // this.props.onOrganisationChangeAction(organisationItem, "organisationChange")
         this.setState({ dataOnload: false })
       }
     }
@@ -56,7 +56,7 @@ class DashboardLayout extends React.Component {
       this.setState({ dataOnload: true })
     }
     else {
-      this.props.userState.getUserOrganisation.length == 0 && this.props.getUserOrganisationAction()
+      this.props.userState.getUserOrganisation.length === 0 && this.props.getUserOrganisationAction()
       this.setState({ dataOnload: true })
     }
   }
@@ -71,6 +71,9 @@ class DashboardLayout extends React.Component {
     switch (menuName) {
       case AppConstants.home:
         return AppImages.homeIcon;
+
+      case AppConstants.account:
+        return AppImages.accountIcon;
 
       case AppConstants.user:
         return AppImages.userIcon;
@@ -130,14 +133,17 @@ class DashboardLayout extends React.Component {
     //      });
     //   }
     // }
-   
   }
 
   ///////user profile dropdown
   userProfileDropdown() {
-    let userData = this.props.userState.getUserOrganisation
-    let selectedOrgData = getOrganisationData()
-    let userImage = selectedOrgData ? (selectedOrgData.photoUrl ? selectedOrgData.photoUrl : AppImages.defaultUser) : AppImages.defaultUser
+    const { menuName } = this.props;
+    let userData = this.props.userState.getUserOrganisation;
+    let selectedOrgData = getOrganisationData();
+    let userImage = (selectedOrgData && selectedOrgData.photoUrl)
+      ? selectedOrgData.photoUrl
+      : AppImages.defaultUser;
+
     return (
       <div className="dropdown">
         <button
@@ -145,38 +151,37 @@ class DashboardLayout extends React.Component {
           type="button"
           data-toggle="dropdown"
         >
-          <img
-            src={userImage}
-            alt="" />
+          <img src={userImage} alt="" />
         </button>
+
         <ul className="dropdown-menu">
           <li>
             <div className="media">
               <div className="media-left">
                 <figure className="user-img-wrap">
-                  <img
-                    src={userImage}
-                    alt=""
-                  />
+                  <img src={userImage} alt="" />
                 </figure>
               </div>
+
               <div className="media-body">
-                {selectedOrgData ?
+                {selectedOrgData && (
                   <span className="user-name">
                     {selectedOrgData.firstName + " " + selectedOrgData.lastName}
                   </span>
-                  : null}
+                )}
+
                 <span className="user-name-btm pt-3">
-                  {selectedOrgData ?
+                  {selectedOrgData && (
                     <span style={{ textTransform: "capitalize" }}>
                       {selectedOrgData.name + "(" + selectedOrgData.userRole + ")"}
                     </span>
-                    : null}
+                  )}
                 </span>
               </div>
             </div>
           </li>
-          {userData.length > 0 ?
+
+          {userData.length > 0 && (
             <div className="acc-help-support-list-view">
               {userData.map((item, index) => {
                 return (
@@ -188,24 +193,24 @@ class DashboardLayout extends React.Component {
                 )
               })}
             </div>
-            : null}
+          )}
+
           <div className="acc-help-support-list-view">
-            <li>
-              <a href="#">{"Account Settings"}</a>
+            <li className={menuName === AppConstants.account ? "active" : ""}>
+              <NavLink to="/account/profile">Account Settings</NavLink>
             </li>
             <li>
-              <a href="#"> {"Help & Support"}</a>
+              <a href="#">Help & Support</a>
             </li>
           </div>
+
           <li className="log-out">
-            <a onClick={() => this.logout()}>{"Log Out"}</a>
+            <a onClick={this.logout}>Log Out</a>
           </li>
         </ul>
       </div>
-    )
+    );
   }
-
-
 
   render() {
     let menuName = this.props.menuName;
@@ -218,11 +223,13 @@ class DashboardLayout extends React.Component {
                 <NavLink to="/" className="site-brand">
                   <img src={AppImages.netballLogo1} alt="" />
                 </NavLink>
+
                 <div className="col-sm dashboard-layout-menu-heading-view" onClick={this.props.onMenuHeadingClick}>
                   <span className="dashboard-layout-menu-heading">
                     {this.props.menuHeading}
                   </span>
                 </div>
+
                 {/* <div className="col-sm width_200 mt-1">
                   <div
                     style={{
@@ -235,7 +242,7 @@ class DashboardLayout extends React.Component {
                   >
                     <span className="year-select-heading">
                       {AppConstants.organisation}:
-            </span>
+                    </span>
                     <Select
                       style={{ minWidth: 160, minHeight: "initial" }}
                       name={"competition"}
@@ -243,7 +250,7 @@ class DashboardLayout extends React.Component {
                       onChange={organisationUniqueKey => this.onOrganisationChange(organisationUniqueKey)}
                       value={JSON.parse(JSON.stringify(this.state.organisationUniqueKey))}
                     >
-                      {this.props.userState.venueOragnasation.map(item => {
+                      {this.props.userState.venueOrganisation.map(item => {
                         return (
                           <Option key={"organisationUniqueKey" + item.organisationUniqueKey} value={item.organisationUniqueKey}>
                             {item.name}
@@ -285,7 +292,6 @@ class DashboardLayout extends React.Component {
                           }
                         />
                       </div>
-
                     </form>
                   </li> */}
                   <li>
@@ -306,7 +312,7 @@ class DashboardLayout extends React.Component {
                           >
                             <div className="home-menu menu-wrap">
                               <NavLink to="/homeDashboard">
-                                <span className="icon"></span>
+                                <span className="icon" />
                                 {AppConstants.home}
                               </NavLink>
                             </div>
@@ -318,7 +324,7 @@ class DashboardLayout extends React.Component {
                           >
                             <div className="user-menu menu-wrap">
                               <NavLink to="/userTextualDashboard">
-                                <span className="icon"></span>
+                                <span className="icon" />
                                 {AppConstants.user}
                               </NavLink>
                             </div>
@@ -332,7 +338,7 @@ class DashboardLayout extends React.Component {
                           >
                             <div className="registration-menu menu-wrap">
                               <NavLink to="/registrationDashboard">
-                                <span className="icon"></span>
+                                <span className="icon" />
                                 {AppConstants.registration}
                               </NavLink>
                             </div>
@@ -342,10 +348,11 @@ class DashboardLayout extends React.Component {
                               menuName === AppConstants.competitions
                                 ? "active"
                                 : ""
-                            }                          >
+                            }
+                          >
                             <div className="competitions-menu menu-wrap">
                               <NavLink to="/competitionDashboard">
-                                <span className="icon"></span>
+                                <span className="icon" />
                                 {AppConstants.competitions}
                               </NavLink>
                             </div>
@@ -359,7 +366,7 @@ class DashboardLayout extends React.Component {
                           >
                             <div className="lives-cores menu-wrap">
                               <NavLink to="/liveScoreCompetitions">
-                                <span className="icon"></span>
+                                <span className="icon" />
                                 {AppConstants.liveScores}
                               </NavLink>
                             </div>
@@ -371,7 +378,7 @@ class DashboardLayout extends React.Component {
                           >
                             <div className="events-menu menu-wrap">
                               <a href="#">
-                                <span className="icon"></span>
+                                <span className="icon" />
                                 {AppConstants.events}
                               </a>
                             </div>
@@ -383,7 +390,7 @@ class DashboardLayout extends React.Component {
                           >
                             <div className="shop-menu menu-wrap">
                               <NavLink to="/shopDashboard">
-                                <span className="icon"></span>
+                                <span className="icon" />
                                 {AppConstants.shop}
                               </NavLink>
                             </div>
@@ -395,7 +402,7 @@ class DashboardLayout extends React.Component {
                           >
                             <div className="umpires-menu menu-wrap">
                               <NavLink to="/umpireDashboard">
-                                <span className="icon"></span>
+                                <span className="icon" />
                                 {AppConstants.umpires}
                               </NavLink>
                             </div>
@@ -421,7 +428,7 @@ class DashboardLayout extends React.Component {
                           >
                             <div className="finance-menu menu-wrap">
                               <a href="#">
-                                <span className="icon"></span>
+                                <span className="icon" />
                                 {AppConstants.finance}
                               </a>
                             </div>
@@ -462,17 +469,19 @@ class DashboardLayout extends React.Component {
     );
   }
 }
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     getUserOrganisationAction,
     onOrganisationChangeAction,
-    clearHomeDashboardData
-  }, dispatch)
+    clearHomeDashboardData,
+  }, dispatch);
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
   return {
-    userState: state.UserState
-  }
+    userState: state.UserState,
+  };
 }
-export default connect(mapStatetoProps, mapDispatchToProps)((DashboardLayout));
+
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardLayout);

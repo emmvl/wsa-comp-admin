@@ -4,22 +4,34 @@ import CompetitionAxiosApi from "../../http/competitionHttp/competitionAxiosApi"
 import RegstrartionAxiosApi from "../../http/registrationHttp/registrationAxios";
 import { message } from "antd";
 import history from "../../../util/history";
+import AppConstants from "../../../themes/appConstants";
 
 function* failSaga(result) {
+    console.log("failSaga", result.message)
     yield put({ type: ApiConstants.API_COMPETITION_DRAWS_FAIL });
     setTimeout(() => {
+        message.config({
+            duration: 1.5,
+            maxCount: 1
+        })
         message.error(result.message)
     }, 800);
 }
 
 function* errorSaga(error) {
-    console.log("Error=======",error)
+    console.log("errorSaga", error)
     yield put({
         type: ApiConstants.API_COMPETITION_DRAWS_ERROR,
         error: error,
         status: error.status
     });
-    message.error("Something went wrong.")
+    setTimeout(() => {
+        message.config({
+            duration: 1.5,
+            maxCount: 1
+        })
+        message.error(AppConstants.somethingWentWrong);
+    }, 800);
 }
 
 ///////get competition draws

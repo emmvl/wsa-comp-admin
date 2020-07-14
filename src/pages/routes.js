@@ -73,7 +73,7 @@ import LiveScoreTeam from "../components/liveScore/liveScoreTeams"
 import LiveScoreAddTeam from "../components/liveScore/liveScoreAddTeam"
 import LiveScoreManagerList from "../components/liveScore/liveScoreManagers"
 import LiveScoreAddManager from "../components/liveScore/liveScoreAddManagers"
-import LiveScorerManagerImport from "../components/liveScore/liveScorerManagerImport"
+import LiveScoreManagerImport from "../components/liveScore/liveScoreManagerImport"
 import LiveScoreManagerView from "../components/liveScore/liveScoreManagerView"
 import LiveScoreTeamView from "../components/liveScore/liveScoreTeamView"
 import LiveScorerView from "../components/liveScore/liveScorerView"
@@ -124,7 +124,6 @@ import LiveScoreSocialSheet from "../components/liveScore/liveScoreSocialSheet"
 import UmpireDashboard from "../components/umpire/umpireDashboard"
 import AddUmpire from "../components/umpire/addUmpire"
 
-
 import LiveScoreMatchSheet from "../components/liveScore/liveScoreMatchSheet";
 import ShopDashboard from "../components/shop/shopDashboard";
 import UmpireRoaster from "../components/umpire/umpireRoaster"
@@ -147,19 +146,12 @@ import RegistrationMainDashboard from "../components/registration/registrationMa
 import LiveScoreLadderAdjustment from "../components/liveScore/liveScoreLadderAdjustment";
 import LiveScorePositionTrackReport from "../components/liveScore/liveScorePositionTrackReport";
 
-import RegistrationChange from "../components/registration/registrationChange"
-import MultifieldDraws from "../components/competition/multifieldDraws"
+import Account from "./Account";
+import RegistrationChange from "../components/registration/registrationChange";
+import MultifieldDraws from "../components/competition/multifieldDraws";
+import RegistrationChangeReview from "../components/registration/registrationChangeReview"
 
-const lazyLoad = Component => {
-  const lazy = props => {
-    return (
-      <React.Suspense fallback={<Skeleton avatar paragraph={{ rows: 4 }} />}>
-        <Component {...props} />
-      </React.Suspense>
-    );
-  };
-  return lazy;
-};
+import lazyLoad from "../components/lazyLoad";
 
 class Routes extends React.Component {
   render() {
@@ -432,8 +424,8 @@ class Routes extends React.Component {
         />
 
         <PrivateRoute
-          path="/liveScorerManagerImport"
-          component={lazyLoad(LiveScorerManagerImport)}
+          path="/liveScoreManagerImport"
+          component={lazyLoad(LiveScoreManagerImport)}
         />
 
         <PrivateRoute
@@ -446,7 +438,6 @@ class Routes extends React.Component {
           component={lazyLoad(LiveScoreTeamView)}
         />
 
-
         <PrivateRoute
           path="/liveScorerView"
           component={lazyLoad(LiveScorerView)}
@@ -457,7 +448,6 @@ class Routes extends React.Component {
           component={lazyLoad(LiveScoreMatchImport)}
         />
 
-
         <PrivateRoute
           path="/liveScoreTeamImport"
           component={lazyLoad(LiveScoreTeamImport)}
@@ -467,6 +457,7 @@ class Routes extends React.Component {
           path="/liveScoreUmpireList"
           component={lazyLoad(LiveScoreUmpireList)}
         />
+
         <PrivateRoute
           path="/liveScoreLadderList"
           component={lazyLoad(LiveScoreLadderList)}
@@ -494,8 +485,8 @@ class Routes extends React.Component {
 
         <PrivateRoute
           path="/liveScoreIncidentView"
-          component={lazyLoad(LiveScoreIncidentView)} />
-
+          component={lazyLoad(LiveScoreIncidentView)}
+        />
 
         <PrivateRoute
           path="/liveScoreIncidentList"
@@ -504,7 +495,8 @@ class Routes extends React.Component {
 
         <PrivateRoute
           path="/liveScoreNewsList"
-          component={lazyLoad(LiveScoreNewsList)} />
+          component={lazyLoad(LiveScoreNewsList)}
+        />
 
         <PrivateRoute
           path="/liveScoreAddNews"
@@ -518,7 +510,8 @@ class Routes extends React.Component {
 
         <PrivateRoute
           path="/liveScoreSettingsView"
-          component={lazyLoad(LiveScoreSettingsView)} />
+          component={lazyLoad(LiveScoreSettingsView)}
+        />
 
         <PrivateRoute
           path="/liveScoreBanners"
@@ -559,6 +552,7 @@ class Routes extends React.Component {
           path="/liveScoreDivisionList"
           component={lazyLoad(LiveScoreDivisionList)}
         />
+
         <PrivateRoute
           path="/liveScoreAddDivision"
           component={lazyLoad(LiveScoreAddDivision)}
@@ -583,13 +577,16 @@ class Routes extends React.Component {
           path="/liveScoreAssignMatch"
           component={lazyLoad(LiveScoreAssignMatch)}
         />
+
         <PrivateRoute
           path="/liveScoreVenueChange"
           component={lazyLoad(LiveScoreVenueChange)}
         />
+
         <PrivateRoute
           path="/registrationFormList"
-          component={lazyLoad(RegistrationFormList)} />
+          component={lazyLoad(RegistrationFormList)}
+        />
 
         <PrivateRoute
           path="/liveScoreIncidentImport"
@@ -615,10 +612,12 @@ class Routes extends React.Component {
           path="/liveScoreSeasonFixture"
           component={lazyLoad(LiveScoreSeasonFixture)}
         />
+
         <PrivateRoute
           path="/playWithFriend"
           component={lazyLoad(PlayWithFriend)}
         />
+
         <PrivateRoute
           path="/referFriend"
           component={lazyLoad(ReferFriend)}
@@ -653,6 +652,7 @@ class Routes extends React.Component {
           path="/liveScoreAddEditCoach"
           component={lazyLoad(LiveScoreAddEditCoach)}
         />
+
         <PrivateRoute
           path="/competitionException"
           component={lazyLoad(CompetitionException)}
@@ -697,6 +697,7 @@ class Routes extends React.Component {
           path="/umpire"
           component={lazyLoad(Umpire)}
         />
+
         <PrivateRoute
           path="/listProducts"
           component={lazyLoad(ListProducts)}
@@ -711,6 +712,7 @@ class Routes extends React.Component {
           path="/paymentDashboard"
           component={lazyLoad(PaymentDashboard)}
         />
+
         <PrivateRoute
           path="/orderSummary"
           component={lazyLoad(OrderSummary)}
@@ -720,6 +722,7 @@ class Routes extends React.Component {
           path="/orderStatus"
           component={lazyLoad(ShopOrderStatus)}
         />
+
         <PrivateRoute
           path="/shopSettings"
           component={lazyLoad(ShopSettings)}
@@ -780,6 +783,9 @@ class Routes extends React.Component {
           component={lazyLoad(MultifieldDraws)}
         />
 
+        <PrivateRoute path="/account" component={lazyLoad(Account)} />
+        <PrivateRoute path="/registrationChangeReview" component={lazyLoad(RegistrationChangeReview)} />
+
         <Route path="/" component={lazyLoad(NotFound)} />
 
         <Redirect from="*" to="/404" />
@@ -787,4 +793,5 @@ class Routes extends React.Component {
     );
   }
 }
+
 export default Routes;

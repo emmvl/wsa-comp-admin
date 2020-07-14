@@ -4,8 +4,10 @@ import AxiosApi from "../../http/registrationHttp/registrationAxios";
 import commonAxiosApi from "../../http/axiosApi";
 import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 import { message } from "antd";
+import AppConstants from "../../../themes/appConstants";
 
 function* failSaga(result) {
+    console.log("failSaga", result.result.data.message)
     yield put({
         type: ApiConstants.API_COMPETITION_FEES_FAIL,
         error: result,
@@ -21,6 +23,7 @@ function* failSaga(result) {
 }
 
 function* errorSaga(error) {
+    console.log("errorSaga", error)
     yield put({
         type: ApiConstants.API_COMPETITION_FEES_ERROR,
         error: error,
@@ -31,7 +34,7 @@ function* errorSaga(error) {
             duration: 1.5,
             maxCount: 1
         })
-        message.error("Something went wrong.");
+        message.error(AppConstants.somethingWentWrong);
     }, 800);
 }
 

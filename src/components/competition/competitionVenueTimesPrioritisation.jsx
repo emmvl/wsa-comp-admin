@@ -71,7 +71,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
     }
 
     componentDidMount() {
-        this.props.venueListAction();
+        //this.props.venueListAction();
+        this.props.getVenuesTypeAction('all');
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
@@ -689,8 +690,11 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
 
     handleSearch = (value, data) => {
+        // const filteredData = data.filter(memo => {
+        //     return memo.venueName.toLowerCase().indexOf(value.toLowerCase()) > -1
+        // })
         const filteredData = data.filter(memo => {
-            return memo.venueName.toLowerCase().indexOf(value.toLowerCase()) > -1
+            return memo.name.toLowerCase().indexOf(value.toLowerCase()) > -1
         })
         this.props.searchVenueList(filteredData)
     };
@@ -702,7 +706,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
     }
 
     selectAddVenueView() {
-        const { venueList, mainVenueList } = this.props.commonReducerState
+       // const { venueList, mainVenueList } = this.props.commonReducerState
+        const {venueList, mainVenueList} = this.props.appState;
         const { selectedVenueId } = this.props.venueTimeState
         return (
             <div className="fluid-width">
@@ -720,7 +725,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                             onSearch={(value) => { this.handleSearch(value, mainVenueList) }}
                         >
                             {venueList.length > 0 && venueList.map((item) => (
-                                < Option value={item.venueId} key={item.venueId} > {item.venueName}</Option>
+                                < Option value={item.id} key={item.name} > {item.name}</Option>
                             ))
                             }
                         </Select>

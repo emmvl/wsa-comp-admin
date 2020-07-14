@@ -256,7 +256,7 @@ const columnsTodaysMatch = [
         key: 'scorer1Status',
         sorter: (a, b) => tableSort(a, b, "scorer1Status"),
         render: (scorer1Status) =>
-            <span>{isArrayNotEmpty(scorer1Status) ? scorer1Status[0].r_status == "YES" ? "Accepted" : "Not Accepted" : "Not SET"}</span>
+            <span>{isArrayNotEmpty(scorer1Status) ? scorer1Status[0].status == "YES" ? "Accepted" : "Not Accepted" : "Not SET"}</span>
 
     }, {
         title: "Scorer 2",
@@ -264,7 +264,7 @@ const columnsTodaysMatch = [
         key: 'scorer2Status',
         sorter: (a, b) => tableSort(a, b, "scorer2Status"),
         render: (scorer2Status, record) =>
-            <span >{record.competition.scoringType == 'SINGLE' ? "" : isArrayNotEmpty(scorer2Status) ? scorer2Status[0].r_status == "YES" ? "Accepted" : "Not Accepted" : "  Not SET"}</span>
+            <span >{record.competition.scoringType == 'SINGLE' ? "" : isArrayNotEmpty(scorer2Status) ? scorer2Status[0].status == "YES" ? "Accepted" : "Not Accepted" : "  Not SET"}</span>
     },
     {
         title: "Player Attendance Team A",
@@ -321,13 +321,7 @@ const columnsTodaysIncient = [
         render: (incidentPlayers, record) =>
 
             isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
-
-                // <NavLink to={{
-                //     pathname: '/liveScorePlayerView',
-                //     state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null, screenName: 'dashboard' }
-                // }}>
-                <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.checkUserId(record)} className="desc-text-style side-bar-profile-data" >{item.player.firstName}</span>
-                // </NavLink>
+                <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.checkUserId(item)} className="desc-text-style side-bar-profile-data" >{item.player.firstName}</span>
             ))
     
     },
@@ -339,13 +333,7 @@ const columnsTodaysIncient = [
         render: (incidentPlayers, record) =>
 
             isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
-
-                // <NavLink to={{
-                //     pathname: '/liveScorePlayerView',
-                //     state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null, screenName: 'dashboard' }
-                // }}>
-                <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.checkUserId(record)} className="desc-text-style side-bar-profile-data" >{item.player.lastName}</span>
-                // </NavLink>
+                <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.checkUserId(item)} className="desc-text-style side-bar-profile-data" >{item.player.lastName}</span>
             ))
     },
     {
@@ -476,7 +464,7 @@ class LiveScoreDashboard extends Component {
     }
 
     checkUserId(record) {
-        if (record.userId == null) {
+        if (record.player.userId == null) {
             message.config({ duration: 1.5, maxCount: 1 })
             message.warn(ValidationConstants.playerMessage)
         }
@@ -484,7 +472,6 @@ class LiveScoreDashboard extends Component {
             history.push("/userPersonal", { userId: record.userId, screenKey: "livescore", screen: "/userPersonal" })
         }
     }
-
 
     getStartofDay() {
         var start = new Date();

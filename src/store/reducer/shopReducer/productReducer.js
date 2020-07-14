@@ -13,7 +13,7 @@ const defaultAddProductObject = {
     price: 0,
     cost: 0,
     tax: 0,
-    invetoryTracking: true,
+    inventoryTracking: true,
     barcode: "",
     skuCode: "",
     quantity: 0,
@@ -37,7 +37,8 @@ const defaultAddProductObject = {
                         cost: 0,
                         skuCode: "",
                         barcode: "",
-                        quantity: 0
+                        quantity: 0,
+                        id: 0,
                     }
                 }
             ]
@@ -68,8 +69,27 @@ const initialState = {
 ////adding extra parameters in the productDetailData
 function makeDetailDataObject(data) {
     let productData = data
+    let defaultVariant = [
+        {
+            name: "",
+            options: [
+                {
+                    optionName: "",
+                    properties: {
+                        price: 0,
+                        cost: 0,
+                        skuCode: "",
+                        barcode: "",
+                        quantity: 0,
+                        id: 0,
+                    }
+                }
+            ]
+        }
+    ]
     productData['variantsChecked'] = isArrayNotEmpty(productData.variants) ? true : false
     productData['taxApplicable'] = productData.tax > 0 ? true : false
+    productData["variants"] = isArrayNotEmpty(productData.variants) ? productData.variants : defaultVariant
     return productData
 }
 
@@ -140,10 +160,10 @@ function shopProductState(state = initialState, action) {
             if (action.key === "variantName") {
                 state.productDetailData["variants"][action.index]["name"] = action.data
             }
-            if (action.key === "variantOption") {
+            else if (action.key === "variantOption") {
                 state.productDetailData["variants"][action.index]["options"] = action.data
             }
-            if (action.key === "typeOnChange") {
+            else if (action.key === "typeOnChange") {
                 let typeListArray = JSON.parse(JSON.stringify(state.typesProductList))
                 let typeIndex = typeListArray.findIndex(x => x.id == action.data)
                 if (typeIndex >= 0) {
@@ -151,13 +171,16 @@ function shopProductState(state = initialState, action) {
                     state.productDetailData["type"] = typeObject
                 }
             }
-            if (action.key === "price") {
+            else if (action.key === "price") {
+                state.productDetailData["tax"] = state.productDetailData.taxApplicable === true ? Number(action.data) * 10 / 100 : 0
                 state.productDetailData[action.key] = action.data
-                state.productDetailData["tax"] = state.productDetailData.taxApplicable === true ? JSON.parse(action.data) * 10 / 100 : 0
             }
-            if (action.key === "taxApplicable") {
+            else if (action.key === "taxApplicable") {
                 state.productDetailData[action.key] = action.data
-                state.productDetailData["tax"] = action.data === true ? JSON.parse(state.productDetailData.price) * 10 / 100 : 0
+                state.productDetailData["tax"] = action.data === true ? Number(state.productDetailData.price) * 10 / 100 : 0
+            }
+            else if (action.key === "inventoryTracking") {
+                state.productDetailData.inventoryTracking = action.data
             }
             else {
                 state.productDetailData[action.key] = action.data
@@ -207,7 +230,7 @@ function shopProductState(state = initialState, action) {
                     price: 0,
                     cost: 0,
                     tax: 0,
-                    invetoryTracking: true,
+                    inventoryTracking: true,
                     barcode: "",
                     skuCode: "",
                     quantity: 0,
@@ -231,7 +254,8 @@ function shopProductState(state = initialState, action) {
                                         cost: 0,
                                         skuCode: "",
                                         barcode: "",
-                                        quantity: 0
+                                        quantity: 0,
+                                        id: 0,
                                     }
                                 }
                             ]
@@ -254,6 +278,9 @@ function shopProductState(state = initialState, action) {
             return { ...state, onLoad: true, error: null };
 
         case ApiConstants.API_DELETE_SHOP_PRODUCT_VARIANT_SUCCESS:
+            let varientOptions = state.productDetailData.variants[action.index].options
+            varientOptions.splice(action.subIndex, 1)
+            state.productDetailData["variants"][action.index]["options"] = varientOptions
             return {
                 ...state,
                 onLoad: false,

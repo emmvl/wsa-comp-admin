@@ -68,7 +68,7 @@ class QuickCompetitionMatchFormat extends Component {
             this.apiCalls(competitionId, year);
         }
         else {
-            this.props.getYearAndQuickCompetitionAction(this.props.quickCompetitionState.quick_CompetitionArr, null);
+            this.props.getYearAndQuickCompetitionAction(this.props.quickCompetitionState.quick_CompetitionYearArr, null);
         }
     }
 
@@ -163,7 +163,7 @@ class QuickCompetitionMatchFormat extends Component {
     }
 
     onYearChange(yearId) {
-        this.props.getYearAndQuickCompetitionAction(this.props.quickCompetitionState.quick_CompetitionArr, yearId)
+        this.props.getYearAndQuickCompetitionAction(this.props.quickCompetitionState.quick_CompetitionYearArr, yearId)
         this.setState({ firstTimeCompId: null, yearRefId: yearId })
     }
 
@@ -306,7 +306,6 @@ class QuickCompetitionMatchFormat extends Component {
         this.props.updateCompetitionFormatAction(id, fieldName);
     }
     onChangeSetCompFormatDivisionValue = (id, fieldName, competitionFormatDivisions, index) => {
-        console.log("fieldName::" + fieldName + ":::" + id);
         if (fieldName == "matchDuration") {
             competitionFormatDivisions[index].matchDuration = id;
         }
@@ -319,8 +318,6 @@ class QuickCompetitionMatchFormat extends Component {
         else if (fieldName == "timeBetweenGames") {
             competitionFormatDivisions[index].timeBetweenGames = id;
         }
-
-
         this.props.updateCompetitionFormatAction(competitionFormatDivisions, 'competionFormatDivisions');
     }
 

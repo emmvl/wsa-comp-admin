@@ -4,17 +4,23 @@ import AxiosApi from "../../http/registrationHttp/registrationAxios";
 import { message } from "antd";
 
 function* failSaga(result) {
+    console.log("failSaga", result.result.data.message)
     yield put({
         type: ApiConstants.API_REG_DASHBOARD_LIST_FAIL,
         error: result,
         status: result.status
     });
     setTimeout(() => {
+        message.config({
+            duration: 1.5,
+            maxCount: 1
+        })
         message.error(result.result.data.message);
     }, 800);
 }
 
 function* errorSaga(error) {
+    console.log("errorSaga", error)
     yield put({
         type: ApiConstants.API_REG_DASHBOARD_LIST_ERROR,
         error: error,
@@ -22,7 +28,10 @@ function* errorSaga(error) {
     });
 
     setTimeout(() => {
-        // message.error(error.result.data.message);
+        message.config({
+            duration: 1.5,
+            maxCount: 1
+        })
         message.error("Something went wrong.");
     }, 800);
 }

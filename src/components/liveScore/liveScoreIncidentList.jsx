@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Breadcrumb, Pagination, Input, Icon, Menu } from "antd";
+import { Layout, Button, Table, Breadcrumb, Pagination, Input, Icon, message } from "antd";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -12,6 +12,7 @@ import { liveScore_formateDate, liveScore_MatchFormate } from '../../themes/date
 import history from "../../util/history";
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { isArrayNotEmpty } from "../../util/helpers";
+import ValidationConstants from "../../themes/validationConstant";
 
 function getIncidentPlayer(incidentPlayers) {
     let playerId = incidentPlayers.length > 0 ? incidentPlayers[0].playerId : ""
@@ -36,6 +37,7 @@ function checkSorting(a, b, key) {
 
 
 const { Content } = Layout;
+let this_obj = null;
 ////columens data
 const columns = [
 
@@ -67,25 +69,23 @@ const columns = [
     },
     {
         title: 'Player ID',
-        dataIndex: 'Incident Players Dd',
+        dataIndex: 'incidentPlayers',
         key: 'incident Players',
         // render: (incidentPlayers, record) => {
-        // isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
-        //     <span className="input-heading-add-another pt-0">{item.playerId}</span>
-        // ))
-        // }
-
+        //     isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
+        //         <span onClick={() => this_obj.checkUserId(record)} className="input-heading-add-another pt-0">{item.playerId}</span>
+        //     ))
+        // },
         render: (incidentPlayers, record) =>
 
             isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item, index) => (
-                <NavLink to={{
-                    pathname: '/liveScorePlayerView',
-                    state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null, screenName: 'incident' }
-                }}>
-                    <span key={`playerId${index}` + item.playerId} style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.playerId}</span>
-                </NavLink>
+                // <NavLink to={{
+                //     pathname: '/liveScorePlayerView',
+                //     state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null, screenName: 'incident' }
+                // }}>
+                <span onClick={() => this_obj.checkUserId(item)} key={`playerId${index}` + item.playerId} style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.playerId}</span>
+                // </NavLink>
             ))
-
 
     },
     {
@@ -106,12 +106,12 @@ const columns = [
             isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item, index) => (
 
 
-                <NavLink to={{
-                    pathname: '/liveScorePlayerView',
-                    state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null, screenName: 'incident' }
-                }}>
-                    <span key={`playerFirstName${index}` + item.playerId} style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.player.firstName}</span>
-                </NavLink>
+                // <NavLink to={{
+                //     pathname: '/liveScorePlayerView',
+                //     state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null, screenName: 'incident' }
+                // }}>
+                <span onClick={() => this_obj.checkUserId(item)} key={`playerFirstName${index}` + item.playerId} style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.player.firstName}</span>
+                // </NavLink>
 
             ))
 
@@ -133,12 +133,12 @@ const columns = [
 
             isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item, index) => (
 
-                <NavLink to={{
-                    pathname: '/liveScorePlayerView',
-                    state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null, screenName: 'incident' }
-                }}>
-                    <span key={`playerLastName${index}` + item.playerId} style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.player.lastName}</span>
-                </NavLink>
+                // <NavLink to={{
+                //     pathname: '/liveScorePlayerView',
+                //     state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null, screenName: 'incident' }
+                // }}>
+                <span onClick={() => this_obj.checkUserId(item)} key={`playerLastName${index}` + item.playerId} style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.player.lastName}</span>
+                // </NavLink>
             ))
 
 
@@ -187,6 +187,7 @@ class LiveScoreIncidentList extends Component {
         this.state = {
             searchText: ""
         };
+        this_obj = this
     }
 
     componentDidMount() {
@@ -198,6 +199,18 @@ class LiveScoreIncidentList extends Component {
             history.push('/')
         }
     }
+
+    checkUserId(record) {
+
+        if (record.player.userId == null) {
+            message.config({ duration: 1.5, maxCount: 1 })
+            message.warn(ValidationConstants.playerMessage)
+        }
+        else {
+            history.push("/userPersonal", { userId: record.userId, screenKey: "livescore", screen: "/userPersonal" })
+        }
+    }
+
 
     // on change search text
     onChangeSearchText = (e) => {

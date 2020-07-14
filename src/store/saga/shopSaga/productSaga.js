@@ -5,6 +5,7 @@ import { message } from "antd";
 import AppConstants from "../../../themes/appConstants";
 
 function* failSaga(result) {
+    console.log("failSaga", result.result.data.message)
     yield put({
         type: ApiConstants.API_SHOP_PRODUCT_FAIL,
         error: result,
@@ -20,6 +21,7 @@ function* failSaga(result) {
 }
 
 function* errorSaga(error) {
+    console.log("errorSaga", error)
     yield put({
         type: ApiConstants.API_SHOP_PRODUCT_ERROR,
         error: error,
@@ -30,7 +32,7 @@ function* errorSaga(error) {
             duration: 1.5,
             maxCount: 1
         })
-        message.error("Something went wrong.");
+        message.error(AppConstants.somethingWentWrong);
     }, 800);
 }
 
@@ -116,9 +118,11 @@ export function* deleteProductVariantSaga(action) {
             yield put({
                 type: ApiConstants.API_DELETE_SHOP_PRODUCT_VARIANT_SUCCESS,
                 result: result.result.data,
-                status: result.status
+                status: result.status,
+                index: action.index,
+                subIndex: action.subIndex
             });
-            message.success(result.result.data.message);
+            message.success(AppConstants.variantDeletedMessage);
         } else {
             yield call(failSaga, result)
         }

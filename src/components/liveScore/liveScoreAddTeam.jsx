@@ -461,7 +461,7 @@ if(x[0].charCodeAt()>=97)
                             })(<InputWithHead
                                 required={"required-field pt-0 pb-0"}
                                 heading={AppConstants.firstName}
-                                placeholder={AppConstants.enter_firstName}
+                                placeholder={AppConstants.enterFirstName}
                                 name={'firstName'}
                                 onChange={(event) => {
                                     this.props.liveScoreAddTeamform({ key: 'firstName', data: captializedString(event.target.value) })
@@ -612,7 +612,10 @@ if(x[0].charCodeAt()>=97)
                     }
 
                     formData.append('name', captializedString(name))
-                    formData.append('alias', captializedString(alias))
+
+                    if (alias) {
+                        formData.append('alias', captializedString(alias))
+                    }
 
                     if (this.state.image) {
                         formData.append('logo', this.state.image)
@@ -643,7 +646,10 @@ if(x[0].charCodeAt()>=97)
                     }
 
                     formData.append('name', name)
-                    formData.append('alias', alias)
+
+                    if (alias) {
+                        formData.append('alias', alias)
+                    }
 
                     if (this.state.image) {
                         formData.append('logo', this.state.image)
@@ -674,7 +680,9 @@ if(x[0].charCodeAt()>=97)
                     }
 
                     formData.append('name', name)
-                    formData.append('alias', alias)
+                    if (alias) {
+                        formData.append('alias', alias)
+                    }
 
                     if (this.state.image) {
                         formData.append('logo', this.state.image)
