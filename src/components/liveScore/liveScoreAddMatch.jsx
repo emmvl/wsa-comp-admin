@@ -225,10 +225,10 @@ class LiveScoreAddMatch extends Component {
 
     onCreateRound = () => {
         let { addEditMatch, highestSequence } = this.props.liveScoreMatchState
-        let sequence = (highestSequence == -Infinity ? 0 : highestSequence)  + 1
+        let sequence = (highestSequence == -Infinity ? 0 : highestSequence) + 1
         // const { id } = JSON.parse(getLiveScoreCompetiton())
         let divisionID = addEditMatch.divisionId
-        
+
         this.props.liveScoreCreateRoundAction(this.state.createRound, sequence, this.state.compId, divisionID)
         this.setState({ visible: false, createRound: '', roundLoad: true })
     }
@@ -592,6 +592,7 @@ class LiveScoreAddMatch extends Component {
         const { umpireList } = this.props.umpireState
         let umpireListResult = isArrayNotEmpty(umpireList) ? umpireList : []
         let { allDisabled } = this.state
+        console.log(recordUmpireType, 'recordUmpireType')
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -1085,6 +1086,7 @@ class LiveScoreAddMatch extends Component {
                 let umpireData
                 let scorerData
                 let umpire_1_Obj, umpire_2_Obj, scorers_1, scorers_2
+                console.log(recordUmpireType, 'recordUmpireType')
 
                 if (recordUmpireType == 'NAMES') {
 
@@ -1330,6 +1332,95 @@ class LiveScoreAddMatch extends Component {
                             umpireData = [scorers_2]
 
                         }
+
+                    }
+
+
+                }
+
+                if (recordUmpireType === null) {
+
+                    if (scorerRosterId_1) {
+                        if (this.state.isEdit) {
+                            scorers_1 = {
+                                matchId: this.state.matchId,
+                                teamId: team1id,
+                                userId: scorer1,
+                                roleId: 4,
+                                rosterId: scorerRosterId_1
+                            }
+                        } else {
+                            scorers_1 = {
+                                matchId: 0,
+                                teamId: team1id,
+                                userId: scorer1,
+                                roleId: 4,
+                                rosterId: scorerRosterId_1
+                            }
+                        }
+                    } else {
+                        if (this.state.isEdit) {
+                            scorers_1 = {
+                                matchId: this.state.matchId,
+                                teamId: team1id,
+                                userId: scorer1,
+                                roleId: 4,
+                            }
+                        } else {
+                            scorers_1 = {
+                                matchId: 0,
+                                teamId: team1id,
+                                userId: scorer1,
+                                roleId: 4,
+                            }
+                        }
+                    }
+
+
+                    if (scorerRosterId_2) {
+                        if (this.state.isEdit) {
+                            scorers_2 = {
+                                matchId: this.state.matchId,
+                                teamId: team2id,
+                                userId: scorer2,
+                                roleId: 4,
+                                rosterId: scorerRosterId_2
+                            }
+                        } else {
+                            scorers_2 = {
+                                matchId: 0,
+                                teamId: team2id,
+                                userId: scorer2,
+                                roleId: 4,
+                                rosterId: scorerRosterId_2
+                            }
+                        }
+                    } else {
+                        if (this.state.isEdit) {
+                            scorers_2 = {
+                                matchId: this.state.matchId,
+                                teamId: team2id,
+                                userId: scorer2,
+                                roleId: 4,
+                            }
+                        } else {
+                            scorers_2 = {
+                                matchId: 0,
+                                teamId: team2id,
+                                userId: scorer2,
+                                roleId: 4,
+                            }
+                        }
+                    }
+
+                    if (scorer1 && scorer2) {
+                        umpireData = [scorers_1, scorers_2]
+
+                    } else if (scorer1) {
+                        umpireData = [scorers_1]
+
+                    } else if (scorer2) {
+                        umpireData = [scorers_2]
 
                     }
 

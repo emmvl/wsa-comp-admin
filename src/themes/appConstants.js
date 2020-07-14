@@ -8,8 +8,8 @@ const AppConstants = {
   status: 'Status',
   administrators: 'Administrators',
   maintain: 'Maintain',
-  Regto:'Reg. To',
-  Regfrom:'Reg. From',				  
+  Regto: 'Reg. To',
+  Regfrom: 'Reg. From',
   venueAndCourts: 'Venues & Courts',
   graphicalDashboard: 'Graphical Display',
   textualDashboard: 'Textual Display',
@@ -1422,6 +1422,13 @@ const AppConstants = {
   enterNewPassword: "Enter new password",
   confirmPassword: "Confirm password",
   enterConfirmPassword: "Enter confirm password",
+  userIsRegisteredTo: "User is registered to",
+  competitionAdimistrator: 'Competition Adimistrator',
+  regChangeDetail: 'REGISTRATION CHANGE DETAILS',
+  dateRegChange: 'Date Registration Change',
+  dateCompStart: 'Date Competition Start',
+  regChangeType: 'Registration Change Type'
+
 };
 
 export default AppConstants;

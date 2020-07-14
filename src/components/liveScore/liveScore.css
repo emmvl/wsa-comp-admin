@@ -47,7 +47,7 @@
 .desc-text-style {
     display: flex;
     align-content: center;
-    text-align: center;
+    text-align: left;
     font-size: 13px;
     color: var(--app-4c4c6d);
     font-weight: 500;

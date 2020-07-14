@@ -63,13 +63,13 @@ const columns = [
     },
     {
         title: 'Played?',
-        dataIndex: 'attended',
-        key: 'attended',
-        sorter: (a, b) => tableSort(a, b, "attended"),
-        render: attended =>
+        dataIndex: 'attendance',
+        key: 'attendance',
+        sorter: (a, b) => tableSort(a, b, "attendance"),
+        render: attendance =>
             <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
                 <img className="dot-image"
-                    src={attended ? AppImages.greenDot : AppImages.greyDot}
+                    src={attendance ? AppImages.greenDot : AppImages.greyDot}
                     alt="" width="12" height="12" />
             </span>,
     },
@@ -112,7 +112,7 @@ const columnsTeam1 = [
                     // className={"checkbox-green-color-outline mt-1"}
                     checked={record.attendance && record.attendance.isPlaying}
                     // checked={true}
-                    onChange={(e) => this_.playingView(record, e.target.checked)}
+                    onChange={(e) => this_.playingView(record, e.target.checked, index, 'team1Players')}
                 ></Checkbox>
             )
         },
@@ -154,7 +154,7 @@ const columnsTeam2 = [
                 <Checkbox
                     className={record.lineup ? record.lineup.playing ? "checkbox-green-color-outline mt-1" : 'single-checkbox mt-1' : 'single-checkbox mt-1'}
                     checked={record.attendance && record.attendance.isPlaying}
-                    onChange={(e) => this_.playingView(record, e.target.checked)}
+                    onChange={(e) => this_.playingView(record, e.target.checked, index, 'team2Players')}
                 ></Checkbox>
             )
         },
@@ -209,8 +209,8 @@ class LiveScoreMatchDetails extends Component {
 
 
     }
-    playingView(record, value) {
-        this.props.changePlayerLineUpAction({ record: record, value: value, matchId: this.state.matchId, competitionId: this.state.competitionId, teamId: record.teamId })
+    playingView(record, value, index, key) {
+        this.props.changePlayerLineUpAction({ record: record, value: value, matchId: this.state.matchId, competitionId: this.state.competitionId, teamId: record.teamId, index: index, key: key })
     }
 
     onChange = e => {

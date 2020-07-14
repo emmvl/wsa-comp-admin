@@ -84,7 +84,7 @@ class AddProduct extends Component {
             let imageUrls = shopProductState.imageUrls
             this.setDetailsFieldValue();
             this.setEditorFieldValue();
-            this.setState({ getLoad: false, urls: imageUrls });
+            this.setState({ getLoad: false, urls: imageUrls, files: imageUrls });
         }
     }
 
@@ -107,7 +107,11 @@ class AddProduct extends Component {
         for (let i in urls) {
             for (let j in files) {
                 if (urls[i].id == files[j].id) {
-                    imagesFiles.push(files[j].fileObject)
+                    if (files[j].fileObject) {
+                        imagesFiles.push(files[j].fileObject)
+                    } else {
+                        imagesFiles.push(files[j].image)
+                    }
                 }
             }
         }
@@ -702,18 +706,18 @@ class AddProduct extends Component {
                     <div className="pt-4">
                         <Checkbox
                             className="single-checkbox mt-0"
-                            checked={productDetailData.invetoryTracking}
+                            checked={productDetailData.inventoryTracking}
                             onChange={(e) =>
                                 this.props.onChangeProductDetails(
                                     e.target.checked,
-                                    'invetoryTracking'
+                                    'inventoryTracking'
                                 )
                             }
                         >
                             {AppConstants.enableInventoryTracking}
                         </Checkbox>
                     </div>
-                    {productDetailData.invetoryTracking && <>
+                    {productDetailData.inventoryTracking && <>
                         <div className="row">
                             <div className="col-sm">
                                 <InputWithHead

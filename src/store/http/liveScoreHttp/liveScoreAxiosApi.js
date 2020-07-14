@@ -292,7 +292,6 @@ let LiveScoreAxiosApi = {
         }
 
         let url = `/matches`
-        console.log("body::" + JSON.stringify(body));
         return Method.dataPost(url, token, body)
     },
 
@@ -903,14 +902,14 @@ let LiveScoreAxiosApi = {
     playerLineUpApi(payload) {
         console.log(payload, 'playerLineUpApi')
 
-        let body = {
+        let body = [{
             "teamId": payload.teamId,
             "matchId": payload.matchId,
             "playing": payload.value,
             "borrowed": false,
             "playerId": payload.record.playerId,
             "competitionId": payload.competitionId
-        }
+        }]
         // body.playing = value
         var url = `/matches/lineup/update?matchId=${payload.matchId}&teamId=${payload.teamId}&updateMatchEvents=1`
         return Method.dataPatch(url, token, body)

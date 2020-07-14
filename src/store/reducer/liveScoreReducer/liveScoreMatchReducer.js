@@ -253,7 +253,7 @@ function getOrganisation(data) {
     return arr
 }
 
-function getHighestSequesnce(roundArr) {
+function getHighestSequence(roundArr) {
 
     let sequence = []
 
@@ -670,14 +670,14 @@ function liveScoreMatchReducer(state = initialState, action) {
 
 
         case ApiConstants.API_LIVE_SCORE_ROUND_LIST_SUCCESS:
-
-            let sequenceValue = getHighestSequesnce(action.result)
+            let sequenceValue = getHighestSequence(action.result)
             state.highestSequence = sequenceValue
-
+            let roundListArray = action.result
+            roundListArray.sort((a, b) => Number(a.sequence) - Number(b.sequence));
+            state.roundList = roundListArray
             return {
                 ...state,
                 onLoad: false,
-                roundList: action.result,
                 status: action.status,
                 rounLoad: false
             };
@@ -742,6 +742,13 @@ function liveScoreMatchReducer(state = initialState, action) {
 
         case ApiConstants.API_CHNAGE_LINEUP_STATUS_SUCCESS:
 
+            if (action.key === 'team1Players') {
+                state[action.key][action.index]['lineup'] = action.result[0]
+
+            } else if (action.key === 'team2Players') {
+                state[action.key][action.index]['lineup'] = action.result[0]
+
+            }
             return {
                 ...state,
                 onLoad: false,

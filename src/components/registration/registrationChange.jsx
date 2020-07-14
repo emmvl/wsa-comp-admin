@@ -134,20 +134,19 @@ const columns = [
                     mode="horizontal"
                     style={{ lineHeight: '25px' }}
                 >
-                    {/* <Menu.SubMenu
-                key="sub1"
-                style={{ borderBottomStyle: "solid", borderBottom: 0 }}
-                title={
-                    <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
-                }
-            >
-                <Menu.Item key={'1'}>
-                    <NavLink to={{
-                        pathname: '/liveScoreAddIncident',
-                        state: { isEdit: true, tableRecord: record }
-                    }}><span >Edit</span></NavLink>
-                </Menu.Item>
-            </Menu.SubMenu> */}
+                    <Menu.SubMenu
+                        key="sub1"
+                        style={{ borderBottomStyle: "solid", borderBottom: 0 }}
+                        title={
+                            <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
+                        }
+                    >
+                        <Menu.Item key={'1'}>
+                            <NavLink to={{
+                                pathname: '/registrationChangeReview',
+                            }}><span >Review</span></NavLink>
+                        </Menu.Item>
+                    </Menu.SubMenu>
                 </Menu>
             }
         ]

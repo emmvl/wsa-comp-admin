@@ -149,6 +149,7 @@ import LiveScorePositionTrackReport from "../components/liveScore/liveScorePosit
 import Account from "./Account";
 import RegistrationChange from "../components/registration/registrationChange";
 import MultifieldDraws from "../components/competition/multifieldDraws";
+import RegistrationChangeReview from "../components/registration/registrationChangeReview"
 
 import lazyLoad from "../components/lazyLoad";
 
@@ -783,6 +784,7 @@ class Routes extends React.Component {
         />
 
         <PrivateRoute path="/account" component={lazyLoad(Account)} />
+        <PrivateRoute path="/registrationChangeReview" component={lazyLoad(RegistrationChangeReview)} />
 
         <Route path="/" component={lazyLoad(NotFound)} />
 

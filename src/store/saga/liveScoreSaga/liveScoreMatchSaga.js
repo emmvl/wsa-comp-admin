@@ -216,7 +216,8 @@ export function* playerLineUpStatusChnage(action) {
                 type: ApiConstants.API_CHNAGE_LINEUP_STATUS_SUCCESS,
                 result: result.result.data,
                 status: result.status,
-                index: action.index
+                index: action.data.index,
+                key: action.data.key,
             });
 
         } else {

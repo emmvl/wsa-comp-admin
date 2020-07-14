@@ -45,10 +45,12 @@ function liveScoreRound(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_ROUND_LIST_SUCCESS:
+            let roundListArray = action.result
+            roundListArray.sort((a, b) => Number(a.sequence) - Number(b.sequence));
+            state.roundList = roundListArray
             return {
                 ...state,
                 onLoad: false,
-                roundList: action.result,
                 status: action.status
             };
 
