@@ -1601,7 +1601,8 @@ function competitionFees(state = initialState, action) {
                 }
             }
             state.postInvitees = allData.competitiondetail.invitees
-            state.postVenues = allData.competitiondetail.venues
+            if(state.selectedVenuesAdd == null)
+                state.postVenues = allData.competitiondetail.venues
 
             if (state.createVenue) {
                 let defaultPostVenueObject = {
@@ -2198,7 +2199,7 @@ function competitionFees(state = initialState, action) {
                 }
                 state.competitionDetailData = defaultDetailObj
                 state.competitionId = ""
-                state.postVenues = []
+                state.postVenues = state.selectedVenuesAdd == null ? [] : state.postVenues
                 state.postInvitees = []
                 state.selectedVenues = state.selectedVenuesAdd == null ? [] : state.selectedVenues
                 state.selectedInvitees = []
