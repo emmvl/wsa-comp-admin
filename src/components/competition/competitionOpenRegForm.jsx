@@ -587,7 +587,7 @@ class CompetitionOpenRegForm extends Component {
         let orgData = getOrganisationData()
         this.setState({ organisationTypeRefId: orgData.organisationTypeRefId })
         let competitionId = null
-        console.log("competitionId", competitionId)
+       // console.log("competitionId", competitionId)
         this.apiCalls(competitionId)
         this.getRefernce()
         this.setDetailsFieldValue()
@@ -892,7 +892,7 @@ class CompetitionOpenRegForm extends Component {
 
 
     onChange(checkedValues) {
-        console.log("checked = ", checkedValues);
+       // console.log("checked = ", checkedValues);
     }
 
     divisionTableDataOnchange(checked, record, index, keyword) {
@@ -1076,7 +1076,7 @@ class CompetitionOpenRegForm extends Component {
         getFieldDecorator
     ) => {
         const { own_YearArr, own_CompetitionArr, } = this.props.appState
-        console.log("this.state.firstTimeCompId", this.state.firstTimeCompId)
+        //console.log("this.state.firstTimeCompId", this.state.firstTimeCompId)
         return (
             <div className="comp-venue-courts-dropdown-view mt-0">
                 <div className="fluid-width">
@@ -1282,7 +1282,7 @@ class CompetitionOpenRegForm extends Component {
     //// On change Invitees
     onInviteesChange(value) {
         let regInviteesselectedData = this.props.competitionFeesState.selectedInvitees
-        console.log("value" + value);
+        //console.log("value" + value);
         let arr = [value]
         this.props.add_editcompetitionFeeDeatils(arr, "invitees")
     }
@@ -1650,7 +1650,7 @@ class CompetitionOpenRegForm extends Component {
     ////membership types in competition fees onchhange function
     membershipTypeSelected = (checked, membershipIndex, typeIndex) => {
         this.props.membershipTypeSelectedAction(checked, membershipIndex, typeIndex)
-        console.log("checked, membershipIndex, typeIndex", checked, membershipIndex, typeIndex)
+        //console.log("checked, membershipIndex, typeIndex", checked, membershipIndex, typeIndex)
     }
 
 
@@ -1734,7 +1734,7 @@ class CompetitionOpenRegForm extends Component {
 
     //////add or remove another division inthe divsision tab
     addRemoveDivision = (index, item, keyword) => {
-        console.log("item:: Competition Division::" + JSON.stringify(item));
+        //console.log("item:: Competition Division::" + JSON.stringify(item));
         if (keyword == "add") {
             this.props.addRemoveDivisionAction(index, item, keyword);
         }
@@ -1747,8 +1747,8 @@ class CompetitionOpenRegForm extends Component {
 
 
     handleDeleteDivision = (key) => {
-        console.log("****************handleDeleteDivision" + JSON.stringify(this.state.competitionDivision));
-        console.log("&&&&&&" + this.state.divisionIndex);
+        // console.log("****************handleDeleteDivision" + JSON.stringify(this.state.competitionDivision));
+        // console.log("&&&&&&" + this.state.divisionIndex);
 
         if (key == "ok") {
             let payload = {
@@ -2754,7 +2754,7 @@ class CompetitionOpenRegForm extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        console.log(this.props.competitionFeesState)
+        //console.log(this.props.competitionFeesState)
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
