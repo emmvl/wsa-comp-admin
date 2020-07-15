@@ -108,6 +108,8 @@ const initialState = {
   userHistoryList: [],
   userHistoryPage: 1,
   userHistoryTotalCount: 1,
+  isProfileLoaded: false,
+  userProfile: {},
   userDetailUpdate: false,
   userPhotoUpdate: false,
   userPasswordUpdate: false,
@@ -292,9 +294,8 @@ function userReducer(state = initialState, action) {
         x => x.organisationUniqueKey === action.organisationData.organisationUniqueKey
       );
       if (organisationIndex > -1) {
-        state.getUserOrganisation = allOrgData[organisationIndex];
         allOrgData.splice(organisationIndex, 1);
-        state.allUserOrganisationData = allOrgData;
+        state.getUserOrganisation = allOrgData;
       }
       return {
         ...state,
@@ -578,11 +579,24 @@ function userReducer(state = initialState, action) {
     case ApiConstants.API_USER_PHOTO_UPDATE_SUCCESS:
       return {
         ...state,
-        getUserOrganisation: {
-          ...state.getUserOrganisation,
+        userProfile: {
+          ...state.userProfile,
           photoUrl: action.result.photoUrl,
         },
         userPhotoUpdate: false,
+        status: action.status,
+        error: null
+      };
+
+    case ApiConstants.API_USER_DETAIL_LOAD:
+      return { ...state, onLoad: true };
+
+    case ApiConstants.API_USER_DETAIL_SUCCESS:
+      return {
+        ...state,
+        isProfileLoaded: true,
+        userProfile: action.result,
+        onLoad: false,
         status: action.status,
         error: null
       };
@@ -593,12 +607,11 @@ function userReducer(state = initialState, action) {
     case ApiConstants.API_USER_DETAIL_UPDATE_SUCCESS:
       return {
         ...state,
-        getUserOrganisation: {
-          ...state.getUserOrganisation,
-          email: action.result.user.email,
-          firstName: action.result.user.firstName,
-          lastName: action.result.user.lastName,
-          mobileNumber: action.result.user.mobileNumber,
+        userProfile: {
+          email: action.result.email,
+          firstName: action.result.firstName,
+          lastName: action.result.lastName,
+          mobileNumber: action.result.mobileNumber,
         },
         userDetailUpdate: false,
         status: action.status,
