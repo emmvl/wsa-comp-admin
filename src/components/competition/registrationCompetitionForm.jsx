@@ -2834,10 +2834,10 @@ class RegistrationCompetitionForm extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        console.log(this.props.competitionFeesState)
+        //console.log(this.props.competitionFeesState)
         let competitionId = null
         competitionId = this.props.location.state ? this.props.location.state.id : null
-        console.log("permissionObject", this.state.permissionState)
+        //console.log("permissionObject", this.state.permissionState)
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout

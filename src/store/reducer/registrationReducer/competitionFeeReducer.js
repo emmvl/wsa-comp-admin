@@ -1,4 +1,5 @@
 import ApiConstants from "../../../themes/apiConstants";
+import AppConstants from "../../../themes/appConstants";
 import history from "../../../util/history";
 import { getRegistrationSetting } from "../../objectModel/getRegSettingObject";
 import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
@@ -2248,7 +2249,9 @@ function competitionFees(state = initialState, action) {
 
         case ApiConstants.API_ADD_VENUE_SUCCESS:
             let venueSuccess = action.result
-            if (venueSuccess != null) {
+            if (venueSuccess != null && (venueSuccess.screenNavigationKey == AppConstants.competitionFees ||
+                venueSuccess.screenNavigationKey == AppConstants.competitionDetails || 
+                venueSuccess.screenNavigationKey ==  AppConstants.dashboard)) {
                 let updatedVenue = JSON.parse(JSON.stringify(state.newVenueObj))
                 updatedVenue["id"] = venueSuccess.venueId
                 updatedVenue['name'] = venueSuccess.name
