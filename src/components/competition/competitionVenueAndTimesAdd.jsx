@@ -259,7 +259,7 @@ class CompetitionVenueAndTimesAdd extends Component {
     }
 
     componentDidUpdate(nextProps) {
-        if (this.state.saveContraintLoad === true && this.props.venueTimeState.onLoad === false) {
+        if (this.state.saveContraintLoad === true && this.props.commonReducerState.onVenueDataLoad === false) {
             this.navigateTo();
         }
 
