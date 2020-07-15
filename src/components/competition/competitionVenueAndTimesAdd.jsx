@@ -115,7 +115,7 @@ class CompetitionVenueAndTimesAdd extends Component {
 
                     render: (lat, record, index) => {
                         const { getFieldDecorator } = this.props.form;
-                        console.log(index, 'tooltipindex')
+                       // console.log(index, 'tooltipindex')
                         return (
 
                             // <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', height: index > 0 ? 0 : 150 }}>
@@ -275,7 +275,7 @@ class CompetitionVenueAndTimesAdd extends Component {
     setFormFieldValue = () => {
 
         let venueData = this.props.venueTimeState.venuData;
-        console.log("setFormFieldValue" + JSON.stringify(venueData));
+       // console.log("setFormFieldValue" + JSON.stringify(venueData));
         // this.props.form.setFieldsValue({
         //     name: venueData.venueName,
         //     addressOne: venueData.street1,
@@ -356,10 +356,10 @@ class CompetitionVenueAndTimesAdd extends Component {
     }
 
     getDisabledMinutes = (selectedHour, startTime) => {
-        console.log("&&&&&&&&&&&" + startTime);
-        console.log("selectedHour::" + startTime.split(":")[0]);
-        console.log("Current Minute::" + startTime.split(":")[1]);
-        console.log("*****selectedHour:::" + selectedHour);
+        // console.log("&&&&&&&&&&&" + startTime);
+        // console.log("selectedHour::" + startTime.split(":")[0]);
+        // console.log("Current Minute::" + startTime.split(":")[1]);
+        // console.log("*****selectedHour:::" + selectedHour);
         let hour = Number(startTime.split(":")[0]);
         let min = Number(startTime.split(":")[1]);
         var minutes = [];
@@ -378,7 +378,7 @@ class CompetitionVenueAndTimesAdd extends Component {
     }
 
     validateTime = (rule, value, callback, startTime, endTime, type) => {
-        console.log("StartTime" + startTime + "EndTime::" + endTime + "Type::" + type);
+        //console.log("StartTime" + startTime + "EndTime::" + endTime + "Type::" + type);
         if (type == "end") {
             if (startTime > endTime) {
                 callback('End time should be greater than start time');
@@ -778,7 +778,7 @@ class CompetitionVenueAndTimesAdd extends Component {
     //////court day view
     courtView = (getFieldDecorator) => {
         let venueCourts = [...this.props.venueTimeState.venuData.venueCourts];
-        console.log("venueCourts" + JSON.stringify(venueCourts));
+        //console.log("venueCourts" + JSON.stringify(venueCourts));
         return (
             <div className="fees-view pt-5">
                 <div style={{ display: 'flex' }}>
@@ -874,6 +874,8 @@ class CompetitionVenueAndTimesAdd extends Component {
                         return;
                     }
                     if (!hasError) {
+                        venuData["screenNavigationKey"]  = this.state.screenNavigationKey;
+                        //console.log("venuData" + JSON.stringify(venuData));
                         this.props.addVenueAction(venuData)
                         this.setState({ saveContraintLoad: true });
                     }
@@ -917,7 +919,7 @@ class CompetitionVenueAndTimesAdd extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        console.log(this.props.venueTimeState.venuData, 'this.props.commonReducerState')
+       // console.log(this.props.venueTimeState.venuData, 'this.props.commonReducerState')
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout

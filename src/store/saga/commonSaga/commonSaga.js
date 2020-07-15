@@ -87,11 +87,14 @@ export function* getCommonDataSaga(action) {
 export function* addVenueSaga(action) {
     try {
         let venueId = action.data.venueId;
+        let screenNavigationKey = action.data.screenNavigationKey;
         const result = yield call(CommonAxiosApi.addVenue, action.data);
         if (result.status === 1) {
+            let venueData = result.result.data;
+            venueData["screenNavigationKey"] = screenNavigationKey;
             yield put({
                 type: ApiConstants.API_ADD_VENUE_SUCCESS,
-                result: venueId == 0 ? result.result.data : null,
+                result: venueId == 0 ? venueData : null,
                 status: result.result.status
             });
             // setTimeout(() => {
