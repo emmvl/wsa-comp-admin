@@ -493,7 +493,9 @@ function VenueTimeState(state = initialState, action) {
             state.courtPrefArrayStore = selectedCourtPrefArray.courtPreferencesPost
             state.venueConstrainstData.courtPreferences = selectedCourtPrefArray.courtsArray
             state.courtPreferencesPost = selectedCourtPrefArray.courtPreferencesPost
-            state.venuePost = state.venueConstrainstData.venues
+            if (state.selectedVenueIdAdd == null) {
+                state.venuePost = state.venueConstrainstData.venues
+            }
 
             if (state.createVenue) {
                 let venueObj = {
