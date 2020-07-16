@@ -189,6 +189,12 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token)
     },
 
+
+    liveScoreMatchSheetDownloadList() {
+        const url = '/matches/downloads';
+        return Method.dataGet(url, token)
+    },
+
     liveScoreTeam(competitionID, divisionId) {
         if (divisionId) {
             var url = `/teams/list?competitionId=${competitionID}&divisionId=${divisionId}`;
@@ -1008,8 +1014,8 @@ let LiveScoreAxiosApi = {
 
     },
 
-    liveScoreMatchSheetPrint(competitionId, divisionId, teamId) {
-        let url = `/matches/print?competitionId=${competitionId}&divisionIds=${divisionId}&teamIds=${teamId}`;
+    liveScoreMatchSheetPrint(competitionId, divisionId, teamId, templateType) {
+        let url = `/matches/print?competitionId=${competitionId}&divisionIds=${divisionId}&teamIds=${teamId}&templateType=${templateType}`;
 
         return Method.dataGet(url, token)
     },

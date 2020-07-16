@@ -75,13 +75,35 @@ export function* liveScoreMatchSheetPrintSaga(action) {
             LiveScoreAxiosApi.liveScoreMatchSheetPrint,
             action.competitionId,
             action.divisionId,
-            action.teamId
+            action.teamId,
+            action.templateType,
         );
 
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_MATCH_SHEET_PRINT_SUCCESS,
-                downloadLink: result.result.data,
+                status: result.status,
+            });
+            message.config({ duration: 5, maxCount: 1 });
+            message.loading('Print is processing now, please check download table after for a while.')
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+export function* liveScoreMatchSheetDownloadSaga() {
+    try {
+        const result = yield call(
+            LiveScoreAxiosApi.liveScoreMatchSheetDownloadList,
+        );
+
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_MATCH_SHEET_DOWNLOADS_SUCCESS,
+                matchSheetDownloads: result.result.data.data,
                 status: result.status,
             });
         } else {
