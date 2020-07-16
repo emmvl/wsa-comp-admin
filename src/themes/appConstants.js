@@ -1396,6 +1396,7 @@ const AppConstants = {
   importTeamPlayer: "Import Team and Players",
   quickCompetitionFormat: "Competition Format (3/3)",
   matchPrintTemplateType: 'Match Print Template Type',
+  templateType: 'Template type',
   playerBorrowing: "Player Borrowing",
   gamesBorrowed: "Games Borrowed",
   minutesBorrowed: "Minutes Borrowed",
@@ -1408,6 +1409,7 @@ const AppConstants = {
   history: "History",
   somethingWentWrong: "Something went wrong.",
   variantDeletedMessage: "Variant deleted successfully.",
+  refreshDownloads: "Refresh Downloads",
 
   // Account
   account: "Account",
@@ -1427,7 +1429,17 @@ const AppConstants = {
   regChangeDetail: 'REGISTRATION CHANGE DETAILS',
   dateRegChange: 'Date Registration Change',
   dateCompStart: 'Date Competition Start',
-  regChangeType: 'Registration Change Type'
+  regChangeType: 'Registration Change Type',
+  doTheySayForGame: 'Do they say they have taken the court for training, grading or a competition game?',
+  reasonToDeRegister: 'Reasons why they would like to de-register?',
+  overCommited: `I am over commited with other activities and can't fit in time for netball`,
+  injuredOrHealthReason: 'I have been injured or health reason (not netball related)',
+  decideNotToParticipate: 'Decided not to participate in netball',
+  moveToDiffGeographicalArea: 'Moving to different geographical area',
+  otherReason: 'Other',
+  approvals: 'Approvals',
+  approve: 'APPROVE',
+  decline: 'DECLINE'
 
 };
 

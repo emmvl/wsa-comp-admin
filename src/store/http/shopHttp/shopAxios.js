@@ -14,8 +14,10 @@ let token = getAuthToken();
 let AxiosApi = {
 
     /////////////////product listing get API 
-    getProductListing(sorterBy, order, offset, filter, limit) {
-        var url = `/product/list?sorterBy=${sorterBy}&order=${order}&offset=${offset}&filter=${filter}&limit=${limit}`;
+    async getProductListing(sorterBy, order, offset, filter, limit) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem.organisationUniqueKey
+        var url = `/product/list?organisationUniqueKey=${organisationUniqueKey}&sorterBy=${sorterBy}&order=${order}&offset=${offset}&filter=${filter}&limit=${limit}`;
         return Method.dataGet(url, token);
     },
 

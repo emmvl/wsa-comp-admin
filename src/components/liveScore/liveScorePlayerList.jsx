@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Input, Icon, Layout, Button, Table, Pagination, Spin, Alert, message, Menu } from 'antd';
+import { Input, Icon, Layout, Button, Table, Pagination, Spin, message, Menu } from 'antd';
 import './liveScore.css';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -9,13 +9,12 @@ import AppImages from "../../themes/appImages";
 import { playerListWithPagginationAction } from "../../store/actions/LiveScoreAction/liveScorePlayerAction"
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import moment from 'moment'
 import { liveScore_formateDate } from '../../themes/dateformate'
 import history from "../../util/history";
-import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { exportFilesAction } from "../../store/actions/appAction"
 import ValidationConstants from "../../themes/validationConstant";
-import { isArrayNotEmpty, teamListData } from "../../util/helpers";
+import { teamListData } from "../../util/helpers";
 
 const { Content } = Layout;
 const { SubMenu } = Menu;
@@ -105,7 +104,7 @@ const columns = [
                 pathname: "/liveScoreTeamView",
                 state: { tableRecord: record, screenName: 'fromPlayerList' }
             }} >
-                <span class="input-heading-add-another pt-0" >{team.name}</span>
+                <span className="input-heading-add-another pt-0" >{team.name}</span>
             </NavLink>
             : <span  >{team.name}</span>
     },
@@ -177,7 +176,13 @@ class LiveScorePlayerList extends Component {
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
-                    <Table loading={this.props.liveScorePlayerState.onLoad == true && true} className="home-dashboard-table" columns={columns} dataSource={result} pagination={false} />
+                    <Table
+                        loading={this.props.liveScorePlayerState.onLoad == true && true}
+                        className="home-dashboard-table" columns={columns}
+                        dataSource={result}
+                        pagination={false}
+                        rowKey={(record, index) => record.id + index}
+                    />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
                     <div

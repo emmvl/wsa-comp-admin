@@ -68,7 +68,7 @@ class LiveScoreGoalList extends Component {
                             pathname: '/liveScorePlayerView',
                             state: { tableRecord: record }
                         }}>
-                            <span class="input-heading-add-another pt-0" >{firstName}</span>
+                            <span className="input-heading-add-another pt-0" >{firstName}</span>
                         </NavLink>
                 },
                 {
@@ -81,7 +81,7 @@ class LiveScoreGoalList extends Component {
                             pathname: '/liveScorePlayerView',
                             state: { tableRecord: record }
                         }}>
-                            <span class="input-heading-add-another pt-0" >{lastName}</span>
+                            <span className="input-heading-add-another pt-0" >{lastName}</span>
                         </NavLink>
                 },
                 {
@@ -121,13 +121,13 @@ class LiveScoreGoalList extends Component {
             columns2: [
                 {
                     title: 'Team',
-                    dataIndex: 'teamName',
+                    dataIndex: 'teamName1',
                     key: 'teamName',
                     sorter: (a, b) => tableSort(a, b, "teamName"),
                 },
                 {
                     title: 'First Name',
-                    dataIndex: 'firstName',
+                    dataIndex: 'firstName1',
                     key: 'firstName',
                     sorter: (a, b) => tableSort(a, b, "firstName"),
                     render: (firstName, record) =>
@@ -135,12 +135,12 @@ class LiveScoreGoalList extends Component {
                             pathname: '/liveScorePlayerView',
                             state: { tableRecord: record }
                         }}>
-                            <span class="input-heading-add-another pt-0" >{firstName}</span>
+                            <span className="input-heading-add-another pt-0" >{firstName}</span>
                         </NavLink>
                 },
                 {
                     title: 'Last Name',
-                    dataIndex: 'lastName',
+                    dataIndex: 'lastName1',
                     key: 'lastName',
                     sorter: (a, b) => tableSort(a, b, 'lastName'),
                     render: (lastName, record) =>
@@ -148,36 +148,36 @@ class LiveScoreGoalList extends Component {
                             pathname: '/liveScorePlayerView',
                             state: { tableRecord: record }
                         }}>
-                            <span class="input-heading-add-another pt-0" >{lastName}</span>
+                            <span className="input-heading-add-another pt-0" >{lastName}</span>
                         </NavLink>
                 },
                 {
                     title: 'Position',
-                    dataIndex: 'gamePositionName',
+                    dataIndex: 'gamePositionName1',
                     key: 'gamePositionName',
                     sorter: (a, b) => tableSort(a, b, "gamePositionName"),
                 },
                 {
                     title: 'Misses',
-                    dataIndex: 'miss',
+                    dataIndex: 'miss1',
                     key: 'miss',
                     sorter: (a, b) => tableSort(a, b, "miss"),
                 },
                 {
                     title: 'Goals',
-                    dataIndex: 'goal',
+                    dataIndex: 'goal1',
                     key: 'goal',
                     sorter: (a, b) => tableSort(a, b, "goal"),
                 },
                 {
                     title: 'Attempts',
-                    dataIndex: 'attempts',
+                    dataIndex: 'attempts1',
                     key: 'attempts',
                     sorter: (a, b) => tableSort(a, b, "attempts"),
                 },
                 {
                     title: 'Goals%',
-                    dataIndex: 'goal_percent',
+                    dataIndex: 'goal_percent1',
                     key: 'goal_percent',
                     sorter: (a, b) => tableSort(a, b, "goal_percent"),
                 },
@@ -319,7 +319,12 @@ class LiveScoreGoalList extends Component {
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
-                    <Table loading={this.props.liveScoreGoalState.onLoad === true && true} className="home-dashboard-table" columns={this.state.filter === "By Match" ? this.state.columns1 : this.state.columns2} dataSource={goalList} pagination={false}
+                    <Table
+                        loading={this.props.liveScoreGoalState.onLoad === true && true}
+                        className="home-dashboard-table" columns={this.state.filter === "By Match" ? this.state.columns1 : this.state.columns2}
+                        dataSource={goalList}
+                        pagination={false}
+                        rowKey={(record, index) => record.matchId + index}
                     />
                 </div>
                 <div className="d-flex justify-content-end">

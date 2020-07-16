@@ -362,6 +362,7 @@ class LiveScoreTeamAttendance extends Component {
                         columns={columns}
                         dataSource={dataSource}
                         pagination={false}
+                        rowKey={(record, index) => record.matchId + index}
                     />
                 </div>
                 <div className="d-flex justify-content-end">

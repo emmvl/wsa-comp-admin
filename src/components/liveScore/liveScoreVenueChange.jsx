@@ -167,7 +167,7 @@ class LiveScoreVenueChange extends Component {
                                         placeholder={"dd-mm-yyyy"}
                                         showTime={false}
                                         onChange={(startDate) => this.props.liveScoreUpdateVenueChange(startDate, "startDate")}
-                                        value={venueChangeData.startDate}
+                                    // value={venueChangeData.startDate}
 
                                     />
                                 )}
@@ -186,7 +186,7 @@ class LiveScoreVenueChange extends Component {
                                         format={"hh:mm"}
                                         use12Hours={false}
                                         onChange={(startTime) => this.props.liveScoreUpdateVenueChange(startTime, "startTime")}
-                                        value={venueChangeData.startTime}
+                                    // value={venueChangeData.startTime}
                                     />
                                 )}
                             </Form.Item>
@@ -212,7 +212,7 @@ class LiveScoreVenueChange extends Component {
                                         showTime={false}
                                         name={'registrationOepn'}
                                         onChange={(endDate) => this.props.liveScoreUpdateVenueChange(endDate, "endDate")}
-                                        value={venueChangeData.endDate}
+                                    // value={venueChangeData.endDate}
                                     />
                                 )}
                             </Form.Item>
@@ -229,7 +229,7 @@ class LiveScoreVenueChange extends Component {
                                         defaultOpenValue={moment("00:00", "HH:mm")}
                                         format={"HH:mm"}
                                         onChange={(endTime) => this.props.liveScoreUpdateVenueChange(endTime, "endTime")}
-                                        value={venueChangeData.endTime}
+                                    // value={venueChangeData.endTime}
                                     />
                                 )}
                             </Form.Item>
@@ -249,7 +249,7 @@ class LiveScoreVenueChange extends Component {
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 placeholder={AppConstants.selectVenue}
                                 onChange={(venueId) => this.onChangeVenue(venueId)}
-                                value={venueChangeData.venueId}
+                                // value={venueChangeData.venueId}
                                 optionFilterProp="children"
                                 onSearch={(e) => this.onSearchVenue(e)}>
 
@@ -283,7 +283,7 @@ class LiveScoreVenueChange extends Component {
                                 this.props.liveScoreUpdateVenueChange(courtId, "courtId")
                                 this.props.clearFilter('court_1')
                             }}
-                            value={venueChangeData.courtId}
+                            // value={venueChangeData.courtId}
                             onSearch={(value) => { this.handleSearch(value, mainCourtList, 'court_1') }}
                             filterOption={false}
                         >
@@ -324,7 +324,7 @@ class LiveScoreVenueChange extends Component {
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 placeholder={AppConstants.selectVenue}
                                 onChange={(venueId) => this.onChangeToVenue(venueId)}
-                                value={venueChangeData.changeToVenueId}
+                                // value={venueChangeData.changeToVenueId}
                                 optionFilterProp="children"
                                 onSearch={(e) => this.onSearchVenue(e)}>
                                 {venueList.map((item) => {
@@ -357,7 +357,7 @@ class LiveScoreVenueChange extends Component {
                                     this.props.liveScoreUpdateVenueChange(courtId, "changeToCourtId")
                                     this.props.clearFilter('court_2')
                                 }}
-                                value={venueChangeData.changeToCourtId}
+                                // value={venueChangeData.changeToCourtId}
                                 onSearch={(value) => { this.handleSearch(value, mainCourtList, 'court_2') }}
                                 filterOption={false}
                             >

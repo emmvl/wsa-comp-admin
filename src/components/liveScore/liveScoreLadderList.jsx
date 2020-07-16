@@ -214,7 +214,6 @@ class LiveScoreLadderList extends Component {
     ///dropdown view containing dropdown
     dropdownView = () => {
         const { liveScoreLadderState } = this.props;
-        console.log(liveScoreLadderState)
         // let grade = liveScoreLadderState.liveScoreLadderDivisionData !== [] ? liveScoreLadderState.liveScoreLadderDivisionData : []
         let grade = isArrayNotEmpty(liveScoreLadderState.liveScoreLadderDivisionData) ? liveScoreLadderState.liveScoreLadderDivisionData : []
 
@@ -246,7 +245,12 @@ class LiveScoreLadderList extends Component {
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
-                    <Table loading={this.props.liveScoreLadderState.onLoad == true ? true : false} className="home-dashboard-table" columns={columns} dataSource={DATA} pagination={false}
+                    <Table
+                        loading={this.props.liveScoreLadderState.onLoad == true ? true : false}
+                        className="home-dashboard-table"
+                        columns={columns} dataSource={DATA}
+                        pagination={false}
+                    // rowKey={(record, index) => record.id + index}
                     />
                 </div>
                 {/* <div className="d-flex justify-content-end">

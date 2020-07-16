@@ -32,20 +32,20 @@ const columns = [
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
-        sorter: (a, b) => tableSort(a,b, "name")
+        sorter: (a, b) => tableSort(a, b, "name")
     },
 
     {
         title: 'Division',
         dataIndex: 'divisionName',
         key: 'divisionName',
-        sorter: (a, b) => tableSort(a,b, "divisionName")
+        sorter: (a, b) => tableSort(a, b, "divisionName")
     },
     {
         title: 'Grade',
         dataIndex: 'grade',
         key: 'grade',
-        sorter: (a, b) => tableSort(a,b, "grade")
+        sorter: (a, b) => tableSort(a, b, "grade")
     },
     {
         title: 'Action',
@@ -107,6 +107,7 @@ class LiveScoreDivisionList extends Component {
                         columns={columns} dataSource={divisionList}
                         pagination={false}
                         loading={this.props.liveScoreDivisionState.onLoad === true && true}
+                        rowKey={(record, index) => record.id + index}
                     />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">

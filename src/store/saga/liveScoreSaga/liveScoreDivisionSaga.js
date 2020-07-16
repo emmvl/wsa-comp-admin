@@ -3,6 +3,7 @@ import ApiConstants from "../../../themes/apiConstants";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 import { message } from "antd";
 import history from "../../../util/history";
+import AppConstants from "../../../themes/appConstants";
 
 function* failSaga(result) {
     yield put({
@@ -22,7 +23,7 @@ function* errorSaga(error) {
         status: error.status
     });
     setTimeout(() => {
-        message.error(error ? error.error ? error.error : "Something went wrong." : "Something went wrong.");
+        message.error(AppConstants.somethingWentWrong);
     }, 800);
 }
 

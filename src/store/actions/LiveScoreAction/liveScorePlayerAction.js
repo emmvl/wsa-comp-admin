@@ -45,11 +45,10 @@ function playerListWithPagginationAction(competitionID, offset, limit, serach) {
     const action = {
         type: ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_LOAD,
         competitionID: competitionID,
-        offset:offset,
-        limit:limit,
-        search:serach
+        offset: offset,
+        limit: limit,
+        search: serach
     };
-    console.log(action)
     return action;
 }
 

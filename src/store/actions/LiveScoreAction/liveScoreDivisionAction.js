@@ -7,9 +7,9 @@ function getLiveScoreDivisionList(competitionID, compKey) {
     const action = {
         type: ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_LOAD,
         competitionID: competitionID,
-        compKey : compKey
+        compKey: compKey
     };
-  
+
     return action;
 }
 //liveScoreUpdateDivisionAction
@@ -20,7 +20,6 @@ function liveScoreUpdateDivisionAction(data, key, contentType) {
         key: key,
         contentType: contentType
     }
-    console.log(action, "action")
     return action
 }
 //createDivisionAction

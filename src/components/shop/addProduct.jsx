@@ -27,6 +27,7 @@ import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import SortableImage from '../../customComponents/sortableImageComponent';
 import ValidationConstants from '../../themes/validationConstant';
 import { checkOrganisationLevel } from "../../util/permissions";
+import { getOrganisationData } from "../../util/sessionStorage"
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -93,13 +94,18 @@ class AddProduct extends Component {
         e.preventDefault();
         let { productDetailData } = JSON.parse(JSON.stringify(this.props.shopProductState));
         let description = JSON.parse(JSON.stringify(productDetailData.description))
+        let orgData = getOrganisationData();
+        let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0;
+        productDetailData["organisationUniqueKey"] = organisationUniqueKey
         let descriptionText = ""
-        if (description) {
+        if (isArrayNotEmpty(description)) {
             let descriptionStringArr = []
             for (let i in description) {
                 descriptionStringArr.push(description[i].text)
             }
             descriptionText = descriptionStringArr.join(`<br/>`)
+        } else {
+            descriptionText = description
         }
         productDetailData.description = descriptionText
         let { urls, files } = this.state
@@ -241,10 +247,14 @@ class AddProduct extends Component {
     }
 
     handleDragEnter = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
         this.handleDrags(e);
     }
 
     handleDragOver = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
         this.handleDrags(e);
     }
 
@@ -388,17 +398,18 @@ class AddProduct extends Component {
 
     ///////add new varient option
     addVariantOption = (index, subIndex, key, optionId) => {
+        let { productDetailData } = this.props.shopProductState
         let varientOptionObject = {
             "optionName": "",
             "properties": {
-                "price": 0,
+                "price": productDetailData.price,
+                "cost": 0,
                 "SKU": "",
                 "barcode": "",
                 "quantity": 0,
                 "id": 0
             }
         }
-        let { productDetailData } = this.props.shopProductState
         let varientOptions = productDetailData.variants[index].options
         if (key === "add") {
             varientOptions.push(varientOptionObject)
@@ -410,10 +421,6 @@ class AddProduct extends Component {
         this.props.onChangeProductDetails(varientOptions, 'variantOption', index)
 
     }
-
-
-
-
 
     onChangeShippingCheckBox = async (e) => {
         await this.props.onChangeProductDetails(
@@ -967,11 +974,12 @@ class AddProduct extends Component {
                                             suffix="cm"
                                             onChange={(e) =>
                                                 this.props.onChangeProductDetails(
-                                                    e.target.value,
+                                                    Number(e.target.value).toFixed(2),
                                                     'length'
                                                 )
                                             }
                                             type="number"
+                                            step="1.00"
                                         />
                                     )}
                                 </Form.Item>
@@ -1005,11 +1013,12 @@ class AddProduct extends Component {
                                             suffix="cm"
                                             onChange={(e) =>
                                                 this.props.onChangeProductDetails(
-                                                    e.target.value,
+                                                    Number(e.target.value).toFixed(2),
                                                     'width'
                                                 )
                                             }
                                             type="number"
+                                            step="1.00"
                                         />
                                     )}
                                 </Form.Item>
@@ -1043,11 +1052,12 @@ class AddProduct extends Component {
                                             suffix="cm"
                                             onChange={(e) =>
                                                 this.props.onChangeProductDetails(
-                                                    e.target.value,
+                                                    Number(e.target.value).toFixed(2),
                                                     'height'
                                                 )
                                             }
                                             type="number"
+                                            step="1.00"
                                         />
                                     )}
                                 </Form.Item>
@@ -1075,11 +1085,12 @@ class AddProduct extends Component {
                                             suffix="kg"
                                             onChange={(e) =>
                                                 this.props.onChangeProductDetails(
-                                                    e.target.value,
+                                                    Number(e.target.value).toFixed(2),
                                                     'weight'
                                                 )
                                             }
                                             type="number"
+                                            step="1.00"
                                         />
                                     )}
                                 </Form.Item>

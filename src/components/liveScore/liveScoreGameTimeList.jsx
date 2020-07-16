@@ -94,7 +94,7 @@ const columns = [
             pathname: '/liveScorePlayerView',
             state: { tableRecord: player }
         }} >
-            <span class="input-heading-add-another pt-0" >{player.mnbPlayerId ? player.mnbPlayerId : player.id}</span>
+            <span className="input-heading-add-another pt-0" >{player.mnbPlayerId ? player.mnbPlayerId : player.id}</span>
         </NavLink>
 
         // sorter: (a, b) => tableSort(a, b, "id"),
@@ -115,7 +115,7 @@ const columns = [
             pathname: '/liveScorePlayerView',
             state: { tableRecord: player }
         }} >
-            <span class="input-heading-add-another pt-0" >{firstName}</span>
+            <span className="input-heading-add-another pt-0" >{firstName}</span>
         </NavLink>
     },
     {
@@ -128,7 +128,7 @@ const columns = [
             pathname: '/liveScorePlayerView',
             state: { tableRecord: player }
         }} >
-            <span class="input-heading-add-another pt-0" >{lastName}</span>
+            <span className="input-heading-add-another pt-0" >{lastName}</span>
         </NavLink>
     },
     {
@@ -141,7 +141,7 @@ const columns = [
                 pathname: '/liveScoreTeamView',
                 state: { tableRecord: team, screenName: 'fromGameTimeList' }
             }} >
-                <span class="input-heading-add-another pt-0" >{team.name}</span>
+                <span className="input-heading-add-another pt-0" >{team.name}</span>
             </NavLink> : <span  >{team.name}</span>
     },
     {
@@ -349,6 +349,7 @@ class LiveScoreGameTimeList extends Component {
                         columns={columns}
                         dataSource={dataSource}
                         pagination={false}
+                        rowKey={(record, index) => 'gameTime' + index}
                     />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
