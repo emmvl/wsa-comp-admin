@@ -69,6 +69,8 @@ const initialState = {
     selectedCasualFee: [],
     selectedCasualFeeKey: [],
     SelectedSeasonalFeeKey: [],
+    seasonalExpendedKey: null,
+    casusalExpendedKey: null,
     charityRoundUp: [],
     govtVoucher: [],
     competionDiscountValue:
@@ -385,20 +387,20 @@ function discountDataObject(data) {
 }
 
 // for  updated selected seasonal fee array
-function getUpdatedSeasonalFee(value, getUpdatedSeasonalFeeArr) {
-    for (let i in value) {
-        if (value[i] == 5) {
-        } else {
-            let settingObj = {
-                "subOptions": [],
-                "feesTypeRefId": '2',
-                "paymentOptionRefId": value[i]
-            }
-            getUpdatedSeasonalFeeArr.push(settingObj)
-        }
-    }
-    return getUpdatedSeasonalFeeArr
-}
+// function getUpdatedSeasonalFee(value, getUpdatedSeasonalFeeArr) {
+//     for (let i in value) {
+//         if (value[i] == 5) {
+//         } else {
+//             let settingObj = {
+//                 "subOptions": [],
+//                 "feesTypeRefId": '2',
+//                 "paymentOptionRefId": value[i]
+//             }
+//             getUpdatedSeasonalFeeArr.push(settingObj)
+//         }
+//     }
+//     return getUpdatedSeasonalFeeArr
+// }
 // get selected casual fee payment option key
 function checkSelectedCasualFee(paymentData, casualFee, selectedCasualFee, selectedCasualFeeKey) {
     selectedCasualFeeKey = []
@@ -448,7 +450,8 @@ function checkSelectedSeasonalFee(paymentDataArray, seasonalFee, selectedSeasona
 
 
 // for  updated selected Casual fee array
-function getUpdatedCasualFee(value, getUpdatedCasualFeeArr, allDataCasualFee, key) {
+function getUpdatedSeasonalFee(value, getUpdatedCasualFeeArr, allDataCasualFee, key) {
+    console.log("getUpdatedSeasonalFee.length" + allDataCasualFee.length);
     for (let i in value) {
         if (allDataCasualFee.length > 0) {
             for (let j in allDataCasualFee) {
@@ -462,7 +465,7 @@ function getUpdatedCasualFee(value, getUpdatedCasualFeeArr, allDataCasualFee, ke
                     getUpdatedCasualFeeArr.push(object)
                     break
                 } else {
-                    if (value[i] == 5) {
+                    if (value[i] == 5 || value[i] == 1) {
                     }
                     else {
                         let object = {
@@ -478,7 +481,54 @@ function getUpdatedCasualFee(value, getUpdatedCasualFeeArr, allDataCasualFee, ke
             }
         }
         else {
-            if (value[i] == 5) {
+            if (value[i] == 5 || value[i] == 1) {
+            } else {
+                let object = {
+                    "subOptions": [],
+                    "feesTypeRefId": key,
+                    "paymentOptionRefId": value[i],
+                    "paymentOptionId": 0
+                }
+                getUpdatedCasualFeeArr.push(object)
+                break
+            }
+        }
+    }
+    return getUpdatedCasualFeeArr
+}
+
+function getUpdatedCasualFee(value, getUpdatedCasualFeeArr, allDataCasualFee, key) {
+    console.log("allDataCasualFee.length" + allDataCasualFee.length);
+    for (let i in value) {
+        if (allDataCasualFee.length > 0) {
+            for (let j in allDataCasualFee) {
+                if (value[i] == allDataCasualFee[j].paymentOptionRefId) {
+                    let object = {
+                        "subOptions": [],
+                        "feesTypeRefId": allDataCasualFee[j].feesTypeRefId,
+                        "paymentOptionRefId": allDataCasualFee[j].paymentOptionRefId,
+                        "paymentOptionId": allDataCasualFee[j].paymentOptionId
+                    }
+                    getUpdatedCasualFeeArr.push(object)
+                    break
+                } else {
+                    if (value[i] == 1 || value[i] == 4 || value[i] == 8 || value[i] == 12) {
+                    }
+                    else {
+                        let object = {
+                            "subOptions": [],
+                            "feesTypeRefId": key,
+                            "paymentOptionRefId": value[i],
+                            "paymentOptionId": 0
+                        }
+                        getUpdatedCasualFeeArr.push(object)
+                        break
+                    }
+                }
+            }
+        }
+        else {
+            if (value[i] == 1 || value[i] == 4 || value[i] == 8 || value[i] == 12) {
             } else {
                 let object = {
                     "subOptions": [],
@@ -1418,6 +1468,13 @@ function checkDiscountProduct(discountStateData, selectedDiscount) {
     return object
 }
 
+// function getSeasonalExpandedKey(existingValue, newValue){
+//     for(let i in existingValue){
+//         if(newValue.indexOf(existingValue[i]) == -1){
+//             if()
+//         }
+//     }
+// }
 
 function competitionFees(state = initialState, action) {
     switch (action.type) {
@@ -1936,13 +1993,15 @@ function competitionFees(state = initialState, action) {
             let getUpdatedCasualFeeArr = []
             let getUpdatedSeasonalFeeArr = []
             if (action.key == "casualfee") {
-                state.selectedCasualFeeKey = action.value
+                state.selectedCasualFeeKey = action.value;
+                state.casusalExpendedKey = action.value[0];
                 let updatedCasual = getUpdatedCasualFee(action.value, getUpdatedCasualFeeArr, state.defaultSelectedCasualFee, 1)
                 state.selectedCasualFee = updatedCasual
             }
             else {
-                state.SelectedSeasonalFeeKey = action.value
-                let updatedSeasonal = getUpdatedCasualFee(action.value, getUpdatedSeasonalFeeArr, state.defaultSelectedSeasonalFee, 2)
+                state.SelectedSeasonalFeeKey = action.value;
+                state.seasonalExpendedKey = action.value[0];
+                let updatedSeasonal = getUpdatedSeasonalFee(action.value, getUpdatedSeasonalFeeArr, state.defaultSelectedSeasonalFee, 2)
                 state.SelectedSeasonalFee = updatedSeasonal
 
             }
@@ -2209,6 +2268,8 @@ function competitionFees(state = initialState, action) {
                 state.SelectedSeasonalFee = []
                 state.SelectedSeasonalFeeKey = []
                 state.selectedCasualFeeKey = []
+                state.seasonalExpendedKey = null
+                state.casusalExpendedKey = null
 
                 // state.charityRoundUp = []
                 // state.govtVoucher = []

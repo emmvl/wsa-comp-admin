@@ -4609,12 +4609,20 @@ class RegistrationCompetitionFee extends Component {
 
   //on change of casual fee payment option
   onChangeCasualFee(itemValue, paymentData) {
+    console.log("itemValue", itemValue);
     this.props.updatePaymentFeeOption(itemValue, 'casualfee');
   }
   //on change of casual fee payment option
-  onChangeSeasonalFee(itemValue, paymentData) {
+  onChangeSeasonalFee(itemValue, info) {
+    console.log("itemValue, info", itemValue, info);
     this.props.updatePaymentFeeOption(itemValue, 'seasonalfee');
   }
+  onSelectCasualFee = (selectedKeys, info) => {
+    console.log('selected Casual', selectedKeys, info);
+  };
+  onExpandSeasonalFee = (selectedKeys) => {
+    console.log('onExpandSeasonalFee', selectedKeys);
+  };
 
   checkIsSeasonal = (feeDetails) => {
     let isSeasonalValue = false;
@@ -4652,25 +4660,9 @@ class RegistrationCompetitionFee extends Component {
     let selectedCasualFeeKey = this.props.competitionFeesState
       .selectedCasualFeeKey;
     let paymentsDisable = this.state.permissionState.paymentsDisable;
-    let seasonalExpendeKey =
-      selectedSeasonalFeeKey.includes('6') ||
-        selectedSeasonalFeeKey.includes('7') ||
-        selectedSeasonalFeeKey.includes('8') ||
-        selectedSeasonalFeeKey.includes(6) ||
-        selectedSeasonalFeeKey.includes(7) ||
-        selectedSeasonalFeeKey.includes(8)
-        ? '5'
-        : null;
-    let casuallExpendeKey =
-      selectedCasualFeeKey.includes('6') ||
-        selectedCasualFeeKey.includes('7') ||
-        selectedCasualFeeKey.includes('8') ||
-        selectedCasualFeeKey.includes(6) ||
-        selectedCasualFeeKey.includes(7) ||
-        selectedCasualFeeKey.includes(8)
-        ? '5'
-        : null;
-    // console.log(seasonalExpendeKey);
+    let seasonalExpendeKey = this.props.competitionFeesState.seasonalExpendedKey;
+    let casuallExpendeKey =  this.props.competitionFeesState.casusalExpendedKey;
+
     return (
       <div className="fees-view pt-5">
         <span className="form-heading">{AppConstants.paymentOptions}</span>
@@ -4696,7 +4688,7 @@ class RegistrationCompetitionFee extends Component {
               expandedKeys={[seasonalExpendeKey]}
               defaultCheckedKeys={[]}
               checkedKeys={selectedSeasonalFeeKey}
-              onCheck={(e) => this.onChangeSeasonalFee(e, paymentData)}
+              onCheck={(e, info) => this.onChangeSeasonalFee(e, info)}
               disabled={paymentsDisable}
             >
               {this.seasonalDataTree(seasonalPayment)}
