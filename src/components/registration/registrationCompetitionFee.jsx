@@ -4398,7 +4398,7 @@ class RegistrationCompetitionFee extends Component {
       affiliateNonSelected,
       anyOrgNonSelected,
     } = this.props.competitionFeesState;
-    //console.log(this.props.appState.registrationInvitees, 'invitees');
+   // console.log(invitees, 'invitees');
     let orgLevelId = JSON.stringify(this.state.organisationTypeRefId);
     let regInviteesDisable = this.state.permissionState.regInviteesDisable;
     return (
