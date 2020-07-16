@@ -433,8 +433,9 @@ class LiveScoreMatchSheet extends Component {
                         </div>
                     </div>
                 </div>
+                {/*  //////app was crashing so we commented this code.(Samir Team)
 
-                <div className="fluid-width" style={{marginTop: 15}}>
+                 <div className="fluid-width" style={{marginTop: 15}}>   
                     <div className="row">
                         <div className="col-sm">
                             <InputWithHead heading={AppConstants.templateType}/>
@@ -449,7 +450,7 @@ class LiveScoreMatchSheet extends Component {
                             </Select>
                         </div>
                     </div>
-                </div>
+                </div> */}
 
                 <Checkbox
                     className="single-checkbox pt-3"
