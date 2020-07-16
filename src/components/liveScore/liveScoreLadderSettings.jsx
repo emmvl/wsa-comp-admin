@@ -268,7 +268,7 @@ class LiveScoreLadderSettings extends Component {
                         <InputWithHead heading={AppConstants.ladderLink} />
                         <div>
                             <a className="user-reg-link" href={AppConstants.public_Ladder_Url + `organisationKey=${organisationUniqueKey}`} target='_blank' >
-                                {AppConstants.public_Ladder_Url + `organisationKey=${organisationUniqueKey}`}
+                                {process.env.REACT_APP_COMPETITION_API_URL + `/liveScorePublicLadder?organisationKey=${organisationUniqueKey}`}
                             </a>
                         </div>
                     </div>
@@ -290,7 +290,7 @@ class LiveScoreLadderSettings extends Component {
                         <InputWithHead heading={AppConstants.drawsLink} />
                         <div>
                             <a className="user-reg-link" href={AppConstants.public_draws_Url + `organisationKey=${organisationUniqueKey}`} target='_blank' >
-                                {AppConstants.public_draws_Url + `organisationKey=${organisationUniqueKey}`}
+                                {process.env.REACT_APP_COMPETITION_API_URL + `/livescoreSeasonFixture?organisationKey=${organisationUniqueKey}`}
                             </a>
                         </div>
                     </div>
