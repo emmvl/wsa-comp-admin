@@ -182,6 +182,15 @@ function shopProductState(state = initialState, action) {
             else if (action.key === "inventoryTracking") {
                 state.productDetailData.inventoryTracking = action.data
             }
+            else if (action.key === "variantsChecked") {
+                state.productDetailData.variantsChecked = action.data
+                if (action.data == true) {
+                    let firstVariantOptionPrice = state.productDetailData.variants[0].options[0].properties.price
+                    if (firstVariantOptionPrice == 0) {
+                        state.productDetailData.variants[0].options[0].properties.price = state.productDetailData.price
+                    }
+                }
+            }
             else {
                 state.productDetailData[action.key] = action.data
             }

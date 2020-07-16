@@ -28,7 +28,6 @@ function* errorSaga(error) {
 //// get manager list
 export function* liveScoreScorerListSaga(action) {
     try {
-        console.log('hello saga search ,', action)
         const result = yield call(LiveScoreAxiosApi.liveScoreScorerList, action.competitionId, action.roleId, action.body, action.search)
         if (result.status == 1) {
             yield put({

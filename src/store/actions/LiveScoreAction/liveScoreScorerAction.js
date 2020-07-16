@@ -10,7 +10,6 @@ function liveScoreScorerListAction(competitionId, roleId, data, search) {
         search
 
     }
-    console.log(action, 'liveScoreScorerListAction')
     return action
 }
 function liveScoreScorerUpdate(data, key) {
@@ -92,7 +91,6 @@ function liveScoreScorerSearch(roleId, entityTypeId, competitionId, searchText) 
         competitionId,
         searchText
     }
-    console.log(action)
     return action
 }
 

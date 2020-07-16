@@ -182,7 +182,7 @@ class LiveScoreBulkChange extends Component {
                                 className="reg-form-multiple-select"
                                 // onChange={(venueId) => this.props.liveScoreUpdateMatchAction(venueId, "venueId")}
                                 onChange={(venueId) => this.props.liveScoreUpdateBulkAction(venueId, "venueId")}
-                                value={selected_Option.venueId}
+                            // value={selected_Option.venueId}
                             >
 
                                 {venueData && venueData.map((item) => {
@@ -213,7 +213,7 @@ class LiveScoreBulkChange extends Component {
                         <Select
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                             onChange={(selectedOption) => this.props.liveScoreUpdateBulkAction(selectedOption, "selectedOption")}
-                            value={selectedOption}
+                            // value={selectedOption}
                             placeholder={AppConstants.slectOption}
                         >
                             <Option value={"pushBack"}>{'Push Back'}</Option>
@@ -392,7 +392,7 @@ class LiveScoreBulkChange extends Component {
                                         showTime={false}
                                         // onChange={(date) => this.props.liveScoreUpdateBulkAction(moment(date).format('YYYY-MM-DD'), "startDate")}
                                         onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "startDate")}
-                                        value={pushBackData.startDate}
+                                    // value={pushBackData.startDate}
                                     />
                                 )}
                             </Form.Item>
@@ -410,7 +410,7 @@ class LiveScoreBulkChange extends Component {
                                         // minuteStep={15}
                                         use12Hours={false}
                                         onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "startTime")}
-                                        value={pushBackData.startTime}
+                                    // value={pushBackData.startTime}
                                     />
                                 )}
                             </Form.Item>
@@ -437,7 +437,7 @@ class LiveScoreBulkChange extends Component {
                                         showTime={false}
                                         name={'registrationOepn'}
                                         onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "endDate")}
-                                        value={pushBackData.endDate}
+                                    // value={pushBackData.endDate}
                                     />
                                 )}
                             </Form.Item>
@@ -455,7 +455,7 @@ class LiveScoreBulkChange extends Component {
                                         // minuteStep={15}
                                         use12Hours={false}
                                         onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "endTime")}
-                                        value={pushBackData.endTime}
+                                    // value={pushBackData.endTime}
                                     />
                                 )}
                             </Form.Item>
@@ -574,7 +574,7 @@ class LiveScoreBulkChange extends Component {
                                         size="large"
                                         style={{ width: "100%" }}
                                         onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "startDate")}
-                                        value={bringForwardData.startDate}
+                                        // value={bringForwardData.startDate}
                                         format={"DD-MM-YYYY"}
                                         placeholder={"dd-mm-yyyy"}
                                         showTime={false}
@@ -593,7 +593,7 @@ class LiveScoreBulkChange extends Component {
                                         defaultOpenValue={moment("00:00", "HH:mm")}
                                         onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "startTime")}
                                         format={"HH:mm"}
-                                        value={bringForwardData.startTime}
+                                        // value={bringForwardData.startTime}
                                         // minuteStep={15}
                                         use12Hours={false}
                                     />
@@ -617,7 +617,7 @@ class LiveScoreBulkChange extends Component {
                                         size="large"
                                         style={{ width: "100%" }}
                                         onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "endDate")}
-                                        value={bringForwardData.endDate}
+                                        // value={bringForwardData.endDate}
                                         format={"DD-MM-YYYY"}
                                         placeholder={"dd-mm-yyyy"}
                                         showTime={false}
@@ -637,7 +637,7 @@ class LiveScoreBulkChange extends Component {
                                         defaultOpenValue={moment("00:00", "HH:mm")}
                                         onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "endTime")}
                                         format={"HH:mm"}
-                                        value={bringForwardData.endTime}
+                                        // value={bringForwardData.endTime}
                                         // minuteStep={15}
                                         use12Hours={false}
                                     />
@@ -754,7 +754,7 @@ class LiveScoreBulkChange extends Component {
                                         placeholder={"dd-mm-yyyy"}
                                         showTime={false}
                                         onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "startDate")}
-                                        value={endMatchData.startDate}
+                                    // value={endMatchData.startDate}
                                     />
                                 )}
                             </Form.Item>
@@ -771,7 +771,7 @@ class LiveScoreBulkChange extends Component {
                                         format={"hh:mm"}
                                         // minuteStep={15}
                                         onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "startTime")}
-                                        value={endMatchData.startTime}
+                                        // value={endMatchData.startTime}
                                         use12Hours={false}
                                     />
                                 )}
@@ -797,7 +797,7 @@ class LiveScoreBulkChange extends Component {
                                         showTime={false}
                                         name={'registrationOepn'}
                                         onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "endDate")}
-                                        value={endMatchData.endDate}
+                                    // value={endMatchData.endDate}
                                     />
                                 )}
                             </Form.Item>
@@ -813,7 +813,7 @@ class LiveScoreBulkChange extends Component {
                                         defaultOpenValue={moment("00:00", "HH:mm")}
                                         format={"HH:mm"}
                                         onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "endTime")}
-                                        value={endMatchData.endTime}
+                                        // value={endMatchData.endTime}
                                         // minuteStep={15}
                                         use12Hours={false}
                                     />
@@ -952,7 +952,7 @@ class LiveScoreBulkChange extends Component {
                                 optionFilterProp="children"
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 onChange={(round_1) => this.props.liveScoreUpdateBulkAction(round_1, "round_1")}
-                                value={doubleHeaderResult.round_1}
+                                // value={doubleHeaderResult.round_1}
                                 placeholder={AppConstants.selectRoundOne}
                             >
                                 {
@@ -981,7 +981,7 @@ class LiveScoreBulkChange extends Component {
                             <Select
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 onChange={(round_2) => this.props.liveScoreUpdateBulkAction(round_2, "round_2")}
-                                value={doubleHeaderResult.round_2}
+                                // value={doubleHeaderResult.round_2}
                                 placeholder={AppConstants.selectRoundOne}
                                 showSearch
                                 optionFilterProp="children"
@@ -1033,7 +1033,7 @@ class LiveScoreBulkChange extends Component {
                                             showTime={false}
                                             name={'registrationOepn'}
                                             onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "startDate")}
-                                            value={abandonData.startDate}
+                                        // value={abandonData.startDate}
 
                                         />
                                     )}
@@ -1073,7 +1073,7 @@ class LiveScoreBulkChange extends Component {
                                             showTime={false}
                                             name={'registrationOepn'}
                                             onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "endDate")}
-                                            value={abandonData.endDate}
+                                        // value={abandonData.endDate}
                                         />
                                     )}
                                 </Form.Item>
@@ -1212,7 +1212,7 @@ class LiveScoreBulkChange extends Component {
                                 onChange={selectReason => this.setState({ selectReason })}
                                 placeholder={AppConstants.selectReason}
                                 onChange={(resultType) => this.props.liveScoreUpdateBulkAction(resultType, "resultType")}
-                                value={abandonData.resultType ? abandonData.resultType : []}
+                            // value={abandonData.resultType ? abandonData.resultType : []}
                             >
                                 {/* {isArrayNotEmpty(matchResult) && matchResult.map((item, index) => {
                                     return (
