@@ -1603,7 +1603,7 @@ function competitionFees(state = initialState, action) {
                             "inviteesOrg": affiliateOrgSelectedArr.selecetdOrgArray
                         }
                         state.anyOrgAffiliateArr = [affiliateObject]
-                        state.anyOrgNonSelected = null
+                        //state.anyOrgNonSelected = null
                     }
                     else {
                         // club
@@ -1617,6 +1617,8 @@ function competitionFees(state = initialState, action) {
                         }
                         state.anyOrgAffiliateArr = [affiliateObject]
                     }
+
+                    state.anyOrgNonSelected = null
 
                 } else {
                     state.affiliateArray = allData.competitiondetail.invitees

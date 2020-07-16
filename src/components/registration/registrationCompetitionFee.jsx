@@ -4398,7 +4398,7 @@ class RegistrationCompetitionFee extends Component {
       affiliateNonSelected,
       anyOrgNonSelected,
     } = this.props.competitionFeesState;
-    //console.log(this.props.appState.registrationInvitees, 'invitees');
+   // console.log(invitees, 'invitees');
     let orgLevelId = JSON.stringify(this.state.organisationTypeRefId);
     let regInviteesDisable = this.state.permissionState.regInviteesDisable;
     return (
@@ -4609,21 +4609,15 @@ class RegistrationCompetitionFee extends Component {
 
   //on change of casual fee payment option
   onChangeCasualFee(itemValue, paymentData) {
-    console.log("itemValue", itemValue);
+    //console.log("itemValue", itemValue);
     this.props.updatePaymentFeeOption(itemValue, 'casualfee');
   }
   //on change of casual fee payment option
   onChangeSeasonalFee(itemValue, info) {
-    console.log("itemValue, info", itemValue, info);
+    //console.log("itemValue, info", itemValue, info);
     this.props.updatePaymentFeeOption(itemValue, 'seasonalfee');
   }
-  onSelectCasualFee = (selectedKeys, info) => {
-    console.log('selected Casual', selectedKeys, info);
-  };
-  onExpandSeasonalFee = (selectedKeys) => {
-    console.log('onExpandSeasonalFee', selectedKeys);
-  };
-
+  
   checkIsSeasonal = (feeDetails) => {
     let isSeasonalValue = false;
     for (let i in feeDetails) {
