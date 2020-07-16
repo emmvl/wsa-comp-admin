@@ -2,13 +2,15 @@ import ApiConstants from '../../../themes/apiConstants'
 
 const initialState = {
     onLoad: false,
+    printLoad: false,
     error: null,
     result: null,
     status: 0,
     liveScoreDivisionList: [],
     allTeamData: [],
     isLoaderActive: false,
-    allDivisionData: []
+    allDivisionData: [],
+    matchSheetDownloads: [],
 };
 
 function liveScoreMatchSheetState(state = initialState, action) {
@@ -72,13 +74,23 @@ function liveScoreMatchSheetState(state = initialState, action) {
             };
 
         case ApiConstants.API_MATCH_SHEET_PRINT_LOAD:
-            return { ...state, onLoad: true };
+            return { ...state, printLoad: true };
 
         case ApiConstants.API_MATCH_SHEET_PRINT_SUCCESS:
             return {
                 ...state,
+                printLoad: false,
+                status: action.status
+            };
+
+        case ApiConstants.API_MATCH_SHEET_DOWNLOADS_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_MATCH_SHEET_DOWNLOADS_SUCCESS:
+            return {
+                ...state,
                 onLoad: false,
-                liveScoreMatchSheetDownloadLink: action.downloadLink,
+                matchSheetDownloads: action.matchSheetDownloads,
                 status: action.status
             };
 

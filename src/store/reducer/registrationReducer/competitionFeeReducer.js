@@ -1,4 +1,5 @@
 import ApiConstants from "../../../themes/apiConstants";
+import AppConstants from "../../../themes/appConstants";
 import history from "../../../util/history";
 import { getRegistrationSetting } from "../../objectModel/getRegSettingObject";
 import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
@@ -136,7 +137,8 @@ const initialState = {
 
     affiliateArray: [],
     anyOrgAffiliateArr: [],
-    any_club_Org_AffiliateArr: []
+    any_club_Org_AffiliateArr: [],
+    createVenue: null
 };
 
 /////function to append isselected values in default membership types array
@@ -1441,6 +1443,7 @@ function competitionFees(state = initialState, action) {
             return { ...state, onLoad: true, error: null };
 
         case ApiConstants.API_REG_COMPETITION_LIST_SUCCESS:
+            console.log("API_REG_COMPETITION_LIST_SUCCESS",state.selectedVenuesAdd, state.selectedVenues )
             let competitionListData = action.result;
             state.selectedVenuesAdd = null
             state.selectedVenues = []
@@ -1598,7 +1601,17 @@ function competitionFees(state = initialState, action) {
                 }
             }
             state.postInvitees = allData.competitiondetail.invitees
-            state.postVenues = allData.competitiondetail.venues
+            if(state.selectedVenuesAdd == null)
+                state.postVenues = allData.competitiondetail.venues
+
+            if (state.createVenue) {
+                let defaultPostVenueObject = {
+                    competitionVenueId: 0,
+                    venueId: state.createVenue.venueId
+                }
+                state.postVenues.push(defaultPostVenueObject)
+            }
+            
             state.charityTitle = isArrayNotEmpty(allData.competitionpayments.charityRoundUp) ? allData.competitionpayments.charityRoundUp[0].charityRoundUpName : ""
             state.charityDescription = isArrayNotEmpty(allData.competitionpayments.charityRoundUp) ? allData.competitionpayments.charityRoundUp[0].charityRoundUpDescription : ""
             state.onLoad = false
@@ -2159,6 +2172,7 @@ function competitionFees(state = initialState, action) {
         ///clearing particular reducer data
         case ApiConstants.REG_COMPETITION_FEES_CLEARING_REDUCER_DATA:
             if (action.dataName == "all") {
+                console.log("REG_COMPETITION_FEES_CLEARING_REDUCER_DATA", state.selectedVenuesAdd, state.selectedVenues)
                 const defaultDetailObj = {
                     competitionUniqueKey: "",
                     competitionName: "",
@@ -2185,7 +2199,7 @@ function competitionFees(state = initialState, action) {
                 }
                 state.competitionDetailData = defaultDetailObj
                 state.competitionId = ""
-                state.postVenues = []
+                state.postVenues = state.selectedVenuesAdd == null ? [] : state.postVenues
                 state.postInvitees = []
                 state.selectedVenues = state.selectedVenuesAdd == null ? [] : state.selectedVenues
                 state.selectedInvitees = []
@@ -2248,7 +2262,9 @@ function competitionFees(state = initialState, action) {
 
         case ApiConstants.API_ADD_VENUE_SUCCESS:
             let venueSuccess = action.result
-            if (venueSuccess != null) {
+            if (venueSuccess != null && (venueSuccess.screenNavigationKey == AppConstants.competitionFees ||
+                venueSuccess.screenNavigationKey == AppConstants.competitionDetails || 
+                venueSuccess.screenNavigationKey ==  AppConstants.dashboard)) {
                 let updatedVenue = JSON.parse(JSON.stringify(state.newVenueObj))
                 updatedVenue["id"] = venueSuccess.venueId
                 updatedVenue['name'] = venueSuccess.name
@@ -2261,13 +2277,10 @@ function competitionFees(state = initialState, action) {
                 updatedVenue['contactNumber'] = venueSuccess.contactNumber
                 state.venueList.push(updatedVenue)
                 state.selectedVenuesAdd = "Add"
+                console.log("state.selectedVenues", state.selectedVenues);
                 state.selectedVenues.push(venueSuccess.venueId)
-
-                let defaultPostVenueObject = {
-                    competitionVenueId: 0,
-                    venueId: venueSuccess.venueId
-                }
-                state.postVenues.push(defaultPostVenueObject)
+                state.createVenue = action.result
+               
             }
             return { ...state }
 

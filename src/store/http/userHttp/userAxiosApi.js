@@ -258,6 +258,11 @@ let userHttpApi = {
     return Method.dataPost(url, token, payload);
   },
 
+  getUserDetail() {
+    const url = `users/profile`;
+    return Method.dataGet(url, token);
+  },
+
   saveUserDetail(payload) {
     const url = `users/profile`;
     return Method.dataPatch(url, token, payload);

@@ -207,13 +207,13 @@ function checkSelectedVenuesList(selectedVenue, venueList) {
         if (matchedWithSelectedVenue.status == true) {
             venueObject = {
                 "competitionVenueId": matchedWithSelectedVenue.result.competitionVenueId,
-                "venueId": venueList[i].venueId,
+                "venueId": venueList[i].id,
                 // "name": venueList[i].name,
             }
         } else {
             venueObject = {
                 "competitionVenueId": 0,
-                "venueId": venueList[i].venueId,
+                "venueId": venueList[i].id,
                 // "name": venueList[i].name,
             }
         }
@@ -493,7 +493,9 @@ function VenueTimeState(state = initialState, action) {
             state.courtPrefArrayStore = selectedCourtPrefArray.courtPreferencesPost
             state.venueConstrainstData.courtPreferences = selectedCourtPrefArray.courtsArray
             state.courtPreferencesPost = selectedCourtPrefArray.courtPreferencesPost
-            state.venuePost = state.venueConstrainstData.venues
+            if (state.selectedVenueIdAdd == null) {
+                state.venuePost = state.venueConstrainstData.venues
+            }
 
             if (state.createVenue) {
                 let venueObj = {
@@ -502,6 +504,8 @@ function VenueTimeState(state = initialState, action) {
                 }
                 state.venuePost.push(venueObj)
             }
+
+            console.log("selecetdVenueListId, selectedVenueId", selecetdVenueListId, state.selectedVenueId)
 
             // let setVenueObj = getVenueObj(action.result)
             // state.venueConstrainstData = setVenueObj
@@ -741,15 +745,24 @@ function VenueTimeState(state = initialState, action) {
                 searchVenueList: action.result
             };
 
+        case ApiConstants.API_REG_FORM_VENUE_SUCCESS:
+            return {
+                ...state,
+                venueList: action.result,
+                status: action.status,
+                searchVenueList: action.result
+            };
+
         case ApiConstants.API_UPDATE_VENUE_CONSTRAINTS_DATA:
 
             if (action.contentType == 'venueListSection') {
 
                 // state.venues.push(venueObj) //// add Venue object*
                 state.selectedVenueId = action.data
+             
                 let venueSelectedData = state.venueList.filter(function (object_1) {
                     return action.data.some(function (object_2) {
-                        return object_1.venueId === object_2;
+                        return object_1.id === object_2;
                     });
                 });
                 let courtDataArray = generateCourtData(venueSelectedData)
@@ -1181,8 +1194,8 @@ function VenueTimeState(state = initialState, action) {
             };
 
         case ApiConstants.API_ADD_VENUE_SUCCESS:
-            if (action.result != null) {
-               
+            if (action.result != null && action.result.screenNavigationKey == AppConstants.venues) {
+               console.log('Venue Time Constraints' + action.result.venueId)
                 state.selectedVenueIdAdd = "addVenue"
                 state.selectedVenueId.push(action.result.venueId)
                

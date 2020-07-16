@@ -762,8 +762,11 @@ export default function* root_saga() {
   // Get match print template type
   yield takeEvery(ApiConstants.API_MATCH_PRINT_TEMPLATE_LOAD, getMatchPrintTemplateTypeSaga)
 
-  // Get match sheet download link
+  // Get match sheet upload
   yield takeEvery(ApiConstants.API_MATCH_SHEET_PRINT_LOAD, liveScoreMatchSheetSaga.liveScoreMatchSheetPrintSaga)
+
+  // Get match sheet download
+  yield takeEvery(ApiConstants.API_MATCH_SHEET_DOWNLOADS_LOAD, liveScoreMatchSheetSaga.liveScoreMatchSheetDownloadSaga)
 
   yield takeEvery(ApiConstants.API_LADDER_ADJUSTMENT_POST_LOAD, ladderAdjustmentPostSaga)
   yield takeEvery(ApiConstants.API_LADDER_ADJUSTMENT_GET_LOAD, ladderAdjustmentGetSaga)
@@ -773,6 +776,9 @@ export default function* root_saga() {
 
   // Update User Photo
   yield takeEvery(ApiConstants.API_USER_PHOTO_UPDATE_LOAD, userSaga.saveUserPhotosSaga);
+
+  // Get User Detail
+  yield takeEvery(ApiConstants.API_USER_DETAIL_LOAD, userSaga.getUserDetailSaga);
 
   // Update User Detail
   yield takeEvery(ApiConstants.API_USER_DETAIL_UPDATE_LOAD, userSaga.saveUserDetailSaga);

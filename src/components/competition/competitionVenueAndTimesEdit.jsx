@@ -43,7 +43,7 @@ const papaparseOptions = {
         .toLowerCase()
         .replace(/\W/g, '_'),
     complete: function(results, file) {
-        console.log("Parsing complete:", results, file);
+       // console.log("Parsing complete:", results, file);
     }
   }
 
@@ -202,12 +202,12 @@ class CompetitionVenueAndTimesEdit extends Component {
     }
 
     componentWillMount() {
-       console.log("componentWillMount" + JSON.stringify(this.props.venueTimeState.venuData));
+       //console.log("componentWillMount" + JSON.stringify(this.props.venueTimeState.venuData));
       // this.setState({initialData: this.props.venueTimeState.venuData});
     }
 
     componentDidMount() {
-        console.log("componentDidMount");
+      //  console.log("componentDidMount");
         window.scroll(0,0);
         let venueId = this.props.location.state.venueId;
         let isUsed  = this.props.location.state.isUsed;
@@ -228,7 +228,7 @@ class CompetitionVenueAndTimesEdit extends Component {
         //console.log("componentDidUpdate" + JSON.stringify(nextProps));
         let competitionList = this.props.appState.competitionList
         if (this.state.saveContraintLoad == true && this.props.venueTimeState.onLoad == false) {
-            console.log("this.state.screenNavigationKey:" + this.state.screenNavigationKey);
+           // console.log("this.state.screenNavigationKey:" + this.state.screenNavigationKey);
             this.navigateTo();
         }
 
@@ -258,7 +258,7 @@ class CompetitionVenueAndTimesEdit extends Component {
     }
 
     setFormFieldValue = () => {
-        console.log("setFormFieldValue");
+        //console.log("setFormFieldValue");
         let venueData = this.props.venueTimeState.venuData;
 
         this.props.form.setFieldsValue({
@@ -371,7 +371,7 @@ class CompetitionVenueAndTimesEdit extends Component {
     }
 
     validateTime = (rule, value, callback, startTime, endTime, type) => {
-        console.log( "StartTime"+ startTime + "EndTime::" + endTime + "Type::" + type );
+        //console.log( "StartTime"+ startTime + "EndTime::" + endTime + "Type::" + type );
         if(type == "end"){
             if(startTime > endTime){
                 callback('End time should be greater than start time');
@@ -767,7 +767,7 @@ class CompetitionVenueAndTimesEdit extends Component {
     //////court day view
     courtView = (getFieldDecorator) => {
         //console.log(this.props.venueTimeState.venuData.expandedRowKeys)
-        console.log(this.props.venueTimeState.venuData);
+        //console.log(this.props.venueTimeState.venuData);
         let venueTimestate = this.props.venueTimeState;
         let {venueCourts}  = venueTimestate.venuData;
         //console.log("venueCourts::" +JSON.stringify(venueCourts));
@@ -868,7 +868,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     }
 
                     if(!hasError){
-                        console.log("venuData" + JSON.stringify(venuData));
+                       // console.log("venuData" + JSON.stringify(venuData));
                         this.props.addVenueAction(venuData)
                         this.setState({ saveContraintLoad: true });
                     }

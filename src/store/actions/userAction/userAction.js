@@ -269,10 +269,16 @@ function userPasswordUpdateAction(payload) {
   }
 }
 
-function getUserHistoryAction(userId){
+function getUserHistoryAction(userId) {
   return {
     type: ApiConstants.API_USER_MODULE_HISTORY_LOAD,
     payload: userId
+  };
+}
+
+function getUserProfileAction() {
+  return {
+    type: ApiConstants.API_USER_DETAIL_LOAD,
   };
 }
 
@@ -314,4 +320,5 @@ export {
   userPhotoUpdateAction,
   userDetailUpdateAction,
   userPasswordUpdateAction,
+  getUserProfileAction,
 }

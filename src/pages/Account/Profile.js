@@ -12,9 +12,9 @@ import Loader from "../../customComponents/loader";
 function Profile(props) {
   const { userState, form, userPhotoUpdateAction, userDetailUpdateAction } = props;
 
-  const [user, setUser] = useState(userState.getUserOrganisation);
+  const [user, setUser] = useState(userState.userProfile);
 
-  const { firstName, lastName, mobileNumber, userEmail, photoUrl } = userState.getUserOrganisation;
+  const { firstName, lastName, mobileNumber, email, photoUrl } = userState.userProfile;
 
   useEffect(() => {
     setUser(prevState => ({
@@ -22,9 +22,9 @@ function Profile(props) {
       firstName,
       lastName,
       mobileNumber,
-      email: userEmail,
+      email,
     }));
-  }, [firstName, lastName, mobileNumber, userEmail]);
+  }, [firstName, lastName, mobileNumber, email]);
 
   useEffect(() => {
     setUser(prevState => ({ ...prevState, photoUrl }));

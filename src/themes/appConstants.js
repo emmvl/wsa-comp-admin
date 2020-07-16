@@ -1396,6 +1396,7 @@ const AppConstants = {
   importTeamPlayer: "Import Team and Players",
   quickCompetitionFormat: "Competition Format (3/3)",
   matchPrintTemplateType: 'Match Print Template Type',
+  templateType: 'Template type',
   playerBorrowing: "Player Borrowing",
   gamesBorrowed: "Games Borrowed",
   minutesBorrowed: "Minutes Borrowed",
@@ -1408,6 +1409,7 @@ const AppConstants = {
   history: "History",
   somethingWentWrong: "Something went wrong.",
   variantDeletedMessage: "Variant deleted successfully.",
+  refreshDownloads: "Refresh Downloads",
 
   // Account
   account: "Account",

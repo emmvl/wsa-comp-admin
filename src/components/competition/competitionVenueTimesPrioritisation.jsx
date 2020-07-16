@@ -31,8 +31,8 @@ import {
     clearVenueDataAction
 } from "../../store/actions/competitionModuleAction/venueTimeAction";
 import { getYearAndCompetitionOwnAction, clearYearCompetitionAction } from '../../store/actions/appAction'
-import { getVenuesTypeAction } from "../../store/actions/appAction";
-import { venueListAction, getCommonRefData, searchVenueList, clearFilter } from '../../store/actions/commonAction/commonAction'
+import { getVenuesTypeAction, searchVenueList, clearFilter} from "../../store/actions/appAction";
+import { venueListAction, getCommonRefData } from '../../store/actions/commonAction/commonAction'
 import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
 import history from '../../util/history'
 import ValidationConstant from '../../themes/validationConstant'
@@ -614,7 +614,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
         let courtRotationList = isArrayNotEmpty(courtRotation) ? courtRotation : []
         let evenRotaionList = isArrayNotEmpty(courtRotation) ? courtRotation[0].subReferences : []
         let allocateSameCourtList = isArrayNotEmpty(courtRotation) ? courtRotation[1].subReferences : []
-        console.log(evenRotation, "list", allocateSameCourtList)
+       // console.log(evenRotation, "list", allocateSameCourtList)
         return (
             <div>
                 <span className="applicable-to-heading required-field">
@@ -706,9 +706,9 @@ class CompetitionVenueTimesPrioritisation extends Component {
     }
 
     selectAddVenueView() {
-       // const { venueList, mainVenueList } = this.props.commonReducerState
+        //const { venueList, mainVenueList } = this.props.commonReducerState
         const {venueList, mainVenueList} = this.props.appState;
-        const { selectedVenueId } = this.props.venueTimeState
+        const { selectedVenueId } = this.props.venueTimeState;
         return (
             <div className="fluid-width">
                 <div className="row">
@@ -1269,7 +1269,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
 
     render() {
-        console.log(this.props.venueTimeState.courtRotation)
+       // console.log(this.props.venueTimeState.courtRotation)
         const { getFieldDecorator } = this.props.form;
         const { venueConstrainstData } = this.props.venueTimeState;
         return (

@@ -612,6 +612,24 @@ export function* saveUserPhotosSaga(action) {
     }
 }
 
+/* Get the User Detail */
+export function* getUserDetailSaga() {
+    try {
+        const result = yield call(userHttpApi.getUserDetail);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_USER_DETAIL_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
 /* Save the User Detail */
 export function* saveUserDetailSaga(action) {
     try {

@@ -301,19 +301,19 @@ class Registration extends Component {
     headerView = () => {
 		const { paymentStatus } = this.props.commonReducerState;
         return (
-            <div className="comp-player-grades-header-view-design" >
-                <div className="row" >
-                    <div className="col-sm-7" style={{ display: "flex", alignContent: "center" }} >
+            <div className="comp-player-grades-header-view-design" style={{marginBottom:-10}}>
+                <div className="row" style={{marginRight: 42}}>
+                    <div className="col-lg-6 col-md-12" style={{ display: "flex", alignContent: "center", marginBottom: 20 ,}} >
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.Registrations}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-					<div className="reg-col1" style={{marginLeft: -54}}>
-                        <div className="reg-filter-col-cont" >
-                            <div className='year-select-heading' style={{width: 95}}>{AppConstants.status}</div>
+					<div className="reg-col1 col-lg-3 col-md-5" style={{alignSelf:'center', paddingRight: '10px', paddingLeft: '25px'}}>
+                        <div className="reg-filter-col-cont status-dropdown" >
+                            <div className='year-select-heading' style={{width: 120}}>{AppConstants.status}</div>
                             <Select
                                 className="year-select reg-filter-select"
-                                style={{ minWidth: 100 }}
+                                style={{ width:'95%' }}
                                 onChange={(e) => this.onChangeDropDownValue(e, 'paymentStatusRefId')}
                                 value={this.state.paymentStatusRefId}>
                                 <Option key={-1} value={-1}>{AppConstants.all}</Option>
@@ -323,7 +323,7 @@ class Registration extends Component {
                             </Select>
                         </div>
                     </div>						  
-                    <div className="col-sm d-flex align-items-center justify-content-end"   style={{paddingLeft: 0 , marginLeft:-6 ,marginRight: 60}} >
+                    <div className="col-sm col-lg-2.5 d-flex align-items-center justify-content-end"   style={{paddingLeft: 0 , marginLeft:10 ,marginRight:0}} >
                         <div className="comp-product-search-inp-width" >
                             <Input className="product-reg-search-input"
                                  onChange={(e) => this.onChangeSearchText(e)}
@@ -366,10 +366,10 @@ class Registration extends Component {
         const { genderData } = this.props.commonReducerState;
         const { competitions, membershipProductTypes, membershipProducts, postalCodes } = this.props.userRegistrationState;
         return (
-            <div className="comp-player-grades-header-drop-down-view mt-1"  style={{paddingLeft:60.8}}>
-                <div className="fluid-width" >
+            <div className="comp-player-grades-header-view-design">
+                <div className="fluid-width" style={{ marginRight: 55}} >
                     <div className="row reg-filter-row" >
-                        <div className="reg-col" >
+                        <div className="reg-col col-lg-3 col-md-5" >
                             <div className="reg-filter-col-cont">
                                 <div className='year-select-heading'>{AppConstants.year}</div>
                                 <Select
@@ -388,7 +388,7 @@ class Registration extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="reg-col" >
+                        <div className="reg-col col-lg-3 col-md-7" >
                             <div className="reg-filter-col-cont">
                                 <div className='year-select-heading'>{AppConstants.competition}</div>
                                 <Select
@@ -408,7 +408,7 @@ class Registration extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="reg-col">
+                        <div className="reg-col col-lg-3 col-md-5">
                             <div className="reg-filter-col-cont" style={{ marginRight: '30px' }}>
                                 <div className='year-select-heading'>{AppConstants.dobFrom}</div>
                                 <DatePicker
@@ -422,7 +422,7 @@ class Registration extends Component {
                                 />
                             </div>
                         </div>
-                        <div className="reg-col">
+                        <div className="reg-col col-lg-3 col-md-7">
                             <div className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.dobTo}</div>
                                 <DatePicker
@@ -439,7 +439,7 @@ class Registration extends Component {
                         </div>
                     </div>
                     <div className="row reg-filter-row" >
-                        <div className="reg-col" >
+                        <div className="reg-col col-lg-3 col-md-5" >
                             <div className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.product}</div>
                                 <Select
@@ -455,7 +455,7 @@ class Registration extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="reg-col1" >
+                        <div className="reg-col1 col-lg-3 col-md-7" >
                             <div className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.gender}</div>
                                 <Select
@@ -469,7 +469,7 @@ class Registration extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="reg-col" >
+                        <div className="reg-col col-lg-3 col-md-5" >
                             <div className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.affiliate}</div>
                                 <Select
@@ -485,7 +485,7 @@ class Registration extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="reg-col" >
+                        <div className="reg-col col-lg-3 col-md-7" >
                             <div className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.payment}</div>
                                 <Select
@@ -498,7 +498,7 @@ class Registration extends Component {
                         </div>
                     </div>
                     <div className="row reg-filter-row" >
-                        <div className="reg-col" >
+                        <div className="reg-col col-lg-3 col-md-5" >
                             <div className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.type}</div>
                                 <Select
@@ -515,18 +515,19 @@ class Registration extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="reg-col" style={{ marginRight: '25px' }}>
+                        <div className="reg-col col-lg-3 col-md-7">
                             <div className="reg-filter-col-cont" >
-                                <div className='year-select-heading'>{AppConstants.postCode}</div>
-                                <InputWithHead
-                                    placeholder={AppConstants.postCode}
-                                    onChange={(e) => this.onChangeDropDownValue(e.target.value, 'postalCode')}
-                                    value={this.state.postalCode}
-                                />
-
+                                <div className='year-select-heading'  style={{ width:95}}>{AppConstants.postCode}</div>
+								<div style={{width:'76%'}}>
+									<InputWithHead
+										placeholder={AppConstants.postCode}
+										onChange={(e) => this.onChangeDropDownValue(e.target.value, 'postalCode')}
+										value={this.state.postalCode}
+									/>
+								</div>
                             </div>
                         </div>
-                        <div className="reg-col">
+                        <div className="reg-col col-lg-3 col-md-5">
                             <div className="reg-filter-col-cont" style={{ marginRight: '30px' }}>
                                 <div className='year-select-heading'>{AppConstants.Regfrom}</div>
                                 <DatePicker
@@ -540,7 +541,7 @@ class Registration extends Component {
                                 />
                             </div>
                         </div>
-                        <div className="reg-col">
+                        <div className="reg-col col-lg-3 col-md-7">
                             <div className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.Regto}</div>
                                 <DatePicker
