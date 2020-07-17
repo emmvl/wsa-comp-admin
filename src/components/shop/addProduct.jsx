@@ -20,7 +20,7 @@ import {
     clearProductReducer,
 } from "../../store/actions/shopAction/productAction"
 import InputWithHead from "../../customComponents/InputWithHead";
-import { isArrayNotEmpty, isNotNullOrEmptyString, captializedString } from "../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString, captializedString, isImageFormatValid } from "../../util/helpers";
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, ContentState, convertFromHTML, } from 'draft-js';
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -157,6 +157,11 @@ class AddProduct extends Component {
                 weight: productDetailData.weight,
             });
         }
+        if (productDetailData.inventoryTracking === true) {
+            this.props.form.setFieldsValue({
+                quantity: productDetailData.quantity,
+            });
+        }
         let variants = productDetailData.variants
         if (productDetailData.variantsChecked === true) {
             variants.length > 0 &&
@@ -210,14 +215,18 @@ class AddProduct extends Component {
         let { productDetailData } = this.props.shopProductState
         let affiliatePostObject = productDetailData.affiliates
         let assignedValue = value == true ? 1 : 0
-        if (name === "Direct") {
-            affiliatePostObject.direct = assignedValue
-        }
-        if (name === "1st Level Affiliates - Association/ League") {
-            affiliatePostObject.firstLevel = assignedValue
-        }
-        if (name === "2nd Level Affiliates - Club/School") {
-            affiliatePostObject.secondLevel = assignedValue
+        switch (name) {
+            case AppConstants.direct:
+                affiliatePostObject.direct = assignedValue
+                break;
+            case AppConstants.firstLevelAffiliatesAssociationLeague:
+                affiliatePostObject.firstLevel = assignedValue
+                break;
+            case AppConstants.secondLevelAffiliatesClubSchool:
+                affiliatePostObject.secondLevel = assignedValue
+                break;
+            default:
+                break;
         }
         this.props.onChangeProductDetails(affiliatePostObject, 'affiliates')
     }
@@ -226,14 +235,15 @@ class AddProduct extends Component {
     checkedAffiliates = (name) => {
         let { productDetailData } = this.props.shopProductState
         let affiliate = productDetailData.affiliates
-        if (name === "Direct") {
-            return affiliate.direct
-        }
-        if (name === "1st Level Affiliates - Association/ League") {
-            return affiliate.firstLevel
-        }
-        if (name === "2nd Level Affiliates - Club/School") {
-            return affiliate.secondLevel
+        switch (name) {
+            case AppConstants.direct:
+                return affiliate.direct
+            case AppConstants.firstLevelAffiliatesAssociationLeague:
+                return affiliate.firstLevel
+            case AppConstants.secondLevelAffiliatesClubSchool:
+                return affiliate.secondLevel
+            default:
+                break;
         }
     }
 
@@ -286,10 +296,9 @@ class AddProduct extends Component {
     }
 
     handleFiles = (file) => {
-        let fileTypes = ['jpg', 'jpeg', 'png'];
         if (file) {
             let extension = file.name.split('.').pop().toLowerCase();
-            let isSuccess = fileTypes.indexOf(extension) > -1;
+            let isSuccess = isImageFormatValid(extension);
             if (isSuccess) {
                 let reader = new FileReader();
                 reader.onloadend = () => {
@@ -483,9 +492,9 @@ class AddProduct extends Component {
         let { productDetailData, typesProductList } = this.props.shopProductState
         console.log("productDetailData", productDetailData)
         let affiliateArray = [
-            { id: 1, name: "Direct" },
-            { id: 2, name: "1st Level Affiliates - Association/ League" },
-            { id: 3, name: "2nd Level Affiliates - Club/School" }
+            { id: 1, name: AppConstants.direct },
+            { id: 2, name: AppConstants.firstLevelAffiliatesAssociationLeague },
+            { id: 3, name: AppConstants.secondLevelAffiliatesClubSchool }
         ]
         return (
             <div className="content-view pt-4">
@@ -755,20 +764,33 @@ class AddProduct extends Component {
                         </div>
                         <div >
                             <span className="input-heading" >{AppConstants.quantity}</span>
-                            <InputNumber
-                                style={{ width: 70, }}
-                                // value={addEditMatch.matchDuration}
-                                formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                                onChange={(quantity) => this.props.onChangeProductDetails(
-                                    quantity,
-                                    'quantity'
+                            <Form.Item>
+                                {getFieldDecorator(
+                                    `quantity`, /////static index=1 for now
+                                    {
+                                        rules: [
+                                            {
+                                                required: true,
+                                                message:
+                                                    ValidationConstants.pleaseEnterQuantity,
+                                            },
+                                        ],
+                                    }
+                                )(
+                                    <InputNumber
+                                        style={{ width: 70, }}
+                                        formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                        parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                        onChange={(quantity) => this.props.onChangeProductDetails(
+                                            quantity,
+                                            'quantity'
+                                        )}
+                                        placeholder={AppConstants.quantity}
+                                        min={0}
+                                        type="number"
+                                    />
                                 )}
-                                placeholder={'0'}
-                                min={0}
-                                value={productDetailData.quantity}
-                                type="number"
-                            />
+                            </Form.Item>
                         </div>
                     </>}
                     <div className="pt-5">
@@ -835,76 +857,78 @@ class AddProduct extends Component {
                         </div>
 
                         {isArrayNotEmpty(varientOptionArray) && varientOptionArray.map((subItem, subIndex) => (
-                            <div className="row" key={"varientOptionArray" + subIndex}>
-                                <div className="col-sm">
-                                    <InputWithHead
-                                        heading={AppConstants.option}
-                                        placeholder={AppConstants.option}
-                                        onChange={(e) => this.onVariantOptionOnChange(e.target.value, "optionName", 0, subIndex)}
-                                        value={subItem.optionName}
-                                    />
-                                </div>
-                                <div className="col-sm">
-                                    <InputWithHead
-                                        heading={AppConstants.price}
-                                        placeholder={AppConstants.price}
-                                        prefix="$"
-                                        onChange={(e) => this.onVariantOptionOnChange(e.target.value, "price", 0, subIndex)}
-                                        value={subItem.properties.price}
-                                        type={"number"}
-                                    />
-                                </div>
-                                <div className="col-sm">
-                                    <InputWithHead
-                                        heading={AppConstants.cost}
-                                        placeholder={AppConstants.cost}
-                                        prefix="$"
-                                        onChange={(e) => this.onVariantOptionOnChange(e.target.value, "cost", 0, subIndex)}
-                                        value={subItem.properties.cost}
-                                        type={"number"}
-                                    />
-                                </div>
-                                <div className="col-sm">
-                                    <InputWithHead
-                                        heading={AppConstants.sku}
-                                        placeholder={AppConstants.sku}
-                                        onChange={(e) => this.onVariantOptionOnChange(e.target.value, "skuCode", 0, subIndex)}
-                                        value={subItem.properties.skuCode}
-                                    />
-                                </div>
-                                <div className="col-sm">
-                                    <InputWithHead
-                                        heading={AppConstants.barcode}
-                                        placeholder={AppConstants.barcode}
-                                        onChange={(e) => this.onVariantOptionOnChange(e.target.value, "barcode", 0, subIndex)}
-                                        value={subItem.properties.barcode}
-                                    />
-                                </div>
-                                <div className="col-sm">
-                                    <span className="input-heading" >{AppConstants.quantity}</span>
-                                    <InputNumber
-                                        style={{ width: 70 }}
-                                        formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                        parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                                        placeholder={'0'}
-                                        min={0}
-                                        onChange={(value) => this.onVariantOptionOnChange(value, "quantity", 0, subIndex)}
-                                        value={subItem.properties.quantity}
-                                        type={"number"}
-                                    />
-                                </div>
-                                <div className="col-sm red-remove-cross-img-div">
-                                    {subIndex > 0 && <div
-                                        style={{ cursor: 'pointer' }}>
-                                        <img
-                                            className="dot-image"
-                                            src={AppImages.redCross}
-                                            alt=""
-                                            width="16"
-                                            height="16"
-                                            onClick={() => this.addVariantOption(0, subIndex, "remove", subItem.properties.id)}
+                            <div className="prod-reg-inside-container-view">
+                                <div className="row" key={"varientOptionArray" + subIndex} >
+                                    <div className="col-sm">
+                                        <InputWithHead
+                                            heading={AppConstants.option}
+                                            placeholder={AppConstants.option}
+                                            onChange={(e) => this.onVariantOptionOnChange(e.target.value, "optionName", 0, subIndex)}
+                                            value={subItem.optionName}
                                         />
-                                    </div>}
+                                    </div>
+                                    <div className="col-sm">
+                                        <InputWithHead
+                                            heading={AppConstants.price}
+                                            placeholder={AppConstants.price}
+                                            prefix="$"
+                                            onChange={(e) => this.onVariantOptionOnChange(e.target.value, "price", 0, subIndex)}
+                                            value={subItem.properties.price}
+                                            type={"number"}
+                                        />
+                                    </div>
+                                    <div className="col-sm">
+                                        <InputWithHead
+                                            heading={AppConstants.cost}
+                                            placeholder={AppConstants.cost}
+                                            prefix="$"
+                                            onChange={(e) => this.onVariantOptionOnChange(e.target.value, "cost", 0, subIndex)}
+                                            value={subItem.properties.cost}
+                                            type={"number"}
+                                        />
+                                    </div>
+                                    <div className="col-sm">
+                                        <InputWithHead
+                                            heading={AppConstants.sku}
+                                            placeholder={AppConstants.sku}
+                                            onChange={(e) => this.onVariantOptionOnChange(e.target.value, "skuCode", 0, subIndex)}
+                                            value={subItem.properties.skuCode}
+                                        />
+                                    </div>
+                                    <div className="col-sm">
+                                        <InputWithHead
+                                            heading={AppConstants.barcode}
+                                            placeholder={AppConstants.barcode}
+                                            onChange={(e) => this.onVariantOptionOnChange(e.target.value, "barcode", 0, subIndex)}
+                                            value={subItem.properties.barcode}
+                                        />
+                                    </div>
+                                    <div className="col-sm">
+                                        <span className="input-heading" >{AppConstants.quantity}</span>
+                                        <InputNumber
+                                            style={{ width: 70 }}
+                                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                            parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                            placeholder={'0'}
+                                            min={0}
+                                            onChange={(value) => this.onVariantOptionOnChange(value, "quantity", 0, subIndex)}
+                                            value={subItem.properties.quantity}
+                                            type={"number"}
+                                        />
+                                    </div>
+                                    <div className="col-sm red-remove-cross-img-div">
+                                        {subIndex > 0 && <div
+                                            style={{ cursor: 'pointer' }}>
+                                            <img
+                                                className="dot-image"
+                                                src={AppImages.redCross}
+                                                alt=""
+                                                width="16"
+                                                height="16"
+                                                onClick={() => this.addVariantOption(0, subIndex, "remove", subItem.properties.id)}
+                                            />
+                                        </div>}
+                                    </div>
                                 </div>
                             </div>
                         ))}

@@ -182,7 +182,8 @@ const ValidationConstants = {
     userRegister: 'User register is required',
     competitionAdimistrator: 'Competition adimistrator is required',
     regChangeDate: 'Registration change date is required',
-    compStartDate: 'Competition start date is required'
+    compStartDate: 'Competition start date is required',
+    pleaseEnterQuantity: "Please enter quantity.",
 
 };
 
