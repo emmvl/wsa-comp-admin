@@ -229,6 +229,11 @@
 .user-filter-row .year-select-heading{
   width: 95px;
 }
+
+.select-heading-wid {
+  width: 120px !important;
+}
+
 .user-filter-row{
   margin-left: 8px;
 }
