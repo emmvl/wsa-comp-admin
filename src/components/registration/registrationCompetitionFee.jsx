@@ -2053,15 +2053,14 @@ class RegistrationCompetitionFee extends Component {
 
   // for  save  payment
   paymentApiCall = (competitionId) => {
-    let paymentDataArr = this.props.competitionFeesState
-      .competitionPaymentsData;
-    let selectedCasualPaymentArr = this.props.competitionFeesState
-      .selectedCasualFee;
-    let SelectedSeasonalPaymentArr = this.props.competitionFeesState
-      .SelectedSeasonalFee;
+    let paymentDataArr = this.props.competitionFeesState.competitionPaymentsData;
+    let selectedCasualPaymentArr = this.props.competitionFeesState.selectedCasualFee;
+    let SelectedSeasonalPaymentArr = this.props.competitionFeesState.SelectedSeasonalFee;
+    let selectedSeasonalTeamPaymentArr = this.props.competitionFeesState.selectedSeasonalTeamFee;
     let paymentOptionData = selectedCasualPaymentArr.concat(
-      SelectedSeasonalPaymentArr
+      SelectedSeasonalPaymentArr, selectedSeasonalTeamPaymentArr
     );
+    console.log("paymentOptionData", paymentOptionData);
     paymentDataArr.paymentOptions = paymentOptionData;
     let charityTitle = this.props.competitionFeesState.charityTitle;
     let charityDescription = this.props.competitionFeesState.charityDescription;
@@ -2073,7 +2072,7 @@ class RegistrationCompetitionFee extends Component {
       item.charityRoundUpDescription = charityDescription;
     });
     paymentDataArr.charityRoundUp = postCharityRoundUpData;
-    this.props.competitionPaymentApi(paymentDataArr, competitionId);
+    //this.props.competitionPaymentApi(paymentDataArr, competitionId);
   };
 
   ////check the division objects does not contain empty division array
@@ -2886,6 +2885,44 @@ class RegistrationCompetitionFee extends Component {
   SeasonalTreeSubAdvancedNode(item) {
     return <span>{item.description}</span>;
   }
+
+  // for creation seasonal team fee tree parent data
+  seasonalTeamDataTree = (tree) => {
+    const { TreeNode } = Tree;
+    return tree.map((item, catIndex) => {
+      return (
+        <TreeNode title={this.SeasonsalTeamDataNode(item)} key={item.id}>
+          {this.SeasonalTeamDataAdvancedNode(item, catIndex)}
+        </TreeNode>
+      );
+    });
+  };
+
+  // / for creation seasonal team fee tree child data
+  SeasonalTeamDataAdvancedNode(item, catIndex) {
+    const { TreeNode } = Tree;
+    return item.subReferences.map((inItem, scatIndex) => {
+      return (
+        <TreeNode
+          title={this.SeasonalTeamTreeSubAdvancedNode(inItem)}
+          key={inItem.id}
+        >
+          {/* {this.showParentSeasonalDataNode(inItem, catIndex, scatIndex)} */}
+        </TreeNode>
+      );
+    });
+  }
+
+   // for getting seasonal fee tree parent name
+   SeasonsalTeamDataNode = (item) => {
+    return <span>{item.description}</span>;
+  };
+
+   // / for getting seasonal team fee tree child name
+   SeasonalTeamTreeSubAdvancedNode(item) {
+    return <span>{item.description}</span>;
+  }
+
 
   ///////view for breadcrumb
   headerView = () => {
@@ -4398,7 +4435,7 @@ class RegistrationCompetitionFee extends Component {
       affiliateNonSelected,
       anyOrgNonSelected,
     } = this.props.competitionFeesState;
-    //console.log(this.props.appState.registrationInvitees, 'invitees');
+   // console.log(invitees, 'invitees');
     let orgLevelId = JSON.stringify(this.state.organisationTypeRefId);
     let regInviteesDisable = this.state.permissionState.regInviteesDisable;
     return (
@@ -4609,23 +4646,43 @@ class RegistrationCompetitionFee extends Component {
 
   //on change of casual fee payment option
   onChangeCasualFee(itemValue, paymentData) {
+    //console.log("itemValue", itemValue);
     this.props.updatePaymentFeeOption(itemValue, 'casualfee');
   }
-  //on change of casual fee payment option
-  onChangeSeasonalFee(itemValue, paymentData) {
+  //on change of Seasonal fee payment option
+  onChangeSeasonalFee(itemValue, info) {
+    //console.log("itemValue, info", itemValue, info);
     this.props.updatePaymentFeeOption(itemValue, 'seasonalfee');
   }
-
+    //on change of Seasonal Team fee payment option
+    onChangeSeasonalTeamFee(itemValue, info) {
+      //console.log("itemValue, info", itemValue, info);
+      this.props.updatePaymentFeeOption(itemValue, 'seasonalteamfee');
+    }
+    
+  
   checkIsSeasonal = (feeDetails) => {
     let isSeasonalValue = false;
     for (let i in feeDetails) {
-      if (feeDetails[i].isSeasonal == true || feeDetails[i].isTeamSeasonal) {
+      if (feeDetails[i].isSeasonal == true) {
         isSeasonalValue = true;
         break;
       }
     }
     return isSeasonalValue;
   };
+
+  checkIsTeamSeasonal = (feeDetails) => {
+    let isSeasonalValue = false;
+    for (let i in feeDetails) {
+      if (feeDetails[i].isTeamSeasonal) {
+        isSeasonalValue = true;
+        break;
+      }
+    }
+    return isSeasonalValue;
+  };
+
   checkIsCasual = (feeDetails) => {
     let isCasuallValue = false;
     for (let i in feeDetails) {
@@ -4643,38 +4700,25 @@ class RegistrationCompetitionFee extends Component {
     let feeDetails = allStates.competitionFeesData;
     let isSeasonal = this.checkIsSeasonal(feeDetails);
     let isCasual = this.checkIsCasual(feeDetails);
+    let isTeamSeasonal = this.checkIsTeamSeasonal(feeDetails);
     let casualPayment = this.props.competitionFeesState.casualPaymentDefault;
-    let seasonalPayment = this.props.competitionFeesState
-      .seasonalPaymentDefault;
+    let seasonalPayment = this.props.competitionFeesState.seasonalPaymentDefault;
+    let seasonalTeamPayment = this.props.competitionFeesState.seasonalTeamPaymentDefault;
+
     let paymentData = this.props.competitionFeesState.competitionPaymentsData;
-    let selectedSeasonalFeeKey = this.props.competitionFeesState
-      .SelectedSeasonalFeeKey;
-    let selectedCasualFeeKey = this.props.competitionFeesState
-      .selectedCasualFeeKey;
+    let selectedSeasonalFeeKey = this.props.competitionFeesState.SelectedSeasonalFeeKey;
+    let selectedCasualFeeKey = this.props.competitionFeesState.selectedCasualFeeKey;
+    let selectedSeasonalTeamFeeKey = this.props.competitionFeesState.selectedSeasonalTeamFeeKey;
+
     let paymentsDisable = this.state.permissionState.paymentsDisable;
-    let seasonalExpendeKey =
-      selectedSeasonalFeeKey.includes('6') ||
-        selectedSeasonalFeeKey.includes('7') ||
-        selectedSeasonalFeeKey.includes('8') ||
-        selectedSeasonalFeeKey.includes(6) ||
-        selectedSeasonalFeeKey.includes(7) ||
-        selectedSeasonalFeeKey.includes(8)
-        ? '5'
-        : null;
-    let casuallExpendeKey =
-      selectedCasualFeeKey.includes('6') ||
-        selectedCasualFeeKey.includes('7') ||
-        selectedCasualFeeKey.includes('8') ||
-        selectedCasualFeeKey.includes(6) ||
-        selectedCasualFeeKey.includes(7) ||
-        selectedCasualFeeKey.includes(8)
-        ? '5'
-        : null;
-    // console.log(seasonalExpendeKey);
+    let seasonalExpendeKey = this.props.competitionFeesState.seasonalExpendedKey;
+    let casuallExpendeKey =  this.props.competitionFeesState.casusalExpendedKey;
+    let seasonalTeamExpendeKey = this.props.competitionFeesState.seasonalTeamExpendedKey;
+
     return (
       <div className="fees-view pt-5">
         <span className="form-heading">{AppConstants.paymentOptions}</span>
-        {isSeasonal == false && isCasual == false && (
+        {isSeasonal == false && isCasual == false && isTeamSeasonal == false && (
           <span className="applicable-to-heading pt-0">
             {AppConstants.please_Sel_Fee}
           </span>
@@ -4696,7 +4740,7 @@ class RegistrationCompetitionFee extends Component {
               expandedKeys={[seasonalExpendeKey]}
               defaultCheckedKeys={[]}
               checkedKeys={selectedSeasonalFeeKey}
-              onCheck={(e) => this.onChangeSeasonalFee(e, paymentData)}
+              onCheck={(e, info) => this.onChangeSeasonalFee(e, info)}
               disabled={paymentsDisable}
             >
               {this.seasonalDataTree(seasonalPayment)}
@@ -4725,6 +4769,30 @@ class RegistrationCompetitionFee extends Component {
               disabled={paymentsDisable}
             >
               {this.casualDataTree(casualPayment)}
+            </Tree>
+          </div>
+        )}
+        {isTeamSeasonal == true && (
+          <div className="inside-container-view">
+            <div className="contextualHelp-RowDirection">
+              <span className="form-heading">{AppConstants.teamSeasonalFee}</span>
+              <div style={{ marginTop: 4 }}>
+                <CustumToolTip placement="top" background="#ff8237">
+                  <span>{AppConstants.paymentSeasonalFeeMsg}</span>
+                </CustumToolTip>
+              </div>
+            </div>
+            <Tree
+              style={{ flexDirection: 'column' }}
+              className="tree-government-rebate tree-selection-icon"
+              checkable
+              expandedKeys={[seasonalTeamExpendeKey]}
+              defaultCheckedKeys={[]}
+              checkedKeys={selectedSeasonalTeamFeeKey}
+              onCheck={(e, info) => this.onChangeSeasonalTeamFee(e, info)}
+              disabled={paymentsDisable}
+            >
+              {this.seasonalTeamDataTree(seasonalTeamPayment)}
             </Tree>
           </div>
         )}

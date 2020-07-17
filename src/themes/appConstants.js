@@ -1442,6 +1442,8 @@ const AppConstants = {
   decline: 'DECLINE',
   firstLevelAffiliatesAssociationLeague: "1st Level Affiliates - Association/ League",
   secondLevelAffiliatesClubSchool: "2nd Level Affiliates - Club/School",
+  teamSeasonalFee: 'Team Seasonal Fee'
+
 };
 
 export default AppConstants;
