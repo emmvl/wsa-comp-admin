@@ -1439,7 +1439,8 @@ const AppConstants = {
   otherReason: 'Other',
   approvals: 'Approvals',
   approve: 'APPROVE',
-  decline: 'DECLINE'
+  decline: 'DECLINE',
+  teamSeasonalFee: 'Team Seasonal Fee'
 
 };
 

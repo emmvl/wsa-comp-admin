@@ -65,12 +65,16 @@ const initialState = {
     postInvitees: [],
     casualPaymentDefault: [],
     seasonalPaymentDefault: [],
+    seasonalTeamPaymentDefault: [],
     SelectedSeasonalFee: [],
     selectedCasualFee: [],
+    selectedSeasonalTeamFee: [],
     selectedCasualFeeKey: [],
     SelectedSeasonalFeeKey: [],
+    selectedSeasonalTeamFeeKey: [],
     seasonalExpendedKey: null,
     casusalExpendedKey: null,
+    seasonalTeamExpendedKey: null,
     charityRoundUp: [],
     govtVoucher: [],
     competionDiscountValue:
@@ -91,6 +95,7 @@ const initialState = {
     selectedProductType: [],
     defaultSelectedCasualFee: [],
     defaultSelectedSeasonalFee: [],
+    defaultSelectedSeasonalTeamFee: [],
     selectedCharityArray: [],
     defaultChairtyOption: [],
     defaultGovtVoucher: [],
@@ -429,7 +434,7 @@ function checkSelectedSeasonalFee(paymentDataArray, seasonalFee, selectedSeasona
     selectedSeasonalFeeKey = []
     if (paymentDataArray) {
         for (let i in paymentDataArray) {
-            if (paymentDataArray[i].feesTypeRefId == 2) {
+            if (paymentDataArray[i].feesTypeRefId == 3) {
                 selectedSeasonalFeeKey.push(paymentDataArray[i].paymentOptionRefId)
                 selectedSeasonalFee.push(paymentDataArray[i])
             }
@@ -444,6 +449,31 @@ function checkSelectedSeasonalFee(paymentDataArray, seasonalFee, selectedSeasona
         return {
             selectedSeasonalFeeKey,
             selectedSeasonalFee,
+        }
+    }
+}
+
+
+// get selected Seasonal Team fee payment option key
+function checkSelectedSeasonalTeamFee(paymentDataArray, seasonalFee, selectedSeasonalTeamFee, selectedSeasonalTeamFeeKey) {
+    selectedSeasonalTeamFeeKey = []
+    if (paymentDataArray) {
+        for (let i in paymentDataArray) {
+            if (paymentDataArray[i].feesTypeRefId == 3) {
+                selectedSeasonalTeamFeeKey.push(paymentDataArray[i].paymentOptionRefId)
+                selectedSeasonalTeamFee.push(paymentDataArray[i])
+            }
+        }
+        return {
+            selectedSeasonalTeamFeeKey,
+            selectedSeasonalTeamFee
+        }
+
+    }
+    else {
+        return {
+            selectedSeasonalTeamFeeKey,
+            selectedSeasonalTeamFee,
         }
     }
 }
@@ -1553,6 +1583,7 @@ function competitionFees(state = initialState, action) {
                 onLoad: false,
                 status: action.status,
                 seasonalPaymentDefault: seasonalPayment,
+                seasonalTeamPaymentDefault: seasonalPayment,
                 error: null
             };
 
@@ -1632,6 +1663,7 @@ function competitionFees(state = initialState, action) {
             state.selectedInvitees = selectedInvitees
             let selectedCasualFee = checkSelectedCasualFee(allData.competitionpayments.paymentOptions, state.casualPaymentDefault, state.selectedCasualFee, state.selectedCasualFeeKey)
             let selectedSeasonalFee = checkSelectedSeasonalFee(allData.competitionpayments.paymentOptions, state.seasonalPaymentDefault, state.SelectedSeasonalFee, state.SelectedSeasonalFeeKey)
+            let selectedSeasonalTeamFee = checkSelectedSeasonalTeamFee(allData.competitionpayments.paymentOptions, state.seasonalTeamPaymentDefault, state.selectedSeasonalTeamFee, state.selectedSeasonalTeamFeeKey)
             let finalDiscountData = discountDataObject(allData.competitiondiscounts)
             state.competionDiscountValue.competitionDiscounts[0].discounts = finalDiscountData
             let selectedCharity = checkSelectedCharity(allData.competitionpayments.charityRoundUp, state.charityRoundUp)
@@ -1686,9 +1718,12 @@ function competitionFees(state = initialState, action) {
                 selectedCasualFeeKey: selectedCasualFee.selectedCasualFeeKey,
                 selectedSeasonalFee: selectedSeasonalFee.selectedSeasonalFee,
                 SelectedSeasonalFeeKey: selectedSeasonalFee.selectedSeasonalFeeKey,
+                selectedSeasonalTeamFee: selectedSeasonalTeamFee.selectedSeasonalTeamFee,
+                selectedSeasonalTeamFeeKey: selectedSeasonalTeamFee.selectedSeasonalTeamFeeKey,
                 competitionId: allData.competitiondetail.competitionUniqueKey,
                 defaultSelectedCasualFee: selectedCasualFee.selectedCasualFee,
                 defaultSelectedSeasonalFee: selectedSeasonalFee.selectedSeasonalFee,
+                defaultSelectedSeasonalTeamFee: selectedSeasonalTeamFee.selectedSeasonalTeamFee,
                 defaultChairtyOption: allData.competitionpayments.charityRoundUp,
                 defaultGovtVoucher: allData.competitiondiscounts.govermentVouchers,
                 error: null
@@ -1994,18 +2029,28 @@ function competitionFees(state = initialState, action) {
         case ApiConstants.UPDATE_PAYMENTS_OPTIONS_COMPETITION_FEES:
             let getUpdatedCasualFeeArr = []
             let getUpdatedSeasonalFeeArr = []
+            let getUpdatedSeasonalTeamFeeArr = []
+            console.log("action.value", action.value);
             if (action.key == "casualfee") {
                 state.selectedCasualFeeKey = action.value;
                 state.casusalExpendedKey = action.value[0];
                 let updatedCasual = getUpdatedCasualFee(action.value, getUpdatedCasualFeeArr, state.defaultSelectedCasualFee, 1)
                 state.selectedCasualFee = updatedCasual
             }
-            else {
+            else if(action.key == "seasonalfee"){
                 state.SelectedSeasonalFeeKey = action.value;
                 state.seasonalExpendedKey = action.value[0];
                 let updatedSeasonal = getUpdatedSeasonalFee(action.value, getUpdatedSeasonalFeeArr, state.defaultSelectedSeasonalFee, 2)
+                console.log("updatedSeasonal", updatedSeasonal);
                 state.SelectedSeasonalFee = updatedSeasonal
 
+            }
+            else if(action.key == "seasonalteamfee"){
+                state.selectedSeasonalTeamFeeKey = action.value;
+                state.seasonalTeamExpendedKey = action.value[0];
+                let updatedTeamSeasonal = getUpdatedSeasonalFee(action.value, getUpdatedSeasonalTeamFeeArr, state.defaultSelectedSeasonalTeamFee, 3)
+                console.log("updatedTeamSeasonal", updatedTeamSeasonal);
+                state.selectedSeasonalTeamFee = updatedTeamSeasonal
             }
             return { ...state }
 
@@ -2268,10 +2313,13 @@ function competitionFees(state = initialState, action) {
                 state.competitionFeesData = []
                 state.selectedCasualFee = []
                 state.SelectedSeasonalFee = []
+                state.selectedSeasonalTeamFee = []
                 state.SelectedSeasonalFeeKey = []
                 state.selectedCasualFeeKey = []
+                state.selectedSeasonalTeamFeeKey = []
                 state.seasonalExpendedKey = null
                 state.casusalExpendedKey = null
+                state.seasonalTeamExpendedKey = null
 
                 // state.charityRoundUp = []
                 // state.govtVoucher = []
