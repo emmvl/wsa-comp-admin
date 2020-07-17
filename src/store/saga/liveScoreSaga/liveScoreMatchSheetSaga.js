@@ -85,7 +85,7 @@ export function* liveScoreMatchSheetPrintSaga(action) {
                 status: result.status,
             });
             message.config({ duration: 5, maxCount: 1 });
-            message.loading('Print is processing now, please check download table after for a while.')
+            message.loading('Print is in processing now, please refresh downloads table after for a while.')
         } else {
             yield call(failSaga, result)
         }

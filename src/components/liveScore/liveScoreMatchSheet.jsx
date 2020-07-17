@@ -411,7 +411,7 @@ class LiveScoreMatchSheet extends Component {
                                 onChange={(division) => this.changeDivision({division})}
                                 value={this.state.division}
                             >
-                                {division.map((item) => <Option value={item.id} key={item.id}>{item.name}</Option>)}
+                                {division.length > 0 && division.map((item) => <Option value={item.id} key={item.id}>{item.name}</Option>)}
                             </Select>
                         </div>
                     </div>
@@ -428,14 +428,13 @@ class LiveScoreMatchSheet extends Component {
                                 value={this.state.selectedTeam}
                                 placeholder="Select template type"
                             >
-                                {teamList.map((item) => <Option value={item.id} key={item.id}>{item.name}</Option>)}
+                                {teamList.length > 0 && teamList.map((item) => <Option value={item.id} key={item.id}>{item.name}</Option>)}
                             </Select>
                         </div>
                     </div>
                 </div>
-                {/*  //////app was crashing so we commented this code.(Samir Team)
 
-                 <div className="fluid-width" style={{marginTop: 15}}>   
+                <div className="fluid-width" style={{marginTop: 15}}>
                     <div className="row">
                         <div className="col-sm">
                             <InputWithHead heading={AppConstants.templateType}/>
@@ -446,42 +445,12 @@ class LiveScoreMatchSheet extends Component {
                                 onChange={(selectedTemplateId) => this.onChangeTemplate(selectedTemplateId)}
                                 value={this.state.selectedTemplateId ?? 'Select template type'}
                             >
-                                {templateList.map((item) => <Option value={item.id} key={item.id}>{item.description}</Option>)}
+                                {templateList.length > 0 && templateList.map(
+                                    (item) => <Option value={item.id} key={item.id}>{item.description}</Option>)}
                             </Select>
                         </div>
                     </div>
-                </div> */}
-
-                <Checkbox
-                    className="single-checkbox pt-3"
-                    defaultChecked={false}
-                    onChange={(e) => this.setState({gameTimeTracking: e.target.checked})}>
-                    {AppConstants.gameTimeTracking}
-                </Checkbox>
-                {this.state.gameTimeTracking && (
-                    <div className="comp-match-sheets-game-time-track-radio-view">
-                        <Radio.Group onChange={this.onChange} value={this.state.value} defaultValue="periods">
-                            <Radio value="periods">{AppConstants.periods}</Radio>
-                            <Radio value="minutes">{AppConstants.minutes}</Radio>
-                        </Radio.Group>
-                    </div>
-                )}
-                <div>
-                    <Checkbox
-                        className="single-checkbox"
-                        defaultChecked
-                        onChange={(e) => this.onChange(e)}
-                    >
-                        {AppConstants.positionTracking}
-                    </Checkbox>
                 </div>
-                <Checkbox
-                    className="single-checkbox"
-                    defaultChecked
-                    onChange={(e) => this.onChange(e)}
-                >
-                    {AppConstants.shooting}%
-                </Checkbox>
             </div>
         );
     };
