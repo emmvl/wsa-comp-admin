@@ -433,7 +433,9 @@ class LiveScoreMatchSheet extends Component {
                         </div>
                     </div>
                 </div>
-
+                
+{/*----------- This code is commented by Samir Team  because of crashing the entire application-------////////
+                
                 <div className="fluid-width" style={{marginTop: 15}}>
                     <div className="row">
                         <div className="col-sm">
@@ -450,7 +452,7 @@ class LiveScoreMatchSheet extends Component {
                             </Select>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         );
     };
