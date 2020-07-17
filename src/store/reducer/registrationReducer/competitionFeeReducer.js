@@ -481,7 +481,7 @@ function checkSelectedSeasonalTeamFee(paymentDataArray, seasonalFee, selectedSea
 
 // for  updated selected Casual fee array
 function getUpdatedSeasonalFee(value, getUpdatedCasualFeeArr, allDataCasualFee, key) {
-    console.log("getUpdatedSeasonalFee.length" + allDataCasualFee.length);
+    //console.log("getUpdatedSeasonalFee.length" + allDataCasualFee.length);
     for (let i in value) {
         if (allDataCasualFee.length > 0) {
             for (let j in allDataCasualFee) {
@@ -520,7 +520,7 @@ function getUpdatedSeasonalFee(value, getUpdatedCasualFeeArr, allDataCasualFee, 
                     "paymentOptionId": 0
                 }
                 getUpdatedCasualFeeArr.push(object)
-                break
+                //break
             }
         }
     }
@@ -528,7 +528,7 @@ function getUpdatedSeasonalFee(value, getUpdatedCasualFeeArr, allDataCasualFee, 
 }
 
 function getUpdatedCasualFee(value, getUpdatedCasualFeeArr, allDataCasualFee, key) {
-    console.log("allDataCasualFee.length" + allDataCasualFee.length);
+  //  console.log("allDataCasualFee.length" + allDataCasualFee.length);
     for (let i in value) {
         if (allDataCasualFee.length > 0) {
             for (let j in allDataCasualFee) {
@@ -567,7 +567,7 @@ function getUpdatedCasualFee(value, getUpdatedCasualFeeArr, allDataCasualFee, ke
                     "paymentOptionId": 0
                 }
                 getUpdatedCasualFeeArr.push(object)
-                break
+                //break
             }
         }
     }
@@ -2030,7 +2030,6 @@ function competitionFees(state = initialState, action) {
             let getUpdatedCasualFeeArr = []
             let getUpdatedSeasonalFeeArr = []
             let getUpdatedSeasonalTeamFeeArr = []
-            console.log("action.value", action.value);
             if (action.key == "casualfee") {
                 state.selectedCasualFeeKey = action.value;
                 state.casusalExpendedKey = action.value[0];
@@ -2041,7 +2040,6 @@ function competitionFees(state = initialState, action) {
                 state.SelectedSeasonalFeeKey = action.value;
                 state.seasonalExpendedKey = action.value[0];
                 let updatedSeasonal = getUpdatedSeasonalFee(action.value, getUpdatedSeasonalFeeArr, state.defaultSelectedSeasonalFee, 2)
-                console.log("updatedSeasonal", updatedSeasonal);
                 state.SelectedSeasonalFee = updatedSeasonal
 
             }
@@ -2049,7 +2047,6 @@ function competitionFees(state = initialState, action) {
                 state.selectedSeasonalTeamFeeKey = action.value;
                 state.seasonalTeamExpendedKey = action.value[0];
                 let updatedTeamSeasonal = getUpdatedSeasonalFee(action.value, getUpdatedSeasonalTeamFeeArr, state.defaultSelectedSeasonalTeamFee, 3)
-                console.log("updatedTeamSeasonal", updatedTeamSeasonal);
                 state.selectedSeasonalTeamFee = updatedTeamSeasonal
             }
             return { ...state }
