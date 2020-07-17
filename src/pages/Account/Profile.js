@@ -7,6 +7,7 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import InputWithHead from "../../customComponents/InputWithHead";
 import { userPhotoUpdateAction, userDetailUpdateAction } from "../../store/actions/userAction/userAction";
+import { captializedString } from "../../util/helpers";
 import Loader from "../../customComponents/loader";
 
 function Profile(props) {
@@ -123,6 +124,12 @@ function Profile(props) {
             placeholder={AppConstants.enterFirstName}
             value={user.firstName}
             onChange={onChangeField}
+            onBlur={(e) => {
+              setUser({
+                ...user,
+                firstName: captializedString(e.currentTarget.value),
+              });
+            }}
           />
 
           <InputWithHead
@@ -132,6 +139,12 @@ function Profile(props) {
             placeholder={AppConstants.enterLastName}
             value={user.lastName}
             onChange={onChangeField}
+            onBlur={(e) => {
+              setUser({
+                ...user,
+                lastName: captializedString(e.currentTarget.value),
+              });
+            }}
           />
 
           <InputWithHead

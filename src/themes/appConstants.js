@@ -1439,8 +1439,9 @@ const AppConstants = {
   otherReason: 'Other',
   approvals: 'Approvals',
   approve: 'APPROVE',
-  decline: 'DECLINE'
-
+  decline: 'DECLINE',
+  firstLevelAffiliatesAssociationLeague: "1st Level Affiliates - Association/ League",
+  secondLevelAffiliatesClubSchool: "2nd Level Affiliates - Club/School",
 };
 
 export default AppConstants;

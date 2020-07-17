@@ -27,7 +27,6 @@ class ListProducts extends Component {
             limit: 8,
             deleteLoading: false,
         }
-
     }
 
 
@@ -183,6 +182,7 @@ class ListProducts extends Component {
                                     productItem={item}
                                     deleteOnclick={() => this.showDeleteConfirm(item.id)}
                                     editOnclick={() => history.push("/addProduct", { id: item.id })}
+                                    viewOnclick={() => history.push("/addProduct", { id: item.id })}
                                 />
                             </div>
                         )
