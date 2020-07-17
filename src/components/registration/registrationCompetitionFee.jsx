@@ -2545,9 +2545,11 @@ class RegistrationCompetitionFee extends Component {
           }
         }
 
+        console.log("finalpostarray"+ JSON.stringify(finalpostarray));
+
         if (finalpostarray.length > 0) {
-          this.props.saveCompetitionFeeSection(finalpostarray, competitionId);
-          this.setState({ loading: true });
+          // this.props.saveCompetitionFeeSection(finalpostarray, competitionId);
+          // this.setState({ loading: true });
         } else {
           message.error(ValidationConstants.feesCannotBeEmpty);
         }
