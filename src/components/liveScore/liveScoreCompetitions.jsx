@@ -254,10 +254,13 @@ class LiveScoreCompetitions extends Component {
         console.log(this.state.orgLevel, 'this.state.orgLevel')
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
-                <div className="fluid-width">
-                    <div className="row">
+                <div className="fluid-width" style={{
+                    display: "flex", maxWidth: "99%",
+                    justifyContent: "flex-end"
+                }}>
+                    {/* <div className="row"> */}
 
-                        {/* <div className="col-sm">
+                    {/* <div className="col-sm">
                             <div className="year-select-heading-view">
                                 <span className="year-select-heading">
                                     {AppConstants.year}:
@@ -279,80 +282,75 @@ class LiveScoreCompetitions extends Component {
                                 </Select>
                             </div>
                         </div> */}
-                        <div className="col-sm" style={{
-                            display: "flex", maxWidth: "99%",
-                            justifyContent: "flex-end"
-                        }}>
-                            <div className="row">
+                    <div className="row">
 
-                                <div className="col-sm">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: "100%",
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
-                                        {this.state.orgLevel === "state" &&
-                                            <Button onClick={() => {
-                                                setKeyForStateWideMessage('stateWideMessege')
-                                                this.props.history.push({
-                                                    pathname: '/liveScoreNewsList',
-                                                    state: { screenKey: 'stateWideMsg' }
-                                                })
-                                            }}
-                                                className="primary-add-comp-form" type="primary">
-                                                {AppConstants.stateWideMsg}
-                                            </Button>
-                                        }
+                        <div className="col-sm">
+                            <div
+                                className="comp-dashboard-botton-view-mobile"
+                                style={{
+                                    width: "100%",
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    justifyContent: "flex-end"
+                                }}
+                            >
+                                {this.state.orgLevel === "state" &&
+                                    <Button onClick={() => {
+                                        setKeyForStateWideMessage('stateWideMessege')
+                                        this.props.history.push({
+                                            pathname: '/liveScoreNewsList',
+                                            state: { screenKey: 'stateWideMsg' }
+                                        })
+                                    }}
+                                        className="primary-add-comp-form" type="primary">
+                                        {AppConstants.stateWideMsg}
+                                    </Button>
+                                }
 
-                                    </div>
-                                </div>
+                            </div>
+                        </div>
 
-                                <div className="col-sm">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: "100%",
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
-                                        <Button
-                                            onClick={() => {
-                                                localStorage.removeItem('LiveScoreCompetiton')
-                                                this.props.history.push('/liveScoreSettingsView', 'add')
-                                            }}
-                                            className="primary-add-comp-form" type="primary">
-                                            + {AppConstants.addCompetition}
-                                        </Button>
+                        <div className="col-sm">
+                            <div
+                                className="comp-dashboard-botton-view-mobile"
+                                style={{
+                                    width: "100%",
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    justifyContent: "flex-end"
+                                }}
+                            >
+                                <Button
+                                    onClick={() => {
+                                        localStorage.removeItem('LiveScoreCompetiton')
+                                        this.props.history.push('/liveScoreSettingsView', 'add')
+                                    }}
+                                    className="primary-add-comp-form" type="primary">
+                                    + {AppConstants.addCompetition}
+                                </Button>
 
-                                    </div>
-                                </div>
-                                <div className="col-sm">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: "100%",
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                    >
-                                        <Button className="primary-add-comp-form" type="primary">
-                                            + {AppConstants.replicateCompetition}
-                                        </Button>
-                                    </div>
-                                </div>
+                            </div>
+                        </div>
+                        <div className="col-sm">
+                            <div
+                                className="comp-dashboard-botton-view-mobile"
+                                style={{
+                                    width: "100%",
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    justifyContent: "flex-end"
+                                }}
+                            >
+                                <Button className="primary-add-comp-form" type="primary">
+                                    + {AppConstants.replicateCompetition}
+                                </Button>
                             </div>
                         </div>
                     </div>
+                    {/* </div> */}
 
                 </div>
             </div>
