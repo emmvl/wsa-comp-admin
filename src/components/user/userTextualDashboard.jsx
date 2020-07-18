@@ -446,11 +446,13 @@ class UserTextualDashboard extends Component{
                         <div className="user-col col-lg-3 col-md-6" >
                             <div  className="user-filter-col-postal" >
                                 <div className='year-select-heading  select-heading-wid'>{AppConstants.postCode}</div>
-                                <InputWithHead
-                                    placeholder={AppConstants.postCode}
-                                    onChange={(e) => this.onChangeDropDownValue(e.target.value, 'postalCode')}
-                                    value={this.state.postalCode}
-                                />
+								<div style={{width:'100%'}}>
+                                    <InputWithHead
+										placeholder={AppConstants.postCode}
+										onChange={(e) => this.onChangeDropDownValue(e.target.value, 'postalCode')}
+										value={this.state.postalCode}
+									/>
+                                </div>
                             </div>
                         </div>
                         <div className="user-col col-lg-3 col-md-6">

@@ -2072,7 +2072,7 @@ class RegistrationCompetitionFee extends Component {
       item.charityRoundUpDescription = charityDescription;
     });
     paymentDataArr.charityRoundUp = postCharityRoundUpData;
-    //this.props.competitionPaymentApi(paymentDataArr, competitionId);
+    this.props.competitionPaymentApi(paymentDataArr, competitionId);
   };
 
   ////check the division objects does not contain empty division array
@@ -2544,6 +2544,8 @@ class RegistrationCompetitionFee extends Component {
             finalpostarray = modifyArr;
           }
         }
+
+       // console.log("finalpostarray"+ JSON.stringify(finalpostarray));
 
         if (finalpostarray.length > 0) {
           this.props.saveCompetitionFeeSection(finalpostarray, competitionId);
@@ -4704,7 +4706,7 @@ class RegistrationCompetitionFee extends Component {
     let casualPayment = this.props.competitionFeesState.casualPaymentDefault;
     let seasonalPayment = this.props.competitionFeesState.seasonalPaymentDefault;
     let seasonalTeamPayment = this.props.competitionFeesState.seasonalTeamPaymentDefault;
-
+   // console.log("seasonalTeamPayment, seasonalPayment ", seasonalTeamPayment, seasonalPayment)
     let paymentData = this.props.competitionFeesState.competitionPaymentsData;
     let selectedSeasonalFeeKey = this.props.competitionFeesState.SelectedSeasonalFeeKey;
     let selectedCasualFeeKey = this.props.competitionFeesState.selectedCasualFeeKey;
@@ -4737,8 +4739,8 @@ class RegistrationCompetitionFee extends Component {
               style={{ flexDirection: 'column' }}
               className="tree-government-rebate tree-selection-icon"
               checkable
-              expandedKeys={[seasonalExpendeKey]}
-              defaultCheckedKeys={[]}
+              expandedKeys={['1','5']}
+              //defaultCheckedKeys={[]}
               checkedKeys={selectedSeasonalFeeKey}
               onCheck={(e, info) => this.onChangeSeasonalFee(e, info)}
               disabled={paymentsDisable}
@@ -4761,9 +4763,9 @@ class RegistrationCompetitionFee extends Component {
               style={{ flexDirection: 'column' }}
               className="tree-government-rebate tree-selection-icon"
               checkable
-              defaultExpandedKeys={[]}
-              defaultCheckedKeys={[]}
-              expandedKeys={[casuallExpendeKey]}
+              //defaultExpandedKeys={[]}
+              //defaultCheckedKeys={[]}
+              expandedKeys={['1','4','8','12']}
               checkedKeys={selectedCasualFeeKey}
               onCheck={(e) => this.onChangeCasualFee(e, paymentData)}
               disabled={paymentsDisable}
@@ -4786,8 +4788,8 @@ class RegistrationCompetitionFee extends Component {
               style={{ flexDirection: 'column' }}
               className="tree-government-rebate tree-selection-icon"
               checkable
-              expandedKeys={[seasonalTeamExpendeKey]}
-              defaultCheckedKeys={[]}
+              expandedKeys={['1','5']}
+              //defaultCheckedKeys={[]}
               checkedKeys={selectedSeasonalTeamFeeKey}
               onCheck={(e, info) => this.onChangeSeasonalTeamFee(e, info)}
               disabled={paymentsDisable}
