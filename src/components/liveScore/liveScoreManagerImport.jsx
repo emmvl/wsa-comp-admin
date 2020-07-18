@@ -7,7 +7,7 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { liveScoreCoachImportAction } from '../../store/actions/LiveScoreAction/liveScoreCoachAction'
+import { liveScoreManagerImportAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 import Loader from '../../customComponents/loader'
 import { message } from "antd";
 import ValidationConstants from "../../themes/validationConstant";
@@ -48,7 +48,7 @@ class liveScoreManagerImport extends Component {
                     <div className="row" >
                         <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
                             <Breadcrumb separator=" > ">
-                                <Breadcrumb.Item className="breadcrumb-add">{AppConstants.importCoach}</Breadcrumb.Item>
+                                <Breadcrumb.Item className="breadcrumb-add">{AppConstants.importManager}</Breadcrumb.Item>
                             </Breadcrumb>
                         </div>
                     </div>
@@ -65,7 +65,7 @@ class liveScoreManagerImport extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
 
         if (this.state.csvdata) {
-            this.props.liveScoreCoachImportAction({ id: id, csvFile: this.state.csvdata })
+            this.props.liveScoreManagerImportAction({ id: id, csvFile: this.state.csvdata })
         } else {
             message.config({ duration: 0.9, maxCount: 1 })
             message.error(ValidationConstants.csvField)
@@ -107,7 +107,7 @@ class liveScoreManagerImport extends Component {
                     style={{ marginTop: 10 }}>
                     <div className="row">
                         <div className="reg-add-save-button">
-                            <Button className="primary-add-comp-form" type="primary">
+                            <Button onClick={() => this.onUploadBtn()} className="primary-add-comp-form" type="primary">
                                 {AppConstants.upload}
                             </Button>
                         </div>
@@ -131,7 +131,7 @@ class liveScoreManagerImport extends Component {
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"4"} />
-                <Loader visible={this.props.liveScoreCoachState.onLoad || this.props.appState.onLoad} />
+                <Loader visible={this.props.liveScoreMangerState.onLoad || this.props.appState.onLoad} />
                 <Layout>
                     {this.headerView()}
                     <Content>
@@ -146,12 +146,12 @@ class liveScoreManagerImport extends Component {
     }
 }
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScoreCoachImportAction, userExportFilesAction }, dispatch)
+    return bindActionCreators({ liveScoreManagerImportAction, userExportFilesAction }, dispatch)
 }
 
 function mapStateToProps(state) {
     return {
-        liveScoreCoachState: state.LiveScoreCoachState,
+        liveScoreMangerState: state.LiveScoreMangerState,
         appState: state.AppState
     }
 }

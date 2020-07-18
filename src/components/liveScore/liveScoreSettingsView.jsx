@@ -570,19 +570,25 @@ class LiveScoreSettingsView extends Component {
                 </div>
 
                 {/* Record Umpire dropdown view */}
-                <InputWithHead conceptulHelp conceptulHelpMsg={AppConstants.recordUmpireMsg} marginTop={5} heading={AppConstants.recordUmpire} />
+                <InputWithHead required={"required-field pb-3"} conceptulHelp conceptulHelpMsg={AppConstants.recordUmpireMsg} marginTop={5} heading={AppConstants.recordUmpire} />
                 <div className="row" >
                     <div className="col-sm" >
-                        <Select
-                            placeholder={'Select Record Umpire'}
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
-                            onChange={recordUmpire => this.props.onChangeSettingForm({ key: "recordUmpire", data: recordUmpire })}
-                            value={recordUmpire}
-                        >
-                            <Option value={"NONE"}>{'None'}</Option>
-                            <Option value={"USERS"}>{'Integrated'}</Option>
-                            <Option value={"NAMES"}>{'At courts'}</Option>
-                        </Select>
+                        <Form.Item>
+                            {getFieldDecorator('recordumpire', {
+                                rules: [{ required: true, message: ValidationConstants.recordumpireField }]
+                            })(
+                                <Select
+                                    placeholder={'Select Record Umpire'}
+                                    style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
+                                    onChange={recordUmpire => this.props.onChangeSettingForm({ key: "recordUmpire", data: recordUmpire })}
+                                    value={recordUmpire}
+                                >
+                                    <Option value={"NONE"}>{'None'}</Option>
+                                    <Option value={"USERS"}>{'Integrated'}</Option>
+                                    <Option value={"NAMES"}>{'At courts'}</Option>
+                                </Select>
+                            )}
+                        </Form.Item>
                     </div>
                 </div>
 
@@ -591,34 +597,46 @@ class LiveScoreSettingsView extends Component {
                 <span className='text-heading-large pt-5' >{AppConstants.attendence_reord_report}</span>
                 <div className="row" >
                     <div className="col-sm" >
-                        <InputWithHead required={"pt-0"} marginTop={-15} conceptulHelp conceptulHelpMsg={AppConstants.recordMsg} heading={AppConstants.record} />
-                        <Select
-                            placeholder={'Select Record'}
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
-                            onChange={recordSelection => this.props.onChangeSettingForm({ key: "attendanceRecordingType", data: recordSelection })}
-                            value={this.props.liveScoreSetting.form.attendanceRecordingType}
-                        // defaultValue={}
-                        // value={this.props.liveScoreSetting.form.attendanceRecordingType}
-                        >
-                            <Option value={"OWN"}>{'Own'}</Option>
-                            <Option value={"BOTH"}>{'Both'}</Option>
-                            <Option value={"OPPOSITION"}>{'Opposition'}</Option>
-                        </Select>
+                        <InputWithHead required={"required-field pb-3"} marginTop={0} conceptulHelp conceptulHelpMsg={AppConstants.recordMsg} heading={AppConstants.record} />
+                        <Form.Item>
+                            {getFieldDecorator('attendanceRecord', {
+                                rules: [{ required: true, message: ValidationConstants.attendanceRecordField }]
+                            })(
+                                <Select
+                                    placeholder={'Select Record'}
+                                    style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
+                                    onChange={recordSelection => this.props.onChangeSettingForm({ key: "attendanceRecordingType", data: recordSelection })}
+                                    value={this.props.liveScoreSetting.form.attendanceRecordingType}
+                                // defaultValue={}
+                                // value={this.props.liveScoreSetting.form.attendanceRecordingType}
+                                >
+                                    <Option value={"OWN"}>{'Own'}</Option>
+                                    <Option value={"BOTH"}>{'Both'}</Option>
+                                    <Option value={"OPPOSITION"}>{'Opposition'}</Option>
+                                </Select>
+                            )}
+                        </Form.Item>
                     </div>
                     <div className="col-sm" >
-                        <InputWithHead required={"pt-0"} marginTop={-15} conceptulHelp conceptulHelpMsg={AppConstants.reportMsg} heading={AppConstants.report} />
-                        <Select
-                            placeholder={'Select Report'}
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                            onChange={reportSelection => this.props.onChangeSettingForm({ key: "attendanceRecordingPeriod", data: reportSelection })}
-                            value={this.props.liveScoreSetting.form.attendanceRecordingPeriod}
-                        // value={this.props.liveScoreSetting.form.attendanceRecordingPeriod}
-                        >
-                            <Option value={"PERIOD"}>{'Period'}</Option>
-                            <Option value={"MINUTE"}>{'Minute'}</Option>
-                            <Option value={"MATCH"}>{'Games'}</Option>
+                        <InputWithHead required={"required-field pb-3"} marginTop={0} conceptulHelp conceptulHelpMsg={AppConstants.reportMsg} heading={AppConstants.report} />
+                        <Form.Item>
+                            {getFieldDecorator('attendanceReport', {
+                                rules: [{ required: true, message: ValidationConstants.attendanceReportField }]
+                            })(
+                                <Select
+                                    placeholder={'Select Report'}
+                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                    onChange={reportSelection => this.props.onChangeSettingForm({ key: "attendanceRecordingPeriod", data: reportSelection })}
+                                    value={this.props.liveScoreSetting.form.attendanceRecordingPeriod}
+                                // value={this.props.liveScoreSetting.form.attendanceRecordingPeriod}
+                                >
+                                    <Option value={"PERIOD"}>{'Period'}</Option>
+                                    <Option value={"MINUTE"}>{'Minute'}</Option>
+                                    <Option value={"MATCH"}>{'Games'}</Option>
 
-                        </Select>
+                                </Select>
+                            )}
+                        </Form.Item>
                     </div>
                 </div>
 
@@ -820,37 +838,42 @@ class LiveScoreSettingsView extends Component {
                 </div>
 
                 {/* radion button view */}
-                <span className="applicable-to-heading">{AppConstants.scoring}</span>
-                {/* <span className='text-heading-large pt-5' >{AppConstants.scoring}</span> */}
+                {/* <span required={"required-field pb-0"} className="applicable-to-heading">{AppConstants.scoring}</span> */}
+                <InputWithHead required={"required-field"} heading={AppConstants.scoring} />
                 <div className='contextualHelp-RowDirection' >
+                    <Form.Item>
+                        {getFieldDecorator('scoring', {
+                            rules: [{ required: true, message: ValidationConstants.scoringField }]
+                        })(
+                            <Radio.Group
+                                className="reg-competition-radio"
+                                onChange={e => this.competition_format(e)}
+                                value={this.props.liveScoreSetting.form.scoring}
+                            >
+                                <div className="row ml-2" style={{ marginTop: 0 }} >
 
-                    <Radio.Group
-                        className="reg-competition-radio"
-                        onChange={e => this.competition_format(e)}
-                        value={this.props.liveScoreSetting.form.scoring}
-                    >
-                        <div className="row ml-2" style={{ marginTop: 0 }} >
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"SINGLE"}>{AppConstants.single}</Radio>
+                                        <div style={{ marginLeft: -10 }}>
+                                            <Tooltip background='#ff8237'>
+                                                <span>{AppConstants.singleScoringMsg}</span>
+                                            </Tooltip>
+                                        </div>
+                                    </div>
 
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"SINGLE"}>{AppConstants.single}</Radio>
-                                <div style={{ marginLeft: -10 }}>
-                                    <Tooltip background='#ff8237'>
-                                        <span>{AppConstants.singleScoringMsg}</span>
-                                    </Tooltip>
+                                    <div style={{ display: 'flex', alignItems: 'center', marginLeft: 10 }}>
+                                        <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"50_50"}>{'50/50'} </Radio>
+                                        <div style={{ marginLeft: -10 }}>
+                                            <Tooltip background='#ff8237' >
+                                                <span>{AppConstants.fiftyScoringMsg}</span>
+                                            </Tooltip>
+                                        </div>
+                                    </div>
+
                                 </div>
-                            </div>
-
-                            <div style={{ display: 'flex', alignItems: 'center', marginLeft: 10 }}>
-                                <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"50_50"}>{'50/50'} </Radio>
-                                <div style={{ marginLeft: -10 }}>
-                                    <Tooltip background='#ff8237' >
-                                        <span>{AppConstants.fiftyScoringMsg}</span>
-                                    </Tooltip>
-                                </div>
-                            </div>
-
-                        </div>
-                    </Radio.Group>
+                            </Radio.Group>
+                        )}
+                    </Form.Item>
                 </div>
 
 

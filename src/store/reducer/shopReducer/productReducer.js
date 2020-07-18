@@ -48,6 +48,7 @@ const defaultAddProductObject = {
     availableIfOutOfStock: 0,
     taxApplicable: false,
     variantsChecked: false,
+    organisationUniqueKey: 0,
 }
 
 
@@ -274,6 +275,7 @@ function shopProductState(state = initialState, action) {
                     availableIfOutOfStock: 0,
                     taxApplicable: false,
                     variantsChecked: false,
+                    organisationUniqueKey: 0,
                 }
                 state.productDetailData = defaultAddProductObject
             }

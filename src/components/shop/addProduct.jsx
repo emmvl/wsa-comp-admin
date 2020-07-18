@@ -49,12 +49,14 @@ class AddProduct extends Component {
             loading: false,
             getLoad: false,
             orgLevel: AppConstants.state,
+            allDisabled: false
         }
         props.clearProductReducer("productDetailData")
     }
 
 
     componentDidMount() {
+        window.scrollTo(0, 0)
         this.apiCalls();
         this.setDetailsFieldValue();
         this.setEditorFieldValue();
@@ -83,9 +85,14 @@ class AddProduct extends Component {
         }
         if (shopProductState.getDetailsLoad === false && this.state.getLoad === true) {
             let imageUrls = shopProductState.imageUrls
+            let creatorId = shopProductState.productDetailData.organisationUniqueKey;
+            let orgData = getOrganisationData();
+            let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0;
+            let allDisabled = creatorId == organisationUniqueKey ? false : true;
+
             this.setDetailsFieldValue();
             this.setEditorFieldValue();
-            this.setState({ getLoad: false, urls: imageUrls, files: imageUrls });
+            this.setState({ getLoad: false, urls: imageUrls, files: imageUrls, allDisabled });
         }
     }
 
@@ -96,7 +103,7 @@ class AddProduct extends Component {
         let description = JSON.parse(JSON.stringify(productDetailData.description))
         let orgData = getOrganisationData();
         let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0;
-        productDetailData["organisationUniqueKey"] = organisationUniqueKey
+        productDetailData.organisationUniqueKey = organisationUniqueKey
         let descriptionText = ""
         if (isArrayNotEmpty(description)) {
             let descriptionStringArr = []
@@ -457,10 +464,11 @@ class AddProduct extends Component {
     };
 
     editorView = () => {
-        const { editorState } = this.state;
+        const { editorState, allDisabled } = this.state;
         return (
             <div className="fluid-width mt-3 shop-decription-editor-main-div">
-                <div className="livescore-editor-news col-sm">
+                <div className="livescore-editor-news col-sm"
+                    style={allDisabled == true ? { backgroundColor: "#f5f5f5" } : null}>
                     <Editor
                         editorState={editorState}
                         wrapperClassName="demo-wrapper"
@@ -481,6 +489,7 @@ class AddProduct extends Component {
                             link: { inDropdown: true },
                             history: { inDropdown: true },
                         }}
+                        readOnly={this.state.allDisabled}
                     />
                 </div>
             </div>
@@ -524,6 +533,7 @@ class AddProduct extends Component {
                             onBlur={(i) => this.props.form.setFieldsValue({
                                 'productName': captializedString(i.target.value)
                             })}
+                            disabled={this.state.allDisabled}
                         />
                     )}
                 </Form.Item>
@@ -543,6 +553,7 @@ class AddProduct extends Component {
                     }
                     placeholder="Select"
                     value={isNotNullOrEmptyString(productDetailData.type.typeName) ? productDetailData.type.id : []}
+                    disabled={this.state.allDisabled}
                 >
                     {isArrayNotEmpty(typesProductList) && typesProductList.map(
                         (item, index) => {
@@ -574,6 +585,7 @@ class AddProduct extends Component {
                         placeholder={ValidationConstants.pleaseEnterProductType}
                         onChange={(e) => this.setState({ newProductType: e.target.value })}
                         value={this.state.newProductType}
+                        disabled={this.state.allDisabled}
                     />
 
                 </Modal>
@@ -584,7 +596,7 @@ class AddProduct extends Component {
                             <Checkbox
                                 className="single-checkbox mt-3"
                                 checked={this.checkedAffiliates(item.name) === 1 ? true : false}
-                                disabled={this.state.orgLevel == "Club" && item.id == 2 ? true : false}
+                                disabled={this.state.orgLevel == "Club" && item.id == 2 ? true : this.state.allDisabled}
                                 onChange={(e) =>
                                     this.affiliateOnChange(e.target.checked, item.name)
                                 }
@@ -600,7 +612,7 @@ class AddProduct extends Component {
 
     ////////Image content view
     imageView = () => {
-        const { urls, files, isDragging } = this.state;
+        const { urls, files, isDragging, allDisabled } = this.state;
         const dropCss = urls.length > 0 ? "dragDropLeft" : "dragDropCenter";
         const dropClass = isDragging ? `${dropCss} dragging` : dropCss;
         return (
@@ -617,7 +629,7 @@ class AddProduct extends Component {
                         <>
                             {
                                 urls.length > 0 ?
-                                    <SortableImage images={urls} reorderedUrls={(data) => this.setState({ urls: data })} /> :
+                                    <SortableImage images={urls} reorderedUrls={(data) => this.setState({ urls: data })} allDisabled={allDisabled} /> :
                                     <div className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: 180 }}>
                                         <InputWithHead heading={AppConstants.dragImageToUpload} />
                                         <div className="d-flex justify-content-center" style={{ width: '100%' }}>
@@ -632,6 +644,26 @@ class AddProduct extends Component {
                             {this.getImage()}
                         </div> : ''
                     }
+                </div>
+            </div >
+        );
+
+    };
+
+    ////////Image content view for non edit
+    imageNonEditView = () => {
+        const { urls, files, isDragging, allDisabled } = this.state;
+        const dropCss = urls.length > 0 ? "dragDropLeft" : "dragDropCenter";
+        const dropClass = isDragging ? `${dropCss} dragging` : dropCss;
+        return (
+            <div>
+                <div className="fees-view pt-5">
+                    <div
+                        className={dropClass}
+                        style={{ backgroundColor: "#f5f5f5" }}
+                    >
+                        <SortableImage images={urls} reorderedUrls={(data) => this.setState({ urls: data })} allDisabled={allDisabled} /> :
+                    </div>
                 </div>
             </div >
         );
@@ -659,6 +691,7 @@ class AddProduct extends Component {
                                 }
                                 value={productDetailData.price}
                                 type="number"
+                                disabled={this.state.allDisabled}
                             />
                         </div>
                         <div className="col-sm">
@@ -674,6 +707,7 @@ class AddProduct extends Component {
                                 }
                                 value={productDetailData.cost}
                                 type="number"
+                                disabled={this.state.allDisabled}
                             />
                         </div>
                     </div>
@@ -687,6 +721,7 @@ class AddProduct extends Component {
                                     'taxApplicable'
                                 )
                             }
+                            disabled={this.state.allDisabled}
                         >
                             {AppConstants.chargeTaxesOnProduct}
                         </Checkbox>
@@ -729,6 +764,7 @@ class AddProduct extends Component {
                                     'inventoryTracking'
                                 )
                             }
+                            disabled={this.state.allDisabled}
                         >
                             {AppConstants.enableInventoryTracking}
                         </Checkbox>
@@ -746,6 +782,7 @@ class AddProduct extends Component {
                                         )
                                     }
                                     value={productDetailData.skuCode}
+                                    disabled={this.state.allDisabled}
                                 />
                             </div>
                             <div className="col-sm">
@@ -759,6 +796,7 @@ class AddProduct extends Component {
                                         )
                                     }
                                     value={productDetailData.barcode}
+                                    disabled={this.state.allDisabled}
                                 />
                             </div>
                         </div>
@@ -778,7 +816,7 @@ class AddProduct extends Component {
                                     }
                                 )(
                                     <InputNumber
-                                        style={{ width: 70, }}
+                                        style={{ width: 90 }}
                                         formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                         parser={value => value.replace(/\$\s?|(,*)/g, '')}
                                         onChange={(quantity) => this.props.onChangeProductDetails(
@@ -788,6 +826,7 @@ class AddProduct extends Component {
                                         placeholder={AppConstants.quantity}
                                         min={0}
                                         type="number"
+                                        disabled={this.state.allDisabled}
                                     />
                                 )}
                             </Form.Item>
@@ -803,6 +842,7 @@ class AddProduct extends Component {
                                     'availableIfOutOfStock'
                                 )
                             }
+                            disabled={this.state.allDisabled}
                         >
                             {AppConstants.allowCustToPurchase}
                         </Checkbox>
@@ -826,6 +866,7 @@ class AddProduct extends Component {
                             className="single-checkbox mt-0"
                             checked={productDetailData.variantsChecked}
                             onChange={(e) => this.onChangeVariantsCheckBox(e)}
+                            disabled={this.state.allDisabled}
                         >
                             {AppConstants.enableVariants}
                         </Checkbox>
@@ -850,6 +891,7 @@ class AddProduct extends Component {
                                             heading={AppConstants.variantName}
                                             placeholder={AppConstants.variantName}
                                             onChange={(e) => this.onVariantNameChange(e.target.value)}
+                                            disabled={this.state.allDisabled}
                                         />
                                     )}
                                 </Form.Item>
@@ -865,6 +907,7 @@ class AddProduct extends Component {
                                             placeholder={AppConstants.option}
                                             onChange={(e) => this.onVariantOptionOnChange(e.target.value, "optionName", 0, subIndex)}
                                             value={subItem.optionName}
+                                            disabled={this.state.allDisabled}
                                         />
                                     </div>
                                     <div className="col-sm">
@@ -875,6 +918,7 @@ class AddProduct extends Component {
                                             onChange={(e) => this.onVariantOptionOnChange(e.target.value, "price", 0, subIndex)}
                                             value={subItem.properties.price}
                                             type={"number"}
+                                            disabled={this.state.allDisabled}
                                         />
                                     </div>
                                     <div className="col-sm">
@@ -885,6 +929,7 @@ class AddProduct extends Component {
                                             onChange={(e) => this.onVariantOptionOnChange(e.target.value, "cost", 0, subIndex)}
                                             value={subItem.properties.cost}
                                             type={"number"}
+                                            disabled={this.state.allDisabled}
                                         />
                                     </div>
                                     <div className="col-sm">
@@ -893,6 +938,7 @@ class AddProduct extends Component {
                                             placeholder={AppConstants.sku}
                                             onChange={(e) => this.onVariantOptionOnChange(e.target.value, "skuCode", 0, subIndex)}
                                             value={subItem.properties.skuCode}
+                                            disabled={this.state.allDisabled}
                                         />
                                     </div>
                                     <div className="col-sm">
@@ -901,23 +947,26 @@ class AddProduct extends Component {
                                             placeholder={AppConstants.barcode}
                                             onChange={(e) => this.onVariantOptionOnChange(e.target.value, "barcode", 0, subIndex)}
                                             value={subItem.properties.barcode}
+                                            disabled={this.state.allDisabled}
                                         />
                                     </div>
                                     <div className="col-sm">
                                         <span className="input-heading" >{AppConstants.quantity}</span>
                                         <InputNumber
-                                            style={{ width: 70 }}
+                                            style={{ width: 90 }}
                                             formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                             parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                                            placeholder={'0'}
+                                            placeholder={AppConstants.quantity}
                                             min={0}
                                             onChange={(value) => this.onVariantOptionOnChange(value, "quantity", 0, subIndex)}
                                             value={subItem.properties.quantity}
                                             type={"number"}
+                                            disabled={this.state.allDisabled}
                                         />
                                     </div>
                                     <div className="col-sm red-remove-cross-img-div">
-                                        {subIndex > 0 && <div
+                                        {/* {subIndex > 0 &&  */}
+                                        <div
                                             style={{ cursor: 'pointer' }}>
                                             <img
                                                 className="dot-image"
@@ -925,14 +974,17 @@ class AddProduct extends Component {
                                                 alt=""
                                                 width="16"
                                                 height="16"
-                                                onClick={() => this.addVariantOption(0, subIndex, "remove", subItem.properties.id)}
+                                                onClick={() => this.state.allDisabled === false ? this.addVariantOption(0, subIndex, "remove", subItem.properties.id) : null}
                                             />
-                                        </div>}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         ))}
-                        <span className="input-heading-add-another" onClick={() => this.addVariantOption(0, -1, "add")}>+{AppConstants.addvariantoption}</span>
+                        <span className="input-heading-add-another"
+                            onClick={() => this.state.allDisabled === false ? this.addVariantOption(0, -1, "add") : null}>
+                            +{AppConstants.addvariantoption}
+                        </span>
                     </>}
                 </div>
             </div >
@@ -951,6 +1003,7 @@ class AddProduct extends Component {
                             className="single-checkbox mt-3"
                             checked={productDetailData.deliveryType == "shipping" ? true : false}
                             onChange={(e) => this.onChangeShippingCheckBox(e)}
+                            disabled={this.state.allDisabled}
                         >
                             {AppConstants.shipping}
                         </Checkbox>
@@ -965,6 +1018,7 @@ class AddProduct extends Component {
                                     'deliveryType'
                                 )
                             }
+                            disabled={this.state.allDisabled}
                         >
                             {AppConstants.pickup}
                         </Checkbox>
@@ -1004,6 +1058,7 @@ class AddProduct extends Component {
                                             }
                                             type="number"
                                             step="1.00"
+                                            disabled={this.state.allDisabled}
                                         />
                                     )}
                                 </Form.Item>
@@ -1043,6 +1098,7 @@ class AddProduct extends Component {
                                             }
                                             type="number"
                                             step="1.00"
+                                            disabled={this.state.allDisabled}
                                         />
                                     )}
                                 </Form.Item>
@@ -1082,6 +1138,7 @@ class AddProduct extends Component {
                                             }
                                             type="number"
                                             step="1.00"
+                                            disabled={this.state.allDisabled}
                                         />
                                     )}
                                 </Form.Item>
@@ -1115,6 +1172,7 @@ class AddProduct extends Component {
                                             }
                                             type="number"
                                             step="1.00"
+                                            disabled={this.state.allDisabled}
                                         />
                                     )}
                                 </Form.Item>
@@ -1142,10 +1200,12 @@ class AddProduct extends Component {
                     </div>
                     <div className="col-sm">
                         <div className="comp-buttons-view">
-                            <Button className="publish-button" type="primary"
-                                htmlType="submit">
-                                {AppConstants.save}
-                            </Button>
+                            {this.state.allDisabled === false &&
+                                <Button className="publish-button" type="primary"
+                                    htmlType="submit">
+                                    {AppConstants.save}
+                                </Button>
+                            }
                         </div>
                     </div>
                 </div>
@@ -1166,7 +1226,9 @@ class AddProduct extends Component {
                         <Content >
                             {this.headerView()}
                             <div className="formView">{this.contentView(getFieldDecorator)}</div>
-                            <div className="formView">{this.imageView()}</div>
+                            <div className="formView">
+                                {this.state.allDisabled === true ? this.imageNonEditView() : this.imageView()}
+                            </div>
                             <div className="formView">{this.pricingView(getFieldDecorator)}</div>
                             <div className="formView">{this.inventoryView(getFieldDecorator)}</div>
                             <div className="formView">{this.variantsView(getFieldDecorator)}</div>

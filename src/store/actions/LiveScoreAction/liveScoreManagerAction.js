@@ -57,12 +57,22 @@ function liveScoreManagerSearch(data, competition_Id) {
     }
     return action
 }
+
+function liveScoreManagerImportAction(payload) {
+    const action = {
+        type: ApiConstants.API_LIVE_SCORE_MANAGER_IMPORT_LOAD,
+        payload
+    }
+    return action
+}
+
 export {
     liveScoreAddEditManager,
     liveScoreManagerListAction,
     liveScoreUpdateManagerDataAction,
     liveScoreManagerFilter,
     liveScoreClear,
-    liveScoreManagerSearch
+    liveScoreManagerSearch,
+    liveScoreManagerImportAction
 
 };

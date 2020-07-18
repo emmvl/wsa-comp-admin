@@ -240,7 +240,7 @@ class RegistrationChangeReview extends Component {
                     <InputWithHead heading={AppConstants.regChangeType} />
                     <Select
                         style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
-                        placeholder={AppConstants.competition}
+                        placeholder={AppConstants.regChangeType}
                         filterOption={false}
                         onChange={(id) => this.props.updateRegistrationReviewAction({ data: id, key: 'regChangeType' })}
                         value={detailsData.regChangeType ? detailsData.regChangeType : undefined}

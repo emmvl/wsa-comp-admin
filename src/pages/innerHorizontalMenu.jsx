@@ -399,7 +399,7 @@ class InnerHorizontalMenu extends React.Component {
                     </SubMenu>
                     <Menu.Item key="21">
                         <NavLink to="/liveScoreNewsList">
-                        {/* <NavLink to="/liveScoreAddEditCoach"> */}
+                            {/* <NavLink to="/liveScoreAddEditCoach"> */}
                             <span>News & Messages</span>
                         </NavLink>
                     </Menu.Item>
@@ -612,6 +612,21 @@ class InnerHorizontalMenu extends React.Component {
                 {menu === "account" && (
                     <AccountMenu selectedKey={selectedKey} />
                 )}
+
+                {menu === "liveScoreNews" && <Menu
+                    theme="light"
+                    mode="horizontal"
+                    defaultSelectedKeys={['1']}
+                    style={{ lineHeight: '64px' }}
+                    selectedKeys={[this.props.liveScoreNewsSelectedKey]}
+                >
+                    <Menu.Item key="21">
+                        <NavLink to="/liveScoreNewsList">
+                            <span>News & Messages</span>
+                        </NavLink>
+                    </Menu.Item>
+                </Menu>
+                }
             </div>
         );
     }

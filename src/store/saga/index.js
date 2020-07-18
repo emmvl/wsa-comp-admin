@@ -84,7 +84,7 @@ import { liveScoreRoundSaga, liveScoreRoundListSaga } from './liveScoreSaga/live
 import { liveScoreNewsListSaga, liveScoreAddNewsSaga, liveScoreNewsNotificationSaga, liveScoreNewsDeleteSaga } from './liveScoreSaga/liveScoreNewsSaga';
 import { liveScoreBannerSaga, liveScoreAddBannerSaga, liveScoreRemoveBannerSaga } from './liveScoreSaga/liveScoreBannerSaga';
 import { liveScoreGoalSaga } from './liveScoreSaga/liveScoreGoalSaga'
-import { liveScoreManagerListSaga, liveScoreAddEditManagerSaga, liveScoreManagerSearch } from './liveScoreSaga/liveScoreManagerSaga';
+import { liveScoreManagerListSaga, liveScoreAddEditManagerSaga, liveScoreManagerSearch, liveScoreManagerImportSaga } from './liveScoreSaga/liveScoreManagerSaga';
 import { liveScoreScorerListSaga, liveScorerSearchUserSaga, liveScoreAssigneMatches, liveScoreChangeAssignStatus, liveScoreAddEditScorerSaga, liveScoreUnAssignMatcheSaga, liveScoreScorerSearchSaga } from '../saga/liveScoreSaga/liveScoreScorerSaga';
 import { liveScoreBulkPushBack, liveScoreBulkBringForwardSaga, liveScoreMatchResult, liveScoreEndMatchesSaga, liveScoreDoubleHeaderSaga, liveScoreAbandonMatchSaga } from './liveScoreSaga/liveScoreBulkMatchSaga';
 
@@ -785,4 +785,6 @@ export default function* root_saga() {
 
   // Update User Password
   yield takeEvery(ApiConstants.API_USER_PASSWORD_UPDATE_LOAD, userSaga.updateUserPasswordSaga);
+
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_MANAGER_IMPORT_LOAD, liveScoreManagerImportSaga)
 }

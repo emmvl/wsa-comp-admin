@@ -18,6 +18,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Loader from '../../customComponents/loader'
 import Tooltip from 'react-png-tooltip'
+import { getKeyForStateWideMessage } from '../../util/sessionStorage';
 
 const { Header, Footer, Content } = Layout;
 const { confirm } = Modal;
@@ -32,7 +33,8 @@ class LiveScoreNewsView extends Component {
             newsItem: props.location.state ? props.location.state.item : null,
             id: props.location.state ? props.location.state.id ? props.location.state.id : null : null,
             getDataLoading: false,
-            deleteLoading: false
+            deleteLoading: false,
+            screenKey: props.location ? props.location.state ? props.location.state.screenKey ? props.location.state.screenKey : null : null : null
         }
     }
 
@@ -72,7 +74,10 @@ class LiveScoreNewsView extends Component {
             }
             if (onLoad_2Data.onLoad_2 == false && this.state.deleteLoading == true) {
                 if (this.props.liveScoreNewsState.deleteNews !== []) {
-                    history.push('./liveScoreNewsList')
+                    history.push({
+                        pathname: '/liveScoreNewsList',
+                        state: { screenKey: this.state.screenKey }
+                    })
                 }
             }
 
@@ -117,7 +122,7 @@ class LiveScoreNewsView extends Component {
                     <div className="col-sm live-form-view-button-container" style={{ display: "flex", justifyContent: "flex-end" }} >
                         <NavLink to={{
                             pathname: "liveScoreAddNews",
-                            state: { isEdit: true, item: this.state.newsItem }
+                            state: { isEdit: true, item: this.state.newsItem, screenKey: this.state.screenKey }
                         }}>
                             <Button className="primary-add-comp-form mr-5" type="primary">{AppConstants.edit}
                             </Button>
@@ -243,18 +248,23 @@ class LiveScoreNewsView extends Component {
     };
 
     onSubmitNewsPublish = (data, value) => {
-        console.log(data, value)
-        this.props.newsNotificationAction(data, value)
+        this.props.newsNotificationAction(data, value, this.state.screenKey)
         this.setState({ getDataLoading: true })
     }
 
 
     ////main render function
     render() {
+        let stateWideMsg = getKeyForStateWideMessage()
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"21"} />
+                {
+                    stateWideMsg ?
+                        <InnerHorizontalMenu menu={"liveScoreNews"} liveScoreNewsSelectedKey={"21"} />
+                        :
+                        <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"21"} />
+                }
                 <Loader visible={this.props.liveScoreNewsState.notifyLoad} />
                 <Layout>
                     {this.headerView()}

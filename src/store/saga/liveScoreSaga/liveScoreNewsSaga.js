@@ -44,7 +44,7 @@ export function* liveScoreNewsListSaga(action) {
 ////News AddNews
 export function* liveScoreAddNewsSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreAddNews, action.data, action.imageData, action.newsId);
+        const result = yield call(LiveScoreAxiosApi.liveScoreAddNews, action.data, action.imageData, action.newsId, action.competitionId);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_ADD_NEWS_SUCCESS,
@@ -72,7 +72,11 @@ export function* liveScoreNewsNotificationSaga(action) {
                 status: result.status,
             });
             // message.success(action.newsId ? 'News Edited Successfully.' : 'News Added Successfully .');
-            history.push('./liveScoreNewsList')
+            //screenKey
+            history.push({
+                pathname: '/liveScoreNewsList',
+                state: { screenKey: action.screenKey }
+            })
         } else {
             yield call(failSaga, result)
         }

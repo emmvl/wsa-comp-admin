@@ -184,6 +184,10 @@ const ValidationConstants = {
     regChangeDate: 'Registration change date is required',
     compStartDate: 'Competition start date is required',
     pleaseEnterQuantity: "Please enter quantity.",
+    recordumpireField: 'Record umpire is required.',
+    attendanceRecordField: 'Record is required.',
+    attendanceReportField: 'Report is required.',
+    scoringField: 'Scoring is required.'
 
 };
 

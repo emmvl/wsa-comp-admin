@@ -161,6 +161,15 @@ const getLiveScoreUmpireCompition = () => {
   return localStorage.liveScoreUmpireCompetitionId
 }
 
+const setKeyForStateWideMessage = stateWideMessege => {
+  localStorage.setItem("stateWideMessege", stateWideMessege)
+  console.log(stateWideMessege, 'stateWideMessege')
+}
+
+const getKeyForStateWideMessage = () => {
+  return localStorage.stateWideMessege
+}
+
 module.exports = {
   setCompetitionID, getCompetitonId,
   setAuthToken, getAuthToken,
@@ -194,5 +203,7 @@ module.exports = {
   getLiveScoreUmpireCompitionData,
   setLiveScoreUmpireCompitionData,
   setLiveScoreUmpireCompition,
-  getLiveScoreUmpireCompition
+  getLiveScoreUmpireCompition,
+  setKeyForStateWideMessage,
+  getKeyForStateWideMessage
 }

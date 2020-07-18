@@ -715,7 +715,7 @@ const AppConstants = {
   addBanners: 'Add Banners',
   ////export URl
   // exportUrl: 'http://world-sport-action-socket.appspot.com/players/csv?competitionId=',
-  exportUrl: 'https://livescores-api-dev.worldsportaction.com/players/csv?',
+  exportUrl: '/players/csv?',
 
   ////Registartion
   membershipTypeName: 'Membership Type Name',
@@ -1322,7 +1322,7 @@ const AppConstants = {
   addvariantoption: "Add variant option",
   deleteProduct: "Delete Product",
   deleteProductDescription: "Please confirm you want to delete this product?",
-  umpireDashboardExport: "https://livescores-api-dev.worldsportaction.com/matchUmpire/dashboard/export?",
+  umpireDashboardExport: "/matchUmpire/dashboard/export?",
   updateAction: "Update Action",
   actionBoxConfirmMsg: "Are you sure you want to complete this activity?",
   backToUmpire: 'Back to all Umpires',
@@ -1440,6 +1440,9 @@ const AppConstants = {
   approvals: 'Approvals',
   approve: 'APPROVE',
   decline: 'DECLINE',
+  stateWideMsg: 'State-wide messages',
+  allOrganisation: 'All Organisations',
+  indivisualOrgnisation: 'Individual Organisations',
   firstLevelAffiliatesAssociationLeague: "1st Level Affiliates - Association/ League",
   secondLevelAffiliatesClubSchool: "2nd Level Affiliates - Club/School",
   teamSeasonalFee: 'Team Seasonal Fee'

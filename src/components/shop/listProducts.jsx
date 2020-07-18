@@ -31,6 +31,7 @@ class ListProducts extends Component {
 
 
     componentDidMount() {
+        window.scrollTo(0, 0)
         const widthWindow = window.innerWidth;
         let windowLimit = Math.round(widthWindow / 270) * 2
         let limit = windowLimit < 6 ? 6 : windowLimit

@@ -332,23 +332,27 @@ let LiveScoreAxiosApi = {
         return Method.dataDelete(url, token)
     },
 
-    liveScoreNewsList() {
-        let competitionID = localStorage.getItem("competitionId");
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-        // var url = `/news?&competitionIds=${competitionId}`;
-        var url = `/news/admin?entityId=${id}&entityTypeId=1`;
+    liveScoreNewsList(competitionId) {
+
+        var url = `/news/admin?entityId=${competitionId}&entityTypeId=1`;
         return Method.dataGet(url, token)
     },
-    liveScoreAddNews(data, imageData, newsId) {
+    liveScoreAddNews(data, imageData, newsId, competitionId) {
+        console.log(JSON.parse(getLiveScoreCompetiton()), 'competitionId')
         let mediaArray = [imageData]
         let body = new FormData();
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-        const authorData = JSON.parse(getLiveScoreCompetiton())
+        // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let authorData = null
+
+        if (JSON.parse(getLiveScoreCompetiton())) {
+            authorData = JSON.parse(getLiveScoreCompetiton())
+        }
+
         body.append('id', newsId ? newsId : 0)
         body.append('title', data.title)
         body.append('body', data.body);
-        body.append("entityId", id);
-        body.append("author", data.author ? data.author : authorData.longName);
+        body.append("entityId", competitionId);
+        body.append("author", data.author ? data.author : authorData ? authorData.longName : 'World sport actioa');
         body.append("recipients", data.recipients);
         body.append("news_expire_date", data.news_expire_date);
         body.append("recipientRefId", 12)
@@ -1029,7 +1033,14 @@ let LiveScoreAxiosApi = {
     ladderAdjustmentGetData(data) {
         var url = `/teams/ladder/adjustment?competitionUniqueKey=${data.uniqueKey}&divisionId=${data.divisionId}`;
         return Method.dataGet(url, token)
-    }
+    },
+
+    liveScoreManagerImport(data) {
+        let body = new FormData();
+        body.append("file", data.csvFile, data.csvFile.name);
+        var url = `users/import?competitionId=${data.id}&roleId=3`;
+        return Method.dataPost(url, token, body)
+    },
 };
 
 

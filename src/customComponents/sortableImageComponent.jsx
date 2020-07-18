@@ -5,7 +5,10 @@ import AppImages from "../themes/appImages";
 export default class SortableImage extends React.PureComponent {
     constructor(props) {
         super(props)
-        this.state = { items: props.images };
+        this.state = {
+            items: props.images,
+            allDisabled: props.allDisabled,
+        };
     }
 
     componentWillReceiveProps(nextProps) {
@@ -45,7 +48,7 @@ export default class SortableImage extends React.PureComponent {
                         alt=""
                         width="16"
                         height="16"
-                        onClick={() => this.removeImage(index)}
+                        onClick={() => this.state.allDisabled == false ? this.removeImage(index) : null}
                     />
                 </div>
             </div>
@@ -53,8 +56,10 @@ export default class SortableImage extends React.PureComponent {
     };
 
     handleRLDDChange = (reorderedItems) => {
-        this.setState({ items: reorderedItems });
-        this.props.reorderedUrls(reorderedItems)
+        if (this.state.allDisabled == false) {
+            this.setState({ items: reorderedItems });
+            this.props.reorderedUrls(reorderedItems)
+        }
     };
 
 }
