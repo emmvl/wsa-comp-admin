@@ -284,7 +284,7 @@ class LiveScoreCompetitions extends Component {
                         </div> */}
                     <div className="row">
 
-                        <div className="col-sm">
+                        {this.state.orgLevel === "state" && <div className="col-sm">
                             <div
                                 className="comp-dashboard-botton-view-mobile"
                                 style={{
@@ -295,21 +295,21 @@ class LiveScoreCompetitions extends Component {
                                     justifyContent: "flex-end"
                                 }}
                             >
-                                {this.state.orgLevel === "state" &&
-                                    <Button onClick={() => {
-                                        setKeyForStateWideMessage('stateWideMessege')
-                                        this.props.history.push({
-                                            pathname: '/liveScoreNewsList',
-                                            state: { screenKey: 'stateWideMsg' }
-                                        })
-                                    }}
-                                        className="primary-add-comp-form" type="primary">
-                                        {AppConstants.stateWideMsg}
-                                    </Button>
-                                }
+
+                                <Button onClick={() => {
+                                    setKeyForStateWideMessage('stateWideMessege')
+                                    this.props.history.push({
+                                        pathname: '/liveScoreNewsList',
+                                        state: { screenKey: 'stateWideMsg' }
+                                    })
+                                }}
+                                    className="primary-add-comp-form" type="primary">
+                                    {AppConstants.stateWideMsg}
+                                </Button>
+
 
                             </div>
-                        </div>
+                        </div>}
 
                         <div className="col-sm">
                             <div
