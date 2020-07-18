@@ -1,11 +1,8 @@
 import ApiConstants from '../../../themes/apiConstants'
 import { getMatchListSettings } from '../../../store/objectModel/getMatchTeamListObject'
-import { formateTime, liveScore_formateDate, formatDateTime } from '../../../themes/dateformate'
 import moment from "moment";
 import liveScoreMatchModal from "../../objectModel/liveScoreMatchModal";
 import { isArrayNotEmpty } from '../../../util/helpers';
-
-
 
 var object = {
     id: '',
@@ -307,7 +304,7 @@ function liveScoreMatchReducer(state = initialState, action) {
                 status: action.status,
                 liveScoreMatchListData: result,
                 liveScoreBulkScoreList: result,
-                liveScoreMatchList: action.result
+                liveScoreMatchList: isArrayNotEmpty(action.result) ? action.result : result,
             };
 
         case ApiConstants.API_LIVE_SCORE_MATCH_LIST_FAIL:
