@@ -15,22 +15,6 @@ function Profile(props) {
 
   const [user, setUser] = useState(userState.userProfile);
 
-  const { firstName, lastName, mobileNumber, email, photoUrl } = userState.userProfile;
-
-  useEffect(() => {
-    setUser(prevState => ({
-      ...prevState,
-      firstName,
-      lastName,
-      mobileNumber,
-      email,
-    }));
-  }, [firstName, lastName, mobileNumber, email]);
-
-  useEffect(() => {
-    setUser(prevState => ({ ...prevState, photoUrl }));
-  }, [photoUrl]);
-
   const onChangeField = useCallback((e) => {
     setUser({
       ...user,

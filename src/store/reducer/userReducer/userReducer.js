@@ -608,6 +608,7 @@ function userReducer(state = initialState, action) {
       return {
         ...state,
         userProfile: {
+          ...state.userProfile,
           email: action.result.email,
           firstName: action.result.firstName,
           lastName: action.result.lastName,

@@ -637,7 +637,7 @@ export function* saveUserDetailSaga(action) {
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_USER_DETAIL_UPDATE_SUCCESS,
-                result: result.result.data,
+                result: result.result.data[0],
                 status: result.status
             });
         } else {
