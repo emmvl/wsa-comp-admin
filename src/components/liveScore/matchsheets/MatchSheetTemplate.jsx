@@ -244,7 +244,7 @@ const MatchSheetTemplate = (props) => {
                             </View>
                             {team1players.length > 0 && team1players.map((player, index) => (
                                 <View style={styles.row} key={`row_${index}`}>
-                                    <Text style={styles.cell}>{index}</Text>
+                                    <Text style={styles.cell}>{player.playerId}</Text>
                                     <Text style={styles.largeCell}>{`${player.firstName} ${player.lastName}`}</Text>
                                     <Text style={styles.largeCell}></Text>
                                     <Text style={styles.cell}></Text>
@@ -266,9 +266,9 @@ const MatchSheetTemplate = (props) => {
                                 <Text style={styles.cell}>3</Text>
                                 <Text style={styles.cell}>4</Text>
                             </View>
-                            {team2players.length > 0 && team1players.map((player, index) => (
+                            {team2players.length > 0 && team2players.map((player, index) => (
                                 <View style={styles.row} key={`row_${index}`}>
-                                    <Text style={styles.cell}>{index}</Text>
+                                    <Text style={styles.cell}>{player.playerId}</Text>
                                     <Text style={styles.largeCell}>{`${player.firstName} ${player.lastName}`}</Text>
                                     <Text style={styles.largeCell}></Text>
                                     <Text style={styles.cell}></Text>

@@ -170,12 +170,12 @@ let LiveScoreAxiosApi = {
 
     },
 
-    liveScoreMatchList(competitionID, start, offset, search, divisionId, roundName, teamIds) {
+    liveScoreMatchList(competitionID, start, offset, search, divisionId, roundName, teamId) {
 
         let url;
 
-        if (teamIds !== undefined) {
-            url = `/matches?competitionId=${competitionID}&divisionIds=${divisionId}&teamIds=${teamIds}`;
+        if (teamId !== undefined) {
+            url = `/matches?competitionId=${competitionID}&divisionIds=${divisionId}&teamIds=${teamId}`;
         } else if (divisionId && roundName) {
             url = `/matches?competitionId=${competitionID}&start=${start}&offset=${offset}&limit=${10}&search=${search}&divisionIds=${divisionId}&roundName=${roundName}`;
         } else if (divisionId) {
@@ -190,8 +190,8 @@ let LiveScoreAxiosApi = {
     },
 
 
-    liveScoreMatchSheetDownloadList() {
-        const url = '/matches/downloads';
+    liveScoreMatchSheetDownloadList(competitionId) {
+        const url = `/matches/downloads?competitionId=${competitionId}`;
         return Method.dataGet(url, token)
     },
 
