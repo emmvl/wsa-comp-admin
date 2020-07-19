@@ -145,7 +145,6 @@ export function* liveScoreCompetitionVenuesList(action) {
     try {
         const result = yield call(CommonAxiosApi.getVenueList, action.competitionID, action.searchValue);
         if (result.status === 1) {
-            console.log(result, "status")
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_COMPETITION_VENUES_LIST_SUCCESS,
                 status: result.status,

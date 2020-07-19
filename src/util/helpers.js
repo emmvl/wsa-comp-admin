@@ -70,4 +70,17 @@ const regexNumberExpression = (number) => {
     }
 }
 
-module.exports = { isArrayNotEmpty, isNotNullOrEmptyString, getAge, deepCopyFunction, stringTONumber, captializedString, teamListData, regexNumberExpression }
+const isImageFormatValid = value => {
+    let fileTypes = ['jpg', 'jpeg', 'png'];
+    if (fileTypes.indexOf(value) > -1) {
+        return true
+    } else {
+        return false
+    }
+}
+
+module.exports = {
+    isArrayNotEmpty, isNotNullOrEmptyString, getAge, deepCopyFunction,
+    stringTONumber, captializedString, teamListData, regexNumberExpression,
+    isImageFormatValid
+}

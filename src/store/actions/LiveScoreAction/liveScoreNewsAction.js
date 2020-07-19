@@ -30,14 +30,15 @@ function liveScoreUpdateNewsAction(data, key, contentType) {
     return action;
 }
 
-function liveScoreAddNewsAction(data, imageData, newsId, key) {
+function liveScoreAddNewsAction(data, imageData, newsId, key, competitionId) {
 
     const action = {
         type: ApiConstants.API_LIVE_SCORE_ADD_NEWS_LOAD,
         data,
         imageData,
         newsId,
-        key
+        key,
+        competitionId
     }
     return action;
 }
@@ -50,11 +51,12 @@ function liveScoreRefreshNewsAction() {
     return action;
 }
 // news notification on click publish and notify
-function newsNotificationAction(data, value) {
+function newsNotificationAction(data, value, screenKey) {
     const action = {
         type: ApiConstants.API_LIVESCORE_NEWS_NOTIFICATION_LOAD,
         data: data,
-        value: value
+        value: value,
+        screenKey: screenKey
     }
     return action
 }

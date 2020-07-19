@@ -89,3 +89,22 @@ export function* liveScoreManagerSearch(action) {
         yield call(errorSaga, error)
     }
 }
+
+export function* liveScoreManagerImportSaga(action) {
+    try {
+        const result = yield call(LiveScoreAxiosApi.liveScoreManagerImport, action.payload)
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_LIVE_SCORE_MANAGER_IMPORT_SUCCESS
+            });
+            history.push('/liveScoreManagerList')
+            message.success('Manager Imported Successfully.')
+        }
+        else {
+            yield call(failSaga, result)
+        }
+    } catch (e) {
+        yield call(errorSaga, e)
+    }
+
+}

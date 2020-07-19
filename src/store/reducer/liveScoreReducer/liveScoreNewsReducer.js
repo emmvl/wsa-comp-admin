@@ -45,9 +45,11 @@ const initialState = {
     expire_time: null,
     notificationResult: [],
     deleteNews: [],
-    newExpiryDate : null,
-    newExpiryTime : null,
-    newsBody : null
+    newExpiryDate: null,
+    newExpiryTime: null,
+    newsBody: null,
+    allOrg: false,
+    indivisualOrg: false
 };
 
 function liveScoreNewsState(state = initialState, action) {
@@ -83,19 +85,25 @@ function liveScoreNewsState(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_ADD_NEWS_DETAILS:
             let news_data = action.addNewItemDetail
-            let authorData = JSON.parse(getLiveScoreCompetiton())
-         
+            let authorData
+            if (getLiveScoreCompetiton()) {
+                authorData = JSON.parse(getLiveScoreCompetiton())
+            } else {
+                authorData = 'World sport actioa'
+            }
+
+
             state.addEditNews = news_data
-            state.addEditNews["author"] = authorData.longName
-            
+            state.addEditNews["author"] = authorData ? authorData.longName : ''
+
             state.news_expire_date = news_data.news_expire_date ? moment(news_data.news_expire_date).format("YYYY-MM-DD") : ""
             // state.news_expire_date = moment(news_data.news_expire_date).format("YYYY-MM-DD")
-            state.expire_date = moment(news_data.news_expire_date,"YYYY-MM-DD")
+            state.expire_date = moment(news_data.news_expire_date, "YYYY-MM-DD")
             state.newExpiryDate = moment(news_data.news_expire_date, "YYYY-MM-DD")
             state.expire_time = news_data.news_expire_date
             state.newExpiryTime = news_data.news_expire_date
-           
-    
+
+
             return {
                 ...state,
                 onLoad: false,
@@ -120,38 +128,25 @@ function liveScoreNewsState(state = initialState, action) {
             };
 
         case ApiConstants.API_LIVE_SCORE_UPDATE_NEWS:
-            
+
             let news_object = state.addEditNews
             let dateFormat = null
             let utcTimestamp = null
             if (action.key === "expire_date") {
                 state[action.key] = action.data
-                state.newExpiryDate =  moment(action.data , "YYYY-MM-DD")
-                state.news_expire_date  = moment(action.data).format("YYYY-MM-DD")
-                // state.addEditNews['news_expire_date'] = action.data + " " + state['expire_time']
-
-                // if (state.expire_time) {
-                //     dateFormat = moment(state.expire_date).format('MM/DD/YYYY') + " " + state.expire_time
-                //     utcTimestamp = new Date(dateFormat).toISOString();
-
-                //     state.addEditNews['news_expire_date'] = utcTimestamp
-                // }
+                state.newExpiryDate = moment(action.data, "YYYY-MM-DD")
+                state.news_expire_date = moment(action.data).format("YYYY-MM-DD")
 
             } else if (action.key === "expire_time") {
 
                 state[action.key] = action.data
 
-
-                // if (state.expire_date) {
-                //     dateFormat = moment(state.expire_date).format('MM/DD/YYYY') + " " + state.expire_time
-                // }
-                // utcTimestamp = new Date(dateFormat).toISOString();
-                // state.addEditNews['news_expire_date'] = utcTimestamp
-
-            }else if(action.key == "body"){
-                console.log(action.data)
+            } else if (action.key == "body") {
                 state.newsBody = action.data
-            } 
+            }
+            else if (action.key == "allOrg" || action.key == "indivisualOrg") {
+                state[action.key] = action.data
+            }
             else {
                 state.addEditNews[action.key] = action.data
             }
@@ -222,7 +217,7 @@ function liveScoreNewsState(state = initialState, action) {
 
         case ApiConstants.API_DEFAULT_NEWS_IMAGE_VIDEO:
             console.log(action.payload)
-            
+
             return {
                 ...state,
                 addEditNews: {

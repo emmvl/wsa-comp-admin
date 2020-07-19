@@ -27,11 +27,11 @@ class ListProducts extends Component {
             limit: 8,
             deleteLoading: false,
         }
-
     }
 
 
     componentDidMount() {
+        window.scrollTo(0, 0)
         const widthWindow = window.innerWidth;
         let windowLimit = Math.round(widthWindow / 270) * 2
         let limit = windowLimit < 6 ? 6 : windowLimit
@@ -183,6 +183,7 @@ class ListProducts extends Component {
                                     productItem={item}
                                     deleteOnclick={() => this.showDeleteConfirm(item.id)}
                                     editOnclick={() => history.push("/addProduct", { id: item.id })}
+                                    viewOnclick={() => history.push("/addProduct", { id: item.id })}
                                 />
                             </div>
                         )

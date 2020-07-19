@@ -2,13 +2,17 @@ import ApiConstants from '../../../themes/apiConstants'
 
 const initialState = {
     onLoad: false,
+    printLoad: false,
+    onTeamLoad: false,
+    onDivisionLoad: false,
     error: null,
     result: null,
     status: 0,
     liveScoreDivisionList: [],
     allTeamData: [],
     isLoaderActive: false,
-    allDivisionData: []
+    allDivisionData: [],
+    matchSheetDownloads: [],
 };
 
 function liveScoreMatchSheetState(state = initialState, action) {
@@ -20,7 +24,7 @@ function liveScoreMatchSheetState(state = initialState, action) {
             }
 
         case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_LOAD:
-            return { ...state, onLoad: true };
+            return { ...state, onDivisionLoad: true };
         case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_SUCCESS:
             let divisionArray = JSON.parse(JSON.stringify(action.result))
             state.allDivisionData = JSON.parse(JSON.stringify(action.result))
@@ -33,13 +37,13 @@ function liveScoreMatchSheetState(state = initialState, action) {
             state.isLoaderActive = false
             return {
                 ...state,
-                onLoad: false,
+                onDivisionLoad: false,
                 liveScoreDivisionList: divisionArray,
                 status: action.status
             };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_LOAD:
-            return { ...state, onLoad: true };
+            return { ...state, onTeamLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
             let teamsArray = JSON.parse(JSON.stringify(action.result))
@@ -53,7 +57,7 @@ function liveScoreMatchSheetState(state = initialState, action) {
             state.isLoaderActive = false
             return {
                 ...state,
-                onLoad: false,
+                onTeamLoad: false,
                 teamResult: teamsArray,
             };
 
@@ -72,13 +76,23 @@ function liveScoreMatchSheetState(state = initialState, action) {
             };
 
         case ApiConstants.API_MATCH_SHEET_PRINT_LOAD:
-            return { ...state, onLoad: true };
+            return { ...state, printLoad: true };
 
         case ApiConstants.API_MATCH_SHEET_PRINT_SUCCESS:
             return {
                 ...state,
+                printLoad: false,
+                status: action.status
+            };
+
+        case ApiConstants.API_MATCH_SHEET_DOWNLOADS_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_MATCH_SHEET_DOWNLOADS_SUCCESS:
+            return {
+                ...state,
                 onLoad: false,
-                liveScoreMatchSheetDownloadLink: action.downloadLink,
+                matchSheetDownloads: action.matchSheetDownloads,
                 status: action.status
             };
 

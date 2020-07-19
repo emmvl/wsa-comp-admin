@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavLink, Redirect, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -8,6 +8,7 @@ import AppConstants from "../../themes/appConstants";
 import PrivateRoute from "../../util/protectedRoute";
 import lazyLoad from "../../components/lazyLoad";
 import Loader from "../../customComponents/loader";
+import { getUserProfileAction } from "../../store/actions/userAction/userAction";
 import DashboardLayout from "../dashboardLayout";
 import InnerHorizontalMenu from "../innerHorizontalMenu";
 import Profile from "./Profile";
@@ -16,7 +17,13 @@ import Password from "./Password";
 const { Header, Footer, Content } = Layout;
 
 function Account(props) {
-  const { location: { pathname }, appState } = props;
+  const { location: { pathname }, appState, userState, getUserProfileAction } = props;
+
+  useEffect(() => {
+    if (!userState.isProfileLoaded) {
+      getUserProfileAction();
+    }
+  }, [userState.isProfileLoaded, getUserProfileAction]);
 
   return (
     <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
@@ -62,7 +69,7 @@ function Account(props) {
               <Redirect to="/account/profile" />
             </Switch>
 
-            <Loader visible={appState && appState.onLoad} />
+            <Loader visible={appState.onLoad || userState.onLoad} />
 
             <Footer />
           </div>
@@ -74,12 +81,14 @@ function Account(props) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
+    getUserProfileAction,
   }, dispatch);
 }
 
 function mapStateToProps(state) {
   return {
     appState: state.AppState,
+    userState: state.UserState,
   };
 }
 

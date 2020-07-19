@@ -297,7 +297,7 @@ class UserTextualDashboard extends Component{
      ///////view for breadcrumb
      headerView = () => {
         return (
-            <Header className="comp-player-grades-header-view" >
+            <Header className="comp-player-grades-header-view" style={{padding: '0px 50px 0 45px'}} >
                 <div className="row" >
                     <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
                         <Breadcrumb separator=" > ">
@@ -355,14 +355,14 @@ class UserTextualDashboard extends Component{
         
         return (
             <div style={{paddingLeft: '3.0%'}}>
-                <div className="fluid-width" >
+                <div className="fluid-width" style={{ marginRight: 35}}>
                     <div className="row user-filter-row" >
-                        <div className="user-col" >
+                        <div className="user-col col-lg-3 col-md-6" >
                             <div className="user-filter-col-cont">
-                                <div className='year-select-heading'>{AppConstants.year}</div>
+                                <div className='year-select-heading  select-heading-wid'>{AppConstants.year}</div>
                                 <Select
                                     name={"yearRefId"}
-                                    className="year-select user-filter-select"
+                                    className="year-select user-filter-select-drop"
                                     onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
                                     value={this.state.yearRefId}>
                                         <Option key={-1} value={-1}>{AppConstants.all}</Option>
@@ -376,13 +376,13 @@ class UserTextualDashboard extends Component{
                                 </Select>
                             </div>
                         </div>
-                        <div className="user-col" >
+                        <div className="user-col col-lg-3 col-md-6" >
                             <div className="user-filter-col-cont">
-                                <div className='year-select-heading'>{AppConstants.competition}</div>
+                                <div className='year-select-heading  select-heading-wid'>{AppConstants.competition}</div>
                                 <Select
                                     showSearch
                                     optionFilterProp="children"
-                                    className="year-select user-filter-select1"
+                                    className="year-select user-filter-select-drop"
                                     onChange={competitionId => this.onChangeDropDownValue(competitionId, "competitionId")}
                                     value={this.state.competitionUniqueKey}>
                                         <Option key={-1} value={'-1'}>{AppConstants.all}</Option>
@@ -396,11 +396,11 @@ class UserTextualDashboard extends Component{
                                 </Select>
                             </div>
                         </div>
-                        <div className="user-col" >
+                        <div className="user-col col-lg-3 col-md-6" >
                             <div  className="user-filter-col-cont" >
-                                <div className='year-select-heading'>{AppConstants.roles}</div>
+                                <div className='year-select-heading  select-heading-wid'>{AppConstants.roles}</div>
                                 <Select
-                                    className="year-select user-filter-select"
+                                    className="year-select user-filter-select-drop"
                                     onChange={(e) => this.onChangeDropDownValue(e, 'roleId')}
                                     value={this.state.roleId}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
@@ -410,11 +410,11 @@ class UserTextualDashboard extends Component{
                                 </Select>
                             </div>
                         </div>
-                        <div className="user-col" >
+                        <div className="user-col col-lg-3 col-md-6" >
                             <div  className="user-filter-col-cont" >
-                                <div className='year-select-heading'>{AppConstants.gender}</div>
+                                <div className='year-select-heading  select-heading-wid'>{AppConstants.gender}</div>
                                 <Select
-                                    className="year-select user-filter-select"
+                                    className="year-select user-filter-select-drop"
                                     onChange={(e) => this.onChangeDropDownValue(e, 'genderRefId')}
                                     value={this.state.genderRefId}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
@@ -426,13 +426,13 @@ class UserTextualDashboard extends Component{
                         </div>
                     </div>
                     <div className="row user-filter-row" >
-                        <div className="user-col" >
+                        <div className="user-col col-lg-3 col-md-6" >
                             <div  className="user-filter-col-cont" >
-                                <div className='year-select-heading'>{AppConstants.linked}</div>
+                                <div className='year-select-heading  select-heading-wid'>{AppConstants.linked}</div>
                                 <Select
                                     showSearch
                                     optionFilterProp="children"
-                                    className="year-select user-filter-select"
+                                    className="year-select user-filter-select-drop"
                                     style={{ minWidth: 100 }}
                                     onChange={(e) => this.onChangeDropDownValue(e, 'linkedEntityId')}
                                     value={this.state.linkedEntityId}>
@@ -443,22 +443,24 @@ class UserTextualDashboard extends Component{
                                 </Select>
                             </div>
                         </div>
-                        <div className="user-col" >
-                            <div  className="user-filter-col-cont" >
-                                <div className='year-select-heading'>{AppConstants.postCode}</div>
-                                <InputWithHead
-                                    placeholder={AppConstants.postCode}
-                                    onChange={(e) => this.onChangeDropDownValue(e.target.value, 'postalCode')}
-                                    value={this.state.postalCode}
-                                />
+                        <div className="user-col col-lg-3 col-md-6" >
+                            <div  className="user-filter-col-postal" >
+                                <div className='year-select-heading  select-heading-wid'>{AppConstants.postCode}</div>
+								<div style={{width:'100%'}}>
+                                    <InputWithHead
+										placeholder={AppConstants.postCode}
+										onChange={(e) => this.onChangeDropDownValue(e.target.value, 'postalCode')}
+										value={this.state.postalCode}
+									/>
+                                </div>
                             </div>
                         </div>
-                        <div className="user-col">
-                            <div className="user-filter-col-cont" style={{ marginRight: '30px', marginLeft: '25px' }}>
-                                <div className='year-select-heading'>{AppConstants.dobFrom}</div>
+                        <div className="user-col col-lg-3 col-md-6">
+                            <div className="user-filter-col-cont">
+                                <div className='year-select-heading  select-heading-wid'>{AppConstants.dobFrom}</div>
                                 <DatePicker
                                     size="default"
-                                    className="year-select user-filter-select"
+                                    className="year-select user-filter-select-cal"
                                     onChange={e => this.onChangeDropDownValue(e, 'dobFrom')}
                                     format={"DD-MM-YYYY"}
                                     showTime={false}
@@ -467,13 +469,13 @@ class UserTextualDashboard extends Component{
                                 />
                             </div>
                         </div>
-                        <div className="user-col">
+                        <div className="user-col col-lg-3 col-md-6">
                             <div className="user-filter-col-cont" >
-                                <div className='year-select-heading'>{AppConstants.dobTo}</div>
+                                <div className='year-select-heading  select-heading-wid'>{AppConstants.dobTo}</div>
                                 <DatePicker
                                     placeholder={"dd-mm-yyyy"}
                                     size="large"
-                                    className="year-select user-filter-select"
+                                    className="year-select user-filter-select-cal"
                                     onChange={e => this.onChangeDropDownValue(e, 'dobTo')}
                                     //onChange={e => this.setState({dobTo: moment(e, "YYYY-MM-DD")}) }
                                     format={"DD-MM-YYYY"}

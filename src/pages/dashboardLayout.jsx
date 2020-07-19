@@ -11,12 +11,10 @@ import { getUserOrganisationAction, onOrganisationChangeAction } from "../store/
 import {
   setOrganisationData,
   getOrganisationData,
-  setAuthToken, getAuthToken,
-  setUserId, getUserId,clearUmpireStorage
+  clearUmpireStorage,
 } from "../util/sessionStorage";
 import { clearHomeDashboardData, } from "../store/actions/homeAction/homeAction";
-import { identify, setUserVars } from 'react-fullstory';
-
+import { setUserVars } from 'react-fullstory';
 
 const { Option } = Select;
 
@@ -33,29 +31,26 @@ class DashboardLayout extends React.Component {
     if (this.props.userState.onLoad == false && this.state.dataOnload == true) {
       let organisationData = this.props.userState.getUserOrganisation
       if (organisationData.length > 0) {
-        let orgData = getOrganisationData()
-        let organisationItem = orgData ? orgData : organisationData[0]
+        let orgData = getOrganisationData();
+        let organisationItem = orgData ? orgData : organisationData[0];
         this.setFullStory(organisationItem);
-        await setOrganisationData(organisationItem)
-       // this.props.onOrganisationChangeAction(organisationItem, "organisationChange")
-        this.setState({ dataOnload: false })
+        await setOrganisationData(organisationItem);
+        this.props.onOrganisationChangeAction(organisationItem, "organisationChange");
+        this.setState({ dataOnload: false });
       }
     }
   }
 
-
   componentDidMount() {
     this.setOrganisationKey()
   }
-
 
   setOrganisationKey() {
     let organisationData = getOrganisationData()
     if (!organisationData) {
       this.props.userState.getUserOrganisation.length == 0 && this.props.getUserOrganisationAction()
       this.setState({ dataOnload: true })
-    }
-    else {
+    } else {
       this.props.userState.getUserOrganisation.length === 0 && this.props.getUserOrganisationAction()
       this.setState({ dataOnload: true })
     }
@@ -63,8 +58,8 @@ class DashboardLayout extends React.Component {
 
   logout = async () => {
     await localStorage.clear();
-    history.push("/");
     window.location.reload();
+    history.push("/");
   };
 
   menuImageChange = menuName => {
@@ -122,7 +117,7 @@ class DashboardLayout extends React.Component {
     window.location.reload();
   }
 
-  setFullStory = (organisationData) =>{
+  setFullStory = (organisationData) => {
     // if(organisationData!= null ){
     //   let exOrgData = getOrganisationData();
     //   if(exOrgData == null || organisationData.organisationUniqueKey!= exOrgData.organisationUniqueKey){
@@ -151,7 +146,7 @@ class DashboardLayout extends React.Component {
           type="button"
           data-toggle="dropdown"
         >
-          <img src={userImage} alt="" />
+          <img src={userImage} alt=""/>
         </button>
 
         <ul className="dropdown-menu">
@@ -159,7 +154,7 @@ class DashboardLayout extends React.Component {
             <div className="media">
               <div className="media-left">
                 <figure className="user-img-wrap">
-                  <img src={userImage} alt="" />
+                  <img src={userImage} alt=""/>
                 </figure>
               </div>
 
@@ -221,7 +216,7 @@ class DashboardLayout extends React.Component {
             <div className="col-sm-12 d-flex">
               <div className="logo-box">
                 <NavLink to="/" className="site-brand">
-                  <img src={AppImages.netballLogo1} alt="" />
+                  <img src={AppImages.netballLogo1} alt=""/>
                 </NavLink>
 
                 <div className="col-sm dashboard-layout-menu-heading-view" onClick={this.props.onMenuHeadingClick}>
@@ -302,7 +297,7 @@ class DashboardLayout extends React.Component {
                           type="button"
                           data-toggle="dropdown"
                         >
-                          <img src={this.menuImageChange(menuName)} alt="" />
+                          <img src={this.menuImageChange(menuName)} alt=""/>
                         </button>}
                         <ul className="dropdown-menu">
                           <li
@@ -312,7 +307,7 @@ class DashboardLayout extends React.Component {
                           >
                             <div className="home-menu menu-wrap">
                               <NavLink to="/homeDashboard">
-                                <span className="icon" />
+                                <span className="icon"/>
                                 {AppConstants.home}
                               </NavLink>
                             </div>
@@ -324,7 +319,7 @@ class DashboardLayout extends React.Component {
                           >
                             <div className="user-menu menu-wrap">
                               <NavLink to="/userTextualDashboard">
-                                <span className="icon" />
+                                <span className="icon"/>
                                 {AppConstants.user}
                               </NavLink>
                             </div>
@@ -338,7 +333,7 @@ class DashboardLayout extends React.Component {
                           >
                             <div className="registration-menu menu-wrap">
                               <NavLink to="/registrationDashboard">
-                                <span className="icon" />
+                                <span className="icon"/>
                                 {AppConstants.registration}
                               </NavLink>
                             </div>
@@ -352,7 +347,7 @@ class DashboardLayout extends React.Component {
                           >
                             <div className="competitions-menu menu-wrap">
                               <NavLink to="/competitionDashboard">
-                                <span className="icon" />
+                                <span className="icon"/>
                                 {AppConstants.competitions}
                               </NavLink>
                             </div>
@@ -366,7 +361,7 @@ class DashboardLayout extends React.Component {
                           >
                             <div className="lives-cores menu-wrap">
                               <NavLink to="/liveScoreCompetitions">
-                                <span className="icon" />
+                                <span className="icon"/>
                                 {AppConstants.liveScores}
                               </NavLink>
                             </div>
@@ -378,7 +373,7 @@ class DashboardLayout extends React.Component {
                           >
                             <div className="events-menu menu-wrap">
                               <a href="#">
-                                <span className="icon" />
+                                <span className="icon"/>
                                 {AppConstants.events}
                               </a>
                             </div>
@@ -390,7 +385,7 @@ class DashboardLayout extends React.Component {
                           >
                             <div className="shop-menu menu-wrap">
                               <NavLink to="/shopDashboard">
-                                <span className="icon" />
+                                <span className="icon"/>
                                 {AppConstants.shop}
                               </NavLink>
                             </div>
@@ -402,7 +397,7 @@ class DashboardLayout extends React.Component {
                           >
                             <div className="umpires-menu menu-wrap">
                               <NavLink to="/umpireDashboard">
-                                <span className="icon" />
+                                <span className="icon"/>
                                 {AppConstants.umpires}
                               </NavLink>
                             </div>
@@ -428,7 +423,7 @@ class DashboardLayout extends React.Component {
                           >
                             <div className="finance-menu menu-wrap">
                               <a href="#">
-                                <span className="icon" />
+                                <span className="icon"/>
                                 {AppConstants.finance}
                               </a>
                             </div>

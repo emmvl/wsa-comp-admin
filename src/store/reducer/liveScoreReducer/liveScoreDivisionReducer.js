@@ -85,12 +85,13 @@ function liveScoreDivisionState(state = initialState, action) {
             }
 
         case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_FAIL:
-            return { ...state, onLoad: false }
+            return { ...state, onLoad: false, printLoad: false }
 
         case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_ERROR:
             return {
                 ...state,
                 onLoad: false,
+                printLoad: false,
                 status: action.status
             }
 

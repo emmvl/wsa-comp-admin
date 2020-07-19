@@ -7,14 +7,15 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import InputWithHead from "../../customComponents/InputWithHead";
 import { userPhotoUpdateAction, userDetailUpdateAction } from "../../store/actions/userAction/userAction";
+import { captializedString } from "../../util/helpers";
 import Loader from "../../customComponents/loader";
 
 function Profile(props) {
   const { userState, form, userPhotoUpdateAction, userDetailUpdateAction } = props;
 
-  const [user, setUser] = useState(userState.getUserOrganisation);
+  const [user, setUser] = useState(userState.userProfile);
 
-  const { firstName, lastName, mobileNumber, userEmail, photoUrl } = userState.getUserOrganisation;
+  const { firstName, lastName, mobileNumber, email, photoUrl } = userState.userProfile;
 
   useEffect(() => {
     setUser(prevState => ({
@@ -22,9 +23,9 @@ function Profile(props) {
       firstName,
       lastName,
       mobileNumber,
-      email: userEmail,
+      email,
     }));
-  }, [firstName, lastName, mobileNumber, userEmail]);
+  }, [firstName, lastName, mobileNumber, email]);
 
   useEffect(() => {
     setUser(prevState => ({ ...prevState, photoUrl }));
@@ -123,6 +124,12 @@ function Profile(props) {
             placeholder={AppConstants.enterFirstName}
             value={user.firstName}
             onChange={onChangeField}
+            onBlur={(e) => {
+              setUser({
+                ...user,
+                firstName: captializedString(e.currentTarget.value),
+              });
+            }}
           />
 
           <InputWithHead
@@ -132,6 +139,12 @@ function Profile(props) {
             placeholder={AppConstants.enterLastName}
             value={user.lastName}
             onChange={onChangeField}
+            onBlur={(e) => {
+              setUser({
+                ...user,
+                lastName: captializedString(e.currentTarget.value),
+              });
+            }}
           />
 
           <InputWithHead

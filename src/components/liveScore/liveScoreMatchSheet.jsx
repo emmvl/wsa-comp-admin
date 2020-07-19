@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {
-    Breadcrumb, Button, Layout, Select, Checkbox, Radio, Table,
+    Breadcrumb, Button, Layout, Select, Table, message,
 } from 'antd';
 
 import DashboardLayout from '../../pages/dashboardLayout';
@@ -14,16 +14,17 @@ import {getliveScoreTeams} from '../../store/actions/LiveScoreAction/liveScoreTe
 import {getMatchPrintTemplateType} from '../../store/actions/commonAction/commonAction';
 import {liveScoreMatchListAction} from '../../store/actions/LiveScoreAction/liveScoreMatchAction';
 import {liveScoreGetMatchDetailInitiate} from '../../store/actions/LiveScoreAction/liveScoreMatchAction';
-import {liveScoreMatchSheetPrintAction} from '../../store/actions/LiveScoreAction/liveScoreMatchSheetAction';
+import {liveScoreMatchSheetPrintAction, liveScoreMatchSheetDownloadsAction} from '../../store/actions/LiveScoreAction/liveScoreMatchSheetAction';
 import Loader from '../../customComponents/loader';
 import InputWithHead from '../../customComponents/InputWithHead';
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
 import LiveScoreMatchSheetPreviewModal from './matchsheets/LiveScoreMatchSheetPreviewModal';
 import {liveScore_MatchFormate} from '../../themes/dateformate';
+import {getLiveScoreCompetiton} from "../../util/sessionStorage";
 
 import './liveScore.css';
 
-const {Header, Footer, Content} = Layout;
+const {Header, Content} = Layout;
 const {Option} = Select;
 
 const tableSort = (a, b, key) => {
@@ -37,82 +38,51 @@ class LiveScoreMatchSheet extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            year: '2019',
-            competition: '2019winter',
-            division: 'All',
-            grade: 'all',
-            teams: 'all',
-            value: 'periods',
-            gameTimeTracking: false,
-            onCompLoad: false,
-            selectedComp: null,
-            competitionUniqueKey: null,
+            competitionId: null,
+            division: null,
+            selectedTeam: null,
             onDivisionLoad: false,
-            teamLoad: false,
-            teamsList: [],
+            onTeamLoad: false,
+            onMatchLoad: false,
             showPreview: false,
-            selectedTeam: 'All',
             organisation: null,
             selectedMatchId: null,
             selectedMatch: null,
+            selectedTemplateId: null,
+            templateType: null,
         };
     }
 
     componentDidMount() {
-        const {organisationId} = JSON.parse(localStorage.getItem('setOrganisationData'));
-        this.setState({organisation: JSON.parse(localStorage.getItem('setOrganisationData'))});
-        this.setState({onCompLoad: true});
-        this.props.fixtureCompetitionListAction(organisationId);
+        const { id } = JSON.parse(getLiveScoreCompetiton());
+        this.props.getLiveScoreDivisionList(id);
+        this.setState({onDivisionLoad: true, competitionId: id});
         this.props.getMatchPrintTemplateType();
+        this.refreshDownloads();
     }
 
     componentDidUpdate(nextProps) {
-        if (nextProps.liveScoreFixturCompState !== this.props.liveScoreFixturCompState) {
-            if (this.state.onCompLoad === true && this.props.liveScoreFixturCompState.onLoad === false) {
-                const firstComp = this.props.liveScoreFixturCompState.comptitionList
-                    && this.props.liveScoreFixturCompState.comptitionList[0].id;
-                const compKey = this.props.liveScoreFixturCompState.comptitionList
-                    && this.props.liveScoreFixturCompState.comptitionList[0].competitionUniqueKey;
-                this.props.getLiveScoreDivisionList(firstComp);
-                this.setState({
-                    selectedComp: firstComp,
-                    onCompLoad: false,
-                    onDivisionLoad: true,
-                    competitionUniqueKey: compKey,
-                });
-            }
-        }
-
         if (this.props.liveScoreMatchSheetState !== nextProps.liveScoreMatchSheetState) {
-            if (this.props.liveScoreMatchSheetState.onLoad === false && this.state.onDivisionLoad === true) {
+            if (this.props.liveScoreMatchSheetState.onDivisionLoad === false && this.state.onDivisionLoad === true) {
+                let division = null;
                 if (this.props.liveScoreMatchSheetState.liveScoreDivisionList.length > 0) {
-                    const division = this.props.liveScoreMatchSheetState.liveScoreDivisionList[0].id;
-                    this.props.getliveScoreTeams(this.state.selectedComp, division);
-                    this.setState({
-                        onDivisionLoad: false,
-                        division,
-                        teamLoad: true
-                    });
-                    this.props.liveScoreMatchListAction(
-                        this.state.selectedComp,
-                        undefined,
-                        undefined,
-                        undefined,
-                        division,
-                        undefined,
-                        this.state.selectedTeam === 'All' ? null : this.state.selectedTeam
-                    );
+                    division = this.props.liveScoreMatchSheetState.liveScoreDivisionList[0].id;
                 }
+                this.setState({
+                    onDivisionLoad: false,
+                    onTeamLoad: true,
+                    division,
+                });
+                this.props.getliveScoreTeams(this.state.competitionId, division);
             }
 
-            if (this.props.liveScoreMatchSheetState.onLoad === false && this.state.teamLoad === true) {
-                const teams = isArrayNotEmpty(this.props.liveScoreMatchSheetState.allTeamData)
-                    ? this.props.liveScoreMatchSheetState.allTeamData[0].id
-                    : [];
+            if (this.props.liveScoreMatchSheetState.onTeamLoad === false && this.state.onTeamLoad === true) {
                 this.setState({
-                    teamLoad: false,
-                    teams,
+                    onDivisionLoad: false,
+                    onTeamLoad: false,
+                    onMatchLoad: true,
                 });
+                this.fetchMatchList(this.state.division, null);
             }
         }
     }
@@ -140,71 +110,66 @@ class LiveScoreMatchSheet extends Component {
     };
 
     printAll = () => {
-        if (this.props.liveScoreMatchState.liveScoreMatchList.length > 0) {
-            this.props.liveScoreMatchSheetPrintAction(
-                this.state.selectedComp,
+        const filteredMatchesByTeam = this.state.selectedTeam !== null
+            ? this.props.liveScoreMatchState.liveScoreMatchList.filter(
+                (match) => match.team1Id === this.state.selectedTeam || match.team2Id === this.state.selectedTeam)
+            : this.props.liveScoreMatchState.liveScoreMatchList;
+        if (this.state.selectedTemplateId !== null  && filteredMatchesByTeam.length > 0) {
+            this.props.liveScoreMatchSheetPrintAction (
+                this.state.competitionId,
                 this.state.division === 'All' ? null : this.state.division,
-                this.state.selectedTeam === 'All' ? null : this.state.selectedTeam
+                this.state.selectedTeam === 'All' ? null : this.state.selectedTeam,
+                this.state.templateType,
             );
+        } else if (this.props.liveScoreMatchState.liveScoreMatchList.length === 0) {
+            message.error('There is no matchsheets to print.')
+        } else {
+            message.error('Please select template type.')
         }
     };
 
-    onChange = (e) => {
-        this.setState({
-            value: e.target.value,
-        });
-    };
+    onChangeTemplate(selectedTemplateId) {
+        const {commonReducerState} = this.props;
+        const templateType = commonReducerState.matchPrintTemplateType.find(type => type.id === selectedTemplateId);
 
-    onChangeComp(compID) {
-        const selectedComp = compID.comp;
-        const compKey = compID.competitionUniqueKey;
-        this.props.getLiveScoreDivisionList(selectedComp);
         this.setState({
-            selectedComp,
-            onDivisionLoad: true,
-            division: null,
-            competitionUniqueKey: compKey,
+            selectedTemplateId,
+            templateType: templateType.description,
         });
-        this.props.liveScoreMatchListAction(
-            selectedComp,
-            undefined,
-            undefined,
-            undefined,
-            this.state.division === 'All' ? null : this.state.division,
-            undefined,
-            this.state.selectedTeam === 'All' ? null : this.state.selectedTeam
-        );
     }
 
     changeDivision(divisionId) {
-        const {division} = divisionId;
-        this.props.getliveScoreTeams(this.state.selectedComp, division);
+        const { division } = divisionId;
+        this.props.getliveScoreTeams(this.state.competitionId, division);
         this.setState({
             division,
             teamLoad: true
         });
-        this.props.liveScoreMatchListAction(
-            this.state.selectedComp,
-            undefined,
-            undefined,
-            undefined,
+        this.fetchMatchList(
             division === 'All' ? null : division,
-            undefined,
             this.state.selectedTeam === 'All' ? null : this.state.selectedTeam
         );
     }
 
     onChangeTeam(selectedTeam) {
+        this.setState({selectedTeam});
+    }
+
+    fetchMatchList(divisionId, teamId) {
         this.props.liveScoreMatchListAction(
-            this.state.selectedComp,
+            this.state.competitionId,
             undefined,
             undefined,
             undefined,
-            this.state.division === 'All' ? null : this.state.division,
+            divisionId,
             undefined,
-            selectedTeam === 'All' ? null : selectedTeam
+            teamId
         );
-        this.setState({selectedTeam})
+    }
+
+    refreshDownloads() {
+        const { id } = JSON.parse(getLiveScoreCompetiton());
+        this.props.liveScoreMatchSheetDownloadsAction(id);
     }
 
     /// view for breadcrumb
@@ -219,44 +184,6 @@ class LiveScoreMatchSheet extends Component {
             </div>
         </Header>
     );
-
-    /// dropdown view containing all the dropdown of header
-    dropdownView = () => {
-        const competition = this.props.liveScoreFixturCompState.comptitionList
-            ? this.props.liveScoreFixturCompState.comptitionList
-            : [];
-        return (
-            <div className="comp-venue-courts-dropdown-view mt-0">
-                <div className="fluid-width">
-                    <div className="row">
-                        <div className="col-sm-2">
-                            <div
-                                style={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    marginRight: 50,
-                                }}
-                            >
-                                <span className="year-select-heading">
-                                  {AppConstants.competition}:
-                                </span>
-                                <Select
-                                    className="year-select"
-                                    style={{minWidth: 160}}
-                                    onChange={(comp) => this.onChangeComp({comp})}
-                                    value={this.state.selectedComp}
-                                >
-                                    {competition.map((item) => <Option value={item.id} key={item.id}>{item.longName}</Option>)}
-                                </Select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    };
 
     columns = [
         {
@@ -297,9 +224,12 @@ class LiveScoreMatchSheet extends Component {
     ];
 
     // Match sheet table
-    tableView = () => {
+    sheetTableView = () => {
         const { liveScoreMatchState } = this.props;
         let DATA = liveScoreMatchState ? liveScoreMatchState.liveScoreMatchList : [];
+        const filteredMatchesByTeam = this.state.selectedTeam !== null
+            ? DATA.filter((match) => match.team1Id === this.state.selectedTeam || match.team2Id === this.state.selectedTeam)
+            : DATA;
 
         return (
             <div className="formView mt-4">
@@ -307,7 +237,7 @@ class LiveScoreMatchSheet extends Component {
                     <Table
                         className="home-dashboard-table"
                         columns={this.columns}
-                        dataSource={DATA}
+                        dataSource={filteredMatchesByTeam}
                         rowKey={(record, index) => record.id + index}
                     />
                 </div>
@@ -344,17 +274,17 @@ class LiveScoreMatchSheet extends Component {
         },
         {
             title: 'Download',
-            dataIndex: 'downloadLink',
-            key: 'downloadLink',
-            render: (downloadLink) => <a href={downloadLink}>
-                {downloadLink}
+            dataIndex: 'downloadUrl',
+            key: 'downloadUrl',
+            render: (downloadUrl) => <a className="sheet-download-link" href={downloadUrl}>
+                Download
             </a>
         },
     ];
 
     // Match sheet table
     dropdownTableView = () => {
-        let DATA = [];
+        let DATA = this.props.liveScoreMatchSheetState.matchSheetDownloads;
 
         return (
             <div className="formView mt-4 mb-5">
@@ -372,12 +302,15 @@ class LiveScoreMatchSheet extends Component {
 
     /// form content view
     contentView = () => {
-        const {liveScoreMatchSheetState} = this.props;
+        const {liveScoreMatchSheetState, commonReducerState} = this.props;
         const division = isArrayNotEmpty(liveScoreMatchSheetState.allDivisionData)
             ? liveScoreMatchSheetState.allDivisionData
             : [];
         const teamList = isArrayNotEmpty(liveScoreMatchSheetState.allTeamData)
             ? liveScoreMatchSheetState.allTeamData
+            : [];
+        const templateList = isArrayNotEmpty(commonReducerState.matchPrintTemplateType)
+            ? commonReducerState.matchPrintTemplateType
             : [];
 
         return (
@@ -393,8 +326,10 @@ class LiveScoreMatchSheet extends Component {
                                 style={{width: '100%', paddingRight: 1, minWidth: 182}}
                                 onChange={(division) => this.changeDivision({division})}
                                 value={this.state.division}
+                                placeholder="Select division"
                             >
-                                {division.map((item) => <Option value={item.id} key={item.id}>{item.name}</Option>)}
+                                {division.length > 0 && division.map(
+                                    (item) => <Option value={item.id} key={item.id}>{item.name}</Option>)}
                             </Select>
                         </div>
                     </div>
@@ -409,43 +344,33 @@ class LiveScoreMatchSheet extends Component {
                                 style={{width: '100%', paddingRight: 1, minWidth: 182}}
                                 onChange={(selectedTeam) => this.onChangeTeam(selectedTeam)}
                                 value={this.state.selectedTeam}
+                                placeholder="Select team"
                             >
-                                {teamList.map((item) => <Option value={item.id} key={item.id}>{item.name}</Option>)}
+                                {teamList.length > 0 && teamList.map(
+                                    (item) => <Option value={item.id} key={item.id}>{item.name}</Option>)}
                             </Select>
                         </div>
                     </div>
                 </div>
 
-                <Checkbox
-                    className="single-checkbox pt-3"
-                    defaultChecked={false}
-                    onChange={(e) => this.setState({gameTimeTracking: e.target.checked})}>
-                    {AppConstants.gameTimeTracking}
-                </Checkbox>
-                {this.state.gameTimeTracking && (
-                    <div className="comp-match-sheets-game-time-track-radio-view">
-                        <Radio.Group onChange={this.onChange} value={this.state.value} defaultValue="periods">
-                            <Radio value="periods">{AppConstants.periods}</Radio>
-                            <Radio value="minutes">{AppConstants.minutes}</Radio>
-                        </Radio.Group>
+                <div className="fluid-width" style={{marginTop: 15}}>
+                    <div className="row">
+                        <div className="col-sm">
+                            <InputWithHead heading={AppConstants.templateType}/>
+                        </div>
+                        <div className="col-sm">
+                            {/* <Select
+                                style={{width: '100%', paddingRight: 1, minWidth: 182}}
+                                onChange={(selectedTemplateId) => this.onChangeTemplate(selectedTemplateId)}
+                                value={this.state.selectedTemplateId ?? 'Select template type'}
+                                placeholder="Select template type"
+                            >
+                                {templateList.length > 0 && templateList.map(
+                                    (item) => <Option value={item.id} key={item.id}>{item.description}</Option>)}
+                            </Select> */}
+                        </div>
                     </div>
-                )}
-                <div>
-                    <Checkbox
-                        className="single-checkbox"
-                        defaultChecked
-                        onChange={(e) => this.onChange(e)}
-                    >
-                        {AppConstants.positionTracking}
-                    </Checkbox>
                 </div>
-                <Checkbox
-                    className="single-checkbox"
-                    defaultChecked
-                    onChange={(e) => this.onChange(e)}
-                >
-                    {AppConstants.shooting}%
-                </Checkbox>
             </div>
         );
     };
@@ -455,6 +380,13 @@ class LiveScoreMatchSheet extends Component {
         <div className="fluid-width">
             <div className="match-sheet-footer-view">
                 <div style={{display: 'flex', justifyContent: 'flex-end', marginRight: 15}}>
+                    <Button
+                        className="open-reg-button mr-3"
+                        type="primary"
+                        onClick={() => this.refreshDownloads()}
+                    >
+                        {AppConstants.refreshDownloads}
+                    </Button>
                     <Button
                         className="open-reg-button"
                         type="primary"
@@ -474,7 +406,10 @@ class LiveScoreMatchSheet extends Component {
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="22"/>
                 <Loader
                     visible={
-                        this.props.liveScoreMatchSheetState.onLoad
+                        this.props.liveScoreMatchSheetState.onDivisionLoad
+                        || this.props.liveScoreMatchSheetState.onTeamLoad
+                        || this.props.liveScoreMatchSheetState.printLoad
+                        || this.props.liveScoreMatchSheetState.onLoad
                         || this.props.liveScoreMatchState.onLoad
                         || this.props.liveScoreMatchState.isFetchingMatchList
                     }
@@ -482,11 +417,10 @@ class LiveScoreMatchSheet extends Component {
                 <Layout>
                     {this.headerView()}
                     <Content>
-                        {this.dropdownView()}
                         <div className="formView">
                             {this.contentView()}
                         </div>
-                        {this.tableView()}
+                        {this.sheetTableView()}
                         {this.footerView()}
                         {this.dropdownTableView()}
                     </Content>
@@ -515,6 +449,7 @@ function mapDispatchtoprops(dispatch) {
         liveScoreMatchListAction,
         liveScoreGetMatchDetailInitiate,
         liveScoreMatchSheetPrintAction,
+        liveScoreMatchSheetDownloadsAction,
     }, dispatch);
 }
 

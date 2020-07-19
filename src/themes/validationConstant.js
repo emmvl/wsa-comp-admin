@@ -177,7 +177,18 @@ const ValidationConstants = {
     pleaseSelectAffiliate: "Please select one affiliate.",
     incidentPlayer: "Player Name is required",
     point: "Point is required.",
-    reasonChange: "Reason is required."
+    reasonChange: "Reason is required.",
+    userName: 'User name is required.',
+    userRegister: 'User register is required',
+    competitionAdimistrator: 'Competition adimistrator is required',
+    regChangeDate: 'Registration change date is required',
+    compStartDate: 'Competition start date is required',
+    pleaseEnterQuantity: "Please enter quantity.",
+    recordumpireField: 'Record umpire is required.',
+    attendanceRecordField: 'Record is required.',
+    attendanceReportField: 'Report is required.',
+    scoringField: 'Scoring is required.'
+
 };
 
 export default ValidationConstants;

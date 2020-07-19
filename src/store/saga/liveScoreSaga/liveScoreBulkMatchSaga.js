@@ -152,7 +152,6 @@ export function* liveScoreAbandonMatchSaga(action) {
 export function* liveScoreMatchResult(action) {
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreMatchResult);
-        console.log(result)
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_MATCH_RESULT_SUCCESS,

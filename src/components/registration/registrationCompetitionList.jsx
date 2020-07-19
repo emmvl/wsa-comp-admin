@@ -300,11 +300,12 @@ class RegistrationCompetitionList extends Component {
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
                     <div className="row" >
-                        <div className="col-sm">
+                         <div className="col-sm-2">
                             <div className="com-year-select-heading-view">
-                                <span className="year-select-heading">{AppConstants.year}:</span>
+                                <span className="year-select-heading" style={{width: 50}}>{AppConstants.year}:</span>
                                 <Select
-                                    className="year-select"
+                                    style={{marginLeft: 10}}
+                                    className="year-select user-filter-select-drop"
                                     value={this.state.yearRefId}
                                     onChange={(e) => this.yearChange(e)}
                                 >
@@ -318,6 +319,7 @@ class RegistrationCompetitionList extends Component {
                                 </Select>
                             </div>
                         </div>
+						<div className="col-sm"></div>							  
                         <div style={{ marginRight: "25px", display: "flex", alignItems: 'center' }} >
                             <div className="comp-product-search-inp-width" >
                                 <Input className="product-reg-search-input"

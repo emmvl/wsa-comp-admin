@@ -4,9 +4,21 @@ import "./shopSingleProductComponent.css";
 import AppImages from "../themes/appImages";
 import { currencyFormat } from "../util/currencyFormat";
 import { isArrayNotEmpty } from "../util/helpers";
+import { getOrganisationData } from '../util/sessionStorage';
 
 const { SubMenu } = Menu;
 class ShopSingleProductComponent extends React.Component {
+
+    /////check product is for parent or for affiliate
+    isParentCreator = (creatorOrgKey) => {
+        let orgData = getOrganisationData();
+        let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0;
+        if (organisationUniqueKey == creatorOrgKey) {
+            return true
+        } else {
+            return false
+        }
+    }
 
 
     productItemPriceCheck = (productItem) => {
@@ -23,7 +35,7 @@ class ShopSingleProductComponent extends React.Component {
     }
 
     render() {
-        const { productItem } = this.props
+        const { productItem, editOnclick, deleteOnclick, viewOnclick } = this.props
         return (
             <div className="shop-single-prd-main-view mt-3" >
                 <div className="product-menu-option-view">
@@ -46,12 +58,21 @@ class ShopSingleProductComponent extends React.Component {
                                 />
                             }
                         >
-                            <Menu.Item onClick={this.props.editOnclick} >
-                                <span>Edit</span>
-                            </Menu.Item>
-                            <Menu.Item onClick={this.props.deleteOnclick} >
-                                <span>Delete</span>
-                            </Menu.Item>
+                            {this.isParentCreator(productItem.organisationUniqueKey) &&
+                                <Menu.Item onClick={editOnclick} >
+                                    <span>Edit</span>
+                                </Menu.Item>
+                            }
+                            {this.isParentCreator(productItem.organisationUniqueKey) &&
+                                <Menu.Item onClick={deleteOnclick} >
+                                    <span>Delete</span>
+                                </Menu.Item>
+                            }
+                            {this.isParentCreator(productItem.organisationUniqueKey) == false &&
+                                <Menu.Item onClick={viewOnclick}>
+                                    <span>View</span>
+                                </Menu.Item>
+                            }
                         </SubMenu>
                     </Menu>
                 </div>

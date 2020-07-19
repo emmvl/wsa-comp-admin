@@ -79,13 +79,13 @@ let userHttpApi = {
   },
 
   liveScoreManagerList(roleId, entityTypeId, entityId, searchText) {
-    let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+    // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
 
     let url = ''
     if (searchText) {
-      url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${id}&userName=${searchText}`;
+      url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&userName=${searchText}`;
     } else {
-      url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${id}`;
+      url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}`;
     }
     return Method.dataGet(url, token)
   },
@@ -256,6 +256,11 @@ let userHttpApi = {
   saveUserPhoto(payload) {
     const url = `users/photo`;
     return Method.dataPost(url, token, payload);
+  },
+
+  getUserDetail() {
+    const url = `users/profile`;
+    return Method.dataGet(url, token);
   },
 
   saveUserDetail(payload) {

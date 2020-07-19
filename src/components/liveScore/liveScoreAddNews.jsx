@@ -10,6 +10,7 @@ import {
     Form,
     Modal,
     Spin,
+    Checkbox
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -33,11 +34,11 @@ import Loader from '../../customComponents/loader';
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, ContentState, convertFromHTML, } from 'draft-js';
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { getLiveScoreCompetiton } from '../../util/sessionStorage';
+import { getLiveScoreCompetiton, getKeyForStateWideMessage } from '../../util/sessionStorage';
 import { isArrayNotEmpty, captializedString } from "../../util/helpers";
 import { liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
-// import LoaderImg from 'react-loader-spinner'
 import ImageLoader from '../../customComponents/ImageLoader'
+import { NavLink } from "react-router-dom";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -70,21 +71,38 @@ class LiveScoreAddNews extends Component {
             editorState: EditorState.createEmpty(),
             authorName: 'abc',
             imageTimeout: null,
-            videoTimeout: null
+            videoTimeout: null,
+            screenKey: props.location ? props.location.state ? props.location.state.screenKey ? props.location.state.screenKey : null : null : null
         };
     }
 
 
     componentDidMount() {
+        let name
+        if (getLiveScoreCompetiton()) {
+            const AuthorData = JSON.parse(getLiveScoreCompetiton())
+            name = AuthorData.longName
+        } else {
+            name = 'World sport actioa'
+        }
 
-        const AuthorData = JSON.parse(getLiveScoreCompetiton())
 
-        const name = AuthorData.longName
-        // this.setState({  })
-        // let competitionId = getCompetitonId()
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.props.getliveScoreScorerList(id, 4)
-        this.props.liveScoreManagerListAction(3, 1, id)
+
+        if (getLiveScoreCompetiton()) {
+            const { id, organisationId } = JSON.parse(getLiveScoreCompetiton())
+            if (this.state.screenKey === 'stateWideMsg') {
+                this.props.getliveScoreScorerList(organisationId, 4)
+                this.props.liveScoreManagerListAction(3, 1, organisationId)
+            } else {
+
+                this.props.getliveScoreScorerList(id, 4)
+                this.props.liveScoreManagerListAction(3, 1, 1)
+            }
+        } else {
+            this.props.getliveScoreScorerList(1, 4)
+            this.props.liveScoreManagerListAction(3, 1, 1)
+        }
+
         this.setState({ getDataLoading: false, authorName: name })
 
         const { addEditNews } = this.props.liveScoreNewsState;
@@ -143,11 +161,16 @@ class LiveScoreAddNews extends Component {
 
 
     setInitalFiledValue(data, author) {
-        const authorData = JSON.parse(getLiveScoreCompetiton())
+
+        let authorData = null
+        if (getLiveScoreCompetiton()) {
+            authorData = JSON.parse(getLiveScoreCompetiton())
+        }
+
 
         this.props.form.setFieldsValue({
             'news_Title': data.title,
-            'author': author ? author : authorData.longName
+            'author': author ? author : authorData ? authorData.longName : 'World sport actioa'
         })
         let finalBody = data ? data.body ? data.body : "" : ""
         let body = EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(finalBody)))
@@ -170,7 +193,11 @@ class LiveScoreAddNews extends Component {
                     }
                     // history.push('./liveScoreNewsView', { item: this.props.liveScoreNewsState.addNewsResult, id: this.state.key })
                 }
-                history.push('./liveScoreNewsView', { item: appendData, id: this.state.key })
+                // history.push('./liveScoreNewsView', { item: appendData, id: this.state.key })
+                history.push({
+                    pathname: '/liveScoreNewsView',
+                    state: { item: appendData, id: this.state.key, screenKey: this.state.screenKey }
+                })
             }
         }
     }
@@ -341,6 +368,7 @@ class LiveScoreAddNews extends Component {
     managerView = () => {
         const { managerListResult } = this.props.liveScoreMangerState
         let managerList = isArrayNotEmpty(managerListResult) ? managerListResult : []
+
         return (
             <div className="row" >
                 <div className="col-sm" >
@@ -382,6 +410,7 @@ class LiveScoreAddNews extends Component {
         let expiryDate = liveScoreNewsState.news_expire_date
         let expiryTime = liveScoreNewsState.expire_time
         let expiryTime_formate = expiryTime ? moment(expiryTime).format("HH:mm") : null;
+        let stateWideMsg = getKeyForStateWideMessage()
         return (
             <div className="content-view pt-4">
                 <Form.Item >
@@ -519,9 +548,100 @@ class LiveScoreAddNews extends Component {
                         />
                     </div>
                 </div>
+
+                {stateWideMsg && this.stateWideMsgView()}
             </div >
         );
     };
+
+    stateWideMsgView() {
+        const { allOrg, indivisualOrg } = this.props.liveScoreNewsState;
+        const recipientArr_1 = [
+            { label: 'All User', value: "allUser", },
+            { label: 'All Coaches', value: "allCoach", },
+            { label: 'All Managers', value: "allManager", },
+
+        ];
+
+        const recipientArr_2 = [
+
+            { label: 'All Players', value: "allPlayer", },
+            { label: 'All Umpires', value: "allUmpire", },
+            { label: 'All Parents', value: "allParent", },
+        ];
+
+        return (
+            <div>
+                <div
+                    className="mt-3"
+                    style={{ display: "flex", alignItems: "center" }}
+                >
+                    <Checkbox
+                        className="single-checkbox"
+                        onChange={(e) => this.props.liveScoreUpdateNewsAction(e.target.checked, "allOrg")}
+                        value={allOrg}
+                    >
+                        {AppConstants.allOrganisation}
+                    </Checkbox>
+                </div>
+
+                <div
+                    className="mt-3"
+                    style={{ display: "flex", alignItems: "center" }}
+                >
+                    <Checkbox
+                        className="single-checkbox"
+                        onChange={(e) => this.props.liveScoreUpdateNewsAction(e.target.checked, "indivisualOrg")}
+                        value={indivisualOrg}
+                    >
+                        {AppConstants.indivisualOrgnisation}
+                    </Checkbox>
+                </div>
+
+                {
+                    indivisualOrg &&
+                    <div>
+                        <Select
+                            mode='multiple'
+                            placeholder={AppConstants.selectOrganisation}
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+
+                        >
+
+                        </Select>
+                    </div>
+                }
+
+                <InputWithHead heading={AppConstants.recipients} />
+                <div className='row'>
+                    <div className="col-sm"  >
+                        <Checkbox.Group
+                            style={{
+                                display: "-ms-flexbox",
+                                flexDirection: "column",
+                                justifyContent: "center"
+                            }}
+                            options={recipientArr_1}
+                        >
+                        </Checkbox.Group>
+                    </div>
+
+                    <div className="col-sm" >
+                        <Checkbox.Group
+                            style={{
+                                display: "-ms-flexbox",
+                                flexDirection: "column",
+                                justifyContent: "center"
+                            }}
+                            options={recipientArr_2}
+                        >
+                        </Checkbox.Group>
+                    </div>
+                </div>
+
+            </div>
+        )
+    }
 
     onSaveButton = (e) => {
         let newsId = this.props.location.state ? this.props.location.state.item ? this.props.location.state.item.id ? this.props.location.state.item.id : null : null : null
@@ -583,8 +703,12 @@ class LiveScoreAddNews extends Component {
                 }
 
                 let editData = liveScoreNewsState.addEditNews;
-
-                this.props.liveScoreAddNewsAction(editData, mediaArry, newsId, this.state.key)
+                if (getLiveScoreCompetiton()) {
+                    const { id } = JSON.parse(getLiveScoreCompetiton())
+                    this.props.liveScoreAddNewsAction(editData, mediaArry, newsId, this.state.key, id)
+                } else {
+                    this.props.liveScoreAddNewsAction(editData, mediaArry, newsId, this.state.key, 1)
+                }
                 this.setState({ getDataLoading: true })
             }
         });
@@ -603,7 +727,17 @@ class LiveScoreAddNews extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <Button onClick={() => history.push(this.state.key == 'dashboard' ? 'liveScoreDashboard' : '/liveScoreNewsList')} type="cancel-button">{AppConstants.cancel}</Button>
+                                {/* <Button onClick={() => history.push(this.state.key == 'dashboard' ? 'liveScoreDashboard' : '/liveScoreNewsList')} type="cancel-button">{AppConstants.cancel}</Button> */}
+                                <NavLink
+                                    to={{
+                                        pathname: this.state.key == 'dashboard' ? 'liveScoreDashboard' : '/liveScoreNewsList',
+                                        state: { screenKey: this.state.screenKey }
+                                    }}
+                                >
+                                    <Button type="cancel-button">
+                                        {AppConstants.cancel}
+                                    </Button>
+                                </NavLink>
                             </div>
                         </div>
                         <div className="col-sm">
@@ -623,11 +757,18 @@ class LiveScoreAddNews extends Component {
     /////main render method
     render() {
         const { getFieldDecorator } = this.props.form;
+        let stateWideMsg = getKeyForStateWideMessage()
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <Loader visible={this.props.liveScoreNewsState.onLoad_2} />
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.key == 'dashboard' ? '1' : "21"} />
+
+                {
+                    stateWideMsg ?
+                        <InnerHorizontalMenu menu={"liveScoreNews"} liveScoreNewsSelectedKey={"21"} />
+                        :
+                        <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.key == 'dashboard' ? '1' : "21"} />
+                }
                 <Layout>
                     {this.headerView()}
                     <Form

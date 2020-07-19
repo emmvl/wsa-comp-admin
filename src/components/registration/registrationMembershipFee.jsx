@@ -317,6 +317,7 @@ class RegistrationMembershipFee extends Component {
             validityRefId: membershipProductData.ValidityRefId ? membershipProductData.ValidityRefId : 2,
         });
         let typesData = membershipProductData.membershipProductTypes ? membershipProductData.membershipProductTypes : []
+       
         typesData.length > 0 && typesData.map((item, index) => {
             let dobFrom = `dobFrom${index}`
             let dobTo = `dobTo${index}`
@@ -327,11 +328,9 @@ class RegistrationMembershipFee extends Component {
                     [dobTo]: moment(item.dobTo),
                 })
             }
-            if (isNotNullOrEmptyString(item.allowTeamRegistrationTypeRefId)) {
-                this.props.form.setFieldsValue({
-                    [allowTeamRegistrationTypeRefId]: item.allowTeamRegistrationTypeRefId
-                })
-            }
+            this.props.form.setFieldsValue({
+                [allowTeamRegistrationTypeRefId]: item.allowTeamRegistrationTypeRefId
+            })
         })
         let data = this.props.registrationState.membershipProductDiscountData
         let discountData = data && data.membershipProductDiscounts !== null ? data.membershipProductDiscounts[0].discounts : []
@@ -633,7 +632,7 @@ class RegistrationMembershipFee extends Component {
 												<div className="col-sm">
 																										
 													<Form.Item  >
-													{getFieldDecorator(`allowTeamRegistrationTypeRefId${index}`, { initialValue: 1,
+													{getFieldDecorator(`allowTeamRegistrationTypeRefId${index}`, { 
 																		rules: [{ required: true, message: ValidationConstants.finalFixtureTemplateRequired }]
 													})(
 														<Radio.Group className="reg-competition-radio" 

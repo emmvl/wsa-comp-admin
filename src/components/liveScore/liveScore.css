@@ -374,6 +374,15 @@
   .match-sheet-footer-view {
       padding: 24px 15%;
   }
+
+.sheet-download-link {
+  font-weight: bold;
+  color: var(--app-color);
+}
+
+.sheet-download-link:hover {
+  color: var(--app-color);
+}
   
 @media(min-width: 768px) and (max-width: 1024px) {
     .live-score-edit-match-buttons {

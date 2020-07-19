@@ -9,12 +9,12 @@ function liveScorePlayerListAction(competitionID) {
     return action;
 }
 
-function getliveScoreScorerList(competitionId, roleId) {
+function getliveScoreScorerList(competitionId, roleId, screenKey) {
     const action = {
         type: ApiConstants.API_LIVE_SCORE_GET_SCORER_LIST_LOAD,
         competitionId,
         roleId,
-
+        screenKey
     };
 
     return action;

@@ -10,6 +10,8 @@ import { liveScoreNewsListAction } from '../../store/actions/LiveScoreAction/liv
 import { liveScore_formateDate, liveScore_MatchFormate } from '../../themes/dateformate'
 import AppImages from "../../themes/appImages";
 import history from "../../util/history";
+import { getKeyForStateWideMessage, getLiveScoreCompetiton } from "../../util/sessionStorage"
+
 const { Content } = Layout;
 
 ////columens data
@@ -164,11 +166,17 @@ class LiveScoreNewsList extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            screenKey: props.location ? props.location.state ? props.location.state.screenKey ? props.location.state.screenKey : null : null : null
         };
     }
 
     componentDidMount() {
-        this.props.liveScoreNewsListAction(1)
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            this.props.liveScoreNewsListAction(id)
+        } else {
+            this.props.liveScoreNewsListAction(1)
+        }
     }
 
     ///////view for breadcrumb
@@ -199,7 +207,7 @@ class LiveScoreNewsList extends Component {
                                     <NavLink
                                         to={{
                                             pathname: '/liveScoreAddNews',
-                                            state: { key: 'List', item: null }
+                                            state: { key: 'List', item: null, screenKey: this.state.screenKey }
                                         }}
                                     >
                                         <Button className="primary-add-comp-form" type="primary">
@@ -259,10 +267,18 @@ class LiveScoreNewsList extends Component {
 
     ////main render method
     render() {
+
+        let stateWideMsg = getKeyForStateWideMessage()
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"21"} />
+
+                {
+                    stateWideMsg ?
+                        <InnerHorizontalMenu menu={"liveScoreNews"} liveScoreNewsSelectedKey={"21"} />
+                        :
+                        <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"21"} />
+                }
                 <Layout>
                     {this.headerView()}
                     <Content>
