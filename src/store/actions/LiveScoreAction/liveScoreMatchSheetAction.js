@@ -12,9 +12,10 @@ const liveScoreMatchSheetPrintAction = (competitionId, divisionId, teamId, templ
     return action
 };
 
-const liveScoreMatchSheetDownloadsAction = () => {
+const liveScoreMatchSheetDownloadsAction = (competitionId) => {
     const action = {
         type: ApiConstants.API_MATCH_SHEET_DOWNLOADS_LOAD,
+        competitionId,
     };
 
     return action

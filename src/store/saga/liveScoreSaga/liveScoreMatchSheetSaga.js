@@ -94,10 +94,11 @@ export function* liveScoreMatchSheetPrintSaga(action) {
     }
 }
 
-export function* liveScoreMatchSheetDownloadSaga() {
+export function* liveScoreMatchSheetDownloadSaga(action) {
     try {
         const result = yield call(
             LiveScoreAxiosApi.liveScoreMatchSheetDownloadList,
+            action.competitionId
         );
 
         if (result.status === 1) {

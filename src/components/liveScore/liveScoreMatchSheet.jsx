@@ -38,7 +38,7 @@ class LiveScoreMatchSheet extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            competition: null,
+            competitionId: null,
             division: null,
             selectedTeam: null,
             onDivisionLoad: false,
@@ -56,7 +56,7 @@ class LiveScoreMatchSheet extends Component {
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton());
         this.props.getLiveScoreDivisionList(id);
-        this.setState({onDivisionLoad: true, competition: id});
+        this.setState({onDivisionLoad: true, competitionId: id});
         this.props.getMatchPrintTemplateType();
         this.refreshDownloads();
     }
@@ -73,23 +73,16 @@ class LiveScoreMatchSheet extends Component {
                     onTeamLoad: true,
                     division,
                 });
-                this.props.getliveScoreTeams(this.state.competition, division);
+                this.props.getliveScoreTeams(this.state.competitionId, division);
             }
 
             if (this.props.liveScoreMatchSheetState.onTeamLoad === false && this.state.onTeamLoad === true) {
-                let selectedTeam = null;
-                if (this.props.liveScoreMatchSheetState.allTeamData.length > 0) {
-                    selectedTeam = this.props.liveScoreMatchSheetState.allTeamData[0].id;
-                }
-
                 this.setState({
                     onDivisionLoad: false,
                     onTeamLoad: false,
                     onMatchLoad: true,
-                    selectedTeam,
                 });
-
-                this.fetchMatchList(this.state.division, selectedTeam);
+                this.fetchMatchList(this.state.division, null);
             }
         }
     }
@@ -117,9 +110,13 @@ class LiveScoreMatchSheet extends Component {
     };
 
     printAll = () => {
-        if (this.state.selectedTemplateId !== null  && this.props.liveScoreMatchState.liveScoreMatchList.length > 0) {
+        const filteredMatchesByTeam = this.state.selectedTeam !== null
+            ? this.props.liveScoreMatchState.liveScoreMatchList.filter(
+                (match) => match.team1Id === this.state.selectedTeam || match.team2Id === this.state.selectedTeam)
+            : this.props.liveScoreMatchState.liveScoreMatchList;
+        if (this.state.selectedTemplateId !== null  && filteredMatchesByTeam.length > 0) {
             this.props.liveScoreMatchSheetPrintAction (
-                this.state.competition,
+                this.state.competitionId,
                 this.state.division === 'All' ? null : this.state.division,
                 this.state.selectedTeam === 'All' ? null : this.state.selectedTeam,
                 this.state.templateType,
@@ -143,7 +140,7 @@ class LiveScoreMatchSheet extends Component {
 
     changeDivision(divisionId) {
         const { division } = divisionId;
-        this.props.getliveScoreTeams(this.state.competition, division);
+        this.props.getliveScoreTeams(this.state.competitionId, division);
         this.setState({
             division,
             teamLoad: true
@@ -155,16 +152,12 @@ class LiveScoreMatchSheet extends Component {
     }
 
     onChangeTeam(selectedTeam) {
-        this.setState({selectedTeam})
-        this.fetchMatchList(
-            this.state.division === 'All' ? null : this.state.division,
-            selectedTeam === 'All' ? null : selectedTeam
-        );
+        this.setState({selectedTeam});
     }
 
     fetchMatchList(divisionId, teamId) {
         this.props.liveScoreMatchListAction(
-            this.state.competition,
+            this.state.competitionId,
             undefined,
             undefined,
             undefined,
@@ -175,7 +168,8 @@ class LiveScoreMatchSheet extends Component {
     }
 
     refreshDownloads() {
-        this.props.liveScoreMatchSheetDownloadsAction();
+        const { id } = JSON.parse(getLiveScoreCompetiton());
+        this.props.liveScoreMatchSheetDownloadsAction(id);
     }
 
     /// view for breadcrumb
@@ -233,6 +227,9 @@ class LiveScoreMatchSheet extends Component {
     sheetTableView = () => {
         const { liveScoreMatchState } = this.props;
         let DATA = liveScoreMatchState ? liveScoreMatchState.liveScoreMatchList : [];
+        const filteredMatchesByTeam = this.state.selectedTeam !== null
+            ? DATA.filter((match) => match.team1Id === this.state.selectedTeam || match.team2Id === this.state.selectedTeam)
+            : DATA;
 
         return (
             <div className="formView mt-4">
@@ -240,7 +237,7 @@ class LiveScoreMatchSheet extends Component {
                     <Table
                         className="home-dashboard-table"
                         columns={this.columns}
-                        dataSource={DATA}
+                        dataSource={filteredMatchesByTeam}
                         rowKey={(record, index) => record.id + index}
                     />
                 </div>
