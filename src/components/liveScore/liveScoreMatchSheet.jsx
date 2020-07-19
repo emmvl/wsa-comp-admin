@@ -238,7 +238,7 @@ class LiveScoreMatchSheet extends Component {
                         className="home-dashboard-table"
                         columns={this.columns}
                         dataSource={filteredMatchesByTeam}
-                        rowKey={(record, index) => record.id + index}
+                        rowKey={(record) => record.id}
                     />
                 </div>
             </div>
@@ -263,6 +263,7 @@ class LiveScoreMatchSheet extends Component {
             dataIndex: 'name',
             key: 'name',
             sorter: (a, b) => tableSort(a, b, "name"),
+            ellipsis: true,
         },
         {
             title: 'Created at',
@@ -293,7 +294,7 @@ class LiveScoreMatchSheet extends Component {
                         className="home-dashboard-table"
                         columns={this.dropdownTableColumns}
                         dataSource={DATA}
-                        rowKey={(record, index) => record.id + index}
+                        rowKey={(record) => record.id}
                     />
                 </div>
             </div>
