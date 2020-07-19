@@ -109,13 +109,17 @@ class LiveScoreSettingsView extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.liveScoreSetting != this.props.liveScoreSetting) {
-            const { competitionName, shortName, competitionLogo, scoring } = this.props.liveScoreSetting.form
-
+            const { competitionName, shortName, competitionLogo, scoring, recordUmpireType } = this.props.liveScoreSetting.form
+            console.log(this.props.liveScoreSetting ,  "chchch")
             this.props.form.setFieldsValue({
                 competition_name: competitionName,
                 short_name: shortName,
                 time: this.props.liveScoreSetting.form.timerType,
-                venue: this.props.liveScoreSetting.form.venue
+                venue: this.props.liveScoreSetting.form.venue,
+                scoring:scoring,
+                recordumpire:this.props.liveScoreSetting.recordUmpire,
+                attendanceReport:this.props.liveScoreSetting.form.attendanceRecordingPeriod,
+                attendanceRecord:this.props.liveScoreSetting.form.attendanceRecordingType,
             })
 
 
@@ -581,7 +585,7 @@ class LiveScoreSettingsView extends Component {
                                     placeholder={'Select Record Umpire'}
                                     style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
                                     onChange={recordUmpire => this.props.onChangeSettingForm({ key: "recordUmpire", data: recordUmpire })}
-                                    value={recordUmpire}
+                                    // value={recordUmpire}
                                 >
                                     <Option value={"NONE"}>{'None'}</Option>
                                     <Option value={"USERS"}>{'Integrated'}</Option>
