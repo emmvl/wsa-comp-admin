@@ -359,7 +359,7 @@ class LiveScoreMatchSheet extends Component {
                             <InputWithHead heading={AppConstants.templateType}/>
                         </div>
                         <div className="col-sm">
-                            {/* <Select
+                            <Select
                                 style={{width: '100%', paddingRight: 1, minWidth: 182}}
                                 onChange={(selectedTemplateId) => this.onChangeTemplate(selectedTemplateId)}
                                 value={this.state.selectedTemplateId ?? 'Select template type'}
@@ -367,7 +367,7 @@ class LiveScoreMatchSheet extends Component {
                             >
                                 {templateList.length > 0 && templateList.map(
                                     (item) => <Option value={item.id} key={item.id}>{item.description}</Option>)}
-                            </Select> */}
+                            </Select>
                         </div>
                     </div>
                 </div>
