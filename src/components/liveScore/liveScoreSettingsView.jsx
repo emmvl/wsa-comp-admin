@@ -103,19 +103,27 @@ class LiveScoreSettingsView extends Component {
         if (this.props.location.state === 'add') {
             this.props.clearLiveScoreSetting()
             this.props.getCompetitonVenuesList()
+
+            this.props.form.setFieldsValue({
+                "recordumpire": undefined
+            })
         }
 
     }
 
     componentDidUpdate(nextProps) {
         if (nextProps.liveScoreSetting != this.props.liveScoreSetting) {
-            const { competitionName, shortName, competitionLogo, scoring } = this.props.liveScoreSetting.form
-
+            const { competitionName, shortName, competitionLogo, scoring, recordUmpireType } = this.props.liveScoreSetting.form
+            console.log(this.props.liveScoreSetting, "chchch")
             this.props.form.setFieldsValue({
                 competition_name: competitionName,
                 short_name: shortName,
                 time: this.props.liveScoreSetting.form.timerType,
-                venue: this.props.liveScoreSetting.form.venue
+                venue: this.props.liveScoreSetting.form.venue,
+                scoring: scoring,
+                recordumpire: this.props.liveScoreSetting.recordUmpire,
+                attendanceReport: this.props.liveScoreSetting.form.attendanceRecordingPeriod,
+                attendanceRecord: this.props.liveScoreSetting.form.attendanceRecordingType,
             })
 
 
@@ -293,7 +301,7 @@ class LiveScoreSettingsView extends Component {
                     formData.append('invitedOrganisation', JSON.stringify(invitedOrganisation))
                 }
 
-                this.props.settingDataPostInititae({ body: formData, venue: venue, settingView: this.props.location.state, screenName: this.state.screenName, competitionId: this.state.competitionId })
+                this.props.settingDataPostInititae({ body: formData, venue: venue, settingView: this.props.location.state, screenName: this.state.screenName, competitionId: this.state.competitionId, isEdit: this.state.isEdit })
 
             }
         });
@@ -581,7 +589,7 @@ class LiveScoreSettingsView extends Component {
                                     placeholder={'Select Record Umpire'}
                                     style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
                                     onChange={recordUmpire => this.props.onChangeSettingForm({ key: "recordUmpire", data: recordUmpire })}
-                                    value={recordUmpire}
+                                // value={recordUmpire}
                                 >
                                     <Option value={"NONE"}>{'None'}</Option>
                                     <Option value={"USERS"}>{'Integrated'}</Option>
@@ -1227,7 +1235,7 @@ class LiveScoreSettingsView extends Component {
                                 {/* <Button className="save-draft-text" type="save-draft-text">
                                     {AppConstants.saveAsDraft}
                                 </Button> */}
-                                <Button onClick={this.handleSubmit} htmlType='submit' className="publish-button" type="primary">
+                                <Button disabled={this.props.liveScoreSetting.loader} onClick={this.handleSubmit} htmlType='submit' className="publish-button" type="primary">
                                     {this.state.competitionTabKey == 6 ? AppConstants.publish : AppConstants.save}
                                 </Button>
                             </div>

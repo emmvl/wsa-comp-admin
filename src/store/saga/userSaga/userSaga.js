@@ -2,6 +2,7 @@ import { put, call } from "redux-saga/effects";
 import ApiConstants from "../../../themes/apiConstants";
 import userHttpApi from "../../http/userHttp/userAxiosApi";
 import { message } from "antd";
+import { setAuthToken } from "../../../util/sessionStorage";
 
 function* failSaga(result) {
     yield put({
@@ -82,7 +83,6 @@ export function* getUreSaga(action) {
     }
 }
 
-
 /* Get the Affiliates Listing  */
 export function* getAffiliatesListingSaga(action) {
     try {
@@ -101,7 +101,7 @@ export function* getAffiliatesListingSaga(action) {
     }
 }
 
-/* Save the Affilaite Saga */
+/* Save the Affiliate Saga */
 export function* saveAffiliateSaga(action) {
     try {
         const result = yield call(
@@ -212,8 +212,6 @@ export function* deleteAffiliateSaga(action) {
     }
 }
 
-
-
 //get particular user organisation 
 export function* getUserOrganisationSaga(action) {
     try {
@@ -231,7 +229,6 @@ export function* getUserOrganisationSaga(action) {
         yield call(errorSaga, error)
     }
 }
-
 
 /* Get the User Dashboard Textual Listing  */
 export function* getUserDashboardTextualListingSaga(action) {
@@ -599,9 +596,15 @@ export function* saveUserPhotosSaga(action) {
     try {
         const result = yield call(userHttpApi.saveUserPhoto, action.payload);
         if (result.status === 1) {
+            if (action.userDetail) {
+                yield call(saveUserDetailSaga, { payload: action.userDetail });
+            } else {
+                message.success('Photo is updated successfully.');
+            }
+
             yield put({
                 type: ApiConstants.API_USER_PHOTO_UPDATE_SUCCESS,
-                result: result.result.data,
+                result: result.result.data[0],
                 status: result.status
             });
         } else {
@@ -635,11 +638,15 @@ export function* saveUserDetailSaga(action) {
     try {
         const result = yield call(userHttpApi.saveUserDetail, action.payload);
         if (result.status === 1) {
+            setAuthToken(result.result.data.authToken);
+
             yield put({
                 type: ApiConstants.API_USER_DETAIL_UPDATE_SUCCESS,
-                result: result.result.data,
+                result: result.result.data.user,
                 status: result.status
             });
+
+            message.success('Profile is updated successfully.');
         } else {
             yield call(failSaga, result);
         }
@@ -653,13 +660,15 @@ export function* updateUserPasswordSaga(action) {
     try {
         const result = yield call(userHttpApi.updateUserPassword, action.payload);
         if (result.status === 1) {
+            setAuthToken(result.result.data.authToken);
+
             yield put({
                 type: ApiConstants.API_USER_PASSWORD_UPDATE_SUCCESS,
-                result: result.result.data,
+                result: result.result.data.user,
                 status: result.status
             });
 
-            message.success(result.result.data.message);
+            message.success('Password is updated successfully.');
         } else {
             yield call(failSaga, result);
         }

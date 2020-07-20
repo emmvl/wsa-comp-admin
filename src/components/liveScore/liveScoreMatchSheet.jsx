@@ -238,7 +238,7 @@ class LiveScoreMatchSheet extends Component {
                         className="home-dashboard-table"
                         columns={this.columns}
                         dataSource={filteredMatchesByTeam}
-                        rowKey={(record, index) => record.id + index}
+                        rowKey={(record) => record.id}
                     />
                 </div>
             </div>
@@ -263,6 +263,7 @@ class LiveScoreMatchSheet extends Component {
             dataIndex: 'name',
             key: 'name',
             sorter: (a, b) => tableSort(a, b, "name"),
+            ellipsis: true,
         },
         {
             title: 'Created at',
@@ -293,7 +294,7 @@ class LiveScoreMatchSheet extends Component {
                         className="home-dashboard-table"
                         columns={this.dropdownTableColumns}
                         dataSource={DATA}
-                        rowKey={(record, index) => record.id + index}
+                        rowKey={(record) => record.id}
                     />
                 </div>
             </div>
@@ -359,7 +360,7 @@ class LiveScoreMatchSheet extends Component {
                             <InputWithHead heading={AppConstants.templateType}/>
                         </div>
                         <div className="col-sm">
-                            {/* <Select
+                            <Select
                                 style={{width: '100%', paddingRight: 1, minWidth: 182}}
                                 onChange={(selectedTemplateId) => this.onChangeTemplate(selectedTemplateId)}
                                 value={this.state.selectedTemplateId ?? 'Select template type'}
@@ -367,7 +368,7 @@ class LiveScoreMatchSheet extends Component {
                             >
                                 {templateList.length > 0 && templateList.map(
                                     (item) => <Option value={item.id} key={item.id}>{item.description}</Option>)}
-                            </Select> */}
+                            </Select>
                         </div>
                     </div>
                 </div>

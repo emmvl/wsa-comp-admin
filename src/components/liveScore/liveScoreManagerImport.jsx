@@ -113,11 +113,11 @@ class liveScoreManagerImport extends Component {
                         </div>
 
                         <div className="reg-add-save-button ml-3"  >
-                            {/* <NavLink to="/templates/wsa-livescore-import-manager.csv" target="_blank" download> */}
-                            <Button className="primary-add-comp-form" type="primary">
-                                {AppConstants.downloadTemplate}
-                            </Button>
-                            {/* </NavLink> */}
+                            <NavLink to="/templates/wsa-livescore-import-manager.csv" target="_blank" download>
+                                <Button className="primary-add-comp-form" type="primary">
+                                    {AppConstants.downloadTemplate}
+                                </Button>
+                            </NavLink>
                         </div>
                     </div>
                 </div>

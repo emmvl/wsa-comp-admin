@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Button, Form, message } from "antd";
@@ -15,22 +15,6 @@ function Profile(props) {
 
   const [user, setUser] = useState(userState.userProfile);
 
-  const { firstName, lastName, mobileNumber, email, photoUrl } = userState.userProfile;
-
-  useEffect(() => {
-    setUser(prevState => ({
-      ...prevState,
-      firstName,
-      lastName,
-      mobileNumber,
-      email,
-    }));
-  }, [firstName, lastName, mobileNumber, email]);
-
-  useEffect(() => {
-    setUser(prevState => ({ ...prevState, photoUrl }));
-  }, [photoUrl]);
-
   const onChangeField = useCallback((e) => {
     setUser({
       ...user,
@@ -43,21 +27,23 @@ function Profile(props) {
 
     form.validateFields((err) => {
       if (!err) {
-        if (user.photo && user.photoUrl) {
-          let formData = new FormData();
-          formData.append("profile_photo", user.photo);
-          userPhotoUpdateAction(formData);
-        }
+        const { photo, photoUrl, ...restUserProperty } = user;
 
-        userDetailUpdateAction({
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          mobileNumber: user.mobileNumber,
-        });
+        const isChangedData = user.firstName !== userState.userProfile.firstName
+          || user.lastName !== userState.userProfile.lastName
+          || user.mobileNumber !== userState.userProfile.mobileNumber
+          || user.email !== userState.userProfile.email;
+
+        if (photo && photoUrl) {
+          let formData = new FormData();
+          formData.append("profile_photo", photo);
+          userPhotoUpdateAction(formData, isChangedData ? restUserProperty : null);
+        } else if (isChangedData) {
+          userDetailUpdateAction(restUserProperty);
+        }
       }
     });
-  }, [form, user, userPhotoUpdateAction, userDetailUpdateAction]);
+  }, [form, user, userState.userProfile, userPhotoUpdateAction, userDetailUpdateAction]);
 
   const selectImage = useCallback(() => {
     const fileInput = document.getElementById('user-pic');
