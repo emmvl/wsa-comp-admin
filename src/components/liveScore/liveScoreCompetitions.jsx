@@ -216,7 +216,7 @@ class LiveScoreCompetitions extends Component {
     showDeleteConfirm = (record) => {
         let this_ = this
         confirm({
-            title: 'Are you sure you want to delete this division?',
+            title: 'Are you sure you want to delete this competition?',
             okText: 'Yes',
             okType: 'danger',
             cancelText: 'No',

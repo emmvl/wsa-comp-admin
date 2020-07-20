@@ -7,10 +7,12 @@ import AppConstants from "../../themes/appConstants";
 import InputWithHead from "../../customComponents/InputWithHead";
 import { userPasswordUpdateAction } from "../../store/actions/userAction/userAction";
 import Loader from "../../customComponents/loader";
+import ValidationConstants from "../../themes/validationConstant";
 
 function Password(props) {
+  const { getFieldDecorator } = props.form
   const { userState, form, userPasswordUpdateAction } = props;
-  
+
   const [security, setSecurity] = useState({});
 
   const onChangeField = useCallback((e) => {
@@ -30,6 +32,7 @@ function Password(props) {
           return;
         }
 
+
         userPasswordUpdateAction({
           password: security.password,
           newPassword: security.newPassword,
@@ -42,35 +45,74 @@ function Password(props) {
     <div className="inside-table-view">
       <Form colon={false} onSubmit={handleSubmit}>
         <div className="fluid-width">
-          <InputWithHead
-            required="required-field"
-            heading={AppConstants.currentPassword}
-            type="password"
-            name="password"
-            placeholder={AppConstants.enterCurrentPassword}
-            value={security.password}
-            onChange={onChangeField}
-          />
+          <Form.Item>
+            {getFieldDecorator(AppConstants.password, {
+              rules: [
 
-          <InputWithHead
-            required="required-field"
-            heading={AppConstants.newPassword}
-            type="password"
-            name="newPassword"
-            placeholder={AppConstants.enterNewPassword}
-            value={security.newPassword}
-            onChange={onChangeField}
-          />
+                {
+                  min: 8,
+                  message: ValidationConstants.passwordVerification
+                }
+              ]
+            })(
+              <InputWithHead
+                required="required-field"
+                heading={AppConstants.currentPassword}
+                type="password"
+                name="password"
+                min={8}
+                placeholder={AppConstants.enterCurrentPassword}
+                value={security.password}
+                onChange={onChangeField}
+              />
+            )}
+          </Form.Item>
 
-          <InputWithHead
-            required="required-field"
-            heading={AppConstants.confirmPassword}
-            type="password"
-            name="confirmPassword"
-            placeholder={AppConstants.enterConfirmPassword}
-            value={security.confirmPassword}
-            onChange={onChangeField}
-          />
+          <Form.Item>
+            {getFieldDecorator(AppConstants.newPassword, {
+              rules: [
+
+                {
+                  min: 8,
+                  message: ValidationConstants.passwordVerification
+                }
+              ]
+            })(
+              <InputWithHead
+                required="required-field"
+                heading={AppConstants.newPassword}
+                type="password"
+                name="newPassword"
+                min={8}
+                placeholder={AppConstants.enterNewPassword}
+                value={security.newPassword}
+                onChange={onChangeField}
+              />
+            )}
+          </Form.Item>
+
+          <Form.Item>
+            {getFieldDecorator(AppConstants.confirmPassword, {
+              rules: [
+
+                {
+                  min: 8,
+                  message: ValidationConstants.passwordVerification
+                }
+              ]
+            })(
+              <InputWithHead
+                required="required-field"
+                heading={AppConstants.confirmPassword}
+                type="password"
+                name="confirmPassword"
+                min={8}
+                placeholder={AppConstants.enterConfirmPassword}
+                value={security.confirmPassword}
+                onChange={onChangeField}
+              />
+            )}
+          </Form.Item>
 
           <div className="d-flex justify-content-end mt-4">
             <Button

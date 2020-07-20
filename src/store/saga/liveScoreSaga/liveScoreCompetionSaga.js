@@ -32,7 +32,7 @@ export function* liveScoreCompetitionDelete({ payload }) {
         if (result.status == 1) {
 
             yield put({ type: ApiConstants.API_LIVESCORE_COMPETION_DELETE_SUCCESS, payload: { id: payload } })
-            message.success('deleted Sucessfully')
+            message.success('Deleted Sucessfully')
         } else {
 
             setTimeout(() => {
