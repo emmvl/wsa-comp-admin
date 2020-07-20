@@ -350,6 +350,20 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 mainVenueList: payload
             }
         case ApiConstants.LiveScore_CLEAR_SETTING:
+            state.lineupSelection = null
+            state.inputNumberValue = null
+            state.premierCompLink = false
+            state.gamesBorrowedThreshold = null
+            state.buzzerEnabled = false
+            state.warningBuzzerEnabled = false
+            state.recordUmpire = []
+            state.affiliateSelected = null
+            state.affiliateNonSelected = null
+            state.anyOrgNonSelected = null
+            state.anyOrgSelected = null
+            state.otherSelected = null
+            state.nonSelected = null
+            state.borrowedPlayer = 'GAMES'
             return {
                 ...state,
                 form: {
