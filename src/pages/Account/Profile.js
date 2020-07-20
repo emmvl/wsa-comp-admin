@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Button, Form, message } from "antd";
@@ -33,7 +33,7 @@ function Profile(props) {
           userPhotoUpdateAction(formData);
         }
 
-        const { photoUrl, ...restUserProperty } = user;
+        const { photo, photoUrl, ...restUserProperty } = user;
         userDetailUpdateAction(restUserProperty);
       }
     });
