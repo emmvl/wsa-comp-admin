@@ -248,10 +248,11 @@ function userProfileUpdateAction(data) {
   };
 }
 
-function userPhotoUpdateAction(payload) {
+function userPhotoUpdateAction(payload, userDetail) {
   return {
     type: ApiConstants.API_USER_PHOTO_UPDATE_LOAD,
     payload,
+    userDetail,
   }
 }
 

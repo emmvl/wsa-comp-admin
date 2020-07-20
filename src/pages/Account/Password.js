@@ -32,7 +32,6 @@ function Password(props) {
           return;
         }
 
-
         userPasswordUpdateAction({
           password: security.password,
           newPassword: security.newPassword,
@@ -48,7 +47,6 @@ function Password(props) {
           <Form.Item>
             {getFieldDecorator(AppConstants.password, {
               rules: [
-
                 {
                   min: 8,
                   message: ValidationConstants.passwordVerification
@@ -71,7 +69,6 @@ function Password(props) {
           <Form.Item>
             {getFieldDecorator(AppConstants.newPassword, {
               rules: [
-
                 {
                   min: 8,
                   message: ValidationConstants.passwordVerification
@@ -94,7 +91,6 @@ function Password(props) {
           <Form.Item>
             {getFieldDecorator(AppConstants.confirmPassword, {
               rules: [
-
                 {
                   min: 8,
                   message: ValidationConstants.passwordVerification
