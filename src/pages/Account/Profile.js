@@ -33,12 +33,8 @@ function Profile(props) {
           userPhotoUpdateAction(formData);
         }
 
-        userDetailUpdateAction({
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          mobileNumber: user.mobileNumber,
-        });
+        const { photoUrl, ...restUserProperty } = user;
+        userDetailUpdateAction(restUserProperty);
       }
     });
   }, [form, user, userPhotoUpdateAction, userDetailUpdateAction]);

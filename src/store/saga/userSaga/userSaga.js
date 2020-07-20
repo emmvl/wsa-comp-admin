@@ -2,6 +2,7 @@ import { put, call } from "redux-saga/effects";
 import ApiConstants from "../../../themes/apiConstants";
 import userHttpApi from "../../http/userHttp/userAxiosApi";
 import { message } from "antd";
+import { setAuthToken } from "../../../util/sessionStorage";
 
 function* failSaga(result) {
     yield put({
@@ -601,7 +602,7 @@ export function* saveUserPhotosSaga(action) {
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_USER_PHOTO_UPDATE_SUCCESS,
-                result: result.result.data,
+                result: result.result.data[0],
                 status: result.status
             });
         } else {
@@ -635,9 +636,11 @@ export function* saveUserDetailSaga(action) {
     try {
         const result = yield call(userHttpApi.saveUserDetail, action.payload);
         if (result.status === 1) {
+            setAuthToken(result.result.data.authToken);
+
             yield put({
                 type: ApiConstants.API_USER_DETAIL_UPDATE_SUCCESS,
-                result: result.result.data[0],
+                result: result.result.data.user,
                 status: result.status
             });
         } else {
@@ -653,9 +656,11 @@ export function* updateUserPasswordSaga(action) {
     try {
         const result = yield call(userHttpApi.updateUserPassword, action.payload);
         if (result.status === 1) {
+            setAuthToken(result.result.data.authToken);
+
             yield put({
                 type: ApiConstants.API_USER_PASSWORD_UPDATE_SUCCESS,
-                result: result.result.data,
+                result: result.result.data.user,
                 status: result.status
             });
 
