@@ -15,22 +15,6 @@ function Profile(props) {
 
   const [user, setUser] = useState(userState.userProfile);
 
-  const { firstName, lastName, mobileNumber, email, photoUrl } = userState.userProfile;
-
-  useEffect(() => {
-    setUser(prevState => ({
-      ...prevState,
-      firstName,
-      lastName,
-      mobileNumber,
-      email,
-    }));
-  }, [firstName, lastName, mobileNumber, email]);
-
-  useEffect(() => {
-    setUser(prevState => ({ ...prevState, photoUrl }));
-  }, [photoUrl]);
-
   const onChangeField = useCallback((e) => {
     setUser({
       ...user,
@@ -49,12 +33,8 @@ function Profile(props) {
           userPhotoUpdateAction(formData);
         }
 
-        userDetailUpdateAction({
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          mobileNumber: user.mobileNumber,
-        });
+        const { photoUrl, ...restUserProperty } = user;
+        userDetailUpdateAction(restUserProperty);
       }
     });
   }, [form, user, userPhotoUpdateAction, userDetailUpdateAction]);
