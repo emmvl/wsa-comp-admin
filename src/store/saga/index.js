@@ -110,7 +110,9 @@ import * as liveScoreVenueChangeSaga from "./liveScoreSaga/liveScoreVenueChangeS
 import * as registrationSaga from "./registrationSaga/registrationSaga";
 import * as competitionFeeSaga from "./registrationSaga/competitionFeeSaga";
 
-export default function* root_saga() {
+import * as supportSaga from "./supportSaga";
+
+export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_LOGIN_LOAD, loginApiSaga);
   yield takeEvery(ApiConstants.API_QR_CODE_LOAD, qrApiSaga);
   yield takeEvery(ApiConstants.API_ROLE_LOAD, userSaga.getRoleSaga);
@@ -694,4 +696,6 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_USER_PASSWORD_UPDATE_LOAD, userSaga.updateUserPasswordSaga);
 
   yield takeEvery(ApiConstants.API_LIVE_SCORE_MANAGER_IMPORT_LOAD, liveScoreManagerImportSaga)
+
+  yield takeEvery(ApiConstants.API_SUPPORT_CONTENT_LOAD, supportSaga.getSupportContentSaga);
 }

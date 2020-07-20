@@ -195,7 +195,7 @@ class DashboardLayout extends React.Component {
               <NavLink to="/account/profile">Account Settings</NavLink>
             </li>
             <li>
-              <a href="#">Help & Support</a>
+              <NavLink to="/support">Help & Support</NavLink>
             </li>
           </div>
 
