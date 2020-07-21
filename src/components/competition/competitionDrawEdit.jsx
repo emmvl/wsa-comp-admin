@@ -10,7 +10,7 @@ import { getDayName, getTime } from './../../themes/dateformate';
 import SwappableComponentEdit from '../../customComponents/SwappableComponentEdit.jsx';
 import AppConstants from '../../themes/appConstants';
 import history from "../../util/history";
-import { generateDrawAction } 
+import { generateDrawAction }
     from "../../store/actions/competitionModuleAction/competitionModuleAction";
 import {
     getYearAndCompetitionOwnAction,
@@ -119,7 +119,7 @@ class CompetitionDrawEditOld extends Component {
 
         if (this.state.updateLoad == true && this.props.drawsState.updateLoad == false) {
             console.log("*********************************");
-            this.setState({updateLoad: false})
+            this.setState({ updateLoad: false })
             this.reGenerateDraw();
         }
     }
@@ -181,13 +181,13 @@ class CompetitionDrawEditOld extends Component {
 
     reGenerateDraw = () => {
         let payload = {
-          yearRefId: this.state.yearRefId,
-          competitionUniqueKey: this.state.firstTimeCompId,
-          organisationId: getOrganisationData().organisationUniqueKey
+            yearRefId: this.state.yearRefId,
+            competitionUniqueKey: this.state.firstTimeCompId,
+            organisationId: getOrganisationData().organisationUniqueKey
         }
         this.props.generateDrawAction(payload);
         this.setState({ venueLoad: true });
-      }
+    }
 
 
     onChange = e => {
@@ -337,7 +337,7 @@ class CompetitionDrawEditOld extends Component {
                 "edit"
             );
 
-            this.setState({updateLoad: true});
+            this.setState({ updateLoad: true });
         }
     }
 
@@ -422,21 +422,24 @@ class CompetitionDrawEditOld extends Component {
             <div className="row">
                 <div className="col-sm-3">
                     <div className="year-select-heading-view">
-                        <span className="year-select-heading">{AppConstants.draws}:</span>
-                        <Select
-                            name={'yearRefId'}
-                            className="year-select"
-                            onChange={yearRefId => this.onYearChange(yearRefId)}
-                            value={this.state.yearRefId}
-                        >
-                            {this.props.appState.own_YearArr.length > 0 && this.props.appState.own_YearArr.map(item => {
-                                return (
-                                    <Option key={'yearRefId' + item.id} value={item.id}>
-                                        {item.description}
-                                    </Option>
-                                );
-                            })}
-                        </Select>
+                        <div className="reg-filter-col-cont"  >
+                            <span className="year-select-heading">{AppConstants.draws}:</span>
+                            <Select
+                                name={'yearRefId'}
+                                className="year-select reg-filter-select1 ml-2"
+                                style={{ maxWidth: 160 }}
+                                onChange={yearRefId => this.onYearChange(yearRefId)}
+                                value={this.state.yearRefId}
+                            >
+                                {this.props.appState.own_YearArr.length > 0 && this.props.appState.own_YearArr.map(item => {
+                                    return (
+                                        <Option key={'yearRefId' + item.id} value={item.id}>
+                                            {item.description}
+                                        </Option>
+                                    );
+                                })}
+                            </Select>
+                        </div>
                     </div>
                 </div>
                 <div className="col-sm-4">
@@ -449,29 +452,31 @@ class CompetitionDrawEditOld extends Component {
                             marginRight: 50
                         }}
                     >
-                        <span className="year-select-heading">
-                            {AppConstants.competition}:
+                        <div className="reg-filter-col-cont"  >
+                            <span className="year-select-heading">
+                                {AppConstants.competition}:
             </span>
-                        <Select
-                            style={{ minWidth: 160 }}
-                            name={'competition'}
-                            className="year-select"
-                            onChange={competitionId =>
-                                this.onCompetitionChange(competitionId)
-                            }
-                            value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
-                        >
-                            {this.props.appState.own_CompetitionArr.map(item => {
-                                return (
-                                    <Option
-                                        key={'competition' + item.competitionId}
-                                        value={item.competitionId}
-                                    >
-                                        {item.competitionName}
-                                    </Option>
-                                );
-                            })}
-                        </Select>
+                            <Select
+                                name={'competition'}
+                                className="year-select reg-filter-select1 ml-2"
+                                style={{ maxWidth: 250 }}
+                                onChange={competitionId =>
+                                    this.onCompetitionChange(competitionId)
+                                }
+                                value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
+                            >
+                                {this.props.appState.own_CompetitionArr.map(item => {
+                                    return (
+                                        <Option
+                                            key={'competition' + item.competitionId}
+                                            value={item.competitionId}
+                                        >
+                                            {item.competitionName}
+                                        </Option>
+                                    );
+                                })}
+                            </Select>
+                        </div>
                     </div>
                 </div>
                 <div className="col-sm-5">

@@ -411,7 +411,7 @@ class CompetitionPartPlayerGrades extends Component {
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
                                     name={"yearRefId"}
-                                    className="year-select"
+                                    className="year-select reg-filter-select1 ml-2"
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
@@ -435,7 +435,7 @@ class CompetitionPartPlayerGrades extends Component {
                                 <Select
                                     style={{ minWidth: 160 }}
                                     name={"competition"}
-                                    className="year-select"
+                                    className="year-select reg-filter-select1 ml-2"
                                     onChange={competitionId => this.onCompetitionChange(competitionId)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
@@ -459,7 +459,7 @@ class CompetitionPartPlayerGrades extends Component {
                                     <span className='year-select-heading'>{AppConstants.division}:</span>
                                     <Select
                                         style={{ minWidth: 120 }}
-                                        className="year-select"
+                                        className="year-select reg-filter-select1 ml-2"
                                         onChange={(divisionId) => this.onDivisionChange(divisionId)}
                                         value={JSON.parse(JSON.stringify(this.state.divisionId))}
                                     >
@@ -656,14 +656,14 @@ class CompetitionPartPlayerGrades extends Component {
                                                                                 {playerItem.position2}
                                                                             </Tag>
                                                                         }
-                                                                         <div className="col-sm d-flex">
+                                                                        <div className="col-sm d-flex">
                                                                             {playerItem.playerHistory.map((item, index) => {
-                                                                            return (
-                                                                                <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
-                                                                                    {item.divisionGrade + '('+ item.ladderResult + ')'}
-                                                                                </Tag>
+                                                                                return (
+                                                                                    <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
+                                                                                        {item.divisionGrade + '(' + item.ladderResult + ')'}
+                                                                                    </Tag>
 
-                                                                            )
+                                                                                )
                                                                             })}
                                                                         </div>
                                                                         <img className="comp-player-table-img" src={
@@ -861,14 +861,14 @@ class CompetitionPartPlayerGrades extends Component {
                                                                 {playerItem.position2}
                                                             </Tag>
                                                         }
-                                                         <div className="col-sm d-flex">
+                                                        <div className="col-sm d-flex">
                                                             {playerItem.playerHistory.map((item, index) => {
-                                                            return (
-                                                                <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
-                                                                    {item.divisionGrade + '('+ item.ladderResult + ')'}
-                                                                </Tag>
+                                                                return (
+                                                                    <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
+                                                                        {item.divisionGrade + '(' + item.ladderResult + ')'}
+                                                                    </Tag>
 
-                                                            )
+                                                                )
                                                             })}
                                                         </div>
                                                         <img className="comp-player-table-img" src={

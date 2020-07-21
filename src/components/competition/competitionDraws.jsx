@@ -570,7 +570,7 @@ class CompetitionDraws extends Component {
             <span className="year-select-heading">{AppConstants.year}:</span>
             <Select
               name={'yearRefId'}
-              className="year-select"
+              className="year-select reg-filter-select1 ml-2"
               onChange={(yearRefId) => this.onYearChange(yearRefId)}
               value={this.state.yearRefId}
             >
@@ -600,7 +600,7 @@ class CompetitionDraws extends Component {
             <Select
               style={{ minWidth: 160 }}
               name={'competition'}
-              className="year-select"
+              className="year-select reg-filter-select1 ml-2"
               onChange={(competitionId) =>
                 this.onCompetitionChange(competitionId)
               }
@@ -635,7 +635,7 @@ class CompetitionDraws extends Component {
             <Select
               style={{ minWidth: 160 }}
               name={'competition'}
-              className="year-select"
+              className="year-select reg-filter-select1 ml-2"
               onChange={(competitionDivisionGradeId) =>
                 this.onDivisionGradeNameChange(competitionDivisionGradeId)
               }
@@ -675,7 +675,7 @@ class CompetitionDraws extends Component {
             <Select
               style={{ minWidth: 160 }}
               name={'competition'}
-              className="year-select"
+              className="year-select reg-filter-select1 ml-2"
               onChange={(oragnisationId) =>
                 this.onchangeOrganisation(oragnisationId)
               }

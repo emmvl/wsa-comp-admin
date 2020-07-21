@@ -353,31 +353,35 @@ class LiveScorePositionTrackReport extends Component {
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="row">
                     <div className="col-sm"  >
-                        <span className='year-select-heading'>{AppConstants.periodFilter}:</span>
-                        <Select
-                            className="year-select"
-                            style={{ minWidth: 160 }}
-                            onChange={(periodId) => this.setState({ period: periodId })}
-                            value={this.state.period}
-                        >
-                            <Option value={'All'}>{'All'}</Option>
-                            <Option value={'percent'}>{'%'}</Option>
-                            <Option value={'minutes'}>{'Minutes'}</Option>
+                        <div className="reg-filter-col-cont"  >
+                            <span className='year-select-heading'>{AppConstants.periodFilter}:</span>
+                            <Select
+                                className="year-select reg-filter-select1 ml-2"
+                                style={{ minWidth: 160 }}
+                                onChange={(periodId) => this.setState({ period: periodId })}
+                                value={this.state.period}
+                            >
+                                <Option value={'All'}>{'All'}</Option>
+                                <Option value={'percent'}>{'%'}</Option>
+                                <Option value={'minutes'}>{'Minutes'}</Option>
 
-                        </Select>
+                            </Select>
+                        </div>
                     </div>
                     <div className="col-sm" >
-                        <span className='year-select-heading'>{AppConstants.byGame}:</span>
-                        <Select
-                            className="year-select"
-                            style={{ minWidth: 160 }}
-                            onChange={(gameId) => this.setState({ game: gameId })}
-                            value={this.state.game}
-                        >
-                            <Option value={'All'}>{'All'}</Option>
-                            <Option value={'total'}>{'Total'}</Option>
+                        <div className="reg-filter-col-cont"  >
+                            <span className='year-select-heading'>{AppConstants.byGame}:</span>
+                            <Select
+                                className="year-select reg-filter-select1 ml-2"
+                                style={{ minWidth: 160 }}
+                                onChange={(gameId) => this.setState({ game: gameId })}
+                                value={this.state.game}
+                            >
+                                <Option value={'All'}>{'All'}</Option>
+                                <Option value={'total'}>{'Total'}</Option>
 
-                        </Select>
+                            </Select>
+                        </div>
                     </div>
 
                     <div className="col-sm" style={{ display: "flex", justifyContent: 'flex-end', alignItems: "center" }} >

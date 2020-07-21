@@ -2296,7 +2296,7 @@ class RegistrationCompetitionFee extends Component {
             } else {
               feeSeasonalData = fee_data[i].seasonal.perType;
               feeCasualData = fee_data[i].casual.perType;
-  
+
               for (let j in feeSeasonalData) {
                 for (let k in feeCasualData) {
                   if (
@@ -2323,15 +2323,15 @@ class RegistrationCompetitionFee extends Component {
                       feeSeasonalData[j].competitionMembershipProductTypeId ==
                       feeSeasonalTeamData[k].competitionMembershipProductTypeId
                     ) {
-                        feeSeasonalData[j]['teamSeasonalFees'] =
-                          feeSeasonalTeamData[j].fee;
-                        feeSeasonalData[j]['teamSeasonalGST'] =
-                          feeSeasonalTeamData[j].gst;
-                        feeSeasonalData[j]['affiliateTeamSeasonalFees'] =
-                          feeSeasonalTeamData[j].affiliateFee;
-                        feeSeasonalData[j]['affiliateTeamSeasonalGST'] =
-                          feeSeasonalTeamData[j].affiliateGst;
-                        break;
+                      feeSeasonalData[j]['teamSeasonalFees'] =
+                        feeSeasonalTeamData[j].fee;
+                      feeSeasonalData[j]['teamSeasonalGST'] =
+                        feeSeasonalTeamData[j].gst;
+                      feeSeasonalData[j]['affiliateTeamSeasonalFees'] =
+                        feeSeasonalTeamData[j].affiliateFee;
+                      feeSeasonalData[j]['affiliateTeamSeasonalGST'] =
+                        feeSeasonalTeamData[j].affiliateGst;
+                      break;
                     }
                   }
                 }
@@ -2545,7 +2545,7 @@ class RegistrationCompetitionFee extends Component {
           }
         }
 
-       // console.log("finalpostarray"+ JSON.stringify(finalpostarray));
+        // console.log("finalpostarray"+ JSON.stringify(finalpostarray));
 
         if (finalpostarray.length > 0) {
           this.props.saveCompetitionFeeSection(finalpostarray, competitionId);
@@ -2570,15 +2570,15 @@ class RegistrationCompetitionFee extends Component {
         let venue = JSON.stringify(compFeesState.postVenues);
         // let invitees = compFeesState.postInvitees
         let invitees = [];
-        if(compFeesState.affiliateArray!= null && compFeesState.affiliateArray.length > 0){
+        if (compFeesState.affiliateArray != null && compFeesState.affiliateArray.length > 0) {
           invitees = compFeesState.affiliateArray.concat(
             compFeesState.anyOrgAffiliateArr
           );
         }
-        else if(compFeesState.anyOrgAffiliateArr!= null && compFeesState.anyOrgAffiliateArr.length > 0){
-            invitees =  compFeesState.anyOrgAffiliateArr
+        else if (compFeesState.anyOrgAffiliateArr != null && compFeesState.anyOrgAffiliateArr.length > 0) {
+          invitees = compFeesState.anyOrgAffiliateArr
         }
-       
+
         if (tabKey == '1') {
           if (
             compFeesState.competitionDetailData.competitionLogoUrl !== null &&
@@ -2915,13 +2915,13 @@ class RegistrationCompetitionFee extends Component {
     });
   }
 
-   // for getting seasonal fee tree parent name
-   SeasonsalTeamDataNode = (item) => {
+  // for getting seasonal fee tree parent name
+  SeasonsalTeamDataNode = (item) => {
     return <span>{item.description}</span>;
   };
 
-   // / for getting seasonal team fee tree child name
-   SeasonalTeamTreeSubAdvancedNode(item) {
+  // / for getting seasonal team fee tree child name
+  SeasonalTeamTreeSubAdvancedNode(item) {
     return <span>{item.description}</span>;
   }
 
@@ -2978,7 +2978,9 @@ class RegistrationCompetitionFee extends Component {
                       ],
                     }
                   )(
-                    <Select className="year-select">
+                    <Select
+                      className="year-select reg-filter-select1 ml-2"
+                      style={{ minWidth: 160 }}>
                       {this.props.appState.yearList.map((item) => {
                         return (
                           <Option key={'yearRefId' + item.id} value={item.id}>
@@ -3203,9 +3205,9 @@ class RegistrationCompetitionFee extends Component {
                 )
               }
               disabled={compDetailDisable}
-              onBlur={(i)=> this.props.form.setFieldsValue({
+              onBlur={(i) => this.props.form.setFieldsValue({
                 'competition_name': captializedString(i.target.value)
-            })}
+              })}
             />
           )}
         </Form.Item>
@@ -3819,6 +3821,7 @@ class RegistrationCompetitionFee extends Component {
             <div className="inside-container-view">
               <span className="form-heading pt-2 pl-2">
                 {item.membershipProductName}
+                <span className="requiredSpan">*</span>
               </span>
               {item.isPlayingStatus == true ? (
                 <div>
@@ -4437,7 +4440,7 @@ class RegistrationCompetitionFee extends Component {
       affiliateNonSelected,
       anyOrgNonSelected,
     } = this.props.competitionFeesState;
-   // console.log(invitees, 'invitees');
+    // console.log(invitees, 'invitees');
     let orgLevelId = JSON.stringify(this.state.organisationTypeRefId);
     let regInviteesDisable = this.state.permissionState.regInviteesDisable;
     return (
@@ -4656,13 +4659,13 @@ class RegistrationCompetitionFee extends Component {
     //console.log("itemValue, info", itemValue, info);
     this.props.updatePaymentFeeOption(itemValue, 'seasonalfee');
   }
-    //on change of Seasonal Team fee payment option
-    onChangeSeasonalTeamFee(itemValue, info) {
-      //console.log("itemValue, info", itemValue, info);
-      this.props.updatePaymentFeeOption(itemValue, 'seasonalteamfee');
-    }
-    
-  
+  //on change of Seasonal Team fee payment option
+  onChangeSeasonalTeamFee(itemValue, info) {
+    //console.log("itemValue, info", itemValue, info);
+    this.props.updatePaymentFeeOption(itemValue, 'seasonalteamfee');
+  }
+
+
   checkIsSeasonal = (feeDetails) => {
     let isSeasonalValue = false;
     for (let i in feeDetails) {
@@ -4706,7 +4709,7 @@ class RegistrationCompetitionFee extends Component {
     let casualPayment = this.props.competitionFeesState.casualPaymentDefault;
     let seasonalPayment = this.props.competitionFeesState.seasonalPaymentDefault;
     let seasonalTeamPayment = this.props.competitionFeesState.seasonalTeamPaymentDefault;
-   // console.log("seasonalTeamPayment, seasonalPayment ", seasonalTeamPayment, seasonalPayment)
+    // console.log("seasonalTeamPayment, seasonalPayment ", seasonalTeamPayment, seasonalPayment)
     let paymentData = this.props.competitionFeesState.competitionPaymentsData;
     let selectedSeasonalFeeKey = this.props.competitionFeesState.SelectedSeasonalFeeKey;
     let selectedCasualFeeKey = this.props.competitionFeesState.selectedCasualFeeKey;
@@ -4714,7 +4717,7 @@ class RegistrationCompetitionFee extends Component {
 
     let paymentsDisable = this.state.permissionState.paymentsDisable;
     let seasonalExpendeKey = this.props.competitionFeesState.seasonalExpendedKey;
-    let casuallExpendeKey =  this.props.competitionFeesState.casusalExpendedKey;
+    let casuallExpendeKey = this.props.competitionFeesState.casusalExpendedKey;
     let seasonalTeamExpendeKey = this.props.competitionFeesState.seasonalTeamExpendedKey;
 
     return (
@@ -4739,7 +4742,7 @@ class RegistrationCompetitionFee extends Component {
               style={{ flexDirection: 'column' }}
               className="tree-government-rebate tree-selection-icon"
               checkable
-              expandedKeys={['1','5']}
+              expandedKeys={['1', '5']}
               //defaultCheckedKeys={[]}
               checkedKeys={selectedSeasonalFeeKey}
               onCheck={(e, info) => this.onChangeSeasonalFee(e, info)}
@@ -4765,7 +4768,7 @@ class RegistrationCompetitionFee extends Component {
               checkable
               //defaultExpandedKeys={[]}
               //defaultCheckedKeys={[]}
-              expandedKeys={['1','4','8','12']}
+              expandedKeys={['1', '4', '8', '12']}
               checkedKeys={selectedCasualFeeKey}
               onCheck={(e) => this.onChangeCasualFee(e, paymentData)}
               disabled={paymentsDisable}
@@ -4788,7 +4791,7 @@ class RegistrationCompetitionFee extends Component {
               style={{ flexDirection: 'column' }}
               className="tree-government-rebate tree-selection-icon"
               checkable
-              expandedKeys={['1','5']}
+              expandedKeys={['1', '5']}
               //defaultCheckedKeys={[]}
               checkedKeys={selectedSeasonalTeamFeeKey}
               onCheck={(e, info) => this.onChangeSeasonalTeamFee(e, info)}
@@ -4866,9 +4869,9 @@ class RegistrationCompetitionFee extends Component {
                       'title'
                     )
                   }
-                  onBlur={(i)=> this.props.form.setFieldsValue({
+                  onBlur={(i) => this.props.form.setFieldsValue({
                     'charityTitle': captializedString(i.target.value)
-                })}
+                  })}
                 />
               )}
             </Form.Item>

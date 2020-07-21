@@ -116,14 +116,14 @@ class UmpireSetting extends Component {
                                     {AppConstants.competition}:
                 </span>
                                 <Select
-                                    className="year-select"
-                                    style={{ minWidth: 160 }}
+                                    className="year-select reg-filter-select1 ml-2"
+                                    style={{ minWidth: 200 }}
                                     onChange={(comp) => this.onChangeComp({ comp })}
                                     value={this.state.selectedComp}
                                 >
                                     {
                                         competition.map((item, index) => {
-                                            return <Option key={`longName${index}`+item.id} value={item.id}>{item.longName}</Option>
+                                            return <Option key={`longName${index}` + item.id} value={item.id}>{item.longName}</Option>
                                         })
                                     }
 
@@ -185,9 +185,9 @@ class UmpireSetting extends Component {
 
                     {arr.length > 0 && arr.map((item, index) => {
                         return (
-                            <div key={`name${index}`+item.id}>
+                            <div key={`name${index}` + item.id}>
                                 <div className='contextualHelp-RowDirection' >
-                                    <Radio  value={item.id}>{item.name}</Radio>
+                                    <Radio value={item.id}>{item.name}</Radio>
 
                                 </div>
                                 {item.id == 2 &&
@@ -199,7 +199,7 @@ class UmpireSetting extends Component {
                                         >
                                             {umpireLinkTeamArr.length > 0 && umpireLinkTeamArr.map((item, index) => {
                                                 return (
-                                                    <Radio key={`name`+index} value={item.id}>{item.name}</Radio>
+                                                    <Radio key={`name` + index} value={item.id}>{item.name}</Radio>
                                                 )
                                             }
                                             )}

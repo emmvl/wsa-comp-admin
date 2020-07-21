@@ -58,7 +58,7 @@ const columns = [
             return (
                 <div>
                     {record.user.userRoleEntities.length > 0 && record.user.userRoleEntities.map((item, index) => (
-                        <span key={`organisationName`+index} className='multi-column-text-aligned'>{item.organisation.name}</span>
+                        <span key={`organisationName` + index} className='multi-column-text-aligned'>{item.organisation.name}</span>
                     ))
                     }
                 </div>)
@@ -418,8 +418,8 @@ class UmpireRoaster extends Component {
                         }} >
                             <span className='year-select-heading'>{AppConstants.competition}:</span>
                             <Select
-                                className="year-select"
-                                style={{ minWidth: 160 }}
+                                className="year-select reg-filter-select1 ml-2"
+                                style={{ minWidth: 200 }}
                                 onChange={(comp) => this.onChangeComp({ comp })}
                                 value={this.state.selectedComp}
                             >
@@ -439,7 +439,7 @@ class UmpireRoaster extends Component {
                         }} >
                             <span className='year-select-heading'>{AppConstants.status}:</span>
                             <Select
-                                className="year-select"
+                                className="year-select reg-filter-select1 ml-2"
                                 style={{ minWidth: 160 }}
                                 onChange={(status) => this.onChangeStatus(status)}
                                 value={this.state.status}

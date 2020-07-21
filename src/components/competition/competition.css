@@ -1,4 +1,9 @@
 @import "../../themes/colorVariables.css";
+.requiredSpan{
+  content: '*';
+  color: var(--app-red);
+  margin-top: -5px;
+}
 .checkbox-row-wise {
   display: flex;
   flex-direction: row;

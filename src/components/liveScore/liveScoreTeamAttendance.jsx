@@ -287,7 +287,7 @@ class LiveScoreTeamAttendance extends Component {
 
 
                             <Select
-                                className="year-select"
+                                className="year-select reg-filter-select1"
                                 style={{ display: "flex", alignItems: "flex-start", minWidth: 140 }}
                                 onChange={(selectStatus) => this.onChnageStatus(selectStatus)}
                                 value={this.state.selectStatus} >
