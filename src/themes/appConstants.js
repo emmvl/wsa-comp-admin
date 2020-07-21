@@ -1446,7 +1446,8 @@ const AppConstants = {
   indivisualOrgnisation: 'Individual Organisations',
   firstLevelAffiliatesAssociationLeague: "1st Level Affiliates - Association/ League",
   secondLevelAffiliatesClubSchool: "2nd Level Affiliates - Club/School",
-  teamSeasonalFee: 'Team Seasonal Fee'
+  teamSeasonalFee: 'Team Seasonal Fee',
+  emailChangedWarning: "You will need to log in with your new email address on your next login.",
 
 };
 
