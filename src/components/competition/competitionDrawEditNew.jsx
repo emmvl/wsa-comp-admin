@@ -352,7 +352,7 @@ class CompetitionDrawEdit extends Component {
     ////////form content view
     contentView = () => {
         return (
-            <div className="comp-draw-content-view mt-0">
+            <div className="comp-draw-content-view mt-5">
                 <div className="row comp-draw-list-top-head">
                     <div className="col-sm-4">
                         <span className='form-heading'>{AppConstants.fixtures}</span>
