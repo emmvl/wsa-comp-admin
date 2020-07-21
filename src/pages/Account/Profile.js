@@ -152,6 +152,9 @@ function Profile(props) {
             value={user.email}
             onChange={onChangeField}
           />
+          {userState.userProfile.email !== user.email && (
+            <div className="form-field-error">{AppConstants.emailChangedWarning}</div>
+          )}
 
           <div className="d-flex justify-content-end mt-4">
             <Button

@@ -231,3 +231,7 @@
     padding: 0 15px
   }
 }
+
+.form-field-error {
+  color: var(--app-f5222d);
+}
