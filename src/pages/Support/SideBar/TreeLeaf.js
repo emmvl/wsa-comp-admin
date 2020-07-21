@@ -1,43 +1,79 @@
-import React, { useCallback, useState } from 'react';
+import React, { Component } from "react";
 
-function TreeLeaf(props) {
-  const { content, showArticle } = props;
-  const [collapsed, setCollapsed] = useState(false);
+class TreeLeaf extends Component {
+  constructor(props) {
+    super(props);
 
-  const onCollapse = useCallback(() => {
-    setCollapsed(prevState => !prevState);
-    showArticle(content.id);
-  }, [setCollapsed, showArticle, content]);
+    this.state = {
+      collapsed: false,
+    };
+  }
 
-  const onSelect = useCallback((id) => () => {
-    showArticle(id);
-  }, [showArticle]);
+  componentDidUpdate() {
+    const { collapsed } = this.state;
+    const { searchedArray, content } = this.props;
+    if (!collapsed && searchedArray && searchedArray.indexOf(content.id) > -1) {
+      this.setState({ collapsed: true });
+    } else if (collapsed && searchedArray.length === 0 && searchedArray.indexOf(content.id) === -1) {
+      this.setState({ collapsed: false });
+    }
+  }
 
-  return (
-    <div className="side-bar-item">
-      <ul onClick={onCollapse}>
-        {content.article === 'Home' ? (
-          <i className="fa fa-home" />
-        ) : (
-          <i className="fa fa-angle-right fa-lg" />
-        )}
+  onCollapse = (e) => {
+    this.setState({ collapsed: e ? true : !this.state.collapsed });
+  }
 
-        {content.article}
-      </ul>
+  onShow = e => {
+    this.props.selectArticle(e);
+  }
 
-      {collapsed && (
-        content.children.map((leaf) => (
-          <ul
-            className="child-leaf"
-            onClick={onSelect(leaf.id)}
-            key={leaf.article}
-          >
-            {leaf.article}
-          </ul>
-        ))
-      )}
-    </div>
-  );
+  render() {
+    const { searchedArray, data, content } = this.props;
+    const { collapsed } = this.state;
+    let leaves = [];
+    data.forEach((art) => {
+      if (art.id === content.id) {
+        content.subArticles = art.subArticles;
+      } else {
+        leaves.push({ ...art });
+      }
+    });
+
+    return (
+      <div className="side-bar-item">
+        <ul
+          onClick={() => this.onShow(content.id)}
+          onDoubleClick={this.onCollapse}
+        >
+          {content.article === 'Home' ? (
+            <i className="fa fa-home" />
+          ) : (
+            <i
+              className={"fa " + (content.subArticles.length > 0
+                ? (collapsed
+                  ? "fa-angle-right fa-lg tree-collapse"
+                  : "fa-angle-right fa-lg tree-not-collapse")
+                : "fa-minus fa-sm")
+              }
+            />
+          )}
+
+          {content.article}
+        </ul>
+        <div className={`side-bar-child-item ${(collapsed ? "tree-item-show" : "tree-item-hide")}`}>
+          {content.subArticles && content.subArticles.map((leaf) => (
+            <TreeLeaf
+              searchedArray={searchedArray}
+              key={leaf.article}
+              data={leaves}
+              content={leaf}
+              selectArticle={this.props.selectArticle}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
 }
 
 export default TreeLeaf;

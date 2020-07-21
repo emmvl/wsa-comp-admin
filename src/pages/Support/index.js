@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
 import AppConstants from "../../themes/appConstants";
@@ -13,21 +13,28 @@ import "./style.scss";
 function Support(props) {
   const { supportState, getSupportContent } = props;
 
-  const { onLoad, result: content } = supportState;
+  const { onLoad, result } = supportState;
+
+  const [currentArticle, setCurrentArticle] = useState(1);
 
   useEffect(() => {
     getSupportContent();
   }, [getSupportContent]);
 
-  console.log(content);
+  let content;
+  result.forEach((article) => {
+    if (article.id === currentArticle) {
+      content = article.content;
+    }
+  });
 
   return (
     <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
       <DashboardLayout menuHeading={AppConstants.support} menuName={AppConstants.support} />
 
       <div className="support-panel">
-        <SideBar content={content} />
-        <ContentPanel content={<></>} />
+        <SideBar content={result} selectArticle={setCurrentArticle} />
+        <ContentPanel content={content} />
       </div>
 
       <Loader visible={onLoad} />
