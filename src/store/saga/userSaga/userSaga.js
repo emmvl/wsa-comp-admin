@@ -83,7 +83,6 @@ export function* getUreSaga(action) {
     }
 }
 
-
 /* Get the Affiliates Listing  */
 export function* getAffiliatesListingSaga(action) {
     try {
@@ -102,7 +101,7 @@ export function* getAffiliatesListingSaga(action) {
     }
 }
 
-/* Save the Affilaite Saga */
+/* Save the Affiliate Saga */
 export function* saveAffiliateSaga(action) {
     try {
         const result = yield call(
@@ -213,8 +212,6 @@ export function* deleteAffiliateSaga(action) {
     }
 }
 
-
-
 //get particular user organisation 
 export function* getUserOrganisationSaga(action) {
     try {
@@ -232,7 +229,6 @@ export function* getUserOrganisationSaga(action) {
         yield call(errorSaga, error)
     }
 }
-
 
 /* Get the User Dashboard Textual Listing  */
 export function* getUserDashboardTextualListingSaga(action) {
@@ -600,6 +596,12 @@ export function* saveUserPhotosSaga(action) {
     try {
         const result = yield call(userHttpApi.saveUserPhoto, action.payload);
         if (result.status === 1) {
+            if (action.userDetail) {
+                yield call(saveUserDetailSaga, { payload: action.userDetail });
+            } else {
+                message.success('Photo is updated successfully.');
+            }
+
             yield put({
                 type: ApiConstants.API_USER_PHOTO_UPDATE_SUCCESS,
                 result: result.result.data[0],
@@ -643,6 +645,8 @@ export function* saveUserDetailSaga(action) {
                 result: result.result.data.user,
                 status: result.status
             });
+
+            message.success('Profile is updated successfully.');
         } else {
             yield call(failSaga, result);
         }
@@ -664,7 +668,7 @@ export function* updateUserPasswordSaga(action) {
                 status: result.status
             });
 
-            message.success(result.result.data.message);
+            message.success('Password is updated successfully.');
         } else {
             yield call(failSaga, result);
         }
