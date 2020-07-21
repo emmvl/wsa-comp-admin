@@ -1,0 +1,22 @@
+.place-auto-complete-container {
+  width: 100%;
+  position: relative;
+}
+  .place-auto-complete-container .place-location {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: 0 0 2px 2px #aaaaaa;
+    position: absolute;
+    z-index: 10;
+    background: white;
+    width: 100%;
+  }
+    .place-auto-complete-container .place-location li {
+      cursor: pointer;
+      padding: 5px 4px;
+      border-bottom: 1px solid rgba(72, 94, 144, 0.16);
+    }
+    .place-auto-complete-container .place-location li:last-child {
+       text-align: right;
+    }
