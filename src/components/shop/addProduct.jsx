@@ -390,8 +390,8 @@ class AddProduct extends Component {
     showDeleteConfirm = (optionId, index, subIndex) => {
         let this_ = this
         confirm({
-            title: AppConstants.deleteProduct,
-            content: AppConstants.deleteProductDescription,
+            title: AppConstants.deleteVariantOption,
+            content: AppConstants.deleteVariantOptionDescription,
             okText: 'Confirm',
             okType: 'danger',
             cancelText: 'Cancel',
@@ -552,7 +552,9 @@ class AddProduct extends Component {
                         )
                     }
                     placeholder="Select"
-                    value={isNotNullOrEmptyString(productDetailData.type.typeName) ? productDetailData.type.id : []}
+                    value={productDetailData.type ?
+                        isNotNullOrEmptyString(productDetailData.type.typeName) ?
+                            productDetailData.type.id : [] : []}
                     disabled={this.state.allDisabled}
                 >
                     {isArrayNotEmpty(typesProductList) && typesProductList.map(
@@ -899,8 +901,8 @@ class AddProduct extends Component {
                         </div>
 
                         {isArrayNotEmpty(varientOptionArray) && varientOptionArray.map((subItem, subIndex) => (
-                            <div className="prod-reg-inside-container-view">
-                                <div className="row" key={"varientOptionArray" + subIndex} >
+                            <div className="prod-reg-inside-container-view" key={"varientOptionArray" + subIndex}>
+                                <div className="row"  >
                                     <div className="col-sm">
                                         <InputWithHead
                                             heading={AppConstants.option}

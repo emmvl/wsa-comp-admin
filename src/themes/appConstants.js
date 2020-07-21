@@ -1446,8 +1446,12 @@ const AppConstants = {
   indivisualOrgnisation: 'Individual Organisations',
   firstLevelAffiliatesAssociationLeague: "1st Level Affiliates - Association/ League",
   secondLevelAffiliatesClubSchool: "2nd Level Affiliates - Club/School",
-  teamSeasonalFee: 'Team Seasonal Fee'
-
+  teamSeasonalFee: 'Team Seasonal Fee',
+  addressAddedMessage: "Address added successfully.",
+  deleteVariantOption: "Delete variant option",
+  deleteVariantOptionDescription: "Please confirm you want to delete this variant option?",
+  deleteProductType: "Delete product type",
+  deleteProductTypeDescription: "Please confirm you want to delete this product type?",
 };
 
 export default AppConstants;

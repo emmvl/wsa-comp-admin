@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Select, Breadcrumb, Button } from 'antd';
+import { Layout, Select, Breadcrumb, Button, Form, Modal } from 'antd';
 import './shop.css';
 import DashboardLayout from "../../pages/dashboardLayout";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -10,31 +10,108 @@ import { bindActionCreators } from 'redux';
 import InputWithHead from "../../customComponents/InputWithHead";
 import { getStateReferenceAction } from "../../store/actions/commonAction/commonAction"
 import Loader from '../../customComponents/loader';
+import {
+    getShopSettingAction,
+    createAddressAction,
+    onChangeSettingsData,
+} from "../../store/actions/shopAction/shopSettingAction";
+import ValidationConstants from '../../themes/validationConstant';
+import { isArrayNotEmpty, isNotNullOrEmptyString, captializedString } from "../../util/helpers";
+import { checkOrganisationLevel } from "../../util/permissions";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
+const { confirm } = Modal;
 
 class ShopSettings extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: ""
+            getLoad: false,
+            orgLevel: AppConstants.state,
         }
     }
+
     componentDidMount() {
         this.apiCalls()
+        this.setDetailsFieldValue();
+        checkOrganisationLevel().then((value) => (
+            this.setState({ orgLevel: value })
+        ))
     }
+
+    componentDidUpdate(nextProps) {
+        let { getDetailsLoad } = this.props.shopSettingState;
+        if (getDetailsLoad === false && this.state.getLoad === true) {
+            this.setDetailsFieldValue();
+            this.setState({ getLoad: false });
+        }
+    }
+
 
     apiCalls = () => {
         let body = {
             State: "State"
         }
         this.props.getStateReferenceAction(body)
+        this.getSettingScreenData()
     }
 
+    getSettingScreenData = () => {
+        this.props.getShopSettingAction()
+        this.setState({ getLoad: true })
+    }
+
+    setDetailsFieldValue() {
+        let { settingDetailsData } = this.props.shopSettingState;
+        this.props.form.setFieldsValue({
+            address: settingDetailsData.address,
+            suburb: settingDetailsData.suburb,
+            state: settingDetailsData.state,
+            postcode: settingDetailsData.postcode,
+        });
+    }
+
+
+    //////delete the type
+    showDeleteConfirm = (index) => {
+        let this_ = this
+        confirm({
+            title: AppConstants.deleteProductType,
+            content: AppConstants.deleteProductTypeDescription,
+            okText: 'Confirm',
+            okType: 'danger',
+            cancelText: 'Cancel',
+            onOk() {
+                let { settingDetailsData } = this_.props.shopSettingState;
+                let types = settingDetailsData.types
+                types.splice(index, 1)
+                this_.props.onChangeSettingsData(types, 'types')
+            },
+            onCancel() {
+            },
+        });
+    }
+
+    ///////add remove type
+    addRemoveTypeOption = (index, key) => {
+        let { settingDetailsData } = this.props.shopSettingState;
+        let defaultTypeObject = {
+            "id": 0,
+            "typeName": ""
+        }
+        let types = settingDetailsData.types
+        if (key === "add") {
+            types.push(defaultTypeObject)
+        }
+        if (key === "remove") {
+            this.showDeleteConfirm(index)
+        }
+        this.props.onChangeSettingsData(types, 'types')
+
+    }
     ///////view for breadcrumb
     headerView = () => {
-        let isEdit = this.props.location.state ? this.props.location.state.isEdit : null
         return (
             <div className="header-view">
                 <Header
@@ -59,85 +136,157 @@ class ShopSettings extends Component {
 
 
     ////////form content view
-    contentView = () => {
+    contentView = (getFieldDecorator) => {
         let stateList = this.props.commonState.stateData
-        console.log("this.props.appState", this.props.commonState.stateData)
         return (
             <div className="content-view pt-4">
                 <span className="form-heading">{AppConstants.pickUpAddress}</span>
-                <InputWithHead
-                    required={"required-field "}
-                    heading={AppConstants.address}
-                    placeholder={AppConstants.address}
-                    // name={AppConstants.description}
-                    onChange={(e) => this.setState({ value: e.target.value })}
-                    value={this.state.value}
-                />
-                <InputWithHead
-                    required={"required-field "}
-                    heading={AppConstants.suburb}
-                    placeholder={AppConstants.suburb}
-                    // name={AppConstants.description}
-                    onChange={(e) => this.setState({ suburb: e.target.value })}
-                    value={this.state.suburb}
-                />
+                <Form.Item>
+                    {getFieldDecorator(
+                        `address`,
+                        {
+                            rules: [
+                                {
+                                    required: true,
+                                    message:
+                                        ValidationConstants.enterAddress,
+                                },
+                            ],
+                        }
+                    )(
+                        <InputWithHead
+                            required={"required-field "}
+                            heading={AppConstants.address}
+                            placeholder={AppConstants.address}
+                            onChange={(e) => this.props.onChangeSettingsData(
+                                e.target.value,
+                                'address'
+                            )}
+                        />
+                    )}
+                </Form.Item>
+                <Form.Item>
+                    {getFieldDecorator(
+                        `suburb`,
+                        {
+                            rules: [
+                                {
+                                    required: true,
+                                    message:
+                                        ValidationConstants.enterSuburb,
+                                },
+                            ],
+                        }
+                    )(
+                        <InputWithHead
+                            required={"required-field "}
+                            heading={AppConstants.suburb}
+                            placeholder={AppConstants.suburb}
+                            onChange={(e) => this.props.onChangeSettingsData(
+                                e.target.value,
+                                'suburb'
+                            )}
+                        />
+                    )}
+                </Form.Item>
                 <InputWithHead
                     heading={AppConstants.stateHeading}
+                    required={"required-field"}
                 />
-                <Select
-                    style={{ width: "100%" }}
-                    placeholder={AppConstants.select}
-                // onChange={(stateRefId) => this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId')}
-                >
-                    {stateList.length > 0 && stateList.map((item) => (
-                        < Option key={"stateList" + item.id} value={item.id}> {item.name}</Option>
-                    ))
-                    }
-                </Select>
-                <InputWithHead
-                    required={"required-field "}
-                    heading={AppConstants.postCode}
-                    placeholder={AppConstants.postcode}
-                    // name={AppConstants.description}
-                    onChange={(e) => this.setState({ postCode: e.target.value })}
-                    value={this.state.postCode}
-                />
+                <Form.Item>
+                    {getFieldDecorator(
+                        `state`,
+                        {
+                            rules: [
+                                {
+                                    required: true,
+                                    message:
+                                        ValidationConstants.enterState,
+                                },
+                            ],
+                        }
+                    )(
+                        <Select
+                            style={{ width: "100%" }}
+                            placeholder={AppConstants.select}
+                            onChange={(value) => this.props.onChangeSettingsData(
+                                value,
+                                'state'
+                            )}
+                        >
+                            {stateList.length > 0 && stateList.map((item) => (
+                                < Option key={"stateList" + item.id} value={item.name}> {item.name}</Option>
+                            ))
+                            }
+                        </Select>
+                    )}
+                </Form.Item>
+                <Form.Item>
+                    {getFieldDecorator(
+                        `postcode`,
+                        {
+                            rules: [
+                                {
+                                    required: true,
+                                    message:
+                                        ValidationConstants.enterPostcode,
+                                },
+                            ],
+                        }
+                    )(
+                        <InputWithHead
+                            required={"required-field "}
+                            heading={AppConstants.postCode}
+                            placeholder={AppConstants.postcode}
+                            onChange={(e) => this.props.onChangeSettingsData(
+                                e.target.value,
+                                'postcode'
+                            )}
+                            type="number"
+                        />
+                    )}
+                </Form.Item>
             </div >
         );
     };
-    productTypes = () => {
-        let product = [{
-            id: 1, name: "T-Shirt"
-        }]
+
+    productTypesView = () => {
+        let { settingDetailsData } = this.props.shopSettingState;
+        console.log("settingDetailsData", settingDetailsData)
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading">{AppConstants.productTypes}</span>
-                <div className="row">
-                    <div className=" col-sm">
-                        <InputWithHead
-                            required={"required-field "}
-                            placeholder={AppConstants.productTypes}
-                            // name={AppConstants.description}
-                            onChange={(e) => this.setState({ productTypes: e.target.value })}
-                            value={this.state.productTypes}
-                        />
-                    </div>
-                    <div className="col-sm-2 d-flex justify-content-center align-items-center" >
-                        <span className='user-remove-btn pl-2'
-                            style={{ cursor: 'pointer', }}>
-                            <img
-                                className="dot-image"
-                                src={AppImages.redCross}
-                                alt=""
-                                width="16"
-                                height="16"
-                            // onClick={() => this.addTimeManualPerVenue(timeIndex, venueIndex, "removeTimeSlotManualPerVenue", index)}
+                {isArrayNotEmpty(settingDetailsData.types) && settingDetailsData.types.map((item, index) => (
+                    <div className="row mt-4" key={"settingDetailsData" + index}>
+                        <div className=" col-sm">
+                            <InputWithHead
+                                required={"required-field "}
+                                placeholder={AppConstants.productTypes}
+                                onChange={(e) => this.props.onChangeSettingsData(
+                                    e.target.value,
+                                    'typeName', index
+                                )}
+                                value={item.typeName}
                             />
-                        </span>
+                        </div>
+                        <div className="col-sm-2 d-flex justify-content-center align-items-center" >
+                            <span className='user-remove-btn pl-2'
+                                style={{ cursor: 'pointer', }}>
+                                <img
+                                    className="dot-image"
+                                    src={AppImages.redCross}
+                                    alt=""
+                                    width="16"
+                                    height="16"
+                                    onClick={() => this.addRemoveTypeOption(index, "remove")}
+                                />
+                            </span>
+                        </div>
                     </div>
-                </div>
+                ))}
                 <span style={{ cursor: 'pointer' }}
-                    className="input-heading-add-another">
+                    className="input-heading-add-another"
+                    onClick={() => this.addRemoveTypeOption(-1, "add")}>
                     + {AppConstants.addType}
                 </span>
             </div >
@@ -151,9 +300,9 @@ class ShopSettings extends Component {
                 <div className="row">
                     <div className="col-sm">
                         <div className="reg-add-save-button">
-                            <Button
+                            {/* <Button
                                 type="cancel-button"
-                                onClick={() => console.log("Cancel")}>{AppConstants.cancel}</Button>
+                                onClick={() => console.log("Cancel")}>{AppConstants.cancel}</Button> */}
                         </div>
                     </div>
                     <div className="col-sm">
@@ -170,19 +319,25 @@ class ShopSettings extends Component {
     };
 
     render() {
+        const { getFieldDecorator } = this.props.form;
+        let { orgLevel } = this.state
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.shop} menuName={AppConstants.shop} />
                 <InnerHorizontalMenu menu={"shop"} shopSelectedKey={"4"} />
                 <Layout>
-                    <Content className="comp-dash-table-view">
-                        {this.headerView()}
-                        <div className="formView">{this.contentView()}</div>
-                        <div className="formView">{this.productTypes()}</div>
-                    </Content>
-                    <Loader
-                        visible={this.props.commonState.onLoad} />
-                    <Footer>{this.footerView()}</Footer>
+                    <Form
+                        onSubmit={this.saveSettings}
+                        noValidate="noValidate">
+                        <Content>
+                            {this.headerView()}
+                            <div className="formView">{this.contentView(getFieldDecorator)}</div>
+                            {orgLevel === AppConstants.state && <div className="formView">{this.productTypesView()}</div>}
+                        </Content>
+                        <Loader
+                            visible={this.props.commonState.onLoad || this.props.shopSettingState.onLoad} />
+                        <Footer>{this.footerView()}</Footer>
+                    </Form>
                 </Layout>
             </div>
         );
@@ -191,13 +346,17 @@ class ShopSettings extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getStateReferenceAction
+        getStateReferenceAction,
+        getShopSettingAction,
+        createAddressAction,
+        onChangeSettingsData,
     }, dispatch)
 }
 
 function mapStatetoProps(state) {
     return {
-        commonState: state.CommonReducerState
+        commonState: state.CommonReducerState,
+        shopSettingState: state.ShopSettingState,
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)((ShopSettings));
+export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(ShopSettings));

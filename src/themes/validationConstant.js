@@ -188,7 +188,11 @@ const ValidationConstants = {
     attendanceRecordField: 'Record is required.',
     attendanceReportField: 'Report is required.',
     scoringField: 'Scoring is required.',
-    passwordVerification: 'Password must be minimum 8 characters'
+    enterAddress: 'Please enter address.',
+    enterSuburb: 'Please enter suburb.',
+    enterState: 'Please enter state.',
+    enterPostcode: 'Please enter postcode.',
+    passwordVerification: 'Password must be minimum 8 characters',
 
 };
 
