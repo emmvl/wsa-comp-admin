@@ -50,10 +50,10 @@ function createQuickCompetitionAction(year, comptitionName, competitionDate) {
 }
 
 ////post/save quick competition division
-function saveQuickCompDivisionAction(competitionUniqueKey, divisions) {
+function saveQuickCompDivisionAction(competitionUniqueKey, divisions, year, competitionName) {
     const action = {
         type: ApiConstants.API_SAVE_QUICK_COMPETITION_DIVISION_LOAD,
-        competitionUniqueKey, divisions
+        competitionUniqueKey, divisions, year, competitionName
     }
     return action
 }
@@ -77,10 +77,10 @@ function getQuickCompetitionAction(competitionUniqueKey) {
 }
 
 // post time slot Data 
-function quickCompetitionTimeSlotData(payload) {
+function quickCompetitionTimeSlotData(payload, year, competitionUniqueKey, competitionName) {
     const action = {
         type: ApiConstants.API_QUICK_COMPETITION_TIMESLOT_POST_LOAD,
-        payload: payload
+        payload: payload, year: year, competitionUniqueKey: competitionUniqueKey, competitionName: competitionName
     }
     return action
 }

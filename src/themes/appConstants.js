@@ -1430,6 +1430,7 @@ const AppConstants = {
   dateRegChange: 'Date Registration Change',
   dateCompStart: 'Date Competition Start',
   regChangeType: 'Registration Change Type',
+  generateFixtures: "Generate Fixtures",
   doTheySayForGame: 'Do they say they have taken the court for training, grading or a competition game?',
   reasonToDeRegister: 'Reasons why they would like to de-register?',
   overCommited: `I am over commited with other activities and can't fit in time for netball`,
