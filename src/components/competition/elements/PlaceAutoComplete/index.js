@@ -83,7 +83,7 @@ const PlacesAutocomplete = ({
             value={value}
             onChange={handleInput}
             disabled={!ready}
-            placeholder="Area / Grid / Room*"
+            placeholder="Please input location"
         />
         {/* We can use the "status" to decide whether we should display the dropdown or not */}
         {status === 'OK' && (
