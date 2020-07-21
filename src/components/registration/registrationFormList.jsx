@@ -172,7 +172,8 @@ class RegistrationFormList extends Component {
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
                                     name={"yearRefId"}
-                                    className="year-select"
+                                    className="year-select reg-filter-select1 ml-2"
+                                    style={{ minWidth: 160 }}
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >

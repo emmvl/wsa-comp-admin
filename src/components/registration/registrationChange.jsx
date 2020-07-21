@@ -250,7 +250,8 @@ class RegistrationChange extends Component {
                             <div className="com-year-select-heading-view">
                                 <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
-                                    className="year-select"
+                                    className="year-select reg-filter-select1 ml-2"
+                                    style={{ minWidth: 100 }}
                                     value={this.state.yearRefId}
                                     onChange={(e) => this.yearChange(e)}
                                 >
@@ -269,7 +270,8 @@ class RegistrationChange extends Component {
                             <div className="com-year-select-heading-view">
                                 <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
-                                    className="year-select"
+                                    className="year-select reg-filter-select1 ml-2"
+                                    style={{ minWidth: 200 }}
                                     value={this.state.competition}
                                 // onChange={(e) => this.yearChange(e)}
                                 >
@@ -282,7 +284,8 @@ class RegistrationChange extends Component {
                             <div className="com-year-select-heading-view">
                                 <span className="year-select-heading">{AppConstants.type}:</span>
                                 <Select
-                                    className="year-select"
+                                    className="year-select reg-filter-select1 ml-2"
+                                    style={{ minWidth: 160 }}
                                     value={this.state.type}
                                 // onChange={(e) => this.yearChange(e)}
                                 >

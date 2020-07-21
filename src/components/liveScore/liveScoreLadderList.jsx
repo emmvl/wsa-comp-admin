@@ -219,20 +219,22 @@ class LiveScoreLadderList extends Component {
 
         return (
             <div className="comp-player-grades-header-drop-down-view">
-                <span className='year-select-heading'>{AppConstants.filterByDivision}:</span>
-                {grade.length > 0 && <Select
-                    className="year-select"
-                    onChange={(division) => this.divisionChange({ division })}
-                    style={{ minWidth: 80 }}
-                    defaultValue={grade[0].name}
-                >
-                    {grade.map((item) => (
-                        <Option key={'selectDivision' + item.id} value={item.id}>
-                            {item.name}
-                        </Option>
-                    ))}
+                <div className="reg-filter-col-cont"  >
+                    <span className='year-select-heading'>{AppConstants.filterByDivision}:</span>
+                    {grade.length > 0 && <Select
+                        className="year-select reg-filter-select1 ml-2"
+                        onChange={(division) => this.divisionChange({ division })}
+                        style={{ maxWidth: 100 }}
+                        defaultValue={grade[0].name}
+                    >
+                        {grade.map((item) => (
+                            <Option key={'selectDivision' + item.id} value={item.id}>
+                                {item.name}
+                            </Option>
+                        ))}
 
-                </Select>}
+                    </Select>}
+                </div>
             </div>
         )
     }

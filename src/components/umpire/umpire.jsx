@@ -79,7 +79,7 @@ const columns = [
             return (
                 <div>
                     {linkedEntity.length > 0 && linkedEntity.map((item, index) => (
-                        <span key={`entityName`+index} className='multi-column-text-aligned'>{item.name}</span>
+                        <span key={`entityName` + index} className='multi-column-text-aligned'>{item.name}</span>
                     ))
                     }
                 </div>)
@@ -396,14 +396,14 @@ class Umpire extends Component {
                         }} >
                             <span className='year-select-heading'>{AppConstants.competition}:</span>
                             <Select
-                                className="year-select"
-                                style={{ minWidth: 160 }}
+                                className="year-select reg-filter-select1 ml-2"
+                                style={{ minWidth: 200, maxWidth: 250 }}
                                 onChange={(comp) => this.onChangeComp({ comp })}
                                 value={this.state.selectedComp}
                             >
                                 {
                                     competition.map((item, index) => {
-                                        return <Option key={`competition`+index} value={item.id}>{item.longName}</Option>
+                                        return <Option key={`competition` + index} value={item.id}>{item.longName}</Option>
                                     })
                                 }
 

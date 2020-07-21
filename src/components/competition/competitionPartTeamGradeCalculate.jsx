@@ -173,8 +173,8 @@ class CompetitionPartTeamGradeCalculate extends Component {
                 title: null,
                 dataIndex: `grades${i}`,
                 render: (grades, record) =>
-                    < div style={{ width: "fit-content", display: "flex", flexDirection: 'column', justifyContent: 'center', height:"100%" }}>
-                        <a className="pb-3" style={{marginBottom: "auto", marginTop: "auto"}}>
+                    < div style={{ width: "fit-content", display: "flex", flexDirection: 'column', justifyContent: 'center', height: "100%" }}>
+                        <a className="pb-3" style={{ marginBottom: "auto", marginTop: "auto" }}>
                             <span style={{ color: "var(--app-color)" }}
                                 onClick={() => this.updateGradeName(grades.competitionDivisionGradeId, record.competitionMembershipProductDivisionId)} className="year-select-heading ">
                                 {grades.gradeName}
@@ -302,7 +302,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
                                     name={"yearRefId"}
-                                    className="year-select"
+                                    className="year-select reg-filter-select1 ml-2"
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
@@ -324,9 +324,9 @@ class CompetitionPartTeamGradeCalculate extends Component {
                             }} >
                                 <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
-                                    style={{ minWidth: 160 }}
+                                    style={{ minWidth: 100 }}
                                     name={"competition"}
-                                    className="year-select"
+                                    className="year-select reg-filter-select1 ml-2"
                                     onChange={competitionId => this.onCompetitionChange(competitionId)
                                     }
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}

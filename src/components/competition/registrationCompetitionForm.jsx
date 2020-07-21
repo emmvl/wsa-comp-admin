@@ -1135,7 +1135,8 @@ class RegistrationCompetitionForm extends Component {
                                     {getFieldDecorator('yearRefId', { initialValue: 1 },
                                         { rules: [{ required: true, message: ValidationConstants.pleaseSelectYear }] })(
                                             <Select
-                                                className="year-select"
+                                                className="year-select reg-filter-select1 ml-2"
+                                                style={{ minWidth: 160 }}
                                             >
                                                 {this.props.appState.yearList.map(item => {
                                                     return (
@@ -1361,7 +1362,7 @@ class RegistrationCompetitionForm extends Component {
                                 // value={detailsData.competitionDetailData.competitionName}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(captializedString(e.target.value), "competitionName")}
                                 disabled={compDetailDisable}
-                                onBlur={(i)=> this.props.form.setFieldsValue({
+                                onBlur={(i) => this.props.form.setFieldsValue({
                                     'competition_name': captializedString(i.target.value)
                                 })}
                             />

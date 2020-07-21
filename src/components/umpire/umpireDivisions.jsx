@@ -110,8 +110,8 @@ class UmpireDivisions extends Component {
                                    </span>
 
                                 <Select
-                                    className="year-select"
-                                    style={{ minWidth: 160 }}
+                                    className="year-select reg-filter-select1 ml-2"
+                                    style={{ minWidth: 200 }}
                                     onChange={(comp) => this.onChangeComp({ comp })}
                                     value={this.state.selectedComp}
                                 >

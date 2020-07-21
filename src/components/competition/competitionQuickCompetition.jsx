@@ -193,11 +193,11 @@ class CompetitionQuickCompetition extends Component {
                 </div>
             </Header >
             <div className="row" >
-                <div className="col-sm-2 pt-0">
+                <div className="col-sm-2 pb-3">
                     <span className="input-heading-add-another pt-0" onClick={() => this.visibleCompetitionModal()}>+{AppConstants.addNew}</span>
                 </div>
             </div>
-            <div className="row" >
+            <div className="row pb-3" >
                 <div className="col-sm-3">
                     <div
                         style={{
@@ -211,8 +211,8 @@ class CompetitionQuickCompetition extends Component {
                         <span className="year-select-heading">{AppConstants.year}:</span>
                         <Select
                             name={'yearRefId'}
-                            className="year-select"
-                            style={{ minWidth: 100 }}
+                            className="year-select reg-filter-select1 ml-2"
+                            style={{ maxWidth: 160 }}
                             onChange={(yearRefId) => this.onYearChange(yearRefId)}
                             value={this.state.yearRefId}
                         >
@@ -239,8 +239,8 @@ class CompetitionQuickCompetition extends Component {
                         <span className="year-select-heading">{AppConstants.competition}:</span>
                         <Select
                             name={'competition'}
-                            style={{ minWidth: 160 }}
-                            className="year-select"
+                            style={{ minWidth: 200 }}
+                            className="year-select reg-filter-select1 ml-2"
                             onChange={competitionId =>
                                 this.onCompetitionChange(competitionId)
                             }
@@ -638,7 +638,7 @@ class CompetitionQuickCompetition extends Component {
                                                     id={index.toString() + ':' + slotIndex.toString()}
                                                     content={1}
                                                     swappable={true}
-                                                    onSwap={(source, target,) => {
+                                                    onSwap={(source, target, ) => {
                                                         console.log(source, target)
                                                         return (
                                                             this.onSwap(

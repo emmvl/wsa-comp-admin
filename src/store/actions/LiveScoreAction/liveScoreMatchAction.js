@@ -36,7 +36,6 @@ function liveScoreUpdateMatchAction(data, key, contentType) {
         key: key,
         contentType: contentType,
     }
-    console.log(action)
     return action;
 }
 
@@ -148,7 +147,7 @@ function bulkScoreUpdate(data) {
 
 }
 
-function onCancelBulkScoreUpdate(){
+function onCancelBulkScoreUpdate() {
     const action = {
         type: ApiConstants.BULK_SCORE_UPDATE_CANCEL,
     }

@@ -171,7 +171,7 @@ class RegistrationPayments extends Component {
                         <InputWithHead required={"pt-0"} heading={AppConstants.year} />
                         <Select
                             className="reg-payment-select"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182, maxHeight: 60 }}
                             onChange={(year) => this.setState({ year })}
                             value={this.state.year}
                         >
