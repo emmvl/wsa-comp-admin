@@ -75,7 +75,8 @@ class UserOurOragnization extends Component {
             orgPhotoModalVisible: false,
             isEditable: true,
             sourcePage: "AFF",
-            termsAndCondititionFile: null
+            termsAndCondititionFile: null,
+            organisationTypeRefId: 0
         }
         _this = this;
         this.props.getCommonRefData();
@@ -92,8 +93,10 @@ class UserOurOragnization extends Component {
             let isEditable = this.props.location.state.isEditable;
             let affiliateOrgId = this.props.location.state.affiliateOrgId;
             let sourcePage = this.props.location.state.sourcePage;
-
-            await this.setState({ organisationId: affiliateOrgId, isEditable: isEditable, sourcePage: sourcePage })
+            let organisationTypeRefId = this.props.location.state.organisationTypeRefId;
+            await this.setState({ organisationId: affiliateOrgId, 
+                isEditable: isEditable, sourcePage: sourcePage, 
+                organisationTypeRefId: organisationTypeRefId })
         }
 
         this.referenceCalls(this.state.organisationId);
@@ -1410,7 +1413,8 @@ class UserOurOragnization extends Component {
                                             {this.termsAndConditionsView(getFieldDecorator)}
                                         </div>
                                     </TabPane>
-                                    {getOrganisationData().organisationTypeRefId == 2 && 
+                                    {((getOrganisationData().organisationTypeRefId == 2 && this.state.sourcePage != "DIR") || 
+                                            (this.state.organisationTypeRefId == 2 && this.state.sourcePage == "DIR")) && 
                                     <TabPane tab={AppConstants.charity} key="4">
                                         <div className="tab-formView mt-5" >
                                         {this.charityVoucherView(getFieldDecorator)}
