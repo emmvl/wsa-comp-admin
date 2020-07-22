@@ -149,99 +149,138 @@ class RegistrationPayments extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <Header className="reg-payment-header-view mt-5" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
-                        <Breadcrumb separator=" > ">
-                            {/* <Breadcrumb.Item className="breadcrumb-product">{AppConstants.registration}</Breadcrumb.Item> */}
-                            < Breadcrumb.Item className="breadcrumb-add"> {AppConstants.registrationAccountSummary}</Breadcrumb.Item>
-                        </Breadcrumb>
+            // <Header className="reg-payment-header-view mt-5" >
+            //     <div className="row" >
+            //         <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            //             <Breadcrumb separator=" > ">
+            //                 {/* <Breadcrumb.Item className="breadcrumb-product">{AppConstants.registration}</Breadcrumb.Item> */}
+            //                 < Breadcrumb.Item className="breadcrumb-add"> {AppConstants.registrationAccountSummary}</Breadcrumb.Item>
+            //             </Breadcrumb>
+            //         </div>
+            //     </div>
+            // </Header >
+            // <div className="comp-player-grades-header-drop-down-view">
+            <div className="reg-payment-header-view mt-5">
+                <div className="row">
+                    <div className='col-sm' style={{ display: "flex", alignContent: "center" }}>
+                        <span className="form-heading">
+                            {AppConstants.dashboard}
+                        </span>
+                    </div>
+                    <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
+                        <div className="row">
+                            <div className="col-sm pt-1">
+                                <div
+                                    className="comp-dashboard-botton-view-mobile"
+                                    style={{
+                                        width: "100%",
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        justifyContent: "flex-end"
+                                    }}
+                                >
+                                    <Button className="primary-add-comp-form" type="primary">
+                                        <div className="row">
+                                            <div className="col-sm">
+                                                <img
+                                                    src={AppImages.export}
+                                                    alt=""
+                                                    className="export-image"
+                                                />
+                                                {AppConstants.export}
+                                            </div>
+                                        </div>
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </Header >
+            </div>
+            // </div >
         )
     }
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
-            <div className="fluid-width" >
-                <div className="row" >
-                    <div className="col-sm" >
-                        <InputWithHead required={"pt-0"} heading={AppConstants.year} />
-                        <Select
-                            className="reg-payment-select"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182, maxHeight: 60 }}
-                            onChange={(year) => this.setState({ year })}
-                            value={this.state.year}
-                        >
-                            <Option value={"2020"}>{AppConstants.year2020}</Option>
-                            <Option value={"2019"}>{AppConstants.year2019}</Option>
-                            <Option value={"2018"}>{AppConstants.year2018}</Option>
-                            <Option value={"2017"}>{AppConstants.year2017}</Option>
-                            <Option value={"2016"}>{AppConstants.year2016}</Option>
-                        </Select>
-                    </div>
-                    <div className="col-sm" >
-                        <InputWithHead required={"pt-0"} heading={AppConstants.competition} />
+            <div className="row" >
+                <div className="col-sm" >
+                    <InputWithHead required={"pt-0"} heading={AppConstants.year} />
+                    <Select
+                        className="reg-payment-select"
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182, maxHeight: 60, minHeight: 44 }}
+                        onChange={(year) => this.setState({ year })}
+                        value={this.state.year}
+                    >
+                        <Option value={"2020"}>{AppConstants.year2020}</Option>
+                        <Option value={"2019"}>{AppConstants.year2019}</Option>
+                        <Option value={"2018"}>{AppConstants.year2018}</Option>
+                        <Option value={"2017"}>{AppConstants.year2017}</Option>
+                        <Option value={"2016"}>{AppConstants.year2016}</Option>
+                    </Select>
+                </div>
+                <div className="col-sm" >
+                    <InputWithHead required={"pt-0"} heading={AppConstants.competition} />
 
-                        <Select
-                            className="reg-payment-select"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                            onChange={(competition) => this.setState({ competition })}
-                            value={this.state.competition}
-                        >
-                            <Option value={"all"}>{AppConstants.all}</Option>
-                            <Option value={"2020"}>{AppConstants.year2020}</Option>
-                            <Option value={"2019"}>{AppConstants.year2019}</Option>
-                            <Option value={"2018"}>{AppConstants.year2018}</Option>
-                            <Option value={"2017"}>{AppConstants.year2017}</Option>
-                            <Option value={"2016"}>{AppConstants.year2016}</Option>
-                        </Select>
-                    </div>
-                    <div className="col-sm" >
-                        <InputWithHead required={"pt-0"} heading={AppConstants.paymentFor} />
-                        <Select
-                            className="reg-payment-select"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                            onChange={(paymentFor) => this.setState({ paymentFor })}
-                            value={this.state.paymentFor}
-                        >
-                            <Option value={"all"}>{AppConstants.all}</Option>
-                            <Option value={"2020"}>{AppConstants.year2020}</Option>
-                            <Option value={"2019"}>{AppConstants.year2019}</Option>
-                            <Option value={"2018"}>{AppConstants.year2018}</Option>
-                            <Option value={"2017"}>{AppConstants.year2017}</Option>
-                            <Option value={"2016"}>{AppConstants.year2016}</Option>
-                        </Select>
-                    </div>
-                    <div className="col-sm" >
-                        <InputWithHead required={"pt-0"} heading={AppConstants.dateFrom} />
-                        <DatePicker
-                            className="reg-payment-datepicker"
-                            size="large"
-                            style={{ width: "100%" }}
-                            onChange={date => this.dateOnChangeFrom(date)}
-                            format={'DD-MM-YYYY'}
-                            showTime={false}
-                            placeholder={"dd-mm-yyyy"}
-                        />
-                    </div>
-                    <div className="col-sm" >
-                        <InputWithHead required={"pt-0"} heading={AppConstants.dateTo} />
-                        <DatePicker
-                            className="reg-payment-datepicker"
-                            size="large"
-                            style={{ width: "100%" }}
-                            onChange={date => this.dateOnChangeTo(date)}
-                            format={'DD-MM-YYYY'}
-                            showTime={false}
-                            placeholder={"dd-mm-yyyy"}
+                    <Select
+                        className="reg-payment-select"
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        onChange={(competition) => this.setState({ competition })}
+                        value={this.state.competition}
+                    >
+                        <Option value={"all"}>{AppConstants.all}</Option>
+                        <Option value={"2020"}>{AppConstants.year2020}</Option>
+                        <Option value={"2019"}>{AppConstants.year2019}</Option>
+                        <Option value={"2018"}>{AppConstants.year2018}</Option>
+                        <Option value={"2017"}>{AppConstants.year2017}</Option>
+                        <Option value={"2016"}>{AppConstants.year2016}</Option>
+                    </Select>
+                </div>
+                <div className="col-sm" >
+                    <InputWithHead required={"pt-0"} heading={AppConstants.paymentFor} />
+                    <Select
+                        className="reg-payment-select"
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        onChange={(paymentFor) => this.setState({ paymentFor })}
+                        value={this.state.paymentFor}
+                    >
+                        <Option value={"all"}>{AppConstants.all}</Option>
+                        <Option value={"2020"}>{AppConstants.year2020}</Option>
+                        <Option value={"2019"}>{AppConstants.year2019}</Option>
+                        <Option value={"2018"}>{AppConstants.year2018}</Option>
+                        <Option value={"2017"}>{AppConstants.year2017}</Option>
+                        <Option value={"2016"}>{AppConstants.year2016}</Option>
+                    </Select>
+                </div>
+                <div className="col-sm" >
+                    <InputWithHead required={"pt-0"} heading={AppConstants.dateFrom} />
+                    <DatePicker
+                        className="reg-payment-datepicker"
+                        size="large"
+                        style={{ width: "100%" }}
+                        onChange={date => this.dateOnChangeFrom(date)}
+                        format={'DD-MM-YYYY'}
+                        showTime={false}
+                        placeholder={"dd-mm-yyyy"}
+                    />
+                </div>
+                <div className="col-sm" >
+                    <InputWithHead required={"pt-0"} heading={AppConstants.dateTo} />
+                    <DatePicker
+                        className="reg-payment-datepicker"
+                        size="large"
+                        style={{ width: "100%" }}
+                        onChange={date => this.dateOnChangeTo(date)}
+                        format={'DD-MM-YYYY'}
+                        showTime={false}
+                        placeholder={"dd-mm-yyyy"}
 
-                        />
-                    </div>
+                    />
                 </div>
             </div>
+
         )
     }
 
@@ -280,7 +319,7 @@ class RegistrationPayments extends Component {
         let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=${StripeKeys.clientId}&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=${StripeKeys.url}/registrationPayments`
         // let stripeDashboardUrl = `https://dashboard.stripe.com/${stripeConnected}/test/dashboard`
         return (
-            <div className="pb-5">
+            <div className="pb-5 pt-5">
                 <div className="row">
                     <div className="col-sm">
                         <span className="reg-payment-price-text">{stripeConnected ? currencyFormat(accountBalance) : null}</span>
@@ -396,7 +435,7 @@ class RegistrationPayments extends Component {
     contentView = () => {
 
         return (
-            <div >
+            <div>
                 {this.dropdownView()}
                 {/* 
                 <div className="row" >

@@ -72,7 +72,7 @@ let AxiosApi = {
     /////////////shop setting create address API
     createAddress(payload) {
         let body = payload
-        var url = `/address`;
+        var url = `/settings`;
         return Method.dataPost(url, token, body);
     },
 

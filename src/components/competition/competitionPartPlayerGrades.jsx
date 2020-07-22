@@ -474,7 +474,7 @@ class CompetitionPartPlayerGrades extends Component {
                                     </Select>
                                 </div>
                             </div>
-                            <div className="col-sm" style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }} >
+                            <div className="col-sm-2" style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }} >
                                 <span className='comp-grading-final-text'>{AppConstants.open}</span>
                             </div>
                         </div>

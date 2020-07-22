@@ -4,11 +4,11 @@ import { isArrayNotEmpty } from "../../../util/helpers";
 // dummy object of setting screen
 const defaultObject = {
     address: "",
-    id: "",
+    id: 0,
     postcode: "",
     state: "",
     suburb: "",
-    organisationId: 0,
+    organisationUniqueKey: 0,
     types: [],
 }
 
@@ -30,7 +30,7 @@ function modifySettingData(data) {
         postcode: singleAddress ? singleAddress.postcode : "",
         state: singleAddress ? singleAddress.state : "",
         suburb: singleAddress ? singleAddress.suburb : "",
-        organisationId: singleAddress ? singleAddress.organisationId : "",
+        organisationUniqueKey: singleAddress ? singleAddress.organisationUniqueKey : 0,
         types: isArrayNotEmpty(data.types) ? data.types : [],
     }
     return newObject
@@ -76,6 +76,9 @@ function shopSettingState(state = initialState, action) {
             return { ...state, onLoad: true, error: null };
 
         case ApiConstants.API_CREATE_SHOP_SETTING_ADDRESS_SUCCESS:
+            let setting_Data = modifySettingData(action.result)
+            state.settingDetailsData = setting_Data
+            state.getDetailsLoad = false
             return {
                 ...state,
                 onLoad: false,
