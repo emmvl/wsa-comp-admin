@@ -65,10 +65,10 @@ export function* createAddressSaga(action) {
                 status: result.status
             });
             if (action.key == "add") {
-                message.success(AppConstants.addressAddedMessage);
+                message.success(AppConstants.settingsAddedMessage);
             }
             else {
-                message.success(AppConstants.addressUpdatedMessage);
+                message.success(AppConstants.settingsUpdatedMessage);
             }
         } else {
             yield call(failSaga, result)

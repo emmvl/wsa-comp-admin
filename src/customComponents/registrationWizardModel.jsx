@@ -17,7 +17,6 @@ class RegistrationWizardModel extends React.Component {
 
     render() {
         const { competitionStatus, registrationStatus, competitionClick, registrationClick, publishStatus, stripeConnectURL, stripeConnected, competitionId, competitionChange, wizardCompetition, heading, placeholder, name, handleBlur, modalTitle, visible, onOK, onCancel, ownnerComment, affilateComment } = this.props
-        console.log(publishStatus)
         return (
             <div style={{ backgroundColor: "red" }}>
                 <Modal
@@ -31,17 +30,14 @@ class RegistrationWizardModel extends React.Component {
                     okButtonProps={{ style: { display: "none" } }}
                     maskClosable={true}
                 >
-
-
                     <div className="col-sm pl-0 pb-2">
-
                         {/* < span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className={`comment-heading`}>{AppConstants.competition}{" "}</span> */}
                         <span className="year-select-heading">
                             {AppConstants.competition}:
                                 </span>
                         <Select
                             className="year-select"
-                            style={{ minWidth: 160 }}
+                            style={{ minWidth: 160, width: "70%" }}
                             onChange={competitionChange}
                             value={competitionId}
                         >

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Table, Select, Menu, Pagination, Modal } from "antd";
+import { Layout, Breadcrumb, Table, Select, Menu, Pagination, Modal, Button, DatePicker } from "antd";
 import "./product.scss";
 import { NavLink } from "react-router-dom";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -11,6 +11,7 @@ import AppImages from "../../themes/appImages";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { currencyFormat } from "../../util/currencyFormat";
 import { getPaymentList } from "../../store/actions/stripeAction/stripeAction"
+import InputWithHead from "../../customComponents/InputWithHead"
 
 const { confirm } = Modal;
 const { Content } = Layout;
@@ -138,6 +139,10 @@ class PaymentDashboard extends Component {
         super(props);
         this.state = {
             deleteLoading: false,
+            year: "2020",
+            competition: "all",
+            paymentFor: "all",
+            loadingSave: false,
 
         };
         this_Obj = this;
@@ -150,29 +155,142 @@ class PaymentDashboard extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-view-design">
-                <div className="row">
-                    <div
-                        className="col-sm"
-                        style={{ display: "flex", alignContent: "center" }}
-                    >
-                        <Breadcrumb separator=" > ">
-                            <Breadcrumb.Item className="breadcrumb-add">
-                                {/* Payments  */}
-                                Dashboard
-                          </Breadcrumb.Item>
-                        </Breadcrumb>
+            <div className="comp-player-grades-header-drop-down-view">
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className='col-sm' style={{ display: "flex", alignContent: "center" }}>
+                            <span className="form-heading">
+                                {AppConstants.dashboard}
+                            </span>
+                        </div>
+                        <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
+                            <div className="row">
+                                <div className="col-sm pt-1">
+                                    <div
+                                        className="comp-dashboard-botton-view-mobile"
+                                        style={{
+                                            width: "100%",
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            alignItems: "center",
+                                            justifyContent: "flex-end"
+                                        }}
+                                    >
+                                        <Button className="primary-add-comp-form" type="primary">
+                                            <div className="row">
+                                                <div className="col-sm">
+                                                    <img
+                                                        src={AppImages.export}
+                                                        alt=""
+                                                        className="export-image"
+                                                    />
+                                                    {AppConstants.export}
+                                                </div>
+                                            </div>
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </div >
         );
     };
+    ///setting the available from date
+    dateOnChangeFrom = date => {
+        // this.setState({ endDate: moment(date).utc().toISOString() })
+        console.log(date)
+    }
+
+    ////setting the available to date
+    dateOnChangeTo = date => {
+        console.log(date)
+    }
 
     handlePaymentTableList = (page) => {
         let offset = page ? 10 * (page - 1) : 0;
         this.props.getPaymentList(offset);
     };
+    dropdownView = () => {
+        return (
+            <div className="row pb-5" >
+                <div className="col-sm" >
+                    <InputWithHead required={"pt-0"} heading={AppConstants.year} />
+                    <Select
+                        className="reg-payment-select"
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182, maxHeight: 60, minHeight: 44 }}
+                        onChange={(year) => this.setState({ year })}
+                        value={this.state.year}
+                    >
+                        <Option value={"2020"}>{AppConstants.year2020}</Option>
+                        <Option value={"2019"}>{AppConstants.year2019}</Option>
+                        <Option value={"2018"}>{AppConstants.year2018}</Option>
+                        <Option value={"2017"}>{AppConstants.year2017}</Option>
+                        <Option value={"2016"}>{AppConstants.year2016}</Option>
+                    </Select>
+                </div>
+                <div className="col-sm" >
+                    <InputWithHead required={"pt-0"} heading={AppConstants.competition} />
 
+                    <Select
+                        className="reg-payment-select"
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        onChange={(competition) => this.setState({ competition })}
+                        value={this.state.competition}
+                    >
+                        <Option value={"all"}>{AppConstants.all}</Option>
+                        <Option value={"2020"}>{AppConstants.year2020}</Option>
+                        <Option value={"2019"}>{AppConstants.year2019}</Option>
+                        <Option value={"2018"}>{AppConstants.year2018}</Option>
+                        <Option value={"2017"}>{AppConstants.year2017}</Option>
+                        <Option value={"2016"}>{AppConstants.year2016}</Option>
+                    </Select>
+                </div>
+                <div className="col-sm" >
+                    <InputWithHead required={"pt-0"} heading={AppConstants.paymentFor} />
+                    <Select
+                        className="reg-payment-select"
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        onChange={(paymentFor) => this.setState({ paymentFor })}
+                        value={this.state.paymentFor}
+                    >
+                        <Option value={"all"}>{AppConstants.all}</Option>
+                        <Option value={"2020"}>{AppConstants.year2020}</Option>
+                        <Option value={"2019"}>{AppConstants.year2019}</Option>
+                        <Option value={"2018"}>{AppConstants.year2018}</Option>
+                        <Option value={"2017"}>{AppConstants.year2017}</Option>
+                        <Option value={"2016"}>{AppConstants.year2016}</Option>
+                    </Select>
+                </div>
+                <div className="col-sm" >
+                    <InputWithHead required={"pt-0"} heading={AppConstants.dateFrom} />
+                    <DatePicker
+                        className="reg-payment-datepicker"
+                        size="large"
+                        style={{ width: "100%" }}
+                        onChange={date => this.dateOnChangeFrom(date)}
+                        format={'DD-MM-YYYY'}
+                        showTime={false}
+                        placeholder={"dd-mm-yyyy"}
+                    />
+                </div>
+                <div className="col-sm" >
+                    <InputWithHead required={"pt-0"} heading={AppConstants.dateTo} />
+                    <DatePicker
+                        className="reg-payment-datepicker"
+                        size="large"
+                        style={{ width: "100%" }}
+                        onChange={date => this.dateOnChangeTo(date)}
+                        format={'DD-MM-YYYY'}
+                        showTime={false}
+                        placeholder={"dd-mm-yyyy"}
+
+                    />
+                </div>
+            </div>
+        )
+    }
 
     ////////form content view
     contentView = () => {
@@ -180,7 +298,9 @@ class PaymentDashboard extends Component {
         let total = paymentState.paymentListTotalCount;
         console.log(paymentState)
         return (
+
             <div className="comp-dash-table-view mt-2">
+                {this.dropdownView()}
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         className="home-dashboard-table"
@@ -213,7 +333,6 @@ class PaymentDashboard extends Component {
                 <Layout>
                     {this.headerView()}
                     <Content>
-
                         {this.contentView()}
                     </Content>
                 </Layout>

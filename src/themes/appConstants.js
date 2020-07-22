@@ -1447,13 +1447,13 @@ const AppConstants = {
   firstLevelAffiliatesAssociationLeague: "1st Level Affiliates - Association/ League",
   secondLevelAffiliatesClubSchool: "2nd Level Affiliates - Club/School",
   teamSeasonalFee: 'Team Seasonal Fee',
-  addressAddedMessage: "Address added successfully.",
+  settingsAddedMessage: "Settings added successfully.",
   deleteVariantOption: "Delete variant option",
   deleteVariantOptionDescription: "Please confirm you want to delete this variant option?",
   deleteProductType: "Delete product type",
   deleteProductTypeDescription: "Please confirm you want to delete this product type?",
   emailChangedWarning: "You will need to log in with your new email address on your next login.",
-  addressUpdatedMessage: "Address updated successfully.",
+  settingsUpdatedMessage: "Settings updated successfully.",
 };
 
 export default AppConstants;
