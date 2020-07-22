@@ -1410,11 +1410,13 @@ class UserOurOragnization extends Component {
                                             {this.termsAndConditionsView(getFieldDecorator)}
                                         </div>
                                     </TabPane>
+                                    {getOrganisationData().organisationTypeRefId == 2 && 
                                     <TabPane tab={AppConstants.charity} key="4">
                                         <div className="tab-formView mt-5" >
                                         {this.charityVoucherView(getFieldDecorator)}
                                         </div>
                                     </TabPane>
+                                    }
                                 </Tabs>
                             </div>
                             <Loader visible={userState.onLoad} />

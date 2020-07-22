@@ -145,7 +145,9 @@ const initialState = {
     affiliateArray: [],
     anyOrgAffiliateArr: [],
     any_club_Org_AffiliateArr: [],
-    createVenue: null
+    createVenue: null,
+    selectedTeamSeasonalInstalmentDates:[],
+    selectedSeasonalInstalmentDates:[],			   
 };
 
 /////function to append isselected values in default membership types array
@@ -430,8 +432,9 @@ function checkSelectedCasualFee(paymentData, casualFee, selectedCasualFee, selec
 
 
 // get selected Seasonal fee payment option key
-function checkSelectedSeasonalFee(paymentDataArray, seasonalFee, selectedSeasonalFee, selectedSeasonalFeeKey) {
-    selectedSeasonalFeeKey = []
+function checkSelectedSeasonalFee(paymentDataArray, seasonalFee, selectedSeasonalFee, selectedSeasonalFeeKey,instalmentDates,selectedSeasonalInstalmentDates) {
+    selectedSeasonalFeeKey = [];
+    selectedSeasonalInstalmentDates = [];
     if (paymentDataArray) {
         for (let i in paymentDataArray) {
             if (paymentDataArray[i].feesTypeRefId == 3) {
@@ -439,24 +442,34 @@ function checkSelectedSeasonalFee(paymentDataArray, seasonalFee, selectedSeasona
                 selectedSeasonalFee.push(paymentDataArray[i])
             }
         }
-        return {
-            selectedSeasonalFeeKey,
-            selectedSeasonalFee
+        if(instalmentDates.length > 0){
+            for(let i in instalmentDates){
+                if (instalmentDates[i].feesTypeRefId == 2) {
+                    selectedSeasonalInstalmentDates.push(instalmentDates[i]);
+                }
+            }
         }
-
-    }
-    else {
         return {
             selectedSeasonalFeeKey,
             selectedSeasonalFee,
+            selectedSeasonalInstalmentDates
+        }
+
+	 
+    }else {
+        return {
+            selectedSeasonalFeeKey,
+            selectedSeasonalFee,
+            selectedSeasonalInstalmentDates
         }
     }
 }
 
 
 // get selected Seasonal Team fee payment option key
-function checkSelectedSeasonalTeamFee(paymentDataArray, seasonalFee, selectedSeasonalTeamFee, selectedSeasonalTeamFeeKey) {
-    selectedSeasonalTeamFeeKey = []
+function checkSelectedSeasonalTeamFee(paymentDataArray, seasonalFee, selectedSeasonalTeamFee, selectedSeasonalTeamFeeKey,instalmentdates,selectedTeamSeasonalInstalmentDates) {
+    selectedSeasonalTeamFeeKey = [];
+    selectedTeamSeasonalInstalmentDates = [];
     if (paymentDataArray) {
         for (let i in paymentDataArray) {
             if (paymentDataArray[i].feesTypeRefId == 3) {
@@ -464,9 +477,17 @@ function checkSelectedSeasonalTeamFee(paymentDataArray, seasonalFee, selectedSea
                 selectedSeasonalTeamFee.push(paymentDataArray[i])
             }
         }
+        if(instalmentdates.length > 0){
+            for (let i in instalmentdates) {
+                if (instalmentdates[i].feesTypeRefId == 3) {
+                    selectedTeamSeasonalInstalmentDates.push(instalmentdates[i])
+                }
+            }
+        }
         return {
             selectedSeasonalTeamFeeKey,
-            selectedSeasonalTeamFee
+            selectedSeasonalTeamFee,
+            selectedTeamSeasonalInstalmentDates
         }
 
     }
@@ -474,26 +495,46 @@ function checkSelectedSeasonalTeamFee(paymentDataArray, seasonalFee, selectedSea
         return {
             selectedSeasonalTeamFeeKey,
             selectedSeasonalTeamFee,
+            selectedTeamSeasonalInstalmentDates
         }
     }
 }
 
 
 // for  updated selected Casual fee array
-function getUpdatedSeasonalFee(value, getUpdatedCasualFeeArr, allDataCasualFee, key) {
-    //console.log("getUpdatedSeasonalFee.length" + allDataCasualFee.length);
+function getUpdatedSeasonalFee(value, getUpdatedCasualFeeArr, allDataCasualFee, key,instalmentDates) {   
+    if(value.length == 0){
+        instalmentDates = [];            
+    }
     for (let i in value) {
         if (allDataCasualFee.length > 0) {
             for (let j in allDataCasualFee) {
                 if (value[i] == allDataCasualFee[j].paymentOptionRefId) {
-                    let object = {
-                        "subOptions": [],
-                        "feesTypeRefId": allDataCasualFee[j].feesTypeRefId,
-                        "paymentOptionRefId": allDataCasualFee[j].paymentOptionRefId,
-                        "paymentOptionId": allDataCasualFee[j].paymentOptionId
+                    if(allDataCasualFee[j].feesTypeRefId == key){
+                        let object = {
+                            "subOptions": [],
+                            "feesTypeRefId": allDataCasualFee[j].feesTypeRefId,
+                            "paymentOptionRefId": allDataCasualFee[j].paymentOptionRefId,
+                            "paymentOptionId": allDataCasualFee[j].paymentOptionId
+                        }
+                        getUpdatedCasualFeeArr.push(object)
+                        break                        
                     }
-                    getUpdatedCasualFeeArr.push(object)
-                    break
+                    else {
+                        if (value[i] == 5 || value[i] == 1) {
+                        }
+                        else {
+                            let object = {
+                                "subOptions": [],
+                                "feesTypeRefId": key,
+                                "paymentOptionRefId": value[i],
+                                "paymentOptionId": 0
+                            }
+                            getUpdatedCasualFeeArr.push(object)
+                            break
+                        }
+                    }                 
+                    
                 } else {
                     if (value[i] == 5 || value[i] == 1) {
                     }
@@ -517,14 +558,14 @@ function getUpdatedSeasonalFee(value, getUpdatedCasualFeeArr, allDataCasualFee, 
                     "subOptions": [],
                     "feesTypeRefId": key,
                     "paymentOptionRefId": value[i],
-                    "paymentOptionId": 0
+                    "paymentOptionId": 0,
                 }
                 getUpdatedCasualFeeArr.push(object)
                 //break
             }
         }
     }
-    return getUpdatedCasualFeeArr
+    return {getUpdatedCasualFeeArr,instalmentDates}
 }
 
 function getUpdatedCasualFee(value, getUpdatedCasualFeeArr, allDataCasualFee, key) {
@@ -1506,6 +1547,67 @@ function checkDiscountProduct(discountStateData, selectedDiscount) {
 //     }
 // }
 
+// adding object to seasonal payemnt 
+
+function getSeasonaltreeData (datalist)
+{
+    let seasonalPaymentDefault = datalist;   
+    let instalmentDates = [];       
+    seasonalPaymentDefault.map((item) => {        
+        let subReferences = item.subReferences
+        if(subReferences.length > 0){
+            for(let i = 0;i<subReferences.length;i++){
+                subReferences[i]["instalmentDates"] = instalmentDates
+            }
+        }       
+    })  
+    return seasonalPaymentDefault;
+}
+
+function addInstalmentDate(selectedSeasonalInstalmentDatesArray){
+    let newInstalmentDateObj ={
+        paymentOptionRefId:5,
+        paymentInstalmentId:0,
+        instalmentDate:"",
+        feesTypeRefId:2,
+    }
+    selectedSeasonalInstalmentDatesArray.push(newInstalmentDateObj);
+}
+
+function removeInstalmentDate(removeObj){  
+    let selectedSeasonalInstalmentDatesArray = removeObj.selectedSeasonalInstalmentDatesArray;      
+    let index = removeObj.index; 
+    selectedSeasonalInstalmentDatesArray.splice(index,1);      
+}
+
+function updateInstalmentDate(value){   
+    let instalmentDate = value.instalmentDate;      
+    let selectedSeasonalInstalmentDatesArrayItem = value.selectedSeasonalInstalmentDatesArrayItem; 
+    selectedSeasonalInstalmentDatesArrayItem.instalmentDate = instalmentDate;    
+}
+
+function addSeasonalTeamInstalmentDate(selectedSeasonalTeamInstalmentDatesArray){
+    let newInstalmentDateObj ={
+            paymentOptionRefId:5,
+            paymentInstalmentId:0,
+            instalmentDate:"",
+            feesTypeRefId:3,
+        }
+        selectedSeasonalTeamInstalmentDatesArray.push(newInstalmentDateObj);
+}
+ 
+function removeSeasonalTeamInstalmentDate(removeObj){  
+    let selectedSeasonalTeamInstalmentDatesArray = removeObj.selectedSeasonalTeamInstalmentDatesArray;
+    let selectedSeasonalTeamInstalmentDatesArrayItem = removeObj.selectedSeasonalTeamInstalmentDatesArrayItem;    
+    let index = selectedSeasonalTeamInstalmentDatesArray.indexOf(selectedSeasonalTeamInstalmentDatesArrayItem);
+    selectedSeasonalTeamInstalmentDatesArray.splice(index,1);             
+}
+ 
+function updateSeasonalTeamInstalmentDate(value){   
+    let seasonalTeamInstalmentDate = value.seasonalTeamInstalmentDate;      
+    let selectedSeasonalTeamInstalmentDatesArrayItem = value.selectedSeasonalTeamInstalmentDatesArrayItem; 
+    selectedSeasonalTeamInstalmentDatesArrayItem.instalmentDate = seasonalTeamInstalmentDate;        
+}
 function competitionFees(state = initialState, action) {
     switch (action.type) {
         case ApiConstants.API_COMPETITION_FEES_FAIL:
@@ -1578,11 +1680,12 @@ function competitionFees(state = initialState, action) {
 
         case ApiConstants.GET_SEASONAL_FEE_DETAIL_API_SUCCESS:
             const seasonalPayment = getRegistrationSetting(action.seasonalPaymentOptionResult)
+			const seasonalPaymentData = getSeasonaltreeData(seasonalPayment)																
             return {
                 ...state,
                 onLoad: false,
                 status: action.status,
-                seasonalPaymentDefault: seasonalPayment,
+                seasonalPaymentDefault: seasonalPaymentData,
                 seasonalTeamPaymentDefault: seasonalPayment,
                 error: null
             };
@@ -1662,8 +1765,8 @@ function competitionFees(state = initialState, action) {
             }
             state.selectedInvitees = selectedInvitees
             let selectedCasualFee = checkSelectedCasualFee(allData.competitionpayments.paymentOptions, state.casualPaymentDefault, state.selectedCasualFee, state.selectedCasualFeeKey)
-            let selectedSeasonalFee = checkSelectedSeasonalFee(allData.competitionpayments.paymentOptions, state.seasonalPaymentDefault, state.SelectedSeasonalFee, state.SelectedSeasonalFeeKey)
-            let selectedSeasonalTeamFee = checkSelectedSeasonalTeamFee(allData.competitionpayments.paymentOptions, state.seasonalTeamPaymentDefault, state.selectedSeasonalTeamFee, state.selectedSeasonalTeamFeeKey)
+            let selectedSeasonalFee = checkSelectedSeasonalFee(allData.competitionpayments.paymentOptions, state.seasonalPaymentDefault, state.SelectedSeasonalFee, state.SelectedSeasonalFeeKey,allData.competitionpayments.instalmentDates,state.selectedSeasonalInstalmentDates)
+            let selectedSeasonalTeamFee = checkSelectedSeasonalTeamFee(allData.competitionpayments.paymentOptions, state.seasonalTeamPaymentDefault, state.selectedSeasonalTeamFee, state.selectedSeasonalTeamFeeKey,allData.competitionpayments.instalmentDates,state.selectedTeamSeasonalInstalmentDates)
             let finalDiscountData = discountDataObject(allData.competitiondiscounts)
             state.competionDiscountValue.competitionDiscounts[0].discounts = finalDiscountData
             console.log("####, $$$$$", state.charityRoundUp, allData.competitionpayments.charityRoundUp)
@@ -1727,6 +1830,8 @@ function competitionFees(state = initialState, action) {
                 defaultSelectedSeasonalTeamFee: selectedSeasonalTeamFee.selectedSeasonalTeamFee,
                 defaultChairtyOption: allData.competitionpayments.charityRoundUp,
                 defaultGovtVoucher: allData.competitiondiscounts.govermentVouchers,
+                selectedSeasonalInstalmentDates: selectedSeasonalFee.selectedSeasonalInstalmentDates,
+                selectedTeamSeasonalInstalmentDates:selectedSeasonalTeamFee.selectedTeamSeasonalInstalmentDates,
                 error: null
             };
 
@@ -2037,18 +2142,19 @@ function competitionFees(state = initialState, action) {
                 let updatedCasual = getUpdatedCasualFee(action.value, getUpdatedCasualFeeArr, state.defaultSelectedCasualFee, 1)
                 state.selectedCasualFee = updatedCasual
             }
-            else if(action.key == "seasonalfee"){
+            if(action.key == "seasonalfee"){
                 state.SelectedSeasonalFeeKey = action.value;
                 state.seasonalExpendedKey = action.value[0];
-                let updatedSeasonal = getUpdatedSeasonalFee(action.value, getUpdatedSeasonalFeeArr, state.defaultSelectedSeasonalFee, 2)
-                state.SelectedSeasonalFee = updatedSeasonal
-
+                let updatedSeasonal = getUpdatedSeasonalFee(action.value, getUpdatedSeasonalFeeArr, state.defaultSelectedSeasonalFee, 2,state.selectedSeasonalInstalmentDates)
+                state.SelectedSeasonalFee = updatedSeasonal.getUpdatedCasualFeeArr
+                state.selectedSeasonalInstalmentDates = updatedSeasonal.instalmentDates;
             }
             else if(action.key == "seasonalteamfee"){
                 state.selectedSeasonalTeamFeeKey = action.value;
-                state.seasonalTeamExpendedKey = action.value[0];
-                let updatedTeamSeasonal = getUpdatedSeasonalFee(action.value, getUpdatedSeasonalTeamFeeArr, state.defaultSelectedSeasonalTeamFee, 3)
-                state.selectedSeasonalTeamFee = updatedTeamSeasonal
+                state.seasonalTeamExpendedKey = action.value[0];                
+                let updatedTeamSeasonal = getUpdatedSeasonalFee(action.value, getUpdatedSeasonalTeamFeeArr, state.defaultSelectedSeasonalTeamFee, 3,state.selectedTeamSeasonalInstalmentDates)
+                state.selectedSeasonalTeamFee = updatedTeamSeasonal.getUpdatedCasualFeeArr;
+                state.selectedTeamSeasonalInstalmentDates = updatedTeamSeasonal.instalmentDates;
             }
             return { ...state }
 
@@ -2346,6 +2452,8 @@ function competitionFees(state = initialState, action) {
                 state.affiliateArray = []
                 state.anyOrgAffiliateArr = []
                 state.any_club_Org_AffiliateArr = []
+                state.selectedTeamSeasonalInstalmentDates = []
+                state.selectedSeasonalInstalmentDates = []								  
             }
             return {
                 ...state, error: null
@@ -2445,6 +2553,26 @@ function competitionFees(state = initialState, action) {
                 error: null
             };
 
+        case ApiConstants.UPDATE_INSTALMENT_DATE:
+            if(action.key == "instalmentAddDate"){
+                addInstalmentDate(action.value)
+            }
+            if(action.key == "instalmentRemoveDate"){
+                removeInstalmentDate(action.value)            
+            }
+            if(action.key == "instalmentDateupdate"){
+                updateInstalmentDate(action.value)            
+            }
+            if(action.key == "seasonalTeaminstalmentAddDate"){
+                addSeasonalTeamInstalmentDate(action.value)
+            }
+            if(action.key == "instalmentSeasonalTeamRemoveDate"){
+                removeSeasonalTeamInstalmentDate(action.value)            
+            }
+            if(action.key == "seasonalTeaminstalmentDateupdate"){
+                updateSeasonalTeamInstalmentDate(action.value)            
+            }
+            return { ...state,  };    
 
         default:
             return state;

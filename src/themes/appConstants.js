@@ -1447,6 +1447,8 @@ const AppConstants = {
   firstLevelAffiliatesAssociationLeague: "1st Level Affiliates - Association/ League",
   secondLevelAffiliatesClubSchool: "2nd Level Affiliates - Club/School",
   teamSeasonalFee: 'Team Seasonal Fee',
+  instalmentDate:"Instalment Date",
+  addInstalmentDate: "+ Add Instalment date",
   settingsAddedMessage: "Settings added successfully.",
   deleteVariantOption: "Delete variant option",
   deleteVariantOptionDescription: "Please confirm you want to delete this variant option?",

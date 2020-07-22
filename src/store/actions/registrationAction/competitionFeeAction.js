@@ -144,8 +144,16 @@ function updatePaymentFeeOption(value, key) {
 
 function paymentFeeDeafault() {
     const action = {
-        type: ApiConstants.GET_CASUAL_FEE_DETAIL_API_LOAD,
+        type: ApiConstants.GET_CASUAL_FEE_DETAIL_API_LOAD,			   
+    }
+    return action
+}
 
+function instalmentDateAction(value,key) {
+    const action = {
+        type: ApiConstants.UPDATE_INSTALMENT_DATE,
+        value:value,
+        key:key
     }
     return action
 }
@@ -338,5 +346,6 @@ export {
     getDefaultCharity,
     getDefaultCompFeesLogoAction,
     onInviteesSearchAction,
-    removeCompetitionDivisionAction								   
+    removeCompetitionDivisionAction	,
+    instalmentDateAction			
 };
