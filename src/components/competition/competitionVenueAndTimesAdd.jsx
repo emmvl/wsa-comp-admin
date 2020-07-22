@@ -1,4 +1,6 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import {
     Layout,
     Breadcrumb,
@@ -11,32 +13,30 @@ import {
     message,
     Form,
 
-} from "antd";
+} from 'antd';
+import moment from 'moment';
+import CSVReader from 'react-csv-reader'
+import Tooltip from 'react-png-tooltip'
+
 import "./competition.css";
-import InputWithHead from "../../customComponents/InputWithHead";
-import moment from "moment";
-import DashboardLayout from "../../pages/dashboardLayout";
+import InputWithHead from '../../customComponents/InputWithHead';
+import DashboardLayout from '../../pages/dashboardLayout';
 import AppConstants from "../../themes/appConstants";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import {
     updateVenuAndTimeDataAction, updateVenuListAction, refreshVenueFieldsAction,
     removeObjectAction, clearVenueDataAction
 } from '../../store/actions/competitionModuleAction/venueTimeAction'
 import { getYearAndCompetitionAction } from '../../store/actions/appAction'
 import { getCommonRefData, addVenueAction } from '../../store/actions/commonAction/commonAction'
-import { getOrganisationAction } from "../../store/actions/userAction/userAction"
+import { getOrganisationAction } from '../../store/actions/userAction/userAction'
 import history from '../../util/history'
 import ValidationConstants from "../../themes/validationConstant";
-import AppImages from "../../themes/appImages";
-import CSVReader from 'react-csv-reader'
-import { deepCopyFunction, captializedString } from '../../util/helpers';
-import Tooltip from 'react-png-tooltip'
-
+import AppImages from '../../themes/appImages';
+import { captializedString } from '../../util/helpers';
+import PlacesAutocomplete from "./elements/PlaceAutoComplete";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
-
 
 const papaparseOptions = {
     header: true,
@@ -424,6 +424,9 @@ class CompetitionVenueAndTimesAdd extends Component {
                 <span className="form-heading" >
                     {AppConstants.venue}
                 </span>
+                <Form.Item >
+                    <PlacesAutocomplete />
+                </Form.Item>
                 <Form.Item >
                     {getFieldDecorator('name', {
                         rules: [{ required: true, message: ValidationConstants.nameField[2] }],
@@ -908,14 +911,6 @@ class CompetitionVenueAndTimesAdd extends Component {
             </div>
         );
     };
-
-    // ////Show success message after success response
-    // success = () => {
-    //     this.props.commonReducerState.addVenueSuccessMsg = ""
-    //     message.success('Venue - Added Sucessfully')
-    //     this.props.refreshVenueFieldsAction()
-    //     history.push('/competitionVenueTimesPrioritisation')
-    // };
 
     render() {
         const { getFieldDecorator } = this.props.form;
