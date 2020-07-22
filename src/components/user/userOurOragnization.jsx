@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Layout, Breadcrumb, Button, Select, Form, Modal, 
-    Checkbox, message, Tabs, Table, Radio } from 'antd';
+    Checkbox, message, Tabs, Table, Radio, Input} from 'antd';
 import './user.css';
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -15,7 +15,7 @@ import {
     getAffiliateToOrganisationAction, saveAffiliateAction, updateOrgAffiliateAction,
     getUreAction, getRoleAction, getAffiliateOurOrganisationIdAction,
     getOrganisationPhotoAction, saveOrganisationPhotoAction, deleteOrganisationPhotoAction,
-    deleteOrgContact
+    deleteOrgContact, updateCharityValue, updateCharityAction, updateTermsAndCondtionAction
 } from
     "../../store/actions/userAction/userAction";
 import ValidationConstants from "../../themes/validationConstant";
@@ -23,12 +23,14 @@ import { getCommonRefData, getPhotoTypeAction } from '../../store/actions/common
 import { getUserId, getOrganisationData } from "../../util/sessionStorage";
 import Loader from '../../customComponents/loader';
 import ImageLoader from '../../customComponents/ImageLoader'
-import Tooltip from 'react-png-tooltip'
+import CustumToolTip from 'react-png-tooltip';
+import { captializedString } from "../../util/helpers"
 
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { TabPane } = Tabs;
+const { TextArea } = Input;
 const phoneRegExp = /^((\\+[1,9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 var _this = null
@@ -323,94 +325,7 @@ class UserOurOragnization extends Component {
         this.props.updateOrgAffiliateAction(contacts, "contacts");
     };
 
-    saveAffiliate = (e) => {
-        e.preventDefault();
-        let tabKey = this.state.organisationTabKey;
-        this.props.form.validateFields((err, values) => {
-            console.log("err::" + err);
-            if (!err) {
-                if (tabKey == "1") {
-                    console.log("**" + JSON.stringify(this.state.image));
-                    let affiliate = this.props.userState.affiliateOurOrg;
-
-                    if (affiliate.contacts == null || affiliate.contacts == undefined || affiliate.contacts.length == 0) {
-                        message.error(ValidationConstants.affiliateContactRequired[0]);
-                    }
-                    else {
-
-                        let data = affiliate.contacts.find(x => x.permissions.find(y => y.roleId == 2));
-                        if (data == undefined || data == null || data == "") {
-                            message.error(ValidationConstants.affiliateContactRequired[0]);
-                        }
-                        else {
-                            let contacts = JSON.stringify(affiliate.contacts);
-
-                            let formData = new FormData();
-
-                            if (this.state.image != null) {
-                                affiliate.organisationLogo = this.state.image;
-                                affiliate.organisationLogoId = 0;
-                            }
-                            let termsAndConditionsValue = null;
-                            if(affiliate.termsAndConditionsRefId == 1){
-                                termsAndConditionsValue = affiliate.termsAndConditionsLink;
-                            }
-                            if(this.state.termsAndCondititionFile == null && affiliate.termsAndConditionsRefId == 2){
-                                termsAndConditionsValue = affiliate.termsAndConditionsFile;
-                            }
-
-                            formData.append("email", affiliate.email);
-                            formData.append("organisationLogo", this.state.image);
-                            formData.append("organisationLogoId", affiliate.organisationLogoId);
-                            formData.append("affiliateId", affiliate.affiliateId);
-                            formData.append("affiliateOrgId", affiliate.affiliateOrgId)
-                            formData.append("organisationTypeRefId", affiliate.organisationTypeRefId)
-                            formData.append("affiliatedToOrgId", affiliate.affiliatedToOrgId);
-                            formData.append("organisationId", getOrganisationData().organisationUniqueKey);
-                            formData.append("name", affiliate.name);
-                            formData.append("street1", affiliate.street1);
-                            formData.append("street2", affiliate.street2);
-                            formData.append("suburb", affiliate.suburb);
-                            formData.append("phoneNo", affiliate.phoneNo);
-                            formData.append("city", affiliate.city);
-                            formData.append("postalCode", affiliate.postalCode);
-                            formData.append("stateRefId", affiliate.stateRefId);
-                            formData.append("whatIsTheLowestOrgThatCanAddChild", affiliate.whatIsTheLowestOrgThatCanAddChild);
-                            formData.append("logoIsDefault", affiliate.logoIsDefault == true ? 1 : 0);
-                            formData.append("contacts", contacts);
-                            formData.append("termsAndConditionsRefId", affiliate.termsAndConditionsRefId);
-                            formData.append("termsAndConditions", termsAndConditionsValue);
-                            formData.append("organisationLogo", this.state.termsAndCondititionFile);
-                            formData.append("termsAndConditionId", this.state.termsAndCondititionFile == null ? 1 : 0);
-
-                            this.setState({ loading: true });
-
-                            console.log("formData:::"+termsAndConditionsValue);
-                           
-                            this.props.saveAffiliateAction(formData);
-                        }
-                    }
-                }
-                else if (tabKey == "2") {
-                    let tableRowData = this.state.tableRecord;
-                    let formData = new FormData();
-                    formData.append("organisationPhoto", this.state.orgPhotosImgSend);
-                    formData.append("organisationPhotoId", tableRowData.id);
-                    formData.append("photoTypeRefId", tableRowData.photoTypeRefId);
-                    formData.append("photoUrl", tableRowData.photoUrl);
-                    formData.append("organisationId", getOrganisationData().organisationUniqueKey);
-
-                    this.setState({ loading: true });
-                    this.props.saveOrganisationPhotoAction(formData);
-                }
-
-            }
-            else {
-                message.error(ValidationConstants.requiredMessage);
-            }
-        });
-    }
-
+   
     setImage = (data) => {
         if (data.files[0] !== undefined) {
             console.log("*****" + JSON.stringify(data.files[0]));
@@ -523,6 +438,130 @@ class UserOurOragnization extends Component {
     handleForce = data => {
         this.setState({ termsAndCondititionFile: data.target.files[0]})
     };
+
+    onChangesetCharity = (value, index, key) =>{
+        this.props.updateCharityValue(value, index, key);
+    }
+
+    saveAffiliate = (e) => {
+        e.preventDefault();
+        let tabKey = this.state.organisationTabKey;
+        this.props.form.validateFields((err, values) => {
+            console.log("err::" + err);
+            if (!err) {
+                if (tabKey == "1") {
+                    console.log("**" + JSON.stringify(this.state.image));
+                    let affiliate = this.props.userState.affiliateOurOrg;
+
+                    if (affiliate.contacts == null || affiliate.contacts == undefined || affiliate.contacts.length == 0) {
+                        message.error(ValidationConstants.affiliateContactRequired[0]);
+                    }
+                    else {
+
+                        let data = affiliate.contacts.find(x => x.permissions.find(y => y.roleId == 2));
+                        if (data == undefined || data == null || data == "") {
+                            message.error(ValidationConstants.affiliateContactRequired[0]);
+                        }
+                        else {
+                            let contacts = JSON.stringify(affiliate.contacts);
+
+                            let formData = new FormData();
+
+                            if (this.state.image != null) {
+                                affiliate.organisationLogo = this.state.image;
+                                affiliate.organisationLogoId = 0;
+                            }
+                            // let termsAndConditionsValue = null;
+                            // if(affiliate.termsAndConditionsRefId == 1){
+                            //     termsAndConditionsValue = affiliate.termsAndConditionsLink;
+                            // }
+                            // if(this.state.termsAndCondititionFile == null && affiliate.termsAndConditionsRefId == 2){
+                            //     termsAndConditionsValue = affiliate.termsAndConditionsFile;
+                            // }
+
+                            formData.append("email", affiliate.email);
+                            formData.append("organisationLogo", this.state.image);
+                            formData.append("organisationLogoId", affiliate.organisationLogoId);
+                            formData.append("affiliateId", affiliate.affiliateId);
+                            formData.append("affiliateOrgId", affiliate.affiliateOrgId)
+                            formData.append("organisationTypeRefId", affiliate.organisationTypeRefId)
+                            formData.append("affiliatedToOrgId", affiliate.affiliatedToOrgId);
+                            formData.append("organisationId", getOrganisationData().organisationUniqueKey);
+                            formData.append("name", affiliate.name);
+                            formData.append("street1", affiliate.street1);
+                            formData.append("street2", affiliate.street2);
+                            formData.append("suburb", affiliate.suburb);
+                            formData.append("phoneNo", affiliate.phoneNo);
+                            formData.append("city", affiliate.city);
+                            formData.append("postalCode", affiliate.postalCode);
+                            formData.append("stateRefId", affiliate.stateRefId);
+                            formData.append("whatIsTheLowestOrgThatCanAddChild", affiliate.whatIsTheLowestOrgThatCanAddChild);
+                            formData.append("logoIsDefault", affiliate.logoIsDefault == true ? 1 : 0);
+                            formData.append("contacts", contacts);
+                            // formData.append("termsAndConditionsRefId", affiliate.termsAndConditionsRefId);
+                            // formData.append("termsAndConditions", termsAndConditionsValue);
+                            // formData.append("organisationLogo", this.state.termsAndCondititionFile);
+                           // formData.append("termsAndConditionId", this.state.termsAndCondititionFile == null ? 1 : 0);
+
+                            this.setState({ loading: true });
+                            this.props.saveAffiliateAction(formData);
+                        }
+                    }
+                }
+                else if (tabKey == "2") {
+                    let tableRowData = this.state.tableRecord;
+                    let formData = new FormData();
+                    formData.append("organisationPhoto", this.state.orgPhotosImgSend);
+                    formData.append("organisationPhotoId", tableRowData.id);
+                    formData.append("photoTypeRefId", tableRowData.photoTypeRefId);
+                    formData.append("photoUrl", tableRowData.photoUrl);
+                    formData.append("organisationId", getOrganisationData().organisationUniqueKey);
+
+                    this.setState({ loading: true });
+                    this.props.saveOrganisationPhotoAction(formData);
+                }
+
+            }
+            else {
+                message.error(ValidationConstants.requiredMessage);
+            }
+        });
+    }
+
+    updateTermsAndCondition = () =>{
+        let affiliate = this.props.userState.affiliateOurOrg;
+        let formData = new FormData();
+        let termsAndConditionsValue = null;
+        if(affiliate.termsAndConditionsRefId == 1){
+            termsAndConditionsValue = affiliate.termsAndConditionsLink;
+        }
+        if(this.state.termsAndCondititionFile == null && affiliate.termsAndConditionsRefId == 2){
+            termsAndConditionsValue = affiliate.termsAndConditionsFile;
+        }
+        formData.append("organisationId", getOrganisationData().organisationUniqueKey);
+        formData.append("termsAndConditionsRefId", affiliate.termsAndConditionsRefId);
+        formData.append("termsAndConditions", termsAndConditionsValue);
+        formData.append("termsAndCondition", this.state.termsAndCondititionFile);
+
+        this.setState({ loading: true });
+        this.props.updateTermsAndCondtionAction(formData);
+        this.setState({termsAndCondititionFile: null});
+    }
+
+    updateCharity = () =>{
+        let affiliate = this.props.userState.affiliateOurOrg;
+        let charityRoundUpArr = affiliate.charityRoundUp.filter(x=>x.isSelected == true);
+       
+        let payload = {
+            organisationId:  getOrganisationData().organisationUniqueKey,
+            charityRoundUp : charityRoundUpArr,
+            charity: affiliate.charity
+        }
+        console.log("updateCharity::" + JSON.stringify(payload));
+        this.setState({ loading: true });
+        this.props.updateCharityAction(payload);
+    }
+
 
     ///////view for breadcrumb
     headerView = () => {
@@ -906,6 +945,7 @@ class UserOurOragnization extends Component {
     termsAndConditionsView = (getFieldDecorator) => {
         let userState = this.props.userState;
         let affiliate = this.props.userState.affiliateOurOrg;
+        console.log("affiliate::", affiliate);
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading">{AppConstants.termsAndConditions}</span>
@@ -1195,6 +1235,83 @@ class UserOurOragnization extends Component {
         );
     }
 
+     //////charity voucher view
+    charityVoucherView = (getFieldDecorator) => {
+
+        let affiliate = this.props.userState.affiliateOurOrg;
+        let charityRoundUp = affiliate.charityRoundUp;
+        let checkCharityArray = affiliate.charity;
+        return (
+        <div className="advanced-setting-view pt-5">
+            {/* <div className="contextualHelp-RowDirection">
+            <span className="form-heading">{AppConstants.charityRoundUp}</span>
+            <div style={{ marginTop: 4 }}>
+                <CustumToolTip placement="top" background="#ff8237">
+                    <span>{AppConstants.charityRoundUpMsg}</span>
+                </CustumToolTip>
+            </div>
+            </div> */}
+            {(checkCharityArray || []).map((item, index) => (
+            <div>
+                {/* <Form.Item>
+                {getFieldDecorator('charityTitle', {
+                    rules: [
+                    {
+                        required: true,
+                        message: ValidationConstants.charityTitleNameIsRequired,
+                    },
+                    ],
+                })( */}
+                    <InputWithHead
+                    heading={AppConstants.title}
+                    placeholder={AppConstants.title}
+                    value={item.name}
+                    onChange={(e) => this.onChangesetCharity(captializedString(e.target.value),index,'name')}
+                    />
+                {/* )}
+                </Form.Item> */}
+                <InputWithHead heading={AppConstants.description} />
+                {/* <Form.Item>
+                {getFieldDecorator('charityDescription', {
+                    rules: [
+                    {
+                        required: true,
+                        message: ValidationConstants.charityDescriptionIsRequired,
+                    },
+                    ],
+                })( */}
+                    <TextArea
+                    placeholder={AppConstants.addCharityDescription}
+                    value={item.description}
+                    allowClear
+                    onChange={(e) => this.onChangesetCharity(e.target.value,index,'description')}
+                    />
+                {/* )}
+                </Form.Item> */}
+            </div>
+            ))
+            }
+            <div className="inside-container-view">
+                <span className="form-heading">{AppConstants.roundUp}</span>
+                {charityRoundUp.map((item, index) => {
+                    return (
+                    <div className="row" key={index} style={{marginLeft: '0px'}}>
+                        <Checkbox
+                        className="single-checkbox mt-3"
+                        checked={item.isSelected}
+                        onChange={(e) => this.onChangesetCharity(e.target.checked,index,'charityRoundUp')}>
+                        {item.description}
+                        </Checkbox>
+                    </div>
+                    );
+                })}
+            </div>
+
+            
+        </div>
+        );
+    };
+
     //////////////End Photos ///////////////////
     ///footer view containing all the buttons like submit and cancel
     footerView = (isSubmitting) => {
@@ -1211,12 +1328,30 @@ class UserOurOragnization extends Component {
                         </div>
                         {this.state.isEditable &&
                             <div className="col-sm">
+                                {this.state.organisationTabKey == "1" && 
                                 <div className="comp-buttons-view">
                                     <Button className="user-approval-button" type="primary" htmlType="submit" disabled={isSubmitting}
                                         onClick={() => this.setState({ buttonPressed: "save" })}>
                                         {AppConstants.updateAffiliates}
                                     </Button>
                                 </div>
+                                }
+                                {this.state.organisationTabKey == "3" && 
+                                <div className="comp-buttons-view">
+                                    <Button className="user-approval-button" type="primary" htmlType="button" disabled={isSubmitting}
+                                        onClick={() => this.updateTermsAndCondition()}>
+                                        {AppConstants.updateAffiliates}
+                                    </Button>
+                                </div>
+                                }
+                                {this.state.organisationTabKey == "4" && 
+                                <div className="comp-buttons-view">
+                                    <Button className="user-approval-button" type="primary" htmlType="button" disabled={isSubmitting}
+                                        onClick={() => this.updateCharity()}>
+                                        {AppConstants.updateAffiliates}
+                                    </Button>
+                                </div>
+                                }
                             </div>}
                     </div>
                 </div>
@@ -1248,9 +1383,6 @@ class UserOurOragnization extends Component {
                                         <div className="tab-formView mt-5" >
                                             {this.contacts(getFieldDecorator)}
                                         </div>
-                                        <div className="tab-formView mt-5" >
-                                            {this.termsAndConditionsView(getFieldDecorator)}
-                                        </div>
                                     </TabPane>
                                     <TabPane tab={AppConstants.photos} key="2">
                                         <div>{AppConstants.orgPhotosText}</div>
@@ -1273,11 +1405,22 @@ class UserOurOragnization extends Component {
                                         }
                                         {this.orgPhotoDeleteConfirmModalView()}
                                     </TabPane>
+                                    <TabPane tab={AppConstants.termsAndCond} key="3">
+                                        <div className="tab-formView mt-5" >
+                                            {this.termsAndConditionsView(getFieldDecorator)}
+                                        </div>
+                                    </TabPane>
+                                    <TabPane tab={AppConstants.charity} key="4">
+                                        <div className="tab-formView mt-5" >
+                                        {this.charityVoucherView(getFieldDecorator)}
+                                        </div>
+                                    </TabPane>
                                 </Tabs>
                             </div>
                             <Loader visible={userState.onLoad} />
                         </Content>
-                        {this.state.organisationTabKey == "1" ?
+                        {(this.state.organisationTabKey == "1" || this.state.organisationTabKey == "3" ||
+                                    this.state.organisationTabKey == "4")  ?
                             <Footer>{this.footerView()}</Footer>
                             : null
                         }
@@ -1301,7 +1444,9 @@ function mapDispatchToProps(dispatch) {
         getOrganisationPhotoAction,
         saveOrganisationPhotoAction,
         deleteOrganisationPhotoAction,
-        deleteOrgContact
+        deleteOrgContact,
+        updateCharityValue,
+        updateCharityAction, updateTermsAndCondtionAction
     }, dispatch);
 
 }

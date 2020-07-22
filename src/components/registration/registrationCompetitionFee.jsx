@@ -4809,6 +4809,7 @@ class RegistrationCompetitionFee extends Component {
   //////charity voucher view
   charityVoucherView = (getFieldDecorator) => {
     let charityRoundUp = this.props.competitionFeesState.charityRoundUp;
+    console.log("charityRoundUp", charityRoundUp)
     let paymentData = this.props.competitionFeesState.competitionPaymentsData;
     let paymentsDisable = this.state.permissionState.paymentsDisable;
     let checkCharityArray = this.props.competitionFeesState
@@ -5935,9 +5936,9 @@ class RegistrationCompetitionFee extends Component {
                     <div className="tab-formView">
                       {this.paymentOptionsView(getFieldDecorator)}
                     </div>
-                    <div className="tab-formView">
+                    {/* <div className="tab-formView">
                       {this.charityVoucherView(getFieldDecorator)}
-                    </div>
+                    </div> */}
                   </TabPane>
                   <TabPane tab={AppConstants.discounts} key={'6'}>
                     <div className="tab-formView">

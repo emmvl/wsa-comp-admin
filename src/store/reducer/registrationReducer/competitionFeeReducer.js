@@ -1666,6 +1666,7 @@ function competitionFees(state = initialState, action) {
             let selectedSeasonalTeamFee = checkSelectedSeasonalTeamFee(allData.competitionpayments.paymentOptions, state.seasonalTeamPaymentDefault, state.selectedSeasonalTeamFee, state.selectedSeasonalTeamFeeKey)
             let finalDiscountData = discountDataObject(allData.competitiondiscounts)
             state.competionDiscountValue.competitionDiscounts[0].discounts = finalDiscountData
+            console.log("####, $$$$$", state.charityRoundUp, allData.competitionpayments.charityRoundUp)
             let selectedCharity = checkSelectedCharity(allData.competitionpayments.charityRoundUp, state.charityRoundUp)
             let selectedGovtVoucher = checkSelectedVoucher(allData.competitiondiscounts.govermentVouchers, state.govtVoucher)
             state.charityRoundUp = selectedCharity
@@ -2123,6 +2124,7 @@ function competitionFees(state = initialState, action) {
 
         // get default charity and govt voucher
         case ApiConstants.API_REG_COMPETITION_FEE_DEFAULT_CHARITY_SUCCESS:
+            console.log(")))))))))))))))))))))))");
             let charityData = getCharityResult(action.charityResult)
             let govtVocuherData = getCharityResult(action.govtVoucherResult)
             state.charityRoundUp = charityData
