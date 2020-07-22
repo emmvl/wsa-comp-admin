@@ -604,7 +604,7 @@ export function* saveUserPhotosSaga(action) {
 
             yield put({
                 type: ApiConstants.API_USER_PHOTO_UPDATE_SUCCESS,
-                result: result.result.data[0],
+                result: result.result.data,
                 status: result.status
             });
         } else {
