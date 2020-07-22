@@ -19,9 +19,9 @@ const PlacesAutocomplete = ({
     setValue,
     clearSuggestions,
   } = usePlacesAutocomplete({
-    // requestOptions: {
-    //   componentRestrictions: { country: ['au'] },
-    // },
+    requestOptions: {
+      componentRestrictions: { country: ['au'] },
+    },
     debounce: 300,
   });
 
