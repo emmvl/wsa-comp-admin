@@ -1453,7 +1453,7 @@ const AppConstants = {
   deleteProductType: "Delete product type",
   deleteProductTypeDescription: "Please confirm you want to delete this product type?",
   emailChangedWarning: "You will need to log in with your new email address on your next login.",
-
+  addressUpdatedMessage: "Address updated successfully.",
 };
 
 export default AppConstants;

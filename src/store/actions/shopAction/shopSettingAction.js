@@ -9,10 +9,10 @@ function getShopSettingAction() {
 }
 
 //shop setting create address
-function createAddressAction(payload) {
+function createAddressAction(payload, key) {
     const action = {
         type: ApiConstants.API_CREATE_SHOP_SETTING_ADDRESS_LOAD,
-        payload
+        payload, key
     };
     return action;
 }

@@ -18,6 +18,7 @@ import {
 import ValidationConstants from '../../themes/validationConstant';
 import { isArrayNotEmpty, isNotNullOrEmptyString, captializedString } from "../../util/helpers";
 import { checkOrganisationLevel } from "../../util/permissions";
+import { getOrganisationData } from "../../util/sessionStorage"
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -67,11 +68,30 @@ class ShopSettings extends Component {
         this.props.form.setFieldsValue({
             address: settingDetailsData.address,
             suburb: settingDetailsData.suburb,
-            state: settingDetailsData.state,
+            state: isNotNullOrEmptyString(settingDetailsData.state) ? settingDetailsData.state : [],
             postcode: settingDetailsData.postcode,
         });
     }
 
+    ///////post api
+    saveSettings = (e) => {
+        e.preventDefault();
+        let { settingDetailsData } = JSON.parse(JSON.stringify(this.props.shopSettingState));
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                let payload = settingDetailsData
+                let orgData = getOrganisationData();
+                let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0;
+                payload.organisationUniqueKey = organisationUniqueKey
+                let key = "update"
+                if (payload.id == 0) {
+                    delete payload['id'];
+                    key = "add"
+                }
+                this.props.createAddressAction(payload, key)
+            }
+        })
+    }
 
     //////delete the type
     showDeleteConfirm = (index) => {
@@ -97,7 +117,6 @@ class ShopSettings extends Component {
     addRemoveTypeOption = (index, key) => {
         let { settingDetailsData } = this.props.shopSettingState;
         let defaultTypeObject = {
-            "id": 0,
             "typeName": ""
         }
         let types = settingDetailsData.types
@@ -155,7 +174,7 @@ class ShopSettings extends Component {
                         }
                     )(
                         <InputWithHead
-                            required={"required-field "}
+                            required={"required-field pb-0"}
                             heading={AppConstants.address}
                             placeholder={AppConstants.address}
                             onChange={(e) => this.props.onChangeSettingsData(
@@ -179,7 +198,7 @@ class ShopSettings extends Component {
                         }
                     )(
                         <InputWithHead
-                            required={"required-field "}
+                            required={"required-field pb-0"}
                             heading={AppConstants.suburb}
                             placeholder={AppConstants.suburb}
                             onChange={(e) => this.props.onChangeSettingsData(
@@ -235,7 +254,7 @@ class ShopSettings extends Component {
                         }
                     )(
                         <InputWithHead
-                            required={"required-field "}
+                            required={"required-field pb-0"}
                             heading={AppConstants.postCode}
                             placeholder={AppConstants.postcode}
                             onChange={(e) => this.props.onChangeSettingsData(
