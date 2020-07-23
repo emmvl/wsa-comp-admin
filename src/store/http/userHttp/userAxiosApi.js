@@ -271,7 +271,17 @@ let userHttpApi = {
   updateUserPassword(payload) {
     const url = `users/updatePassword`;
     return Method.dataPatch(url, token, payload);
-  }
+  },
+
+  updateCharity(payload) {
+    const url = `api/charity/update`;
+    return Method.dataPost(url, token, payload);
+  },
+
+  updateTermsAndConditions(payload) {
+    const url = `api/termsandcondition/update`;
+    return Method.dataPost(url, token, payload);
+  },
 }
 
 let Method = {

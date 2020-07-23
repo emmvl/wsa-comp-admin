@@ -130,7 +130,7 @@ const columns = [
         render: (playerHistory, record, key) => (
             <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>
                 {playerHistory.map((item, index) => (
-                    // item.teamText ?
+                     (item.divisionGrade!= null && item.divisionGrade!= "") ?
                     <Tooltip
                         className="comp-player-table-tag2"
                         style={{ height: "100%" }}
@@ -143,12 +143,12 @@ const columns = [
                         >
                             <Tag className="comp-player-table-tag" style={{ cursor: "pointer" }} key={item.historyPlayerId + index}
                             >
-                                {item.divisionGrade + '(' + item.ladderResult + ')'}
+                                {item.divisionGrade!= null && item.divisionGrade!= "" ? (item.divisionGrade + '(' + item.ladderResult + ')') : ""}
                             </Tag>
                         </NavLink>
                     </Tooltip>
                     // </a>
-                    // : null
+                     : null
                 ))}
             </span>
         ),

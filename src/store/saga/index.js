@@ -792,4 +792,10 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_GET_SHOP_SETTING_LOAD, shopSettingSaga.getShopSettingSaga);
   ////shop setting create address API
   yield takeEvery(ApiConstants.API_CREATE_SHOP_SETTING_ADDRESS_LOAD, shopSettingSaga.createAddressSaga);
+
+  ////organisation charity update API
+  yield takeEvery(ApiConstants.API_UPDATE_CHARITY_ROUND_UP_LOAD, userSaga.updateCharitySaga);
+
+  ////organisation terms and conditions update API
+  yield takeEvery(ApiConstants.API_UPDATE_TERMS_AND_CONDITION_LOAD, userSaga.updateTermsAndConditionsSaga);
 }

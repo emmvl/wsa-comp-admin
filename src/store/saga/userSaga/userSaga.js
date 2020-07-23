@@ -3,6 +3,7 @@ import ApiConstants from "../../../themes/apiConstants";
 import userHttpApi from "../../http/userHttp/userAxiosApi";
 import { message } from "antd";
 import { setAuthToken } from "../../../util/sessionStorage";
+import commonAxiosApi from "../../http/axiosApi";
 
 function* failSaga(result) {
     yield put({
@@ -143,16 +144,21 @@ export function* getAffiliateByOrganisationIdSaga(action) {
 /* Get the Affiliate Our Organisation Id  */
 export function* getAffiliateOurOrganisationIdSaga(action) {
     try {
-        const result = yield call(userHttpApi.affiliateByOrganisationId, action.payload);
-        if (result.status === 1) {
-            yield put({
-                type: ApiConstants.API_AFFILIATE_OUR_ORGANISATION_SUCCESS,
-                result: result.result.data,
-                status: result.status
-            });
-        } else {
-            yield call(failSaga, result)
+        const resultcharity = yield call(commonAxiosApi.getCharityRoundUp, action);
+        if(resultcharity.status == 1){
+            const result = yield call(userHttpApi.affiliateByOrganisationId, action.payload);
+            if (result.status === 1) {
+                yield put({
+                    type: ApiConstants.API_AFFILIATE_OUR_ORGANISATION_SUCCESS,
+                    result: result.result.data,
+                    charityResult: resultcharity.result.data,
+                    status: result.status
+                });
+            } else {
+                yield call(failSaga, result)
+            }
         }
+        
     } catch (error) {
         yield call(errorSaga, error)
     }
@@ -674,5 +680,41 @@ export function* updateUserPasswordSaga(action) {
         }
     } catch (error) {
         yield call(errorSaga, error);
+    }
+}
+
+export function* updateCharitySaga(action) {
+    try {
+        const result = yield call(userHttpApi.updateCharity, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_UPDATE_CHARITY_ROUND_UP_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+            message.success('Charity updated successfully');
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+export function* updateTermsAndConditionsSaga(action) {
+    try {
+        const result = yield call(userHttpApi.updateTermsAndConditions, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_UPDATE_TERMS_AND_CONDITION_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+            message.success('Terms and Conditions updated successfully');
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
     }
 }
