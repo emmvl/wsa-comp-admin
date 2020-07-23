@@ -866,6 +866,7 @@ class UmpireDashboard extends Component {
                                     // showSearch
                                     // optionFilterProp="children"
                                     className="year-select reg-filter-select1"
+                                    style={{ minWidth: 200 }}
                                     onChange={(comp) => this.onChangeComp({ comp })}
                                     value={this.state.selectedComp}
                                 >
@@ -879,7 +880,7 @@ class UmpireDashboard extends Component {
                         </div>
 
                         {/* Venue List */}
-                        <div className="reg-col1" >
+                        <div className="reg-col1 ml-5" >
                             <div className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.venue}</div>
                                 <Select
@@ -900,7 +901,7 @@ class UmpireDashboard extends Component {
 
                         {/* Division List */}
 
-                        <div className="reg-col1" >
+                        <div className="reg-col1 ml-5" >
                             <div className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.division}</div>
                                 <Select
@@ -952,13 +953,13 @@ class UmpireDashboard extends Component {
             <div className="comp-dash-table-view mt-2">
                 <div>
                     <div className="row">
-                        <div className="col-sm-6" >
+                        <div className="col-sm" >
                             <div className="registration-count">
                                 <div className="reg-payment-paid-reg-text">No. of umpires</div>
                                 <div className="reg-payment-price-text">{0}</div>
                             </div>
                         </div>
-                        <div className="col-sm-6" >
+                        <div className="col-sm" >
                             <div className="registration-count">
                                 <div className="reg-payment-paid-reg-text">No. of registered umpires</div>
                                 <div className="reg-payment-price-text">{0}</div>

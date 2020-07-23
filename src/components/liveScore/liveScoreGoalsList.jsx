@@ -251,7 +251,7 @@ class LiveScoreGoalList extends Component {
 
                             <div className="col-sm">
                                 <Select
-                                    className="year-select"
+                                    className="year-select reg-filter-select1"
                                     style={{ display: "flex", alignItems: "flex-start", minWidth: 100 }}
                                     onChange={(filter) => {
                                         this.setState({ filter })

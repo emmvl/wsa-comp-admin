@@ -8,7 +8,7 @@ import { NavLink } from "react-router-dom";
 import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { liveScoreMatchListAction, changeMatchBulkScore, bulkScoreUpdate,onCancelBulkScoreUpdate } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
+import { liveScoreMatchListAction, changeMatchBulkScore, bulkScoreUpdate, onCancelBulkScoreUpdate } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
 import history from "../../util/history";
 import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage'
 import { liveScore_MatchFormate } from '../../themes/dateformate'
@@ -181,7 +181,7 @@ class LiveScoreMatchesList extends Component {
             selectedRound: 'All',
             isBulkUpload: false,
             isScoreChanged: false,
-            onScoreUpdate:false
+            onScoreUpdate: false
         }
         _this = this
     }
@@ -209,13 +209,13 @@ class LiveScoreMatchesList extends Component {
         }
     }
 
-    componentDidUpdate(nextProps){
-        if(nextProps.liveScoreMatchListState !== this.props.liveScoreMatchListState){
-            if(nextProps.liveScoreMatchListState.onLoad === false && this.state.onScoreUpdate === true){
-                        this.setState({isBulkUpload:false,onScoreUpdate:false})      
+    componentDidUpdate(nextProps) {
+        if (nextProps.liveScoreMatchListState !== this.props.liveScoreMatchListState) {
+            if (nextProps.liveScoreMatchListState.onLoad === false && this.state.onScoreUpdate === true) {
+                this.setState({ isBulkUpload: false, onScoreUpdate: false })
             }
         }
-       
+
     }
 
 
@@ -435,11 +435,11 @@ class LiveScoreMatchesList extends Component {
         )
     }
 
-    onPageChange(page){
+    onPageChange(page) {
         let checkScoreChanged = this.checkIsScoreChanged()
         if (checkScoreChanged === true) {
             message.info("Please save or cancel the current changes! ");
-        }else{
+        } else {
             this.handleMatchTableList(page, this.state.competitionId)
         }
     }
@@ -459,8 +459,8 @@ class LiveScoreMatchesList extends Component {
                         className="home-dashboard-table" columns={columns}
                         dataSource={DATA}
                         pagination={false}
-                        rowKey={(record, index) => record.id + index} 
-                        />
+                        rowKey={(record, index) => record.id + index}
+                    />
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
@@ -496,7 +496,7 @@ class LiveScoreMatchesList extends Component {
 
     checkIsScoreChanged() {
         let { liveScoreMatchListData, liveScoreBulkScoreList } = this.props.liveScoreMatchListState
-       
+
         let isChanged = false
 
         for (let i in liveScoreMatchListData) {
@@ -522,12 +522,12 @@ class LiveScoreMatchesList extends Component {
             if (liveScoreMatchListData[i].team1Score !== liveScoreBulkScoreList[i].team1Score || liveScoreMatchListData[i].team2Score !== liveScoreBulkScoreList[i].team2Score) {
                 let requestObject = {
                     "id": liveScoreMatchListData[i].id,
-                    "team1Score":JSON.parse(liveScoreMatchListData[i].team1Score),
-                    "team2Score":JSON.parse(liveScoreMatchListData[i].team2Score)
+                    "team1Score": JSON.parse(liveScoreMatchListData[i].team1Score),
+                    "team2Score": JSON.parse(liveScoreMatchListData[i].team2Score)
                 }
                 array.push(requestObject)
             }
-           
+
         }
         return array
     }
@@ -536,10 +536,10 @@ class LiveScoreMatchesList extends Component {
         let checkScoreChanged = this.checkIsScoreChanged()
         if (checkScoreChanged === true) {
             let postArray = this.createPostMatchArray()
-            this.setState({onScoreUpdate:true})
+            this.setState({ onScoreUpdate: true })
             this.props.bulkScoreUpdate(postArray)
         } else {
-            this.setState({isBulkUpload:false})
+            this.setState({ isBulkUpload: false })
         }
     }
 
@@ -564,8 +564,8 @@ class LiveScoreMatchesList extends Component {
     }
 
 
-      ///dropdown view containing all the dropdown of header
-      dropdownView = () => {
+    ///dropdown view containing all the dropdown of header
+    dropdownView = () => {
         let { divisionList, roundList } = this.props.liveScoreMatchListState
         let divisionListArr = isArrayNotEmpty(divisionList) ? divisionList : []
         let roundListArr = isArrayNotEmpty(roundList) ? roundList : []
@@ -573,9 +573,10 @@ class LiveScoreMatchesList extends Component {
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="row">
                     <div className="col-sm"  >
+                        <div className="reg-filter-col-cont pb-3"  >
                             <span className='year-select-heading'>{AppConstants.division}:</span>
                             <Select
-                                className="year-select"
+                                className="year-select reg-filter-select1 ml-2"
                                 style={{ minWidth: 160 }}
                                 onChange={(divisionId) => this.onChangeDivision(divisionId)}
                                 value={this.state.selectedDivision}
@@ -587,11 +588,13 @@ class LiveScoreMatchesList extends Component {
                                     })
                                 }
                             </Select>
+                        </div>
                     </div>
                     <div className="col-sm" >
+                        <div className="reg-filter-col-cont pb-3"  >
                             <span className='year-select-heading'>{AppConstants.round}:</span>
                             <Select
-                                className="year-select"
+                                className="year-select reg-filter-select1 ml-2"
                                 style={{ minWidth: 160 }}
                                 onChange={(roundName) => this.onChangeRound(roundName)}
                                 value={this.state.selectedRound}
@@ -599,14 +602,15 @@ class LiveScoreMatchesList extends Component {
                                 <Option value={'All'}>{'All'}</Option>
                                 {
                                     roundListArr.map((item) => {
-                                        return <Option key ={"round" + item.id} value={item.name}>{item.name}</Option>
+                                        return <Option key={"round" + item.id} value={item.name}>{item.name}</Option>
                                     })
                                 }
                             </Select>
                         </div>
+                    </div>
 
-                    <div className="col-sm" style={{ display: "flex", justifyContent: 'flex-end',alignItems:"center" }} >
-                        <div className="comp-product-search-inp-width" >
+                    <div className="col-sm" style={{ display: "flex", justifyContent: 'flex-end', alignItems: "center" }} >
+                        <div className="comp-product-search-inp-width pb-3" >
                             <Input className="product-reg-search-input"
                                 onChange={(e) => this.onChangeSearchText(e)}
                                 placeholder="Search..."

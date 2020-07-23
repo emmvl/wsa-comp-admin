@@ -38,6 +38,7 @@ import {
   updatePaymentFeeOption,
   paymentFeeDeafault,
   paymentSeasonalFee,
+  instalmentDateAction,					   
   competitionPaymentApi,
   addRemoveCompFeeDiscountAction,
   add_editcompetitionFeeDeatils,
@@ -2057,10 +2058,11 @@ class RegistrationCompetitionFee extends Component {
     let selectedCasualPaymentArr = this.props.competitionFeesState.selectedCasualFee;
     let SelectedSeasonalPaymentArr = this.props.competitionFeesState.SelectedSeasonalFee;
     let selectedSeasonalTeamPaymentArr = this.props.competitionFeesState.selectedSeasonalTeamFee;
+    let selectedSeasonalInstalmentDates = this.props.competitionFeesState.selectedSeasonalInstalmentDates;
+    let selectedTeamSeasonalInstalmentDates = this.props.competitionFeesState.selectedTeamSeasonalInstalmentDates;																												  
     let paymentOptionData = selectedCasualPaymentArr.concat(
       SelectedSeasonalPaymentArr, selectedSeasonalTeamPaymentArr
     );
-    console.log("paymentOptionData", paymentOptionData);
     paymentDataArr.paymentOptions = paymentOptionData;
     let charityTitle = this.props.competitionFeesState.charityTitle;
     let charityDescription = this.props.competitionFeesState.charityDescription;
@@ -2072,6 +2074,7 @@ class RegistrationCompetitionFee extends Component {
       item.charityRoundUpDescription = charityDescription;
     });
     paymentDataArr.charityRoundUp = postCharityRoundUpData;
+    paymentDataArr.instalmentDates = selectedSeasonalInstalmentDates .concat(selectedTeamSeasonalInstalmentDates);																												  
     this.props.competitionPaymentApi(paymentDataArr, competitionId);
   };
 
@@ -2296,7 +2299,7 @@ class RegistrationCompetitionFee extends Component {
             } else {
               feeSeasonalData = fee_data[i].seasonal.perType;
               feeCasualData = fee_data[i].casual.perType;
-  
+
               for (let j in feeSeasonalData) {
                 for (let k in feeCasualData) {
                   if (
@@ -2323,15 +2326,15 @@ class RegistrationCompetitionFee extends Component {
                       feeSeasonalData[j].competitionMembershipProductTypeId ==
                       feeSeasonalTeamData[k].competitionMembershipProductTypeId
                     ) {
-                        feeSeasonalData[j]['teamSeasonalFees'] =
-                          feeSeasonalTeamData[j].fee;
-                        feeSeasonalData[j]['teamSeasonalGST'] =
-                          feeSeasonalTeamData[j].gst;
-                        feeSeasonalData[j]['affiliateTeamSeasonalFees'] =
-                          feeSeasonalTeamData[j].affiliateFee;
-                        feeSeasonalData[j]['affiliateTeamSeasonalGST'] =
-                          feeSeasonalTeamData[j].affiliateGst;
-                        break;
+                      feeSeasonalData[j]['teamSeasonalFees'] =
+                        feeSeasonalTeamData[j].fee;
+                      feeSeasonalData[j]['teamSeasonalGST'] =
+                        feeSeasonalTeamData[j].gst;
+                      feeSeasonalData[j]['affiliateTeamSeasonalFees'] =
+                        feeSeasonalTeamData[j].affiliateFee;
+                      feeSeasonalData[j]['affiliateTeamSeasonalGST'] =
+                        feeSeasonalTeamData[j].affiliateGst;
+                      break;
                     }
                   }
                 }
@@ -2545,7 +2548,7 @@ class RegistrationCompetitionFee extends Component {
           }
         }
 
-       // console.log("finalpostarray"+ JSON.stringify(finalpostarray));
+        // console.log("finalpostarray"+ JSON.stringify(finalpostarray));
 
         if (finalpostarray.length > 0) {
           this.props.saveCompetitionFeeSection(finalpostarray, competitionId);
@@ -2570,15 +2573,15 @@ class RegistrationCompetitionFee extends Component {
         let venue = JSON.stringify(compFeesState.postVenues);
         // let invitees = compFeesState.postInvitees
         let invitees = [];
-        if(compFeesState.affiliateArray!= null && compFeesState.affiliateArray.length > 0){
+        if (compFeesState.affiliateArray != null && compFeesState.affiliateArray.length > 0) {
           invitees = compFeesState.affiliateArray.concat(
             compFeesState.anyOrgAffiliateArr
           );
         }
-        else if(compFeesState.anyOrgAffiliateArr!= null && compFeesState.anyOrgAffiliateArr.length > 0){
-            invitees =  compFeesState.anyOrgAffiliateArr
+        else if (compFeesState.anyOrgAffiliateArr != null && compFeesState.anyOrgAffiliateArr.length > 0) {
+          invitees = compFeesState.anyOrgAffiliateArr
         }
-       
+
         if (tabKey == '1') {
           if (
             compFeesState.competitionDetailData.competitionLogoUrl !== null &&
@@ -2757,9 +2760,10 @@ class RegistrationCompetitionFee extends Component {
     });
   };
 
-  onChange(checkedValues) {
-    // console.log('checked = ', checkedValues);
-  }
+
+
+
+
 
   divisionTableDataOnchange(checked, record, index, keyword) {
     this.props.divisionTableDataOnchangeAction(checked, record, index, keyword);
@@ -2855,74 +2859,234 @@ class RegistrationCompetitionFee extends Component {
   }
 
   // for creation seasonal fee tree parent data
-  seasonalDataTree = (tree) => {
+ seasonalDataTree = (seasonalPaymentDefaultArray,selectedSeasonalInstalmentDatesArray,selectedSeasonalFeeKey) => {
     const { TreeNode } = Tree;
-    return tree.map((item, catIndex) => {
-      return (
-        <TreeNode title={this.SeasonsalDataNode(item)} key={item.id}>
-          {this.SeasonalDataAdvancedNode(item, catIndex)}
+    return seasonalPaymentDefaultArray.map((seasonalPaymentDefaultArrayItem) => {
+      return (        
+        <TreeNode title={this.SeasonsalDataNode(seasonalPaymentDefaultArrayItem.description)} key={seasonalPaymentDefaultArrayItem.id}> 
+          {this.SeasonalDataAdvancedNode(seasonalPaymentDefaultArrayItem, selectedSeasonalInstalmentDatesArray,selectedSeasonalFeeKey)}
         </TreeNode>
       );
     });
   };
   // for getting seasonal fee tree parent name
-  SeasonsalDataNode = (item) => {
-    return <span>{item.description}</span>;
+  SeasonsalDataNode = (description) => {
+    return <span style={{marginTop:5}}>{description}</span>;
   };
   // / for creation seasonal fee tree child data
-  SeasonalDataAdvancedNode(item, catIndex) {
+  SeasonalDataAdvancedNode(seasonalPaymentDefaultArrayItem,selectedSeasonalInstalmentDatesArray,selectedSeasonalFeeKey) {
     const { TreeNode } = Tree;
-    return item.subReferences.map((inItem, scatIndex) => {
+    return seasonalPaymentDefaultArrayItem.subReferences.map((subreferencesArrayItem) => {
       return (
         <TreeNode
-          title={this.SeasonalTreeSubAdvancedNode(inItem)}
-          key={inItem.id}
-        >
-          {/* {this.showParentSeasonalDataNode(inItem, catIndex, scatIndex)} */}
+          title={this.SeasonalTreeSubAdvancedNode(subreferencesArrayItem.description)}
+          key={subreferencesArrayItem.id}
+          className="custom-seasonaltree"  
+        >   
+          {(selectedSeasonalFeeKey.includes("6") || selectedSeasonalFeeKey.includes(6) || selectedSeasonalFeeKey.includes("7") || selectedSeasonalFeeKey.includes(7)) ? this.instalmentDate() : null}          
+          {selectedSeasonalFeeKey.includes("6") || selectedSeasonalFeeKey.includes(6) || selectedSeasonalFeeKey.includes("7") || selectedSeasonalFeeKey.includes(7) ? this.showInstalmentDate(selectedSeasonalInstalmentDatesArray,selectedSeasonalFeeKey) : null}
+          {selectedSeasonalFeeKey.includes("6") || selectedSeasonalFeeKey.includes(6) || selectedSeasonalFeeKey.includes("7") || selectedSeasonalFeeKey.includes(7) ? this.addInstalmentDateBtn(selectedSeasonalInstalmentDatesArray) : null}
         </TreeNode>
       );
     });
   }
-  // / for getting seasonal fee tree child name
-  SeasonalTreeSubAdvancedNode(item) {
-    return <span>{item.description}</span>;
+ 
+  instalmentDate()
+  { 
+    const { TreeNode } = Tree;
+      return (
+          <TreeNode  title={
+            <div className="breadcrumb-add"  style ={{fontSize:16 , cursor: "default"}}>             
+              {AppConstants.instalmentDate}
+            </div>
+            }
+            key={"instalmentDate"} checkable={false} 
+            className="customize-subtree-start">
+              
+          </TreeNode>
+      );
+  }
+
+  showInstalmentDate(selectedSeasonalInstalmentDatesArray,selectedSeasonalFeeKey){   
+    const { TreeNode } = Tree;   
+    return selectedSeasonalInstalmentDatesArray.map((selectedSeasonalInstalmentDatesArrayItem,index) => {
+      return (
+        <TreeNode  title={this.getInstalmentDate(selectedSeasonalInstalmentDatesArray,selectedSeasonalInstalmentDatesArrayItem,index,selectedSeasonalFeeKey)} 
+        key={"index"} checkable={false}
+        className='customize-subtree-middle'
+        >
+        </TreeNode>
+      );
+    });   
+  }
+  showSeasonalTeamInstalmentDate(selectedSeasonalTeamInstalmentDatesArray){   
+      const { TreeNode } = Tree;   
+      return selectedSeasonalTeamInstalmentDatesArray.map((selectedSeasonalTeamInstalmentDatesArrayItem) => {
+        return (
+          <TreeNode  title={this.getSeasonalTeamDate(selectedSeasonalTeamInstalmentDatesArray,selectedSeasonalTeamInstalmentDatesArrayItem)} key={"index"} checkable={false}
+          className="customize-subtree-middle">
+          </TreeNode>
+        );
+      }); 
+  }
+  
+  
+  instalmentPaymentDateChange(instalmentDate,selectedSeasonalInstalmentDatesArrayItem){    
+    let obj = {
+      instalmentDate : (moment(instalmentDate).format("YYYY-MM-DD")),
+      selectedSeasonalInstalmentDatesArrayItem:selectedSeasonalInstalmentDatesArrayItem,
+    }
+      if (instalmentDate !== null && instalmentDate !=="" ) {
+        this.props.instalmentDateAction(obj, 'instalmentDateupdate');
+      }
+  }
+
+  seasonalTeaminstalmentPaymentDateChange(seasonalTeamInstalmentDate,selectedSeasonalTeamInstalmentDatesArrayItem){    
+    let obj = {
+      seasonalTeamInstalmentDate : (moment(seasonalTeamInstalmentDate).format("YYYY-MM-DD")),
+      selectedSeasonalTeamInstalmentDatesArrayItem:selectedSeasonalTeamInstalmentDatesArrayItem,
+    }
+      if (seasonalTeamInstalmentDate !== null && seasonalTeamInstalmentDate !=="" ) {
+        this.props.instalmentDateAction(obj, 'seasonalTeaminstalmentDateupdate');
+      }
+  }
+    
+   
+
+  getInstalmentDate(selectedSeasonalInstalmentDatesArray,selectedSeasonalInstalmentDatesArrayItem,index,selectedSeasonalFeeKey){ 
+      let removeObj = {
+        selectedSeasonalInstalmentDatesArray: selectedSeasonalInstalmentDatesArray,
+        selectedSeasonalInstalmentDatesArrayItem: selectedSeasonalInstalmentDatesArrayItem,
+        index:index,
+        selectedSeasonalFeeKey:selectedSeasonalFeeKey
+      }  
+      let instalmentDate = selectedSeasonalInstalmentDatesArrayItem.instalmentDate
+      return(  
+          <div>
+            <DatePicker 
+            placeholder={"dd-mm-yyyy"}            
+            format={'DD-MM-YYYY'}
+            showTime={false}
+            onChange={(e)=>this.instalmentPaymentDateChange(e,selectedSeasonalInstalmentDatesArrayItem)} 
+            value={(instalmentDate == "" ) ? null :moment(instalmentDate, 'YYYY-MM-DD')} />
+              
+            <span style={{marginLeft: 8, cursor: 'pointer' }}>
+                <img
+                    className="dot-image"
+                    src={AppImages.redCross}
+                    alt=""
+                    width="16"
+                    height="16"
+                    onClick={(e)=>this.props.instalmentDateAction(removeObj,"instalmentRemoveDate")}
+                />
+            </span>                             
+          </div>
+      );
+  }
+  
+  getSeasonalTeamDate(selectedSeasonalTeamInstalmentDatesArray,selectedSeasonalTeamInstalmentDatesArrayItem){ 
+    let removeObj = {
+      selectedSeasonalTeamInstalmentDatesArray: selectedSeasonalTeamInstalmentDatesArray,
+      selectedSeasonalTeamInstalmentDatesArrayItem: selectedSeasonalTeamInstalmentDatesArrayItem
+    }   
+    let instalmentDate = selectedSeasonalTeamInstalmentDatesArrayItem.instalmentDate
+    return(  
+        <div>
+          <DatePicker 
+          placeholder={"dd-mm-yyyy"}
+          format={'DD-MM-YYYY'}
+          showTime={false}
+          onChange={(e)=>this.seasonalTeaminstalmentPaymentDateChange(e,selectedSeasonalTeamInstalmentDatesArrayItem)} 
+          value={(instalmentDate == "") ? null:moment(instalmentDate, 'YYYY-MM-DD')} />
+             
+          <span style={{marginLeft: 8, cursor: 'pointer' }}>
+              <img
+                  className="dot-image"
+                  src={AppImages.redCross}
+                  alt=""
+                  width="16"
+                  height="16"
+                  onClick={(e)=>this.props.instalmentDateAction(removeObj,"instalmentSeasonalTeamRemoveDate")}
+              />
+          </span>                             
+        </div>
+    );
+  }
+
+  addInstalmentDateBtn(selectedSeasonalInstalmentDatesArray){
+      const { TreeNode } = Tree;
+      return(
+        <TreeNode  
+          title={        
+            <span style={{ cursor: 'pointer', paddingTop:0 }} onClick={(e)=>this.props.instalmentDateAction(selectedSeasonalInstalmentDatesArray,"instalmentAddDate")} className="input-heading-add-another">
+              { AppConstants.addInstalmentDate}
+            </span>         
+          } 
+          key={"button"} checkable={false} 
+          className='customize-subtree-end'>
+        </TreeNode>
+      ); 
+  }
+  seasonalTeamaddButton(selectedSeasonalTeamInstalmentDatesArray){
+      const { TreeNode } = Tree;
+      return(
+        <TreeNode  
+          title={        
+            <span style={{ cursor: 'pointer', paddingTop:0 , marginBottom: 20}} onClick={(e)=>this.props.instalmentDateAction(selectedSeasonalTeamInstalmentDatesArray,"seasonalTeaminstalmentAddDate")} className="input-heading-add-another">
+              { AppConstants.addInstalmentDate}
+            </span>         
+          } 
+          key={"button"} checkable={false}
+          className="customize-subtree-end">
+        </TreeNode>
+      );      
+  }
+
+ 
+   // / for getting seasonal fee tree child name
+  SeasonalTreeSubAdvancedNode(description) {
+    return <span>{description}</span>;
   }
 
   // for creation seasonal team fee tree parent data
-  seasonalTeamDataTree = (tree) => {
+  seasonalTeamDataTree = (seasonalTeamPaymentDefaultArray,selectedSeasonalTeamInstalmentDatesArray,selectedSeasonalTeamFeeKey) => {
     const { TreeNode } = Tree;
-    return tree.map((item, catIndex) => {
+    return seasonalTeamPaymentDefaultArray.map((seasonalTeamPaymentDefaultArrayItem, catIndex) => {
       return (
-        <TreeNode title={this.SeasonsalTeamDataNode(item)} key={item.id}>
-          {this.SeasonalTeamDataAdvancedNode(item, catIndex)}
+        <TreeNode title={this.SeasonsalTeamDataNode(seasonalTeamPaymentDefaultArrayItem.description)} key={seasonalTeamPaymentDefaultArrayItem.id}>
+          {this.SeasonalTeamDataAdvancedNode(seasonalTeamPaymentDefaultArrayItem, selectedSeasonalTeamInstalmentDatesArray,selectedSeasonalTeamFeeKey)}
         </TreeNode>
       );
     });
   };
 
   // / for creation seasonal team fee tree child data
-  SeasonalTeamDataAdvancedNode(item, catIndex) {
+  SeasonalTeamDataAdvancedNode(seasonalTeamPaymentDefaultArrayItem, selectedSeasonalTeamInstalmentDatesArray,selectedSeasonalTeamFeeKey) {
+    console.log("show seasonal team fee key"+JSON.stringify(selectedSeasonalTeamFeeKey));
     const { TreeNode } = Tree;
-    return item.subReferences.map((inItem, scatIndex) => {
+    return seasonalTeamPaymentDefaultArrayItem.subReferences.map((subReferencesArrayItem) => {
       return (
         <TreeNode
-          title={this.SeasonalTeamTreeSubAdvancedNode(inItem)}
-          key={inItem.id}
+          title={this.SeasonalTeamTreeSubAdvancedNode(subReferencesArrayItem.description)}
+          key={subReferencesArrayItem.id}
+          className="custom-seasonaltree"          
         >
-          {/* {this.showParentSeasonalDataNode(inItem, catIndex, scatIndex)} */}
+          {selectedSeasonalTeamFeeKey.includes("6") || selectedSeasonalTeamFeeKey.includes(6) || selectedSeasonalTeamFeeKey.includes("7") ||  selectedSeasonalTeamFeeKey.includes(7) ? this.instalmentDate() : null}
+          {selectedSeasonalTeamFeeKey.includes("6") || selectedSeasonalTeamFeeKey.includes(6) || selectedSeasonalTeamFeeKey.includes("7") ||  selectedSeasonalTeamFeeKey.includes(7) ? this.showSeasonalTeamInstalmentDate(selectedSeasonalTeamInstalmentDatesArray) : null}
+          {selectedSeasonalTeamFeeKey.includes("6") || selectedSeasonalTeamFeeKey.includes(6) || selectedSeasonalTeamFeeKey.includes("7") ||  selectedSeasonalTeamFeeKey.includes(7) ? this.seasonalTeamaddButton(selectedSeasonalTeamInstalmentDatesArray) : null}       
         </TreeNode>
       );
     });
   }
 
    // for getting seasonal fee tree parent name
-   SeasonsalTeamDataNode = (item) => {
-    return <span>{item.description}</span>;
+   SeasonsalTeamDataNode = (description) => {
+    return <span>{description}</span>;
   };
 
    // / for getting seasonal team fee tree child name
-   SeasonalTeamTreeSubAdvancedNode(item) {
-    return <span>{item.description}</span>;
+  SeasonalTeamTreeSubAdvancedNode(description) {
+    return <span>{description}</span>;
   }
 
 
@@ -2978,7 +3142,9 @@ class RegistrationCompetitionFee extends Component {
                       ],
                     }
                   )(
-                    <Select className="year-select">
+                    <Select
+                      className="year-select reg-filter-select1 ml-2"
+                      style={{ maxWidth: 80 }}>
                       {this.props.appState.yearList.map((item) => {
                         return (
                           <Option key={'yearRefId' + item.id} value={item.id}>
@@ -3203,9 +3369,9 @@ class RegistrationCompetitionFee extends Component {
                 )
               }
               disabled={compDetailDisable}
-              onBlur={(i)=> this.props.form.setFieldsValue({
+              onBlur={(i) => this.props.form.setFieldsValue({
                 'competition_name': captializedString(i.target.value)
-            })}
+              })}
             />
           )}
         </Form.Item>
@@ -3819,6 +3985,7 @@ class RegistrationCompetitionFee extends Component {
             <div className="inside-container-view">
               <span className="form-heading pt-2 pl-2">
                 {item.membershipProductName}
+                <span className="requiredSpan">*</span>
               </span>
               {item.isPlayingStatus == true ? (
                 <div>
@@ -4437,7 +4604,7 @@ class RegistrationCompetitionFee extends Component {
       affiliateNonSelected,
       anyOrgNonSelected,
     } = this.props.competitionFeesState;
-   // console.log(invitees, 'invitees');
+    // console.log(invitees, 'invitees');
     let orgLevelId = JSON.stringify(this.state.organisationTypeRefId);
     let regInviteesDisable = this.state.permissionState.regInviteesDisable;
     return (
@@ -4652,17 +4819,18 @@ class RegistrationCompetitionFee extends Component {
     this.props.updatePaymentFeeOption(itemValue, 'casualfee');
   }
   //on change of Seasonal fee payment option
-  onChangeSeasonalFee(itemValue, info) {
-    //console.log("itemValue, info", itemValue, info);
+  onChangeSeasonalFee(itemValue) {      
+													  
     this.props.updatePaymentFeeOption(itemValue, 'seasonalfee');
   }
-    //on change of Seasonal Team fee payment option
-    onChangeSeasonalTeamFee(itemValue, info) {
-      //console.log("itemValue, info", itemValue, info);
-      this.props.updatePaymentFeeOption(itemValue, 'seasonalteamfee');
-    }
-    
-  
+
+  //on change of Seasonal Team fee payment option
+  onChangeSeasonalTeamFee(itemValue) {    
+													  
+    this.props.updatePaymentFeeOption(itemValue, 'seasonalteamfee');
+  }
+
+
   checkIsSeasonal = (feeDetails) => {
     let isSeasonalValue = false;
     for (let i in feeDetails) {
@@ -4706,16 +4874,20 @@ class RegistrationCompetitionFee extends Component {
     let casualPayment = this.props.competitionFeesState.casualPaymentDefault;
     let seasonalPayment = this.props.competitionFeesState.seasonalPaymentDefault;
     let seasonalTeamPayment = this.props.competitionFeesState.seasonalTeamPaymentDefault;
-   // console.log("seasonalTeamPayment, seasonalPayment ", seasonalTeamPayment, seasonalPayment)
     let paymentData = this.props.competitionFeesState.competitionPaymentsData;
     let selectedSeasonalFeeKey = this.props.competitionFeesState.SelectedSeasonalFeeKey;
+    let selectedSeasonalFee = this.props.competitionFeesState.SelectedSeasonalFee;
     let selectedCasualFeeKey = this.props.competitionFeesState.selectedCasualFeeKey;
     let selectedSeasonalTeamFeeKey = this.props.competitionFeesState.selectedSeasonalTeamFeeKey;
+
+    console.log("selectedSeasonalFeeKey", selectedSeasonalFeeKey);
 
     let paymentsDisable = this.state.permissionState.paymentsDisable;
     let seasonalExpendeKey = this.props.competitionFeesState.seasonalExpendedKey;
     let casuallExpendeKey =  this.props.competitionFeesState.casusalExpendedKey;
     let seasonalTeamExpendeKey = this.props.competitionFeesState.seasonalTeamExpendedKey;
+    let selectedSeasonalInstalmentDates = this.props.competitionFeesState.selectedSeasonalInstalmentDates;
+    let selectedTeamSeasonalInstalmentDates = this.props.competitionFeesState.selectedTeamSeasonalInstalmentDates;																										  
 
     return (
       <div className="fees-view pt-5">
@@ -4739,13 +4911,13 @@ class RegistrationCompetitionFee extends Component {
               style={{ flexDirection: 'column' }}
               className="tree-government-rebate tree-selection-icon"
               checkable
-              expandedKeys={['1','5']}
+              expandedKeys={['1','5', '7']}
               //defaultCheckedKeys={[]}
-              checkedKeys={selectedSeasonalFeeKey}
-              onCheck={(e, info) => this.onChangeSeasonalFee(e, info)}
+             checkedKeys={selectedSeasonalFeeKey}
+              onCheck={(e, info) => this.onChangeSeasonalFee(e)}
               disabled={paymentsDisable}
             >
-              {this.seasonalDataTree(seasonalPayment)}
+              {this.seasonalDataTree(seasonalPayment,selectedSeasonalInstalmentDates,selectedSeasonalFeeKey)}
             </Tree>
           </div>
         )}
@@ -4765,7 +4937,7 @@ class RegistrationCompetitionFee extends Component {
               checkable
               //defaultExpandedKeys={[]}
               //defaultCheckedKeys={[]}
-              expandedKeys={['1','4','8','12']}
+              expandedKeys={['1', '4', '8', '12']}
               checkedKeys={selectedCasualFeeKey}
               onCheck={(e) => this.onChangeCasualFee(e, paymentData)}
               disabled={paymentsDisable}
@@ -4788,13 +4960,13 @@ class RegistrationCompetitionFee extends Component {
               style={{ flexDirection: 'column' }}
               className="tree-government-rebate tree-selection-icon"
               checkable
-              expandedKeys={['1','5']}
+              expandedKeys={['1', '5', '7']}
               //defaultCheckedKeys={[]}
               checkedKeys={selectedSeasonalTeamFeeKey}
-              onCheck={(e, info) => this.onChangeSeasonalTeamFee(e, info)}
+              onCheck={(e) => this.onChangeSeasonalTeamFee(e)}
               disabled={paymentsDisable}
             >
-              {this.seasonalTeamDataTree(seasonalTeamPayment)}
+              {this.seasonalTeamDataTree(seasonalTeamPayment,selectedTeamSeasonalInstalmentDates,selectedSeasonalTeamFeeKey)}
             </Tree>
           </div>
         )}
@@ -4806,6 +4978,7 @@ class RegistrationCompetitionFee extends Component {
   //////charity voucher view
   charityVoucherView = (getFieldDecorator) => {
     let charityRoundUp = this.props.competitionFeesState.charityRoundUp;
+  
     let paymentData = this.props.competitionFeesState.competitionPaymentsData;
     let paymentsDisable = this.state.permissionState.paymentsDisable;
     let checkCharityArray = this.props.competitionFeesState
@@ -4866,9 +5039,9 @@ class RegistrationCompetitionFee extends Component {
                       'title'
                     )
                   }
-                  onBlur={(i)=> this.props.form.setFieldsValue({
+                  onBlur={(i) => this.props.form.setFieldsValue({
                     'charityTitle': captializedString(i.target.value)
-                })}
+                  })}
                 />
               )}
             </Form.Item>
@@ -5932,9 +6105,9 @@ class RegistrationCompetitionFee extends Component {
                     <div className="tab-formView">
                       {this.paymentOptionsView(getFieldDecorator)}
                     </div>
-                    <div className="tab-formView">
+                    {/* <div className="tab-formView">
                       {this.charityVoucherView(getFieldDecorator)}
-                    </div>
+                    </div> */}
                   </TabPane>
                   <TabPane tab={AppConstants.discounts} key={'6'}>
                     <div className="tab-formView">
@@ -6000,6 +6173,7 @@ function mapDispatchToProps(dispatch) {
       onInviteesSearchAction,
       registrationRestrictionTypeAction,
       fixtureTemplateRoundsAction,
+      instalmentDateAction,								  
     },
     dispatch
   );

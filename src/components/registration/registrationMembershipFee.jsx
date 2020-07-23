@@ -19,7 +19,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import{getAllowTeamRegistrationTypeAction} from '../../store/actions/commonAction/commonAction';																								
+import { getAllowTeamRegistrationTypeAction } from '../../store/actions/commonAction/commonAction';
 import {
     regGetMembershipProductDetailsAction,
     regSaveMembershipProductDetailsAction,
@@ -47,7 +47,7 @@ import moment from "moment";
 import history from "../../util/history";
 import ValidationConstants from "../../themes/validationConstant";
 import { message } from "antd";
-import { isArrayNotEmpty,isNotNullOrEmptyString } from "../../util/helpers";
+import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
 import Loader from '../../customComponents/loader';
 import { routePermissionForOrgLevel } from "../../util/permissions";
 import Tooltip from 'react-png-tooltip'
@@ -213,7 +213,7 @@ class RegistrationMembershipFee extends Component {
         this.props.getMembershipProductFeesTypeAction()
         this.props.getCommonDiscountTypeTypeAction()
         this.props.membershipProductDiscountTypesAction()
-		this.props.getAllowTeamRegistrationTypeAction()											   
+        this.props.getAllowTeamRegistrationTypeAction()
     }
 
 
@@ -317,7 +317,7 @@ class RegistrationMembershipFee extends Component {
             validityRefId: membershipProductData.ValidityRefId ? membershipProductData.ValidityRefId : 2,
         });
         let typesData = membershipProductData.membershipProductTypes ? membershipProductData.membershipProductTypes : []
-       
+
         typesData.length > 0 && typesData.map((item, index) => {
             let dobFrom = `dobFrom${index}`
             let dobTo = `dobTo${index}`
@@ -403,7 +403,8 @@ class RegistrationMembershipFee extends Component {
                                     {getFieldDecorator('yearRefId', { initialValue: 1 },
                                         { rules: [{ required: true, message: ValidationConstants.pleaseSelectYear }] })(
                                             <Select
-                                                className="year-select"
+                                                className="year-select reg-filter-select1 ml-2"
+                                                style={{ maxWidth: 80 }}
                                             >
                                                 {this.props.appState.yearList.map(item => {
                                                     return (
@@ -474,12 +475,12 @@ class RegistrationMembershipFee extends Component {
         this.props.updatedMembershipTypeDataAction(membershipTypeData)
     };
 
-	allowTeamRegistrationPlayer = (checkedValue, index , keyword) => {
+    allowTeamRegistrationPlayer = (checkedValue, index, keyword) => {
         let allowTeamRegistration = checkedValue;
         let membershipTypeData = this.props.registrationState.getDefaultMembershipProductTypes
         membershipTypeData[index][keyword] = allowTeamRegistration;
         this.props.updatedMembershipTypeDataAction(membershipTypeData)
-    };	  
+    };
     //////dynamic membership type view
     membershipTypesView = (
         getFieldDecorator
@@ -487,7 +488,7 @@ class RegistrationMembershipFee extends Component {
         let registrationState = this.props.registrationState
         const defaultTypes = registrationState.getDefaultMembershipProductTypes !== null ? registrationState.getDefaultMembershipProductTypes : []
         let allData = this.props.registrationState.getMembershipProductDetails
-        let {allowTeamRegistration} = this.props.commonReducerState;
+        let { allowTeamRegistration } = this.props.commonReducerState;
         return (
             <div>
                 <span className="applicable-to-heading">
@@ -538,7 +539,7 @@ class RegistrationMembershipFee extends Component {
                                     </div>
                                     <Checkbox
                                         className="single-checkbox"
-                                        style={{width: '100%'}}
+                                        style={{ width: '100%' }}
                                         checked={item.isMandate}
                                         onChange={e =>
                                             this.membershipTypesAndAgeSelected(e.target.checked, index, "isMandate")
@@ -614,42 +615,42 @@ class RegistrationMembershipFee extends Component {
                                             </div>
                                         </div>
                                     )}
-									<Checkbox
-										className="single-checkbox"
-										style={{marginLeft:"0px"}}
-										checked={item.isAllow}
-										onChange={e =>
-											this.membershipTypesAndAgeSelected(e.target.checked, index, "isAllow")
-                                    }
-                                    disabled={this.state.membershipIsUsed}
-									>
-										{AppConstants.allowTeamRegistration}
-									</Checkbox>
+                                    <Checkbox
+                                        className="single-checkbox"
+                                        style={{ marginLeft: "0px" }}
+                                        checked={item.isAllow}
+                                        onChange={e =>
+                                            this.membershipTypesAndAgeSelected(e.target.checked, index, "isAllow")
+                                        }
+                                        disabled={this.state.membershipIsUsed}
+                                    >
+                                        {AppConstants.allowTeamRegistration}
+                                    </Checkbox>
 
-									{item.isAllow && item.isPlaying == 1 && (
-										<div className="fluid-width" style={{marginTop:"10px"}}>
-											<div className="row">
-												<div className="col-sm">
-																										
-													<Form.Item  >
-													{getFieldDecorator(`allowTeamRegistrationTypeRefId${index}`, { 
-																		rules: [{ required: true, message: ValidationConstants.finalFixtureTemplateRequired }]
-													})(
-														<Radio.Group className="reg-competition-radio" 
-															onChange={(e) => this.allowTeamRegistrationPlayer(e.target.value, index, 'allowTeamRegistrationTypeRefId')} 
-                                                            setFieldsValue={item.allowTeamRegistrationTypeRefId}
-                                                            disabled={this.state.membershipIsUsed}
+                                    {item.isAllow && item.isPlaying == 1 && (
+                                        <div className="fluid-width" style={{ marginTop: "10px" }}>
+                                            <div className="row">
+                                                <div className="col-sm">
+
+                                                    <Form.Item  >
+                                                        {getFieldDecorator(`allowTeamRegistrationTypeRefId${index}`, {
+                                                            rules: [{ required: true, message: ValidationConstants.finalFixtureTemplateRequired }]
+                                                        })(
+                                                            <Radio.Group className="reg-competition-radio"
+                                                                onChange={(e) => this.allowTeamRegistrationPlayer(e.target.value, index, 'allowTeamRegistrationTypeRefId')}
+                                                                setFieldsValue={item.allowTeamRegistrationTypeRefId}
+                                                                disabled={this.state.membershipIsUsed}
                                                             >
-																{(allowTeamRegistration || []).map((fix, fixIndex) => (
-																	<Radio key={fix.id} value={fix.id}>{fix.description}</Radio>
-																))}
-														</Radio.Group>
-													)}
-													</Form.Item>
-												</div>
-											</div>
-										</div>
-									)}
+                                                                {(allowTeamRegistration || []).map((fix, fixIndex) => (
+                                                                    <Radio key={fix.id} value={fix.id}>{fix.description}</Radio>
+                                                                ))}
+                                                            </Radio.Group>
+                                                        )}
+                                                    </Form.Item>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             )
                         }
@@ -702,7 +703,7 @@ class RegistrationMembershipFee extends Component {
                                 conceptulHelp
                                 conceptulHelpMsg={AppConstants.membershipProductNameMsg}
                                 tooltiprequired={"mt-3"}
-                                onBlur={(i)=> this.props.form.setFieldsValue({
+                                onBlur={(i) => this.props.form.setFieldsValue({
                                     'membershipProductName': captializedString(i.target.value)
                                 })}
                             />

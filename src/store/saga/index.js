@@ -196,7 +196,7 @@ import * as assignUmpireSaga from "../saga/umpireSaga/assignUmpireSaga";
 import * as shopProductSaga from "../saga/shopSaga/productSaga";
 import * as competitionQuickSaga from "../saga/competitionManagementSaga/competitionQuickSaga";
 import * as liveScoreMatchSheetSaga from './liveScoreSaga/liveScoreMatchSheetSaga';
-
+import * as shopSettingSaga from './shopSaga/shopSettingSaga';
 
 export default function* root_saga() {
   yield takeEvery(ApiConstants.API_LOGIN_LOAD, loginApiSaga);
@@ -787,4 +787,15 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_USER_PASSWORD_UPDATE_LOAD, userSaga.updateUserPasswordSaga);
 
   yield takeEvery(ApiConstants.API_LIVE_SCORE_MANAGER_IMPORT_LOAD, liveScoreManagerImportSaga)
+
+  ///////////shop setting get API
+  yield takeEvery(ApiConstants.API_GET_SHOP_SETTING_LOAD, shopSettingSaga.getShopSettingSaga);
+  ////shop setting create address API
+  yield takeEvery(ApiConstants.API_CREATE_SHOP_SETTING_ADDRESS_LOAD, shopSettingSaga.createAddressSaga);
+
+  ////organisation charity update API
+  yield takeEvery(ApiConstants.API_UPDATE_CHARITY_ROUND_UP_LOAD, userSaga.updateCharitySaga);
+
+  ////organisation terms and conditions update API
+  yield takeEvery(ApiConstants.API_UPDATE_TERMS_AND_CONDITION_LOAD, userSaga.updateTermsAndConditionsSaga);
 }

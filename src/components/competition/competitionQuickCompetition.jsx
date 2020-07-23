@@ -133,7 +133,7 @@ class CompetitionQuickCompetition extends Component {
         let quickCompetitionData = this.props.quickCompetitionState.quickComptitionDetails
         let selectedVenues = this.props.quickCompetitionState.selectedVenues
         this.props.form.setFieldsValue({
-            competition_name: quickCompetitionData.competitionName,
+            "competition_name": quickCompetitionData.competitionName,
             selectedVenues: selectedVenues
         })
     }
@@ -166,7 +166,7 @@ class CompetitionQuickCompetition extends Component {
             yearRefId, firstTimeCompId: ""
         })
         this.props.getYearAndQuickCompetitionAction(
-            this.props.quickCompetitionState.quick_CompetitionArr,
+            this.props.quickCompetitionState.quick_CompetitionYearArr,
             yearRefId,
         );
         this.setFieldValues()
@@ -193,12 +193,12 @@ class CompetitionQuickCompetition extends Component {
                 </div>
             </Header >
             <div className="row" >
-                <div className="col-sm-2 pt-0">
+                <div className="col-sm-2 pb-3">
                     <span className="input-heading-add-another pt-0" onClick={() => this.visibleCompetitionModal()}>+{AppConstants.addNew}</span>
                 </div>
             </div>
-            <div className="row" >
-                <div className="col-sm-3">
+            <div className="row pb-3" >
+                <div className="col-sm-3 pb-3">
                     <div
                         style={{
                             width: '100%',
@@ -211,8 +211,8 @@ class CompetitionQuickCompetition extends Component {
                         <span className="year-select-heading">{AppConstants.year}:</span>
                         <Select
                             name={'yearRefId'}
-                            className="year-select"
-                            style={{ minWidth: 100 }}
+                            className="year-select reg-filter-select1 ml-2"
+                            style={{ maxWidth: 80 }}
                             onChange={(yearRefId) => this.onYearChange(yearRefId)}
                             value={this.state.yearRefId}
                         >
@@ -226,7 +226,7 @@ class CompetitionQuickCompetition extends Component {
                         </Select>
                     </div>
                 </div>
-                <div className="col-sm-3">
+                <div className="col-sm-3 pb-3">
                     <div
                         style={{
                             width: "fit-content",
@@ -239,8 +239,8 @@ class CompetitionQuickCompetition extends Component {
                         <span className="year-select-heading">{AppConstants.competition}:</span>
                         <Select
                             name={'competition'}
-                            style={{ minWidth: 160 }}
-                            className="year-select"
+                            // style={{ minWidth: 200 }}
+                            className="year-select reg-filter-select1 ml-2"
                             onChange={competitionId =>
                                 this.onCompetitionChange(competitionId)
                             }
@@ -306,7 +306,7 @@ class CompetitionQuickCompetition extends Component {
     handleOK = () => {
         let competitionId = this.state.firstTimeCompId
         let division = this.props.quickCompetitionState.division
-        this.props.saveQuickCompDivisionAction(competitionId, division)
+        this.props.saveQuickCompDivisionAction(competitionId, division, this.state.yearRefId, this.props.quickCompetitionState.quickComptitionDetails.competitionName)
         this.setState({
             visibleDivisionModal: false
         }
@@ -323,7 +323,7 @@ class CompetitionQuickCompetition extends Component {
             for (let k in manualStartTime) {
                 let manualAllVenueObj =
                 {
-                    "competitionVenueTimeslotsDayTimeId": timeslot[j].competitionVenueTimeslotsDayTimeId,
+                    "competitionVenueTimeslotsDayTimeId": 0,
                     "dayRefId": timeslot[j].dayRefId,
                     "startTime": manualStartTime[k].startTime,
                     "sortOrder": JSON.parse(k),
@@ -350,7 +350,8 @@ class CompetitionQuickCompetition extends Component {
             timeslotGenerationRefId: 2,
             timeslotRotationRefId: 7,
         }
-        this.props.quickCompetitionTimeSlotData(body)
+        this.props.quickCompetitionTimeSlotData(body, this.state.yearRefId, this.state.firstTimeCompId, this.props.quickCompetitionState.quickComptitionDetails.competitionName
+        )
         this.setState({
             timeSlotVisible: false
         })
@@ -546,12 +547,12 @@ class CompetitionQuickCompetition extends Component {
     }
     // grid view 
     draggableView = () => {
-        var dateMargin = 60;
-        var dayMargin = 60;
+        var dateMargin = 80;
+        var dayMargin = 80;
         let topMargin = 0;
         let getStaticDrawsData = this.props.quickCompetitionState.quickComptitionDetails.draws
         let dateArray = this.props.quickCompetitionState.quickComptitionDetails.dateNewArray
-        console.log(getStaticDrawsData.length > 0 && getStaticDrawsData[0].slotsArray)
+        console.log(this.props.quickCompetitionState)
         return (
             <div className="draggable-wrap draw-data-table">
                 <div className="scroll-bar pb-4">
@@ -564,7 +565,9 @@ class CompetitionQuickCompetition extends Component {
                                     dateMargin += 75;
                                 }
                                 return (
-                                    <span key={"key" + index} style={{ left: dateMargin }}>{getDayName(dateItem.date)}</span>
+                                    <span key={"key" + index} style={{ left: dateMargin }}>
+                                        {dateItem.notInDraw == false ? getDayName(dateItem.date) : ''}
+                                    </span>
                                 );
                             })}
                         </div>
@@ -579,9 +582,13 @@ class CompetitionQuickCompetition extends Component {
                                         <span key={"time" + index}
                                             style={{
                                                 left: dayMargin,
+                                                fontSize: item.notInDraw !== false && 10,
                                             }}
                                         >
-                                            {getTime(item.date)}
+                                            {item.notInDraw == false
+                                                ? getTime(item.date)
+                                                : 'Not in draw'}
+                                            {/* {getTime(item.date)} */}
                                         </span>
                                     );
                                 })}
@@ -591,14 +598,14 @@ class CompetitionQuickCompetition extends Component {
 
                 <div className="main-canvas Draws">
                     {getStaticDrawsData.map((courtData, index) => {
-                        let leftMargin = 60;
+                        let leftMargin = 80;
                         if (index !== 0) {
                             topMargin += 50;
                         }
                         return (
                             <div key={index + "courtkey"}>
                                 <div className="quick-comp-canvas" >
-                                    <div className="venueCourt-tex-div" style={{ width: 60 }}>
+                                    <div className="venueCourt-tex-div" style={{ width: 80 }}>
                                         <span className="venueCourt-text">
                                             {courtData.venueShortName + '-' + courtData.venueCourtNumber}
                                         </span>
@@ -631,16 +638,14 @@ class CompetitionQuickCompetition extends Component {
                                                     id={index.toString() + ':' + slotIndex.toString()}
                                                     content={1}
                                                     swappable={true}
-                                                    onSwap={(source, target,) => {
+                                                    onSwap={(source, target, ) => {
                                                         console.log(source, target)
                                                         return (
                                                             this.onSwap(
                                                                 source,
                                                                 target,
-                                                            )
-                                                        )
-                                                    }
-                                                    }
+                                                            ))
+                                                    }}
                                                 >
                                                     {slotObject.drawsId != null ? (
                                                         <span>
@@ -675,8 +680,8 @@ class CompetitionQuickCompetition extends Component {
                     </div>
                     <div className="col-sm" >
                         <div className="comp-buttons-view">
-                            <Button className="save-draft-text" htmlType="submit" type="save-draft-text"
-                                onClick={() => this.setState({ buttonPressed: "saveDraft" })}>{AppConstants.saveAsDraft}</Button>
+                            <Button className="save-draft-text" htmlType="submit" type="save-draft-text" style={{ width: 160 }}
+                                onClick={() => this.setState({ buttonPressed: "saveDraft" })}>{AppConstants.generateFixtures}</Button>
                             <Button className="open-reg-button" htmlType="submit" type="primary"
                                 onClick={() => this.setState({ buttonPressed: "AddTeam" })}>
                                 {AppConstants.addTeams}</Button>

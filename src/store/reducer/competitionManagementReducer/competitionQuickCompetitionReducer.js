@@ -59,6 +59,7 @@ const initialState = {
     SelectedTeamPlayer: 0,
     importModalVisible: false,
     teamsImportData: [],
+    isTeamNotInDraws: 0
 };
 var gradeColorArray = [];
 const lightGray = '#999999';
@@ -192,10 +193,13 @@ function setupDateObjectArray(dateArray, drawObject) {
     var tempDateArray = JSON.parse(JSON.stringify(dateArray))
     let defaultDateObject = {
         date: drawObject.matchDate,
+        notInDraw: drawObject.outOfCompetitionDate == 1 || drawObject.outOfRoundDate == 1 ? true : false
     }
     for (let i in dateArray) {
         if (isDateSame(dateArray[i].date, drawObject.matchDate)) {
-            tempDateArray[i] = defaultDateObject
+            if (tempDateArray[i].notInDraw == false) {
+                tempDateArray[i] = defaultDateObject
+            }
             return tempDateArray;
         }
 
@@ -217,13 +221,17 @@ function sortDateArray(dateArray) {
     let inDrawsArray = []
     let outDrawsArray = []
     for (let i in dateArray) {
-
-        inDrawsArray.push(dateArray[i])
-
+        if (dateArray[i].notInDraw == false) {
+            inDrawsArray.push(dateArray[i])
+        }
+        else {
+            outDrawsArray.push(dateArray[i])
+        }
     }
     inDrawsArray = sortArrayByDate(inDrawsArray)
+    outDrawsArray = sortArrayByDate(outDrawsArray)
 
-    return inDrawsArray;
+    return inDrawsArray.concat(outDrawsArray);
 }
 
 //sort court array
@@ -684,6 +692,7 @@ function QuickCompetitionState(state = initialState, action) {
             detailsResult.draws = drawsData.mainCourtNumberArray
             detailsResult.dateNewArray = drawsData.sortedDateArray
             state.onQuickCompLoad = false
+            state.isTeamNotInDraws = action.result.isTeamNotInDraws
             return {
                 ...state,
                 quickComptitionDetails: detailsResult,

@@ -587,7 +587,7 @@ class CompetitionOpenRegForm extends Component {
         let orgData = getOrganisationData()
         this.setState({ organisationTypeRefId: orgData.organisationTypeRefId })
         let competitionId = null
-       // console.log("competitionId", competitionId)
+        // console.log("competitionId", competitionId)
         this.apiCalls(competitionId)
         this.getRefernce()
         this.setDetailsFieldValue()
@@ -892,7 +892,7 @@ class CompetitionOpenRegForm extends Component {
 
 
     onChange(checkedValues) {
-       // console.log("checked = ", checkedValues);
+        // console.log("checked = ", checkedValues);
     }
 
     divisionTableDataOnchange(checked, record, index, keyword) {
@@ -1081,7 +1081,7 @@ class CompetitionOpenRegForm extends Component {
             <div className="comp-venue-courts-dropdown-view mt-0">
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm-3">
+                        <div className="col-sm-3 pb-3">
                             <div
                                 style={{
                                     width: "fit-content",
@@ -1098,7 +1098,8 @@ class CompetitionOpenRegForm extends Component {
                                         { rules: [{ required: true, message: ValidationConstants.pleaseSelectYear }] })( */}
                                 <Select
                                     name={"yearRefId"}
-                                    className="year-select"
+                                    className="year-select reg-filter-select1 ml-2"
+                                    // style={{ minWidth: 160 }}
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
@@ -1115,7 +1116,7 @@ class CompetitionOpenRegForm extends Component {
                             </div>
 
                         </div>
-                        <div className="col-sm-3">
+                        <div className="col-sm-3 pb-3">
                             <div
                                 style={{
                                     width: "fit-content",
@@ -1129,9 +1130,9 @@ class CompetitionOpenRegForm extends Component {
                                     {AppConstants.competition}:
             </span>
                                 <Select
-                                    style={{ minWidth: 160 }}
+                                    style={{ minWidth: 200 }}
                                     name={"competition"}
-                                    className="year-select"
+                                    className="year-select reg-filter-select1 ml-2"
                                     onChange={competitionId => this.onCompetitionChange(competitionId)
                                     }
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
@@ -1334,7 +1335,7 @@ class CompetitionOpenRegForm extends Component {
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(captializedString(
                                     e.target.value), "competitionName")}
                                 disabled={compDetailDisable}
-                                onBlur={(i)=> this.props.form.setFieldsValue({
+                                onBlur={(i) => this.props.form.setFieldsValue({
                                     'competition_name': captializedString(i.target.value)
                                 })}
                             />

@@ -173,8 +173,8 @@ class CompetitionPartTeamGradeCalculate extends Component {
                 title: null,
                 dataIndex: `grades${i}`,
                 render: (grades, record) =>
-                    < div style={{ width: "fit-content", display: "flex", flexDirection: 'column', justifyContent: 'center', height:"100%" }}>
-                        <a className="pb-3" style={{marginBottom: "auto", marginTop: "auto"}}>
+                    < div style={{ width: "fit-content", display: "flex", flexDirection: 'column', justifyContent: 'center', height: "100%" }}>
+                        <a className="pb-3" style={{ marginBottom: "auto", marginTop: "auto" }}>
                             <span style={{ color: "var(--app-color)" }}
                                 onClick={() => this.updateGradeName(grades.competitionDivisionGradeId, record.competitionMembershipProductDivisionId)} className="year-select-heading ">
                                 {grades.gradeName}
@@ -297,12 +297,13 @@ class CompetitionPartTeamGradeCalculate extends Component {
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width" >
                     <div className="row" >
-                        <div className="col-sm-2" >
-                            <div className="com-year-select-heading-view" >
+                        <div className="col-sm-3" >
+                            <div className="com-year-select-heading-view pb-3" >
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
                                     name={"yearRefId"}
-                                    className="year-select"
+                                    style={{ maxWidth: 80 }}
+                                    className="year-select reg-filter-select1 ml-2"
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
@@ -316,17 +317,17 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-5" >
+                        <div className="col-sm-3 pb-3" >
                             <div style={{
-                                width: "100%", display: "flex",
+                                width: "fit-content", display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center", marginRight: 50
                             }} >
                                 <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
-                                    style={{ minWidth: 160 }}
+                                    // style={{ minWidth: 100 }}
                                     name={"competition"}
-                                    className="year-select"
+                                    className="year-select reg-filter-select1 ml-2"
                                     onChange={competitionId => this.onCompetitionChange(competitionId)
                                     }
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}

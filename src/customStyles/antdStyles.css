@@ -466,9 +466,18 @@ textarea.ant-input {
 .tree-selection-icon .anticon svg{
   display: none
 }
+.ant-tree-child-tree > li:first-child {
+  padding-top: 15px !important;
+} 
 
 @media (max-width: 767px) {
   .ant-tabs-nav .ant-tabs-tab {
     padding: 12px 16px;
   }
+}
+.ant-tree li .ant-tree-node-content-wrapper.ant-tree-node-selected {
+  background: 0!important;
+}
+.ant-tree li .ant-tree-node-content-wrapper:hover {
+  background-color: transparent!important;
 }

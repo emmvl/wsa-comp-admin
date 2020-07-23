@@ -264,18 +264,17 @@ class LiveScoreTeamAttendance extends Component {
         }
     }
 
+
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-drop-down-view mt-4">
+            <div className="comp-player-grades-header-drop-down-view ">
                 < div className="row" >
                     <div className="col-sm" style={{ alignSelf: 'center' }} >
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.teamAttendane}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-
-
                     <div className="col-sm" style={{
                         display: "flex",
                         flexDirection: 'row',
@@ -284,19 +283,18 @@ class LiveScoreTeamAttendance extends Component {
                     }}>
                         <div className="row">
 
-
-
-                            <Select
-                                className="year-select"
-                                style={{ display: "flex", alignItems: "flex-start", minWidth: 140 }}
-                                onChange={(selectStatus) => this.onChnageStatus(selectStatus)}
-                                value={this.state.selectStatus} >
-                                <Option value={"All"}>{'All'}</Option>
-                                <Option value={"Borrowed"}>{'Borrowed Player'}</Option>
-                                <Option value={"Did Not Play"}>{'Did Not Play'}</Option>
-                                <Option value={"Played"}>{'Played'}</Option>
-                            </Select>
-
+                            <div className="col-sm">
+                                <Select
+                                    className="year-select reg-filter-select1"
+                                    style={{ display: "flex", alignItems: "flex-start", minWidth: 140 }}
+                                    onChange={(selectStatus) => this.onChnageStatus(selectStatus)}
+                                    value={this.state.selectStatus} >
+                                    <Option value={"All"}>{'All'}</Option>
+                                    <Option value={"Borrowed"}>{'Borrowed Player'}</Option>
+                                    <Option value={"Did Not Play"}>{'Did Not Play'}</Option>
+                                    <Option value={"Played"}>{'Played'}</Option>
+                                </Select>
+                            </div>
                             <div className="col-sm"
                                 style={{ display: "flex" }}>
                                 <div
@@ -305,11 +303,10 @@ class LiveScoreTeamAttendance extends Component {
                                         width: "100%",
                                         display: "flex",
                                         flexDirection: "row",
-                                        alignItems: "flex-end",
-                                        justifyContent: "flex-end",
                                         alignSelf: 'center',
-                                    }}
-                                >
+                                        alignItems: "flex-end",
+                                        justifyContent: "flex-end"
+                                    }} >
                                     <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
@@ -327,11 +324,10 @@ class LiveScoreTeamAttendance extends Component {
                                 </div>
                             </div>
                         </div>
-                    </div>
-
+                    </div >
                 </div >
                 {/* search box */}
-                <div className="col-sm pt-3 ml-3" style={{ display: "flex", justifyContent: 'flex-end', }} >
+                <div className="col-sm pt-3 ml-3 " style={{ display: "flex", justifyContent: 'flex-end', }} >
                     <div className="comp-product-search-inp-width" >
                         <Input className="product-reg-search-input"
                             onChange={(e) => this.onChangeSearchText(e)}
@@ -344,10 +340,11 @@ class LiveScoreTeamAttendance extends Component {
                         />
                     </div>
                 </div>
-            </div >
-
+            </div>
         )
     }
+
+
     ////////form content view
     contentView = () => {
         const { teamAttendanceResult, teamAttendancePage, teamAttendanceTotalCount } = this.props.liveScoreTeamAttendanceState

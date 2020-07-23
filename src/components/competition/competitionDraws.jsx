@@ -18,6 +18,7 @@ import AppConstants from '../../themes/appConstants';
 import { connect } from 'react-redux';
 import AppImages from '../../themes/appImages';
 import { bindActionCreators } from 'redux';
+import DrawsPublishModel from '../../customComponents/drawsPublishModel'																		
 import {
   getCompetitionDrawsAction,
   getDrawsRoundsAction,
@@ -74,7 +75,18 @@ class CompetitionDraws extends Component {
       competitionDivisionGradeId: '',
       organisationId: getOrganisationData().organisationUniqueKey,
       updateLoad: false,
-      organisation_Id: null
+      organisation_Id: null,
+      visible: false,
+	    value: 1,
+      publishPartModel: {
+        isShowPart: false,
+        publishPart: {
+          isShowDivision: false,
+          isShowRound: false
+        }
+      },
+      selectedDivisions: null,
+      selectedRounds: null
     };
   }
 
@@ -382,7 +394,8 @@ class CompetitionDraws extends Component {
       message.config({ duration: 0.9, maxCount: 1 });
       message.error(ValidationConstants.pleaseSelectVenue);
     } else {
-      this.props.publishDraws(this.state.firstTimeCompId);
+	  this.setState({visible:true})
+      //this.props.publishDraws(this.state.firstTimeCompId);
     }
   };
 
@@ -557,7 +570,7 @@ class CompetitionDraws extends Component {
   dropdownView = () => {
     return (
       <div className="row">
-        <div className="col-sm-3">
+        <div className="col-sm-2 pb-3">
           <div
             style={{
               width: '100%',
@@ -570,7 +583,8 @@ class CompetitionDraws extends Component {
             <span className="year-select-heading">{AppConstants.year}:</span>
             <Select
               name={'yearRefId'}
-              className="year-select"
+              className="year-select reg-filter-select1 ml-2"
+              style={{ maxWidth: 80 }}
               onChange={(yearRefId) => this.onYearChange(yearRefId)}
               value={this.state.yearRefId}
             >
@@ -584,10 +598,10 @@ class CompetitionDraws extends Component {
             </Select>
           </div>
         </div>
-        <div className="col-sm-3">
+        <div className="col-sm pb-3">
           <div
             style={{
-              width: '100%',
+              width: "fit-content",
               display: 'flex',
               flexDirection: 'row',
               alignItems: 'center',
@@ -598,9 +612,9 @@ class CompetitionDraws extends Component {
               {AppConstants.competition}:
             </span>
             <Select
-              style={{ minWidth: 160 }}
+              // style={{ minWidth: 160 }}
               name={'competition'}
-              className="year-select"
+              className="year-select reg-filter-select1 ml-2"
               onChange={(competitionId) =>
                 this.onCompetitionChange(competitionId)
               }
@@ -619,7 +633,7 @@ class CompetitionDraws extends Component {
             </Select>
           </div>
         </div>
-        <div className="col-sm-3">
+        <div className="col-sm pb-3">
           <div
             style={{
               width: '100%',
@@ -635,7 +649,7 @@ class CompetitionDraws extends Component {
             <Select
               style={{ minWidth: 160 }}
               name={'competition'}
-              className="year-select"
+              className="year-select reg-filter-select1 ml-2"
               onChange={(competitionDivisionGradeId) =>
                 this.onDivisionGradeNameChange(competitionDivisionGradeId)
               }
@@ -659,7 +673,7 @@ class CompetitionDraws extends Component {
           </div>
 
         </div>
-        <div className="col-sm-3">
+        <div className="col-sm pb-3">
           <div
             style={{
               width: '100%',
@@ -675,7 +689,7 @@ class CompetitionDraws extends Component {
             <Select
               style={{ minWidth: 160 }}
               name={'competition'}
-              className="year-select"
+              className="year-select reg-filter-select1 ml-2"
               onChange={(oragnisationId) =>
                 this.onchangeOrganisation(oragnisationId)
               }
@@ -748,6 +762,86 @@ class CompetitionDraws extends Component {
   //unlockDraws
   unlockDraws(id, round_Id, venueCourtId) {
     this.props.unlockDrawsAction(id, round_Id, venueCourtId);
+  }
+
+  
+  onChangeRadio = e => {
+    this.setState({
+      value: e.target.value,
+    });
+    if(e.target.value==2)
+    {
+      this.state.publishPartModel.isShowPart = true;
+      this.setState({
+        publishPartModel: this.state.publishPartModel
+      })
+    }
+    else
+    {
+      this.state.publishPartModel.isShowPart = false;
+    }
+  };
+  
+  handleCancel = e => {
+    this.setState({
+      visible: false,
+    });
+    this.state.publishPartModel.publishPart.isShowRound = false;
+    this.state.publishPartModel.publishPart.isShowDivision = false;
+    this.state.publishPartModel.isShowPart = false;
+    this.state.value = 1;
+  };
+  
+  checkDivision = e =>{  
+    if(e.target.checked)
+    {
+      this.state.publishPartModel.publishPart.isShowDivision = true;
+    }
+    else
+    {
+      this.state.publishPartModel.publishPart.isShowDivision = false;
+    }
+    this.setState({
+      publishPart: this.state.publishPartModel.publishPart
+    })
+  }
+  
+  checkRound = e =>{
+    if(e.target.checked)
+    {
+      this.state.publishPartModel.publishPart.isShowRound = true;
+    }
+    else{
+      this.state.publishPartModel.publishPart.isShowRound = false;
+    }
+    this.setState({
+      publishPart: this.state.publishPartModel.publishPart
+    })
+  }
+
+  onSelectDivisionsValues = (e) => {
+    console.log("e" + e);
+
+    this.setState({selectedDivisions: e})
+  }
+
+  onSelectRoundValues = (e) => {
+    console.log("e" + e);
+    this.setState({selectedRounds: e})
+  }
+
+  publishDraw = () =>{
+    let payload = {
+      isPartial: this.state.publishPartModel.isShowPart,
+      divisions: [],
+      rounds: []
+    }
+    if(this.state.publishPartModel.isShowPart == true){
+      payload.divisions = this.state.selectedDivisions;
+      payload.rounds = this.state.selectedRounds
+    }
+    this.props.publishDraws(this.state.firstTimeCompId, '', payload);
+    this.setState({visible:false})
   }
 
   ////// Publish draws
@@ -1180,6 +1274,7 @@ class CompetitionDraws extends Component {
       </div>
     );
   };
+
   //////footer view containing all the buttons like submit and cancel
   footerView = () => {
     let publishStatus = this.props.drawsState.publishStatus;
@@ -1227,6 +1322,22 @@ class CompetitionDraws extends Component {
           </div>
           {/* </div> */}
         </div>
+		<DrawsPublishModel 
+          publishVisible={this.state.visible} 
+          divisionGradeNameList={this.props.drawsState.divisionGradeNameList}
+          getDrawsRoundsData={this.props.drawsState.getDrawsRoundsData}
+          modelCheckDivision={e => this.checkDivision(e)}
+          modelCheckRound={e => this.checkRound(e)}
+          modelCancel={this.handleCancel}
+          modelRadio={this.onChangeRadio}
+          modalPublish={(e)=>this.publishDraw()}
+          modalDivisions = {(e) => this.onSelectDivisionsValues(e)}
+          modalRounds={(e) => this.onSelectRoundValues(e)}
+          modalRadioValue={this.state.value}
+          modalIsShowPart={this.state.publishPartModel.isShowPart}
+          modalIsShowDivision={this.state.publishPartModel.publishPart.isShowDivision}
+          modalIsShowRound={this.state.publishPartModel.publishPart.isShowRound}
+        ></DrawsPublishModel>			 
       </div>
     );
   };

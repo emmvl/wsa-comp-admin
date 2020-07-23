@@ -210,7 +210,7 @@ export function* getDivisionGradeNameListSaga(action) {
 
 export function* publishDraws(action) {
     try {
-        const result = yield call(CompetitionAxiosApi.publishDrawsApi, action.competitionId);
+        const result = yield call(CompetitionAxiosApi.publishDrawsApi, action);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_DRAW_PUBLISH_SUCCESS,

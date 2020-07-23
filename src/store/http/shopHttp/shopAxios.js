@@ -61,6 +61,20 @@ let AxiosApi = {
         return Method.dataGet(url, token);
     },
 
+    /////////////shop setting get API
+    async getShopSetting() {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem.organisationUniqueKey
+        var url = `/settings/list?organisationUniqueKey=${organisationUniqueKey}`;
+        return Method.dataGet(url, token);
+    },
+
+    /////////////shop setting create address API
+    createAddress(payload) {
+        let body = payload
+        var url = `/settings`;
+        return Method.dataPost(url, token, body);
+    },
 
 };
 

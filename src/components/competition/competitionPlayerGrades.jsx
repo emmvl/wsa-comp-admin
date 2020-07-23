@@ -412,12 +412,13 @@ class CompetitionPlayerGrades extends Component {
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width" >
                     <div className="row" >
-                        <div className="col-sm-2" >
-                            <div className="com-year-select-heading-view" >
+                        <div className="col-sm" >
+                            <div className="com-year-select-heading-view pb-3" >
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
                                     name={"yearRefId"}
-                                    className="year-select"
+                                    style={{ minWidth: 80, maxWidth: 80 }}
+                                    className="year-select reg-filter-select1 ml-2"
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
@@ -431,9 +432,9 @@ class CompetitionPlayerGrades extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-4" >
+                        <div className="col-sm pb-3" >
                             <div style={{
-                                width: "100%", display: "flex",
+                                width: "fit-content", display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center",
                             }} >
@@ -441,7 +442,7 @@ class CompetitionPlayerGrades extends Component {
                                 <Select
                                     style={{ minWidth: 160 }}
                                     name={"competition"}
-                                    className="year-select"
+                                    className="year-select reg-filter-select1 ml-2"
                                     onChange={competitionId => this.onCompetitionChange(competitionId)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
@@ -456,7 +457,7 @@ class CompetitionPlayerGrades extends Component {
                             </div>
                         </div>
                         <div className="row" >
-                            <div className="col-sm" >
+                            <div className="col-sm pb-3" >
                                 <div className="col-sm" style={{
                                     width: "100%", display: "flex",
                                     flexDirection: "row",
@@ -464,8 +465,8 @@ class CompetitionPlayerGrades extends Component {
                                 }} >
                                     <span className='year-select-heading'>{AppConstants.division}:</span>
                                     <Select
-                                        style={{ minWidth: 120,marginRight: 65 }}
-                                        className="year-select"
+                                        style={{ minWidth: 120, marginRight: 65 }}
+                                        className="year-select reg-filter-select1 ml-2"
                                         onChange={(divisionId) => this.onDivisionChange(divisionId)}
                                         value={JSON.parse(JSON.stringify(this.state.divisionId))}
                                     >
@@ -480,11 +481,11 @@ class CompetitionPlayerGrades extends Component {
                                     </Select>
                                 </div>
                             </div>
-                            <div className="col-sm" style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }} >
+                            <div className="col-sm-2 pb-3" style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }} >
                                 <span className='comp-grading-final-text'>{AppConstants.open}</span>
                             </div>
                         </div>
-                        <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end", alignSelf: "center" }} >
+                        <div className="col-sm pb-3" style={{ display: "flex", justifyContent: "flex-end", alignSelf: "center" }} >
                             <NavLink to="/competitionPlayerGradeCalculate" >
                                 <span className='input-heading-add-another pt-0'>{AppConstants.playerGradingToggle}</span>
                             </NavLink>
@@ -496,7 +497,7 @@ class CompetitionPlayerGrades extends Component {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         )
     }
 
@@ -670,13 +671,13 @@ class CompetitionPlayerGrades extends Component {
                                                                             </Tag>
                                                                         }
                                                                         <div className="col-sm d-flex">
-                                                                        {playerItem.playerHistory.map((item, index) => {
-                                                                            return (
-                                                                                <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
-                                                                                    {item.divisionGrade + '('+ item.ladderResult + ')'}
-                                                                                </Tag>
+                                                                            {playerItem.playerHistory.map((item, index) => {
+                                                                                return (
+                                                                                    <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
+                                                                                        {item.divisionGrade + '(' + item.ladderResult + ')'}
+                                                                                    </Tag>
 
-                                                                            )
+                                                                                )
                                                                             })}
                                                                         </div>
                                                                         <img className="comp-player-table-img" src={
@@ -876,12 +877,12 @@ class CompetitionPlayerGrades extends Component {
                                                         }
                                                         <div className="col-sm d-flex">
                                                             {playerItem.playerHistory.map((item, index) => {
-                                                            return (
-                                                                <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
-                                                                    {item.divisionGrade + '('+ item.ladderResult + ')'}
-                                                                </Tag>
+                                                                return (
+                                                                    <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
+                                                                        {item.divisionGrade + '(' + item.ladderResult + ')'}
+                                                                    </Tag>
 
-                                                            )
+                                                                )
                                                             })}
                                                         </div>
                                                         <img className="comp-player-table-img" src={

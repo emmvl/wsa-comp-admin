@@ -192,7 +192,6 @@ class CompetitionDashboard extends Component {
             }
         }
     }
-
     onChange = e => {
         this.setState({
             value: e.target.value
@@ -228,10 +227,10 @@ class CompetitionDashboard extends Component {
                         <div className="col-sm-8">
                             <div className="year-select-heading-view">
                                 <span className="year-select-heading">
-                                    {AppConstants.year}:
-                </span>
+                                    {AppConstants.year}:</span>
                                 <Select
-                                    className="year-select"
+                                    className="year-select reg-filter-select1 ml-2"
+                                    style={{ maxWidth: 80 }}
                                     onChange={yearId => this.onYearClick(yearId)}
                                     value={selectedYearId}
                                 >

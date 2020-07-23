@@ -390,8 +390,8 @@ class AddProduct extends Component {
     showDeleteConfirm = (optionId, index, subIndex) => {
         let this_ = this
         confirm({
-            title: AppConstants.deleteProduct,
-            content: AppConstants.deleteProductDescription,
+            title: AppConstants.deleteVariantOption,
+            content: AppConstants.deleteVariantOptionDescription,
             okText: 'Confirm',
             okType: 'danger',
             cancelText: 'Cancel',
@@ -521,7 +521,7 @@ class AddProduct extends Component {
                         }
                     )(
                         <InputWithHead
-                            required={"required-field "}
+                            required={"required-field pb-0"}
                             heading={AppConstants.title}
                             placeholder={AppConstants.enterTitle}
                             onChange={(e) =>
@@ -552,7 +552,9 @@ class AddProduct extends Component {
                         )
                     }
                     placeholder="Select"
-                    value={isNotNullOrEmptyString(productDetailData.type.typeName) ? productDetailData.type.id : []}
+                    value={productDetailData.type ?
+                        isNotNullOrEmptyString(productDetailData.type.typeName) ?
+                            productDetailData.type.id : [] : []}
                     disabled={this.state.allDisabled}
                 >
                     {isArrayNotEmpty(typesProductList) && typesProductList.map(
@@ -589,7 +591,7 @@ class AddProduct extends Component {
                     />
 
                 </Modal>
-                <InputWithHead required="pb-0" heading={AppConstants.affiliates} />
+                <InputWithHead required="required-field pb-0" heading={AppConstants.affiliates} />
                 {affiliateArray.map((item, index) => {
                     return (
                         <div key={"affiliateArray" + index} >
@@ -801,7 +803,7 @@ class AddProduct extends Component {
                             </div>
                         </div>
                         <div >
-                            <span className="input-heading" >{AppConstants.quantity}</span>
+                            <span className="input-heading required-field" >{AppConstants.quantity}</span>
                             <Form.Item>
                                 {getFieldDecorator(
                                     `quantity`, /////static index=1 for now
@@ -888,6 +890,7 @@ class AddProduct extends Component {
                                         }
                                     )(
                                         <InputWithHead
+                                            required={"required-field pb-0"}
                                             heading={AppConstants.variantName}
                                             placeholder={AppConstants.variantName}
                                             onChange={(e) => this.onVariantNameChange(e.target.value)}
@@ -899,8 +902,8 @@ class AddProduct extends Component {
                         </div>
 
                         {isArrayNotEmpty(varientOptionArray) && varientOptionArray.map((subItem, subIndex) => (
-                            <div className="prod-reg-inside-container-view">
-                                <div className="row" key={"varientOptionArray" + subIndex} >
+                            <div className="prod-reg-inside-container-view" key={"varientOptionArray" + subIndex}>
+                                <div className="row"  >
                                     <div className="col-sm">
                                         <InputWithHead
                                             heading={AppConstants.option}

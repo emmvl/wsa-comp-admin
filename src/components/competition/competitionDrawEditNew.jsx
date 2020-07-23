@@ -21,7 +21,7 @@ import {
 import {
     getYearAndCompetitionOwnAction,
 } from '../../store/actions/appAction';
-import { generateDrawAction } 
+import { generateDrawAction }
     from "../../store/actions/competitionModuleAction/competitionModuleAction";
 import { getDivisionAction, getCompetitionFixtureAction, clearFixtureData, updateCompetitionFixtures } from "../../store/actions/competitionModuleAction/competitionDrawsAction"
 import moment from 'moment'
@@ -86,9 +86,9 @@ class CompetitionDrawEdit extends Component {
         //     this.reGenerateDraw();
         // }
 
-        if(this.state.reGenerateLoad == true && this.props.competitionModuleState.drawGenerateLoad == false){
-            this.setState({reGenerateLoad: false})
-            if(!this.props.competitionModuleState.error && this.props.competitionModuleState.status == 1){
+        if (this.state.reGenerateLoad == true && this.props.competitionModuleState.drawGenerateLoad == false) {
+            this.setState({ reGenerateLoad: false })
+            if (!this.props.competitionModuleState.error && this.props.competitionModuleState.status == 1) {
                 localStorage.removeItem("draws_round");
                 history.push('/competitionDraws')
             }
@@ -131,13 +131,13 @@ class CompetitionDrawEdit extends Component {
 
     reGenerateDraw = () => {
         let payload = {
-          yearRefId: this.state.yearRefId,
-          competitionUniqueKey: this.state.firstTimeCompId,
-          organisationId: getOrganisationData().organisationUniqueKey
+            yearRefId: this.state.yearRefId,
+            competitionUniqueKey: this.state.firstTimeCompId,
+            organisationId: getOrganisationData().organisationUniqueKey
         }
         this.props.generateDrawAction(payload);
         this.setState({ reGenerateLoad: true });
-      }
+    }
 
     onChange = e => {
         this.setState({
@@ -281,7 +281,7 @@ class CompetitionDrawEdit extends Component {
                 round_Id, this.state.yearRefId, this.state.firstTimeCompId, this.state.competitionDivisionGradeId,
             )
 
-            this.setState({updateLoad: true});
+            this.setState({ updateLoad: true });
         }
     }
 
@@ -294,7 +294,8 @@ class CompetitionDrawEdit extends Component {
                         <span className="year-select-heading">{AppConstants.year}:</span>
                         <Select
                             name={'yearRefId'}
-                            className="year-select"
+                            className="year-select reg-filter-select1 ml-2"
+                            style={{ maxWidth: 160 }}
                             onChange={yearRefId => this.onYearChange(yearRefId)}
                             value={this.state.yearRefId}
                         >
@@ -322,9 +323,10 @@ class CompetitionDrawEdit extends Component {
                             {AppConstants.competition}:
         </span>
                         <Select
-                            style={{ minWidth: 160 }}
+
                             name={'competition'}
-                            className="year-select"
+                            className="year-select reg-filter-select1 ml-2"
+                            style={{ maxWidth: 250 }}
                             onChange={competitionId =>
                                 this.onCompetitionChange(competitionId)
                             }
@@ -350,7 +352,7 @@ class CompetitionDrawEdit extends Component {
     ////////form content view
     contentView = () => {
         return (
-            <div className="comp-draw-content-view mt-0">
+            <div className="comp-draw-content-view mt-5">
                 <div className="row comp-draw-list-top-head">
                     <div className="col-sm-4">
                         <span className='form-heading'>{AppConstants.fixtures}</span>
