@@ -493,10 +493,10 @@ class CompetitionVenueAndTimesEdit extends Component {
                               stateRefId,
                           });
 
-                          this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId')
-                          this.props.updateVenuAndTimeDataAction(address.addressOne, 'Venue', 'street1')
-                          this.props.updateVenuAndTimeDataAction(address.suburb, 'Venue', 'suburb')
-                          this.props.updateVenuAndTimeDataAction(address.postcode, 'Venue', 'postalCode')
+                          this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId');
+                          this.props.updateVenuAndTimeDataAction(address.addressOne, 'Venue', 'street1');
+                          this.props.updateVenuAndTimeDataAction(address.suburb, 'Venue', 'suburb');
+                          this.props.updateVenuAndTimeDataAction(address.postcode, 'Venue', 'postalCode');
                       }}
                     />
                 </Form.Item>
