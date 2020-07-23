@@ -486,7 +486,7 @@ class CompetitionCourtAndTimesAssign extends Component {
             <div className="comp-venue-courts-dropdown-view mt-0" >
                 <div className="fluid-width" >
                     <div className="row" >
-                        <div className="col-sm-3" >
+                        <div className="col-sm-3 pb-3" >
                             <div
                                 style={{
                                     width: "fit-content",
@@ -501,7 +501,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 <Select
                                     name={"yearRefId"}
                                     className="year-select reg-filter-select1 ml-2"
-                                    style={{ minWidth: 160 }}
+                                    style={{ minWidth: 80 }}
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
@@ -515,15 +515,15 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-4" >
+                        <div className="col-sm-4 pb-3" >
                             <div style={{
-                                width: "100%", display: "flex",
+                                width: "fit-content", display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center", marginRight: 50,
                             }} >
                                 <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
-                                    style={{ minWidth: 200 }}
+                                    style={{ minWidth: 250 }}
                                     name={"competition"}
                                     className="year-select reg-filter-select1 ml-2"
                                     onChange={competitionId => this.onCompetitionChange(competitionId)

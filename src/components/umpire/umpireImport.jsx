@@ -13,6 +13,7 @@ import { getUmpireCompetiton } from '../../util/sessionStorage'
 import { message } from "antd";
 import ValidationConstants from '../../themes/validationConstant'
 import { exportFilesAction } from "../../store/actions/appAction"
+import { NavLink } from 'react-router-dom';
 
 
 const { Content, Header, Footer } = Layout;
@@ -147,6 +148,15 @@ class UmpireImport extends Component {
                                 {AppConstants.downloadTemplate}
                             </Button>
                         </div>}
+
+                        {this.state.screenName == "umpire" && <div className="reg-add-save-button"  >
+                            <NavLink to="/templates/wsa-livescore-import-umpire.csv" target="_blank" download>
+                                <Button className="primary-add-comp-form" type="primary">
+                                    {AppConstants.downloadTemplate}
+                                </Button>
+                            </NavLink>
+                        </div>}
+
                     </div>
                 </div>
             </div>

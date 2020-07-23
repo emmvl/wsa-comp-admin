@@ -228,8 +228,8 @@ class UserAffiliatesList extends Component {
                             <div style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center" }} >
                                 <span className='year-select-heading' style={{width:120}}>{AppConstants.affiliatedTo}</span>
                                 <Select
-                                    style={{ minWidth: 100 }}
-                                    className="year-select"
+                                    className="year-select reg-filter-select1 ml-2"
+                                    style={{ minWidth: 160 }}
                                     onChange={(e) => this.onChangeAffiliateTo(e)}
                                     value={this.state.affiliatedToOrgId}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
@@ -243,8 +243,8 @@ class UserAffiliatesList extends Component {
                             <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }} >
                                 <span className='year-select-heading' style={{width:240}}>{AppConstants.organisationType}</span>
                                 <Select
-                                    style={{ minWidth: 100 }}
-                                    className="year-select"
+                                    className="year-select reg-filter-select1 ml-2"
+                                    style={{ minWidth: 160 }}
                                     onChange={(e) => this.onChangeOrganisationTypes(e)}
                                     value={this.state.organisationTypeRefId}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
@@ -259,8 +259,8 @@ class UserAffiliatesList extends Component {
                             <div style={{  display: "flex", flexDirection: "row", alignItems: "center" }} >
                                 <span className='year-select-heading' style={{width:120}}>{AppConstants.status}</span>
                                 <Select
-                                    className="year-select"
-                                    style={{ minWidth: 100 }}
+                                    className="year-select reg-filter-select1 ml-2"
+                                    style={{ minWidth: 160 }}
                                     onChange={(e) => this.onChangeStatusRefId(e)}
                                     value={this.state.statusRefId}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>

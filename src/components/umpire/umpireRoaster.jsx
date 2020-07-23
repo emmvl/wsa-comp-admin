@@ -410,7 +410,7 @@ class UmpireRoaster extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className="mt-5" style={{ display: "flex", width: 'fit-content' }} >
+                    {/* <div className="mt-5" style={{ display: "flex", width: 'fit-content' }} >
                         <div style={{
                             width: "100%", display: "flex",
                             flexDirection: "row",
@@ -451,11 +451,66 @@ class UmpireRoaster extends Component {
                             </Select>
                         </div>
 
-                    </div>
+                    </div> */}
                 </div>
             </div >
         );
     };
+
+    ///dropdown view containing all the dropdown of header
+    dropdownView = () => {
+        let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
+
+        return (
+            <div className="comp-player-grades-header-drop-down-view mt-1">
+                <div className="fluid-width" >
+                    <div className="row reg-filter-row" >
+
+                        {/* Comp List */}
+
+                        <div className="reg-col" >
+                            <div className="reg-filter-col-cont">
+                                <span className='year-select-heading'>{AppConstants.competition}:</span>
+                                <Select
+                                    className="year-select reg-filter-select1"
+                                    style={{ minWidth: 200 }}
+                                    onChange={(comp) => this.onChangeComp({ comp })}
+                                    value={this.state.selectedComp}
+                                >
+                                    {
+                                        competition.map((item) => {
+                                            return <Option key={"competition" + item.id} value={item.id}>{item.longName}</Option>
+                                        })
+                                    }
+
+                                </Select>
+                            </div>
+                        </div>
+
+                        {/* Venue List */}
+                        <div className="reg-col1 ml-0" >
+                            <div className="reg-filter-col-cont ml-3" >
+                                <span className='year-select-heading'>{AppConstants.status}:</span>
+                                <Select
+                                    className="year-select reg-filter-select1"
+                                    style={{ minWidth: 160 }}
+                                    onChange={(status) => this.onChangeStatus(status)}
+                                    value={this.state.status}
+                                >
+                                    <Option value={'All'}>{'All'}</Option>
+                                    <Option value={'YES'}>{'Accepted'}</Option>
+                                    <Option value={'NO'}>{'Declined'}</Option>
+                                    <Option value={'NONE'}>{'No Response'}</Option>
+                                </Select>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
 
 
     render() {
@@ -466,6 +521,7 @@ class UmpireRoaster extends Component {
                 <Layout>
                     {this.headerView()}
                     <Content>
+                        {this.dropdownView()}
                         {this.contentView()}
                     </Content>
                 </Layout>

@@ -31,25 +31,27 @@ class RegistrationWizardModel extends React.Component {
                     maskClosable={true}
                 >
                     <div className="col-sm pl-0 pb-2">
-                        {/* < span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className={`comment-heading`}>{AppConstants.competition}{" "}</span> */}
-                        <span className="year-select-heading">
-                            {AppConstants.competition}:
+
+                        <div className="reg-filter-col-cont"  >
+                            <span className="year-select-heading">
+                                {AppConstants.competition}:
                                 </span>
-                        <Select
-                            className="year-select"
-                            style={{ minWidth: 160, width: "70%" }}
-                            onChange={competitionChange}
-                            value={competitionId}
-                        >
-                            {wizardCompetition.length > 0 && wizardCompetition.map((item, index) => {
-                                return (
-                                    < Option key={"Comp" + index} value={item.competitionId}> {item.competitionName}</Option>
-                                );
-                            })}
-                        </Select>
+                            <Select
+                                className="year-select reg-filter-select1 ml-2"
+                                style={{ width: '70%' }}
+                                onChange={competitionChange}
+                                value={competitionId}
+                            >
+                                {wizardCompetition.length > 0 && wizardCompetition.map((item, index) => {
+                                    return (
+                                        < Option key={"Comp" + index} value={item.competitionId}> {item.competitionName}</Option>
+                                    );
+                                })}
+                            </Select>
+                        </div>
                     </div>
 
-                    <div className="wizard_div" style={{ minHeight: stripeConnected ? 100 : 140 }}>
+                    <div className="wizard_div" style={{ minHeight: stripeConnected ? 100 : 140, marginTop: 20 }}>
                         <div className="row" >
                             <div className="col-sm  pl-0 pb-2">
                                 <div className="col-sm-6 " style={{ display: "flex", justifyContent: 'flex-start' }}>

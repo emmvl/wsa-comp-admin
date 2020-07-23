@@ -1460,7 +1460,24 @@ const AppConstants = {
   termsAndCond: "T&Cs",
   roundUp: "Round Up",
   whatDoYouWantToPublish: "What do you want to Publish?",
-  part: 'Part'
+  part: 'Part',
+  home_page_heading: "home_page_heading",
+  homeTab: "home_tab",
+  maintain_tab: "maintain_tab",
+  venue_courtId: "venue&court",
+  home_icon: "home_icon",
+  competition_icon: "competition_icon",
+  competitions_label: "competitions_label",
+  registration_icon: "registration_icon",
+  registrations_label: "registrations_label",
+  user_profile_icon: "user_profile_icon",
+  log_out: "log_out",
+  acct_settings_label: "acct_settings_label",
+  help_support_label: "help&support_label",
+  action_box_table: "action_box_table",
+
+
+
 };
 
 export default AppConstants;

@@ -570,7 +570,7 @@ class CompetitionDraws extends Component {
   dropdownView = () => {
     return (
       <div className="row">
-        <div className="col-sm-3">
+        <div className="col-sm-2 pb-3">
           <div
             style={{
               width: '100%',
@@ -584,6 +584,7 @@ class CompetitionDraws extends Component {
             <Select
               name={'yearRefId'}
               className="year-select reg-filter-select1 ml-2"
+              style={{ maxWidth: 80 }}
               onChange={(yearRefId) => this.onYearChange(yearRefId)}
               value={this.state.yearRefId}
             >
@@ -597,10 +598,10 @@ class CompetitionDraws extends Component {
             </Select>
           </div>
         </div>
-        <div className="col-sm-3">
+        <div className="col-sm pb-3">
           <div
             style={{
-              width: '100%',
+              width: "fit-content",
               display: 'flex',
               flexDirection: 'row',
               alignItems: 'center',
@@ -611,7 +612,7 @@ class CompetitionDraws extends Component {
               {AppConstants.competition}:
             </span>
             <Select
-              style={{ minWidth: 160 }}
+              // style={{ minWidth: 160 }}
               name={'competition'}
               className="year-select reg-filter-select1 ml-2"
               onChange={(competitionId) =>
@@ -632,7 +633,7 @@ class CompetitionDraws extends Component {
             </Select>
           </div>
         </div>
-        <div className="col-sm-3">
+        <div className="col-sm pb-3">
           <div
             style={{
               width: '100%',
@@ -672,7 +673,7 @@ class CompetitionDraws extends Component {
           </div>
 
         </div>
-        <div className="col-sm-3">
+        <div className="col-sm pb-3">
           <div
             style={{
               width: '100%',

@@ -173,7 +173,7 @@ class RegistrationFormList extends Component {
                                 <Select
                                     name={"yearRefId"}
                                     className="year-select reg-filter-select1 ml-2"
-                                    style={{ minWidth: 160 }}
+                                    style={{ maxWidth: 80 }}
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >

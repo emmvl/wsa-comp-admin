@@ -140,10 +140,11 @@ class PlayWithFriend extends Component {
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
                                     name={"yearRefId"}
-                                    className="year-select"
+                                    className="year-select reg-filter-select1 ml-2"
+                                    style={{ maxWidth: 80 }}
                                     onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
                                     value={this.state.yearRefId}>
-                                        <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {this.props.appState.yearList.map(item => {
                                         return (
                                             <Option key={"yearRefId" + item.id} value={item.id}>

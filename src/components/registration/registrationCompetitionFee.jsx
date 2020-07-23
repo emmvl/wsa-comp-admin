@@ -3144,7 +3144,7 @@ class RegistrationCompetitionFee extends Component {
                   )(
                     <Select
                       className="year-select reg-filter-select1 ml-2"
-                      style={{ minWidth: 160 }}>
+                      style={{ maxWidth: 80 }}>
                       {this.props.appState.yearList.map((item) => {
                         return (
                           <Option key={'yearRefId' + item.id} value={item.id}>

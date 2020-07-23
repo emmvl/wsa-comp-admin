@@ -198,7 +198,7 @@ class CompetitionQuickCompetition extends Component {
                 </div>
             </div>
             <div className="row pb-3" >
-                <div className="col-sm-3">
+                <div className="col-sm-3 pb-3">
                     <div
                         style={{
                             width: '100%',
@@ -212,7 +212,7 @@ class CompetitionQuickCompetition extends Component {
                         <Select
                             name={'yearRefId'}
                             className="year-select reg-filter-select1 ml-2"
-                            style={{ maxWidth: 160 }}
+                            style={{ maxWidth: 80 }}
                             onChange={(yearRefId) => this.onYearChange(yearRefId)}
                             value={this.state.yearRefId}
                         >
@@ -226,7 +226,7 @@ class CompetitionQuickCompetition extends Component {
                         </Select>
                     </div>
                 </div>
-                <div className="col-sm-3">
+                <div className="col-sm-3 pb-3">
                     <div
                         style={{
                             width: "fit-content",
@@ -239,7 +239,7 @@ class CompetitionQuickCompetition extends Component {
                         <span className="year-select-heading">{AppConstants.competition}:</span>
                         <Select
                             name={'competition'}
-                            style={{ minWidth: 200 }}
+                            // style={{ minWidth: 200 }}
                             className="year-select reg-filter-select1 ml-2"
                             onChange={competitionId =>
                                 this.onCompetitionChange(competitionId)
