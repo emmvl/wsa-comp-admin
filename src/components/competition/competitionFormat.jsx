@@ -500,7 +500,7 @@ class CompetitionFormat extends Component {
             <div className="comp-venue-courts-dropdown-view mt-0" >
                 <div className="fluid-width" >
                     <div className="row" >
-                        <div className="col-sm-3" >
+                        <div className="col-sm-3 pb-3" >
                             <div style={{
                                 width: "fit-content", display: "flex", flexDirection: "row",
                                 alignItems: "center"
@@ -509,7 +509,7 @@ class CompetitionFormat extends Component {
                                 <Select
                                     name={"yearRefId"}
                                     className="year-select reg-filter-select1 ml-2"
-                                    style={{ minWidth: 160 }}
+                                    style={{ maxWidth: 80 }}
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
@@ -523,7 +523,7 @@ class CompetitionFormat extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-4" >
+                        <div className="col-sm-4 pb-3" >
                             <div style={{
                                 width: "100%", display: "flex",
                                 flexDirection: "row",
@@ -531,7 +531,7 @@ class CompetitionFormat extends Component {
                             }} >
                                 <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
-                                    style={{ minWidth: 160 }}
+                                    // style={{ minWidth: 160 }}
                                     name={"competition"}
                                     className="year-select reg-filter-select1 ml-2"
                                     onChange={competitionId => this.onCompetitionChange(competitionId)

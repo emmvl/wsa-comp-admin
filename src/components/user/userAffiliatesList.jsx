@@ -224,12 +224,12 @@ class UserAffiliatesList extends Component {
             <div className="comp-player-grades-header-drop-down-view mt-1">
                 <div className="fluid-width" >
                     <div className="row" >
-                        <div className="col-sm-3" >
+                        <div className="col-sm pb-3" >
                             <div style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center" }} >
                                 <span className='year-select-heading'>{AppConstants.affiliatedTo}</span>
                                 <Select
-                                    style={{ minWidth: 100 }}
-                                    className="year-select"
+                                    className="year-select reg-filter-select1 ml-2"
+                                    style={{ minWidth: 160 }}
                                     onChange={(e) => this.onChangeAffiliateTo(e)}
                                     value={this.state.affiliatedToOrgId}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
@@ -239,12 +239,12 @@ class UserAffiliatesList extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-3" >
+                        <div className="col-sm pb-3" >
                             <div style={{ width: "fit-content", display: "flex", flexDirection: "row", alignItems: "center" }} >
                                 <span className='year-select-heading'>{AppConstants.organisationType}</span>
                                 <Select
-                                    style={{ minWidth: 100 }}
-                                    className="year-select"
+                                    className="year-select reg-filter-select1 ml-2"
+                                    style={{ minWidth: 160 }}
                                     onChange={(e) => this.onChangeOrganisationTypes(e)}
                                     value={this.state.organisationTypeRefId}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
@@ -255,12 +255,12 @@ class UserAffiliatesList extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-2" >
+                        <div className="col-sm pb-3" >
                             <div style={{ width: "fit-content", display: "flex", flexDirection: "row", alignItems: "center" }} >
                                 <span className='year-select-heading'>{AppConstants.status}</span>
                                 <Select
-                                    className="year-select"
-                                    style={{ minWidth: 100 }}
+                                    className="year-select reg-filter-select1 ml-2"
+                                    style={{ minWidth: 160 }}
                                     onChange={(e) => this.onChangeStatusRefId(e)}
                                     value={this.state.statusRefId}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
@@ -270,7 +270,7 @@ class UserAffiliatesList extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-2 add-affiliate-btn">
+                        <div className="col-sm add-affiliate-btn">
                             {
                                 affiliateToData.isEligibleToAddAffiliate ?
                                     <div className="d-flex flex-row-reverse">

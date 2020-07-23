@@ -283,14 +283,13 @@ class RegistrationMainDashboard extends Component {
                             </span>
                         </div>
                         <div className="col-sm-2">
-                            <div className="year-select-heading-view">
+                            <div className="year-select-heading-view pb-3">
                                 <div className="reg-filter-col-cont"  >
                                     <span className="year-select-heading">
-                                        {AppConstants.year}:
-                </span>
+                                        {AppConstants.year}:</span>
                                     <Select
                                         className="year-select reg-filter-select1 ml-2"
-                                        style={{ minWidth: 160 }}
+                                        style={{ maxWidth: 80 }}
                                         onChange={yearId => this.onYearClick(yearId)}
                                         value={this.state.year}
                                     >
@@ -302,7 +301,8 @@ class RegistrationMainDashboard extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-sm" style={{ display: "flex", alignContent: "center", justifyContent: 'flex-end' }} >
+                        <div className="col-sm-2"></div>
+                        <div className="col-sm pb-3" style={{ display: "flex", alignContent: "center", justifyContent: 'flex-end' }} >
                             <Button
                                 className="open-reg-button"
                                 type="primary"
