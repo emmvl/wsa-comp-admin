@@ -1331,7 +1331,7 @@ class CompetitionDraws extends Component {
           modelRadio={this.onChangeRadio}
           modalPublish={(e)=>this.publishDraw()}
           modalDivisions = {(e) => this.onSelectDivisionsValues(e)}
-          modalRounds={(e) => this.selectedRounds(e)}
+          modalRounds={(e) => this.onSelectRoundValues(e)}
           modalRadioValue={this.state.value}
           modalIsShowPart={this.state.publishPartModel.isShowPart}
           modalIsShowDivision={this.state.publishPartModel.publishPart.isShowDivision}
