@@ -1458,8 +1458,9 @@ const AppConstants = {
   settingsUpdatedMessage: "Settings updated successfully.",
   charity: "Charity",
   termsAndCond: "T&Cs",
-  roundUp: "Round Up"
-
+  roundUp: "Round Up",
+  whatDoYouWantToPublish: "What do you want to Publish?",
+  part: 'Part'
 };
 
 export default AppConstants;

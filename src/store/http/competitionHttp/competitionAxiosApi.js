@@ -414,9 +414,9 @@ let CompetitionAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    publishDrawsApi(competitionId) {
-        var url = `/api/draws/publish?competitionUniquekey=${competitionId}`
-        return Method.dataPost(url, token);
+    publishDrawsApi(action) {
+        var url = `/api/draws/publish?competitionUniquekey=${action.competitionId}`
+        return Method.dataPost(url, token, action.payload);
     },
 
     async deleteTeam(payload) {

@@ -88,9 +88,9 @@
 }
 
 .live-score-edit {
-    background-color: var(--app-e0e1e3);
-    border-color: var(--app-e0e1e3);
-    color: var(--app-4c4c6d);
+    background-color: var(--app-e0e1e3) !important;
+    border-color: var(--app-e0e1e3) !important;
+    color: var(--app-4c4c6d) !important;
     height: 50px;
     font-weight: 500;
     font-family: inter-medium;
@@ -396,9 +396,9 @@
 
 @media(max-width:767px) {
     .live-score-edit {
-        background-color: var(--app-e0e1e3);
-        border-color: var(--app-e0e1e3);
-        color: var(--app-4c4c6d);
+        background-color: var(--app-e0e1e3) !important;
+        border-color: var(--app-e0e1e3) !important;
+        color: var(--app-4c4c6d) !important;
         height: 50px;
         font-weight: 500;
         font-family: inter-medium;

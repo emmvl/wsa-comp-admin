@@ -18,6 +18,7 @@ import AppConstants from '../../themes/appConstants';
 import { connect } from 'react-redux';
 import AppImages from '../../themes/appImages';
 import { bindActionCreators } from 'redux';
+import DrawsPublishModel from '../../customComponents/drawsPublishModel'																		
 import {
   getCompetitionDrawsAction,
   getDrawsRoundsAction,
@@ -74,7 +75,18 @@ class CompetitionDraws extends Component {
       competitionDivisionGradeId: '',
       organisationId: getOrganisationData().organisationUniqueKey,
       updateLoad: false,
-      organisation_Id: null
+      organisation_Id: null,
+      visible: false,
+	    value: 1,
+      publishPartModel: {
+        isShowPart: false,
+        publishPart: {
+          isShowDivision: false,
+          isShowRound: false
+        }
+      },
+      selectedDivisions: null,
+      selectedRounds: null
     };
   }
 
@@ -382,7 +394,8 @@ class CompetitionDraws extends Component {
       message.config({ duration: 0.9, maxCount: 1 });
       message.error(ValidationConstants.pleaseSelectVenue);
     } else {
-      this.props.publishDraws(this.state.firstTimeCompId);
+	  this.setState({visible:true})
+      //this.props.publishDraws(this.state.firstTimeCompId);
     }
   };
 
@@ -748,6 +761,85 @@ class CompetitionDraws extends Component {
   //unlockDraws
   unlockDraws(id, round_Id, venueCourtId) {
     this.props.unlockDrawsAction(id, round_Id, venueCourtId);
+  }
+
+  
+  onChangeRadio = e => {
+    this.setState({
+      value: e.target.value,
+    });
+    if(e.target.value==2)
+    {
+      this.state.publishPartModel.isShowPart = true;
+      this.setState({
+        publishPartModel: this.state.publishPartModel
+      })
+    }
+    else
+    {
+      this.state.publishPartModel.isShowPart = false;
+    }
+  };
+  
+  handleCancel = e => {
+    this.setState({
+      visible: false,
+    });
+    this.state.publishPartModel.publishPart.isShowRound = false;
+    this.state.publishPartModel.publishPart.isShowDivision = false;
+    this.state.publishPartModel.isShowPart = false;
+    this.state.value = 1;
+  };
+  
+  checkDivision = e =>{  
+    if(e.target.checked)
+    {
+      this.state.publishPartModel.publishPart.isShowDivision = true;
+    }
+    else
+    {
+      this.state.publishPartModel.publishPart.isShowDivision = false;
+    }
+    this.setState({
+      publishPart: this.state.publishPartModel.publishPart
+    })
+  }
+  
+  checkRound = e =>{
+    if(e.target.checked)
+    {
+      this.state.publishPartModel.publishPart.isShowRound = true;
+    }
+    else{
+      this.state.publishPartModel.publishPart.isShowRound = false;
+    }
+    this.setState({
+      publishPart: this.state.publishPartModel.publishPart
+    })
+  }
+
+  onSelectDivisionsValues = (e) => {
+    console.log("e" + e);
+
+    this.setState({selectedDivisions: e})
+  }
+
+  onSelectRoundValues = (e) => {
+    console.log("e" + e);
+    this.setState({selectedRounds: e})
+  }
+
+  publishDraw = () =>{
+    let payload = {
+      isPartial: this.state.publishPartModel.isShowPart,
+      divisions: [],
+      rounds: []
+    }
+    if(this.state.publishPartModel.isShowPart == true){
+      payload.divisions = this.state.selectedDivisions;
+      payload.rounds = this.state.selectedRounds
+    }
+    this.props.publishDraws(this.state.firstTimeCompId, '', payload);
   }
 
   ////// Publish draws
@@ -1180,6 +1272,7 @@ class CompetitionDraws extends Component {
       </div>
     );
   };
+
   //////footer view containing all the buttons like submit and cancel
   footerView = () => {
     let publishStatus = this.props.drawsState.publishStatus;
@@ -1227,6 +1320,22 @@ class CompetitionDraws extends Component {
           </div>
           {/* </div> */}
         </div>
+		<DrawsPublishModel 
+          publishVisible={this.state.visible} 
+          divisionGradeNameList={this.props.drawsState.divisionGradeNameList}
+          getDrawsRoundsData={this.props.drawsState.getDrawsRoundsData}
+          modelCheckDivision={e => this.checkDivision(e)}
+          modelCheckRound={e => this.checkRound(e)}
+          modelCancel={this.handleCancel}
+          modelRadio={this.onChangeRadio}
+          modalPublish={(e)=>this.publishDraw()}
+          modalDivisions = {(e) => this.onSelectDivisionsValues(e)}
+          modalRounds={(e) => this.selectedRounds(e)}
+          modalRadioValue={this.state.value}
+          modalIsShowPart={this.state.publishPartModel.isShowPart}
+          modalIsShowDivision={this.state.publishPartModel.publishPart.isShowDivision}
+          modalIsShowRound={this.state.publishPartModel.publishPart.isShowRound}
+        ></DrawsPublishModel>			 
       </div>
     );
   };
