@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import usePlacesAutocomplete, {
   getGeocode,
@@ -31,6 +31,11 @@ const mapAddressInfo = (addressComponents) => {
 const PlacesAutocomplete = ({
   defaultValue, heading, error, required, onSetData, ...otherProps
 }) => {
+  const [defaultAddress, setDefaultAddress] = useState(defaultValue);
+  useEffect(() => {
+    setDefaultAddress(defaultValue);
+  }, [defaultValue]);
+
   const {
     ready,
     value,
@@ -50,6 +55,7 @@ const PlacesAutocomplete = ({
 
   const handleInput = (e) => {
     setValue(e.target.value);
+    setDefaultAddress(null);
   };
 
   const handleSelect = ({description}) => () => {
@@ -102,7 +108,8 @@ const PlacesAutocomplete = ({
       )}
       <Input
         className="input"
-        value={value || defaultValue}
+        defaultValue="EEEEEEEEEEEEEEEEEEEEEEEEEE"
+        value={value || defaultAddress}
         onChange={handleInput}
         disabled={!ready}
         placeholder={AppConstants.pleaseInputAddress}

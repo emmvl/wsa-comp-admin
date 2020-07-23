@@ -415,7 +415,7 @@ class CompetitionVenueAndTimesEdit extends Component {
           ? stateList.find((state) => state.id === venuData.stateRefId).name
           : null;
 
-        const defaultVenueAddress = `${
+        let defaultVenueAddress = `${
             venuData.street1 ? `${venuData.street1},` : ''
         } ${
             venuData.suburb ? `${venuData.suburb},` : ''
