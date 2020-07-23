@@ -841,6 +841,7 @@ class CompetitionDraws extends Component {
       payload.rounds = this.state.selectedRounds
     }
     this.props.publishDraws(this.state.firstTimeCompId, '', payload);
+    this.setState({visible:false})
   }
 
   ////// Publish draws
