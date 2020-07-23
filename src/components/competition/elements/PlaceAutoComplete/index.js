@@ -29,7 +29,7 @@ const mapAddressInfo = (addressComponents) => {
 };
 
 const PlacesAutocomplete = ({
-  heading, error, required, onSetData, ...otherProps
+  defaultValue, heading, error, required, onSetData, ...otherProps
 }) => {
   const {
     ready,
@@ -102,7 +102,7 @@ const PlacesAutocomplete = ({
       )}
       <Input
         className="input"
-        value={value}
+        value={value || defaultValue}
         onChange={handleInput}
         disabled={!ready}
         placeholder={AppConstants.pleaseInputAddress}
@@ -131,14 +131,15 @@ const PlacesAutocomplete = ({
 
 PlacesAutocomplete.propTypes = {
   heading: PropTypes.string,
+  defaultValue: PropTypes.string,
   required: PropTypes.bool,
   error: PropTypes.string,
   onSetData: PropTypes.func,
 };
 
 PlacesAutocomplete.defaultProps = {
-  heading: () => {
-  },
+  heading: '',
+  defaultValue: null,
   required: false,
   error: '',
   onSetData: () => {

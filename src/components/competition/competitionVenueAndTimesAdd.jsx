@@ -482,12 +482,10 @@ class CompetitionVenueAndTimesAdd extends Component {
                                 venueAddress: address,
                             });
 
-                            const selectedState = address.state
+                            const stateRefId = stateList.length > 0 && address.state
                               ? stateList.find((state) => state.name === address.state).id
                               : null;
-                            const stateRefId = stateList.length > 0
-                              ? selectedState
-                              : null;
+
                             delete address.state;
 
                             this.props.form.setFieldsValue({
@@ -495,10 +493,10 @@ class CompetitionVenueAndTimesAdd extends Component {
                                 stateRefId,
                             });
 
-                            this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId')
-                            this.props.updateVenuAndTimeDataAction(address.addressOne, 'Venue', 'street1')
-                            this.props.updateVenuAndTimeDataAction(address.suburb, 'Venue', 'suburb')
-                            this.props.updateVenuAndTimeDataAction(address.postalCode, 'Venue', 'postalCode')
+                            this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId');
+                            this.props.updateVenuAndTimeDataAction(address.addressOne, 'Venue', 'street1');
+                            this.props.updateVenuAndTimeDataAction(address.suburb, 'Venue', 'suburb');
+                            this.props.updateVenuAndTimeDataAction(address.postcode, 'Venue', 'postalCode');
                         }}
                     />
                 </Form.Item>
@@ -508,7 +506,6 @@ class CompetitionVenueAndTimesAdd extends Component {
                             required={"required-field pt-3 pb-0"}
                             heading={AppConstants.addressOne}
                             placeholder={AppConstants.addressOne}
-                            onChange={(street1) => this.props.updateVenuAndTimeDataAction(street1.target.value, 'Venue', 'street1')}
                             setFieldsValue={venuData.street1}
                             readOnly
                         />
@@ -530,7 +527,6 @@ class CompetitionVenueAndTimesAdd extends Component {
                             required={"required-field pt-3 pb-0"}
                             heading={AppConstants.suburb}
                             placeholder={AppConstants.suburb}
-                            onChange={(suburb) => this.props.updateVenuAndTimeDataAction(suburb.target.value, 'Venue', 'suburb')}
                             setFieldsValue={venuData.suburb}
                             readOnly
                         />
@@ -547,7 +543,6 @@ class CompetitionVenueAndTimesAdd extends Component {
                         <Select
                             style={{ width: "100%" }}
                             placeholder={AppConstants.select}
-                            onChange={(stateRefId) => this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId')}
                             setFieldsValue={venuData.stateRefId}
                             disabled
                         >
@@ -565,7 +560,6 @@ class CompetitionVenueAndTimesAdd extends Component {
                             required={"required-field"}
                             heading={AppConstants.postcode}
                             placeholder={AppConstants.postcode}
-                            onChange={(postalCode) => this.props.updateVenuAndTimeDataAction(postalCode.target.value, 'Venue', 'postalCode')}
                             setFieldsValue={venuData.postalCode}
                             maxLength={4}
                             readOnly
