@@ -440,11 +440,12 @@ class CompetitionPartProposedTeamGrading extends Component {
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width" >
                     <div className="row" >
-                        <div className="col-sm-2" >
-                            <div className="com-year-select-heading-view" >
+                        <div className="col-sm-3" >
+                            <div className="com-year-select-heading-view pb-3" >
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
                                     name={"yearRefId"}
+                                    style={{ maxWidth: 80 }}
                                     className="year-select reg-filter-select1 ml-2"
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
@@ -459,7 +460,7 @@ class CompetitionPartProposedTeamGrading extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm" >
+                        <div className="col-sm pb-3" >
                             <div style={{
                                 width: "100%", display: "flex",
                                 flexDirection: "row",
@@ -483,7 +484,7 @@ class CompetitionPartProposedTeamGrading extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm" >
+                        <div className="col-sm pb-3" >
                             <div className="row" >
                                 <div className="col-sm" >
                                     <div className="com-year-select-heading-view" >
@@ -505,7 +506,7 @@ class CompetitionPartProposedTeamGrading extends Component {
                                         </Select>
                                     </div>
                                 </div>
-                                <div className="col-sm" style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }} >
+                                <div className="col-sm pb-3" style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }} >
                                     <span className='comp-grading-final-text ml-1' >{AppConstants.open}</span>
                                 </div>
                             </div>

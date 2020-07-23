@@ -276,6 +276,35 @@
   border: 1px solid var(--app-d9d9d9);
 }
 
+.modal-publish-popup
+{
+  background-color: var(--app-f7fafc);
+  border: 1px solid var(--app-d9d9d9);
+  padding: 25px 15px;
+  border-radius: 12px;
+}
+
+.ant-btn-primary {
+  color: var(--app-white) !important;
+  background-color: var(--app-color) !important;
+  border-color: var(--app-color) !important;
+}
+
+.checkbox-model-popup
+{
+  font-weight: 500;
+  margin-left: 35px !important;
+  margin-top: 15px;
+}
+.radio-model-popup
+{
+    display:grid;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+.radio-model-popup > label > span{
+  margin-left: 5px;
+}
 .com-year-select-heading-view {
   width: 100%;
   display: flex;

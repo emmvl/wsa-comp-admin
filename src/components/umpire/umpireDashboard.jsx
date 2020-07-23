@@ -953,13 +953,13 @@ class UmpireDashboard extends Component {
             <div className="comp-dash-table-view mt-2">
                 <div>
                     <div className="row">
-                        <div className="col-sm-6" >
+                        <div className="col-sm" >
                             <div className="registration-count">
                                 <div className="reg-payment-paid-reg-text">No. of umpires</div>
                                 <div className="reg-payment-price-text">{0}</div>
                             </div>
                         </div>
-                        <div className="col-sm-6" >
+                        <div className="col-sm" >
                             <div className="registration-count">
                                 <div className="reg-payment-paid-reg-text">No. of registered umpires</div>
                                 <div className="reg-payment-price-text">{0}</div>

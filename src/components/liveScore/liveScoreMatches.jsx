@@ -573,7 +573,7 @@ class LiveScoreMatchesList extends Component {
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="row">
                     <div className="col-sm"  >
-                        <div className="reg-filter-col-cont"  >
+                        <div className="reg-filter-col-cont pb-3"  >
                             <span className='year-select-heading'>{AppConstants.division}:</span>
                             <Select
                                 className="year-select reg-filter-select1 ml-2"
@@ -591,7 +591,7 @@ class LiveScoreMatchesList extends Component {
                         </div>
                     </div>
                     <div className="col-sm" >
-                        <div className="reg-filter-col-cont"  >
+                        <div className="reg-filter-col-cont pb-3"  >
                             <span className='year-select-heading'>{AppConstants.round}:</span>
                             <Select
                                 className="year-select reg-filter-select1 ml-2"
@@ -610,7 +610,7 @@ class LiveScoreMatchesList extends Component {
                     </div>
 
                     <div className="col-sm" style={{ display: "flex", justifyContent: 'flex-end', alignItems: "center" }} >
-                        <div className="comp-product-search-inp-width" >
+                        <div className="comp-product-search-inp-width pb-3" >
                             <Input className="product-reg-search-input"
                                 onChange={(e) => this.onChangeSearchText(e)}
                                 placeholder="Search..."

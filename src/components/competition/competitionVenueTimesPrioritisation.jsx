@@ -284,13 +284,13 @@ class CompetitionVenueTimesPrioritisation extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm-3">
-                            <div className="com-year-select-heading-view">
+                            <div className="com-year-select-heading-view pb-3">
                                 <span className="year-select-heading">
                                     {AppConstants.year}:
                                     </span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
-                                    style={{ minWidth: 160 }}
+                                    style={{ maxWidth: 80 }}
                                     onChange={year => this.onYearClick(year)}
                                     value={this.state.yearRefId}
                                 >
@@ -301,7 +301,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-3">
+                        <div className="col-sm-3 pb-3">
                             <div
                                 style={{
                                     width: "100%",
@@ -316,7 +316,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                 </span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
-                                    style={{ minWidth: 200 }}
+                                    style={{ minWidth: 250 }}
                                     onChange={competitionId => this.onCompetitionClick(competitionId)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >

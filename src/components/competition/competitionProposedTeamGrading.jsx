@@ -130,7 +130,7 @@ const columns = [
         render: (playerHistory, record, key) => (
             <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>
                 {playerHistory.map((item, index) => (
-                    // item.teamText ?
+                     (item.divisionGrade!= null && item.divisionGrade!= "") ?
                     <Tooltip
                         className="comp-player-table-tag2"
                         style={{ height: "100%" }}
@@ -143,12 +143,12 @@ const columns = [
                         >
                             <Tag className="comp-player-table-tag" style={{ cursor: "pointer" }} key={item.historyPlayerId + index}
                             >
-                                {item.divisionGrade + '(' + item.ladderResult + ')'}
+                                {item.divisionGrade!= null && item.divisionGrade!= "" ? (item.divisionGrade + '(' + item.ladderResult + ')') : ""}
                             </Tag>
                         </NavLink>
                     </Tooltip>
                     // </a>
-                    // : null
+                     : null
                 ))}
             </span>
         ),
@@ -566,13 +566,13 @@ class CompetitionProposedTeamGrading extends Component {
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width" >
                     <div className="row" >
-                        <div className="col-sm-2" >
-                            <div className="com-year-select-heading-view" >
+                        <div className="col-sm-3" >
+                            <div className="com-year-select-heading-view pb-3" >
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
                                     name={"yearRefId"}
                                     className="year-select reg-filter-select1 ml-2"
-                                    style={{ maxWidth: 160 }}
+                                    style={{ maxWidth: 80 }}
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
@@ -586,7 +586,7 @@ class CompetitionProposedTeamGrading extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-4" >
+                        <div className="col-sm-3 pb-3" >
                             <div style={{
                                 width: "100%", display: "flex",
                                 flexDirection: "row",
@@ -609,7 +609,7 @@ class CompetitionProposedTeamGrading extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm" >
+                        <div className="col-sm-3 pb-3" >
                             <div style={{
                                 width: "100%", display: "flex",
                                 flexDirection: "row",
@@ -633,7 +633,7 @@ class CompetitionProposedTeamGrading extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm" >
+                        <div className="col-sm-3 pb-3" >
                             <div style={{
                                 width: "100%", display: "flex",
                                 flexDirection: "row",

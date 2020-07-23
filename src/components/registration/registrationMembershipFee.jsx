@@ -404,7 +404,7 @@ class RegistrationMembershipFee extends Component {
                                         { rules: [{ required: true, message: ValidationConstants.pleaseSelectYear }] })(
                                             <Select
                                                 className="year-select reg-filter-select1 ml-2"
-                                                style={{ minWidth: 160 }}
+                                                style={{ maxWidth: 80 }}
                                             >
                                                 {this.props.appState.yearList.map(item => {
                                                     return (

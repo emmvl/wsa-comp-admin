@@ -283,6 +283,35 @@ function getUserProfileAction() {
   };
 }
 
+
+//update charity value
+function updateCharityValue(value, index, key) {
+  const action = {
+      type: ApiConstants.UPDATE_ORGANISATION_CHARITY_ROUND_UP,
+      value: value,
+      index: index,
+      key: key
+  }
+  return action;
+}
+
+function updateCharityAction(payload){
+  const action = {
+    type: ApiConstants.API_UPDATE_CHARITY_ROUND_UP_LOAD,
+    payload: payload
+  }
+
+  return action;
+}
+
+function updateTermsAndCondtionAction(payload){
+  const action = {
+    type: ApiConstants.API_UPDATE_TERMS_AND_CONDITION_LOAD,
+    payload: payload
+  }
+
+  return action;
+}
 export {
   getRoleAction,
   getUreAction,
@@ -322,4 +351,7 @@ export {
   userDetailUpdateAction,
   userPasswordUpdateAction,
   getUserProfileAction,
+  updateCharityValue,
+  updateCharityAction,
+  updateTermsAndCondtionAction
 }

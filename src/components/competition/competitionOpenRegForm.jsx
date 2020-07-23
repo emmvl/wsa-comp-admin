@@ -1081,7 +1081,7 @@ class CompetitionOpenRegForm extends Component {
             <div className="comp-venue-courts-dropdown-view mt-0">
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm-3">
+                        <div className="col-sm-3 pb-3">
                             <div
                                 style={{
                                     width: "fit-content",
@@ -1099,7 +1099,7 @@ class CompetitionOpenRegForm extends Component {
                                 <Select
                                     name={"yearRefId"}
                                     className="year-select reg-filter-select1 ml-2"
-                                    style={{ minWidth: 160 }}
+                                    // style={{ minWidth: 160 }}
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
@@ -1116,7 +1116,7 @@ class CompetitionOpenRegForm extends Component {
                             </div>
 
                         </div>
-                        <div className="col-sm-3">
+                        <div className="col-sm-3 pb-3">
                             <div
                                 style={{
                                     width: "fit-content",

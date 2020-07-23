@@ -220,109 +220,109 @@ class ShopOrderStatus extends Component{
                                     }}
                                 >
                                     <Button className="primary-add-comp-form" type="primary">
-                                                {AppConstants.addOrder}
+                                        {AppConstants.addOrder}
                                     </Button>
                                 </div>
                             </div>
-             
+
                         </div>
+                    </div>
                 </div>
-            </div>
-        </div >
-    );
+            </div >
+        );
     }
 
-    
 
-    onChangeYear(data){
-        this.setState({year:data.year})
+
+    onChangeYear(data) {
+        this.setState({ year: data.year })
     }
 
-    onChangePaymentStatus(data){
-        this.setState({paymentStatus:data.paymentStatus})
+    onChangePaymentStatus(data) {
+        this.setState({ paymentStatus: data.paymentStatus })
     }
 
-    onChangefullFillmentStatus(data){
-        this.setState({fulfilStatus:data.fulfilStatus})
+    onChangefullFillmentStatus(data) {
+        this.setState({ fulfilStatus: data.fulfilStatus })
     }
 
     dropdownView = () => {
-        return(
-        <div className="comp-player-grades-header-drop-down-view mt-1">
-             <div className="fluid-width" >
-                 <div className="row reg-filter-row" >
+        return (
+            <div className="comp-player-grades-header-drop-down-view mt-1">
+                <div className="fluid-width" >
+                    <div className="row reg-filter-row" >
 
-                 <div className="reg-col" >
-                          <div className="reg-filter-col-cont">
-                              <div className='year-select-heading'>{AppConstants.year}</div>
-                          <Select
-                            style={{ minWidth: 160 }}
-                            onChange={(year) => this.onChangeYear({ year })}
-                            value={this.state.year}
-                            className="year-select reg-filter-select" >
-                            <Option key={"year"} value="year">{"2020"}</Option>
-                            
-                        </Select>
-                         </div>
-                     </div>
+                        <div className="reg-col" >
+                            <div className="reg-filter-col-cont">
+                                <div className='year-select-heading'>{AppConstants.year}</div>
+                                <Select
+                                    style={{ minWidth: 160 }}
+                                    onChange={(year) => this.onChangeYear({ year })}
+                                    value={this.state.year}
+                                    className="year-select reg-filter-select mr-3" >
+                                    <Option key={"year"} value="year">{"2020"}</Option>
 
-                         <div className="reg-col" >
-                          <div className="reg-filter-col-cont">
-                              <div className='year-select-heading'>{AppConstants.paymentStatus}</div>
-                          <Select
-                            style={{ minWidth: 160 }}
-                            onChange={(paymentStatus) => this.onChangePaymentStatus({ paymentStatus })}
-                            value={this.state.paymentStatus}
-                            className="year-select reg-filter-select" >
-                            <Option key={"all"} value="all">{"All"}</Option>
-                            
-                        </Select>
-                         </div>
-                     </div>
+                                </Select>
+                            </div>
+                        </div>
 
-                  
+                        <div className="reg-col" >
+                            <div className="reg-filter-col-cont">
+                                <div className='year-select-heading'>{AppConstants.paymentStatus}</div>
+                                <Select
+                                    style={{ minWidth: 160 }}
+                                    onChange={(paymentStatus) => this.onChangePaymentStatus({ paymentStatus })}
+                                    value={this.state.paymentStatus}
+                                    className="year-select reg-filter-select mr-3" >
+                                    <Option key={"all"} value="all">{"All"}</Option>
 
-                     <div className="reg-col" >
+                                </Select>
+                            </div>
+                        </div>
+
+
+
+                        <div className="reg-col" >
                             <div className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.fullFillmentStatus}</div>
                                 <Select
                                     //  mode="multiple"
-                                     className="year-select reg-filter-select"
-                                     style={{ minWidth: 160 }}
-                                     onChange={(fulfilStatus) => this.onChangefullFillmentStatus({fulfilStatus})}
-                                     value={this.state.fulfilStatus}>
+                                    className="year-select reg-filter-select mr-3"
+                                    style={{ minWidth: 160 }}
+                                    onChange={(fulfilStatus) => this.onChangefullFillmentStatus({ fulfilStatus })}
+                                    value={this.state.fulfilStatus}>
                                     <Option key={"all"} value="all">{"All"}</Option>
                                 </Select>
                             </div>
                         </div>
 
-                 </div>
-             </div>
-            
-        </div>
+                    </div>
+                </div>
+
+            </div>
         )
     }
 
     contentView = () => {
-        return(<div className="comp-dash-table-view mt-2">
-             <div className="d-flex flex-row justify-content-between">
-                       {/* {this.noOfUmpires()} */}
-                       
+        return (<div className="comp-dash-table-view mt-2">
+            <div className="d-flex flex-row justify-content-between">
+                {/* {this.noOfUmpires()} */}
+
             </div>
-        <div className="table-responsive home-dash-table-view">
-        <Table
-                     // loading={this.props.umpireDashboardState.onLoad}
-                     className="home-dashboard-table"
-                     columns={columns}
-                     dataSource={dataSource}
-                     pagination={false} />
-         
-        </div>
-     </div>)
+            <div className="table-responsive home-dash-table-view">
+                <Table
+                    // loading={this.props.umpireDashboardState.onLoad}
+                    className="home-dashboard-table"
+                    columns={columns}
+                    dataSource={dataSource}
+                    pagination={false} />
+
+            </div>
+        </div>)
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.shop} menuName={AppConstants.shop} />
                 <InnerHorizontalMenu menu={"shop"} shopSelectedKey={"5"} />
