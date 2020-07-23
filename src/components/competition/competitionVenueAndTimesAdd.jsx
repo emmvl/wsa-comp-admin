@@ -60,6 +60,8 @@ class CompetitionVenueAndTimesAdd extends Component {
             loading: false,
             screenHeader: "",
             hover: false,
+            venueAddress: null,
+            venueAddressError: '',
             courtColumns: [
                 {
                     title: "Court Numbers",
@@ -79,7 +81,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                         const { getFieldDecorator } = this.props.form;
                         return (
 
-                            <Form.Item >
+                            <Form.Item>
                                 {getFieldDecorator(`venueCourtName${index}`, {
                                     rules: [{ required: true, message: ValidationConstants.courtField[3] }],
                                 })(
@@ -425,9 +427,6 @@ class CompetitionVenueAndTimesAdd extends Component {
                     {AppConstants.venue}
                 </span>
                 <Form.Item >
-                    <PlacesAutocomplete />
-                </Form.Item>
-                <Form.Item >
                     {getFieldDecorator('name', {
                         rules: [{ required: true, message: ValidationConstants.nameField[2] }],
                     })(
@@ -461,17 +460,57 @@ class CompetitionVenueAndTimesAdd extends Component {
                         />
                     )}
                 </Form.Item>
+                <Form.Item name="venueAddress">
+                    <PlacesAutocomplete
+                        heading={AppConstants.venueSearch}
+                        required
+                        error={this.state.venueAddressError}
+                        onSetData={(data) => {
+                            const address = data.mapData;
 
+                            if (address.addressOne === null) {
+                                this.setState({
+                                    venueAddressError: AppConstants.venueAddressDetailsError,
+                                })
+                            } else {
+                                this.setState({
+                                    venueAddressError: ''
+                                })
+                            }
+
+                            this.setState({
+                                venueAddress: address,
+                            });
+
+                            const selectedState = address.state
+                              ? stateList.find((state) => state.name === address.state).id
+                              : null;
+                            const stateRefId = stateList.length > 0
+                              ? selectedState
+                              : null;
+                            delete address.state;
+
+                            this.props.form.setFieldsValue({
+                                ...address,
+                                stateRefId,
+                            });
+
+                            this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId')
+                            this.props.updateVenuAndTimeDataAction(address.addressOne, 'Venue', 'street1')
+                            this.props.updateVenuAndTimeDataAction(address.suburb, 'Venue', 'suburb')
+                            this.props.updateVenuAndTimeDataAction(address.postalCode, 'Venue', 'postalCode')
+                        }}
+                    />
+                </Form.Item>
                 <Form.Item >
-                    {getFieldDecorator('addressOne', {
-                        rules: [{ required: true, message: ValidationConstants.addressField[0] }],
-                    })(
+                    {getFieldDecorator('addressOne')(
                         <InputWithHead
                             required={"required-field pt-3 pb-0"}
                             heading={AppConstants.addressOne}
                             placeholder={AppConstants.addressOne}
                             onChange={(street1) => this.props.updateVenuAndTimeDataAction(street1.target.value, 'Venue', 'street1')}
                             setFieldsValue={venuData.street1}
+                            readOnly
                         />
                     )}
                 </Form.Item>
@@ -486,15 +525,14 @@ class CompetitionVenueAndTimesAdd extends Component {
 
 
                 <Form.Item >
-                    {getFieldDecorator('suburb', {
-                        rules: [{ required: true, message: ValidationConstants.suburbField[0] }],
-                    })(
+                    {getFieldDecorator('suburb')(
                         <InputWithHead
                             required={"required-field pt-3 pb-0"}
                             heading={AppConstants.suburb}
                             placeholder={AppConstants.suburb}
                             onChange={(suburb) => this.props.updateVenuAndTimeDataAction(suburb.target.value, 'Venue', 'suburb')}
                             setFieldsValue={venuData.suburb}
+                            readOnly
                         />
                     )}
                 </Form.Item>
@@ -505,29 +543,24 @@ class CompetitionVenueAndTimesAdd extends Component {
                 />
 
                 <Form.Item >
-                    {getFieldDecorator('stateRefId', {
-                        rules: [{ required: true, message: ValidationConstants.stateField[0] }],
-                    })(
+                    {getFieldDecorator('stateRefId')(
                         <Select
                             style={{ width: "100%" }}
                             placeholder={AppConstants.select}
                             onChange={(stateRefId) => this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId')}
                             setFieldsValue={venuData.stateRefId}
-
+                            disabled
                         >
                             {stateList.length > 0 && stateList.map((item) => (
                                 < Option key={item.id} value={item.id}> {item.name}</Option>
-                            ))
-                            }
+                            ))}
                         </Select>
                     )}
                 </Form.Item>
 
 
                 <Form.Item >
-                    {getFieldDecorator('postcode', {
-                        rules: [{ required: true, message: ValidationConstants.postCodeField[0] }],
-                    })(
+                    {getFieldDecorator('postcode')(
                         <InputWithHead
                             required={"required-field"}
                             heading={AppConstants.postcode}
@@ -535,6 +568,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                             onChange={(postalCode) => this.props.updateVenuAndTimeDataAction(postalCode.target.value, 'Venue', 'postalCode')}
                             setFieldsValue={venuData.postalCode}
                             maxLength={4}
+                            readOnly
                         />
                     )}
                 </Form.Item>
@@ -838,6 +872,13 @@ class CompetitionVenueAndTimesAdd extends Component {
     onAddVenue = (e) => {
         e.preventDefault();
         let hasError = false;
+        let venueAddressError = false;
+
+        if (!this.state.venueAddress) {
+            this.setState({venueAddressError: AppConstants.venueAddressError});
+            venueAddressError = true;
+        }
+
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 const { venuData } = this.props.venueTimeState
@@ -876,6 +917,12 @@ class CompetitionVenueAndTimesAdd extends Component {
                         message.error(ValidationConstants.gameDayEndTimeValidation);
                         return;
                     }
+
+                    if (venueAddressError) {
+                        message.error('Please select a venue from the venue search');
+                        return;
+                    }
+
                     if (!hasError) {
                         venuData["screenNavigationKey"]  = this.state.screenNavigationKey;
                         //console.log("venuData" + JSON.stringify(venuData));
