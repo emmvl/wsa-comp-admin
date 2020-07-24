@@ -465,12 +465,17 @@ class CompetitionVenueAndTimesAdd extends Component {
                         heading={AppConstants.venueSearch}
                         required
                         error={this.state.venueAddressError}
+                        onBlur={() => {
+                            this.setState({
+                                venueAddressError: ''
+                            })
+                        }}
                         onSetData={(data) => {
                             const address = data.mapData;
 
                             if (address.addressOne === null) {
                                 this.setState({
-                                    venueAddressError: AppConstants.venueAddressDetailsError,
+                                    venueAddressError: ValidationConstants.venueAddressDetailsError,
                                 })
                             } else {
                                 this.setState({
@@ -869,7 +874,8 @@ class CompetitionVenueAndTimesAdd extends Component {
         let venueAddressError = false;
 
         if (!this.state.venueAddress) {
-            this.setState({venueAddressError: AppConstants.venueAddressError});
+            this.setState({venueAddressError: ValidationConstants.venueAddressRequiredError});
+            message.error(AppConstants.venueAddressSelect);
             venueAddressError = true;
         }
 
@@ -913,7 +919,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                     }
 
                     if (venueAddressError) {
-                        message.error('Please select a venue from the venue search');
+                        message.error(AppConstants.venueAddressSelect);
                         return;
                     }
 

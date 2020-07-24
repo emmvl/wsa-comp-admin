@@ -107,8 +107,7 @@ const PlacesAutocomplete = ({
         </div>
       )}
       <Input
-        className="input"
-        defaultValue="EEEEEEEEEEEEEEEEEEEEEEEEEE"
+        className={error ? 'input-error' : 'input'}
         value={value || defaultAddress}
         onChange={handleInput}
         disabled={!ready}
@@ -117,7 +116,7 @@ const PlacesAutocomplete = ({
       />
       {status !== 'OK' && error && (
         <div style={{display: 'flex', alignItems: 'center'}}>
-          <span className="place-auto-complete-input-error">{error}</span>
+          <span className="place-auto-complete-input-error-message">{error}</span>
         </div>
       )}
       {/* We can use the "status" to decide whether we should display the dropdown or not */}
