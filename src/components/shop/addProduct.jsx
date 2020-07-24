@@ -254,6 +254,21 @@ class AddProduct extends Component {
         }
     }
 
+    checkAffiliateDisable = (item) => {
+        if (this.state.orgLevel == AppConstants.association && item.id == 2) {
+            return true;
+        }
+       else if (this.state.orgLevel == AppConstants.club && item.id == 2) {
+            return true;
+        }
+        else if (this.state.orgLevel == AppConstants.club && item.id == 3) {
+            return true;
+        }
+        else {
+            return this.state.allDisabled;
+        }
+    }
+
     handleDrags = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -598,7 +613,7 @@ class AddProduct extends Component {
                             <Checkbox
                                 className="single-checkbox mt-3"
                                 checked={this.checkedAffiliates(item.name) === 1 ? true : false}
-                                disabled={this.state.orgLevel == "Club" && item.id == 2 ? true : this.state.allDisabled}
+                                disabled={this.checkAffiliateDisable(item)}
                                 onChange={(e) =>
                                     this.affiliateOnChange(e.target.checked, item.name)
                                 }
