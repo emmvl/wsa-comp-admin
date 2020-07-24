@@ -658,10 +658,11 @@ class CompetitionPartPlayerGrades extends Component {
                                                                         <div className="col-sm d-flex">
                                                                             {playerItem.playerHistory.map((item, index) => {
                                                                                 return (
+                                                                                    item.divisionGrade!= null && item.divisionGrade!= "" ? 
                                                                                     <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
                                                                                         {item.divisionGrade + '(' + item.ladderResult + ')'}
                                                                                     </Tag>
-
+                                                                                    : null
                                                                                 )
                                                                             })}
                                                                         </div>
@@ -863,10 +864,11 @@ class CompetitionPartPlayerGrades extends Component {
                                                         <div className="col-sm d-flex">
                                                             {playerItem.playerHistory.map((item, index) => {
                                                                 return (
+                                                                    item.divisionGrade!= null && item.divisionGrade!= "" ? 
                                                                     <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
                                                                         {item.divisionGrade + '(' + item.ladderResult + ')'}
                                                                     </Tag>
-
+                                                                    : null
                                                                 )
                                                             })}
                                                         </div>
