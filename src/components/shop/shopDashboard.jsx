@@ -20,7 +20,7 @@ class ShopDashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            year: 'All'
         }
         this.chartRefCompititions = React.createRef();
 
@@ -67,7 +67,7 @@ class ShopDashboard extends Component {
                                 {AppConstants.shop}
                             </span>
                         </div>
-                        <div className="col-sm pt-1" >
+                        {/* <div className="col-sm pt-1" >
                             <div className="row reg-filter-row" >
                                 <div className="reg-col" >
                                     <div className="reg-filter-col-cont">
@@ -108,11 +108,64 @@ class ShopDashboard extends Component {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div >
                 </div >
             </div>
         );
+    }
+
+    ///dropdown view containing all the dropdown of header
+    dropdownView = () => {
+        return (
+            <div className="comp-player-grades-header-drop-down-view mt-1">
+                <div className="fluid-width" >
+                    <div className="row reg-filter-row" >
+
+                        <div className="reg-col" >
+                            <div className="reg-filter-col-cont">
+                                <div className='year-select-heading'>{AppConstants.year} :</div>
+                                <Select
+                                    style={{ minWidth: 160 }}
+                                    value={"2020"}
+                                    className="year-select shop-filter-select" >
+                                    <Option key={"year"} value="year">{"2020"}</Option>
+
+                                </Select>
+                            </div>
+                        </div>
+
+                        <div className="reg-col mr-3" >
+                            <div className="reg-filter-col-cont">
+                                <div className='year-select-heading'>{AppConstants.productTypes} :</div>
+                                <Select
+                                    style={{ minWidth: 160 }}
+                                    value={"All"}
+                                    className="year-select reg-filter-select1 ml-2" >
+                                    <Option key={"all"} value="all">{"All"}</Option>
+
+                                </Select>
+                            </div>
+                        </div>
+
+                        <div className="reg-col" >
+                            <div className="reg-filter-col-cont">
+                                <div className='year-select-heading'>{AppConstants.affiliate} :</div>
+                                <Select
+                                    style={{ minWidth: 160 }}
+                                    value={"All"}
+                                    className="year-select reg-filter-select1 ml-2" >
+                                    <Option key={"all"} value="all">{"All"}</Option>
+
+                                </Select>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        )
     }
 
     contentView = () => {
@@ -205,6 +258,7 @@ class ShopDashboard extends Component {
                 <Layout>
                     <Content className="comp-dash-table-view">
                         {this.headerView()}
+                        {this.dropdownView()}
                         {this.contentView()}
                         {/* <div className="formView">{this.productTypes()}</div> */}
                     </Content>

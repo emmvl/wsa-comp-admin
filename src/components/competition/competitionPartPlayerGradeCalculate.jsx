@@ -257,8 +257,8 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
                                     name={"yearRefId"}
-                                    className="year-select reg-filter-select1 ml-2"
-                                    style={{ maxWidth: 80 }}
+                                    className="year-select reg-filter-select-year ml-2"
+                                    // style={{ width: 90 }}
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
@@ -281,8 +281,8 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                                 <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
                                     name={"competition"}
-                                    className="year-select reg-filter-select1 ml-2"
-                                    style={{ maxWidth: 250 }}
+                                    className="year-select rreg-filter-select-competition ml-2"
+                                    // style={{ minWidth: 200 }}
                                     onChange={competitionId => this.onCompetitionChange(competitionId)
                                     }
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}

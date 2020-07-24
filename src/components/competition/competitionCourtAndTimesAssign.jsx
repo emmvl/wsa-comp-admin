@@ -500,8 +500,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                                   </span>
                                 <Select
                                     name={"yearRefId"}
-                                    className="year-select reg-filter-select1 ml-2"
-                                    style={{ minWidth: 80 }}
+                                    className="year-select reg-filter-select-year ml-2"
+                                    // style={{ width: 90 }}
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
@@ -515,7 +515,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-4 pb-3" >
+                        <div className="col-sm-3 pb-3" >
                             <div style={{
                                 width: "fit-content", display: "flex",
                                 flexDirection: "row",
@@ -523,9 +523,9 @@ class CompetitionCourtAndTimesAssign extends Component {
                             }} >
                                 <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
-                                    style={{ minWidth: 250 }}
+                                    // style={{ minWidth: 250 }}
                                     name={"competition"}
-                                    className="year-select reg-filter-select1 ml-2"
+                                    className="year-select reg-filter-select-competition ml-2"
                                     onChange={competitionId => this.onCompetitionChange(competitionId)
                                     }
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}

@@ -229,8 +229,8 @@ class CompetitionDashboard extends Component {
                                 <span className="year-select-heading">
                                     {AppConstants.year}:</span>
                                 <Select
-                                    className="year-select reg-filter-select1 ml-2"
-                                    style={{ maxWidth: 80 }}
+                                    className="year-select reg-filter-select-year ml-2"
+                                    // style={{ width: 90 }}
                                     onChange={yearId => this.onYearClick(yearId)}
                                     value={selectedYearId}
                                 >

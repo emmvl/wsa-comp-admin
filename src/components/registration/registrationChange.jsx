@@ -236,7 +236,7 @@ class RegistrationChange extends Component {
     //////year change onchange
     yearChange = (yearRefId) => {
         this.setState({ yearRefId })
-        this.handleCompetitionTableList(1, yearRefId, this.state.searchText)
+        // this.handleCompetitionTableList(1, yearRefId, this.state.searchText)
     }
     // on change search text
 
@@ -251,7 +251,7 @@ class RegistrationChange extends Component {
                                 <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
-                                    style={{ maxWidth: 80 }}
+                                    // style={{ width: 90 }}
                                     value={this.state.yearRefId}
                                     onChange={(e) => this.yearChange(e)}
                                 >
@@ -270,8 +270,8 @@ class RegistrationChange extends Component {
                             <div className="com-year-select-heading-view">
                                 <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
-                                    className="year-select reg-filter-select1 ml-2"
-                                    style={{ minWidth: 200 }}
+                                    className="year-select reg-filter-select-competition ml-2"
+                                    // style={{ minWidth: 200 }}
                                     value={this.state.competition}
                                 // onChange={(e) => this.yearChange(e)}
                                 >

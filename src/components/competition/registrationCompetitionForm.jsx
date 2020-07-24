@@ -1135,8 +1135,8 @@ class RegistrationCompetitionForm extends Component {
                                     {getFieldDecorator('yearRefId', { initialValue: 1 },
                                         { rules: [{ required: true, message: ValidationConstants.pleaseSelectYear }] })(
                                             <Select
-                                                className="year-select reg-filter-select1 ml-2"
-                                                style={{ minWidth: 160 }}
+                                                className="year-select reg-filter-select-year ml-2"
+                                            // style={{ minWidth: 160 }}
                                             >
                                                 {this.props.appState.yearList.map(item => {
                                                     return (
