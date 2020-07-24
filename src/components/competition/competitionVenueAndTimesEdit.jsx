@@ -463,6 +463,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                       heading={AppConstants.venueSearch}
                       required
                       error={this.state.venueAddressError}
+                      disabled={this.state.isUsed}
                       onSetData={(data) => {
                           const address = data.mapData;
 
