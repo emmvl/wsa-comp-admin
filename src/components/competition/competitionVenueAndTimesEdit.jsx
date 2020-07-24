@@ -29,6 +29,7 @@ import ValidationConstants from "../../themes/validationConstant";
 import AppImages from "../../themes/appImages";
 import Loader from '../../customComponents/loader';
 import CSVReader from 'react-csv-reader'
+import PlacesAutocomplete from "./elements/PlaceAutoComplete";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -62,6 +63,8 @@ class CompetitionVenueAndTimesEdit extends Component {
             csvData: null,
             loading:false,
             isUsed: false,
+            venueAddress: null,
+            venueAddressError: '',
             courtColumns: [
                 {
                     title: "Court Number",
@@ -270,8 +273,7 @@ class CompetitionVenueAndTimesEdit extends Component {
             postcode: venueData.postalCode
         });
         this.setVenuCourtFormFields();
-       
-    }
+    };
 
     setVenuCourtFormFields = () => {
         let venueData = this.props.venueTimeState.venuData;
@@ -408,6 +410,19 @@ class CompetitionVenueAndTimesEdit extends Component {
         const { venuData } = this.props.venueTimeState
         const { stateList } = this.props.commonReducerState
        // const { venueOrganisation } = this.props.userState
+
+        const state = stateList.length > 0 && venuData.stateRefId
+          ? stateList.find((state) => state.id === venuData.stateRefId).name
+          : null;
+
+        let defaultVenueAddress = `${
+            venuData.street1 ? `${venuData.street1},` : ''
+        } ${
+            venuData.suburb ? `${venuData.suburb},` : ''
+        } ${
+            state ? `${state},` : ''
+        } Australia`;
+
         return (
             <div className="content-view">
                 <span className="form-heading" >
@@ -442,10 +457,53 @@ class CompetitionVenueAndTimesEdit extends Component {
                     )}
                 </Form.Item>
 
+                <Form.Item name="venueAddress">
+                    <PlacesAutocomplete
+                      defaultValue={defaultVenueAddress}
+                      heading={AppConstants.venueSearch}
+                      required
+                      error={this.state.venueAddressError}
+                      disabled={this.state.isUsed}
+                      onSetData={(data) => {
+                          const address = data.mapData;
+
+                          if (address.addressOne === null) {
+                              this.setState({
+                                  venueAddressError: AppConstants.venueAddressDetailsError,
+                              })
+                          } else {
+                              this.setState({
+                                  venueAddressError: ''
+                              })
+                          }
+
+                          this.setState({
+                              venueAddress: address,
+                          });
+
+                          const selectedState = address.state
+                            ? stateList.find((state) => state.name === address.state).id
+                            : null;
+                          const stateRefId = stateList.length > 0
+                            ? selectedState
+                            : null;
+                          delete address.state;
+
+                          this.props.form.setFieldsValue({
+                              ...address,
+                              stateRefId,
+                          });
+
+                          this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId');
+                          this.props.updateVenuAndTimeDataAction(address.addressOne, 'Venue', 'street1');
+                          this.props.updateVenuAndTimeDataAction(address.suburb, 'Venue', 'suburb');
+                          this.props.updateVenuAndTimeDataAction(address.postcode, 'Venue', 'postalCode');
+                      }}
+                    />
+                </Form.Item>
+
                 <Form.Item >
-                    {getFieldDecorator('addressOne', {
-                        rules: [{ required: true, message: ValidationConstants.addressField[0] }],
-                    })(
+                    {getFieldDecorator('addressOne')(
                         <InputWithHead
                             required={"required-field pt-3 pb-0"}
                             heading={AppConstants.addressOne}
@@ -468,9 +526,7 @@ class CompetitionVenueAndTimesEdit extends Component {
 
 
                 <Form.Item >
-                    {getFieldDecorator('suburb', {
-                        rules: [{ required: true, message: ValidationConstants.suburbField[0] }],
-                    })(
+                    {getFieldDecorator('suburb')(
                         <InputWithHead
                             required={"required-field pt-3 pb-0"}
                             heading={AppConstants.suburb}
@@ -488,9 +544,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 />
 
                 <Form.Item >
-                    {getFieldDecorator('stateRefId', {
-                        rules: [{ required: true, message: ValidationConstants.stateField[0] }],
-                    })(
+                    {getFieldDecorator('stateRefId')(
                         <Select
                             style={{ width: "100%" }}
                             placeholder={AppConstants.select}
@@ -509,9 +563,7 @@ class CompetitionVenueAndTimesEdit extends Component {
 
 
                 <Form.Item >
-                    {getFieldDecorator('postcode', {
-                        rules: [{ required: true, message: ValidationConstants.postCodeField[0] }],
-                    })(
+                    {getFieldDecorator('postcode')(
                         <InputWithHead
                             required={"required-field"}
                             heading={AppConstants.postcode}
@@ -825,6 +877,13 @@ class CompetitionVenueAndTimesEdit extends Component {
     onAddVenue = (e) => {
         e.preventDefault();
         let hasError = false;
+        let venueAddressError = false;
+
+        if (!this.state.venueAddress) {
+            this.setState({venueAddressError: AppConstants.venueAddressError});
+            venueAddressError = true;
+        }
+
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 const { venuData } = this.props.venueTimeState
@@ -864,6 +923,11 @@ class CompetitionVenueAndTimesEdit extends Component {
                     if(hasError)
                     {
                         message.error(ValidationConstants.gameDayEndTimeValidation);
+                        return;
+                    }
+
+                    if (venueAddressError) {
+                        message.error('Please select a venue from the venue search');
                         return;
                     }
 
