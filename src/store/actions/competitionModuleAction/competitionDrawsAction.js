@@ -101,11 +101,12 @@ function getDivisionGradeNameLisAction(competitionId) {
     return action
 }
 
-function publishDraws(competitionId, key) {
+function publishDraws(competitionId, key, payload) {
     const action = {
         type: ApiConstants.API_DRAW_PUBLISH_LOAD,
         competitionId: competitionId,
-        key: key
+        key: key,
+        payload: payload
     }
     return action
 }

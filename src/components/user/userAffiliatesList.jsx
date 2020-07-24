@@ -224,9 +224,9 @@ class UserAffiliatesList extends Component {
             <div className="comp-player-grades-header-drop-down-view mt-1">
                 <div className="fluid-width" >
                     <div className="row" >
-                        <div className="col-sm pb-3" >
+                        <div className="col-lg-3 col-md-6" >
                             <div style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center" }} >
-                                <span className='year-select-heading'>{AppConstants.affiliatedTo}</span>
+                                <span className='year-select-heading' style={{width:120}}>{AppConstants.affiliatedTo}</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
                                     style={{ minWidth: 160 }}
@@ -239,9 +239,9 @@ class UserAffiliatesList extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm pb-3" >
-                            <div style={{ width: "fit-content", display: "flex", flexDirection: "row", alignItems: "center" }} >
-                                <span className='year-select-heading'>{AppConstants.organisationType}</span>
+                        <div className="col-lg-4 col-md-6" >
+                            <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }} >
+                                <span className='year-select-heading' style={{width:240}}>{AppConstants.organisationType}</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
                                     style={{ minWidth: 160 }}
@@ -255,9 +255,9 @@ class UserAffiliatesList extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm pb-3" >
-                            <div style={{ width: "fit-content", display: "flex", flexDirection: "row", alignItems: "center" }} >
-                                <span className='year-select-heading'>{AppConstants.status}</span>
+                        <div className="col-lg-3 col-md-6" >
+                            <div style={{  display: "flex", flexDirection: "row", alignItems: "center" }} >
+                                <span className='year-select-heading' style={{width:120}}>{AppConstants.status}</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
                                     style={{ minWidth: 160 }}
@@ -270,7 +270,7 @@ class UserAffiliatesList extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm add-affiliate-btn">
+                        <div className="col-lg-2 col-md-6 add-affiliate-btn">
                             {
                                 affiliateToData.isEligibleToAddAffiliate ?
                                     <div className="d-flex flex-row-reverse">
