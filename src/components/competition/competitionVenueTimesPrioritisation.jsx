@@ -289,8 +289,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     {AppConstants.year}:
                                     </span>
                                 <Select
-                                    className="year-select reg-filter-select1 ml-2"
-                                    style={{ maxWidth: 80 }}
+                                    className="year-select reg-filter-select-year ml-2"
+                                    // style={{ width: 90 }}
                                     onChange={year => this.onYearClick(year)}
                                     value={this.state.yearRefId}
                                 >
@@ -304,7 +304,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         <div className="col-sm-3 pb-3">
                             <div
                                 style={{
-                                    width: "100%",
+                                    width: "fit-content",
                                     display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center",
@@ -315,8 +315,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     {AppConstants.competition}:
                                 </span>
                                 <Select
-                                    className="year-select reg-filter-select1 ml-2"
-                                    style={{ minWidth: 250 }}
+                                    className="year-select reg-filter-select-competition ml-2"
+                                    // style={{ minWidth: 200 }}
                                     onChange={competitionId => this.onCompetitionClick(competitionId)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >

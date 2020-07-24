@@ -55,10 +55,12 @@ class LiveScoreMatchSheet extends Component {
 
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton());
-        this.props.getLiveScoreDivisionList(id);
-        this.setState({onDivisionLoad: true, competitionId: id});
-        this.props.getMatchPrintTemplateType();
-        this.refreshDownloads();
+        if (id !== undefined) {
+            this.props.getLiveScoreDivisionList(id);
+            this.setState({onDivisionLoad: true, competitionId: id});
+            this.props.getMatchPrintTemplateType();
+            this.refreshDownloads();
+        }
     }
 
     componentDidUpdate(nextProps) {
@@ -122,9 +124,9 @@ class LiveScoreMatchSheet extends Component {
                 this.state.templateType,
             );
         } else if (this.props.liveScoreMatchState.liveScoreMatchList.length === 0) {
-            message.error('There is no matchsheets to print.')
+            message.error(AppConstants.matchSheetsNoPrintError)
         } else {
-            message.error('Please select template type.')
+            message.error(AppConstants.selectTemplateTypeError)
         }
     };
 
@@ -187,13 +189,13 @@ class LiveScoreMatchSheet extends Component {
 
     columns = [
         {
-            title: 'Match Id',
+            title: AppConstants.tableMatchID,
             dataIndex: 'id',
             key: 'id',
             sorter: (a, b) => tableSort(a, b, "id"),
         },
         {
-            title: 'Start Time',
+            title: AppConstants.startTime,
             dataIndex: 'startTime',
             key: 'startTime',
             sorter: (a, b) => tableSort(a, b, "startTime"),
@@ -201,7 +203,7 @@ class LiveScoreMatchSheet extends Component {
                 <span>{startTime ? liveScore_MatchFormate(startTime) : ""}</span>
         },
         {
-            title: 'Round',
+            title: AppConstants.round,
             dataIndex: 'round',
             key: 'round',
             sorter: (a, b) => tableSort(a, b, "round"),
@@ -247,26 +249,26 @@ class LiveScoreMatchSheet extends Component {
 
     dropdownTableColumns = [
         {
-            title: 'Sheet ID',
+            title: AppConstants.tableSheetID,
             dataIndex: 'id',
             key: 'id',
             sorter: (a, b) => tableSort(a, b, "id"),
         },
         {
-            title: 'Competition',
+            title: AppConstants.competition,
             dataIndex: 'competitionName',
             key: 'competitionName',
             sorter: (a, b) => tableSort(a, b, "competitionName"),
         },
         {
-            title: 'Name',
+            title: AppConstants.name,
             dataIndex: 'name',
             key: 'name',
             sorter: (a, b) => tableSort(a, b, "name"),
             ellipsis: true,
         },
         {
-            title: 'Created at',
+            title: AppConstants.createdAt,
             dataIndex: 'createdAt',
             key: 'createdAt',
             sorter: (a, b) => tableSort(a, b, "createdAt"),
@@ -274,7 +276,7 @@ class LiveScoreMatchSheet extends Component {
                 <span>{createdAt ? liveScore_MatchFormate(createdAt) : ""}</span>
         },
         {
-            title: 'Download',
+            title: AppConstants.download,
             dataIndex: 'downloadUrl',
             key: 'downloadUrl',
             render: (downloadUrl) => <a className="sheet-download-link" href={downloadUrl}>
@@ -327,7 +329,7 @@ class LiveScoreMatchSheet extends Component {
                                 style={{width: '100%', paddingRight: 1, minWidth: 182}}
                                 onChange={(division) => this.changeDivision({division})}
                                 value={this.state.division}
-                                placeholder="Select division"
+                                placeholder={AppConstants.selectDivision}
                             >
                                 {division.length > 0 && division.map(
                                     (item) => <Option value={item.id} key={item.id}>{item.name}</Option>)}
@@ -345,7 +347,7 @@ class LiveScoreMatchSheet extends Component {
                                 style={{width: '100%', paddingRight: 1, minWidth: 182}}
                                 onChange={(selectedTeam) => this.onChangeTeam(selectedTeam)}
                                 value={this.state.selectedTeam}
-                                placeholder="Select team"
+                                placeholder={AppConstants.selectTeam}
                             >
                                 {teamList.length > 0 && teamList.map(
                                     (item) => <Option value={item.id} key={item.id}>{item.name}</Option>)}
@@ -363,8 +365,8 @@ class LiveScoreMatchSheet extends Component {
                             <Select
                                 style={{width: '100%', paddingRight: 1, minWidth: 182}}
                                 onChange={(selectedTemplateId) => this.onChangeTemplate(selectedTemplateId)}
-                                value={this.state.selectedTemplateId ?? 'Select template type'}
-                                placeholder="Select template type"
+                                value={this.state.selectedTemplateId ?? AppConstants.selectTemplateType}
+                                placeholder={AppConstants.selectTemplateType}
                             >
                                 {templateList.length > 0 && templateList.map(
                                     (item) => <Option value={item.id} key={item.id}>{item.description}</Option>)}
@@ -431,7 +433,7 @@ class LiveScoreMatchSheet extends Component {
                     match={this.state.selectedMatch}
                     matchDetails={this.props.liveScoreMatchState.matchDetails}
                     matchTemplateTypes={this.props.commonReducerState.matchPrintTemplateType}
-                    modalTitle="LiveScores Match Sheet"
+                    modalTitle={AppConstants.liveScoreMatchSheetPreviewModalTitle}
                     handleOK={this.handleModalOk}
                     handleCancel={this.handleModalCancel}
                 />

@@ -1450,6 +1450,7 @@ const AppConstants = {
   instalmentDate:"Instalment Date",
   addInstalmentDate: "+ Add Instalment date",
   settingsAddedMessage: "Settings added successfully.",
+  addressAddedMessage: "Address added successfully.",
   deleteVariantOption: "Delete variant option",
   deleteVariantOptionDescription: "Please confirm you want to delete this variant option?",
   deleteProductType: "Delete product type",
@@ -1475,9 +1476,18 @@ const AppConstants = {
   acct_settings_label: "acct_settings_label",
   help_support_label: "help&support_label",
   action_box_table: "action_box_table",
-
-
-
+  venueAddressDetailsError: "Please input venue address in details",
+  venueAddressError: "Please select a venue from the venue search",
+  venueSearch: "Venue search",
+  matchSheetsNoPrintError: "There is no match sheets to print.",
+  selectTemplateTypeError: "Please select template type.",
+  selectTemplateType: "Select template type",
+  liveScoreMatchSheetPreviewModalTitle: "LiveScores Match Sheet",
+  tableMatchID: "Match ID",
+  tableSheetID: "Sheet ID",
+  createdAt: "Created at",
+  download: "Download",
+  pleaseInputAddress: "Please input address",
 };
 
 export default AppConstants;
