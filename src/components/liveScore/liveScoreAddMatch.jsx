@@ -693,7 +693,7 @@ class LiveScoreAddMatch extends Component {
                             formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '')}
                             parser={value => value.replace(/\$\s?|(,*)/g, '')}
                             onChange={(mnbMatchId) => this.props.liveScoreUpdateMatchAction(mnbMatchId, "mnbMatchId")}
-                            // value={addEditMatch.mnbMatchId ? addEditMatch.mnbMatchId : ''}
+                            value={addEditMatch.mnbMatchId ? addEditMatch.mnbMatchId : ''}
                             placeholder={'0'}
                             disabled={allDisabled}
                         />
@@ -1446,7 +1446,8 @@ class LiveScoreAddMatch extends Component {
                             <div className="col-sm-2 col-md-3 ">
                                 <div className="comp-buttons-view mt-0">
                                     <Button
-                                        className="user-approval-button  mt-0" type="primary" htmlType="submit" >
+                                        className="user-approval-button  mt-0" type="primary" htmlType="submit"
+                                        disabled={this.props.liveScoreMatchState.onLoad} >
                                         {AppConstants.save}
                                     </Button>
                                 </div>

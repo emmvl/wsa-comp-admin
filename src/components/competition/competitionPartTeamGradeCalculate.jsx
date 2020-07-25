@@ -26,6 +26,7 @@ import {
 } from "../../util/sessionStorage";
 import AppImages from "../../themes/appImages";
 import Tooltip from 'react-png-tooltip'
+import AppUniqueId from "../../themes/appUniqueId";
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
@@ -237,7 +238,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                         <div className="row">
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile">
-                                    <Button className="primary-add-comp-form" type="primary" onClick={() => this.exportTeams()}>
+                                    <Button id={AppUniqueId.teamGrading_ExportBtn} className="primary-add-comp-form" type="primary" onClick={() => this.exportTeams()}>
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img
@@ -253,7 +254,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                             </div>
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile">
-                                    <Button className="primary-add-comp-form" type="primary" onClick={() => this.exportPlayers()}>
+                                    <Button id={AppUniqueId.teamGrading_ExportPlayer} className="primary-add-comp-form" type="primary" onClick={() => this.exportPlayers()}>
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img
@@ -301,9 +302,10 @@ class CompetitionPartTeamGradeCalculate extends Component {
                             <div className="com-year-select-heading-view pb-3" >
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
+                                    id={AppUniqueId.teamGradingYear_dpdn}
                                     name={"yearRefId"}
-                                    style={{ maxWidth: 80 }}
-                                    className="year-select reg-filter-select1 ml-2"
+                                    // style={{ width: 90 }}
+                                    className="year-select reg-filter-select-year ml-2"
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
@@ -325,9 +327,9 @@ class CompetitionPartTeamGradeCalculate extends Component {
                             }} >
                                 <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
-                                    // style={{ minWidth: 100 }}
+                                    id={AppUniqueId.teamGradingYCompetition_dpdn}
                                     name={"competition"}
-                                    className="year-select reg-filter-select1 ml-2"
+                                    className="year-select reg-filter-select-competition ml-2"
                                     onChange={competitionId => this.onCompetitionChange(competitionId)
                                     }
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
@@ -440,7 +442,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                         <div className="col-sm" >
                             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
                                 {/* <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button> */}
-                                <Button
+                                <Button id={AppUniqueId.teamGrading_PublishBtn}
                                     className="open-reg-button"
                                     type="primary"
                                     onClick={() => this.publishtApiCall()}

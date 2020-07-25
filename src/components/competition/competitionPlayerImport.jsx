@@ -15,6 +15,7 @@ import { message } from "antd";
 import ValidationConstants from "../../themes/validationConstant";
 import { getOrganisationData } from "../../util/sessionStorage";
 import history from "../../util/history";
+import AppUniqueId from "../../themes/appUniqueId";
 
 const { Content, Header, Footer } = Layout;
 
@@ -165,13 +166,13 @@ class CompetitionPlayerImport extends Component {
                     style={{ marginTop: 10 }}>
                     <div className="row">
                         <div className="reg-add-save-button">
-                            <Button onClick={() => this.onUploadBtn()} className="primary-add-comp-form" type="primary">
+                            <Button id={AppUniqueId.importPlayerBtn} onClick={() => this.onUploadBtn()} className="primary-add-comp-form" type="primary">
                                 {AppConstants.upload}
                             </Button>
                         </div>
                         <div className="reg-add-save-button" style={{ marginLeft: '20px' }}>
                             <NavLink to="/templates/wsa-import-player.csv" target="_blank" download>
-                                <Button className="primary-add-comp-form" type="primary">
+                                <Button id={AppUniqueId.downLoadTempletebtn} className="primary-add-comp-form" type="primary">
                                     {AppConstants.downloadTemplate}
                                 </Button>
                             </NavLink>

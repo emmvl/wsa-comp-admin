@@ -44,6 +44,8 @@ import {
 } from "../../util/sessionStorage"
 import Loader from '../../customComponents/loader'
 import Tooltip from 'react-png-tooltip'
+import AppUniqueId from "../../themes/appUniqueId";
+import { element } from "prop-types";
 
 
 const { Header, Footer, Content } = Layout;
@@ -284,13 +286,13 @@ class CompetitionVenueTimesPrioritisation extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm-3">
-                            <div className="com-year-select-heading-view pb-3">
+                            <div id-={AppUniqueId.compYear_dpdnVenues} className="com-year-select-heading-view pb-3">
                                 <span className="year-select-heading">
                                     {AppConstants.year}:
                                     </span>
                                 <Select
-                                    className="year-select reg-filter-select1 ml-2"
-                                    style={{ maxWidth: 80 }}
+                                    className="year-select reg-filter-select-year ml-2"
+                                    // style={{ width: 90 }}
                                     onChange={year => this.onYearClick(year)}
                                     value={this.state.yearRefId}
                                 >
@@ -302,9 +304,9 @@ class CompetitionVenueTimesPrioritisation extends Component {
                             </div>
                         </div>
                         <div className="col-sm-3 pb-3">
-                            <div
+                            <div id-={AppUniqueId.CompetitionName_dpdnVenues}
                                 style={{
-                                    width: "100%",
+                                    width: "fit-content",
                                     display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center",
@@ -315,8 +317,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     {AppConstants.competition}:
                                 </span>
                                 <Select
-                                    className="year-select reg-filter-select1 ml-2"
-                                    style={{ minWidth: 250 }}
+                                    className="year-select reg-filter-select-competition ml-2"
+                                    // style={{ minWidth: 200 }}
                                     onChange={competitionId => this.onCompetitionClick(competitionId)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
@@ -430,6 +432,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     rules: [{ required: true, message: ValidationConstant.courtField[3] }]
                                 })(
                                     <Select
+                                        id={AppUniqueId.CourtPreferences_AllocSameCourt_CourtID}
                                         style={{ width: "100%", minWidth: 182 }}
                                         placeholder={'Select Court'}
                                         onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "venueCourtId", "courtPreferences")}
@@ -451,6 +454,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     rules: [{ required: true, message: ValidationConstant.courtField[4] }]
                                 })(
                                     <Select
+                                        id={AppUniqueId.CourtPreferences_AllocSameCourt_AddAnotherCourt_DivisionID}
                                         mode={'multiple'}
                                         style={{ width: "100%", minWidth: 182, display: "grid", alignItems: 'center' }}
                                         placeholder={'Select Division'}
@@ -558,7 +562,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
 
 
-                    <span style={{ cursor: 'pointer' }} onClick={() => this.props.updateVenueConstraintsData(null, courtRotationId, "courtPreferences", "addCourtPreferences")} className="input-heading-add-another">
+                    <span id={AppUniqueId.CourtPreferences_AddAnotherCourtPreference_btn} style={{ cursor: 'pointer' }} onClick={() => this.props.updateVenueConstraintsData(null, courtRotationId, "courtPreferences", "addCourtPreferences")} className="input-heading-add-another">
                         + {AppConstants.addAnother}
                     </span>
                 </div>
@@ -587,7 +591,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     {homeTeamRotationList.length > 0 && homeTeamRotationList.map((item, index) => {
                         return (
                             <div className='contextualHelp-RowDirection' >
-                                <Radio value={item.id}>{item.description}</Radio>
+                                <Radio id={this.getCourtRotationId(item.id, 'homeTeamRotation')} value={item.id}>{item.description}</Radio>
 
                                 {
                                     item.helpMsg &&
@@ -610,6 +614,63 @@ class CompetitionVenueTimesPrioritisation extends Component {
         )
     }
 
+    getCourtRotationId(data, key) {
+
+        switch (key) {
+
+            case "courtRotation":
+
+                switch (data) {
+
+                    case 1: return AppUniqueId.CourtPreferences_EvenRotation
+
+                    case 5: return AppUniqueId.CourtPreferences_AllocSameCourt
+
+                    case 8: return AppUniqueId.CourtPreferences_NoPreference
+
+                    default: break;
+                }
+
+            case "subPref1":
+
+                switch (data) {
+
+                    case 2: return AppUniqueId.CourtPreferences_Divisions_EvenRotation
+
+                    case 3: return AppUniqueId.CourtPreferences_Grades_EvenRotation
+
+                    case 4: return AppUniqueId.CourtPreferences_Teams_EvenRotation
+
+                    default: break;
+                }
+
+            case "subPref2":
+
+                switch (data) {
+
+                    case 6: return AppUniqueId.CourtPreferences_AllocSameCourt_Divisions
+
+                    case 7: return AppUniqueId.CourtPreferences_AllocSameCourt_Grades
+
+                    default: break;
+                }
+
+            case "homeTeamRotation":
+
+                switch (data) {
+
+                    case 1: return AppUniqueId.homeAndAwayComp
+
+                    case 2: return AppUniqueId.centreVenueComp
+
+                    default: break;
+                }
+
+            default: break;
+        }
+
+    }
+
 
     anyGradePrefenceView() {
         const { courtRotation, evenRotation, venueConstrainstData, selectedRadioBtn } = this.props.venueTimeState
@@ -630,15 +691,19 @@ class CompetitionVenueTimesPrioritisation extends Component {
                 >
 
                     {courtRotationList.length > 0 && courtRotationList.map((item, index) => {
+
                         return (
                             <div >
                                 <div className='contextualHelp-RowDirection' >
-                                    <Radio key={"main" + index} value={item.id}>{item.description}</Radio>
-                                    <div style={{ marginLeft: -20, marginTop: 3 }}>
-                                        <Tooltip background='#ff8237'>
-                                            <span>{item.helpMsg}</span>
-                                        </Tooltip>
-                                    </div>
+                                    <Radio id={this.getCourtRotationId(item.id, 'courtRotation')} key={"main" + index} value={item.id}>{item.description}</Radio>
+                                    {
+                                        item.helpMsg &&
+                                        <div style={{ marginLeft: -20, marginTop: 3 }}>
+                                            <Tooltip background='#ff8237'>
+                                                <span>{item.helpMsg}</span>
+                                            </Tooltip>
+                                        </div>
+                                    }
                                 </div>
                                 {item.selectedPrefrence == 1 &&
                                     <div className="ml-5" >
@@ -649,7 +714,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                         >
                                             {evenRotaionList.length > 0 && evenRotaionList.map((item, index) => {
                                                 return (
-                                                    <Radio key={"sec" + index} value={item.id}>{item.description}</Radio>
+                                                    <Radio id={this.getCourtRotationId(item.id, 'subPref1')} key={"sec" + index} value={item.id}>{item.description}</Radio>
                                                 )
 
                                             }
@@ -668,7 +733,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                         >
                                             {allocateSameCourtList.length > 0 && allocateSameCourtList.map((item, index) => {
                                                 return (
-                                                    <Radio value={item.id}>{item.description}</Radio>
+                                                    <Radio id={this.getCourtRotationId(item.id, 'subPref2')} value={item.id}>{item.description}</Radio>
                                                 )
 
                                             }

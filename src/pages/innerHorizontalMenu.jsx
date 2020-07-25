@@ -6,6 +6,7 @@ import AppConstants from "../themes/appConstants";
 import { checkOrganisationLevel } from "../util/permissions";
 import AccountMenu from "./InnerHorizontalMenu/AccountMenu";
 import "./layout.css";
+import AppUniqueId from "../themes/appUniqueId";
 
 const { SubMenu } = Menu;
 
@@ -55,38 +56,38 @@ class InnerHorizontalMenu extends React.Component {
                     <SubMenu
                         key="sub1"
                         title={
-                            <span>Own Competitions</span>
+                            <span id={AppUniqueId.own_comp_tab} >Own Competitions</span>
                         }
                     >
                         <Menu.Item key="2">
                             {/* <a href="https://comp-management-test.firebaseapp.com/quick-competitions.html">Quick Competition</a> */}
                             <NavLink to="/quickCompetition">
-                                <span>Quick Competition</span>
+                                <span id={AppUniqueId.quick_comp_subtab}>Quick Competition</span>
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="3">
                             <NavLink to="/competitionOpenRegForm">
-                                <span> Competition Details</span>
+                                <span id={AppUniqueId.comp_details_subtab}> Competition Details</span>
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="4">
                             <NavLink to="/competitionPlayerGrades">
-                                <span>Player Grading</span>
+                                <span id={AppUniqueId.player_grad_subtab}>Player Grading</span>
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="5">
                             <NavLink to="/competitionPartTeamGradeCalculate">
-                                <span>Team Grading</span>
+                                <span id={AppUniqueId.team_grad_subtab}>Team Grading</span>
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="6">
                             <NavLink to="/competitionCourtAndTimesAssign">
-                                <span>Time Slots</span>
+                                <span id={AppUniqueId.timeslots_subtab}>Time Slots</span>
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="7">
                             <NavLink to="/competitionVenueTimesPrioritisation">
-                                <span>Venues</span>
+                                <span id={AppUniqueId.venues_subtab}>Venues</span>
                             </NavLink>
                         </Menu.Item>
                         {/* <Menu.Item key="8">
@@ -96,12 +97,12 @@ class InnerHorizontalMenu extends React.Component {
                         </Menu.Item> */}
                         <Menu.Item key="9">
                             <NavLink to="/competitionFormat">
-                                <span>Competition Format</span>
+                                <span id={AppUniqueId.comp_formats_subtab}>Competition Format</span>
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="10">
                             <NavLink to="/competitionFinals">
-                                <span>Finals</span>
+                                <span id={AppUniqueId.finals_subtab}>Finals</span>
                             </NavLink>
                         </Menu.Item>
                         {/* <Menu.Item key="11">
@@ -114,7 +115,7 @@ class InnerHorizontalMenu extends React.Component {
                         <Menu.Item key="18">
                             {/* <a href="https://comp-management-test.firebaseapp.com/competitions-draws.html">Draws</a> */}
                             <NavLink to="/competitionDraws">
-                                <span>Draws</span>
+                                <span id={AppUniqueId.draws_subtab}>Draws</span>
                             </NavLink>
                         </Menu.Item>
                         {/* <SubMenu
@@ -140,17 +141,17 @@ class InnerHorizontalMenu extends React.Component {
                     <SubMenu
                         key="sub3"
                         title={
-                            <span>Participating-In Competitions</span>
+                            <span id={AppUniqueId.participating_in_comp_tab}>Participating-In Competitions</span>
                         }
                     >
                         <Menu.Item key="14">
                             <NavLink to="/competitionPartPlayerGrades">
-                                <span>Player Grading</span>
+                                <span id={AppUniqueId.playergrad_particip_tab}>Player Grading</span>
                             </NavLink>
                         </Menu.Item>
                         <Menu.Item key="15">
                             <NavLink to="/competitionPartProposedTeamGrading">
-                                <span>Team Grading</span>
+                                <span id={AppUniqueId.teamgrad_particip_tab}>Team Grading</span>
                             </NavLink>
                         </Menu.Item>
                     </SubMenu>

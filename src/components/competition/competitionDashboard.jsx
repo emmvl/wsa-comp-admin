@@ -14,6 +14,7 @@ import { isArrayNotEmpty } from "../../util/helpers";
 import moment from "moment";
 import { checkRegistrationType } from "../../util/permissions";
 import Tooltip from 'react-png-tooltip'
+import AppUniqueId from "../../themes/appUniqueId";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -229,8 +230,8 @@ class CompetitionDashboard extends Component {
                                 <span className="year-select-heading">
                                     {AppConstants.year}:</span>
                                 <Select
-                                    className="year-select reg-filter-select1 ml-2"
-                                    style={{ maxWidth: 80 }}
+                                    className="year-select reg-filter-select-year ml-2"
+                                    // style={{ width: 90 }}
                                     onChange={yearId => this.onYearClick(yearId)}
                                     value={selectedYearId}
                                 >
@@ -292,7 +293,7 @@ class CompetitionDashboard extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                            <span className="form-heading">
+                            <span id={AppUniqueId.ownedCompetition_column_headers_table} className="form-heading">
                                 {AppConstants.ownedCompetitions}
                             </span>
                             <div style={{ marginTop: -10 }}>
@@ -317,7 +318,7 @@ class CompetitionDashboard extends Component {
                                             justifyContent: "flex-end"
                                         }}
                                     >
-                                        <Button className="primary-add-comp-form" type="primary" onClick={() => this.openModel(this.props)}
+                                        <Button id={AppUniqueId.newCompetitionButton} className="primary-add-comp-form" type="primary" onClick={() => this.openModel(this.props)}
                                         >
                                             + {AppConstants.newCompetition}
                                         </Button>
@@ -336,7 +337,7 @@ class CompetitionDashboard extends Component {
                                         }}
                                     >
                                         <NavLink to="/competitionReplicate">
-                                            <Button className="primary-add-comp-form" type="primary">
+                                            <Button id={AppUniqueId.replicateCompetitionButton} className="primary-add-comp-form" type="primary">
                                                 + {AppConstants.replicateCompetition}
                                             </Button>
                                         </NavLink>
@@ -389,7 +390,7 @@ class CompetitionDashboard extends Component {
     ownedView = () => {
         return (
             <div className="comp-dash-table-view">
-                <div className="table-responsive home-dash-table-view">
+                <div id={AppUniqueId.ownedCompetition_Table} className="table-responsive home-dash-table-view">
                     <Table
                         loading={this.props.competitionDashboardState.onLoad === true && true}
                         className="home-dashboard-table"
