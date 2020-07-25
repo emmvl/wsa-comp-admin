@@ -624,7 +624,10 @@ class CompetitionPartPlayerGrades extends Component {
                                                                     onChange={e => this.onChangeChildDivCheckbox(e.target.checked, teamIndex, playerIndex, "assigned")} >
                                                                 </Checkbox>
                                                                 <div className="col-sm d-flex align-items-center"  >
-                                                                    <NavLink to={{ pathname: `/userPersonal`, state: { userId: playerItem.userId } }}
+                                                                    <NavLink to={{
+                                                                        pathname: `/userPersonal`,
+                                                                        state: { userId: playerItem.userId, screenKey: 'competitionPartPlayerGrades', screen: "/competitionPartPlayerGrades" }
+                                                                    }}
                                                                     >
                                                                         <span style={{ cursor: "pointer" }}
                                                                             className="player-grading-player-name-text">{playerItem.playerName}</span>
@@ -658,11 +661,11 @@ class CompetitionPartPlayerGrades extends Component {
                                                                         <div className="col-sm d-flex">
                                                                             {playerItem.playerHistory.map((item, index) => {
                                                                                 return (
-                                                                                    item.divisionGrade!= null && item.divisionGrade!= "" ? 
-                                                                                    <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
-                                                                                        {item.divisionGrade + '(' + item.ladderResult + ')'}
-                                                                                    </Tag>
-                                                                                    : null
+                                                                                    item.divisionGrade != null && item.divisionGrade != "" ?
+                                                                                        <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
+                                                                                            {item.divisionGrade + '(' + item.ladderResult + ')'}
+                                                                                        </Tag>
+                                                                                        : null
                                                                                 )
                                                                             })}
                                                                         </div>
@@ -831,7 +834,10 @@ class CompetitionPartPlayerGrades extends Component {
                                                     onChange={e => this.onChangeChildDivCheckbox(e.target.checked, 0, playerIndex, "unAssigned")} >
                                                 </Checkbox>
                                                 <div className="col-sm d-flex align-items-center"  >
-                                                    <NavLink to={{ pathname: `/userPersonal`, state: { userId: playerItem.userId } }}
+                                                    <NavLink to={{
+                                                        pathname: `/userPersonal`,
+                                                        state: { userId: playerItem.userId, screen: "/competitionPartPlayerGrades", screenKey: 'competitionPartPlayerGrades' }
+                                                    }}
                                                     >
                                                         <span style={{ cursor: "pointer" }}
                                                             className="player-grading-player-name-text">{playerItem.playerName}</span>
@@ -864,11 +870,11 @@ class CompetitionPartPlayerGrades extends Component {
                                                         <div className="col-sm d-flex">
                                                             {playerItem.playerHistory.map((item, index) => {
                                                                 return (
-                                                                    item.divisionGrade!= null && item.divisionGrade!= "" ? 
-                                                                    <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
-                                                                        {item.divisionGrade + '(' + item.ladderResult + ')'}
-                                                                    </Tag>
-                                                                    : null
+                                                                    item.divisionGrade != null && item.divisionGrade != "" ?
+                                                                        <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
+                                                                            {item.divisionGrade + '(' + item.ladderResult + ')'}
+                                                                        </Tag>
+                                                                        : null
                                                                 )
                                                             })}
                                                         </div>

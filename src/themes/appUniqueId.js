@@ -64,8 +64,69 @@ const AppUniqueId = {
     PlayerGrading_unassigned_Player_CheckBox: "playgrad_unassigned_chkbox",
 
     //// Unique Ids for ImportPlayer ////////
+
     downLoadTempletebtn: "playerImport_template_btn",
     importPlayerBtn: "playerImport_upload_btn",
+
+    //// Unique Ids for competitionDashboard ////////
+
+    newCompetitionButton: "new_competition_button",
+    replicateCompetitionButton: "replic_competition_button",
+    ownedCompetition_column_headers_table: "owned_competition_headers",
+    ownedCompetition_Table: "owned_compet_content_table",
+    defaultComp_logo_checkbox: "default_logo_chkbox",
+
+    //// Unique Ids for registrationCompetitionForm ////////
+
+    select_Venues: "select_venues",
+    add_Venue: "add_venues",
+    comp_type1: "comp_type1",
+    comp_type2: "comp_type2",
+    comp_format1: "comp_format1",
+    comp_format2: "comp_format2",
+    comp_format3: "comp_format3",
+    comp_format4: "comp_format4",
+    comp_start_date: "comp_start_date",
+    comp_end_date: "comp_end_date",
+    time_rounds_days: "time_rounds_days",
+    time_rounds_hrs: "time_rounds_hrs",
+    time_rounds_mins: "time_rounds_mins",
+    add_non_playingdate_button: "add_non-playingdate_button",
+    team_min_players: "team_min_players",
+    team_max_players: "team_max_players",
+    comp_savedraft_button: "comp_savedraft_button",
+    comp_page1_Next_button: "comp_page1_Next_button",//////
+    comp_year_refid: "comp_year_refid",
+
+    //// Unique Ids for innerHorizontalMenu for Own Competition Tab //////// 
+
+    comp_details_tab: "comp_details_tab",
+    comp_division_tab: "comp_division_tab",
+    own_comp_tab: "own_comp_tab",//////
+    quick_comp_subtab: "quick_comp_subtab",
+    comp_details_subtab: "comp_details_subtab",
+    player_grad_subtab: "player_grad_subtab",
+    team_grad_subtab: "team_grad_subtab",
+    timeslots_subtab: "timeslots_subtab",
+    venues_subtab: "venues_subtab",
+    comp_formats_subtab: "comp_formats_subtab",
+    finals_subtab: "finals_subtab",
+    draws_subtab: "draws_subtab",
+    participating_in_comp_tab: "participating_in_comp_tab",
+    playergrad_particip_tab: "playergrad_particip_tab",
+    teamgrad_particip_tab: "teamgrad_particip_tab",
+
+    //// Unique Ids for CompetitionDivision ////////
+
+    existing_comp_dropdown: "existing_comp_dropdown",
+    div_gender_chkbox: "div_gender_chkbox",
+    div_gender_refid: "div_gender_refid",
+    div_ageres_chkbox: "div_ageres_chkbox",
+    div_ageres_fromdate: "div_ageres_fromdate",
+    div_ageres_todate: "div_ageres_todate",
+    add_div_button: "add_div_button",
+    compdiv_save_button: "compdiv_save_button",
+    compdiv_cancel_button: "compdiv_cancel_button"
 
 };
 

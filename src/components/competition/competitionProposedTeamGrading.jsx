@@ -130,25 +130,28 @@ const columns = [
         render: (playerHistory, record, key) => (
             <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>
                 {playerHistory.map((item, index) => (
-                     (item.divisionGrade!= null && item.divisionGrade!= "") ?
-                    <Tooltip
-                        className="comp-player-table-tag2"
-                        style={{ height: "100%" }}
-                        onMouseEnter={() => this_obj.changeHover(item, key, index, true)}
-                        onMouseLeave={() => this_obj.changeHover(item, key, index, false)}
-                        visible={item.hoverVisible}
+                    (item.divisionGrade != null && item.divisionGrade != "") ?
+                        <Tooltip
+                            className="comp-player-table-tag2"
+                            style={{ height: "100%" }}
+                            onMouseEnter={() => this_obj.changeHover(item, key, index, true)}
+                            onMouseLeave={() => this_obj.changeHover(item, key, index, false)}
+                            visible={item.hoverVisible}
 
-                        title={item.playerName}>
-                        <NavLink to={{ pathname: `/userPersonal`, state: { userId: item.userId } }}
-                        >
-                            <Tag className="comp-player-table-tag" style={{ cursor: "pointer" }} key={item.historyPlayerId + index}
+                            title={item.playerName}>
+                            <NavLink to={{
+                                pathname: `/userPersonal`,
+                                state: { userId: item.userId, screenKey: 'competitionProposedTeamGrading', screen: "/competitionProposedTeamGrading" }
+                            }}
                             >
-                                {item.divisionGrade!= null && item.divisionGrade!= "" ? (item.divisionGrade + '(' + item.ladderResult + ')') : ""}
-                            </Tag>
-                        </NavLink>
-                    </Tooltip>
-                    // </a>
-                     : null
+                                <Tag className="comp-player-table-tag" style={{ cursor: "pointer" }} key={item.historyPlayerId + index}
+                                >
+                                    {item.divisionGrade != null && item.divisionGrade != "" ? (item.divisionGrade + '(' + item.ladderResult + ')') : ""}
+                                </Tag>
+                            </NavLink>
+                        </Tooltip>
+                        // </a>
+                        : null
                 ))}
             </span>
         ),

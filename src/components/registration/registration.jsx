@@ -33,9 +33,12 @@ const columns = [
         key: 'name',
         sorter: (a, b) => a.name.localeCompare(b.name),
         render: (name, record) =>
-        <NavLink to={{ pathname: `/userPersonal`, state: {userId: record.userId} }}>
-            <span className="input-heading-add-another pt-0" >{name}</span>
-        </NavLink>
+            <NavLink to={{
+                pathname: `/userPersonal`,
+                state: { userId: record.userId, screenKey: 'registration', screen: "/registration" }
+            }}>
+                <span className="input-heading-add-another pt-0" >{name}</span>
+            </NavLink>
     },
     {
         title: 'Registration date',

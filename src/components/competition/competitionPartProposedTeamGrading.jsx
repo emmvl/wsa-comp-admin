@@ -82,7 +82,10 @@ const columns = [
                         visible={item.hoverVisible}
 
                         title={item.playerName}>
-                        <NavLink to={{ pathname: `/userPersonal`, state: { userId: item.userId } }}
+                        <NavLink to={{
+                            pathname: `/userPersonal`,
+                            state: { userId: item.userId, screenKey: 'competitionPartProposedTeamGrading', screen: "/competitionPartProposedTeamGrading" }
+                        }}
                         >
                             <Tag className="comp-player-table-tag" style={{ cursor: "pointer" }} key={item}>
                                 {item.teamText}
