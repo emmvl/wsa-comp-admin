@@ -99,17 +99,25 @@ const columns = [
         key: 'teamName',
         sorter: (a, b) => tableSort(a, b, "teamName"),
         render: (teamName, record, index) => (
-            record.isDirectRegistration == 0 ? (
-                <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>{teamName}</span>
-            ) : (
-                    <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>
+            // record.isDirectRegistration == 0 ? (
+            //     <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>{teamName}</span>
+            // ) : (
+            //         <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>
+            //             <Input className="input-inside-team-grades-table" style={{ width: '230px' }}
+            //                 onChange={e => this_obj.props.onchangeCompOwnFinalTeamGradingData(e.target.value, index, "teamName")}
+            //                 placeholder={"Team Name"}
+            //                 value={teamName}
+            //             />
+            //         </span>
+            //     )
+
+            <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>
                         <Input className="input-inside-team-grades-table" style={{ width: '230px' }}
                             onChange={e => this_obj.props.onchangeCompOwnFinalTeamGradingData(e.target.value, index, "teamName")}
                             placeholder={"Team Name"}
                             value={teamName}
                         />
                     </span>
-                )
         )
     },
     {
