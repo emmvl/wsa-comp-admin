@@ -230,7 +230,7 @@
 }
 
 .ant-input-lg {
-  height: 56px;
+  height: 56px!important;
   color: var(--app-1b1b34);
   font-family: inter;
   font-size: 14px;
