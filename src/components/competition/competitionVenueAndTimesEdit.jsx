@@ -405,6 +405,45 @@ class CompetitionVenueAndTimesEdit extends Component {
         );
     };
 
+    handlePlacesAutocomplete = (data) => {
+        const { stateList } = this.props.commonReducerState;
+        const address = data;
+
+        if (!address.addressOne) {
+            this.setState({
+                venueAddressError: ValidationConstants.venueAddressDetailsError,
+            })
+        } else {
+            this.setState({
+                venueAddressError: ''
+            })
+        }
+
+        this.setState({
+            venueAddress: address,
+        });
+
+        const stateRefId = stateList.length > 0 && address.state
+          ? stateList.find((state) => state.name === address.state).id
+          : null;
+
+        this.props.form.setFieldsValue({
+            stateRefId,
+            addressOne: address.addressOne || null,
+            suburb: address.suburb || null,
+            postcode: address.postcode || null,
+        });
+
+        if (address.addressOne) {
+            this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId');
+            this.props.updateVenuAndTimeDataAction(address.addressOne, 'Venue', 'street1');
+            this.props.updateVenuAndTimeDataAction(address.suburb, 'Venue', 'suburb');
+            this.props.updateVenuAndTimeDataAction(address.postcode, 'Venue', 'postalCode');
+            this.props.updateVenuAndTimeDataAction(address.lat, 'Venue', 'lat');
+            this.props.updateVenuAndTimeDataAction(address.lng, 'Venue', 'lng');
+        }
+    };
+
     ////////form content view
     contentView = (getFieldDecorator) => {
         const { venuData } = this.props.venueTimeState
@@ -469,41 +508,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                               venueAddressError: ''
                           })
                       }}
-                      onSetData={(data) => {
-                          const address = data.mapData;
-
-                          if (address.addressOne === null) {
-                              this.setState({
-                                  venueAddressError: ValidationConstants.venueAddressDetailsError,
-                              })
-                          } else {
-                              this.setState({
-                                  venueAddressError: ''
-                              })
-                          }
-
-                          this.setState({
-                              venueAddress: address,
-                          });
-
-                          const selectedState = address.state
-                            ? stateList.find((state) => state.name === address.state).id
-                            : null;
-                          const stateRefId = stateList.length > 0
-                            ? selectedState
-                            : null;
-                          delete address.state;
-
-                          this.props.form.setFieldsValue({
-                              ...address,
-                              stateRefId,
-                          });
-
-                          this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId');
-                          this.props.updateVenuAndTimeDataAction(address.addressOne, 'Venue', 'street1');
-                          this.props.updateVenuAndTimeDataAction(address.suburb, 'Venue', 'suburb');
-                          this.props.updateVenuAndTimeDataAction(address.postcode, 'Venue', 'postalCode');
-                      }}
+                      onSetData={this.handlePlacesAutocomplete}
                     />
                 </Form.Item>
 
@@ -877,7 +882,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 </div>
             </div>
         );
-    };
+    };API_COMMON_SAGA_FAIL
 
     onAddVenue = (e) => {
         e.preventDefault();
@@ -904,6 +909,11 @@ class CompetitionVenueAndTimesEdit extends Component {
                     message.error(ValidationConstants.emptyGameDaysValidation);
                 }
                 else {
+
+                    if (venuData.venueCourts.length == 0) {
+                        message.error(ValidationConstants.emptyAddCourtValidation);
+                        return;
+                    }
 
                     venuData.venueCourts.map((item, index) => {
                         (item.availabilities || []).map((avItem, avIndex) => {

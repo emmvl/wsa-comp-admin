@@ -103,7 +103,7 @@ export function* addVenueSaga(action) {
         } else {
             yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
             setTimeout(() => {
-                alert(result.data.message);
+                message.error(result.result.data.message);
             }, 800);
         }
     } catch (error) {

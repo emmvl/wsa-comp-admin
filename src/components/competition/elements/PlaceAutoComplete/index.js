@@ -20,12 +20,7 @@ const mapAddressInfo = (addressComponents) => {
     }
   }
 
-  return {
-    addressOne: null,
-    suburb: null,
-    state: null,
-    postcode: null,
-  };
+  return null;
 };
 
 const PlacesAutocomplete = ({
@@ -61,23 +56,23 @@ const PlacesAutocomplete = ({
   const handleSelect = ({description}) => () => {
     setValue(description, false);
     clearSuggestions();
-    const data = {
-      address: description,
-      mapData: null,
-      lat: '',
-      lng: '',
-    };
-    data.address = description;
+    let mapData = null;
+
     // Get latitude and longitude via utility functions
     getGeocode({address: description})
       .then((results) => {
-        data.mapData = mapAddressInfo(results[0].address_components);
+        mapData = mapAddressInfo(results[0].address_components);
         return getLatLng(results[0])
       })
       .then(({lat, lng}) => {
-        data.lat = lat;
-        data.lng = lng;
-        onSetData(data);
+
+        const result = mapData ? {
+          ...mapData,
+          lat,
+          lng,
+        } : null;
+
+        onSetData(result);
       })
       .catch((error) => {
         console.log('Error: ', error);
