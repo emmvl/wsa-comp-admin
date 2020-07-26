@@ -241,6 +241,19 @@ class CompetitionVenueAndTimesEdit extends Component {
                     getDataLoading: false
                 });
                 this.setFormFieldValue();
+
+                let venueData = this.props.venueTimeState.venuData;
+                this.setState({
+                    venueAddress: {
+                        addressOne: venueData.street1,
+                        suburb: venueData.suburb,
+                        stateRefId: venueData.stateRefId,
+                        postcode: venueData.postalCode,
+                        lat: venueData.lat,
+                        lng: venueData.lng,
+                    }
+                });
+
                 this.setVenueOrganisation();
             }
 

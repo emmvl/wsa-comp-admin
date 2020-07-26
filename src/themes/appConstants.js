@@ -1487,6 +1487,7 @@ const AppConstants = {
   createdAt: "Created at",
   download: "Download",
   pleaseInputAddress: "Please input address",
+  venueSavedSuccessfully: "Successfully Saved",
 };
 
 export default AppConstants;

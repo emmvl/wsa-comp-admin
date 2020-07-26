@@ -98,7 +98,7 @@ export function* addVenueSaga(action) {
                 status: result.result.status
             });
             // setTimeout(() => {
-            message.success('Successfully Inserted');
+            message.success(AppConstants.venueSavedSuccessfully);
             // }, 500);
         } else {
             yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
