@@ -28,6 +28,7 @@ import ColorsArray from "../../util/colorsArray";
 import PlayerCommentModal from "../../customComponents/playerCommentModal";
 import moment from "moment"
 import Tooltip from 'react-png-tooltip'
+import AppUniqueId from "../../themes/appUniqueId";
 
 
 
@@ -169,7 +170,7 @@ class CompetitionPlayerGrades extends Component {
                                     <Dropdown overlay={menu} placement="bottomLeft">
                                         <Button className="primary-add-comp-form" type="primary">
                                             <div className="row">
-                                                <div className="col-sm">
+                                                <div id={AppUniqueId.PlayerGrading_ImportBtn} className="col-sm">
                                                     <img src={AppImages.import} alt="" className="export-image" />
                                                     {AppConstants.action}
                                                 </div>
@@ -187,7 +188,7 @@ class CompetitionPlayerGrades extends Component {
                                         }}>
                                             <Button className="primary-add-comp-form" type="primary">
                                                 <div className="row">
-                                                    <div className="col-sm">
+                                                    <div id={AppUniqueId.PlayerGrading_ImportTeamBtn} className="col-sm">
                                                         <img
                                                             src={AppImages.import}
                                                             alt=""
@@ -416,9 +417,10 @@ class CompetitionPlayerGrades extends Component {
                             <div className="com-year-select-heading-view pb-3" >
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
+                                    id={AppUniqueId.PlayerGradingYear_dpdn}
                                     name={"yearRefId"}
-                                    style={{ minWidth: 80, maxWidth: 80 }}
-                                    className="year-select reg-filter-select1 ml-2"
+                                    // style={{ width: 90 }}
+                                    className="year-select reg-filter-select-year ml-2"
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
@@ -440,9 +442,9 @@ class CompetitionPlayerGrades extends Component {
                             }} >
                                 <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
-                                    style={{ minWidth: 160 }}
+                                    id={AppUniqueId.PlayerGradingYCompetition_dpdn}
                                     name={"competition"}
-                                    className="year-select reg-filter-select1 ml-2"
+                                    className="year-select reg-filter-select-competition ml-2"
                                     onChange={competitionId => this.onCompetitionChange(competitionId)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
@@ -465,6 +467,7 @@ class CompetitionPlayerGrades extends Component {
                                 }} >
                                     <span className='year-select-heading'>{AppConstants.division}:</span>
                                     <Select
+                                        id={AppUniqueId.PlayerGradingYDivisionName_dpdn}
                                         style={{ minWidth: 120, marginRight: 65 }}
                                         className="year-select reg-filter-select1 ml-2"
                                         onChange={(divisionId) => this.onDivisionChange(divisionId)}
@@ -639,7 +642,10 @@ class CompetitionPlayerGrades extends Component {
                                                                     onChange={e => this.onChangeChildDivCheckbox(e.target.checked, teamIndex, playerIndex, "assigned")} >
                                                                 </Checkbox>
                                                                 <div className="col-sm d-flex align-items-center"  >
-                                                                    <NavLink to={{ pathname: `/userPersonal`, state: { userId: playerItem.userId } }}
+                                                                    <NavLink to={{
+                                                                        pathname: `/userPersonal`,
+                                                                        state: { userId: playerItem.userId, screenKey: 'competitionPlayerGrades', screen: "/competitionPlayerGrades" }
+                                                                    }}
                                                                     >
                                                                         <span style={{ cursor: "pointer" }}
                                                                             className="player-grading-player-name-text">{playerItem.playerName}</span>
@@ -673,10 +679,11 @@ class CompetitionPlayerGrades extends Component {
                                                                         <div className="col-sm d-flex">
                                                                             {playerItem.playerHistory.map((item, index) => {
                                                                                 return (
-                                                                                    <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
-                                                                                        {item.divisionGrade + '(' + item.ladderResult + ')'}
-                                                                                    </Tag>
-
+                                                                                    item.divisionGrade != null && item.divisionGrade != "" ?
+                                                                                        <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
+                                                                                            {item.divisionGrade + '(' + item.ladderResult + ')'}
+                                                                                        </Tag>
+                                                                                        : null
                                                                                 )
                                                                             })}
                                                                         </div>
@@ -806,6 +813,7 @@ class CompetitionPlayerGrades extends Component {
                             <div className="player-grading-droppable-heading-view">
                                 <div className="row" >
                                     <Checkbox
+                                        id={AppUniqueId.PlayerGrading_unassigned_Player_CheckBox}
                                         className="single-checkbox mt-1 check-box-player"
                                         checked={unassignedData.isChecked}
                                         onChange={e => this.onChangeParentDivCheckbox(e.target.checked, 0, "unAssigned")} >
@@ -818,7 +826,7 @@ class CompetitionPlayerGrades extends Component {
                                     </div>
                                     {this.state.divisionId != null &&
                                         <div className="col-sm d-flex justify-content-end">
-                                            <Button className="primary-add-comp-form" type="primary" onClick={this.addNewTeam}  >
+                                            <Button id={AppUniqueId.PlayerGrading_CreateTeam} className="primary-add-comp-form" type="primary" onClick={this.addNewTeam}  >
                                                 + {AppConstants.createTeam}
                                             </Button>
 
@@ -845,7 +853,10 @@ class CompetitionPlayerGrades extends Component {
                                                     onChange={e => this.onChangeChildDivCheckbox(e.target.checked, 0, playerIndex, "unAssigned")} >
                                                 </Checkbox>
                                                 <div className="col-sm d-flex align-items-center"  >
-                                                    <NavLink to={{ pathname: `/userPersonal`, state: { userId: playerItem.userId } }}
+                                                    <NavLink to={{
+                                                        pathname: `/userPersonal`,
+                                                        state: { userId: playerItem.userId, screenKey: 'competitionPlayerGrades', screen: "/competitionPlayerGrades" }
+                                                    }}
                                                     >
                                                         <span style={{ cursor: "pointer" }}
                                                             className="player-grading-player-name-text">{playerItem.playerName}</span>
@@ -878,10 +889,11 @@ class CompetitionPlayerGrades extends Component {
                                                         <div className="col-sm d-flex">
                                                             {playerItem.playerHistory.map((item, index) => {
                                                                 return (
-                                                                    <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
-                                                                        {item.divisionGrade + '(' + item.ladderResult + ')'}
-                                                                    </Tag>
-
+                                                                    item.divisionGrade != null && item.divisionGrade != "" ?
+                                                                        <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
+                                                                            {item.divisionGrade + '(' + item.ladderResult + ')'}
+                                                                        </Tag>
+                                                                        : null
                                                                 )
                                                             })}
                                                         </div>
@@ -914,13 +926,15 @@ class CompetitionPlayerGrades extends Component {
                     onOk={() => this.handleOk()}
                     onCancel={() => this.handleCancel()}
                 >
-                    <InputWithHead
-                        required={"pt-0 mt-0"}
-                        heading={AppConstants.addTeam}
-                        placeholder={AppConstants.pleaseEnterteamName}
-                        onChange={(e) => this.setState({ newTeam: e.target.value })}
-                        value={this.state.newTeam}
-                    />
+                    <div id={AppUniqueId.PlayerGrading_addTeamName}>
+                        <InputWithHead
+                            required={"pt-0 mt-0"}
+                            heading={AppConstants.addTeam}
+                            placeholder={AppConstants.pleaseEnterteamName}
+                            onChange={(e) => this.setState({ newTeam: e.target.value })}
+                            value={this.state.newTeam}
+                        />
+                    </div>
 
                 </Modal>
                 <PlayerCommentModal

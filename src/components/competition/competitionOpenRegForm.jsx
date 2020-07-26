@@ -1098,8 +1098,8 @@ class CompetitionOpenRegForm extends Component {
                                         { rules: [{ required: true, message: ValidationConstants.pleaseSelectYear }] })( */}
                                 <Select
                                     name={"yearRefId"}
-                                    className="year-select reg-filter-select1 ml-2"
-                                    // style={{ minWidth: 160 }}
+                                    className="year-select reg-filter-select-year ml-2"
+                                    // style={{ width: 90 }}
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
@@ -1130,9 +1130,9 @@ class CompetitionOpenRegForm extends Component {
                                     {AppConstants.competition}:
             </span>
                                 <Select
-                                    style={{ minWidth: 200 }}
+                                    // style={{ minWidth: 200 }}
                                     name={"competition"}
-                                    className="year-select reg-filter-select1 ml-2"
+                                    className="year-select reg-filter-select-competition ml-2"
                                     onChange={competitionId => this.onCompetitionChange(competitionId)
                                     }
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}

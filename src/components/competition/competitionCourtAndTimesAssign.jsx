@@ -30,6 +30,7 @@ import {
 import AppImages from "../../themes/appImages";
 import Loader from '../../customComponents/loader'
 import Tooltip from 'react-png-tooltip'
+import AppUniqueId from "../../themes/appUniqueId";
 
 
 
@@ -412,6 +413,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             },
                         )(
                             <Select
+                                id={AppUniqueId.timeRotation_matchDuration_Day_of_the_week_drpdn}
                                 style={{ width: "80%" }}
                                 onChange={(dayOfTheWeek) => this.props.UpdateTimeSlotsData(dayOfTheWeek, 'dayRefId', 'competitionVenueTimeslotsDayTime', index, null, null)}
                                 placeholder={'Select Week Day'}
@@ -427,6 +429,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                 <div className="col-sm">
                     <InputWithHead heading={index == 0 ? AppConstants.startTime : " "} />
                     <TimePicker
+                        id={AppUniqueId.timeRotation_matchDuration_StartTime_drpdn}
                         key={"startTime"}
                         className="comp-venue-time-timepicker"
                         style={{ width: "80%" }}
@@ -442,6 +445,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                 <div className="col-sm">
                     <InputWithHead heading={index == 0 ? AppConstants.endTime : " "} />
                     <TimePicker
+                        id={AppUniqueId.timeRotation_matchDuration_EndTime_drpdn}
                         key={"endTime"}
                         className="comp-venue-time-timepicker"
                         style={{ width: "80%" }}
@@ -499,9 +503,10 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     {AppConstants.year}:
                                   </span>
                                 <Select
+                                    id={AppUniqueId.compYear_dpdnTimeslot}
                                     name={"yearRefId"}
-                                    className="year-select reg-filter-select1 ml-2"
-                                    style={{ minWidth: 80 }}
+                                    className="year-select reg-filter-select-year ml-2"
+                                    // style={{ width: 90 }}
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
@@ -515,7 +520,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-4 pb-3" >
+                        <div className="col-sm-3 pb-3" >
                             <div style={{
                                 width: "fit-content", display: "flex",
                                 flexDirection: "row",
@@ -523,9 +528,9 @@ class CompetitionCourtAndTimesAssign extends Component {
                             }} >
                                 <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
-                                    style={{ minWidth: 250 }}
+                                    id={AppUniqueId.competitionName_dpdnTimeslot}
                                     name={"competition"}
-                                    className="year-select reg-filter-select1 ml-2"
+                                    className="year-select reg-filter-select-competition ml-2"
                                     onChange={competitionId => this.onCompetitionChange(competitionId)
                                     }
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
@@ -553,6 +558,65 @@ class CompetitionCourtAndTimesAssign extends Component {
         }, 300)
     }
 
+    getCourtRotationId(data, key) {
+
+
+        switch (key) {
+
+            case "timeSlotPref":
+
+                switch (data) {
+                    case 7: return AppUniqueId.timeRotationPreferenceRadiobutton
+
+                    case 8: return AppUniqueId.allocateSameTimeslotRadiobutton
+
+                    default: break;
+
+                }
+                break;
+
+            case "subPref":
+
+                switch (data) {
+                    case 4: return AppUniqueId.allocateSameTimeslotDivision
+
+                    case 5: return AppUniqueId.allocateSameTimeslotGrade
+
+                    default: break;
+
+                }
+                break;
+
+            case "timeSlotGenration":
+
+                switch (data) {
+                    case 1: return AppUniqueId.timeRotation_matchDuration_RadioBtn
+
+                    case 2: return AppUniqueId.manuallyAddTimeslot
+
+                    default: break;
+
+                }
+                break;
+
+            case "manuallySubPref":
+
+                switch (data) {
+                    case 1: return AppUniqueId.manuallyAddTimeslot_ApplyAllVenues
+
+                    case 2: return AppUniqueId.manuallyAddTimeslot_ApplySettingsIndividualVenues
+
+                    default: break;
+
+                }
+                break;
+
+            default: break
+
+        }
+
+    }
+
 
     ////////form content view
     contentView = (getFieldDecorator) => {
@@ -578,7 +642,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 return (
                                     <div key={"timeSlot" + index}>
                                         <div className='contextualHelp-RowDirection' >
-                                            <Radio key={item.id} value={item.id}> {item.description}</Radio>
+                                            <Radio id={this.getCourtRotationId(item.id, 'timeSlotPref')} key={item.id} value={item.id}> {item.name}</Radio>
                                             <div style={{ marginLeft: -22, marginTop: -5 }}>
                                                 <Tooltip background='#ff8237'>
                                                     <span>{item.helpMsg}</span>
@@ -598,7 +662,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                         {timeSlotData.mainTimeRotationID == item.id && item.subReferences.map((subArr) => {
                                                             return (
 
-                                                                <Radio key={"data" + subArr.id} value={subArr.id}> {subArr.description}</Radio>
+                                                                <Radio id={this.getCourtRotationId(item.id, 'subPref')} key={"data" + subArr.id} value={subArr.id}> {subArr.description}</Radio>
                                                             )
                                                         })}
                                                     </Radio.Group>
@@ -622,7 +686,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     return (
                                         <div key={"slot" + index}>
                                             <div className='contextualHelp-RowDirection' >
-                                                <Radio key={item.id} value={item.id}> {item.description}</Radio>
+                                                <Radio id={this.getCourtRotationId(item.id, 'timeSlotGenration')} key={item.id} value={item.id}> {item.description}</Radio>
                                                 <div style={{ marginLeft: -22, marginTop: -5 }}>
                                                     <Tooltip background='#ff8237'>
                                                         <span>{item.helpMsg}</span>
@@ -636,14 +700,14 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                             return this.addDataTimeSlot(item, index, getFieldDecorator, timeSlotData.competitionVenueTimeslotsDayTime)
                                                         })}
                                                     </div>
-                                                    <span className='input-heading-add-another' onClick={() => this.addAnotherTimeSlot(null, null, "competitionVenueTimeslotsDayTime")} > + {AppConstants.addAnotherDay}</span>
+                                                    <span id={AppUniqueId.timeRotation_matchDuration_Add_anotherday_Btn} className='input-heading-add-another' onClick={() => this.addAnotherTimeSlot(null, null, "competitionVenueTimeslotsDayTime")} > + {AppConstants.addAnotherDay}</span>
                                                 </div>
                                             }
                                             {timeSlotData.mainTimeRotationID === 8 && item.id == 1 && timeSlotData.timeslotGenerationRefId === index + 1 &&
                                                 < div >
 
                                                     <div className="fluid-width">
-                                                        {timeSlotData.timeslotRotationRefId == 4 && <span className="applicable-to-heading">
+                                                        {timeSlotData.timeslotRotationRefId == 4 && <span id={AppUniqueId.timeRotation_matchDuration_AdddivisionTimeslotOrderTextField} className="applicable-to-heading">
                                                             {AppConstants.divisionsTimeSlot}
                                                         </span>
                                                         }
@@ -659,7 +723,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                         })}
                                                     </div>
 
-                                                    <span className='input-heading-add-another' onClick={() => this.addDivisionOrGrade(null, null, "competitionTimeslotsEntity")}>+ {AppConstants.addTimeSlot}</span>
+                                                    <span id={AppUniqueId.timeRotation_matchDuration_AddAnotherTimeslot_Btn} className='input-heading-add-another' onClick={() => this.addDivisionOrGrade(null, null, "competitionTimeslotsEntity")}>+ {AppConstants.addTimeSlot}</span>
                                                 </div>
                                             }
                                         </div>
@@ -676,7 +740,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                 >
                                                     {commonState.applyVenue.length > 0 && commonState.applyVenue.map(item => {
                                                         return (
-                                                            <Radio key={item.id} value={item.id}> {item.description}</Radio>
+                                                            <Radio id={this.getCourtRotationId(item.id, 'manuallySubPref')} key={item.id} value={item.id}> {item.description}</Radio>
                                                         )
                                                     }
                                                     )}
@@ -716,7 +780,7 @@ class CompetitionCourtAndTimesAssign extends Component {
 
                                                         )
                                                     })}
-                                                <span className='input-heading-add-another pointer' onClick={() => this.addTimeManualAllVenue(venueIndex, item, "competitionTimeslotManualAllVenue")} > + {AppConstants.addAnotherDay}</span>
+                                                <span id={AppUniqueId.manuallyAddTimeslot_ApplySettingsIndividualVenues_AddAnotherDayBtn} className='input-heading-add-another pointer' onClick={() => this.addTimeManualAllVenue(venueIndex, item, "competitionTimeslotManualAllVenue")} > + {AppConstants.addAnotherDay}</span>
                                             </div>
                                         )
                                     }
@@ -753,6 +817,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             )(
 
                                 <Select
+                                    id={AppUniqueId.manuallyAddTimeslot_ApplySettingsIndividualVenues_Day_of_the_week_drpdn}
                                     style={{ width: mainId == 8 ? "70%" : "70%", minWidth: 100 }}
                                     onChange={(dayOfTheWeek) => this.props.UpdateTimeSlotsDataManual(dayOfTheWeek, 'dayRefId', 'competitionTimeslotManualAllvenue', index, null, null, venueIndex)}
                                     // value={item.dayRefId}
@@ -775,6 +840,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     <div className={mainId == 8 ? "col-sm" : "col-sm"} >
                                         <InputWithHead heading={index == 0 && timeIndex == 0 ? AppConstants.startTime : ' '} />
                                         <TimePicker
+                                            id={AppUniqueId.manuallyAddTimeslot_ApplySettingsIndividualVenues_startTime}
                                             key={"startTime"}
                                             style={{ minWidth: 100, }}
                                             className="comp-venue-time-timepicker"
@@ -820,6 +886,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                     )(
 
                                                         < Select
+                                                            id={AppUniqueId.manuallyAddTimeslot_ApplySettingsIndividualVenues_Divisions}
                                                             mode='multiple'
                                                             placeholder="Select"
                                                             style={{ display: 'grid', alignContent: 'center' }}
@@ -875,7 +942,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 </div>
                             )
                         })}
-                        <span className='input-heading-add-another' onClick={() => this.addTimeManualPerVenue(index, null, "addTimeSlotManualperVenue", venueIndex)} > + {AppConstants.add_TimeSlot}</span>
+                        <span id={AppUniqueId.manuallyAddTimeslot_ApplySettingsIndividualVenues_AddTimeSlotBtn} className='input-heading-add-another' onClick={() => this.addTimeManualPerVenue(index, null, "addTimeSlotManualperVenue", venueIndex)} > + {AppConstants.add_TimeSlot}</span>
                     </div>
                     {data.length > 1 &&
                         <div className="col-sm-2 delete-image-timeSlot-view" onClick={() => this.addTimeManualPerVenue(index, venueIndex, "competitionTimeslotManualAllVenuedelete")}>
@@ -1028,6 +1095,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             },
                         )(
                             <Select
+                                id={AppUniqueId.manuallyAddTimeslot_ApplyAllVenues_Day_of_the_week_drpdn}
                                 style={{ width: mainId == 8 ? "70%" : "70%", minWidth: 100, }}
                                 onChange={(dayOfTheWeek) => this.props.UpdateTimeSlotsDataManual(dayOfTheWeek, 'dayRefId', 'competitionTimeslotManual', index, null, null)}
                                 placeholder="Select Week Day"
@@ -1178,7 +1246,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                         <div className="col-sm" >
                             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
                                 {/* <Button className="save-draft-text" htmlType="submit" type="save-draft-text">{AppConstants.saveDraft}</Button> */}
-                                <Button className="open-reg-button" htmlType="submit" type="primary">{AppConstants.save}</Button>
+                                <Button id={AppUniqueId.timeSlotSaveBtn} className="open-reg-button" htmlType="submit" type="primary">{AppConstants.save}</Button>
                             </div>
                         </div>
                     </div>

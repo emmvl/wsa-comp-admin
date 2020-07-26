@@ -382,7 +382,7 @@
 }
 
 .reg-payment-datepicker .ant-input-lg {
-  height: 44px;
+  height: 44px !important;
 }
 
 .reg-payment-header-view.ant-layout-header {
@@ -840,6 +840,26 @@ input[type=number] {
     // width: 123px;
   }
 }
+.reg-filter-select-year {
+  .ant-select-selection {
+    border: 1px solid var(--app-d9d9d9) !important;
+			width: 90px !important;				
+    min-height: 40px !important;
+					   
+    box-shadow: 0 8px 16px 0 rgba(27, 27, 52, 0.06);
+    background-color: var(--app-white);
+   // margin-right: 30px;
+  }}
+  .reg-filter-select-competition {
+    .ant-select-selection {
+      border: 1px solid var(--app-d9d9d9) !important;
+        min-width: 200px !important;				
+      min-height: 40px !important;
+               
+      box-shadow: 0 8px 16px 0 rgba(27, 27, 52, 0.06);
+      background-color: var(--app-white);
+     // margin-right: 30px;
+    }}
 
 .reg-filter-select1 {
   .ant-select-selection {

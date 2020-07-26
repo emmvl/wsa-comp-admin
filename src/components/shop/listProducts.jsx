@@ -12,6 +12,7 @@ import Loader from '../../customComponents/loader';
 import history from "../../util/history";
 import ShopSingleProductComponent from "../../customComponents/shopSingleProductComponent";
 import { getProductListingAction, deleteProductAction, clearProductReducer } from "../../store/actions/shopAction/productAction"
+import { isArrayNotEmpty } from "../../util/helpers";
 
 const { Footer, Content } = Layout;
 const { confirm } = Modal;
@@ -176,7 +177,7 @@ class ListProducts extends Component {
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="shop-product-content-div">
-                    {productListingData.length > 0 && productListingData.map((item, index) => {
+                    {isArrayNotEmpty(productListingData) && productListingData.map((item, index) => {
                         return (
                             <div key={"productListingData" + index}>
                                 <ShopSingleProductComponent
@@ -190,13 +191,15 @@ class ListProducts extends Component {
                     })}
                 </div>
                 <div className="d-flex justify-content-end">
-                    <Pagination
-                        className="antd-pagination"
-                        total={productListingTotalCount}
-                        onChange={(page) => this.handlePagination(page)}
-                        pageSize={this.state.limit}
-                        current={productListingCurrentPage}
-                    />
+                    {isArrayNotEmpty(productListingData) &&
+                        <Pagination
+                            className="antd-pagination"
+                            total={productListingTotalCount}
+                            onChange={(page) => this.handlePagination(page)}
+                            pageSize={this.state.limit}
+                            current={productListingCurrentPage}
+                        />
+                    }
                 </div>
             </div>
         );
