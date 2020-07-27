@@ -3,6 +3,7 @@ import { getMatchListSettings } from '../../../store/objectModel/getMatchTeamLis
 import moment from "moment";
 import liveScoreMatchModal from "../../objectModel/liveScoreMatchModal";
 import { isArrayNotEmpty } from '../../../util/helpers';
+import { array } from 'prop-types';
 
 var object = {
     id: '',
@@ -286,11 +287,23 @@ function checkUmpireType(umpireArray, key) {
 
 }
 
+
+// Remove duplicate rounds names 
+
+function removeDuplicateValues(array){
+    return array.filter((obj, index, self) =>
+    index === self.findIndex((el) => (
+        el["name"] === obj["name"]
+    ))
+)
+
+}
+
 function liveScoreMatchReducer(state = initialState, action) {
     switch (action.type) {
         //LIVESCORE Match LIST
         case ApiConstants.API_LIVE_SCORE_MATCH_LIST_LOAD:
-            return { ...state, onLoad: true, isFetchingMatchList: true };
+            return { ...state, onLoad: true, isFetchingMatchList: true, liveScoreMatchListData:[] };
 
         case ApiConstants.API_LIVE_SCORE_MATCH_LIST_SUCCESS:
 
@@ -671,7 +684,7 @@ function liveScoreMatchReducer(state = initialState, action) {
             state.highestSequence = sequenceValue
             let roundListArray = action.result
             roundListArray.sort((a, b) => Number(a.sequence) - Number(b.sequence));
-            state.roundList = roundListArray
+            state.roundList = removeDuplicateValues(roundListArray)
             return {
                 ...state,
                 onLoad: false,
