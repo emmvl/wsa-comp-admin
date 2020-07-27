@@ -98,7 +98,7 @@ class QuickCompetitionInvitations extends Component {
 
     ////////form content view
     contentView = () => {
-        const { teamPlayerArray, SelectedTeamPlayer, importModalVisible } = this.props.quickCompetitionState
+        const { teamPlayerArray, SelectedTeamPlayer, importModalVisible, importPlayer } = this.props.quickCompetitionState
         return (
             <div className="content-view pt-5 mt-0 ">
                 <span className='form-heading'>{AppConstants.how_Add_teams_players}</span>
@@ -116,7 +116,7 @@ class QuickCompetitionInvitations extends Component {
                         (item, index) => {
                             return (
                                 <div key={"playerArray" + index}>
-                                    <Radio value={item.id}>{item.value}</Radio>
+                                    <Radio disabled={item.id == 1 && importPlayer == 1 ? true : false} value={item.id}>{item.value}</Radio>
                                     {this.mergeExistingCompetition(
                                         item,
                                         SelectedTeamPlayer

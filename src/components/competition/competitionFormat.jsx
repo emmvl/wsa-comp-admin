@@ -825,8 +825,12 @@ class CompetitionFormat extends Component {
             <div className="fluid-width" >
                 <div className="footer-view">
                     <div className="row" >
-                        <div className="col-sm" style={{ display: 'flex', alignItems: "flex-start" }}>
-                            {/* <Button type="cancel-button">Cancel</Button> */}
+                    <div className="col-sm">
+                    <div className="reg-add-save-button">
+                        <NavLink to="/competitionVenueTimesPrioritisation">
+                                <Button type="cancel-button">{AppConstants.back}</Button>
+                            </NavLink>
+                        </div>
                         </div>
                         <div className="col-sm" >
                             <div className="comp-finals-button-view">
