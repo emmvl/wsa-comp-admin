@@ -1486,6 +1486,8 @@ const AppConstants = {
   competitionstartDate: "Competition Start Date",
   statusPublishHover: "This competition needs to be unlocked using the Edit / Regrade option on the competition dashboard in order to be edited",
 
+
+
   venueAddressDetailsError: "Please input venue address in details",
   venueAddressError: "Please select a venue from the venue search",
   venueSearch: "Venue search",

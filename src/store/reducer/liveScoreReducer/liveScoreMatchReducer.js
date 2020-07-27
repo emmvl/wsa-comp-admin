@@ -458,6 +458,7 @@ function liveScoreMatchReducer(state = initialState, action) {
                 state.team1id = null
                 state.team2id = null
                 state.addEditMatch['divisionId'] = null
+                state.addEditMatch['mnbMatchId'] = null
 
             } else {
 

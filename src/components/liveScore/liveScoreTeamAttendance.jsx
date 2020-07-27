@@ -117,7 +117,7 @@ class LiveScoreTeamAttendance extends Component {
         this.state = {
             year: "2020",
             teamSelection: "WSA 1",
-            selectStatus: "All",
+            selectStatus: "Borrowed",
             competitionId: null,
             searchText: ""
         }
@@ -289,7 +289,7 @@ class LiveScoreTeamAttendance extends Component {
                                     style={{ display: "flex", alignItems: "flex-start", minWidth: 140 }}
                                     onChange={(selectStatus) => this.onChnageStatus(selectStatus)}
                                     value={this.state.selectStatus} >
-                                    <Option value={"All"}>{'All'}</Option>
+                                    {/* <Option value={"All"}>{'All'}</Option> */}
                                     <Option value={"Borrowed"}>{'Borrowed Player'}</Option>
                                     <Option value={"Did Not Play"}>{'Did Not Play'}</Option>
                                     <Option value={"Played"}>{'Played'}</Option>

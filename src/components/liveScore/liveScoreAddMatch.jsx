@@ -183,6 +183,8 @@ class LiveScoreAddMatch extends Component {
         let formated_date = moment(start_date).format("DD-MM-YYYY")
         let time_formate = moment(displayTime).format("HH:mm");
 
+        console.log(data, 'data~~~~')
+
         this.props.form.setFieldsValue({
             'date': moment(start_date, "DD-MM-YYYY"),
             'time': moment(time_formate, "HH:mm"),
