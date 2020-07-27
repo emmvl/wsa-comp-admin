@@ -305,6 +305,7 @@ function shopProductState(state = initialState, action) {
 
         case ApiConstants.API_SHOP_ADD_TYPE_IN_TYPELIST_SUCCESS:
             state.typesProductList.push(action.result)
+            state.productDetailData["type"] = action.result
             return {
                 ...state,
                 onLoad: false,
