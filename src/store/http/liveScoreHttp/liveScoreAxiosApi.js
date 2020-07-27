@@ -164,7 +164,7 @@ let LiveScoreAxiosApi = {
             competitionId: compKey,
             divisionId: divisionId
         }
-        let url = `/teams/ladder`
+        let url = `/teams/ladder/web`
         return Method.dataPost(url, localStorage.token, payload)
 
 

@@ -1068,7 +1068,6 @@ class LiveScoreAddMatch extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 let { addEditMatch, matchData, start_date, start_time, start_post_date, umpire1Orag, umpire1TextField, umpire2Orag, umpire2TextField, umpire1Name, umpire2Name, scorer1, scorer2, recordUmpireType, matchUmpireId_1, matchUmpireId_2, scorerRosterId_1, scorerRosterId_2, umpireRosterId_1, umpireRosterId_2, team1id, team2id } = this.props.liveScoreMatchState
-
                 let match_date_ = moment(start_date, "DD-MM-YYYY")
                 let startDate = moment(match_date_).format("YYYY-MMM-DD")
                 let start = moment(start_time).format("HH:mm")
@@ -1421,8 +1420,13 @@ class LiveScoreAddMatch extends Component {
 
                 }
 
+                let matchStatus = null;
+                if(matchData.id != 0){
+                    matchStatus = addEditMatch.matchStatus;
+                }
+
                 // const { id } = JSON.parse(getLiveScoreCompetiton())
-                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, null, null, null, null, this.state.umpireKey, umpireData, scorerData, recordUmpireType)
+                 this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, null, null, matchStatus, null, this.state.umpireKey, umpireData, scorerData, recordUmpireType)
             }
         });
     }

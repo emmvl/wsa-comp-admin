@@ -40,7 +40,11 @@ const columns = [
         dataIndex: 'name',
         key: 'name',
         sorter: (a, b) => tableSort(a, b, "name"),
-
+        render: (data, record) => (
+            record.hasAdjustments ? 
+            <span className="required-field">{data}</span>
+            :  <span>{data}</span>
+        )
     },
 
     {
@@ -243,7 +247,8 @@ class LiveScoreLadderList extends Component {
     contentView = () => {
         const { liveScoreLadderState } = this.props;
 
-        let DATA = liveScoreLadderState.liveScoreLadderListData
+        let DATA = liveScoreLadderState.liveScoreLadderListData;
+        let adjData = liveScoreLadderState.liveScoreLadderAdjData;
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
@@ -263,6 +268,17 @@ class LiveScoreLadderList extends Component {
                     // onChange={this.handleTableChange}
                     />
                 </div> */}
+                <div  className="comp-dash-table-view mt-4 ml-1">
+                    <div className="ladder-list-adjustment">
+                        {
+                            (adjData || []).map((x,index) =>(
+                                <div key ={index} style={{marginBottom: '10px'}}>
+                                    <li className="required-field">{x.teamName + ' deducted ' + x.points + ' points for ' + x.adjustmentReason   }</li>
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
             </div>
         )
     }
