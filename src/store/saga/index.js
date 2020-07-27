@@ -166,7 +166,7 @@ import {
 
 import { regDashboardListSaga, getCompetitionSaga, registrationMainDashboardListSaga } from "./registrationSaga/registrationDashboardSaga"
 ////Competition Dashboard Saga
-import { competitionDashboardSaga } from './competitionManagementSaga/competitionDashboardSaga';
+import { competitionDashboardSaga, updateCompetitionStatusSaga } from './competitionManagementSaga/competitionDashboardSaga';
 // import { liveScoreAddEditManagerSaga } from './liveScoreSaga/liveScoreManagerSaga';
 
 // EndUserRegistrationSaga
@@ -798,4 +798,5 @@ export default function* root_saga() {
 
   ////organisation terms and conditions update API
   yield takeEvery(ApiConstants.API_UPDATE_TERMS_AND_CONDITION_LOAD, userSaga.updateTermsAndConditionsSaga);
+  yield takeEvery(ApiConstants.API_COMPETITION_STATUS_UPDATE_LOAD, updateCompetitionStatusSaga)
 }

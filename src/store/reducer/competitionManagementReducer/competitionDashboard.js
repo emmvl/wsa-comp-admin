@@ -86,6 +86,12 @@ function CompetitionDashboardState(state = initialState, action) {
                 status: action.status
             };
 
+        case ApiConstants.API_COMPETITION_STATUS_UPDATE_LOAD:
+            return { ...state, onLoad: false }
+
+        case ApiConstants.API_COMPETITION_STATUS_UPDATE_SUCCESS:
+            return { ...state, onLoad: false }
+
         default:
             return state;
     }
