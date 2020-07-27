@@ -59,7 +59,8 @@ const initialState = {
     SelectedTeamPlayer: 0,
     importModalVisible: false,
     teamsImportData: [],
-    isTeamNotInDraws: 0
+    isTeamNotInDraws: 0,
+    importPlayer: false
 };
 var gradeColorArray = [];
 const lightGray = '#999999';
@@ -499,6 +500,7 @@ function QuickCompetitionState(state = initialState, action) {
                 state.timeSlot = 0
                 state.quickComptitionDetails = JSON.parse(JSON.stringify(newQuickComp))
                 state.postDraws = []
+                state.importPlayer = false
             }
             if (action.key == 'date') {
                 state.competitionDate = moment(action.value).format("YYYY-MM-DD")
@@ -693,6 +695,7 @@ function QuickCompetitionState(state = initialState, action) {
             detailsResult.dateNewArray = drawsData.sortedDateArray
             state.onQuickCompLoad = false
             state.isTeamNotInDraws = action.result.isTeamNotInDraws
+            state.importPlayer = JSON.parse(JSON.stringify(action.result.importPlayer))
             return {
                 ...state,
                 quickComptitionDetails: detailsResult,
@@ -736,6 +739,7 @@ function QuickCompetitionState(state = initialState, action) {
             state.selectedVenues = competiitonResultData
             state.division = JSON.parse(JSON.stringify(action.detailResult.divisions))
             state.postDivisionData = JSON.parse(JSON.stringify(action.detailResult.divisions))
+            state.importPlayer = JSON.parse(JSON.stringify(action.detailResult.importPlayer))
             state.postDraws = JSON.parse(JSON.stringify(action.detailResult.draws))
             let drawsDataArray = drawsDataStructure(JSON.parse(JSON.stringify(action.detailResult.draws)))
             detailsResultData.draws = drawsDataArray.mainCourtNumberArray

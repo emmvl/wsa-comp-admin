@@ -1,4 +1,8 @@
 @import "../../themes/colorVariables.css";
+.paddingBottom56px{
+  padding-bottom: 56px;
+
+}
 .requiredSpan{
   content: '*';
   color: var(--app-red);
@@ -663,6 +667,9 @@ a.collapsed i {
 }
 
 @media (max-width: 767px) {
+  .paddingBottom56px{
+    padding-bottom: 5px;
+  }
   .comp-buttons-view {
     display: flex;
     align-items: center;

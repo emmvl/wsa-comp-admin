@@ -915,16 +915,16 @@ function CompetitionDraws(state = initialState, action) {
       state.isTeamInDraw = action.result.isTeamNotInDraws
 
       let orgData = JSON.parse(JSON.stringify(action.result.organisations))
-      let orgObject = {
-        organisationName: "All",
-        organisationUniqueKey: "-1"
-      }
-      orgData.unshift(orgObject)
+      // let orgObject = {
+      //   organisationName: "All",
+      //   organisationUniqueKey: "-1"
+      // }
+      // orgData.unshift(orgObject)
 
       return {
         ...state,
         getRoundsDrawsdata: resultData.roundsdata,
-        drawOrganisations: state.drawOrganisations.length == 0 ? orgData : state.drawOrganisations,
+        drawOrganisations: orgData,
         onLoad: false,
         error: null,
         spinLoad: false
@@ -1087,6 +1087,7 @@ function CompetitionDraws(state = initialState, action) {
       state.legendsArray = [];
       legendsArray = [];
       state.getRoundsDrawsdata = []
+      state.drawOrganisations = []
       if (action.key == 'round') {
         state.competitionVenues = [];
         state.getDrawsRoundsData = [];

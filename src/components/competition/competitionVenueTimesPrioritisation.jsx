@@ -554,7 +554,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
             <div>
                 <InputWithHead heading={AppConstants.courtPreferences} />
                 <div className="comp-venue-time-inside-container-view">
-                    {courtPreferencesList.map((item, index, ) => {
+                    {courtPreferencesList.map((item, index,) => {
                         return <div className="col-sm">
                             {this.divisionView(item, index, courtRotationId, getFieldDecorator)}
                         </div>
@@ -1263,20 +1263,23 @@ class CompetitionVenueTimesPrioritisation extends Component {
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
-            <div className="fluid-width">
-                <div className="footer-view">
-                    <div className="row">
-                        <div className="col-sm">
-                            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                                {/* <Button className="save-draft-text" type="save-draft-text">
-                                    {AppConstants.saveDraft}
-                                </Button> */}
-                                {/* <NavLink to="/competitionCourtAndTimesAssign"> */}
-                                <Button className="open-reg-button" htmlType='submit' type="primary">
-                                    {AppConstants.save}
-                                </Button>
-                                {/* </NavLink> */}
-                            </div>
+            <div className="footer-view">
+                <div className="row">
+                    <div className="col-sm">
+                        <div className="reg-add-save-button">
+                            <NavLink to="/competitionCourtAndTimesAssign">
+                                <Button type="cancel-button"  >{AppConstants.back}</Button>
+                            </NavLink>
+                        </div>
+                    </div>
+                    <div className="col-sm">
+                        <div className="comp-buttons-view">
+                            <Button className="open-reg-button save-draft-text" htmlType='submit' type="primary">
+                                {AppConstants.save}
+                            </Button>
+                            <NavLink to="/competitionFormat">
+                                <Button className="publish-button" type="primary">{AppConstants.next}</Button>
+                            </NavLink>
                         </div>
                     </div>
                 </div>

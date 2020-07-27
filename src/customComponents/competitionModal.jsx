@@ -85,7 +85,7 @@ class CompetitionModal extends React.Component {
                             </div>
                             <div className="col-sm pl-0 pb-2">
                                 <InputWithHead
-                                    heading={"Competition Date"}
+                                    heading={AppConstants.competitionstartDate}
                                 />
                                 <Form.Item
                                 >

@@ -1447,7 +1447,7 @@ const AppConstants = {
   firstLevelAffiliatesAssociationLeague: "1st Level Affiliates - Association/ League",
   secondLevelAffiliatesClubSchool: "2nd Level Affiliates - Club/School",
   teamSeasonalFee: 'Team Seasonal Fee',
-  instalmentDate:"Instalment Date",
+  instalmentDate: "Instalment Date",
   addInstalmentDate: "+ Add Instalment date",
   settingsAddedMessage: "Settings added successfully.",
   addressAddedMessage: "Address added successfully.",
@@ -1460,6 +1460,8 @@ const AppConstants = {
   charity: "Charity",
   termsAndCond: "T&Cs",
   roundUp: "Round Up",
+
+  /// id for home dashboard
   whatDoYouWantToPublish: "What do you want to Publish?",
   part: 'Part',
   home_page_heading: "home_page_heading",
@@ -1476,6 +1478,14 @@ const AppConstants = {
   acct_settings_label: "acct_settings_label",
   help_support_label: "help&support_label",
   action_box_table: "action_box_table",
+  //************************* */
+
+  editRegret: "Edit/Regret",
+  fullCompetition: "Full Competition",
+  quickCompetition: "Quick Competition",
+  competitionstartDate: "Competition Start Date",
+  statusPublishHover: "This competition needs to be unlocked using the Edit / Regrade option on the competition dashboard in order to be edited",
+
   venueAddressDetailsError: "Please input venue address in details",
   venueAddressError: "Please select a venue from the venue search",
   venueSearch: "Venue search",

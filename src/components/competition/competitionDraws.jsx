@@ -18,7 +18,7 @@ import AppConstants from '../../themes/appConstants';
 import { connect } from 'react-redux';
 import AppImages from '../../themes/appImages';
 import { bindActionCreators } from 'redux';
-import DrawsPublishModel from '../../customComponents/drawsPublishModel'																		
+import DrawsPublishModel from '../../customComponents/drawsPublishModel'
 import {
   getCompetitionDrawsAction,
   getDrawsRoundsAction,
@@ -75,9 +75,9 @@ class CompetitionDraws extends Component {
       competitionDivisionGradeId: '',
       organisationId: getOrganisationData().organisationUniqueKey,
       updateLoad: false,
-      organisation_Id: null,
+      organisation_Id: '-1',
       visible: false,
-	    value: 1,
+      value: 1,
       publishPartModel: {
         isShowPart: false,
         publishPart: {
@@ -200,12 +200,12 @@ class CompetitionDraws extends Component {
       }
     }
 
-    if (nextProps.drawsState.drawOrganisations != drawOrganisations) {
-      if (drawOrganisations.length > 0) {
-        let organisation_Id = drawOrganisations[0].organisationUniqueKey;
-        this.setState({ organisation_Id })
-      }
-    }
+    // if (nextProps.drawsState.drawOrganisations != drawOrganisations) {
+    //   if (drawOrganisations.length > 0) {
+    //     let organisation_Id = drawOrganisations[0].organisationUniqueKey;
+    //     this.setState({ organisation_Id })
+    //   }
+    // }
   }
 
   componentDidMount() {
@@ -394,7 +394,7 @@ class CompetitionDraws extends Component {
       message.config({ duration: 0.9, maxCount: 1 });
       message.error(ValidationConstants.pleaseSelectVenue);
     } else {
-	  this.setState({visible:true})
+      this.setState({ visible: true })
       //this.props.publishDraws(this.state.firstTimeCompId);
     }
   };
@@ -512,14 +512,6 @@ class CompetitionDraws extends Component {
     this.setState({
       organisation_Id
     })
-    // this.props.clearDraws();
-    // this.props.getCompetitionDrawsAction(
-    //   this.state.yearRefId,
-    //   this.state.firstTimeCompId,
-    //   this.state.venueId,
-    //   this.state.roundId,
-    //   organisation_Id
-    // );
   }
 
   //////year change onchange
@@ -534,7 +526,7 @@ class CompetitionDraws extends Component {
       roundTime: null,
       venueId: null,
       competitionDivisionGradeId: null,
-      organisation_Id: null
+      organisation_Id: "-1"
     });
     this.props.getYearAndCompetitionOwnAction(
       this.props.appState.own_YearArr,
@@ -554,7 +546,7 @@ class CompetitionDraws extends Component {
       roundTime: null,
       venueLoad: true,
       competitionDivisionGradeId: null,
-      organisation_Id: null
+      organisation_Id: "-1"
     });
     // this.props.getCompetitionVenue(competitionId);
     this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId);
@@ -695,6 +687,14 @@ class CompetitionDraws extends Component {
               }
               value={this.state.organisation_Id}
             >
+              <Option
+                key={
+                  "-1"
+                }
+                value={"-1"}
+              >
+                {AppConstants.all}
+              </Option>
               {
                 this.props.drawsState.drawOrganisations.map((item) => {
                   return (
@@ -764,24 +764,22 @@ class CompetitionDraws extends Component {
     this.props.unlockDrawsAction(id, round_Id, venueCourtId);
   }
 
-  
+
   onChangeRadio = e => {
     this.setState({
       value: e.target.value,
     });
-    if(e.target.value==2)
-    {
+    if (e.target.value == 2) {
       this.state.publishPartModel.isShowPart = true;
       this.setState({
         publishPartModel: this.state.publishPartModel
       })
     }
-    else
-    {
+    else {
       this.state.publishPartModel.isShowPart = false;
     }
   };
-  
+
   handleCancel = e => {
     this.setState({
       visible: false,
@@ -791,27 +789,24 @@ class CompetitionDraws extends Component {
     this.state.publishPartModel.isShowPart = false;
     this.state.value = 1;
   };
-  
-  checkDivision = e =>{  
-    if(e.target.checked)
-    {
+
+  checkDivision = e => {
+    if (e.target.checked) {
       this.state.publishPartModel.publishPart.isShowDivision = true;
     }
-    else
-    {
+    else {
       this.state.publishPartModel.publishPart.isShowDivision = false;
     }
     this.setState({
       publishPart: this.state.publishPartModel.publishPart
     })
   }
-  
-  checkRound = e =>{
-    if(e.target.checked)
-    {
+
+  checkRound = e => {
+    if (e.target.checked) {
       this.state.publishPartModel.publishPart.isShowRound = true;
     }
-    else{
+    else {
       this.state.publishPartModel.publishPart.isShowRound = false;
     }
     this.setState({
@@ -822,26 +817,26 @@ class CompetitionDraws extends Component {
   onSelectDivisionsValues = (e) => {
     console.log("e" + e);
 
-    this.setState({selectedDivisions: e})
+    this.setState({ selectedDivisions: e })
   }
 
   onSelectRoundValues = (e) => {
     console.log("e" + e);
-    this.setState({selectedRounds: e})
+    this.setState({ selectedRounds: e })
   }
 
-  publishDraw = () =>{
+  publishDraw = () => {
     let payload = {
       isPartial: this.state.publishPartModel.isShowPart,
       divisions: [],
       rounds: []
     }
-    if(this.state.publishPartModel.isShowPart == true){
+    if (this.state.publishPartModel.isShowPart == true) {
       payload.divisions = this.state.selectedDivisions;
       payload.rounds = this.state.selectedRounds
     }
     this.props.publishDraws(this.state.firstTimeCompId, '', payload);
-    this.setState({visible:false})
+    this.setState({ visible: false })
   }
 
   ////// Publish draws
@@ -1322,22 +1317,22 @@ class CompetitionDraws extends Component {
           </div>
           {/* </div> */}
         </div>
-		<DrawsPublishModel 
-          publishVisible={this.state.visible} 
+        <DrawsPublishModel
+          publishVisible={this.state.visible}
           divisionGradeNameList={this.props.drawsState.divisionGradeNameList}
           getDrawsRoundsData={this.props.drawsState.getDrawsRoundsData}
           modelCheckDivision={e => this.checkDivision(e)}
           modelCheckRound={e => this.checkRound(e)}
           modelCancel={this.handleCancel}
           modelRadio={this.onChangeRadio}
-          modalPublish={(e)=>this.publishDraw()}
-          modalDivisions = {(e) => this.onSelectDivisionsValues(e)}
+          modalPublish={(e) => this.publishDraw()}
+          modalDivisions={(e) => this.onSelectDivisionsValues(e)}
           modalRounds={(e) => this.onSelectRoundValues(e)}
           modalRadioValue={this.state.value}
           modalIsShowPart={this.state.publishPartModel.isShowPart}
           modalIsShowDivision={this.state.publishPartModel.publishPart.isShowDivision}
           modalIsShowRound={this.state.publishPartModel.publishPart.isShowRound}
-        ></DrawsPublishModel>			 
+        ></DrawsPublishModel>
       </div>
     );
   };
