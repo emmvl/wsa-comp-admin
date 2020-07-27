@@ -246,17 +246,25 @@ const columnsTodaysMatch = [
             }} ><span nowrap class="input-heading-add-another pt-0" >{setMatchResult(records)} </span></NavLink>
     }, {
         title: "Umpire",
-        dataIndex: 'competition',
-        key: 'competition',
-        render: (competition) =>
-            <span class="input-heading-add-another pt-0" onClick={() => { console.log('hello clcicked ') }} >{competition.recordUmpire}</span>
+        dataIndex: 'umpires',
+        key: 'umpires',
+        render: (umpires) =>
+       
+            isArrayNotEmpty(umpires) && umpires.map((item) => (
+                <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.umpireName(item)} 
+                    // className="desc-text-style side-bar-profile-data" 
+                    className='multi-column-text-aligned'
+                    >{item.umpireName}</span>
+            ))
+
+        // <span class="input-heading-add-another pt-0" onClick={() => { console.log('hello clcicked ') }} >{competition.recordUmpire}</span>
     }, {
         title: "Scorer 1",
         dataIndex: 'scorer1Status',
         key: 'scorer1Status',
         sorter: (a, b) => tableSort(a, b, "scorer1Status"),
         render: (scorer1Status) =>
-            <span>{isArrayNotEmpty(scorer1Status) ? scorer1Status[0].status == "YES" ? "Accepted" : "Not Accepted" : "Not SET"}</span>
+            <span>{scorer1Status ? scorer1Status.status == "YES" ? "Accepted" : "Not Accepted" : "Not SET"}</span>
 
     }, {
         title: "Scorer 2",
@@ -264,7 +272,7 @@ const columnsTodaysMatch = [
         key: 'scorer2Status',
         sorter: (a, b) => tableSort(a, b, "scorer2Status"),
         render: (scorer2Status, record) =>
-            <span >{record.competition.scoringType == 'SINGLE' ? "" : isArrayNotEmpty(scorer2Status) ? scorer2Status[0].status == "YES" ? "Accepted" : "Not Accepted" : "  Not SET"}</span>
+            <span >{record.competition.scoringType == 'SINGLE' ? "" : scorer2Status ? scorer2Status.status == "YES" ? "Accepted" : "Not Accepted" : "Not SET"}</span>
     },
     {
         title: "Player Attendance Team A",
@@ -323,7 +331,7 @@ const columnsTodaysIncient = [
             isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
                 <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.checkUserId(item)} className="desc-text-style side-bar-profile-data" >{item.player.firstName}</span>
             ))
-    
+
     },
     {
         title: 'Last Name',
@@ -333,7 +341,7 @@ const columnsTodaysIncient = [
         render: (incidentPlayers, record) =>
 
             isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
-                <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.checkUserId(item)} className="desc-text-style side-bar-profile-data" >{item.player.lastName}</span>
+                <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.gotoUmpire(item)} className="desc-text-style side-bar-profile-data" >{item.player.lastName}</span>
             ))
     },
     {
@@ -472,6 +480,16 @@ class LiveScoreDashboard extends Component {
             history.push("/userPersonal", { userId: record.userId, screenKey: "livescore", screen: "/userPersonal" })
         }
     }
+
+    umpireName(item){
+        if (item.userId) {
+            history.push("/userPersonal", { userId: item.userId, screenKey: "livescore", screen: "/userPersonal" })
+        }else{
+            message.config({ duration: 1.5, maxCount: 1 })
+            message.warn(ValidationConstants.playerMessage)
+        }
+    }
+
 
     getStartofDay() {
         var start = new Date();
