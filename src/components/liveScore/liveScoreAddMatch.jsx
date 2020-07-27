@@ -1067,7 +1067,7 @@ class LiveScoreAddMatch extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                let { addEditMatch, matchData, start_date, start_time, start_post_date, umpire1Orag, umpire1TextField, umpire2Orag, umpire2TextField, umpire1Name, umpire2Name, scorer1, scorer2, recordUmpireType, matchUmpireId_1, matchUmpireId_2, scorerRosterId_1, scorerRosterId_2, umpireRosterId_1, umpireRosterId_2, team1id, team2id } = this.props.liveScoreMatchState
+                let { addEditMatch, matchData, start_date, start_time, start_post_date, umpire1Orag, umpire1TextField, umpire2Orag, umpire2TextField, umpire1Name, umpire2Name, scorer1, scorer2, recordUmpireType, matchUmpireId_1, matchUmpireId_2, scorerRosterId_1, scorerRosterId_2, umpireRosterId_1, umpireRosterId_2, team1id, team2id, matchResult } = this.props.liveScoreMatchState
                 let match_date_ = moment(start_date, "DD-MM-YYYY")
                 let startDate = moment(match_date_).format("YYYY-MMM-DD")
                 let start = moment(start_time).format("HH:mm")
@@ -1421,12 +1421,27 @@ class LiveScoreAddMatch extends Component {
                 }
 
                 let matchStatus = null;
+                let team1resultId = null;
+                let team2resultId = null;
                 if(matchData.id != 0){
+                    if (Number(addEditMatch.team1Score) > Number(addEditMatch.team2Score)) {
+                        team1resultId = matchResult[0].id
+                        team2resultId = matchResult[1].id
+            
+                    } else if (Number(addEditMatch.team1Score) < Number(addEditMatch.team2Score)) {
+                        team1resultId = matchResult[1].id
+                        team2resultId = matchResult[0].id
+            
+                    } else if (Number(addEditMatch.team1Score) == Number(addEditMatch.team2Score)) {
+                        team1resultId = matchResult[2].id
+                        team2resultId = matchResult[2].id
+            
+                    }
                     matchStatus = addEditMatch.matchStatus;
                 }
 
                 // const { id } = JSON.parse(getLiveScoreCompetiton())
-                 this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, null, null, matchStatus, null, this.state.umpireKey, umpireData, scorerData, recordUmpireType)
+                 this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, null, this.state.umpireKey, umpireData, scorerData, recordUmpireType)
             }
         });
     }
