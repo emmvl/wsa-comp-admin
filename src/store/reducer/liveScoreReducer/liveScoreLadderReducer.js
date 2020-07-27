@@ -48,7 +48,7 @@ function liveScoreLaddersReducer(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_LOAD:
             return { ...state };
         case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_SUCCESS:
-
+            console.log("action.result", action.result);
             return {
                 ...state,
                 onLoad: false,
@@ -62,7 +62,7 @@ function liveScoreLaddersReducer(state = initialState, action) {
             return { ...state, onLoad: true };
         case ApiConstants.API_LIVE_SCORE_LADDERS_LIST_SUCCESS:
 
-            let ladder_List = createLadderRank(action.result)
+            let ladder_List = createLadderRank(action.result.ladders)
             return {
                 ...state,
                 onLoad: false,
