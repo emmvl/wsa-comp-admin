@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Checkbox, Breadcrumb, Spin, Table } from 'antd';
+import { Layout, Button, Checkbox, Breadcrumb, Spin, Table, Radio } from 'antd';
 import './liveScore.css';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -16,7 +16,6 @@ import ImageLoader from '../../customComponents/ImageLoader'
 const { Header, Content } = Layout;
 var _this = null
 const columns = [
-
     {
         dataIndex: 'bannerUrl',
         key: 'bannerUrl',
@@ -40,7 +39,6 @@ class LiveScoreBanners extends Component {
             imageError: "",
             bannerImg: null,
             timeout: null
-
         }
         _this = this
     }
@@ -66,12 +64,11 @@ class LiveScoreBanners extends Component {
 
     setImage = (data) => {
         if (data.files[0] !== undefined) {
-            this.setState({ bannerImg: data.files[0], bannerImg: URL.createObjectURL(data.files[0]) })
+            this.setState({ bannerImg: URL.createObjectURL(data.files[0]) })
         }
     };
 
     componentDidMount() {
-
         this.setState({ timeout: 3000 })
         setTimeout(() => {
             this.setState({ timeout: null })
@@ -83,6 +80,7 @@ class LiveScoreBanners extends Component {
             history.push('/')
         }
     }
+
     loaderView() {
         return (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', }}>
@@ -102,8 +100,9 @@ class LiveScoreBanners extends Component {
                     width
                     borderRadius
                     timeout={this.state.timeout}
-                    src={bannerUrl} />
-                {/* <img thumbnail={true} alt="" className="banner-image" src={bannerUrl} /> */}
+                    src={bannerUrl}
+                />
+                {/* <img thumbnail alt="" className="banner-image" src={bannerUrl} /> */}
             </div>
         )
     }
@@ -119,68 +118,92 @@ class LiveScoreBanners extends Component {
                     columns={columns}
                     dataSource={bannerResult}
                     showHeader={false}
-                    pagination={false} />
+                    pagination={false}
+                />
             </div>
         )
     }
 
-
-
     footerView(record) {
-        let { bannerResult } = this.props.liveScoreBannerState
-
         return (
             <div>
                 <div className="row">
-
                     <div className="col-sm pt-1">
                         <InputWithHead
                             heading={AppConstants.bannerlink}
                             placeholder={AppConstants.bannerlink}
                             name={'bannerlink'}
-                            disabled={true}
+                            disabled
                             value={record.bannerLink ? record.bannerLink : `http://`}
                         />
-                    </div>
 
+                        <div className="mt-3">
+                            <div>
+                                <span>{AppConstants.bannerFormat}</span>
+                            </div>
+                            <Radio.Group
+                              name="format"
+                              disabled
+                              value={record.format}
+                            >
+                                <Radio value="Horizontal">Horizontal</Radio>
+                                <Radio value="Square">Square</Radio>
+                            </Radio.Group>
+                        </div>
+                    </div>
                 </div>
+
                 {this.chekboxes(record)}
             </div>
-
         )
     }
 
     //check box
 
     chekboxes = (record) => {
-        let { showOnHome, showOnDraws, showOnLadder } = this.props.liveScoreBannerState
-
         return (
             <div className="pt-4">
                 <Checkbox
-                    disabled={true}
+                    disabled
                     className="single-checkbosx"
-                    // checked = {true}
-                    checked={record.showOnHome == true ? 1 : 0}
+                    checked={record.showOnHome === 1}
                 >
                     {AppConstants.showHomePage}
                 </Checkbox>
                 <div style={{ marginTop: 5 }}>
                     <Checkbox
-                        disabled={true}
+                        disabled
                         className="single-checkbox"
-                        checked={record.showOnDraws == true ? 1 : 0}
+                        checked={record.showOnDraws === 1}
                     >
-                        {AppConstants.showonDrawsPage}
+                        {AppConstants.showOnDrawsPage}
                     </Checkbox>
                 </div>
                 <div style={{ marginTop: 5 }}>
                     <Checkbox
-                        disabled={true}
+                        disabled
                         className="single-checkbox"
-                        checked={record.showOnLadder == true ? 1 : 0}
+                        checked={record.showOnLadder === 1}
                     >
-                        {AppConstants.showonLadderPage}
+                        {AppConstants.showOnLadderPage}
+                    </Checkbox>
+                </div>
+                <div style={{ marginTop: 5 }}>
+                    <Checkbox
+                      disabled
+                      className="single-checkbox"
+                      checked={record.showOnNews === 1}
+                    >
+                        {AppConstants.showOnNewsPage}
+                    </Checkbox>
+                </div>
+                <div style={{ marginTop: 5 }}>
+                    <Checkbox
+                      disabled
+                      className="single-checkbox"
+                      checked={record.showOnChat === 1}
+                    >
+                        {AppConstants.showOnChatPage}
                     </Checkbox>
                 </div>
             </div>
@@ -190,26 +213,25 @@ class LiveScoreBanners extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <Header className="comp-venue-courts-header-view live-form-view-button-header" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <Header className="comp-venue-courts-header-view live-form-view-button-header">
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.banners}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                    <div className="col-sm live-form-view-button-container" style={{ display: "flex", justifyContent: "flex-end" }} >
-                        <NavLink to='/liveScoreEditBanners'>
-                            <Button className="primary-add-comp-form " type="primary">{"+" + AppConstants.addBanners}</Button>
+                    <div className="col-sm live-form-view-button-container" style={{ display: "flex", justifyContent: "flex-end" }}>
+                        <NavLink to="/liveScoreEditBanners">
+                            <Button className="primary-add-comp-form" type="primary">{"+" + AppConstants.addBanners}</Button>
                         </NavLink>
                     </div>
                 </div>
-            </Header >
+            </Header>
         )
     }
 
     removeBanner(record) {
         this.props.liveScoreRemoveBanner(record.id)
-
     }
 
     ///////view for breadcrumb
@@ -227,10 +249,12 @@ class LiveScoreBanners extends Component {
                         justifyContent: "flex-end",
                     }}
                 >
-                    <NavLink to={{
-                        pathname: '/liveScoreEditBanners',
-                        state: { isEdit: true, tableRecord: record }
-                    }}>
+                    <NavLink
+                        to={{
+                            pathname: '/liveScoreEditBanners',
+                            state: { isEdit: true, tableRecord: record }
+                        }}
+                    >
                         <Button onClick={() => this.setState({ bannerImg: null })} className="primary-add-comp-form ml-5" type="primary">
                             {"+" + AppConstants.editBanner}
                         </Button>
@@ -256,25 +280,23 @@ class LiveScoreBanners extends Component {
                     <Content>
                         <div className="formView pt-3">
                             {/* {(this.state.bannerImg || bannerResult.length > 0) && this.removeBtn()} */}
-
                             {this.contentView()}
-
                         </div>
-
-
                     </Content>
                 </Layout>
             </div>
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({ getliveScoreBanners, liveScoreRemoveBanner }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         liveScoreBannerState: state.LiveScoreBannerState,
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)((LiveScoreBanners));
+
+export default connect(mapStateToProps, mapDispatchToProps)((LiveScoreBanners));

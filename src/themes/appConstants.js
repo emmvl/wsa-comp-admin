@@ -673,8 +673,11 @@ const AppConstants = {
   bannerlink: 'Banner Link',
   removeBanner: 'Remove Banner',
   showHomePage: 'Show on Home Page',
-  showonDrawsPage: 'Show on Draws Page',
-  showonLadderPage: 'Show on Ladder Page',
+  showOnDrawsPage: 'Show on Draws Page',
+  showOnLadderPage: 'Show on Ladder Page',
+  showOnNewsPage: 'Show on News Page',
+  showOnChatPage: 'Show on Chat Page',
+  bannerFormat: 'Banner Format',
   teamAttendane: 'Team Attendance',
   newsList: 'News List',
   gameTime: 'Game Time',
@@ -1482,11 +1485,8 @@ const AppConstants = {
 
   editRegret: "Edit/Regret",
   fullCompetition: "Full Competition",
-  quickCompetition: "Quick Competition",
   competitionstartDate: "Competition Start Date",
   statusPublishHover: "This competition needs to be unlocked using the Edit / Regrade option on the competition dashboard in order to be edited",
-
-
 
   venueAddressDetailsError: "Please input venue address in details",
   venueAddressError: "Please select a venue from the venue search",
