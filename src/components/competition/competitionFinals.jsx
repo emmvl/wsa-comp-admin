@@ -29,6 +29,7 @@ import {
     setOwn_competition,
     getOwn_competition
 } from "../../util/sessionStorage";
+import AppUniqueId from "../../themes/appUniqueId";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -333,7 +334,7 @@ class CompetitionFinals extends Component {
                             : <span>{AppConstants.allDivisions}</span>
                         }
                         <div className="row">
-                            <div className="col-sm-6">
+                            <div id={AppUniqueId.final_StartDate} className="col-sm-6">
                                 <InputWithHead heading={AppConstants.finalsStartDate} required={"required-field"} />
                                 <Form.Item >
                                     {getFieldDecorator(`finalsStartDate${index}`,
@@ -358,6 +359,7 @@ class CompetitionFinals extends Component {
                                 rules: [{ required: true, message: ValidationConstants.finalFixtureTemplateRequired }]
                             })(
                                 <Radio.Group className="reg-competition-radio"
+                                    id={AppUniqueId.draw_Publish_btn}
                                     onChange={(e) => this.onChangeSetValue(e.target.value, 'finalsFixtureTemplateRefId', index)}
                                     setFieldsValue={data.finalsFixtureTemplateRefId} >
                                     {(finalFixtureTemplateData || []).map((fix, fixIndex) => (
@@ -372,6 +374,7 @@ class CompetitionFinals extends Component {
                                 rules: [{ required: true, message: ValidationConstants.matchTypeRequired }]
                             })(
                                 <Select
+                                    id={AppUniqueId.final_Match_Type_dpdn}
                                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                     onChange={(matchType) => this.onChangeSetValue(matchType, 'finalsMatchTypeRefId', index)}
                                     setFieldsValue={data.finalsMatchTypeRefId}>
@@ -383,7 +386,7 @@ class CompetitionFinals extends Component {
                         </Form.Item>
                         <div className="fluid-width" >
                             <div className="row" >
-                                <div className="col-sm-3" >
+                                <div id={AppUniqueId.finals_matchduration} className="col-sm-3" >
                                     <Form.Item >
                                         {getFieldDecorator(`matchDuration${index}`, {
                                             rules: [{
@@ -398,7 +401,7 @@ class CompetitionFinals extends Component {
                                     </Form.Item>
                                 </div>
                                 {(data.finalsMatchTypeRefId == 2 || data.finalsMatchTypeRefId == 3) ?
-                                    <div className="col-sm-3" >
+                                    <div id={AppUniqueId.finals_mainbreak} className="col-sm-3" >
                                         <Form.Item >
                                             {getFieldDecorator(`mainBreak${index}`, {
                                                 rules: [{ required: true, message: ValidationConstants.mainBreak }]
@@ -411,7 +414,7 @@ class CompetitionFinals extends Component {
                                     </div> : null
                                 }
                                 {data.finalsMatchTypeRefId == 3 ?
-                                    <div className="col-sm-3" >
+                                    <div id={AppUniqueId.finals_qtrbreak} className="col-sm-3" >
                                         <Form.Item >
                                             {getFieldDecorator(`qtrBreak${index}`, {
                                                 rules: [{ required: true, message: ValidationConstants.qtrBreak }]
@@ -444,7 +447,7 @@ class CompetitionFinals extends Component {
                             {getFieldDecorator(`applyToRefId${index}`, {
                                 rules: [{ required: true, message: ValidationConstants.applyToRequired }]
                             })(
-                                <Radio.Group className="reg-competition-radio" onChange={(e) => this.onChangeSetValue(e.target.value, 'applyToRefId', index)}
+                                <Radio.Group id={AppUniqueId.applyToRefId_radiobtn} className="reg-competition-radio" onChange={(e) => this.onChangeSetValue(e.target.value, 'applyToRefId', index)}
                                     setFieldsValue={data.applyToRefId} >
                                     {(applyToData || []).map((app, appIndex) => (
                                         <Radio key={app.id} value={app.id}>{app.description}</Radio>
@@ -459,6 +462,7 @@ class CompetitionFinals extends Component {
                                 rules: [{ required: true, message: ValidationConstants.extraTimeMatchTypeRequired }]
                             })(
                                 <Select
+                                    id={AppUniqueId.finals_extratimetype_dpdn}
                                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                     onChange={(matchType) => this.onChangeSetValue(matchType, 'extraTimeMatchTypeRefId', index)}
                                     setFieldsValue={data.extraTimeMatchTypeRefId}>
@@ -470,7 +474,7 @@ class CompetitionFinals extends Component {
                         </Form.Item>
                         <div className="fluid-width" >
                             <div className="row" >
-                                <div className="col-sm-3" >
+                                <div id={AppUniqueId.finals_extratime_duration} className="col-sm-3" >
                                     <Form.Item >
                                         {getFieldDecorator(`extraTimeDuration${index}`, {
                                             rules: [{
@@ -486,7 +490,7 @@ class CompetitionFinals extends Component {
                                     </Form.Item>
                                 </div>
                                 {(data.extraTimeMatchTypeRefId == 2 || data.extraTimeMatchTypeRefId == 3) ?
-                                    <div className="col-sm-3" >
+                                    <div id={AppUniqueId.finals_extratime_mainbreak} className="col-sm-3" >
                                         <Form.Item >
                                             {getFieldDecorator(`extraTimeMainBreak${index}`, {
                                                 rules: [{ required: true, message: ValidationConstants.extraTimeMainBreakRequired }]
@@ -500,7 +504,7 @@ class CompetitionFinals extends Component {
                                     </div> : null
                                 }
                                 {data.extraTimeMatchTypeRefId == 3 ?
-                                    <div className="col-sm-3" >
+                                    <div id={AppUniqueId.finals_extratime_break} className="col-sm-3" >
                                         <Form.Item >
                                             {getFieldDecorator(`extraTimeBreak${index}`, {
                                                 rules: [{ required: true, message: ValidationConstants.extraTimeBreakRequired }]
@@ -534,7 +538,7 @@ class CompetitionFinals extends Component {
                                 {getFieldDecorator(`extraTimeDrawRefId${index}`, {
                                     rules: [{ required: true, message: ValidationConstants.extraTimeDrawRequired }]
                                 })(
-                                    <Radio.Group className="reg-competition-radio" onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeDrawRefId', index)}
+                                    <Radio.Group id={AppUniqueId.extratime_ifDraw_radiobtn} className="reg-competition-radio" onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeDrawRefId', index)}
                                         setFieldsValue={data.extraTimeDrawRefId} >
                                         {(extraTimeDrawData || []).map((ex, exIndex) => (
                                             <Radio key={ex.id} value={ex.id}>{ex.description}</Radio>
