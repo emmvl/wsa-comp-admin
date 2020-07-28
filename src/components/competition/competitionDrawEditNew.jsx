@@ -47,7 +47,7 @@ class CompetitionDrawEdit extends Component {
             reGenerateLoad: false,
             roundLoad: false,
             drawGenerateModalVisible: false,
-            generateRoundId: null
+            generateRoundId: null,
             competitionStatus: 0,
             tooltipVisibleDelete: false
         }

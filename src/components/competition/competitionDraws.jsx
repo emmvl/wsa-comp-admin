@@ -97,7 +97,7 @@ class CompetitionDraws extends Component {
       roundLoad: false,
       drawGenerateModalVisible: false,
       competitionStatus: 0,
-      tooltipVisibleDelete: false
+      tooltipVisibleDelete: false,
       generateRoundId: null
     };
     
