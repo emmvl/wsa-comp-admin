@@ -279,6 +279,11 @@ function shopProductState(state = initialState, action) {
                 }
                 state.productDetailData = defaultAddProductObject
             }
+            if (action.dataName === "productListingData") {
+                state.productListingData = []
+                state.productListingTotalCount = 1
+                state.productListingCurrentPage = 1
+            }
             return {
                 ...state, error: null
             };
