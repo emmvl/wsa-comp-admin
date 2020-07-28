@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Select, Checkbox, Button, Radio, Form, message, DatePicker } from 'antd';
+import { Layout, Breadcrumb, Select, Checkbox, Button, Radio, Form, message, DatePicker, Modal } from 'antd';
 import './competition.css';
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -23,11 +23,14 @@ import {
     getExtraTimeDrawAction,
     getFinalFixtureTemplateAction
 } from '../../store/actions/commonAction/commonAction';
+import { getActiveRoundsAction
+} from '../../store/actions/competitionModuleAction/competitionDrawsAction';
 import {
     getOrganisationData, setOwnCompetitionYear,
     getOwnCompetitionYear,
     setOwn_competition,
-    getOwn_competition
+    getOwn_competition,
+    getOwn_competitionStatus
 } from "../../util/sessionStorage";
 
 const { Header, Footer, Content } = Layout;
@@ -42,7 +45,10 @@ class CompetitionFinals extends Component {
             organisationId: getOrganisationData().organisationUniqueKey,
             getDataLoading: false,
             buttonPressed: "",
-            loading: false
+            loading: false,
+            roundLoad: false,
+            drawGenerateModalVisible: false,
+            generateRoundId: null
         }
 
         this.referenceApiCalls();
@@ -113,8 +119,15 @@ class CompetitionFinals extends Component {
                             organisationId: this.state.organisationId
                         }
                         if (competitionModuleState.drawGenerateLoad == false) {
-                            this.props.generateDrawAction(payload);
-                            this.setState({ loading: true });
+                            let competitionStatus = getOwn_competitionStatus();
+                            if(competitionStatus != 2){
+                                this.props.generateDrawAction(payload);
+                                this.setState({ loading: true });
+                            }
+                            else{
+                                this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
+                                this.setState({ roundLoad: true });
+                            }
                         }
                     }
                 }
@@ -135,6 +148,18 @@ class CompetitionFinals extends Component {
                 message.error(ValidationConstants.drawsMessage[0]);
             }
         }
+
+        if (this.state.roundLoad == true && this.props.drawsState.onActRndLoad == false) {
+            this.setState({roundLoad: false});
+            if(this.props.drawsState.activeDrawsRoundsData!= null && 
+              this.props.drawsState.activeDrawsRoundsData.length > 0){
+                this.setState({drawGenerateModalVisible: true})
+              }
+              else{
+                message.config({ duration: 0.9, maxCount: 1 });
+                message.info(AppConstants.roundsNotAvailable);
+              }
+          }
     }
 
     apiCalls = (competitionId, yearRefId) => {
@@ -204,6 +229,32 @@ class CompetitionFinals extends Component {
         console.log("id::" + id + fieldName + index);
         this.props.updateCompetitionFinalsAction(id, fieldName, index);
     }
+
+    handleGenerateDrawModal =  (key) =>{
+        if(key == "ok"){
+          if(this.state.generateRoundId!= null){
+            this.callGenerateDraw();
+            this.setState({drawGenerateModalVisible: false});
+          }
+          else{
+            message.error("Please select round");
+          }
+        }
+        else{
+          this.setState({drawGenerateModalVisible: false});
+        }
+      }
+    
+      callGenerateDraw = () =>{
+        let payload = {
+          yearRefId: this.state.yearRefId,
+          competitionUniqueKey: this.state.firstTimeCompId,
+          organisationId: getOrganisationData().organisationUniqueKey,
+          roundId: this.state.generateRoundId
+        };
+        this.props.generateDrawAction(payload);
+        this.setState({ loading: true });
+      }
 
     saveCompetitionFinals = (e) => {
         e.preventDefault();
@@ -560,6 +611,7 @@ class CompetitionFinals extends Component {
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         let finalsList = this.props.competitionFinalsState.competitionFinalsList;
+        let activeDrawsRoundsData = this.props.drawsState.activeDrawsRoundsData;
         return (
             <div className="fluid-width" >
                 {finalsList != null && finalsList.length > 0 && (
@@ -576,6 +628,24 @@ class CompetitionFinals extends Component {
                         </div>
                     </div>
                 )}
+
+                <Modal
+                    title="Regenerate Draw"
+                    visible={this.state.drawGenerateModalVisible}
+                    onOk={() => this.handleGenerateDrawModal("ok")}
+                    onCancel={() => this.handleGenerateDrawModal("cancel")}>
+                    <Select
+                    className="year-select reg-filter-select-competition ml-2"
+                        onChange={(e) => this.setState({generateRoundId: e})}
+                        placeholder={'Round'}>
+                        {(activeDrawsRoundsData || []).map((d, dIndex) => (
+                                <Option key={d.roundId} 
+                                value={d.roundId} >{d.name}</Option>
+                            ))
+                        }
+                    
+                    </Select>
+                </Modal>
             </div>
         )
     }
@@ -624,7 +694,8 @@ function mapDispatchToProps(dispatch) {
         getTemplateDownloadAction,
         getApplyToAction,
         getExtraTimeDrawAction,
-        getFinalFixtureTemplateAction
+        getFinalFixtureTemplateAction,
+        getActiveRoundsAction
     }, dispatch);
 
 }
@@ -634,7 +705,8 @@ function mapStatetoProps(state) {
         competitionFinalsState: state.CompetitionFinalsState,
         competitionModuleState: state.CompetitionModuleState,
         appState: state.AppState,
-        commonReducerState: state.CommonReducerState
+        commonReducerState: state.CommonReducerState,
+        drawsState: state.CompetitionDrawsState,
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionFinals));

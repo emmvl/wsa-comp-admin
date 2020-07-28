@@ -1500,6 +1500,7 @@ const AppConstants = {
   createdAt: "Created at",
   download: "Download",
   pleaseInputAddress: "Please input address",
+  roundsNotAvailable: "Rounds not available"
 };
 
 export default AppConstants;
