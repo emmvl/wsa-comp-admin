@@ -7,7 +7,6 @@ const AppUniqueId = {
     CourtPreferences_Divisions_EvenRotation: "venuesEvenRotationDivisions",
     CourtPreferences_Grades_EvenRotation: "venuesEvenRotationGrades",
     CourtPreferences_Teams_EvenRotation: "venuesEvenRotationTeams",
-    CourtPreferences_Teams_EvenRotation: "venuesEvenRotationTeams",
     CourtPreferences_AllocSameCourt: "venuesAllocSameCourt",
     CourtPreferences_AllocSameCourt_Divisions: "venuesAllocSameCourtDivisions",
     CourtPreferences_AllocSameCourt_Grades: "venuesAllocSameCourtGrades",

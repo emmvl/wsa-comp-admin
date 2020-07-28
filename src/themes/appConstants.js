@@ -605,6 +605,7 @@ const AppConstants = {
   contactValue: '9646097979',
   enterFirstName: 'Enter first name',
   enterLastName: 'Enter last name',
+  enterDateOfBirth: 'Enter date of birth',
   assignToMatch: 'Assign To Match',
   aboutScorer: 'About Scorer',
   importMatch: 'Import Match',
@@ -1482,7 +1483,6 @@ const AppConstants = {
 
   editRegret: "Edit/Regrade",
   fullCompetition: "Full Competition",
-  quickCompetition: "Quick Competition",
   competitionstartDate: "Competition Start Date",
   statusPublishHover: "This competition needs to be unlocked using the Edit / Regrade option on the competition dashboard in order to be edited",
 
