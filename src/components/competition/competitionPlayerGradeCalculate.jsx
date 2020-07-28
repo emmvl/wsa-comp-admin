@@ -378,7 +378,7 @@ class CompetitionPlayerGradeCalculate extends Component {
                                     <Button
                                         disabled={this.state.competitionStatus == 1 ? true : false}
                                         className="publish-button"
-                                        style={{ height: isPublished && "100%", borderRadius: isPublished && 10 }}
+                                        style={{ height: isPublished && "100%", borderRadius: isPublished && 10, width: isPublished && "inherit" }}
                                         type="primary"
                                         onClick={() => this.submitApiCall()}>
                                         {AppConstants.save}
