@@ -299,7 +299,7 @@ const columnsTodaysMatch = [
         key: 'matchStatus',
         sorter: (a, b) => tableSort(a, b, "matchStatus"),
         render: (matchStatus, record) =>
-            <span >{matchStatus == "0" ? "" : matchStatus}</span>
+            <span >{(matchStatus == "0" || matchStatus == null) ? "Not Started" : matchStatus}</span>
     },
 
 
@@ -426,6 +426,8 @@ const columnsTodaysMatch_1 = [
         dataIndex: 'matchStatus',
         key: 'matchStatus',
         sorter: (a, b) => tableSort(a, b, "matchStatus"),
+        render: (matchStatus, record) =>
+            <span >{(matchStatus == "0" || matchStatus == null) ? "Not Started" : matchStatus}</span>
     },
 
 
