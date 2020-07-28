@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Select, Checkbox, Button, Radio, Form, message, DatePicker } from 'antd';
+import { Layout, Breadcrumb, Select, Checkbox, Button, Radio, Form, message, DatePicker, Tooltip } from 'antd';
 import './competition.css';
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -27,7 +27,7 @@ import {
     getOrganisationData, setOwnCompetitionYear,
     getOwnCompetitionYear,
     setOwn_competition,
-    getOwn_competition
+    getOwn_competition, getOwn_competitionStatus, setOwn_competitionStatus
 } from "../../util/sessionStorage";
 import AppUniqueId from "../../themes/appUniqueId";
 
@@ -43,7 +43,9 @@ class CompetitionFinals extends Component {
             organisationId: getOrganisationData().organisationUniqueKey,
             getDataLoading: false,
             buttonPressed: "",
-            loading: false
+            loading: false,
+            competitionStatus: 0,
+            tooltipVisibleDelete: false
         }
 
         this.referenceApiCalls();
@@ -54,6 +56,7 @@ class CompetitionFinals extends Component {
 
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
+        let storedCompetitionStatus = getOwn_competitionStatus()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
 
@@ -61,6 +64,7 @@ class CompetitionFinals extends Component {
             this.setState({
                 yearRefId: JSON.parse(yearId),
                 firstTimeCompId: storedCompetitionId,
+                competitionStatus: storedCompetitionStatus,
                 getDataLoading: true
             })
             this.apiCalls(storedCompetitionId, yearId);
@@ -96,9 +100,12 @@ class CompetitionFinals extends Component {
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
                     let competitionId = competitionList[0].competitionId;
+                    let statusRefId = competitionList[0].statusRefId
+                    setOwn_competition(competitionId)
+                    setOwn_competitionStatus(statusRefId)
                     console.log("competitionId::" + competitionId);
                     this.apiCalls(competitionId, this.state.yearRefId);
-                    this.setState({ getDataLoading: true, firstTimeCompId: competitionId })
+                    this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
                 }
             }
         }
@@ -184,21 +191,23 @@ class CompetitionFinals extends Component {
     onYearChange(yearId) {
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
+        setOwn_competitionStatus(undefined)
         this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
-        this.setState({ firstTimeCompId: null, yearRefId: yearId })
+        this.setState({ firstTimeCompId: null, yearRefId: yearId, competitionStatus: 0 })
     }
 
     // on Competition change
-    onCompetitionChange(competitionId) {
+    onCompetitionChange(competitionId, statusRefId) {
         console.log("competitionId::" + competitionId);
         setOwn_competition(competitionId)
+        setOwn_competitionStatus(statusRefId)
         let payload = {
             yearRefId: this.state.yearRefId,
             competitionUniqueKey: competitionId,
             organisationId: this.state.organisationId
         }
         this.props.getCompetitionFinalsAction(payload);
-        this.setState({ getDataLoading: true, firstTimeCompId: competitionId })
+        this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
     }
 
     onChangeSetValue = (id, fieldName, index) => {
@@ -290,13 +299,13 @@ class CompetitionFinals extends Component {
                                     // style={{ minWidth: 200 }}
                                     name={"competition"}
                                     className="year-select reg-filter-select-competition ml-2"
-                                    onChange={competitionId => this.onCompetitionChange(competitionId)
+                                    onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)
                                     }
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
                                     {own_CompetitionArr.length > 0 && own_CompetitionArr.map(item => {
                                         return (
-                                            <Option key={"competition" + item.competitionId} value={item.competitionId}>
+                                            <Option key={item.statusRefId} value={item.competitionId}>
                                                 {item.competitionName}
                                             </Option>
                                         );
@@ -317,6 +326,7 @@ class CompetitionFinals extends Component {
         let finalsList = this.props.competitionFinalsState.competitionFinalsList;
         let appState = this.props.appState;
         let { applyToData, extraTimeDrawData, finalFixtureTemplateData } = this.props.commonReducerState;
+        let disabledStatus = this.state.competitionStatus == 1 ? true : false
         return (
             <div className="content-view" style={{ paddingLeft: '0px', paddingTop: '0px' }}>
                 {(finalsList || []).map((data, index) => (
@@ -340,6 +350,7 @@ class CompetitionFinals extends Component {
                                     {getFieldDecorator(`finalsStartDate${index}`,
                                         { rules: [{ required: true, message: ValidationConstants.finalsStartDateRequired }] })(
                                             <DatePicker
+                                                disabled={disabledStatus}
                                                 size="large"
                                                 placeholder={"dd-mm-yyyy"}
                                                 style={{ width: "100%" }}
@@ -358,7 +369,9 @@ class CompetitionFinals extends Component {
                             {getFieldDecorator(`finalsFixtureTemplateRefId${index}`, {
                                 rules: [{ required: true, message: ValidationConstants.finalFixtureTemplateRequired }]
                             })(
-                                <Radio.Group className="reg-competition-radio"
+                                <Radio.Group
+                                    disabled={disabledStatus}
+                                    className="reg-competition-radio"
                                     id={AppUniqueId.draw_Publish_btn}
                                     onChange={(e) => this.onChangeSetValue(e.target.value, 'finalsFixtureTemplateRefId', index)}
                                     setFieldsValue={data.finalsFixtureTemplateRefId} >
@@ -374,6 +387,7 @@ class CompetitionFinals extends Component {
                                 rules: [{ required: true, message: ValidationConstants.matchTypeRequired }]
                             })(
                                 <Select
+                                    disabled={disabledStatus}
                                     id={AppUniqueId.final_Match_Type_dpdn}
                                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                     onChange={(matchType) => this.onChangeSetValue(matchType, 'finalsMatchTypeRefId', index)}
@@ -394,7 +408,9 @@ class CompetitionFinals extends Component {
                                                 message: ValidationConstants.matchDuration
                                             }]
                                         })(
-                                            <InputWithHead heading={AppConstants.matchDuration} required={"required-field"}
+                                            <InputWithHead
+                                                disabled={disabledStatus}
+                                                heading={AppConstants.matchDuration} required={"required-field"}
                                                 placeholder={AppConstants.mins} setFieldsValue={data.matchDuration}
                                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'matchDuration', index)} ></InputWithHead>
                                         )}
@@ -406,7 +422,9 @@ class CompetitionFinals extends Component {
                                             {getFieldDecorator(`mainBreak${index}`, {
                                                 rules: [{ required: true, message: ValidationConstants.mainBreak }]
                                             })(
-                                                <InputWithHead heading={AppConstants.mainBreak} required={"required-field"}
+                                                <InputWithHead
+                                                    disabled={disabledStatus}
+                                                    heading={AppConstants.mainBreak} required={"required-field"}
                                                     placeholder={AppConstants.mins} setFieldsValue={data.mainBreak}
                                                     onChange={(e) => this.onChangeSetValue(e.target.value, 'mainBreak', index)}></InputWithHead>
                                             )}
@@ -419,7 +437,9 @@ class CompetitionFinals extends Component {
                                             {getFieldDecorator(`qtrBreak${index}`, {
                                                 rules: [{ required: true, message: ValidationConstants.qtrBreak }]
                                             })(
-                                                <InputWithHead heading={AppConstants.qtrBreak} required={"required-field"}
+                                                <InputWithHead
+                                                    disabled={disabledStatus}
+                                                    heading={AppConstants.qtrBreak} required={"required-field"}
                                                     placeholder={AppConstants.mins} setFieldsValue={data.qtrBreak}
                                                     onChange={(e) => this.onChangeSetValue(e.target.value, 'qtrBreak', index)}></InputWithHead>
                                             )}
@@ -432,7 +452,9 @@ class CompetitionFinals extends Component {
                                             {getFieldDecorator(`timeBetweenGames${index}`, {
                                                 rules: [{ required: true, message: ValidationConstants.timeBetweenGames }]
                                             })(
-                                                <InputWithHead heading={AppConstants.betweenGames} required={"required-field"}
+                                                <InputWithHead
+                                                    disabled={disabledStatus}
+                                                    heading={AppConstants.betweenGames} required={"required-field"}
                                                     placeholder={AppConstants.mins} setFieldsValue={data.timeBetweenGames}
                                                     onChange={(e) => this.onChangeSetValue(e.target.value, 'timeBetweenGames', index)}></InputWithHead>
                                             )}
@@ -447,7 +469,10 @@ class CompetitionFinals extends Component {
                             {getFieldDecorator(`applyToRefId${index}`, {
                                 rules: [{ required: true, message: ValidationConstants.applyToRequired }]
                             })(
-                                <Radio.Group id={AppUniqueId.applyToRefId_radiobtn} className="reg-competition-radio" onChange={(e) => this.onChangeSetValue(e.target.value, 'applyToRefId', index)}
+                                <Radio.Group
+                                    disabled={disabledStatus}
+                                    id={AppUniqueId.applyToRefId_radiobtn}
+                                    className="reg-competition-radio" onChange={(e) => this.onChangeSetValue(e.target.value, 'applyToRefId', index)}
                                     setFieldsValue={data.applyToRefId} >
                                     {(applyToData || []).map((app, appIndex) => (
                                         <Radio key={app.id} value={app.id}>{app.description}</Radio>
@@ -462,6 +487,7 @@ class CompetitionFinals extends Component {
                                 rules: [{ required: true, message: ValidationConstants.extraTimeMatchTypeRequired }]
                             })(
                                 <Select
+                                    disabled={disabledStatus}
                                     id={AppUniqueId.finals_extratimetype_dpdn}
                                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                     onChange={(matchType) => this.onChangeSetValue(matchType, 'extraTimeMatchTypeRefId', index)}
@@ -482,7 +508,9 @@ class CompetitionFinals extends Component {
                                                 message: ValidationConstants.extraTimeDurationRequired
                                             }]
                                         })(
-                                            <InputWithHead heading={AppConstants.extraTimeDuration} required={"required-field"}
+                                            <InputWithHead
+                                                disabled={disabledStatus}
+                                                heading={AppConstants.extraTimeDuration} required={"required-field"}
                                                 placeholder={AppConstants.mins}
                                                 setFieldsValue={data.extraTimeDuration}
                                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeDuration', index)} ></InputWithHead>
@@ -495,7 +523,9 @@ class CompetitionFinals extends Component {
                                             {getFieldDecorator(`extraTimeMainBreak${index}`, {
                                                 rules: [{ required: true, message: ValidationConstants.extraTimeMainBreakRequired }]
                                             })(
-                                                <InputWithHead heading={AppConstants.extraTimeMainBreak} required={"required-field"}
+                                                <InputWithHead
+                                                    disabled={disabledStatus}
+                                                    heading={AppConstants.extraTimeMainBreak} required={"required-field"}
                                                     placeholder={AppConstants.mins}
                                                     setFieldsValue={data.extraTimeMainBreak}
                                                     onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeMainBreak', index)} ></InputWithHead>
@@ -509,7 +539,9 @@ class CompetitionFinals extends Component {
                                             {getFieldDecorator(`extraTimeBreak${index}`, {
                                                 rules: [{ required: true, message: ValidationConstants.extraTimeBreakRequired }]
                                             })(
-                                                <InputWithHead heading={AppConstants.extraTimeBreak} placeholder={AppConstants.mins}
+                                                <InputWithHead
+                                                    disabled={disabledStatus}
+                                                    heading={AppConstants.extraTimeBreak} placeholder={AppConstants.mins}
                                                     setFieldsValue={data.extraTimeBreak} required={"required-field"}
                                                     onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeBreak', index)} ></InputWithHead>
                                             )}
@@ -522,7 +554,9 @@ class CompetitionFinals extends Component {
                                             {getFieldDecorator(`beforeExtraTime${index}`, {
                                                 rules: [{ required: true, message: ValidationConstants.beforeExtraTimeRequired }]
                                             })(
-                                                <InputWithHead heading={AppConstants.beaforeExtraTime} placeholder={AppConstants.mins}
+                                                <InputWithHead
+                                                    disabled={disabledStatus}
+                                                    heading={AppConstants.beaforeExtraTime} placeholder={AppConstants.mins}
                                                     setFieldsValue={data.beforeExtraTime} required={"required-field"}
                                                     onChange={(e) => this.onChangeSetValue(e.target.value, 'beforeExtraTime', index)} ></InputWithHead>
                                             )}
@@ -538,7 +572,10 @@ class CompetitionFinals extends Component {
                                 {getFieldDecorator(`extraTimeDrawRefId${index}`, {
                                     rules: [{ required: true, message: ValidationConstants.extraTimeDrawRequired }]
                                 })(
-                                    <Radio.Group id={AppUniqueId.extratime_ifDraw_radiobtn} className="reg-competition-radio" onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeDrawRefId', index)}
+                                    <Radio.Group
+                                        disabled={disabledStatus}
+                                        id={AppUniqueId.extratime_ifDraw_radiobtn}
+                                        className="reg-competition-radio" onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeDrawRefId', index)}
                                         setFieldsValue={data.extraTimeDrawRefId} >
                                         {(extraTimeDrawData || []).map((ex, exIndex) => (
                                             <Radio key={ex.id} value={ex.id}>{ex.description}</Radio>
@@ -564,6 +601,7 @@ class CompetitionFinals extends Component {
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         let finalsList = this.props.competitionFinalsState.competitionFinalsList;
+        let isPublished = this.state.competitionStatus == 1 ? true : false
         return (
             <div className="fluid-width" >
                 {finalsList != null && finalsList.length > 0 && (
@@ -574,7 +612,22 @@ class CompetitionFinals extends Component {
                             </div>
                             <div className="col-sm" >
                                 <div className="comp-finals-button-view">
-                                    <Button className="open-reg-button" type="primary" htmlType="submit" >Create Draft Draw</Button>
+
+                                    <Tooltip
+                                        style={{ height: '100%' }}
+                                        onMouseEnter={() =>
+                                            this.setState({
+                                                tooltipVisibleDelete: isPublished ? true : false,
+                                            })
+                                        }
+                                        onMouseLeave={() =>
+                                            this.setState({ tooltipVisibleDelete: false })
+                                        }
+                                        visible={this.state.tooltipVisibleDelete}
+                                        title={AppConstants.statusPublishHover}
+                                    >
+                                        <Button disabled={isPublished} style={{ height: isPublished && "100%", borderRadius: isPublished && 10 }} className="open-reg-button" type="primary" htmlType="submit" >Create Draft Draw</Button>
+                                    </Tooltip>
                                 </div>
                             </div>
                         </div>

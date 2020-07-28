@@ -458,14 +458,14 @@ class CompetitionPartTeamGradeCalculate extends Component {
         return (
             <div className="fluid-width paddingBottom56px" >
                 <div className="row" >
-                    <div className="col-sm-3 mt-3" >
+                    <div className="col-sm-3" >
                         <div className="reg-add-save-button">
                             <NavLink to="/competitionPlayerGrades">
-                                <Button type="cancel-button"  >{AppConstants.back}</Button>
+                                <Button className="cancelBtnWidth" type="cancel-button"  >{AppConstants.back}</Button>
                             </NavLink>
                         </div>
                     </div>
-                    <div className="col-sm" >
+                    <div className="col-sm">
                         <div className="comp-buttons-view">
                             <Tooltip
                                 style={{ height: '100%' }}
@@ -482,23 +482,24 @@ class CompetitionPartTeamGradeCalculate extends Component {
                             >
                                 <Button
                                     id={AppUniqueId.teamGrading_PublishBtn}
-                                    className="open-reg-button"
+                                    className="publish-button save-draft-text"
                                     disabled={isPublished}
-                                    style={{ height: isPublished && "100%", borderRadius: isPublished && 5 }}
+                                    style={{ height: isPublished && "100%", borderRadius: isPublished && 10 }}
                                     type="primary"
                                     onClick={() => this.publishtApiCall()}
                                 >{AppConstants.publish}
                                 </Button>
                             </Tooltip>
-                        </div>
-                    </div>
-                    <div className="col-sm-1">
-                        <div className="comp-buttons-view">
                             <NavLink to="/competitionCourtAndTimesAssign">
-                                <Button className="open-reg-button" type="primary">{AppConstants.next}</Button>
+                                <Button className="publish-button" type="primary">{AppConstants.next}</Button>
                             </NavLink>
                         </div>
                     </div>
+                    {/* <div className="col-sm-1">
+                        <div className="comp-buttons-view">
+                           
+                        </div>
+                    </div> */}
                 </div>
             </div >
         )

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Input, Button, Table, Select, Form } from 'antd';
+import { Layout, Breadcrumb, Input, Button, Table, Select, Form, Tooltip } from 'antd';
 import { NavLink } from 'react-router-dom';
 import './competition.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -20,6 +20,8 @@ import {
     getParticipatingYear,
     setParticipating_competition,
     getParticipating_competition,
+    getParticipating_competitionStatus,
+    setParticipating_competitionStatus
 } from "../../util/sessionStorage"
 import PlayerCommentModal from "../../customComponents/playerCommentModal"
 import moment from "moment"
@@ -54,6 +56,7 @@ const columns = [
         dataIndex: 'minimumPlayers',
         key: 'minimumPlayers',
         render: (minimumPlayers, record, index) => <Input
+            disabled={this_Obj.state.competitionStatus == 1 ? true : false}
             className="input-inside-player-grades-table-for-grade"
             value={minimumPlayers}
             onChange={(e) => this_Obj.props.onchangeCompPartPlayerGradingSummaryData(e.target.value, index, "minimumPlayers")} />,
@@ -107,7 +110,9 @@ class CompetitionPartPlayerGradeCalculate extends Component {
             playerGradingorgId: null,
             commentsCreatedBy: null,
             commentsCreatedOn: null,
-            comments: null
+            comments: null,
+            competitionStatus: 0,
+            tooltipVisibleDelete: false
         }
         this_Obj = this;
     }
@@ -118,9 +123,11 @@ class CompetitionPartPlayerGradeCalculate extends Component {
             if (nextProps.appState.participate_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
                     let competitionId = competitionList[0].competitionId
+                    let statusRefId = competitionList[0].statusRefId
                     setParticipating_competition(competitionId)
+                    setParticipating_competitionStatus(statusRefId)
                     this.props.getCompPartPlayerGradingSummaryAction(this.state.yearRefId, competitionId)
-                    this.setState({ getDataLoading: true, firstTimeCompId: competitionId })
+                    this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
                 }
             }
         }
@@ -138,12 +145,14 @@ class CompetitionPartPlayerGradeCalculate extends Component {
     apiCalls = () => {
         let yearId = getParticipatingYear()
         let storedCompetitionId = getParticipating_competition()
+        let storedCompetitionStatus = getParticipating_competitionStatus()
         let propsData = this.props.appState.participate_YearArr.length > 0 ? this.props.appState.participate_YearArr : undefined
         let compData = this.props.appState.participate_CompetitionArr.length > 0 ? this.props.appState.participate_CompetitionArr : undefined
         if (storedCompetitionId && yearId && propsData && compData) {
             this.setState({
                 yearRefId: JSON.parse(yearId),
                 firstTimeCompId: storedCompetitionId,
+                competitionStatus: storedCompetitionStatus,
                 getDataLoading: true
             })
             this.props.getCompPartPlayerGradingSummaryAction(yearId, storedCompetitionId)
@@ -196,16 +205,18 @@ class CompetitionPartPlayerGradeCalculate extends Component {
     onYearChange = (yearId) => {
         setParticipatingYear(yearId)
         setParticipating_competition(undefined)
+        setParticipating_competitionStatus(undefined)
         this.props.getYearAndCompetitionParticipateAction(this.props.appState.yearList, yearId)
-        this.setState({ firstTimeCompId: null, yearRefId: yearId })
+        this.setState({ firstTimeCompId: null, yearRefId: yearId, competitionStatus: 0 })
         // this.setDetailsFieldValue()
     }
 
     // on Competition change
-    onCompetitionChange(competitionId) {
+    onCompetitionChange(competitionId, statusRefId) {
         setParticipating_competition(competitionId)
+        setParticipating_competitionStatus(statusRefId)
         this.props.getCompPartPlayerGradingSummaryAction(this.state.yearRefId, competitionId)
-        this.setState({ getDataLoading: true, firstTimeCompId: competitionId })
+        this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
     }
 
     // onClickComment(record) {
@@ -282,14 +293,13 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                                 <Select
                                     name={"competition"}
                                     className="year-select reg-filter-select-competition ml-2"
-                                    // style={{ minWidth: 200 }}
-                                    onChange={competitionId => this.onCompetitionChange(competitionId)
+                                    onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)
                                     }
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
                                     {this.props.appState.participate_CompetitionArr.map(item => {
                                         return (
-                                            <Option key={"competition" + item.competitionId} value={item.competitionId}>
+                                            <Option key={item.statusRefId} value={item.competitionId}>
                                                 {item.competitionName}
                                             </Option>
                                         );
@@ -342,19 +352,35 @@ class CompetitionPartPlayerGradeCalculate extends Component {
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
+        let isPublished = this.state.competitionStatus == 1 ? true : false
         return (
             <div className="fluid-width" >
                 <div className="comp-player-grades-footer-view">
                     <div className="row" >
                         <div className="col-sm" >
                             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
-                                {/* <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button> */}
-                                <Button
-                                    className="open-reg-button"
-                                    type="primary"
-                                    onClick={() => this.submitApiCall()}>
-                                    {AppConstants.save}
-                                </Button>
+                                <Tooltip
+                                    style={{ height: '100%' }}
+                                    onMouseEnter={() =>
+                                        this.setState({
+                                            tooltipVisibleDelete: isPublished ? true : false,
+                                        })
+                                    }
+                                    onMouseLeave={() =>
+                                        this.setState({ tooltipVisibleDelete: false })
+                                    }
+                                    visible={this.state.tooltipVisibleDelete}
+                                    title={AppConstants.statusPublishHover}
+                                >
+                                    <Button
+                                        disabled={isPublished}
+                                        className="publish-button"
+                                        type="primary"
+                                        style={{ height: isPublished && "100%", borderRadius: isPublished && 10, width: isPublished && "inherit" }}
+                                        onClick={() => this.submitApiCall()}>
+                                        {AppConstants.save}
+                                    </Button>
+                                </Tooltip>
                             </div>
                         </div>
                     </div>
