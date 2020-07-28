@@ -1482,7 +1482,7 @@ class RegistrationCompetitionForm extends Component {
                     <Form.Item  >
                         {getFieldDecorator('selectedVenues', { rules: [{ required: true, message: ValidationConstants.pleaseSelectvenue }] })(
                             <Select
-                            id={AppUniqueId.select_Venues}
+                                id={AppUniqueId.select_Venues}
                                 mode="multiple"
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 onChange={venueSelection => {
@@ -2784,7 +2784,7 @@ class RegistrationCompetitionForm extends Component {
                                     visible={this.state.tooltipVisibleDraft}
                                     title={ValidationConstants.compIsPublished}>
                                     <Button
-                                    id={AppUniqueId.comp_savedraft_button}
+                                        id={AppUniqueId.comp_savedraft_button}
                                         className="save-draft-text" type="save-draft-text"
                                         disabled={isPublished}
                                         htmlType="submit"
@@ -2799,7 +2799,9 @@ class RegistrationCompetitionForm extends Component {
                                     onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
                                     visible={this.state.tooltipVisiblePublish}
                                     title={ValidationConstants.compIsPublished}>
-                                    <Button className="publish-button" type="primary"
+                                    <Button
+                                        id={tabKey === "2" ? AppUniqueId.comp_Division_Publish_button : AppUniqueId.comp_page1_Next_button}
+                                        className="publish-button" type="primary"
                                         disabled={tabKey === "1" || tabKey === "2" ? allDisable : isPublished}
                                         htmlType="submit" onClick={() => this.setState({
                                             statusRefId: tabKey == "2" ? 2 : 1,

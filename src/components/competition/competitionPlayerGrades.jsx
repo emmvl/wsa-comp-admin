@@ -1044,14 +1044,14 @@ class CompetitionPlayerGrades extends Component {
                     <div className="col-sm-3 mt-3" >
                         <div className="reg-add-save-button">
                             <NavLink to="/competitionOpenRegForm">
-                                <Button type="cancel-button"  >{AppConstants.back}</Button>
+                                <Button className="cancelBtnWidth" type="cancel-button"  >{AppConstants.back}</Button>
                             </NavLink>
                         </div>
                     </div>
                     <div className="col-sm mt-3" >
                         <div className="comp-finals-button-view">
                             <NavLink to="/competitionPartTeamGradeCalculate">
-                                <Button className="open-reg-button" type="primary">{AppConstants.next}</Button>
+                                <Button className="publish-button" type="primary">{AppConstants.next}</Button>
                             </NavLink>
                         </div>
                     </div>

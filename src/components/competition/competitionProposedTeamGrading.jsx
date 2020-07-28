@@ -777,14 +777,14 @@ class CompetitionProposedTeamGrading extends Component {
                     <div className="row" >
                         <div className="col-sm" >
                             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
-                                <Button type="cancel-button" style={{ marginRight: '20px' }}
+                                <Button className="save-draft-text cancelBtnWidth" type="cancel-button" style={{ marginRight: '20px' }}
                                     onClick={() => this.cancelCall()}
                                 >{AppConstants.cancel}
                                 </Button>
                                 {this.state.divisionId != null &&
                                     <div>
 
-                                        <Button className="open-reg-button" style={{ marginRight: '20px' }}
+                                        <Button className="publish-button save-draft-text"
                                             disabled={isPublished}
                                             onClick={() => this.submitApiCall("save")}
                                             type="primary">{AppConstants.save}
@@ -804,7 +804,7 @@ class CompetitionProposedTeamGrading extends Component {
                                         >
                                             <Button className="open-reg-button"
                                                 disabled={isPublished}
-                                                style={{ height: isPublished && "100%", borderRadius: isPublished && 5 }}
+                                                style={{ height: isPublished && "100%", borderRadius: isPublished && 10 }}
                                                 onClick={() => this.submitApiCall("submit")}
                                                 type="primary">{AppConstants.submit}
                                             </Button>

@@ -186,7 +186,7 @@ class LiveScoreGameTimeList extends Component {
         super(props);
         this.state = {
             selectStatus: "Select Status",
-            filter: "All",
+            filter: AppConstants.period,
             competitionId: null,
             searchText: ''
         };
@@ -273,11 +273,11 @@ class LiveScoreGameTimeList extends Component {
                             <div className="col-sm">
                                 <Select
                                     className="year-select reg-filter-select1"
-                                    style={{ display: "flex", alignItems: "flex-start", minWidth: 140 }}
+                                    style={{ display: "flex", justifyContent: "flex-end", minWidth: 140 }}
                                     // onChange={(selectStatus) => this.setState({ selectStatus })}
                                     onChange={(filter) => this.setFilterValue({ filter })}
                                     value={this.state.filter} >
-                                    <Option value={'All'}>{'All'}</Option>
+                                    {/* <Option value={'All'}>{'All'}</Option> */}
                                     <Option value={AppConstants.period}>{AppConstants.periods}</Option>
                                     <Option value={AppConstants.minute}>{AppConstants.minutes}</Option>
                                     <Option value={AppConstants.matches}>{AppConstants.totalGames}</Option>

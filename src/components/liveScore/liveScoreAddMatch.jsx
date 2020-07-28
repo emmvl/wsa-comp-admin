@@ -1425,25 +1425,25 @@ class LiveScoreAddMatch extends Component {
                 let matchStatus = null;
                 let team1resultId = null;
                 let team2resultId = null;
-                if(matchData.id != 0){
+                if (matchData.id != 0) {
                     if (Number(addEditMatch.team1Score) > Number(addEditMatch.team2Score)) {
                         team1resultId = matchResult[0].id
                         team2resultId = matchResult[1].id
-            
+
                     } else if (Number(addEditMatch.team1Score) < Number(addEditMatch.team2Score)) {
                         team1resultId = matchResult[1].id
                         team2resultId = matchResult[0].id
-            
+
                     } else if (Number(addEditMatch.team1Score) == Number(addEditMatch.team2Score)) {
                         team1resultId = matchResult[2].id
                         team2resultId = matchResult[2].id
-            
+
                     }
-                    matchStatus = addEditMatch.matchStatus;
+                    matchStatus = addEditMatch.matchStatus === "0" ? null : addEditMatch.matchStatus;
                 }
 
                 // const { id } = JSON.parse(getLiveScoreCompetiton())
-                 this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, null, this.state.umpireKey, umpireData, scorerData, recordUmpireType)
+                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, null, this.state.umpireKey, umpireData, scorerData, recordUmpireType)
             }
         });
     }
