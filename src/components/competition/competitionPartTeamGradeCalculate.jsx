@@ -484,7 +484,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                     id={AppUniqueId.teamGrading_PublishBtn}
                                     className="publish-button save-draft-text"
                                     disabled={isPublished}
-                                    style={{ height: isPublished && "100%", borderRadius: isPublished && 10 }}
+                                    style={{ height: isPublished && "100%", borderRadius: isPublished && 10, width: isPublished && "inherit" }}
                                     type="primary"
                                     onClick={() => this.publishtApiCall()}
                                 >{AppConstants.publish}
