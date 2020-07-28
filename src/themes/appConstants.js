@@ -1480,7 +1480,7 @@ const AppConstants = {
   action_box_table: "action_box_table",
   //************************* */
 
-  editRegret: "Edit/Regrade",
+  editRegrade: "Edit/Regrade",
   fullCompetition: "Full Competition",
   quickCompetition: "Quick Competition",
   competitionstartDate: "Competition Start Date",

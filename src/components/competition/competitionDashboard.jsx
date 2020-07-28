@@ -184,7 +184,7 @@ const columnsOwned = [
                             <Menu.Item key="1"
                                 onClick={() => this_Obj.updateCompetitionStatus(record)}
                             >
-                                <span>{AppConstants.editRegret}</span>
+                                <span>{AppConstants.editRegrade}</span>
                             </Menu.Item>
 
                         </SubMenu>
@@ -366,7 +366,6 @@ class CompetitionDashboard extends Component {
                                                 + {AppConstants.quickCompetition}
                                             </Button>
                                         </NavLink>
-
                                     </div>
                                 </div>
                                 <div className="col-sm">

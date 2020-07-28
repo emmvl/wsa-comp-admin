@@ -378,8 +378,8 @@ class CompetitionPlayerGradeCalculate extends Component {
                                 >
                                     <Button
                                         disabled={this.state.competitionStatus == 1 ? true : false}
-                                        className="open-reg-button"
-                                        style={{ height: isPublished && "100%", borderRadius: isPublished && 5 }}
+                                        className="publish-button"
+                                        style={{ height: isPublished && "100%", borderRadius: isPublished && 10 }}
                                         type="primary"
                                         onClick={() => this.submitApiCall()}>
                                         {AppConstants.save}

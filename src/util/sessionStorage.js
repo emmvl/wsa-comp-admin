@@ -90,6 +90,15 @@ const setParticipating_competition = Participating_competition => {
 const getParticipating_competition = () => {
   return localStorage.Participating_competition
 }
+// Set  Participating competition  status
+const setParticipating_competitionStatus = Participating_competitionStaus => {
+  localStorage.setItem("Participating_competitionStaus", Participating_competitionStaus)
+}
+
+// get Participating competition status
+const getParticipating_competitionStatus = () => {
+  return localStorage.Participating_competitionStaus
+}
 
 const setDraws_venue = draws_venue => {
   localStorage.setItem("draws_venue", draws_venue)
@@ -216,5 +225,7 @@ module.exports = {
   setKeyForStateWideMessage,
   getKeyForStateWideMessage,
   setOwn_competitionStatus,
-  getOwn_competitionStatus
+  getOwn_competitionStatus,
+  getParticipating_competitionStatus,
+  setParticipating_competitionStatus
 }
