@@ -77,6 +77,8 @@ import { venueListAction, getCommonRefData, } from '../../store/actions/commonAc
 import { getUserId, getOrganisationData } from "../../util/sessionStorage"
 import CustumToolTip from 'react-png-tooltip'
 import { fixtureTemplateRoundsAction } from '../../store/actions/competitionModuleAction/competitionDashboardAction';
+import AppUniqueId from "../../themes/appUniqueId";
+
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { TextArea } = Input;
@@ -301,6 +303,7 @@ class CompetitionOpenRegForm extends Component {
                     },
                     render: (genderRestriction, record, index) => (
                         <Checkbox
+                            id={AppUniqueId.div_gender_chkbox}
                             className="single-checkbox mt-1"
                             disabled={this.state.permissionState.divisionsDisable}
                             checked={genderRestriction}
@@ -320,6 +323,7 @@ class CompetitionOpenRegForm extends Component {
                                 {getFieldDecorator(`genderRefId${record.parentIndex}${index}`,
                                     { rules: [{ required: true, message: ValidationConstants.genderRestriction }] })(
                                         <Select
+                                            id={AppUniqueId.div_gender_refid}
                                             className='division-age-select'
                                             style={{ width: "100%", minWidth: 120, }}
                                             onChange={genderRefId => this.divisionTableDataOnchange(genderRefId, record, index, "genderRefId")}
@@ -358,6 +362,7 @@ class CompetitionOpenRegForm extends Component {
                     },
                     render: (ageRestriction, record, index) => (
                         <Checkbox
+                            id={AppUniqueId.div_ageres_chkbox}
                             className="single-checkbox mt-1"
                             checked={ageRestriction}
                             onChange={e => this.divisionTableDataOnchange(e.target.checked, record, index, "ageRestriction")}
@@ -377,6 +382,7 @@ class CompetitionOpenRegForm extends Component {
                                 {getFieldDecorator(`fromDate${record.parentIndex}${index}`,
                                     { rules: [{ required: record.ageRestriction, message: ValidationConstants.pleaseSelectDOBFrom }] })(
                                         <DatePicker
+                                            id={AppUniqueId.div_ageres_fromdate}
                                             size="large"
                                             className="comp-venue-time-datepicker"
                                             style={{ width: "100%", minWidth: 135 }}
@@ -406,6 +412,7 @@ class CompetitionOpenRegForm extends Component {
                                 {getFieldDecorator(`toDate${record.parentIndex}${index}`,
                                     { rules: [{ required: record.ageRestriction, message: ValidationConstants.PleaseSelectDOBTo }] })(
                                         <DatePicker
+                                            id={AppUniqueId.div_ageres_todate}
                                             size="large"
                                             className="comp-venue-time-datepicker"
                                             style={{ width: "100%", minWidth: 135 }}
@@ -1130,7 +1137,7 @@ class CompetitionOpenRegForm extends Component {
                                     {AppConstants.competition}:
             </span>
                                 <Select
-                                    // style={{ minWidth: 200 }}
+                                    id={AppUniqueId.existing_comp_dropdown}
                                     name={"competition"}
                                     className="year-select reg-filter-select-competition ml-2"
                                     onChange={competitionId => this.onCompetitionChange(competitionId)
@@ -1799,6 +1806,7 @@ class CompetitionOpenRegForm extends Component {
                                     </div>
                                     <a>
                                         <span
+                                            id={AppUniqueId.add_div_button}
                                             className="input-heading-add-another"
                                             onClick={() =>
                                                 !divisionsDisable
@@ -2696,7 +2704,7 @@ class CompetitionOpenRegForm extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <Button type="cancel-button" onClick={() => history.push('/competitionDashboard')} >{AppConstants.cancel}</Button>
+                                <Button id={AppUniqueId.compdiv_cancel_button} type="cancel-button" onClick={() => history.push('/competitionDashboard')} >{AppConstants.cancel}</Button>
                             </div>
                         </div>
                         <div className="col-sm">
@@ -2708,7 +2716,9 @@ class CompetitionOpenRegForm extends Component {
                                     onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
                                     visible={this.state.tooltipVisiblePublish}
                                     title={ValidationConstants.compIsPublished}>
-                                    <Button className="publish-button" type="primary"
+                                    <Button
+                                        id={AppUniqueId.compdiv_save_button}
+                                        className="publish-button" type="primary"
                                         disabled={tabKey === "1" || tabKey === "2" ? allDisable : isPublished}
                                         htmlType="submit" onClick={() => this.setState({
                                             statusRefId: tabKey == "2" ? 2 : 1,

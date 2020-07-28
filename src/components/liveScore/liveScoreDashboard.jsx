@@ -298,6 +298,8 @@ const columnsTodaysMatch = [
         dataIndex: 'matchStatus',
         key: 'matchStatus',
         sorter: (a, b) => tableSort(a, b, "matchStatus"),
+        render: (matchStatus, record) =>
+            <span >{matchStatus == "0" ? "" : matchStatus}</span>
     },
 
 

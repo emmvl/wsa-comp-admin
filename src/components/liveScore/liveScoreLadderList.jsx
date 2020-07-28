@@ -224,11 +224,12 @@ class LiveScoreLadderList extends Component {
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="reg-filter-col-cont"  >
-                    <span className='year-select-heading'>{AppConstants.filterByDivision}:</span>
-                    {grade.length > 0 && <Select
+                    {/* <span className='year-select-heading'>{AppConstants.filterByDivision}:</span> */}
+                    {/* {grade.length > 0 && <Select
                         className="year-select reg-filter-select1 ml-2"
+                        style={{ minWidth: 200 }}
                         onChange={(division) => this.divisionChange({ division })}
-                        style={{ maxWidth: 100 }}
+                        nowrap
                         defaultValue={grade[0].name}
                     >
                         {grade.map((item) => (
@@ -237,7 +238,35 @@ class LiveScoreLadderList extends Component {
                             </Option>
                         ))}
 
-                    </Select>}
+                    </Select>} */}
+
+                    <div
+                        style={{
+                            width: "fit-content",
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                        }}
+                    >
+                        <span className="year-select-heading">
+                            {AppConstants.filterByDivision}:
+                </span>
+                        {grade.length > 0 && <Select
+                            className="year-select reg-filter-select1 ml-2"
+                            style={{ minWidth: 200 }}
+                            onChange={(division) => this.divisionChange({ division })}
+                            nowrap
+                            defaultValue={grade[0].name}
+                        >
+                            {grade.map((item) => (
+                                <Option key={'selectDivision' + item.id} value={item.id}>
+                                    {item.name}
+                                </Option>
+                            ))}
+
+                        </Select>}
+                    </div>
+
                 </div>
             </div>
         )
