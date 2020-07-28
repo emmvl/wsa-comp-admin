@@ -58,6 +58,8 @@ import moment from 'moment';
 import LegendComponent from '../../customComponents/legendComponent';
 import { isArrayNotEmpty } from '../../util/helpers';
 import { generateDrawAction } from '../../store/actions/competitionModuleAction/competitionModuleAction';
+import AppUniqueId from "../../themes/appUniqueId";
+
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { confirm } = Modal;
@@ -491,6 +493,7 @@ class CompetitionDraws extends Component {
             }}
           >
             <Button
+            id={AppUniqueId.matchList_Btn}
               onClick={() => this.onMatchesList()}
               className="primary-add-comp-form"
               type="primary"
@@ -639,6 +642,7 @@ class CompetitionDraws extends Component {
               {AppConstants.division}:
             </span>
             <Select
+            id={AppUniqueId.division_dpdn}
               style={{ minWidth: 160 }}
               name={'competition'}
               className="year-select reg-filter-select1 ml-2"
@@ -679,6 +683,7 @@ class CompetitionDraws extends Component {
               {AppConstants.organisation}:
             </span>
             <Select
+            id={AppUniqueId.organisation_dpdn}
               style={{ minWidth: 160 }}
               name={'competition'}
               className="year-select reg-filter-select1 ml-2"
@@ -871,6 +876,7 @@ class CompetitionDraws extends Component {
                     {AppConstants.venue}:
                   </span>
                   <Select
+                  id={AppUniqueId.drawsVenueList_dpdn}
                     className="year-select"
                     placeholder="Select"
                     style={{
@@ -931,7 +937,7 @@ class CompetitionDraws extends Component {
           </div>
           <div className="col-sm-2 comp-draw-edit-btn-view">
             <NavLink to="/competitionDrawEdit">
-              <Button className="live-score-edit" type="primary">
+              <Button id={AppUniqueId.editDraw_Btn} className="live-score-edit" type="primary">
                 {AppConstants.edit}
               </Button>
             </NavLink>
@@ -1284,6 +1290,7 @@ class CompetitionDraws extends Component {
             <div className="comp-buttons-view">
               {/* <NavLink to="/competitionFormat"> */}
               <Button
+              id={AppUniqueId.regenrate_Btn}
                 className="open-reg-button"
                 type="primary"
                 onClick={() => this.reGenerateDraw()}
@@ -1301,6 +1308,7 @@ class CompetitionDraws extends Component {
           <div>
             <div className="comp-buttons-view">
               <Button
+               id={AppUniqueId.draw_Publish_btn}
                 className="open-reg-button"
                 type="primary"
                 htmlType="submit"

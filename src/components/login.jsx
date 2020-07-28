@@ -12,6 +12,7 @@ import history from "../util/history";
 import AppConstants from "../themes/appConstants";
 import AppImages from "../themes/appImages";
 import Loader from "../customComponents/loader";
+import AppUniqueId from "../themes/appUniqueId";
 
 const { Content } = Layout;
 const loginFormSchema = Yup.object().shape({
@@ -69,13 +70,14 @@ class Login extends Component {
         )}
 
         <NavLink to={{ pathname: `/forgotPassword`, state: { email: values.userName } }}>
-          <span className="forgot-password-link-text">{AppConstants.forgotResetPassword}</span>
+          <span id={AppUniqueId.forgot_Password_Link} className="forgot-password-link-text">{AppConstants.forgotResetPassword}</span>
         </NavLink>
 
         <div className="row pt-5">
           <div className="col-sm">
             <div className="comp-finals-button-view">
               <Button
+                id={AppUniqueId.login_Button}
                 className="open-reg-button"
                 htmlType="submit"
                 type="primary"

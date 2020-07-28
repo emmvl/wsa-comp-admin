@@ -25,6 +25,7 @@ import {
     setOwn_competition,
     getOwn_competition
 } from "../../util/sessionStorage";
+import AppUniqueId from "../../themes/appUniqueId";
 
 
 const { Header, Footer, Content } = Layout;
@@ -507,6 +508,7 @@ class CompetitionFormat extends Component {
                             }}  >
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
+                                    id={AppUniqueId.compYear_DrpDwn}
                                     name={"yearRefId"}
                                     className="year-select reg-filter-select-year ml-2"
                                     // style={{ width: 90 }}
@@ -531,7 +533,7 @@ class CompetitionFormat extends Component {
                             }} >
                                 <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
-                                    // style={{ minWidth: 200 }}
+                                    id={AppUniqueId.compName_DrpDwn}
                                     name={"competition"}
                                     className="year-select reg-filter-select-competition ml-2"
                                     onChange={competitionId => this.onCompetitionChange(competitionId)
@@ -565,7 +567,7 @@ class CompetitionFormat extends Component {
             <div className="content-view pt-4">
                 <InputWithHead heading={AppConstants.competition_name} placeholder={AppConstants.competition_name}
                     value={data.competitionName} onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionName')}  ></InputWithHead>
-                <div style={{ marginTop: 15 }}>
+                <div id={AppUniqueId.comp_Format_Type} style={{ marginTop: 15 }}>
                     <InputWithHead heading={AppConstants.competitionFormat} required={"required-field"} />
                     <Form.Item >
                         {getFieldDecorator('competitionFormatRefId', {
@@ -606,6 +608,7 @@ class CompetitionFormat extends Component {
                         rules: [{ required: true, message: ValidationConstants.matchTypeRequired }],
                     })(
                         <Select
+                            id={AppUniqueId.matchType_Selection_dpdn}
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                             onChange={(matchType) => this.onChangeSetValue(matchType, 'matchTypeRefId')}
                             value={data.matchTypeRefId}>
@@ -639,7 +642,7 @@ class CompetitionFormat extends Component {
                     </div> : null
                 }
 
-                <span className="applicable-to-heading">{AppConstants.frequency}</span>
+                <span id={AppUniqueId.competition_Frequency} className="applicable-to-heading">{AppConstants.frequency}</span>
                 <Radio.Group className="reg-competition-radio" onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionTypeRefId')} value={data.competitionTypeRefId} >
                     <div className="fluid-width" >
                         <div className="row" >
@@ -683,7 +686,7 @@ class CompetitionFormat extends Component {
                                 </div>
                                 {this.deleteConfirmModalView(data.competionFormatDivisions)}
                             </div>
-                            <Checkbox className="single-checkbox pt-2" checked={isAllDivisionChecked} onChange={(e) => this.onChangeAllDivision(e, data.competionFormatDivisions, index)}>{AppConstants.allDivisions}</Checkbox>
+                            <Checkbox id={AppUniqueId.apply_match_format_All_divisions_Checkbox} className="single-checkbox pt-2" checked={isAllDivisionChecked} onChange={(e) => this.onChangeAllDivision(e, data.competionFormatDivisions, index)}>{AppConstants.allDivisions}</Checkbox>
                             {!isAllDivisionChecked ? <div className="fluid-width" >
                                 <div className="row" >
                                     <div className="col-sm">
@@ -708,7 +711,7 @@ class CompetitionFormat extends Component {
 
                         <div className="fluid-width" >
                             <div className="row" >
-                                <div className="col-sm-3" >
+                                <div id={AppUniqueId.match_Duration} className="col-sm-3" >
                                     <Form.Item >
                                         {getFieldDecorator(`matchDuration${index}`, {
                                             rules: [{
@@ -758,7 +761,7 @@ class CompetitionFormat extends Component {
                                     </div>
                                     : null}
                                 {data.timeslotGenerationRefId != 2 ?
-                                    <div className="col-sm-3" >
+                                    <div id={AppUniqueId.timeBetween_Matches} className="col-sm-3" >
                                         <Form.Item >
                                             {getFieldDecorator(`timeBetweenGames${index}`, {
                                                 rules: [{ required: true, message: ValidationConstants.timeBetweenGames }]
@@ -825,18 +828,18 @@ class CompetitionFormat extends Component {
             <div className="fluid-width" >
                 <div className="footer-view">
                     <div className="row" >
-                    <div className="col-sm">
-                    <div className="reg-add-save-button">
-                        <NavLink to="/competitionVenueTimesPrioritisation">
-                                <Button type="cancel-button">{AppConstants.back}</Button>
-                            </NavLink>
-                        </div>
+                        <div className="col-sm">
+                            <div className="reg-add-save-button">
+                                <NavLink to="/competitionVenueTimesPrioritisation">
+                                    <Button type="cancel-button">{AppConstants.back}</Button>
+                                </NavLink>
+                            </div>
                         </div>
                         <div className="col-sm" >
                             <div className="comp-finals-button-view">
                                 {/* <Button className="save-draft-text" type="save-draft-text"
                                     onClick={()=> this.saveCompetitionFormats()}>{AppConstants.saveDraft}</Button> */}
-                                <Button className="open-reg-button" type="primary" htmlType="submit" disabled={isSubmitting}
+                                <Button id={AppUniqueId.create_Draft_Draw_Btn} className="open-reg-button" type="primary" htmlType="submit" disabled={isSubmitting}
                                 >{AppConstants.createDraftDraw}</Button>
                             </div>
                         </div>

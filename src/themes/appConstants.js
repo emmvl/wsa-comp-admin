@@ -1483,7 +1483,7 @@ const AppConstants = {
   action_box_table: "action_box_table",
   //************************* */
 
-  editRegret: "Edit/Regret",
+  editRegret: "Edit/Regrade",
   fullCompetition: "Full Competition",
   competitionstartDate: "Competition Start Date",
   statusPublishHover: "This competition needs to be unlocked using the Edit / Regrade option on the competition dashboard in order to be edited",
