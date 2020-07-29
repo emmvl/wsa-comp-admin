@@ -876,6 +876,7 @@ class CompetitionDraws extends Component {
     }
     else {
       this.state.publishPartModel.publishPart.isShowDivision = false;
+	  this.onSelectDivisionsValues(null)									
     }
     this.setState({
       publishPart: this.state.publishPartModel.publishPart
@@ -888,6 +889,7 @@ class CompetitionDraws extends Component {
     }
     else {
       this.state.publishPartModel.publishPart.isShowRound = false;
+	  this.onSelectRoundValues(null)							
     }
     this.setState({
       publishPart: this.state.publishPartModel.publishPart
