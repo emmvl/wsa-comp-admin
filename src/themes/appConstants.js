@@ -298,7 +298,7 @@ const AppConstants = {
   gameTimeTracking: 'Game Time Tracking',
   periods: 'Periods',
   minutes: 'Minutes',
-  totalGames: 'Total Games',
+  totalGames: 'Games',
   positionTracking: 'Position Tracking',
   shooting: 'Shooting ',
   preview: 'Preview',

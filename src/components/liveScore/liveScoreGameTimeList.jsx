@@ -186,7 +186,7 @@ class LiveScoreGameTimeList extends Component {
         super(props);
         this.state = {
             selectStatus: "Select Status",
-            filter: AppConstants.period,
+            filter: '',
             competitionId: null,
             searchText: ''
         };
@@ -194,10 +194,10 @@ class LiveScoreGameTimeList extends Component {
     }
 
     componentDidMount() {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ competitionId: id })
+        const { id,attendanceRecordingPeriod } = JSON.parse(getLiveScoreCompetiton())
+        this.setState({ competitionId: id ,filter:attendanceRecordingPeriod})
         if (id !== null) {
-            this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, this.state.searchText)
+            this.props.gameTimeStatisticsListAction(id, attendanceRecordingPeriod, 0, this.state.searchText)
         } else {
             history.push("/")
         }
