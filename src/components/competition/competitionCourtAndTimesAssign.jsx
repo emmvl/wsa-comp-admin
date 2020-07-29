@@ -545,9 +545,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 <Select
                                     id={AppUniqueId.competitionName_dpdnTimeslot}
                                     name={"competition"}
-                                    className="year-select reg-filter-select1 ml-2"
-                                    onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)
-                                    }
+                                    className="year-select reg-filter-select-competition ml-2"
+                                    onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
                                     {own_CompetitionArr.length > 0 && own_CompetitionArr.map(item => {
@@ -1280,7 +1279,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                     <div className="col-sm">
                         <div className="reg-add-save-button">
                             <NavLink to="/competitionPartTeamGradeCalculate">
-                                <Button type="cancel-button"  >{AppConstants.back}</Button>
+                                <Button className="cancelBtnWidth" type="cancel-button"  >{AppConstants.back}</Button>
                             </NavLink>
                         </div>
                     </div>
@@ -1300,7 +1299,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 visible={this.state.tooltipVisibleDelete}
                                 title={AppConstants.statusPublishHover}
                             >
-                                <Button id={AppUniqueId.timeSlotSaveBtn} disabled={isPublished} style={{ height: isPublished && "100%", borderRadius: isPublished && 5 }} className="open-reg-button save-draft-text" htmlType="submit" type="primary">{AppConstants.save}</Button>
+                                <Button id={AppUniqueId.timeSlotSaveBtn} disabled={isPublished} style={{ height: isPublished && "100%", borderRadius: isPublished && 10, width: isPublished && "inherit" }} className="publish-button save-draft-text" htmlType="submit" type="primary">{AppConstants.save}</Button>
                             </Tooltip>
                             <NavLink to="/competitionVenueTimesPrioritisation">
                                 <Button className="publish-button" type="primary">{AppConstants.next}</Button>

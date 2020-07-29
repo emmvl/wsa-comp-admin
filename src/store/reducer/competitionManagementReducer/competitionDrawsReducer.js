@@ -25,8 +25,10 @@ const initialState = {
   updateFixtureLoad: false,
   getRoundsDrawsdata: [],
   spinLoad: false,
-  drawOrganisations: []
-  // colorsArray: []
+  drawOrganisations: [],
+  // colorsArray: [],
+  activeDrawsRoundsData: [],
+  onActRndLoad: false
 
 };
 var gradeColorArray = [];
@@ -1231,6 +1233,18 @@ function CompetitionDraws(state = initialState, action) {
         updateLoad: false
       }
 
+       /////get rounds in the competition draws
+    case ApiConstants.API_GET_DRAWS_ACTIVE_ROUNDS_LOAD:
+      return { ...state, onActRndLoad: true, error: null };
+
+    case ApiConstants.API_GET_DRAWS_ACTIVE_ROUNDS_SUCCESS:
+      let activeDrawsRoundsData = JSON.parse(JSON.stringify(action.result))
+      return {
+        ...state,
+        onActRndLoad: false,
+        activeDrawsRoundsData: activeDrawsRoundsData,
+        error: null,
+      };
     default:
       return state;
   }

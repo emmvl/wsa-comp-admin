@@ -1481,7 +1481,7 @@ const AppConstants = {
   action_box_table: "action_box_table",
   //************************* */
 
-  editRegret: "Edit/Regrade",
+  editRegrade: "Edit/Regrade",
   fullCompetition: "Full Competition",
   competitionstartDate: "Competition Start Date",
   statusPublishHover: "This competition needs to be unlocked using the Edit / Regrade option on the competition dashboard in order to be edited",
@@ -1500,6 +1500,7 @@ const AppConstants = {
   createdAt: "Created at",
   download: "Download",
   pleaseInputAddress: "Please input address",
+  roundsNotAvailable: "Rounds not available"
 };
 
 export default AppConstants;
