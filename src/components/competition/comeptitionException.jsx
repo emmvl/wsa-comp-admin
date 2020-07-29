@@ -8,6 +8,7 @@ import {
     TimePicker,
     Form,
     message,
+    Modal
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -18,12 +19,16 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import ValidationConstants from '../../themes/validationConstant'
 import { venueListAction, courtListAction } from '../../store/actions/commonAction/commonAction'
-import { updateCourtTimingsDrawsAction } from "../../store/actions/competitionModuleAction/competitionDrawsAction"
+import { updateCourtTimingsDrawsAction, getActiveRoundsAction } from "../../store/actions/competitionModuleAction/competitionDrawsAction"
 import { generateDrawAction } from "../../store/actions/competitionModuleAction/competitionModuleAction";
 import { isArrayNotEmpty } from "../../util/helpers";
 import { NavLink } from 'react-router-dom';
 import history from "../../util/history";
-import Loader from '../../customComponents/loader'
+import Loader from '../../customComponents/loader';
+import {
+    getOwn_competitionStatus,
+    getOrganisationData
+} from "../../util/sessionStorage"
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -41,7 +46,10 @@ class CompetitionException extends Component {
             matchDuration: null,
             drawsId: null,
             reGenerateDrawLoad: false,
-            exceptionUpdateLoad: false
+            exceptionUpdateLoad: false,
+            roundLoad: false,
+            drawGenerateModalVisible: false,
+            generateRoundId: null
         };
     }
 
@@ -94,7 +102,16 @@ class CompetitionException extends Component {
         if (nextProps.drawsState != drawsState) {
             if (drawsState.updateLoad == false && this.state.exceptionUpdateLoad == true) {
                 this.setState({ exceptionUpdateLoad: false });
-                this.reGenerateDraw();
+
+                let competitionStatus = getOwn_competitionStatus();
+                if(competitionStatus != 2){
+                    this.callGenerateDraw();
+                }
+                else{
+                    this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
+                    this.setState({ roundLoad: true });
+                }
+              
             }
         }
 
@@ -104,6 +121,20 @@ class CompetitionException extends Component {
                 history.push('/competitionDraws');
             }
         }
+
+        if (
+            this.state.roundLoad == true && this.props.drawsState.onActRndLoad == false
+          ) {
+            this.setState({roundLoad: false});
+            if(this.props.drawsState.activeDrawsRoundsData!= null && 
+              this.props.drawsState.activeDrawsRoundsData.length > 0){
+                this.setState({drawGenerateModalVisible: true})
+              }
+              else{
+                message.config({ duration: 0.9, maxCount: 1 });
+                message.info(AppConstants.roundsNotAvailable);
+              }
+          }
 
     }
 
@@ -288,18 +319,46 @@ class CompetitionException extends Component {
     }
 
     reGenerateDraw = () => {
-        let payload = {
-            yearRefId: this.state.yearRefId,
-            competitionUniqueKey: this.state.competitionId,
-            organisationId: this.state.organisationId
+        let competitionStatus = getOwn_competitionStatus();
+        if(competitionStatus == 2){
+          this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
+          this.setState({ roundLoad: true });
         }
+        else{
+          this.callGenerateDraw();
+        }
+    }
+
+    handleGenerateDrawModal =  (key) =>{
+        if(key == "ok"){
+          if(this.state.generateRoundId!= null){
+            this.callGenerateDraw();
+            this.setState({drawGenerateModalVisible: false});
+          }
+          else{
+            message.error("Please select round");
+          }
+        }
+        else{
+          this.setState({drawGenerateModalVisible: false});
+        }
+      }
+    
+      callGenerateDraw = () =>{
+        let payload = {
+          yearRefId: this.state.yearRefId,
+          competitionUniqueKey: this.state.firstTimeCompId,
+          organisationId: getOrganisationData().organisationUniqueKey,
+          roundId: this.state.generateRoundId
+        };
         this.props.generateDrawAction(payload);
         this.setState({ reGenerateDrawLoad: true });
-    }
+      }
 
 
     //////footer view containing all the buttons like submit and cancel
     footerView = (isSubmitting) => {
+        let activeDrawsRoundsData = this.props.drawsState.activeDrawsRoundsData;
         return (
             <div className="fluid-width">
                 <div className="footer-view">
@@ -320,6 +379,25 @@ class CompetitionException extends Component {
                         </div>
                     </div>
                 </div>
+
+                
+                <Modal
+                    title="Regenerate Draw"
+                    visible={this.state.drawGenerateModalVisible}
+                    onOk={() => this.handleGenerateDrawModal("ok")}
+                    onCancel={() => this.handleGenerateDrawModal("cancel")}>
+                    <Select
+                    className="year-select reg-filter-select-competition ml-2"
+                        onChange={(e) => this.setState({generateRoundId: e})}
+                        placeholder={'Round'}>
+                        {(activeDrawsRoundsData || []).map((d, dIndex) => (
+                                <Option key={d.roundId} 
+                                value={d.roundId} >{d.name}</Option>
+                            ))
+                        }
+                    
+                    </Select>
+                </Modal>
             </div>
         );
     };

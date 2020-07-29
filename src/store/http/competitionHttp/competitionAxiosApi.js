@@ -585,7 +585,19 @@ let CompetitionAxiosApi = {
         body.append("isProceed", payload.isProceed);
         var url = `/api/quickcompetition/import/player`;
         return Method.dataPost(url, token, body);
-    }
+    },
+     ////////competition draws rounds 
+     async  getActiveDrawsRounds(yearRefId, competitionId) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        let body = {
+            yearRefId: yearRefId,
+            competitionUniqueKey: competitionId,
+            organisationId: organisationUniqueKey
+        };
+        var url = `/api/activerounds`
+        return Method.dataPost(url, token, body);
+    },
 
 };
 
