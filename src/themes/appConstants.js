@@ -1488,6 +1488,7 @@ const AppConstants = {
   download: "Download",
   pleaseInputAddress: "Please input address",
   venueSavedSuccessfully: "Successfully Saved",
+  checkVenueAddressDuplication: "Check venue address duplication",
 };
 
 export default AppConstants;

@@ -22,7 +22,7 @@ import { bindActionCreators } from 'redux';
 import { updateVenuAndTimeDataAction, updateVenuListAction, refreshVenueFieldsAction, 
     removeObjectAction, venueByIdAction, clearVenueDataAction } from '../../store/actions/competitionModuleAction/venueTimeAction'
 import { getYearAndCompetitionAction } from '../../store/actions/appAction'
-import { getCommonRefData, addVenueAction } from '../../store/actions/commonAction/commonAction'
+import { getCommonRefData, addVenueAction, checkVenueDuplication } from '../../store/actions/commonAction/commonAction'
 import { getOrganisationAction } from "../../store/actions/userAction/userAction";
 import history from '../../util/history'
 import ValidationConstants from "../../themes/validationConstant";
@@ -225,6 +225,7 @@ class CompetitionVenueAndTimesEdit extends Component {
         }
         this.props.venueByIdAction(payload);
         this.setState({getDataLoading: true});
+        this.props.checkVenueDuplication();
     }
 
     componentDidUpdate(nextProps) {
@@ -269,6 +270,13 @@ class CompetitionVenueAndTimesEdit extends Component {
             if(this.props.userState.onLoad == false)
             {
                 this.setVenueOrganisation();
+            }
+        }
+
+
+        if (nextProps.commonReducerState !== this.props.commonReducerState) {
+            if (this.props.commonReducerState.venueAddressDuplication && !this.state.getDataLoading) {
+                message.error(ValidationConstants.duplicatedVenueAddressError);
             }
         }
     }
@@ -420,7 +428,13 @@ class CompetitionVenueAndTimesEdit extends Component {
 
     handlePlacesAutocomplete = (data) => {
         const { stateList } = this.props.commonReducerState;
+        const { venuData } = this.props.venueTimeState
         const address = data;
+
+        this.props.checkVenueDuplication({
+            ...address,
+            venueId: venuData?.venueId,
+        });
 
         if (!address.addressOne) {
             this.setState({
@@ -902,6 +916,11 @@ class CompetitionVenueAndTimesEdit extends Component {
         let hasError = false;
         let venueAddressError = false;
 
+        if (this.props.commonReducerState.venueAddressDuplication) {
+            message.error(ValidationConstants.duplicatedVenueAddressError);
+            return;
+        }
+
         if (!this.state.venueAddress) {
             this.setState({venueAddressError: ValidationConstants.venueAddressRequiredError});
             message.error(AppConstants.venueAddressSelect);
@@ -1023,7 +1042,12 @@ class CompetitionVenueAndTimesEdit extends Component {
                             <div className="formView">{this.contentView(getFieldDecorator)}</div>
                             <div className="formView">{this.gameDayView(getFieldDecorator)}</div>
                             <div className="formView">{this.courtView(getFieldDecorator)}</div>
-                            <Loader visible={this.props.venueTimeState.onLoad} />
+                            <Loader
+                              visible={
+                                  this.props.venueTimeState.onLoad
+                                  || this.props.commonReducerState.onLoad
+                              }
+                            />
                         </Content>
                         <Footer>{this.footerView()}</Footer>
                     </Form>
@@ -1043,7 +1067,8 @@ function mapDispatchToProps(dispatch) {
         getOrganisationAction,
         removeObjectAction,
         venueByIdAction,
-        clearVenueDataAction
+        clearVenueDataAction,
+        checkVenueDuplication
     }, dispatch)
 }
 

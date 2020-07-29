@@ -5,6 +5,7 @@ import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 import { message } from "antd";
 import AppConstants from "../../../themes/appConstants";
 import AxiosApi from '../../http/registrationHttp/registrationAxios';
+import ValidationConstants from "../../../themes/validationConstant";
 
 function* failSaga(result) {
     console.log("failSaga", result.message)
@@ -660,6 +661,25 @@ export function* getMatchPrintTemplateTypeSaga() {
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_MATCH_PRINT_TEMPLATE_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+
+// Get the match print template type
+export function* checkVenueAddressDuplicationSaga(action) {
+    try {
+        const result = yield call(CommonAxiosApi.checkVenueDuplication, action.body);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_VENUE_ADDRESS_CHECK_DUPLICATION_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });

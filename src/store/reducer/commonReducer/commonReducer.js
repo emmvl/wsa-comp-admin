@@ -54,6 +54,7 @@ const initialState = {
     stateData: [],
     paymentStatus: [],
     matchPrintTemplateType: [],
+    venueAddressDuplication: false,
 };
 
 
@@ -433,6 +434,22 @@ function commonReducerState(state = initialState, action) {
                 matchPrintTemplateType: action.result.MatchPrintTemplate,
                 status: action.status
             };
+
+
+        case ApiConstants.API_VENUE_ADDRESS_CHECK_DUPLICATION_LOAD:
+            return {
+                ...state,
+                onLoad: true,
+            };
+
+        case ApiConstants.API_VENUE_ADDRESS_CHECK_DUPLICATION_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                venueAddressDuplication: action.result.duplicated,
+                status: action.status
+            };
+
         default:
             return state;
     }

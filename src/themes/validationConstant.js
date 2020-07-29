@@ -197,6 +197,7 @@ const ValidationConstants = {
     // Venue Add/Edit
     venueAddressRequiredError: "Venue address is required",
     venueAddressDetailsError: "Please input venue address in details",
+    duplicatedVenueAddressError: "Venue address is duplicated, please select other address",
 };
 
 export default ValidationConstants;

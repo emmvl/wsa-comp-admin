@@ -591,7 +591,6 @@ function VenueTimeState(state = initialState, action) {
 
                 upDateData[action.key] = action.data
                 state.venuData = upDateData
-                console.log(state.venuData);
             }
             else if (action.contentType == 'courtData') {
                 let upDateCourtData = state.venuData.venueCourts

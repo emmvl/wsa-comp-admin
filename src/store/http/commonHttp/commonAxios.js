@@ -153,6 +153,18 @@ let AxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
+    // Check Venue address duplication
+    async checkVenueDuplication(venueAddress) {
+        const url = '/api/venue/duplicate';
+        const body = venueAddress ? {
+            venueId: venueAddress.venueId,
+            lng: venueAddress.lng,
+            lat: venueAddress.lat,
+        } : null;
+
+        return Method.dataPost(url, token, body);
+    },
+
     ////own Competition venue list
     async  getVenueList(competitionID, search) {
         var url = ""
