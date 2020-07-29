@@ -314,12 +314,12 @@ class LiveScoreEditBanners extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <Button onClick={() => history.push('/liveScoreBanners')} type="cancel-button">{AppConstants.cancel}</Button>
+                                <Button className="cancelBtnWidth" onClick={() => history.push('/liveScoreBanners')} type="cancel-button">{AppConstants.cancel}</Button>
                             </div>
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button className="user-approval-button"
+                                <Button className="publish-button save-draft-text"
                                     type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.save}
                                 </Button>

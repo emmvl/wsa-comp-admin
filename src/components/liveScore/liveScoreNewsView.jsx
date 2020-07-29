@@ -58,6 +58,7 @@ class LiveScoreNewsView extends Component {
     handleCancel = e => {
         this.setState({
             visible: false,
+            modaldata: ''
         });
     };
 

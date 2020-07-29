@@ -579,7 +579,7 @@ class CompetitionDraws extends Component {
             <Select
               name={'yearRefId'}
               className="year-select reg-filter-select-year ml-2"
-              // style={{ width: 90 }}
+              style={{ width: 90 }}
               onChange={(yearRefId) => this.onYearChange(yearRefId)}
               value={this.state.yearRefId}
             >

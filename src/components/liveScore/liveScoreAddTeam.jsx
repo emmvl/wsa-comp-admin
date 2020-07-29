@@ -565,12 +565,12 @@ if(x[0].charCodeAt()>=97)
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <Button onClick={() => history.push('/liveScoreTeam')} type="cancel-button">{AppConstants.cancel}</Button>
+                                <Button onClick={() => history.push('/liveScoreTeam')} className="cancelBtnWidth" type="cancel-button">{AppConstants.cancel}</Button>
                             </div>
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button onClick={this.handleSubmit} className="user-approval-button" type="primary" htmlType="submit" disabled={isSubmitting}>
+                                <Button onClick={this.handleSubmit} className="publish-button save-draft-text" type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.save}
                                 </Button>
                             </div>
