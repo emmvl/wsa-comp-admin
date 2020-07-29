@@ -9,15 +9,24 @@ function competitionDashboardAction(yearId) {
 }
 
 //  Enhanced Round Robin Fixture template
-
 function fixtureTemplateRoundsAction() {
     const action = {
-        type: ApiConstants.API_FIXTURE_TEMPLATE_ROUNDS_LOAD,        
+        type: ApiConstants.API_FIXTURE_TEMPLATE_ROUNDS_LOAD,
     };
     return action;
+}
+function updateCompetitionStatus(payload, yearId) {
+    console.log(payload)
+    const action = {
+        type: ApiConstants.API_COMPETITION_STATUS_UPDATE_LOAD,
+        payload,
+        yearId
+    }
+    return action
 }
 
 export {
     competitionDashboardAction,
-    fixtureTemplateRoundsAction
+    fixtureTemplateRoundsAction,
+    updateCompetitionStatus
 }

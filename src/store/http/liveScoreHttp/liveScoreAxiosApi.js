@@ -17,29 +17,21 @@ let token = getAuthToken();
 // let userId = getUserId();
 
 function checlfixedDurationForBulkMatch(data) {
-
     let url = ""
 
     if (data.hours || data.minutes || data.seconds) {
-
         if (data.hours && data.minutes && data.seconds) {
             url = `&hours=${data.hours}&minutes=${data.minutes}&seconds=${data.seconds}`;
-
         } else if (data.hours && data.minutes) {
             url = `&hours=${data.hours}&minutes=${data.minutes}`;
-
         } else if (data.hours && data.seconds) {
             url = `&hours=${data.hours}&seconds=${data.seconds}`;
-
         } else if (data.minutes && data.seconds) {
             url = `&minutes=${data.minutes}&seconds=${data.seconds}`;
-
         } else if (data.hours) {
             url = `&hours=${data.hours}`;
-
         } else if (data.minutes) {
             url = `&minutes=${data.minutes}`;
-
         } else {
             url = `&seconds=${data.seconds}`;
         }
@@ -65,30 +57,25 @@ function checkVenueCourdId(data) {
     return url
 }
 
-
-
-
-
 let LiveScoreAxiosApi = {
     livescoreMatchDetails(data, isLineup) {
         let url = `/matches/admin/${data}?lineups=${isLineup}`
         // let url = `/matches/admin/${data}`
         return Method.dataGet(url, null)
     },
-    liveScoreGetDivision(data, compKey) {
 
-        var url = null
+    liveScoreGetDivision(data, compKey) {
+        let url = null
         if (compKey) {
             url = `/division?competitionKey=${compKey}`
         } else {
             url = `/division?competitionId=${data}`
         }
 
-
         return Method.dataGet(url, null)
     },
-    liveScoreGetAffilate(data) {
 
+    liveScoreGetAffilate(data) {
         let url = ''
         if (data.name) {
             url = `organisation/name=${data.name}&competitionId=${data.id}`
@@ -97,33 +84,37 @@ let LiveScoreAxiosApi = {
         }
         return Method.dataGet(url, null)
     },
+
     liveScoreAddNewTeam(data) {
         const url = '/teams/add'
         return Method.dataPost(url, null, data)
     },
+
     liveScoreSettingPost(data) {
         const venueString = JSON.stringify(data.venue)
         const url = `competitions?venues=${venueString}`
         return Method.dataPost(url, null, data.body)
     },
+
     liveScoreSettingView(data) {
         const url = `/competitions/id/${data}`;
         return Method.dataGet(url, null)
 
     },
+
     liveScoreCompetitionDelete(data) {
         const url = `/competitions/id/${data}`
         return Method.dataDelete(url, localStorage.token)
     },
+
     liveScoreCompetition(data, year, orgKey, recordUmpireTypes) {
-        var url = null;
+        let url = null;
         if (orgKey) {
             if (recordUmpireTypes) {
                 url = `/competitions/admin?organisationId=${orgKey}&recordUmpireType=${recordUmpireTypes}`;
             } else {
                 url = `/competitions/admin?organisationId=${orgKey}`;
             }
-
         } else {
             url = `/competitions/admin`;
         }
@@ -133,8 +124,8 @@ let LiveScoreAxiosApi = {
         } else {
             return Method.dataPost(url, null)
         }
-
     },
+
     liveScorePlayerList(competitionID) {
         var url = `/players?competitionId=${competitionID}`;
         return Method.dataGet(url, localStorage.token);
@@ -164,14 +155,12 @@ let LiveScoreAxiosApi = {
             competitionId: compKey,
             divisionId: divisionId
         }
-        let url = `/teams/ladder`
+
+        let url = `/teams/ladder/web`
         return Method.dataPost(url, localStorage.token, payload)
-
-
     },
 
     liveScoreMatchList(competitionID, start, offset, search, divisionId, roundName, teamId) {
-
         let url;
 
         if (teamId !== undefined) {
@@ -189,23 +178,23 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token)
     },
 
-
     liveScoreMatchSheetDownloadList(competitionId) {
         const url = `/matches/downloads?competitionId=${competitionId}`;
         return Method.dataGet(url, token)
     },
 
     liveScoreTeam(competitionID, divisionId) {
+        let url;
         if (divisionId) {
-            var url = `/teams/list?competitionId=${competitionID}&divisionId=${divisionId}`;
+            url = `/teams/list?competitionId=${competitionID}&divisionId=${divisionId}`;
         } else {
-            var url = `/teams/list?competitionId=${competitionID}`;
+            url = `/teams/list?competitionId=${competitionID}`;
         }
         return Method.dataGet(url, localStorage.token)
     },
 
     liveScoreRound(competitionID, divisionId) {
-        var url = null
+        let url;
         if (divisionId) {
             url = `/round?competitionId=${competitionID}&divisionId=${divisionId}`;
         } else {
@@ -214,8 +203,8 @@ let LiveScoreAxiosApi = {
 
         return Method.dataGet(url, localStorage.token)
     },
-    liveScoreCreateRound(roundName, sequence, competitionID, divisionId) {
 
+    liveScoreCreateRound(roundName, sequence, competitionID, divisionId) {
         let body = JSON.stringify(
             {
                 "name": roundName,
@@ -224,80 +213,125 @@ let LiveScoreAxiosApi = {
                 "divisionId": divisionId,
             }
         )
-        var url = "/round";
+
+        const url = "/round";
         return Method.dataPost(url, localStorage.token, body)
     },
 
     liveScoreAddEditMatch(id) {
-        var url = `/matches/id/${id}`;
+        const url = `/matches/id/${id}`;
         return Method.dataGet(url, localStorage.token)
     },
 
     liveScoreIncidentList(competitionID, search) {
-        var url = `/incident?competitionId=${competitionID}&search=${search}`;
+        const url = `/incident?competitionId=${competitionID}&search=${search}`;
         return Method.dataGet(url, token)
     },
 
     liveScoreCreateMatch(data, competitionId, key, isEdit, team1resultId, team2resultId, matchStatus, endTime, umpireArr, scorerData, recordUmpireType) {
+        let body;
 
-        let body
-
-        if (recordUmpireType == 'NAMES') {
-            body = {
-                "id": data.id ? data.id : 0,
-                "startTime": data.startTime,
-                "divisionId": data.divisionId,
-                "type": data.type,
-                "competitionId": competitionId,
-                "mnbMatchId": data.mnbMatchId,
-                "team1Id": data.team1id,
-                "team2Id": data.team2id,
-                "venueCourtId": data.venueId,
-                "roundId": data.roundId,
-                "matchDuration": data.matchDuration,
-                "mainBreakDuration": data.mainBreakDuration,
-                "breakDuration": (data.type == 'TWO_HALVES' || data.type == 'SINGLE') ? data.mainBreakDuration : data.qtrBreak,
-                "team1Score": data.team1Score,
-                "team2Score": data.team2Score,
-                "resultStatus": isEdit && data.resultStatus,
-                "team1ResultId": isEdit && team1resultId,
-                "team2ResultId": isEdit && team2resultId,
-                "matchStatus": isEdit && matchStatus,
-                "endTime": isEdit && endTime,
-                "matchUmpires": umpireArr,
-                "rosters": scorerData
-                // "breakDuration": data.breakDuration
+        if (recordUmpireType === 'NAMES') {
+            if (isEdit) {
+                body = {
+                    "id": data.id ? data.id : 0,
+                    "startTime": data.startTime,
+                    "divisionId": data.divisionId,
+                    "type": data.type,
+                    "competitionId": competitionId,
+                    "mnbMatchId": data.mnbMatchId,
+                    "team1Id": data.team1id,
+                    "team2Id": data.team2id,
+                    "venueCourtId": data.venueId,
+                    "roundId": data.roundId,
+                    "matchDuration": data.matchDuration,
+                    "mainBreakDuration": data.mainBreakDuration,
+                    "breakDuration": (data.type === 'TWO_HALVES' || data.type === 'SINGLE') ? data.mainBreakDuration : data.qtrBreak,
+                    "team1Score": data.team1Score,
+                    "team2Score": data.team2Score,
+                    "resultStatus": data.resultStatus,
+                    "team1ResultId": team1resultId,
+                    "team2ResultId": team2resultId,
+                    "matchStatus": matchStatus,
+                    "endTime": endTime,
+                    "matchUmpires": umpireArr,
+                    "rosters": scorerData
+                    // "breakDuration": data.breakDuration
+                }
+            } else {
+                body = {
+                    "id": data.id ? data.id : 0,
+                    "startTime": data.startTime,
+                    "divisionId": data.divisionId,
+                    "type": data.type,
+                    "competitionId": competitionId,
+                    "mnbMatchId": data.mnbMatchId,
+                    "team1Id": data.team1id,
+                    "team2Id": data.team2id,
+                    "venueCourtId": data.venueId,
+                    "roundId": data.roundId,
+                    "matchDuration": data.matchDuration,
+                    "mainBreakDuration": data.mainBreakDuration,
+                    "breakDuration": (data.type === 'TWO_HALVES' || data.type === 'SINGLE') ? data.mainBreakDuration : data.qtrBreak,
+                    "team1Score": data.team1Score,
+                    "team2Score": data.team2Score,
+                    "matchUmpires": umpireArr,
+                    "rosters": scorerData
+                    // "breakDuration": data.breakDuration
+                }
             }
-
         } else {
-            body = {
-                "id": data.id ? data.id : 0,
-                "startTime": data.startTime,
-                "divisionId": data.divisionId,
-                "type": data.type,
-                "competitionId": competitionId,
-                "mnbMatchId": data.mnbMatchId,
-                "team1Id": data.team1id,
-                "team2Id": data.team2id,
-                "venueCourtId": data.venueId,
-                "roundId": data.roundId,
-                "matchDuration": data.matchDuration,
-                "mainBreakDuration": data.mainBreakDuration,
-                "breakDuration": (data.type == 'TWO_HALVES' || data.type == 'SINGLE') ? data.mainBreakDuration : data.qtrBreak,
-                "team1Score": data.team1Score,
-                "team2Score": data.team2Score,
-                "resultStatus": isEdit && data.resultStatus,
-                "team1ResultId": isEdit && team1resultId,
-                "team2ResultId": isEdit && team2resultId,
-                "matchStatus": isEdit && matchStatus,
-                "endTime": isEdit && endTime,
-                "rosters": umpireArr,
-                // "scorers": scorerData
-                // "breakDuration": data.breakDuration
+            if (isEdit) {
+                body = {
+                    "id": data.id ? data.id : 0,
+                    "startTime": data.startTime,
+                    "divisionId": data.divisionId,
+                    "type": data.type,
+                    "competitionId": competitionId,
+                    "mnbMatchId": data.mnbMatchId,
+                    "team1Id": data.team1id,
+                    "team2Id": data.team2id,
+                    "venueCourtId": data.venueId,
+                    "roundId": data.roundId,
+                    "matchDuration": data.matchDuration,
+                    "mainBreakDuration": data.mainBreakDuration,
+                    "breakDuration": (data.type === 'TWO_HALVES' || data.type === 'SINGLE') ? data.mainBreakDuration : data.qtrBreak,
+                    "team1Score": data.team1Score,
+                    "team2Score": data.team2Score,
+                    "resultStatus": data.resultStatus,
+                    "team1ResultId": team1resultId,
+                    "team2ResultId": team2resultId,
+                    "matchStatus": matchStatus,
+                    "endTime": endTime,
+                    "rosters": umpireArr,
+                    // "scorers": scorerData
+                    // "breakDuration": data.breakDuration
+                }
+            } else {
+                body = {
+                    "id": data.id ? data.id : 0,
+                    "startTime": data.startTime,
+                    "divisionId": data.divisionId,
+                    "type": data.type,
+                    "competitionId": competitionId,
+                    "mnbMatchId": data.mnbMatchId,
+                    "team1Id": data.team1id,
+                    "team2Id": data.team2id,
+                    "venueCourtId": data.venueId,
+                    "roundId": data.roundId,
+                    "matchDuration": data.matchDuration,
+                    "mainBreakDuration": data.mainBreakDuration,
+                    "breakDuration": (data.type === 'TWO_HALVES' || data.type === 'SINGLE') ? data.mainBreakDuration : data.qtrBreak,
+                    "team1Score": data.team1Score,
+                    "team2Score": data.team2Score,
+                    "rosters": umpireArr,
+                    // "scorers": scorerData
+                    // "breakDuration": data.breakDuration
+                }
             }
         }
 
-        let url = `/matches`
+        const url = `/matches`
         return Method.dataPost(url, token, body)
     },
 
@@ -309,36 +343,36 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, token)
     },
 
-    liveScoreAddBanner(competitionID, bannerImage, showOnHome, showOnDraws, showOnLadder, bannerLink, bannerId) {
-
-        let competitionId = localStorage.getItem("competitionId");
+    liveScoreAddBanner(competitionID, bannerImage, showOnHome, showOnDraws, showOnLadder, showOnNews, showOnChat, format, bannerLink, bannerId) {
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
         let body = new FormData();
         if (bannerImage !== null) {
             body.append("bannerImage", bannerImage)
         }
         body.append('competitionId', id)
-        body.append('showOnHome', showOnHome)
         body.append('id', bannerId)
+        body.append('showOnHome', showOnHome)
         body.append("showOnDraws", showOnDraws)
         body.append("showOnLadder", showOnLadder)
+        body.append("showOnNews", showOnNews)
+        body.append("showOnChat", showOnChat)
+        body.append('format', format)
         body.append('bannerLink', bannerLink)
-        var url = `/banners?competitionId=${id}`;
+        const url = `/banners?competitionId=${id}`;
         return Method.dataPost(url, token, body)
     },
 
     liveScoreRemoveBanner(bannerId) {
-        var url = "/banners/id/" + bannerId;
+        const url = "/banners/id/" + bannerId;
         return Method.dataDelete(url, token)
     },
 
     liveScoreNewsList(competitionId) {
-
-        var url = `/news/admin?entityId=${competitionId}&entityTypeId=1`;
+        const url = `/news/admin?entityId=${competitionId}&entityTypeId=1`;
         return Method.dataGet(url, token)
     },
+
     liveScoreAddNews(data, imageData, newsId, competitionId) {
-        console.log(JSON.parse(getLiveScoreCompetiton()), 'competitionId')
         let mediaArray = [imageData]
         let body = new FormData();
         // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
@@ -356,7 +390,7 @@ let LiveScoreAxiosApi = {
         body.append("recipients", data.recipients);
         body.append("news_expire_date", data.news_expire_date);
         body.append("recipientRefId", 12)
-        //body.append("id", 20)
+        // body.append("id", 20)
         // body.append("newsMedia", imageData)
         body.append("entityTypeId", 1)
         if (imageData !== []) {
@@ -369,31 +403,27 @@ let LiveScoreAxiosApi = {
     },
 
     liveScoreGoalList(compId, goaltype, search) {
-
         let url = null
         if (goaltype === "By Match") {
             url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}`
-        }
-        else if (goaltype === "Total") {
+        } else if (goaltype === "Total") {
             url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=ALL&search=${search}`
-
         }
 
         return Method.dataGet(url, token)
-
     },
 
     liveScoreManagerList(roleId, entityTypeId, entityId) {
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-        var url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${id}`;
+        const url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${id}`;
         return Method.dataGet(url, token)
     },
+
     liveScoreScorerList(comID, roleId, body, search) {
         let competitionID = localStorage.getItem("competitionId");
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
 
-
-        var url = `/roster/admin?competitionId=${id}&roleId=${roleId}`;
+        const url = `/roster/admin?competitionId=${id}&roleId=${roleId}`;
         return Method.dataPost(url, token, body)
     },
 

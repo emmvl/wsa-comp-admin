@@ -298,7 +298,7 @@ const AppConstants = {
   gameTimeTracking: 'Game Time Tracking',
   periods: 'Periods',
   minutes: 'Minutes',
-  totalGames: 'Total Games',
+  totalGames: 'Games',
   positionTracking: 'Position Tracking',
   shooting: 'Shooting ',
   preview: 'Preview',
@@ -605,6 +605,7 @@ const AppConstants = {
   contactValue: '9646097979',
   enterFirstName: 'Enter first name',
   enterLastName: 'Enter last name',
+  enterDateOfBirth: 'Enter date of birth',
   assignToMatch: 'Assign To Match',
   aboutScorer: 'About Scorer',
   importMatch: 'Import Match',
@@ -673,8 +674,11 @@ const AppConstants = {
   bannerlink: 'Banner Link',
   removeBanner: 'Remove Banner',
   showHomePage: 'Show on Home Page',
-  showonDrawsPage: 'Show on Draws Page',
-  showonLadderPage: 'Show on Ladder Page',
+  showOnDrawsPage: 'Show on Draws Page',
+  showOnLadderPage: 'Show on Ladder Page',
+  showOnNewsPage: 'Show on News Page',
+  showOnChatPage: 'Show on Chat Page',
+  bannerFormat: 'Banner Format',
   teamAttendane: 'Team Attendance',
   newsList: 'News List',
   gameTime: 'Game Time',
@@ -1460,6 +1464,8 @@ const AppConstants = {
   charity: "Charity",
   termsAndCond: "T&Cs",
   roundUp: "Round Up",
+
+  /// id for home dashboard
   whatDoYouWantToPublish: "What do you want to Publish?",
   part: 'Part',
   home_page_heading: "home_page_heading",
@@ -1476,6 +1482,15 @@ const AppConstants = {
   acct_settings_label: "acct_settings_label",
   help_support_label: "help&support_label",
   action_box_table: "action_box_table",
+  //************************* */
+
+  editRegrade: "Edit/Regrade",
+  fullCompetition: "Full Competition",
+  competitionstartDate: "Competition Start Date",
+  statusPublishHover: "This competition needs to be unlocked using the Edit / Regrade option on the competition dashboard in order to be edited",
+
+  venueAddressDetailsError: "Please input venue address in details",
+  venueAddressError: "Please select a venue from the venue search",
   venueAddressSelect: "Please select a venue from the venue search",
   venueSearch: "Venue search",
   matchSheetsNoPrintError: "There is no match sheets to print.",
@@ -1487,6 +1502,7 @@ const AppConstants = {
   createdAt: "Created at",
   download: "Download",
   pleaseInputAddress: "Please input address",
+  roundsNotAvailable: "Rounds not available",
   venueSavedSuccessfully: "Successfully Saved",
   checkVenueAddressDuplication: "Check venue address duplication",
 };

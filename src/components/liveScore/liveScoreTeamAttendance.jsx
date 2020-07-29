@@ -286,7 +286,7 @@ class LiveScoreTeamAttendance extends Component {
                             <div className="col-sm">
                                 <Select
                                     className="year-select reg-filter-select1"
-                                    style={{ display: "flex", alignItems: "flex-start", minWidth: 140 }}
+                                    style={{ display: "flex", justifyContent: "flex-end", minWidth: 140 }}
                                     onChange={(selectStatus) => this.onChnageStatus(selectStatus)}
                                     value={this.state.selectStatus} >
                                     <Option value={"All"}>{'All'}</Option>

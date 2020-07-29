@@ -183,6 +183,8 @@ class LiveScoreAddMatch extends Component {
         let formated_date = moment(start_date).format("DD-MM-YYYY")
         let time_formate = moment(displayTime).format("HH:mm");
 
+        console.log(data, 'data~~~~')
+
         this.props.form.setFieldsValue({
             'date': moment(start_date, "DD-MM-YYYY"),
             'time': moment(time_formate, "HH:mm"),
@@ -1067,8 +1069,7 @@ class LiveScoreAddMatch extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                let { addEditMatch, matchData, start_date, start_time, start_post_date, umpire1Orag, umpire1TextField, umpire2Orag, umpire2TextField, umpire1Name, umpire2Name, scorer1, scorer2, recordUmpireType, matchUmpireId_1, matchUmpireId_2, scorerRosterId_1, scorerRosterId_2, umpireRosterId_1, umpireRosterId_2, team1id, team2id } = this.props.liveScoreMatchState
-
+                let { addEditMatch, matchData, start_date, start_time, start_post_date, umpire1Orag, umpire1TextField, umpire2Orag, umpire2TextField, umpire1Name, umpire2Name, scorer1, scorer2, recordUmpireType, matchUmpireId_1, matchUmpireId_2, scorerRosterId_1, scorerRosterId_2, umpireRosterId_1, umpireRosterId_2, team1id, team2id, matchResult } = this.props.liveScoreMatchState
                 let match_date_ = moment(start_date, "DD-MM-YYYY")
                 let startDate = moment(match_date_).format("YYYY-MMM-DD")
                 let start = moment(start_time).format("HH:mm")
@@ -1421,8 +1422,28 @@ class LiveScoreAddMatch extends Component {
 
                 }
 
+                let matchStatus = null;
+                let team1resultId = null;
+                let team2resultId = null;
+                if (matchData.id != 0) {
+                    if (Number(addEditMatch.team1Score) > Number(addEditMatch.team2Score)) {
+                        team1resultId = matchResult[0].id
+                        team2resultId = matchResult[1].id
+
+                    } else if (Number(addEditMatch.team1Score) < Number(addEditMatch.team2Score)) {
+                        team1resultId = matchResult[1].id
+                        team2resultId = matchResult[0].id
+
+                    } else if (Number(addEditMatch.team1Score) == Number(addEditMatch.team2Score)) {
+                        team1resultId = matchResult[2].id
+                        team2resultId = matchResult[2].id
+
+                    }
+                    matchStatus = addEditMatch.matchStatus === "0" ? null : addEditMatch.matchStatus;
+                }
+
                 // const { id } = JSON.parse(getLiveScoreCompetiton())
-                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, null, null, null, null, this.state.umpireKey, umpireData, scorerData, recordUmpireType)
+                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, null, this.state.umpireKey, umpireData, scorerData, recordUmpireType)
             }
         });
     }
@@ -1437,7 +1458,7 @@ class LiveScoreAddMatch extends Component {
                         <div className="row">
                             <div className="col-sm-10 col-md-9">
                                 <div className="reg-add-save-button p-0">
-                                    <Button className="button-spacing-style ml-2 mr-2" onClick={() => history.push(this.state.key == 'dashboard' ? 'liveScoreDashboard' : this.state.key == 'umpireRoaster' ? 'umpireRoaster' : this.state.umpireKey == 'umpire' ? 'umpireDashboard' : '/liveScoreMatches')} type="cancel-button">{AppConstants.cancel}</Button>
+                                    <Button className="cancelBtnWidth" onClick={() => history.push(this.state.key == 'dashboard' ? 'liveScoreDashboard' : this.state.key == 'umpireRoaster' ? 'umpireRoaster' : this.state.umpireKey == 'umpire' ? 'umpireDashboard' : '/liveScoreMatches')} type="cancel-button">{AppConstants.cancel}</Button>
                                     {this.state.isEdit == true && <Button className="button-spacing-style ml-2 mr-2" onClick={() => this.setState({ forfeitVisible: true })} type="cancel-button">{AppConstants.forfiet}</Button>}
                                     {this.state.isEdit == true && <Button className="button-spacing-style ml-2 mr-2" onClick={() => this.setState({ abandonVisible: true })} type="cancel-button">{AppConstants.abandon}</Button>}
                                     {this.state.isEdit == true && <Button className="button-spacing-style ml-2 mr-2" onClick={() => this.endMatchResult()} type="cancel-button">{AppConstants.endMatch}</Button>}
@@ -1446,7 +1467,7 @@ class LiveScoreAddMatch extends Component {
                             <div className="col-sm-2 col-md-3 ">
                                 <div className="comp-buttons-view mt-0">
                                     <Button
-                                        className="user-approval-button  mt-0" type="primary" htmlType="submit"
+                                        className="publish-button save-draft-text" type="primary" htmlType="submit"
                                         disabled={this.props.liveScoreMatchState.onLoad} >
                                         {AppConstants.save}
                                     </Button>

@@ -462,7 +462,7 @@ class LiveScoreMatchesList extends Component {
                         rowKey={(record, index) => record.id + index}
                     />
                 </div>
-                <div className="d-flex justify-content-end">
+                <div className="d-flex justify-content-end mb-5" >
                     <Pagination
                         className="antd-pagination pb-5"
                         current={liveScoreMatchListState.liveScoreMatchListPage}
@@ -472,17 +472,17 @@ class LiveScoreMatchesList extends Component {
                     />
                 </div>
 
-                {this.state.isBulkUpload === true && <div className="d-flex justify-content-end">
+                {this.state.isBulkUpload === true && <div className="d-flex justify-content-end " style={{ paddingBottom: "15vh" }}>
 
-                    <div className="row">
+                    <div className="row" >
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <Button style={{ height: 48, width: 130 }} onClick={() => this.onCancel()} type="cancel-button">{AppConstants.cancel}</Button>
+                                <Button onClick={() => this.onCancel()} className="cancelBtnWidth" type="cancel-button">{AppConstants.cancel}</Button>
                             </div>
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button onClick={this.handleSubmit} className="user-approval-button" type="primary">
+                                <Button onClick={this.handleSubmit} className="publish-button save-draft-text" type="primary">
                                     {AppConstants.save}
                                 </Button>
                             </div>

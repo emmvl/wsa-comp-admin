@@ -161,12 +161,13 @@ import {
   updateCompetitionDraws, saveDrawsSaga,
   getCompetitionVenues, updateCourtTimingsDrawsAction,
   getDivisionGradeNameListSaga, publishDraws, drawsMatchesListExportSaga,
-  getDivisionSaga, competitionFixtureSaga, updateCompetitionFixtures, updateDrawsLock
+  getDivisionSaga, competitionFixtureSaga, updateCompetitionFixtures, updateDrawsLock,
+  getActiveDrawsRoundsSaga
 } from './competitionManagementSaga/competitionDrawsSaga';
 
 import { regDashboardListSaga, getCompetitionSaga, registrationMainDashboardListSaga } from "./registrationSaga/registrationDashboardSaga"
 ////Competition Dashboard Saga
-import { competitionDashboardSaga } from './competitionManagementSaga/competitionDashboardSaga';
+import { competitionDashboardSaga, updateCompetitionStatusSaga } from './competitionManagementSaga/competitionDashboardSaga';
 // import { liveScoreAddEditManagerSaga } from './liveScoreSaga/liveScoreManagerSaga';
 
 // EndUserRegistrationSaga
@@ -798,6 +799,10 @@ export default function* root_saga() {
 
   ////organisation terms and conditions update API
   yield takeEvery(ApiConstants.API_UPDATE_TERMS_AND_CONDITION_LOAD, userSaga.updateTermsAndConditionsSaga);
+  yield takeEvery(ApiConstants.API_COMPETITION_STATUS_UPDATE_LOAD, updateCompetitionStatusSaga)
+
+  ////////competition Active Draws rounds
+  yield takeEvery(ApiConstants.API_GET_DRAWS_ACTIVE_ROUNDS_LOAD, getActiveDrawsRoundsSaga)
 
   // Check venue address duplication
   yield takeEvery(ApiConstants.API_VENUE_ADDRESS_CHECK_DUPLICATION_LOAD, checkVenueAddressDuplicationSaga);

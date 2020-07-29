@@ -229,7 +229,7 @@ class LiveScoreNewsList extends Component {
     tableView = () => {
         const { liveScoreNewsState } = this.props;
         let newsData = liveScoreNewsState ? liveScoreNewsState.liveScoreNewsListData : [];
-
+        let stateWideMsg = getKeyForStateWideMessage()
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
@@ -241,6 +241,9 @@ class LiveScoreNewsList extends Component {
                         pagination={false}
                     />
                 </div>
+
+
+
                 <div className="comp-dashboard-botton-view-mobile">
                     <div
                         className="comp-dashboard-botton-view-mobile"
@@ -248,19 +251,33 @@ class LiveScoreNewsList extends Component {
                             width: "100%",
                             display: "flex",
                             flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "flex-end"
+                            // alignItems: "center",
+                            justifyContent: "center"
                         }} >
+                       
+                            <div className="col-sm">
+                            {
+                            stateWideMsg && <div className="reg-add-save-button">
+                                    <NavLink to={{
+                                        pathname: '/liveScoreCompetitions'
+                                    }}>
+                                        <Button className="button-spacing-style ml-2 mr-2 mt-3" type="cancel-button">{AppConstants.back}</Button>
+                                    </NavLink>
+                                </div>   }
+                            </div>
+                     
+                        <div className="d-flex justify-content-end">
+                            <Pagination
+                                className="antd-pagination"
+                                defaultCurrent={1}
+                                total={8}
+                            // onChange={this.handleTableChange}
+                            />
+                        </div>
                     </div>
-                    <div className="d-flex justify-content-end">
-                        <Pagination
-                            className="antd-pagination"
-                            defaultCurrent={1}
-                            total={8}
-                        // onChange={this.handleTableChange}
-                        />
-                    </div>
+
                 </div>
+
             </div>
         );
     };

@@ -734,7 +734,7 @@ class LiveScoreAddNews extends Component {
                                         state: { screenKey: this.state.screenKey }
                                     }}
                                 >
-                                    <Button type="cancel-button">
+                                    <Button className="cancelBtnWidth" type="cancel-button">
                                         {AppConstants.cancel}
                                     </Button>
                                 </NavLink>
@@ -742,7 +742,7 @@ class LiveScoreAddNews extends Component {
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button className="user-approval-button"
+                                <Button className="publish-button save-draft-text"
                                     type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.next}
                                 </Button>

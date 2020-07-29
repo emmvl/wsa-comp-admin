@@ -211,10 +211,12 @@ export function* getDivisionGradeNameListSaga(action) {
 export function* publishDraws(action) {
     try {
         const result = yield call(CompetitionAxiosApi.publishDrawsApi, action);
+        console.log(result)
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_DRAW_PUBLISH_SUCCESS,
                 result: result.result.data,
+                competitionId: action.competitionId,
                 status: result.status,
             });
             if (action.key == "edit") {
@@ -336,5 +338,25 @@ export function* updateDrawsLock(action) {
     } catch (error) {
         yield call(errorSaga, error)
 
+    }
+}
+
+
+////get active rounds in the competition draws
+export function* getActiveDrawsRoundsSaga(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.getActiveDrawsRounds,
+            action.yearRefId, action.competitionId);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_DRAWS_ACTIVE_ROUNDS_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
     }
 }

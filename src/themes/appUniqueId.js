@@ -7,7 +7,6 @@ const AppUniqueId = {
     CourtPreferences_Divisions_EvenRotation: "venuesEvenRotationDivisions",
     CourtPreferences_Grades_EvenRotation: "venuesEvenRotationGrades",
     CourtPreferences_Teams_EvenRotation: "venuesEvenRotationTeams",
-    CourtPreferences_Teams_EvenRotation: "venuesEvenRotationTeams",
     CourtPreferences_AllocSameCourt: "venuesAllocSameCourt",
     CourtPreferences_AllocSameCourt_Divisions: "venuesAllocSameCourtDivisions",
     CourtPreferences_AllocSameCourt_Grades: "venuesAllocSameCourtGrades",
@@ -96,6 +95,8 @@ const AppUniqueId = {
     team_max_players: "team_max_players",
     comp_savedraft_button: "comp_savedraft_button",
     comp_page1_Next_button: "comp_page1_Next_button",//////
+    comp_Division_Publish_button: "compdiv_publish_button",
+    comp_Division_Cancel_button: "compdiv_cancel_button",
     comp_year_refid: "comp_year_refid",
 
     //// Unique Ids for innerHorizontalMenu for Own Competition Tab //////// 
@@ -126,7 +127,53 @@ const AppUniqueId = {
     div_ageres_todate: "div_ageres_todate",
     add_div_button: "add_div_button",
     compdiv_save_button: "compdiv_save_button",
-    compdiv_cancel_button: "compdiv_cancel_button"
+    compdiv_cancel_button: "compdiv_cancel_button",
+
+    //// Unique Ids for Login Page ////////
+
+    login_Button: "login_btn",
+    forgot_Password_Link: "forgot_pwd_link",
+
+    //// Unique Ids for Competition Format ////////
+
+    compYear_DrpDwn: "compyear_dpdn",
+    compName_DrpDwn: "compname_dpdn",
+    comp_Format_Type: "compformat_radioBn",
+    matchType_Selection_dpdn: "compmatch_type_dpdn",
+    competition_Frequency: "compfreq_inFormat",
+    apply_match_format_All_divisions_Checkbox: "apply_alldiv_ckbx",
+    match_Duration: "matchDuration0",
+    timeBetween_Matches: "timeBetweenGames0",
+    create_Draft_Draw_Btn: "compformat_createdraft_draw_btn",
+
+    //// Unique Ids for Competition Draws ////////
+
+    division_dpdn: "draw_div_dpdn",
+    organisation_dpdn: "draw_org_dpdn",
+    matchList_Btn: "draw_matchlist_btn",
+    editDraw_Btn: "draw_edit_btn",
+    regenrate_Btn: "draw_regenerate_btn",
+    drawsVenueList_dpdn: "draw_venue_dpdn",
+    draw_Publish_btn: "draw_publish_btn",
+    publish_All_Or_PArt_radioBtn: "drawpublish_all_part_radiobtn",
+
+    //// Unique Ids for Competition Finals ////////
+
+    final_StartDate: "finals_start_date",
+    final_FixtureTemplate_radioBtn: "finals_fix_template_radiobtn",
+    final_Match_Type_dpdn: "finals_matchtype_dpdn",
+    finals_matchduration: "finals_matchduration",
+    finals_mainbreak: "finals_mainbreak",
+    finals_qtrbreak: "finals_qtrbreak",
+    applyToRefId_radiobtn: "applyToRefId_radiobtn",
+    finals_extratimetype_dpdn: "finals_extratimetype_dpdn",
+    finals_extratime_duration: "finals_extratime_duration",
+    finals_extratime_mainbreak: "finals_extratime_mainbreak",
+    finals_extratime_break: "finals_extratime_break",
+    extratime_ifDraw_radiobtn: "extratime_ifDraw_radiobtn"
+
+
+
 
 };
 

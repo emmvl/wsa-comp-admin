@@ -32,6 +32,7 @@ class ListProducts extends Component {
 
 
     componentDidMount() {
+        this.props.clearProductReducer("productListingData")
         window.scrollTo(0, 0)
         const widthWindow = window.innerWidth;
         let windowLimit = Math.round(widthWindow / 270) * 2
@@ -176,7 +177,7 @@ class ListProducts extends Component {
         let { productListingData, productListingTotalCount, productListingCurrentPage } = this.props.shopProductState
         return (
             <div className="comp-dash-table-view mt-4">
-                <div className="shop-product-content-div">
+                <div className="shop-product-content-div" style={{ display: productListingData.length < 3 ? "flex" : "grid" }}>
                     {isArrayNotEmpty(productListingData) && productListingData.map((item, index) => {
                         return (
                             <div key={"productListingData" + index}>

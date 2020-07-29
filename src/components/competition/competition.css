@@ -1,4 +1,8 @@
 @import "../../themes/colorVariables.css";
+.paddingBottom56px{
+  padding-bottom: 56px;
+
+}
 .requiredSpan{
   content: '*';
   color: var(--app-red);
@@ -289,7 +293,9 @@
   background-color: var(--app-color) !important;
   border-color: var(--app-color) !important;
 }
-
+.cancelBtnWidth{
+  width:92.5px
+}
 .checkbox-model-popup
 {
   font-weight: 500;
@@ -663,6 +669,9 @@ a.collapsed i {
 }
 
 @media (max-width: 767px) {
+  .paddingBottom56px{
+    padding-bottom: 5px;
+  }
   .comp-buttons-view {
     display: flex;
     align-items: center;

@@ -383,6 +383,12 @@
 .sheet-download-link:hover {
   color: var(--app-color);
 }
+
+.ladder-list-adjustment{
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--app-f5222d);
+  }
   
 @media(min-width: 768px) and (max-width: 1024px) {
     .live-score-edit-match-buttons {

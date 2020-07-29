@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Select, Checkbox, Button, Radio, Form, Modal, message } from 'antd';
+import { Layout, Breadcrumb, Select, Checkbox, Button, Radio, Form, Modal, message, Tooltip } from 'antd';
 import './competition.css';
 import { NavLink } from 'react-router-dom';
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -16,6 +16,9 @@ import {
     getMatchTypesAction, getCompetitionFormatTypesAction, getCompetitionTypesAction,
     getYearAndCompetitionOwnAction, clearYearCompetitionAction, getEnhancedRoundRobinAction
 } from "../../store/actions/appAction";
+import {
+    getActiveRoundsAction
+} from '../../store/actions/competitionModuleAction/competitionDrawsAction';
 
 import { generateDrawAction } from "../../store/actions/competitionModuleAction/competitionModuleAction";
 import Loader from '../../customComponents/loader';
@@ -23,8 +26,11 @@ import {
     getOrganisationData, setOwnCompetitionYear,
     getOwnCompetitionYear,
     setOwn_competition,
-    getOwn_competition
+    getOwn_competition,
+    getOwn_competitionStatus,
+    setOwn_competitionStatus,
 } from "../../util/sessionStorage";
+import AppUniqueId from "../../themes/appUniqueId";
 
 
 const { Header, Footer, Content } = Layout;
@@ -45,7 +51,12 @@ class CompetitionFormat extends Component {
             buttonPressed: "",
             loading: false,
             isFinalAvailable: false,
-            matchTypeRefStateId: 0
+            matchTypeRefStateId: 0,
+            roundLoad: false,
+            drawGenerateModalVisible: false,
+            competitionStatus: 0,
+            tooltipVisibleDelete: false,
+            generateRoundId: null
         }
 
         this.referenceApiCalls();
@@ -55,6 +66,7 @@ class CompetitionFormat extends Component {
         console.log("Component Did mount");
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
+        let storedCompetitionStatus = getOwn_competitionStatus()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
 
@@ -62,6 +74,7 @@ class CompetitionFormat extends Component {
             this.setState({
                 yearRefId: JSON.parse(yearId),
                 firstTimeCompId: storedCompetitionId,
+                competitionStatus: storedCompetitionStatus,
                 getDataLoading: true
             })
             this.apiCalls(storedCompetitionId, yearId);
@@ -99,10 +112,12 @@ class CompetitionFormat extends Component {
                 if (nextProps.appState.own_CompetitionArr !== competitionList) {
                     if (competitionList.length > 0) {
                         let competitionId = competitionList[0].competitionId
+                        let statusRefId = competitionList[0].statusRefId
                         setOwn_competition(competitionId);
+                        setOwn_competitionStatus(statusRefId)
                         console.log("competitionId::" + competitionId);
                         this.apiCalls(competitionId, this.state.yearRefId);
-                        this.setState({ getDataLoading: true, firstTimeCompId: competitionId })
+                        this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
                     }
                 }
             }
@@ -123,12 +138,16 @@ class CompetitionFormat extends Component {
                                 }
                                 if (competitionModuleState.drawGenerateLoad == false &&
                                     !this.state.isFinalAvailable) {
-                                    this.props.generateDrawAction(payload);
-                                    this.setState({ loading: true });
+                                    let competitionStatus = getOwn_competitionStatus();
+                                    if (competitionStatus != 2) {
+                                        this.props.generateDrawAction(payload);
+                                        this.setState({ loading: true });
+                                    }
+                                    else {
+                                        this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
+                                        this.setState({ roundLoad: true });
+                                    }
                                 }
-
-
-
                             }
                         }
                     }
@@ -155,6 +174,18 @@ class CompetitionFormat extends Component {
                 if (competitionModuleState.status == 4 && competitionModuleState.drawGenerateLoad == false) {
                     this.setState({ loading: false });
                     this.apiCalls(this.state.firstTimeCompId, this.state.yearRefId);
+                }
+            }
+
+            if (this.state.roundLoad == true && this.props.drawsState.onActRndLoad == false) {
+                this.setState({ roundLoad: false });
+                if (this.props.drawsState.activeDrawsRoundsData != null &&
+                    this.props.drawsState.activeDrawsRoundsData.length > 0) {
+                    this.setState({ drawGenerateModalVisible: true })
+                }
+                else {
+                    message.config({ duration: 0.9, maxCount: 1 });
+                    message.info(AppConstants.roundsNotAvailable);
                 }
             }
         }
@@ -186,21 +217,23 @@ class CompetitionFormat extends Component {
     onYearChange(yearId) {
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
+        setOwn_competitionStatus(undefined)
         this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
-        this.setState({ firstTimeCompId: null, yearRefId: yearId })
+        this.setState({ firstTimeCompId: null, yearRefId: yearId, competitionStatus: 0 })
     }
 
     // on Competition change
-    onCompetitionChange(competitionId) {
+    onCompetitionChange(competitionId, statusRefId) {
         console.log("competitionId::" + competitionId);
         setOwn_competition(competitionId)
+        setOwn_competitionStatus(statusRefId)
         let payload = {
             yearRefId: this.state.yearRefId,
             competitionUniqueKey: competitionId,
             organisationId: this.state.organisationId
         }
         this.props.getCompetitionFormatAction(payload);
-        this.setState({ getDataLoading: true, firstTimeCompId: competitionId })
+        this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
     }
 
     setFormFieldValue = () => {
@@ -412,6 +445,32 @@ class CompetitionFormat extends Component {
         this.props.updateCompetitionFormatAction(arr, 'competionFormatDivisions');
     }
 
+    handleGenerateDrawModal = (key) => {
+        if (key == "ok") {
+            if (this.state.generateRoundId != null) {
+                this.callGenerateDraw();
+                this.setState({ drawGenerateModalVisible: false });
+            }
+            else {
+                message.error("Please select round");
+            }
+        }
+        else {
+            this.setState({ drawGenerateModalVisible: false });
+        }
+    }
+
+    callGenerateDraw = () => {
+        let payload = {
+            yearRefId: this.state.yearRefId,
+            competitionUniqueKey: this.state.firstTimeCompId,
+            organisationId: getOrganisationData().organisationUniqueKey,
+            roundId: this.state.generateRoundId
+        };
+        this.props.generateDrawAction(payload);
+        this.setState({ loading: true });
+    }
+
 
     saveCompetitionFormats = (e) => {
         e.preventDefault();
@@ -507,6 +566,7 @@ class CompetitionFormat extends Component {
                             }}  >
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
+                                    id={AppUniqueId.compYear_DrpDwn}
                                     name={"yearRefId"}
                                     className="year-select reg-filter-select-year ml-2"
                                     // style={{ width: 90 }}
@@ -531,16 +591,16 @@ class CompetitionFormat extends Component {
                             }} >
                                 <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
-                                    // style={{ minWidth: 200 }}
+                                    id={AppUniqueId.compName_DrpDwn}
                                     name={"competition"}
                                     className="year-select reg-filter-select-competition ml-2"
-                                    onChange={competitionId => this.onCompetitionChange(competitionId)
+                                    onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)
                                     }
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
                                     {own_CompetitionArr.length > 0 && own_CompetitionArr.map(item => {
                                         return (
-                                            <Option key={"competition" + item.competitionId} value={item.competitionId}>
+                                            <Option key={item.statusRefId} value={item.competitionId}>
                                                 {item.competitionName}
                                             </Option>
                                         );
@@ -561,18 +621,21 @@ class CompetitionFormat extends Component {
         // console.log("!!!!!!!!!!!!" + JSON.stringify(data.competitionName));
         let appState = this.props.appState;
         let isAllDivisionChecked = this.props.competitionFormatState.isAllDivisionChecked;
+        let disabledStatus = this.state.competitionStatus == 1 ? true : false
         return (
             <div className="content-view pt-4">
-                <InputWithHead heading={AppConstants.competition_name} placeholder={AppConstants.competition_name}
+                <InputWithHead disabled={disabledStatus} heading={AppConstants.competition_name} placeholder={AppConstants.competition_name}
                     value={data.competitionName} onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionName')}  ></InputWithHead>
-                <div style={{ marginTop: 15 }}>
+                <div id={AppUniqueId.comp_Format_Type} style={{ marginTop: 15 }}>
                     <InputWithHead heading={AppConstants.competitionFormat} required={"required-field"} />
                     <Form.Item >
                         {getFieldDecorator('competitionFormatRefId', {
                             rules: [{ required: true, message: ValidationConstants.pleaseSelectCompetitionFormat }],
                         })(
                             <Radio.Group className="reg-competition-radio" onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionFormatRefId')}
-                                setFieldsValue={data.competitionFormatRefId}>
+                                setFieldsValue={data.competitionFormatRefId}
+                                disabled={disabledStatus}
+                            >
                                 <div className="fluid-width" >
                                     <div className="row" >
                                         {(appState.competitionFormatTypes || []).map(item => {
@@ -606,6 +669,8 @@ class CompetitionFormat extends Component {
                         rules: [{ required: true, message: ValidationConstants.matchTypeRequired }],
                     })(
                         <Select
+                            disabled={disabledStatus}
+                            id={AppUniqueId.matchType_Selection_dpdn}
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                             onChange={(matchType) => this.onChangeSetValue(matchType, 'matchTypeRefId')}
                             value={data.matchTypeRefId}>
@@ -619,6 +684,7 @@ class CompetitionFormat extends Component {
                     <div>
                         <InputWithHead heading={AppConstants.numberOfRounds} />
                         <Select
+                            disabled={disabledStatus}
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                             onChange={(x) => this.onChangeSetValue(x, 'noOfRounds')}
                             value={data.noOfRounds}>
@@ -629,6 +695,7 @@ class CompetitionFormat extends Component {
                         </Select>
                         <InputWithHead heading={AppConstants.enhancedRoundRobinType} />
                         <Select
+                            disabled={disabledStatus}
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                             onChange={(x) => this.onChangeSetValue(x, 'enhancedRoundRobinTypeRefId')}
                             value={data.enhancedRoundRobinTypeRefId}>
@@ -639,8 +706,8 @@ class CompetitionFormat extends Component {
                     </div> : null
                 }
 
-                <span className="applicable-to-heading">{AppConstants.frequency}</span>
-                <Radio.Group className="reg-competition-radio" onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionTypeRefId')} value={data.competitionTypeRefId} >
+                <span id={AppUniqueId.competition_Frequency} className="applicable-to-heading">{AppConstants.frequency}</span>
+                <Radio.Group disabled={disabledStatus} className="reg-competition-radio" onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionTypeRefId')} value={data.competitionTypeRefId} >
                     <div className="fluid-width" >
                         <div className="row" >
                             {(appState.typesOfCompetition || []).map((item, index) => (
@@ -656,16 +723,16 @@ class CompetitionFormat extends Component {
                 <div className="fluid-width">
                     <div className="row" >
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <InputWithHead placeholder={AppConstants.days} value={data.roundInDays}
+                            <InputWithHead disabled={disabledStatus} placeholder={AppConstants.days} value={data.roundInDays}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInDays')}></InputWithHead>
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <InputWithHead placeholder={AppConstants.hours} value={data.roundInHours}
+                            <InputWithHead disabled={disabledStatus} placeholder={AppConstants.hours} value={data.roundInHours}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInHours')}></InputWithHead>
 
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <InputWithHead placeholder={AppConstants.mins} value={data.roundInMins}
+                            <InputWithHead disabled={disabledStatus} placeholder={AppConstants.mins} value={data.roundInMins}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInMins')}></InputWithHead>
                         </div>
                     </div>
@@ -675,7 +742,7 @@ class CompetitionFormat extends Component {
                         <div className="fluid-width" >
                             <div style={{ display: 'flex' }}>
                                 <div className="applicable-to-heading" style={{ paddingTop: '0px' }}>{AppConstants.applyMatchFormat}</div>
-                                <div className="transfer-image-view pt-0 pointer" style={{ marginLeft: 'auto' }} onClick={() => this.deleteModal(index)}>
+                                <div className="transfer-image-view pt-0 pointer" style={{ marginLeft: 'auto', cursor: disabledStatus && "no-drop" }} onClick={() => disabledStatus == false && this.deleteModal(index)}>
                                     <span className="user-remove-btn" ><i className="fa fa-trash-o" aria-hidden="true"></i></span>
                                     <span className="user-remove-text">
                                         {AppConstants.remove}
@@ -683,11 +750,12 @@ class CompetitionFormat extends Component {
                                 </div>
                                 {this.deleteConfirmModalView(data.competionFormatDivisions)}
                             </div>
-                            <Checkbox className="single-checkbox pt-2" checked={isAllDivisionChecked} onChange={(e) => this.onChangeAllDivision(e, data.competionFormatDivisions, index)}>{AppConstants.allDivisions}</Checkbox>
+                            <Checkbox id={AppUniqueId.apply_match_format_All_divisions_Checkbox} disabled={disabledStatus} className="single-checkbox pt-2" checked={isAllDivisionChecked} onChange={(e) => this.onChangeAllDivision(e, data.competionFormatDivisions, index)}>{AppConstants.allDivisions}</Checkbox>
                             {!isAllDivisionChecked ? <div className="fluid-width" >
                                 <div className="row" >
                                     <div className="col-sm">
                                         <Select
+                                            disabled={disabledStatus}
                                             mode="multiple"
                                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                             onChange={(e) => this.onChange(e, data.competionFormatDivisions, index)}
@@ -708,7 +776,7 @@ class CompetitionFormat extends Component {
 
                         <div className="fluid-width" >
                             <div className="row" >
-                                <div className="col-sm-3" >
+                                <div id={AppUniqueId.match_Duration} className="col-sm-3" >
                                     <Form.Item >
                                         {getFieldDecorator(`matchDuration${index}`, {
                                             rules: [{
@@ -717,6 +785,7 @@ class CompetitionFormat extends Component {
                                             }]
                                         })(
                                             <InputWithHead heading={AppConstants.matchDuration}
+                                                disabled={disabledStatus}
                                                 required={"required-field"}
                                                 placeholder={AppConstants.mins}
                                                 setFieldsValue={item.matchDuration}
@@ -731,7 +800,9 @@ class CompetitionFormat extends Component {
                                             {getFieldDecorator(`mainBreak${index}`, {
                                                 rules: [{ required: ((data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? true : false), message: ValidationConstants.mainBreak }]
                                             })(
-                                                <InputWithHead heading={AppConstants.mainBreak}
+                                                <InputWithHead
+                                                    disabled={disabledStatus}
+                                                    heading={AppConstants.mainBreak}
                                                     required={(data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? "required-field" : null}
                                                     placeholder={AppConstants.mins}
                                                     setFieldsValue={item.mainBreak}
@@ -748,7 +819,9 @@ class CompetitionFormat extends Component {
                                             {getFieldDecorator(`qtrBreak${index}`, {
                                                 rules: [{ required: (data.matchTypeRefId == 3 ? true : false), message: ValidationConstants.qtrBreak }]
                                             })(
-                                                <InputWithHead heading={AppConstants.qtrBreak} placeholder={AppConstants.mins}
+                                                <InputWithHead
+                                                    disabled={disabledStatus}
+                                                    heading={AppConstants.qtrBreak} placeholder={AppConstants.mins}
                                                     required={(data.matchTypeRefId == 3) ? "required-field" : null}
                                                     setFieldsValue={item.qtrBreak}
                                                     onChange={(e) => this.onChangeSetCompFormatDivisionValue(e.target.value, 'qtrBreak',
@@ -758,12 +831,14 @@ class CompetitionFormat extends Component {
                                     </div>
                                     : null}
                                 {data.timeslotGenerationRefId != 2 ?
-                                    <div className="col-sm-3" >
+                                    <div id={AppUniqueId.timeBetween_Matches} className="col-sm-3" >
                                         <Form.Item >
                                             {getFieldDecorator(`timeBetweenGames${index}`, {
                                                 rules: [{ required: true, message: ValidationConstants.timeBetweenGames }]
                                             })(
-                                                <InputWithHead heading={AppConstants.timeBetweenMatches} placeholder={AppConstants.mins}
+                                                <InputWithHead
+                                                    disabled={disabledStatus}
+                                                    heading={AppConstants.timeBetweenMatches} placeholder={AppConstants.mins}
                                                     required={"required-field"}
                                                     setFieldsValue={item.timeBetweenGames}
                                                     onChange={(e) => this.onChangeSetCompFormatDivisionValue(e.target.value, 'timeBetweenGames',
@@ -774,20 +849,24 @@ class CompetitionFormat extends Component {
                                     : null}
                             </div>
                         </div>
-                        {data.competitionFormatRefId != 1 &&
+                        {
+                            data.competitionFormatRefId != 1 &&
                             <div>
-                                <Checkbox className="single-checkbox pt-2" checked={item.isFinal} onChange={(e) => this.onChangeFinal(e, data.competionFormatDivisions, index)}>{AppConstants.applyFinalFormat}</Checkbox>
+                                <Checkbox disabled={disabledStatus} className="single-checkbox pt-2" checked={item.isFinal} onChange={(e) => this.onChangeFinal(e, data.competionFormatDivisions, index)}>{AppConstants.applyFinalFormat}</Checkbox>
                             </div>
                         }
                     </div>
-                ))}
+                ))
+                }
                 {/* <NavLink to="/competitionFinals" >
                     <span className='input-heading-add-another'> {AppConstants.setUpFinalTemplate_optional}</span>
                 </NavLink> */}
-                {!isAllDivisionChecked ?
-                    <span className='input-heading-add-another pointer' onClick={() => this.addCompetitionFormatDivision(data)} >+ {AppConstants.addNewCompetitionFormat}</span> : null}
+                {
+                    !isAllDivisionChecked ?
+                        <span className='input-heading-add-another pointer' onClick={() => this.addCompetitionFormatDivision(data)} >+ {AppConstants.addNewCompetitionFormat}</span> : null
+                }
                 {/* <Checkbox className="single-checkbox pt-2" defaultChecked={data.isDefault} onChange={(e) => this.onChangeSetValue(e.target.checked, 'isDefault')}>{AppConstants.setAsDefault}</Checkbox> */}
-            </div>
+            </div >
         )
     }
 
@@ -821,23 +900,66 @@ class CompetitionFormat extends Component {
 
     //////footer view containing all the buttons like submit and cancel
     footerView = (isSubmitting) => {
+        let activeDrawsRoundsData = this.props.drawsState.activeDrawsRoundsData;
+        let isPublished = this.state.competitionStatus == 1 ? true : false
         return (
             <div className="fluid-width" >
                 <div className="footer-view">
                     <div className="row" >
-                        <div className="col-sm" style={{ display: 'flex', alignItems: "flex-start" }}>
-                            {/* <Button type="cancel-button">Cancel</Button> */}
+                        <div className="col-sm">
+                            <div className="reg-add-save-button">
+                                <NavLink to="/competitionVenueTimesPrioritisation">
+                                    <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
+                                </NavLink>
+                            </div>
                         </div>
                         <div className="col-sm" >
                             <div className="comp-finals-button-view">
-                                {/* <Button className="save-draft-text" type="save-draft-text"
-                                    onClick={()=> this.saveCompetitionFormats()}>{AppConstants.saveDraft}</Button> */}
-                                <Button className="open-reg-button" type="primary" htmlType="submit" disabled={isSubmitting}
-                                >{AppConstants.createDraftDraw}</Button>
+                                <Tooltip
+                                    style={{ height: '100%' }}
+                                    onMouseEnter={() =>
+                                        this.setState({
+                                            tooltipVisibleDelete: isPublished ? true : false,
+                                        })
+                                    }
+                                    onMouseLeave={() =>
+                                        this.setState({ tooltipVisibleDelete: false })
+                                    }
+                                    visible={this.state.tooltipVisibleDelete}
+                                    title={AppConstants.statusPublishHover}
+                                >
+                                    <Button
+                                        id={AppUniqueId.create_Draft_Draw_Btn}
+                                        style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 10 }}
+                                        className="open-reg-button"
+                                        type="primary"
+                                        htmlType="submit"
+                                        disabled={isPublished}
+                                    >
+                                        {AppConstants.createDraftDraw}
+                                    </Button>
+                                </Tooltip>
                             </div>
                         </div>
                     </div>
                 </div>
+                <Modal
+                    title="Regenerate Draw"
+                    visible={this.state.drawGenerateModalVisible}
+                    onOk={() => this.handleGenerateDrawModal("ok")}
+                    onCancel={() => this.handleGenerateDrawModal("cancel")}>
+                    <Select
+                        className="year-select reg-filter-select-competition ml-2"
+                        onChange={(e) => this.setState({ generateRoundId: e })}
+                        placeholder={'Round'}>
+                        {(activeDrawsRoundsData || []).map((d, dIndex) => (
+                            <Option key={d.roundId}
+                                value={d.roundId} >{d.name}</Option>
+                        ))
+                        }
+
+                    </Select>
+                </Modal>
             </div>
         )
     }
@@ -883,7 +1005,8 @@ function mapDispatchToProps(dispatch) {
         getYearAndCompetitionOwnAction,
         clearYearCompetitionAction,
         generateDrawAction,
-        getEnhancedRoundRobinAction
+        getEnhancedRoundRobinAction,
+        getActiveRoundsAction
     }, dispatch);
 
 }
@@ -892,7 +1015,8 @@ function mapStatetoProps(state) {
     return {
         competitionFormatState: state.CompetitionFormatState,
         appState: state.AppState,
-        competitionModuleState: state.CompetitionModuleState
+        competitionModuleState: state.CompetitionModuleState,
+        drawsState: state.CompetitionDrawsState,
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionFormat));

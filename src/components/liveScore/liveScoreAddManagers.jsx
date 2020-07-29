@@ -438,13 +438,13 @@ class LiveScoreAddManager extends Component {
                         <div className="col-sm-3">
                             <div className="reg-add-save-button">
                                 <NavLink to='/liveScoreManagerList'>
-                                    <Button type="cancel-button">{AppConstants.cancel}</Button>
+                                    <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.cancel}</Button>
                                 </NavLink>
                             </div>
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button className="user-approval-button" type="primary" htmlType="submit" disabled={isSubmitting}>
+                                <Button className="publish-button save-draft-text" type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.save}
                                 </Button>
                             </div>
