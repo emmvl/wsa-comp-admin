@@ -2,12 +2,12 @@ import React, { useCallback, useState } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Button, Form, message } from "antd";
+import moment from "moment";
 
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import InputWithHead from "../../customComponents/InputWithHead";
 import { userPhotoUpdateAction, userDetailUpdateAction } from "../../store/actions/userAction/userAction";
-import { captializedString } from "../../util/helpers";
+import InputWithHead from "../../customComponents/InputWithHead";
 import Loader from "../../customComponents/loader";
 
 function Profile(props) {
@@ -104,33 +104,24 @@ function Profile(props) {
           </div>
 
           <InputWithHead
-            required="required-field"
             heading={AppConstants.firstName}
-            name="firstName"
             placeholder={AppConstants.enterFirstName}
+            readOnly
             value={user.firstName}
-            onChange={onChangeField}
-            onBlur={(e) => {
-              setUser({
-                ...user,
-                firstName: captializedString(e.currentTarget.value),
-              });
-            }}
           />
 
           <InputWithHead
-            required="required-field"
             heading={AppConstants.lastName}
-            name="lastName"
             placeholder={AppConstants.enterLastName}
+            readOnly
             value={user.lastName}
-            onChange={onChangeField}
-            onBlur={(e) => {
-              setUser({
-                ...user,
-                lastName: captializedString(e.currentTarget.value),
-              });
-            }}
+          />
+
+          <InputWithHead
+            heading={AppConstants.dateOfBirth}
+            placeholder={AppConstants.enterDateOfBirth}
+            readOnly
+            value={user.dateOfBirth ? moment(user.dateOfBirth).format("DD-MM-YYYY") : ""}
           />
 
           <InputWithHead

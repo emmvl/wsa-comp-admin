@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Select, Button, Tooltip } from 'antd';
+import { Layout, Breadcrumb, Select, Button, message, Modal, Tooltip } from 'antd';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import loadjs from 'loadjs';
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -14,6 +14,7 @@ import {
     setOwn_competition,
     getOwn_competition,
     getOrganisationData,
+    setDraws_round,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
 } from "../../util/sessionStorage"
@@ -22,7 +23,8 @@ import {
 } from '../../store/actions/appAction';
 import { generateDrawAction }
     from "../../store/actions/competitionModuleAction/competitionModuleAction";
-import { getDivisionAction, getCompetitionFixtureAction, clearFixtureData, updateCompetitionFixtures } from "../../store/actions/competitionModuleAction/competitionDrawsAction"
+import { getDivisionAction, getCompetitionFixtureAction, 
+    clearFixtureData, updateCompetitionFixtures, getActiveRoundsAction } from "../../store/actions/competitionModuleAction/competitionDrawsAction"
 import moment from 'moment'
 import Loader from '../../customComponents/loader'
 import history from "../../util/history"
@@ -43,6 +45,9 @@ class CompetitionDrawEdit extends Component {
             competitionDivisionGradeId: "",
             updateLoad: false,
             reGenerateLoad: false,
+            roundLoad: false,
+            drawGenerateModalVisible: false,
+            generateRoundId: null,
             competitionStatus: 0,
             tooltipVisibleDelete: false
         }
@@ -91,6 +96,20 @@ class CompetitionDrawEdit extends Component {
                 history.push('/competitionDraws')
             }
         }
+
+        if (
+            this.state.roundLoad == true && this.props.drawsState.onActRndLoad == false
+          ) {
+            this.setState({roundLoad: false});
+            if(this.props.drawsState.activeDrawsRoundsData!= null && 
+              this.props.drawsState.activeDrawsRoundsData.length > 0){
+                this.setState({drawGenerateModalVisible: true})
+              }
+              else{
+                message.config({ duration: 0.9, maxCount: 1 });
+                message.info(AppConstants.roundsNotAvailable);
+              }
+          }
     }
 
     componentDidMount() {
@@ -130,14 +149,43 @@ class CompetitionDrawEdit extends Component {
     }
 
     reGenerateDraw = () => {
-        let payload = {
-            yearRefId: this.state.yearRefId,
-            competitionUniqueKey: this.state.firstTimeCompId,
-            organisationId: getOrganisationData().organisationUniqueKey
+
+        let competitionStatus = getOwn_competitionStatus();
+        if(competitionStatus == 2){
+          this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
+          this.setState({ roundLoad: true });
         }
+        else{
+          this.callGenerateDraw();
+        }
+
+    }
+
+    handleGenerateDrawModal =  (key) =>{
+        if(key == "ok"){
+          if(this.state.generateRoundId!= null){
+            this.callGenerateDraw();
+            this.setState({drawGenerateModalVisible: false});
+          }
+          else{
+            message.error("Please select round");
+          }
+        }
+        else{
+          this.setState({drawGenerateModalVisible: false});
+        }
+      }
+    
+      callGenerateDraw = () =>{
+        let payload = {
+          yearRefId: this.state.yearRefId,
+          competitionUniqueKey: this.state.firstTimeCompId,
+          organisationId: getOrganisationData().organisationUniqueKey,
+          roundId: this.state.generateRoundId
+        };
         this.props.generateDrawAction(payload);
         this.setState({ reGenerateLoad: true });
-    }
+      }
 
     onChange = e => {
         this.setState({
@@ -532,6 +580,7 @@ class CompetitionDrawEdit extends Component {
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
+        let activeDrawsRoundsData = this.props.drawsState.activeDrawsRoundsData;
         let isPublish = this.state.competitionStatus == 1 ? true : false
         return (
             <div className="fluid-width"  >
@@ -566,6 +615,24 @@ class CompetitionDrawEdit extends Component {
                     </div> */}
                 </div>
                 {/* </div> */}
+
+                <Modal
+                    title="Regenerate Draw"
+                    visible={this.state.drawGenerateModalVisible}
+                    onOk={() => this.handleGenerateDrawModal("ok")}
+                    onCancel={() => this.handleGenerateDrawModal("cancel")}>
+                <Select
+                   className="year-select reg-filter-select-competition ml-2"
+                    onChange={(e) => this.setState({generateRoundId: e})}
+                    placeholder={'Round'}>
+                    {(activeDrawsRoundsData || []).map((d, dIndex) => (
+                            <Option key={d.roundId} 
+                            value={d.roundId} >{d.name}</Option>
+                        ))
+                    }
+                
+                </Select>
+          </Modal>
             </div>
         )
     }
@@ -600,7 +667,8 @@ function mapDispatchToProps(dispatch) {
             getCompetitionFixtureAction,
             clearFixtureData,
             updateCompetitionFixtures,
-            generateDrawAction
+            generateDrawAction,
+            getActiveRoundsAction
         },
         dispatch
     );

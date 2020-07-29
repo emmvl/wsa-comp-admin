@@ -163,6 +163,15 @@ function unlockDrawsAction(drawsId, roundId, venueCourtId) {
     }
     return action
 }
+
+///get active rounds in the competition
+function getActiveRoundsAction(yearRefId, competitionId) {
+    const action = {
+        type: ApiConstants.API_GET_DRAWS_ACTIVE_ROUNDS_LOAD,
+        yearRefId, competitionId
+    };
+    return action;
+}
 export {
     getCompetitionDrawsAction,
     getDrawsRoundsAction,
@@ -179,5 +188,6 @@ export {
     getCompetitionFixtureAction,
     clearFixtureData,
     updateCompetitionFixtures,
-    unlockDrawsAction
+    unlockDrawsAction,
+    getActiveRoundsAction
 }

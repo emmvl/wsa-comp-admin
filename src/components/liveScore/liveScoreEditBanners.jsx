@@ -1,19 +1,20 @@
 import React, { Component } from "react";
-import { Layout, Button, Checkbox, Breadcrumb, Spin, Form } from 'antd';
-import './liveScore.css';
-import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
-import DashboardLayout from "../../pages/dashboardLayout";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { Layout, Button, Checkbox, Breadcrumb, Radio, Spin, Form } from "antd";
+
 import AppConstants from "../../themes/appConstants";
 import ValidationConstants from "../../themes/validationConstant";
-import InputWithHead from "../../customComponents/InputWithHead";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { liveScoreAddBanner, liveScoreAddBannerUpdate, clearEditBannerAction } from '../../store/actions/LiveScoreAction/liveScoreBannerAction'
 import history from "../../util/history";
-import { getLiveScoreCompetiton } from '../../util/sessionStorage';
-import Loader from '../../customComponents/loader'
-import ImageLoader from '../../customComponents/ImageLoader'
+import { getLiveScoreCompetiton } from "../../util/sessionStorage";
+import { liveScoreAddBanner, liveScoreAddBannerUpdate, clearEditBannerAction } from "../../store/actions/LiveScoreAction/liveScoreBannerAction";
+import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
+import DashboardLayout from "../../pages/dashboardLayout";
+import InputWithHead from "../../customComponents/InputWithHead";
+import Loader from "../../customComponents/loader";
+import ImageLoader from "../../customComponents/ImageLoader";
 
+import "./liveScore.css";
 
 const { Header, Content, Footer } = Layout;
 
@@ -25,9 +26,12 @@ class LiveScoreEditBanners extends Component {
             bannerImg: null,
             bannerImgSend: null,
             bannerlink: '',
+            format: '',
             showOnHome: false,
             showOnDraws: false,
             showOnLadder: false,
+            showOnNews: false,
+            showOnChat: false,
             http: `https://`,
             tableRecord: this.props.location.state ? this.props.location.state.tableRecord : null,
             isEdit: this.props.location.state ? this.props.location.state.isEdit : null,
@@ -47,7 +51,6 @@ class LiveScoreEditBanners extends Component {
 
     componentDidUpdate() {
         if (this.state.load === true && this.props.liveScoreBannerState.onLoad === false) {
-
             history.push('/liveScoreBanners')
             this.setState({ load: false })
         }
@@ -81,7 +84,6 @@ class LiveScoreEditBanners extends Component {
             //this.setState({ bannerImgSend: data.files[0], bannerImg: URL.createObjectURL(data.files[0]) })
             this.setState({ bannerImgSend: data.files[0], bannerImg: URL.createObjectURL(data.files[0]) })
         }
-
     };
 
     loaderView() {
@@ -108,16 +110,14 @@ class LiveScoreEditBanners extends Component {
         e.preventDefault();
 
         this.props.form.validateFields((err, values) => {
-
             if (!err) {
-                // console.log('err', 'hello')
                 this.onUploadButton()
             }
         });
     };
 
     onUploadButton = () => {
-        const { showOnHome, showOnDraws, showOnLadder, bannerLink } = this.props.liveScoreBannerState
+        const { showOnHome, showOnDraws, showOnLadder, showOnNews, showOnChat, format, bannerLink } = this.props.liveScoreBannerState
         const editBannerId = this.props.location.state ? this.props.location.state.tableRecord.id : null
 
         // let competitionId = getCompetitonId();
@@ -125,21 +125,30 @@ class LiveScoreEditBanners extends Component {
         let showOnhome = showOnHome === true ? 1 : 0
         let showOndraws = showOnDraws === true ? 1 : 0
         let showOnladder = showOnLadder === true ? 1 : 0
+        let showOnnews = showOnNews === true ? 1 : 0
+        let showOnchat = showOnChat === true ? 1 : 0
         if (id !== null) {
             let bannerId = this.state.isEdit === true ? editBannerId : 0
 
-            this.props.liveScoreAddBanner(id, this.state.bannerImgSend, showOnhome, showOndraws, showOnladder, bannerLink, bannerId)
+            this.props.liveScoreAddBanner(id, this.state.bannerImgSend, showOnhome, showOndraws, showOnladder, showOnnews, showOnchat, format, bannerLink, bannerId)
         }
 
         this.setState({ load: true })
-        // console.log('hello')
-    }
+    };
+
+    onChangeFormat = (e) => {
+        this.props.liveScoreAddBannerUpdate(e.target.value, "format");
+
+        if (e.target.value === 'Square') {
+            this.props.liveScoreAddBannerUpdate(0, "showOnChat");
+            this.props.liveScoreAddBannerUpdate(0, "showOnDraws");
+            this.props.liveScoreAddBannerUpdate(0, "showOnLadder");
+        }
+    };
 
     ////////form content view
     contentView = (getFieldDecorator) => {
-        const { bannerLink } = this.props.liveScoreBannerState
-
-
+        const { bannerLink, format } = this.props.liveScoreBannerState
         const bannerImage = this.props.location.state ? this.props.location.state.tableRecord.bannerUrl : null
 
         return (
@@ -151,7 +160,8 @@ class LiveScoreEditBanners extends Component {
                     width
                     borderRadius
                     timeout={this.state.timeout}
-                    src={bannerImage ? bannerImage : this.state.bannerImg} />
+                    src={bannerImage ? bannerImage : this.state.bannerImg}
+                />
                 <div>
                     <div className="row">
                         <div className="col-sm" >
@@ -175,7 +185,8 @@ class LiveScoreEditBanners extends Component {
                                             setTimeout(() => {
                                                 this.setState({ timeout: null })
                                             }, 1000);
-                                        }} />
+                                        }}
+                                    />
                                 )}
                             </Form.Item>
                             <span className="form-err">{this.state.imageError}</span>
@@ -191,17 +202,29 @@ class LiveScoreEditBanners extends Component {
                                 // prefix={"https://"}
                                 value={bannerLink}
                             />
+
+                            <div className="mt-3">
+                                <div>
+                                    <span>{AppConstants.bannerFormat}</span>
+                                </div>
+                                <Radio.Group
+                                    name="format"
+                                    onChange={this.onChangeFormat}
+                                    value={format}
+                                >
+                                    <Radio value="Horizontal">Horizontal</Radio>
+                                    <Radio value="Square">Square</Radio>
+                                </Radio.Group>
+                            </div>
                         </div>
                     </div>
-                    {/* <div className="col-sm"
-                        style={{ marginTop: 10 }}>
+                    {/* <div className="col-sm" style={{ marginTop: 10 }}>
                         <div className="row">
                             <div className="reg-add-save-button">
                                 <Button onClick={this.handleSubmit} className="primary-add-comp-form" type="primary">
                                     {AppConstants.upload}
                                 </Button>
                             </div>
-
                         </div>
                     </div> */}
                 </div>
@@ -211,21 +234,16 @@ class LiveScoreEditBanners extends Component {
         )
     }
 
-
-
     //check box
     chekboxes = (getFieldDecorator) => {
-        const showOnHome = this.props.location.state ? this.props.location.state.tableRecord.showOnHome : null
-        const showOnDraws = this.props.location.state ? this.props.location.state.tableRecord.showOnDraws : null
-        const showOnLadder = this.props.location.state ? this.props.location.state.tableRecord.showOnLadder : null
-
-        //        const { showOnHome, showOnDraws, showOnLadder } = this.props.liveScoreBannerState
+        const { showOnHome, showOnDraws, showOnLadder, showOnNews, showOnChat, format } = this.props.liveScoreBannerState
+        const isSquare = format === 'Square';
 
         return (
             <div className="pt-4">
                 <Checkbox
                     className="single-checkbosx"
-                    defaultChecked={showOnHome == 1 && true}
+                    checked={showOnHome}
                     onChange={(e) => this.props.liveScoreAddBannerUpdate(e.target.checked, "showOnHome")}
                 >
                     {AppConstants.showHomePage}
@@ -234,44 +252,71 @@ class LiveScoreEditBanners extends Component {
                 <div style={{ marginTop: 5 }}>
                     <Checkbox
                         className="single-checkbox"
-                        defaultChecked={showOnDraws == 1 && true}
-                        onChange={(e) => this.u({ showOnDraws: !this.state.showOnDraws })}
+                        disabled={isSquare}
+                        checked={showOnDraws}
                         onChange={(e) => this.props.liveScoreAddBannerUpdate(e.target.checked, "showOnDraws")}
                     >
-                        {AppConstants.showonDrawsPage}
+                        {AppConstants.showOnDrawsPage}
                     </Checkbox>
                 </div>
+
                 <div style={{ marginTop: 5 }}>
                     <Checkbox
                         className="single-checkbox"
-                        defaultChecked={showOnLadder == 1 && true}
+                        disabled={isSquare}
+                        checked={showOnLadder}
                         //onChange={(e) => this.setState({ showOnLadder: !this.state.showOnLadder })
                         onChange={(e) => this.props.liveScoreAddBannerUpdate(e.target.checked, "showOnLadder")}
                     >
-                        {AppConstants.showonLadderPage}
+                        {AppConstants.showOnLadderPage}
+                    </Checkbox>
+                </div>
+
+                <div style={{ marginTop: 5 }}>
+                    <Checkbox
+                        className="single-checkbox"
+                        checked={showOnNews}
+                        onChange={(e) => this.props.liveScoreAddBannerUpdate(e.target.checked, "showOnNews")}
+                    >
+                        {AppConstants.showOnNewsPage}
+                    </Checkbox>
+                </div>
+
+                <div style={{ marginTop: 5 }}>
+                    <Checkbox
+                        className="single-checkbox"
+                        disabled={isSquare}
+                        checked={showOnChat}
+                        onChange={(e) => this.props.liveScoreAddBannerUpdate(e.target.checked, "showOnChat")}
+                    >
+                        {AppConstants.showOnChatPage}
                     </Checkbox>
                 </div>
             </div>
         )
     }
 
-
     headerView = () => {
         return (
             <div className="header-view">
-                <Header className="form-header-view" style={{
-                    backgroundColor: "transparent",
-                    display: "flex",
-                    alignItems: "center",
-                }} >
-                    <div className="row" >
-                        <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+                <Header
+                    className="form-header-view"
+                    style={{
+                        backgroundColor: "transparent",
+                        display: "flex",
+                        alignItems: "center",
+                    }}
+                >
+                    <div className="row">
+                        <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                             <Breadcrumb separator=" > ">
-                                <Breadcrumb.Item className="breadcrumb-add">{this.state.isEdit === true ? AppConstants.editBanners : AppConstants.addBanners}</Breadcrumb.Item>
+                                <Breadcrumb.Item className="breadcrumb-add">
+                                    {this.state.isEdit === true ? AppConstants.editBanners : AppConstants.addBanners}
+                                </Breadcrumb.Item>
                             </Breadcrumb>
                         </div>
                     </div>
-                </Header >
+                </Header>
             </div>
         )
     }
@@ -298,7 +343,6 @@ class LiveScoreEditBanners extends Component {
                         <Button onClick={() => this.onRemoveBtn()} className="primary-add-comp-form" type="primary">
                             {AppConstants.removeBanner}
                         </Button>
-
                     </div>
                 </div>
             </div>
@@ -307,7 +351,6 @@ class LiveScoreEditBanners extends Component {
 
     //////footer view containing all the buttons like submit and cancel
     footerView = (isSubmitting) => {
-
         return (
             <div className="fluid-width">
                 <div className="footer-view">
@@ -331,13 +374,15 @@ class LiveScoreEditBanners extends Component {
         );
     };
 
-
-
     render() {
         const { getFieldDecorator } = this.props.form
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc", paddingBottom: 10 }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                <DashboardLayout
+                    menuHeading={AppConstants.liveScores}
+                    menuName={AppConstants.liveScores}
+                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                />
                 <Loader visible={this.props.liveScoreBannerState.onLoad} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"20"} />
                 <Layout>
@@ -345,7 +390,8 @@ class LiveScoreEditBanners extends Component {
                     <Form
                         onSubmit={this.handleSubmit}
                         className="login-form"
-                        noValidate="noValidate">
+                        noValidate="noValidate"
+                    >
                         <Content>
                             <div className="formView pt-3">
                                 {this.state.bannerImg && this.removeBtn()}
@@ -353,20 +399,22 @@ class LiveScoreEditBanners extends Component {
                             </div>
                         </Content>
 
-                        <Footer >{this.footerView()}</Footer>
+                        <Footer>{this.footerView()}</Footer>
                     </Form>
                 </Layout>
             </div>
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({ liveScoreAddBanner, liveScoreAddBannerUpdate, clearEditBannerAction }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         liveScoreBannerState: state.LiveScoreBannerState,
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(LiveScoreEditBanners));
+
+export default connect(mapStateToProps, mapDispatchToProps)(Form.create()(LiveScoreEditBanners));

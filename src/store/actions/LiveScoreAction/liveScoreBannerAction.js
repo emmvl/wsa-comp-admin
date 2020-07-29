@@ -1,9 +1,7 @@
-
 import ApiConstants from "../../../themes/apiConstants";
 
 //Banners action
 function getliveScoreBanners(competitionID) {
-    console.log('action', competitionID)
     const action = {
         type: ApiConstants.API_LIVE_SCORE_BANNERS_LOAD,
         competitionID: competitionID,
@@ -13,8 +11,7 @@ function getliveScoreBanners(competitionID) {
 }
 
 //Banners Add
-function liveScoreAddBanner(competitionID, bannerImage, showOnHome, showOnDraws, showOnLadder, bannerLink, bannerId) {
-
+function liveScoreAddBanner(competitionID, bannerImage, showOnHome, showOnDraws, showOnLadder, showOnNews, showOnChat, format, bannerLink, bannerId) {
     const action = {
         type: ApiConstants.API_LIVE_SCORE_ADD_BANNER_LOAD,
         competitionID: competitionID,
@@ -22,15 +19,18 @@ function liveScoreAddBanner(competitionID, bannerImage, showOnHome, showOnDraws,
         showOnHome: showOnHome,
         showOnDraws: showOnDraws,
         showOnLadder: showOnLadder,
+        showOnNews: showOnNews,
+        showOnChat: showOnChat,
+        format: format,
         bannerLink: bannerLink,
         bannerId: bannerId
     };
+
     return action;
 }
 
 //Banners Add
 function liveScoreRemoveBanner(bannerId) {
-
     const action = {
         type: ApiConstants.API_LIVE_SCORE_REMOVE_BANNER_LOAD,
         bannerId: bannerId

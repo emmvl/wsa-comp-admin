@@ -338,3 +338,23 @@ export function* updateDrawsLock(action) {
 
     }
 }
+
+
+////get active rounds in the competition draws
+export function* getActiveDrawsRoundsSaga(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.getActiveDrawsRounds,
+            action.yearRefId, action.competitionId);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_DRAWS_ACTIVE_ROUNDS_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

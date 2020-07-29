@@ -31,6 +31,7 @@ import {
   publishDraws,
   matchesListDrawsAction,
   unlockDrawsAction,
+  getActiveRoundsAction
 } from '../../store/actions/competitionModuleAction/competitionDrawsAction';
 import Swappable from '../../customComponents/SwappableComponent';
 import { getDayName, getTime } from '../../themes/dateformate';
@@ -53,6 +54,7 @@ import {
   setDraws_division_grade,
   getDraws_division_grade,
   getOrganisationData,
+
   getOwn_competitionStatus,
   setOwn_competitionStatus
 } from '../../util/sessionStorage';
@@ -92,9 +94,13 @@ class CompetitionDraws extends Component {
       },
       selectedDivisions: null,
       selectedRounds: null,
+      roundLoad: false,
+      drawGenerateModalVisible: false,
       competitionStatus: 0,
-      tooltipVisibleDelete: false
+      tooltipVisibleDelete: false,
+      generateRoundId: null
     };
+    
   }
 
   componentDidUpdate(nextProps) {
@@ -207,6 +213,20 @@ class CompetitionDraws extends Component {
           );
         }
       }
+    }
+
+    if (
+      this.state.roundLoad == true && this.props.drawsState.onActRndLoad == false
+    ) {
+      this.setState({roundLoad: false});
+      if(this.props.drawsState.activeDrawsRoundsData!= null && 
+        this.props.drawsState.activeDrawsRoundsData.length > 0){
+          this.setState({drawGenerateModalVisible: true})
+        }
+        else{
+          message.config({ duration: 0.9, maxCount: 1 });
+          message.info(AppConstants.roundsNotAvailable);
+        }
     }
 
     // if (nextProps.drawsState.drawOrganisations != drawOrganisations) {
@@ -771,14 +791,42 @@ class CompetitionDraws extends Component {
   };
 
   reGenerateDraw = () => {
+    let competitionStatus = getOwn_competitionStatus();
+    if(competitionStatus == 2){
+      this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
+      this.setState({ roundLoad: true });
+    }
+    else{
+      this.callGenerateDraw();
+    }
+ 
+  };
+
+  handleGenerateDrawModal =  (key) =>{
+    if(key == "ok"){
+      if(this.state.generateRoundId!= null){
+        this.callGenerateDraw();
+        this.setState({drawGenerateModalVisible: false});
+      }
+      else{
+        message.error("Please select round");
+      }
+    }
+    else{
+      this.setState({drawGenerateModalVisible: false});
+    }
+  }
+
+  callGenerateDraw = () =>{
     let payload = {
       yearRefId: this.state.yearRefId,
       competitionUniqueKey: this.state.firstTimeCompId,
       organisationId: getOrganisationData().organisationUniqueKey,
+      roundId: this.state.generateRoundId
     };
     this.props.generateDrawAction(payload);
     this.setState({ venueLoad: true });
-  };
+  }
 
 
   //unlockDraws
@@ -1312,8 +1360,8 @@ class CompetitionDraws extends Component {
   footerView = () => {
     let publishStatus = this.props.drawsState.publishStatus;
     let isTeamNotInDraws = this.props.drawsState.isTeamInDraw;
+    let activeDrawsRoundsData = this.props.drawsState.activeDrawsRoundsData;
     let isPublish = this.state.competitionStatus == 1 ? true : false
-
     return (
       <div className="fluid-width">
         <div className="row">
@@ -1391,7 +1439,25 @@ class CompetitionDraws extends Component {
           modalIsShowDivision={this.state.publishPartModel.publishPart.isShowDivision}
           modalIsShowRound={this.state.publishPartModel.publishPart.isShowRound}
         ></DrawsPublishModel>
-      </div >
+
+          <Modal
+                title="Regenerate Draw"
+                visible={this.state.drawGenerateModalVisible}
+                onOk={() => this.handleGenerateDrawModal("ok")}
+                onCancel={() => this.handleGenerateDrawModal("cancel")}>
+                <Select
+                   className="year-select reg-filter-select-competition ml-2"
+                    onChange={(e) => this.setState({generateRoundId: e})}
+                    placeholder={'Round'}>
+                    {(activeDrawsRoundsData || []).map((d, dIndex) => (
+                            <Option key={d.roundId} 
+                            value={d.roundId} >{d.name}</Option>
+                        ))
+                    }
+                
+                </Select>
+          </Modal>
+      </div>
     );
   };
 
@@ -1434,6 +1500,7 @@ function mapDispatchToProps(dispatch) {
       matchesListDrawsAction,
       generateDrawAction,
       unlockDrawsAction,
+      getActiveRoundsAction
     },
     dispatch
   );
