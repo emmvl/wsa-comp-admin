@@ -252,7 +252,7 @@ class CompetitionPartPlayerGrades extends Component {
         this.props.clearReducerCompPartPlayerGradingAction("partPlayerGradingListData")
         this.props.clearReducerDataAction("allDivisionsData")
         this.setState({ firstTimeCompId: competitionId, divisionId: null, competitionStatus: statusRefId })
-        this.props.getDivisionsListAction(this.state.yearRefId, competitionId,)
+        this.props.getDivisionsListAction(this.state.yearRefId, competitionId)
     }
 
 
@@ -420,6 +420,7 @@ class CompetitionPartPlayerGrades extends Component {
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
                                     name={"yearRefId"}
+                                    style={{ width: 90 }}
                                     className="year-select reg-filter-select-year ml-2"
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}

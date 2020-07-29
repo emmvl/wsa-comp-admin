@@ -304,7 +304,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     </span>
                                 <Select
                                     className="year-select reg-filter-select-year ml-2"
-                                    // style={{ width: 90 }}
+                                    style={{ width: 90 }}
                                     onChange={year => this.onYearClick(year)}
                                     value={this.state.yearRefId}
                                 >

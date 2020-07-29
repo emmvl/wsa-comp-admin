@@ -324,7 +324,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                 <Select
                                     id={AppUniqueId.teamGradingYear_dpdn}
                                     name={"yearRefId"}
-                                    // style={{ width: 90 }}
+                                    style={{ width: 90 }}
                                     className="year-select reg-filter-select-year ml-2"
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
