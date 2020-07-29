@@ -253,7 +253,7 @@ class LiveScoreLadderList extends Component {
                 </span>
                         {grade.length > 0 && <Select
                             className="year-select reg-filter-select1 ml-2"
-                            style={{ minWidth: 200 }}
+                            style={{ minWidth: 140 }}
                             onChange={(division) => this.divisionChange({ division })}
                             nowrap
                             defaultValue={grade[0].name}
