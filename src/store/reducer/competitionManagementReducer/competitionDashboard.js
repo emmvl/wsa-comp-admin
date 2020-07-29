@@ -2,13 +2,15 @@ import ApiConstants from "../../../themes/apiConstants";
 import { isArrayNotEmpty } from "../../../util/helpers";
 import ColorsArray from "../../../util/colorsArray";
 
+
 const initialState = {
     onLoad: false,
     error: null,
     result: [],
     status: 0,
     ownedCompetitions: [],
-    participatingInComptitions: []
+    participatingInComptitions: [],
+    updateLoad: false
 };
 
 
@@ -87,10 +89,17 @@ function CompetitionDashboardState(state = initialState, action) {
             };
 
         case ApiConstants.API_COMPETITION_STATUS_UPDATE_LOAD:
-            return { ...state, onLoad: false }
+            return { ...state, updateLoad: true }
 
         case ApiConstants.API_COMPETITION_STATUS_UPDATE_SUCCESS:
-            return { ...state, onLoad: false }
+            let ownCompetion_Array = genrateOwnedCompArray(action.updateDashboardResult)
+            let participating_Comptitions = genratePaticipatingArray(action.updateDashboardResult)
+            return {
+                ...state,
+                updateLoad: false,
+                ownedCompetitions: ownCompetion_Array,
+                participatingInComptitions: participating_Comptitions,
+            }
 
         default:
             return state;

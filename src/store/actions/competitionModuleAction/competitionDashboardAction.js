@@ -15,11 +15,12 @@ function fixtureTemplateRoundsAction() {
     };
     return action;
 }
-function updateCompetitionStatus(payload) {
+function updateCompetitionStatus(payload, yearId) {
     console.log(payload)
     const action = {
         type: ApiConstants.API_COMPETITION_STATUS_UPDATE_LOAD,
-        payload
+        payload,
+        yearId
     }
     return action
 }

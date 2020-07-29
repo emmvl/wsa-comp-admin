@@ -16,8 +16,9 @@ import {
     getMatchTypesAction, getCompetitionFormatTypesAction, getCompetitionTypesAction,
     getYearAndCompetitionOwnAction, clearYearCompetitionAction, getEnhancedRoundRobinAction
 } from "../../store/actions/appAction";
-import { getActiveRoundsAction
-  } from '../../store/actions/competitionModuleAction/competitionDrawsAction';
+import {
+    getActiveRoundsAction
+} from '../../store/actions/competitionModuleAction/competitionDrawsAction';
 
 import { generateDrawAction } from "../../store/actions/competitionModuleAction/competitionModuleAction";
 import Loader from '../../customComponents/loader';
@@ -137,20 +138,16 @@ class CompetitionFormat extends Component {
                                 }
                                 if (competitionModuleState.drawGenerateLoad == false &&
                                     !this.state.isFinalAvailable) {
-                                        let competitionStatus = getOwn_competitionStatus();
-                                        if(competitionStatus != 2){
-                                            this.props.generateDrawAction(payload);
-                                            this.setState({ loading: true });
-                                        }
-                                        else{
-                                            this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
-                                            this.setState({ roundLoad: true });
-                                        }
-                                   
+                                    let competitionStatus = getOwn_competitionStatus();
+                                    if (competitionStatus != 2) {
+                                        this.props.generateDrawAction(payload);
+                                        this.setState({ loading: true });
+                                    }
+                                    else {
+                                        this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
+                                        this.setState({ roundLoad: true });
+                                    }
                                 }
-
-
-
                             }
                         }
                     }
@@ -181,16 +178,16 @@ class CompetitionFormat extends Component {
             }
 
             if (this.state.roundLoad == true && this.props.drawsState.onActRndLoad == false) {
-                this.setState({roundLoad: false});
-                if(this.props.drawsState.activeDrawsRoundsData!= null && 
-                  this.props.drawsState.activeDrawsRoundsData.length > 0){
-                    this.setState({drawGenerateModalVisible: true})
-                  }
-                  else{
+                this.setState({ roundLoad: false });
+                if (this.props.drawsState.activeDrawsRoundsData != null &&
+                    this.props.drawsState.activeDrawsRoundsData.length > 0) {
+                    this.setState({ drawGenerateModalVisible: true })
+                }
+                else {
                     message.config({ duration: 0.9, maxCount: 1 });
                     message.info(AppConstants.roundsNotAvailable);
-                  }
-              }
+                }
+            }
         }
         catch (error) {
             console.log("ERROr" + error);
@@ -448,31 +445,31 @@ class CompetitionFormat extends Component {
         this.props.updateCompetitionFormatAction(arr, 'competionFormatDivisions');
     }
 
-    handleGenerateDrawModal =  (key) =>{
-        if(key == "ok"){
-          if(this.state.generateRoundId!= null){
-            this.callGenerateDraw();
-            this.setState({drawGenerateModalVisible: false});
-          }
-          else{
-            message.error("Please select round");
-          }
+    handleGenerateDrawModal = (key) => {
+        if (key == "ok") {
+            if (this.state.generateRoundId != null) {
+                this.callGenerateDraw();
+                this.setState({ drawGenerateModalVisible: false });
+            }
+            else {
+                message.error("Please select round");
+            }
         }
-        else{
-          this.setState({drawGenerateModalVisible: false});
+        else {
+            this.setState({ drawGenerateModalVisible: false });
         }
-      }
-    
-      callGenerateDraw = () =>{
+    }
+
+    callGenerateDraw = () => {
         let payload = {
-          yearRefId: this.state.yearRefId,
-          competitionUniqueKey: this.state.firstTimeCompId,
-          organisationId: getOrganisationData().organisationUniqueKey,
-          roundId: this.state.generateRoundId
+            yearRefId: this.state.yearRefId,
+            competitionUniqueKey: this.state.firstTimeCompId,
+            organisationId: getOrganisationData().organisationUniqueKey,
+            roundId: this.state.generateRoundId
         };
         this.props.generateDrawAction(payload);
         this.setState({ loading: true });
-      }
+    }
 
 
     saveCompetitionFormats = (e) => {
@@ -931,8 +928,16 @@ class CompetitionFormat extends Component {
                                     visible={this.state.tooltipVisibleDelete}
                                     title={AppConstants.statusPublishHover}
                                 >
-                                    <Button id={AppUniqueId.create_Draft_Draw_Btn} className="open-reg-button" type="primary" htmlType="submit" disabled={isSubmitting}
-                                    >{AppConstants.createDraftDraw}</Button>
+                                    <Button
+                                        id={AppUniqueId.create_Draft_Draw_Btn}
+                                        style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 10 }}
+                                        className="open-reg-button"
+                                        type="primary"
+                                        htmlType="submit"
+                                        disabled={isPublished}
+                                    >
+                                        {AppConstants.createDraftDraw}
+                                    </Button>
                                 </Tooltip>
                             </div>
                         </div>
@@ -944,15 +949,15 @@ class CompetitionFormat extends Component {
                     onOk={() => this.handleGenerateDrawModal("ok")}
                     onCancel={() => this.handleGenerateDrawModal("cancel")}>
                     <Select
-                    className="year-select reg-filter-select-competition ml-2"
-                        onChange={(e) => this.setState({generateRoundId: e})}
+                        className="year-select reg-filter-select-competition ml-2"
+                        onChange={(e) => this.setState({ generateRoundId: e })}
                         placeholder={'Round'}>
                         {(activeDrawsRoundsData || []).map((d, dIndex) => (
-                                <Option key={d.roundId} 
+                            <Option key={d.roundId}
                                 value={d.roundId} >{d.name}</Option>
-                            ))
+                        ))
                         }
-                    
+
                     </Select>
                 </Modal>
             </div>
