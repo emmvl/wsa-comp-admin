@@ -938,11 +938,11 @@ class CompetitionVenueAndTimesAdd extends Component {
                         <div className="col-sm">
                             <div style={{ display: "flex", justifyContent: "flex-end" }}>
                                 {/* <Button onClick={() => this.props.addVenueAction(venuData)} className="open-reg-button" type="primary"> */}
-                                <Button className="open-reg-button" type="primary" style={{ marginRight: '20px' }}
+                                <Button className="publish-button" type="primary" style={{ marginRight: '20px' }}
                                     onClick={() => this.navigateTo()}>
                                     {AppConstants.cancel}
                                 </Button>
-                                <Button className="open-reg-button" type="primary" htmlType="submit">
+                                <Button className="publish-button" type="primary" htmlType="submit">
                                     {AppConstants.save}
                                 </Button>
                             </div>

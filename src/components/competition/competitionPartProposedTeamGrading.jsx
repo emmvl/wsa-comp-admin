@@ -84,7 +84,7 @@ const columns = [
                         onMouseLeave={() => this_obj.changeHover(item, key, index, false)}
                         visible={item.hoverVisible}
                         title={item.playerName}>
-                        {this_obj.state.competitionStatus !== 1 ?
+                        {this_obj.state.competitionStatus != 1 ?
                             <NavLink to={{
                                 pathname: `/userPersonal`,
                                 state: { userId: item.userId, screenKey: 'competitionPartProposedTeamGrading', screen: "/competitionPartProposedTeamGrading" }
@@ -134,7 +134,7 @@ const columns = [
         key: 'comments',
         width: 110,
         render: (comments, record) =>
-            <div style={{ display: "flex", justifyContent: "center", cursor: "pointer" }} onClick={() => this_obj.state.competitionStatus !== 1 && this_obj.onClickComment(record)}>
+            <div style={{ display: "flex", justifyContent: "center", cursor: "pointer" }} onClick={() => this_obj.state.competitionStatus != 1 && this_obj.onClickComment(record)}>
                 <img src={record.isCommentsAvailable == 1 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
             </div>,
     },

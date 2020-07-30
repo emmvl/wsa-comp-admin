@@ -32,7 +32,6 @@ import {
 } from "../../util/sessionStorage";
 import AppUniqueId from "../../themes/appUniqueId";
 
-
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
@@ -56,7 +55,9 @@ class CompetitionFormat extends Component {
             drawGenerateModalVisible: false,
             competitionStatus: 0,
             tooltipVisibleDelete: false,
-            generateRoundId: null
+            generateRoundId: null,
+            tooltipVisibleSave: false,
+            buttonClicked: ""
         }
 
         this.referenceApiCalls();
@@ -126,26 +127,31 @@ class CompetitionFormat extends Component {
                 if (competitionFormatState.onLoad == false && this.state.loading === true) {
                     this.setState({ loading: false });
                     if (!competitionFormatState.error) {
-                        if (this.state.buttonPressed == "save") {
-                            if (this.state.isFinalAvailable) {
-                                history.push('/competitionFinals');
-                            }
-                            else {
-                                let payload = {
-                                    yearRefId: this.state.yearRefId,
-                                    competitionUniqueKey: this.state.firstTimeCompId,
-                                    organisationId: this.state.organisationId
+                        if (this.state.buttonClicked == "save") {
+                            message.success(AppConstants.successMessage)
+
+                        } else if (this.state.buttonClicked == "createDraw") {
+                            if (this.state.buttonPressed == "save") {
+                                if (this.state.isFinalAvailable) {
+                                    history.push('/competitionFinals');
                                 }
-                                if (competitionModuleState.drawGenerateLoad == false &&
-                                    !this.state.isFinalAvailable) {
-                                    let competitionStatus = getOwn_competitionStatus();
-                                    if (competitionStatus != 2) {
-                                        this.props.generateDrawAction(payload);
-                                        this.setState({ loading: true });
+                                else {
+                                    let payload = {
+                                        yearRefId: this.state.yearRefId,
+                                        competitionUniqueKey: this.state.firstTimeCompId,
+                                        organisationId: this.state.organisationId
                                     }
-                                    else {
-                                        this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
-                                        this.setState({ roundLoad: true });
+                                    if (competitionModuleState.drawGenerateLoad == false &&
+                                        !this.state.isFinalAvailable) {
+                                        let competitionStatus = getOwn_competitionStatus();
+                                        if (competitionStatus != 2) {
+                                            this.props.generateDrawAction(payload);
+                                            this.setState({ loading: true });
+                                        }
+                                        else {
+                                            this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
+                                            this.setState({ roundLoad: true });
+                                        }
                                     }
                                 }
                             }
@@ -321,8 +327,7 @@ class CompetitionFormat extends Component {
     }
 
     deleteCompetitionFormatDivision = (competionFormatDivisions, index) => {
-        console.log("*****" + JSON.stringify(competionFormatDivisions));
-        console.log("index::" + index);
+
         let removedFormat = competionFormatDivisions[index];
 
         let remainingFormatDiv = competionFormatDivisions.
@@ -346,9 +351,7 @@ class CompetitionFormat extends Component {
     }
 
     onChangeSetValue = (id, fieldName) => {
-        console.log("id::" + id);
         let data = this.props.competitionFormatState.competitionFormatList;
-        console.log("*****" + JSON.stringify(data));
         let fixtureTemplateId = null;
         if (fieldName == "noOfRounds") {
             // data.fixtureTemplates.map((item, index) => {
@@ -902,6 +905,8 @@ class CompetitionFormat extends Component {
     footerView = (isSubmitting) => {
         let activeDrawsRoundsData = this.props.drawsState.activeDrawsRoundsData;
         let isPublished = this.state.competitionStatus == 1 ? true : false
+        let finalAvailable = this.checkFinalAvailable()
+        console.log(finalAvailable)
         return (
             <div className="fluid-width" >
                 <div className="footer-view">
@@ -914,32 +919,93 @@ class CompetitionFormat extends Component {
                             </div>
                         </div>
                         <div className="col-sm" >
-                            <div className="comp-finals-button-view">
-                                <Tooltip
-                                    style={{ height: '100%' }}
-                                    onMouseEnter={() =>
-                                        this.setState({
-                                            tooltipVisibleDelete: isPublished ? true : false,
-                                        })
-                                    }
-                                    onMouseLeave={() =>
-                                        this.setState({ tooltipVisibleDelete: false })
-                                    }
-                                    visible={this.state.tooltipVisibleDelete}
-                                    title={AppConstants.statusPublishHover}
-                                >
-                                    <Button
-                                        id={AppUniqueId.create_Draft_Draw_Btn}
-                                        style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 10 }}
-                                        className="open-reg-button"
-                                        type="primary"
-                                        htmlType="submit"
-                                        disabled={isPublished}
+                            {finalAvailable == true ?
+                                <div className="comp-buttons-view">
+                                    <Tooltip
+                                        style={{ height: '100%' }}
+                                        onMouseEnter={() =>
+                                            this.setState({
+                                                tooltipVisibleSave: isPublished ? true : false,
+                                            })
+                                        }
+                                        onMouseLeave={() =>
+                                            this.setState({ tooltipVisibleSave: false })
+                                        }
+                                        visible={this.state.tooltipVisibleSave}
+                                        title={AppConstants.statusPublishHover}
                                     >
-                                        {AppConstants.createDraftDraw}
-                                    </Button>
-                                </Tooltip>
-                            </div>
+                                        <Button
+                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 10 }}
+                                            className="publish-button save-draft-text"
+                                            type="primary"
+                                            htmlType="submit"
+                                            onClick={() => this.setState({ buttonClicked: "save" })}
+                                            disabled={isPublished}
+                                        >
+                                            {AppConstants.save}
+                                        </Button>
+                                    </Tooltip>
+                                    <NavLink to="/competitionFinals">
+                                        <Button
+                                            className="publish-button margin-top-disabled-button"
+                                            type="primary"
+                                        >
+                                            {AppConstants.next}
+                                        </Button>
+                                    </NavLink>
+                                </div>
+                                : <div className="comp-buttons-view">
+                                    <Tooltip
+                                        style={{ height: '100%' }}
+                                        onMouseEnter={() =>
+                                            this.setState({
+                                                tooltipVisibleSave: isPublished ? true : false,
+                                            })
+                                        }
+                                        onMouseLeave={() =>
+                                            this.setState({ tooltipVisibleSave: false })
+                                        }
+                                        visible={this.state.tooltipVisibleSave}
+                                        title={AppConstants.statusPublishHover}
+                                    >
+                                        <Button
+                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 10 }}
+                                            className="publish-button save-draft-text"
+                                            type="primary"
+                                            htmlType="submit"
+                                            onClick={() => this.setState({ buttonClicked: "save" })}
+                                            disabled={isPublished}
+                                        >
+                                            {AppConstants.save}
+                                        </Button>
+                                    </Tooltip>
+                                    <Tooltip
+                                        style={{ height: '100%' }}
+                                        onMouseEnter={() =>
+                                            this.setState({
+                                                tooltipVisibleDelete: isPublished ? true : false,
+                                            })
+                                        }
+                                        onMouseLeave={() =>
+                                            this.setState({ tooltipVisibleDelete: false })
+                                        }
+                                        visible={this.state.tooltipVisibleDelete}
+                                        title={AppConstants.statusPublishHover}
+                                    >
+                                        <Button
+                                            id={AppUniqueId.create_Draft_Draw_Btn}
+                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 10 }}
+                                            className="open-reg-button"
+                                            type="primary"
+                                            htmlType="submit"
+                                            onClick={() => this.setState({ buttonClicked: "createDraw" })}
+                                            disabled={isPublished}
+                                        >
+                                            {AppConstants.createDraftDraw}
+                                        </Button>
+                                    </Tooltip>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -962,6 +1028,22 @@ class CompetitionFormat extends Component {
                 </Modal>
             </div>
         )
+    }
+
+    checkFinalAvailable() {
+        let formatList = Object.assign(this.props.competitionFormatState.competitionFormatList);
+        let competitionFormatDivision = formatList.competionFormatDivisions;
+        formatList.organisationId = this.state.organisationId;
+        for (let item in competitionFormatDivision) {
+            console.log("item.isFinal::" + formatList.competitionFormatRefId);
+            let isFinal = competitionFormatDivision[item]["isFinal"];
+            if (isFinal && formatList.competitionFormatRefId != 1) {
+                return true
+            }
+            else {
+                return false
+            }
+        }
     }
 
     render() {

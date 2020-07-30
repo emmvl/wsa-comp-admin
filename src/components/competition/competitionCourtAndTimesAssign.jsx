@@ -1302,7 +1302,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 <Button id={AppUniqueId.timeSlotSaveBtn} disabled={isPublished} style={{ height: isPublished && "100%", borderRadius: isPublished && 10, width: isPublished && "inherit" }} className="publish-button save-draft-text" htmlType="submit" type="primary">{AppConstants.save}</Button>
                             </Tooltip>
                             <NavLink to="/competitionVenueTimesPrioritisation">
-                                <Button className="publish-button" type="primary">{AppConstants.next}</Button>
+                                <Button className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
                             </NavLink>
                         </div>
                     </div>

@@ -951,14 +951,14 @@ class CompetitionVenueAndTimesEdit extends Component {
                         <div className="col-sm">
                             <div style={{ display: "flex", justifyContent: "flex-end" }}>
                                 {/* <Button onClick={() => this.props.addVenueAction(venuData)} className="open-reg-button" type="primary"> */}
-                                <Button className="open-reg-button" type="primary" style={{marginRight: '20px'}} onClick={() => this.navigateTo()}>
+                                <Button className="publish-button" type="primary" style={{ marginRight: '20px' }} onClick={() => this.navigateTo()}>
                                     {AppConstants.cancel}
                                 </Button>
                                 {!this.state.isUsed ?
-                                <Button className="open-reg-button" type="primary" htmlType="submit">
-                                    {AppConstants.save}
-                                </Button>
-                                : null }
+                                    <Button className="publish-button" type="primary" htmlType="submit">
+                                        {AppConstants.save}
+                                    </Button>
+                                    : null}
                             </div>
                         </div>
                     </div>

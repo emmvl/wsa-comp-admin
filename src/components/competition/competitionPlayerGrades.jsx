@@ -521,7 +521,7 @@ class CompetitionPlayerGrades extends Component {
         let unassignedPlayerData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData
         let playerId
         // dropped outside the list
-        if (this.state.competitionStatus !== 1) {
+        if (this.state.competitionStatus != 1) {
             if (!destination) {
                 return;
             }

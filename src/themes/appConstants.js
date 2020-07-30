@@ -1501,7 +1501,8 @@ const AppConstants = {
   createdAt: "Created at",
   download: "Download",
   pleaseInputAddress: "Please input address",
-  roundsNotAvailable: "Rounds not available"
+  roundsNotAvailable: "Rounds not available",
+  successMessage: "Successfully inserted"
 };
 
 export default AppConstants;

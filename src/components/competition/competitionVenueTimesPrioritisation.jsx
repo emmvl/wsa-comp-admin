@@ -1319,7 +1319,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                 </Button>
                             </Tooltip>
                             <NavLink to="/competitionFormat">
-                                <Button className="publish-button" type="primary">{AppConstants.next}</Button>
+                                <Button className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
                             </NavLink>
                         </div>
                     </div>
