@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Select, Checkbox, Button, Radio, Form, Modal, message, Tooltip } from 'antd';
+import { Layout, Breadcrumb, Select, Checkbox, Button, Radio, Form, Modal, message, Tooltip,  DatePicker, } from 'antd';
 import './competition.css';
 import { NavLink } from 'react-router-dom';
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -31,6 +31,7 @@ import {
     setOwn_competitionStatus,
 } from "../../util/sessionStorage";
 import AppUniqueId from "../../themes/appUniqueId";
+import moment from "moment";							
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -538,7 +539,92 @@ class CompetitionFormat extends Component {
         });
 
     }
+    
+    // Non playing dates view
+    nonPlayingDateView(item, index) {
+        let compDetailDisable = false;
+        // this.state.permissionState.compDetailDisable
+        
+        let disabledStatus = this.state.competitionStatus == 1 ? true : false
+        return (
+            <div className="fluid-width mt-3">
+                <div className="row">
+                    <div className="col-sm">
+                        <InputWithHead
+                            placeholder={AppConstants.name}
+                            value={item.name}
+                            onChange={(e) => this.updateNonPlayingNames(e.target.value, index, "name")}
+                            disabled={(disabledStatus || compDetailDisable) ? true : false}
+                        />
+                    </div>
+                    <div className="col-sm">
+                        <DatePicker
+                            className="comp-dashboard-botton-view-mobile"
+                            size="large"
+                            placeholder={"dd-mm-yyyy"}
+                            style={{ width: "100%" }}
+                            onChange={date => this.updateNonPlayingNames(date, index, "date")}
+                            format={"DD-MM-YYYY"}
+                            showTime={false}
+                            value={item.nonPlayingDate && moment(item.nonPlayingDate, "YYYY-MM-DD")}
+                            disabled={(disabledStatus || compDetailDisable) ? true : false}
 
+                        />
+                    </div>
+                    <div className="col-sm-2 transfer-image-view" onClick={() => !disabledStatus ? this.removeNonPlaying(index) : null}>
+                        <a className="transfer-image-view">
+                            <span className="user-remove-btn">
+                                <i className="fa fa-trash-o" aria-hidden="true"></i>
+                            </span>
+                            <span className="user-remove-text mr-0">{AppConstants.remove}</span>
+                        </a>
+                    </div>
+                </div>
+            </div >
+        )
+    }
+     ///// Add Non Playing dates
+     addNonPlayingDate() {
+        if (this.state.competitionStatus == 1) {
+
+        } else {
+            let nonPlayingObject = {
+                "competitionNonPlayingDatesId": 0,
+                "name": "",
+                "nonPlayingDate": ""
+            }
+            // this.props.add_editcompetitionFeeDeatils(nonPlayingObject, "nonPlayingObjectAdd")
+            this.props.updateCompetitionFormatAction(nonPlayingObject, "nonPlayingDates")
+        }
+    }
+     //remove non playing dates
+     removeNonPlaying(index) {
+        if (this.state.competitionStatus == 1) {
+
+        } else {
+            this.props.updateCompetitionFormatAction(index, "nonPlayingDataRemove")
+        }
+    }
+
+    updateNonPlayingNames(data, index, key) {
+        console.log("data",data)
+        if(key == "date"){
+            let obj = {
+                data:moment(data).format("YYYY-MM-DD"),
+                index:index,
+                key:"nonPlayingDate"
+            }
+            this.props.updateCompetitionFormatAction(obj, "nonPlayingUpdateDates");           
+        }
+        else{
+            let obj = {
+                data:data,
+                index:index,
+                key:key
+            }
+            this.props.updateCompetitionFormatAction(obj, "nonPlayingUpdateDates")
+        }            
+    }
 
     ///////view for breadcrumb
     headerView = () => {
@@ -625,6 +711,7 @@ class CompetitionFormat extends Component {
         let appState = this.props.appState;
         let isAllDivisionChecked = this.props.competitionFormatState.isAllDivisionChecked;
         let disabledStatus = this.state.competitionStatus == 1 ? true : false
+		let nonPlayingDates  = data.nonPlayingDates != undefined ? data.nonPlayingDates : [] ;																					  
         return (
             <div className="content-view pt-4">
                 <InputWithHead disabled={disabledStatus} heading={AppConstants.competition_name} placeholder={AppConstants.competition_name}
@@ -740,6 +827,20 @@ class CompetitionFormat extends Component {
                         </div>
                     </div>
                 </div>
+                {data.IsQuickCompetition == 1 ?
+                <div className="inside-container-view pt-4">
+                    <InputWithHead heading={AppConstants.nonPlayingDates} />
+                    {nonPlayingDates.length>0 ?nonPlayingDates .map((item, index) =>
+                        this.nonPlayingDateView(item, index))
+                        :null
+                    }
+                    <a>
+                    <span onClick={() =>this.addNonPlayingDate() } className="input-heading-add-another">
+                        + {AppConstants.addAnotherNonPlayingDate}
+                    </span>
+                    </a>
+                </div>:null
+                }				 
                 {(data.competionFormatDivisions || []).map((item, index) => (
                     <div className="inside-container-view" key={"compFormat" + index}>
                         <div className="fluid-width" >
