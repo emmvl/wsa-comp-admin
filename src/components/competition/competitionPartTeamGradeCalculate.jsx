@@ -491,7 +491,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                 </Button>
                             </Tooltip>
                             <NavLink to="/competitionCourtAndTimesAssign">
-                                <Button className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
+                                <Button id={AppUniqueId.teamGrading_NextBtn} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
                             </NavLink>
                         </div>
                     </div>

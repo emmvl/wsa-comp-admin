@@ -1627,8 +1627,9 @@ class RegistrationCompetitionForm extends Component {
                 <InputWithHead heading={AppConstants.timeBetweenRounds} />
                 <div className="fluid-width">
                     <div className="row">
-                        <div id={AppUniqueId.time_rounds_days} className="col-sm" style={{ marginTop: 5 }}>
+                        <div className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
+                                id={AppUniqueId.time_rounds_days}
                                 placeholder={AppConstants.days}
                                 value={detailsData.competitionDetailData.roundInDays}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInDays")}
@@ -1636,8 +1637,9 @@ class RegistrationCompetitionForm extends Component {
 
                             />
                         </div>
-                        <div id={AppUniqueId.time_rounds_hrs} className="col-sm" style={{ marginTop: 5 }}>
+                        <div className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
+                                id={AppUniqueId.time_rounds_hrs}
                                 placeholder={AppConstants.hours}
                                 value={detailsData.competitionDetailData.roundInHours}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInHours")}
@@ -1645,8 +1647,9 @@ class RegistrationCompetitionForm extends Component {
 
                             />
                         </div>
-                        <div id={AppUniqueId.time_rounds_mins} className="col-sm" style={{ marginTop: 5 }}>
+                        <div className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
+                                id={AppUniqueId.time_rounds_mins}
                                 placeholder={AppConstants.mins}
                                 value={detailsData.competitionDetailData.roundInMins}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInMins")}
@@ -1681,8 +1684,9 @@ class RegistrationCompetitionForm extends Component {
                 <InputWithHead heading={AppConstants.playerInEachTeam} />
                 <div className="fluid-width">
                     <div className="row">
-                        <div id={AppUniqueId.team_min_players} className="col-sm" style={{ marginTop: 5 }}>
+                        <div className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
+                                id={AppUniqueId.team_min_players}
                                 placeholder={AppConstants.minNumber}
                                 value={detailsData.competitionDetailData.minimunPlayers}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "minimunPlayers")}
@@ -1690,8 +1694,9 @@ class RegistrationCompetitionForm extends Component {
 
                             />
                         </div>
-                        <div id={AppUniqueId.team_max_players} className="col-sm" style={{ marginTop: 5 }}>
+                        <div className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
+                                id={AppUniqueId.team_max_players}
                                 placeholder={AppConstants.maxNumber}
                                 value={detailsData.competitionDetailData.maximumPlayers}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "maximumPlayers")}
@@ -2784,7 +2789,7 @@ class RegistrationCompetitionForm extends Component {
                                     visible={this.state.tooltipVisibleDraft}
                                     title={ValidationConstants.compIsPublished}>
                                     <Button
-                                        id={AppUniqueId.comp_savedraft_button}
+                                        id={AppUniqueId.compdiv_savedraft_button}
                                         className="save-draft-text" type="save-draft-text"
                                         disabled={isPublished}
                                         htmlType="submit"

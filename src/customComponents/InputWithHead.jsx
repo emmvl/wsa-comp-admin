@@ -17,6 +17,7 @@ function InputWithHead(props) {
     marginTop,
     required,
     tooltiprequired,
+    id
   } = props;
 
   return (
@@ -39,6 +40,7 @@ function InputWithHead(props) {
 
       {placeholder && (
         <Input
+          id={id}
           className="input"
           placeholder={placeholder}
           name={name}

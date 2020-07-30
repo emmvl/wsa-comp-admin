@@ -592,6 +592,13 @@ class CompetitionCourtAndTimesAssign extends Component {
             case "subPref":
 
                 switch (data) {
+
+                    case 1: return AppUniqueId.eventimeRotation_div
+
+                    case 2: return AppUniqueId.eventimeRotation_grade
+
+                    case 3: return AppUniqueId.eventimeRotation_team
+
                     case 4: return AppUniqueId.allocateSameTimeslotDivision
 
                     case 5: return AppUniqueId.allocateSameTimeslotGrade
@@ -1125,7 +1132,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             },
                         )(
                             <Select
-                                id={AppUniqueId.manuallyAddTimeslot_ApplyAllVenues_Day_of_the_week_drpdn}
+                                id={AppUniqueId.dayRefIdAllVenue}
                                 style={{ width: mainId == 8 ? "70%" : "70%", minWidth: 100, }}
                                 onChange={(dayOfTheWeek) => this.props.UpdateTimeSlotsDataManual(dayOfTheWeek, 'dayRefId', 'competitionTimeslotManual', index, null, null)}
                                 placeholder="Select Week Day"

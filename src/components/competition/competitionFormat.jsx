@@ -629,8 +629,8 @@ class CompetitionFormat extends Component {
             <div className="content-view pt-4">
                 <InputWithHead disabled={disabledStatus} heading={AppConstants.competition_name} placeholder={AppConstants.competition_name}
                     value={data.competitionName} onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionName')}  ></InputWithHead>
-                <div id={AppUniqueId.comp_Format_Type} style={{ marginTop: 15 }}>
-                    <InputWithHead heading={AppConstants.competitionFormat} required={"required-field"} />
+                <div style={{ marginTop: 15 }}>
+                    <InputWithHead id={AppUniqueId.comp_Format_Type} heading={AppConstants.competitionFormat} required={"required-field"} />
                     <Form.Item >
                         {getFieldDecorator('competitionFormatRefId', {
                             rules: [{ required: true, message: ValidationConstants.pleaseSelectCompetitionFormat }],
@@ -779,7 +779,7 @@ class CompetitionFormat extends Component {
 
                         <div className="fluid-width" >
                             <div className="row" >
-                                <div id={AppUniqueId.match_Duration} className="col-sm-3" >
+                                <div className="col-sm-3" >
                                     <Form.Item >
                                         {getFieldDecorator(`matchDuration${index}`, {
                                             rules: [{
@@ -787,7 +787,9 @@ class CompetitionFormat extends Component {
                                                 message: ValidationConstants.matchDuration
                                             }]
                                         })(
-                                            <InputWithHead heading={AppConstants.matchDuration}
+                                            <InputWithHead
+                                                id={AppUniqueId.match_Duration}
+                                                heading={AppConstants.matchDuration}
                                                 disabled={disabledStatus}
                                                 required={"required-field"}
                                                 placeholder={AppConstants.mins}
@@ -834,12 +836,13 @@ class CompetitionFormat extends Component {
                                     </div>
                                     : null}
                                 {data.timeslotGenerationRefId != 2 ?
-                                    <div id={AppUniqueId.timeBetween_Matches} className="col-sm-3" >
+                                    <div className="col-sm-3" >
                                         <Form.Item >
                                             {getFieldDecorator(`timeBetweenGames${index}`, {
                                                 rules: [{ required: true, message: ValidationConstants.timeBetweenGames }]
                                             })(
                                                 <InputWithHead
+                                                    id={AppUniqueId.timeBetween_Matches}
                                                     disabled={disabledStatus}
                                                     heading={AppConstants.timeBetweenMatches} placeholder={AppConstants.mins}
                                                     required={"required-field"}

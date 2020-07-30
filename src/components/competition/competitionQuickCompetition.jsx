@@ -28,6 +28,7 @@ import {
 import { quickCompetitionInit } from "../../store/actions/commonAction/commonAction"
 import { getDayName, getTime } from '../../themes/dateformate';
 import { captializedString } from "../../util/helpers";
+import AppUniqueId from "../../themes/appUniqueId";
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
@@ -497,10 +498,10 @@ class CompetitionQuickCompetition extends Component {
                         </Form.Item>
                     </div>
                     <div className="col-sm mt-2  quick-comp-btn-view">
-                        <Button className="open-reg-button" onClick={() => this.visibleTimeModal()} type="primary">+ {AppConstants.add_TimeSlot}</Button>
+                        <Button id={AppUniqueId.add_TimeSlot_Btn} className="open-reg-button" onClick={() => this.visibleTimeModal()} type="primary">+ {AppConstants.add_TimeSlot}</Button>
                     </div>
                     <div className="col-sm-2.5 mt-2  quick-comp-btn-view paddingview">
-                        <Button className="open-reg-button" type="primary" onClick={() => this.visibleDivisonModal()}>+ {AppConstants.addDivisionsAndGrades}</Button>
+                        <Button id={AppUniqueId.add_Div_Grade_Btn} className="open-reg-button" type="primary" onClick={() => this.visibleDivisonModal()}>+ {AppConstants.addDivisionsAndGrades}</Button>
                     </div>
 
                 </div>

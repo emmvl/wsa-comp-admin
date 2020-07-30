@@ -991,6 +991,7 @@ class CompetitionDraws extends Component {
                     {AppConstants.round}:
                   </span>
                   <Select
+                    id={AppUniqueId.draw_rounds_dpdn}
                     disabled={disabledStatus}
                     className="year-select"
                     style={{ minWidth: 100, maxWidth: 130 }}
@@ -1137,7 +1138,7 @@ class CompetitionDraws extends Component {
       : [];
     return (
       <div>
-        <div className="scroll-bar pb-4">
+        <div id={AppUniqueId.main_draws_round_tableview} className="scroll-bar pb-4">
           <div className="table-head-wrap">
             {/* Day name list */}
             <div className="tablehead-row">
