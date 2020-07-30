@@ -69,7 +69,7 @@ const columns = [
         render: attendance =>
             <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
                 <img className="dot-image"
-                    src={attendance ? AppImages.greenDot : AppImages.greyDot}
+                    src={attendance ? attendance.isPlaying === true ? AppImages.greenDot : AppImages.greyDot : AppImages.greyDot}
                     alt="" width="12" height="12" />
             </span>,
     },

@@ -298,7 +298,7 @@ const AppConstants = {
   gameTimeTracking: 'Game Time Tracking',
   periods: 'Periods',
   minutes: 'Minutes',
-  totalGames: 'Total Games',
+  totalGames: 'Games',
   positionTracking: 'Position Tracking',
   shooting: 'Shooting ',
   preview: 'Preview',
@@ -1501,7 +1501,8 @@ const AppConstants = {
   createdAt: "Created at",
   download: "Download",
   pleaseInputAddress: "Please input address",
-  roundsNotAvailable: "Rounds not available"
+  roundsNotAvailable: "Rounds not available",
+  successMessage: "Successfully inserted"
 };
 
 export default AppConstants;

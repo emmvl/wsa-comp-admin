@@ -686,9 +686,17 @@ a.collapsed i {
     flex-direction: column;
     margin-top: 10px;
   }
-  .comp-buttons-view .ant-btn {
+  .margin-top-disabled-button{
+    margin-top: 12px;
+
+  }
+
+  /* .comp-buttons-view .ant-btn {
     margin-top: 12px;
   }
+  .comp-buttons-view .ant-btn .ant-btn-primary-disabled{
+    margin-top: 0px !important
+  } */
   .ant-checkbox-wrapper+.ant-checkbox-wrapper {
     margin-left: 0;
   }

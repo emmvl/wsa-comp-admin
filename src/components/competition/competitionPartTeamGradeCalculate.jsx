@@ -324,7 +324,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                 <Select
                                     id={AppUniqueId.teamGradingYear_dpdn}
                                     name={"yearRefId"}
-                                    // style={{ width: 90 }}
+                                    style={{ width: 90 }}
                                     className="year-select reg-filter-select-year ml-2"
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
@@ -487,11 +487,11 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                     style={{ height: isPublished && "100%", borderRadius: isPublished && 10, width: isPublished && "inherit" }}
                                     type="primary"
                                     onClick={() => this.publishtApiCall()}
-                                >{AppConstants.publish}
+                                >{AppConstants.save}
                                 </Button>
                             </Tooltip>
                             <NavLink to="/competitionCourtAndTimesAssign">
-                                <Button className="publish-button" type="primary">{AppConstants.next}</Button>
+                                <Button id={AppUniqueId.teamGrading_NextBtn} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
                             </NavLink>
                         </div>
                     </div>

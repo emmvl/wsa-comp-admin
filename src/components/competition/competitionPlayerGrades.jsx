@@ -177,8 +177,8 @@ class CompetitionPlayerGrades extends Component {
                                     <Dropdown disabled={this.state.competitionStatus == 1 ? true : false} overlay={menu} placement="bottomLeft">
                                         <Button className="primary-add-comp-form" type="primary">
                                             <div className="row">
-                                                <div id={AppUniqueId.PlayerGrading_ImportBtn} className="col-sm">
-                                                    <img src={AppImages.import} alt="" className="export-image" />
+                                                <div className="col-sm">
+                                                    <img id={AppUniqueId.PlayerGrading_ImportBtn} src={AppImages.import} alt="" className="export-image" />
                                                     {AppConstants.action}
                                                 </div>
                                             </div>
@@ -195,8 +195,9 @@ class CompetitionPlayerGrades extends Component {
                                         }}>
                                             <Button disabled={this.state.competitionStatus == 1 ? true : false} className="primary-add-comp-form" type="primary">
                                                 <div className="row">
-                                                    <div id={AppUniqueId.PlayerGrading_ImportTeamBtn} className="col-sm">
+                                                    <div className="col-sm">
                                                         <img
+                                                            id={AppUniqueId.PlayerGrading_ImportTeamBtn}
                                                             src={AppImages.import}
                                                             alt=""
                                                             className="export-image"
@@ -428,7 +429,7 @@ class CompetitionPlayerGrades extends Component {
                                 <Select
                                     id={AppUniqueId.PlayerGradingYear_dpdn}
                                     name={"yearRefId"}
-                                    // style={{ width: 90 }}
+                                    style={{ width: 90 }}
                                     className="year-select reg-filter-select-year ml-2"
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
@@ -521,7 +522,7 @@ class CompetitionPlayerGrades extends Component {
         let unassignedPlayerData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData
         let playerId
         // dropped outside the list
-        if (this.state.competitionStatus !== 1) {
+        if (this.state.competitionStatus != 1) {
             if (!destination) {
                 return;
             }
@@ -963,8 +964,9 @@ class CompetitionPlayerGrades extends Component {
                     onOk={() => this.handleOk()}
                     onCancel={() => this.handleCancel()}
                 >
-                    <div id={AppUniqueId.PlayerGrading_addTeamName}>
+                    <div >
                         <InputWithHead
+                            id={AppUniqueId.PlayerGrading_addTeamName}
                             required={"pt-0 mt-0"}
                             heading={AppConstants.addTeam}
                             placeholder={AppConstants.pleaseEnterteamName}
@@ -1051,7 +1053,7 @@ class CompetitionPlayerGrades extends Component {
                     <div className="col-sm mt-3" >
                         <div className="comp-finals-button-view">
                             <NavLink to="/competitionPartTeamGradeCalculate">
-                                <Button className="publish-button" type="primary">{AppConstants.next}</Button>
+                                <Button id={AppUniqueId.playgrad_Next_bn} className="publish-button" type="primary">{AppConstants.next}</Button>
                             </NavLink>
                         </div>
                     </div>

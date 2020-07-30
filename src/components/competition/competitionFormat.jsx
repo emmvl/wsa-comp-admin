@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Select, Checkbox, Button, Radio, Form, Modal, message, Tooltip } from 'antd';
+import { Layout, Breadcrumb, Select, Checkbox, Button, Radio, Form, Modal, message, Tooltip,  DatePicker, } from 'antd';
 import './competition.css';
 import { NavLink } from 'react-router-dom';
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -16,8 +16,9 @@ import {
     getMatchTypesAction, getCompetitionFormatTypesAction, getCompetitionTypesAction,
     getYearAndCompetitionOwnAction, clearYearCompetitionAction, getEnhancedRoundRobinAction
 } from "../../store/actions/appAction";
-import { getActiveRoundsAction
-  } from '../../store/actions/competitionModuleAction/competitionDrawsAction';
+import {
+    getActiveRoundsAction
+} from '../../store/actions/competitionModuleAction/competitionDrawsAction';
 
 import { generateDrawAction } from "../../store/actions/competitionModuleAction/competitionModuleAction";
 import Loader from '../../customComponents/loader';
@@ -30,7 +31,7 @@ import {
     setOwn_competitionStatus,
 } from "../../util/sessionStorage";
 import AppUniqueId from "../../themes/appUniqueId";
-
+import moment from "moment";							
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -55,7 +56,9 @@ class CompetitionFormat extends Component {
             drawGenerateModalVisible: false,
             competitionStatus: 0,
             tooltipVisibleDelete: false,
-            generateRoundId: null
+            generateRoundId: null,
+            tooltipVisibleSave: false,
+            buttonClicked: ""
         }
 
         this.referenceApiCalls();
@@ -125,32 +128,33 @@ class CompetitionFormat extends Component {
                 if (competitionFormatState.onLoad == false && this.state.loading === true) {
                     this.setState({ loading: false });
                     if (!competitionFormatState.error) {
-                        if (this.state.buttonPressed == "save") {
-                            if (this.state.isFinalAvailable) {
-                                history.push('/competitionFinals');
-                            }
-                            else {
-                                let payload = {
-                                    yearRefId: this.state.yearRefId,
-                                    competitionUniqueKey: this.state.firstTimeCompId,
-                                    organisationId: this.state.organisationId
+                        if (this.state.buttonClicked == "save") {
+                            message.success(AppConstants.successMessage)
+
+                        } else if (this.state.buttonClicked == "createDraw") {
+                            if (this.state.buttonPressed == "save") {
+                                if (this.state.isFinalAvailable) {
+                                    history.push('/competitionFinals');
                                 }
-                                if (competitionModuleState.drawGenerateLoad == false &&
-                                    !this.state.isFinalAvailable) {
+                                else {
+                                    let payload = {
+                                        yearRefId: this.state.yearRefId,
+                                        competitionUniqueKey: this.state.firstTimeCompId,
+                                        organisationId: this.state.organisationId
+                                    }
+                                    if (competitionModuleState.drawGenerateLoad == false &&
+                                        !this.state.isFinalAvailable) {
                                         let competitionStatus = getOwn_competitionStatus();
-                                        if(competitionStatus != 2){
+                                        if (competitionStatus != 2) {
                                             this.props.generateDrawAction(payload);
                                             this.setState({ loading: true });
                                         }
-                                        else{
+                                        else {
                                             this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
                                             this.setState({ roundLoad: true });
                                         }
-                                   
+                                    }
                                 }
-
-
-
                             }
                         }
                     }
@@ -181,16 +185,16 @@ class CompetitionFormat extends Component {
             }
 
             if (this.state.roundLoad == true && this.props.drawsState.onActRndLoad == false) {
-                this.setState({roundLoad: false});
-                if(this.props.drawsState.activeDrawsRoundsData!= null && 
-                  this.props.drawsState.activeDrawsRoundsData.length > 0){
-                    this.setState({drawGenerateModalVisible: true})
-                  }
-                  else{
+                this.setState({ roundLoad: false });
+                if (this.props.drawsState.activeDrawsRoundsData != null &&
+                    this.props.drawsState.activeDrawsRoundsData.length > 0) {
+                    this.setState({ drawGenerateModalVisible: true })
+                }
+                else {
                     message.config({ duration: 0.9, maxCount: 1 });
                     message.info(AppConstants.roundsNotAvailable);
-                  }
-              }
+                }
+            }
         }
         catch (error) {
             console.log("ERROr" + error);
@@ -324,8 +328,7 @@ class CompetitionFormat extends Component {
     }
 
     deleteCompetitionFormatDivision = (competionFormatDivisions, index) => {
-        console.log("*****" + JSON.stringify(competionFormatDivisions));
-        console.log("index::" + index);
+
         let removedFormat = competionFormatDivisions[index];
 
         let remainingFormatDiv = competionFormatDivisions.
@@ -349,9 +352,7 @@ class CompetitionFormat extends Component {
     }
 
     onChangeSetValue = (id, fieldName) => {
-        console.log("id::" + id);
         let data = this.props.competitionFormatState.competitionFormatList;
-        console.log("*****" + JSON.stringify(data));
         let fixtureTemplateId = null;
         if (fieldName == "noOfRounds") {
             // data.fixtureTemplates.map((item, index) => {
@@ -448,31 +449,31 @@ class CompetitionFormat extends Component {
         this.props.updateCompetitionFormatAction(arr, 'competionFormatDivisions');
     }
 
-    handleGenerateDrawModal =  (key) =>{
-        if(key == "ok"){
-          if(this.state.generateRoundId!= null){
-            this.callGenerateDraw();
-            this.setState({drawGenerateModalVisible: false});
-          }
-          else{
-            message.error("Please select round");
-          }
+    handleGenerateDrawModal = (key) => {
+        if (key == "ok") {
+            if (this.state.generateRoundId != null) {
+                this.callGenerateDraw();
+                this.setState({ drawGenerateModalVisible: false });
+            }
+            else {
+                message.error("Please select round");
+            }
         }
-        else{
-          this.setState({drawGenerateModalVisible: false});
+        else {
+            this.setState({ drawGenerateModalVisible: false });
         }
-      }
-    
-      callGenerateDraw = () =>{
+    }
+
+    callGenerateDraw = () => {
         let payload = {
-          yearRefId: this.state.yearRefId,
-          competitionUniqueKey: this.state.firstTimeCompId,
-          organisationId: getOrganisationData().organisationUniqueKey,
-          roundId: this.state.generateRoundId
+            yearRefId: this.state.yearRefId,
+            competitionUniqueKey: this.state.firstTimeCompId,
+            organisationId: getOrganisationData().organisationUniqueKey,
+            roundId: this.state.generateRoundId
         };
         this.props.generateDrawAction(payload);
         this.setState({ loading: true });
-      }
+    }
 
 
     saveCompetitionFormats = (e) => {
@@ -538,7 +539,92 @@ class CompetitionFormat extends Component {
         });
 
     }
+    
+    // Non playing dates view
+    nonPlayingDateView(item, index) {
+        let compDetailDisable = false;
+        // this.state.permissionState.compDetailDisable
+        
+        let disabledStatus = this.state.competitionStatus == 1 ? true : false
+        return (
+            <div className="fluid-width mt-3">
+                <div className="row">
+                    <div className="col-sm">
+                        <InputWithHead
+                            placeholder={AppConstants.name}
+                            value={item.name}
+                            onChange={(e) => this.updateNonPlayingNames(e.target.value, index, "name")}
+                            disabled={(disabledStatus || compDetailDisable) ? true : false}
+                        />
+                    </div>
+                    <div className="col-sm">
+                        <DatePicker
+                            className="comp-dashboard-botton-view-mobile"
+                            size="large"
+                            placeholder={"dd-mm-yyyy"}
+                            style={{ width: "100%" }}
+                            onChange={date => this.updateNonPlayingNames(date, index, "date")}
+                            format={"DD-MM-YYYY"}
+                            showTime={false}
+                            value={item.nonPlayingDate && moment(item.nonPlayingDate, "YYYY-MM-DD")}
+                            disabled={(disabledStatus || compDetailDisable) ? true : false}
 
+                        />
+                    </div>
+                    <div className="col-sm-2 transfer-image-view" onClick={() => !disabledStatus ? this.removeNonPlaying(index) : null}>
+                        <a className="transfer-image-view">
+                            <span className="user-remove-btn">
+                                <i className="fa fa-trash-o" aria-hidden="true"></i>
+                            </span>
+                            <span className="user-remove-text mr-0">{AppConstants.remove}</span>
+                        </a>
+                    </div>
+                </div>
+            </div >
+        )
+    }
+     ///// Add Non Playing dates
+     addNonPlayingDate() {
+        if (this.state.competitionStatus == 1) {
+
+        } else {
+            let nonPlayingObject = {
+                "competitionNonPlayingDatesId": 0,
+                "name": "",
+                "nonPlayingDate": ""
+            }
+            // this.props.add_editcompetitionFeeDeatils(nonPlayingObject, "nonPlayingObjectAdd")
+            this.props.updateCompetitionFormatAction(nonPlayingObject, "nonPlayingDates")
+        }
+    }
+     //remove non playing dates
+     removeNonPlaying(index) {
+        if (this.state.competitionStatus == 1) {
+
+        } else {
+            this.props.updateCompetitionFormatAction(index, "nonPlayingDataRemove")
+        }
+    }
+
+    updateNonPlayingNames(data, index, key) {
+        console.log("data",data)
+        if(key == "date"){
+            let obj = {
+                data:moment(data).format("YYYY-MM-DD"),
+                index:index,
+                key:"nonPlayingDate"
+            }
+            this.props.updateCompetitionFormatAction(obj, "nonPlayingUpdateDates");           
+        }
+        else{
+            let obj = {
+                data:data,
+                index:index,
+                key:key
+            }
+            this.props.updateCompetitionFormatAction(obj, "nonPlayingUpdateDates")
+        }            
+    }
 
     ///////view for breadcrumb
     headerView = () => {
@@ -625,12 +711,13 @@ class CompetitionFormat extends Component {
         let appState = this.props.appState;
         let isAllDivisionChecked = this.props.competitionFormatState.isAllDivisionChecked;
         let disabledStatus = this.state.competitionStatus == 1 ? true : false
+		let nonPlayingDates  = data.nonPlayingDates != undefined ? data.nonPlayingDates : [] ;																					  
         return (
             <div className="content-view pt-4">
                 <InputWithHead disabled={disabledStatus} heading={AppConstants.competition_name} placeholder={AppConstants.competition_name}
                     value={data.competitionName} onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionName')}  ></InputWithHead>
-                <div id={AppUniqueId.comp_Format_Type} style={{ marginTop: 15 }}>
-                    <InputWithHead heading={AppConstants.competitionFormat} required={"required-field"} />
+                <div style={{ marginTop: 15 }}>
+                    <InputWithHead id={AppUniqueId.comp_Format_Type} heading={AppConstants.competitionFormat} required={"required-field"} />
                     <Form.Item >
                         {getFieldDecorator('competitionFormatRefId', {
                             rules: [{ required: true, message: ValidationConstants.pleaseSelectCompetitionFormat }],
@@ -740,6 +827,20 @@ class CompetitionFormat extends Component {
                         </div>
                     </div>
                 </div>
+                {data.IsQuickCompetition == 1 ?
+                <div className="inside-container-view pt-4">
+                    <InputWithHead heading={AppConstants.nonPlayingDates} />
+                    {nonPlayingDates.length>0 ?nonPlayingDates .map((item, index) =>
+                        this.nonPlayingDateView(item, index))
+                        :null
+                    }
+                    <a>
+                    <span onClick={() =>this.addNonPlayingDate() } className="input-heading-add-another">
+                        + {AppConstants.addAnotherNonPlayingDate}
+                    </span>
+                    </a>
+                </div>:null
+                }				 
                 {(data.competionFormatDivisions || []).map((item, index) => (
                     <div className="inside-container-view" key={"compFormat" + index}>
                         <div className="fluid-width" >
@@ -779,7 +880,7 @@ class CompetitionFormat extends Component {
 
                         <div className="fluid-width" >
                             <div className="row" >
-                                <div id={AppUniqueId.match_Duration} className="col-sm-3" >
+                                <div className="col-sm-3" >
                                     <Form.Item >
                                         {getFieldDecorator(`matchDuration${index}`, {
                                             rules: [{
@@ -787,7 +888,9 @@ class CompetitionFormat extends Component {
                                                 message: ValidationConstants.matchDuration
                                             }]
                                         })(
-                                            <InputWithHead heading={AppConstants.matchDuration}
+                                            <InputWithHead
+                                                id={AppUniqueId.match_Duration}
+                                                heading={AppConstants.matchDuration}
                                                 disabled={disabledStatus}
                                                 required={"required-field"}
                                                 placeholder={AppConstants.mins}
@@ -834,12 +937,13 @@ class CompetitionFormat extends Component {
                                     </div>
                                     : null}
                                 {data.timeslotGenerationRefId != 2 ?
-                                    <div id={AppUniqueId.timeBetween_Matches} className="col-sm-3" >
+                                    <div className="col-sm-3" >
                                         <Form.Item >
                                             {getFieldDecorator(`timeBetweenGames${index}`, {
                                                 rules: [{ required: true, message: ValidationConstants.timeBetweenGames }]
                                             })(
                                                 <InputWithHead
+                                                    id={AppUniqueId.timeBetween_Matches}
                                                     disabled={disabledStatus}
                                                     heading={AppConstants.timeBetweenMatches} placeholder={AppConstants.mins}
                                                     required={"required-field"}
@@ -905,6 +1009,8 @@ class CompetitionFormat extends Component {
     footerView = (isSubmitting) => {
         let activeDrawsRoundsData = this.props.drawsState.activeDrawsRoundsData;
         let isPublished = this.state.competitionStatus == 1 ? true : false
+        let finalAvailable = this.checkFinalAvailable()
+        console.log(finalAvailable)
         return (
             <div className="fluid-width" >
                 <div className="footer-view">
@@ -917,24 +1023,93 @@ class CompetitionFormat extends Component {
                             </div>
                         </div>
                         <div className="col-sm" >
-                            <div className="comp-finals-button-view">
-                                <Tooltip
-                                    style={{ height: '100%' }}
-                                    onMouseEnter={() =>
-                                        this.setState({
-                                            tooltipVisibleDelete: isPublished ? true : false,
-                                        })
-                                    }
-                                    onMouseLeave={() =>
-                                        this.setState({ tooltipVisibleDelete: false })
-                                    }
-                                    visible={this.state.tooltipVisibleDelete}
-                                    title={AppConstants.statusPublishHover}
-                                >
-                                    <Button id={AppUniqueId.create_Draft_Draw_Btn} className="open-reg-button" type="primary" htmlType="submit" disabled={isSubmitting}
-                                    >{AppConstants.createDraftDraw}</Button>
-                                </Tooltip>
-                            </div>
+                            {finalAvailable == true ?
+                                <div className="comp-buttons-view">
+                                    <Tooltip
+                                        style={{ height: '100%' }}
+                                        onMouseEnter={() =>
+                                            this.setState({
+                                                tooltipVisibleSave: isPublished ? true : false,
+                                            })
+                                        }
+                                        onMouseLeave={() =>
+                                            this.setState({ tooltipVisibleSave: false })
+                                        }
+                                        visible={this.state.tooltipVisibleSave}
+                                        title={AppConstants.statusPublishHover}
+                                    >
+                                        <Button
+                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 10 }}
+                                            className="publish-button save-draft-text"
+                                            type="primary"
+                                            htmlType="submit"
+                                            onClick={() => this.setState({ buttonClicked: "save" })}
+                                            disabled={isPublished}
+                                        >
+                                            {AppConstants.save}
+                                        </Button>
+                                    </Tooltip>
+                                    <NavLink to="/competitionFinals">
+                                        <Button
+                                            className="publish-button margin-top-disabled-button"
+                                            type="primary"
+                                        >
+                                            {AppConstants.next}
+                                        </Button>
+                                    </NavLink>
+                                </div>
+                                : <div className="comp-buttons-view">
+                                    <Tooltip
+                                        style={{ height: '100%' }}
+                                        onMouseEnter={() =>
+                                            this.setState({
+                                                tooltipVisibleSave: isPublished ? true : false,
+                                            })
+                                        }
+                                        onMouseLeave={() =>
+                                            this.setState({ tooltipVisibleSave: false })
+                                        }
+                                        visible={this.state.tooltipVisibleSave}
+                                        title={AppConstants.statusPublishHover}
+                                    >
+                                        <Button
+                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 10 }}
+                                            className="publish-button save-draft-text"
+                                            type="primary"
+                                            htmlType="submit"
+                                            onClick={() => this.setState({ buttonClicked: "save" })}
+                                            disabled={isPublished}
+                                        >
+                                            {AppConstants.save}
+                                        </Button>
+                                    </Tooltip>
+                                    <Tooltip
+                                        style={{ height: '100%' }}
+                                        onMouseEnter={() =>
+                                            this.setState({
+                                                tooltipVisibleDelete: isPublished ? true : false,
+                                            })
+                                        }
+                                        onMouseLeave={() =>
+                                            this.setState({ tooltipVisibleDelete: false })
+                                        }
+                                        visible={this.state.tooltipVisibleDelete}
+                                        title={AppConstants.statusPublishHover}
+                                    >
+                                        <Button
+                                            id={AppUniqueId.create_Draft_Draw_Btn}
+                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 10 }}
+                                            className="open-reg-button"
+                                            type="primary"
+                                            htmlType="submit"
+                                            onClick={() => this.setState({ buttonClicked: "createDraw" })}
+                                            disabled={isPublished}
+                                        >
+                                            {AppConstants.createDraftDraw}
+                                        </Button>
+                                    </Tooltip>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -944,19 +1119,35 @@ class CompetitionFormat extends Component {
                     onOk={() => this.handleGenerateDrawModal("ok")}
                     onCancel={() => this.handleGenerateDrawModal("cancel")}>
                     <Select
-                    className="year-select reg-filter-select-competition ml-2"
-                        onChange={(e) => this.setState({generateRoundId: e})}
+                        className="year-select reg-filter-select-competition ml-2"
+                        onChange={(e) => this.setState({ generateRoundId: e })}
                         placeholder={'Round'}>
                         {(activeDrawsRoundsData || []).map((d, dIndex) => (
-                                <Option key={d.roundId} 
+                            <Option key={d.roundId}
                                 value={d.roundId} >{d.name}</Option>
-                            ))
+                        ))
                         }
-                    
+
                     </Select>
                 </Modal>
             </div>
         )
+    }
+
+    checkFinalAvailable() {
+        let formatList = Object.assign(this.props.competitionFormatState.competitionFormatList);
+        let competitionFormatDivision = formatList.competionFormatDivisions;
+        formatList.organisationId = this.state.organisationId;
+        for (let item in competitionFormatDivision) {
+            console.log("item.isFinal::" + formatList.competitionFormatRefId);
+            let isFinal = competitionFormatDivision[item]["isFinal"];
+            if (isFinal && formatList.competitionFormatRefId != 1) {
+                return true
+            }
+            else {
+                return false
+            }
+        }
     }
 
     render() {

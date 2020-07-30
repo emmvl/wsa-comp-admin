@@ -4,6 +4,7 @@ import { isDateSame, sortArrayByDate } from './../../../themes/dateformate';
 import ColorsArray from '../../../util/colorsArray';
 
 const initialState = {
+  changeStatus: false,
   onLoad: false,
   error: null,
   result: [],
@@ -518,7 +519,7 @@ function swapedDrawsArrayFunc(
   // }
   
 */
-console.log(sourceArray, drawsArray,'valled')
+  console.log(sourceArray, drawsArray, 'valled')
   return drawsArray;
 }
 
@@ -1115,15 +1116,16 @@ function CompetitionDraws(state = initialState, action) {
       };
 
     case ApiConstants.API_DRAW_PUBLISH_LOAD:
-      return { ...state, onLoad: true, updateLoad: true }
+      return { ...state, onLoad: true, updateLoad: true, changeStatus: true }
 
     case ApiConstants.API_DRAW_PUBLISH_SUCCESS:
-      state.publishStatus = 1
+      state.publishStatus = action.result.statusRefId
       state.isTeamInDraw = null
       state.updateLoad = false
       return {
         ...state,
         onLoad: false,
+        changeStatus: false,
         error: null,
       }
 

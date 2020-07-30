@@ -367,7 +367,7 @@ class LiveScoreAddIncident extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <Button onClick={() => history.push("/liveScoreIncidentList")} type="cancel-button">{AppConstants.cancel}</Button>
+                                <Button className="cancelBtnWidth" onClick={() => history.push("/liveScoreIncidentList")} type="cancel-button">{AppConstants.cancel}</Button>
                             </div>
                         </div>
                         <div className="col-sm">
@@ -375,7 +375,7 @@ class LiveScoreAddIncident extends Component {
                                 {/* <Form.Item > */}
                                 {/* <Button onClick={(editData.title == '' || editData.author == null) ? this.handleSubmit : this.onSaveButton} className="user-approval-button" */}
                                 <Button
-                                    className="user-approval-button"
+                                    className="publish-button save-draft-text"
                                     type="primary"
                                     htmlType="submit"
                                     disabled={isSubmitting}

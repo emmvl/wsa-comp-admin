@@ -98,9 +98,10 @@ class CompetitionDraws extends Component {
       drawGenerateModalVisible: false,
       competitionStatus: 0,
       tooltipVisibleDelete: false,
+      changeStatus: false,
       generateRoundId: null
     };
-    
+
   }
 
   componentDidUpdate(nextProps) {
@@ -110,6 +111,7 @@ class CompetitionDraws extends Component {
     let drawOrganisations = this.props.drawsState.drawOrganisations
     let venueData = this.props.drawsState.competitionVenues;
     let divisionGradeNameList = this.props.drawsState.divisionGradeNameList;
+    let changeStatus = this.props.drawsState.changeStatus
     if (
       this.state.venueLoad == true &&
       this.props.drawsState.updateLoad == false
@@ -215,18 +217,26 @@ class CompetitionDraws extends Component {
       }
     }
 
+    if (nextProps.drawsState.changeStatus != changeStatus) {
+      if (this.props.drawsState.changeStatus == false && this.state.changeStatus == true) {
+        let statusRefId = this.props.drawsState.publishStatus
+        console.log(this.props.appState.own_CompetitionArr)
+        setOwn_competitionStatus(statusRefId)
+        this.setState({ changeStatus: false, competitionStatus: statusRefId })
+      }
+    }
     if (
       this.state.roundLoad == true && this.props.drawsState.onActRndLoad == false
     ) {
-      this.setState({roundLoad: false});
-      if(this.props.drawsState.activeDrawsRoundsData!= null && 
-        this.props.drawsState.activeDrawsRoundsData.length > 0){
-          this.setState({drawGenerateModalVisible: true})
-        }
-        else{
-          message.config({ duration: 0.9, maxCount: 1 });
-          message.info(AppConstants.roundsNotAvailable);
-        }
+      this.setState({ roundLoad: false });
+      if (this.props.drawsState.activeDrawsRoundsData != null &&
+        this.props.drawsState.activeDrawsRoundsData.length > 0) {
+        this.setState({ drawGenerateModalVisible: true })
+      }
+      else {
+        message.config({ duration: 0.9, maxCount: 1 });
+        message.info(AppConstants.roundsNotAvailable);
+      }
     }
 
     // if (nextProps.drawsState.drawOrganisations != drawOrganisations) {
@@ -614,7 +624,7 @@ class CompetitionDraws extends Component {
             <Select
               name={'yearRefId'}
               className="year-select reg-filter-select-year ml-2"
-              // style={{ width: 90 }}
+              style={{ width: 90 }}
               onChange={(yearRefId) => this.onYearChange(yearRefId)}
               value={this.state.yearRefId}
             >
@@ -792,32 +802,32 @@ class CompetitionDraws extends Component {
 
   reGenerateDraw = () => {
     let competitionStatus = getOwn_competitionStatus();
-    if(competitionStatus == 2){
+    if (competitionStatus == 2) {
       this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
       this.setState({ roundLoad: true });
     }
-    else{
+    else {
       this.callGenerateDraw();
     }
- 
+
   };
 
-  handleGenerateDrawModal =  (key) =>{
-    if(key == "ok"){
-      if(this.state.generateRoundId!= null){
+  handleGenerateDrawModal = (key) => {
+    if (key == "ok") {
+      if (this.state.generateRoundId != null) {
         this.callGenerateDraw();
-        this.setState({drawGenerateModalVisible: false});
+        this.setState({ drawGenerateModalVisible: false });
       }
-      else{
+      else {
         message.error("Please select round");
       }
     }
-    else{
-      this.setState({drawGenerateModalVisible: false});
+    else {
+      this.setState({ drawGenerateModalVisible: false });
     }
   }
 
-  callGenerateDraw = () =>{
+  callGenerateDraw = () => {
     let payload = {
       yearRefId: this.state.yearRefId,
       competitionUniqueKey: this.state.firstTimeCompId,
@@ -866,6 +876,7 @@ class CompetitionDraws extends Component {
     }
     else {
       this.state.publishPartModel.publishPart.isShowDivision = false;
+	  this.onSelectDivisionsValues(null)									
     }
     this.setState({
       publishPart: this.state.publishPartModel.publishPart
@@ -878,6 +889,7 @@ class CompetitionDraws extends Component {
     }
     else {
       this.state.publishPartModel.publishPart.isShowRound = false;
+	  this.onSelectRoundValues(null)							
     }
     this.setState({
       publishPart: this.state.publishPartModel.publishPart
@@ -906,7 +918,7 @@ class CompetitionDraws extends Component {
       payload.rounds = this.state.selectedRounds
     }
     this.props.publishDraws(this.state.firstTimeCompId, '', payload);
-    this.setState({ visible: false })
+    this.setState({ visible: false, changeStatus: true })
   }
 
   ////// Publish draws
@@ -979,6 +991,7 @@ class CompetitionDraws extends Component {
                     {AppConstants.round}:
                   </span>
                   <Select
+                    id={AppUniqueId.draw_rounds_dpdn}
                     disabled={disabledStatus}
                     className="year-select"
                     style={{ minWidth: 100, maxWidth: 130 }}
@@ -1125,7 +1138,7 @@ class CompetitionDraws extends Component {
       : [];
     return (
       <div>
-        <div className="scroll-bar pb-4">
+        <div id={AppUniqueId.main_draws_round_tableview} className="scroll-bar pb-4">
           <div className="table-head-wrap">
             {/* Day name list */}
             <div className="tablehead-row">
@@ -1440,23 +1453,23 @@ class CompetitionDraws extends Component {
           modalIsShowRound={this.state.publishPartModel.publishPart.isShowRound}
         ></DrawsPublishModel>
 
-          <Modal
-                title="Regenerate Draw"
-                visible={this.state.drawGenerateModalVisible}
-                onOk={() => this.handleGenerateDrawModal("ok")}
-                onCancel={() => this.handleGenerateDrawModal("cancel")}>
-                <Select
-                   className="year-select reg-filter-select-competition ml-2"
-                    onChange={(e) => this.setState({generateRoundId: e})}
-                    placeholder={'Round'}>
-                    {(activeDrawsRoundsData || []).map((d, dIndex) => (
-                            <Option key={d.roundId} 
-                            value={d.roundId} >{d.name}</Option>
-                        ))
-                    }
-                
-                </Select>
-          </Modal>
+        <Modal
+          title="Regenerate Draw"
+          visible={this.state.drawGenerateModalVisible}
+          onOk={() => this.handleGenerateDrawModal("ok")}
+          onCancel={() => this.handleGenerateDrawModal("cancel")}>
+          <Select
+            className="year-select reg-filter-select-competition ml-2"
+            onChange={(e) => this.setState({ generateRoundId: e })}
+            placeholder={'Round'}>
+            {(activeDrawsRoundsData || []).map((d, dIndex) => (
+              <Option key={d.roundId}
+                value={d.roundId} >{d.name}</Option>
+            ))
+            }
+
+          </Select>
+        </Modal>
       </div>
     );
   };

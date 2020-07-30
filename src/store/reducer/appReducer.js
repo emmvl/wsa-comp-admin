@@ -47,7 +47,7 @@ const initialState = {
   membershipProductFeeMsg: [AppConstants.firstComRegOnlyMsg, AppConstants.allCompRegMsg],
   allYearList: [],
   allCompetitionTypeList: [],
- 
+
 };
 function arraymove(arr, fromIndex, toIndex) {
   var element = arr[fromIndex];
@@ -536,7 +536,28 @@ function appState(state = initialState, action) {
         onLoad: false,
         status: action.status
       };
+    //update status ref id 
+    case ApiConstants.API_DRAW_PUBLISH_SUCCESS:
+      let publishCompetitionid = action.competitionId
+      let publishedCompIndex = state.own_CompetitionArr.findIndex((x) => x.competitionId == publishCompetitionid)
+      state.own_CompetitionArr[publishedCompIndex].statusRefId = action.result.statusRefId
+      return {
+        ...state,
+        onLoad: false,
+        status: action.status
+      }
 
+
+    ///clear reducer data
+    case ApiConstants.API_COMPETITION_STATUS_UPDATE_SUCCESS:
+      state.participate_CompetitionArr = []
+      state.own_CompetitionArr = []
+      state.own_YearArr = []
+      state.participate_YearArr = []
+      return {
+        ...state
+
+      }
 
 
     default:
