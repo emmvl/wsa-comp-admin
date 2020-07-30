@@ -657,7 +657,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 return (
                                     <div key={"timeSlot" + index}>
                                         <div className='contextualHelp-RowDirection' >
-                                            <Radio id={this.getCourtRotationId(item.id, 'timeSlotPref')} key={item.id} value={item.id}> {item.name}</Radio>
+                                            <Radio id={this.getCourtRotationId(item.id, 'timeSlotPref')} key={item.id} value={item.id}> {item.description}</Radio>
                                             <div style={{ marginLeft: -22, marginTop: -5 }}>
                                                 <CustomTooltip background='#ff8237'>
                                                     <span>{item.helpMsg}</span>
