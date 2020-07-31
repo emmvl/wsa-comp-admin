@@ -965,3 +965,16 @@ input[type=number] {
   border-radius: 0px;
   height: 38px;
 }
+
+.marginLeft24{
+  margin-left: 24px;
+}
+
+@media (max-width: 767px) {
+  .auth-form {
+    width: 100%;
+  }
+  .marginLeft24{
+    margin-left: 0px;
+  }
+}
