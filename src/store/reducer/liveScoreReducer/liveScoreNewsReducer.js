@@ -87,6 +87,7 @@ function liveScoreNewsState(state = initialState, action) {
             let news_data = action.addNewItemDetail
             let authorData
             if (getLiveScoreCompetiton()) {
+
                 authorData = JSON.parse(getLiveScoreCompetiton())
             } else {
                 authorData = 'World sport actioa'
@@ -94,7 +95,8 @@ function liveScoreNewsState(state = initialState, action) {
 
 
             state.addEditNews = news_data
-            state.addEditNews["author"] = authorData ? authorData.longName : ''
+            state.addEditNews["author"] = news_data.author ? news_data.author : authorData ? authorData.longName : ''
+            console.log(state.addEditNews, 'news_data#####')
 
             state.news_expire_date = news_data.news_expire_date ? moment(news_data.news_expire_date).format("YYYY-MM-DD") : ""
             // state.news_expire_date = moment(news_data.news_expire_date).format("YYYY-MM-DD")

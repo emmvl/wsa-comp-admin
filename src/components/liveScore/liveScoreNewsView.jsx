@@ -19,6 +19,8 @@ import { connect } from 'react-redux';
 import Loader from '../../customComponents/loader'
 import Tooltip from 'react-png-tooltip'
 import { getKeyForStateWideMessage } from '../../util/sessionStorage';
+import { EditorState, ContentState, convertFromHTML, convertFromRaw } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
 
 const { Header, Footer, Content } = Layout;
 const { confirm } = Modal;
@@ -34,7 +36,8 @@ class LiveScoreNewsView extends Component {
             id: props.location.state ? props.location.state.id ? props.location.state.id : null : null,
             getDataLoading: false,
             deleteLoading: false,
-            screenKey: props.location ? props.location.state ? props.location.state.screenKey ? props.location.state.screenKey : null : null : null
+            screenKey: props.location ? props.location.state ? props.location.state.screenKey ? props.location.state.screenKey : null : null : null,
+            editorState: EditorState.createEmpty(),
         }
     }
 
@@ -61,6 +64,18 @@ class LiveScoreNewsView extends Component {
             modaldata: ''
         });
     };
+
+    componentDidMount() {
+
+        let newsData = this.state.newsItem;
+
+        let finalBody = newsData ? newsData.body ? JSON.parse(newsData.body) : "" : ""
+        const contentState = convertFromRaw({ "entityMap": {}, "blocks": finalBody });
+        const editorState = EditorState.createWithContent(contentState);
+        this.setState({
+            editorState
+        })
+    }
 
     componentDidUpdate(nextProps) {
         let newsState = this.props.liveScoreNewsState.notificationResult
@@ -139,6 +154,7 @@ class LiveScoreNewsView extends Component {
     ////////form content view
     contentView = () => {
         let newsData = this.state.newsItem;
+        const { editorState } = this.state;
         return (
             <div className="content-view pt-4">
                 <InputWithHead heading={newsData.title} />
@@ -148,9 +164,21 @@ class LiveScoreNewsView extends Component {
                     height='100' width='100' />}
 
                 {/* <span className="input-heading">{newsData.body}</span> */}
-                <div className="input-heading" dangerouslySetInnerHTML={{ __html: newsData.body }}>
+                {/* <div className="input-heading" dangerouslySetInnerHTML={{ __html: newsData.body }}></div> */}
 
+
+                <div style={{ marginTop: -10 }}>
+
+                    <Editor
+                        toolbarHidden
+                        editorState={editorState}
+                        onChange={null}
+                        readOnly
+
+                    />
                 </div>
+
+
                 {newsData.newsVideo && <div className='video-view mt-5'>
                     <video style={{ cursor: 'pointer' }} onClick={() => this.showModal(newsData.newsVideo, true)}
                         src={newsData ? newsData.newsVideo : ''} height='100' width='150' />
