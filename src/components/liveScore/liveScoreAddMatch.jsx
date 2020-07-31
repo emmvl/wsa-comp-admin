@@ -1440,9 +1440,12 @@ class LiveScoreAddMatch extends Component {
 
                     }
                     matchStatus = addEditMatch.matchStatus === "0" ? null : addEditMatch.matchStatus;
+                    matchData["resultStatus"] = addEditMatch.resultStatus == "0" ? null : addEditMatch.resultStatus
                 }
 
-                // const { id } = JSON.parse(getLiveScoreCompetiton())
+                // console.log("matchData::" ,matchData);
+                // console.log("addEditMatch", addEditMatch)
+                
                 this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, null, this.state.umpireKey, umpireData, scorerData, recordUmpireType)
             }
         });
