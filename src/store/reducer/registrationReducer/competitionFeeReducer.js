@@ -147,7 +147,8 @@ const initialState = {
     any_club_Org_AffiliateArr: [],
     createVenue: null,
     selectedTeamSeasonalInstalmentDates:[],
-    selectedSeasonalInstalmentDates:[],			   
+    selectedSeasonalInstalmentDates:[],	
+    orgRegistrationId: null,		   
 };
 
 /////function to append isselected values in default membership types array
@@ -2241,6 +2242,7 @@ function competitionFees(state = initialState, action) {
         case ApiConstants.API_POST_COMPETITION_FEE_DISCOUNT_LOAD:
             return { ...state, onLoad: true, }
         case ApiConstants.API_POST_COMPETITION_FEE_DISCOUNT_SUCCESS:
+            state.orgRegistrationId = action.result.orgRegistrationId
             return {
                 ...state,
                 onLoad: false,

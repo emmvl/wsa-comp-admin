@@ -109,3 +109,21 @@ export function* umpireImportSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+export function* umpireRoundListSaga(action) {
+
+    try {
+        const result = yield call(LiveScoreAxiosApi.umpireRoundList, action.competitionID, action.divisionId);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_UMPIRE_ROUND_LIST_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

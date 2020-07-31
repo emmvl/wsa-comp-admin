@@ -163,6 +163,11 @@
 
 .rdw-editor-main {
     min-height: 120px;
+    /* max-height: 240px; */
+}
+
+.newsDetailEditor {
+    min-height: 120px;
     max-height: 240px;
 }
 

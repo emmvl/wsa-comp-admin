@@ -807,4 +807,8 @@ export default function* root_saga() {
   // Check venue address duplication
   yield takeEvery(ApiConstants.API_VENUE_ADDRESS_CHECK_DUPLICATION_LOAD, checkVenueAddressDuplicationSaga);
 
+  // Umpire Round Saga
+
+  yield takeEvery(ApiConstants.API_UMPIRE_ROUND_LIST_LOAD, umpireDashboardSaga.umpireRoundListSaga)
+
 }
