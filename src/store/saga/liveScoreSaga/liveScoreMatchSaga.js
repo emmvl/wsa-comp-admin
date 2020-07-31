@@ -1,9 +1,10 @@
-import { put, call } from '../../../../node_modules/redux-saga/effects'
-import ApiConstants from '../../../themes/apiConstants'
+import { message } from "antd";
+import { put, call } from "redux-saga/effects";
+
+import ApiConstants from "../../../themes/apiConstants";
+import history from "../../../util/history";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 import CommonAxiosApi from "../../http/commonHttp/commonAxios"
-import { message } from "antd";
-import history from "../../../util/history";
 
 function* failSaga(result) {
     yield put({
@@ -17,15 +18,13 @@ function* failSaga(result) {
 }
 
 function* errorSaga(error) {
-
     yield put({
         type: ApiConstants.API_LIVE_SCORE_CREATE_MATCH_ERROR,
         error: error,
         status: error.status
     });
     setTimeout(() => {
-
-        message.error(error ? error.error ? error.error : "Something went wrong." : "Something went wrong.");
+        message.error((error && error.error) ? error.error : "Something went wrong.");
         // message.error("Something went wrong.");
     }, 800);
 }
@@ -33,7 +32,8 @@ function* errorSaga(error) {
 ////Match List
 export function* liveScoreMatchListSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreMatchList,
+        const result = yield call(
+            LiveScoreAxiosApi.liveScoreMatchList,
             action.competitionID,
             action.start,
             action.offset,
@@ -41,6 +41,8 @@ export function* liveScoreMatchListSaga(action) {
             action.divisionId,
             action.roundName,
             action.teamIds,
+            action.sortBy,
+            action.sortOrder,
         );
         if (result.status === 1) {
             yield put({
@@ -48,7 +50,6 @@ export function* liveScoreMatchListSaga(action) {
                 result: result.result.data,
                 status: result.status,
             });
-
         } else {
             yield call(failSaga, result)
         }
@@ -63,7 +64,6 @@ export function* liveScoreAddMatchSaga(action) {
         const result = yield call(LiveScoreAxiosApi.liveScoreAddEditMatch, action.matchId);
 
         if (result.status === 1) {
-
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_MATCH_SUCCESS,
                 result: result.result.data,
@@ -79,9 +79,9 @@ export function* liveScoreAddMatchSaga(action) {
 
 ////Add Match
 export function* liveScoreCreateMatchSaga(action) {
-
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreCreateMatch,
+        const result = yield call(
+            LiveScoreAxiosApi.liveScoreCreateMatch,
             action.data,
             action.competitionId,
             action.key,
@@ -93,7 +93,6 @@ export function* liveScoreCreateMatchSaga(action) {
             action.umpireArr,
             action.scorerData,
             action.recordUmpireType
-
         );
         if (result.status === 1) {
             yield put({
@@ -130,7 +129,6 @@ export function* liveScoreDeleteMatchSaga(action) {
             });
             history.push('/liveScoreMatches')
             message.success('Match Deleted Successfully.')
-
         } else {
             yield call(failSaga, result)
         }
@@ -138,7 +136,6 @@ export function* liveScoreDeleteMatchSaga(action) {
         yield call(errorSaga, error)
     }
 }
-
 
 ////Delete Match
 export function* liveScoreCompetitionVenuesList(action) {
@@ -176,6 +173,7 @@ export function* liveScoreMatchImportSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
 export function* liveScoreMatchSaga({ payload, isLineup }) {
     try {
         const result = yield call(LiveScoreAxiosApi.livescoreMatchDetails, payload, isLineup)
@@ -186,9 +184,9 @@ export function* liveScoreMatchSaga({ payload, isLineup }) {
         }
     } catch (error) {
         yield call(errorSaga, error)
-
     }
 }
+
 export function* liveScoreClubListSaga(action) {
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreClubList, action.competitionId);
@@ -198,7 +196,6 @@ export function* liveScoreClubListSaga(action) {
                 result: result.result.data,
                 status: result.status,
             });
-
         } else {
             yield call(failSaga, result)
         }
@@ -218,7 +215,6 @@ export function* playerLineUpStatusChnage(action) {
                 index: action.data.index,
                 key: action.data.key,
             });
-
         } else {
             yield call(failSaga, result)
         }
@@ -226,7 +222,6 @@ export function* playerLineUpStatusChnage(action) {
         yield call(errorSaga, error)
     }
 }
-
 
 export function* bulkScoreChange(action) {
     try {

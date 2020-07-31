@@ -1452,7 +1452,7 @@ const AppConstants = {
   firstLevelAffiliatesAssociationLeague: "1st Level Affiliates - Association/ League",
   secondLevelAffiliatesClubSchool: "2nd Level Affiliates - Club/School",
   teamSeasonalFee: 'Team Seasonal Fee',
-  instalmentDate:"Instalment Date",
+  instalmentDate: "Instalment Date",
   addInstalmentDate: "+ Add Instalment date",
   settingsAddedMessage: "Settings added successfully.",
   addressAddedMessage: "Address added successfully.",
@@ -1507,6 +1507,7 @@ const AppConstants = {
   roundsNotAvailable: "Rounds not available",
   venueSavedSuccessfully: "Successfully Saved",
   checkVenueAddressDuplication: "Check venue address duplication",
+  successMessage: "Successfully inserted"
 };
 
 export default AppConstants;

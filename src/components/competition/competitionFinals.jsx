@@ -23,7 +23,8 @@ import {
     getExtraTimeDrawAction,
     getFinalFixtureTemplateAction
 } from '../../store/actions/commonAction/commonAction';
-import { getActiveRoundsAction
+import {
+    getActiveRoundsAction
 } from '../../store/actions/competitionModuleAction/competitionDrawsAction';
 import {
     getOrganisationData, setOwnCompetitionYear,
@@ -32,6 +33,7 @@ import {
     getOwn_competition, getOwn_competitionStatus, setOwn_competitionStatus
 } from "../../util/sessionStorage";
 import AppUniqueId from "../../themes/appUniqueId";
+import { NavLink } from 'react-router-dom';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -127,11 +129,11 @@ class CompetitionFinals extends Component {
                         }
                         if (competitionModuleState.drawGenerateLoad == false) {
                             let competitionStatus = getOwn_competitionStatus();
-                            if(competitionStatus != 2){
+                            if (competitionStatus != 2) {
                                 this.props.generateDrawAction(payload);
                                 this.setState({ loading: true });
                             }
-                            else{
+                            else {
                                 this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
                                 this.setState({ roundLoad: true });
                             }
@@ -157,16 +159,16 @@ class CompetitionFinals extends Component {
         }
 
         if (this.state.roundLoad == true && this.props.drawsState.onActRndLoad == false) {
-            this.setState({roundLoad: false});
-            if(this.props.drawsState.activeDrawsRoundsData!= null && 
-              this.props.drawsState.activeDrawsRoundsData.length > 0){
-                this.setState({drawGenerateModalVisible: true})
-              }
-              else{
+            this.setState({ roundLoad: false });
+            if (this.props.drawsState.activeDrawsRoundsData != null &&
+                this.props.drawsState.activeDrawsRoundsData.length > 0) {
+                this.setState({ drawGenerateModalVisible: true })
+            }
+            else {
                 message.config({ duration: 0.9, maxCount: 1 });
                 message.info(AppConstants.roundsNotAvailable);
-              }
-          }
+            }
+        }
     }
 
     apiCalls = (competitionId, yearRefId) => {
@@ -239,31 +241,31 @@ class CompetitionFinals extends Component {
         this.props.updateCompetitionFinalsAction(id, fieldName, index);
     }
 
-    handleGenerateDrawModal =  (key) =>{
-        if(key == "ok"){
-          if(this.state.generateRoundId!= null){
-            this.callGenerateDraw();
-            this.setState({drawGenerateModalVisible: false});
-          }
-          else{
-            message.error("Please select round");
-          }
+    handleGenerateDrawModal = (key) => {
+        if (key == "ok") {
+            if (this.state.generateRoundId != null) {
+                this.callGenerateDraw();
+                this.setState({ drawGenerateModalVisible: false });
+            }
+            else {
+                message.error("Please select round");
+            }
         }
-        else{
-          this.setState({drawGenerateModalVisible: false});
+        else {
+            this.setState({ drawGenerateModalVisible: false });
         }
-      }
-    
-      callGenerateDraw = () =>{
+    }
+
+    callGenerateDraw = () => {
         let payload = {
-          yearRefId: this.state.yearRefId,
-          competitionUniqueKey: this.state.firstTimeCompId,
-          organisationId: getOrganisationData().organisationUniqueKey,
-          roundId: this.state.generateRoundId
+            yearRefId: this.state.yearRefId,
+            competitionUniqueKey: this.state.firstTimeCompId,
+            organisationId: getOrganisationData().organisationUniqueKey,
+            roundId: this.state.generateRoundId
         };
         this.props.generateDrawAction(payload);
         this.setState({ loading: true });
-      }
+    }
 
     saveCompetitionFinals = (e) => {
         e.preventDefault();
@@ -658,11 +660,16 @@ class CompetitionFinals extends Component {
                 {finalsList != null && finalsList.length > 0 && (
                     <div className="footer-view">
                         <div className="row" >
-                            <div className="col-sm" style={{ display: 'flex', alignItems: "flex-start" }}>
+                            <div className="col-sm" >
+                                <div className="reg-add-save-button">
+                                    <NavLink to="/competitionFormat">
+                                        <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
+                                    </NavLink>
+                                </div>
                                 {/* <Button type="cancel-button">Cancel</Button> */}
                             </div>
                             <div className="col-sm" >
-                                <div className="comp-finals-button-view">
+                                <div className="comp-buttons-view">
 
                                     <Tooltip
                                         style={{ height: '100%' }}
@@ -691,15 +698,15 @@ class CompetitionFinals extends Component {
                     onOk={() => this.handleGenerateDrawModal("ok")}
                     onCancel={() => this.handleGenerateDrawModal("cancel")}>
                     <Select
-                    className="year-select reg-filter-select-competition ml-2"
-                        onChange={(e) => this.setState({generateRoundId: e})}
+                        className="year-select reg-filter-select-competition ml-2"
+                        onChange={(e) => this.setState({ generateRoundId: e })}
                         placeholder={'Round'}>
                         {(activeDrawsRoundsData || []).map((d, dIndex) => (
-                                <Option key={d.roundId} 
+                            <Option key={d.roundId}
                                 value={d.roundId} >{d.name}</Option>
-                            ))
+                        ))
                         }
-                    
+
                     </Select>
                 </Modal>
             </div>

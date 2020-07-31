@@ -2745,7 +2745,7 @@ class CompetitionOpenRegForm extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <Button id={AppUniqueId.compdiv_cancel_button} type="cancel-button" onClick={() => history.push('/competitionDashboard')} >{AppConstants.cancel}</Button>
+                                <Button id={AppUniqueId.compdiv_cancel_button} className="cancelBtnWidth" type="cancel-button" onClick={() => history.push('/competitionDashboard')} >{AppConstants.back}</Button>
                             </div>
                         </div>
                         <div className="col-sm">
@@ -2773,6 +2773,11 @@ class CompetitionOpenRegForm extends Component {
                                                 : AppConstants.next}
                                         </Button>
                                     </Tooltip>
+                                    {tabKey == "2" &&
+                                        <NavLink to="/competitionPlayerGrades">
+                                            <Button className="publish-button" type="primary">{AppConstants.next}</Button>
+                                        </NavLink>
+                                    }
                                 </div>
                                 :
                                 <div className="comp-buttons-view">
@@ -2785,7 +2790,7 @@ class CompetitionOpenRegForm extends Component {
                                         title={ValidationConstants.compIsPublished}>
                                         <Button
                                             id={AppUniqueId.compdiv_save_button}
-                                            className="publish-button" type="primary"
+                                            className="publish-button save-draft-text" type="primary"
                                             disabled={tabKey === "1" || tabKey === "2" ? allDisable : isPublished}
                                             htmlType="submit" onClick={() => this.setState({
                                                 statusRefId: tabKey == "2" ? 2 : 1,
@@ -2798,18 +2803,11 @@ class CompetitionOpenRegForm extends Component {
                                                 : AppConstants.next}
                                         </Button>
                                     </Tooltip>
-
-
-                                    {/* <Button className="publish-button" type="primary"
-                                        htmlType="submit" onClick={() => this.setState({
-                                            statusRefId: tabKey == "2" ? 2 : 1,
-                                            buttonPressed: tabKey == "2" ? "publish" : "next"
-                                        })}
-                                    >
-                                        {tabKey === "2"
-                                            ? AppConstants.save
-                                            : AppConstants.next}
-                                    </Button> */}
+                                    {tabKey == "2" &&
+                                        <NavLink to="/competitionPlayerGrades">
+                                            <Button className="publish-button" type="primary">{AppConstants.next}</Button>
+                                        </NavLink>
+                                    }
                                 </div>
                             }
                         </div>

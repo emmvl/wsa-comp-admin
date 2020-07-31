@@ -1017,7 +1017,7 @@ class CompetitionPartPlayerGrades extends Component {
                     <div className="col-sm mt-3" >
                         <div className="comp-finals-button-view">
                             <NavLink to="/competitionPartProposedTeamGrading">
-                                <Button className="publish-button" type="primary">{AppConstants.next}</Button>
+                                <Button className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
                             </NavLink>
                         </div>
                     </div>

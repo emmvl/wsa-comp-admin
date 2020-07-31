@@ -364,7 +364,7 @@ class CompetitionDashboard extends Component {
                                         }}
                                     >
                                         <NavLink to="/quickCompetition">
-                                            <Button className="primary-add-comp-form" type="primary"
+                                            <Button id={AppUniqueId.quickCom_Button} className="primary-add-comp-form" type="primary"
                                             >
                                                 + {AppConstants.quickCompetition}
                                             </Button>

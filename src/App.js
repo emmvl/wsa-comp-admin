@@ -17,9 +17,14 @@ import lazyLoad from "./components/lazyLoad";
 
 import "./customStyles/customStyles.css";
 import "./customStyles/antdStyles.css";
-
+import TagManager from 'react-gtm-module'
 // const ORG_ID = 'Netball';
+const tagManagerArgs = {
+  gtmId: process.env.REACT_APP_GTM_ID
+}
 
+
+TagManager.initialize(tagManagerArgs)
 function App() {
   return (
     <div className="App">

@@ -199,14 +199,12 @@ export function* updateQuickCompetitionSaga(action) {
     try {
         const result = yield call(AxiosApi.updateQuickCompetition, action.payload);
         if (result.status === 1) {
-            const drawResult = yield call(AxiosApi.quickCompetitionGenerateDraw, action.year, action.payload.competitionId)
-            if (drawResult.status === 1) {
+            if (action.buttonPressed == "AddTeam") {
                 const detailResult = yield call(AxiosApi.getQuickCompetiitonDetails, action.payload.competitionId);
                 if (detailResult.status === 1) {
                     yield put({
                         type: ApiConstants.API_UPDATE_QUICK_COMPETITION_SUCCESS,
                         result: result.result.data,
-                        drawresult: drawResult.result.data,
                         detailResult: detailResult.result.data,
                         status: result.status,
                         competitionId: action.payload.competitionId,
@@ -219,9 +217,31 @@ export function* updateQuickCompetitionSaga(action) {
                 else {
                     yield call(failSaga, detailResult)
                 }
-            }
-            else {
-                yield call(failSaga, drawResult)
+
+            } else {
+                const drawResult = yield call(AxiosApi.quickCompetitionGenerateDraw, action.year, action.payload.competitionId)
+                if (drawResult.status === 1) {
+                    const detailResult = yield call(AxiosApi.getQuickCompetiitonDetails, action.payload.competitionId);
+                    if (detailResult.status === 1) {
+                        yield put({
+                            type: ApiConstants.API_UPDATE_QUICK_COMPETITION_SUCCESS,
+                            result: result.result.data,
+                            drawresult: drawResult.result.data,
+                            detailResult: detailResult.result.data,
+                            status: result.status,
+                            competitionId: action.payload.competitionId,
+                            competitionName: action.payload.competitionName
+                        });
+
+                    }
+                    else {
+                        yield call(failSaga, detailResult)
+                    }
+                }
+
+                else {
+                    yield call(failSaga, drawResult)
+                }
             }
         } else {
             yield call(failSaga, result)
