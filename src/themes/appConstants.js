@@ -302,8 +302,9 @@ const AppConstants = {
   positionTracking: 'Position Tracking',
   shooting: 'Shooting ',
   preview: 'Preview',
+  previews: 'Previews',
   print: 'Print',
-  previewAll: 'Print All',
+  printAll: 'Print All',
 
   /**** competition Open Reg form*/
   competitionDetails: 'Competition Details',
@@ -1501,6 +1502,7 @@ const AppConstants = {
   tableSheetID: "Sheet ID",
   createdAt: "Created at",
   download: "Download",
+  downloads: "Downloads",
   pleaseInputAddress: "Please input address",
   roundsNotAvailable: "Rounds not available",
   venueSavedSuccessfully: "Successfully Saved",
