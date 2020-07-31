@@ -1038,6 +1038,18 @@ let LiveScoreAxiosApi = {
         const url = `users/import?competitionId=${data.id}&roleId=3`;
         return Method.dataPost(url, token, body)
     },
+
+    umpireRoundList(competitionID, divisionId) {
+        let url;
+        if (divisionId) {
+            url = `/round?competitionId=${competitionID}&divisionId=${divisionId}`;
+        } else {
+            url = `/round?competitionId=${competitionID}&divisionId=${divisionId}`;
+        }
+
+        return Method.dataGet(url, localStorage.token)
+    },
+
 };
 
 const Method = {

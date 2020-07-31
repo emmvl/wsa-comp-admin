@@ -801,7 +801,11 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_UPDATE_TERMS_AND_CONDITION_LOAD, userSaga.updateTermsAndConditionsSaga);
   yield takeEvery(ApiConstants.API_COMPETITION_STATUS_UPDATE_LOAD, updateCompetitionStatusSaga)
 
-    ////////competition Active Draws rounds
-    yield takeEvery(ApiConstants.API_GET_DRAWS_ACTIVE_ROUNDS_LOAD, getActiveDrawsRoundsSaga)
+  ////////competition Active Draws rounds
+  yield takeEvery(ApiConstants.API_GET_DRAWS_ACTIVE_ROUNDS_LOAD, getActiveDrawsRoundsSaga)
+
+  // Umpire Round Saga
+
+  yield takeEvery(ApiConstants.API_UMPIRE_ROUND_LIST_LOAD, umpireDashboardSaga.umpireRoundListSaga)
 
 }
