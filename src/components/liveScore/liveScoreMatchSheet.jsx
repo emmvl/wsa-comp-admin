@@ -246,7 +246,7 @@ class LiveScoreMatchSheet extends Component {
             : DATA;
 
         return (
-            <div className="formView mt-4">
+            <div className="formView mt-4" style={{marginBottom: 20}}>
                 {this.sheetTableHeading()}
                 <div className="table-responsive p-4 home-dash-table-view">
                     <Table

@@ -272,12 +272,6 @@ class CompetitionVenueAndTimesAdd extends Component {
                 this.setFormFieldValue();
             }
         }
-
-        if (nextProps.commonReducerState !== this.props.commonReducerState) {
-            if (this.props.commonReducerState.venueAddressDuplication && !this.state.getDataLoading) {
-                message.error(ValidationConstants.duplicatedVenueAddressError);
-            }
-        }
     }
 
     setFormFieldValue = () => {
@@ -990,7 +984,7 @@ class CompetitionVenueAndTimesAdd extends Component {
        // console.log(this.props.venueTimeState.venuData, 'this.props.commonReducerState')
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <Loader visible={this.props.commonReducerState.onLoad} />
+                <Loader visible={this.props.commonReducerState.onLoad || this.props.venueTimeState.onLoad} />
                 <DashboardLayout
                     menuHeading={this.state.screenHeader}
                     menuName={this.state.screenHeader}

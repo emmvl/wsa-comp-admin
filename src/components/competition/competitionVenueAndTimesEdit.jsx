@@ -272,13 +272,6 @@ class CompetitionVenueAndTimesEdit extends Component {
                 this.setVenueOrganisation();
             }
         }
-
-
-        if (nextProps.commonReducerState !== this.props.commonReducerState) {
-            if (this.props.commonReducerState.venueAddressDuplication && !this.state.getDataLoading) {
-                message.error(ValidationConstants.duplicatedVenueAddressError);
-            }
-        }
     }
 
     setFormFieldValue = () => {

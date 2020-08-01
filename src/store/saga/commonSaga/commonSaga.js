@@ -683,6 +683,9 @@ export function* checkVenueAddressDuplicationSaga(action) {
                 result: result.result.data,
                 status: result.status,
             });
+            if (result.result.data.duplicated) {
+                message.error(ValidationConstants.duplicatedVenueAddressError);
+            }
         } else {
             yield call(failSaga, result)
         }
