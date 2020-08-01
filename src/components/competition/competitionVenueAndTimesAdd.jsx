@@ -27,13 +27,14 @@ import {
     removeObjectAction, clearVenueDataAction
 } from '../../store/actions/competitionModuleAction/venueTimeAction'
 import { getYearAndCompetitionAction } from '../../store/actions/appAction'
-import { getCommonRefData, addVenueAction } from '../../store/actions/commonAction/commonAction'
+import { getCommonRefData, addVenueAction, checkVenueDuplication } from '../../store/actions/commonAction/commonAction'
 import { getOrganisationAction } from '../../store/actions/userAction/userAction'
 import history from '../../util/history'
 import ValidationConstants from "../../themes/validationConstant";
 import AppImages from '../../themes/appImages';
 import { captializedString } from '../../util/helpers';
 import PlacesAutocomplete from "./elements/PlaceAutoComplete";
+import Loader from "../../customComponents/loader";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -243,8 +244,8 @@ class CompetitionVenueAndTimesAdd extends Component {
         this.setState({
             screenNavigationKey: screenNavigationKey
         })
-
         this.setHeaderValue(screenNavigationKey);
+        this.props.checkVenueDuplication();
     }
 
     setHeaderValue = (screenNavigationKey) => {
@@ -269,7 +270,6 @@ class CompetitionVenueAndTimesAdd extends Component {
             if (this.state.csvData != null) {
                 this.setState({ csvData: null, loading: false });
                 this.setFormFieldValue();
-
             }
         }
     }
@@ -416,6 +416,47 @@ class CompetitionVenueAndTimesAdd extends Component {
         );
     };
 
+    handlePlacesAutocomplete = (data) => {
+        const { stateList } = this.props.commonReducerState;
+        const address = data;
+
+        this.props.checkVenueDuplication(address);
+
+        if (!address.addressOne) {
+            this.setState({
+                venueAddressError: ValidationConstants.venueAddressDetailsError,
+            })
+        } else {
+            this.setState({
+                venueAddressError: ''
+            })
+        }
+
+        this.setState({
+            venueAddress: address,
+        });
+
+        const stateRefId = stateList.length > 0 && address.state
+          ? stateList.find((state) => state.name === address.state).id
+          : null;
+
+        this.props.form.setFieldsValue({
+            stateRefId,
+            addressOne: address.addressOne || null,
+            suburb: address.suburb || null,
+            postcode: address.postcode || null,
+        });
+
+        if (address.addressOne) {
+            this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId');
+            this.props.updateVenuAndTimeDataAction(address.addressOne, 'Venue', 'street1');
+            this.props.updateVenuAndTimeDataAction(address.suburb, 'Venue', 'suburb');
+            this.props.updateVenuAndTimeDataAction(address.postcode, 'Venue', 'postalCode');
+            this.props.updateVenuAndTimeDataAction(address.lat, 'Venue', 'lat');
+            this.props.updateVenuAndTimeDataAction(address.lng, 'Venue', 'lng');
+        }
+    };
+
     ////////form content view
     contentView = (getFieldDecorator) => {
         const { venuData } = this.props.venueTimeState
@@ -465,39 +506,12 @@ class CompetitionVenueAndTimesAdd extends Component {
                         heading={AppConstants.venueSearch}
                         required
                         error={this.state.venueAddressError}
-                        onSetData={(data) => {
-                            const address = data.mapData;
-
-                            if (address.addressOne === null) {
-                                this.setState({
-                                    venueAddressError: AppConstants.venueAddressDetailsError,
-                                })
-                            } else {
-                                this.setState({
-                                    venueAddressError: ''
-                                })
-                            }
-
+                        onBlur={() => {
                             this.setState({
-                                venueAddress: address,
-                            });
-
-                            const stateRefId = stateList.length > 0 && address.state
-                              ? stateList.find((state) => state.name === address.state).id
-                              : null;
-
-                            delete address.state;
-
-                            this.props.form.setFieldsValue({
-                                ...address,
-                                stateRefId,
-                            });
-
-                            this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId');
-                            this.props.updateVenuAndTimeDataAction(address.addressOne, 'Venue', 'street1');
-                            this.props.updateVenuAndTimeDataAction(address.suburb, 'Venue', 'suburb');
-                            this.props.updateVenuAndTimeDataAction(address.postcode, 'Venue', 'postalCode');
+                                venueAddressError: ''
+                            })
                         }}
+                        onSetData={this.handlePlacesAutocomplete}
                     />
                 </Form.Item>
                 <Form.Item >
@@ -868,8 +882,14 @@ class CompetitionVenueAndTimesAdd extends Component {
         let hasError = false;
         let venueAddressError = false;
 
+        if (this.props.commonReducerState.venueAddressDuplication) {
+            message.error(ValidationConstants.duplicatedVenueAddressError);
+            return;
+        }
+
         if (!this.state.venueAddress) {
-            this.setState({venueAddressError: AppConstants.venueAddressError});
+            this.setState({venueAddressError: ValidationConstants.venueAddressRequiredError});
+            message.error(AppConstants.venueAddressSelect);
             venueAddressError = true;
         }
 
@@ -887,6 +907,12 @@ class CompetitionVenueAndTimesAdd extends Component {
                     message.error(ValidationConstants.emptyGameDaysValidation);
                 }
                 else {
+
+                    if (venuData.venueCourts.length == 0) {
+                        message.error(ValidationConstants.emptyAddCourtValidation);
+                        return;
+                    }
+
                     venuData.venueCourts.map((item, index) => {
                         (item.availabilities || []).map((avItem, avIndex) => {
                             if (avItem.startTime > avItem.endTime) {
@@ -913,7 +939,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                     }
 
                     if (venueAddressError) {
-                        message.error('Please select a venue from the venue search');
+                        message.error(AppConstants.venueAddressSelect);
                         return;
                     }
 
@@ -958,6 +984,7 @@ class CompetitionVenueAndTimesAdd extends Component {
        // console.log(this.props.venueTimeState.venuData, 'this.props.commonReducerState')
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+                <Loader visible={this.props.commonReducerState.onLoad || this.props.venueTimeState.onLoad} />
                 <DashboardLayout
                     menuHeading={this.state.screenHeader}
                     menuName={this.state.screenHeader}
@@ -991,7 +1018,8 @@ function mapDispatchToProps(dispatch) {
         refreshVenueFieldsAction,
         getOrganisationAction,
         removeObjectAction,
-        clearVenueDataAction
+        clearVenueDataAction,
+        checkVenueDuplication,
     }, dispatch)
 }
 

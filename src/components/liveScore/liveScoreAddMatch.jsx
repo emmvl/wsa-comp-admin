@@ -290,7 +290,7 @@ class LiveScoreAddMatch extends Component {
         matchData.startTime = formated__Date
 
         // const { id } = JSON.parse(getLiveScoreCompetiton())
-
+        matchData["resultStatus"] = addEditMatch.resultStatus == "0" ? null : addEditMatch.resultStatus
 
         if (forfietedTeam) {
             if (forfietedTeam == 'team1') {
@@ -383,7 +383,7 @@ class LiveScoreAddMatch extends Component {
         matchData.startTime = formated__Date
 
         // const { id } = JSON.parse(getLiveScoreCompetiton())
-
+        matchData["resultStatus"] = addEditMatch.resultStatus == "0" ? null : addEditMatch.resultStatus
 
         if (abandoneReason) {
             if (abandoneReason == 'Incomplete') {
@@ -1043,6 +1043,7 @@ class LiveScoreAddMatch extends Component {
         let formated__Date = new Date(datetimeA).toISOString()
 
         matchData.startTime = formated__Date
+        matchData["resultStatus"] = addEditMatch.resultStatus == "0" ? null : addEditMatch.resultStatus
 
         if (Number(addEditMatch.team1Score) > Number(addEditMatch.team2Score)) {
             let team1resultId = matchResult[0].id

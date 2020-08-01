@@ -112,7 +112,7 @@ import {
   getGenderSaga, getPhotoTypeSaga, getAppyToSaga, getExtraTimeDrawSaga,
   getFinalsFixtureTemplateSaga, courtListSaga, getSendInvitesSaga, RegistrationRestrictionType,
   getAllowTeamRegistrationTypeSaga, disabilityReferenceSaga, getCommonInitSaga, getStateReferenceSaga,
-  getRegistrationPaymentStatusSaga, getMatchPrintTemplateTypeSaga
+  getRegistrationPaymentStatusSaga, getMatchPrintTemplateTypeSaga, checkVenueAddressDuplicationSaga
 } from "./commonSaga/commonSaga";
 
 import { fixtureTemplateSaga } from '../saga/competitionManagementSaga/competitionManagementSaga';
@@ -805,6 +805,9 @@ export default function* root_saga() {
 
   ////////competition Active Draws rounds
   yield takeEvery(ApiConstants.API_GET_DRAWS_ACTIVE_ROUNDS_LOAD, getActiveDrawsRoundsSaga)
+
+  // Check venue address duplication
+  yield takeEvery(ApiConstants.API_VENUE_ADDRESS_CHECK_DUPLICATION_LOAD, checkVenueAddressDuplicationSaga);
 
   // Umpire Round Saga
 
