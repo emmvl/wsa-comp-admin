@@ -89,7 +89,7 @@ function commonReducerState(state = initialState, action) {
 
         ////Add Venue Case
         case ApiConstants.API_ADD_VENUE_LOAD:
-            return { ...state, onVenueDataLoad: true };
+            return { ...state, onLoad: true, onVenueDataLoad: true };
 
         case ApiConstants.API_ADD_VENUE_SUCCESS:
             if (action.result != null) {
@@ -99,6 +99,7 @@ function commonReducerState(state = initialState, action) {
 
             return {
                 ...state,
+                onLoad: false,
                 mainVenueList: action.result,
                 onVenueDataLoad: false,
                 addVenueData: action.result,
