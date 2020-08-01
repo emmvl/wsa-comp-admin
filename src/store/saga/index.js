@@ -199,6 +199,8 @@ import * as competitionQuickSaga from "../saga/competitionManagementSaga/competi
 import * as liveScoreMatchSheetSaga from './liveScoreSaga/liveScoreMatchSheetSaga';
 import * as shopSettingSaga from './shopSaga/shopSettingSaga';
 
+import { getInnerHorizontalCompSaga } from './liveScoreSaga/liveScoreInnerHorizontalSaga'
+
 export default function* root_saga() {
   yield takeEvery(ApiConstants.API_LOGIN_LOAD, loginApiSaga);
   yield takeEvery(ApiConstants.API_QR_CODE_LOAD, qrApiSaga);
@@ -807,5 +809,7 @@ export default function* root_saga() {
   // Umpire Round Saga
 
   yield takeEvery(ApiConstants.API_UMPIRE_ROUND_LIST_LOAD, umpireDashboardSaga.umpireRoundListSaga)
+
+  yield takeEvery(ApiConstants.API_INNER_HORIZONTAL_COMPETITION_LIST_LOAD, getInnerHorizontalCompSaga)
 
 }
