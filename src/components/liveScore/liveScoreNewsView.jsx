@@ -174,7 +174,6 @@ class LiveScoreNewsView extends Component {
                         editorState={editorState}
                         onChange={null}
                         readOnly
-
                     />
                 </div>
 
