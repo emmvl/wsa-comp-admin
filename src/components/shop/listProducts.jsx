@@ -32,6 +32,7 @@ class ListProducts extends Component {
 
 
     componentDidMount() {
+        this.props.clearProductReducer("productListingData")
         window.scrollTo(0, 0)
         const widthWindow = window.innerWidth;
         let windowLimit = Math.round(widthWindow / 270) * 2

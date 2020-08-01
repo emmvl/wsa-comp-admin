@@ -32,7 +32,7 @@ import ValidationConstants from "../../themes/validationConstant";
 import history from '../../util/history'
 import Loader from '../../customComponents/loader';
 import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, ContentState, convertFromHTML, } from 'draft-js';
+import { EditorState, ContentState, convertFromHTML, convertFromRaw } from 'draft-js';
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { getLiveScoreCompetiton, getKeyForStateWideMessage } from '../../util/sessionStorage';
 import { isArrayNotEmpty, captializedString } from "../../util/helpers";
@@ -104,12 +104,11 @@ class LiveScoreAddNews extends Component {
         }
 
         this.setState({ getDataLoading: false, authorName: name })
-
         const { addEditNews } = this.props.liveScoreNewsState;
-
         this.props.form.setFieldsValue({
             'author': addEditNews.author ? addEditNews.author : name
         })
+
         if (this.state.isEdit === true) {
             this.props.setDefaultImageVideoNewAction({ newsImage: this.props.location.state.item.newsImage, newsVideo: this.props.location.state.item.newsVideo, author: name })
             this.props.liveScoreAddNewsDetailsAction(this.props.location.state.item)
@@ -135,18 +134,18 @@ class LiveScoreAddNews extends Component {
                 <div className="livescore-editor-news col-sm">
                     <Editor
                         editorState={editorState}
-                        wrapperClassName="demo-wrapper"
-                        editorClassName="demo-editor"
-                        toolbarClassName="toolbar-class"
+                        editorClassName="newsDetailEditor"
                         placeholder="News body"
                         onChange={(e) => this.onChangeEditorData(e.blocks)}
                         onEditorStateChange={this.onEditorStateChange}
                         toolbar={{
+                            options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded', 'emoji', 'remove', 'history'],
                             inline: { inDropdown: true },
                             list: { inDropdown: true },
                             textAlign: { inDropdown: true },
                             link: { inDropdown: true },
                             history: { inDropdown: true },
+                            
                         }}
                     />
                 </div>
@@ -161,7 +160,7 @@ class LiveScoreAddNews extends Component {
 
 
     setInitalFiledValue(data, author) {
-
+        console.log(data, 'addEditNews')
         let authorData = null
         if (getLiveScoreCompetiton()) {
             authorData = JSON.parse(getLiveScoreCompetiton())
@@ -170,11 +169,20 @@ class LiveScoreAddNews extends Component {
 
         this.props.form.setFieldsValue({
             'news_Title': data.title,
-            'author': author ? author : authorData ? authorData.longName : 'World sport actioa'
+            'author': data.author ? data.author : author ? author : authorData ? authorData.longName : 'World sport actioa'
         })
-        let finalBody = data ? data.body ? data.body : "" : ""
-        let body = EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(finalBody)))
-        this.setState({ editorState: body })
+        // let finalBody = data ? data.body ? data.body : "" : ""
+        // let body = EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(finalBody)))
+        // this.setState({ editorState: body })
+
+        let finalBody = data ? data.body ? JSON.parse(data.body) : "" : ""
+        const contentState = convertFromRaw({ "entityMap": {}, "blocks": finalBody });
+        const editorState = EditorState.createWithContent(contentState);
+        this.setState({
+            editorState
+        })
+
+
     }
 
     componentDidUpdate(nextProps) {
@@ -696,7 +704,10 @@ class LiveScoreAddNews extends Component {
                         newstringArr.push(data.newsBody[i].text)
                     }
 
-                    let bodyText = newstringArr.join(`<br/>`)
+                    // let bodyText = newstringArr.join(`<br/>`)
+                    let bodyText = JSON.stringify(data.newsBody)
+
+
                     // let bodyText = newstringArr.join("")
 
                     liveScoreNewsState.addEditNews.body = bodyText

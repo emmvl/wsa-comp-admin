@@ -5,6 +5,7 @@ import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 import { message } from "antd";
 import AppConstants from "../../../themes/appConstants";
 import AxiosApi from '../../http/registrationHttp/registrationAxios';
+import ValidationConstants from "../../../themes/validationConstant";
 
 function* failSaga(result) {
     console.log("failSaga", result.message)
@@ -98,12 +99,12 @@ export function* addVenueSaga(action) {
                 status: result.result.status
             });
             // setTimeout(() => {
-            message.success('Successfully Inserted');
+            message.success(AppConstants.venueSavedSuccessfully);
             // }, 500);
         } else {
             yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
             setTimeout(() => {
-                alert(result.data.message);
+                message.error(result.result.data.message);
             }, 800);
         }
     } catch (error) {
@@ -663,6 +664,28 @@ export function* getMatchPrintTemplateTypeSaga() {
                 result: result.result.data,
                 status: result.status,
             });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+
+// Get the match print template type
+export function* checkVenueAddressDuplicationSaga(action) {
+    try {
+        const result = yield call(CommonAxiosApi.checkVenueDuplication, action.body);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_VENUE_ADDRESS_CHECK_DUPLICATION_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+            if (result.result.data.duplicated) {
+                message.error(ValidationConstants.duplicatedVenueAddressError);
+            }
         } else {
             yield call(failSaga, result)
         }

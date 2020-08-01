@@ -486,9 +486,7 @@ class AddProduct extends Component {
                     style={allDisabled == true ? { backgroundColor: "#f5f5f5" } : null}>
                     <Editor
                         editorState={editorState}
-                        wrapperClassName="demo-wrapper"
-                        editorClassName="demo-editor"
-                        toolbarClassName="toolbar-class"
+                        editorClassName="newsDetailEditor"
                         placeholder={AppConstants.description}
                         onChange={(e) =>
                             this.props.onChangeProductDetails(

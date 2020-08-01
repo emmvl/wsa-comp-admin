@@ -16,6 +16,7 @@ import { checkRegistrationType } from "../../util/permissions";
 import Tooltip from 'react-png-tooltip'
 import AppImages from "../../themes/appImages"
 import AppUniqueId from "../../themes/appUniqueId";
+import Loader from '../../customComponents/loader'
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -229,11 +230,13 @@ class CompetitionDashboard extends Component {
         }
     }
     updateCompetitionStatus = (record) => {
+        let storedYearID = localStorage.getItem("yearId");
+        let selectedYearId = (storedYearID == null || storedYearID == 'null') ? 1 : JSON.parse(storedYearID)
         let payload = {
             competitionUniqueKey: record.competitionId,
             statusRefId: 2
         }
-        this.props.updateCompetitionStatus(payload)
+        this.props.updateCompetitionStatus(payload, selectedYearId)
     }
     onChange = e => {
         this.setState({
@@ -273,7 +276,7 @@ class CompetitionDashboard extends Component {
                                     {AppConstants.year}:</span>
                                 <Select
                                     className="year-select reg-filter-select-year ml-2"
-                                    // style={{ width: 90 }}
+                                    style={{ width: 90 }}
                                     onChange={yearId => this.onYearClick(yearId)}
                                     value={selectedYearId}
                                 >
@@ -361,7 +364,7 @@ class CompetitionDashboard extends Component {
                                         }}
                                     >
                                         <NavLink to="/quickCompetition">
-                                            <Button className="primary-add-comp-form" type="primary"
+                                            <Button id={AppUniqueId.quickCom_Button} className="primary-add-comp-form" type="primary"
                                             >
                                                 + {AppConstants.quickCompetition}
                                             </Button>
@@ -450,8 +453,8 @@ class CompetitionDashboard extends Component {
     ////////ownedView view for competition
     ownedView = () => {
         return (
-            <div className="comp-dash-table-view">
-                <div id={AppUniqueId.ownedCompetition_Table} className="table-responsive home-dash-table-view">
+            <div className="comp-dash-table-view " style={{ paddingBottom: 100 }}>
+                <div id={AppUniqueId.ownedCompetition_Table} className="table-responsive home-dash-table-view ">
                     <Table
                         loading={this.props.competitionDashboardState.onLoad === true && true}
                         className="home-dashboard-table"
@@ -464,7 +467,7 @@ class CompetitionDashboard extends Component {
                         })}
                     />
                 </div>
-            </div>
+            </div >
         );
     };
 
@@ -479,6 +482,7 @@ class CompetitionDashboard extends Component {
                 <Layout>
                     <Content>
                         {this.dropdownView()}
+                        <Loader visible={this.props.competitionDashboardState.updateLoad} />
                         {this.participatedView()}
                         {this.dropdownButtonView()}
                         {this.ownedView()}

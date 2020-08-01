@@ -7,7 +7,6 @@ const AppUniqueId = {
     CourtPreferences_Divisions_EvenRotation: "venuesEvenRotationDivisions",
     CourtPreferences_Grades_EvenRotation: "venuesEvenRotationGrades",
     CourtPreferences_Teams_EvenRotation: "venuesEvenRotationTeams",
-    CourtPreferences_Teams_EvenRotation: "venuesEvenRotationTeams",
     CourtPreferences_AllocSameCourt: "venuesAllocSameCourt",
     CourtPreferences_AllocSameCourt_Divisions: "venuesAllocSameCourtDivisions",
     CourtPreferences_AllocSameCourt_Grades: "venuesAllocSameCourtGrades",
@@ -43,14 +42,20 @@ const AppUniqueId = {
     manuallyAddTimeslot_ApplySettingsIndividualVenues_AddTimeSlotBtn: "timeSlotManualAddTimeslot_btn",
     manuallyAddTimeslot_ApplySettingsIndividualVenues_AddAnotherDayBtn: "timeSlotManualAddDay_btn",
     timeSlotSaveBtn: "timeslot_save_btn",
+    dayRefIdAllVenue: "dayRefIdAllVenue",
+    eventimeRotation_div: "eventimeRotation_div",
+    eventimeRotation_grade: "eventimeRotation_grade",
+    eventimeRotation_team: "eventimeRotation_team",
+
 
     //// Unique Ids for TeamGrading ////////
 
     teamGradingYear_dpdn: "teamgrad_year_dpdn",
-    teamGradingYCompetition_dpdn: "teamgrad_year_dpdn",
-    teamGrading_ExportBtn: "teamgrad_year_dpdn",
-    teamGrading_ExportPlayer: "teamgrad_year_dpdn",
-    teamGrading_PublishBtn: "teamgrad_year_dpdn",
+    teamGradingYCompetition_dpdn: "teamgrad_compname_dpdn",
+    teamGrading_ExportBtn: "teamgrad_export_bn",
+    teamGrading_ExportPlayer: "teamgrad_exportplayer_bn",
+    teamGrading_PublishBtn: "teamgrad_publish_bn",
+    teamGrading_NextBtn: "teamgrad_Next_bn",
 
     //// Unique Ids for PlayerGrading ////////
 
@@ -62,6 +67,7 @@ const AppUniqueId = {
     PlayerGrading_CreateTeam: "playgrad_create_team_bn",
     PlayerGrading_addTeamName: "playgrad_addTeamname",
     PlayerGrading_unassigned_Player_CheckBox: "playgrad_unassigned_chkbox",
+    playgrad_Next_bn: "playgrad_Next_bn",
 
     //// Unique Ids for ImportPlayer ////////
 
@@ -75,6 +81,14 @@ const AppUniqueId = {
     ownedCompetition_column_headers_table: "owned_competition_headers",
     ownedCompetition_Table: "owned_compet_content_table",
     defaultComp_logo_checkbox: "default_logo_chkbox",
+    quickCom_Button: "quick_competition_button",
+
+    //// Unique Ids for quickCompetition Page ////////
+
+    add_TimeSlot_Btn: "qckcomp_addtimeslot_btn",
+    add_Div_Grade_Btn: "qckcomp_addDiv_Grade_btn",
+
+
 
     //// Unique Ids for registrationCompetitionForm ////////
 
@@ -94,7 +108,7 @@ const AppUniqueId = {
     add_non_playingdate_button: "add_non-playingdate_button",
     team_min_players: "team_min_players",
     team_max_players: "team_max_players",
-    comp_savedraft_button: "comp_savedraft_button",
+    compdiv_savedraft_button: "compdiv_savedraft_button",
     comp_page1_Next_button: "comp_page1_Next_button",//////
     comp_Division_Publish_button: "compdiv_publish_button",
     comp_Division_Cancel_button: "compdiv_cancel_button",
@@ -157,6 +171,8 @@ const AppUniqueId = {
     drawsVenueList_dpdn: "draw_venue_dpdn",
     draw_Publish_btn: "draw_publish_btn",
     publish_All_Or_PArt_radioBtn: "drawpublish_all_part_radiobtn",
+    main_draws_round_tableview: "main_draws_round_tableview",
+    draw_rounds_dpdn: "draw_rounds_dpdn",
 
     //// Unique Ids for Competition Finals ////////
 

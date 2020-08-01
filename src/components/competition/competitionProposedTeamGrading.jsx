@@ -141,7 +141,7 @@ const columns = [
         render: (playerHistory, record, key) => (
             <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>
                 {playerHistory.map((item, index) => (
-                    (item.divisionGrade != null && item.divisionGrade != "" && this_obj.state.competitionStatus !== 1) ?
+                    (item.divisionGrade != null && item.divisionGrade != "" && this_obj.state.competitionStatus != 1) ?
                         <Tooltip
                             className="comp-player-table-tag2"
                             style={{ height: "100%" }}
@@ -211,7 +211,7 @@ const columns = [
         render: (responseComments, record) =>
             <div className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}
                 style={{ display: "flex", justifyContent: "center", cursor: "pointer", backgroundColor: "none" }}
-                onClick={() => this_obj.state.competitionStatus !== 1 && this_obj.onClickComment(record)}>
+                onClick={() => this_obj.state.competitionStatus != 1 && this_obj.onClickComment(record)}>
                 <img src={record.isCommentsAvailable == 1 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
             </div>,
     },

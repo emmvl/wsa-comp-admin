@@ -51,12 +51,23 @@ export function* updateCompetitionStatusSaga(action) {
     try {
         const result = yield call(RegistrationAxiosApi.updateCompetitionStatus, action.payload);
         if (result.status === 1) {
-            console.log(result)
-            yield put({
-                type: ApiConstants.API_COMPETITION_STATUS_UPDATE_SUCCESS,
-                result: result.result.data,
-                status: result.status,
-            });
+            const updateDashboardResult = yield call(CompetitionAxiosApi.competitionDashboard, action.yearId,);
+            if (updateDashboardResult.status === 1) {
+                yield put({
+                    type: ApiConstants.API_COMPETITION_STATUS_UPDATE_SUCCESS,
+                    result: result.result.data,
+                    updateDashboardResult: updateDashboardResult.result.data,
+                    status: result.status,
+                });
+
+            }
+            else {
+                yield put({
+                    type: ApiConstants.API_COMPETITION_STATUS_UPDATE_SUCCESS,
+                    result: result.result.data,
+                    status: result.status,
+                });
+            }
         } else {
             yield call(failSaga, result)
         }

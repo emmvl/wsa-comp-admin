@@ -61,8 +61,19 @@ class CompetitionCourtAndTimesAssign extends Component {
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
-        let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
-        let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
+       let compData = undefined;
+        let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined;
+        if(this.props.appState.own_CompetitionArr!= null){
+            compData = this.props.appState.own_CompetitionArr.filter(x=> x.isQuickCompetition == 0)
+            let filteredComp = compData.filter(x=>x.competitionId == storedCompetitionId);
+            if(filteredComp == null || undefined){
+                storedCompetitionId = filteredComp[0].competitionId;
+                storedCompetitionStatus = filteredComp[0].statusRefId;
+                setOwn_competition(storedCompetitionId)
+                setOwn_competitionStatus(storedCompetitionStatus)
+                this.setState({ firstTimeCompId: storedCompetitionId, competitionStatus: storedCompetitionStatus })
+            }
+        }		 
         if (storedCompetitionId && yearId && propsData && compData) {
             this.setState({
                 yearRefId: JSON.parse(yearId),
@@ -100,7 +111,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         }
 
         if (nextProps.appState !== this.props.appState) {
-            let competitionList = this.props.appState.own_CompetitionArr
+            let competitionList = this.props.appState.own_CompetitionArr.filter(x=>x.isQuickCompetition == 0)
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
                     let competitionId = competitionList[0].competitionId
@@ -500,7 +511,7 @@ class CompetitionCourtAndTimesAssign extends Component {
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         const { own_YearArr, own_CompetitionArr, } = this.props.appState
-
+        let competitionList = own_CompetitionArr != null ? own_CompetitionArr.filter(x=> x.isQuickCompetition == 0) : [];
         return (
             <div className="comp-venue-courts-dropdown-view mt-0" >
                 <div className="fluid-width" >
@@ -549,7 +560,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {own_CompetitionArr.length > 0 && own_CompetitionArr.map(item => {
+                                    {(competitionList || []).map(item => {
                                         return (
                                             <Option key={item.statusRefId} value={item.competitionId}>
                                                 {item.competitionName}
@@ -592,6 +603,13 @@ class CompetitionCourtAndTimesAssign extends Component {
             case "subPref":
 
                 switch (data) {
+
+                    case 1: return AppUniqueId.eventimeRotation_div
+
+                    case 2: return AppUniqueId.eventimeRotation_grade
+
+                    case 3: return AppUniqueId.eventimeRotation_team
+
                     case 4: return AppUniqueId.allocateSameTimeslotDivision
 
                     case 5: return AppUniqueId.allocateSameTimeslotGrade
@@ -1125,7 +1143,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             },
                         )(
                             <Select
-                                id={AppUniqueId.manuallyAddTimeslot_ApplyAllVenues_Day_of_the_week_drpdn}
+                                id={AppUniqueId.dayRefIdAllVenue}
                                 style={{ width: mainId == 8 ? "70%" : "70%", minWidth: 100, }}
                                 onChange={(dayOfTheWeek) => this.props.UpdateTimeSlotsDataManual(dayOfTheWeek, 'dayRefId', 'competitionTimeslotManual', index, null, null)}
                                 placeholder="Select Week Day"
@@ -1302,7 +1320,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 <Button id={AppUniqueId.timeSlotSaveBtn} disabled={isPublished} style={{ height: isPublished && "100%", borderRadius: isPublished && 10, width: isPublished && "inherit" }} className="publish-button save-draft-text" htmlType="submit" type="primary">{AppConstants.save}</Button>
                             </Tooltip>
                             <NavLink to="/competitionVenueTimesPrioritisation">
-                                <Button className="publish-button" type="primary">{AppConstants.next}</Button>
+                                <Button className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
                             </NavLink>
                         </div>
                     </div>

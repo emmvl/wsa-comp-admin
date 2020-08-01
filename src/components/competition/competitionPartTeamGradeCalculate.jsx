@@ -487,11 +487,11 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                     style={{ height: isPublished && "100%", borderRadius: isPublished && 10, width: isPublished && "inherit" }}
                                     type="primary"
                                     onClick={() => this.publishtApiCall()}
-                                >{AppConstants.publish}
+                                >{AppConstants.save}
                                 </Button>
                             </Tooltip>
                             <NavLink to="/competitionCourtAndTimesAssign">
-                                <Button className="publish-button" type="primary">{AppConstants.next}</Button>
+                                <Button id={AppUniqueId.teamGrading_NextBtn} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
                             </NavLink>
                         </div>
                     </div>

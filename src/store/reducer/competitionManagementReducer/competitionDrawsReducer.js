@@ -4,6 +4,7 @@ import { isDateSame, sortArrayByDate } from './../../../themes/dateformate';
 import ColorsArray from '../../../util/colorsArray';
 
 const initialState = {
+  changeStatus: false,
   onLoad: false,
   error: null,
   result: [],
@@ -25,8 +26,10 @@ const initialState = {
   updateFixtureLoad: false,
   getRoundsDrawsdata: [],
   spinLoad: false,
-  drawOrganisations: []
-  // colorsArray: []
+  drawOrganisations: [],
+  // colorsArray: [],
+  activeDrawsRoundsData: [],
+  onActRndLoad: false
 
 };
 var gradeColorArray = [];
@@ -516,7 +519,7 @@ function swapedDrawsArrayFunc(
   // }
   
 */
-console.log(sourceArray, drawsArray,'valled')
+  console.log(sourceArray, drawsArray, 'valled')
   return drawsArray;
 }
 
@@ -1113,15 +1116,16 @@ function CompetitionDraws(state = initialState, action) {
       };
 
     case ApiConstants.API_DRAW_PUBLISH_LOAD:
-      return { ...state, onLoad: true, updateLoad: true }
+      return { ...state, onLoad: true, updateLoad: true, changeStatus: true }
 
     case ApiConstants.API_DRAW_PUBLISH_SUCCESS:
-      state.publishStatus = 1
+      state.publishStatus = action.result.statusRefId
       state.isTeamInDraw = null
       state.updateLoad = false
       return {
         ...state,
         onLoad: false,
+        changeStatus: false,
         error: null,
       }
 
@@ -1231,6 +1235,18 @@ function CompetitionDraws(state = initialState, action) {
         updateLoad: false
       }
 
+       /////get rounds in the competition draws
+    case ApiConstants.API_GET_DRAWS_ACTIVE_ROUNDS_LOAD:
+      return { ...state, onActRndLoad: true, error: null };
+
+    case ApiConstants.API_GET_DRAWS_ACTIVE_ROUNDS_SUCCESS:
+      let activeDrawsRoundsData = JSON.parse(JSON.stringify(action.result))
+      return {
+        ...state,
+        onActRndLoad: false,
+        activeDrawsRoundsData: activeDrawsRoundsData,
+        error: null,
+      };
     default:
       return state;
   }

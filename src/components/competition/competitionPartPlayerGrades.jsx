@@ -252,7 +252,7 @@ class CompetitionPartPlayerGrades extends Component {
         this.props.clearReducerCompPartPlayerGradingAction("partPlayerGradingListData")
         this.props.clearReducerDataAction("allDivisionsData")
         this.setState({ firstTimeCompId: competitionId, divisionId: null, competitionStatus: statusRefId })
-        this.props.getDivisionsListAction(this.state.yearRefId, competitionId,)
+        this.props.getDivisionsListAction(this.state.yearRefId, competitionId)
     }
 
 
@@ -1005,16 +1005,20 @@ class CompetitionPartPlayerGrades extends Component {
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
-            <div className="fluid-width" >
-                <div className="comp-player-grades-footer-view">
-                    <div className="row" >
-                        <div className="col-sm" >
-                            <div className="comp-finals-button-view">
-                                <Button className="save-draft-text" type="save-draft-text">{AppConstants.save}</Button>
-                                <NavLink to="/competitionPartProposedTeamGrading">
-                                    <Button className="open-reg-button" type="primary">{AppConstants.gradeAndNameTeams}</Button>
-                                </NavLink>
-                            </div>
+            <div className="fluid-width paddingBottom56px" >
+                <div className="row" >
+                    <div className="col-sm-3 mt-3" >
+                        <div className="reg-add-save-button">
+                            <NavLink to="/competitionDashboard">
+                                <Button className="cancelBtnWidth" type="cancel-button"  >{AppConstants.back}</Button>
+                            </NavLink>
+                        </div>
+                    </div>
+                    <div className="col-sm mt-3" >
+                        <div className="comp-finals-button-view">
+                            <NavLink to="/competitionPartProposedTeamGrading">
+                                <Button className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
+                            </NavLink>
                         </div>
                     </div>
                 </div>
@@ -1042,7 +1046,7 @@ class CompetitionPartPlayerGrades extends Component {
                     </Content>
 
                     <Footer>
-                        {/* {this.footerView()} */}
+                        {this.footerView()}
                     </Footer>
                 </Layout>
             </div>

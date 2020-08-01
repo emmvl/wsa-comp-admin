@@ -302,8 +302,9 @@ const AppConstants = {
   positionTracking: 'Position Tracking',
   shooting: 'Shooting ',
   preview: 'Preview',
+  previews: 'Previews',
   print: 'Print',
-  previewAll: 'Print All',
+  printAll: 'Print All',
 
   /**** competition Open Reg form*/
   competitionDetails: 'Competition Details',
@@ -605,6 +606,7 @@ const AppConstants = {
   contactValue: '9646097979',
   enterFirstName: 'Enter first name',
   enterLastName: 'Enter last name',
+  enterDateOfBirth: 'Enter date of birth',
   assignToMatch: 'Assign To Match',
   aboutScorer: 'About Scorer',
   importMatch: 'Import Match',
@@ -673,8 +675,11 @@ const AppConstants = {
   bannerlink: 'Banner Link',
   removeBanner: 'Remove Banner',
   showHomePage: 'Show on Home Page',
-  showonDrawsPage: 'Show on Draws Page',
-  showonLadderPage: 'Show on Ladder Page',
+  showOnDrawsPage: 'Show on Draws Page',
+  showOnLadderPage: 'Show on Ladder Page',
+  showOnNewsPage: 'Show on News Page',
+  showOnChatPage: 'Show on Chat Page',
+  bannerFormat: 'Banner Format',
   teamAttendane: 'Team Attendance',
   newsList: 'News List',
   gameTime: 'Game Time',
@@ -1482,14 +1487,12 @@ const AppConstants = {
 
   editRegrade: "Edit/Regrade",
   fullCompetition: "Full Competition",
-  quickCompetition: "Quick Competition",
   competitionstartDate: "Competition Start Date",
   statusPublishHover: "This competition needs to be unlocked using the Edit / Regrade option on the competition dashboard in order to be edited",
 
-
-
   venueAddressDetailsError: "Please input venue address in details",
   venueAddressError: "Please select a venue from the venue search",
+  venueAddressSelect: "Please select a venue from the venue search",
   venueSearch: "Venue search",
   matchSheetsNoPrintError: "There is no match sheets to print.",
   selectTemplateTypeError: "Please select template type.",
@@ -1499,7 +1502,12 @@ const AppConstants = {
   tableSheetID: "Sheet ID",
   createdAt: "Created at",
   download: "Download",
+  downloads: "Downloads",
   pleaseInputAddress: "Please input address",
+  roundsNotAvailable: "Rounds not available",
+  venueSavedSuccessfully: "Successfully Saved",
+  checkVenueAddressDuplication: "Check venue address duplication",
+  successMessage: "Successfully inserted"
 };
 
 export default AppConstants;

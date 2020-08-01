@@ -83,8 +83,22 @@ class CompetitionVenueTimesPrioritisation extends Component {
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
+        let compData = undefined;
+        if(this.props.appState.own_CompetitionArr!= null){
+            compData = this.props.appState.own_CompetitionArr.filter(x=> x.isQuickCompetition == 0)
+            let filteredComp = compData.filter(x=>x.competitionId == storedCompetitionId);
+            if(filteredComp == null || undefined){
+                storedCompetitionId = filteredComp[0].competitionId;
+                storedCompetitionStatus = filteredComp[0].statusRefId;
+                setOwn_competition(storedCompetitionId)
+                setOwn_competitionStatus(storedCompetitionStatus)
+                this.setState({ firstTimeCompId: storedCompetitionId, competitionStatus: storedCompetitionStatus })
+            }
+        }
+        //let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
+       
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
-        let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
+ 
         if (yearId && storedCompetitionId && propsData && compData) {
             this.setState({
                 yearRefId: JSON.parse(yearId),
@@ -124,7 +138,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
             //         year_id = storedYearID ? storedYearID : yearList[0].id
             //         setOwnCompetitionYear(year_id)
             //     }
-            let competitionList = this.props.appState.own_CompetitionArr
+			let competitionList = this.props.appState.own_CompetitionArr.filter(x=>x.isQuickCompetition == 0)
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
                     // let competitionId = null
@@ -292,7 +306,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         const { own_YearArr, own_CompetitionArr, } = this.props.appState
-        const { yearId } = this.props.venueTimeState
+        const { yearId } = this.props.venueTimeState;
+        let competitionList = own_CompetitionArr != null ? own_CompetitionArr.filter(x=> x.isQuickCompetition == 0) : [];																													 
         return (
             <div className="comp-venue-courts-dropdown-view mt-0">
                 <div className="fluid-width">
@@ -333,7 +348,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     onChange={(competitionId, e) => this.onCompetitionClick(competitionId, e.key)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {own_CompetitionArr.length > 0 && own_CompetitionArr.map((item, index) => {
+                                    {competitionList.length > 0 && competitionList.map((item, index) => {
                                         return (
                                             < Option key={item.statusRefId} value={item.competitionId}> {item.competitionName}</Option>
                                         );
@@ -1319,7 +1334,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                 </Button>
                             </Tooltip>
                             <NavLink to="/competitionFormat">
-                                <Button className="publish-button" type="primary">{AppConstants.next}</Button>
+                                <Button className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
                             </NavLink>
                         </div>
                     </div>
