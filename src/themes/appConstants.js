@@ -302,8 +302,9 @@ const AppConstants = {
   positionTracking: 'Position Tracking',
   shooting: 'Shooting ',
   preview: 'Preview',
+  previews: 'Previews',
   print: 'Print',
-  previewAll: 'Print All',
+  printAll: 'Print All',
 
   /**** competition Open Reg form*/
   competitionDetails: 'Competition Details',
@@ -1491,6 +1492,7 @@ const AppConstants = {
 
   venueAddressDetailsError: "Please input venue address in details",
   venueAddressError: "Please select a venue from the venue search",
+  venueAddressSelect: "Please select a venue from the venue search",
   venueSearch: "Venue search",
   matchSheetsNoPrintError: "There is no match sheets to print.",
   selectTemplateTypeError: "Please select template type.",
@@ -1500,8 +1502,11 @@ const AppConstants = {
   tableSheetID: "Sheet ID",
   createdAt: "Created at",
   download: "Download",
+  downloads: "Downloads",
   pleaseInputAddress: "Please input address",
   roundsNotAvailable: "Rounds not available",
+  venueSavedSuccessfully: "Successfully Saved",
+  checkVenueAddressDuplication: "Check venue address duplication",
   successMessage: "Successfully inserted"
 };
 

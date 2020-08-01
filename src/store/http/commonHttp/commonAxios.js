@@ -133,6 +133,8 @@ let AxiosApi = {
             "yearRefId": venuData.yearRefId,
             "competitionMembershipProductDivisionId": venuData.competitionMembershipProductDivisionId,
             "venueId": venuData.venueId,
+            "lng": venuData.lng,
+            "lat": venuData.lat,
             "name": venuData.name,
             "shortName": venuData.shortName,
             "street1": venuData.street1,
@@ -148,6 +150,18 @@ let AxiosApi = {
 
         }
         var url = `/api/venue/save?userId=${userId}`;
+        return Method.dataPost(url, token, body);
+    },
+
+    // Check Venue address duplication
+    async checkVenueDuplication(venueAddress) {
+        const url = '/api/venue/duplicate';
+        const body = venueAddress ? {
+            venueId: venueAddress.venueId,
+            lng: venueAddress.lng,
+            lat: venueAddress.lat,
+        } : null;
+
         return Method.dataPost(url, token, body);
     },
 

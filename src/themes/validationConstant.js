@@ -194,6 +194,10 @@ const ValidationConstants = {
     enterPostcode: 'Please enter postcode.',
     passwordVerification: 'Password must be minimum 8 characters',
 
+    // Venue Add/Edit
+    venueAddressRequiredError: "Venue address is required",
+    venueAddressDetailsError: "Please input venue address in details",
+    duplicatedVenueAddressError: "Venue address is duplicated, please select other address",
 };
 
 export default ValidationConstants;
