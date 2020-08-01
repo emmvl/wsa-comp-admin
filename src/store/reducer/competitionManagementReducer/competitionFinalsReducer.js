@@ -25,7 +25,8 @@ const initialState = {
     error: null,
     result: [],
     status: 0,
-    competitionFinalsList: [obj]
+    competitionFinalsList: [obj],
+    competitionVenuesList: []
 };
 function competitionFinalsReducer(state = initialState, action) {
 
@@ -34,11 +35,13 @@ function competitionFinalsReducer(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_GET_COMPETITION_FINALS_SUCCESS:
+			 state.competitionVenuesList= []							   
             let compFinalsData = action.result;
             return {
                 ...state,
                 onLoad: false,
-                competitionFinalsList: compFinalsData,
+                competitionFinalsList: compFinalsData.finals,
+                competitionVenuesList: compFinalsData.venues,	 
                 status: action.status
             };
 
@@ -58,8 +61,20 @@ function competitionFinalsReducer(state = initialState, action) {
             let updatedValue = action.updatedData;
             let getKey = action.key;
             let index = action.index;
-            console.log("Index::" +index);
-            oldData[index][getKey] = updatedValue;
+            if(action.key.venueList == "venueList")
+            {
+                state.competitionVenuesList = []
+                updatedValue.map((id)=>{
+                    let obj={
+                        venueId:id,
+                        competitionVenueId:0,
+                    }
+                    state.competitionVenuesList.push(obj)
+                })
+            }
+            else{
+                oldData[index][getKey] = updatedValue;
+            }
             return { ...state, error: null };
 
         case ApiConstants.API_COMPETITION_FINALS_FAIL:
