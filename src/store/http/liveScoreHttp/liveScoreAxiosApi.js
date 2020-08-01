@@ -1050,6 +1050,13 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token)
     },
 
+    innerHorizontalCompList(organisationId) {
+
+        let url = `/competitions/admin?organisationId=${organisationId}`;
+
+        return Method.dataPost(url, null)
+    },
+
 };
 
 const Method = {
