@@ -1507,7 +1507,11 @@ const AppConstants = {
   roundsNotAvailable: "Rounds not available",
   venueSavedSuccessfully: "Successfully Saved",
   checkVenueAddressDuplication: "Check venue address duplication",
-  successMessage: "Successfully inserted"
+  successMessage: "Successfully inserted",
+  videoSize:"Selected file must be less then 1 MB",
+  video_size: 1024000,
+  qcTimeslotNotApplicable: "Timeslots are not applicable for quick competition",
+  qcVenueConstraintNotApplicable: "Venue Constraints are not applicable for quick competition"
 };
 
 export default AppConstants;

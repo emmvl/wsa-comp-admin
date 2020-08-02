@@ -10,7 +10,8 @@ import {
     Form,
     Modal,
     Spin,
-    Checkbox
+    Checkbox,
+    message
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -32,14 +33,15 @@ import ValidationConstants from "../../themes/validationConstant";
 import history from '../../util/history'
 import Loader from '../../customComponents/loader';
 import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, ContentState, convertFromHTML, convertFromRaw } from 'draft-js';
+import { EditorState, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { getLiveScoreCompetiton, getKeyForStateWideMessage } from '../../util/sessionStorage';
 import { isArrayNotEmpty, captializedString } from "../../util/helpers";
 import { liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 import ImageLoader from '../../customComponents/ImageLoader'
 import { NavLink } from "react-router-dom";
-
+import htmlToDraft from 'html-to-draftjs';
+import draftToHtml from 'draftjs-to-html';
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
@@ -160,13 +162,10 @@ class LiveScoreAddNews extends Component {
 
 
     setInitalFiledValue(data, author) {
-        console.log(data, 'addEditNews')
         let authorData = null
         if (getLiveScoreCompetiton()) {
             authorData = JSON.parse(getLiveScoreCompetiton())
         }
-
-
         this.props.form.setFieldsValue({
             'news_Title': data.title,
             'author': data.author ? data.author : author ? author : authorData ? authorData.longName : 'World sport actioa'
@@ -175,12 +174,23 @@ class LiveScoreAddNews extends Component {
         // let body = EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(finalBody)))
         // this.setState({ editorState: body })
 
-        let finalBody = data ? data.body ? JSON.parse(data.body) : "" : ""
-        const contentState = convertFromRaw({ "entityMap": {}, "blocks": finalBody });
-        const editorState = EditorState.createWithContent(contentState);
-        this.setState({
+        let finalBody = data ? data.body ? data.body : "" : ""
+        // const contentState = convertFromRaw({ "entityMap": {}, "blocks": finalBody });
+        // const editorState = EditorState.createWithContent(contentState);
+        // this.setState({
+        //     editorState
+        // })
+
+        const html = finalBody;
+        const contentBlock = htmlToDraft(html);
+        if (contentBlock) {
+          const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+          const editorState = EditorState.createWithContent(contentState);
+         this.setState({
             editorState
         })
+
+        }
 
 
     }
@@ -247,6 +257,12 @@ class LiveScoreAddNews extends Component {
 
         if (data.files[0] !== undefined) {
 
+            // if (data.files[0].size > AppConstants.logo_size) {
+            //     message.error(AppConstants.videoSize);
+            //     return;
+            //   }
+
+
             if (this.state.isEdit == true) {
                 editData.newsImage = ''
             }
@@ -272,6 +288,13 @@ class LiveScoreAddNews extends Component {
         const { liveScoreNewsState } = this.props;
         let editData = liveScoreNewsState.addEditNews;
         if (data.files[0] !== undefined) {
+
+            if (data.files[0].size > AppConstants.video_size) {
+                message.error(AppConstants.videoSize);
+                return;
+              }
+
+
             if (this.state.isEdit == true) {
                 editData.newsVideo = ''
             }
@@ -517,6 +540,7 @@ class LiveScoreAddNews extends Component {
                             id="user-vdo"
                             style={{ display: 'none' }}
                             onChange={(event) => {
+                                console.log(event.target ,  "Video player")
                                 this.setVideo(event.target, "evt.target")
                                 this.setState({ videoTimeout: 2000 })
                                 setTimeout(() => {
@@ -704,13 +728,18 @@ class LiveScoreAddNews extends Component {
                         newstringArr.push(data.newsBody[i].text)
                     }
 
+                    let bodyDetails = draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()))
+                    // let bodyText = newstringArr.join("")
+
+                    liveScoreNewsState.addEditNews.body = bodyDetails
+
                     // let bodyText = newstringArr.join(`<br/>`)
-                    let bodyText = JSON.stringify(data.newsBody)
+                    // let bodyText = JSON.stringify(data.newsBody)
 
 
                     // let bodyText = newstringArr.join("")
 
-                    liveScoreNewsState.addEditNews.body = bodyText
+                    // liveScoreNewsState.addEditNews.body = bodyText
                 }
 
                 let editData = liveScoreNewsState.addEditNews;

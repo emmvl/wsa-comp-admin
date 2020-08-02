@@ -703,7 +703,7 @@ class CompetitionFinals extends Component {
                 ))}
 
                 {(finalsList == null || finalsList.length == 0) &&
-                    <div className="final-validation">
+                    <div className="comp-warning-info">
                         {AppConstants.finalsMessage}
                     </div>
                 }

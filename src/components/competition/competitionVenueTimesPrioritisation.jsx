@@ -70,8 +70,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
             currentIndex: 0,
             currentModal: "",
             competitionStatus: 0,
-            tooltipVisibleDelete: false
-
+            tooltipVisibleDelete: false,
+            isQuickCompetition: false
         };
         // this.props.clearYearCompetitionAction()
         // this.props.getCommonRefData()
@@ -83,28 +83,17 @@ class CompetitionVenueTimesPrioritisation extends Component {
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
-        let compData = undefined;
-        if(this.props.appState.own_CompetitionArr!= null){
-            compData = this.props.appState.own_CompetitionArr.filter(x=> x.isQuickCompetition == 0)
-            let filteredComp = compData.filter(x=>x.competitionId == storedCompetitionId);
-            if(filteredComp == null || undefined){
-                storedCompetitionId = filteredComp[0].competitionId;
-                storedCompetitionStatus = filteredComp[0].statusRefId;
-                setOwn_competition(storedCompetitionId)
-                setOwn_competitionStatus(storedCompetitionStatus)
-                this.setState({ firstTimeCompId: storedCompetitionId, competitionStatus: storedCompetitionStatus })
-            }
-        }
-        //let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
-       
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
- 
+        let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
         if (yearId && storedCompetitionId && propsData && compData) {
+            let quickComp = this.props.appState.own_CompetitionArr.find(x=>x.competitionId == 
+                storedCompetitionId && x.isQuickCompetition == 1);
             this.setState({
                 yearRefId: JSON.parse(yearId),
                 firstTimeCompId: storedCompetitionId,
                 competitionStatus: storedCompetitionStatus,
-                getDataLoading: true
+                getDataLoading: true,
+                isQuickCompetition: quickComp!= undefined ? true : false
             })
             this.props.venueConstraintListAction(yearId, storedCompetitionId, 1)
         }
@@ -138,7 +127,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
             //         year_id = storedYearID ? storedYearID : yearList[0].id
             //         setOwnCompetitionYear(year_id)
             //     }
-			let competitionList = this.props.appState.own_CompetitionArr.filter(x=>x.isQuickCompetition == 0)
+			let competitionList = this.props.appState.own_CompetitionArr
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
                     // let competitionId = null
@@ -149,10 +138,12 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
+                    let quickComp = this.props.appState.own_CompetitionArr.find(x=>x.competitionId == 
+                        competitionId && x.isQuickCompetition == 1);
                     this.props.venueConstraintListAction(this.state.yearRefId, competitionId, 1)
                     this.setState({
                         getDataLoading: true, loading: false, firstTimeCompId: competitionId,
-                        competitionStatus: statusRefId
+                        competitionStatus: statusRefId, isQuickCompetition: quickComp!= undefined ? true : false
                     })
                 }
             }
@@ -295,7 +286,10 @@ class CompetitionVenueTimesPrioritisation extends Component {
     onCompetitionClick(competitionId, statusRefId) {
         setOwn_competition(competitionId)
         setOwn_competitionStatus(statusRefId)
-        this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId })
+        let quickComp = this.props.appState.own_CompetitionArr.find(x=>x.competitionId == 
+            competitionId && x.isQuickCompetition == 1);
+        this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId,
+            isQuickCompetition: quickComp!= undefined ? true : false })
         this.props.clearVenueTimesDataAction(competitionId)
 
         if (this.props.venueTimeState.onVenueDataClear == true) {
@@ -307,7 +301,6 @@ class CompetitionVenueTimesPrioritisation extends Component {
     dropdownView = () => {
         const { own_YearArr, own_CompetitionArr, } = this.props.appState
         const { yearId } = this.props.venueTimeState;
-        let competitionList = own_CompetitionArr != null ? own_CompetitionArr.filter(x=> x.isQuickCompetition == 0) : [];																													 
         return (
             <div className="comp-venue-courts-dropdown-view mt-0">
                 <div className="fluid-width">
@@ -348,7 +341,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     onChange={(competitionId, e) => this.onCompetitionClick(competitionId, e.key)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {competitionList.length > 0 && competitionList.map((item, index) => {
+                                    {own_CompetitionArr.length > 0 && own_CompetitionArr.map((item, index) => {
                                         return (
                                             < Option key={item.statusRefId} value={item.competitionId}> {item.competitionName}</Option>
                                         );
@@ -1392,6 +1385,16 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
     }
 
+    qcWarningView = () => {
+        return (
+            <div className="content-view pt-3">
+                <div className="comp-warning-info">
+                    {AppConstants.qcVenueConstraintNotApplicable}
+                </div>
+            </div>
+        )
+    }
+
 
 
     render() {
@@ -1414,7 +1417,9 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         noValidate="noValidate"
                     >
                         <Content>
-                            <div className="formView">{this.contentView(getFieldDecorator)}</div>
+                            <div className="formView">{
+                            !this.state.isQuickCompetition ? this.contentView(getFieldDecorator) :
+                                this.qcWarningView()}</div>
 
                             {/* {venueConstrainstData.competitionTypeRefId == 1 ? 
                                 <div>
@@ -1432,7 +1437,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                             } */}
 
                         </Content>
-                        <Footer>{this.footerView()}</Footer>
+                        <Footer>{!this.state.isQuickCompetition ? this.footerView() : null}</Footer>
                     </Form>
                 </Layout>
             </div>

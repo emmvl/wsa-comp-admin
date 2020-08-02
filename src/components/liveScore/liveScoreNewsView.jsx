@@ -21,6 +21,7 @@ import Tooltip from 'react-png-tooltip'
 import { getKeyForStateWideMessage } from '../../util/sessionStorage';
 import { EditorState, ContentState, convertFromHTML, convertFromRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
+import htmlToDraft from 'html-to-draftjs';
 
 const { Header, Footer, Content } = Layout;
 const { confirm } = Modal;
@@ -69,12 +70,23 @@ class LiveScoreNewsView extends Component {
 
         let newsData = this.state.newsItem;
 
-        let finalBody = newsData ? newsData.body ? JSON.parse(newsData.body) : "" : ""
-        const contentState = convertFromRaw({ "entityMap": {}, "blocks": finalBody });
-        const editorState = EditorState.createWithContent(contentState);
-        this.setState({
+        // let finalBody = newsData ? newsData.body ? JSON.parse(newsData.body) : "" : ""
+        // const contentState = convertFromRaw({ "entityMap": {}, "blocks": finalBody });
+        // const editorState = EditorState.createWithContent(contentState);
+        // this.setState({
+        //     editorState
+        // })
+
+        const html = newsData.body ? newsData.body :"";
+        const contentBlock = htmlToDraft(html);
+        if (contentBlock) {
+          const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+          const editorState = EditorState.createWithContent(contentState);
+         this.setState({
             editorState
         })
+
+        }
     }
 
     componentDidUpdate(nextProps) {
