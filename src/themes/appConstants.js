@@ -1511,7 +1511,9 @@ const AppConstants = {
   videoSize:"Selected file must be less then 1 MB",
   video_size: 1024000,
   qcTimeslotNotApplicable: "Timeslots are not applicable for quick competition",
-  qcVenueConstraintNotApplicable: "Venue Constraints are not applicable for quick competition"
+  qcVenueConstraintNotApplicable: "Venue Constraints are not applicable for quick competition",
+  publishModalInfo: "You have changed the grade of the following teams:",
+  publishModalConfirmationMsg: "Would you like to adjust their ladder points?"
 };
 
 export default AppConstants;
