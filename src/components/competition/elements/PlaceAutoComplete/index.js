@@ -28,7 +28,7 @@ const mapAddressInfo = (addressComponents) => {
       }
     }
     return {
-      addressOne: streetNumber + ' ' + address,
+      addressOne: streetNumber ? streetNumber + ' ' + address : address,
       suburb: suburb,
       state: addressComponents[addressComponents.length - 3].short_name,
       postcode: addressComponents[addressComponents.length - 1].short_name,
