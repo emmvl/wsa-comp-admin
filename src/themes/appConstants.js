@@ -1507,7 +1507,9 @@ const AppConstants = {
   roundsNotAvailable: "Rounds not available",
   venueSavedSuccessfully: "Successfully Saved",
   checkVenueAddressDuplication: "Check venue address duplication",
-  successMessage: "Successfully inserted"
+  successMessage: "Successfully inserted",
+  qcTimeslotNotApplicable: "Timeslots are not applicable for quick competition",
+  qcVenueConstraintNotApplicable: "Venue Constraints are not applicable for quick competition"
 };
 
 export default AppConstants;
