@@ -1510,6 +1510,8 @@ const AppConstants = {
   successMessage: "Successfully inserted",
   videoSize:"Selected file must be less then 1 MB",
   video_size: 1024000,
+  qcTimeslotNotApplicable: "Timeslots are not applicable for quick competition",
+  qcVenueConstraintNotApplicable: "Venue Constraints are not applicable for quick competition"
 };
 
 export default AppConstants;
