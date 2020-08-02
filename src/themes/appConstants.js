@@ -1507,7 +1507,9 @@ const AppConstants = {
   roundsNotAvailable: "Rounds not available",
   venueSavedSuccessfully: "Successfully Saved",
   checkVenueAddressDuplication: "Check venue address duplication",
-  successMessage: "Successfully inserted"
+  successMessage: "Successfully inserted",
+  videoSize:"Selected file must be less then 1 MB",
+  video_size: 1024000,
 };
 
 export default AppConstants;
