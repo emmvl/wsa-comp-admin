@@ -165,8 +165,15 @@ class CompetitionFinals extends Component {
                 this.setState({ drawGenerateModalVisible: true })
             }
             else {
-                message.config({ duration: 0.9, maxCount: 1 });
-                message.info(AppConstants.roundsNotAvailable);
+                let payload = {
+                    yearRefId: this.state.yearRefId,
+                    competitionUniqueKey: this.state.firstTimeCompId,
+                    organisationId: this.state.organisationId
+                }
+                this.props.generateDrawAction(payload);
+                this.setState({ loading: true });
+                // message.config({ duration: 0.9, maxCount: 1 });
+                // message.info(AppConstants.roundsNotAvailable);
             }
         }
     }

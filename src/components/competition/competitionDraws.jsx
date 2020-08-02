@@ -40,6 +40,9 @@ import {
   getVenuesTypeAction,
 } from '../../store/actions/appAction';
 import Loader from '../../customComponents/loader';
+import history from "../../util/history"
+import {setLiveScoreUmpireCompition, setLiveScoreUmpireCompitionData } from "../../util/sessionStorage"
+
 import {
   setOwnCompetitionYear,
   getOwnCompetitionYear,
@@ -99,7 +102,8 @@ class CompetitionDraws extends Component {
       competitionStatus: 0,
       tooltipVisibleDelete: false,
       changeStatus: false,
-      generateRoundId: null
+      generateRoundId: null,
+      publishModalVisible: false
     };
 
   }
@@ -222,7 +226,12 @@ class CompetitionDraws extends Component {
         let statusRefId = this.props.drawsState.publishStatus
         console.log(this.props.appState.own_CompetitionArr)
         setOwn_competitionStatus(statusRefId)
+        message.success("Draws published to live scores successfully");
         this.setState({ changeStatus: false, competitionStatus: statusRefId })
+
+        if(this.props.drawsState.teamNames!= null && this.props.drawsState.teamNames!= ""){
+          this.setState({publishModalVisible: true});
+        }
       }
     }
     if (
@@ -234,8 +243,9 @@ class CompetitionDraws extends Component {
         this.setState({ drawGenerateModalVisible: true })
       }
       else {
-        message.config({ duration: 0.9, maxCount: 1 });
-        message.info(AppConstants.roundsNotAvailable);
+        this.callGenerateDraw();
+        // message.config({ duration: 0.9, maxCount: 1 });
+        // message.info(AppConstants.roundsNotAvailable);
       }
     }
 
@@ -838,6 +848,18 @@ class CompetitionDraws extends Component {
     this.setState({ venueLoad: true });
   }
 
+  handlePublishModal = (key) => {
+    if (key == "ok") {
+      let competitiondata =  this.props.drawsState.liveScoreCompetiton
+      localStorage.setItem("LiveScoreCompetiton", JSON.stringify(competitiondata))
+      localStorage.removeItem('stateWideMessege')
+      setLiveScoreUmpireCompition(competitiondata.id)
+      setLiveScoreUmpireCompitionData(JSON.stringify(competitiondata))
+      history.push('/liveScoreLadderList')
+    }
+    this.setState({ drawGenerateModalVisible: false });
+  }
+
 
   //unlockDraws
   unlockDraws(id, round_Id, venueCourtId) {
@@ -1374,7 +1396,8 @@ class CompetitionDraws extends Component {
     let publishStatus = this.props.drawsState.publishStatus;
     let isTeamNotInDraws = this.props.drawsState.isTeamInDraw;
     let activeDrawsRoundsData = this.props.drawsState.activeDrawsRoundsData;
-    let isPublish = this.state.competitionStatus == 1 ? true : false
+    let isPublish = this.state.competitionStatus == 1 ? true : false;
+    let teamNames = this.props.drawsState.teamNames;
     return (
       <div className="fluid-width">
         <div className="row">
@@ -1469,6 +1492,17 @@ class CompetitionDraws extends Component {
             }
 
           </Select>
+        </Modal>
+        <Modal
+          title="Team Names"
+          visible={this.state.publishModalVisible}
+          onOk={() => this.handlePublishModal("ok")}
+          onCancel={() => this.handlePublishModal("cancel")}>
+          <div>
+            <div>{AppConstants.publishModalInfo}</div>
+            <div>{teamNames}</div>
+            <div>{AppConstants.publishModalConfirmationMsg}</div>
+          </div>
         </Modal>
       </div>
     );
