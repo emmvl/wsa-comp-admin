@@ -13,9 +13,13 @@ import AppConstants from '../../../../themes/appConstants';
 const mapAddressInfo = (addressComponents) => {
   if (addressComponents.length > 4) {
 
+    let streetNumber;
     let address;
     let suburb;
     for (let i = 0; i < addressComponents.length; i++) {
+      if (addressComponents[i].types.includes('street_number')) {
+        streetNumber = addressComponents[i].short_name;
+      }
       if (addressComponents[i].types.includes('route')) {
         address = addressComponents[i].short_name;
       }
@@ -24,7 +28,7 @@ const mapAddressInfo = (addressComponents) => {
       }
     }
     return {
-      addressOne: address,
+      addressOne: streetNumber + ' ' + address,
       suburb: suburb,
       state: addressComponents[addressComponents.length - 3].short_name,
       postcode: addressComponents[addressComponents.length - 1].short_name,
