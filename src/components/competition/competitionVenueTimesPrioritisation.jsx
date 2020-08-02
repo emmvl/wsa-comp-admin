@@ -1437,7 +1437,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                             } */}
 
                         </Content>
-                        <Footer>{!this.state.isQuickCompetition ? this.footerView() : this.qcWarningView()}</Footer>
+                        <Footer>{!this.state.isQuickCompetition ? this.footerView() : null}</Footer>
                     </Form>
                 </Layout>
             </div>
