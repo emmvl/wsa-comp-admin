@@ -79,7 +79,7 @@ const AppUniqueId = {
     newCompetitionButton: "new_competition_button",
     replicateCompetitionButton: "replic_competition_button",
     ownedCompetition_column_headers_table: "owned_competition_headers",
-    ownedCompetition_Table: "owned_compet_content_table",
+    owned_compet_content_table: "owned_compet_content_table",
     defaultComp_logo_checkbox: "default_logo_chkbox",
     quickCom_Button: "quick_competition_button",
 
@@ -100,8 +100,8 @@ const AppUniqueId = {
     comp_format2: "comp_format2",
     comp_format3: "comp_format3",
     comp_format4: "comp_format4",
-    comp_start_date: "comp_start_date",
-    comp_end_date: "comp_end_date",
+    comp_start_date: "compstartDate",
+    comp_end_date: "compendDate",
     time_rounds_days: "time_rounds_days",
     time_rounds_hrs: "time_rounds_hrs",
     time_rounds_mins: "time_rounds_mins",
@@ -187,10 +187,10 @@ const AppUniqueId = {
     finals_extratime_duration: "finals_extratime_duration",
     finals_extratime_mainbreak: "finals_extratime_mainbreak",
     finals_extratime_break: "finals_extratime_break",
-    extratime_ifDraw_radiobtn: "extratime_ifDraw_radiobtn"
+    extratime_ifDraw_radiobtn: "extratime_ifDraw_radiobtn",
 
-
-
+    qckcomp_genFixtures_btn: "qckcomp_genFixtures_btn",
+    qckcomp_addTeams_btn: "qckcomp_addTeams_btn",
 
 };
 

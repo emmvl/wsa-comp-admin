@@ -1376,7 +1376,7 @@ class CompetitionDraws extends Component {
     let activeDrawsRoundsData = this.props.drawsState.activeDrawsRoundsData;
     let isPublish = this.state.competitionStatus == 1 ? true : false
     return (
-      <div className="fluid-width">
+      <div className="fluid-width paddingBottom56px">
         <div className="row">
           <div className="col-sm-3">
             <div className="reg-add-save-button"></div>
@@ -1421,7 +1421,7 @@ class CompetitionDraws extends Component {
                   className="open-reg-button"
                   type="primary"
                   htmlType="submit"
-                  style={{ height: (isPublish || publishStatus == 1) && "100%", borderRadius: (isPublish || publishStatus == 1) && 10 }}
+                  style={{ height: (isPublish || publishStatus == 1) && "100%", borderRadius: (isPublish || publishStatus == 1) && 6 }}
                   onClick={() =>
                     isTeamNotInDraws == 1
                       ? this.openModel(this.props)

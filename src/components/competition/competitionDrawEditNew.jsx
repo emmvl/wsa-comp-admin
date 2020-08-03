@@ -483,8 +483,6 @@ class CompetitionDrawEdit extends Component {
                                             </div>
                                         </div>
                                         <div className="sr-no fixture-huge-sr">
-
-
                                         </div>
 
                                         {courtData.draws.map((slotObject, slotIndex) => {
@@ -556,7 +554,7 @@ class CompetitionDrawEdit extends Component {
                                                                     ':1:' + courtData.roundId + ":" + slotObject.competitionFormatRefId
                                                                 }
                                                                 content={1}
-                                                                swappable={true}
+                                                                swappable={disabledStatus == false ? true : false}
                                                                 onSwap={(source, target) =>
                                                                     this.onSwap(source, target, courtData.roundId, courtData.draws)
                                                                 }
@@ -602,7 +600,7 @@ class CompetitionDrawEdit extends Component {
                                 title={AppConstants.statusPublishHover}
                             >
                                 <Button
-                                    style={{ height: isPublish && "100%", borderRadius: isPublish && 10, width: isPublish && "inherit" }}
+                                    style={{ height: isPublish && "100%", borderRadius: isPublish && 6, width: isPublish && "inherit" }}
                                     disabled={isPublish} onClick={() => isPublish == false && this.reGenerateDraw()} className="publish-button" type="primary">{AppConstants.save}</Button>
                             </Tooltip>
                         </div>

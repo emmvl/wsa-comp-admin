@@ -261,6 +261,7 @@
 .quick-comp-btn-view {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
 }
 .comp-dashboard-table-tag {
   font-family: inter-semi-bold;
@@ -288,11 +289,13 @@
   border-radius: 12px;
 }
 
-.ant-btn-primary {
+
+
+/* .ant-btn-primary {
   color: var(--app-white) !important;
   background-color: var(--app-color) !important;
   border-color: var(--app-color) !important;
-}
+} */
 .cancelBtnWidth{
   width:92.5px
 }

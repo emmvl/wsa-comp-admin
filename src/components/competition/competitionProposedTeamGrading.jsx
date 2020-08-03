@@ -595,7 +595,7 @@ class CompetitionProposedTeamGrading extends Component {
                                 <Select
                                     name={"yearRefId"}
                                     className="year-select reg-filter-select-year ml-2"
-                                    // style={{ width: 90 }}
+                                    style={{ width: 90 }}
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
@@ -772,46 +772,46 @@ class CompetitionProposedTeamGrading extends Component {
     footerView = () => {
         let isPublished = this.state.competitionStatus == 1 ? true : false
         return (
-            <div className="fluid-width" >
-                <div className="comp-player-grades-footer-view">
-                    <div className="row" >
-                        <div className="col-sm" >
-                            <div style={{ display: 'flex', justifyContent: "flex-end" }}>
-                                <Button className="save-draft-text cancelBtnWidth" type="cancel-button" style={{ marginRight: '20px' }}
-                                    onClick={() => this.cancelCall()}
-                                >{AppConstants.cancel}
-                                </Button>
-                                {this.state.divisionId != null &&
-                                    <div>
-
-                                        <Button className="publish-button save-draft-text"
-                                            disabled={isPublished}
-                                            onClick={() => this.submitApiCall("save")}
-                                            type="primary">{AppConstants.save}
-                                        </Button>
-                                        <Tooltip
-                                            style={{ height: '100%' }}
-                                            onMouseEnter={() =>
-                                                this.setState({
-                                                    tooltipVisibleDelete: isPublished ? true : false,
-                                                })
-                                            }
-                                            onMouseLeave={() =>
-                                                this.setState({ tooltipVisibleDelete: false })
-                                            }
-                                            visible={this.state.tooltipVisibleDelete}
-                                            title={AppConstants.statusPublishHover}
-                                        >
-                                            <Button className="open-reg-button"
-                                                disabled={isPublished}
-                                                style={{ height: isPublished && "100%", borderRadius: isPublished && 10 }}
-                                                onClick={() => this.submitApiCall("submit")}
-                                                type="primary">{AppConstants.submit}
-                                            </Button>
-                                        </Tooltip>
-                                    </div>}
-                            </div>
+            <div className="fluid-width paddingBottom56px" >
+                <div className="row" >
+                    <div className="col-sm-3" >
+                        <div className="reg-add-save-button">
+                            <Button className="cancelBtnWidth" type="cancel-button"
+                                onClick={() => this.cancelCall()}
+                            >{AppConstants.cancel}
+                            </Button>
                         </div>
+                    </div>
+                    <div className="col-sm" >
+                        {this.state.divisionId != null &&
+                            <div className="comp-buttons-view">
+                                <Button className="publish-button save-draft-text"
+                                    disabled={isPublished}
+                                    onClick={() => this.submitApiCall("save")}
+                                    type="primary">{AppConstants.save}
+                                </Button>
+                                <Tooltip
+                                    style={{ height: '100%' }}
+                                    onMouseEnter={() =>
+                                        this.setState({
+                                            tooltipVisibleDelete: isPublished ? true : false,
+                                        })
+                                    }
+                                    onMouseLeave={() =>
+                                        this.setState({ tooltipVisibleDelete: false })
+                                    }
+                                    visible={this.state.tooltipVisibleDelete}
+                                    title={AppConstants.statusPublishHover}
+                                >
+                                    <Button className="publish-button margin-top-disabled-button"
+                                        disabled={isPublished}
+                                        style={{ height: isPublished && "100%", borderRadius: isPublished && 6 }}
+                                        onClick={() => this.submitApiCall("submit")}
+                                        type="primary">{AppConstants.submit}
+                                    </Button>
+                                </Tooltip>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

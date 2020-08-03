@@ -59,14 +59,11 @@ class CompetitionFinals extends Component {
     }
 
     componentDidMount() {
-        console.log("Component Did mount");
-
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
-
         if (storedCompetitionId && yearId && propsData && compData) {
             this.setState({
                 yearRefId: JSON.parse(yearId),
@@ -443,8 +440,7 @@ class CompetitionFinals extends Component {
                     </Form.Item>
                 </div>
                 {(finalsList || []).map((data, index) => (
-                    <div key={data.competitionFormatTemplateId}>
-
+                    <div key={data.competitionFormatTemplateId} className="inside-container-view">
                         <InputWithHead heading={AppConstants.divisions} />
                         {data.divisions != null ?
                             <div>
@@ -724,7 +720,7 @@ class CompetitionFinals extends Component {
                             <div className="col-sm" >
                                 <div className="reg-add-save-button">
                                     <NavLink to="/competitionFormat">
-                                        <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
+                                        <Button disabled={isPublished} className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
                                     </NavLink>
                                 </div>
                                 {/* <Button type="cancel-button">Cancel</Button> */}
@@ -745,7 +741,7 @@ class CompetitionFinals extends Component {
                                         visible={this.state.tooltipVisibleDelete}
                                         title={AppConstants.statusPublishHover}
                                     >
-                                        <Button disabled={isPublished} style={{ height: isPublished && "100%", borderRadius: isPublished && 10 }} className="open-reg-button" type="primary" htmlType="submit" >Create Draft Draw</Button>
+                                        <Button disabled={isPublished} style={{ height: isPublished && "100%", borderRadius: isPublished && 6 }} className="open-reg-button" type="primary" htmlType="submit" >Create Draft Draw</Button>
                                     </Tooltip>
                                 </div>
                             </div>

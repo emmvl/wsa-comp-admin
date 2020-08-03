@@ -1482,7 +1482,7 @@ const AppConstants = {
   log_out: "log_out",
   acct_settings_label: "acct_settings_label",
   help_support_label: "help&support_label",
-  action_box_table: "action_box_table",
+  home_table_view: "home_table_view",
   //************************* */
 
   editRegrade: "Edit/Regrade",

@@ -1302,7 +1302,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     <div className="col-sm">
                         <div className="reg-add-save-button">
                             <NavLink to="/competitionCourtAndTimesAssign">
-                                <Button className="cancelBtnWidth" type="cancel-button"  >{AppConstants.back}</Button>
+                                <Button disabled={isPublished} className="cancelBtnWidth" type="cancel-button"  >{AppConstants.back}</Button>
                             </NavLink>
                         </div>
                     </div>
@@ -1321,13 +1321,13 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                 visible={this.state.tooltipVisibleDelete}
                                 title={AppConstants.statusPublishHover}
                             >
-                                <Button style={{ height: isPublished && "100%", borderRadius: isPublished && 10, width: isPublished && "inherit" }} className="publish-button save-draft-text"
+                                <Button style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }} className="publish-button save-draft-text"
                                     disabled={isPublished} htmlType='submit' type="primary">
                                     {AppConstants.save}
                                 </Button>
                             </Tooltip>
                             <NavLink to="/competitionFormat">
-                                <Button className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
+                                <Button disabled={isPublished} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
                             </NavLink>
                         </div>
                     </div>

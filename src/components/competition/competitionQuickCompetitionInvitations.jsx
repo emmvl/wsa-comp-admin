@@ -21,7 +21,8 @@ class QuickCompetitionInvitations extends Component {
             competition: "2019winter",
             importModalVisible: false,
             yearRefId: 1,
-            competitionId: null
+            competitionId: null,
+            importPlayer: 0
 
         }
     }
@@ -29,11 +30,13 @@ class QuickCompetitionInvitations extends Component {
     componentDidMount() {
         let competitionId = this.props.location.state ? this.props.location.state.competitionUniqueKey : null
         let year = this.props.location.state && this.props.location.state.year
-        if (competitionId) {
+        let importPlayerValue = this.props.location.state && this.props.location.state.importPlayer
+        if (competitionId && importPlayerValue) {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, year, "own_competition")
             this.setState({
                 competitionId: competitionId,
-                yearRefId: year
+                yearRefId: year,
+                importPlayer: importPlayerValue
 
             })
         } else {
@@ -116,7 +119,7 @@ class QuickCompetitionInvitations extends Component {
                         (item, index) => {
                             return (
                                 <div key={"playerArray" + index}>
-                                    <Radio disabled={item.id == 1 && importPlayer == 1 ? true : false} value={item.id}>{item.value}</Radio>
+                                    <Radio disabled={item.id == 1 && this.state.importPlayer == 1 ? true : false} value={item.id}>{item.value}</Radio>
                                     {this.mergeExistingCompetition(
                                         item,
                                         SelectedTeamPlayer
@@ -151,7 +154,7 @@ class QuickCompetitionInvitations extends Component {
                     <div className="row" >
                         <div className="col-sm-3" >
                             <div className="reg-add-save-button">
-                                <Button type="cancel-button" htmlType="submit" onClick={() => this.onBackButton()} >{AppConstants.back}</Button>
+                                <Button className="cancelBtnWidth" type="cancel-button" htmlType="submit" onClick={() => this.onBackButton()} >{AppConstants.back}</Button>
                             </div>
                         </div>
                         <div className="col-sm-9" >

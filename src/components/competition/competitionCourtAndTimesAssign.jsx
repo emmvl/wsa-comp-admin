@@ -1306,7 +1306,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                     <div className="col-sm">
                         <div className="reg-add-save-button">
                             <NavLink to="/competitionPartTeamGradeCalculate">
-                                <Button className="cancelBtnWidth" type="cancel-button"  >{AppConstants.back}</Button>
+                                <Button disabled={isPublished} className="cancelBtnWidth" type="cancel-button"  >{AppConstants.back}</Button>
                             </NavLink>
                         </div>
                     </div>
@@ -1326,10 +1326,10 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 visible={this.state.tooltipVisibleDelete}
                                 title={AppConstants.statusPublishHover}
                             >
-                                <Button id={AppUniqueId.timeSlotSaveBtn} disabled={isPublished} style={{ height: isPublished && "100%", borderRadius: isPublished && 10, width: isPublished && "inherit" }} className="publish-button save-draft-text" htmlType="submit" type="primary">{AppConstants.save}</Button>
+                                <Button id={AppUniqueId.timeSlotSaveBtn} disabled={isPublished} style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }} className="publish-button save-draft-text" htmlType="submit" type="primary">{AppConstants.save}</Button>
                             </Tooltip>
                             <NavLink to="/competitionVenueTimesPrioritisation">
-                                <Button className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
+                                <Button disabled={isPublished} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
                             </NavLink>
                         </div>
                     </div>

@@ -454,7 +454,7 @@ class CompetitionDashboard extends Component {
     ownedView = () => {
         return (
             <div className="comp-dash-table-view " style={{ paddingBottom: 100 }}>
-                <div id={AppUniqueId.ownedCompetition_Table} className="table-responsive home-dash-table-view ">
+                <div className="table-responsive home-dash-table-view ">
                     <Table
                         loading={this.props.competitionDashboardState.onLoad === true && true}
                         className="home-dashboard-table"
@@ -465,6 +465,7 @@ class CompetitionDashboard extends Component {
                             onClick: () =>
                                 this.compScreenDeciderCheck(record)
                         })}
+                        key={AppUniqueId.owned_compet_content_table}
                     />
                 </div>
             </div >
