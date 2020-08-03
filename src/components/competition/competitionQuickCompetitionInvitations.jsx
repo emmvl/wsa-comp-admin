@@ -8,7 +8,7 @@ import history from "../../util/history";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Loader from "../../customComponents/loader";
-import { updateSelectedTeamPlayer, getYearAndQuickCompetitionAction } from "../../store/actions/competitionModuleAction/competitionQuickAction"
+import { updateSelectedTeamPlayer, getYearAndQuickCompetitionAction } from "../../store/actions/competitionModuleAction/competitionQuickCompetitionAction"
 import ImportTeamPlayerModal from "../../customComponents/importTeamPlayerModal"
 import { getYearAndCompetitionOwnAction } from '../../store/actions/appAction'
 const { Option } = Select;
