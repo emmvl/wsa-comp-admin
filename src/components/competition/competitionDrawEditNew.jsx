@@ -106,8 +106,9 @@ class CompetitionDrawEdit extends Component {
                 this.setState({drawGenerateModalVisible: true})
               }
               else{
-                message.config({ duration: 0.9, maxCount: 1 });
-                message.info(AppConstants.roundsNotAvailable);
+                this.callGenerateDraw();
+                // message.config({ duration: 0.9, maxCount: 1 });
+                // message.info(AppConstants.roundsNotAvailable);
               }
           }
     }

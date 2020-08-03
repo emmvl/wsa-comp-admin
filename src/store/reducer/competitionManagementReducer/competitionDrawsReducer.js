@@ -29,7 +29,9 @@ const initialState = {
   drawOrganisations: [],
   // colorsArray: [],
   activeDrawsRoundsData: [],
-  onActRndLoad: false
+  onActRndLoad: false,
+  teamNames: null,
+  liveScoreCompetiton: null
 
 };
 var gradeColorArray = [];
@@ -1119,13 +1121,16 @@ function CompetitionDraws(state = initialState, action) {
       return { ...state, onLoad: true, updateLoad: true, changeStatus: true }
 
     case ApiConstants.API_DRAW_PUBLISH_SUCCESS:
-      state.publishStatus = action.result.statusRefId
-      state.isTeamInDraw = null
-      state.updateLoad = false
+      state.publishStatus = action.result.statusRefId;
+      state.isTeamInDraw = null;
+      state.updateLoad = false;
+      state.teamNames = action.result.teamNames;
+      state.liveScoreCompetiton = action.result.liveScoreCompetiton
       return {
         ...state,
         onLoad: false,
         changeStatus: false,
+        teamNames: action.result.teamNames,
         error: null,
       }
 
