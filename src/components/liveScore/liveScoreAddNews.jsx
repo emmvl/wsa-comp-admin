@@ -548,6 +548,7 @@ class LiveScoreAddNews extends Component {
                                 }, 2000);
                             }}
                         />
+                        <span className="video_Message">{AppConstants.videoSizeMessage}</span>
                     </div>
                 </div>
 

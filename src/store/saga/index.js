@@ -195,7 +195,7 @@ import * as umpireRoasterSaga from "../saga/umpireSaga/umpireRoasterSaga"
 import * as umpireSaga from "../saga/umpireSaga/umpireSaga"
 import * as assignUmpireSaga from "../saga/umpireSaga/assignUmpireSaga";
 import * as shopProductSaga from "../saga/shopSaga/productSaga";
-import * as competitionQuickSaga from "../saga/competitionManagementSaga/competitionQuickSaga";
+import * as competitionQuickSaga from "../saga/competitionManagementSaga/competitionQuickCompetitionSaga";
 import * as liveScoreMatchSheetSaga from './liveScoreSaga/liveScoreMatchSheetSaga';
 import * as shopSettingSaga from './shopSaga/shopSettingSaga';
 

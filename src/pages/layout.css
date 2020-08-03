@@ -11,6 +11,10 @@
   color: var(--app-color);
   border-bottom: 2px solid var(--app-color);
 }
+.innerSelect-value
+.ant-select-selection-selected-value{
+  max-width: 155px !important;
+}
 
 .ant-menu {
   font-size: 14px;
