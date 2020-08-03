@@ -14,7 +14,7 @@ import {
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 import history from "../../util/history";
-import { getMatchTypesAction, getYearAndCompetitionOwnAction, clearYearCompetitionAction, getVenuesTypeAction } from "../../store/actions/appAction";
+import { getMatchTypesAction, getYearAndCompetitionOwnAction, clearYearCompetitionAction, getVenuesTypeAction, searchVenueList } from "../../store/actions/appAction";
 import Loader from '../../customComponents/loader';
 import { generateDrawAction } from "../../store/actions/competitionModuleAction/competitionModuleAction";
 import ValidationConstants from "../../themes/validationConstant";
@@ -417,8 +417,9 @@ class CompetitionFinals extends Component {
         let disabledStatus = this.state.competitionStatus == 1 ? true : false
 		let detailsData = this.props.competitionFeesState												 
         return (
-            <div style={{backgroundColor:'#ffffff' }} className="inside-container-view">
-				 <div>
+           <div>
+                {(finalsList != null && finalsList.length > 0) &&	
+				<div className="compitition-finals-venue">				
                     <InputWithHead required={"required-field pb-0 "} heading={AppConstants.venue} />
                     <Form.Item >
                         {getFieldDecorator('selectedVenues', { rules: [{ required: true, message: ValidationConstants.pleaseSelectvenue }] })(
@@ -446,270 +447,277 @@ class CompetitionFinals extends Component {
                         )}
                     </Form.Item>
                 </div>
-                {(finalsList || []).map((data, index) => (
-                    <div key={data.competitionFormatTemplateId} className="inside-container-view">
-                        <InputWithHead heading={AppConstants.divisions} />
-                        {data.divisions != null ?
-                            <div>
-                                {(data.divisions || []).map((div, divIndex) => (
-                                    <span>
-                                        <span>{div.divisionName}</span>
-                                        <span>{data.divisions.length != (divIndex + 1) ? ', ' : ''}</span>
-                                    </span>
-                                ))} </div>
-                            : <span>{AppConstants.allDivisions}</span>
-                        }
-                        <div className="row">
-                            <div id={AppUniqueId.final_StartDate} className="col-sm-6">
-                                <InputWithHead heading={AppConstants.finalsStartDate} required={"required-field"} />
-                                <Form.Item >
-                                    {getFieldDecorator(`finalsStartDate${index}`,
-                                        { rules: [{ required: true, message: ValidationConstants.finalsStartDateRequired }] })(
-                                            <DatePicker
-                                                disabled={disabledStatus}
-                                                size="large"
-                                                placeholder={"dd-mm-yyyy"}
-                                                style={{ width: "100%" }}
-                                                onChange={(e) => this.onChangeSetValue(e, 'finalsStartDate', index)}
-                                                name={"finalsStartDate"}
-                                                format={"DD-MM-YYYY"}
-                                                showTime={false}
-
-                                            />
-                                        )}
-                                </Form.Item>
-                            </div>
-                        </div>
-                        <InputWithHead heading={AppConstants.finalFixtures} required={"required-field"} />
-                        <Form.Item >
-                            {getFieldDecorator(`finalsFixtureTemplateRefId${index}`, {
-                                rules: [{ required: true, message: ValidationConstants.finalFixtureTemplateRequired }]
-                            })(
-                                <Radio.Group
-                                    disabled={disabledStatus}
-                                    className="reg-competition-radio"
-                                    id={AppUniqueId.draw_Publish_btn}
-                                    onChange={(e) => this.onChangeSetValue(e.target.value, 'finalsFixtureTemplateRefId', index)}
-                                    setFieldsValue={data.finalsFixtureTemplateRefId} >
-                                    {(finalFixtureTemplateData || []).map((fix, fixIndex) => (
-                                        <Radio key={fix.id} value={fix.id}>{fix.description}</Radio>
-                                    ))}
-                                </Radio.Group>
-                            )}
-                        </Form.Item>
-                        <InputWithHead heading={AppConstants.matchType} required={"required-field"} />
-                        <Form.Item >
-                            {getFieldDecorator(`finalsMatchTypeRefId${index}`, {
-                                rules: [{ required: true, message: ValidationConstants.matchTypeRequired }]
-                            })(
-                                <Select
-                                    disabled={disabledStatus}
-                                    id={AppUniqueId.final_Match_Type_dpdn}
-                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                    onChange={(matchType) => this.onChangeSetValue(matchType, 'finalsMatchTypeRefId', index)}
-                                    setFieldsValue={data.finalsMatchTypeRefId}>
-                                    {(appState.matchTypes || []).map((item, index) => (
-                                        <Option key={item.id} value={item.id}>{item.description}</Option>
-                                    ))}
-                                </Select>
-                            )}
-                        </Form.Item>
-                        <div className="fluid-width" >
-                            <div className="row" >
-                                <div id={AppUniqueId.finals_matchduration} className="col-sm-3" >
+				 }
+                <div className="compitition-finals-division">
+                    {(finalsList || []).map((data, index) => (
+                    <div key={data.competitionFormatTemplateId} className="inside-container-view" style={{paddingTop:5}}>
+                        <div>
+                            <InputWithHead heading={AppConstants.divisions} style={{fontSize:18}} />
+                            {data.divisions != null ?
+                                <div>
+                                    {(data.divisions || []).map((div, divIndex) => (
+                                        <span>
+                                            <span>{div.divisionName}</span>
+                                            <span>{data.divisions.length != (divIndex + 1) ? ', ' : ''}</span>
+                                        </span>
+                                    ))} </div>
+                                : <span>{AppConstants.allDivisions}</span>
+                            }
+                            <div className="row">
+                                <div id={AppUniqueId.final_StartDate} className="col-sm-6">
+                                    <InputWithHead heading={AppConstants.finalsStartDate} required={"required-field"} />
                                     <Form.Item >
-                                        {getFieldDecorator(`matchDuration${index}`, {
-                                            rules: [{
-                                                required: true, pattern: new RegExp("^[1-9][0-9]*$"),
-                                                message: ValidationConstants.matchDuration
-                                            }]
-                                        })(
-                                            <InputWithHead
-                                                disabled={disabledStatus}
-                                                heading={AppConstants.matchDuration} required={"required-field"}
-                                                placeholder={AppConstants.mins} setFieldsValue={data.matchDuration}
-                                                onChange={(e) => this.onChangeSetValue(e.target.value, 'matchDuration', index)} ></InputWithHead>
-                                        )}
+                                        {getFieldDecorator(`finalsStartDate${index}`,
+                                            { rules: [{ required: true, message: ValidationConstants.finalsStartDateRequired }] })(
+                                                <DatePicker
+                                                    disabled={disabledStatus}
+                                                    size="large"
+                                                    placeholder={"dd-mm-yyyy"}
+                                                    style={{ width: "100%" }}
+                                                    onChange={(e) => this.onChangeSetValue(e, 'finalsStartDate', index)}
+                                                    name={"finalsStartDate"}
+                                                    format={"DD-MM-YYYY"}
+                                                    showTime={false}
+
+                                                />
+                                            )}
                                     </Form.Item>
                                 </div>
-                                {(data.finalsMatchTypeRefId == 2 || data.finalsMatchTypeRefId == 3) ?
-                                    <div id={AppUniqueId.finals_mainbreak} className="col-sm-3" >
-                                        <Form.Item >
-                                            {getFieldDecorator(`mainBreak${index}`, {
-                                                rules: [{ required: true, message: ValidationConstants.mainBreak }]
-                                            })(
-                                                <InputWithHead
-                                                    disabled={disabledStatus}
-                                                    heading={AppConstants.mainBreak} required={"required-field"}
-                                                    placeholder={AppConstants.mins} setFieldsValue={data.mainBreak}
-                                                    onChange={(e) => this.onChangeSetValue(e.target.value, 'mainBreak', index)}></InputWithHead>
-                                            )}
-                                        </Form.Item>
-                                    </div> : null
-                                }
-                                {data.finalsMatchTypeRefId == 3 ?
-                                    <div id={AppUniqueId.finals_qtrbreak} className="col-sm-3" >
-                                        <Form.Item >
-                                            {getFieldDecorator(`qtrBreak${index}`, {
-                                                rules: [{ required: true, message: ValidationConstants.qtrBreak }]
-                                            })(
-                                                <InputWithHead
-                                                    disabled={disabledStatus}
-                                                    heading={AppConstants.qtrBreak} required={"required-field"}
-                                                    placeholder={AppConstants.mins} setFieldsValue={data.qtrBreak}
-                                                    onChange={(e) => this.onChangeSetValue(e.target.value, 'qtrBreak', index)}></InputWithHead>
-                                            )}
-                                        </Form.Item>
-                                    </div>
-                                    : null}
-                                {data.timeslotGenerationRefId != 2 ?
-                                    <div className="col-sm-3">
-                                        <Form.Item >
-                                            {getFieldDecorator(`timeBetweenGames${index}`, {
-                                                rules: [{ required: true, message: ValidationConstants.timeBetweenGames }]
-                                            })(
-                                                <InputWithHead
-                                                    disabled={disabledStatus}
-                                                    heading={AppConstants.betweenGames} required={"required-field"}
-                                                    placeholder={AppConstants.mins} setFieldsValue={data.timeBetweenGames}
-                                                    onChange={(e) => this.onChangeSetValue(e.target.value, 'timeBetweenGames', index)}></InputWithHead>
-                                            )}
-                                        </Form.Item>
-                                    </div>
-                                    : null}
                             </div>
-                        </div>
-
-                        <span className="applicable-to-heading">{AppConstants.extraTimeIfDraw}</span>
-                        <Form.Item >
-                            {getFieldDecorator(`applyToRefId${index}`, {
-                                rules: [{ required: true, message: ValidationConstants.applyToRequired }]
-                            })(
-                                <Radio.Group
-                                    disabled={disabledStatus}
-                                    id={AppUniqueId.applyToRefId_radiobtn}
-                                    className="reg-competition-radio" onChange={(e) => this.onChangeSetValue(e.target.value, 'applyToRefId', index)}
-                                    setFieldsValue={data.applyToRefId} >
-                                    {(applyToData || []).map((app, appIndex) => (
-                                        <Radio key={app.id} value={app.id}>{app.description}</Radio>
-                                    ))}
-                                </Radio.Group>
-                            )}
-                        </Form.Item>
-
-                        <InputWithHead heading={AppConstants.extraTimeMatchType} required={"required-field"} />
-                        <Form.Item >
-                            {getFieldDecorator(`extraTimeMatchTypeRefId${index}`, {
-                                rules: [{ required: true, message: ValidationConstants.extraTimeMatchTypeRequired }]
-                            })(
-                                <Select
-                                    disabled={disabledStatus}
-                                    id={AppUniqueId.finals_extratimetype_dpdn}
-                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                    onChange={(matchType) => this.onChangeSetValue(matchType, 'extraTimeMatchTypeRefId', index)}
-                                    setFieldsValue={data.extraTimeMatchTypeRefId}>
-                                    {(appState.matchTypes || []).map((item, index) => (
-                                        <Option key={item.id} value={item.id}>{item.description}</Option>
-                                    ))}
-                                </Select>
-                            )}
-                        </Form.Item>
-                        <div className="fluid-width" >
-                            <div className="row" >
-                                <div id={AppUniqueId.finals_extratime_duration} className="col-sm-3" >
-                                    <Form.Item >
-                                        {getFieldDecorator(`extraTimeDuration${index}`, {
-                                            rules: [{
-                                                required: true, pattern: new RegExp("^[1-9][0-9]*$"),
-                                                message: ValidationConstants.extraTimeDurationRequired
-                                            }]
-                                        })(
-                                            <InputWithHead
-                                                disabled={disabledStatus}
-                                                heading={AppConstants.extraTimeDuration} required={"required-field"}
-                                                placeholder={AppConstants.mins}
-                                                setFieldsValue={data.extraTimeDuration}
-                                                onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeDuration', index)} ></InputWithHead>
-                                        )}
-                                    </Form.Item>
-                                </div>
-                                {(data.extraTimeMatchTypeRefId == 2 || data.extraTimeMatchTypeRefId == 3) ?
-                                    <div id={AppUniqueId.finals_extratime_mainbreak} className="col-sm-3" >
-                                        <Form.Item >
-                                            {getFieldDecorator(`extraTimeMainBreak${index}`, {
-                                                rules: [{ required: true, message: ValidationConstants.extraTimeMainBreakRequired }]
-                                            })(
-                                                <InputWithHead
-                                                    disabled={disabledStatus}
-                                                    heading={AppConstants.extraTimeMainBreak} required={"required-field"}
-                                                    placeholder={AppConstants.mins}
-                                                    setFieldsValue={data.extraTimeMainBreak}
-                                                    onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeMainBreak', index)} ></InputWithHead>
-                                            )}
-                                        </Form.Item>
-                                    </div> : null
-                                }
-                                {data.extraTimeMatchTypeRefId == 3 ?
-                                    <div id={AppUniqueId.finals_extratime_break} className="col-sm-3" >
-                                        <Form.Item >
-                                            {getFieldDecorator(`extraTimeBreak${index}`, {
-                                                rules: [{ required: true, message: ValidationConstants.extraTimeBreakRequired }]
-                                            })(
-                                                <InputWithHead
-                                                    disabled={disabledStatus}
-                                                    heading={AppConstants.extraTimeBreak} placeholder={AppConstants.mins}
-                                                    setFieldsValue={data.extraTimeBreak} required={"required-field"}
-                                                    onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeBreak', index)} ></InputWithHead>
-                                            )}
-                                        </Form.Item>
-                                    </div> : null
-                                }
-                                {data.timeslotGenerationRefId != 2 ?
-                                    <div className="col-sm-3" >
-                                        <Form.Item >
-                                            {getFieldDecorator(`beforeExtraTime${index}`, {
-                                                rules: [{ required: true, message: ValidationConstants.beforeExtraTimeRequired }]
-                                            })(
-                                                <InputWithHead
-                                                    disabled={disabledStatus}
-                                                    heading={AppConstants.beaforeExtraTime} placeholder={AppConstants.mins}
-                                                    setFieldsValue={data.beforeExtraTime} required={"required-field"}
-                                                    onChange={(e) => this.onChangeSetValue(e.target.value, 'beforeExtraTime', index)} ></InputWithHead>
-                                            )}
-                                        </Form.Item>
-                                    </div> : null
-                                }
-
-                            </div>
-                        </div>
-                        <div className="mt-4">
-                            <InputWithHead heading={AppConstants.extraTimeIfDraw2} required={"required-field"} />
+                            <InputWithHead heading={AppConstants.finalFixtures} required={"required-field"} />
                             <Form.Item >
-                                {getFieldDecorator(`extraTimeDrawRefId${index}`, {
-                                    rules: [{ required: true, message: ValidationConstants.extraTimeDrawRequired }]
+                                {getFieldDecorator(`finalsFixtureTemplateRefId${index}`, {
+                                    rules: [{ required: true, message: ValidationConstants.finalFixtureTemplateRequired }]
                                 })(
                                     <Radio.Group
                                         disabled={disabledStatus}
-                                        id={AppUniqueId.extratime_ifDraw_radiobtn}
-                                        className="reg-competition-radio" onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeDrawRefId', index)}
-                                        setFieldsValue={data.extraTimeDrawRefId} >
-                                        {(extraTimeDrawData || []).map((ex, exIndex) => (
-                                            <Radio key={ex.id} value={ex.id}>{ex.description}</Radio>
+                                        className="reg-competition-radio"
+                                        id={AppUniqueId.draw_Publish_btn}
+                                        onChange={(e) => this.onChangeSetValue(e.target.value, 'finalsFixtureTemplateRefId', index)}
+                                        setFieldsValue={data.finalsFixtureTemplateRefId} >
+                                        {(finalFixtureTemplateData || []).map((fix, fixIndex) => (
+                                            <Radio key={fix.id} value={fix.id}>{fix.description}</Radio>
                                         ))}
                                     </Radio.Group>
                                 )}
                             </Form.Item>
-                        </div>
-                        {/* <span className='input-heading-add-another'>+ {AppConstants.addAnotherFinalFormat}</span> */}
-                        {/* <Checkbox className="single-checkbox pt-2" defaultChecked={data.isDefault} onChange={(e) => this.onChangeSetValue(e.target.checked, 'isDefault',index)}>{AppConstants.setAsDefault}</Checkbox> */}
-                    </div>
-                ))}
+                            <InputWithHead heading={AppConstants.matchType} required={"required-field"} />
+                            <Form.Item >
+                                {getFieldDecorator(`finalsMatchTypeRefId${index}`, {
+                                    rules: [{ required: true, message: ValidationConstants.matchTypeRequired }]
+                                })(
+                                    <Select
+                                        disabled={disabledStatus}
+                                        id={AppUniqueId.final_Match_Type_dpdn}
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={(matchType) => this.onChangeSetValue(matchType, 'finalsMatchTypeRefId', index)}
+                                        setFieldsValue={data.finalsMatchTypeRefId}>
+                                        {(appState.matchTypes || []).map((item, index) => (
+                                            <Option key={item.id} value={item.id}>{item.description}</Option>
+                                        ))}
+                                    </Select>
+                                )}
+                            </Form.Item>
+                            <div className="fluid-width" >
+                                <div className="row" >
+                                    <div id={AppUniqueId.finals_matchduration} className="col-sm-3" >
+                                        <Form.Item >
+                                            {getFieldDecorator(`matchDuration${index}`, {
+                                                rules: [{
+                                                    required: true, pattern: new RegExp("^[1-9][0-9]*$"),
+                                                    message: ValidationConstants.matchDuration
+                                                }]
+                                            })(
+                                                <InputWithHead
+                                                    disabled={disabledStatus}
+                                                    heading={AppConstants.matchDuration} required={"required-field"}
+                                                    placeholder={AppConstants.mins} setFieldsValue={data.matchDuration}
+                                                    onChange={(e) => this.onChangeSetValue(e.target.value, 'matchDuration', index)} ></InputWithHead>
+                                            )}
+                                        </Form.Item>
+                                    </div>
+                                    {(data.finalsMatchTypeRefId == 2 || data.finalsMatchTypeRefId == 3) ?
+                                        <div id={AppUniqueId.finals_mainbreak} className="col-sm-3" >
+                                            <Form.Item >
+                                                {getFieldDecorator(`mainBreak${index}`, {
+                                                    rules: [{ required: true, message: ValidationConstants.mainBreak }]
+                                                })(
+                                                    <InputWithHead
+                                                        disabled={disabledStatus}
+                                                        heading={AppConstants.mainBreak} required={"required-field"}
+                                                        placeholder={AppConstants.mins} setFieldsValue={data.mainBreak}
+                                                        onChange={(e) => this.onChangeSetValue(e.target.value, 'mainBreak', index)}></InputWithHead>
+                                                )}
+                                            </Form.Item>
+                                        </div> : null
+                                    }
+                                    {data.finalsMatchTypeRefId == 3 ?
+                                        <div id={AppUniqueId.finals_qtrbreak} className="col-sm-3" >
+                                            <Form.Item >
+                                                {getFieldDecorator(`qtrBreak${index}`, {
+                                                    rules: [{ required: true, message: ValidationConstants.qtrBreak }]
+                                                })(
+                                                    <InputWithHead
+                                                        disabled={disabledStatus}
+                                                        heading={AppConstants.qtrBreak} required={"required-field"}
+                                                        placeholder={AppConstants.mins} setFieldsValue={data.qtrBreak}
+                                                        onChange={(e) => this.onChangeSetValue(e.target.value, 'qtrBreak', index)}></InputWithHead>
+                                                )}
+                                            </Form.Item>
+                                        </div>
+                                        : null}
+                                    {data.timeslotGenerationRefId != 2 ?
+                                        <div className="col-sm-3">
+                                            <Form.Item >
+                                                {getFieldDecorator(`timeBetweenGames${index}`, {
+                                                    rules: [{ required: true, message: ValidationConstants.timeBetweenGames }]
+                                                })(
+                                                    <InputWithHead
+                                                        disabled={disabledStatus}
+                                                        heading={AppConstants.betweenGames} required={"required-field"}
+                                                        placeholder={AppConstants.mins} setFieldsValue={data.timeBetweenGames}
+                                                        onChange={(e) => this.onChangeSetValue(e.target.value, 'timeBetweenGames', index)}></InputWithHead>
+                                                )}
+                                            </Form.Item>
+                                        </div>
+                                        : null}
+                                </div>
+                            </div>
 
-                {(finalsList == null || finalsList.length == 0) &&
-                    <div className="comp-warning-info">
-                        {AppConstants.finalsMessage}
+                            <span className="applicable-to-heading">{AppConstants.extraTimeIfDraw}</span>
+                            <Form.Item >
+                                {getFieldDecorator(`applyToRefId${index}`, {
+                                    rules: [{ required: true, message: ValidationConstants.applyToRequired }]
+                                })(
+                                    <Radio.Group
+                                        disabled={disabledStatus}
+                                        id={AppUniqueId.applyToRefId_radiobtn}
+                                        className="reg-competition-radio" onChange={(e) => this.onChangeSetValue(e.target.value, 'applyToRefId', index)}
+                                        setFieldsValue={data.applyToRefId} >
+                                        {(applyToData || []).map((app, appIndex) => (
+                                            <Radio key={app.id} value={app.id}>{app.description}</Radio>
+                                        ))}
+                                    </Radio.Group>
+                                )}
+                            </Form.Item>
+
+                            <InputWithHead heading={AppConstants.extraTimeMatchType} required={"required-field"} />
+                            <Form.Item >
+                                {getFieldDecorator(`extraTimeMatchTypeRefId${index}`, {
+                                    rules: [{ required: true, message: ValidationConstants.extraTimeMatchTypeRequired }]
+                                })(
+                                    <Select
+                                        disabled={disabledStatus}
+                                        id={AppUniqueId.finals_extratimetype_dpdn}
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={(matchType) => this.onChangeSetValue(matchType, 'extraTimeMatchTypeRefId', index)}
+                                        setFieldsValue={data.extraTimeMatchTypeRefId}>
+                                        {(appState.matchTypes || []).map((item, index) => (
+                                            <Option key={item.id} value={item.id}>{item.description}</Option>
+                                        ))}
+                                    </Select>
+                                )}
+                            </Form.Item>
+                            <div className="fluid-width" >
+                                <div className="row" >
+                                    <div id={AppUniqueId.finals_extratime_duration} className="col-sm-3" >
+                                        <Form.Item >
+                                            {getFieldDecorator(`extraTimeDuration${index}`, {
+                                                rules: [{
+                                                    required: true, pattern: new RegExp("^[1-9][0-9]*$"),
+                                                    message: ValidationConstants.extraTimeDurationRequired
+                                                }]
+                                            })(
+                                                <InputWithHead
+                                                    disabled={disabledStatus}
+                                                    heading={AppConstants.extraTimeDuration} required={"required-field"}
+                                                    placeholder={AppConstants.mins}
+                                                    setFieldsValue={data.extraTimeDuration}
+                                                    onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeDuration', index)} ></InputWithHead>
+                                            )}
+                                        </Form.Item>
+                                    </div>
+                                    {(data.extraTimeMatchTypeRefId == 2 || data.extraTimeMatchTypeRefId == 3) ?
+                                        <div id={AppUniqueId.finals_extratime_mainbreak} className="col-sm-3" >
+                                            <Form.Item >
+                                                {getFieldDecorator(`extraTimeMainBreak${index}`, {
+                                                    rules: [{ required: true, message: ValidationConstants.extraTimeMainBreakRequired }]
+                                                })(
+                                                    <InputWithHead
+                                                        disabled={disabledStatus}
+                                                        heading={AppConstants.extraTimeMainBreak} required={"required-field"}
+                                                        placeholder={AppConstants.mins}
+                                                        setFieldsValue={data.extraTimeMainBreak}
+                                                        onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeMainBreak', index)} ></InputWithHead>
+                                                )}
+                                            </Form.Item>
+                                        </div> : null
+                                    }
+                                    {data.extraTimeMatchTypeRefId == 3 ?
+                                        <div id={AppUniqueId.finals_extratime_break} className="col-sm-3" >
+                                            <Form.Item >
+                                                {getFieldDecorator(`extraTimeBreak${index}`, {
+                                                    rules: [{ required: true, message: ValidationConstants.extraTimeBreakRequired }]
+                                                })(
+                                                    <InputWithHead
+                                                        disabled={disabledStatus}
+                                                        heading={AppConstants.extraTimeBreak} placeholder={AppConstants.mins}
+                                                        setFieldsValue={data.extraTimeBreak} required={"required-field"}
+                                                        onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeBreak', index)} ></InputWithHead>
+                                                )}
+                                            </Form.Item>
+                                        </div> : null
+                                    }
+                                    {data.timeslotGenerationRefId != 2 ?
+                                        <div className="col-sm-3" >
+                                            <Form.Item >
+                                                {getFieldDecorator(`beforeExtraTime${index}`, {
+                                                    rules: [{ required: true, message: ValidationConstants.beforeExtraTimeRequired }]
+                                                })(
+                                                    <InputWithHead
+                                                        disabled={disabledStatus}
+                                                        heading={AppConstants.beaforeExtraTime} placeholder={AppConstants.mins}
+                                                        setFieldsValue={data.beforeExtraTime} required={"required-field"}
+                                                        onChange={(e) => this.onChangeSetValue(e.target.value, 'beforeExtraTime', index)} ></InputWithHead>
+                                                )}
+                                            </Form.Item>
+                                        </div> : null
+                                    }
+
+                                </div>
+                            </div>
+		 
+                            <div className="mt-4">
+                                <InputWithHead heading={AppConstants.extraTimeIfDraw2} required={"required-field"} />
+                                <Form.Item >
+                                    {getFieldDecorator(`extraTimeDrawRefId${index}`, {
+                                        rules: [{ required: true, message: ValidationConstants.extraTimeDrawRequired }]
+                                    })(
+                                        <Radio.Group
+                                            disabled={disabledStatus}
+                                            id={AppUniqueId.extratime_ifDraw_radiobtn}
+                                            className="reg-competition-radio" onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeDrawRefId', index)}
+                                            setFieldsValue={data.extraTimeDrawRefId} >
+                                            {(extraTimeDrawData || []).map((ex, exIndex) => (
+                                                <Radio key={ex.id} value={ex.id}>{ex.description}</Radio>
+                                            ))}
+                                        </Radio.Group>
+                                    )}
+                                </Form.Item>
+                            </div>
+                            {/* <span className='input-heading-add-another'>+ {AppConstants.addAnotherFinalFormat}</span> */}
+                            {/* <Checkbox className="single-checkbox pt-2" defaultChecked={data.isDefault} onChange={(e) => this.onChangeSetValue(e.target.checked, 'isDefault',index)}>{AppConstants.setAsDefault}</Checkbox> */}
+                        </div>
+																					   
                     </div>
-                }
+                    ))}
+
+                    {(finalsList == null || finalsList.length == 0) &&
+                        <div className="comp-warning-info">
+                            {AppConstants.finalsMessage}
+                        </div>
+                    }
+                </div>
             </div>
         )
     }
@@ -792,7 +800,7 @@ class CompetitionFinals extends Component {
                         noValidate="noValidate">
                         <Content>
                             {this.dropdownView()}
-                            <div className="formView">
+                            <div className="formView-finals">
                                 {this.contentView(getFieldDecorator)}
                             </div>
                             <Loader visible={this.state.loading} />
@@ -823,7 +831,8 @@ function mapDispatchToProps(dispatch) {
         getExtraTimeDrawAction,
         getFinalFixtureTemplateAction,
 		getVenuesTypeAction,					
-        getActiveRoundsAction
+        getActiveRoundsAction,
+        searchVenueList,
     }, dispatch);
 
 }
