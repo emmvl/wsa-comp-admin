@@ -58,8 +58,8 @@ class DashboardLayout extends React.Component {
 
   logout = async () => {
     await localStorage.clear();
-    window.location.reload();
     history.push("/");
+    window.location.reload();
   };
 
   changeId = menuName => {
