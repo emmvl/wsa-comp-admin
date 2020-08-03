@@ -215,7 +215,7 @@ class LiveScoreMatchSheet extends Component {
             title: '',
             dataIndex: 'id',
             key: 'operation',
-            render: (id) => <div className="d-flex">
+            render: (id) => <div className="d-flex justify-content-end mr-4 mr-lg-4 mr-md-0">
                 <Button
                     className="primary-add-comp-form"
                     type="primary"
@@ -248,7 +248,7 @@ class LiveScoreMatchSheet extends Component {
         return (
             <div className="formView mt-4" style={{marginBottom: 20}}>
                 {this.sheetTableHeading()}
-                <div className="table-responsive p-4 home-dash-table-view">
+                <div className="table-responsive home-dash-table-view">
                     <Table
                         className="home-dashboard-table"
                         columns={this.columns}
@@ -266,6 +266,7 @@ class LiveScoreMatchSheet extends Component {
             dataIndex: 'id',
             key: 'id',
             sorter: (a, b) => tableSort(a, b, "id"),
+            render: (id) => <div style={{minWidth: 80}}>{id}</div>,
         },
         {
             title: AppConstants.competition,
@@ -278,7 +279,6 @@ class LiveScoreMatchSheet extends Component {
             dataIndex: 'name',
             key: 'name',
             sorter: (a, b) => tableSort(a, b, "name"),
-            ellipsis: true,
         },
         {
             title: AppConstants.createdAt,
@@ -307,7 +307,7 @@ class LiveScoreMatchSheet extends Component {
               </div>
               <div className="col-sm text-right" >
                   <Button
-                    className="primary-add-comp-form"
+                    className="primary-add-comp-form mr-4 mr-lg-4 mr-md-0"
                     type="primary"
                     onClick={() => this.refreshDownloads()}
                   >
@@ -315,7 +315,6 @@ class LiveScoreMatchSheet extends Component {
                   </Button>
               </div>
           </div>
-
         )
     };
 
@@ -326,7 +325,7 @@ class LiveScoreMatchSheet extends Component {
         return (
             <div className="formView mt-4 mb-4">
                 {this.dropdownTableHeading()}
-                <div className="table-responsive p-4 home-dash-table-view">
+                <div className="table-responsive home-dash-table-view">
                     <Table
                         className="home-dashboard-table"
                         columns={this.dropdownTableColumns}
@@ -352,7 +351,7 @@ class LiveScoreMatchSheet extends Component {
             : [];
 
         return (
-            <div className="content-view">
+            <div className="p-5">
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
