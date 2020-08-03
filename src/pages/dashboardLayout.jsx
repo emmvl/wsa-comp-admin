@@ -155,7 +155,7 @@ class DashboardLayout extends React.Component {
           type="button"
           data-toggle="dropdown"
         >
-          <img src={userImage} alt="" />
+          <img id={AppConstants.user_profile_icon} src={userImage} alt="" />
         </button>
 
         <ul className="dropdown-menu">
@@ -163,7 +163,7 @@ class DashboardLayout extends React.Component {
             <div className="media">
               <div className="media-left">
                 <figure className="user-img-wrap">
-                  <img id={AppConstants.user_profile_icon} src={userImage} alt="" />
+                  <img src={userImage} alt="" />
                 </figure>
               </div>
 
@@ -200,8 +200,8 @@ class DashboardLayout extends React.Component {
           )}
 
           <div className="acc-help-support-list-view">
-            <li id={AppConstants.acct_settings_label} className={menuName === AppConstants.account ? "active" : ""}>
-              <NavLink to="/account/profile">Account Settings</NavLink>
+            <li className={menuName === AppConstants.account ? "active" : ""}>
+              <NavLink id={AppConstants.acct_settings_label} to="/account/profile">Account Settings</NavLink>
             </li>
             <li>
               <a id={AppConstants.help_support_label} href="#">Help & Support</a>
@@ -340,9 +340,9 @@ class DashboardLayout extends React.Component {
                                 : ""
                             }
                           >
-                            <div className="registration-menu menu-wrap">
+                            <div id={AppConstants.registration_icon} className="registration-menu menu-wrap">
                               <NavLink to="/registrationDashboard">
-                                <span className="icon" />
+                                <span id={AppConstants.registrations_label} className="icon" />
                                 {AppConstants.registration}
                               </NavLink>
                             </div>
@@ -354,9 +354,9 @@ class DashboardLayout extends React.Component {
                                 : ""
                             }
                           >
-                            <div className="competitions-menu menu-wrap">
+                            <div id={AppConstants.competition_icon} className="competitions-menu menu-wrap">
                               <NavLink to="/competitionDashboard">
-                                <span className="icon" />
+                                <span id={AppConstants.competitions_label} className="icon" />
                                 {AppConstants.competitions}
                               </NavLink>
                             </div>

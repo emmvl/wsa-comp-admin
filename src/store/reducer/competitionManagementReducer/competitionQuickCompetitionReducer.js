@@ -54,7 +54,7 @@ const initialState = {
     timeSlotId: [],
     postDraws: [],
     teamPlayerArray: [
-        { id: 1, value: "Import" }, { id: 2, value: "Merge with an Existing Competition" }, { id: 3, value: "Invite Registrations" }
+        { id: 1, value: "Import" }, { id: 2, value: "Merge with an Existing Competition" }
     ],
     SelectedTeamPlayer: 0,
     importModalVisible: false,

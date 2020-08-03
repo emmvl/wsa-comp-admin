@@ -461,7 +461,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                     <div className="col-sm-3" >
                         <div className="reg-add-save-button">
                             <NavLink to="/competitionPlayerGrades">
-                                <Button className="cancelBtnWidth" type="cancel-button"  >{AppConstants.back}</Button>
+                                <Button disabled={isPublished} className="cancelBtnWidth" type="cancel-button"  >{AppConstants.back}</Button>
                             </NavLink>
                         </div>
                     </div>
@@ -484,14 +484,14 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                     id={AppUniqueId.teamGrading_PublishBtn}
                                     className="publish-button save-draft-text"
                                     disabled={isPublished}
-                                    style={{ height: isPublished && "100%", borderRadius: isPublished && 10, width: isPublished && "inherit" }}
+                                    style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }}
                                     type="primary"
                                     onClick={() => this.publishtApiCall()}
                                 >{AppConstants.save}
                                 </Button>
                             </Tooltip>
                             <NavLink to="/competitionCourtAndTimesAssign">
-                                <Button id={AppUniqueId.teamGrading_NextBtn} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
+                                <Button id={AppUniqueId.teamGrading_NextBtn} disabled={isPublished} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
                             </NavLink>
                         </div>
                     </div>

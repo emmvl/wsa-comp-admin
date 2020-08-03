@@ -334,7 +334,7 @@ class LiveScorePositionTrackReport extends Component {
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
-                        className="antd-pagination pb-5"
+                        className="antd-pagination"
                         // current={liveScoreMatchListState.liveScoreMatchListPage}
                         // total={total}
                         // onChange={(page) => this.onPageChange(page)}

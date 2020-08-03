@@ -61,7 +61,7 @@ class DivisionGradeModal extends React.Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { fieldDecorator, checkvalue, changeDivision, changeTeam, division, modalTitle, onOK, onCancel, addDivision, addGrade, removegrade, changegrade, removeDivision } = this.props
+        const { fieldDecorator, checkvalue, changeDivision, changeTeam, division, modalTitle, onDivisionBack, onCancel, addDivision, addGrade, removegrade, changegrade, removeDivision } = this.props
         return (
             <div style={{ backgroundColor: "red" }}>
 
@@ -187,13 +187,13 @@ class DivisionGradeModal extends React.Component {
                             <div className="row">
                                 <div className="col-sm" style={{ display: "flex", width: "100%", paddingTop: 10 }}>
                                     <div className="col-sm-6" style={{ display: "flex", width: "50%", justifyContent: "flex-start" }}>
-                                        <Button className="open-reg-button" type="primary" onClick={onCancel} style={{ marginRight: '20px' }}
+                                        <Button className="cancelBtnWidth" type="cancel-button" onClick={onDivisionBack} style={{ marginRight: '20px' }}
                                         >
-                                            {AppConstants.cancel}
+                                            {AppConstants.back}
                                         </Button>
                                     </div>
                                     <div className="col-sm-6" style={{ display: "flex", width: "50%", justifyContent: "flex-end" }}>
-                                        <Button className="open-reg-button" type="primary" htmlType="submit" >
+                                        <Button className="publish-button" type="primary" htmlType="submit" >
                                             {AppConstants.save}
                                         </Button>
                                     </div>

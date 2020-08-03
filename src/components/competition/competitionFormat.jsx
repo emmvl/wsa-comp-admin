@@ -1025,7 +1025,7 @@ class CompetitionFormat extends Component {
                         <div className="col-sm">
                             <div className="reg-add-save-button">
                                 <NavLink to="/competitionVenueTimesPrioritisation">
-                                    <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
+                                    <Button disabled={isPublished} className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
                                 </NavLink>
                             </div>
                         </div>
@@ -1046,7 +1046,7 @@ class CompetitionFormat extends Component {
                                         title={AppConstants.statusPublishHover}
                                     >
                                         <Button
-                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 10 }}
+                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 6 }}
                                             className="publish-button save-draft-text"
                                             type="primary"
                                             htmlType="submit"
@@ -1058,6 +1058,7 @@ class CompetitionFormat extends Component {
                                     </Tooltip>
                                     <NavLink to="/competitionFinals">
                                         <Button
+                                            disabled={isPublished}
                                             className="publish-button margin-top-disabled-button"
                                             type="primary"
                                         >
@@ -1080,7 +1081,7 @@ class CompetitionFormat extends Component {
                                         title={AppConstants.statusPublishHover}
                                     >
                                         <Button
-                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 10 }}
+                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 6 }}
                                             className="publish-button save-draft-text"
                                             type="primary"
                                             htmlType="submit"
@@ -1105,7 +1106,7 @@ class CompetitionFormat extends Component {
                                     >
                                         <Button
                                             id={AppUniqueId.create_Draft_Draw_Btn}
-                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 10 }}
+                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 6 }}
                                             className="open-reg-button"
                                             type="primary"
                                             htmlType="submit"

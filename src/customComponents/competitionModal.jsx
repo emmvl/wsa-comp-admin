@@ -40,7 +40,7 @@ class CompetitionModal extends React.Component {
     }
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { modalTitle, handleOK, onCancel, competitionChange, updateDate, competitionName, selectedDate } = this.props
+        const { modalTitle, handleOK, onCancel, competitionChange, updateDate, onCompetitionBack, selectedDate, handleCompetitionNext } = this.props
         return (
             <div style={{ backgroundColor: "red" }}>
                 <Modal
@@ -109,14 +109,17 @@ class CompetitionModal extends React.Component {
                             <div className="col-sm" style={{ display: "flex", width: "100%", paddingTop: 10 }}>
                                 <div className="col-sm-6" style={{ display: "flex", width: "50%", justifyContent: "flex-start" }}>
                                     {/* <Button onClick={() => this.props.addVenueAction(venuData)} className="open-reg-button" type="primary"> */}
-                                    <Button className="open-reg-button" type="primary" onClick={onCancel} style={{ marginRight: '20px' }}
+                                    <Button className="cancelBtnWidth" type="cancel-button" onClick={onCancel} style={{ marginRight: '20px' }}
                                     >
-                                        {AppConstants.cancel}
+                                        {AppConstants.back}
                                     </Button>
                                 </div>
                                 <div className="col-sm-6" style={{ display: "flex", width: "50%", justifyContent: "flex-end" }}>
-                                    <Button className="open-reg-button" type="primary" htmlType="submit" >
+                                    <Button className="publish-button save-draft-text" type="primary" htmlType="submit" >
                                         {AppConstants.save}
+                                    </Button>
+                                    <Button className="publish-button" type="primary" onClick={() => handleCompetitionNext()} >
+                                        {AppConstants.next}
                                     </Button>
                                 </div>
                             </div>
