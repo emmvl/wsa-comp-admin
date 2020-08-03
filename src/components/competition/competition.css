@@ -811,3 +811,25 @@ a.collapsed i {
   text-align: center;
   padding-top: 40px;
 }
+.formView-finals {
+  width: 70%;
+  margin: auto;
+  border-radius: 10px;
+}
+.compitition-finals-venue
+{
+    background-color: white;
+    padding: 13px 40px 40px;
+    border-radius: 10px;
+}
+.compitition-finals-division
+{
+  background-color: white;
+  padding: 20px 40px 40px;
+  border-radius: 10px;
+  margin-top: 40px;
+}
+.inside-container-view> div > div > div >.undefined
+{
+  font-size: 18px;
+}
