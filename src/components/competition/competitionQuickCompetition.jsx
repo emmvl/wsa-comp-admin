@@ -98,7 +98,6 @@ class CompetitionQuickCompetition extends Component {
                 })
             }
             if (this.state.compModalLoad === true && this.props.quickCompetitionState.onQuickCompLoad === false) {
-                this.setFieldValues()
                 if (this.state.modalButtonPressed == "next") {
                     this.setState({
                         compModalLoad: false,
@@ -116,7 +115,6 @@ class CompetitionQuickCompetition extends Component {
 
         }
         if (this.state.timeslotModalLoad === true && this.props.quickCompetitionState.onQuickCompLoad === false) {
-            this.setFieldValues()
             if (this.state.timeSlotButtonClicked == "next") {
                 this.setState({
                     timeslotModalLoad: false,
@@ -125,13 +123,12 @@ class CompetitionQuickCompetition extends Component {
             }
             else if (this.state.timeSlotButtonClicked == "save") {
                 this.setState({
-                    compModalLoad: false,
+                    timeslotModalLoad: false,
                     timeSlotVisible: false,
                 })
             }
         }
         if (this.state.venueComptitionLoad === true && this.props.quickCompetitionState.onQuickCompLoad === false) {
-            // this.setFieldValues()
             if (this.state.venueButtonClicked == "next") {
                 this.setState({
                     venueComptitionLoad: false,
