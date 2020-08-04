@@ -857,7 +857,7 @@ class CompetitionDraws extends Component {
       setLiveScoreUmpireCompitionData(JSON.stringify(competitiondata))
       history.push('/liveScoreLadderList')
     }
-    this.setState({ drawGenerateModalVisible: false });
+    this.setState({ publishModalVisible: false });
   }
 
 
