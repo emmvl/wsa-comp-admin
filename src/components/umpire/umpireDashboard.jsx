@@ -736,7 +736,7 @@ class UmpireDashboard extends Component {
 
         this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: divisionid == 'All' ? "" : divisionid, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, roundId: this.state.round == 'All' ? "" : this.state.round, pageData: body })
         this.props.umpireRoundListAction(this.state.selectedComp, divisionid == 'All' ? "" : divisionid)
-        this.setState({ division: divisionid })
+        this.setState({ division: divisionid,round:'All' })
     }
 
     onRoundChange(roundId) {

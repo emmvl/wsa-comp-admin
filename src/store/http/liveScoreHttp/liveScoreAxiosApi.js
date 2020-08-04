@@ -1063,6 +1063,18 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, null)
     },
 
+    liveScorePositionTrackList(data) {
+        let body = data.pagination
+        let url
+        if (data.reporting === 'PERCENT') {
+            url = `/stats/positionTracking?aggregate=${data.aggregate}&reporting=${'MINUTE'}&competitionId=${data.compId}&search=${data.search}`;
+        } else {
+            url = `/stats/positionTracking?aggregate=${data.aggregate}&reporting=${data.reporting}&competitionId=${data.compId}&search=${data.search}`;
+        }
+
+        return Method.dataPost(url, token, body)
+    },
+
 };
 
 const Method = {

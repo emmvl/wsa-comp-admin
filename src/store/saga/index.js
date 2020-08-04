@@ -201,6 +201,8 @@ import * as shopSettingSaga from './shopSaga/shopSettingSaga';
 
 import { getInnerHorizontalCompSaga } from './liveScoreSaga/liveScoreInnerHorizontalSaga'
 
+import { liveScorePositionTrackSaga } from './liveScoreSaga/liveScorePositionTrackSaga'
+
 export default function* root_saga() {
   yield takeEvery(ApiConstants.API_LOGIN_LOAD, loginApiSaga);
   yield takeEvery(ApiConstants.API_QR_CODE_LOAD, qrApiSaga);
@@ -814,5 +816,7 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_UMPIRE_ROUND_LIST_LOAD, umpireDashboardSaga.umpireRoundListSaga)
 
   yield takeEvery(ApiConstants.API_INNER_HORIZONTAL_COMPETITION_LIST_LOAD, getInnerHorizontalCompSaga)
+
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_POSITION_TRACKING_LOAD, liveScorePositionTrackSaga)
 
 }

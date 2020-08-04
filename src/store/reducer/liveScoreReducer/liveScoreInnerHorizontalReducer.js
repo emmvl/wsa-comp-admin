@@ -18,7 +18,6 @@ function innerHorizontalState(state = initialState, action) {
 
         case ApiConstants.API_INNER_HORIZONTAL_COMPETITION_LIST_SUCCESS:
             let result = action.result
-            console.log(result, 'result_1')
             return {
                 ...state,
                 onLoad: false,
