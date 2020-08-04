@@ -1514,7 +1514,8 @@ const AppConstants = {
   qcVenueConstraintNotApplicable: "Venue Constraints are not applicable for quick competition",
   publishModalInfo: "You have changed the grade of the following teams:",
   publishModalConfirmationMsg: "Would you like to adjust their ladder points?",
-  videoSizeMessage: "The maximum file size can be 2 MB"
+  videoSizeMessage: "The maximum file size can be 2 MB",
+  childrenCheckNumber:"Requires Working with Children Check"													 
 };
 
 export default AppConstants;
