@@ -211,7 +211,7 @@ export function* updateQuickCompetitionSaga(action) {
                         competitionName: action.payload.competitionName
                     });
                     if (action.buttonPressed == "AddTeam") {
-                        history.push('/quickCompetitionInvitations', { competitionUniqueKey: action.payload.competitionId, year: action.year, importPlayer: detailResult.result.data.importPlayer })
+                        history.push('/quickCompetitionInvitations', { competitionUniqueKey: action.payload.competitionId, year: action.year, importPlayer: JSON.stringify(detailResult.result.data.importPlayer) })
                     }
                 }
                 else {
