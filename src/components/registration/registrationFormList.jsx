@@ -246,9 +246,6 @@ class RegistrationFormList extends Component {
                         {this.dropdownView()}
                         {this.contentView()}
                     </Content>
-                    <Footer>
-                        {/* {this.footerView()} */}
-                    </Footer>
                 </Layout>
             </div>
         );

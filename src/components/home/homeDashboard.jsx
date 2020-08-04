@@ -398,7 +398,7 @@ class HomeDashboard extends Component {
                 {/*  */}
                 {/* <span className='input-heading'>{"This feature is not implemented yet"}</span> */}
                 <div className="home-table-view" style={{ boxShadow: 'none', background: 'none' }}>
-                    <div className="table-responsive home-dash-table-view">
+                    <div id={AppConstants.home_table_view} className="table-responsive home-dash-table-view">
                         <Table className="home-dashboard-table"
                             columns={columnsInbox}
                             dataSource={actionBoxList}
@@ -506,7 +506,7 @@ class HomeDashboard extends Component {
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center" }}>
                                     <div className="reg-payment-regist-view">
 
-                                        <img id={AppConstants.registration_icon} src={AppImages.activeRegist} alt="" height="25" width="25" />
+                                        <img src={AppImages.activeRegist} alt="" height="25" width="25" />
                                     </div>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
@@ -518,7 +518,7 @@ class HomeDashboard extends Component {
                                     }
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
-                                    <span id={AppConstants.registrations_label} className="reg-payment-paid-reg-text">{AppConstants.totalRegistrations}</span>
+                                    <span className="reg-payment-paid-reg-text">{AppConstants.totalRegistrations}</span>
                                 </div>
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}
                                     onClick={() => history.push("/registration")}  >
@@ -536,14 +536,14 @@ class HomeDashboard extends Component {
                             <div className="row " >
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center" }}>
                                     <div className="reg-payment-regist-view">
-                                        <img id={AppConstants.competition_icon} src={AppImages.activeCompIcon} alt="" height="25" width="25" />
+                                        <img src={AppImages.activeCompIcon} alt="" height="25" width="25" />
                                     </div>
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
                                     <Spin size="small"
                                         spinning={this.props.homeDashboardState.onLoad} />
                                     {this.props.homeDashboardState.onLoad == false &&
-                                        <span id={AppConstants.competitions_label} className="reg-payment-price-text">{(registrationCompetitionCount !== null && registrationCompetitionCount !== "") ? registrationCompetitionCount : "-"}</span>
+                                        <span className="reg-payment-price-text">{(registrationCompetitionCount !== null && registrationCompetitionCount !== "") ? registrationCompetitionCount : "-"}</span>
                                     }
                                 </div>
                                 <div className="col-sm-4" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
@@ -611,7 +611,7 @@ class HomeDashboard extends Component {
         return (
             <div>
                 {this.ownedHeadingView()}
-                <div id={AppConstants.action_box_table} className="table-responsive home-dash-table-view">
+                <div className="table-responsive home-dash-table-view">
                     <Table
                         className="home-dashboard-table"
                         columns={columnsOwned}
@@ -664,7 +664,9 @@ class HomeDashboard extends Component {
                         {this.participatedView()} */}
                     </Content>
                     <Loader visible={this.props.appState.onLoad} />
-                    <Footer />
+                    <Footer className="mb-5">
+
+                    </Footer>
                 </Layout>
             </div>
         );

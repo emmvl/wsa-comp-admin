@@ -881,9 +881,15 @@ let LiveScoreAxiosApi = {
     },
 
     umpireListDashboard(data) {
+        console.log(data)
         let body = data.pageData
-        const url = `/matchUmpire/dashboard?competitionId=${data.compId}&divisionId=${data.divisionid}&venueId=${data.venueId}&organisationId=${data.orgId}`;
-
+        let url
+        if (data.roundId) {
+            const round = JSON.stringify([data.roundId])
+            url = `/matchUmpire/dashboard?competitionId=${data.compId}&divisionId=${data.divisionid}&venueId=${data.venueId}&organisationId=${data.orgId}&roundIds=${round}`;
+        } else {
+            url = `/matchUmpire/dashboard?competitionId=${data.compId}&divisionId=${data.divisionid}&venueId=${data.venueId}&organisationId=${data.orgId}`;
+        }
         // const url = `/matchUmpire/dashboard?competitionId=${1}&divisionId=${3}&venueId=${233}&organisationId=${3}`;
         return Method.dataPost(url, token, body)
     },

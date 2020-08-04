@@ -608,7 +608,7 @@ class UmpireDashboard extends Component {
                     }
                 }
                 this.setState({ divisionLoad: false })
-                this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, pageData: body })
+                this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, roundId: this.state.round == 'All' ? "" : this.state.round, pageData: body })
                 this.props.umpireRoundListAction(this.state.selectedComp, this.state.division == 'All' ? "" : this.state.division)
 
             }
@@ -641,10 +641,9 @@ class UmpireDashboard extends Component {
             }
         }
 
-        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, pageData: body })
+        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, roundId: this.state.round == 'All' ? "" : this.state.round, pageData: body })
 
     }
-
 
     ////////form content view
     contentView = () => {
@@ -689,9 +688,6 @@ class UmpireDashboard extends Component {
         )
     }
 
-
-
-
     onChangeComp(compID) {
         let selectedComp = compID.comp
         let compKey = compID.competitionUniqueKey
@@ -724,13 +720,12 @@ class UmpireDashboard extends Component {
             }
         }
 
-        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: venueId == 'All' ? "" : venueId, orgId: this.state.orgId, pageData: body })
+        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: venueId == 'All' ? "" : venueId, orgId: this.state.orgId, roundId: this.state.round == 'All' ? "" : this.state.round, pageData: body })
         this.setState({ venue: venueId })
 
     }
 
     onDivisionChange(divisionid) {
-
         const body =
         {
             "paging": {
@@ -739,13 +734,21 @@ class UmpireDashboard extends Component {
             }
         }
 
-        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: divisionid == 'All' ? "" : divisionid, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, pageData: body })
+        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: divisionid == 'All' ? "" : divisionid, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, roundId: this.state.round == 'All' ? "" : this.state.round, pageData: body })
         this.props.umpireRoundListAction(this.state.selectedComp, divisionid == 'All' ? "" : divisionid)
         this.setState({ division: divisionid })
     }
 
     onRoundChange(roundId) {
+        const body =
+        {
+            "paging": {
+                "limit": 10,
+                "offset": 0
+            }
+        }
         this.setState({ round: roundId })
+        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, roundId: roundId == 'All' ? "" : roundId, pageData: body })
     }
 
     // on Export
@@ -755,7 +758,6 @@ class UmpireDashboard extends Component {
     }
     ///////view for breadcrumb
     headerView = () => {
-
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="fluid-width">
@@ -1000,7 +1002,6 @@ class UmpireDashboard extends Component {
             </div>
         )
     }
-
 
     render() {
         return (

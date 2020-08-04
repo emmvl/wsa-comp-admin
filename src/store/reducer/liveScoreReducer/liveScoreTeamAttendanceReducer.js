@@ -15,6 +15,7 @@ const initialState = {
 function liveScoreTeamAttendanceState(state = initialState, action) {
     switch (action.type) {
         case ApiConstants.API_LIVE_SCORE_TEAM_ATTENDANCE_LIST_LOAD:
+            state.teamAttendanceResult = []
             return {
                 ...state,
                 onLoad: true,
@@ -22,7 +23,6 @@ function liveScoreTeamAttendanceState(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_TEAM_ATTENDANCE_LIST_SUCCESS:
             let result = action.result.stats
             state.teamAttendanceResult = result
-
             return {
                 ...state,
                 onLoad: false,

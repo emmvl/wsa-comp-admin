@@ -17,14 +17,15 @@ function InputWithHead(props) {
     marginTop,
     required,
     tooltiprequired,
-    id
+    id,
+    headingId
   } = props;
 
   return (
     <div>
       {heading && (
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <span className={`input-heading ${required}`}>{heading}</span>
+          <span id={headingId} className={`input-heading ${required}`}>{heading}</span>
           {conceptulHelp && (
             <div
               className={`Content_Cancel__VinjW_withCrossBtn ${tooltiprequired}`}

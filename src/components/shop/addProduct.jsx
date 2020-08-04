@@ -22,12 +22,14 @@ import {
 import InputWithHead from "../../customComponents/InputWithHead";
 import { isArrayNotEmpty, isNotNullOrEmptyString, captializedString, isImageFormatValid } from "../../util/helpers";
 import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, ContentState, convertFromHTML, } from 'draft-js';
+import { EditorState, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import SortableImage from '../../customComponents/sortableImageComponent';
 import ValidationConstants from '../../themes/validationConstant';
 import { checkOrganisationLevel } from "../../util/permissions";
 import { getOrganisationData } from "../../util/sessionStorage"
+import htmlToDraft from 'html-to-draftjs';
+import draftToHtml from 'draftjs-to-html';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -104,16 +106,17 @@ class AddProduct extends Component {
         let orgData = getOrganisationData();
         let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0;
         productDetailData.organisationUniqueKey = organisationUniqueKey
-        let descriptionText = ""
-        if (isArrayNotEmpty(description)) {
-            let descriptionStringArr = []
-            for (let i in description) {
-                descriptionStringArr.push(description[i].text)
-            }
-            descriptionText = descriptionStringArr.join(`<br/>`)
-        } else {
-            descriptionText = description
-        }
+        // let descriptionText = ""
+        // if (isArrayNotEmpty(description)) {
+        //     let descriptionStringArr = []
+        //     for (let i in description) {
+        //         descriptionStringArr.push(description[i].text)
+        //     }
+        //     descriptionText = descriptionStringArr.join(`<br/>`)
+        // } else {
+        //     descriptionText = description
+        // }
+        let descriptionText = draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()))
         productDetailData.description = descriptionText
         let { urls, files } = this.state
         let imagesFiles = []
@@ -184,8 +187,18 @@ class AddProduct extends Component {
 
     setEditorFieldValue() {
         let { productDetailData } = this.props.shopProductState;
-        let body = isNotNullOrEmptyString(productDetailData.description) ? EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(productDetailData.description))) : ""
-        this.setState({ editorState: body })
+        // let body = isNotNullOrEmptyString(productDetailData.description) ?
+        //  EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(productDetailData.description))) : ""
+        let finalBody = isNotNullOrEmptyString(productDetailData.description) ? productDetailData.description : ""
+        const html = finalBody;
+        const contentBlock = htmlToDraft(html);
+        if (contentBlock) {
+            const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+            const editorState = EditorState.createWithContent(contentState);
+            this.setState({
+                editorState
+            })
+        }
     }
 
 
@@ -258,7 +271,7 @@ class AddProduct extends Component {
         if (this.state.orgLevel == AppConstants.association && item.id == 2) {
             return true;
         }
-       else if (this.state.orgLevel == AppConstants.club && item.id == 2) {
+        else if (this.state.orgLevel == AppConstants.club && item.id == 2) {
             return true;
         }
         else if (this.state.orgLevel == AppConstants.club && item.id == 3) {
@@ -496,6 +509,7 @@ class AddProduct extends Component {
                         }
                         onEditorStateChange={this.onEditorStateChange}
                         toolbar={{
+                            options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded', 'emoji', 'remove', 'history'],
                             inline: { inDropdown: true },
                             list: { inDropdown: true },
                             textAlign: { inDropdown: true },

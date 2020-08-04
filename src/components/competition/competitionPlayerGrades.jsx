@@ -1046,14 +1046,14 @@ class CompetitionPlayerGrades extends Component {
                     <div className="col-sm-3 mt-3" >
                         <div className="reg-add-save-button">
                             <NavLink to="/competitionOpenRegForm">
-                                <Button className="cancelBtnWidth" type="cancel-button"  >{AppConstants.back}</Button>
+                                <Button disabled={this.state.competitionStatus == 1 ? true : false} className="cancelBtnWidth" type="cancel-button"  >{AppConstants.back}</Button>
                             </NavLink>
                         </div>
                     </div>
                     <div className="col-sm mt-3" >
                         <div className="comp-finals-button-view">
                             <NavLink to="/competitionPartTeamGradeCalculate">
-                                <Button id={AppUniqueId.playgrad_Next_bn} className="publish-button" type="primary">{AppConstants.next}</Button>
+                                <Button id={AppUniqueId.playgrad_Next_bn} disabled={this.state.competitionStatus == 1 ? true : false} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
                             </NavLink>
                         </div>
                     </div>

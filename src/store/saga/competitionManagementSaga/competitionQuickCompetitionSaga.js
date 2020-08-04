@@ -211,7 +211,7 @@ export function* updateQuickCompetitionSaga(action) {
                         competitionName: action.payload.competitionName
                     });
                     if (action.buttonPressed == "AddTeam") {
-                        history.push('/quickCompetitionInvitations', { competitionUniqueKey: action.payload.competitionId, year: action.year })
+                        history.push('/quickCompetitionInvitations', { competitionUniqueKey: action.payload.competitionId, year: action.year, importPlayer: detailResult.result.data.importPlayer })
                     }
                 }
                 else {
@@ -232,7 +232,6 @@ export function* updateQuickCompetitionSaga(action) {
                             competitionId: action.payload.competitionId,
                             competitionName: action.payload.competitionName
                         });
-
                     }
                     else {
                         yield call(failSaga, detailResult)

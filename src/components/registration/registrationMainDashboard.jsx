@@ -479,7 +479,7 @@ class RegistrationMainDashboard extends Component {
     ownedView = () => {
         console.log(this.props.registrationDashboardState)
         return (
-            <div className="comp-dash-table-view">
+            <div className="comp-dash-table-view" style={{ paddingBottom: 100 }}>
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         loading={this.props.registrationDashboardState.onLoad === true && true}

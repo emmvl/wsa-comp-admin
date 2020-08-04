@@ -376,7 +376,7 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                                         disabled={isPublished}
                                         className="publish-button"
                                         type="primary"
-                                        style={{ height: isPublished && "100%", borderRadius: isPublished && 10, width: isPublished && "inherit" }}
+                                        style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }}
                                         onClick={() => this.submitApiCall()}>
                                         {AppConstants.save}
                                     </Button>
