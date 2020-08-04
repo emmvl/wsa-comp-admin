@@ -131,14 +131,14 @@ class CompetitionQuickCompetition extends Component {
             }
         }
         if (this.state.venueComptitionLoad === true && this.props.quickCompetitionState.onQuickCompLoad === false) {
-            this.setFieldValues()
+            // this.setFieldValues()
             if (this.state.venueButtonClicked == "next") {
                 this.setState({
                     venueComptitionLoad: false,
                     timeSlotVisible: true, venueModalVisible: false
                 })
             }
-            else if (this.state.timeSlotButtonClicked == "save") {
+            else if (this.state.venueButtonClicked == "save") {
                 this.setState({
                     venueComptitionLoad: false,
                     venueModalVisible: false
