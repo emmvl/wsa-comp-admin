@@ -121,7 +121,7 @@ const PlacesAutocomplete = ({
         onChange={handleInput}
         disabled={!ready}
         placeholder={AppConstants.pleaseInputAddress}
-        autoComplete="off"
+        autoComplete="new-password"
         {...otherProps}
       />
       {status !== 'OK' && error && (
