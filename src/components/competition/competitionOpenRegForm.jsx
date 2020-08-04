@@ -293,7 +293,7 @@ class CompetitionOpenRegForm extends Component {
                 {
                     title: "Gender Restriction",
                     dataIndex: "genderRestriction",
-                    key: "genderRestriction",
+                    key: AppUniqueId.div_gender_chkbox,
                     filterDropdown: true,
                     filterIcon: () => {
                         return (
@@ -306,7 +306,7 @@ class CompetitionOpenRegForm extends Component {
                         );
                     },
                     render: (genderRestriction, record, index) => (
-                        <div id={AppUniqueId.div_gender_chkbox}>
+                        <div>
                         <Checkbox
                             className="single-checkbox mt-1"
                             disabled={(this.state.competitionStatus == 1 || this.state.permissionState.divisionsDisable) ? true : false}
@@ -318,7 +318,7 @@ class CompetitionOpenRegForm extends Component {
                 },
                 {
                     dataIndex: "genderRefId",
-                    key: "genderRefId",
+                    key: AppUniqueId.div_gender_refid,
                     // width:  ? "20%" : null,
                     render: (genderRefId, record, index) => {
                         const { getFieldDecorator } = this.props.form;
@@ -328,7 +328,6 @@ class CompetitionOpenRegForm extends Component {
                                 {getFieldDecorator(`genderRefId${record.parentIndex}${index}`,
                                     { rules: [{ required: true, message: ValidationConstants.genderRestriction }] })(
                                         <Select
-                                            id={AppUniqueId.div_gender_refid}
                                             className='division-age-select'
                                             style={{ width: "100%", minWidth: 120, }}
                                             onChange={genderRefId => this.divisionTableDataOnchange(genderRefId, record, index, "genderRefId")}
@@ -353,7 +352,7 @@ class CompetitionOpenRegForm extends Component {
                 {
                     title: "Age Restriction",
                     dataIndex: "ageRestriction",
-                    key: "ageRestriction",
+                    key: AppUniqueId.div_ageres_chkbox,
                     filterDropdown: true,
                     filterIcon: () => {
                         return (
@@ -366,7 +365,7 @@ class CompetitionOpenRegForm extends Component {
                         );
                     },
                     render: (ageRestriction, record, index) => (
-                        <div id={AppUniqueId.div_ageres_chkbox}>
+                        <div>
                         <Checkbox
                             className="single-checkbox mt-1"
                             checked={ageRestriction}
@@ -379,7 +378,7 @@ class CompetitionOpenRegForm extends Component {
                 {
                     title: "DOB From",
                     dataIndex: "fromDate",
-                    key: "fromDate",
+                    key: AppUniqueId.div_ageres_fromdate,
                     width: "25%",
                     render: (fromDate, record, index) => {
                         const { getFieldDecorator } = this.props.form;
@@ -388,7 +387,6 @@ class CompetitionOpenRegForm extends Component {
                                 {getFieldDecorator(`fromDate${record.parentIndex}${index}`,
                                     { rules: [{ required: record.ageRestriction, message: ValidationConstants.pleaseSelectDOBFrom }] })(
                                         <DatePicker
-                                            id={AppUniqueId.div_ageres_fromdate}
                                             size="large"
                                             className="comp-venue-time-datepicker"
                                             style={{ width: "100%", minWidth: 135 }}
@@ -410,7 +408,7 @@ class CompetitionOpenRegForm extends Component {
                     title: "DOB To",
                     dataIndex: "toDate",
                     width: "25%",
-                    key: "toDate",
+                    key: AppUniqueId.div_ageres_todate,
                     render: (toDate, record, index) => {
                         const { getFieldDecorator } = this.props.form;
                         return (
@@ -418,7 +416,6 @@ class CompetitionOpenRegForm extends Component {
                                 {getFieldDecorator(`toDate${record.parentIndex}${index}`,
                                     { rules: [{ required: record.ageRestriction, message: ValidationConstants.PleaseSelectDOBTo }] })(
                                         <DatePicker
-                                            id={AppUniqueId.div_ageres_todate}
                                             size="large"
                                             className="comp-venue-time-datepicker"
                                             style={{ width: "100%", minWidth: 135 }}
@@ -1457,6 +1454,7 @@ class CompetitionOpenRegForm extends Component {
                     <Form.Item  >
                         {getFieldDecorator('selectedVenues', { rules: [{ required: true, message: ValidationConstants.pleaseSelectvenue }] })(
                             <Select
+                                id={AppUniqueId.select_Venues}
                                 mode="multiple"
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 onChange={venueSelection => {
@@ -1607,7 +1605,7 @@ class CompetitionOpenRegForm extends Component {
                 <InputWithHead heading={AppConstants.timeBetweenRounds} />
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.time_rounds_days} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
                                 placeholder={AppConstants.days}
                                 value={detailsData.competitionDetailData.roundInDays}
@@ -1616,7 +1614,7 @@ class CompetitionOpenRegForm extends Component {
 
                             />
                         </div>
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.time_rounds_hrs} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
                                 placeholder={AppConstants.hours}
                                 value={detailsData.competitionDetailData.roundInHours}
@@ -1625,7 +1623,7 @@ class CompetitionOpenRegForm extends Component {
 
                             />
                         </div>
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.time_rounds_mins} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
                                 placeholder={AppConstants.mins}
                                 value={detailsData.competitionDetailData.roundInMins}
@@ -1662,7 +1660,7 @@ class CompetitionOpenRegForm extends Component {
                 <InputWithHead heading={AppConstants.playerInEachTeam} />
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.team_min_players} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
                                 placeholder={AppConstants.minNumber}
                                 value={detailsData.competitionDetailData.minimunPlayers}
@@ -1671,7 +1669,7 @@ class CompetitionOpenRegForm extends Component {
 
                             />
                         </div>
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.team_max_players} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
                                 placeholder={AppConstants.maxNumber}
                                 value={detailsData.competitionDetailData.maximumPlayers}

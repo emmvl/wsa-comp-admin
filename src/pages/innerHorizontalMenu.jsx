@@ -35,7 +35,7 @@ class InnerHorizontalMenu extends React.Component {
             this.setState({ organisationLevel: value, orgState: true })
         ));
 
-    
+
         if (this.props) {
             if (this.props.compSelectedKey !== "18") {
                 localStorage.removeItem("draws_roundTime");
@@ -293,7 +293,7 @@ class InnerHorizontalMenu extends React.Component {
                 }
 
                 {menu === "liveScore" &&
-                    <div className="row">
+                    <div className="row mr-0">
                         <div className="col-sm pr-0">
                             <Menu
                                 theme="light"
@@ -464,16 +464,14 @@ class InnerHorizontalMenu extends React.Component {
                                         <span>News & Messages</span>
                                     </NavLink>
                                 </Menu.Item>
-
-
                             </Menu>
 
 
                         </div>
                         <div className="col-sm-2 pr-5 inner-horizontal-dropdown-marginTop inner-horizontal-Comp-dropdown-div">
                             <Select
-                                style={{ width: "fit-content", minWidth: 250 }}
-                                className="year-select reg-filter-select1"
+                                style={{ width: "fit-content", minWidth: 150, maxWidth: 220 }}
+                                className="year-select reg-filter-select1 innerSelect-value"
                                 onChange={(comp) => this.setCompetitionID(comp)}
                                 value={this.state.selectedComp}
                             >

@@ -1508,12 +1508,13 @@ const AppConstants = {
   venueSavedSuccessfully: "Successfully Saved",
   checkVenueAddressDuplication: "Check venue address duplication",
   successMessage: "Successfully inserted",
-  videoSize:"Selected file must be less then 1 MB",
-  video_size: 1024000,
+  videoSize: "Selected file must be less then 1 MB",
+  video_size: 2048000,
   qcTimeslotNotApplicable: "Timeslots are not applicable for quick competition",
   qcVenueConstraintNotApplicable: "Venue Constraints are not applicable for quick competition",
   publishModalInfo: "You have changed the grade of the following teams:",
-  publishModalConfirmationMsg: "Would you like to adjust their ladder points?"
+  publishModalConfirmationMsg: "Would you like to adjust their ladder points?",
+  videoSizeMessage: "The maximum file size can be 2 MB"
 };
 
 export default AppConstants;
