@@ -200,6 +200,7 @@ import * as liveScoreMatchSheetSaga from './liveScoreSaga/liveScoreMatchSheetSag
 import * as shopSettingSaga from './shopSaga/shopSettingSaga';
 
 import { getInnerHorizontalCompSaga } from './liveScoreSaga/liveScoreInnerHorizontalSaga'
+import { quickCompetitionAddVenue } from "../actions/competitionModuleAction/competitionQuickCompetitionAction";
 
 import { liveScorePositionTrackSaga } from './liveScoreSaga/liveScorePositionTrackSaga'
 
@@ -817,6 +818,9 @@ export default function* root_saga() {
 
   yield takeEvery(ApiConstants.API_INNER_HORIZONTAL_COMPETITION_LIST_LOAD, getInnerHorizontalCompSaga)
 
+
+  //add quick competition venue
+  yield takeEvery(ApiConstants.API_QUICK_COMPETITION_ADDVENUE_LOAD, competitionQuickSaga.quickCompetitionAddVenueSaga)
   yield takeEvery(ApiConstants.API_LIVE_SCORE_POSITION_TRACKING_LOAD, liveScorePositionTrackSaga)
 
 }

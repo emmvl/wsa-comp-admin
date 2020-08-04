@@ -947,7 +947,7 @@ const AppConstants = {
   anyClub: 'anyClub',
 
   firstlevelAffiliate:
-    'Affiliates - 1nd level Affiliates - Association/Leagues',
+    'Affiliates - 1st level Affiliates - Association/Leagues',
   secondlevelAffiliate: 'Affiliates - 2nd level Affiliates - Club/ School',
   anyOrgAssociation: 'Any organisation - Association/Leagues',
   anyOrgClub: 'Any organisation - Clubs/ Schools',

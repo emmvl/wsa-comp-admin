@@ -444,10 +444,11 @@ class HomeDashboard extends Component {
                         alignItems: "center", marginLeft: 7,
                         justifyContent: "flex-end"
                     }} >
-                        <span className='year-select-heading'>{AppConstants.year}:</span>
+                        <span className='year-select-heading' style={{ marginRight: 10 }}>{AppConstants.year}:</span>
                         <Select
                             name={"yearRefId"}
-                            className="year-select"
+                            className="year-select reg-filter-select-year"
+                            style={{ width: 90 }}
                             onChange={yearRefId => this.onYearChange(yearRefId)}
                             value={yearRefId}
                         >

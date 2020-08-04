@@ -9,7 +9,8 @@ class CompetitionModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            competitionState: true
+            competitionState: true,
+            buttonClicked: ""
         }
     }
 
@@ -34,7 +35,13 @@ class CompetitionModal extends React.Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                this.props.handleOK()
+                console.log(this.state.buttonClicked)
+                if (this.state.buttonClicked == "save") {
+                    this.props.handleOK()
+                }
+                else {
+                    this.props.handleCompetitionNext()
+                }
             }
         })
     }
@@ -72,7 +79,7 @@ class CompetitionModal extends React.Component {
                                         ],
                                     })(
                                         <InputWithHead
-                                            required={"pt-0"}
+                                            required={"required-field pt-0"}
                                             heading={AppConstants.competition_name}
                                             placeholder={"Enter competition Name"}
                                             onChange={(e) => competitionChange(e)}
@@ -85,6 +92,7 @@ class CompetitionModal extends React.Component {
                             </div>
                             <div className="col-sm pl-0 pb-2">
                                 <InputWithHead
+                                    required={"required-field"}
                                     heading={AppConstants.competitionstartDate}
                                 />
                                 <Form.Item
@@ -115,10 +123,10 @@ class CompetitionModal extends React.Component {
                                     </Button>
                                 </div>
                                 <div className="col-sm-6" style={{ display: "flex", width: "50%", justifyContent: "flex-end" }}>
-                                    <Button className="publish-button save-draft-text" type="primary" htmlType="submit" >
+                                    <Button className="publish-button save-draft-text" type="primary" htmlType="submit" onClick={() => this.setState({ buttonClicked: "save" })} >
                                         {AppConstants.save}
                                     </Button>
-                                    <Button className="publish-button" type="primary" onClick={() => handleCompetitionNext()} >
+                                    <Button className="publish-button" type="primary" htmlType="submit" onClick={() => this.setState({ buttonClicked: "next" })} >
                                         {AppConstants.next}
                                     </Button>
                                 </div>

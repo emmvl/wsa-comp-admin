@@ -3,13 +3,14 @@ import { Modal, DatePicker, Form, Button, Select } from 'antd';
 import InputWithHead from "./InputWithHead"
 import AppConstants from "../themes/appConstants"
 import ValidationConstants from '../themes/validationConstant';
-import { captializedString } from "../util/helpers"
+
 const { Option } = Select;
 class CompetitionVenueModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            competitionState: true
+            competitionState: true,
+            buttonClicked: ""
         }
     }
 
@@ -25,7 +26,7 @@ class CompetitionVenueModal extends React.Component {
 
     setFieldValues = () => {
         this.props.form.setFieldsValue({
-            selectedVenues: this.props.quickCompetitionState.selectedVenues,
+            selectedVenues: this.props.quickCompetitionState.postSelectedVenues,
         })
     }
 
@@ -33,7 +34,12 @@ class CompetitionVenueModal extends React.Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                this.props.handleOK()
+                if (this.state.buttonClicked == "save") {
+                    this.props.handleVenueOK()
+                }
+                else if (this.state.buttonClicked == "next") {
+                    this.props.handleVenueNext()
+                }
             }
         })
     }
@@ -95,10 +101,10 @@ class CompetitionVenueModal extends React.Component {
                                     </Button>
                                 </div>
                                 <div className="col-sm-6" style={{ display: "flex", width: "50%", justifyContent: "flex-end" }}>
-                                    {/* <Button className="publish-button save-draft-text" type="primary" htmlType="submit" >
+                                    <Button className="publish-button save-draft-text" type="primary" htmlType="submit" onClick={() => this.setState({ buttonClicked: "save" })} >
                                         {AppConstants.save}
-                                    </Button> */}
-                                    <Button className="publish-button" type="primary" onClick={() => handleVenueNext()} >
+                                    </Button>
+                                    <Button className="publish-button" type="primary" htmlType="submit" onClick={() => this.setState({ buttonClicked: "next" })} >
                                         {AppConstants.next}
                                     </Button>
                                 </div>

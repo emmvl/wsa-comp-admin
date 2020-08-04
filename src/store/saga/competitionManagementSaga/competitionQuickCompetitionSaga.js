@@ -270,3 +270,25 @@ export function* quickCompetitionPlayer(action) {
         yield call(errorSaga, error)
     }
 }
+
+// competition add venue saga
+export function* quickCompetitionAddVenueSaga(action) {
+    try {
+        const result = yield call(AxiosApi.addVenueQuickCompetition, action.payload);
+        console.log(result)
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_QUICK_COMPETITION_ADDVENUE_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+            setTimeout(() => {
+                message.success(result.result.data.message)
+            }, 500);
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
