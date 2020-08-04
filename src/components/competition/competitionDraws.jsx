@@ -857,7 +857,7 @@ class CompetitionDraws extends Component {
       setLiveScoreUmpireCompitionData(JSON.stringify(competitiondata))
       history.push('/liveScoreLadderList')
     }
-    this.setState({ drawGenerateModalVisible: false });
+    this.setState({ publishModalVisible: false });
   }
 
 
@@ -1477,6 +1477,7 @@ class CompetitionDraws extends Component {
         ></DrawsPublishModel>
 
         <Modal
+          className="add-membership-type-modal"
           title="Regenerate Draw"
           visible={this.state.drawGenerateModalVisible}
           onOk={() => this.handleGenerateDrawModal("ok")}
@@ -1494,6 +1495,7 @@ class CompetitionDraws extends Component {
           </Select>
         </Modal>
         <Modal
+          className="add-membership-type-modal"
           title="Team Names"
           visible={this.state.publishModalVisible}
           onOk={() => this.handlePublishModal("ok")}

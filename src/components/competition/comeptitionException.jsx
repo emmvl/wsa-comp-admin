@@ -383,6 +383,7 @@ class CompetitionException extends Component {
 
                 
                 <Modal
+                    className="add-membership-type-modal"
                     title="Regenerate Draw"
                     visible={this.state.drawGenerateModalVisible}
                     onOk={() => this.handleGenerateDrawModal("ok")}

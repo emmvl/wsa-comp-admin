@@ -988,6 +988,7 @@ class CompetitionFormat extends Component {
         return (
             <div>
                 <Modal
+                    className="add-membership-type-modal"
                     title="Competition Format"
                     visible={this.state.allDivisionVisible}
                     onOk={() => this.handleAllDivisionModal(false, "ok", this.state.currentIndex, competionFormatDivisions)}
@@ -1002,6 +1003,7 @@ class CompetitionFormat extends Component {
         return (
             <div>
                 <Modal
+                    className="add-membership-type-modal"
                     title="Competition Format"
                     visible={this.state.deleteModalVisible}
                     onOk={() => this.handleDeleteModal(false, "ok", this.state.currentIndex, competionFormatDivisions)}
@@ -1122,6 +1124,7 @@ class CompetitionFormat extends Component {
                     </div>
                 </div>
                 <Modal
+                    className="add-membership-type-modal"
                     title="Regenerate Draw"
                     visible={this.state.drawGenerateModalVisible}
                     onOk={() => this.handleGenerateDrawModal("ok")}
