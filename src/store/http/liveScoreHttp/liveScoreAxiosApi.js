@@ -62,12 +62,16 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, null)
     },
 
-    liveScoreGetDivision(data, compKey) {
+    liveScoreGetDivision(data, compKey, sortBy, sortOrder) {
         let url = null
         if (compKey) {
             url = `/division?competitionKey=${compKey}`
         } else {
             url = `/division?competitionId=${data}`
+        }
+
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
 
         return Method.dataGet(url, null)
@@ -420,11 +424,15 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, token)
     },
 
-    liveScoreScorerList(comID, roleId, body, search) {
+    liveScoreScorerList(comID, roleId, body, search, sortBy, sortOrder) {
         let competitionID = localStorage.getItem("competitionId");
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
 
-        const url = `/roster/admin?competitionId=${id}&roleId=${roleId}`;
+        let url = `/roster/admin?competitionId=${id}&roleId=${roleId}`;
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        }
+
         return Method.dataPost(url, token, body)
     },
 
@@ -804,12 +812,16 @@ let LiveScoreAxiosApi = {
     },
 
     /// Get Player list with paging
-    getPlayerWithPaggination(competitionID, offset, limit, search) {
+    getPlayerWithPaggination(competitionID, offset, limit, search, sortBy, sortOrder) {
         let url = null
         if (search && search.length > 0) {
             url = `/players/admin?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=${search}`;
         } else {
             url = `/players/admin?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=`;
+        }
+
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
 
         return Method.dataGet(url, localStorage.token);

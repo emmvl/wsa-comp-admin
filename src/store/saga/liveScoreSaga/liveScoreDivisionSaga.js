@@ -1,7 +1,8 @@
-import { put, call } from '../../../../node_modules/redux-saga/effects'
+import { put, call } from "redux-saga/effects";
+import { message } from "antd";
+
 import ApiConstants from "../../../themes/apiConstants";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
-import { message } from "antd";
 import history from "../../../util/history";
 import AppConstants from "../../../themes/appConstants";
 
@@ -30,7 +31,7 @@ function* errorSaga(error) {
 //////get the competition fee list in registration
 export function* liveScoreDivisionsaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreGetDivision, action.competitionID, action.compKey);
+        const result = yield call(LiveScoreAxiosApi.liveScoreGetDivision, action.competitionID, action.compKey, action.sortBy, action.sortOrder);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_SUCCESS,
@@ -47,13 +48,15 @@ export function* liveScoreDivisionsaga(action) {
 
 export function* liveScoreCreateDivisionsaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreCreateDivision,
+        const result = yield call(
+            LiveScoreAxiosApi.liveScoreCreateDivision,
             action.name,
             action.divisionName,
             action.gradeName,
             action.competitionId,
-            action.divisionId);
-        console.log(result)
+            action.divisionId
+        );
+
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_CREATE_DIVISION_SUCCESS,
@@ -62,7 +65,6 @@ export function* liveScoreCreateDivisionsaga(action) {
             });
             history.push("/liveScoreDivisionList")
             message.success("Division created successfully")
-
         } else {
             yield call(failSaga, result)
         }
@@ -71,13 +73,11 @@ export function* liveScoreCreateDivisionsaga(action) {
     }
 }
 
-
 //// Delete Team Saga
 export function* liveScoreDeleteDivisionSaga(action) {
-
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreDeleteDivision, action.divisionId);
-        console.log(action.divisionId, "action")
+
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_DELETE_DIVISION_SUCCESS,
@@ -102,13 +102,10 @@ export function* liveScoreDivisionImportSaga(action) {
             });
             history.push('/liveScoreDivisionList')
             message.success('Division Imported Successfully.')
-        }
-        else {
+        } else {
             yield call(failSaga, result)
         }
     } catch (e) {
         yield call(errorSaga, e)
     }
-
 }
-

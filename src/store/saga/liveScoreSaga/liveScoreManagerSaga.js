@@ -1,8 +1,9 @@
-import { put, call } from '../../../../node_modules/redux-saga/effects';
+import { put, call } from "redux-saga/effects";
+import { message } from "antd";
+
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 import userHttpApi from "../../http/userHttp/userAxiosApi"
-import ApiConstants from '../../../themes/apiConstants';
-import { message } from "antd";
+import ApiConstants from "../../../themes/apiConstants";
 import history from "../../../util/history";
 
 function* failSaga(result) {
@@ -18,7 +19,7 @@ function* errorSaga(error) {
         error: error,
         status: error.status
     });
-    console.log(error, 'liveScoreManagerListSaga')
+
     // message.error(error ? error.error ? error.error : "Something went wrong." : "Something went wrong.");
     message.error("Something went wrong.");
 }
@@ -26,15 +27,21 @@ function* errorSaga(error) {
 //// get manager list
 export function* liveScoreManagerListSaga(action) {
     try {
-        const result = yield call(userHttpApi.liveScoreManagerList, action.roleId,
-            action.entityTypeId, action.entityId, action.searchText)
-        if (result.status == 1) {
+        const result = yield call(
+            userHttpApi.liveScoreManagerList,
+            action.roleId,
+            action.entityTypeId,
+            action.entityId,
+            action.searchText,
+            action.sortBy,
+            action.sortOrder
+        )
+        if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_MANAGER_LIST_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });
-
         } else {
             yield call(failSaga, result)
         }
@@ -47,7 +54,7 @@ export function* liveScoreManagerListSaga(action) {
 export function* liveScoreAddEditManagerSaga(action) {
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreAddEditManager, action.data, action.teamId, action.exsitingManagerId)
-        if (result.status == 1) {
+        if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_MANAGER_SUCCESS,
                 result: result.result.data,
@@ -55,7 +62,6 @@ export function* liveScoreAddEditManagerSaga(action) {
             });
             message.success('Add Manager - Successfully Added')
             history.push('/liveScoreManagerList')
-
         } else {
             yield call(failSaga, result)
         }
@@ -69,14 +75,13 @@ export function* liveScoreManagerSearch(action) {
     try {
         const result = yield call(userHttpApi.liveScoreSearchManager, action.data, action.competition_Id)
         if (result) {
-            if (result.status == 1) {
+            if (result.status === 1) {
                 yield put({
                     type: ApiConstants.API_LIVESCORE_MANAGER_SEARCH_SUCCESS,
                     result: result.result.data,
                     status: result.status,
                 });
-            }
-            else {
+            } else {
                 yield call(failSaga, result)
             }
         } else {
@@ -99,12 +104,10 @@ export function* liveScoreManagerImportSaga(action) {
             });
             history.push('/liveScoreManagerList')
             message.success('Manager Imported Successfully.')
-        }
-        else {
+        } else {
             yield call(failSaga, result)
         }
     } catch (e) {
         yield call(errorSaga, e)
     }
-
 }

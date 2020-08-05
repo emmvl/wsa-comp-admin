@@ -78,7 +78,7 @@ let userHttpApi = {
     return Method.dataGet(url, token)
   },
 
-  liveScoreManagerList(roleId, entityTypeId, entityId, searchText) {
+  liveScoreManagerList(roleId, entityTypeId, entityId, searchText, sortBy, sortOrder) {
     // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
 
     let url = ''
@@ -87,6 +87,11 @@ let userHttpApi = {
     } else {
       url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}`;
     }
+
+    if (sortBy && sortOrder) {
+      url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+    }
+
     return Method.dataGet(url, token)
   },
 
@@ -201,9 +206,12 @@ let userHttpApi = {
   },
 
   //liveScore coaches list
-  liveScoreCoachesList(roleId, entityTypeId, entityId, search) {
+  liveScoreCoachesList(roleId, entityTypeId, entityId, search, sortBy, sortOrder) {
     let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
     let url = `/users/byRole?roleId=${roleId}&entityTypeId=1&entityId=${id}&userName=${search}`
+    if (sortBy && sortOrder) {
+      url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+    }
     return Method.dataGet(url, localStorage.token);
   },
 

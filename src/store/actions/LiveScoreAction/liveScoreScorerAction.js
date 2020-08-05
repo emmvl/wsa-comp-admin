@@ -1,59 +1,49 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-function liveScoreScorerListAction(competitionId, roleId, data, search) {
-
-    const action = {
+function liveScoreScorerListAction(competitionId, roleId, body, search, sortBy, sortOrder) {
+    return {
         type: ApiConstants.API_LIVE_SCORE_SCORER_LIST_LOAD,
-        competitionId: competitionId,
-        roleId: roleId,
-        body: data,
-        search
-
-    }
-    return action
+        competitionId,
+        roleId,
+        body,
+        search,
+        sortBy,
+        sortOrder,
+    };
 }
+
 function liveScoreScorerUpdate(data, key) {
-    const action = {
+    return {
         type: ApiConstants.API_LIVE_SCORE_UPDATE_SCORER,
         data: data,
         key: key,
-    }
-
-    return action;
+    };
 }
 
-
-//Devision action
+// Devision action
 function liveScoreAddEditScorer(body, teamId, existingScorerId, isEdit) {
-
-    const action = {
+    return {
         type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_SCORER_LOAD,
         body,
         teamId,
         existingScorerId,
         isEdit
     };
-
-    return action;
 }
 
-
 /// Assign matches action
-
 function assignMatchesAction(competitionId, teamId, body) {
-    const action = {
+    return {
         type: ApiConstants.API_LIVESCORE_ASSIGN_MATCHES_LOAD,
         competitionId,
         teamId,
-        body
+        body,
     };
-
-    return action;
 }
 
-/// Chnage assign status
+/// Change assign status
 function changeAssignStatus(index, records, roleId, teamID, scorerKey, teamkey, scorer_Id) {
-    const action = {
+    return {
         type: ApiConstants.API_LIVESCORE_ASSIGN_CHANGE_STATUS_LOAD,
         index,
         records,
@@ -63,35 +53,28 @@ function changeAssignStatus(index, records, roleId, teamID, scorerKey, teamkey, 
         teamkey,
         scorer_Id
     };
-
-    return action;
 }
 
-
-/// Chnage assign status
+/// Change assign status
 function unAssignMatcheStatus(index, records, scorerKey, teamkey) {
-    const action = {
+    return {
         type: ApiConstants.API_LIVESCORE_UNASSIGN_STATUS_LOAD,
         index,
         records,
         scorerKey,
         teamkey
     };
-
-    return action;
 }
-
 
 // Scorer Search
 function liveScoreScorerSearch(roleId, entityTypeId, competitionId, searchText) {
-    const action = {
+    return {
         type: ApiConstants.API_LIVESCORE_SCORER_SEARCH_LOAD,
         roleId,
         entityTypeId,
         competitionId,
-        searchText
-    }
-    return action
+        searchText,
+    };
 }
 
 export {
