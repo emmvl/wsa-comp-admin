@@ -1030,7 +1030,7 @@ function registration(state = initialState, action) {
 
       }
 	  if (action.keyword == "isAllow") {
-        state.getDefaultMembershipProductTypes[action.index].isAllow = action.checkedValue
+        state.getDefaultMembershipProductTypes[action.index]["isAllow"] = action.checkedValue
         if(action.checkedValue == true){
           state.getDefaultMembershipProductTypes[action.index]["allowTeamRegistrationTypeRefId"] = 1
         }
@@ -1043,11 +1043,15 @@ function registration(state = initialState, action) {
       }
       if (action.keyword == "isPlaying") {
         if (action.checkedValue == true) {
-          state.getDefaultMembershipProductTypes[action.index].isPlaying = 1
+          state.getDefaultMembershipProductTypes[action.index][action.keyword] = 1
         }
         else {
-          state.getDefaultMembershipProductTypes[action.index].isPlaying = 0
+          state.getDefaultMembershipProductTypes[action.index][action.keyword] = 0
         }
+      }
+      if (action.keyword == "isChildrenCheckNumber") {
+        state.getDefaultMembershipProductTypes[action.index].isChildrenCheckNumber = action.checkedValue
+
       }
 
       return {
