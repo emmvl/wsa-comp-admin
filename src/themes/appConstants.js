@@ -1515,7 +1515,8 @@ const AppConstants = {
   publishModalInfo: "You have changed the grade of the following teams:",
   publishModalConfirmationMsg: "Would you like to adjust their ladder points?",
   videoSizeMessage: "The maximum file size can be 2 MB",
-  childrenCheckNumber:"Requires Working with Children Check"													 
+  childrenCheckNumber:"Requires Working with Children Check",
+  regenerateDrawTitle:"Regenerate draw from which Round?"											 
 };
 
 export default AppConstants;

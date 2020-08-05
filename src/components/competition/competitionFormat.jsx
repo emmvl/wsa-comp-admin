@@ -1125,7 +1125,7 @@ class CompetitionFormat extends Component {
                 </div>
                 <Modal
                     className="add-membership-type-modal"
-                    title="Regenerate Draw"
+                    title= {AppConstants.regenerateDrawTitle}
                     visible={this.state.drawGenerateModalVisible}
                     onOk={() => this.handleGenerateDrawModal("ok")}
                     onCancel={() => this.handleGenerateDrawModal("cancel")}>
