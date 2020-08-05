@@ -269,12 +269,6 @@ class LiveScoreMatchSheet extends Component {
             render: (id) => <div style={{minWidth: 80}}>{id}</div>,
         },
         {
-            title: AppConstants.competition,
-            dataIndex: 'competitionName',
-            key: 'competitionName',
-            sorter: (a, b) => tableSort(a, b, "competitionName"),
-        },
-        {
             title: AppConstants.name,
             dataIndex: 'name',
             key: 'name',
