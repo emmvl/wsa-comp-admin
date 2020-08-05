@@ -7,17 +7,26 @@ class SideBar extends Component {
   constructor(props) {
     super(props);
 
-    this.searchedArray = [-1];
+    this.searchedTreeLeafArray = [-1];
+    this.searchedArticleArray = [];
+
     this.state = {
-      searchMode: "Refine",
       searchContent: "",
       searchApply: "",
+    };
+  }
+
+  componentDidUpdate() {
+    if (this.searchedTreeLeafArray.length === 0) {
+      this.searchedTreeLeafArray = [-1];
     }
   }
 
   onChangeSearchText = (e) => {
     if (e.target.value.length === 0) {
-      this.searchedArray = [-1];
+      this.searchedTreeLeafArray = [];
+      this.searchedArticleArray = [];
+
       this.setState({
         searchApply: e.target.value,
       });
@@ -35,15 +44,15 @@ class SideBar extends Component {
   };
 
   onClickSearchIcon = () => {
-    this.setState({ searchApply: "" + this.state.searchContent });
+    this.setState({ searchApply: `${this.state.searchContent}` });
   }
 
   search = id => {
     if (id === -1) {
-      this.searchedArray = [];
+      this.searchedTreeLeafArray = [];
       for (let i = 0; i < this.props.content.length; i++) {
         if (this.props.content[i].article.toLowerCase().search(this.state.searchApply.toLowerCase()) >= 0) {
-          this.searchedArray.push(this.props.content[i].id);
+          this.searchedArticleArray.push(this.props.content[i].id);
           if (this.props.content[i].parentArticleId) {
             this.search(this.props.content[i].parentArticleId.id);
           }
@@ -52,7 +61,7 @@ class SideBar extends Component {
     } else if (id > 0) {
       for (let i = 0; i < this.props.content.length; i++) {
         if (id === this.props.content[i].id) {
-          this.searchedArray.push(this.props.content[i].id);
+          this.searchedTreeLeafArray.push(this.props.content[i].id);
           if (this.props.content[i].parentArticleId) {
             this.search(this.props.content[i].parentArticleId.id);
           }
@@ -64,10 +73,18 @@ class SideBar extends Component {
   };
 
   render() {
-    const { content, func } = this.props;
+    const { content, setContentPanel } = this.props;
+
     const tree = [];
     let leaves = [];
-    content.map((art) => art.parentArticleId === null ? tree.push({ ...art }) : leaves.push({ ...art }));
+    content.forEach((art) => {
+      if (art.parentArticleId === null) {
+        tree.push({ ...art });
+      } else {
+        leaves.push({ ...art });
+      }
+    });
+
     if (this.state.searchApply.length > 0) {
       this.search(-1);
     }
@@ -94,18 +111,22 @@ class SideBar extends Component {
         <div className="separator" />
 
         {tree.map((cont) => {
-          if (this.searchedArray.indexOf(-1) === 0
-            || this.searchedArray.indexOf(cont.id) > -1
+          if (
+            ((this.searchedTreeLeafArray.indexOf(-1) === 0 || this.searchedTreeLeafArray.length === 0) && this.searchedArticleArray.length === 0)
+            || this.searchedTreeLeafArray.indexOf(cont.id) > -1
+            || (this.searchedArticleArray.indexOf(cont.id) > -1 || this.searchedArticleArray.length === 0)
           ) {
-            return (<div key={cont.article}>
-              <TreeLeaf
-                searchedArray={this.searchedArray}
-                data={leaves}
-                content={cont}
-                selectArticle={this.props.selectArticle}
-              />
-              <div className="separator"/>
-            </div>);
+            return (
+              <div key={cont.article}>
+                <TreeLeaf
+                  searchedArray={this.searchedTreeLeafArray}
+                  data={leaves}
+                  content={cont}
+                  setContentPanel={setContentPanel}
+                />
+                <div className="separator" />
+              </div>
+            );
           }
           return <></>;
         })}

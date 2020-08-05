@@ -21,7 +21,7 @@ function Support(props) {
     getSupportContent();
   }, [getSupportContent]);
 
-  let content;
+  let content = null;
   result.forEach((article) => {
     if (article.id === currentArticle) {
       content = article.content;
@@ -29,11 +29,11 @@ function Support(props) {
   });
 
   return (
-    <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+    <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
       <DashboardLayout menuHeading={AppConstants.support} menuName={AppConstants.support} />
 
       <div className="support-panel">
-        <SideBar content={result} selectArticle={setCurrentArticle} />
+        <SideBar content={result} setContentPanel={setCurrentArticle} />
         <ContentPanel content={content} />
       </div>
 
