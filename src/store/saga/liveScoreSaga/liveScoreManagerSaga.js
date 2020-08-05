@@ -27,7 +27,7 @@ function* errorSaga(error) {
 export function* liveScoreManagerListSaga(action) {
     try {
         const result = yield call(userHttpApi.liveScoreManagerList, action.roleId,
-            action.entityTypeId, action.entityId, action.searchText)
+            action.entityTypeId, action.entityId, action.searchText,action.offset)
         if (result.status == 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_MANAGER_LIST_SUCCESS,

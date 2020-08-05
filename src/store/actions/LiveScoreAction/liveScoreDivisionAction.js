@@ -1,7 +1,7 @@
 
 import ApiConstants from "../../../themes/apiConstants";
 
-//Banners action
+//Division action
 function getLiveScoreDivisionList(competitionID, compKey) {
 
     const action = {
@@ -51,11 +51,24 @@ function liveScoreDivisionImportAction(data) {
     }
 }
 
+//Division action
+function getMainDivisionListAction(competitionID,offset) {
+
+    const action = {
+        type: ApiConstants.API_LIVE_SCORE_MAIN_DIVISION_LIST_LOAD,
+        competitionID,
+        offset
+    };
+
+    return action;
+}
+
 export {
     getLiveScoreDivisionList,
     liveScoreUpdateDivisionAction,
     createDivisionAction,
     liveScoreDeleteDivision,
-    liveScoreDivisionImportAction
+    liveScoreDivisionImportAction,
+    getMainDivisionListAction
 
 };

@@ -49,7 +49,10 @@ const initialState = {
     newExpiryTime: null,
     newsBody: null,
     allOrg: false,
-    indivisualOrg: false
+    indivisualOrg: false,
+    success:false,
+    newsImage:null,
+    newsVideo:null
 };
 
 function liveScoreNewsState(state = initialState, action) {
@@ -86,6 +89,10 @@ function liveScoreNewsState(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_ADD_NEWS_DETAILS:
             let news_data = action.addNewItemDetail
             let authorData
+
+            state.newsImage=news_data.newsImage
+            state.newsVideo=news_data.newsVideo
+
             if (getLiveScoreCompetiton()) {
 
                 authorData = JSON.parse(getLiveScoreCompetiton())
@@ -96,7 +103,7 @@ function liveScoreNewsState(state = initialState, action) {
 
             state.addEditNews = news_data
             state.addEditNews["author"] = news_data.author ? news_data.author : authorData ? authorData.longName : ''
-            console.log(state.addEditNews, 'news_data#####')
+            
 
             state.news_expire_date = news_data.news_expire_date ? moment(news_data.news_expire_date).format("YYYY-MM-DD") : ""
             // state.news_expire_date = moment(news_data.news_expire_date).format("YYYY-MM-DD")
@@ -122,6 +129,8 @@ function liveScoreNewsState(state = initialState, action) {
             state.addEditNews['title'] = null
             state.addEditNews['body'] = null
             state.addEditNews['news_expire_date'] = null
+            state.newsImage=null
+            state.newsVideo=null
 
             return {
                 ...state,
@@ -149,6 +158,9 @@ function liveScoreNewsState(state = initialState, action) {
             else if (action.key == "allOrg" || action.key == "indivisualOrg") {
                 state[action.key] = action.data
             }
+            else if (action.key == "newsImage" || action.key == "newsVideo") {
+                state[action.key] = action.data
+            }
             else {
                 state.addEditNews[action.key] = action.data
             }
@@ -159,7 +171,7 @@ function liveScoreNewsState(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_ADD_NEWS_LOAD:
             return {
-                ...state, onLoad_2: true
+                ...state, onLoad_2: true,success:false
             }
         case ApiConstants.API_LIVE_SCORE_ADD_NEWS_SUCCESS:
             // history.push('/liveScoreNewsList')
@@ -168,7 +180,8 @@ function liveScoreNewsState(state = initialState, action) {
                 ...state,
                 onLoad_2: false,
                 addNewsResult: action.result,
-                status: action.status
+                status: action.status,
+                success:true
             };
         case ApiConstants.API_NEWS_SAGA_FAIL:
             return {
@@ -178,6 +191,7 @@ function liveScoreNewsState(state = initialState, action) {
                 error: action.error,
                 status: action.status,
                 onLoad: false,
+                success:false
             };
         case ApiConstants.API_NEWS_SAGA_ERROR:
             return {
@@ -187,6 +201,7 @@ function liveScoreNewsState(state = initialState, action) {
                 error: action.error,
                 status: action.status,
                 onLoad: false,
+                success:false
             };
 
         case ApiConstants.API_LIVESCORE_NEWS_NOTIFICATION_LOAD:

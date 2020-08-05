@@ -26,7 +26,7 @@ function* errorSaga(error) {
 export function* liveScoreCoachSaga(action) {
 
     try {
-        const result = yield call(userHttpApi.liveScoreCoachesList, action.roleId, action.entityTypeId, action.entityId, action.search);
+        const result = yield call(userHttpApi.liveScoreCoachesList, action.roleId, action.entityTypeId, action.entityId, action.search,action.offset);
         if (result.status === 1) {
 
             yield put({

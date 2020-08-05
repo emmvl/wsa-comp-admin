@@ -27,7 +27,7 @@ function* errorSaga(error) {
     }, 800);
 }
 
-//////get the competition fee list in registration
+//////get the Division list
 export function* liveScoreDivisionsaga(action) {
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreGetDivision, action.competitionID, action.compKey);
@@ -110,5 +110,24 @@ export function* liveScoreDivisionImportSaga(action) {
         yield call(errorSaga, e)
     }
 
+}
+
+
+//// Main Division List
+export function* liveScoreMainDivisionListsaga(action) {
+    try {
+        const result = yield call(LiveScoreAxiosApi.liveScoreGetMainDivisionList, action.competitionID, action.offset);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_LIVE_SCORE_MAIN_DIVISION_LIST_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
 }
 

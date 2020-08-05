@@ -160,7 +160,8 @@ class LiveScoreManagerList extends Component {
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ competitionId: id })
-        this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText)
+        let offset=0
+        this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText,offset)
     }
 
     ////////form content view
