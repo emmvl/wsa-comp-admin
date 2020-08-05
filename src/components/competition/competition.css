@@ -261,6 +261,7 @@
 .quick-comp-btn-view {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
 }
 .comp-dashboard-table-tag {
   font-family: inter-semi-bold;
@@ -288,11 +289,13 @@
   border-radius: 12px;
 }
 
-.ant-btn-primary {
+
+
+/* .ant-btn-primary {
   color: var(--app-white) !important;
   background-color: var(--app-color) !important;
   border-color: var(--app-color) !important;
-}
+} */
 .cancelBtnWidth{
   width:92.5px
 }
@@ -802,9 +805,31 @@ a.collapsed i {
     padding-top: 3px;
 }
 
-.final-validation {
+.comp-warning-info {
   font-family: inter-medium;
   font-size: 18px;
   text-align: center;
   padding-top: 40px;
+}
+.formView-finals {
+  width: 70%;
+  margin: auto;
+  border-radius: 10px;
+}
+.compitition-finals-venue
+{
+    background-color: white;
+    padding: 13px 40px 40px;
+    border-radius: 10px;
+}
+.compitition-finals-division
+{
+  background-color: white;
+  padding: 20px 40px 40px;
+  border-radius: 10px;
+  margin-top: 40px;
+}
+.inside-container-view> div > div > div >.undefined
+{
+  font-size: 18px;
 }

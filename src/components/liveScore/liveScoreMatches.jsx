@@ -481,9 +481,9 @@ class LiveScoreMatchesList extends Component {
                         rowKey={(record, index) => record.id + index}
                     />
                 </div>
-                <div className="d-flex justify-content-end mb-5" >
+                <div className="d-flex justify-content-end" >
                     <Pagination
-                        className="antd-pagination pb-5"
+                        className="antd-pagination"
                         current={liveScoreMatchListState.liveScoreMatchListPage}
                         total={total}
                         onChange={(page) => this.onPageChange(page)}

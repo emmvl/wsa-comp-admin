@@ -12,7 +12,10 @@
     background: var(--app-white);
     width: 100%;
   }
-    .place-auto-complete-input-error {
+    .place-auto-complete-container .input-error {
+      border-color: var(--app-red);
+    }
+    .place-auto-complete-container .place-auto-complete-input-error-message {
       color: var(--app-red);
     }
     .place-auto-complete-container .ant-input {

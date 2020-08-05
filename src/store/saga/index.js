@@ -112,7 +112,7 @@ import {
   getGenderSaga, getPhotoTypeSaga, getAppyToSaga, getExtraTimeDrawSaga,
   getFinalsFixtureTemplateSaga, courtListSaga, getSendInvitesSaga, RegistrationRestrictionType,
   getAllowTeamRegistrationTypeSaga, disabilityReferenceSaga, getCommonInitSaga, getStateReferenceSaga,
-  getRegistrationPaymentStatusSaga, getMatchPrintTemplateTypeSaga
+  getRegistrationPaymentStatusSaga, getMatchPrintTemplateTypeSaga, checkVenueAddressDuplicationSaga
 } from "./commonSaga/commonSaga";
 
 import { fixtureTemplateSaga } from '../saga/competitionManagementSaga/competitionManagementSaga';
@@ -195,9 +195,14 @@ import * as umpireRoasterSaga from "../saga/umpireSaga/umpireRoasterSaga"
 import * as umpireSaga from "../saga/umpireSaga/umpireSaga"
 import * as assignUmpireSaga from "../saga/umpireSaga/assignUmpireSaga";
 import * as shopProductSaga from "../saga/shopSaga/productSaga";
-import * as competitionQuickSaga from "../saga/competitionManagementSaga/competitionQuickSaga";
+import * as competitionQuickSaga from "../saga/competitionManagementSaga/competitionQuickCompetitionSaga";
 import * as liveScoreMatchSheetSaga from './liveScoreSaga/liveScoreMatchSheetSaga';
 import * as shopSettingSaga from './shopSaga/shopSettingSaga';
+
+import { getInnerHorizontalCompSaga } from './liveScoreSaga/liveScoreInnerHorizontalSaga'
+import { quickCompetitionAddVenue } from "../actions/competitionModuleAction/competitionQuickCompetitionAction";
+
+import { liveScorePositionTrackSaga } from './liveScoreSaga/liveScorePositionTrackSaga'
 
 export default function* root_saga() {
   yield takeEvery(ApiConstants.API_LOGIN_LOAD, loginApiSaga);
@@ -801,7 +806,21 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_UPDATE_TERMS_AND_CONDITION_LOAD, userSaga.updateTermsAndConditionsSaga);
   yield takeEvery(ApiConstants.API_COMPETITION_STATUS_UPDATE_LOAD, updateCompetitionStatusSaga)
 
-    ////////competition Active Draws rounds
-    yield takeEvery(ApiConstants.API_GET_DRAWS_ACTIVE_ROUNDS_LOAD, getActiveDrawsRoundsSaga)
+  ////////competition Active Draws rounds
+  yield takeEvery(ApiConstants.API_GET_DRAWS_ACTIVE_ROUNDS_LOAD, getActiveDrawsRoundsSaga)
+
+  // Check venue address duplication
+  yield takeEvery(ApiConstants.API_VENUE_ADDRESS_CHECK_DUPLICATION_LOAD, checkVenueAddressDuplicationSaga);
+
+  // Umpire Round Saga
+
+  yield takeEvery(ApiConstants.API_UMPIRE_ROUND_LIST_LOAD, umpireDashboardSaga.umpireRoundListSaga)
+
+  yield takeEvery(ApiConstants.API_INNER_HORIZONTAL_COMPETITION_LIST_LOAD, getInnerHorizontalCompSaga)
+
+
+  //add quick competition venue
+  yield takeEvery(ApiConstants.API_QUICK_COMPETITION_ADDVENUE_LOAD, competitionQuickSaga.quickCompetitionAddVenueSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_POSITION_TRACKING_LOAD, liveScorePositionTrackSaga)
 
 }

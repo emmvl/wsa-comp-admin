@@ -191,8 +191,15 @@ class CompetitionFormat extends Component {
                     this.setState({ drawGenerateModalVisible: true })
                 }
                 else {
-                    message.config({ duration: 0.9, maxCount: 1 });
-                    message.info(AppConstants.roundsNotAvailable);
+                    let payload = {
+                        yearRefId: this.state.yearRefId,
+                        competitionUniqueKey: this.state.firstTimeCompId,
+                        organisationId: this.state.organisationId
+                    }
+                    this.props.generateDrawAction(payload);
+                    this.setState({ loading: true });
+                    // message.config({ duration: 0.9, maxCount: 1 });
+                    // message.info(AppConstants.roundsNotAvailable);
                 }
             }
         }
@@ -981,6 +988,7 @@ class CompetitionFormat extends Component {
         return (
             <div>
                 <Modal
+                    className="add-membership-type-modal"
                     title="Competition Format"
                     visible={this.state.allDivisionVisible}
                     onOk={() => this.handleAllDivisionModal(false, "ok", this.state.currentIndex, competionFormatDivisions)}
@@ -995,6 +1003,7 @@ class CompetitionFormat extends Component {
         return (
             <div>
                 <Modal
+                    className="add-membership-type-modal"
                     title="Competition Format"
                     visible={this.state.deleteModalVisible}
                     onOk={() => this.handleDeleteModal(false, "ok", this.state.currentIndex, competionFormatDivisions)}
@@ -1018,7 +1027,7 @@ class CompetitionFormat extends Component {
                         <div className="col-sm">
                             <div className="reg-add-save-button">
                                 <NavLink to="/competitionVenueTimesPrioritisation">
-                                    <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
+                                    <Button disabled={isPublished} className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
                                 </NavLink>
                             </div>
                         </div>
@@ -1039,7 +1048,7 @@ class CompetitionFormat extends Component {
                                         title={AppConstants.statusPublishHover}
                                     >
                                         <Button
-                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 10 }}
+                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 6 }}
                                             className="publish-button save-draft-text"
                                             type="primary"
                                             htmlType="submit"
@@ -1051,6 +1060,7 @@ class CompetitionFormat extends Component {
                                     </Tooltip>
                                     <NavLink to="/competitionFinals">
                                         <Button
+                                            disabled={isPublished}
                                             className="publish-button margin-top-disabled-button"
                                             type="primary"
                                         >
@@ -1073,7 +1083,7 @@ class CompetitionFormat extends Component {
                                         title={AppConstants.statusPublishHover}
                                     >
                                         <Button
-                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 10 }}
+                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 6 }}
                                             className="publish-button save-draft-text"
                                             type="primary"
                                             htmlType="submit"
@@ -1098,7 +1108,7 @@ class CompetitionFormat extends Component {
                                     >
                                         <Button
                                             id={AppUniqueId.create_Draft_Draw_Btn}
-                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 10 }}
+                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 6 }}
                                             className="open-reg-button"
                                             type="primary"
                                             htmlType="submit"
@@ -1114,7 +1124,8 @@ class CompetitionFormat extends Component {
                     </div>
                 </div>
                 <Modal
-                    title="Regenerate Draw"
+                    className="add-membership-type-modal"
+                    title= {AppConstants.regenerateDrawTitle}
                     visible={this.state.drawGenerateModalVisible}
                     onOk={() => this.handleGenerateDrawModal("ok")}
                     onCancel={() => this.handleGenerateDrawModal("cancel")}>

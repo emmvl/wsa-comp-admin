@@ -131,8 +131,9 @@ class CompetitionException extends Component {
                 this.setState({drawGenerateModalVisible: true})
               }
               else{
-                message.config({ duration: 0.9, maxCount: 1 });
-                message.info(AppConstants.roundsNotAvailable);
+                this.callGenerateDraw();
+                // message.config({ duration: 0.9, maxCount: 1 });
+                // message.info(AppConstants.roundsNotAvailable);
               }
           }
 
@@ -382,7 +383,8 @@ class CompetitionException extends Component {
 
                 
                 <Modal
-                    title="Regenerate Draw"
+                    className="add-membership-type-modal"
+                    title= {AppConstants.regenerateDrawTitle}
                     visible={this.state.drawGenerateModalVisible}
                     onOk={() => this.handleGenerateDrawModal("ok")}
                     onCancel={() => this.handleGenerateDrawModal("cancel")}>

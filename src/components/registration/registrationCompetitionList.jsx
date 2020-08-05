@@ -304,7 +304,7 @@ class RegistrationCompetitionList extends Component {
                             <div className="com-year-select-heading-view pb-3">
                                 <span className="year-select-heading" style={{ width: 50 }}>{AppConstants.year}:</span>
                                 <Select
-                                    // style={{ width: 90 }}
+                                    style={{ width: 90 }}
                                     className="year-select reg-filter-select-year ml-2"
                                     value={this.state.yearRefId}
                                     onChange={(e) => this.yearChange(e)}

@@ -11,6 +11,10 @@
   color: var(--app-color);
   border-bottom: 2px solid var(--app-color);
 }
+.innerSelect-value
+.ant-select-selection-selected-value{
+  max-width: 155px !important;
+}
 
 .ant-menu {
   font-size: 14px;
@@ -156,6 +160,14 @@
   max-width: 100%;
 }
 
+.inner-horizontal-Comp-dropdown-div{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  border-bottom: 1px solid #e8e8e8;
+  background-color: var(--app-white);
+}
+
 @media screen and (max-width: 1190px) {
   .header-wrap .logo-box {
     display: block;
@@ -235,6 +247,17 @@
 
   .product-reg-search-input .ant-input {
     padding: 0 15px
+  }
+
+  .inner-horizontal-dropdown-marginTop{
+    margin-top: 12px
+  }
+  .inner-horizontal-Comp-dropdown-div{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    border-bottom: none;
+    background-color: transparent;
   }
 }
 

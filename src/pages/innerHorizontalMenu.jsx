@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu } from "antd";
+import { Menu, Select } from "antd";
 import { NavLink } from "react-router-dom";
 
 import AppConstants from "../themes/appConstants";
@@ -7,8 +7,15 @@ import { checkOrganisationLevel } from "../util/permissions";
 import AccountMenu from "./InnerHorizontalMenu/AccountMenu";
 import "./layout.css";
 import AppUniqueId from "../themes/appUniqueId";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { isArrayNotEmpty } from "../util/helpers";
+import { innerHorizontalCompetitionListAction } from '../store/actions/LiveScoreAction/liveScoreInnerHorizontalAction'
+import { getLiveScoreCompetiton } from '../util/sessionStorage';
+import history from "../util/history";
 
 const { SubMenu } = Menu;
+const { Option } = Select;
 
 class InnerHorizontalMenu extends React.Component {
     constructor(props) {
@@ -16,13 +23,18 @@ class InnerHorizontalMenu extends React.Component {
 
         this.state = {
             organisationLevel: "",
+            selectedComp: null,
+            loading: false,
+            orgId: null,
+            orgState: false
         };
     }
 
     componentDidMount() {
         checkOrganisationLevel().then((value) => (
-            this.setState({ organisationLevel: value })
+            this.setState({ organisationLevel: value, orgState: true })
         ));
+
 
         if (this.props) {
             if (this.props.compSelectedKey !== "18") {
@@ -33,10 +45,52 @@ class InnerHorizontalMenu extends React.Component {
         }
     }
 
+    componentDidUpdate(nextProps) {
+
+        if (this.props.userState.onLoad == false && this.state.orgState == true) {
+            if (JSON.parse(localStorage.getItem('setOrganisationData'))) {
+                let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
+                this.props.innerHorizontalCompetitionListAction(organisationId)
+                this.setState({ loading: true, orgId: organisationId, orgState: false })
+            }
+        }
+
+        if (nextProps.innerHorizontalState !== this.props.innerHorizontalState) {
+
+            if (this.state.loading == true && this.props.innerHorizontalState.onLoad == false) {
+                let compList = isArrayNotEmpty(this.props.innerHorizontalState.competitionList) ? this.props.innerHorizontalState.competitionList : []
+                let firstComp = 1
+
+                if (getLiveScoreCompetiton()) {
+                    const { id } = JSON.parse(getLiveScoreCompetiton())
+                    firstComp = id
+                } else {
+                    firstComp = compList.length > 0 && compList[0].id
+                }
+                this.setState({ selectedComp: firstComp, compArray: compList, loading: false })
+            }
+        }
+    }
+
+
+    setCompetitionID = (compId) => {
+        this.setState({ selectedComp: compId })
+        let compObj = null
+        for (let i in this.state.compArray) {
+            if (compId == this.state.compArray[i].id) {
+                compObj = this.state.compArray[i]
+                break;
+            }
+        }
+        localStorage.setItem("LiveScoreCompetiton", JSON.stringify(compObj))
+        history.push("/liveScoreDashboard")
+    }
+
     render() {
         let orgLevel = this.state.organisationLevel;
         const { menu, selectedKey } = this.props;
-
+        const { competitionList } = this.props.innerHorizontalState
+        let compList = isArrayNotEmpty(competitionList) ? competitionList : []
         return (
             <div>
                 {menu === "competition" && <Menu
@@ -238,176 +292,199 @@ class InnerHorizontalMenu extends React.Component {
                 </Menu>
                 }
 
-                {menu === "liveScore" && <Menu
-                    theme="light"
-                    mode="horizontal"
-                    defaultSelectedKeys={['1']}
-                    style={{ lineHeight: '64px' }}
-                    selectedKeys={[this.props.liveScoreSelectedKey]}
-                >
-                    <Menu.Item key="1">
-                        <NavLink to="/liveScoreDashboard">
-                            <span>Dashboard</span>
-                        </NavLink>
-                    </Menu.Item>
-                    <SubMenu
-                        key="sub1"
-                        title={
-                            <span>Competition Details</span>
-                        }
-                    >
-                        <Menu.Item key="2">
-                            <NavLink to={{
-                                pathname: '/liveScoreMatches',
-                            }}>
-                                <span>Matches</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="3">
-                            <NavLink to="/liveScoreTeam">
-                                <span>Teams</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="23">
-                            <NavLink to="/LiveScoreCoaches">
-                                <span>Coaches </span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="4">
-                            <NavLink to="/liveScoreManagerList">
-                                <span>Managers</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="5">
-                            <NavLink to="/liveScorerList">
-                                <span>Scorers</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="6">
-                            <NavLink to={{
-                                pathname: "/umpireDashboard",
-                                state: { liveScoreUmpire: 'liveScoreUmpire' }
-                            }}>
-                                <span>Umpires</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="7">
-                            <NavLink to="/liveScorePlayerList">
-                                <span>Players</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="8">
-                            <NavLink to="/userAffiliatesList">
-                                <span>Affiliates</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="9">
-                            <NavLink to="/liveScoreDivisionList">
-                                <span>Divisions</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="10">
-                            <NavLink to="/venuesList">
-                                <span>Venues</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="11">
-                            <NavLink to="/liveScoreLadderList">
-                                <span>Ladder</span>
-                            </NavLink>
-                        </Menu.Item>
-                    </SubMenu>
-                    <SubMenu
-                        key="sub2"
-                        title={
-                            <span>Match Day</span>
-                        }
-                    >
-                        <Menu.Item key="12">
-                            <NavLink to="/liveScoreBulkChange">
-                                <span>Bulk Match Change</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="13">
-                            <NavLink to="liveScoreVenueChange">
-                                <span>Court Change</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="14">
-                            <NavLink to="/liveScoreTeamAttendance">
-                                <span>Team Attendance</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <SubMenu
-                            key="sub3"
-                            title={
-                                <span>Statistics</span>
-                            }
-                        >
-                            <Menu.Item key="15">
-                                <NavLink to="/liveScoreGameTimeList">
-                                    <span>Game Time</span>
-                                </NavLink>
-                            </Menu.Item>
-                            {/* <Menu.Item key="16">
+                {menu === "liveScore" &&
+                    <div className="row mr-0">
+                        <div className="col-sm pr-0">
+                            <Menu
+                                theme="light"
+                                mode="horizontal"
+                                defaultSelectedKeys={['1']}
+                                style={{ lineHeight: '64px' }}
+                                selectedKeys={[this.props.liveScoreSelectedKey]}
+                            >
+
+                                <Menu.Item key="1">
+                                    <NavLink to="/liveScoreDashboard">
+                                        <span>Dashboard</span>
+                                    </NavLink>
+                                </Menu.Item>
+                                <SubMenu
+                                    key="sub1"
+                                    title={
+                                        <span>Competition Details</span>
+                                    }
+                                >
+                                    <Menu.Item key="2">
+                                        <NavLink to={{
+                                            pathname: '/liveScoreMatches',
+                                        }}>
+                                            <span>Matches</span>
+                                        </NavLink>
+                                    </Menu.Item>
+                                    <Menu.Item key="3">
+                                        <NavLink to="/liveScoreTeam">
+                                            <span>Teams</span>
+                                        </NavLink>
+                                    </Menu.Item>
+                                    <Menu.Item key="23">
+                                        <NavLink to="/LiveScoreCoaches">
+                                            <span>Coaches </span>
+                                        </NavLink>
+                                    </Menu.Item>
+                                    <Menu.Item key="4">
+                                        <NavLink to="/liveScoreManagerList">
+                                            <span>Managers</span>
+                                        </NavLink>
+                                    </Menu.Item>
+                                    <Menu.Item key="5">
+                                        <NavLink to="/liveScorerList">
+                                            <span>Scorers</span>
+                                        </NavLink>
+                                    </Menu.Item>
+                                    <Menu.Item key="6">
+                                        <NavLink to={{
+                                            pathname: "/umpireDashboard",
+                                            state: { liveScoreUmpire: 'liveScoreUmpire' }
+                                        }}>
+                                            <span>Umpires</span>
+                                        </NavLink>
+                                    </Menu.Item>
+                                    <Menu.Item key="7">
+                                        <NavLink to="/liveScorePlayerList">
+                                            <span>Players</span>
+                                        </NavLink>
+                                    </Menu.Item>
+                                    <Menu.Item key="8">
+                                        <NavLink to="/userAffiliatesList">
+                                            <span>Affiliates</span>
+                                        </NavLink>
+                                    </Menu.Item>
+                                    <Menu.Item key="9">
+                                        <NavLink to="/liveScoreDivisionList">
+                                            <span>Divisions</span>
+                                        </NavLink>
+                                    </Menu.Item>
+                                    <Menu.Item key="10">
+                                        <NavLink to="/venuesList">
+                                            <span>Venues</span>
+                                        </NavLink>
+                                    </Menu.Item>
+                                    <Menu.Item key="11">
+                                        <NavLink to="/liveScoreLadderList">
+                                            <span>Ladder</span>
+                                        </NavLink>
+                                    </Menu.Item>
+                                </SubMenu>
+                                <SubMenu
+                                    key="sub2"
+                                    title={
+                                        <span>Match Day</span>
+                                    }
+                                >
+                                    <Menu.Item key="12">
+                                        <NavLink to="/liveScoreBulkChange">
+                                            <span>Bulk Match Change</span>
+                                        </NavLink>
+                                    </Menu.Item>
+                                    <Menu.Item key="13">
+                                        <NavLink to="liveScoreVenueChange">
+                                            <span>Court Change</span>
+                                        </NavLink>
+                                    </Menu.Item>
+                                    <Menu.Item key="14">
+                                        <NavLink to="/liveScoreTeamAttendance">
+                                            <span>Team Attendance</span>
+                                        </NavLink>
+                                    </Menu.Item>
+                                    <SubMenu
+                                        key="sub3"
+                                        title={
+                                            <span>Statistics</span>
+                                        }
+                                    >
+                                        <Menu.Item key="15">
+                                            <NavLink to="/liveScoreGameTimeList">
+                                                <span>Game Time</span>
+                                            </NavLink>
+                                        </Menu.Item>
+                                        {/* <Menu.Item key="16">
                                 <NavLink to="/liveScoreShooting">
                                     <span>Shooting</span>
                                 </NavLink>
                             </Menu.Item> */}
-                            <Menu.Item key="16">
-                                <NavLink to="/liveScoreGoalsList">
-                                    <span>Goals</span>
-                                </NavLink>
-                            </Menu.Item>
-                            <Menu.Item key="24">
-                                <NavLink to="/liveScorePositionTrackReport">
-                                    <span>Position Tracking</span>
-                                </NavLink>
-                            </Menu.Item>
-                        </SubMenu>
-                        <Menu.Item key="17">
-                            <NavLink to="/liveScoreIncidentList">
-                                <span>Incidents</span>
-                            </NavLink>
-                        </Menu.Item>
-                    </SubMenu>
-                    <SubMenu
-                        key="sub4"
-                        title={
-                            <span>Settings</span>
-                        }
-                    >
-                        <Menu.Item key="18">
-                            <NavLink to={{
-                                pathname: '/liveScoreSettingsView',
-                                state: 'edit'
-                            }}>
-                                <span>Settings</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="19">
-                            <NavLink to="/liveScoreLadderSettings">
-                                <span>Ladder/Draw</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="20">
-                            <NavLink to="/liveScoreBanners">
-                                <span>Banners</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="22">
-                            <NavLink to="/liveScoreMatchSheet">
-                                <span>Match Sheets</span>
-                            </NavLink>
-                        </Menu.Item>
-                    </SubMenu>
-                    <Menu.Item key="21">
-                        <NavLink to="/liveScoreNewsList">
-                            {/* <NavLink to="/liveScoreAddEditCoach"> */}
-                            <span>News & Messages</span>
-                        </NavLink>
-                    </Menu.Item>
-                </Menu>
+                                        <Menu.Item key="16">
+                                            <NavLink to="/liveScoreGoalsList">
+                                                <span>Goals</span>
+                                            </NavLink>
+                                        </Menu.Item>
+                                        <Menu.Item key="24">
+                                            <NavLink to="/liveScorePositionTrackReport">
+                                                <span>Position Tracking</span>
+                                            </NavLink>
+                                        </Menu.Item>
+                                    </SubMenu>
+                                    <Menu.Item key="17">
+                                        <NavLink to="/liveScoreIncidentList">
+                                            <span>Incidents</span>
+                                        </NavLink>
+                                    </Menu.Item>
+                                </SubMenu>
+                                <SubMenu
+                                    key="sub4"
+                                    title={
+                                        <span>Settings</span>
+                                    }
+                                >
+                                    <Menu.Item key="18">
+                                        <NavLink to={{
+                                            pathname: '/liveScoreSettingsView',
+                                            state: 'edit'
+                                        }}>
+                                            <span>Settings</span>
+                                        </NavLink>
+                                    </Menu.Item>
+                                    <Menu.Item key="19">
+                                        <NavLink to="/liveScoreLadderSettings">
+                                            <span>Ladder/Draw</span>
+                                        </NavLink>
+                                    </Menu.Item>
+                                    <Menu.Item key="20">
+                                        <NavLink to="/liveScoreBanners">
+                                            <span>Banners</span>
+                                        </NavLink>
+                                    </Menu.Item>
+                                    <Menu.Item key="22">
+                                        <NavLink to="/liveScoreMatchSheet">
+                                            <span>Match Sheets</span>
+                                        </NavLink>
+                                    </Menu.Item>
+                                </SubMenu>
+                                <Menu.Item key="21">
+                                    <NavLink to="/liveScoreNewsList">
+                                        <span>News & Messages</span>
+                                    </NavLink>
+                                </Menu.Item>
+                            </Menu>
+
+
+                        </div>
+                        <div className="col-sm-2 pr-5 inner-horizontal-dropdown-marginTop inner-horizontal-Comp-dropdown-div">
+                            <Select
+                                style={{ width: "fit-content", minWidth: 150, maxWidth: 220 }}
+                                className="year-select reg-filter-select1 innerSelect-value"
+                                onChange={(comp) => this.setCompetitionID(comp)}
+                                value={this.state.selectedComp}
+                            >
+                                {
+                                    compList.map((item, index) => {
+                                        return <Option key={`longName` + index} value={item.id}>{item.longName}</Option>
+                                    })
+                                }
+
+                            </Select>
+                        </div>
+                    </div>
+
                 }
 
                 {menu === "umpire" && <Menu
@@ -636,4 +713,17 @@ class InnerHorizontalMenu extends React.Component {
     }
 }
 
-export default InnerHorizontalMenu;
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        innerHorizontalCompetitionListAction
+    }, dispatch)
+}
+
+function mapStatetoProps(state) {
+    return {
+        innerHorizontalState: state.InnerHorizontalState,
+        userState: state.UserState,
+    }
+}
+
+export default connect(mapStatetoProps, mapDispatchToProps)((InnerHorizontalMenu));

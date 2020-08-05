@@ -134,7 +134,7 @@ const columns = [
         key: 'comments',
         width: 110,
         render: (comments, record) =>
-            <div style={{ display: "flex", justifyContent: "center", cursor: "pointer" }} onClick={() => this_obj.state.competitionStatus != 1 && this_obj.onClickComment(record)}>
+            <div style={{ display: "flex", justifyContent: "center", cursor: "pointer" }} onClick={() => this_obj.state.competitionStatus !== 0 && this_obj.onClickComment(record)}>
                 <img src={record.isCommentsAvailable == 1 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
             </div>,
     },
@@ -614,13 +614,13 @@ class CompetitionPartProposedTeamGrading extends Component {
     footerView = () => {
         let isPublished = this.state.competitionStatus == 1 ? true : false
         return (
-            <div className="fluid-width" >
+            <div className="fluid-width paddingBottom56px" >
                 {/* <div className="comp-player-grades-footer-view"> */}
                 <div className="row" >
                     <div className="col-sm-3 mt-3" >
                         <div className="reg-add-save-button">
                             <NavLink to="/competitionPartPlayerGrades">
-                                <Button className="cancelBtnWidth" type="cancel-button"  >{AppConstants.back}</Button>
+                                <Button disabled={isPublished} className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
                             </NavLink>
                         </div>
                     </div>
@@ -642,7 +642,7 @@ class CompetitionPartProposedTeamGrading extends Component {
                                 >
                                     {/* <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button> */}
                                     <Button disabled={isPublished} className="publish-button save-draft-text"
-                                        style={{ height: isPublished && "100%", borderRadius: isPublished && 10, width: isPublished && "inherit" }}
+                                        style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }}
                                         onClick={() => this.submitApiCall("save")}
                                         type="primary">{AppConstants.save}
                                     </Button>
@@ -662,10 +662,11 @@ class CompetitionPartProposedTeamGrading extends Component {
                                 >
                                     <Button
                                         disabled={isPublished}
-                                        style={{ height: isPublished && "100%", borderRadius: isPublished && 10, width: isPublished && "inherit" }} className="publish-button save-draft-text"
+                                        style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }} className="publish-button save-draft-text"
                                         type="primary"
                                         onClick={() => this.submitApiCall("submit")}>
-                                        {AppConstants.submit}</Button>
+                                        {AppConstants.submit}
+                                    </Button>
                                 </Tooltip>
                             </div>}
                     </div>

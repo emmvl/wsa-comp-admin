@@ -289,7 +289,7 @@ class RegistrationMainDashboard extends Component {
                                         {AppConstants.year}:</span>
                                     <Select
                                         className="year-select reg-filter-select-year ml-2"
-                                        // style={{ width: 90 }}
+                                        style={{ width: 90 }}
                                         onChange={yearId => this.onYearClick(yearId)}
                                         value={this.state.year}
                                     >
@@ -479,7 +479,7 @@ class RegistrationMainDashboard extends Component {
     ownedView = () => {
         console.log(this.props.registrationDashboardState)
         return (
-            <div className="comp-dash-table-view">
+            <div className="comp-dash-table-view" style={{ paddingBottom: 100 }}>
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         loading={this.props.registrationDashboardState.onLoad === true && true}

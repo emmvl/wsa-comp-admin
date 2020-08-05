@@ -615,22 +615,36 @@ class RegistrationMembershipFee extends Component {
                                             </div>
                                         </div>
                                     )}
-                                    <Checkbox
-                                        className="single-checkbox"
-                                        style={{ marginLeft: "0px" }}
-                                        checked={item.isAllow}
-                                        onChange={e =>
-                                            this.membershipTypesAndAgeSelected(e.target.checked, index, "isAllow")
-                                        }
-                                        disabled={this.state.membershipIsUsed}
-                                    >
-                                        {AppConstants.allowTeamRegistration}
-                                    </Checkbox>
-
+									<div className="fluid-width">
+										<Checkbox
+											className="single-checkbox"
+											style={{ marginLeft: "0px" }}
+											checked={item.isAllow}
+											onChange={e =>
+												this.membershipTypesAndAgeSelected(e.target.checked, index, "isAllow")
+											}
+											disabled={this.state.membershipIsUsed}
+										>
+											{AppConstants.allowTeamRegistration}
+										</Checkbox>
+                                    </div>
+                                    {item.isPlaying != 1 && (
+                                        <Checkbox
+                                            className="single-checkbox"
+                                            style={{ marginLeft: "0px" }}
+                                            checked={item.isChildrenCheckNumber}
+                                            onChange={e =>
+                                                this.membershipTypesAndAgeSelected(e.target.checked, index, "isChildrenCheckNumber")
+                                            }
+                                            disabled={this.state.membershipIsUsed}
+                                        >
+                                            {AppConstants.childrenCheckNumber}
+                                        </Checkbox>
+                                    )}	
                                     {item.isAllow && item.isPlaying == 1 && (
                                         <div className="fluid-width" style={{ marginTop: "10px" }}>
                                             <div className="row">
-                                                <div className="col-sm">
+                                                <div className="col-sm"  style={{ marginLeft: 25}}>
 
                                                     <Form.Item  >
                                                         {getFieldDecorator(`allowTeamRegistrationTypeRefId${index}`, {
@@ -651,6 +665,7 @@ class RegistrationMembershipFee extends Component {
                                             </div>
                                         </div>
                                     )}
+																	  
                                 </div>
                             )
                         }

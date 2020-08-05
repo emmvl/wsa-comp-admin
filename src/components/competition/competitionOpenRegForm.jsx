@@ -293,7 +293,7 @@ class CompetitionOpenRegForm extends Component {
                 {
                     title: "Gender Restriction",
                     dataIndex: "genderRestriction",
-                    key: "genderRestriction",
+                    key: AppUniqueId.div_gender_chkbox,
                     filterDropdown: true,
                     filterIcon: () => {
                         return (
@@ -306,18 +306,19 @@ class CompetitionOpenRegForm extends Component {
                         );
                     },
                     render: (genderRestriction, record, index) => (
+                        <div>
                         <Checkbox
-                            id={AppUniqueId.div_gender_chkbox}
                             className="single-checkbox mt-1"
                             disabled={(this.state.competitionStatus == 1 || this.state.permissionState.divisionsDisable) ? true : false}
                             checked={genderRestriction}
                             onChange={e => this.divisionTableDataOnchange(e.target.checked, record, index, "genderRestriction")}
                         ></Checkbox>
+                        </div>
                     )
                 },
                 {
                     dataIndex: "genderRefId",
-                    key: "genderRefId",
+                    key: AppUniqueId.div_gender_refid,
                     // width:  ? "20%" : null,
                     render: (genderRefId, record, index) => {
                         const { getFieldDecorator } = this.props.form;
@@ -327,7 +328,6 @@ class CompetitionOpenRegForm extends Component {
                                 {getFieldDecorator(`genderRefId${record.parentIndex}${index}`,
                                     { rules: [{ required: true, message: ValidationConstants.genderRestriction }] })(
                                         <Select
-                                            id={AppUniqueId.div_gender_refid}
                                             className='division-age-select'
                                             style={{ width: "100%", minWidth: 120, }}
                                             onChange={genderRefId => this.divisionTableDataOnchange(genderRefId, record, index, "genderRefId")}
@@ -352,7 +352,7 @@ class CompetitionOpenRegForm extends Component {
                 {
                     title: "Age Restriction",
                     dataIndex: "ageRestriction",
-                    key: "ageRestriction",
+                    key: AppUniqueId.div_ageres_chkbox,
                     filterDropdown: true,
                     filterIcon: () => {
                         return (
@@ -365,19 +365,20 @@ class CompetitionOpenRegForm extends Component {
                         );
                     },
                     render: (ageRestriction, record, index) => (
+                        <div>
                         <Checkbox
-                            id={AppUniqueId.div_ageres_chkbox}
                             className="single-checkbox mt-1"
                             checked={ageRestriction}
                             onChange={e => this.divisionTableDataOnchange(e.target.checked, record, index, "ageRestriction")}
                             disabled={(this.state.competitionStatus == 1 || this.state.permissionState.divisionsDisable) ? true : false}
                         ></Checkbox>
+                        </div>
                     )
                 },
                 {
                     title: "DOB From",
                     dataIndex: "fromDate",
-                    key: "fromDate",
+                    key: AppUniqueId.div_ageres_fromdate,
                     width: "25%",
                     render: (fromDate, record, index) => {
                         const { getFieldDecorator } = this.props.form;
@@ -386,7 +387,6 @@ class CompetitionOpenRegForm extends Component {
                                 {getFieldDecorator(`fromDate${record.parentIndex}${index}`,
                                     { rules: [{ required: record.ageRestriction, message: ValidationConstants.pleaseSelectDOBFrom }] })(
                                         <DatePicker
-                                            id={AppUniqueId.div_ageres_fromdate}
                                             size="large"
                                             className="comp-venue-time-datepicker"
                                             style={{ width: "100%", minWidth: 135 }}
@@ -408,7 +408,7 @@ class CompetitionOpenRegForm extends Component {
                     title: "DOB To",
                     dataIndex: "toDate",
                     width: "25%",
-                    key: "toDate",
+                    key: AppUniqueId.div_ageres_todate,
                     render: (toDate, record, index) => {
                         const { getFieldDecorator } = this.props.form;
                         return (
@@ -416,7 +416,6 @@ class CompetitionOpenRegForm extends Component {
                                 {getFieldDecorator(`toDate${record.parentIndex}${index}`,
                                     { rules: [{ required: record.ageRestriction, message: ValidationConstants.PleaseSelectDOBTo }] })(
                                         <DatePicker
-                                            id={AppUniqueId.div_ageres_todate}
                                             size="large"
                                             className="comp-venue-time-datepicker"
                                             style={{ width: "100%", minWidth: 135 }}
@@ -1150,11 +1149,10 @@ class CompetitionOpenRegForm extends Component {
                                     marginRight: 50
                                 }}
                             >
-                                <span className="year-select-heading">
+                                <span id={AppUniqueId.existing_comp_dropdown} className="year-select-heading">
                                     {AppConstants.competition}:
             </span>
                                 <Select
-                                    id={AppUniqueId.existing_comp_dropdown}
                                     name={"competition"}
                                     className="year-select reg-filter-select-competition ml-2"
                                     onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)
@@ -1456,6 +1454,7 @@ class CompetitionOpenRegForm extends Component {
                     <Form.Item  >
                         {getFieldDecorator('selectedVenues', { rules: [{ required: true, message: ValidationConstants.pleaseSelectvenue }] })(
                             <Select
+                                id={AppUniqueId.select_Venues}
                                 mode="multiple"
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 onChange={venueSelection => {
@@ -1606,7 +1605,7 @@ class CompetitionOpenRegForm extends Component {
                 <InputWithHead heading={AppConstants.timeBetweenRounds} />
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.time_rounds_days} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
                                 placeholder={AppConstants.days}
                                 value={detailsData.competitionDetailData.roundInDays}
@@ -1615,7 +1614,7 @@ class CompetitionOpenRegForm extends Component {
 
                             />
                         </div>
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.time_rounds_hrs} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
                                 placeholder={AppConstants.hours}
                                 value={detailsData.competitionDetailData.roundInHours}
@@ -1624,7 +1623,7 @@ class CompetitionOpenRegForm extends Component {
 
                             />
                         </div>
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.time_rounds_mins} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
                                 placeholder={AppConstants.mins}
                                 value={detailsData.competitionDetailData.roundInMins}
@@ -1661,7 +1660,7 @@ class CompetitionOpenRegForm extends Component {
                 <InputWithHead heading={AppConstants.playerInEachTeam} />
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.team_min_players} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
                                 placeholder={AppConstants.minNumber}
                                 value={detailsData.competitionDetailData.minimunPlayers}
@@ -1670,7 +1669,7 @@ class CompetitionOpenRegForm extends Component {
 
                             />
                         </div>
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.team_max_players} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
                                 placeholder={AppConstants.maxNumber}
                                 value={detailsData.competitionDetailData.maximumPlayers}
@@ -2745,7 +2744,7 @@ class CompetitionOpenRegForm extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <Button id={AppUniqueId.compdiv_cancel_button} className="cancelBtnWidth" type="cancel-button" onClick={() => history.push('/competitionDashboard')} >{AppConstants.back}</Button>
+                                <Button id={AppUniqueId.compdiv_cancel_button} disabled={this.state.competitionStatus == 1 ? true : false} className="cancelBtnWidth" type="cancel-button" onClick={() => history.push('/competitionDashboard')} >{AppConstants.back}</Button>
                             </div>
                         </div>
                         <div className="col-sm">
@@ -2760,13 +2759,13 @@ class CompetitionOpenRegForm extends Component {
                                         title={AppConstants.statusPublishHover}>
                                         <Button
                                             id={AppUniqueId.compdiv_save_button}
-                                            className="publish-button" type="primary"
+                                            className="publish-button save-draft-text" type="primary"
                                             disabled={this.state.competitionStatus == 1 ? true : false}
                                             htmlType="submit" onClick={() => this.setState({
                                                 statusRefId: tabKey == "2" ? 2 : 1,
                                                 buttonPressed: tabKey == "2" ? "publish" : "next"
                                             })}
-                                            style={{ height: 48, width: 92.5, borderRadius: 10 }}
+                                            style={{ height: 48, width: 92.5, }}
                                         >
                                             {tabKey === "2"
                                                 ? AppConstants.save
@@ -2775,7 +2774,7 @@ class CompetitionOpenRegForm extends Component {
                                     </Tooltip>
                                     {tabKey == "2" &&
                                         <NavLink to="/competitionPlayerGrades">
-                                            <Button className="publish-button" type="primary">{AppConstants.next}</Button>
+                                            <Button className="publish-button" type="primary" htmlType="submit" disabled={this.state.competitionStatus == 1 ? true : false} >{AppConstants.next}</Button>
                                         </NavLink>
                                     }
                                 </div>
@@ -2791,7 +2790,7 @@ class CompetitionOpenRegForm extends Component {
                                         <Button
                                             id={AppUniqueId.compdiv_save_button}
                                             className="publish-button save-draft-text" type="primary"
-                                            disabled={tabKey === "1" || tabKey === "2" ? allDisable : isPublished}
+                                            disabled={tabKey === "1" || tabKey === "2" ? this.state.competitionStatus == 1 ? true : allDisable : isPublished}
                                             htmlType="submit" onClick={() => this.setState({
                                                 statusRefId: tabKey == "2" ? 2 : 1,
                                                 buttonPressed: tabKey == "2" ? "publish" : "next"

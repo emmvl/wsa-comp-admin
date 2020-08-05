@@ -12,20 +12,29 @@ import AppConstants from '../../../../themes/appConstants';
 
 const mapAddressInfo = (addressComponents) => {
   if (addressComponents.length > 4) {
+
+    let streetNumber;
+    let address;
+    let suburb;
+    for (let i = 0; i < addressComponents.length; i++) {
+      if (addressComponents[i].types.includes('street_number')) {
+        streetNumber = addressComponents[i].short_name;
+      }
+      if (addressComponents[i].types.includes('route')) {
+        address = addressComponents[i].short_name;
+      }
+      if (addressComponents[i].types.includes('locality')) {
+        suburb = addressComponents[i].short_name;
+      }
+    }
     return {
-      addressOne: addressComponents[0].short_name,
-      suburb: addressComponents[1].short_name,
+      addressOne: streetNumber ? streetNumber + ' ' + address : address,
+      suburb: suburb,
       state: addressComponents[addressComponents.length - 3].short_name,
       postcode: addressComponents[addressComponents.length - 1].short_name,
     }
   }
-
-  return {
-    addressOne: null,
-    suburb: null,
-    state: null,
-    postcode: null,
-  };
+  return null;
 };
 
 const PlacesAutocomplete = ({
@@ -61,23 +70,23 @@ const PlacesAutocomplete = ({
   const handleSelect = ({description}) => () => {
     setValue(description, false);
     clearSuggestions();
-    const data = {
-      address: description,
-      mapData: null,
-      lat: '',
-      lng: '',
-    };
-    data.address = description;
+    let mapData = null;
+
     // Get latitude and longitude via utility functions
     getGeocode({address: description})
       .then((results) => {
-        data.mapData = mapAddressInfo(results[0].address_components);
+        mapData = mapAddressInfo(results[0].address_components);
         return getLatLng(results[0])
       })
       .then(({lat, lng}) => {
-        data.lat = lat;
-        data.lng = lng;
-        onSetData(data);
+
+        const result = mapData ? {
+          ...mapData,
+          lat,
+          lng,
+        } : null;
+
+        onSetData(result);
       })
       .catch((error) => {
         console.log('Error: ', error);
@@ -107,17 +116,17 @@ const PlacesAutocomplete = ({
         </div>
       )}
       <Input
-        className="input"
-        defaultValue="EEEEEEEEEEEEEEEEEEEEEEEEEE"
+        className={error ? 'input-error' : 'input'}
         value={value || defaultAddress}
         onChange={handleInput}
         disabled={!ready}
         placeholder={AppConstants.pleaseInputAddress}
+        autoComplete="new-password"
         {...otherProps}
       />
       {status !== 'OK' && error && (
         <div style={{display: 'flex', alignItems: 'center'}}>
-          <span className="place-auto-complete-input-error">{error}</span>
+          <span className="place-auto-complete-input-error-message">{error}</span>
         </div>
       )}
       {/* We can use the "status" to decide whether we should display the dropdown or not */}

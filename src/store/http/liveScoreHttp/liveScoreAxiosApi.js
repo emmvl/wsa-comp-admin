@@ -893,9 +893,15 @@ let LiveScoreAxiosApi = {
     },
 
     umpireListDashboard(data) {
+        console.log(data)
         let body = data.pageData
-        const url = `/matchUmpire/dashboard?competitionId=${data.compId}&divisionId=${data.divisionid}&venueId=${data.venueId}&organisationId=${data.orgId}`;
-
+        let url
+        if (data.roundId) {
+            const round = JSON.stringify([data.roundId])
+            url = `/matchUmpire/dashboard?competitionId=${data.compId}&divisionId=${data.divisionid}&venueId=${data.venueId}&organisationId=${data.orgId}&roundIds=${round}`;
+        } else {
+            url = `/matchUmpire/dashboard?competitionId=${data.compId}&divisionId=${data.divisionid}&venueId=${data.venueId}&organisationId=${data.orgId}`;
+        }
         // const url = `/matchUmpire/dashboard?competitionId=${1}&divisionId=${3}&venueId=${233}&organisationId=${3}`;
         return Method.dataPost(url, token, body)
     },
@@ -1050,6 +1056,37 @@ let LiveScoreAxiosApi = {
         const url = `users/import?competitionId=${data.id}&roleId=3`;
         return Method.dataPost(url, token, body)
     },
+
+    umpireRoundList(competitionID, divisionId) {
+        let url;
+        if (divisionId) {
+            url = `/round?competitionId=${competitionID}&divisionId=${divisionId}`;
+        } else {
+            url = `/round?competitionId=${competitionID}&divisionId=${divisionId}`;
+        }
+
+        return Method.dataGet(url, localStorage.token)
+    },
+
+    innerHorizontalCompList(organisationId) {
+
+        let url = `/competitions/admin?organisationId=${organisationId}`;
+
+        return Method.dataPost(url, null)
+    },
+
+    liveScorePositionTrackList(data) {
+        let body = data.pagination
+        let url
+        if (data.reporting === 'PERCENT') {
+            url = `/stats/positionTracking?aggregate=${data.aggregate}&reporting=${'MINUTE'}&competitionId=${data.compId}&search=${data.search}`;
+        } else {
+            url = `/stats/positionTracking?aggregate=${data.aggregate}&reporting=${data.reporting}&competitionId=${data.compId}&search=${data.search}`;
+        }
+
+        return Method.dataPost(url, token, body)
+    },
+
 };
 
 const Method = {

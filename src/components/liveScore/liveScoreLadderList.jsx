@@ -279,7 +279,7 @@ class LiveScoreLadderList extends Component {
         let DATA = liveScoreLadderState.liveScoreLadderListData;
         let adjData = liveScoreLadderState.liveScoreLadderAdjData;
         return (
-            <div className="comp-dash-table-view mt-2">
+            <div className="comp-dash-table-view" style={{ paddingBottom: 100 }}>
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         loading={this.props.liveScoreLadderState.onLoad == true ? true : false}

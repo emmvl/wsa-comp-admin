@@ -10,8 +10,32 @@ const initialState = {
     umpireDivisionList: [],
     onDivisionLoad: false,
     umpireDashboardList: [],
-    totalPages: null
+    totalPages: null,
+    umpireRoundList: []
 };
+
+function getHighestSequence(roundArr) {
+
+    let sequence = []
+
+    for (let i in roundArr) {
+        sequence.push(roundArr[i].sequence)
+    }
+
+    return Math.max.apply(null, sequence);
+
+}
+
+// Remove duplicate rounds names 
+
+function removeDuplicateValues(array) {
+    return array.filter((obj, index, self) =>
+        index === self.findIndex((el) => (
+            el["name"] === obj["name"]
+        ))
+    )
+
+}
 
 function umpireDashboardState(state = initialState, action) {
     switch (action.type) {
@@ -69,6 +93,24 @@ function umpireDashboardState(state = initialState, action) {
                 error: action.error,
                 status: action.status
             };
+
+        case ApiConstants.API_UMPIRE_ROUND_LIST_LOAD:
+            return { ...state, rounLoad: true };
+
+
+        case ApiConstants.API_UMPIRE_ROUND_LIST_SUCCESS:
+            let sequenceValue = getHighestSequence(action.result)
+            state.highestSequence = sequenceValue
+            let roundListArray = action.result
+            roundListArray.sort((a, b) => Number(a.sequence) - Number(b.sequence));
+            state.umpireRoundList = removeDuplicateValues(roundListArray)
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                rounLoad: false
+            };
+
         default:
             return state;
     }

@@ -211,7 +211,7 @@ export function* updateQuickCompetitionSaga(action) {
                         competitionName: action.payload.competitionName
                     });
                     if (action.buttonPressed == "AddTeam") {
-                        history.push('/quickCompetitionInvitations', { competitionUniqueKey: action.payload.competitionId, year: action.year })
+                        history.push('/quickCompetitionInvitations', { competitionUniqueKey: action.payload.competitionId, year: action.year, importPlayer: JSON.stringify(detailResult.result.data.importPlayer) })
                     }
                 }
                 else {
@@ -232,7 +232,6 @@ export function* updateQuickCompetitionSaga(action) {
                             competitionId: action.payload.competitionId,
                             competitionName: action.payload.competitionName
                         });
-
                     }
                     else {
                         yield call(failSaga, detailResult)
@@ -258,6 +257,28 @@ export function* quickCompetitionPlayer(action) {
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.QUICKCOMP_IMPORT_DATA_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+            setTimeout(() => {
+                message.success(result.result.data.message)
+            }, 500);
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+// competition add venue saga
+export function* quickCompetitionAddVenueSaga(action) {
+    try {
+        const result = yield call(AxiosApi.addVenueQuickCompetition, action.payload);
+        console.log(result)
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_QUICK_COMPETITION_ADDVENUE_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });

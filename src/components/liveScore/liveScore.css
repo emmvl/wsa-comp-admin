@@ -10,7 +10,14 @@
 .live-score-player-profile-content {
     padding: 0 3%;
 }
+.video_Message{
+    color: var(--app-color);
+    font-weight: 500;
+    font-family: inter-medium;
+    font-size: 11px;
+    padding-top: 5px;
 
+}
 .heading-text {
     display: flex;
     justify-content: center;
@@ -162,6 +169,11 @@
 }
 
 .rdw-editor-main {
+    min-height: 120px;
+    /* max-height: 240px; */
+}
+
+.newsDetailEditor {
     min-height: 120px;
     max-height: 240px;
 }

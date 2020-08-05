@@ -9,7 +9,7 @@ import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { isArrayNotEmpty } from "../../util/helpers";
-import { getUmpireDashboardList, getUmpireDashboardVenueList, getUmpireDashboardDivisionList } from "../../store/actions/umpireAction/umpireDashboardAction"
+import { getUmpireDashboardList, getUmpireDashboardVenueList, getUmpireDashboardDivisionList, umpireRoundListAction } from "../../store/actions/umpireAction/umpireDashboardAction"
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { entityTypes } from '../../util/entityTypes'
 import { refRoleTypes } from '../../util/refRoles'
@@ -514,7 +514,8 @@ class UmpireDashboard extends Component {
             orgId: null,
             compArray: [],
             compititionObj: null,
-            liveScoreUmpire: props.location ? props.location.state ? props.location.state.liveScoreUmpire ? props.location.state.liveScoreUmpire : null : null : null
+            liveScoreUmpire: props.location ? props.location.state ? props.location.state.liveScoreUmpire ? props.location.state.liveScoreUmpire : null : null : null,
+            round: "All"
         }
         this_obj = this
     }
@@ -607,7 +608,8 @@ class UmpireDashboard extends Component {
                     }
                 }
                 this.setState({ divisionLoad: false })
-                this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, pageData: body })
+                this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, roundId: this.state.round == 'All' ? "" : this.state.round, pageData: body })
+                this.props.umpireRoundListAction(this.state.selectedComp, this.state.division == 'All' ? "" : this.state.division)
 
             }
         }
@@ -639,10 +641,9 @@ class UmpireDashboard extends Component {
             }
         }
 
-        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, pageData: body })
+        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, roundId: this.state.round == 'All' ? "" : this.state.round, pageData: body })
 
     }
-
 
     ////////form content view
     contentView = () => {
@@ -687,9 +688,6 @@ class UmpireDashboard extends Component {
         )
     }
 
-
-
-
     onChangeComp(compID) {
         let selectedComp = compID.comp
         let compKey = compID.competitionUniqueKey
@@ -722,13 +720,12 @@ class UmpireDashboard extends Component {
             }
         }
 
-        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: venueId == 'All' ? "" : venueId, orgId: this.state.orgId, pageData: body })
+        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: venueId == 'All' ? "" : venueId, orgId: this.state.orgId, roundId: this.state.round == 'All' ? "" : this.state.round, pageData: body })
         this.setState({ venue: venueId })
 
     }
 
     onDivisionChange(divisionid) {
-
         const body =
         {
             "paging": {
@@ -737,8 +734,21 @@ class UmpireDashboard extends Component {
             }
         }
 
-        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: divisionid == 'All' ? "" : divisionid, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, pageData: body })
-        this.setState({ division: divisionid })
+        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: divisionid == 'All' ? "" : divisionid, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, roundId: this.state.round == 'All' ? "" : this.state.round, pageData: body })
+        this.props.umpireRoundListAction(this.state.selectedComp, divisionid == 'All' ? "" : divisionid)
+        this.setState({ division: divisionid,round:'All' })
+    }
+
+    onRoundChange(roundId) {
+        const body =
+        {
+            "paging": {
+                "limit": 10,
+                "offset": 0
+            }
+        }
+        this.setState({ round: roundId })
+        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, roundId: roundId == 'All' ? "" : roundId, pageData: body })
     }
 
     // on Export
@@ -748,7 +758,6 @@ class UmpireDashboard extends Component {
     }
     ///////view for breadcrumb
     headerView = () => {
-
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="fluid-width">
@@ -846,11 +855,14 @@ class UmpireDashboard extends Component {
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
-        const { umpireVenueList, umpireDivisionList } = this.props.umpireDashboardState
+        const { umpireVenueList, umpireDivisionList, umpireRoundList } = this.props.umpireDashboardState
         let venueList = isArrayNotEmpty(umpireVenueList) ? umpireVenueList : []
         let divisionList = isArrayNotEmpty(umpireDivisionList) ? umpireDivisionList : []
+        let roundList = isArrayNotEmpty(umpireRoundList) ? umpireRoundList : []
 
         let umpireType = this.state.compititionObj ? this.state.compititionObj.recordUmpireType : null
+
+        let round
 
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
@@ -919,6 +931,26 @@ class UmpireDashboard extends Component {
                             </div>
                         </div>
 
+                        {/* Round List */}
+
+                        <div className="reg-col1 ml-5" >
+                            <div className="reg-filter-col-cont" >
+                                <div className='year-select-heading'>{AppConstants.round}</div>
+                                <Select
+                                    className="year-select reg-filter-select1"
+                                    onChange={(roundId) => this.onRoundChange(roundId)}
+                                    value={this.state.round}
+                                >
+                                    <Option value={'All'}>{'All'}</Option>
+                                    {
+                                        roundList.map((item, index) => {
+                                            return <Option key={`division` + index} value={item.id}>{item.name}</Option>
+                                        })
+                                    }
+                                </Select>
+                            </div>
+                        </div>
+
 
 
 
@@ -971,7 +1003,6 @@ class UmpireDashboard extends Component {
         )
     }
 
-
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
@@ -995,7 +1026,8 @@ function mapDispatchToProps(dispatch) {
         getUmpireDashboardVenueList,
         getUmpireDashboardDivisionList,
         getUmpireDashboardList,
-        exportFilesAction
+        exportFilesAction,
+        umpireRoundListAction
     }, dispatch)
 }
 

@@ -18,7 +18,7 @@ import {
 } from "../../store/actions/appAction";
 import {
     getYearAndQuickCompetitionAction
-} from "../../store/actions/competitionModuleAction/competitionQuickAction"
+} from "../../store/actions/competitionModuleAction/competitionQuickCompetitionAction"
 import { generateDrawAction } from "../../store/actions/competitionModuleAction/competitionModuleAction";
 import Loader from '../../customComponents/loader';
 import {

@@ -13,9 +13,10 @@ export function* liveScoreSettingSaga({ payload }) {
         if (result.status === 1) {
             yield put({ type: ApiConstants.LiveScore_SETTING_VIEW_SUCCESS, payload: result.result.data })
         } else {
+
             yield put({ type: ApiConstants.LiveScore_SETTING_VIEW_ERROR, payloads: result })
-            setInterval(() => {
-                message.error('Something Went Wrong')
+            setTimeout(() => {
+                message.error(result)
             }, 800)
         }
     } catch (e) {
@@ -54,8 +55,12 @@ export function* liveScorePostSaga({ payload }) {
             }
 
         } else {
-
+            console.log()
             yield put({ type: ApiConstants.LiveScore_SETTING_VIEW_FAIL, payloads: result })
+            let msg = result.result.data.message ? result.result.data.message : "'Something Went Wrong'"
+            setTimeout(() => {
+                message.error(msg)
+            }, 800)
 
         }
     } catch (e) {
@@ -73,7 +78,7 @@ export function* settingRegInviteesSaga({ payload }) {
             yield put({ type: ApiConstants.SETTING_REGISTRATION_INVITEES_SUCCESS, payload: result.result.data, })
         } else {
             yield put({ type: ApiConstants.LiveScore_SETTING_VIEW_ERROR, payloads: result })
-            setInterval(() => {
+            setTimeout(() => {
                 message.error('Something Went Wrong')
             }, 800)
         }

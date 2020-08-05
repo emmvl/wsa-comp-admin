@@ -48,7 +48,8 @@ class CompetitionCourtAndTimesAssign extends Component {
             firstTimeCompId: "",
             getDataLoading: false,
             competitionStatus: 0,
-            tooltipVisibleDelete: false
+            tooltipVisibleDelete: false,
+            isQuickCompetition: false
         }
         // this.props.timeSlotInit()
         this.props.clearYearCompetitionAction()
@@ -61,25 +62,18 @@ class CompetitionCourtAndTimesAssign extends Component {
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
-       let compData = undefined;
-        let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined;
-        if(this.props.appState.own_CompetitionArr!= null){
-            compData = this.props.appState.own_CompetitionArr.filter(x=> x.isQuickCompetition == 0)
-            let filteredComp = compData.filter(x=>x.competitionId == storedCompetitionId);
-            if(filteredComp == null || undefined){
-                storedCompetitionId = filteredComp[0].competitionId;
-                storedCompetitionStatus = filteredComp[0].statusRefId;
-                setOwn_competition(storedCompetitionId)
-                setOwn_competitionStatus(storedCompetitionStatus)
-                this.setState({ firstTimeCompId: storedCompetitionId, competitionStatus: storedCompetitionStatus })
-            }
-        }		 
+        let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
+        let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined	 
         if (storedCompetitionId && yearId && propsData && compData) {
+            let quickComp = this.props.appState.own_CompetitionArr.find(x=>x.competitionId == 
+                storedCompetitionId && x.isQuickCompetition == 1);
+           
             this.setState({
                 yearRefId: JSON.parse(yearId),
                 firstTimeCompId: storedCompetitionId,
                 competitionStatus: storedCompetitionStatus,
-                getDataLoading: true
+                getDataLoading: true,
+                isQuickCompetition: quickComp!= undefined ? true : false
             })
             // if (this.props.competitionTimeSlots.allrefernceData.length > 0) {
             this.props.getCompetitionWithTimeSlots(yearId, storedCompetitionId);
@@ -111,15 +105,18 @@ class CompetitionCourtAndTimesAssign extends Component {
         }
 
         if (nextProps.appState !== this.props.appState) {
-            let competitionList = this.props.appState.own_CompetitionArr.filter(x=>x.isQuickCompetition == 0)
+            let competitionList = this.props.appState.own_CompetitionArr;
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
                     let competitionId = competitionList[0].competitionId
                     let statusRefId = competitionList[0].statusRefId
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
+                    let quickComp = this.props.appState.own_CompetitionArr.find(x=>x.competitionId == 
+                        competitionId && x.isQuickCompetition == 1);
                     this.props.getCompetitionWithTimeSlots(this.state.yearRefId, competitionId);
-                    this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
+                    this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId,
+                        isQuickCompetition: quickComp!= undefined ? true : false })
 
                 }
             }
@@ -398,7 +395,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         setOwn_competition(undefined)
         setOwn_competitionStatus(undefined)
         this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
-        this.setState({ firstTimeCompId: null, yearRefId: yearId, competitionStatus: 0 })
+        this.setState({ firstTimeCompId: null, yearRefId: yearId, competitionStatus: 0, isQuickCompetition: false })
         this.setDetailsFieldValue()
     }
 
@@ -406,8 +403,11 @@ class CompetitionCourtAndTimesAssign extends Component {
     onCompetitionChange(competitionId, statusRefId) {
         setOwn_competition(competitionId)
         setOwn_competitionStatus(statusRefId)
+        let quickComp = this.props.appState.own_CompetitionArr.find(x=>x.competitionId == 
+            competitionId && x.isQuickCompetition == 1);
         this.props.getCompetitionWithTimeSlots(this.state.yearRefId, competitionId);
-        this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
+        this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId,
+            isQuickCompetition: quickComp!= undefined ? true : false })
     }
 
     //add obj on click of time slot allocation based on match duration
@@ -511,7 +511,6 @@ class CompetitionCourtAndTimesAssign extends Component {
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         const { own_YearArr, own_CompetitionArr, } = this.props.appState
-        let competitionList = own_CompetitionArr != null ? own_CompetitionArr.filter(x=> x.isQuickCompetition == 0) : [];
         return (
             <div className="comp-venue-courts-dropdown-view mt-0" >
                 <div className="fluid-width" >
@@ -560,7 +559,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {(competitionList || []).map(item => {
+                                    {own_CompetitionArr.length > 0 && own_CompetitionArr.map(item => {
                                         return (
                                             <Option key={item.statusRefId} value={item.competitionId}>
                                                 {item.competitionName}
@@ -1288,6 +1287,16 @@ class CompetitionCourtAndTimesAssign extends Component {
 
     }
 
+    qcWarningView = () => {
+        return (
+            <div className="content-view pt-3">
+                <div className="comp-warning-info">
+                    {AppConstants.qcTimeslotNotApplicable}
+                </div>
+            </div>
+        )
+    }
+
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         let isPublished = this.state.competitionStatus == 1 ? true : false
@@ -1297,7 +1306,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                     <div className="col-sm">
                         <div className="reg-add-save-button">
                             <NavLink to="/competitionPartTeamGradeCalculate">
-                                <Button className="cancelBtnWidth" type="cancel-button"  >{AppConstants.back}</Button>
+                                <Button disabled={isPublished} className="cancelBtnWidth" type="cancel-button"  >{AppConstants.back}</Button>
                             </NavLink>
                         </div>
                     </div>
@@ -1317,10 +1326,10 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 visible={this.state.tooltipVisibleDelete}
                                 title={AppConstants.statusPublishHover}
                             >
-                                <Button id={AppUniqueId.timeSlotSaveBtn} disabled={isPublished} style={{ height: isPublished && "100%", borderRadius: isPublished && 10, width: isPublished && "inherit" }} className="publish-button save-draft-text" htmlType="submit" type="primary">{AppConstants.save}</Button>
+                                <Button id={AppUniqueId.timeSlotSaveBtn} disabled={isPublished} style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }} className="publish-button save-draft-text" htmlType="submit" type="primary">{AppConstants.save}</Button>
                             </Tooltip>
                             <NavLink to="/competitionVenueTimesPrioritisation">
-                                <Button className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
+                                <Button disabled={isPublished} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
                             </NavLink>
                         </div>
                     </div>
@@ -1346,11 +1355,15 @@ class CompetitionCourtAndTimesAssign extends Component {
                             {this.dropdownView(getFieldDecorator)}
                             <Loader visible={this.props.competitionTimeSlots.onGetTimeSlotLoad} />
                             <div className="formView">
-                                {this.contentView(getFieldDecorator)}
+                                {
+                                    !this.state.isQuickCompetition ?
+                                    this.contentView(getFieldDecorator) :
+                                    this.qcWarningView()
+                                }
                             </div>
                         </Content>
                         <Footer>
-                            {this.footerView(getFieldDecorator)}
+                            { !this.state.isQuickCompetition ?  this.footerView(getFieldDecorator) : null}
                         </Footer>
                     </Form>
                 </Layout>

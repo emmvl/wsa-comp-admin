@@ -106,8 +106,9 @@ class CompetitionDrawEdit extends Component {
                 this.setState({drawGenerateModalVisible: true})
               }
               else{
-                message.config({ duration: 0.9, maxCount: 1 });
-                message.info(AppConstants.roundsNotAvailable);
+                this.callGenerateDraw();
+                // message.config({ duration: 0.9, maxCount: 1 });
+                // message.info(AppConstants.roundsNotAvailable);
               }
           }
     }
@@ -483,8 +484,6 @@ class CompetitionDrawEdit extends Component {
                                             </div>
                                         </div>
                                         <div className="sr-no fixture-huge-sr">
-
-
                                         </div>
 
                                         {courtData.draws.map((slotObject, slotIndex) => {
@@ -556,7 +555,7 @@ class CompetitionDrawEdit extends Component {
                                                                     ':1:' + courtData.roundId + ":" + slotObject.competitionFormatRefId
                                                                 }
                                                                 content={1}
-                                                                swappable={true}
+                                                                swappable={disabledStatus == false ? true : false}
                                                                 onSwap={(source, target) =>
                                                                     this.onSwap(source, target, courtData.roundId, courtData.draws)
                                                                 }
@@ -602,7 +601,7 @@ class CompetitionDrawEdit extends Component {
                                 title={AppConstants.statusPublishHover}
                             >
                                 <Button
-                                    style={{ height: isPublish && "100%", borderRadius: isPublish && 10, width: isPublish && "inherit" }}
+                                    style={{ height: isPublish && "100%", borderRadius: isPublish && 6, width: isPublish && "inherit" }}
                                     disabled={isPublish} onClick={() => isPublish == false && this.reGenerateDraw()} className="publish-button" type="primary">{AppConstants.save}</Button>
                             </Tooltip>
                         </div>
@@ -617,7 +616,8 @@ class CompetitionDrawEdit extends Component {
                 {/* </div> */}
 
                 <Modal
-                    title="Regenerate Draw"
+                    className="add-membership-type-modal"
+                    title= {AppConstants.regenerateDrawTitle}
                     visible={this.state.drawGenerateModalVisible}
                     onOk={() => this.handleGenerateDrawModal("ok")}
                     onCancel={() => this.handleGenerateDrawModal("cancel")}>
