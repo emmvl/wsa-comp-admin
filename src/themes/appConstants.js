@@ -1513,7 +1513,10 @@ const AppConstants = {
   qcTimeslotNotApplicable: "Timeslots are not applicable for quick competition",
   qcVenueConstraintNotApplicable: "Venue Constraints are not applicable for quick competition",
   publishModalInfo: "You have changed the grade of the following teams:",
-  publishModalConfirmationMsg: "Would you like to adjust their ladder points?"
+  publishModalConfirmationMsg: "Would you like to adjust their ladder points?",
+  videoSizeMessage: "The maximum file size can be 2 MB",
+  childrenCheckNumber:"Requires Working with Children Check",
+  regenerateDrawTitle:"Regenerate draw from which Round?"											 
 };
 
 export default AppConstants;
