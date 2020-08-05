@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { Layout, Breadcrumb, Select, Button, Form, message } from 'antd';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
-import { NavLink } from 'react-router-dom';
-import loadjs from 'loadjs';
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import CompetitionSwappable from '../../customComponents/quickCompetitionComponent';
@@ -16,18 +14,21 @@ import {
 } from "../../store/actions/appAction";
 import InputWithHead from "../../customComponents/InputWithHead";
 import ValidationConstants from "../../themes/validationConstant";
-import TimeSlotModal from "../../customComponents/timslotModal"
+import TimeSlotModal from "../../customComponents/timeslotModal"
 import CompetitionModal from "../../customComponents/competitionModal"
 import DivisionGradeModal from "../../customComponents/divisionGradeModal"
+import CompetitionVenueModal from "../../customComponents/quickAddVenueModal"
 import {
     updateQuickCompetitionData, updateTimeSlot, updateDivision, updateCompetition,
     createQuickCompetitionAction,
     saveQuickCompDivisionAction, getYearAndQuickCompetitionAction, getQuickCompetitionAction,
-    quickCompetitionTimeSlotData, updateQuickCompetitionAction, updateQuickCompetitionDraws
-} from "../../store/actions/competitionModuleAction/competitionQuickAction"
+    quickCompetitionTimeSlotData, updateQuickCompetitionAction, updateQuickCompetitionDraws,
+    quickCompetitionAddVenue
+} from "../../store/actions/competitionModuleAction/competitionQuickCompetitionAction"
 import { quickCompetitionInit } from "../../store/actions/commonAction/commonAction"
 import { getDayName, getTime } from '../../themes/dateformate';
 import { captializedString } from "../../util/helpers";
+import AppUniqueId from "../../themes/appUniqueId";
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
@@ -45,7 +46,14 @@ class CompetitionQuickCompetition extends Component {
             yearRefId: 1,
             quickCompetitionLoad: false,
             onloadData: false,
-            buttonPressed: ""
+            buttonPressed: "",
+            venueModalVisible: false,
+            compModalLoad: false,
+            modalButtonPressed: "",
+            timeslotModalLoad: false,
+            timeSlotButtonClicked: "",
+            venueComptitionLoad: false,
+            venueButtonClicked: ""
         }
         this.props.updateCompetition("", "allData")
         this.props.getVenuesTypeAction()
@@ -54,15 +62,14 @@ class CompetitionQuickCompetition extends Component {
             null,
         );
     }
-
-
+    //component did Mount
     componentDidMount() {
         let body = {
             Day: "Day"
         }
         this.props.quickCompetitionInit(body)
     }
-
+    //component did Update
     componentDidUpdate(nextProps) {
         if (nextProps.quickCompetitionState !== this.props.quickCompetitionState) {
             let competitionList = this.props.quickCompetitionState.quick_CompetitionArr;
@@ -90,9 +97,53 @@ class CompetitionQuickCompetition extends Component {
                     quickCompetitionLoad: false,
                 })
             }
+            if (this.state.compModalLoad === true && this.props.quickCompetitionState.onQuickCompLoad === false) {
+                if (this.state.modalButtonPressed == "next") {
+                    this.setState({
+                        compModalLoad: false,
+                        visibleCompModal: false,
+                        venueModalVisible: true
+                    })
+                }
+                else if (this.state.modalButtonPressed == "save") {
+                    this.setState({
+                        compModalLoad: false,
+                        visibleCompModal: false
+                    })
+                }
+            }
+
+        }
+        if (this.state.timeslotModalLoad === true && this.props.quickCompetitionState.onQuickCompLoad === false) {
+            if (this.state.timeSlotButtonClicked == "next") {
+                this.setState({
+                    timeslotModalLoad: false,
+                    timeSlotVisible: false, visibleDivisionModal: true
+                })
+            }
+            else if (this.state.timeSlotButtonClicked == "save") {
+                this.setState({
+                    timeslotModalLoad: false,
+                    timeSlotVisible: false,
+                })
+            }
+        }
+        if (this.state.venueComptitionLoad === true && this.props.quickCompetitionState.onQuickCompLoad === false) {
+            if (this.state.venueButtonClicked == "next") {
+                this.setState({
+                    venueComptitionLoad: false,
+                    timeSlotVisible: true, venueModalVisible: false
+                })
+            }
+            else if (this.state.venueButtonClicked == "save") {
+                this.setState({
+                    venueComptitionLoad: false,
+                    venueModalVisible: false
+                })
+            }
         }
     }
-
+    //api call
     saveAPIsActionCall = (e) => {
         let quickCompetitionData = this.props.quickCompetitionState.quickComptitionDetails
         const { postDivisionData, postTimeslotData, postDraws } = this.props.quickCompetitionState
@@ -101,15 +152,22 @@ class CompetitionQuickCompetition extends Component {
             if (!err) {
                 if (this.state.firstTimeCompId.length > 0) {
                     if (postDivisionData.length > 0 && postTimeslotData.length > 0) {
-                        let payload = {
-                            "competitionId": this.state.firstTimeCompId,
-                            "competitionName": quickCompetitionData.competitionName,
-                            "competitionVenues": quickCompetitionData.competitionVenues,
-                            "draws": postDraws
+                        if (quickCompetitionData.competitionVenues.length > 0) {
+                            let payload = {
+                                "competitionId": this.state.firstTimeCompId,
+                                "competitionName": quickCompetitionData.competitionName,
+                                "competitionVenues": quickCompetitionData.competitionVenues,
+                                "draws": postDraws
+                            }
+                            this.props.updateQuickCompetitionAction(payload, this.state.yearRefId, this.state.buttonPressed)
                         }
+                        else {
+                            message.config({
+                                maxCount: 1, duration: 1
+                            })
+                            message.warning(ValidationConstants.pleaseSelectvenue)
 
-                        // console.log(postDraws)
-                        this.props.updateQuickCompetitionAction(payload, this.state.yearRefId, this.state.buttonPressed)
+                        }
                     }
                     else {
                         message.config({
@@ -133,15 +191,23 @@ class CompetitionQuickCompetition extends Component {
         let quickCompetitionData = this.props.quickCompetitionState.quickComptitionDetails
         let selectedVenues = this.props.quickCompetitionState.selectedVenues
         this.props.form.setFieldsValue({
-            competition_name: quickCompetitionData.competitionName,
+            "competition_name": quickCompetitionData.competitionName,
             selectedVenues: selectedVenues
         })
     }
-    // onChange = e => {
-    //     this.setState({
-    //         value: e.target.value,
-    //     });
-    // };
+
+    //change selected year 
+    onYearChange(yearRefId) {
+        this.props.updateCompetition("", "allData")
+        this.setState({
+            yearRefId, firstTimeCompId: ""
+        })
+        this.props.getYearAndQuickCompetitionAction(
+            this.props.quickCompetitionState.quick_CompetitionYearArr,
+            yearRefId,
+        );
+        this.setFieldValues()
+    }
 
     // change selected competition
     onCompetitionChange(competitionId) {
@@ -159,162 +225,20 @@ class CompetitionQuickCompetition extends Component {
         })
     }
 
-    //change selected year 
-    onYearChange(yearRefId) {
-        this.props.updateCompetition("", "allData")
-        this.setState({
-            yearRefId, firstTimeCompId: ""
-        })
-        this.props.getYearAndQuickCompetitionAction(
-            this.props.quickCompetitionState.quick_CompetitionArr,
-            yearRefId,
-        );
-        this.setFieldValues()
-    }
-
-    ///////view for breadcrumb
-    headerView = (getFieldDecorator) => {
-        let timeSlotData = this.props.quickCompetitionState.timeSlot
-        let division = this.props.quickCompetitionState.division
-        let compName = this.props.quickCompetitionState.competitionName
-        let competitionDate = this.props.quickCompetitionState.competitionDate
-        let quickCompetitionState = this.props.quickCompetitionState
-        return (<div className="fluid-width">
-            <Header className="comp-draws-header-view mt-5" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
-                        <Breadcrumb separator=" > ">
-                            <Breadcrumb.Item className="breadcrumb-add">
-                                {AppConstants.quickCompetition1}
-                            </Breadcrumb.Item>
-                        </Breadcrumb>
-                    </div>
-
-                </div>
-            </Header >
-            <div className="row" >
-                <div className="col-sm-2 pt-0">
-                    <span className="input-heading-add-another pt-0" onClick={() => this.visibleCompetitionModal()}>+{AppConstants.addNew}</span>
-                </div>
-            </div>
-            <div className="row" >
-                <div className="col-sm-3">
-                    <div
-                        style={{
-                            width: '100%',
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            marginRight: 50,
-                        }}
-                    >
-                        <span className="year-select-heading">{AppConstants.year}:</span>
-                        <Select
-                            name={'yearRefId'}
-                            className="year-select"
-                            style={{ minWidth: 100 }}
-                            onChange={(yearRefId) => this.onYearChange(yearRefId)}
-                            value={this.state.yearRefId}
-                        >
-                            {quickCompetitionState.quick_CompetitionYearArr.length > 0 && quickCompetitionState.quick_CompetitionYearArr.map((item) => {
-                                return (
-                                    <Option key={'yearRefId' + item.id} value={item.id}>
-                                        {item.description}
-                                    </Option>
-                                );
-                            })}
-                        </Select>
-                    </div>
-                </div>
-                <div className="col-sm-3">
-                    <div
-                        style={{
-                            width: "fit-content",
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            marginRight: 50
-                        }}
-                    >
-                        <span className="year-select-heading">{AppConstants.competition}:</span>
-                        <Select
-                            name={'competition'}
-                            style={{ minWidth: 160 }}
-                            className="year-select"
-                            onChange={competitionId =>
-                                this.onCompetitionChange(competitionId)
-                            }
-                            value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
-                        >
-                            {quickCompetitionState.quick_CompetitionArr.length > 0 && quickCompetitionState.quick_CompetitionArr.map(item => {
-                                return (
-                                    <Option
-                                        key={'competition' + item.competitionId}
-                                        value={item.competitionId}
-                                    >
-                                        {item.competitionName}
-                                    </Option>
-                                );
-                            })}
-                        </Select>
-                    </div>
-                </div>
-            </div>
-            <TimeSlotModal
-                visible={this.state.timeSlotVisible}
-                onCancel={this.handleCancel}
-                timeSlotOK={() => this.closeTimeSlotModal()}
-                modalTitle={AppConstants.timeSlot}
-                timeslots={timeSlotData}
-                weekDays={this.props.commonState.days}
-                addTimeSlot={() => this.props.updateTimeSlot("add")}
-                addStartTime={(index) => this.props.updateTimeSlot("addStartTime", index)}
-                removetimeSlotDay={(index) => this.props.updateTimeSlot("remove", index)}
-                removeStartTime={(index, timeIndex) => this.props.updateTimeSlot("removeStartTime", index, timeIndex)}
-                UpdateTimeSlotsDataManual={(startTime, index, timeIndex) => this.props.updateTimeSlot("changeTime", index, timeIndex, startTime)}
-                changeDay={(day, index) => this.props.updateTimeSlot("day", index, null, day)}
-            />
-
-            <CompetitionModal
-                handleOK={() => this.closeCompModal()}
-                visible={this.state.visibleCompModal}
-                onCancel={this.compModalClose}
-                modalTitle={AppConstants.competition}
-                competitionChange={(e) => this.props.updateCompetition(captializedString(e.target.value), "add")}
-                competitionName={compName}
-                selectedDate={competitionDate}
-                updateDate={(date) => this.props.updateCompetition(date, "date")}
-            />
-            <DivisionGradeModal
-                visible={this.state.visibleDivisionModal}
-                onCancel={this.divisionModalClose}
-                modalTitle={AppConstants.divisionGradeAndTeams}
-                division={division}
-                onOK={(e) => this.handleOK(e)}
-                changeDivision={(index, e) => this.props.updateDivision("divisionName", index, null, e.target.value)}
-                changeTeam={(index, gradeIndex, value) => this.props.updateDivision("noOfTeams", index, gradeIndex, value)}
-                addDivision={(index) => this.props.updateDivision("addDivision", index)}
-                addGrade={(index) => this.props.updateDivision("addGrade", index)}
-                removegrade={(index, gradeIndex) => this.props.updateDivision("removeGrade", index, gradeIndex)}
-                changegrade={(index, gradeIndex, e) => this.props.updateDivision("gradeName", index, gradeIndex, e.target.value)}
-                removeDivision={(index, gradeIndex) => this.props.updateDivision("removeDivision", index, gradeIndex)}
-            />
-        </div >
-        )
-    }
     // handle divison api
     handleOK = () => {
         let competitionId = this.state.firstTimeCompId
         let division = this.props.quickCompetitionState.division
-        this.props.saveQuickCompDivisionAction(competitionId, division)
+        this.props.saveQuickCompDivisionAction(competitionId, division, this.state.yearRefId, this.props.quickCompetitionState.quickComptitionDetails.competitionName)
         this.setState({
+
             visibleDivisionModal: false
         }
         )
     }
 
     //close timeslot modal and call timeslot api
-    closeTimeSlotModal = () => {
+    closeTimeSlotModal = (key) => {
         let timeslot = this.props.quickCompetitionState.timeSlot
         let timeSlotManualperVenueArray = []
         let timeslots = []
@@ -323,7 +247,7 @@ class CompetitionQuickCompetition extends Component {
             for (let k in manualStartTime) {
                 let manualAllVenueObj =
                 {
-                    "competitionVenueTimeslotsDayTimeId": timeslot[j].competitionVenueTimeslotsDayTimeId,
+                    "competitionVenueTimeslotsDayTimeId": 0,
                     "dayRefId": timeslot[j].dayRefId,
                     "startTime": manualStartTime[k].startTime,
                     "sortOrder": JSON.parse(k),
@@ -350,18 +274,40 @@ class CompetitionQuickCompetition extends Component {
             timeslotGenerationRefId: 2,
             timeslotRotationRefId: 7,
         }
-        this.props.quickCompetitionTimeSlotData(body)
-        this.setState({
-            timeSlotVisible: false
-        })
+
+        if (key == "save") {
+            this.props.quickCompetitionTimeSlotData(body, this.state.yearRefId, this.state.firstTimeCompId, this.props.quickCompetitionState.quickComptitionDetails.competitionName
+            )
+            console.log('called')
+            this.setState({
+                timeslotModalLoad: true, timeSlotButtonClicked: "save"
+            })
+        }
+        else {
+            console.log('called2')
+            this.props.quickCompetitionTimeSlotData(body, this.state.yearRefId, this.state.firstTimeCompId, this.props.quickCompetitionState.quickComptitionDetails.competitionName
+            )
+            this.setState({
+                timeslotModalLoad: true, timeSlotButtonClicked: "next"
+            })
+        }
     }
 
     //close division modal on press cancel button in division modal
-    divisionModalClose = () => {
-        this.props.updateDivision("swap")
-        this.setState({
-            visibleDivisionModal: false
-        })
+    divisionModalClose = (key) => {
+        if (key == "back") {
+            this.props.updateDivision("swap")
+            this.setState({
+                visibleDivisionModal: false,
+                timeSlotVisible: true
+            })
+        }
+        else {
+            this.props.updateDivision("swap")
+            this.setState({
+                visibleDivisionModal: false,
+            })
+        }
     }
 
     //close compModalClose on press cancel button
@@ -370,21 +316,43 @@ class CompetitionQuickCompetition extends Component {
             visibleCompModal: false
         })
     }
+
     //close competition modal and call create competition
     closeCompModal = () => {
         const { competitionName, competitionDate } = this.props.quickCompetitionState
         this.props.createQuickCompetitionAction(this.state.yearRefId, competitionName, competitionDate)
         this.setState({
-            visibleCompModal: false
+            compModalLoad: true,
+            modalButtonPressed: "save"
+            // visibleCompModal: false
+        })
+    }
+
+    //nextCompModal
+    nextCompModal = () => {
+        const { competitionName, competitionDate } = this.props.quickCompetitionState
+        this.props.createQuickCompetitionAction(this.state.yearRefId, competitionName, competitionDate)
+        this.setState({
+            compModalLoad: true,
+            modalButtonPressed: "next"
+            // visibleCompModal: false, venueModalVisible: true
         })
     }
 
     ///close timeslot modal
-    handleCancel = () => {
-        this.props.updateTimeSlot("swapTimeslot")
-        this.setState({
-            timeSlotVisible: false
-        })
+    handleCancel = (key) => {
+        if (key == "back") {
+            this.props.updateTimeSlot("swapTimeslot")
+            this.setState({
+                timeSlotVisible: false, venueModalVisible: true
+            })
+        }
+        else {
+            this.props.updateTimeSlot("swapTimeslot")
+            this.setState({
+                timeSlotVisible: false,
+            })
+        }
     }
 
     //On selection of venue
@@ -416,6 +384,27 @@ class CompetitionQuickCompetition extends Component {
         }
 
     }
+    // venue save button handle
+    handleVenueSave = (e, key) => {
+        let payload = {
+            "competitionUniqueKey": this.state.firstTimeCompId,
+            "competitionVenues": this.props.quickCompetitionState.quickComptitionDetails.competitionVenues
+        }
+        if (key == "save") {
+            this.props.quickCompetitionAddVenue(payload)
+            this.setState({
+                venueButtonClicked: "save",
+                venueComptitionLoad: true
+            })
+        } else if (key == "next") {
+            this.props.quickCompetitionAddVenue(payload)
+            this.setState({
+                venueButtonClicked: "next",
+                venueComptitionLoad: true
+            })
+        }
+
+    }
 
     //open division modal
     visibleDivisonModal = () => {
@@ -432,7 +421,14 @@ class CompetitionQuickCompetition extends Component {
         }
     }
 
-
+    //handle venue back button
+    handleVenueBack = () => {
+        this.props.updateCompetition("", "clear")
+        this.setState({
+            venueModalVisible: false,
+            visibleCompModal: true
+        })
+    }
 
     /// on swap grip view component
     async onSwap(source, target) {
@@ -465,10 +461,158 @@ class CompetitionQuickCompetition extends Component {
                 await this.props.updateQuickCompetitionDraws(sourceIndexArray, targetIndexArray, sourceObejct.drawsId, targetObject.drawsId, targetObject, 'free')
             }
         }
-
         setTimeout(() => {
             this.setState({ quickCompetitionLoad: false })
         }, 100);
+    }
+
+    ///////view for breadcrumb
+    headerView = (getFieldDecorator) => {
+        let appState = this.props.appState
+        let timeSlotData = this.props.quickCompetitionState.timeSlot
+        let division = this.props.quickCompetitionState.division
+        let compName = this.props.quickCompetitionState.competitionName
+        let competitionDate = this.props.quickCompetitionState.competitionDate
+        let quickCompetitionState = this.props.quickCompetitionState
+
+        return (<div className="fluid-width">
+            <Header className="comp-draws-header-view mt-5" >
+                <div className="row" >
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+                        <Breadcrumb separator=" > ">
+                            <Breadcrumb.Item className="breadcrumb-add">
+                                {AppConstants.quickCompetition1}
+                            </Breadcrumb.Item>
+                        </Breadcrumb>
+                    </div>
+
+                </div>
+            </Header >
+            <div className="row" >
+                <div className="col-sm-2 pb-3">
+                    <span className="input-heading-add-another pt-0" onClick={() => this.visibleCompetitionModal()}>+{AppConstants.addNew}</span>
+                </div>
+            </div>
+            <div className="row pb-3" >
+                <div className="col-sm-3 pb-3">
+                    <div
+                        style={{
+                            width: "fit-content",
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            marginRight: 50,
+                        }}
+                    >
+                        <span className="year-select-heading">{AppConstants.year}:</span>
+                        <Select
+                            name={'yearRefId'}
+                            className="year-select reg-filter-select-year ml-2"
+                            // style={{ width: 90 }}
+                            onChange={(yearRefId) => this.onYearChange(yearRefId)}
+                            value={this.state.yearRefId}
+                        >
+                            {quickCompetitionState.quick_CompetitionYearArr.length > 0 && quickCompetitionState.quick_CompetitionYearArr.map((item) => {
+                                return (
+                                    <Option key={'yearRefId' + item.id} value={item.id}>
+                                        {item.description}
+                                    </Option>
+                                );
+                            })}
+                        </Select>
+                    </div>
+                </div>
+                <div className="col-sm-3 pb-3">
+                    <div
+                        style={{
+                            width: "fit-content",
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            marginRight: 50
+                        }}
+                    >
+                        <span className="year-select-heading">{AppConstants.competition}:</span>
+                        <Select
+                            name={'competition'}
+                            // style={{ minWidth: 200 }}
+                            className="year-select reg-filter-select-competition ml-2"
+                            onChange={competitionId =>
+                                this.onCompetitionChange(competitionId)
+                            }
+                            value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
+                        >
+                            {quickCompetitionState.quick_CompetitionArr.length > 0 && quickCompetitionState.quick_CompetitionArr.map(item => {
+                                return (
+                                    <Option
+                                        key={'competition' + item.competitionId}
+                                        value={item.competitionId}
+                                    >
+                                        {item.competitionName}
+                                    </Option>
+                                );
+                            })}
+                        </Select>
+                    </div>
+                </div>
+            </div>
+            <TimeSlotModal
+                visible={this.state.timeSlotVisible}
+                onCancel={() => this.handleCancel("cancel")}
+                timeSlotOK={() => this.closeTimeSlotModal("save")}
+                handleTimeslotNext={() => this.closeTimeSlotModal("next")}
+                onTimslotBack={() => this.handleCancel("back")}
+                modalTitle={AppConstants.timeSlot}
+                timeslots={timeSlotData}
+                weekDays={this.props.commonState.days}
+                addTimeSlot={() => this.props.updateTimeSlot("add")}
+                addStartTime={(index) => this.props.updateTimeSlot("addStartTime", index)}
+                removetimeSlotDay={(index) => this.props.updateTimeSlot("remove", index)}
+                removeStartTime={(index, timeIndex) => this.props.updateTimeSlot("removeStartTime", index, timeIndex)}
+                UpdateTimeSlotsDataManual={(startTime, index, timeIndex) => this.props.updateTimeSlot("changeTime", index, timeIndex, startTime)}
+                changeDay={(day, index) => this.props.updateTimeSlot("day", index, null, day)}
+            />
+
+            <CompetitionModal
+                handleOK={() => this.closeCompModal()}
+                handleCompetitionNext={() => this.nextCompModal()}
+                visible={this.state.visibleCompModal}
+                onCancel={this.compModalClose}
+                modalTitle={AppConstants.competition}
+                competitionChange={(e) => this.props.updateCompetition(captializedString(e.target.value), "add")}
+                competitionName={compName}
+                selectedDate={competitionDate}
+                updateDate={(date) => this.props.updateCompetition(date, "date")}
+            />
+            <DivisionGradeModal
+                visible={this.state.visibleDivisionModal}
+                onCancel={() => this.divisionModalClose("cancel")}
+                onDivisionBack={() => this.divisionModalClose("back")}
+                modalTitle={AppConstants.divisionGradeAndTeams}
+                division={division}
+                onOK={(e) => this.handleOK(e)}
+                changeDivision={(index, e) => this.props.updateDivision("divisionName", index, null, e.target.value)}
+                changeTeam={(index, gradeIndex, value) => this.props.updateDivision("noOfTeams", index, gradeIndex, value)}
+                addDivision={(index) => this.props.updateDivision("addDivision", index)}
+                addGrade={(index) => this.props.updateDivision("addGrade", index)}
+                removegrade={(index, gradeIndex) => this.props.updateDivision("removeGrade", index, gradeIndex)}
+                changegrade={(index, gradeIndex, e) => this.props.updateDivision("gradeName", index, gradeIndex, e.target.value)}
+                removeDivision={(index, gradeIndex) => this.props.updateDivision("removeDivision", index, gradeIndex)}
+            />
+            <CompetitionVenueModal
+                venueVisible={this.state.venueModalVisible}
+                handleVenueOK={(e) => this.handleVenueSave(e, "save")}
+                onVenueBack={() => this.handleVenueBack()}
+                onVenueCancel={() => this.setState({ venueModalVisible: false, })}
+                handleVenueNext={(e) => this.handleVenueSave(e, "next")}
+                appState={this.props.appState}
+                quickCompetitionState={this.props.quickCompetitionState}
+                modalTitle={AppConstants.addVenue}
+                onSelectValues={(venueSelection) => this.onSelectValues(venueSelection, quickCompetitionState.selectedVenues)}
+                handleSearch={(value) => this.handleSearch(value, appState.mainVenueList)}
+            />
+        </div >
+        )
     }
 
     /////form content view
@@ -496,14 +640,15 @@ class CompetitionQuickCompetition extends Component {
                         </Form.Item>
                     </div>
                     <div className="col-sm mt-2  quick-comp-btn-view">
+                        <Button className="open-reg-button save-draft-text" onClick={() => this.setState({ venueModalVisible: true })} type="primary">+ {AppConstants.addVenue}</Button>
                         <Button className="open-reg-button" onClick={() => this.visibleTimeModal()} type="primary">+ {AppConstants.add_TimeSlot}</Button>
                     </div>
                     <div className="col-sm-2.5 mt-2  quick-comp-btn-view paddingview">
-                        <Button className="open-reg-button" type="primary" onClick={() => this.visibleDivisonModal()}>+ {AppConstants.addDivisionsAndGrades}</Button>
+                        <Button id={AppUniqueId.add_Div_Grade_Btn} className="open-reg-button" type="primary" onClick={() => this.visibleDivisonModal()}>+ {AppConstants.addDivisionsAndGrades}</Button>
                     </div>
 
                 </div>
-                <div className="row  ml-4 pb-5">
+                {/* <div className="row  ml-4 pb-5">
                     <div className="col-sm-3 division" >
                         <InputWithHead required={"required-field pb-0 pt-0 "} heading={AppConstants.venue} />
                         <Form.Item  >
@@ -531,7 +676,7 @@ class CompetitionQuickCompetition extends Component {
                             )}
                         </Form.Item>
                     </div>
-                </div>
+                </div> */}
                 {
                     this.state.quickCompetitionLoad ?
                         <div>
@@ -544,14 +689,15 @@ class CompetitionQuickCompetition extends Component {
             </div >
         )
     }
+
     // grid view 
     draggableView = () => {
-        var dateMargin = 60;
-        var dayMargin = 60;
+        var dateMargin = 80;
+        var dayMargin = 80;
         let topMargin = 0;
         let getStaticDrawsData = this.props.quickCompetitionState.quickComptitionDetails.draws
         let dateArray = this.props.quickCompetitionState.quickComptitionDetails.dateNewArray
-        console.log(getStaticDrawsData.length > 0 && getStaticDrawsData[0].slotsArray)
+        console.log(this.props.quickCompetitionState)
         return (
             <div className="draggable-wrap draw-data-table">
                 <div className="scroll-bar pb-4">
@@ -564,7 +710,9 @@ class CompetitionQuickCompetition extends Component {
                                     dateMargin += 75;
                                 }
                                 return (
-                                    <span key={"key" + index} style={{ left: dateMargin }}>{getDayName(dateItem.date)}</span>
+                                    <span key={"key" + index} style={{ left: dateMargin }}>
+                                        {dateItem.notInDraw == false ? getDayName(dateItem.date) : ''}
+                                    </span>
                                 );
                             })}
                         </div>
@@ -579,9 +727,13 @@ class CompetitionQuickCompetition extends Component {
                                         <span key={"time" + index}
                                             style={{
                                                 left: dayMargin,
+                                                fontSize: item.notInDraw !== false && 11,
                                             }}
                                         >
-                                            {getTime(item.date)}
+                                            {item.notInDraw == false
+                                                ? getTime(item.date)
+                                                : 'Not in draw'}
+                                            {/* {getTime(item.date)} */}
                                         </span>
                                     );
                                 })}
@@ -591,14 +743,14 @@ class CompetitionQuickCompetition extends Component {
 
                 <div className="main-canvas Draws">
                     {getStaticDrawsData.map((courtData, index) => {
-                        let leftMargin = 60;
+                        let leftMargin = 80;
                         if (index !== 0) {
                             topMargin += 50;
                         }
                         return (
                             <div key={index + "courtkey"}>
                                 <div className="quick-comp-canvas" >
-                                    <div className="venueCourt-tex-div" style={{ width: 60 }}>
+                                    <div className="venueCourt-tex-div" style={{ width: 80 }}>
                                         <span className="venueCourt-text">
                                             {courtData.venueShortName + '-' + courtData.venueCourtNumber}
                                         </span>
@@ -637,10 +789,8 @@ class CompetitionQuickCompetition extends Component {
                                                             this.onSwap(
                                                                 source,
                                                                 target,
-                                                            )
-                                                        )
-                                                    }
-                                                    }
+                                                            ))
+                                                    }}
                                                 >
                                                     {slotObject.drawsId != null ? (
                                                         <span>
@@ -675,9 +825,9 @@ class CompetitionQuickCompetition extends Component {
                     </div>
                     <div className="col-sm" >
                         <div className="comp-buttons-view">
-                            <Button className="save-draft-text" htmlType="submit" type="save-draft-text"
-                                onClick={() => this.setState({ buttonPressed: "saveDraft" })}>{AppConstants.saveAsDraft}</Button>
-                            <Button className="open-reg-button" htmlType="submit" type="primary"
+                            <Button id={AppUniqueId.qckcomp_genFixtures_btn} className="save-draft-text" htmlType="submit" type="save-draft-text" style={{ width: 160 }}
+                                onClick={() => this.setState({ buttonPressed: "saveDraft" })}>{AppConstants.generateFixtures}</Button>
+                            <Button id={AppUniqueId.qckcomp_addTeams_btn} className="open-reg-button" htmlType="submit" type="primary"
                                 onClick={() => this.setState({ buttonPressed: "AddTeam" })}>
                                 {AppConstants.addTeams}</Button>
                         </div>
@@ -686,7 +836,6 @@ class CompetitionQuickCompetition extends Component {
             </div>
         )
     }
-
 
     /// render function 
     render() {
@@ -717,6 +866,7 @@ class CompetitionQuickCompetition extends Component {
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getVenuesTypeAction,
@@ -732,7 +882,7 @@ function mapDispatchToProps(dispatch) {
         saveQuickCompDivisionAction,
         getQuickCompetitionAction,
         updateQuickCompetitionAction, quickCompetitionTimeSlotData,
-        updateQuickCompetitionDraws
+        updateQuickCompetitionDraws, quickCompetitionAddVenue
     }, dispatch)
 }
 
@@ -743,4 +893,5 @@ function mapStatetoProps(state) {
         commonState: state.CommonReducerState
     }
 }
+
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionQuickCompetition));

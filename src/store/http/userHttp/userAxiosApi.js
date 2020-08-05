@@ -78,14 +78,13 @@ let userHttpApi = {
     return Method.dataGet(url, token)
   },
 
-  liveScoreManagerList(roleId, entityTypeId, entityId, searchText) {
-    // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+  liveScoreManagerList(roleId, entityTypeId, entityId, searchText, offset) {
 
     let url = ''
     if (searchText) {
-      url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&userName=${searchText}`;
+      url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&userName=${searchText}&offset=${offset}&limit=${10}`;
     } else {
-      url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}`;
+      url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&offset=${offset}&limit=${10}`;
     }
     return Method.dataGet(url, token)
   },
@@ -201,9 +200,9 @@ let userHttpApi = {
   },
 
   //liveScore coaches list
-  liveScoreCoachesList(roleId, entityTypeId, entityId, search) {
+  liveScoreCoachesList(roleId, entityTypeId, entityId, search, offset) {
     let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-    let url = `/users/byRole?roleId=${roleId}&entityTypeId=1&entityId=${id}&userName=${search}`
+    let url = `/users/byRole?roleId=${roleId}&entityTypeId=1&entityId=${id}&userName=${search}&offset=${offset}&limit=${10}`
     return Method.dataGet(url, localStorage.token);
   },
 
@@ -271,7 +270,17 @@ let userHttpApi = {
   updateUserPassword(payload) {
     const url = `users/updatePassword`;
     return Method.dataPatch(url, token, payload);
-  }
+  },
+
+  updateCharity(payload) {
+    const url = `api/charity/update`;
+    return Method.dataPost(url, token, payload);
+  },
+
+  updateTermsAndConditions(payload) {
+    const url = `api/termsandcondition/update`;
+    return Method.dataPost(url, token, payload);
+  },
 }
 
 let Method = {

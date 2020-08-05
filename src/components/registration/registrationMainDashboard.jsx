@@ -283,23 +283,26 @@ class RegistrationMainDashboard extends Component {
                             </span>
                         </div>
                         <div className="col-sm-2">
-                            <div className="year-select-heading-view">
-                                <span className="year-select-heading">
-                                    {AppConstants.year}:
-                </span>
-                                <Select
-                                    className="year-select"
-                                    onChange={yearId => this.onYearClick(yearId)}
-                                    value={this.state.year}
-                                >
-                                    {yearList.length > 0 && yearList.map((item, yearIndex) => (
-                                        < Option key={"yearlist" + yearIndex} value={item.id} > {item.name}</Option>
-                                    ))
-                                    }
-                                </Select>
+                            <div className="year-select-heading-view pb-3">
+                                <div className="reg-filter-col-cont"  >
+                                    <span className="year-select-heading">
+                                        {AppConstants.year}:</span>
+                                    <Select
+                                        className="year-select reg-filter-select-year ml-2"
+                                        style={{ width: 90 }}
+                                        onChange={yearId => this.onYearClick(yearId)}
+                                        value={this.state.year}
+                                    >
+                                        {yearList.length > 0 && yearList.map((item, yearIndex) => (
+                                            < Option key={"yearlist" + yearIndex} value={item.id} > {item.name}</Option>
+                                        ))
+                                        }
+                                    </Select>
+                                </div>
                             </div>
                         </div>
-                        <div className="col-sm" style={{ display: "flex", alignContent: "center", justifyContent: 'flex-end' }} >
+                        <div className="col-sm-2"></div>
+                        <div className="col-sm pb-3" style={{ display: "flex", alignContent: "center", justifyContent: 'flex-end' }} >
                             <Button
                                 className="open-reg-button"
                                 type="primary"
@@ -476,7 +479,7 @@ class RegistrationMainDashboard extends Component {
     ownedView = () => {
         console.log(this.props.registrationDashboardState)
         return (
-            <div className="comp-dash-table-view">
+            <div className="comp-dash-table-view" style={{ paddingBottom: 100 }}>
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         loading={this.props.registrationDashboardState.onLoad === true && true}

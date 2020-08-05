@@ -54,11 +54,14 @@ const initialState = {
     timeSlotId: [],
     postDraws: [],
     teamPlayerArray: [
-        { id: 1, value: "Import" }, { id: 2, value: "Merge with an Existing Competition" }, { id: 3, value: "Invite Registrations" }
+        { id: 1, value: "Import" }, { id: 2, value: "Merge with an Existing Competition" }
     ],
     SelectedTeamPlayer: 0,
     importModalVisible: false,
     teamsImportData: [],
+    isTeamNotInDraws: 0,
+    importPlayer: false,
+    postSelectedVenues: []
 };
 var gradeColorArray = [];
 const lightGray = '#999999';
@@ -192,10 +195,13 @@ function setupDateObjectArray(dateArray, drawObject) {
     var tempDateArray = JSON.parse(JSON.stringify(dateArray))
     let defaultDateObject = {
         date: drawObject.matchDate,
+        notInDraw: drawObject.outOfCompetitionDate == 1 || drawObject.outOfRoundDate == 1 ? true : false
     }
     for (let i in dateArray) {
         if (isDateSame(dateArray[i].date, drawObject.matchDate)) {
-            tempDateArray[i] = defaultDateObject
+            if (tempDateArray[i].notInDraw == false) {
+                tempDateArray[i] = defaultDateObject
+            }
             return tempDateArray;
         }
 
@@ -217,13 +223,17 @@ function sortDateArray(dateArray) {
     let inDrawsArray = []
     let outDrawsArray = []
     for (let i in dateArray) {
-
-        inDrawsArray.push(dateArray[i])
-
+        if (dateArray[i].notInDraw == false) {
+            inDrawsArray.push(dateArray[i])
+        }
+        else {
+            outDrawsArray.push(dateArray[i])
+        }
     }
     inDrawsArray = sortArrayByDate(inDrawsArray)
+    outDrawsArray = sortArrayByDate(outDrawsArray)
 
-    return inDrawsArray;
+    return inDrawsArray.concat(outDrawsArray);
 }
 
 //sort court array
@@ -491,6 +501,8 @@ function QuickCompetitionState(state = initialState, action) {
                 state.timeSlot = 0
                 state.quickComptitionDetails = JSON.parse(JSON.stringify(newQuickComp))
                 state.postDraws = []
+                state.importPlayer = false
+                state.postSelectedVenues = []
             }
             if (action.key == 'date') {
                 state.competitionDate = moment(action.value).format("YYYY-MM-DD")
@@ -600,6 +612,7 @@ function QuickCompetitionState(state = initialState, action) {
             return {
                 ...state,
                 onLoad: true,
+                onQuickCompLoad: true,
             }
         ///////create quick competition  success
         case ApiConstants.API_CREATE_QUICK_COMPETITION_SUCCESS:
@@ -662,7 +675,8 @@ function QuickCompetitionState(state = initialState, action) {
                 ...state,
                 quick_CompetitionArr: action.competetionListResult,
                 quick_CompetitionYearArr: action.yearList,
-                onLoad: false
+                onLoad: false,
+                error: null
             }
         ////get quick competition Load
         case ApiConstants.API_GET_QUICK_COMPETITION_LOAD:
@@ -676,6 +690,7 @@ function QuickCompetitionState(state = initialState, action) {
             state.timeSlot = JSON.parse(JSON.stringify(timeSlotResultArr))
             state.postTimeslotData = JSON.parse(JSON.stringify(timeSlotResultArr))
             state.selectedVenues = competiitonResult
+            state.postSelectedVenues = competiitonResult
             state.timeSlotId = checkTimeSlotId(JSON.parse(JSON.stringify(action.result.competitionTimeslotManual)))
             state.division = JSON.parse(JSON.stringify(action.result.divisions))
             state.postDivisionData = JSON.parse(JSON.stringify(action.result.divisions))
@@ -684,6 +699,8 @@ function QuickCompetitionState(state = initialState, action) {
             detailsResult.draws = drawsData.mainCourtNumberArray
             detailsResult.dateNewArray = drawsData.sortedDateArray
             state.onQuickCompLoad = false
+            state.isTeamNotInDraws = action.result.isTeamNotInDraws
+            state.importPlayer = JSON.parse(JSON.stringify(action.result.importPlayer))
             return {
                 ...state,
                 quickComptitionDetails: detailsResult,
@@ -725,8 +742,10 @@ function QuickCompetitionState(state = initialState, action) {
             state.postTimeslotData = JSON.parse(JSON.stringify(timeslotArr))
             state.timeSlotId = checkTimeSlotId(JSON.parse(JSON.stringify(action.detailResult.competitionTimeslotManual)))
             state.selectedVenues = competiitonResultData
+            state.postSelectedVenues = competiitonResultData
             state.division = JSON.parse(JSON.stringify(action.detailResult.divisions))
             state.postDivisionData = JSON.parse(JSON.stringify(action.detailResult.divisions))
+            state.importPlayer = JSON.parse(JSON.stringify(action.detailResult.importPlayer))
             state.postDraws = JSON.parse(JSON.stringify(action.detailResult.draws))
             let drawsDataArray = drawsDataStructure(JSON.parse(JSON.stringify(action.detailResult.draws)))
             detailsResultData.draws = drawsDataArray.mainCourtNumberArray
@@ -810,6 +829,25 @@ function QuickCompetitionState(state = initialState, action) {
                 status: action.status,
                 error: null,
             }
+
+        case ApiConstants.API_QUICK_COMPETITION_ADDVENUE_LOAD:
+            return {
+                ...state,
+                onLoad: true,
+                onQuickCompLoad: true,
+                error: null,
+                status: null,
+            }
+
+        case ApiConstants.API_QUICK_COMPETITION_ADDVENUE_SUCCESS:
+            state.postSelectedVenues = JSON.parse(JSON.stringify(state.selectedVenues))
+            return {
+                ...state,
+                onLoad: false,
+                onQuickCompLoad: false,
+                status: action.status,
+            }
+
         default:
             return state;
     }

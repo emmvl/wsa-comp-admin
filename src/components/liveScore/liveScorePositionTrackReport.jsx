@@ -7,6 +7,10 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { liveScorePositionTrackingAction } from '../../store/actions/LiveScoreAction/liveScorePositionTrackingAction'
+import { getLiveScoreCompetiton } from "../../util/sessionStorage"
+import { isArrayNotEmpty } from "../../util/helpers";
+
 const { Content } = Layout;
 const { Option } = Select;
 
@@ -22,27 +26,27 @@ var _this = null
 const columns_1 = [
     {
         title: 'Match Id',
-        dataIndex: 'id',
-        key: 'id',
-        sorter: (a, b) => tableSort(a, b, "id"),
+        dataIndex: 'matchId',
+        key: 'matchId',
+        sorter: (a, b) => tableSort(a, b, "teamName"),
     },
     {
         title: 'Team',
-        dataIndex: 'team',
-        key: 'team',
-        sorter: (a, b) => tableSort(a, b, "team"),
+        dataIndex: 'teamName',
+        key: 'teamName',
+        sorter: (a, b) => tableSort(a, b, "teamName"),
     },
     {
         title: 'First Name',
-        dataIndex: 'fName',
-        key: 'fName',
-        sorter: (a, b) => tableSort(a, b, "fName"),
+        dataIndex: 'firstName',
+        key: 'firstName',
+        sorter: (a, b) => tableSort(a, b, "firstName"),
     },
     {
         title: 'Last Name',
-        dataIndex: 'lName',
-        key: 'lName',
-        sorter: (a, b) => tableSort(a, b, "lName"),
+        dataIndex: 'lastName',
+        key: 'lastName',
+        sorter: (a, b) => tableSort(a, b, "lastName"),
 
     },
     {
@@ -50,81 +54,119 @@ const columns_1 = [
         dataIndex: 'gs',
         key: 'gs',
         sorter: (a, b) => tableSort(a, b, "gs"),
+        render: (gs, records) =>
+            <span nowrap className="column-width-style" >{gs} </span>
     },
     {
         title: 'GA',
         dataIndex: 'ga',
         key: 'ga',
         sorter: (a, b) => tableSort(a, b, "ga"),
+        render: (ga, records) =>
+            <span nowrap className="column-width-style" >{ga} </span>
     },
     {
         title: 'WA',
         dataIndex: 'wa',
         key: 'wa',
         sorter: (a, b) => tableSort(a, b, "wa"),
+        render: (wa, records) =>
+            <span nowrap className="column-width-style" >{wa} </span>
     },
     {
         title: 'C',
         dataIndex: 'c',
         key: 'c',
         sorter: (a, b) => tableSort(a, b, "c"),
+        render: (c, records) =>
+            <span nowrap className="column-width-style" >{c} </span>
     },
     {
         title: 'WD',
         dataIndex: 'wd',
         key: 'wd',
         sorter: (a, b) => tableSort(a, b, "wd"),
+        render: (wd, records) =>
+            <span nowrap className="column-width-style" >{wd} </span>
     },
     {
         title: 'GD',
         dataIndex: 'gd',
         key: 'gd',
         sorter: (a, b) => tableSort(a, b, "gd"),
+        render: (gd, records) =>
+            <span nowrap className="column-width-style" >{gd} </span>
     },
     {
         title: 'GK',
         dataIndex: 'gk',
         key: 'gk',
         sorter: (a, b) => tableSort(a, b, "gk"),
+        render: (gk, records) =>
+            <span nowrap className="column-width-style" >{gk} </span>
     },
     {
-        title: 'Played',
+        title: "Played",
         dataIndex: 'played',
         key: 'played',
         sorter: (a, b) => tableSort(a, b, "played"),
+        render(played, record) {
+            return {
+                props: {
+                    style: { background: "rgb(248, 225, 209)" }
+                },
+                children: <div>{played}</div>
+            };
+        }
     },
     {
-        title: 'Bench',
+        title: "Bench",
         dataIndex: 'bench',
         key: 'bench',
         sorter: (a, b) => tableSort(a, b, "bench"),
+        render(bench, record) {
+            return {
+                props: {
+                    style: { background: "rgb(248, 225, 209)" }
+                },
+                children: <div>{bench}</div>
+            };
+        }
     },
     {
-        title: 'No Play',
+        title: "No Play",
         dataIndex: 'noPlay',
         key: 'noPlay',
         sorter: (a, b) => tableSort(a, b, "noPlay"),
+        render(noPlay, record) {
+            return {
+                props: {
+                    style: { background: "rgb(248, 225, 209)" }
+                },
+                children: <div>{noPlay}</div>
+            };
+        }
     },
 ];
 
 const columns_2 = [
     {
         title: 'Team',
-        dataIndex: 'team',
-        key: 'team',
-        sorter: (a, b) => tableSort(a, b, "team"),
+        dataIndex: 'teamName',
+        key: 'teamName',
+        sorter: (a, b) => tableSort(a, b, "teamName"),
     },
     {
         title: 'First Name',
-        dataIndex: 'fName',
-        key: 'fName',
-        sorter: (a, b) => tableSort(a, b, "fName"),
+        dataIndex: 'firstName',
+        key: 'firstName',
+        sorter: (a, b) => tableSort(a, b, "firstName"),
     },
     {
         title: 'Last Name',
-        dataIndex: 'lName',
-        key: 'lName',
-        sorter: (a, b) => tableSort(a, b, "lName"),
+        dataIndex: 'lastName',
+        key: 'lastName',
+        sorter: (a, b) => tableSort(a, b, "lastName"),
 
     },
     {
@@ -132,130 +174,100 @@ const columns_2 = [
         dataIndex: 'gs',
         key: 'gs',
         sorter: (a, b) => tableSort(a, b, "gs"),
+        render: (gs, records) =>
+            <span nowrap className="column-width-style" >{gs} </span>
     },
     {
         title: 'GA',
         dataIndex: 'ga',
         key: 'ga',
         sorter: (a, b) => tableSort(a, b, "ga"),
+        render: (ga, records) =>
+            <span nowrap className="column-width-style" >{ga} </span>
     },
     {
         title: 'WA',
         dataIndex: 'wa',
         key: 'wa',
         sorter: (a, b) => tableSort(a, b, "wa"),
+        render: (wa, records) =>
+            <span nowrap className="column-width-style" >{wa} </span>
     },
     {
         title: 'C',
         dataIndex: 'c',
         key: 'c',
         sorter: (a, b) => tableSort(a, b, "c"),
+        render: (c, records) =>
+            <span nowrap className="column-width-style" >{c} </span>
     },
     {
         title: 'WD',
         dataIndex: 'wd',
         key: 'wd',
         sorter: (a, b) => tableSort(a, b, "wd"),
+        render: (wd, records) =>
+            <span nowrap className="column-width-style" >{wd} </span>
     },
     {
         title: 'GD',
         dataIndex: 'gd',
         key: 'gd',
         sorter: (a, b) => tableSort(a, b, "gd"),
+        render: (gd, records) =>
+            <span nowrap className="column-width-style" >{gd} </span>
     },
     {
         title: 'GK',
         dataIndex: 'gk',
         key: 'gk',
         sorter: (a, b) => tableSort(a, b, "gk"),
+        render: (gk, records) =>
+            <span nowrap className="column-width-style" >{gk} </span>
     },
     {
-        title: 'Played',
+        title: "Played",
         dataIndex: 'played',
         key: 'played',
         sorter: (a, b) => tableSort(a, b, "played"),
+        render(played, record) {
+            return {
+                props: {
+                    style: { backgroundColor: "rgb(248, 225, 209)" }
+                },
+                children: <div>{played}</div>
+            };
+        }
     },
     {
-        title: 'Bench',
+        title: "Bench",
         dataIndex: 'bench',
         key: 'bench',
         sorter: (a, b) => tableSort(a, b, "bench"),
+        render(bench, record) {
+            return {
+                props: {
+                    style: { backgroundColor: "rgb(248, 225, 209)", }
+                },
+                children: <div>{bench}</div>
+            };
+        }
     },
     {
-        title: 'No Play',
+        title: "No Play",
         dataIndex: 'noPlay',
         key: 'noPlay',
         sorter: (a, b) => tableSort(a, b, "noPlay"),
+        render(noPlay, record) {
+            return {
+                props: {
+                    style: { backgroundColor: "rgb(248, 225, 209)" }
+                },
+                children: <div>{noPlay}</div>
+            };
+        }
     },
 ];
-
-
-var DATA = [
-    {
-        "team": 'Peninsula 22',
-        "fName": 'Marissa',
-        "lName": 'Cooper',
-        "gs": '2',
-        "ga": '2',
-        "wa": '2',
-        "c": '2',
-        "wd": '2',
-        "gd": '2',
-        "gk": '4',
-        "played": '4',
-        "bench": '4',
-        "noPlay": '4',
-
-    },
-    {
-        "team": 'Peninsula 23',
-        "fName": 'Zoe ',
-        "lName": 'Scamps',
-        "gs": '2',
-        "ga": '2',
-        "wa": '2',
-        "c": '2',
-        "wd": '2',
-        "gd": '2',
-        "gk": '4',
-        "played": '4',
-        "bench": '4',
-        "noPlay": '4',
-
-    },
-    {
-        "team": 'Peninsula 24',
-        "fName": 'Darren',
-        "lName": 'Geros',
-        "gs": '2',
-        "ga": '2',
-        "wa": '2',
-        "c": '2',
-        "wd": '2',
-        "gd": '2',
-        "gk": '4',
-        "played": '4',
-        "bench": '4',
-        "noPlay": '4',
-
-    },
-    {
-        "team": 'Peninsula 245',
-        "fName": 'Sam',
-        "lName": 'OBrien',
-        "gs": '2',
-        "ga": '2',
-        "wa": '2',
-        "c": '2',
-        "wd": '2',
-        "gd": '2',
-        "gk": '4',
-        "played": '4',
-        "bench": '4',
-        "noPlay": '4',
-
-    }
-]
 
 class LiveScorePositionTrackReport extends Component {
     constructor(props) {
@@ -263,10 +275,27 @@ class LiveScorePositionTrackReport extends Component {
         this.state = {
             competitionId: null,
             searchText: "",
-            period: 'All',
-            game: 'All'
+            reporting: 'PERIOD',
+            aggregate: 'MATCH'
         }
         _this = this
+    }
+
+    componentDidMount() {
+
+
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+
+        const body =
+        {
+            "paging": {
+                "limit": 10,
+                "offset": 0
+            }
+        }
+        this.props.liveScorePositionTrackingAction({ compId: id, aggregate: this.state.aggregate, reporting: this.state.reporting, pagination: body, search: this.state.searchText })
+
+        this.setState({ competitionId: id })
     }
 
     ///////view for breadcrumb
@@ -317,33 +346,124 @@ class LiveScorePositionTrackReport extends Component {
         )
     }
 
+    /// Handle Page change
+    handlePageChnage(page) {
+        let offset = page ? 10 * (page - 1) : 0;
+        const body =
+        {
+            "paging": {
+                "limit": 10,
+                "offset": offset
+            }
+        }
+        this.props.liveScorePositionTrackingAction({ compId: this.state.competitionId, aggregate: this.state.aggregate, reporting: this.state.reporting, pagination: body, search: this.state.searchText })
+
+
+    }
+
 
     //////// tableView
     tableView = () => {
+
+        const { positionTrackResult, totalCount } = this.props.liveScorePositionTrackState
+        let positionTrackData = isArrayNotEmpty(positionTrackResult) ? positionTrackResult : []
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        // loading={this.props.liveScoreMatchListState.onLoad == true && true}
-                        className="home-dashboard-table"
-                        columns={this.state.game == 'total' ? columns_1 : columns_2}
-                        dataSource={DATA}
+                        loading={this.props.liveScorePositionTrackState.onLoad}
+                        className={"home-dashboard-table"}
+                        columns={this.state.aggregate == 'MATCH' ? columns_1 : columns_2}
+                        dataSource={positionTrackData}
                         pagination={false}
-                    // rowKey={(record, index) => record.id + index} 
+                        rowKey={(index) => 'positionTrackReport' + index}
+
                     />
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination pb-5"
-                        // current={liveScoreMatchListState.liveScoreMatchListPage}
-                        // total={total}
-                        // onChange={(page) => this.onPageChange(page)}
-                        defaultPageSize={10}
+                        defaultCurrent={1}
+                        total={totalCount}
+                        onChange={(page) => this.handlePageChnage(page)}
                     />
                 </div>
 
             </div>
         )
+    }
+
+    onChangePeriod(reportId) {
+        const body =
+        {
+            "paging": {
+                "limit": 10,
+                "offset": 0
+            }
+        }
+        this.props.liveScorePositionTrackingAction({ compId: this.state.competitionId, aggregate: this.state.aggregate, reporting: reportId, pagination: body, search: this.state.searchText })
+        this.setState({ reporting: reportId })
+    }
+
+    onChangeGame(aggregateId) {
+
+        const body =
+        {
+            "paging": {
+                "limit": 10,
+                "offset": 0
+            }
+        }
+        this.props.liveScorePositionTrackingAction({ compId: this.state.competitionId, aggregate: aggregateId, reporting: this.state.reporting, pagination: body, search: this.state.searchText })
+        this.setState({ aggregate: aggregateId })
+
+
+    }
+
+    // on change search text
+    onChangeSearchText = (e) => {
+        this.setState({ searchText: e.target.value })
+        if (e.target.value == null || e.target.value == "") {
+            const body =
+            {
+                "paging": {
+                    "limit": 10,
+                    "offset": 0
+                }
+            }
+            this.props.liveScorePositionTrackingAction({ compId: this.state.competitionId, aggregate: this.state.aggregate, reporting: this.state.reporting, pagination: body, search: e.target.value })
+        }
+    }
+
+    // search key 
+    onKeyEnterSearchText = (e) => {
+        var code = e.keyCode || e.which;
+        if (code === 13) { //13 is the enter keycode
+            const body =
+            {
+                "paging": {
+                    "limit": 10,
+                    "offset": 0
+                }
+            }
+            this.props.liveScorePositionTrackingAction({ compId: this.state.competitionId, aggregate: this.state.aggregate, reporting: this.state.reporting, pagination: body, search: this.state.searchText })
+        }
+    }
+
+    // on click of search icon
+    onClickSearchIcon = () => {
+        if (this.state.searchText == null || this.state.searchText == "") {
+        }
+        else {
+            const body =
+            {
+                "paging": {
+                    "limit": 10,
+                    "offset": 0
+                }
+            }
+            this.props.liveScorePositionTrackingAction({ compId: this.state.competitionId, aggregate: this.state.aggregate, reporting: this.state.reporting, pagination: body, search: this.state.searchText })
+        }
     }
 
 
@@ -353,41 +473,45 @@ class LiveScorePositionTrackReport extends Component {
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="row">
                     <div className="col-sm"  >
-                        <span className='year-select-heading'>{AppConstants.periodFilter}:</span>
-                        <Select
-                            className="year-select"
-                            style={{ minWidth: 160 }}
-                            onChange={(periodId) => this.setState({ period: periodId })}
-                            value={this.state.period}
-                        >
-                            <Option value={'All'}>{'All'}</Option>
-                            <Option value={'percent'}>{'%'}</Option>
-                            <Option value={'minutes'}>{'Minutes'}</Option>
+                        <div className="reg-filter-col-cont pb-3"  >
+                            <span className='year-select-heading'>{AppConstants.periodFilter}:</span>
+                            <Select
+                                className="year-select reg-filter-select1 ml-2"
+                                style={{ minWidth: 160 }}
+                                onChange={(reportId) => this.onChangePeriod(reportId)}
+                                value={this.state.reporting}
+                            >
+                                <Option value={'PERIOD'}>{'Period'}</Option>
+                                <Option value={'PERCENT'}>{'%'}</Option>
+                                <Option value={'MINUTE'}>{'Minutes'}</Option>
 
-                        </Select>
+                            </Select>
+                        </div>
                     </div>
                     <div className="col-sm" >
-                        <span className='year-select-heading'>{AppConstants.byGame}:</span>
-                        <Select
-                            className="year-select"
-                            style={{ minWidth: 160 }}
-                            onChange={(gameId) => this.setState({ game: gameId })}
-                            value={this.state.game}
-                        >
-                            <Option value={'All'}>{'All'}</Option>
-                            <Option value={'total'}>{'Total'}</Option>
+                        <div className="reg-filter-col-cont pb-3"  >
+                            <span className='year-select-heading'>{AppConstants.byGame}:</span>
+                            <Select
+                                className="year-select reg-filter-select1 ml-2"
+                                style={{ minWidth: 160 }}
+                                onChange={(aggregateId) => this.onChangeGame(aggregateId)}
+                                value={this.state.aggregate}
+                            >
+                                <Option value={'MATCH'}>{'By Game'}</Option>
+                                <Option value={'ALL'}>{'All Games'}</Option>
 
-                        </Select>
+                            </Select>
+                        </div>
                     </div>
 
                     <div className="col-sm" style={{ display: "flex", justifyContent: 'flex-end', alignItems: "center" }} >
-                        <div className="comp-product-search-inp-width" >
+                        <div className="comp-product-search-inp-width pb-3" >
                             <Input className="product-reg-search-input"
-                                // onChange={(e) => this.onChangeSearchText(e)}
+                                onChange={(e) => this.onChangeSearchText(e)}
                                 placeholder="Search..."
-                                // onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                onKeyPress={(e) => this.onKeyEnterSearchText(e)}
                                 prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                // onClick={() => this.onClickSearchIcon()}
+                                    onClick={() => this.onClickSearchIcon()}
                                 />}
                                 allowClear
                             />
@@ -418,12 +542,13 @@ class LiveScorePositionTrackReport extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-
+        liveScorePositionTrackingAction
     }, dispatch)
 }
 
 function mapStateToProps(state) {
     return {
+        liveScorePositionTrackState: state.LiveScorePositionTrackState
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)((LiveScorePositionTrackReport));

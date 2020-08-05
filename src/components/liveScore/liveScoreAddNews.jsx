@@ -10,7 +10,8 @@ import {
     Form,
     Modal,
     Spin,
-    Checkbox
+    Checkbox,
+    message
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -32,14 +33,15 @@ import ValidationConstants from "../../themes/validationConstant";
 import history from '../../util/history'
 import Loader from '../../customComponents/loader';
 import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, ContentState, convertFromHTML, } from 'draft-js';
+import { EditorState, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { getLiveScoreCompetiton, getKeyForStateWideMessage } from '../../util/sessionStorage';
 import { isArrayNotEmpty, captializedString } from "../../util/helpers";
 import { liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 import ImageLoader from '../../customComponents/ImageLoader'
 import { NavLink } from "react-router-dom";
-
+import htmlToDraft from 'html-to-draftjs';
+import draftToHtml from 'draftjs-to-html';
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
@@ -72,7 +74,9 @@ class LiveScoreAddNews extends Component {
             authorName: 'abc',
             imageTimeout: null,
             videoTimeout: null,
-            screenKey: props.location ? props.location.state ? props.location.state.screenKey ? props.location.state.screenKey : null : null : null
+            screenKey: props.location ? props.location.state ? props.location.state.screenKey ? props.location.state.screenKey : null : null : null,
+            crossImageIcon: false,
+            crossVideoIcon: false
         };
     }
 
@@ -104,16 +108,16 @@ class LiveScoreAddNews extends Component {
         }
 
         this.setState({ getDataLoading: false, authorName: name })
-
         const { addEditNews } = this.props.liveScoreNewsState;
-
         this.props.form.setFieldsValue({
             'author': addEditNews.author ? addEditNews.author : name
         })
+
         if (this.state.isEdit === true) {
             this.props.setDefaultImageVideoNewAction({ newsImage: this.props.location.state.item.newsImage, newsVideo: this.props.location.state.item.newsVideo, author: name })
             this.props.liveScoreAddNewsDetailsAction(this.props.location.state.item)
             this.setInitalFiledValue(this.props.location.state.item, name)
+
         } else {
             this.props.liveScoreRefreshNewsAction()
 
@@ -135,18 +139,18 @@ class LiveScoreAddNews extends Component {
                 <div className="livescore-editor-news col-sm">
                     <Editor
                         editorState={editorState}
-                        wrapperClassName="demo-wrapper"
-                        editorClassName="demo-editor"
-                        toolbarClassName="toolbar-class"
+                        editorClassName="newsDetailEditor"
                         placeholder="News body"
                         onChange={(e) => this.onChangeEditorData(e.blocks)}
                         onEditorStateChange={this.onEditorStateChange}
                         toolbar={{
+                            options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded', 'emoji', 'remove', 'history'],
                             inline: { inDropdown: true },
                             list: { inDropdown: true },
                             textAlign: { inDropdown: true },
                             link: { inDropdown: true },
                             history: { inDropdown: true },
+
                         }}
                     />
                 </div>
@@ -161,20 +165,37 @@ class LiveScoreAddNews extends Component {
 
 
     setInitalFiledValue(data, author) {
-
         let authorData = null
         if (getLiveScoreCompetiton()) {
             authorData = JSON.parse(getLiveScoreCompetiton())
         }
-
-
         this.props.form.setFieldsValue({
             'news_Title': data.title,
-            'author': author ? author : authorData ? authorData.longName : 'World sport actioa'
+            'author': data.author ? data.author : author ? author : authorData ? authorData.longName : 'World sport actioa'
         })
+        // let finalBody = data ? data.body ? data.body : "" : ""
+        // let body = EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(finalBody)))
+        // this.setState({ editorState: body })
+
         let finalBody = data ? data.body ? data.body : "" : ""
-        let body = EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(finalBody)))
-        this.setState({ editorState: body })
+        // const contentState = convertFromRaw({ "entityMap": {}, "blocks": finalBody });
+        // const editorState = EditorState.createWithContent(contentState);
+        // this.setState({
+        //     editorState
+        // })
+
+        const html = finalBody;
+        const contentBlock = htmlToDraft(html);
+        if (contentBlock) {
+            const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+            const editorState = EditorState.createWithContent(contentState);
+            this.setState({
+                editorState
+            })
+
+        }
+
+
     }
 
     componentDidUpdate(nextProps) {
@@ -191,13 +212,17 @@ class LiveScoreAddNews extends Component {
                     if (!appendData.hasOwnProperty('newsImage')) {
                         appendData['newsImage'] = this.props.location.state.item.newsImage
                     }
-                    // history.push('./liveScoreNewsView', { item: this.props.liveScoreNewsState.addNewsResult, id: this.state.key })
                 }
-                // history.push('./liveScoreNewsView', { item: appendData, id: this.state.key })
-                history.push({
-                    pathname: '/liveScoreNewsView',
-                    state: { item: appendData, id: this.state.key, screenKey: this.state.screenKey }
-                })
+
+
+                const { success } = this.props.liveScoreNewsState;
+
+                if (success) {
+                    history.push({
+                        pathname: '/liveScoreNewsView',
+                        state: { item: appendData, id: this.state.key, screenKey: this.state.screenKey }
+                    })
+                }
             }
         }
     }
@@ -234,10 +259,18 @@ class LiveScoreAddNews extends Component {
     ////method to setimage
     setImage = (data) => {
 
+        console.log(data,'imageSelection~~~~~~')
+
         const { liveScoreNewsState } = this.props;
         let editData = liveScoreNewsState.addEditNews;
 
         if (data.files[0] !== undefined) {
+
+            // if (data.files[0].size > AppConstants.logo_size) {
+            //     message.error(AppConstants.videoSize);
+            //     return;
+            //   }
+
 
             if (this.state.isEdit == true) {
                 editData.newsImage = ''
@@ -264,10 +297,22 @@ class LiveScoreAddNews extends Component {
         const { liveScoreNewsState } = this.props;
         let editData = liveScoreNewsState.addEditNews;
         if (data.files[0] !== undefined) {
+
+            if (data.files[0].size > AppConstants.video_size) {
+                message.error(AppConstants.videoSize);
+                return;
+            }else{
+                this.setState({ videoTimeout: 2000, crossVideoIcon: false,video: data.files[0], videoSelection: URL.createObjectURL(data.files[0]) })
+                setTimeout(() => {
+                    this.setState({ videoTimeout: null, crossVideoIcon: true })
+                }, 2000);
+            }
+
+
             if (this.state.isEdit == true) {
                 editData.newsVideo = ''
             }
-            this.setState({ video: data.files[0], videoSelection: URL.createObjectURL(data.files[0]) })
+            // this.setState({ video: data.files[0], videoSelection: URL.createObjectURL(data.files[0]) })
             // this.props.liveScoreUpdateNewsAction(URL.createObjectURL(data.files[0]), "newsVideo")
         }
     };
@@ -403,14 +448,28 @@ class LiveScoreAddNews extends Component {
         this.props.liveScoreUpdateNewsAction(recipientName, recipientKey)
     }
 
+    deleteImage(){
+        this.setState({ image: null, imageSelection: AppImages.circleImage, crossImageIcon: false })
+        this.props.liveScoreUpdateNewsAction(null, "newsImage")
+    }
+
+    deleteVideo(){
+        this.setState({ video: null, videoSelection: '', crossVideoIcon: false })
+        this.props.liveScoreUpdateNewsAction(null, "newsVideo")
+    }
+
+
     ////////form content view
     contentView = (getFieldDecorator) => {
-        const { liveScoreNewsState } = this.props;
-        let editData = liveScoreNewsState.addEditNews;
-        let expiryDate = liveScoreNewsState.news_expire_date
-        let expiryTime = liveScoreNewsState.expire_time
+        const { addEditNews,news_expire_date,expire_time,newsImage,newsVideo } = this.props.liveScoreNewsState;
+        let editData = addEditNews;
+        let expiryDate = news_expire_date
+        let expiryTime = expire_time
         let expiryTime_formate = expiryTime ? moment(expiryTime).format("HH:mm") : null;
         let stateWideMsg = getKeyForStateWideMessage()
+
+        console.log(this.state.imageSelection,'imageSelection',this.state.videoSelection)
+
         return (
             <div className="content-view pt-4">
                 <Form.Item >
@@ -477,21 +536,43 @@ class LiveScoreAddNews extends Component {
                         <div className="reg-competition-logo-view" onClick={this.selectImage}>
                             <ImageLoader
                                 timeout={this.state.imageTimeout}
-                                src={editData.newsImage ? editData.newsImage : this.state.imageSelection} />
+                                src={newsImage ? newsImage : this.state.imageSelection} />
 
                         </div>
-                        <input
-                            type="file"
-                            id="user-pic"
-                            style={{ display: 'none' }}
-                            onChange={(event) => {
-                                this.setImage(event.target, 'evt.target')
-                                this.setState({ imageTimeout: 2000 })
-                                setTimeout(() => {
-                                    this.setState({ imageTimeout: null })
-                                }, 2000);
-                            }}
-                        />
+                        <div>
+                            <input
+                                type="file"
+                                id="user-pic"
+                                style={{ display: 'none' }}
+                                onChange={(event) => {
+                                    this.setImage(event.target, 'evt.target')
+                                    this.setState({ imageTimeout: 2000, crossImageIcon: false })
+                                    setTimeout(() => {
+                                        this.setState({ imageTimeout: null, crossImageIcon: true })
+                                    }, 2000);
+                                }}
+                                onClick={(event)=> { 
+                                    event.target.value = null
+                               }}
+                            />
+
+                            <div style={{ position: 'absolute', bottom: 65, left: 150 }}>
+                                {(this.state.crossImageIcon || newsImage) &&
+                                    <span className='user-remove-btn pl-2'
+                                        style={{ cursor: 'pointer' }}>
+                                        <img
+                                            className="dot-image"
+                                            src={AppImages.redCross}
+                                            alt=""
+                                            width="16"
+                                            height="16"
+                                            onClick={() =>this.deleteImage()}
+                                        />
+                                    </span>
+                                }
+                            </div>
+
+                        </div>
 
                     </div>
                     <div className="col-sm" >
@@ -500,8 +581,8 @@ class LiveScoreAddNews extends Component {
                             <ImageLoader
                                 timeout={this.state.videoTimeout}
                                 video
-                                src={editData.newsVideo ? editData.newsVideo : this.state.videoSelection}
-                                poster={(editData.newsVideo || this.state.videoSelection != '') ? '' : AppImages.circleImage} />
+                                src={newsVideo ? newsVideo : this.state.videoSelection}
+                                poster={(newsVideo || this.state.videoSelection != '') ? '' : AppImages.circleImage} />
 
                         </div>
                         <input
@@ -510,12 +591,31 @@ class LiveScoreAddNews extends Component {
                             style={{ display: 'none' }}
                             onChange={(event) => {
                                 this.setVideo(event.target, "evt.target")
-                                this.setState({ videoTimeout: 2000 })
-                                setTimeout(() => {
-                                    this.setState({ videoTimeout: null })
-                                }, 2000);
+                                // this.setState({ videoTimeout: 2000, crossVideoIcon: false })
+                                // setTimeout(() => {
+                                //     this.setState({ videoTimeout: null, crossVideoIcon: true })
+                                // }, 2000);
                             }}
+                            onClick={(event)=> { 
+                                event.target.value = null
+                           }}
                         />
+                        <div style={{ position: 'absolute', bottom: 65, left: 150 }}>
+                            {(this.state.crossVideoIcon || newsVideo) &&
+                                <span className='user-remove-btn pl-2'
+                                    style={{ cursor: 'pointer' }}>
+                                    <img
+                                        className="dot-image"
+                                        src={AppImages.redCross}
+                                        alt=""
+                                        width="16"
+                                        height="16"
+                                        onClick={() =>this.deleteVideo()}
+                                    />
+                                </span>
+                            }
+                        </div>
+                        <span className="video_Message">{AppConstants.videoSizeMessage}</span>
                     </div>
                 </div>
 
@@ -646,6 +746,7 @@ class LiveScoreAddNews extends Component {
     onSaveButton = (e) => {
         let newsId = this.props.location.state ? this.props.location.state.item ? this.props.location.state.item.id ? this.props.location.state.item.id : null : null : null
         let mediaArry = []
+
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
@@ -696,18 +797,26 @@ class LiveScoreAddNews extends Component {
                         newstringArr.push(data.newsBody[i].text)
                     }
 
-                    let bodyText = newstringArr.join(`<br/>`)
+                    let bodyDetails = draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()))
                     // let bodyText = newstringArr.join("")
 
-                    liveScoreNewsState.addEditNews.body = bodyText
+                    liveScoreNewsState.addEditNews.body = bodyDetails
+
+                    // let bodyText = newstringArr.join(`<br/>`)
+                    // let bodyText = JSON.stringify(data.newsBody)
+
+
+                    // let bodyText = newstringArr.join("")
+
+                    // liveScoreNewsState.addEditNews.body = bodyText
                 }
 
                 let editData = liveScoreNewsState.addEditNews;
                 if (getLiveScoreCompetiton()) {
                     const { id } = JSON.parse(getLiveScoreCompetiton())
-                    this.props.liveScoreAddNewsAction(editData, mediaArry, newsId, this.state.key, id)
+                    this.props.liveScoreAddNewsAction({editData:editData,mediaArry:mediaArry,newsId:newsId,key:this.state.key,compId:id,newsImage:data.newsImage,newsVideo:data.newsVideo})
                 } else {
-                    this.props.liveScoreAddNewsAction(editData, mediaArry, newsId, this.state.key, 1)
+                    this.props.liveScoreAddNewsAction({editData:editData,mediaArry:mediaArry,newsId:newsId,key:this.state.key,compId:1,newsImage:data.newsImage,newsVideo:data.newsVideo})
                 }
                 this.setState({ getDataLoading: true })
             }
@@ -734,7 +843,7 @@ class LiveScoreAddNews extends Component {
                                         state: { screenKey: this.state.screenKey }
                                     }}
                                 >
-                                    <Button type="cancel-button">
+                                    <Button className="cancelBtnWidth" type="cancel-button">
                                         {AppConstants.cancel}
                                     </Button>
                                 </NavLink>
@@ -742,7 +851,7 @@ class LiveScoreAddNews extends Component {
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button className="user-approval-button"
+                                <Button className="publish-button save-draft-text"
                                     type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.next}
                                 </Button>

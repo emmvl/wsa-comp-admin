@@ -23,6 +23,8 @@ import {liveScore_MatchFormate} from '../../themes/dateformate';
 import {getLiveScoreCompetiton} from "../../util/sessionStorage";
 
 import './liveScore.css';
+import Tooltip from "react-png-tooltip";
+import {NavLink} from "react-router-dom";
 
 const {Header, Content} = Layout;
 const {Option} = Select;
@@ -55,10 +57,12 @@ class LiveScoreMatchSheet extends Component {
 
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton());
-        this.props.getLiveScoreDivisionList(id);
-        this.setState({onDivisionLoad: true, competitionId: id});
-        this.props.getMatchPrintTemplateType();
-        this.refreshDownloads();
+        if (id !== undefined) {
+            this.props.getLiveScoreDivisionList(id);
+            this.setState({onDivisionLoad: true, competitionId: id});
+            this.props.getMatchPrintTemplateType();
+            this.refreshDownloads();
+        }
     }
 
     componentDidUpdate(nextProps) {
@@ -122,9 +126,9 @@ class LiveScoreMatchSheet extends Component {
                 this.state.templateType,
             );
         } else if (this.props.liveScoreMatchState.liveScoreMatchList.length === 0) {
-            message.error('There is no matchsheets to print.')
+            message.error(AppConstants.matchSheetsNoPrintError)
         } else {
-            message.error('Please select template type.')
+            message.error(AppConstants.selectTemplateTypeError)
         }
     };
 
@@ -187,13 +191,13 @@ class LiveScoreMatchSheet extends Component {
 
     columns = [
         {
-            title: 'Match Id',
+            title: AppConstants.tableMatchID,
             dataIndex: 'id',
             key: 'id',
             sorter: (a, b) => tableSort(a, b, "id"),
         },
         {
-            title: 'Start Time',
+            title: AppConstants.startTime,
             dataIndex: 'startTime',
             key: 'startTime',
             sorter: (a, b) => tableSort(a, b, "startTime"),
@@ -201,7 +205,7 @@ class LiveScoreMatchSheet extends Component {
                 <span>{startTime ? liveScore_MatchFormate(startTime) : ""}</span>
         },
         {
-            title: 'Round',
+            title: AppConstants.round,
             dataIndex: 'round',
             key: 'round',
             sorter: (a, b) => tableSort(a, b, "round"),
@@ -211,10 +215,10 @@ class LiveScoreMatchSheet extends Component {
             title: '',
             dataIndex: 'id',
             key: 'operation',
-            render: (id) => <div className="d-flex">
+            render: (id) => <div className="d-flex justify-content-end mr-4 mr-lg-4 mr-md-0">
                 <Button
-                    size="small"
-                    className="table-preview-button"
+                    className="primary-add-comp-form"
+                    type="primary"
                     onClick={() => this.onClickPreview(id)}
                 >
                     {AppConstants.preview}
@@ -222,6 +226,16 @@ class LiveScoreMatchSheet extends Component {
             </div>
         },
     ];
+
+    sheetTableHeading = () => {
+        return (
+          <div className="pt-4 pb-4 d-flex align-items-center">
+              <div className="col-sm d-flex align-items-center" >
+                  <span className='home-dash-left-text'>{AppConstants.previews}</span>
+              </div>
+          </div>
+        )
+    };
 
     // Match sheet table
     sheetTableView = () => {
@@ -232,8 +246,9 @@ class LiveScoreMatchSheet extends Component {
             : DATA;
 
         return (
-            <div className="formView mt-4">
-                <div className="table-responsive p-2 home-dash-table-view">
+            <div className="formView mt-4" style={{marginBottom: 20}}>
+                {this.sheetTableHeading()}
+                <div className="table-responsive home-dash-table-view">
                     <Table
                         className="home-dashboard-table"
                         columns={this.columns}
@@ -247,26 +262,20 @@ class LiveScoreMatchSheet extends Component {
 
     dropdownTableColumns = [
         {
-            title: 'Sheet ID',
+            title: AppConstants.tableSheetID,
             dataIndex: 'id',
             key: 'id',
             sorter: (a, b) => tableSort(a, b, "id"),
+            render: (id) => <div style={{minWidth: 80}}>{id}</div>,
         },
         {
-            title: 'Competition',
-            dataIndex: 'competitionName',
-            key: 'competitionName',
-            sorter: (a, b) => tableSort(a, b, "competitionName"),
-        },
-        {
-            title: 'Name',
+            title: AppConstants.name,
             dataIndex: 'name',
             key: 'name',
             sorter: (a, b) => tableSort(a, b, "name"),
-            ellipsis: true,
         },
         {
-            title: 'Created at',
+            title: AppConstants.createdAt,
             dataIndex: 'createdAt',
             key: 'createdAt',
             sorter: (a, b) => tableSort(a, b, "createdAt"),
@@ -274,7 +283,7 @@ class LiveScoreMatchSheet extends Component {
                 <span>{createdAt ? liveScore_MatchFormate(createdAt) : ""}</span>
         },
         {
-            title: 'Download',
+            title: AppConstants.download,
             dataIndex: 'downloadUrl',
             key: 'downloadUrl',
             render: (downloadUrl) => <a className="sheet-download-link" href={downloadUrl}>
@@ -283,13 +292,34 @@ class LiveScoreMatchSheet extends Component {
         },
     ];
 
+
+    dropdownTableHeading = () => {
+        return (
+          <div className="pt-4 pb-4 d-flex align-items-center">
+              <div className="col-sm d-flex align-items-center">
+                  <span className='home-dash-left-text'>{AppConstants.downloads}</span>
+              </div>
+              <div className="col-sm text-right" >
+                  <Button
+                    className="primary-add-comp-form mr-4 mr-lg-4 mr-md-0"
+                    type="primary"
+                    onClick={() => this.refreshDownloads()}
+                  >
+                      {AppConstants.refreshDownloads}
+                  </Button>
+              </div>
+          </div>
+        )
+    };
+
     // Match sheet table
     dropdownTableView = () => {
         let DATA = this.props.liveScoreMatchSheetState.matchSheetDownloads;
 
         return (
-            <div className="formView mt-4 mb-5">
-                <div className="table-responsive p-2 home-dash-table-view">
+            <div className="formView mt-4 mb-4">
+                {this.dropdownTableHeading()}
+                <div className="table-responsive home-dash-table-view">
                     <Table
                         className="home-dashboard-table"
                         columns={this.dropdownTableColumns}
@@ -315,7 +345,7 @@ class LiveScoreMatchSheet extends Component {
             : [];
 
         return (
-            <div className="content-view">
+            <div className="p-5">
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
@@ -327,7 +357,7 @@ class LiveScoreMatchSheet extends Component {
                                 style={{width: '100%', paddingRight: 1, minWidth: 182}}
                                 onChange={(division) => this.changeDivision({division})}
                                 value={this.state.division}
-                                placeholder="Select division"
+                                placeholder={AppConstants.selectDivision}
                             >
                                 {division.length > 0 && division.map(
                                     (item) => <Option value={item.id} key={item.id}>{item.name}</Option>)}
@@ -345,7 +375,7 @@ class LiveScoreMatchSheet extends Component {
                                 style={{width: '100%', paddingRight: 1, minWidth: 182}}
                                 onChange={(selectedTeam) => this.onChangeTeam(selectedTeam)}
                                 value={this.state.selectedTeam}
-                                placeholder="Select team"
+                                placeholder={AppConstants.selectTeam}
                             >
                                 {teamList.length > 0 && teamList.map(
                                     (item) => <Option value={item.id} key={item.id}>{item.name}</Option>)}
@@ -363,14 +393,23 @@ class LiveScoreMatchSheet extends Component {
                             <Select
                                 style={{width: '100%', paddingRight: 1, minWidth: 182}}
                                 onChange={(selectedTemplateId) => this.onChangeTemplate(selectedTemplateId)}
-                                value={this.state.selectedTemplateId ?? 'Select template type'}
-                                placeholder="Select template type"
+                                value={this.state.selectedTemplateId ?? AppConstants.selectTemplateType}
+                                placeholder={AppConstants.selectTemplateType}
                             >
                                 {templateList.length > 0 && templateList.map(
                                     (item) => <Option value={item.id} key={item.id}>{item.description}</Option>)}
                             </Select>
                         </div>
                     </div>
+                </div>
+                <div className="fluid-width d-flex justify-content-end" style={{marginTop: 25}}>
+                    <Button
+                      className="open-reg-button"
+                      type="primary"
+                      onClick={() => this.printAll()}
+                    >
+                        {AppConstants.printAll}
+                    </Button>
                 </div>
             </div>
         );
@@ -387,13 +426,6 @@ class LiveScoreMatchSheet extends Component {
                         onClick={() => this.refreshDownloads()}
                     >
                         {AppConstants.refreshDownloads}
-                    </Button>
-                    <Button
-                        className="open-reg-button"
-                        type="primary"
-                        onClick={() => this.printAll()}
-                    >
-                        {AppConstants.previewAll}
                     </Button>
                 </div>
             </div>
@@ -421,9 +453,8 @@ class LiveScoreMatchSheet extends Component {
                         <div className="formView">
                             {this.contentView()}
                         </div>
-                        {this.sheetTableView()}
-                        {this.footerView()}
                         {this.dropdownTableView()}
+                        {this.sheetTableView()}
                     </Content>
                 </Layout>
                 <LiveScoreMatchSheetPreviewModal
@@ -431,7 +462,7 @@ class LiveScoreMatchSheet extends Component {
                     match={this.state.selectedMatch}
                     matchDetails={this.props.liveScoreMatchState.matchDetails}
                     matchTemplateTypes={this.props.commonReducerState.matchPrintTemplateType}
-                    modalTitle="LiveScores Match Sheet"
+                    modalTitle={AppConstants.liveScoreMatchSheetPreviewModalTitle}
                     handleOK={this.handleModalOk}
                     handleCancel={this.handleModalCancel}
                 />

@@ -1,12 +1,13 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-function liveScoreCoachListAction(roleId, entityTypeId, entityId, search) {
+function liveScoreCoachListAction(roleId, entityTypeId, entityId, search,offset) {
     const action = {
         type: ApiConstants.API_LIVE_SCORE_COACH_LIST_LOAD,
         roleId: roleId,
         entityTypeId: entityTypeId,
         entityId: entityId,
-        search: search
+        search: search,
+        offset
     };
 
     return action;

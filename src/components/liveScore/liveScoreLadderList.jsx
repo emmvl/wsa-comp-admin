@@ -40,7 +40,11 @@ const columns = [
         dataIndex: 'name',
         key: 'name',
         sorter: (a, b) => tableSort(a, b, "name"),
-
+        render: (data, record) => (
+            record.hasAdjustments ? 
+            <span className="required-field">{data}</span>
+            :  <span>{data}</span>
+        )
     },
 
     {
@@ -219,20 +223,51 @@ class LiveScoreLadderList extends Component {
 
         return (
             <div className="comp-player-grades-header-drop-down-view">
-                <span className='year-select-heading'>{AppConstants.filterByDivision}:</span>
-                {grade.length > 0 && <Select
-                    className="year-select"
-                    onChange={(division) => this.divisionChange({ division })}
-                    style={{ minWidth: 80 }}
-                    defaultValue={grade[0].name}
-                >
-                    {grade.map((item) => (
-                        <Option key={'selectDivision' + item.id} value={item.id}>
-                            {item.name}
-                        </Option>
-                    ))}
+                <div className="reg-filter-col-cont"  >
+                    {/* <span className='year-select-heading'>{AppConstants.filterByDivision}:</span> */}
+                    {/* {grade.length > 0 && <Select
+                        className="year-select reg-filter-select1 ml-2"
+                        style={{ minWidth: 200 }}
+                        onChange={(division) => this.divisionChange({ division })}
+                        nowrap
+                        defaultValue={grade[0].name}
+                    >
+                        {grade.map((item) => (
+                            <Option key={'selectDivision' + item.id} value={item.id}>
+                                {item.name}
+                            </Option>
+                        ))}
 
-                </Select>}
+                    </Select>} */}
+
+                    <div
+                        style={{
+                            width: "fit-content",
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                        }}
+                    >
+                        <span className="year-select-heading">
+                            {AppConstants.filterByDivision}:
+                </span>
+                        {grade.length > 0 && <Select
+                            className="year-select reg-filter-select1 ml-2"
+                            style={{ minWidth: 140 }}
+                            onChange={(division) => this.divisionChange({ division })}
+                            nowrap
+                            defaultValue={grade[0].name}
+                        >
+                            {grade.map((item) => (
+                                <Option key={'selectDivision' + item.id} value={item.id}>
+                                    {item.name}
+                                </Option>
+                            ))}
+
+                        </Select>}
+                    </div>
+
+                </div>
             </div>
         )
     }
@@ -241,9 +276,10 @@ class LiveScoreLadderList extends Component {
     contentView = () => {
         const { liveScoreLadderState } = this.props;
 
-        let DATA = liveScoreLadderState.liveScoreLadderListData
+        let DATA = liveScoreLadderState.liveScoreLadderListData;
+        let adjData = liveScoreLadderState.liveScoreLadderAdjData;
         return (
-            <div className="comp-dash-table-view mt-2">
+            <div className="comp-dash-table-view" style={{ paddingBottom: 100 }}>
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         loading={this.props.liveScoreLadderState.onLoad == true ? true : false}
@@ -261,6 +297,17 @@ class LiveScoreLadderList extends Component {
                     // onChange={this.handleTableChange}
                     />
                 </div> */}
+                <div  className="comp-dash-table-view mt-4 ml-1">
+                    <div className="ladder-list-adjustment">
+                        {
+                            (adjData || []).map((x,index) =>(
+                                <div key ={index} style={{marginBottom: '10px'}}>
+                                    <li className="required-field">{x.teamName + ' deducted ' + x.points + ' points for ' + x.adjustmentReason   }</li>
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
             </div>
         )
     }

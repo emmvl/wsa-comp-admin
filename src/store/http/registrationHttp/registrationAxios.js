@@ -457,6 +457,12 @@ let AxiosApi = {
         }
         var url = `/api/homedashboard/registration`;
         return Method.dataPost(url, token, body);
+    },
+    updateCompetitionStatus(payload) {
+        console.log(payload)
+        let body = payload
+        var url = `/api/competitionfee/status/update`;
+        return Method.dataPost(url, token, body);
     }
 };
 

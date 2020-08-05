@@ -54,6 +54,7 @@ const initialState = {
     stateData: [],
     paymentStatus: [],
     matchPrintTemplateType: [],
+    venueAddressDuplication: false,
 };
 
 
@@ -88,7 +89,7 @@ function commonReducerState(state = initialState, action) {
 
         ////Add Venue Case
         case ApiConstants.API_ADD_VENUE_LOAD:
-            return { ...state, onVenueDataLoad: true };
+            return { ...state, onLoad: true, onVenueDataLoad: true };
 
         case ApiConstants.API_ADD_VENUE_SUCCESS:
             if (action.result != null) {
@@ -98,6 +99,7 @@ function commonReducerState(state = initialState, action) {
 
             return {
                 ...state,
+                onLoad: false,
                 mainVenueList: action.result,
                 onVenueDataLoad: false,
                 addVenueData: action.result,
@@ -433,6 +435,22 @@ function commonReducerState(state = initialState, action) {
                 matchPrintTemplateType: action.result.MatchPrintTemplate,
                 status: action.status
             };
+
+
+        case ApiConstants.API_VENUE_ADDRESS_CHECK_DUPLICATION_LOAD:
+            return {
+                ...state,
+                onLoad: true,
+            };
+
+        case ApiConstants.API_VENUE_ADDRESS_CHECK_DUPLICATION_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                venueAddressDuplication: action.result.duplicated,
+                status: action.status
+            };
+
         default:
             return state;
     }

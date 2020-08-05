@@ -7,7 +7,7 @@ import { getOrganisationData } from "../util/sessionStorage";
 import ValidationConstants from "../themes/validationConstant";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { quickCompImportDataCleanUpAction, quickCompetitionPlayerImportAction, updateSelectedTeamPlayer } from '../store/actions/competitionModuleAction/competitionQuickAction'
+import { quickCompImportDataCleanUpAction, quickCompetitionPlayerImportAction, updateSelectedTeamPlayer } from '../store/actions/competitionModuleAction/competitionQuickCompetitionAction'
 const columns = [
     {
         title: 'FirstName',
@@ -20,22 +20,45 @@ const columns = [
         key: 'lastName'
     },
     {
+        title: 'DateOfBirth',
+        dataIndex: 'dateOfBirth',
+        key: 'dateOfBirth'
+    },
+    {
         title: 'Phone No',
         dataIndex: 'mobileNumber',
         key: 'mobileNumber'
     },
     {
-        title: 'DateOfBirth',
-        dataIndex: 'dateOfBirth',
-        key: 'dateOfBirth'
-
+        title: 'Email',
+        dataIndex: 'email',
+        key: 'email'
+    },
+    {
+        title: 'Team',
+        dataIndex: 'team',
+        key: 'team'
     },
     {
         title: 'Division',
         dataIndex: 'division',
         key: 'division'
     },
-
+    {
+        title: 'Grade',
+        dataIndex: 'grade',
+        key: 'grade'
+    },
+    {
+        title: 'Historical Grade',
+        dataIndex: 'historicalGrade',
+        key: 'historicalGrade'
+    },
+    {
+        title: 'Historical Result',
+        dataIndex: 'historicalResult',
+        key: 'historicalResult'
+    },
 ];
 class ImportTeamPlayerModal extends React.Component {
     constructor(props) {

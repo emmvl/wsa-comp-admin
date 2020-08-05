@@ -258,6 +258,16 @@ function getMatchPrintTemplateType() {
 }
 
 
+function checkVenueDuplication(body) {
+    const action = {
+        type: ApiConstants.API_VENUE_ADDRESS_CHECK_DUPLICATION_LOAD,
+        body,
+    };
+
+    return action;
+}
+
+
 export {
     timeSlotInit,
     getCommonRefData,
@@ -289,4 +299,5 @@ export {
     getStateReferenceAction,
     registrationPaymentStatusAction,
     getMatchPrintTemplateType,
+    checkVenueDuplication,
 }

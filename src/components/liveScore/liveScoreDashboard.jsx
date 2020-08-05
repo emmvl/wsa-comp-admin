@@ -232,6 +232,7 @@ const columnsTodaysMatch = [
         title: "Div",
         dataIndex: 'division',
         key: 'division',
+        sorter: (a, b, division) => checkSorting(a, b, division.name),
         render: (division) =>
             <span >{division.name}</span>
     },
@@ -239,35 +240,45 @@ const columnsTodaysMatch = [
         title: "Score",
         dataIndex: 'score',
         key: 'score',
+        sorter: (a, b, score) => checkSorting(a, b, score),
         render: (score, records) =>
             <NavLink to={{
                 pathname: '/liveScoreMatchDetails',
                 state: { matchId: records.id, key: 'dashboard' }
-            }} ><span nowrap class="input-heading-add-another pt-0" >{setMatchResult(records)} </span></NavLink>
+            }} ><span nowrap className="input-heading-add-another pt-0" >{setMatchResult(records)} </span></NavLink>
     }, {
         title: "Umpire",
-        dataIndex: 'competition',
-        key: 'competition',
-        render: (competition) =>
-            <span class="input-heading-add-another pt-0" onClick={() => { console.log('hello clcicked ') }} >{competition.recordUmpire}</span>
+        dataIndex: 'umpires',
+        key: 'umpires',
+        sorter: (a, b, umpires) => checkSorting(a, b, umpires),
+        render: (umpires) =>
+
+            isArrayNotEmpty(umpires) && umpires.map((item) => (
+                <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.umpireName(item)}
+                    // className="desc-text-style side-bar-profile-data" 
+                    className='multi-column-text-aligned'
+                >{item.umpireName}</span>
+            ))
+
+        // <span class="input-heading-add-another pt-0" onClick={() => { console.log('hello clcicked ') }} >{competition.recordUmpire}</span>
     }, {
         title: "Scorer 1",
         dataIndex: 'scorer1Status',
         key: 'scorer1Status',
-        sorter: (a, b) => tableSort(a, b, "scorer1Status"),
+        sorter: (a, b, scorer1Status) => checkSorting(a, b, scorer1Status),
         render: (scorer1Status) =>
-            <span>{isArrayNotEmpty(scorer1Status) ? scorer1Status[0].status == "YES" ? "Accepted" : "Not Accepted" : "Not SET"}</span>
+            <span>{scorer1Status ? scorer1Status.status == "YES" ? "Accepted" : "Not Accepted" : "Not Set"}</span>
 
     }, {
         title: "Scorer 2",
         dataIndex: 'scorer2Status',
         key: 'scorer2Status',
-        sorter: (a, b) => tableSort(a, b, "scorer2Status"),
+        sorter: (a, b, scorer2Status) => checkSorting(a, b, scorer2Status),
         render: (scorer2Status, record) =>
-            <span >{record.competition.scoringType == 'SINGLE' ? "" : isArrayNotEmpty(scorer2Status) ? scorer2Status[0].status == "YES" ? "Accepted" : "Not Accepted" : "  Not SET"}</span>
+            <span >{record.competition.scoringType == 'SINGLE' ? "" : scorer2Status ? scorer2Status.status == "YES" ? "Accepted" : "Not Accepted" : "Not Set"}</span>
     },
     {
-        title: "Player Attendance Team A",
+        title: "Player Att. Team A",
         dataIndex: 'teamAttendanceCountA',
         key: 'teamAttendanceCountA',
         sorter: (a, b) => tableSort(a, b, "teamAttendanceCountA"),
@@ -275,7 +286,7 @@ const columnsTodaysMatch = [
             <span >{teamAttendanceCountA > 0 ? "Complete" : "Not Complete"}</span>
     },
     {
-        title: "Player Attendance Team B",
+        title: "Player Att. Team B",
         dataIndex: 'teamAttendanceCountB',
         key: 'teamAttendanceCountB',
         sorter: (a, b) => tableSort(a, b, "teamAttendanceCountB"),
@@ -287,6 +298,136 @@ const columnsTodaysMatch = [
         dataIndex: 'matchStatus',
         key: 'matchStatus',
         sorter: (a, b) => tableSort(a, b, "matchStatus"),
+        render: (matchStatus, record) =>
+            <span >{(matchStatus == "0" || matchStatus == null) ? "Not Started" : matchStatus}</span>
+    },
+
+
+];
+
+const columnsTodaysMatch_1 = [
+    {
+        title: <span nowrap className="column-width-style" >{"Match Id"} </span>,
+        dataIndex: 'id',
+        key: 'id',
+        sorter: (a, b) => tableSort(a, b, 'id'),
+        render: (id) => <NavLink to={{
+            pathname: '/liveScoreMatchDetails',
+            state: { matchId: id, key: 'dashboard' }
+        }} >
+            <span class="input-heading-add-another pt-0" >{id}</span>
+        </NavLink>
+    },
+    {
+        title: 'Start Time',
+        dataIndex: 'startTime',
+        key: 'startTime',
+        sorter: (a, b) => tableSort(a, b, 'startTime'),
+        render: (startTime) =>
+            <span nowrap className="column-width-style" >{liveScore_formateDateTime(startTime)}</span>
+
+    },
+
+    {
+        title: 'Home',
+        dataIndex: 'team1',
+        key: 'team1',
+        sorter: (a, b) => tableSort(a, b, 'team1'),
+        render: (team1, record) =>
+            <NavLink to={{
+                pathname: '/liveScoreTeamView',
+                state: { tableRecord: team1, key: 'dashboard' }
+            }} >
+                <span class="input-heading-add-another pt-0" >{team1.name}</span>
+            </NavLink>
+
+    },
+    {
+        title: 'Away',
+        dataIndex: 'team2',
+        key: 'team2',
+        sorter: (a, b) => tableSort(a, b, 'team2'),
+        render: (team2, record) =>
+            <NavLink to={{
+                pathname: '/liveScoreTeamView',
+                state: { tableRecord: team2, key: 'dashboard' }
+            }} >
+                <span class="input-heading-add-another pt-0" >{team2.name}</span>
+            </NavLink>
+    },
+    {
+        title: 'Venue',
+        dataIndex: 'venueCourt',
+        key: 'venueCourt',
+        sorter: (a, b, venueCourt) => checkSorting(a, b, venueCourt.name),
+        render: (venueCourt, record) => <span nowrap className="column-width-style">{getVenueName(venueCourt)}</span>
+
+    },
+    {
+        title: "Div",
+        dataIndex: 'division',
+        key: 'division',
+        sorter: (a, b, division) => checkSorting(a, b, division.name),
+        render: (division) =>
+            <span >{division.name}</span>
+    },
+    {
+        title: "Score",
+        dataIndex: 'score',
+        key: 'score',
+        sorter: (a, b, score) => checkSorting(a, b, score),
+        render: (score, records) =>
+            <NavLink to={{
+                pathname: '/liveScoreMatchDetails',
+                state: { matchId: records.id, key: 'dashboard' }
+            }} ><span nowrap class="input-heading-add-another pt-0" >{setMatchResult(records)} </span></NavLink>
+    }, {
+        title: "Umpire",
+        dataIndex: 'umpires',
+        key: 'umpires',
+        sorter: (a, b, umpires) => checkSorting(a, b, umpires),
+        render: (umpires) =>
+
+            isArrayNotEmpty(umpires) && umpires.map((item) => (
+                <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.umpireName(item)}
+                    // className="desc-text-style side-bar-profile-data" 
+                    className='multi-column-text-aligned'
+                >{item.umpireName}</span>
+            ))
+
+        // <span class="input-heading-add-another pt-0" onClick={() => { console.log('hello clcicked ') }} >{competition.recordUmpire}</span>
+    }, {
+        title: <span nowrap className="column-width-style" >{"Scorer 1"} </span>,
+        dataIndex: 'scorer1Status',
+        key: 'scorer1Status',
+        sorter: (a, b) => tableSort(a, b, "scorer1Status"),
+        render: (scorer1Status) =>
+            <span>{scorer1Status ? scorer1Status.status == "YES" ? "Accepted" : "Not Accepted" : "Not Set"}</span>
+
+    },
+    {
+        title: <span nowrap className="column-width-style" >{"Player Att. Team A"} </span>,
+        dataIndex: 'teamAttendanceCountA',
+        key: 'teamAttendanceCountA',
+        sorter: (a, b) => tableSort(a, b, "teamAttendanceCountA"),
+        render: (teamAttendanceCountA, record) =>
+            <span >{teamAttendanceCountA > 0 ? "Complete" : "Not Complete"}</span>
+    },
+    {
+        title: <span nowrap className="column-width-style" >{"Player Att. Team B"} </span>,
+        dataIndex: 'teamAttendanceCountB',
+        key: 'teamAttendanceCountB',
+        sorter: (a, b) => tableSort(a, b, "teamAttendanceCountB"),
+        render: (teamAttendanceCountB, record) =>
+            <span >{teamAttendanceCountB > 0 ? "Complete" : "Not Complete"}</span>
+    },
+    {
+        title: "Status",
+        dataIndex: 'matchStatus',
+        key: 'matchStatus',
+        sorter: (a, b) => tableSort(a, b, "matchStatus"),
+        render: (matchStatus, record) =>
+            <span >{(matchStatus == "0" || matchStatus == null) ? "Not Started" : matchStatus}</span>
     },
 
 
@@ -323,7 +464,7 @@ const columnsTodaysIncient = [
             isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
                 <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.checkUserId(item)} className="desc-text-style side-bar-profile-data" >{item.player.firstName}</span>
             ))
-    
+
     },
     {
         title: 'Last Name',
@@ -333,7 +474,7 @@ const columnsTodaysIncient = [
         render: (incidentPlayers, record) =>
 
             isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
-                <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.checkUserId(item)} className="desc-text-style side-bar-profile-data" >{item.player.lastName}</span>
+                <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.gotoUmpire(item)} className="desc-text-style side-bar-profile-data" >{item.player.lastName}</span>
             ))
     },
     {
@@ -457,6 +598,7 @@ class LiveScoreDashboard extends Component {
 
         if (getLiveScoreCompetiton()) {
             const { id } = JSON.parse(getLiveScoreCompetiton())
+
             this.props.liveScoreDashboardListAction(id, startDay, currentTime)
         } else {
             history.push('/liveScoreCompetitions')
@@ -472,6 +614,16 @@ class LiveScoreDashboard extends Component {
             history.push("/userPersonal", { userId: record.userId, screenKey: "livescore", screen: "/userPersonal" })
         }
     }
+
+    umpireName(item) {
+        if (item.userId) {
+            history.push("/userPersonal", { userId: item.userId, screenKey: "livescore", screen: "/userPersonal" })
+        } else {
+            message.config({ duration: 1.5, maxCount: 1 })
+            message.warn(ValidationConstants.playerMessage)
+        }
+    }
+
 
     getStartofDay() {
         var start = new Date();
@@ -601,13 +753,14 @@ class LiveScoreDashboard extends Component {
     ////////ownedView view for competition
     matchView = () => {
         const { dashboardMatchList } = this.props.liveScoreDashboardState
+        const { scoringType } = JSON.parse(getLiveScoreCompetiton())
         return (
             <div className="comp-dash-table-view mt-4">
                 {this.matchHeading()}
                 <div className="table-responsive home-dash-table-view">
                     <Table loading={this.props.liveScoreDashboardState.onLoad}
                         className="home-dashboard-table"
-                        columns={columnsTodaysMatch}
+                        columns={scoringType === "SINGLE" ? columnsTodaysMatch_1 : columnsTodaysMatch}
                         dataSource={dashboardMatchList}
                         pagination={false}
                         rowKey={(record, index) => "dashboardMatchList" + record.id + index} />

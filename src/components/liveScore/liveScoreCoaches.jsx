@@ -143,7 +143,8 @@ class LiveScoreCoaches extends Component {
   componentDidMount() {
     const { id } = JSON.parse(getLiveScoreCompetiton())
     this.setState({ competitionId: id })
-    this.props.liveScoreCoachListAction(17, 1, id, this.state.searchText)
+    let offset=0
+    this.props.liveScoreCoachListAction(17, 1, id, this.state.searchText,offset)
 
     if (id !== null) {
       this.props.getliveScoreTeams(id)
@@ -179,7 +180,7 @@ class LiveScoreCoaches extends Component {
               justifyContent: "flex-end"
             }} >
             <Pagination
-              className="auto-pagination"
+              className="antd-pagination"
               defaultCurrent={1}
               total={8} />
           </div>

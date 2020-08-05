@@ -846,7 +846,7 @@ class UserModulePersonalDetail extends Component {
         }
         if (tabKey == "1") {
             this.hanleActivityTableList(1, userId, competition, "player", yearRefId);
-           // this.hanleActivityTableList(1, userId, competition, "parent", yearRefId);
+            // this.hanleActivityTableList(1, userId, competition, "parent", yearRefId);
             this.hanleActivityTableList(1, userId, competition, "scorer", yearRefId);
             this.hanleActivityTableList(1, userId, competition, "manager", yearRefId);
         }
@@ -903,7 +903,7 @@ class UserModulePersonalDetail extends Component {
         this.props.getUserModuleRegistrationAction(filter)
     };
 
-    handleHistoryTableList = (page, userId) =>{
+    handleHistoryTableList = (page, userId) => {
         let filter =
         {
             userId: userId,
@@ -941,16 +941,16 @@ class UserModulePersonalDetail extends Component {
         return (
             <div className="fluid-width mt-2" >
 
-                <div className='profile-image-view mr-5' style={{marginTop: 20}}>
+                <div className='profile-image-view mr-5' style={{ marginTop: 20 }}>
                     {/* <span className="user-contact-heading">{AppConstants.playerProfile}</span> */}
                     <div className="circular--landscape">
-                    {
-                        personal.photoUrl ?
-                            <img src={personal.photoUrl} alt=""/>
-                            :
-                            <span className="user-contact-heading">{AppConstants.noImage}</span>
+                        {
+                            personal.photoUrl ?
+                                <img src={personal.photoUrl} alt="" />
+                                :
+                                <span className="user-contact-heading">{AppConstants.noImage}</span>
 
-                    }
+                        }
                     </div>
                     <span className="user-contact-heading">{personal.firstName + " " + personal.lastName}</span>
                     <span className="year-select-heading pt-0">{'#' + personal.userId}</span>
@@ -1054,9 +1054,9 @@ class UserModulePersonalDetail extends Component {
                         loading={userState.activityPlayerOnLoad == true && true}
                     />
                 </div>
-                <div className="d-flex justify-content-end">
+                <div className="d-flex justify-content-end ">
                     <Pagination
-                        className="antd-pagination"
+                        className="antd-pagination pb-3"
                         current={userState.activityPlayerPage}
                         total={total}
                         onChange={(page) => this.hanleActivityTableList(page, this.state.userId, this.state.competition, "player")}
@@ -1083,7 +1083,7 @@ class UserModulePersonalDetail extends Component {
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
-                        className="antd-pagination"
+                        className="antd-pagination pb-3"
                         current={userState.activityParentPage}
                         total={total}
                         onChange={(page) => this.hanleActivityTableList(page, this.state.userId, this.state.competition, "parent")}
@@ -1110,7 +1110,7 @@ class UserModulePersonalDetail extends Component {
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
-                        className="antd-pagination"
+                        className="antd-pagination pb-3"
                         current={userState.activityScorerPage}
                         total={total}
                         onChange={(page) => this.hanleActivityTableList(page, this.state.userId, this.state.competition, "scorer")}
@@ -1137,7 +1137,7 @@ class UserModulePersonalDetail extends Component {
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
-                        className="antd-pagination"
+                        className="antd-pagination pb-3"
                         current={userState.activityManagerPage}
                         total={total}
                         onChange={(page) => this.hanleActivityTableList(page, this.state.userId, this.state.competition, "manager")}
@@ -1165,8 +1165,8 @@ class UserModulePersonalDetail extends Component {
         let nationalityName = "";
         let languages = "";
         let userRegId = null;
-  
-        if(personalByCompData != null && personalByCompData.length > 0){
+
+        if (personalByCompData != null && personalByCompData.length > 0) {
             countryName = personalByCompData[0].countryName;
             nationalityName = personalByCompData[0].nationalityName;
             languages = personalByCompData[0].languages;
@@ -1238,20 +1238,20 @@ class UserModulePersonalDetail extends Component {
                             <div className="desc-text-style side-bar-profile-data other-info-font">{personalByCompData != null && personalByCompData.length > 0 ? personalByCompData[0].gender : null}</div>
                         </div>
                         {userRegId != null &&
-                        <div>
-                            <div className="other-info-row">
-                                <div className="year-select-heading other-info-label" >{AppConstants.countryOfBirth}</div>
-                                <div className="desc-text-style side-bar-profile-data other-info-font">{countryName}</div>
-                            </div>
-                            <div className="other-info-row">
-                                <div className="year-select-heading other-info-label">{AppConstants.nationalityReference}</div>
-                                <div className="desc-text-style side-bar-profile-data other-info-font">{nationalityName}</div>
-                            </div>
-                            <div className="other-info-row">
-                                <div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.childLangSpoken}</div>
-                                <div className="desc-text-style side-bar-profile-data other-info-font">{languages}</div>
-                            </div>
-                        </div> }
+                            <div>
+                                <div className="other-info-row">
+                                    <div className="year-select-heading other-info-label" >{AppConstants.countryOfBirth}</div>
+                                    <div className="desc-text-style side-bar-profile-data other-info-font">{countryName}</div>
+                                </div>
+                                <div className="other-info-row">
+                                    <div className="year-select-heading other-info-label">{AppConstants.nationalityReference}</div>
+                                    <div className="desc-text-style side-bar-profile-data other-info-font">{nationalityName}</div>
+                                </div>
+                                <div className="other-info-row">
+                                    <div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.childLangSpoken}</div>
+                                    <div className="desc-text-style side-bar-profile-data other-info-font">{languages}</div>
+                                </div>
+                            </div>}
                         {/* <div className="other-info-row">
 							<div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.disability}</div>
 							<div className="desc-text-style side-bar-profile-data other-info-font">{personal.isDisability == 0 ? "No" : "Yes"}</div>
@@ -1339,7 +1339,7 @@ class UserModulePersonalDetail extends Component {
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
-                        className="antd-pagination"
+                        className="antd-pagination pb-3"
                         current={userState.userRegistrationDataPage}
                         total={total}
                         onChange={(page) => this.handleRegistrationTableList(page, this.state.userId, this.state.competition, this.state.yearRefId)}
@@ -1466,10 +1466,11 @@ class UserModulePersonalDetail extends Component {
                         </Breadcrumb>
                     </Header >
                 </div>
-                {(this.state.screenKey == "livescore" || this.state.screenKey === "umpire") && <div className="col-sm">
+                {this.state.screenKey && <div className="col-sm">
                     <div className="comp-buttons-view mt-4" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
                         <Button onClick={() => history.push(this.state.screen)} className='primary-add-comp-form' type='primary'>
-                            {this.state.screenKey === "umpire" ? AppConstants.backToUmpire : AppConstants.backToLiveScore}
+                            {/* {this.state.screenKey === "umpire" ? AppConstants.backToUmpire : AppConstants.backToLiveScore} */}
+                            {AppConstants.back}
                         </Button>
                     </div>
                 </div>}
@@ -1478,7 +1479,7 @@ class UserModulePersonalDetail extends Component {
     }
 
     historyView = () => {
-        let {userHistoryList, userHistoryPage, userHistoryTotalCount, userHistoryLoad} = this.props.userState;
+        let { userHistoryList, userHistoryPage, userHistoryTotalCount, userHistoryLoad } = this.props.userState;
 
         return (
             <div className="comp-dash-table-view mt-2" >
@@ -1492,7 +1493,7 @@ class UserModulePersonalDetail extends Component {
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
-                        className="antd-pagination"
+                        className="antd-pagination pb-3"
                         current={userHistoryPage}
                         total={userHistoryTotalCount}
                         onChange={(page) => this.handleHistoryTableList(page, this.state.userId)}
@@ -1506,11 +1507,11 @@ class UserModulePersonalDetail extends Component {
         let { activityPlayerList, activityManagerList, activityScorerList, activityParentList, personalByCompData } = this.props.userState;
         let personalDetails = personalByCompData != null ? personalByCompData : [];
         let userRegistrationId = null;
-        if(personalDetails != null && personalDetails.length > 0){
+        if (personalDetails != null && personalDetails.length > 0) {
             userRegistrationId = personalByCompData[0].userRegistrationId
         }
 
-       
+
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
@@ -1542,10 +1543,10 @@ class UserModulePersonalDetail extends Component {
                                             <TabPane tab={AppConstants.personalDetails} key="3">
                                                 {this.personalView()}
                                             </TabPane>
-                                            {userRegistrationId!= null &&
-                                            <TabPane tab={AppConstants.medical} key="4">
-                                                {this.medicalView()}
-                                            </TabPane>}
+                                            {userRegistrationId != null &&
+                                                <TabPane tab={AppConstants.medical} key="4">
+                                                    {this.medicalView()}
+                                                </TabPane>}
                                             <TabPane tab={AppConstants.registration} key="5">
                                                 {!this.state.isRegistrationForm ?
                                                     this.registrationView() :

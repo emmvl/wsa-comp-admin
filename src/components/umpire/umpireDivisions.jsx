@@ -110,8 +110,8 @@ class UmpireDivisions extends Component {
                                    </span>
 
                                 <Select
-                                    className="year-select"
-                                    style={{ minWidth: 160 }}
+                                    className="year-select reg-filter-select1 ml-2"
+                                    style={{ minWidth: 200 }}
                                     onChange={(comp) => this.onChangeComp({ comp })}
                                     value={this.state.selectedComp}
                                 >
@@ -328,14 +328,14 @@ class UmpireDivisions extends Component {
                         <div className="row">
                             <div className="col-sm">
                                 <div className="reg-add-save-button">
-                                    <Button type="cancel-button">{AppConstants.cancel}</Button>
+                                    <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.cancel}</Button>
 
                                 </div>
                             </div>
                             <div className="col-sm">
                                 <div className="comp-buttons-view">
                                     <Button
-                                        className="user-approval-button" type="primary" htmlType="submit" >
+                                        className="publish-button save-draft-text" type="primary" htmlType="submit" >
                                         {AppConstants.save}
                                     </Button>
                                 </div>

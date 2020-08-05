@@ -30,15 +30,11 @@ function liveScoreUpdateNewsAction(data, key, contentType) {
     return action;
 }
 
-function liveScoreAddNewsAction(data, imageData, newsId, key, competitionId) {
+function liveScoreAddNewsAction(data) {
 
     const action = {
         type: ApiConstants.API_LIVE_SCORE_ADD_NEWS_LOAD,
-        data,
-        imageData,
-        newsId,
-        key,
-        competitionId
+        data
     }
     return action;
 }

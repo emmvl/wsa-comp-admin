@@ -300,12 +300,12 @@ class RegistrationCompetitionList extends Component {
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
                     <div className="row" >
-                         <div className="col-sm-2">
-                            <div className="com-year-select-heading-view">
-                                <span className="year-select-heading" style={{width: 50}}>{AppConstants.year}:</span>
+                        <div className="col-sm-2">
+                            <div className="com-year-select-heading-view pb-3">
+                                <span className="year-select-heading" style={{ width: 50 }}>{AppConstants.year}:</span>
                                 <Select
-                                    style={{marginLeft: 10}}
-                                    className="year-select user-filter-select-drop"
+                                    style={{ width: 90 }}
+                                    className="year-select reg-filter-select-year ml-2"
                                     value={this.state.yearRefId}
                                     onChange={(e) => this.yearChange(e)}
                                 >
@@ -319,9 +319,9 @@ class RegistrationCompetitionList extends Component {
                                 </Select>
                             </div>
                         </div>
-						<div className="col-sm"></div>							  
+                        <div className="col-sm"></div>
                         <div style={{ marginRight: "25px", display: "flex", alignItems: 'center' }} >
-                            <div className="comp-product-search-inp-width" >
+                            <div className="comp-product-search-inp-width pb-3" >
                                 <Input className="product-reg-search-input"
                                     onChange={(e) => this.onChangeSearchText(e)}
                                     placeholder="Search..."
@@ -336,7 +336,7 @@ class RegistrationCompetitionList extends Component {
 
                         {/* {this.state.userRole == AppConstants.admin && */}
                         <div style={{ marginRight: '1%', display: "flex", alignItems: 'center' }}>
-                            <div className="d-flex flex-row-reverse button-with-search"
+                            <div className="d-flex flex-row-reverse button-with-search pb-3"
                                 // <div className="col-sm d-flex justify-content-end"
                                 onClick={() => this.props.clearCompReducerDataAction("all")}>
                                 <NavLink

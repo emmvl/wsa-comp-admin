@@ -181,7 +181,6 @@ class LiveScoreAddTeam extends Component {
         const { teamManagerData, affilateList, divisionList, managerType } = this.props.liveScoreTeamState
         let name = teamManagerData.name
         let alias = teamManagerData.alias
-        console.log(name, alias, "dataaa")
         return (
             <div className="content-view pt-4">
                 <Form.Item>
@@ -196,7 +195,7 @@ class LiveScoreAddTeam extends Component {
                                 this.props.liveScoreAddTeamform({ key: 'name', data: captializedString(event.target.value) })
                             }
                             }
-                            value={captializedString(name)}
+                            // value={captializedString(name)}
                             onBlur={(i) => this.props.form.setFieldsValue({
                                 'teamName': captializedString(i.target.value)
                             })}
@@ -288,7 +287,7 @@ if(x[0].charCodeAt()>=97)
                                     onChange={divisionSelection => {
                                         this.props.liveScoreAddTeamform({ key: 'divisionId', data: divisionSelection })
                                     }}
-                                    value={teamManagerData.divisionId}
+                                    // value={teamManagerData.divisionId}
                                     placeholder={"Select Division"}  >
                                     {divisionList.map((item) => (
                                         <Option key={item.id} value={item.id} > {item.name}</Option>
@@ -332,8 +331,8 @@ if(x[0].charCodeAt()>=97)
                                 onChange={affiliateId => {
                                     this.props.liveScoreAddTeamform({ key: 'organisationId', data: affiliateId })
                                 }}
-                                value={teamManagerData.divisionId}
-                                placeholder={"Select User"}  >
+                                // value={teamManagerData.divisionId}
+                                placeholder={"Select Affiliate"}  >
                                 {affilateList.map((item) => {
                                     return <Option key={item.id} value={item.id}>
                                         {item.name}
@@ -416,18 +415,18 @@ if(x[0].charCodeAt()>=97)
                                 onBlur={() => this.props.liveScoreManagerListAction(5, 1, this.state.loaclCompetitionID)}
                                 optionFilterProp="children"
 
-                                // onSearch={(value) => {
+                            // onSearch={(value) => {
 
-                                //     this.setState({ showOption: true })
+                            //     this.setState({ showOption: true })
 
-                                //     const filteredData = this.props.liveScoreMangerState.MainManagerListResult.filter(data => {
-                                //         return data.firstName.indexOf(value) > -1
-                                //     })
-                                //     console.log(filteredData)
-                                //     this.props.liveScoreManagerFilter(filteredData)
+                            //     const filteredData = this.props.liveScoreMangerState.MainManagerListResult.filter(data => {
+                            //         return data.firstName.indexOf(value) > -1
+                            //     })
+                            //     console.log(filteredData)
+                            //     this.props.liveScoreManagerFilter(filteredData)
 
-                                // }}
-                                value={selectedManager}
+                            // }}
+                            // value={selectedManager}
                             >
 
                                 {/* {this.state.showOption ?  */}
@@ -467,7 +466,7 @@ if(x[0].charCodeAt()>=97)
                                     this.props.liveScoreAddTeamform({ key: 'firstName', data: captializedString(event.target.value) })
 
                                 }}
-                                value={teamManagerData.firstName}
+                                // value={teamManagerData.firstName}
                                 onBlur={(i) => this.props.form.setFieldsValue({
                                     'firstName': captializedString(i.target.value)
                                 })}
@@ -489,7 +488,7 @@ if(x[0].charCodeAt()>=97)
                                     onChange={(event) => {
                                         this.props.liveScoreAddTeamform({ key: 'lastName', data: captializedString(event.target.value) })
                                     }}
-                                    value={teamManagerData.lastName}
+                                    // value={teamManagerData.lastName}
                                     onBlur={(i) => this.props.form.setFieldsValue({
                                         'lastName': captializedString(i.target.value)
                                     })}
@@ -526,7 +525,7 @@ if(x[0].charCodeAt()>=97)
                                     onChange={(event) => {
                                         this.props.liveScoreAddTeamform({ key: 'email', data: event.target.value })
                                     }}
-                                    value={teamManagerData.email}
+                                // value={teamManagerData.email}
                                 />
                             )}
                         </Form.Item>
@@ -546,7 +545,7 @@ if(x[0].charCodeAt()>=97)
                                 onChange={(event) => {
                                     this.props.liveScoreAddTeamform({ key: 'mobileNumber', data: event.target.value })
                                 }}
-                                value={teamManagerData.mobileNumber}
+                            // value={teamManagerData.mobileNumber}
                             />)}
                         </Form.Item>
 
@@ -566,12 +565,12 @@ if(x[0].charCodeAt()>=97)
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <Button onClick={() => history.push('/liveScoreTeam')} type="cancel-button">{AppConstants.cancel}</Button>
+                                <Button onClick={() => history.push('/liveScoreTeam')} className="cancelBtnWidth" type="cancel-button">{AppConstants.cancel}</Button>
                             </div>
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button onClick={this.handleSubmit} className="user-approval-button" type="primary" htmlType="submit" disabled={isSubmitting}>
+                                <Button onClick={this.handleSubmit} className="publish-button save-draft-text" type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.save}
                                 </Button>
                             </div>

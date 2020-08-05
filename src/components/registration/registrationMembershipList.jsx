@@ -215,10 +215,11 @@ class RegistrationMembershipList extends Component {
                 <div className="fluid-width" >
                     <div className="row">
                         <div className="col-sm-2" >
-                            <div className="com-year-select-heading-view" >
+                            <div className="com-year-select-heading-view pb-3" >
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
-                                    className="year-select"
+                                    className="year-select reg-filter-select-year ml-2"
+                                    style={{ width: 90 }}
                                     value={this.state.yearRefId}
                                     onChange={(e) => this.yearChange(e)}
                                 >
@@ -232,7 +233,7 @@ class RegistrationMembershipList extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm d-flex justify-content-end" style={{ display: 'flex', alignItems: 'center' }}
+                        <div className="col-sm d-flex justify-content-end pb-3" style={{ display: 'flex', alignItems: 'center' }}
                             onClick={() => this.props.clearReducerDataAction("getMembershipProductDetails")}>
                             <NavLink to={{ pathname: `/registrationMembershipFee`, state: { id: null } }}
                                 className="text-decoration-none">

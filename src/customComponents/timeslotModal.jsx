@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Modal, TimePicker, Select } from 'antd';
+import { Input, Modal, TimePicker, Select, Button } from 'antd';
 import Loader from "./loader"
 import InputWithHead from "./InputWithHead"
 import moment from 'moment'
@@ -9,20 +9,21 @@ const { TextArea } = Input;
 const { Option } = Select
 class TimeSlotModal extends React.Component {
     render() {
-        const { weekDays, timeslots, modalTitle, timeSlotOK, onCancel, addTimeSlot, addStartTime, removetimeSlotDay, changeDay, removeStartTime, UpdateTimeSlotsDataManual } = this.props
+        const { weekDays, timeslots, modalTitle, timeSlotOK, onCancel, addTimeSlot, addStartTime, removetimeSlotDay, changeDay, removeStartTime, UpdateTimeSlotsDataManual, handleTimeslotNext, onTimslotBack } = this.props
         return (
             <div style={{ backgroundColor: "red" }}>
                 <Modal
                     {...this.props}
-                    className="add-membership-type-modal"
+                    className="add-membership-type-modal modalFooter"
                     title={modalTitle}
                     visible={this.props.visible}
                     onOk={timeSlotOK}
                     onCancel={onCancel}
                     okText={AppConstants.save}
-                    cancelButtonProps={{ style: { position: "absolute", left: 15 } }}
-
-
+                    footer={
+                        <div style={{ display: "none" }}
+                        />
+                    }
                 >
                     <div className="inside-container-view">
                         {timeslots.length > 0 && timeslots.map((item, index) => {
@@ -92,6 +93,24 @@ class TimeSlotModal extends React.Component {
                             )
                         })}
                         <span className='input-heading-add-another pointer' onClick={addTimeSlot}> + {AppConstants.addAnotherDay}</span>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm" style={{ display: "flex", width: "100%", paddingTop: 10 }}>
+                            <div className="col-sm-6" style={{ display: "flex", width: "50%", justifyContent: "flex-start" }}>
+                                <Button className="cancelBtnWidth" type="cancel-button" onClick={onTimslotBack} style={{ marginRight: '20px' }}
+                                >
+                                    {AppConstants.back}
+                                </Button>
+                            </div>
+                            <div className="col-sm-6" style={{ display: "flex", width: "50%", justifyContent: "flex-end" }}>
+                                <Button className="publish-button save-draft-text" type="primary" onClick={() => timeSlotOK()} >
+                                    {AppConstants.save}
+                                </Button>
+                                <Button className="publish-button" type="primary" onClick={() => handleTimeslotNext()} >
+                                    {AppConstants.next}
+                                </Button>
+                            </div>
+                        </div>
                     </div>
                 </Modal >
             </div >

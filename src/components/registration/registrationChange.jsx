@@ -236,7 +236,7 @@ class RegistrationChange extends Component {
     //////year change onchange
     yearChange = (yearRefId) => {
         this.setState({ yearRefId })
-        this.handleCompetitionTableList(1, yearRefId, this.state.searchText)
+        // this.handleCompetitionTableList(1, yearRefId, this.state.searchText)
     }
     // on change search text
 
@@ -246,11 +246,12 @@ class RegistrationChange extends Component {
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
                     <div className="row" >
-                        <div className="col-sm">
+                        <div className="col-sm pb-3">
                             <div className="com-year-select-heading-view">
                                 <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
-                                    className="year-select"
+                                    className="year-select reg-filter-select1 ml-2"
+                                    // style={{ width: 90 }}
                                     value={this.state.yearRefId}
                                     onChange={(e) => this.yearChange(e)}
                                 >
@@ -265,11 +266,12 @@ class RegistrationChange extends Component {
                             </div>
                         </div>
 
-                        <div className="col-sm">
+                        <div className="col-sm pb-3">
                             <div className="com-year-select-heading-view">
                                 <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
-                                    className="year-select"
+                                    className="year-select reg-filter-select-competition ml-2"
+                                    // style={{ minWidth: 200 }}
                                     value={this.state.competition}
                                 // onChange={(e) => this.yearChange(e)}
                                 >
@@ -278,11 +280,12 @@ class RegistrationChange extends Component {
                             </div>
                         </div>
 
-                        <div className="col-sm">
+                        <div className="col-sm pb-3">
                             <div className="com-year-select-heading-view">
                                 <span className="year-select-heading">{AppConstants.type}:</span>
                                 <Select
-                                    className="year-select"
+                                    className="year-select reg-filter-select1 ml-2"
+                                    style={{ minWidth: 160 }}
                                     value={this.state.type}
                                 // onChange={(e) => this.yearChange(e)}
                                 >
@@ -292,7 +295,7 @@ class RegistrationChange extends Component {
                         </div>
 
                         <div style={{ marginRight: '1%', display: "flex", alignItems: 'center' }}>
-                            <div className="d-flex flex-row-reverse button-with-search"
+                            <div className="d-flex flex-row-reverse button-with-search pb-3"
                             // <div className="col-sm d-flex justify-content-end"
                             // onClick={() => this.props.clearCompReducerDataAction("all")}
                             >
@@ -308,7 +311,7 @@ class RegistrationChange extends Component {
                         </div>
 
                         <div style={{ marginRight: '1%', display: "flex", alignItems: 'center' }}>
-                            <div className="d-flex flex-row-reverse button-with-search">
+                            <div className="d-flex flex-row-reverse button-with-search pb-3">
                                 <Button className="primary-add-comp-form" type="primary">
 
                                     <div className="row">

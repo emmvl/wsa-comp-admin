@@ -66,7 +66,9 @@ import UmpireState from "./umpireReducer/umpireReducer"
 import AssignUmpireState from "./umpireReducer/assignUmpireReducer";
 import UmpireSettingState from "./umpireReducer/umpireSettingReducer"
 import RegistrationChangeState from "./registrationReducer/registrationChangeReducer";
-
+import ShopSettingState from "./shopReducer/shopSettingReducer";
+import InnerHorizontalState from "./liveScoreReducer/liveScoreInnerHorizontalReducer";
+import LiveScorePositionTrackState from "./liveScoreReducer/liveScorePositionTrackReducer";
 import SupportState from "./supportReducer";
 
 const rootReducer = combineReducers({
@@ -128,6 +130,9 @@ const rootReducer = combineReducers({
   AssignUmpireState,
   UmpireSettingState,
   RegistrationChangeState,
+  ShopSettingState,
+  InnerHorizontalState,
+  LiveScorePositionTrackState,
   SupportState,
 });
 

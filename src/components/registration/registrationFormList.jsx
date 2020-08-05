@@ -172,7 +172,8 @@ class RegistrationFormList extends Component {
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
                                     name={"yearRefId"}
-                                    className="year-select"
+                                    className="year-select reg-filter-select-year ml-2"
+                                    style={{ width: 90 }}
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
@@ -245,9 +246,6 @@ class RegistrationFormList extends Component {
                         {this.dropdownView()}
                         {this.contentView()}
                     </Content>
-                    <Footer>
-                        {/* {this.footerView()} */}
-                    </Footer>
                 </Layout>
             </div>
         );

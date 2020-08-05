@@ -471,7 +471,10 @@ function VenueTimeState(state = initialState, action) {
             state.radioButton = action.commResult.CourtRotation[2].id
             state.allocateToSameCourt = action.commResult.CourtRotation[1].subReferences[0].id
 
-            state.venueConstrainstData = action.result
+            state.venueConstrainstData = {
+                ...action.result,
+                venueConstrainstData: objData,
+            };
             state.divisionList = action.result.divisions
             state.gradeList = action.result.grades
             state.homeRotation = action.result.homeTeamRotationRefId
@@ -588,7 +591,6 @@ function VenueTimeState(state = initialState, action) {
 
                 upDateData[action.key] = action.data
                 state.venuData = upDateData
-
             }
             else if (action.contentType == 'courtData') {
                 let upDateCourtData = state.venuData.venueCourts

@@ -22,12 +22,14 @@ import {
 import InputWithHead from "../../customComponents/InputWithHead";
 import { isArrayNotEmpty, isNotNullOrEmptyString, captializedString, isImageFormatValid } from "../../util/helpers";
 import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, ContentState, convertFromHTML, } from 'draft-js';
+import { EditorState, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
 import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import SortableImage from '../../customComponents/sortableImageComponent';
 import ValidationConstants from '../../themes/validationConstant';
 import { checkOrganisationLevel } from "../../util/permissions";
 import { getOrganisationData } from "../../util/sessionStorage"
+import htmlToDraft from 'html-to-draftjs';
+import draftToHtml from 'draftjs-to-html';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -104,16 +106,17 @@ class AddProduct extends Component {
         let orgData = getOrganisationData();
         let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0;
         productDetailData.organisationUniqueKey = organisationUniqueKey
-        let descriptionText = ""
-        if (isArrayNotEmpty(description)) {
-            let descriptionStringArr = []
-            for (let i in description) {
-                descriptionStringArr.push(description[i].text)
-            }
-            descriptionText = descriptionStringArr.join(`<br/>`)
-        } else {
-            descriptionText = description
-        }
+        // let descriptionText = ""
+        // if (isArrayNotEmpty(description)) {
+        //     let descriptionStringArr = []
+        //     for (let i in description) {
+        //         descriptionStringArr.push(description[i].text)
+        //     }
+        //     descriptionText = descriptionStringArr.join(`<br/>`)
+        // } else {
+        //     descriptionText = description
+        // }
+        let descriptionText = draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()))
         productDetailData.description = descriptionText
         let { urls, files } = this.state
         let imagesFiles = []
@@ -184,8 +187,18 @@ class AddProduct extends Component {
 
     setEditorFieldValue() {
         let { productDetailData } = this.props.shopProductState;
-        let body = isNotNullOrEmptyString(productDetailData.description) ? EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(productDetailData.description))) : ""
-        this.setState({ editorState: body })
+        // let body = isNotNullOrEmptyString(productDetailData.description) ?
+        //  EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(productDetailData.description))) : ""
+        let finalBody = isNotNullOrEmptyString(productDetailData.description) ? productDetailData.description : ""
+        const html = finalBody;
+        const contentBlock = htmlToDraft(html);
+        if (contentBlock) {
+            const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+            const editorState = EditorState.createWithContent(contentState);
+            this.setState({
+                editorState
+            })
+        }
     }
 
 
@@ -251,6 +264,21 @@ class AddProduct extends Component {
                 return affiliate.secondLevel
             default:
                 break;
+        }
+    }
+
+    checkAffiliateDisable = (item) => {
+        if (this.state.orgLevel == AppConstants.association && item.id == 2) {
+            return true;
+        }
+        else if (this.state.orgLevel == AppConstants.club && item.id == 2) {
+            return true;
+        }
+        else if (this.state.orgLevel == AppConstants.club && item.id == 3) {
+            return true;
+        }
+        else {
+            return this.state.allDisabled;
         }
     }
 
@@ -390,8 +418,8 @@ class AddProduct extends Component {
     showDeleteConfirm = (optionId, index, subIndex) => {
         let this_ = this
         confirm({
-            title: AppConstants.deleteProduct,
-            content: AppConstants.deleteProductDescription,
+            title: AppConstants.deleteVariantOption,
+            content: AppConstants.deleteVariantOptionDescription,
             okText: 'Confirm',
             okType: 'danger',
             cancelText: 'Cancel',
@@ -471,9 +499,7 @@ class AddProduct extends Component {
                     style={allDisabled == true ? { backgroundColor: "#f5f5f5" } : null}>
                     <Editor
                         editorState={editorState}
-                        wrapperClassName="demo-wrapper"
-                        editorClassName="demo-editor"
-                        toolbarClassName="toolbar-class"
+                        editorClassName="newsDetailEditor"
                         placeholder={AppConstants.description}
                         onChange={(e) =>
                             this.props.onChangeProductDetails(
@@ -483,6 +509,7 @@ class AddProduct extends Component {
                         }
                         onEditorStateChange={this.onEditorStateChange}
                         toolbar={{
+                            options: ['inline', 'blockType', 'fontSize', 'fontFamily', 'list', 'textAlign', 'colorPicker', 'link', 'embedded', 'emoji', 'remove', 'history'],
                             inline: { inDropdown: true },
                             list: { inDropdown: true },
                             textAlign: { inDropdown: true },
@@ -521,7 +548,7 @@ class AddProduct extends Component {
                         }
                     )(
                         <InputWithHead
-                            required={"required-field "}
+                            required={"required-field pb-0"}
                             heading={AppConstants.title}
                             placeholder={AppConstants.enterTitle}
                             onChange={(e) =>
@@ -552,7 +579,9 @@ class AddProduct extends Component {
                         )
                     }
                     placeholder="Select"
-                    value={isNotNullOrEmptyString(productDetailData.type.typeName) ? productDetailData.type.id : []}
+                    value={productDetailData.type ?
+                        isNotNullOrEmptyString(productDetailData.type.typeName) ?
+                            productDetailData.type.id : [] : []}
                     disabled={this.state.allDisabled}
                 >
                     {isArrayNotEmpty(typesProductList) && typesProductList.map(
@@ -589,14 +618,14 @@ class AddProduct extends Component {
                     />
 
                 </Modal>
-                <InputWithHead required="pb-0" heading={AppConstants.affiliates} />
+                <InputWithHead required="required-field pb-0" heading={AppConstants.affiliates} />
                 {affiliateArray.map((item, index) => {
                     return (
                         <div key={"affiliateArray" + index} >
                             <Checkbox
                                 className="single-checkbox mt-3"
                                 checked={this.checkedAffiliates(item.name) === 1 ? true : false}
-                                disabled={this.state.orgLevel == "Club" && item.id == 2 ? true : this.state.allDisabled}
+                                disabled={this.checkAffiliateDisable(item)}
                                 onChange={(e) =>
                                     this.affiliateOnChange(e.target.checked, item.name)
                                 }
@@ -801,7 +830,7 @@ class AddProduct extends Component {
                             </div>
                         </div>
                         <div >
-                            <span className="input-heading" >{AppConstants.quantity}</span>
+                            <span className="input-heading required-field" >{AppConstants.quantity}</span>
                             <Form.Item>
                                 {getFieldDecorator(
                                     `quantity`, /////static index=1 for now
@@ -888,6 +917,7 @@ class AddProduct extends Component {
                                         }
                                     )(
                                         <InputWithHead
+                                            required={"required-field pb-0"}
                                             heading={AppConstants.variantName}
                                             placeholder={AppConstants.variantName}
                                             onChange={(e) => this.onVariantNameChange(e.target.value)}
@@ -899,8 +929,8 @@ class AddProduct extends Component {
                         </div>
 
                         {isArrayNotEmpty(varientOptionArray) && varientOptionArray.map((subItem, subIndex) => (
-                            <div className="prod-reg-inside-container-view">
-                                <div className="row" key={"varientOptionArray" + subIndex} >
+                            <div className="prod-reg-inside-container-view" key={"varientOptionArray" + subIndex}>
+                                <div className="row"  >
                                     <div className="col-sm">
                                         <InputWithHead
                                             heading={AppConstants.option}

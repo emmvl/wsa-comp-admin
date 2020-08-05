@@ -43,11 +43,37 @@ export function* saveQuickCompDivisionSaga(action) {
     try {
         const result = yield call(AxiosApi.saveQuickCompDivision, action.competitionUniqueKey, action.divisions);
         if (result.status === 1) {
-            yield put({
-                type: ApiConstants.API_SAVE_QUICK_COMPETITION_DIVISION_SUCCESS,
-                result: result.result.data,
-                status: result.status
-            });
+            if (result.result.data.isDrawApplicable == 1) {
+                const drawResult = yield call(AxiosApi.quickCompetitionGenerateDraw, action.year, action.competitionUniqueKey)
+                if (drawResult.status === 1) {
+                    const detailResult = yield call(AxiosApi.getQuickCompetiitonDetails, action.competitionUniqueKey);
+                    if (detailResult.status === 1) {
+                        yield put({
+                            type: ApiConstants.API_UPDATE_QUICK_COMPETITION_SUCCESS,
+                            result: result.result.data,
+                            drawresult: drawResult.result.data,
+                            detailResult: detailResult.result.data,
+                            status: result.status,
+                            competitionId: action.competitionUniqueKey,
+                            competitionName: action.competitionName
+                        });
+                    }
+                }
+                else {
+                    yield put({
+                        type: ApiConstants.API_SAVE_QUICK_COMPETITION_DIVISION_SUCCESS,
+                        result: result.result.data,
+                        status: result.status
+                    });
+                }
+            }
+            else {
+                yield put({
+                    type: ApiConstants.API_SAVE_QUICK_COMPETITION_DIVISION_SUCCESS,
+                    result: result.result.data,
+                    status: result.status
+                });
+            }
         } else {
             yield call(failSaga, result)
         }
@@ -123,14 +149,43 @@ export function* quickcompetitoTimeSlotsPostApi(action) {
     try {
         const result = yield call(AxiosApi.postTimeSlotData, action.payload);
         if (result.status === 1) {
-            yield put({
-                type: ApiConstants.API_QUICK_COMPETITION_TIMESLOT_POST_SUCCESS,
-                result: result.result.data,
-                status: result.status,
-            });
-            setTimeout(() => {
-                message.success(result.result.data.message)
-            }, 500);
+            if (result.result.data.isDrawApplicable == 1) {
+                const drawResult = yield call(AxiosApi.quickCompetitionGenerateDraw, action.year, action.competitionUniqueKey)
+                if (drawResult.status === 1) {
+                    const detailResult = yield call(AxiosApi.getQuickCompetiitonDetails, action.competitionUniqueKey);
+                    if (detailResult.status === 1) {
+                        yield put({
+                            type: ApiConstants.API_UPDATE_QUICK_COMPETITION_SUCCESS,
+                            result: result.result.data,
+                            drawresult: drawResult.result.data,
+                            detailResult: detailResult.result.data,
+                            status: result.status,
+                            competitionId: action.competitionUniqueKey,
+                            competitionName: action.competitionName
+                        });
+                    }
+                }
+                else {
+                    yield put({
+                        type: ApiConstants.API_QUICK_COMPETITION_TIMESLOT_POST_SUCCESS,
+                        result: result.result.data,
+                        status: result.status,
+                    });
+                    setTimeout(() => {
+                        message.success(result.result.data.message)
+                    }, 500);
+                }
+            }
+            else {
+                yield put({
+                    type: ApiConstants.API_QUICK_COMPETITION_TIMESLOT_POST_SUCCESS,
+                    result: result.result.data,
+                    status: result.status,
+                });
+                setTimeout(() => {
+                    message.success(result.result.data.message)
+                }, 500);
+            }
         } else {
             yield call(failSaga, result)
         }
@@ -144,29 +199,48 @@ export function* updateQuickCompetitionSaga(action) {
     try {
         const result = yield call(AxiosApi.updateQuickCompetition, action.payload);
         if (result.status === 1) {
-            const drawResult = yield call(AxiosApi.quickCompetitionGenerateDraw, action.year, action.payload.competitionId)
-            if (drawResult.status === 1) {
+            if (action.buttonPressed == "AddTeam") {
                 const detailResult = yield call(AxiosApi.getQuickCompetiitonDetails, action.payload.competitionId);
                 if (detailResult.status === 1) {
                     yield put({
                         type: ApiConstants.API_UPDATE_QUICK_COMPETITION_SUCCESS,
                         result: result.result.data,
-                        drawresult: drawResult.result.data,
                         detailResult: detailResult.result.data,
                         status: result.status,
                         competitionId: action.payload.competitionId,
                         competitionName: action.payload.competitionName
                     });
                     if (action.buttonPressed == "AddTeam") {
-                        history.push('/quickCompetitionInvitations', { competitionUniqueKey: action.payload.competitionId, year: action.year })
+                        history.push('/quickCompetitionInvitations', { competitionUniqueKey: action.payload.competitionId, year: action.year, importPlayer: JSON.stringify(detailResult.result.data.importPlayer) })
                     }
                 }
                 else {
-                    yield call(failSaga, result)
+                    yield call(failSaga, detailResult)
                 }
-            }
-            else {
-                yield call(failSaga, result)
+
+            } else {
+                const drawResult = yield call(AxiosApi.quickCompetitionGenerateDraw, action.year, action.payload.competitionId)
+                if (drawResult.status === 1) {
+                    const detailResult = yield call(AxiosApi.getQuickCompetiitonDetails, action.payload.competitionId);
+                    if (detailResult.status === 1) {
+                        yield put({
+                            type: ApiConstants.API_UPDATE_QUICK_COMPETITION_SUCCESS,
+                            result: result.result.data,
+                            drawresult: drawResult.result.data,
+                            detailResult: detailResult.result.data,
+                            status: result.status,
+                            competitionId: action.payload.competitionId,
+                            competitionName: action.payload.competitionName
+                        });
+                    }
+                    else {
+                        yield call(failSaga, detailResult)
+                    }
+                }
+
+                else {
+                    yield call(failSaga, drawResult)
+                }
             }
         } else {
             yield call(failSaga, result)
@@ -183,6 +257,28 @@ export function* quickCompetitionPlayer(action) {
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.QUICKCOMP_IMPORT_DATA_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+            setTimeout(() => {
+                message.success(result.result.data.message)
+            }, 500);
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+// competition add venue saga
+export function* quickCompetitionAddVenueSaga(action) {
+    try {
+        const result = yield call(AxiosApi.addVenueQuickCompetition, action.payload);
+        console.log(result)
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_QUICK_COMPETITION_ADDVENUE_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });

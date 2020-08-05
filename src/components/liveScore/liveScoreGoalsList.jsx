@@ -12,6 +12,7 @@ import history from "../../util/history";
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { liveScore_formateDateTime } from '../../themes/dateformate'
 import { exportFilesAction } from "../../store/actions/appAction"
+import { isArrayNotEmpty } from '../../util/helpers'
 
 /////function to sort table column
 function tableSort(a, b, key) {
@@ -49,7 +50,7 @@ class LiveScoreGoalList extends Component {
                     dataIndex: 'startTime',
                     key: 'startTime',
                     sorter: (a, b) => tableSort(a, b, "startTime"),
-                    render: (startTime) => <span  >{liveScore_formateDateTime(startTime)}</span>
+                    // render: (startTime) => <span  >{liveScore_formateDateTime(startTime)}</span>
 
                 },
                 {
@@ -121,27 +122,33 @@ class LiveScoreGoalList extends Component {
             columns2: [
                 {
                     title: 'Team',
-                    dataIndex: 'teamName1',
-                    key: 'teamName',
+                    dataIndex: 'teamName',
+                    key: 'teamName1',
                     sorter: (a, b) => tableSort(a, b, "teamName"),
                 },
                 {
                     title: 'First Name',
-                    dataIndex: 'firstName1',
-                    key: 'firstName',
+                    dataIndex: 'firstName',
+                    key: 'firstName1',
                     sorter: (a, b) => tableSort(a, b, "firstName"),
                     render: (firstName, record) =>
+                   {
+                    console.log(record,'recordCheck')
+                        
+                       return(
                         <NavLink to={{
                             pathname: '/liveScorePlayerView',
                             state: { tableRecord: record }
                         }}>
                             <span className="input-heading-add-another pt-0" >{firstName}</span>
                         </NavLink>
+                       )
+                   }
                 },
                 {
                     title: 'Last Name',
-                    dataIndex: 'lastName1',
-                    key: 'lastName',
+                    dataIndex: 'lastName',
+                    key: 'lastName1',
                     sorter: (a, b) => tableSort(a, b, 'lastName'),
                     render: (lastName, record) =>
                         <NavLink to={{
@@ -153,32 +160,32 @@ class LiveScoreGoalList extends Component {
                 },
                 {
                     title: 'Position',
-                    dataIndex: 'gamePositionName1',
-                    key: 'gamePositionName',
+                    dataIndex: 'gamePositionName',
+                    key: 'gamePositionName1',
                     sorter: (a, b) => tableSort(a, b, "gamePositionName"),
                 },
                 {
                     title: 'Misses',
-                    dataIndex: 'miss1',
-                    key: 'miss',
+                    dataIndex: 'miss',
+                    key: 'miss1',
                     sorter: (a, b) => tableSort(a, b, "miss"),
                 },
                 {
                     title: 'Goals',
-                    dataIndex: 'goal1',
-                    key: 'goal',
+                    dataIndex: 'goal',
+                    key: 'goal1',
                     sorter: (a, b) => tableSort(a, b, "goal"),
                 },
                 {
                     title: 'Attempts',
-                    dataIndex: 'attempts1',
-                    key: 'attempts',
+                    dataIndex: 'attempts',
+                    key: 'attempts1',
                     sorter: (a, b) => tableSort(a, b, "attempts"),
                 },
                 {
                     title: 'Goals%',
-                    dataIndex: 'goal_percent1',
-                    key: 'goal_percent',
+                    dataIndex: 'goal_percent',
+                    key: 'goal_percent1',
                     sorter: (a, b) => tableSort(a, b, "goal_percent"),
                 },
             ],
@@ -192,7 +199,8 @@ class LiveScoreGoalList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ competitionId: id })
         if (id !== null) {
-            this.props.liveScoreGoalListAction(id, this.state.filter, this.state.searchText)
+            let offset = 0
+            this.props.liveScoreGoalListAction(id, this.state.filter, this.state.searchText, offset)
         } else {
             history.push('/')
         }
@@ -207,7 +215,8 @@ class LiveScoreGoalList extends Component {
     onChangeSearchText = (e) => {
         this.setState({ searchText: e.target.value })
         if (e.target.value === null || e.target.value === "") {
-            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, e.target.value)
+            let offset = 0
+            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, e.target.value, offset)
         }
     }
 
@@ -216,7 +225,8 @@ class LiveScoreGoalList extends Component {
         var code = e.keyCode || e.which;
 
         if (code === 13) { //13 is the enter keycode
-            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, e.target.value)
+            let offset = 0
+            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, e.target.value, offset)
         }
     }
 
@@ -226,8 +236,15 @@ class LiveScoreGoalList extends Component {
         if (this.state.searchText === null || this.state.searchText === "") {
         }
         else {
-            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, this.state.searchText)
+            let offset = 0
+            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, this.state.searchText, offset)
         }
+    }
+
+    onChangeFilter(filter) {
+        let offset = 0
+        this.props.liveScoreGoalListAction(this.state.competitionId, filter, this.state.searchText, offset)
+        this.setState({ filter })
     }
 
 
@@ -251,12 +268,9 @@ class LiveScoreGoalList extends Component {
 
                             <div className="col-sm">
                                 <Select
-                                    className="year-select"
-                                    style={{ display: "flex", alignItems: "flex-start", minWidth: 100 }}
-                                    onChange={(filter) => {
-                                        this.setState({ filter })
-                                        this.props.liveScoreGoalListAction(this.state.competitionId, filter, this.state.searchText)
-                                    }}
+                                    className="year-select reg-filter-select1"
+                                    style={{ display: "flex", justifyContent: "flex-end", minWidth: 100 }}
+                                    onChange={(filter) => this.onChangeFilter(filter)}
                                     value={this.state.filter} >
                                     <Option value={AppConstants.ByMatch}>{AppConstants.ByMatch}</Option>
                                     <Option value={AppConstants.total}>{AppConstants.total}</Option>
@@ -310,31 +324,48 @@ class LiveScoreGoalList extends Component {
             </div>
         )
     }
+
+    onPageChange(page) {
+        let offset = page ? 10 * (page - 1) : 0;
+        this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, this.state.searchText, offset)
+    }
+
     ////////form content view
     contentView = () => {
-        const { liveScoreGoalState } = this.props;
-        // let DATA = liveScoreMatchListState ? liveScoreMatchListState.liveScoreMatchListData : []
-        let goalList = liveScoreGoalState ? liveScoreGoalState.result : [];
+        const { result, totalCount,currentPage } = this.props.liveScoreGoalState;
+        let goalList = isArrayNotEmpty(result) ? result : [];
 
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         loading={this.props.liveScoreGoalState.onLoad === true && true}
-                        className="home-dashboard-table" columns={this.state.filter === "By Match" ? this.state.columns1 : this.state.columns2}
+                        className="home-dashboard-table" 
+                        columns={this.state.filter === "By Match" ? this.state.columns1 : this.state.columns2}
                         dataSource={goalList}
                         pagination={false}
-                        rowKey={(record, index) => record.matchId + index}
+                        rowKey={(record, index) => 'goalList' + index}
                     />
                 </div>
-                <div className="d-flex justify-content-end">
-                    <Pagination
-                        className="antd-pagination"
-                        defaultCurrent={1}
-                        total={8}
-                    // onChange={this.handleTableChange}
-                    />
+
+                <div className="comp-dashboard-botton-view-mobile">
+                    <div
+                        className="comp-dashboard-botton-view-mobile"
+                        style={{
+                            width: "100%",
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "flex-end"
+                        }} >
+                        <Pagination
+                            className="antd-pagination"
+                            defaultCurrent={currentPage}
+                            total={totalCount}
+                            onChange={(page) => this.onPageChange(page)} />
+                    </div>
                 </div>
+
             </div>
         )
     }

@@ -1,4 +1,6 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import {
     Layout,
     Breadcrumb,
@@ -11,32 +13,31 @@ import {
     message,
     Form,
 
-} from "antd";
+} from 'antd';
+import moment from 'moment';
+import CSVReader from 'react-csv-reader'
+import Tooltip from 'react-png-tooltip'
+
 import "./competition.css";
-import InputWithHead from "../../customComponents/InputWithHead";
-import moment from "moment";
-import DashboardLayout from "../../pages/dashboardLayout";
+import InputWithHead from '../../customComponents/InputWithHead';
+import DashboardLayout from '../../pages/dashboardLayout';
 import AppConstants from "../../themes/appConstants";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import {
     updateVenuAndTimeDataAction, updateVenuListAction, refreshVenueFieldsAction,
     removeObjectAction, clearVenueDataAction
 } from '../../store/actions/competitionModuleAction/venueTimeAction'
 import { getYearAndCompetitionAction } from '../../store/actions/appAction'
-import { getCommonRefData, addVenueAction } from '../../store/actions/commonAction/commonAction'
-import { getOrganisationAction } from "../../store/actions/userAction/userAction"
+import { getCommonRefData, addVenueAction, checkVenueDuplication } from '../../store/actions/commonAction/commonAction'
+import { getOrganisationAction } from '../../store/actions/userAction/userAction'
 import history from '../../util/history'
 import ValidationConstants from "../../themes/validationConstant";
-import AppImages from "../../themes/appImages";
-import CSVReader from 'react-csv-reader'
-import { deepCopyFunction, captializedString } from '../../util/helpers';
-import Tooltip from 'react-png-tooltip'
-
+import AppImages from '../../themes/appImages';
+import { captializedString } from '../../util/helpers';
+import PlacesAutocomplete from "./elements/PlaceAutoComplete";
+import Loader from "../../customComponents/loader";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
-
 
 const papaparseOptions = {
     header: true,
@@ -60,6 +61,8 @@ class CompetitionVenueAndTimesAdd extends Component {
             loading: false,
             screenHeader: "",
             hover: false,
+            venueAddress: null,
+            venueAddressError: '',
             courtColumns: [
                 {
                     title: "Court Numbers",
@@ -79,7 +82,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                         const { getFieldDecorator } = this.props.form;
                         return (
 
-                            <Form.Item >
+                            <Form.Item>
                                 {getFieldDecorator(`venueCourtName${index}`, {
                                     rules: [{ required: true, message: ValidationConstants.courtField[3] }],
                                 })(
@@ -241,8 +244,8 @@ class CompetitionVenueAndTimesAdd extends Component {
         this.setState({
             screenNavigationKey: screenNavigationKey
         })
-
         this.setHeaderValue(screenNavigationKey);
+        this.props.checkVenueDuplication();
     }
 
     setHeaderValue = (screenNavigationKey) => {
@@ -267,7 +270,6 @@ class CompetitionVenueAndTimesAdd extends Component {
             if (this.state.csvData != null) {
                 this.setState({ csvData: null, loading: false });
                 this.setFormFieldValue();
-
             }
         }
     }
@@ -414,6 +416,47 @@ class CompetitionVenueAndTimesAdd extends Component {
         );
     };
 
+    handlePlacesAutocomplete = (data) => {
+        const { stateList } = this.props.commonReducerState;
+        const address = data;
+
+        this.props.checkVenueDuplication(address);
+
+        if (!address.addressOne) {
+            this.setState({
+                venueAddressError: ValidationConstants.venueAddressDetailsError,
+            })
+        } else {
+            this.setState({
+                venueAddressError: ''
+            })
+        }
+
+        this.setState({
+            venueAddress: address,
+        });
+
+        const stateRefId = stateList.length > 0 && address.state
+          ? stateList.find((state) => state.name === address.state).id
+          : null;
+
+        this.props.form.setFieldsValue({
+            stateRefId,
+            addressOne: address.addressOne || null,
+            suburb: address.suburb || null,
+            postcode: address.postcode || null,
+        });
+
+        if (address.addressOne) {
+            this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId');
+            this.props.updateVenuAndTimeDataAction(address.addressOne, 'Venue', 'street1');
+            this.props.updateVenuAndTimeDataAction(address.suburb, 'Venue', 'suburb');
+            this.props.updateVenuAndTimeDataAction(address.postcode, 'Venue', 'postalCode');
+            this.props.updateVenuAndTimeDataAction(address.lat, 'Venue', 'lat');
+            this.props.updateVenuAndTimeDataAction(address.lng, 'Venue', 'lng');
+        }
+    };
+
     ////////form content view
     contentView = (getFieldDecorator) => {
         const { venuData } = this.props.venueTimeState
@@ -458,17 +501,27 @@ class CompetitionVenueAndTimesAdd extends Component {
                         />
                     )}
                 </Form.Item>
-
+                <Form.Item name="venueAddress">
+                    <PlacesAutocomplete
+                        heading={AppConstants.venueSearch}
+                        required
+                        error={this.state.venueAddressError}
+                        onBlur={() => {
+                            this.setState({
+                                venueAddressError: ''
+                            })
+                        }}
+                        onSetData={this.handlePlacesAutocomplete}
+                    />
+                </Form.Item>
                 <Form.Item >
-                    {getFieldDecorator('addressOne', {
-                        rules: [{ required: true, message: ValidationConstants.addressField[0] }],
-                    })(
+                    {getFieldDecorator('addressOne')(
                         <InputWithHead
                             required={"required-field pt-3 pb-0"}
                             heading={AppConstants.addressOne}
                             placeholder={AppConstants.addressOne}
-                            onChange={(street1) => this.props.updateVenuAndTimeDataAction(street1.target.value, 'Venue', 'street1')}
                             setFieldsValue={venuData.street1}
+                            readOnly
                         />
                     )}
                 </Form.Item>
@@ -483,15 +536,13 @@ class CompetitionVenueAndTimesAdd extends Component {
 
 
                 <Form.Item >
-                    {getFieldDecorator('suburb', {
-                        rules: [{ required: true, message: ValidationConstants.suburbField[0] }],
-                    })(
+                    {getFieldDecorator('suburb')(
                         <InputWithHead
                             required={"required-field pt-3 pb-0"}
                             heading={AppConstants.suburb}
                             placeholder={AppConstants.suburb}
-                            onChange={(suburb) => this.props.updateVenuAndTimeDataAction(suburb.target.value, 'Venue', 'suburb')}
                             setFieldsValue={venuData.suburb}
+                            readOnly
                         />
                     )}
                 </Form.Item>
@@ -502,36 +553,30 @@ class CompetitionVenueAndTimesAdd extends Component {
                 />
 
                 <Form.Item >
-                    {getFieldDecorator('stateRefId', {
-                        rules: [{ required: true, message: ValidationConstants.stateField[0] }],
-                    })(
+                    {getFieldDecorator('stateRefId')(
                         <Select
                             style={{ width: "100%" }}
                             placeholder={AppConstants.select}
-                            onChange={(stateRefId) => this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId')}
                             setFieldsValue={venuData.stateRefId}
-
+                            disabled
                         >
                             {stateList.length > 0 && stateList.map((item) => (
                                 < Option key={item.id} value={item.id}> {item.name}</Option>
-                            ))
-                            }
+                            ))}
                         </Select>
                     )}
                 </Form.Item>
 
 
                 <Form.Item >
-                    {getFieldDecorator('postcode', {
-                        rules: [{ required: true, message: ValidationConstants.postCodeField[0] }],
-                    })(
+                    {getFieldDecorator('postcode')(
                         <InputWithHead
                             required={"required-field"}
                             heading={AppConstants.postcode}
                             placeholder={AppConstants.postcode}
-                            onChange={(postalCode) => this.props.updateVenuAndTimeDataAction(postalCode.target.value, 'Venue', 'postalCode')}
                             setFieldsValue={venuData.postalCode}
                             maxLength={4}
+                            readOnly
                         />
                     )}
                 </Form.Item>
@@ -835,6 +880,19 @@ class CompetitionVenueAndTimesAdd extends Component {
     onAddVenue = (e) => {
         e.preventDefault();
         let hasError = false;
+        let venueAddressError = false;
+
+        if (this.props.commonReducerState.venueAddressDuplication) {
+            message.error(ValidationConstants.duplicatedVenueAddressError);
+            return;
+        }
+
+        if (!this.state.venueAddress) {
+            this.setState({venueAddressError: ValidationConstants.venueAddressRequiredError});
+            message.error(AppConstants.venueAddressSelect);
+            venueAddressError = true;
+        }
+
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 const { venuData } = this.props.venueTimeState
@@ -849,6 +907,12 @@ class CompetitionVenueAndTimesAdd extends Component {
                     message.error(ValidationConstants.emptyGameDaysValidation);
                 }
                 else {
+
+                    if (venuData.venueCourts.length == 0) {
+                        message.error(ValidationConstants.emptyAddCourtValidation);
+                        return;
+                    }
+
                     venuData.venueCourts.map((item, index) => {
                         (item.availabilities || []).map((avItem, avIndex) => {
                             if (avItem.startTime > avItem.endTime) {
@@ -873,6 +937,12 @@ class CompetitionVenueAndTimesAdd extends Component {
                         message.error(ValidationConstants.gameDayEndTimeValidation);
                         return;
                     }
+
+                    if (venueAddressError) {
+                        message.error(AppConstants.venueAddressSelect);
+                        return;
+                    }
+
                     if (!hasError) {
                         venuData["screenNavigationKey"]  = this.state.screenNavigationKey;
                         //console.log("venuData" + JSON.stringify(venuData));
@@ -894,11 +964,11 @@ class CompetitionVenueAndTimesAdd extends Component {
                         <div className="col-sm">
                             <div style={{ display: "flex", justifyContent: "flex-end" }}>
                                 {/* <Button onClick={() => this.props.addVenueAction(venuData)} className="open-reg-button" type="primary"> */}
-                                <Button className="open-reg-button" type="primary" style={{ marginRight: '20px' }}
+                                <Button className="publish-button" type="primary" style={{ marginRight: '20px' }}
                                     onClick={() => this.navigateTo()}>
                                     {AppConstants.cancel}
                                 </Button>
-                                <Button className="open-reg-button" type="primary" htmlType="submit">
+                                <Button className="publish-button" type="primary" htmlType="submit">
                                     {AppConstants.save}
                                 </Button>
                             </div>
@@ -909,19 +979,12 @@ class CompetitionVenueAndTimesAdd extends Component {
         );
     };
 
-    // ////Show success message after success response
-    // success = () => {
-    //     this.props.commonReducerState.addVenueSuccessMsg = ""
-    //     message.success('Venue - Added Sucessfully')
-    //     this.props.refreshVenueFieldsAction()
-    //     history.push('/competitionVenueTimesPrioritisation')
-    // };
-
     render() {
         const { getFieldDecorator } = this.props.form;
        // console.log(this.props.venueTimeState.venuData, 'this.props.commonReducerState')
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+                <Loader visible={this.props.commonReducerState.onLoad || this.props.venueTimeState.onLoad} />
                 <DashboardLayout
                     menuHeading={this.state.screenHeader}
                     menuName={this.state.screenHeader}
@@ -955,7 +1018,8 @@ function mapDispatchToProps(dispatch) {
         refreshVenueFieldsAction,
         getOrganisationAction,
         removeObjectAction,
-        clearVenueDataAction
+        clearVenueDataAction,
+        checkVenueDuplication,
     }, dispatch)
 }
 

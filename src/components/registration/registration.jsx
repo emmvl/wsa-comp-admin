@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Icon, Table, Select, Menu, Pagination, Modal, DatePicker, Input } from "antd"; import './product.scss';
+import { Layout, Breadcrumb, Icon, Table, Select, Menu, Pagination, Modal, DatePicker, Input, Button } from "antd"; import './product.scss';
 import './product.scss';
 import moment from 'moment';
 import { NavLink } from 'react-router-dom';
@@ -32,6 +32,13 @@ const columns = [
         dataIndex: 'name',
         key: 'name',
         sorter: (a, b) => a.name.localeCompare(b.name),
+        render: (name, record) =>
+            <NavLink to={{
+                pathname: `/userPersonal`,
+                state: { userId: record.userId, screenKey: 'registration', screen: "/registration" }
+            }}>
+                <span className="input-heading-add-another pt-0" >{name}</span>
+            </NavLink>
     },
     {
         title: 'Registration date',
@@ -303,17 +310,43 @@ class Registration extends Component {
         return (
             <div className="comp-player-grades-header-view-design" style={{marginBottom:-10}}>
                 <div className="row" style={{marginRight: 42}}>
-                    <div className="col-lg-6 col-md-12" style={{ display: "flex", alignContent: "center", marginBottom: 20 ,}} >
+                    <div className="col-lg-4 col-md-12 d-flex align-items-center" >
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.Registrations}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-					<div className="reg-col1 col-lg-3 col-md-5" style={{alignSelf:'center', paddingRight: '10px', paddingLeft: '25px'}}>
-                        <div className="reg-filter-col-cont status-dropdown" >
-                            <div className='year-select-heading' style={{width: 120}}>{AppConstants.status}</div>
+                    <div className="col-sm d-flex align-items-center justify-content-end" >
+                        <Button className="primary-add-comp-form" type="primary">
+                            <div className="row">
+                                <div className="col-sm">
+                                    <img
+                                        src={AppImages.export}
+                                        alt=""
+                                        className="export-image"
+                                    />
+                                    {AppConstants.export}
+                                </div>
+                            </div>
+                        </Button>
+                    </div>
+                </div>
+            </div >
+        )
+    }
+
+
+    ////status and search view
+     statusView = () => {
+		const { paymentStatus } = this.props.commonReducerState;
+        return (
+            <div className="comp-player-grades-header-view-design" style={{marginBottom:-10}}>
+                <div className="row" style={{marginRight: 42}}>
+                       <div className="col-sm-9 padding-right-reg-dropdown-zero"> 
+                        <div className="reg-filter-col-cont status-dropdown d-flex align-items-center justify-content-end pr-2" >
+                            <div className='year-select-heading' style={{width: 90}}>{AppConstants.status}</div>
                             <Select
                                 className="year-select reg-filter-select"
-                                style={{ width:'95%' }}
+                                style={{ maxWidth:200 }}
                                 onChange={(e) => this.onChangeDropDownValue(e, 'paymentStatusRefId')}
                                 value={this.state.paymentStatusRefId}>
                                 <Option key={-1} value={-1}>{AppConstants.all}</Option>
@@ -323,7 +356,7 @@ class Registration extends Component {
                             </Select>
                         </div>
                     </div>						  
-                    <div className="col-sm col-lg-2.5 d-flex align-items-center justify-content-end"   style={{paddingLeft: 0 , marginLeft:10 ,marginRight:0}} >
+                    <div className="col-sm-3 d-flex align-items-center justify-content-end margin-top-24-mobile"> 
                         <div className="comp-product-search-inp-width" >
                             <Input className="product-reg-search-input"
                                  onChange={(e) => this.onChangeSearchText(e)}
@@ -336,15 +369,10 @@ class Registration extends Component {
                             />
                         </div>
                     </div>
-
                 </div>
-
             </div >
         )
     }
-
-
-
 
 
 
@@ -627,6 +655,7 @@ class Registration extends Component {
                 <InnerHorizontalMenu menu={"registration"} regSelectedKey={"2"} />
                 <Layout>
                     {this.headerView()}
+                    {this.statusView()}
                     <Content>
                         {this.dropdownView()}
                         {this.countView()}

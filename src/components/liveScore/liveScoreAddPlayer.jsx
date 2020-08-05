@@ -362,13 +362,13 @@ class LiveScoreAddPlayer extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <Button onClick={() => history.push(this.state.temaViewPlayer ? 'liveScoreTeamView' : '/liveScorePlayerList', { ...this.props.location.state })} type="cancel-button">{AppConstants.cancel}</Button>
+                                <Button className="cancelBtnWidth" onClick={() => history.push(this.state.temaViewPlayer ? 'liveScoreTeamView' : '/liveScorePlayerList', { ...this.props.location.state })} type="cancel-button">{AppConstants.cancel}</Button>
                             </div>
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
                                 <Form.Item >
-                                    <Button className="user-approval-button" type="primary" htmlType="submit" disabled={isSubmitting}>
+                                    <Button className="publish-button save-draft-text" type="primary" htmlType="submit" disabled={isSubmitting}>
                                         {AppConstants.save}
                                     </Button>
                                 </Form.Item>

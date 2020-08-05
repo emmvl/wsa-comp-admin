@@ -1481,7 +1481,7 @@ class RegistrationForm extends Component {
                                     // style={{ height: statusRefId == 2 ? "100%" : null, borderRadius: statusRefId == 2 ? 5 : null }}
                                     // style={{ height: statusRefId == 2 ? "100%" : null, borderRadius: statusRefId == 2 ? 5 : null }}
                                     >
-                                        {AppConstants.openRegistrations}
+                                        { statusRefId==2 ? AppConstants.publish: AppConstants.openRegistrations}
                                     </Button>
                                     {/* </Tooltip> */}
                                 </div>

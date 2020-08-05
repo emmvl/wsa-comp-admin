@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Select, Spin, Pagination, Menu,Modal } from 'antd';
+import { Layout, Button, Table, Select, Spin, Pagination, Menu, Modal } from 'antd';
 import './home.css';
 import { NavLink } from 'react-router-dom';
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -9,8 +9,10 @@ import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getUreAction, getRoleAction } from '../../store/actions/userAction/userAction'
-import { getUserCount, clearHomeDashboardData, setHomeDashboardYear,
-        getActionBoxAction, updateActionBoxAction } from "../../store/actions/homeAction/homeAction"
+import {
+    getUserCount, clearHomeDashboardData, setHomeDashboardYear,
+    getActionBoxAction, updateActionBoxAction
+} from "../../store/actions/homeAction/homeAction"
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 import Loader from '../../customComponents/loader';
 import history from "../../util/history";
@@ -273,7 +275,7 @@ class HomeDashboard extends Component {
         console.log("componentDidMount" + this.state.organisationId)
         this.props.getRoleAction()
         this.props.getUreAction()
-       
+
         // this.props.getOnlyYearListAction(this.props.appState.yearList)
         // this.props.getUserCount(1)
     }
@@ -308,20 +310,20 @@ class HomeDashboard extends Component {
                             this.setState({ loading: false })
                         }
                     }
-                    
-                    if(this.props.homeDashboardState.actionBoxList == null || this.state.organisationId == null){
+
+                    if (this.props.homeDashboardState.actionBoxList == null || this.state.organisationId == null) {
                         console.log("getOrganisationData::" + JSON.stringify(getOrganisationData()));
-                        let organisationUniqueKey = getOrganisationData() == null ? userOrganisation[0].organisationUniqueKey : 
-                                                getOrganisationData().organisationUniqueKey
-                        await this.setState({organisationId: organisationUniqueKey})
+                        let organisationUniqueKey = getOrganisationData() == null ? userOrganisation[0].organisationUniqueKey :
+                            getOrganisationData().organisationUniqueKey
+                        await this.setState({ organisationId: organisationUniqueKey })
                         this.handleActionBoxList(1);
                     }
                 }
             }
         }
 
-        if(this.state.updateActionBoxLoad == true && this.props.homeDashboardState.onActionBoxLoad == false){
-            this.setState({updateActionBoxLoad: false});
+        if (this.state.updateActionBoxLoad == true && this.props.homeDashboardState.onActionBoxLoad == false) {
+            this.setState({ updateActionBoxLoad: false });
             this.handleActionBoxList(1);
         }
     }
@@ -333,7 +335,7 @@ class HomeDashboard extends Component {
         this.props.getUserCount(yearRefId)
     }
 
-    handleActionBoxList = (page) =>{
+    handleActionBoxList = (page) => {
         let payload =
         {
             organisationId: this.state.organisationId,
@@ -353,8 +355,8 @@ class HomeDashboard extends Component {
     }
 
     handleUpdateActionBoxOk = (key) => {
-      
-        if(key == "ok"){
+
+        if (key == "ok") {
             this.updateActionBox(this.state.actions);
         }
 
@@ -367,12 +369,12 @@ class HomeDashboard extends Component {
             actionsId: e.actionsId,
             actionMasterId: e.actionMasterId
         }
-       // console.log("********" + JSON.stringify(obj));
+        // console.log("********" + JSON.stringify(obj));
         this.props.updateActionBoxAction(obj);
-        this.setState({updateActionBoxLoad: true});
+        this.setState({ updateActionBoxLoad: true });
     }
 
-    
+
 
     actionboxHeadingView = () => {
         return (
@@ -389,30 +391,30 @@ class HomeDashboard extends Component {
 
     //////actionboxView for table
     actionboxView = () => {
-        let {actionBoxList, actionBoxPage, actionBoxTotalCount} = this.props.homeDashboardState;
+        let { actionBoxList, actionBoxPage, actionBoxTotalCount } = this.props.homeDashboardState;
         return (
             <div>
                 {this.actionboxHeadingView()}
-                 {/*  */}
+                {/*  */}
                 {/* <span className='input-heading'>{"This feature is not implemented yet"}</span> */}
-                <div className="home-table-view" style={{boxShadow: 'none',background:'none'}}> 
-                    <div className="table-responsive home-dash-table-view">
-                        <Table className="home-dashboard-table" 
-                            columns={columnsInbox} 
-                            dataSource={actionBoxList} 
+                <div className="home-table-view" style={{ boxShadow: 'none', background: 'none' }}>
+                    <div id={AppConstants.home_table_view} className="table-responsive home-dash-table-view">
+                        <Table className="home-dashboard-table"
+                            columns={columnsInbox}
+                            dataSource={actionBoxList}
                             pagination={false}
                             showHeader={false}
                             loading={this.props.homeDashboardState.onActionBoxLoad === true && true}
                         />
-               
+
                     </div>
                     <div className="d-flex justify-content-end">
                         <Pagination
-                        className="antd-pagination action-box-pagination"
-                        current={actionBoxPage}
-                        total={actionBoxTotalCount}
-                        onChange={(page) => this.handleActionBoxList(page)}
-                    />
+                            className="antd-pagination action-box-pagination"
+                            current={actionBoxPage}
+                            total={actionBoxTotalCount}
+                            onChange={(page) => this.handleActionBoxList(page)}
+                        />
                     </div>
                 </div>
 
@@ -420,7 +422,7 @@ class HomeDashboard extends Component {
                     className="add-membership-type-modal"
                     title={AppConstants.updateAction}
                     visible={this.state.modalVisible}
-                    onOk={ () => this.handleUpdateActionBoxOk("ok")}
+                    onOk={() => this.handleUpdateActionBoxOk("ok")}
                     onCancel={() => this.handleUpdateActionBoxOk("cancel")}>
                     <p>{AppConstants.actionBoxConfirmMsg}</p>
                 </Modal>
@@ -431,7 +433,7 @@ class HomeDashboard extends Component {
     compOverviewHeading = () => {
         const { yearRefId } = this.props.homeDashboardState
         return (
-            <div className="row text-view" style={{paddingTop: '3%'}}>
+            <div className="row text-view" style={{ paddingTop: '3%' }}>
                 <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }} >
                     <span className='home-dash-left-text' >{AppConstants.competitionsOverview}</span>
                 </div>
@@ -442,10 +444,11 @@ class HomeDashboard extends Component {
                         alignItems: "center", marginLeft: 7,
                         justifyContent: "flex-end"
                     }} >
-                        <span className='year-select-heading'>{AppConstants.year}:</span>
+                        <span className='year-select-heading' style={{ marginRight: 10 }}>{AppConstants.year}:</span>
                         <Select
                             name={"yearRefId"}
-                            className="year-select"
+                            className="year-select reg-filter-select-year"
+                            style={{ width: 90 }}
                             onChange={yearRefId => this.onYearChange(yearRefId)}
                             value={yearRefId}
                         >
@@ -611,10 +614,10 @@ class HomeDashboard extends Component {
                 {this.ownedHeadingView()}
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                      className="home-dashboard-table"
-                      columns={columnsOwned}
-                      dataSource={dataOwned}
-                      pagination={false}
+                        className="home-dashboard-table"
+                        columns={columnsOwned}
+                        dataSource={dataOwned}
+                        pagination={false}
                     />
                 </div>
             </div>
@@ -638,10 +641,10 @@ class HomeDashboard extends Component {
                 {this.participatedHeadingView()}
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                      className="home-dashboard-table"
-                      columns={columnsParticipate}
-                      dataSource={dataParticipate}
-                      pagination={false}
+                        className="home-dashboard-table"
+                        columns={columnsParticipate}
+                        dataSource={dataParticipate}
+                        pagination={false}
                     />
                 </div>
             </div>
@@ -651,7 +654,7 @@ class HomeDashboard extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.home} menuName={AppConstants.home} />
+                <DashboardLayout menuId={AppConstants.home_page_heading} menuHeading={AppConstants.home} menuName={AppConstants.home} />
                 <InnerHorizontalMenu menu={"home"} userSelectedKey={"1"} />
                 <Layout>
                     {/* <Content className="container"> */}
@@ -662,7 +665,9 @@ class HomeDashboard extends Component {
                         {this.participatedView()} */}
                     </Content>
                     <Loader visible={this.props.appState.onLoad} />
-                    <Footer />
+                    <Footer className="mb-5">
+
+                    </Footer>
                 </Layout>
             </div>
         );

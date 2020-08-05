@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Select, Tag, Modal } from "antd";
+import { Layout, Button, Table, Select, Tag, Modal, Menu } from "antd";
 import { NavLink } from "react-router-dom";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -7,18 +7,22 @@ import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { clearCompReducerDataAction } from "../../store/actions/registrationAction/competitionFeeAction";
-import { competitionDashboardAction } from '../../store/actions/competitionModuleAction/competitionDashboardAction';
+import { competitionDashboardAction, updateCompetitionStatus } from '../../store/actions/competitionModuleAction/competitionDashboardAction';
 import history from "../../util/history";
 import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from '../../store/actions/appAction'
 import { isArrayNotEmpty } from "../../util/helpers";
 import moment from "moment";
 import { checkRegistrationType } from "../../util/permissions";
 import Tooltip from 'react-png-tooltip'
+import AppImages from "../../themes/appImages"
+import AppUniqueId from "../../themes/appUniqueId";
+import Loader from '../../customComponents/loader'
 
 const { Content } = Layout;
 const { Option } = Select;
 const { confirm } = Modal;
-
+const { SubMenu } = Menu
+let this_Obj = null;
 /////function to sort table column
 function tableSort(a, b, key) {
     let stringA = JSON.stringify(a[key])
@@ -158,6 +162,38 @@ const columnsOwned = [
         },
         sorter: (a, b) => tableSort(a, b, "invitees")
     },
+    {
+        title: 'Action',
+        dataIndex: 'statusRefId',
+        key: 'statusRefId',
+        render: (statusRefId, record) => {
+            return (
+                statusRefId == 1 &&
+                <div onClick={(e) => e.stopPropagation()}>
+                    <Menu
+                        className="action-triple-dot-submenu"
+                        theme="light"
+                        mode="horizontal"
+                        style={{ lineHeight: '25px' }}
+                    >
+                        <SubMenu
+                            key="sub1"
+                            title={
+                                <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
+                            }
+                        >
+                            <Menu.Item key="1"
+                                onClick={() => this_Obj.updateCompetitionStatus(record)}
+                            >
+                                <span>{AppConstants.editRegrade}</span>
+                            </Menu.Item>
+
+                        </SubMenu>
+                    </Menu>
+                </div>
+            )
+        }
+    },
 ];
 
 class CompetitionDashboard extends Component {
@@ -168,6 +204,7 @@ class CompetitionDashboard extends Component {
             loading: false
         };
         this.props.CLEAR_OWN_COMPETITION_DATA("participate_CompetitionArr")
+        this_Obj = this
     }
 
     componentDidMount() {
@@ -192,7 +229,15 @@ class CompetitionDashboard extends Component {
             }
         }
     }
-
+    updateCompetitionStatus = (record) => {
+        let storedYearID = localStorage.getItem("yearId");
+        let selectedYearId = (storedYearID == null || storedYearID == 'null') ? 1 : JSON.parse(storedYearID)
+        let payload = {
+            competitionUniqueKey: record.competitionId,
+            statusRefId: 2
+        }
+        this.props.updateCompetitionStatus(payload, selectedYearId)
+    }
     onChange = e => {
         this.setState({
             value: e.target.value
@@ -228,10 +273,10 @@ class CompetitionDashboard extends Component {
                         <div className="col-sm-8">
                             <div className="year-select-heading-view">
                                 <span className="year-select-heading">
-                                    {AppConstants.year}:
-                </span>
+                                    {AppConstants.year}:</span>
                                 <Select
-                                    className="year-select"
+                                    className="year-select reg-filter-select-year ml-2"
+                                    style={{ width: 90 }}
                                     onChange={yearId => this.onYearClick(yearId)}
                                     value={selectedYearId}
                                 >
@@ -293,7 +338,7 @@ class CompetitionDashboard extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                            <span className="form-heading">
+                            <span id={AppUniqueId.ownedCompetition_column_headers_table} className="form-heading">
                                 {AppConstants.ownedCompetitions}
                             </span>
                             <div style={{ marginTop: -10 }}>
@@ -318,9 +363,28 @@ class CompetitionDashboard extends Component {
                                             justifyContent: "flex-end"
                                         }}
                                     >
-                                        <Button className="primary-add-comp-form" type="primary" onClick={() => this.openModel(this.props)}
+                                        <NavLink to="/quickCompetition">
+                                            <Button id={AppUniqueId.quickCom_Button} className="primary-add-comp-form" type="primary"
+                                            >
+                                                + {AppConstants.quickCompetition}
+                                            </Button>
+                                        </NavLink>
+                                    </div>
+                                </div>
+                                <div className="col-sm">
+                                    <div
+                                        className="comp-dashboard-botton-view-mobile"
+                                        style={{
+                                            width: "100%",
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            alignItems: "center",
+                                            justifyContent: "flex-end"
+                                        }}
+                                    >
+                                        <Button id={AppUniqueId.newCompetitionButton} className="primary-add-comp-form" type="primary" onClick={() => this.openModel(this.props)}
                                         >
-                                            + {AppConstants.newCompetition}
+                                            + {AppConstants.fullCompetition}
                                         </Button>
 
                                     </div>
@@ -337,7 +401,7 @@ class CompetitionDashboard extends Component {
                                         }}
                                     >
                                         <NavLink to="/competitionReplicate">
-                                            <Button className="primary-add-comp-form" type="primary">
+                                            <Button id={AppUniqueId.replicateCompetitionButton} className="primary-add-comp-form" type="primary">
                                                 + {AppConstants.replicateCompetition}
                                             </Button>
                                         </NavLink>
@@ -347,7 +411,7 @@ class CompetitionDashboard extends Component {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         );
     };
 
@@ -389,8 +453,8 @@ class CompetitionDashboard extends Component {
     ////////ownedView view for competition
     ownedView = () => {
         return (
-            <div className="comp-dash-table-view">
-                <div className="table-responsive home-dash-table-view">
+            <div className="comp-dash-table-view " style={{ paddingBottom: 100 }}>
+                <div className="table-responsive home-dash-table-view ">
                     <Table
                         loading={this.props.competitionDashboardState.onLoad === true && true}
                         className="home-dashboard-table"
@@ -401,9 +465,10 @@ class CompetitionDashboard extends Component {
                             onClick: () =>
                                 this.compScreenDeciderCheck(record)
                         })}
+                        key={AppUniqueId.owned_compet_content_table}
                     />
                 </div>
-            </div>
+            </div >
         );
     };
 
@@ -418,6 +483,7 @@ class CompetitionDashboard extends Component {
                 <Layout>
                     <Content>
                         {this.dropdownView()}
+                        <Loader visible={this.props.competitionDashboardState.updateLoad} />
                         {this.participatedView()}
                         {this.dropdownButtonView()}
                         {this.ownedView()}
@@ -433,6 +499,7 @@ function mapDispatchToProps(dispatch) {
         competitionDashboardAction,
         getOnlyYearListAction,
         CLEAR_OWN_COMPETITION_DATA,
+        updateCompetitionStatus
     }, dispatch)
 }
 

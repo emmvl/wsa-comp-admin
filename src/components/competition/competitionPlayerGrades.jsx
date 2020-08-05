@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Checkbox, Button, Menu, Select, Tag, Form, Modal, Dropdown } from 'antd';
+import { Layout, Breadcrumb, Checkbox, Button, Menu, Select, Tag, Form, Modal, Dropdown, message } from 'antd';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -18,7 +18,9 @@ import {
     setOwnCompetitionYear,
     getOwnCompetitionYear,
     setOwn_competition,
-    getOwn_competition
+    getOwn_competition,
+    getOwn_competitionStatus,
+    setOwn_competitionStatus
 } from "../../util/sessionStorage"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import AppImages from "../../themes/appImages";
@@ -28,6 +30,7 @@ import ColorsArray from "../../util/colorsArray";
 import PlayerCommentModal from "../../customComponents/playerCommentModal";
 import moment from "moment"
 import Tooltip from 'react-png-tooltip'
+import AppUniqueId from "../../themes/appUniqueId";
 
 
 
@@ -68,7 +71,8 @@ class CompetitionPlayerGrades extends Component {
             loading: false,
             changeDivisionModalVisible: false,
             competitionDivisionId: null,
-            divisionLoad: false
+            divisionLoad: false,
+            competitionStatus: 0
         }
         this_obj = this;
         this.onDragEnd = this.onDragEnd.bind(this);
@@ -83,9 +87,11 @@ class CompetitionPlayerGrades extends Component {
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
                     let competitionId = competitionList[0].competitionId
+                    let statusRefId = competitionList[0].statusRefId
                     setOwn_competition(competitionId)
+                    setOwn_competitionStatus(statusRefId)
                     this.props.getDivisionsListAction(this.state.yearRefId, competitionId)
-                    this.setState({ firstTimeCompId: competitionId })
+                    this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId })
                 }
             }
         }
@@ -118,12 +124,14 @@ class CompetitionPlayerGrades extends Component {
     componentDidMount() {
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
+        let storedCompetitionStatus = getOwn_competitionStatus()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
         if (storedCompetitionId && yearId && propsData && compData) {
             this.setState({
                 yearRefId: JSON.parse(yearId),
                 firstTimeCompId: storedCompetitionId,
+                competitionStatus: storedCompetitionStatus
                 // getDataLoading: true
             })
             this.props.getDivisionsListAction(yearId, storedCompetitionId)
@@ -166,11 +174,11 @@ class CompetitionPlayerGrades extends Component {
                         <div className="row">
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile">
-                                    <Dropdown overlay={menu} placement="bottomLeft">
+                                    <Dropdown disabled={this.state.competitionStatus == 1 ? true : false} overlay={menu} placement="bottomLeft">
                                         <Button className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">
-                                                    <img src={AppImages.import} alt="" className="export-image" />
+                                                    <img id={AppUniqueId.PlayerGrading_ImportBtn} src={AppImages.import} alt="" className="export-image" />
                                                     {AppConstants.action}
                                                 </div>
                                             </div>
@@ -185,10 +193,11 @@ class CompetitionPlayerGrades extends Component {
                                             pathname: `/competitionPlayerImport`,
                                             state: { divisionId: this.state.divisionId, competitionId: this.state.firstTimeCompId, screenNavigationKey: 'PlayerGrading' }
                                         }}>
-                                            <Button className="primary-add-comp-form" type="primary">
+                                            <Button disabled={this.state.competitionStatus == 1 ? true : false} className="primary-add-comp-form" type="primary">
                                                 <div className="row">
                                                     <div className="col-sm">
                                                         <img
+                                                            id={AppUniqueId.PlayerGrading_ImportTeamBtn}
                                                             src={AppImages.import}
                                                             alt=""
                                                             className="export-image"
@@ -207,7 +216,7 @@ class CompetitionPlayerGrades extends Component {
                                             pathname: `/competitionTeamsImport`,
                                             state: { competitionId: this.state.firstTimeCompId, screenNavigationKey: 'PlayerGrading' }
                                         }}>
-                                            <Button className="primary-add-comp-form" type="primary">
+                                            <Button disabled={this.state.competitionStatus == 1 ? true : false} className="primary-add-comp-form" type="primary">
                                                 <div className="row">
                                                     <div className="col-sm">
                                                         <img
@@ -234,19 +243,21 @@ class CompetitionPlayerGrades extends Component {
     onYearChange = (yearId) => {
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
+        setOwn_competitionStatus(undefined)
         this.props.clearReducerCompPartPlayerGradingAction("partPlayerGradingListData")
         this.props.clearReducerDataAction("allDivisionsData")
         this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
-        this.setState({ firstTimeCompId: null, yearRefId: yearId, divisionId: null })
+        this.setState({ firstTimeCompId: null, yearRefId: yearId, divisionId: null, competitionStatus: 0 })
 
     }
 
     // on Competition change
-    onCompetitionChange = (competitionId) => {
+    onCompetitionChange = (competitionId, statusRefId) => {
+        setOwn_competitionStatus(statusRefId)
         setOwn_competition(competitionId)
         this.props.clearReducerCompPartPlayerGradingAction("partPlayerGradingListData")
         this.props.clearReducerDataAction("allDivisionsData")
-        this.setState({ firstTimeCompId: competitionId, divisionId: null })
+        this.setState({ firstTimeCompId: competitionId, divisionId: null, competitionStatus: statusRefId })
         this.props.getDivisionsListAction(this.state.yearRefId, competitionId)
     }
 
@@ -412,12 +423,14 @@ class CompetitionPlayerGrades extends Component {
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width" >
                     <div className="row" >
-                        <div className="col-sm-2" >
-                            <div className="com-year-select-heading-view" >
+                        <div className="col-sm" >
+                            <div className="com-year-select-heading-view pb-3" >
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
+                                    id={AppUniqueId.PlayerGradingYear_dpdn}
                                     name={"yearRefId"}
-                                    className="year-select"
+                                    style={{ width: 90 }}
+                                    className="year-select reg-filter-select-year ml-2"
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
@@ -431,23 +444,23 @@ class CompetitionPlayerGrades extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-4" >
+                        <div className="col-sm pb-3" >
                             <div style={{
-                                width: "100%", display: "flex",
+                                width: "fit-content", display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center",
                             }} >
                                 <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
-                                    style={{ minWidth: 160 }}
+                                    id={AppUniqueId.PlayerGradingYCompetition_dpdn}
                                     name={"competition"}
-                                    className="year-select"
-                                    onChange={competitionId => this.onCompetitionChange(competitionId)}
+                                    className="year-select reg-filter-select-competition ml-2"
+                                    onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
                                     {this.props.appState.own_CompetitionArr.map(item => {
                                         return (
-                                            <Option key={"competition" + item.competitionId} value={item.competitionId}>
+                                            <Option key={item.statusRefId} value={item.competitionId}>
                                                 {item.competitionName}
                                             </Option>
                                         );
@@ -456,7 +469,7 @@ class CompetitionPlayerGrades extends Component {
                             </div>
                         </div>
                         <div className="row" >
-                            <div className="col-sm" >
+                            <div className="col-sm pb-3" >
                                 <div className="col-sm" style={{
                                     width: "100%", display: "flex",
                                     flexDirection: "row",
@@ -464,8 +477,10 @@ class CompetitionPlayerGrades extends Component {
                                 }} >
                                     <span className='year-select-heading'>{AppConstants.division}:</span>
                                     <Select
-                                        style={{ minWidth: 120,marginRight: 65 }}
-                                        className="year-select"
+                                        disabled={this.state.competitionStatus == 1 ? true : false}
+                                        id={AppUniqueId.PlayerGradingYDivisionName_dpdn}
+                                        style={{ minWidth: 120, marginRight: 65 }}
+                                        className="year-select reg-filter-select1 ml-2"
                                         onChange={(divisionId) => this.onDivisionChange(divisionId)}
                                         value={JSON.parse(JSON.stringify(this.state.divisionId))}
                                     >
@@ -480,11 +495,11 @@ class CompetitionPlayerGrades extends Component {
                                     </Select>
                                 </div>
                             </div>
-                            <div className="col-sm" style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }} >
+                            <div className="col-sm-2 pb-3" style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }} >
                                 <span className='comp-grading-final-text'>{AppConstants.open}</span>
                             </div>
                         </div>
-                        <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end", alignSelf: "center" }} >
+                        <div className="col-sm pb-3" style={{ display: "flex", justifyContent: "flex-end", alignSelf: "center" }} >
                             <NavLink to="/competitionPlayerGradeCalculate" >
                                 <span className='input-heading-add-another pt-0'>{AppConstants.playerGradingToggle}</span>
                             </NavLink>
@@ -496,7 +511,7 @@ class CompetitionPlayerGrades extends Component {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         )
     }
 
@@ -507,70 +522,75 @@ class CompetitionPlayerGrades extends Component {
         let unassignedPlayerData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData
         let playerId
         // dropped outside the list
-        if (!destination) {
-            return;
-        }
-        else if (source.droppableId !== destination.droppableId) {
-            console.log(unassignedPlayerData, assignedPlayerData, source, destination,
-                'called1')
-            let teamId = destination !== null && destination.droppableId == 0 ? null : JSON.parse(destination.droppableId)
-            let sourceTeamID = source !== null && source.droppableId == 0 ? null : JSON.parse(source.droppableId)
-            if (teamId !== null) {
-                if (sourceTeamID == null) {
-                    console.log("called A")
-                    playerId = unassignedPlayerData.players[source.index].playerId
+        if (this.state.competitionStatus != 1) {
+            if (!destination) {
+                return;
+            }
+            else if (source.droppableId !== destination.droppableId) {
+                console.log(unassignedPlayerData, assignedPlayerData, source, destination,
+                    'called1')
+                let teamId = destination !== null && destination.droppableId == 0 ? null : JSON.parse(destination.droppableId)
+                let sourceTeamID = source !== null && source.droppableId == 0 ? null : JSON.parse(source.droppableId)
+                if (teamId !== null) {
+                    if (sourceTeamID == null) {
+                        console.log("called A")
+                        playerId = unassignedPlayerData.players[source.index].playerId
+                    }
+                    else {
+                        console.log("called B")
+                        for (let i in assignedPlayerData) {
+                            if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
+                                playerId = assignedPlayerData[i].players[source.index].playerId
+                            }
+                        }
+                    }
                 }
                 else {
-                    console.log("called B")
+                    console.log('called2')
                     for (let i in assignedPlayerData) {
                         if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
                             playerId = assignedPlayerData[i].players[source.index].playerId
                         }
                     }
                 }
+                this.props.onDragPlayerAction(this.state.firstTimeCompId, teamId, playerId, source, destination)
             }
             else {
-                console.log('called2')
-                for (let i in assignedPlayerData) {
-                    if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
-                        playerId = assignedPlayerData[i].players[source.index].playerId
-                    }
-                }
+                this.props.onSameTeamDragAction(source, destination)
             }
-            this.props.onDragPlayerAction(this.state.firstTimeCompId, teamId, playerId, source, destination)
+
+
+            // if (source.droppableId === destination.droppableId) {
+            //     const items = reorder(
+            //         this.getList(source.droppableId),
+            //         source.index,
+            //         destination.index
+            //     );
+
+            //     let state = { items };
+
+            //     if (source.droppableId === 'droppable2') {
+            //         state = { selected: items };
+            //     }
+
+            //     this.setState(state);
+            // } else {
+            //     const result = move(
+            //         this.getList(source.droppableId),
+            //         this.getList(destination.droppableId),
+            //         source,
+            //         destination
+            //     );
+
+            //     this.setState({
+            //         items: result.droppable,
+            //         selected: result.droppable2
+            //     });
+            // }
         }
         else {
-            this.props.onSameTeamDragAction(source, destination)
+            return
         }
-
-
-        // if (source.droppableId === destination.droppableId) {
-        //     const items = reorder(
-        //         this.getList(source.droppableId),
-        //         source.index,
-        //         destination.index
-        //     );
-
-        //     let state = { items };
-
-        //     if (source.droppableId === 'droppable2') {
-        //         state = { selected: items };
-        //     }
-
-        //     this.setState(state);
-        // } else {
-        //     const result = move(
-        //         this.getList(source.droppableId),
-        //         this.getList(destination.droppableId),
-        //         source,
-        //         destination
-        //     );
-
-        //     this.setState({
-        //         items: result.droppable,
-        //         selected: result.droppable2
-        //     });
-        // }
     };
 
 
@@ -580,11 +600,14 @@ class CompetitionPlayerGrades extends Component {
         let assignedData = this.props.partPlayerGradingState.assignedPartPlayerGradingListData
         let commentList = this.props.partPlayerGradingState.playerCommentList
         let commentLoad = this.props.partPlayerGradingState.commentLoad
+        let disableStatus = this.state.competitionStatus == 1 ? true : false
         return (
             <div className="d-flex flex-column">
                 {assignedData.map((teamItem, teamIndex) =>
                     (
-                        <Droppable droppableId={`${teamItem.teamId}`} key={`${teamItem.teamId}`} >
+                        <Droppable
+                            isDropDisabled={disableStatus}
+                            droppableId={`${teamItem.teamId}`} key={`${teamItem.teamId}`} >
                             {(provided, snapshot) => (
                                 <div
                                     ref={provided.innerRef}
@@ -593,6 +616,7 @@ class CompetitionPlayerGrades extends Component {
                                     <div className="player-grading-droppable-heading-view" >
                                         <div className="row" >
                                             <Checkbox
+                                                disabled={disableStatus}
                                                 className="single-checkbox mt-1 check-box-player"
                                                 checked={teamItem.isChecked}
                                                 onChange={e => this.onChangeParentDivCheckbox(e.target.checked, teamIndex, "assigned")} >
@@ -607,7 +631,7 @@ class CompetitionPlayerGrades extends Component {
                                                     <img className="comp-player-table-img team-delete-link" src={AppImages.deleteImage}
                                                         alt="" height="20" width="20"
                                                         style={{ cursor: "pointer" }}
-                                                        onClick={() => this.onClickDeleteTeam(teamItem, teamIndex)}
+                                                        onClick={() => disableStatus == false && this.onClickDeleteTeam(teamItem, teamIndex)}
                                                     />
                                                     : null}
                                                 <a className="view-more-btn collapsed" data-toggle="collapse" href={`#${teamIndex}`} role="button" aria-expanded="false" aria-controls={teamIndex}>
@@ -621,6 +645,7 @@ class CompetitionPlayerGrades extends Component {
 
                                             return (
                                                 <Draggable
+                                                    isDragDisabled={disableStatus}
                                                     key={JSON.stringify(playerItem.playerId)}
                                                     draggableId={JSON.stringify(playerItem.playerId)}
                                                     index={playerIndex}>
@@ -633,16 +658,26 @@ class CompetitionPlayerGrades extends Component {
                                                         >
                                                             <div className="row" >
                                                                 <Checkbox
+                                                                    disabled={disableStatus}
                                                                     checked={playerItem.isChecked}
                                                                     className="single-checkbox mt-1 check-box-player"
                                                                     onChange={e => this.onChangeChildDivCheckbox(e.target.checked, teamIndex, playerIndex, "assigned")} >
                                                                 </Checkbox>
                                                                 <div className="col-sm d-flex align-items-center"  >
-                                                                    <NavLink to={{ pathname: `/userPersonal`, state: { userId: playerItem.userId } }}
-                                                                    >
+
+                                                                    {disableStatus == false ?
+                                                                        <NavLink to={{
+                                                                            pathname: `/userPersonal`,
+                                                                            state: { userId: playerItem.userId, screenKey: 'competitionPlayerGrades', screen: "/competitionPlayerGrades" }
+                                                                        }}
+                                                                        >
+                                                                            <span style={{ cursor: "pointer" }}
+                                                                                className="player-grading-player-name-text">{playerItem.playerName}</span>
+                                                                        </NavLink>
+                                                                        :
                                                                         <span style={{ cursor: "pointer" }}
                                                                             className="player-grading-player-name-text">{playerItem.playerName}</span>
-                                                                    </NavLink>
+                                                                    }
                                                                 </div>
                                                                 <div
                                                                     className="col-sm d-flex justify-content-end "
@@ -670,20 +705,21 @@ class CompetitionPlayerGrades extends Component {
                                                                             </Tag>
                                                                         }
                                                                         <div className="col-sm d-flex">
-                                                                        {playerItem.playerHistory.map((item, index) => {
-                                                                            return (
-                                                                                <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
-                                                                                    {item.divisionGrade + '('+ item.ladderResult + ')'}
-                                                                                </Tag>
-
-                                                                            )
+                                                                            {playerItem.playerHistory.map((item, index) => {
+                                                                                return (
+                                                                                    item.divisionGrade != null && item.divisionGrade != "" ?
+                                                                                        <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
+                                                                                            {item.divisionGrade + '(' + item.ladderResult + ')'}
+                                                                                        </Tag>
+                                                                                        : null
+                                                                                )
                                                                             })}
                                                                         </div>
-                                                                        <img className="comp-player-table-img" src={
+                                                                        <img aria-disabled={"true"} className="comp-player-table-img" src={
                                                                             playerItem.isCommentsAvailable == 1 ? AppImages.commentFilled :
                                                                                 AppImages.commentEmpty} alt="" height="20" width="20"
                                                                             style={{ cursor: "pointer" }}
-                                                                            onClick={() => this.onClickComment(playerItem, teamIndex)}
+                                                                            onClick={() => disableStatus == false && this.onClickComment(playerItem, teamIndex)}
                                                                         />
                                                                         {/* </div> */}
                                                                     </div>
@@ -795,9 +831,10 @@ class CompetitionPlayerGrades extends Component {
         let colorPosition1
         let colorPosition2
         let divisionData = this.props.registrationState.allDivisionsData.filter(x => x.competitionMembershipProductDivisionId != null);
+        let disableStatus = this.state.competitionStatus == 1 ? true : false
         return (
             <div>
-                <Droppable droppableId={'0'}>
+                <Droppable isDropDisabled={disableStatus} droppableId={'0'}>
                     {(provided, snapshot) => (
                         <div
                             ref={provided.innerRef}
@@ -805,6 +842,8 @@ class CompetitionPlayerGrades extends Component {
                             <div className="player-grading-droppable-heading-view">
                                 <div className="row" >
                                     <Checkbox
+                                        disabled={disableStatus}
+                                        id={AppUniqueId.PlayerGrading_unassigned_Player_CheckBox}
                                         className="single-checkbox mt-1 check-box-player"
                                         checked={unassignedData.isChecked}
                                         onChange={e => this.onChangeParentDivCheckbox(e.target.checked, 0, "unAssigned")} >
@@ -817,7 +856,7 @@ class CompetitionPlayerGrades extends Component {
                                     </div>
                                     {this.state.divisionId != null &&
                                         <div className="col-sm d-flex justify-content-end">
-                                            <Button className="primary-add-comp-form" type="primary" onClick={this.addNewTeam}  >
+                                            <Button id={AppUniqueId.PlayerGrading_CreateTeam} disabled={disableStatus} className="primary-add-comp-form" type="primary" onClick={this.addNewTeam}  >
                                                 + {AppConstants.createTeam}
                                             </Button>
 
@@ -827,6 +866,7 @@ class CompetitionPlayerGrades extends Component {
                             </div>
                             {unassignedData.players && unassignedData.players.map((playerItem, playerIndex) => (
                                 <Draggable
+                                    isDragDisabled={disableStatus}
                                     key={JSON.stringify(playerItem.playerId)}
                                     draggableId={JSON.stringify(playerItem.playerId)}
                                     index={playerIndex}>
@@ -839,16 +879,26 @@ class CompetitionPlayerGrades extends Component {
 
                                             <div className="row" >
                                                 <Checkbox
+                                                    disabled={disableStatus}
                                                     checked={playerItem.isChecked}
                                                     className="single-checkbox mt-1 check-box-player"
                                                     onChange={e => this.onChangeChildDivCheckbox(e.target.checked, 0, playerIndex, "unAssigned")} >
                                                 </Checkbox>
                                                 <div className="col-sm d-flex align-items-center"  >
-                                                    <NavLink to={{ pathname: `/userPersonal`, state: { userId: playerItem.userId } }}
-                                                    >
+                                                    {disableStatus == false ?
+                                                        <NavLink to={{
+                                                            pathname: `/userPersonal`,
+                                                            state: { userId: playerItem.userId, screenKey: 'competitionPlayerGrades', screen: "/competitionPlayerGrades" }
+                                                        }}
+                                                        >
+                                                            <span style={{ cursor: "pointer" }}
+                                                                className="player-grading-player-name-text">{playerItem.playerName}</span>
+                                                        </NavLink>
+                                                        :
                                                         <span style={{ cursor: "pointer" }}
                                                             className="player-grading-player-name-text">{playerItem.playerName}</span>
-                                                    </NavLink>
+
+                                                    }
                                                 </div>
                                                 <div
                                                     className="col-sm d-flex justify-content-end "
@@ -876,19 +926,20 @@ class CompetitionPlayerGrades extends Component {
                                                         }
                                                         <div className="col-sm d-flex">
                                                             {playerItem.playerHistory.map((item, index) => {
-                                                            return (
-                                                                <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
-                                                                    {item.divisionGrade + '('+ item.ladderResult + ')'}
-                                                                </Tag>
-
-                                                            )
+                                                                return (
+                                                                    item.divisionGrade != null && item.divisionGrade != "" ?
+                                                                        <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
+                                                                            {item.divisionGrade + '(' + item.ladderResult + ')'}
+                                                                        </Tag>
+                                                                        : null
+                                                                )
                                                             })}
                                                         </div>
                                                         <img className="comp-player-table-img" src={
                                                             playerItem.isCommentsAvailable == 1 ? AppImages.commentFilled :
                                                                 AppImages.commentEmpty} alt="" height="20" width="20"
                                                             style={{ cursor: "pointer" }}
-                                                            onClick={() => this.onClickComment(playerItem, null)}
+                                                            onClick={() => disableStatus == false && this.onClickComment(playerItem, null)}
                                                         />
                                                         {/* </div> */}
                                                     </div>
@@ -913,13 +964,16 @@ class CompetitionPlayerGrades extends Component {
                     onOk={() => this.handleOk()}
                     onCancel={() => this.handleCancel()}
                 >
-                    <InputWithHead
-                        required={"pt-0 mt-0"}
-                        heading={AppConstants.addTeam}
-                        placeholder={AppConstants.pleaseEnterteamName}
-                        onChange={(e) => this.setState({ newTeam: e.target.value })}
-                        value={this.state.newTeam}
-                    />
+                    <div >
+                        <InputWithHead
+                            id={AppUniqueId.PlayerGrading_addTeamName}
+                            required={"pt-0 mt-0"}
+                            heading={AppConstants.addTeam}
+                            placeholder={AppConstants.pleaseEnterteamName}
+                            onChange={(e) => this.setState({ newTeam: e.target.value })}
+                            value={this.state.newTeam}
+                        />
+                    </div>
 
                 </Modal>
                 <PlayerCommentModal
@@ -959,7 +1013,7 @@ class CompetitionPlayerGrades extends Component {
                     </div>
 
                 </Modal>
-            </div>
+            </div >
         )
     }
 
@@ -969,7 +1023,9 @@ class CompetitionPlayerGrades extends Component {
     contentView = () => {
         return (
             <div className="comp-dash-table-view mt-2">
-                <DragDropContext onDragEnd={this.onDragEnd}>
+
+                <DragDropContext
+                    onDragEnd={this.onDragEnd}>
                     <div className="d-flex flex-row justify-content-between">
                         {this.assignedView()}
                         {this.unassignedView()}
@@ -984,16 +1040,21 @@ class CompetitionPlayerGrades extends Component {
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
-            <div className="fluid-width" >
-                <div className="comp-player-grades-footer-view">
-                    <div className="row" >
-                        <div className="col-sm" >
-                            <div className="comp-finals-button-view">
-                                <Button className="save-draft-text" type="save-draft-text">{AppConstants.save}</Button>
-                                <NavLink to="/competitionPartProposedTeamGrading">
-                                    <Button className="open-reg-button" type="primary">{AppConstants.gradeAndNameTeams}</Button>
-                                </NavLink>
-                            </div>
+            <div className="fluid-width paddingBottom56px" >
+
+                <div className="row" >
+                    <div className="col-sm-3 mt-3" >
+                        <div className="reg-add-save-button">
+                            <NavLink to="/competitionOpenRegForm">
+                                <Button disabled={this.state.competitionStatus == 1 ? true : false} className="cancelBtnWidth" type="cancel-button"  >{AppConstants.back}</Button>
+                            </NavLink>
+                        </div>
+                    </div>
+                    <div className="col-sm mt-3" >
+                        <div className="comp-finals-button-view">
+                            <NavLink to="/competitionPartTeamGradeCalculate">
+                                <Button id={AppUniqueId.playgrad_Next_bn} disabled={this.state.competitionStatus == 1 ? true : false} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
+                            </NavLink>
                         </div>
                     </div>
                 </div>
@@ -1003,6 +1064,7 @@ class CompetitionPlayerGrades extends Component {
 
 
     render() {
+        console.log(this.state.competitionStatus)
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
@@ -1021,7 +1083,7 @@ class CompetitionPlayerGrades extends Component {
                     </Content>
 
                     <Footer>
-                        {/* {this.footerView()} */}
+                        {this.footerView()}
                     </Footer>
                 </Layout>
             </div>

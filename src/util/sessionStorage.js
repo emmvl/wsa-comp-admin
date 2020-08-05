@@ -48,9 +48,18 @@ const setOwn_competition = own_competition => {
   localStorage.setItem("own_competition", own_competition)
 }
 
-// get own competition
+// get own competition 
 const getOwn_competition = () => {
   return localStorage.own_competition
+}
+// Set  own competition  Status
+const setOwn_competitionStatus = own_competitionStatus => {
+  localStorage.setItem("own_competitionStatus", own_competitionStatus)
+}
+
+// get own competition status
+const getOwn_competitionStatus = () => {
+  return localStorage.own_competitionStatus
 }
 
 const setOrganisationData = (organisationData) => {
@@ -80,6 +89,15 @@ const setParticipating_competition = Participating_competition => {
 // get Participating competition
 const getParticipating_competition = () => {
   return localStorage.Participating_competition
+}
+// Set  Participating competition  status
+const setParticipating_competitionStatus = Participating_competitionStaus => {
+  localStorage.setItem("Participating_competitionStaus", Participating_competitionStaus)
+}
+
+// get Participating competition status
+const getParticipating_competitionStatus = () => {
+  return localStorage.Participating_competitionStaus
 }
 
 const setDraws_venue = draws_venue => {
@@ -205,5 +223,9 @@ module.exports = {
   setLiveScoreUmpireCompition,
   getLiveScoreUmpireCompition,
   setKeyForStateWideMessage,
-  getKeyForStateWideMessage
+  getKeyForStateWideMessage,
+  setOwn_competitionStatus,
+  getOwn_competitionStatus,
+  getParticipating_competitionStatus,
+  setParticipating_competitionStatus
 }

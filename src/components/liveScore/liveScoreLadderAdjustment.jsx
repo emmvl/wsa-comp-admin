@@ -47,7 +47,10 @@ class LiveScoreLadderAdjustment extends Component {
             if (this.state.loadding === true && this.props.liveScoreLadderState.onLoad === false) {
                 const { id, uniqueKey } = JSON.parse(getLiveScoreCompetiton())
                 this.props.getliveScoreTeams(id, this.state.divisionId)
-                this.props.ladderAdjustmentGetData({ uniqueKey: uniqueKey, divisionId: this.props.location.state.divisionId })
+
+                if (this.props.location.state.divisionId) {
+                    this.props.ladderAdjustmentGetData({ uniqueKey: uniqueKey, divisionId: this.props.location.state.divisionId })
+                }
                 // this.setInitalFiledValue()
                 this.setState({ loadding: false, getLoad: true })
             }
@@ -279,7 +282,7 @@ class LiveScoreLadderAdjustment extends Component {
                             <div className="col-sm">
                                 <div className="comp-buttons-view">
                                     <Button
-                                        className="user-approval-button" type="primary" htmlType="submit" >
+                                        className="publish-button save-draft-text" type="primary" htmlType="submit" >
                                         {AppConstants.save}
                                     </Button>
                                 </div>

@@ -70,13 +70,17 @@ import {
     setOwnCompetitionYear,
     getOwnCompetitionYear,
     setOwn_competition,
-    getOwn_competition
+    getOwn_competition,
+    getOwn_competitionStatus,
+    setOwn_competitionStatus,
 } from "../../util/sessionStorage";
 import Loader from '../../customComponents/loader';
 import { venueListAction, getCommonRefData, } from '../../store/actions/commonAction/commonAction'
 import { getUserId, getOrganisationData } from "../../util/sessionStorage"
 import CustumToolTip from 'react-png-tooltip'
 import { fixtureTemplateRoundsAction } from '../../store/actions/competitionModuleAction/competitionDashboardAction';
+import AppUniqueId from "../../themes/appUniqueId";
+
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { TextArea } = Input;
@@ -261,6 +265,7 @@ class CompetitionOpenRegForm extends Component {
             deleteDivModalVisible: false,
             competitionDivisionId: null,
             deleteLoading: false,
+            competitionStatus: 0,
             divisionTable: [
                 {
                     title: "Division Name",
@@ -278,7 +283,8 @@ class CompetitionOpenRegForm extends Component {
                                         required={"required-field pt-0 pb-0"}
                                         setFieldsValue={divisionName}
                                         onChange={e => this.divisionTableDataOnchange(e.target.value, record, index, "divisionName")}
-                                        disabled={this.state.permissionState.divisionsDisable} />
+                                        disabled={(this.state.competitionStatus == 1 || this.state.permissionState.divisionsDisable) ? true : false}
+                                    />
                                 )}
                             </Form.Item>
                         )
@@ -287,7 +293,7 @@ class CompetitionOpenRegForm extends Component {
                 {
                     title: "Gender Restriction",
                     dataIndex: "genderRestriction",
-                    key: "genderRestriction",
+                    key: AppUniqueId.div_gender_chkbox,
                     filterDropdown: true,
                     filterIcon: () => {
                         return (
@@ -300,17 +306,19 @@ class CompetitionOpenRegForm extends Component {
                         );
                     },
                     render: (genderRestriction, record, index) => (
+                        <div>
                         <Checkbox
                             className="single-checkbox mt-1"
-                            disabled={this.state.permissionState.divisionsDisable}
+                            disabled={(this.state.competitionStatus == 1 || this.state.permissionState.divisionsDisable) ? true : false}
                             checked={genderRestriction}
                             onChange={e => this.divisionTableDataOnchange(e.target.checked, record, index, "genderRestriction")}
                         ></Checkbox>
+                        </div>
                     )
                 },
                 {
                     dataIndex: "genderRefId",
-                    key: "genderRefId",
+                    key: AppUniqueId.div_gender_refid,
                     // width:  ? "20%" : null,
                     render: (genderRefId, record, index) => {
                         const { getFieldDecorator } = this.props.form;
@@ -325,7 +333,7 @@ class CompetitionOpenRegForm extends Component {
                                             onChange={genderRefId => this.divisionTableDataOnchange(genderRefId, record, index, "genderRefId")}
                                             setFieldsValue={genderRefId}
                                             placeholder={"Select"}
-                                            disabled={this.state.permissionState.divisionsDisable}
+                                            disabled={(this.state.competitionStatus == 1 || this.state.permissionState.divisionsDisable) ? true : false}
                                         >
                                             {this.props.commonReducerState.genderDataEnum.map(item => {
                                                 return (
@@ -344,7 +352,7 @@ class CompetitionOpenRegForm extends Component {
                 {
                     title: "Age Restriction",
                     dataIndex: "ageRestriction",
-                    key: "ageRestriction",
+                    key: AppUniqueId.div_ageres_chkbox,
                     filterDropdown: true,
                     filterIcon: () => {
                         return (
@@ -357,18 +365,20 @@ class CompetitionOpenRegForm extends Component {
                         );
                     },
                     render: (ageRestriction, record, index) => (
+                        <div>
                         <Checkbox
                             className="single-checkbox mt-1"
                             checked={ageRestriction}
                             onChange={e => this.divisionTableDataOnchange(e.target.checked, record, index, "ageRestriction")}
-                            disabled={this.state.permissionState.divisionsDisable}
+                            disabled={(this.state.competitionStatus == 1 || this.state.permissionState.divisionsDisable) ? true : false}
                         ></Checkbox>
+                        </div>
                     )
                 },
                 {
                     title: "DOB From",
                     dataIndex: "fromDate",
-                    key: "fromDate",
+                    key: AppUniqueId.div_ageres_fromdate,
                     width: "25%",
                     render: (fromDate, record, index) => {
                         const { getFieldDecorator } = this.props.form;
@@ -384,7 +394,7 @@ class CompetitionOpenRegForm extends Component {
                                             format={"DD-MM-YYYY"}
                                             showTime={false}
                                             placeholder={"dd-mm-yyyy"}
-                                            disabled={!record.ageRestriction || this.state.permissionState.divisionsDisable}
+                                            disabled={(!record.ageRestriction || this.state.competitionStatus == 1 || this.state.permissionState.divisionsDisable) ? true : false}
                                             setFieldsValue={fromDate !== null && moment(fromDate)}
                                             disabledDate={d => !d || d.isSameOrAfter(record.toDate)
                                             }
@@ -398,7 +408,7 @@ class CompetitionOpenRegForm extends Component {
                     title: "DOB To",
                     dataIndex: "toDate",
                     width: "25%",
-                    key: "toDate",
+                    key: AppUniqueId.div_ageres_todate,
                     render: (toDate, record, index) => {
                         const { getFieldDecorator } = this.props.form;
                         return (
@@ -413,7 +423,7 @@ class CompetitionOpenRegForm extends Component {
                                             format={"DD-MM-YYYY"}
                                             placeholder={"dd-mm-yyyy"}
                                             showTime={false}
-                                            disabled={!record.ageRestriction || this.state.permissionState.divisionsDisable}
+                                            disabled={(!record.ageRestriction || this.state.competitionStatus == 1 || this.state.permissionState.divisionsDisable) ? true : false}
                                             setFieldsValue={toDate !== null && moment(toDate)}
                                             disabledDate={d => moment(record.fromDate).isSameOrAfter(d, 'day')
                                             }
@@ -427,21 +437,28 @@ class CompetitionOpenRegForm extends Component {
                     title: "",
                     dataIndex: "clear",
                     key: "clear",
-                    render: (clear, record, index) => (
-                        <span style={{ display: "flex", justifyContent: "center", width: "100%", cursor: "pointer" }}>
-                            <img
-                                className="dot-image"
-                                src={AppImages.redCross}
-                                alt=""
-                                width="16"
-                                height="16"
-                                onClick={() => !this.state.permissionState.divisionsDisable ? this.addRemoveDivision(index, record, "remove") : null}
-                            />
-                        </span>
-                    )
+                    render: (clear, record, index) => {
+                        console.log(this.state.competitionStatus)
+                        return (
+
+                            <span style={{ display: "flex", justifyContent: "center", width: "100%", cursor: "pointer" }}>
+                                <img
+                                    className="dot-image"
+                                    src={AppImages.redCross}
+                                    alt=""
+                                    width="16"
+                                    height="16"
+                                    onClick={() => !this.state.permissionState.divisionsDisable ? this.addRemoveDivision(index, record, "remove") : null}
+                                />
+                            </span>
+
+
+                        )
+                    }
                 }
             ],
-            divisionState: false
+            divisionState: false,
+
         };
         this_Obj = this;
         // let competitionId = null
@@ -502,9 +519,11 @@ class CompetitionOpenRegForm extends Component {
             if (nextProps.appState.own_CompetitionArr !== competitionTypeList) {
                 if (competitionTypeList.length > 0) {
                     let competitionId = competitionTypeList[0].competitionId
+                    let statusRefId = competitionTypeList[0].statusRefId
                     this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule)
+                    setOwn_competitionStatus(statusRefId)
                     setOwn_competition(competitionId)
-                    this.setState({ getDataLoading: true, firstTimeCompId: competitionId })
+                    this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
                 }
             }
         }
@@ -587,7 +606,7 @@ class CompetitionOpenRegForm extends Component {
         let orgData = getOrganisationData()
         this.setState({ organisationTypeRefId: orgData.organisationTypeRefId })
         let competitionId = null
-       // console.log("competitionId", competitionId)
+        // console.log("competitionId", competitionId)
         this.apiCalls(competitionId)
         this.getRefernce()
         this.setDetailsFieldValue()
@@ -596,6 +615,7 @@ class CompetitionOpenRegForm extends Component {
     getRefernce() {
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
+        let storedCompetitionStatus = getOwn_competitionStatus()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
 
@@ -604,6 +624,7 @@ class CompetitionOpenRegForm extends Component {
             this.setState({
                 yearRefId: JSON.parse(yearId),
                 firstTimeCompId: storedCompetitionId,
+                competitionStatus: storedCompetitionStatus,
                 getDataLoading: true
             })
         }
@@ -892,7 +913,7 @@ class CompetitionOpenRegForm extends Component {
 
 
     onChange(checkedValues) {
-       // console.log("checked = ", checkedValues);
+        // console.log("checked = ", checkedValues);
     }
 
     divisionTableDataOnchange(checked, record, index, keyword) {
@@ -1055,20 +1076,22 @@ class CompetitionOpenRegForm extends Component {
     onYearChange(yearId) {
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
+        setOwn_competitionStatus(undefined)
         this.props.clearCompReducerDataAction("all")
         this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
         // this.props.getCompetitionTypeListAction(yearRefId);
-        this.setState({ firstTimeCompId: null, yearRefId: yearId })
+        this.setState({ firstTimeCompId: null, yearRefId: yearId, competitionStatus: 0 })
         this.setDetailsFieldValue()
 
     }
 
 
-    onCompetitionChange(competitionId) {
+    onCompetitionChange(competitionId, statusRefId) {
         setOwn_competition(competitionId)
+        setOwn_competitionStatus(statusRefId)
         this.props.clearCompReducerDataAction("all")
         this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule)
-        this.setState({ getDataLoading: true, firstTimeCompId: competitionId })
+        this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
 
     }
     ///dropdown view containing all the dropdown of header
@@ -1081,7 +1104,7 @@ class CompetitionOpenRegForm extends Component {
             <div className="comp-venue-courts-dropdown-view mt-0">
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm-3">
+                        <div className="col-sm-3 pb-3">
                             <div
                                 style={{
                                     width: "fit-content",
@@ -1098,7 +1121,8 @@ class CompetitionOpenRegForm extends Component {
                                         { rules: [{ required: true, message: ValidationConstants.pleaseSelectYear }] })( */}
                                 <Select
                                     name={"yearRefId"}
-                                    className="year-select"
+                                    className="year-select reg-filter-select-year ml-2"
+                                    // style={{ width: 90 }}
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
@@ -1115,7 +1139,7 @@ class CompetitionOpenRegForm extends Component {
                             </div>
 
                         </div>
-                        <div className="col-sm-3">
+                        <div className="col-sm-3 pb-3">
                             <div
                                 style={{
                                     width: "fit-content",
@@ -1125,20 +1149,19 @@ class CompetitionOpenRegForm extends Component {
                                     marginRight: 50
                                 }}
                             >
-                                <span className="year-select-heading">
+                                <span id={AppUniqueId.existing_comp_dropdown} className="year-select-heading">
                                     {AppConstants.competition}:
             </span>
                                 <Select
-                                    style={{ minWidth: 160 }}
                                     name={"competition"}
-                                    className="year-select"
-                                    onChange={competitionId => this.onCompetitionChange(competitionId)
+                                    className="year-select reg-filter-select-competition ml-2"
+                                    onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)
                                     }
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
                                     {this.props.appState.own_CompetitionArr.map(item => {
                                         return (
-                                            <Option key={"competition" + item.competitionId} value={item.competitionId}>
+                                            <Option key={item.statusRefId} value={item.competitionId}>
                                                 {item.competitionName}
                                             </Option>
                                         );
@@ -1200,6 +1223,7 @@ class CompetitionOpenRegForm extends Component {
     // Non playing dates view
     nonPlayingDateView(item, index) {
         let compDetailDisable = this.state.permissionState.compDetailDisable
+        let disabledStatus = this.state.competitionStatus == 1 ? true : false
         return (
             <div className="fluid-width mt-3">
                 <div className="row">
@@ -1208,7 +1232,7 @@ class CompetitionOpenRegForm extends Component {
                             placeholder={AppConstants.name}
                             value={item.name}
                             onChange={(e) => this.updateNonPlayingNames(e.target.value, index, "name")}
-                            disabled={compDetailDisable}
+                            disabled={(disabledStatus || compDetailDisable) ? true : false}
 
                         />
                     </div>
@@ -1222,11 +1246,11 @@ class CompetitionOpenRegForm extends Component {
                             format={"DD-MM-YYYY"}
                             showTime={false}
                             value={item.nonPlayingDate && moment(item.nonPlayingDate, "YYYY-MM-DD")}
-                            disabled={compDetailDisable}
+                            disabled={(disabledStatus || compDetailDisable) ? true : false}
 
                         />
                     </div>
-                    <div className="col-sm-2 transfer-image-view" onClick={() => !compDetailDisable ? this.props.add_editcompetitionFeeDeatils(index, "nonPlayingDataRemove") : null}>
+                    <div className="col-sm-2 transfer-image-view" onClick={() => !compDetailDisable ? this.removeNonPlaying(index) : null}>
                         <a className="transfer-image-view">
                             <span className="user-remove-btn">
                                 <i className="fa fa-trash-o" aria-hidden="true"></i>
@@ -1235,7 +1259,7 @@ class CompetitionOpenRegForm extends Component {
                         </a>
                     </div>
                 </div>
-            </div>
+            </div >
         )
     }
 
@@ -1246,16 +1270,28 @@ class CompetitionOpenRegForm extends Component {
         this.props.clearFilter()
     }
 
-    ///// Add Non Playing dates
-    addNonPlayingDate() {
-        let nonPlayingObject = {
-            "competitionNonPlayingDatesId": 0,
-            "name": "",
-            "nonPlayingDate": ""
+    //remove non playing dates
+    removeNonPlaying(index) {
+        if (this.state.competitionStatus == 1) {
+
+        } else {
+            this.props.add_editcompetitionFeeDeatils(index, "nonPlayingDataRemove")
         }
-        this.props.add_editcompetitionFeeDeatils(nonPlayingObject, "nonPlayingObjectAdd")
     }
 
+    ///// Add Non Playing dates
+    addNonPlayingDate() {
+        if (this.state.competitionStatus == 1) {
+
+        } else {
+            let nonPlayingObject = {
+                "competitionNonPlayingDatesId": 0,
+                "name": "",
+                "nonPlayingDate": ""
+            }
+            this.props.add_editcompetitionFeeDeatils(nonPlayingObject, "nonPlayingObjectAdd")
+        }
+    }
     ///handle Invitees selection
     handleInvitees() {
         let detailsData = this.props.competitionFeesState.competitionDetailData
@@ -1320,12 +1356,14 @@ class CompetitionOpenRegForm extends Component {
         let detailsData = this.props.competitionFeesState
         let defaultCompFeesOrgLogo = detailsData.defaultCompFeesOrgLogo
         let compDetailDisable = this.state.permissionState.compDetailDisable
+        let disabledStatus = this.state.competitionStatus == 1 ? true : false
         return (
             <div className="content-view pt-4">
                 <Form.Item >
                     {getFieldDecorator('competition_name',
                         { rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }] })(
                             <InputWithHead
+
                                 required={"required-field pb-0 "}
                                 heading={AppConstants.competition_name}
                                 placeholder={AppConstants.competition_name}
@@ -1333,8 +1371,8 @@ class CompetitionOpenRegForm extends Component {
                                 // value={detailsData.competitionDetailData.competitionName}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(captializedString(
                                     e.target.value), "competitionName")}
-                                disabled={compDetailDisable}
-                                onBlur={(i)=> this.props.form.setFieldsValue({
+                                disabled={(disabledStatus || compDetailDisable) ? true : false}
+                                onBlur={(i) => this.props.form.setFieldsValue({
                                     'competition_name': captializedString(i.target.value)
                                 })}
                             />
@@ -1361,7 +1399,7 @@ class CompetitionOpenRegForm extends Component {
                                 </label>
                             </div>
                             <input
-                                disabled={compDetailDisable}
+                                disabled={(disabledStatus || compDetailDisable) ? true : false}
                                 type="file"
                                 id="user-pic"
                                 style={{ display: 'none' }}
@@ -1381,7 +1419,7 @@ class CompetitionOpenRegForm extends Component {
                                 onChange={e =>
                                     this.logoIsDefaultOnchange(e.target.checked, "logoIsDefault")
                                 }
-                                disabled={compDetailDisable}
+                                disabled={(disabledStatus || compDetailDisable) ? true : false}
                             >
                                 {AppConstants.useDefault}
                             </Checkbox>}
@@ -1392,7 +1430,7 @@ class CompetitionOpenRegForm extends Component {
                                 onChange={e =>
                                     this.logoSaveAsDefaultOnchange(e.target.checked, "logoIsDefault")
                                 }
-                                disabled={compDetailDisable}
+                                disabled={(disabledStatus || compDetailDisable) ? true : false}
                             >
                                 {AppConstants.useAffiliateLogo}
                             </Checkbox>}
@@ -1408,7 +1446,7 @@ class CompetitionOpenRegForm extends Component {
                     allowClear
                     value={detailsData.competitionDetailData.description}
                     onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "description")}
-                    disabled={compDetailDisable}
+                    disabled={(disabledStatus || compDetailDisable) ? true : false}
                 />
 
                 <div style={{ marginTop: 15 }} >
@@ -1416,6 +1454,7 @@ class CompetitionOpenRegForm extends Component {
                     <Form.Item  >
                         {getFieldDecorator('selectedVenues', { rules: [{ required: true, message: ValidationConstants.pleaseSelectvenue }] })(
                             <Select
+                                id={AppUniqueId.select_Venues}
                                 mode="multiple"
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 onChange={venueSelection => {
@@ -1427,7 +1466,7 @@ class CompetitionOpenRegForm extends Component {
                                 placeholder={AppConstants.selectVenue}
                                 filterOption={false}
                                 onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
-                                disabled={compDetailDisable}
+                                disabled={(disabledStatus || compDetailDisable) ? true : false}
                             >
                                 {appState.venueList.length > 0 && appState.venueList.map((item) => {
                                     return (
@@ -1441,12 +1480,16 @@ class CompetitionOpenRegForm extends Component {
                         )}
                     </Form.Item>
                 </div>
-                <NavLink
-                    to={{ pathname: `/competitionVenueAndTimesAdd`, state: { key: AppConstants.competitionDetails } }}
-                >
+                {this.state.competitionStatus == 1 ?
                     <span className="input-heading-add-another">+{AppConstants.addVenue}</span>
-                </NavLink>
+                    :
+                    <NavLink
+                        to={{ pathname: `/competitionVenueAndTimesAdd`, state: { key: AppConstants.competitionDetails } }}
+                    >
+                        <span className="input-heading-add-another">+{AppConstants.addVenue}</span>
+                    </NavLink>
 
+                }
                 <span className="applicable-to-heading required-field">{AppConstants.typeOfCompetition}</span>
                 <Form.Item  >
                     {getFieldDecorator('competitionTypeRefId', { initialValue: 1 }, { rules: [{ required: true, message: ValidationConstants.pleaseSelectCompetitionType }] })(
@@ -1454,8 +1497,7 @@ class CompetitionOpenRegForm extends Component {
                             className="reg-competition-radio"
                             onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionTypeRefId")}
                             setFieldsValue={detailsData.competitionTypeRefId}
-                            disabled={compDetailDisable}
-
+                            disabled={(disabledStatus || compDetailDisable) ? true : false}
                         >
                             {appState.typesOfCompetition.length > 0 && appState.typesOfCompetition.map(item => {
                                 return (
@@ -1475,7 +1517,7 @@ class CompetitionOpenRegForm extends Component {
                             onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionFormatRefId")}
                             // setFieldsValue={1}
                             setFieldsValue={detailsData.competitionFormatRefId}
-                            disabled={compDetailDisable}
+                            disabled={(disabledStatus || compDetailDisable) ? true : false}
 
                         >
                             {appState.competitionFormatTypes.length > 0 && appState.competitionFormatTypes.map(item => {
@@ -1509,7 +1551,7 @@ class CompetitionOpenRegForm extends Component {
                                             placeholder={"dd-mm-yyyy"}
                                             showTime={false}
                                             // value={detailsData.competitionDetailData.startDate && moment(detailsData.competitionDetailData.startDate, "YYYY-MM-DD")}
-                                            disabled={compDetailDisable}
+                                            disabled={(disabledStatus || compDetailDisable) ? true : false}
                                         />
                                     )}
                             </Form.Item>
@@ -1527,7 +1569,7 @@ class CompetitionOpenRegForm extends Component {
                                             placeholder={"dd-mm-yyyy"}
                                             showTime={false}
                                             disabledDate={d => !d || d.isBefore(detailsData.competitionDetailData.startDate)}
-                                            disabled={compDetailDisable}
+                                            disabled={(disabledStatus || compDetailDisable) ? true : false}
                                         />
                                     )}
                             </Form.Item>
@@ -1547,7 +1589,7 @@ class CompetitionOpenRegForm extends Component {
                                         placeholder={AppConstants.selectRound}
                                         onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, "noOfRounds")}
                                         value={detailsData.competitionDetailData.noOfRounds}
-                                        disabled={compDetailDisable}
+                                        disabled={(disabledStatus || compDetailDisable) ? true : false}
                                     >
                                         {roundsArray.map(item => {
                                             return (
@@ -1563,30 +1605,30 @@ class CompetitionOpenRegForm extends Component {
                 <InputWithHead heading={AppConstants.timeBetweenRounds} />
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.time_rounds_days} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
                                 placeholder={AppConstants.days}
                                 value={detailsData.competitionDetailData.roundInDays}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInDays")}
-                                disabled={compDetailDisable}
+                                disabled={(disabledStatus || compDetailDisable) ? true : false}
 
                             />
                         </div>
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.time_rounds_hrs} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
                                 placeholder={AppConstants.hours}
                                 value={detailsData.competitionDetailData.roundInHours}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInHours")}
-                                disabled={compDetailDisable}
+                                disabled={(disabledStatus || compDetailDisable) ? true : false}
 
                             />
                         </div>
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.time_rounds_mins} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
                                 placeholder={AppConstants.mins}
                                 value={detailsData.competitionDetailData.roundInMins}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInMins")}
-                                disabled={compDetailDisable}
+                                disabled={(disabledStatus || compDetailDisable) ? true : false}
 
                             />
                         </div>
@@ -1609,6 +1651,7 @@ class CompetitionOpenRegForm extends Component {
                         this.nonPlayingDateView(item, index))
                     }
                     <a>
+
                         <span onClick={() => !compDetailDisable ? this.addNonPlayingDate() : null} className="input-heading-add-another">
                             + {AppConstants.addAnotherNonPlayingDate}
                         </span>
@@ -1617,21 +1660,21 @@ class CompetitionOpenRegForm extends Component {
                 <InputWithHead heading={AppConstants.playerInEachTeam} />
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.team_min_players} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
                                 placeholder={AppConstants.minNumber}
                                 value={detailsData.competitionDetailData.minimunPlayers}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "minimunPlayers")}
-                                disabled={compDetailDisable}
+                                disabled={(disabledStatus || compDetailDisable) ? true : false}
 
                             />
                         </div>
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.team_max_players} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
                                 placeholder={AppConstants.maxNumber}
                                 value={detailsData.competitionDetailData.maximumPlayers}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "maximumPlayers")}
-                                disabled={compDetailDisable}
+                                disabled={(disabledStatus || compDetailDisable) ? true : false}
 
                             />
                         </div>
@@ -1735,11 +1778,15 @@ class CompetitionOpenRegForm extends Component {
     //////add or remove another division inthe divsision tab
     addRemoveDivision = (index, item, keyword) => {
         //console.log("item:: Competition Division::" + JSON.stringify(item));
-        if (keyword == "add") {
-            this.props.addRemoveDivisionAction(index, item, keyword);
-        }
-        else {
-            this.setState({ deleteDivModalVisible: true, divisionIndex: index, competitionDivision: item })
+        if (this.state.competitionStatus == 1) {
+
+        } else {
+            if (keyword == "add") {
+                this.props.addRemoveDivisionAction(index, item, keyword);
+            }
+            else {
+                this.setState({ deleteDivModalVisible: true, divisionIndex: index, competitionDivision: item })
+            }
         }
 
     }
@@ -1765,6 +1812,7 @@ class CompetitionOpenRegForm extends Component {
         let divisionData = this.props.competitionFeesState.competitionDivisionsData
         let divisionArray = divisionData !== null ? divisionData : []
         let divisionsDisable = this.state.permissionState.divisionsDisable
+        let disiabledStatus = this.state.competitionStatus == 1 ? true : false
         return (
             <div className="fees-view pt-5">
                 <div className='contextualHelp-RowDirection' >
@@ -1798,6 +1846,7 @@ class CompetitionOpenRegForm extends Component {
                                     </div>
                                     <a>
                                         <span
+                                            id={AppUniqueId.add_div_button}
                                             className="input-heading-add-another"
                                             onClick={() =>
                                                 !divisionsDisable
@@ -2695,48 +2744,76 @@ class CompetitionOpenRegForm extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <Button type="cancel-button" onClick={() => history.push('/competitionDashboard')} >{AppConstants.cancel}</Button>
+                                <Button id={AppUniqueId.compdiv_cancel_button} disabled={this.state.competitionStatus == 1 ? true : false} className="cancelBtnWidth" type="cancel-button" onClick={() => history.push('/competitionDashboard')} >{AppConstants.back}</Button>
                             </div>
                         </div>
                         <div className="col-sm">
-                            <div className="comp-buttons-view">
-                                <Tooltip
-                                    style={{ height: "100%" }}
-                                    onMouseEnter={() =>
-                                        this.setState({ tooltipVisiblePublish: allDisable })}
-                                    onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
-                                    visible={this.state.tooltipVisiblePublish}
-                                    title={ValidationConstants.compIsPublished}>
-                                    <Button className="publish-button" type="primary"
-                                        disabled={tabKey === "1" || tabKey === "2" ? allDisable : isPublished}
-                                        htmlType="submit" onClick={() => this.setState({
-                                            statusRefId: tabKey == "2" ? 2 : 1,
-                                            buttonPressed: tabKey == "2" ? "publish" : "next"
-                                        })}
-                                        style={{ height: 48, width: 92.5 }}
-                                    >
-                                        {tabKey === "2"
-                                            ? AppConstants.save
-                                            : AppConstants.next}
-                                    </Button>
-                                </Tooltip>
-
-                                {/* <Button className="publish-button" type="primary"
-                                        htmlType="submit" onClick={() => this.setState({
-                                            statusRefId: tabKey == "2" ? 2 : 1,
-                                            buttonPressed: tabKey == "2" ? "publish" : "next"
-                                        })}
-                                    >
-                                        {tabKey === "2"
-                                            ? AppConstants.save
-                                            : AppConstants.next}
-                                    </Button> */}
-                            </div>
+                            {this.state.competitionStatus == 1 && tabKey == "2" ?
+                                <div className="comp-buttons-view">
+                                    <Tooltip
+                                        style={{ height: "100%" }}
+                                        onMouseEnter={() =>
+                                            this.setState({ tooltipVisiblePublish: true })}
+                                        onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
+                                        visible={this.state.tooltipVisiblePublish}
+                                        title={AppConstants.statusPublishHover}>
+                                        <Button
+                                            id={AppUniqueId.compdiv_save_button}
+                                            className="publish-button save-draft-text" type="primary"
+                                            disabled={this.state.competitionStatus == 1 ? true : false}
+                                            htmlType="submit" onClick={() => this.setState({
+                                                statusRefId: tabKey == "2" ? 2 : 1,
+                                                buttonPressed: tabKey == "2" ? "publish" : "next"
+                                            })}
+                                            style={{ height: 48, width: 92.5, }}
+                                        >
+                                            {tabKey === "2"
+                                                ? AppConstants.save
+                                                : AppConstants.next}
+                                        </Button>
+                                    </Tooltip>
+                                    {tabKey == "2" &&
+                                        <NavLink to="/competitionPlayerGrades">
+                                            <Button className="publish-button" type="primary" htmlType="submit" disabled={this.state.competitionStatus == 1 ? true : false} >{AppConstants.next}</Button>
+                                        </NavLink>
+                                    }
+                                </div>
+                                :
+                                <div className="comp-buttons-view">
+                                    <Tooltip
+                                        style={{ height: "100%" }}
+                                        onMouseEnter={() =>
+                                            this.setState({ tooltipVisiblePublish: allDisable })}
+                                        onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
+                                        visible={this.state.tooltipVisiblePublish}
+                                        title={ValidationConstants.compIsPublished}>
+                                        <Button
+                                            id={AppUniqueId.compdiv_save_button}
+                                            className="publish-button save-draft-text" type="primary"
+                                            disabled={tabKey === "1" || tabKey === "2" ? this.state.competitionStatus == 1 ? true : allDisable : isPublished}
+                                            htmlType="submit" onClick={() => this.setState({
+                                                statusRefId: tabKey == "2" ? 2 : 1,
+                                                buttonPressed: tabKey == "2" ? "publish" : "next"
+                                            })}
+                                            style={{ height: 48, width: 92.5 }}
+                                        >
+                                            {tabKey === "2"
+                                                ? AppConstants.save
+                                                : AppConstants.next}
+                                        </Button>
+                                    </Tooltip>
+                                    {tabKey == "2" &&
+                                        <NavLink to="/competitionPlayerGrades">
+                                            <Button className="publish-button" type="primary">{AppConstants.next}</Button>
+                                        </NavLink>
+                                    }
+                                </div>
+                            }
                         </div>
                     </div>
-                </div>
+                </div >
                 {/* } */}
-            </div>
+            </div >
         );
 
     };

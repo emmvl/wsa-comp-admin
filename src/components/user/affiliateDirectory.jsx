@@ -78,7 +78,7 @@ const columns = [
                             alt="" width="16" height="16" />
                     }>
                     <Menu.Item key="1">
-                        <NavLink to={{ pathname: `/userOurOrganisation`, state: { affiliateOrgId: e.affiliateOrgId, orgTypeRefId: e.organisationTypeRefId, isEditable: (e.isEditable == 1 ? true : false), sourcePage: "DIR" } }} >
+                        <NavLink to={{ pathname: `/userOurOrganisation`, state: { affiliateOrgId: e.affiliateOrgId, orgTypeRefId: e.organisationTypeRefId, isEditable: (e.isEditable == 1 ? true : false), sourcePage: "DIR", organisationTypeRefId: e.organisationTypeRefId } }} >
                             <span>View</span>
                         </NavLink>
                     </Menu.Item>

@@ -10,7 +10,14 @@
 .live-score-player-profile-content {
     padding: 0 3%;
 }
+.video_Message{
+    color: var(--app-color);
+    font-weight: 500;
+    font-family: inter-medium;
+    font-size: 11px;
+    padding-top: 5px;
 
+}
 .heading-text {
     display: flex;
     justify-content: center;
@@ -88,9 +95,9 @@
 }
 
 .live-score-edit {
-    background-color: var(--app-e0e1e3);
-    border-color: var(--app-e0e1e3);
-    color: var(--app-4c4c6d);
+    background-color: var(--app-e0e1e3) !important;
+    border-color: var(--app-e0e1e3) !important;
+    color: var(--app-4c4c6d) !important;
     height: 50px;
     font-weight: 500;
     font-family: inter-medium;
@@ -162,6 +169,11 @@
 }
 
 .rdw-editor-main {
+    min-height: 120px;
+    /* max-height: 240px; */
+}
+
+.newsDetailEditor {
     min-height: 120px;
     max-height: 240px;
 }
@@ -383,6 +395,12 @@
 .sheet-download-link:hover {
   color: var(--app-color);
 }
+
+.ladder-list-adjustment{
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--app-f5222d);
+  }
   
 @media(min-width: 768px) and (max-width: 1024px) {
     .live-score-edit-match-buttons {
@@ -396,9 +414,9 @@
 
 @media(max-width:767px) {
     .live-score-edit {
-        background-color: var(--app-e0e1e3);
-        border-color: var(--app-e0e1e3);
-        color: var(--app-4c4c6d);
+        background-color: var(--app-e0e1e3) !important;
+        border-color: var(--app-e0e1e3) !important;
+        color: var(--app-4c4c6d) !important;
         height: 50px;
         font-weight: 500;
         font-family: inter-medium;

@@ -186,7 +186,7 @@ class LiveScoreGameTimeList extends Component {
         super(props);
         this.state = {
             selectStatus: "Select Status",
-            filter: "All",
+            filter: '',
             competitionId: null,
             searchText: ''
         };
@@ -194,10 +194,10 @@ class LiveScoreGameTimeList extends Component {
     }
 
     componentDidMount() {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ competitionId: id })
+        const { id,attendanceRecordingPeriod } = JSON.parse(getLiveScoreCompetiton())
+        this.setState({ competitionId: id ,filter:attendanceRecordingPeriod})
         if (id !== null) {
-            this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, this.state.searchText)
+            this.props.gameTimeStatisticsListAction(id, attendanceRecordingPeriod, 0, this.state.searchText)
         } else {
             history.push("/")
         }
@@ -255,34 +255,34 @@ class LiveScoreGameTimeList extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-drop-down-view mt-4">
+            <div className="comp-player-grades-header-drop-down-view ">
                 < div className="row" >
                     <div className="col-sm" style={{ alignSelf: 'center' }} >
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.gameTimeStatistics}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-
                     <div className="col-sm" style={{
                         display: "flex",
                         flexDirection: 'row',
                         alignItems: "center",
                         justifyContent: "flex-end",
                     }}>
-
                         <div className="row">
-                            <Select
-                                className="year-select"
-                                style={{ display: "flex", alignItems: "flex-start", minWidth: 140 }}
-                                // onChange={(selectStatus) => this.setState({ selectStatus })}
-                                onChange={(filter) => this.setFilterValue({ filter })}
-                                value={this.state.filter} >
-                                <Option value={'All'}>{'All'}</Option>
-                                <Option value={AppConstants.period}>{AppConstants.periods}</Option>
-                                <Option value={AppConstants.minute}>{AppConstants.minutes}</Option>
-                                <Option value={AppConstants.matches}>{AppConstants.totalGames}</Option>
-                            </Select>
 
+                            <div className="col-sm">
+                                <Select
+                                    className="year-select reg-filter-select1"
+                                    style={{ display: "flex", justifyContent: "flex-end", minWidth: 140 }}
+                                    // onChange={(selectStatus) => this.setState({ selectStatus })}
+                                    onChange={(filter) => this.setFilterValue({ filter })}
+                                    value={this.state.filter} >
+                                    {/* <Option value={'All'}>{'All'}</Option> */}
+                                    <Option value={AppConstants.period}>{AppConstants.periods}</Option>
+                                    <Option value={AppConstants.minute}>{AppConstants.minutes}</Option>
+                                    <Option value={AppConstants.matches}>{AppConstants.totalGames}</Option>
+                                </Select>
+                            </div>
                             <div className="col-sm"
                                 style={{ display: "flex" }}>
                                 <div
@@ -291,10 +291,10 @@ class LiveScoreGameTimeList extends Component {
                                         width: "100%",
                                         display: "flex",
                                         flexDirection: "row",
-                                        alignItems: "flex-end",
-                                        justifyContent: "flex-end",
                                         alignSelf: 'center',
-                                    }}>
+                                        alignItems: "flex-end",
+                                        justifyContent: "flex-end"
+                                    }} >
                                     <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
@@ -312,7 +312,7 @@ class LiveScoreGameTimeList extends Component {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div >
                 </div >
                 {/* search box */}
                 <div className="col-sm pt-3 ml-3 " style={{ display: "flex", justifyContent: 'flex-end', }} >
@@ -328,7 +328,7 @@ class LiveScoreGameTimeList extends Component {
                         />
                     </div>
                 </div>
-            </div >
+            </div>
         )
     }
 
