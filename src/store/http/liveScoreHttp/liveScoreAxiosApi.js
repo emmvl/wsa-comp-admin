@@ -412,7 +412,7 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
-    liveScoreGoalList(compId, goaltype, search,offset) {
+    liveScoreGoalList(compId, goaltype, search, offset) {
         let url = null
         if (goaltype === "By Match") {
             url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}&offset=${offset}&limit=${10}`
@@ -1084,8 +1084,8 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body)
     },
     liveScoreGetMainDivisionList(compId, offset) {
-        let url = null
-        url = `/division?competitionId=${compId}&offset=${offset}&limit=${10}`
+
+        let url = `/division?competitionId=${compId}&offset=${offset}&limit=${10}`
 
         return Method.dataGet(url, null)
     },
@@ -1106,6 +1106,7 @@ const Method = {
                     }
                 })
                 .then(result => {
+                    console.log(result, 'resultChecking')
                     if (result.status === 200) {
                         return resolve({
                             status: 1,
@@ -1131,6 +1132,7 @@ const Method = {
                     }
                 })
                 .catch(err => {
+                    console.log(err.response, 'errorChecking')
                     if (err.response) {
                         if (err.response.status !== null || err.response.status !== undefined) {
                             if (err.response.status === 401) {
@@ -1146,7 +1148,7 @@ const Method = {
                                 });
                                 message.error(err.response.data.message)
                                 return reject({
-                                    status: 5,
+                                    status: 400,
                                     error: err.response.data.message
                                 });
                             } else {
@@ -1181,6 +1183,7 @@ const Method = {
                     }
                 })
                 .then(result => {
+
                     if (result.status === 200) {
                         return resolve({
                             status: 1,
@@ -1397,6 +1400,7 @@ const Method = {
                     }
                 })
                 .catch(err => {
+                    console.log(err.response, 'errorChecking')
                     if (err.response) {
                         if (err.response.status !== null || err.response.status !== undefined) {
                             if (err.response.status === 401) {
@@ -1412,7 +1416,7 @@ const Method = {
                                 });
                                 message.error(err.response.data.message)
                                 return reject({
-                                    status: 5,
+                                    status: 400,
                                     error: err.response.data.message
                                 });
                             } else {

@@ -11,9 +11,12 @@ function* failSaga(result) {
         error: result,
         status: result.status
     });
-    setTimeout(() => {
-        message.error(result.result.data.message);
-    }, 800);
+    let msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong
+    message.config({
+        duration: 1.5,
+        maxCount: 1,
+    });
+    message.error(msg);
 }
 
 function* errorSaga(error) {
@@ -22,9 +25,11 @@ function* errorSaga(error) {
         error: error,
         status: error.status
     });
-    setTimeout(() => {
-        message.error(AppConstants.somethingWentWrong);
-    }, 800);
+    message.config({
+        duration: 1.5,
+        maxCount: 1,
+    });
+    message.error(AppConstants.somethingWentWrong);
 }
 
 //////get the Division list
@@ -77,7 +82,6 @@ export function* liveScoreDeleteDivisionSaga(action) {
 
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreDeleteDivision, action.divisionId);
-        console.log(action.divisionId, "action")
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_DELETE_DIVISION_SUCCESS,

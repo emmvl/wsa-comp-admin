@@ -6,13 +6,12 @@ import AppConstants from "../../../themes/appConstants";
 
 function* failSaga(result) {
     yield put({ type: ApiConstants.API_INNER_HORIZONTAL_FAIL });
-    setTimeout(() => {
-        message.config({
-            duration: 1.5,
-            maxCount: 1
-        })
-        message.error(result.message)
-    }, 800);
+    let msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong
+    message.config({
+        duration: 1.5,
+        maxCount: 1,
+    });
+    message.error(msg);
 }
 
 function* errorSaga(error) {
@@ -21,13 +20,11 @@ function* errorSaga(error) {
         error: error,
         status: error.status
     });
-    setTimeout(() => {
-        message.config({
-            duration: 1.5,
-            maxCount: 1
-        })
-        message.error(AppConstants.somethingWentWrong);
-    }, 800);
+    message.config({
+        duration: 1.5,
+        maxCount: 1,
+    });
+    message.error(AppConstants.somethingWentWrong);
 }
 
 //// get manager list

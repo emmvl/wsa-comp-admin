@@ -4,12 +4,16 @@ import ApiConstants from '../../../themes/apiConstants';
 import { message } from "antd";
 import history from "../../../util/history";
 import userHttpApi from "../../http/userHttp/userAxiosApi"
+import AppConstants from "../../../themes/appConstants";
 
 function* failSaga(result) {
     yield put({ type: ApiConstants.API_LIVE_SCORE_SCORER_LIST_FAIL });
-    setTimeout(() => {
-        message.error(result.message)
-    }, 800);
+    let msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong
+    message.config({
+        duration: 1.5,
+        maxCount: 1,
+    });
+    message.error(msg);
 }
 
 function* errorSaga(error) {
@@ -19,10 +23,20 @@ function* errorSaga(error) {
         status: error.status,
     });
 
-    setTimeout(() => {
-        message.error(error ? error.error ? error.error : "Something went wrong." : "Something went wrong.");
-        // message.error("Something went wrong.");
-    }, 800);
+    if (error.status == 400) {
+
+        message.config({
+            duration: 1.5,
+            maxCount: 1,
+        });
+        message.error((error && error.error) ? error.error : AppConstants.somethingWentWrong);
+    } else {
+        message.config({
+            duration: 1.5,
+            maxCount: 1,
+        });
+        message.error(AppConstants.somethingWentWrong);
+    }
 }
 
 //// get manager list

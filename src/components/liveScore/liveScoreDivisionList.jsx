@@ -86,7 +86,7 @@ class LiveScoreDivisionList extends Component {
         super(props);
         this.state = {
             year: "2020",
-            competitionId:null
+            competitionId: null
         }
 
         this_Obj = this;
@@ -94,7 +94,7 @@ class LiveScoreDivisionList extends Component {
 
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({competitionId:id})
+        this.setState({ competitionId: id })
         let offset = 0
         this.props.getMainDivisionListAction(id, offset)
     }
@@ -106,7 +106,7 @@ class LiveScoreDivisionList extends Component {
 
     ////////form content view
     contentView = () => {
-        const {mainDivisionList,totalCount,currentPage}=this.props.liveScoreDivisionState
+        const { mainDivisionList, totalCount, currentPage } = this.props.liveScoreDivisionState
         let divisionList = isArrayNotEmpty(mainDivisionList) ? mainDivisionList : []
 
         return (

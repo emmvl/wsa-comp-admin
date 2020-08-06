@@ -10,10 +10,11 @@ const initialState = {
     teamAttendanceList: [],
     teamAttendancePage: 0,
     teamAttendanceTotalCount: "",
-    divisionList:[],
+    divisionList: [],
     highestSequence: null,
     rounLoad: false,
-    roundList:[]
+    roundList: [],
+    onDivisionLoad: false
 }
 
 function getHighestSequence(roundArr) {
@@ -30,12 +31,12 @@ function getHighestSequence(roundArr) {
 
 // Remove duplicate rounds names 
 
-function removeDuplicateValues(array){
+function removeDuplicateValues(array) {
     return array.filter((obj, index, self) =>
-    index === self.findIndex((el) => (
-        el["name"] === obj["name"]
-    ))
-)
+        index === self.findIndex((el) => (
+            el["name"] === obj["name"]
+        ))
+    )
 
 }
 
@@ -73,16 +74,21 @@ function liveScoreTeamAttendanceState(state = initialState, action) {
                 error: action.error
             }
 
+
+        case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_LOAD:
+            return { ...state, onDivisionLoad: true, };
+
+
             case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_SUCCESS:
 
-            return {
-                ...state,
-                onLoad: false,
-                divisionList: action.result,
-                status: action.status
-            };
+                return {
+                    ...state,
+                    onDivisionLoad: false,
+                    divisionList: action.result,
+                    status: action.status
+                };
 
-            case ApiConstants.API_LIVE_SCORE_ROUND_LIST_LOAD:
+        case ApiConstants.API_LIVE_SCORE_ROUND_LIST_LOAD:
             return { ...state, rounLoad: true };
 
 
