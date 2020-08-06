@@ -3,7 +3,6 @@ import { message } from "antd";
 
 import ApiConstants from "../../../themes/apiConstants";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
-import { message } from "antd";
 import history from '../../../util/history'
 import AppConstants from "../../../themes/appConstants";
 
