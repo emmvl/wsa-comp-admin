@@ -740,7 +740,13 @@ class UmpireDashboard extends Component {
     }
 
     onRoundChange(roundId) {
-        this.props.umpireDashboardUpdate(roundId)
+
+        if (roundId == 'All') {
+
+        } else {
+            this.props.umpireDashboardUpdate(roundId)
+        }
+
         const body =
         {
             "paging": {
@@ -750,6 +756,7 @@ class UmpireDashboard extends Component {
         }
         const { allRoundIds } = this.props.umpireDashboardState
         this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, roundId: roundId == 'All' ? "" : allRoundIds, pageData: body })
+
         this.setState({ round: roundId })
     }
 
