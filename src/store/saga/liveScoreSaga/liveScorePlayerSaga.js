@@ -1,4 +1,6 @@
-import { put, call } from '../../../../node_modules/redux-saga/effects'
+import { put, call } from "redux-saga/effects";
+import { message } from "antd";
+
 import ApiConstants from "../../../themes/apiConstants";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 import { message } from "antd";
@@ -75,7 +77,7 @@ export function* liveScoreAddEditPlayerSaga(action) {
             });
             message.success(action.playerId ? 'Player Edited Successfully.' : 'Player Added Successfully.')
             // history.push(action.temaViewPlayer ? '/liveScoreTeamView' : '/liveScorePlayerList', { tableRecord: action.data.teamId })
-            history.push(action.propsData.screenName == 'fromMatchList' || action.propsData.screenName == 'fromTeamList' ? '/liveScoreTeamView' : '/liveScorePlayerList', { ...action.propsData })
+            history.push(action.propsData.screenName === 'fromMatchList' || action.propsData.screenName === 'fromTeamList' ? '/liveScoreTeamView' : '/liveScorePlayerList', { ...action.propsData })
         } else {
             yield call(failSaga, result)
         }
@@ -102,12 +104,12 @@ export function* liveScorePlayerImportSaga(action) {
     }
 }
 
-//// Player list pagginaion
+//// Player list paginaion
 
 ////player list saga
 export function* getPlayerListPagginationSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.getPlayerWithPaggination, action.competitionID, action.offset, action.limit, action.search);
+        const result = yield call(LiveScoreAxiosApi.getPlayerWithPaggination, action.competitionID, action.offset, action.limit, action.search, action.sortBy, action.sortOrder);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_SUCCESS,

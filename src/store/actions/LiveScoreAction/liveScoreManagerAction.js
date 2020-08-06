@@ -1,70 +1,64 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-//Devision action
+// Devision action
 function liveScoreAddEditManager(data, teamId, exsitingManagerId) {
-
-    const action = {
+    return {
         type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_MANAGER_LOAD,
         data,
         teamId,
         exsitingManagerId
     };
-
-    return action;
 }
+
 // Manager list action
-function liveScoreManagerListAction(roleId, entityTypeId, entityId, searchText,offset) {
-    const action = {
+function liveScoreManagerListAction(roleId, entityTypeId, entityId, searchText, offset, sortBy, sortOrder) {
+    return {
         type: ApiConstants.API_LIVE_SCORE_MANAGER_LIST_LOAD,
-        roleId: roleId,
-        entityTypeId: entityTypeId,
-        entityId: entityId,
+        roleId,
+        entityTypeId,
+        entityId,
         searchText,
-        offset
-
-
-    }
-    return action
+        offset,
+        sortBy,
+        sortOrder,
+    };
 }
 
 // Manager list action
 function liveScoreUpdateManagerDataAction(data, key) {
-    const action = {
+    return {
         type: ApiConstants.API_LIVE_SCORE_UPDATE_MANAGER_DATA,
         data,
         key,
-    }
-    return action
+    };
 }
-function liveScoreManagerFilter(data) {
-    const action = {
+
+function liveScoreManagerFilter(payload) {
+    return {
         type: ApiConstants.API_LIVESCORE_MANAGER_FILTER,
-        payload: data
-    }
-    return action
+        payload,
+    };
 }
+
 function liveScoreClear() {
-    const action = {
+    return {
         type: ApiConstants.CLEAR_LIVESCORE_MANAGER
-    }
-    return action
+    };
 }
 
 function liveScoreManagerSearch(data, competition_Id) {
-    const action = {
+    return {
         type: ApiConstants.API_LIVESCORE_MANAGER_SEARCH_LOAD,
         data,
         competition_Id
-    }
-    return action
+    };
 }
 
 function liveScoreManagerImportAction(payload) {
-    const action = {
+    return {
         type: ApiConstants.API_LIVE_SCORE_MANAGER_IMPORT_LOAD,
         payload
-    }
-    return action
+    };
 }
 
 export {
@@ -74,6 +68,5 @@ export {
     liveScoreManagerFilter,
     liveScoreClear,
     liveScoreManagerSearch,
-    liveScoreManagerImportAction
-
+    liveScoreManagerImportAction,
 };

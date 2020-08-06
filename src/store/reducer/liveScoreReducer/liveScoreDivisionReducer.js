@@ -27,8 +27,8 @@ function liveScoreDivisionState(state = initialState, action) {
         //LIVESCORE DIVISION LIST
         case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_LOAD:
             return { ...state, onLoad: true };
-        case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_SUCCESS:
 
+        case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_SUCCESS:
             return {
                 ...state,
                 onLoad: false,

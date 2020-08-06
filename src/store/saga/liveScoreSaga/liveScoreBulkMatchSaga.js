@@ -1,4 +1,4 @@
-import { put, call } from '../../../../node_modules/redux-saga/effects'
+import { put, call } from "redux-saga/effects"
 import ApiConstants from "../../../themes/apiConstants";
 import AppConstants from "../../../themes/appConstants";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";

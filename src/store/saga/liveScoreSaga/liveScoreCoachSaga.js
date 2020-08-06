@@ -1,9 +1,10 @@
-import { put, call } from 'redux-saga/effects'
+import { put, call } from "redux-saga/effects"
+import { message } from "antd";
+
 import ApiConstants from "../../../themes/apiConstants";
 import AppConstants from "../../../themes/appConstants";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
-import userHttpApi from '../../http/userHttp/userAxiosApi'
-import { message } from "antd";
+import userHttpApi from "../../http/userHttp/userAxiosApi";
 import history from "../../../util/history";
 
 function* failSaga(result) {
@@ -41,11 +42,9 @@ function* errorSaga(error) {
 }
 
 export function* liveScoreCoachSaga(action) {
-
     try {
-        const result = yield call(userHttpApi.liveScoreCoachesList, action.roleId, action.entityTypeId, action.entityId, action.search, action.offset);
+        const result = yield call(userHttpApi.liveScoreCoachesList, action.roleId, action.entityTypeId, action.entityId, action.search, action.offset, action.sortBy, action.sortOrder);
         if (result.status === 1) {
-
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_COACH_LIST_SUCCESS,
                 result: result.result.data,
@@ -61,12 +60,9 @@ export function* liveScoreCoachSaga(action) {
 }
 
 export function* liveScoreAddCoachSaga(action) {
-
-
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreAddCoach, action.data, action.teamId, action.exsitingManagerId);
         if (result.status === 1) {
-
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_COACH_SUCCESS,
                 result: result.result.data,
@@ -98,5 +94,4 @@ export function* liveScoreCoachImportSaga(action) {
     } catch (e) {
         yield call(errorSaga, e)
     }
-
 }
