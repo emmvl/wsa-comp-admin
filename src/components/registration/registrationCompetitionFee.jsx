@@ -2131,10 +2131,11 @@ class RegistrationCompetitionFee extends Component {
       item.applyDiscount = parseInt(item.applyDiscount);
       if (item.amount !== null) {
         if (item.amount.length > 0) {
-          item.amount = parseInt(item.amount);
-        } else {
-          item['amount'] = null;
-        }
+          item.amount = parseInt(item.amount); 
+		} 
+        // else {
+        //   item['amount'] = null;
+        // }
       } else {
         item['amount'] = null;
       }
