@@ -223,7 +223,7 @@ class UmpireRoaster extends Component {
             message.warn(ValidationConstants.umpireMessage)
         }
         else {
-            history.push("/userPersonal", { userId: record.userId, screenKey: "umpireRoaster", screen: "/umpireRoaster" })
+            history.push("/userPersonal", { userId: record.userId, screenKey: "umpireRoaster", screen: "/umpireRoster" })
         }
     }
 

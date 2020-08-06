@@ -9,7 +9,7 @@ import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { isArrayNotEmpty } from "../../util/helpers";
-import { getUmpireDashboardList, getUmpireDashboardVenueList, getUmpireDashboardDivisionList, umpireRoundListAction } from "../../store/actions/umpireAction/umpireDashboardAction"
+import { getUmpireDashboardList, getUmpireDashboardVenueList, getUmpireDashboardDivisionList, umpireRoundListAction, umpireDashboardUpdate } from "../../store/actions/umpireAction/umpireDashboardAction"
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { entityTypes } from '../../util/entityTypes'
 import { refRoleTypes } from '../../util/refRoles'
@@ -707,7 +707,7 @@ class UmpireDashboard extends Component {
 
         setLiveScoreUmpireCompition(selectedComp)
         setLiveScoreUmpireCompitionData(JSON.stringify(compObj))
-        this.setState({ selectedComp, competitionUniqueKey: compKey, venueLoad: true, divisionLoad: true, venue: "All", division: "All", compititionObj: compObj })
+        this.setState({ selectedComp, competitionUniqueKey: compKey, venueLoad: true, divisionLoad: true, venue: "All", division: "All", compititionObj: compObj, round: 'All' })
 
     }
 
@@ -736,10 +736,11 @@ class UmpireDashboard extends Component {
 
         this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: divisionid == 'All' ? "" : divisionid, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, roundId: this.state.round == 'All' ? "" : this.state.round, pageData: body })
         this.props.umpireRoundListAction(this.state.selectedComp, divisionid == 'All' ? "" : divisionid)
-        this.setState({ division: divisionid,round:'All' })
+        this.setState({ division: divisionid, round: 'All' })
     }
 
     onRoundChange(roundId) {
+        this.props.umpireDashboardUpdate(roundId)
         const body =
         {
             "paging": {
@@ -747,8 +748,9 @@ class UmpireDashboard extends Component {
                 "offset": 0
             }
         }
+        const { allRoundIds } = this.props.umpireDashboardState
+        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, roundId: roundId == 'All' ? "" : allRoundIds, pageData: body })
         this.setState({ round: roundId })
-        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, roundId: roundId == 'All' ? "" : roundId, pageData: body })
     }
 
     // on Export
@@ -1027,7 +1029,8 @@ function mapDispatchToProps(dispatch) {
         getUmpireDashboardDivisionList,
         getUmpireDashboardList,
         exportFilesAction,
-        umpireRoundListAction
+        umpireRoundListAction,
+        umpireDashboardUpdate
     }, dispatch)
 }
 

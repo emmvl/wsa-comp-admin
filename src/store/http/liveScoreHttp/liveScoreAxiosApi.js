@@ -906,7 +906,7 @@ let LiveScoreAxiosApi = {
         let body = data.pageData
         let url
         if (data.roundId) {
-            const round = JSON.stringify([data.roundId])
+            const round = JSON.stringify(data.roundId)
             url = `/matchUmpire/dashboard?competitionId=${data.compId}&divisionId=${data.divisionid}&venueId=${data.venueId}&organisationId=${data.orgId}&roundIds=${round}`;
         } else {
             url = `/matchUmpire/dashboard?competitionId=${data.compId}&divisionId=${data.divisionid}&venueId=${data.venueId}&organisationId=${data.orgId}`;

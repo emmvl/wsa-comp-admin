@@ -11,7 +11,9 @@ const initialState = {
     onDivisionLoad: false,
     umpireDashboardList: [],
     totalPages: null,
-    umpireRoundList: []
+    umpireRoundList: [],
+    allRoundList: [],
+    allRoundIds: null
 };
 
 function getHighestSequence(roundArr) {
@@ -27,13 +29,22 @@ function getHighestSequence(roundArr) {
 }
 
 // Remove duplicate rounds names 
-
 function removeDuplicateValues(array) {
     return array.filter((obj, index, self) =>
         index === self.findIndex((el) => (
             el["name"] === obj["name"]
         ))
     )
+}
+
+// get all same round name 
+function getAllRoundName(data, roundId) {
+
+    let getRoundName = data.find(({ id }) => id === roundId).name
+
+    let getAllRoundId = data.filter(x => x.name === getRoundName).map(x => x.id);
+
+    return getAllRoundId;
 
 }
 
@@ -108,7 +119,17 @@ function umpireDashboardState(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 status: action.status,
+                allRoundList: action.result,
                 rounLoad: false
+            };
+
+        case ApiConstants.UPDATE_UMPIRE_DASHBOARD:
+
+            let allRoundName = getAllRoundName(state.allRoundList, action.data)
+            state.allRoundIds = allRoundName
+
+            return {
+                ...state,
             };
 
         default:
