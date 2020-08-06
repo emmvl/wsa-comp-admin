@@ -332,7 +332,7 @@ if(x[0].charCodeAt()>=97)
                                     this.props.liveScoreAddTeamform({ key: 'organisationId', data: affiliateId })
                                 }}
                                 // value={teamManagerData.divisionId}
-                                placeholder={"Select User"}  >
+                                placeholder={"Select Affiliate"}  >
                                 {affilateList.map((item) => {
                                     return <Option key={item.id} value={item.id}>
                                         {item.name}

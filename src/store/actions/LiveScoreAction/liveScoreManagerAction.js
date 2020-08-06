@@ -11,13 +11,14 @@ function liveScoreAddEditManager(data, teamId, exsitingManagerId) {
 }
 
 // Manager list action
-function liveScoreManagerListAction(roleId, entityTypeId, entityId, searchText, sortBy, sortOrder) {
+function liveScoreManagerListAction(roleId, entityTypeId, entityId, searchText, offset, sortBy, sortOrder) {
     return {
         type: ApiConstants.API_LIVE_SCORE_MANAGER_LIST_LOAD,
         roleId,
         entityTypeId,
         entityId,
         searchText,
+        offset,
         sortBy,
         sortOrder,
     };

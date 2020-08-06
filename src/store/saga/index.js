@@ -92,7 +92,7 @@ import { liveScoreBulkPushBack, liveScoreBulkBringForwardSaga, liveScoreMatchRes
 import { liveScorePlayerSaga, liveScoreAddEditPlayerSaga, liveScorePlayerImportSaga, getPlayerListPagginationSaga } from "./liveScoreSaga/liveScorePlayerSaga";
 import { liveScoreDashboardSaga } from './liveScoreSaga/liveScoreDashboardSaga';
 import { liveScoreCompetitionSaga, liveScoreCompetitionDelete } from './liveScoreSaga/liveScoreCompetionSaga'
-import { liveScoreDivisionsaga, liveScoreDeleteDivisionSaga, liveScoreCreateDivisionsaga, liveScoreDivisionImportSaga } from './liveScoreSaga/liveScoreDivisionSaga';
+import { liveScoreDivisionsaga, liveScoreDeleteDivisionSaga, liveScoreCreateDivisionsaga, liveScoreDivisionImportSaga,liveScoreMainDivisionListsaga } from './liveScoreSaga/liveScoreDivisionSaga';
 
 ////*******************Live Score********************************************End
 
@@ -821,6 +821,10 @@ export default function* root_saga() {
 
   //add quick competition venue
   yield takeEvery(ApiConstants.API_QUICK_COMPETITION_ADDVENUE_LOAD, competitionQuickSaga.quickCompetitionAddVenueSaga)
+
   yield takeEvery(ApiConstants.API_LIVE_SCORE_POSITION_TRACKING_LOAD, liveScorePositionTrackSaga)
+
+
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_MAIN_DIVISION_LIST_LOAD, liveScoreMainDivisionListsaga)
 
 }

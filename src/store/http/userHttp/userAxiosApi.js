@@ -78,14 +78,12 @@ let userHttpApi = {
     return Method.dataGet(url, token)
   },
 
-  liveScoreManagerList(roleId, entityTypeId, entityId, searchText, sortBy, sortOrder) {
-    // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-
+  liveScoreManagerList(roleId, entityTypeId, entityId, searchText, offset, sortBy, sortOrder) {
     let url = ''
     if (searchText) {
-      url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&userName=${searchText}`;
+      url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&userName=${searchText}&offset=${offset}&limit=${10}`;
     } else {
-      url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}`;
+      url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&offset=${offset}&limit=${10}`;
     }
 
     if (sortBy && sortOrder) {
@@ -206,9 +204,9 @@ let userHttpApi = {
   },
 
   //liveScore coaches list
-  liveScoreCoachesList(roleId, entityTypeId, entityId, search, sortBy, sortOrder) {
+  liveScoreCoachesList(roleId, entityTypeId, entityId, search, offset, sortBy, sortOrder) {
     let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-    let url = `/users/byRole?roleId=${roleId}&entityTypeId=1&entityId=${id}&userName=${search}`
+    let url = `/users/byRole?roleId=${roleId}&entityTypeId=1&entityId=${id}&userName=${search}&offset=${offset}&limit=${10}`
     if (sortBy && sortOrder) {
       url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
     }

@@ -45,7 +45,7 @@ class InnerHorizontalMenu extends React.Component {
         }
     }
 
-    componentDidUpdate(nextProps) {
+    async componentDidUpdate(nextProps) {
 
         if (this.props.userState.onLoad == false && this.state.orgState == true) {
             if (JSON.parse(localStorage.getItem('setOrganisationData'))) {
@@ -60,9 +60,11 @@ class InnerHorizontalMenu extends React.Component {
             if (this.state.loading == true && this.props.innerHorizontalState.onLoad == false) {
                 let compList = isArrayNotEmpty(this.props.innerHorizontalState.competitionList) ? this.props.innerHorizontalState.competitionList : []
                 let firstComp = 1
-
-                if (getLiveScoreCompetiton()) {
-                    const { id } = JSON.parse(getLiveScoreCompetiton())
+              
+                let isCompetition = await getLiveScoreCompetiton()
+            
+                if (isCompetition) {
+                    const { id } = JSON.parse(isCompetition)
                     firstComp = id
                 } else {
                     firstComp = compList.length > 0 && compList[0].id

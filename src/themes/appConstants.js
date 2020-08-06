@@ -1508,7 +1508,7 @@ const AppConstants = {
   venueSavedSuccessfully: "Successfully Saved",
   checkVenueAddressDuplication: "Check venue address duplication",
   successMessage: "Successfully inserted",
-  videoSize: "Selected file must be less then 1 MB",
+  videoSize: "Selected file must be less then 2 MB",
   video_size: 2048000,
   qcTimeslotNotApplicable: "Timeslots are not applicable for quick competition",
   qcVenueConstraintNotApplicable: "Venue Constraints are not applicable for quick competition",

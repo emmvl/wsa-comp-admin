@@ -33,8 +33,9 @@ export function* liveScoreManagerListSaga(action) {
             action.entityTypeId,
             action.entityId,
             action.searchText,
+            action.offset,
             action.sortBy,
-            action.sortOrder
+            action.sortOrder,
         )
         if (result.status === 1) {
             yield put({

@@ -191,7 +191,7 @@ let LiveScoreAxiosApi = {
     liveScoreTeam(competitionID, divisionId) {
         let url;
         if (divisionId) {
-            url = `/teams/list?competitionId=${competitionID}&divisionId=${divisionId}`;
+            url = `/teams/list?competitionId=${competitionID}&divisionId=${divisionId}&includeBye=1`;
         } else {
             url = `/teams/list?competitionId=${competitionID}`;
         }
@@ -377,42 +377,51 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, token)
     },
 
-    liveScoreAddNews(data, imageData, newsId, competitionId) {
-        let mediaArray = [imageData]
+    liveScoreAddNews(data) {
         let body = new FormData();
-        // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
         let authorData = null
 
         if (JSON.parse(getLiveScoreCompetiton())) {
             authorData = JSON.parse(getLiveScoreCompetiton())
         }
 
-        body.append('id', newsId ? newsId : 0)
-        body.append('title', data.title)
-        body.append('body', data.body);
-        body.append("entityId", competitionId);
-        body.append("author", data.author ? data.author : authorData ? authorData.longName : 'World sport actioa');
-        body.append("recipients", data.recipients);
-        body.append("news_expire_date", data.news_expire_date);
+        body.append('id', data.newsId ? data.newsId : 0)
+        body.append('title', data.editData.title)
+        body.append('body', data.editData.body);
+        body.append("entityId", data.compId);
+        body.append("author", data.editData.author ? data.editData.author : authorData ? authorData.longName : 'World sport actioa');
+        body.append("recipients", data.editData.recipients);
+        body.append("news_expire_date", data.editData.news_expire_date);
         body.append("recipientRefId", 12)
-        // body.append("id", 20)
-        // body.append("newsMedia", imageData)
         body.append("entityTypeId", 1)
-        if (imageData !== []) {
-            for (let i in imageData)
-                body.append("newsMedia", imageData[i])
+
+        if (data.newsImage) {
+            body.append("newsImage", data.newsImage)
         }
+
+        if (data.newsVideo) {
+
+            body.append("newsVideo", data.newsVideo)
+        }
+
+
+        if (data.mediaArry !== []) {
+            for (let i in data.mediaArry) {
+                body.append(`newsMedia`, data.mediaArry[i]);
+            }
+        }
+
         let url = null;
         url = "/news";
         return Method.dataPost(url, token, body)
     },
 
-    liveScoreGoalList(compId, goaltype, search) {
+    liveScoreGoalList(compId, goaltype, search,offset) {
         let url = null
         if (goaltype === "By Match") {
-            url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}`
+            url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}&offset=${offset}&limit=${10}`
         } else if (goaltype === "Total") {
-            url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=ALL&search=${search}`
+            url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=ALL&search=${search}&offset=${offset}&limit=${10}`
         }
 
         return Method.dataGet(url, token)
@@ -1085,6 +1094,12 @@ let LiveScoreAxiosApi = {
         }
 
         return Method.dataPost(url, token, body)
+    },
+    liveScoreGetMainDivisionList(compId, offset) {
+        let url = null
+        url = `/division?competitionId=${compId}&offset=${offset}&limit=${10}`
+
+        return Method.dataGet(url, null)
     },
 
 };

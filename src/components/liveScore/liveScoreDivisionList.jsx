@@ -10,10 +10,11 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import {
-    getLiveScoreDivisionList,
+    getMainDivisionListAction,
     liveScoreDeleteDivision
 } from "../../store/actions/LiveScoreAction/liveScoreDivisionAction";
 import { getLiveScoreCompetiton } from "../../util/sessionStorage";
+import { isArrayNotEmpty } from "../../util/helpers";
 import history from "../../util/history";
 
 const { Content } = Layout;
@@ -107,6 +108,7 @@ class LiveScoreDivisionList extends Component {
         super(props);
         this.state = {
             year: "2020",
+            competitionId: null
         }
 
         this_Obj = this;
@@ -114,12 +116,20 @@ class LiveScoreDivisionList extends Component {
 
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.props.getLiveScoreDivisionList(id)
+        this.setState({ competitionId: id })
+        let offset = 0
+        this.props.getMainDivisionListAction(id, offset)
+    }
+
+    onPageChange(page) {
+        let offset = page ? 10 * (page - 1) : 0;
+        this.props.getMainDivisionListAction(this.state.competitionId, offset)
     }
 
     ////////form content view
     contentView = () => {
-        let divisionList = this.props.liveScoreDivisionState.liveScoreDivisionList || [];
+        const { mainDivisionList, totalCount, currentPage } = this.props.liveScoreDivisionState;
+        let divisionList = isArrayNotEmpty(mainDivisionList) ? mainDivisionList : [];
 
         return (
             <div className="comp-dash-table-view mt-4">
@@ -146,8 +156,9 @@ class LiveScoreDivisionList extends Component {
                     >
                         <Pagination
                             className="antd-pagination"
-                            defaultCurrent={1}
-                            total={8}
+                            current={currentPage}
+                            total={totalCount}
+                            onChange={(page) => this.onPageChange(page)}
                         />
                     </div>
                 </div>
@@ -274,7 +285,7 @@ class LiveScoreDivisionList extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getLiveScoreDivisionList,
+        getMainDivisionListAction,
         liveScoreDeleteDivision
     }, dispatch)
 }

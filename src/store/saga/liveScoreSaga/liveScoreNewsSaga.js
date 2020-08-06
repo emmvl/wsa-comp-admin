@@ -44,14 +44,14 @@ export function* liveScoreNewsListSaga(action) {
 ////News AddNews
 export function* liveScoreAddNewsSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreAddNews, action.data, action.imageData, action.newsId, action.competitionId);
+        const result = yield call(LiveScoreAxiosApi.liveScoreAddNews, action.data);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_ADD_NEWS_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });
-            message.success(action.newsId ? 'News Edited Successfully.' : 'News Added Successfully .');
+            message.success(action.data.newsId ? 'News Edited Successfully.' : 'News Added Successfully.');
         } else {
             yield call(failSaga, result)
         }
