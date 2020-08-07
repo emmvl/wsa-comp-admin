@@ -14,6 +14,14 @@ function getUreAction() {
   };
 }
 
+// Impersonation
+function impersonationAction(payload) {
+  return {
+    type: ApiConstants.API_IMPERSONATION_LOAD,
+    payload,
+  }
+}
+
 /* Affiliates Listing */
 function getAffiliatesListingAction(payload) {
   return {
@@ -353,5 +361,6 @@ export {
   getUserProfileAction,
   updateCharityValue,
   updateCharityAction,
-  updateTermsAndCondtionAction
+  updateTermsAndCondtionAction,
+  impersonationAction,
 }

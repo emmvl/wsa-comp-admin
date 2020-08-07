@@ -718,3 +718,21 @@ export function* updateTermsAndConditionsSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+
+export function* impersonationSaga(action) {
+    try {
+        const result = yield call(userHttpApi.impersonation, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_IMPERSONATION_SUCCESS,
+                result: result.result.data,
+                status: result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

@@ -1,20 +1,27 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Input, Icon, Select } from "antd";
+import {Button, Icon, Modal, Select} from "antd";
 import "./layout.css";
 import history from "../util/history";
 import AppConstants from "../themes/appConstants";
 import AppImages from "../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getUserOrganisationAction, onOrganisationChangeAction } from "../store/actions/userAction/userAction";
+import {
+  getOrganisationAction,
+  getUserOrganisationAction,
+  impersonationAction,
+  onOrganisationChangeAction
+} from "../store/actions/userAction/userAction";
 import {
   setOrganisationData,
   getOrganisationData,
   clearUmpireStorage,
+  getUserId,
 } from "../util/sessionStorage";
 import { clearHomeDashboardData, } from "../store/actions/homeAction/homeAction";
 import { setUserVars } from 'react-fullstory';
+import Loader from "../customComponents/loader";
 
 const { Option } = Select;
 
@@ -23,7 +30,9 @@ class DashboardLayout extends React.Component {
     super(props);
     this.state = {
       windowMobile: false,
-      dataOnload: false
+      dataOnload: false,
+      openImpersonationModal: false,
+      impersonationOrg: null,
     };
   }
 
@@ -42,7 +51,7 @@ class DashboardLayout extends React.Component {
   }
 
   componentDidMount() {
-    this.setOrganisationKey()
+    this.setOrganisationKey();
   }
 
   setOrganisationKey() {
@@ -139,6 +148,23 @@ class DashboardLayout extends React.Component {
     // }
   }
 
+  handleImpersonation = () => {
+    this.props.getOrganisationAction();
+    this.setState({openImpersonationModal: true});
+    console.log('impersonation >>>>>>>>>>>>', this.props.userState.getUserOrganisation, getOrganisationData())
+    console.log('>>>>>>>>>>>>>>>', getUserId());
+  };
+
+  handleImpersonationModal = (button) => {
+    console.log('?????????????????????', this.state.impersonationOrg)
+    if (button === 'ok') {
+
+      this.setState({openImpersonationModal: false});
+    } else {
+      this.setState({openImpersonationModal: false});
+    }
+  };
+
   ///////user profile dropdown
   userProfileDropdown() {
     const { menuName } = this.props;
@@ -200,6 +226,9 @@ class DashboardLayout extends React.Component {
           )}
 
           <div className="acc-help-support-list-view">
+            <li>
+              <a id={AppConstants.impersonation} onClick={() => this.handleImpersonation()}>{AppConstants.impersonation}</a>
+            </li>
             <li className={menuName === AppConstants.account ? "active" : ""}>
               <NavLink id={AppConstants.acct_settings_label} to="/account/profile">Account Settings</NavLink>
             </li>
@@ -469,6 +498,27 @@ class DashboardLayout extends React.Component {
             </div>
           </div>
         </div>
+        <Modal
+          className="add-membership-type-modal"
+          title= {AppConstants.impersonationOrgSelect}
+          visible={this.state.openImpersonationModal && !this.props.userState.onLoad}
+          onOk={() => this.handleImpersonationModal("ok")}
+          onCancel={() => this.handleImpersonationModal("cancel")}>
+          <Select
+            className="w-100 reg-filter-select-competition"
+            onChange={(e) => this.setState({impersonationOrg: e})}
+            placeholder="Organisation"
+            showSearch
+            filterOption={(input, option) =>
+              option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {(this.props.userState.venueOrganisation || []).map((org, dIndex) => (
+              <Option key={org.id} value={org.id} >{org.name}</Option>
+            ))}
+          </Select>
+        </Modal>
+        <Loader visible={this.props.userState.onLoad} />
       </header>
     );
   }
@@ -479,6 +529,8 @@ function mapDispatchToProps(dispatch) {
     getUserOrganisationAction,
     onOrganisationChangeAction,
     clearHomeDashboardData,
+    getOrganisationAction,
+    impersonationAction,
   }, dispatch);
 }
 

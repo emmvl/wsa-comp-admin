@@ -124,6 +124,7 @@ function userReducer(state = initialState, action) {
       return {
         ...state,
         onLoad: false,
+        impersonationLoad: false,
         userDetailUpdate: false,
         userPhotoUpdate: false,
         userPasswordUpdate: false,
@@ -135,6 +136,7 @@ function userReducer(state = initialState, action) {
       return {
         ...state,
         onLoad: false,
+        impersonationLoad: false,
         userDetailUpdate: false,
         userPhotoUpdate: false,
         userPasswordUpdate: false,
@@ -689,7 +691,15 @@ function userReducer(state = initialState, action) {
         affiliateOurOrg: ourOrgTCData
       };
 
-    
+    case ApiConstants.API_IMPERSONATION_LOAD:
+      return { ...state, impersonationLoad: true };
+
+    case ApiConstants.API_IMPERSONATION_SUCCESS:
+      return {
+        ...state,
+        impersonationLoad: false,
+        status: action.status,
+      };
 
     default:
       return state;

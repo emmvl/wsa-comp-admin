@@ -747,4 +747,7 @@ export default function* rootSaga() {
 
   yield takeEvery(ApiConstants.API_LIVE_SCORE_MAIN_DIVISION_LIST_LOAD, liveScoreMainDivisionListsaga)
 
+  //
+  yield takeEvery(ApiConstants.API_IMPERSONATION_LOAD, userSaga.impersonationSaga)
+
 }

@@ -1480,6 +1480,7 @@ const AppConstants = {
   registrations_label: "registrations_label",
   user_profile_icon: "user_profile_icon",
   log_out: "log_out",
+  impersonation: "Impersonation",
   acct_settings_label: "acct_settings_label",
   help_support_label: "help&support_label",
   home_table_view: "home_table_view",
@@ -1516,7 +1517,8 @@ const AppConstants = {
   publishModalConfirmationMsg: "Would you like to adjust their ladder points?",
   videoSizeMessage: "The maximum file size can be 2 MB",
   childrenCheckNumber:"Requires Working with Children Check",
-  regenerateDrawTitle:"Regenerate draw from which Round?"											 
+  regenerateDrawTitle:"Regenerate draw from which Round?",
+  impersonationOrgSelect:"Choose an organization to access",
 };
 
 export default AppConstants;
