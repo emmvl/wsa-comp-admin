@@ -1,7 +1,9 @@
-import { takeEvery } from "redux-saga/effects";
-import { loginApiSaga, qrApiSaga, forgotPasswordSaga } from "./authenticationSaga";
+import { all, fork, takeEvery } from "redux-saga/effects";
 
 import ApiConstants from "../../themes/apiConstants";
+import appSaga from "./appSaga";
+import authenticationSaga from "./authenticationSaga";
+
 import {
   getRegistrationFormSaga,
   regMembershipFeeListSaga,
@@ -16,30 +18,6 @@ import {
   getMembershipproduct,
   getDivisionsListSaga
 } from "./registrationSaga/registrationSaga";
-
-import {
-  getYearListSaga,
-  getOnlyYearListSaga,
-  getProductValidityListSaga,
-  getCompetitionTypeListSaga,
-  // getRoleSaga,
-  // getUreSaga,
-  getVenuesTypeSaga,
-  getRegFormAdvSettings,
-  getRegFormMethod,
-  getMembershipProductFeesTypeSaga,
-  getCommonDiscountTypeTypeSaga,
-  getCompetitionFeeInitSaga,
-  getMatchTypesSaga,
-  getCompetitionTypesSaga,
-  getCompetitionFormatTypesSaga,
-  getOnlyYearAndCompetitionListSaga,
-  getParticipateYearAndCompetitionListSaga,
-  getOwnYearAndCompetitionListSaga,
-  getEnhancedRoundRobinTypesSaga,
-  exportFilesSaga,
-  userExportFilesSaga,
-} from "./appSaga";
 
 import {
   regCompetitionFeeListSaga,
@@ -204,9 +182,16 @@ import { quickCompetitionAddVenue } from "../actions/competitionModuleAction/com
 
 import { liveScorePositionTrackSaga } from './liveScoreSaga/liveScorePositionTrackSaga'
 
-export default function* root_saga() {
-  yield takeEvery(ApiConstants.API_LOGIN_LOAD, loginApiSaga);
-  yield takeEvery(ApiConstants.API_QR_CODE_LOAD, qrApiSaga);
+export default function* rootSaga() {
+  yield all([
+    fork(appSaga),
+    fork(authenticationSaga),
+  ]);
+
+
+  // Authentication
+
+
   yield takeEvery(ApiConstants.API_ROLE_LOAD, userSaga.getRoleSaga);
   yield takeEvery(ApiConstants.API_URE_LOAD, userSaga.getUreSaga);
   yield takeEvery(ApiConstants.API_REG_COMPETITION_LIST_LOAD, regCompetitionFeeListSaga);
@@ -215,27 +200,15 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_REG_MEMBERSHIP_LIST_DELETE_LOAD, regMembershipFeeListDeleteSaga);
   yield takeEvery(ApiConstants.API_REG_GET_MEMBERSHIP_PRODUCT__LOAD, regGetMembershipProductDetailSaga);
   yield takeEvery(ApiConstants.API_REG_SAVE_MEMBERSHIP_PRODUCT__LOAD, regSaveMembershipProductDetailSaga);
-  yield takeEvery(ApiConstants.API_YEAR_LIST__LOAD, getYearListSaga);
-  yield takeEvery(ApiConstants.API_ONLY_YEAR_LIST__LOAD, getOnlyYearListSaga);
   yield takeEvery(ApiConstants.API_REG_GET_DEFAULT_MEMBERSHIP_PRODUCT_TYPES__LOAD, regDefaultMembershipProductTypesSaga)
   yield takeEvery(ApiConstants.API_REG_SAVE_MEMBERSHIP_PRODUCT_FEES__LOAD, regSaveMembershipProductFeeSaga);
   yield takeEvery(ApiConstants.API_REG_SAVE_MEMBERSHIP_PRODUCT_DISCOUNT__LOAD, regSaveMembershipProductDiscountSaga);
-  yield takeEvery(ApiConstants.API_COMMON_MEMBERSHIP_PRODUCT_FEES_TYPE__LOAD, getMembershipProductFeesTypeSaga);
-  yield takeEvery(ApiConstants.API_COMMON_DISCOUNT_TYPE__LOAD, getCommonDiscountTypeTypeSaga);
   yield takeEvery(ApiConstants.API_MEMBERSHIP_PRODUCT_DISCOUNT_TYPE__LOAD, membershipProductDiscountTypeSaga);
-  yield takeEvery(ApiConstants.API_COMMON_MEMBERSHIP_PRODUCT_FEES_TYPE__LOAD, getMembershipProductFeesTypeSaga);
-  yield takeEvery(ApiConstants.API_COMMON_DISCOUNT_TYPE__LOAD, getCommonDiscountTypeTypeSaga);
   yield takeEvery(ApiConstants.API_MEMBERSHIP_PRODUCT_DISCOUNT_TYPE__LOAD, membershipProductDiscountTypeSaga);
-  yield takeEvery(ApiConstants.API_PRODUCT_VALIDITY_LIST__LOAD, getProductValidityListSaga);
-  yield takeEvery(ApiConstants.API_COMPETITION_TYPE_LIST__LOAD, getCompetitionTypeListSaga);
-  yield takeEvery(ApiConstants.API_REG_FORM_VENUE_LOAD, getVenuesTypeSaga);
   yield takeEvery(ApiConstants.API_REG_FORM_LOAD, regSaveRegistrationForm);
-  yield takeEvery(ApiConstants.API_REG_FORM_SETTINGS_LOAD, getRegFormAdvSettings);
-  yield takeEvery(ApiConstants.API_REG_FORM_METHOD_LOAD, getRegFormMethod);
   yield takeEvery(ApiConstants.API_REG_FORM_MEMBERSHIP_PRODUCT_LOAD, getMembershipproduct);
   yield takeEvery(ApiConstants.API_GET_REG_FORM_LOAD, getRegistrationFormSaga);
   ///competition Init saga
-  yield takeEvery(ApiConstants.API_REG_COMPETITION_FEE_INIT_LOAD, getCompetitionFeeInitSaga)
   yield takeEvery(ApiConstants.API_SAVE_COMPETITION_FEES_DETAILS_LOAD, saveCompetitionFeesDetailsSaga)
   yield takeEvery(ApiConstants.API_GET_COMPETITION_FEES_DETAILS_LOAD, getAllCompetitionFeesDeatilsSaga)
   yield takeEvery(ApiConstants.API_SAVE_COMPETITION_FEES_MEMBERHSIP_TAB_LOAD, saveCompetitionFeesMembershipTabSaga)
@@ -292,11 +265,6 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_COMPETITION_FEE_DEFAULT_LOGO_LOAD, getDefaultCompFeesLogoSaga)
 
 
-  // ****************************Venue And Tiemes**************************************Start
-  ////Year and Competition
-  yield takeEvery(ApiConstants.API_GET_YEAR_COMPETITION_LOAD, getOnlyYearAndCompetitionListSaga)
-
-
   /* Competition Format */
   yield takeEvery(ApiConstants.API_GET_COMPETITION_FORMAT_LOAD, competitionFormatSaga.getCompetitionFormatSaga)
   yield takeEvery(ApiConstants.API_SAVE_COMPETITION_FORMAT_LOAD, competitionFormatSaga.saveCompetitionFormatSaga)
@@ -310,10 +278,6 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_GET_LADDER_FORMAT_LOAD, ladderFormatSaga.getLadderFormatSaga)
   yield takeEvery(ApiConstants.API_SAVE_LADDER_FORMAT_LOAD, ladderFormatSaga.saveLadderFormatSaga)
 
-  yield takeEvery(ApiConstants.API_MATCH_TYPES_LOAD, getMatchTypesSaga)
-  yield takeEvery(ApiConstants.API_COMPETITION_TYPES_LOAD, getCompetitionTypesSaga)
-  yield takeEvery(ApiConstants.API_COMPETITION_FORMAT_TYPES_LOAD, getCompetitionFormatTypesSaga)
-  yield takeEvery(ApiConstants.API_ENHANCED_ROUND_ROBIN_LOAD, getEnhancedRoundRobinTypesSaga)
 
   /* ************Competition Management Ends************ */
 
@@ -551,10 +515,8 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_GENERATE_DRAW_LOAD, competitonGenerateDrawSaga);
 
   ////Year and  OWN Competition
-  yield takeEvery(ApiConstants.API_GET_YEAR_OWN_COMPETITION_LOAD, getOwnYearAndCompetitionListSaga)
 
   ////Year and Participate Competition
-  yield takeEvery(ApiConstants.API_GET_YEAR_Participate_COMPETITION_LOAD, getParticipateYearAndCompetitionListSaga)
   // User Module Activity Player
   yield takeEvery(ApiConstants.API_USER_MODULE_ACTIVITY_PLAYER_LOAD, userSaga.getUserModuleActivityPlayerSaga)
 
@@ -623,7 +585,6 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_COMPETITION_FEE_INVITEES_SEARCH_LOAD, inviteeSearchSaga)
   yield takeEvery(ApiConstants.API_COMPETITION_PLAYER_IMPORT_LOAD, importCompetitionPlayer);
   yield takeEvery(ApiConstants.API_COMPETITION_TEAMS_IMPORT_LOAD, importCompetitionTeams);
-  yield takeEvery(ApiConstants.API_EXPORT_FILES_LOAD, exportFilesSaga)
   yield takeEvery(ApiConstants.API_SAVE_VENUE_CHANGE_LOAD, liveScoreChangeVenueSaga);
   //EndUserRegistrationDashboard List
   yield takeEvery(ApiConstants.API_USER_REG_DASHBOARD_LIST_LOAD, endUserRegSaga.endUserRegDashboardListSaga)
@@ -658,7 +619,6 @@ export default function* root_saga() {
   /////stripe payments transfer list
   yield takeEvery(ApiConstants.API_GET_STRIPE_PAYMENTS_TRANSFER_LIST_API_LOAD, stripeSaga.getStripeTransferListSaga)
   ///forgot password
-  yield takeEvery(ApiConstants.API_FORGOT_PASSWORD_LOAD, forgotPasswordSaga);
   //////stripe payout list
   yield takeEvery(ApiConstants.API_GET_STRIPE_PAYOUT_LIST_API_LOAD, stripeSaga.getStripePayoutListSaga)
   //Final Teams Export
@@ -727,7 +687,6 @@ export default function* root_saga() {
   /////unassign umpire from the match(delete)
   yield takeEvery(ApiConstants.API_UNASSIGN_UMPIRE_FROM_LIST_LOAD, assignUmpireSaga.unassignUmpireSaga)
   yield takeEvery(ApiConstants.CHANGE_PLAYER_LINEUP_LOAD, playerLineUpStatusChnage)
-  yield takeEvery(ApiConstants.API_USER_EXPORT_FILES_LOAD, userExportFilesSaga)
   //////shop product listing
   yield takeEvery(ApiConstants.API_GET_SHOP_PRODUCT_LISTING_LOAD, shopProductSaga.getProductListingSaga)
   /////shop add product

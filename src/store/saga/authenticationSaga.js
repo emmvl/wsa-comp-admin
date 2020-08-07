@@ -1,13 +1,14 @@
-import { put, call } from "redux-saga/effects";
+import { put, call, takeEvery } from "redux-saga/effects";
 import { message } from "antd";
 
 import ApiConstants from "../../themes/apiConstants";
 import AppConstants from "../../themes/appConstants";
 import userAxiosApi from "../http/userHttp/userAxiosApi";
 
-export function* loginApiSaga(action) {
+function* loginApiSaga(action) {
   try {
     const result = yield call(userAxiosApi.Login, action.payload);
+
     if (result.status === 1) {
       yield put({
         type: result.result.data.authToken ? ApiConstants.API_QR_CODE_SUCCESS : ApiConstants.API_LOGIN_SUCCESS,
@@ -17,6 +18,7 @@ export function* loginApiSaga(action) {
       });
     } else {
       yield put({ type: ApiConstants.API_LOGIN_FAIL });
+
       setTimeout(() => {
         alert(result.data.message);
       }, 800);
@@ -44,9 +46,10 @@ export function* loginApiSaga(action) {
   }
 }
 
-export function* qrApiSaga(action) {
+function* qrApiSaga(action) {
   try {
     const result = yield call(userAxiosApi.QrCode, action.payload);
+
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_QR_CODE_SUCCESS,
@@ -56,6 +59,7 @@ export function* qrApiSaga(action) {
       });
     } else {
       yield put({ type: ApiConstants.API_QR_CODE_FAIL });
+
       setTimeout(() => {
         alert(result.data.message);
       }, 800);
@@ -83,10 +87,11 @@ export function* qrApiSaga(action) {
   }
 }
 
-// forgot password
-export function* forgotPasswordSaga(action) {
+// Forgot password
+function* forgotPasswordSaga(action) {
   try {
     const result = yield call(userAxiosApi.forgotPassword, action.email, action.resetType);
+
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_FORGOT_PASSWORD_SUCCESS,
@@ -95,6 +100,7 @@ export function* forgotPasswordSaga(action) {
       });
     } else {
       yield put({ type: ApiConstants.API_LOGIN_FAIL });
+
       setTimeout(() => {
         message.config({
           duration: 1.5,
@@ -109,6 +115,7 @@ export function* forgotPasswordSaga(action) {
       error: error,
       status: error.status
     });
+
     setTimeout(() => {
       message.config({
         duration: 1.5,
@@ -117,4 +124,10 @@ export function* forgotPasswordSaga(action) {
       message.error("Something went wrong.");
     }, 800);
   }
+}
+
+export default function* rootAuthenticationSaga() {
+  yield takeEvery(ApiConstants.API_LOGIN_LOAD, loginApiSaga);
+  yield takeEvery(ApiConstants.API_QR_CODE_LOAD, qrApiSaga);
+  yield takeEvery(ApiConstants.API_FORGOT_PASSWORD_LOAD, forgotPasswordSaga);
 }
