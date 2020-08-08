@@ -902,7 +902,6 @@ let LiveScoreAxiosApi = {
     },
 
     umpireListDashboard(data) {
-        console.log(data)
         let body = data.pageData
         let url
         if (data.roundId) {
@@ -1118,7 +1117,6 @@ const Method = {
                     }
                 })
                 .then(result => {
-                    console.log(result, 'resultChecking')
                     if (result.status === 200) {
                         return resolve({
                             status: 1,
@@ -1144,7 +1142,6 @@ const Method = {
                     }
                 })
                 .catch(err => {
-                    console.log(err.response, 'errorChecking')
                     if (err.response) {
                         if (err.response.status !== null || err.response.status !== undefined) {
                             if (err.response.status === 401) {
@@ -1412,7 +1409,6 @@ const Method = {
                     }
                 })
                 .catch(err => {
-                    console.log(err.response, 'errorChecking')
                     if (err.response) {
                         if (err.response.status !== null || err.response.status !== undefined) {
                             if (err.response.status === 401) {
