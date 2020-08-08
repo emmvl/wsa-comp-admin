@@ -115,7 +115,9 @@ const initialState = {
   userDetailUpdate: false,
   userPhotoUpdate: false,
   userPasswordUpdate: false,
-  defaultCharityRoundUp: []
+  defaultCharityRoundUp: [],
+  impersonationLoad: false,
+  impersonation: false,
 };
 
 function userReducer(state = initialState, action) {
@@ -698,6 +700,7 @@ function userReducer(state = initialState, action) {
       return {
         ...state,
         impersonationLoad: false,
+        impersonation: action.result.success,
         status: action.status,
       };
 

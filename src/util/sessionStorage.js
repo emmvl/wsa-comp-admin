@@ -188,6 +188,21 @@ const getKeyForStateWideMessage = () => {
   return localStorage.stateWideMessege
 }
 
+const setImpersonation = (impersonationOrgData) => {
+  const data = JSON.stringify(impersonationOrgData)
+  localStorage.setItem('impersonation', data);
+};
+
+const getImpersonation = async () => {
+  const dataStr = await localStorage.getItem('impersonation');
+
+  if (dataStr !== 'undefined') {
+    return JSON.parse(dataStr);
+  }
+
+  return null;
+};
+
 module.exports = {
   setCompetitionID, getCompetitonId,
   setAuthToken, getAuthToken,
@@ -227,5 +242,7 @@ module.exports = {
   setOwn_competitionStatus,
   getOwn_competitionStatus,
   getParticipating_competitionStatus,
-  setParticipating_competitionStatus
+  setParticipating_competitionStatus,
+  setImpersonation,
+  getImpersonation,
 }
