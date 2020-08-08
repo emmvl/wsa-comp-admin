@@ -170,6 +170,7 @@ import { getInnerHorizontalCompSaga } from './liveScoreSaga/liveScoreInnerHorizo
 import { quickCompetitionAddVenue } from "../actions/competitionModuleAction/competitionQuickCompetitionAction";
 
 import { liveScorePositionTrackSaga } from './liveScoreSaga/liveScorePositionTrackSaga'
+import * as shopOrderSummarySaga from './shopSaga/orderSummarySaga';
 
 export default function* rootSaga() {
   yield all([
@@ -617,7 +618,7 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_GET_DRAWS_ACTIVE_ROUNDS_LOAD, getActiveDrawsRoundsSaga)
 
   // Check venue address duplication
-  yield takeEvery(ApiConstants.API_VENUE_ADDRESS_CHECK_DUPLICATION_LOAD, checkVenueAddressDuplicationSaga);
+  // yield takeEvery(ApiConstants.API_VENUE_ADDRESS_CHECK_DUPLICATION_LOAD, checkVenueAddressDuplicationSaga);
 
   // Umpire Round Saga
   yield takeEvery(ApiConstants.API_UMPIRE_ROUND_LIST_LOAD, umpireDashboardSaga.umpireRoundListSaga)
@@ -633,4 +634,7 @@ export default function* rootSaga() {
 
   yield takeEvery(ApiConstants.API_LIVE_SCORE_MAIN_DIVISION_LIST_LOAD, liveScoreMainDivisionListsaga)
 
+  ////////////shop order summmary listing get API
+  yield takeEvery(ApiConstants.API_GET_SHOP_ORDER_SUMMARY_LISTING_LOAD, shopOrderSummarySaga.getOrderSummaryListingSaga)
+  
 }

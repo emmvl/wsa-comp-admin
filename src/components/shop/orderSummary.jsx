@@ -1,18 +1,31 @@
 import React, { Component } from "react";
-import { Input, Layout, Button, Table, Select, Menu, Icon, DatePicker } from 'antd';
+import { Input, Layout, Button, Table, Select, Menu, Icon, Pagination } from 'antd';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import Loader from '../../customComponents/loader';
+import history from "../../util/history";
+import { isArrayNotEmpty } from "../../util/helpers";
+import { getOrderSummaryListingAction } from "../../store/actions/shopAction/orderSummaryAction";
+import { currencyFormat } from "../../util/currencyFormat";
+import moment from "moment";
+import { getOnlyYearListAction } from '../../store/actions/appAction'
+import { getAffiliateToOrganisationAction } from "../../store/actions/userAction/userAction";
+import { getOrganisationData } from "../../util/sessionStorage";
+import { isEmptyArray } from "formik";
+import InputWithHead from "../../customComponents/InputWithHead";
 
 const { Content } = Layout
 const { SubMenu } = Menu
 const { Option } = Select
 
 function tableSort(a, b, key) {
-    let stringA = JSON.stringify(key[a])
-    let stringB = JSON.stringify(key[b])
+    let stringA = JSON.stringify(a[key])
+    let stringB = JSON.stringify(b[key])
     return stringA.localeCompare(stringB)
 }
 
@@ -21,7 +34,13 @@ const columns = [
         title: 'Date',
         dataIndex: 'date',
         key: 'date',
+        width: 140,
         sorter: (a, b) => tableSort(a, b, "date"),
+        render: (date) => {
+            return (
+                <span>{date ? moment(date).format("DD-MM-YYYY") : "N/A"}</span>
+            )
+        },
     },
     {
         title: 'Name',
@@ -36,36 +55,34 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "affiliate"),
     },
     {
-        title: 'Competition',
-        dataIndex: 'competition',
-        key: 'competition',
-        sorter: (a, b) => tableSort(a, b, "competition"),
-    },
-
-
-    {
-        title: 'PassCode',
-        dataIndex: 'passcode',
-        key: 'passcode',
-        sorter: (a, b) => tableSort(a, b, "away"),
+        title: 'Postcode',
+        dataIndex: 'postcode',
+        key: 'postcode',
+        sorter: (a, b) => tableSort(a, b, "postcode"),
     },
     {
         title: 'Order ID',
-        dataIndex: 'orderId',
-        key: 'orderId',
-        sorter: (a, b) => tableSort(a, b, "orderId"),
+        dataIndex: 'id',
+        key: 'id',
+        sorter: (a, b) => tableSort(a, b, "id"),
     },
     {
-        title: 'Free Paid',
+        title: 'Paid',
         dataIndex: 'paid',
         key: 'paid',
         sorter: (a, b) => tableSort(a, b, "paid"),
+        render: paid => (
+            <span>{currencyFormat(paid)}</span>
+        )
     },
     {
         title: 'Net Profit',
-        dataIndex: 'profit',
-        key: 'profit',
-        sorter: (a, b) => tableSort(a, b, "profit"),
+        dataIndex: 'netProfit',
+        key: 'netProfit',
+        sorter: (a, b) => tableSort(a, b, "netProfit"),
+        render: netProfit => (
+            <span>{currencyFormat(netProfit)}</span>
+        )
     },
     {
         title: 'Payment Method',
@@ -76,111 +93,128 @@ const columns = [
 
 ]
 
-const dataSource = [
-    {
-        name: "Chloe Price",
-        date: "16/06/2020",
-        affiliate: "MWNA",
-        competition: "MWNA",
-        passcode: "2233",
-        orderId: "12311",
-        paid: "$200",
-        profit: "$32",
-        paymentMethod: "Cash",
-
-    },
-    {
-        name: "Chloe Price",
-        date: "16/06/2020",
-        affiliate: "MWNA",
-        competition: "MWNA",
-        passcode: "2233",
-        orderId: "12311",
-        paid: "$200",
-        profit: "$32",
-        paymentMethod: "Cash",
-
-    },
-    {
-        name: "Chloe Price",
-        date: "16/06/2020",
-        affiliate: "MWNA",
-        competition: "MWNA",
-        passcode: "2233",
-        orderId: "12311",
-        paid: "$200",
-        profit: "$32",
-        paymentMethod: "Cash",
-
-    },
-    {
-        name: "Chloe Price",
-        date: "16/06/2020",
-        affiliate: "MWNA",
-        competition: "MWNA",
-        passcode: "2233",
-        orderId: "12311",
-        paid: "$200",
-        profit: "$32",
-        paymentMethod: "Cash",
-
-    },
-    {
-        name: "Chloe Price",
-        date: "16/06/2020",
-        affiliate: "MWNA",
-        competition: "MWNA",
-        passcode: "2233",
-        orderId: "12311",
-        paid: "$200",
-        profit: "$32",
-        paymentMethod: "Cash",
-
-    },
-
-]
-
-
 class OrderSummary extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            affiliate: "All",
-            year: "2020",
-            paid: "All",
-            postCode: "All",
-            comp: "All"
+            yearRefId: -1,
+            affiliateOrgId: -1,
+            postcode: "",
+            searchText: "",
+            paymentMethod: -1
         }
     }
 
 
     componentDidMount() {
-
+        this.referenceCalls()
+        let { yearRefId, affiliateOrgId, postcode, searchText, paymentMethod } = this.state
+        let params =
+        {
+            limit: 10,
+            offset: 0,
+            search: searchText,
+            year: yearRefId,
+            postcode: postcode,
+            organisationId: affiliateOrgId,
+            paymentMethod: paymentMethod,
+            order: "",
+            sorterBy: ""
+        }
+        this.props.getOrderSummaryListingAction(params)
     }
 
-    onChangeYear(data) {
-        this.setState({ year: data.year })
+    referenceCalls = () => {
+        let organisationUniqueKey = getOrganisationData().organisationUniqueKey
+        this.props.getAffiliateToOrganisationAction(organisationUniqueKey);
+        this.props.getOnlyYearListAction();
     }
 
-    onChangeComp(data) {
-        this.setState({ comp: data.comp })
+    handleTableList = (page) => {
+        let { yearRefId, affiliateOrgId, postcode, searchText, paymentMethod } = this.state
+        let params =
+        {
+            limit: 10,
+            offset: (page ? (10 * (page - 1)) : 0),
+            search: searchText,
+            year: yearRefId,
+            postcode: postcode,
+            organisationId: affiliateOrgId,
+            paymentMethod: paymentMethod,
+            order: "",
+            sorterBy: ""
+        }
+        this.props.getOrderSummaryListingAction(params)
     }
 
-    onChangeAffiliate(data) {
-        this.setState({ affiliate: data.affiliate })
+    onChangeDropDownValue = async (value, key) => {
+        if (key == "yearRefId") {
+            await this.setState({ yearRefId: value });
+            this.handleTableList(1);
+        }
+        else if (key == "affiliateOrgId") {
+            await this.setState({ affiliateOrgId: value });
+            this.handleTableList(1);
+        }
+        else if (key == "postcode") {
+            const regex = /,/gi;
+            let canCall = false;
+            let newVal = value.toString().split(',');
+            newVal.map((x, index) => {
+                console.log("Val::" + x + "**" + x.length);
+                if (Number(x.length) % 4 == 0 && x.length > 0) {
+                    canCall = true;
+                }
+                else {
+                    canCall = false;
+                }
+            })
+            await this.setState({ postcode: value });
+            if (canCall) {
+                this.handleTableList(1);
+            }
+            else if (value.length == 0) {
+                this.handleTableList(1);
+            }
+        }
+        else if (key == "searchText") {
+            await this.setState({ searchText: value });
+            this.handleTableList(1);
+        }
+        else if (key == "paymentMethod") {
+            await this.setState({ paymentMethod: value });
+            this.handleTableList(1);
+        }
     }
 
-    onChangePaid(data) {
-        this.setState({ paid: data.paid })
+    // on change search text
+    onChangeSearchText = (e) => {
+        this.setState({ searchText: e.target.value })
+        if (e.target.value === null || e.target.value === "") {
+            this.handleTableList(1);
+        }
     }
 
-    onChangeDropDownValue(data) {
-        this.setState({ postCode: data.postCode })
+    // search key 
+    onKeyEnterSearchText = (e) => {
+        var code = e.keyCode || e.which;
+        if (code === 13) { //13 is the enter keycode
+            this.handleTableList(1);
+        }
+    }
+
+    // on click of search icon
+    onClickSearchIcon = () => {
+        if (this.state.searchText === null || this.state.searchText === "") {
+        }
+        else {
+            this.handleTableList(1);
+        }
     }
 
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-drop-down-view mt-4">
+            <div className="comp-player-grades-header-drop-down-view mt-4 pt-2">
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
@@ -193,12 +227,13 @@ class OrderSummary extends Component {
                                 <div style={{ display: "flex", justifyContent: 'flex-end' }} >
                                     <div className="comp-product-search-inp-width" >
                                         <Input className="product-reg-search-input"
-                                            //   onChange={(e) => this.onChangeSearchText(e)}
+                                            onChange={(e) => this.onChangeSearchText(e)}
                                             placeholder="Search..."
-                                            //   onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                            onKeyPress={(e) => this.onKeyEnterSearchText(e)}
                                             prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                            // onClick={() => this.onClickSearchIcon()}
+                                                onClick={() => this.onClickSearchIcon()}
                                             />}
+                                            allowClear
                                         />
                                     </div>
                                 </div>
@@ -237,76 +272,93 @@ class OrderSummary extends Component {
     }
 
     dropdownView = () => {
+        let affiliateToData = this.props.userState.affiliateTo;
+        let uniqueValues = [];
+        if (affiliateToData.affiliatedTo != undefined) {
+            let obj = {
+                organisationId: getOrganisationData().organisationUniqueKey,
+                name: getOrganisationData().name
+            }
+            uniqueValues.push(obj);
+            let arr = [...new Map(affiliateToData.affiliatedTo.map(obj => [obj["organisationId"], obj])).values()];
+            if (isEmptyArray) {
+                uniqueValues = [...uniqueValues, ...arr];
+            }
+        }
+        let paymentData = [
+            { name: "Cash", value: "cash" },
+            { name: "Direct Debit", value: "credit card" },
+            { name: "Credit Card", value: "direct debit" }
+        ]
         return (
-            <div className="comp-player-grades-header-drop-down-view mt-1">
+            <div className="comp-player-grades-header-drop-down-view mt-1 order-summ-drop-down-padding order-summary-dropdown-view">
                 <div className="fluid-width" >
                     <div className="row reg-filter-row" >
 
-                        <div className="reg-col" >
+                        <div className="reg-col col-md-3 col-sm-6" >
                             <div className="reg-filter-col-cont">
                                 <div className='year-select-heading'>{AppConstants.year} :</div>
                                 <Select
                                     style={{ minWidth: 160 }}
-                                    onChange={(year) => this.onChangeYear({ year })}
-                                    value={this.state.year}
-                                    className="year-select reg-filter-select mr-5" >
-                                    <Option key={"year"} value="year">{"2020"}</Option>
+                                    onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
+                                    value={this.state.yearRefId}
+                                    className="year-select reg-filter-select" >
+                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                    {this.props.appState.yearList.map(item => {
+                                        return (
+                                            <Option key={"yearRefId" + item.id} value={item.id}>
+                                                {item.description}
+                                            </Option>
+                                        );
+                                    })}
 
                                 </Select>
                             </div>
                         </div>
 
-                        <div className="reg-col mr-3" >
-                            <div className="reg-filter-col-cont">
-                                <div className='year-select-heading'>{AppConstants.competition} :</div>
-                                <Select
-                                    style={{ minWidth: 160 }}
-                                    onChange={(comp) => this.onChangeComp({ comp })}
-                                    value={this.state.affiliate}
-                                    className="year-select reg-filter-select ml-3" >
-                                    <Option key={"all"} value="all">{"All"}</Option>
 
-                                </Select>
-                            </div>
-                        </div>
-
-                        <div className="reg-col" >
+                        <div className="reg-col col-md-3 col-sm-6" >
                             <div className="reg-filter-col-cont">
                                 <div className='year-select-heading'>{AppConstants.affiliate} :</div>
                                 <Select
                                     style={{ minWidth: 160 }}
-                                    onChange={(affiliate) => this.onChangeAffiliate({ affiliate })}
-                                    value={this.state.affiliate}
-                                    className="year-select reg-filter-select mr-3" >
-                                    <Option key={"all"} value="all">{"All"}</Option>
-
+                                    className="year-select reg-filter-select"
+                                    onChange={affiliateOrgId => this.onChangeDropDownValue(affiliateOrgId, "affiliateOrgId")}
+                                    value={this.state.affiliateOrgId}>
+                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                    {(uniqueValues || []).map((org, index) => (
+                                        <Option key={org.organisationId} value={org.organisationId}>{org.name}</Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
 
-                        <div className="reg-col" >
+                        <div className="reg-col col-md-3 col-sm-6" >
                             <div className="reg-filter-col-cont" >
-                                <div className='year-select-heading'>{AppConstants.postCode} :</div>
-                                <Select
-                                    //  mode="multiple"
-                                    className="year-select reg-filter-select mr-3"
-                                    style={{ minWidth: 160 }}
-                                    onChange={(postCode) => this.onChangeDropDownValue({ postCode })}
-                                    value={this.state.postCode}>
-                                    <Option key={"all"} value="all">{"All"}</Option>
-                                </Select>
+                                <div className='year-select-heading' style={{ width: 95 }}>{AppConstants.postCode}</div>
+                                <div style={{ width: '76%' }}>
+                                    <InputWithHead
+                                        placeholder={AppConstants.postCode}
+                                        onChange={(e) => this.onChangeDropDownValue(e.target.value, 'postcode')}
+                                        value={this.state.postcode}
+                                        type="number"
+                                    />
+                                </div>
                             </div>
                         </div>
 
-                        <div className="reg-col" >
+                        <div className="reg-col col-md-3 col-sm-6" >
                             <div className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.payment} :</div>
                                 <Select
                                     style={{ minWidth: 160 }}
-                                    onChange={(paid) => this.onChangePaid({ paid })}
-                                    value={this.state.paid}
-                                    className="year-select reg-filter-select mr-5" >
-                                    <Option key={"amount"} value="amount">{"All"}</Option>
+                                    onChange={paymentMethod => this.onChangeDropDownValue(paymentMethod, "paymentMethod")}
+                                    value={this.state.paymentMethod}
+                                    className="year-select reg-filter-select" >
+                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                    {paymentData.map((item, index) => (
+                                        <Option key={item.value} value={item.value}>{item.name}</Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
@@ -318,20 +370,21 @@ class OrderSummary extends Component {
     }
 
     noOfRegisteredUmpires() {
+        let { numberOfOrders, valueOfOrders } = this.props.shopOrderSummaryState
         return (
             <div className="comp-dash-table-view mt-2">
                 <div>
                     <div className="row">
                         <div className="col-sm-6" >
                             <div className="registration-count">
-                                <div className="reg-payment-paid-reg-text">Number of ORDERS</div>
-                                <div className="reg-payment-price-text">$60,000 </div>
+                                <div className="reg-payment-paid-reg-text">{AppConstants.numberOfOrders}</div>
+                                <div className="reg-payment-price-text">{numberOfOrders}</div>
                             </div>
                         </div>
                         <div className="col-sm-6" >
                             <div className="registration-count">
-                                <div className="reg-payment-paid-reg-text">Value of ORDERS</div>
-                                <div className="reg-payment-price-text">$60,000 </div>
+                                <div className="reg-payment-paid-reg-text">{AppConstants.valueOfOrders}</div>
+                                <div className="reg-payment-price-text">{currencyFormat(valueOfOrders)} </div>
                             </div>
                         </div>
                     </div>
@@ -341,21 +394,28 @@ class OrderSummary extends Component {
     }
 
     contentView = () => {
-        return (<div className="comp-dash-table-view mt-2">
-            <div className="d-flex flex-row justify-content-between">
-                {/* {this.noOfUmpires()} */}
+        let { onLoad, orderSummaryListingData, orderSummaryTotalCount, orderSummaryCurrentPage } = this.props.shopOrderSummaryState
+        console.log("this.props.shopOrderSummaryState", this.props.shopOrderSummaryState)
+        return (
+            <div className="comp-dash-table-view mt-2">
+                <div className="table-responsive home-dash-table-view">
+                    <Table
+                        loading={onLoad}
+                        className="home-dashboard-table"
+                        columns={columns}
+                        dataSource={orderSummaryListingData}
+                        pagination={false} />
 
-            </div>
-            <div className="table-responsive home-dash-table-view">
-                <Table
-                    // loading={this.props.umpireDashboardState.onLoad}
-                    className="home-dashboard-table"
-                    columns={columns}
-                    dataSource={dataSource}
-                    pagination={false} />
-
-            </div>
-        </div>)
+                </div>
+                <div className="d-flex justify-content-end">
+                    <Pagination
+                        className="antd-pagination"
+                        current={orderSummaryCurrentPage}
+                        total={orderSummaryTotalCount}
+                        onChange={(page) => this.handleTableList(page)}
+                    />
+                </div>
+            </div>)
 
     }
 
@@ -377,5 +437,19 @@ class OrderSummary extends Component {
     }
 }
 
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        getOrderSummaryListingAction,
+        getOnlyYearListAction,
+        getAffiliateToOrganisationAction,
+    }, dispatch)
+}
 
-export default OrderSummary
+function mapStatetoProps(state) {
+    return {
+        shopOrderSummaryState: state.ShopOrderSummaryState,
+        userState: state.UserState,
+        appState: state.AppState,
+    }
+}
+export default connect(mapStatetoProps, mapDispatchToProps)((OrderSummary));

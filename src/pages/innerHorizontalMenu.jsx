@@ -50,8 +50,10 @@ class InnerHorizontalMenu extends React.Component {
         if (this.props.userState.onLoad == false && this.state.orgState == true) {
             if (JSON.parse(localStorage.getItem('setOrganisationData'))) {
                 let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
-                this.props.innerHorizontalCompetitionListAction(organisationId)
-                this.setState({ loading: true, orgId: organisationId, orgState: false })
+                if(this.props.menu === "liveScore"){
+                    this.props.innerHorizontalCompetitionListAction(organisationId)
+                    this.setState({ loading: true, orgId: organisationId, orgState: false })
+                }
             }
         }
 
