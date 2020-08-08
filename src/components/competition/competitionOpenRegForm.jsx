@@ -1229,6 +1229,7 @@ class CompetitionOpenRegForm extends Component {
                 <div className="row">
                     <div className="col-sm">
                         <InputWithHead
+                            auto_Complete="new-name"
                             placeholder={AppConstants.name}
                             value={item.name}
                             onChange={(e) => this.updateNonPlayingNames(e.target.value, index, "name")}
@@ -1361,9 +1362,13 @@ class CompetitionOpenRegForm extends Component {
             <div className="content-view pt-4">
                 <Form.Item >
                     {getFieldDecorator('competition_name',
-                        { rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }] })(
+                        {
+                            rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }, {
+                                type: "name"
+                            }]
+                        })(
                             <InputWithHead
-
+                                auto_Complete="new-name"
                                 required={"required-field pb-0 "}
                                 heading={AppConstants.competition_name}
                                 placeholder={AppConstants.competition_name}
@@ -1607,6 +1612,7 @@ class CompetitionOpenRegForm extends Component {
                     <div className="row">
                         <div id={AppUniqueId.time_rounds_days} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
+                                auto_Complete="new-days"
                                 placeholder={AppConstants.days}
                                 value={detailsData.competitionDetailData.roundInDays}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInDays")}
@@ -1616,6 +1622,7 @@ class CompetitionOpenRegForm extends Component {
                         </div>
                         <div id={AppUniqueId.time_rounds_hrs} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
+                                auto_Complete="new-hours"
                                 placeholder={AppConstants.hours}
                                 value={detailsData.competitionDetailData.roundInHours}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInHours")}
@@ -1625,6 +1632,7 @@ class CompetitionOpenRegForm extends Component {
                         </div>
                         <div id={AppUniqueId.time_rounds_mins} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
+                                auto_Complete="new-mins"
                                 placeholder={AppConstants.mins}
                                 value={detailsData.competitionDetailData.roundInMins}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInMins")}
@@ -1662,6 +1670,7 @@ class CompetitionOpenRegForm extends Component {
                     <div className="row">
                         <div id={AppUniqueId.team_min_players} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
+                                auto_Complete="new-minNumber"
                                 placeholder={AppConstants.minNumber}
                                 value={detailsData.competitionDetailData.minimunPlayers}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "minimunPlayers")}
@@ -1671,6 +1680,7 @@ class CompetitionOpenRegForm extends Component {
                         </div>
                         <div id={AppUniqueId.team_max_players} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
+                                auto_Complete="new-maxNumber"
                                 placeholder={AppConstants.maxNumber}
                                 value={detailsData.competitionDetailData.maximumPlayers}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "maximumPlayers")}
@@ -2838,6 +2848,7 @@ class CompetitionOpenRegForm extends Component {
                 <InnerHorizontalMenu menu={"competition"} compSelectedKey={"3"} />
                 <Layout>
                     <Form
+                        autoComplete="off"
                         onSubmit={this.saveAPIsActionCall}
                         noValidate="noValidate"
                     >

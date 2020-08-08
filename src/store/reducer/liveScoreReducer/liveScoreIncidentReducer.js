@@ -200,25 +200,29 @@ function liveScoreIncidentState(state = initialState, action) {
 
 
             } else if (action.key === "clearImage") {
-                state.incidentData['addImages'] = null
+                if (state.mediaData) {
+                    state.incidentData['addImages'] = null
 
-                let imageId = removeMediaId(state.mediaData.incidentMediaList, "image/png")
-                let media_Array = state.incidentMediaIds
-                media_Array.splice(imageId.index, 1)
-                state.mediaData.incidentMediaList.splice(imageId.index, 1)
-                state.incidentMediaIds = media_Array
+                    let imageId = removeMediaId(state.mediaData.incidentMediaList, "image/png")
+                    let media_Array = state.incidentMediaIds
+                    media_Array.splice(imageId.index, 1)
+                    state.mediaData.incidentMediaList.splice(imageId.index, 1)
+                    state.incidentMediaIds = media_Array
 
+                }
 
 
             } else if (action.key === "clearVideo") {
-                state.incidentData['addVideo'] = null
+                if (state.mediaData) {
+                    state.incidentData['addVideo'] = null
 
-                let videoId = removeMediaId(state.mediaData.incidentMediaList, "video/mp4")
+                    let videoId = removeMediaId(state.mediaData.incidentMediaList, "video/mp4")
 
-                let media_Array = state.incidentMediaIds
-                media_Array.splice(videoId.index, 1)
-                state.mediaData.incidentMediaList.splice(videoId.index, 1)
-                state.incidentMediaIds = media_Array
+                    let media_Array = state.incidentMediaIds
+                    media_Array.splice(videoId.index, 1)
+                    state.mediaData.incidentMediaList.splice(videoId.index, 1)
+                    state.incidentMediaIds = media_Array
+                }
 
 
 

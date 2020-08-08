@@ -527,7 +527,9 @@ class QuickCompetitionMatchFormat extends Component {
         let isAllDivisionChecked = this.props.competitionFormatState.isAllDivisionChecked;
         return (
             <div className="content-view pt-4">
-                <InputWithHead heading={AppConstants.competition_name} placeholder={AppConstants.competition_name}
+                <InputWithHead
+                    auto_Complete="new-compName"
+                    heading={AppConstants.competition_name} placeholder={AppConstants.competition_name}
                     value={data.competitionName} onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionName')}  ></InputWithHead>
                 <div style={{ marginTop: 15 }}>
                     <InputWithHead heading={AppConstants.competitionFormat} required={"required-field"} />
@@ -620,16 +622,17 @@ class QuickCompetitionMatchFormat extends Component {
                 <div className="fluid-width">
                     <div className="row" >
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <InputWithHead placeholder={AppConstants.days} value={data.roundInDays}
+                            <InputWithHead auto_Complete="new-roundInDays" placeholder={AppConstants.days} value={data.roundInDays}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInDays')}></InputWithHead>
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <InputWithHead placeholder={AppConstants.hours} value={data.roundInHours}
+                            <InputWithHead auto_Complete="new-roundInHours"
+                                placeholder={AppConstants.hours} value={data.roundInHours}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInHours')}></InputWithHead>
 
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <InputWithHead placeholder={AppConstants.mins} value={data.roundInMins}
+                            <InputWithHead auto_Complete="new-roundInMins" placeholder={AppConstants.mins} value={data.roundInMins}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInMins')}></InputWithHead>
                         </div>
                     </div>
@@ -678,9 +681,15 @@ class QuickCompetitionMatchFormat extends Component {
                                             rules: [{
                                                 required: true, pattern: new RegExp("^[1-9][0-9]*$"),
                                                 message: ValidationConstants.matchDuration
-                                            }]
+                                            },
+                                            {
+                                                type: "matchDuration"
+                                            }
+                                            ]
                                         })(
-                                            <InputWithHead heading={AppConstants.matchDuration}
+                                            <InputWithHead
+                                                auto_Complete="new-matchDuration"
+                                                heading={AppConstants.matchDuration}
                                                 required={"required-field"}
                                                 placeholder={AppConstants.mins}
                                                 setFieldsValue={item.matchDuration}
@@ -693,9 +702,13 @@ class QuickCompetitionMatchFormat extends Component {
                                     <div className="col-sm-3" >
                                         <Form.Item >
                                             {getFieldDecorator(`mainBreak${index}`, {
-                                                rules: [{ required: ((data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? true : false), message: ValidationConstants.mainBreak }]
+                                                rules: [{ required: ((data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? true : false), message: ValidationConstants.mainBreak }, {
+                                                    type: "mainBreak"
+                                                }]
                                             })(
-                                                <InputWithHead heading={AppConstants.mainBreak}
+                                                <InputWithHead
+                                                    auto_Complete="new-mainBreak"
+                                                    heading={AppConstants.mainBreak}
                                                     required={(data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? "required-field" : null}
                                                     placeholder={AppConstants.mins}
                                                     setFieldsValue={item.mainBreak}
@@ -710,9 +723,15 @@ class QuickCompetitionMatchFormat extends Component {
                                     <div className="col-sm-3" >
                                         <Form.Item >
                                             {getFieldDecorator(`qtrBreak${index}`, {
-                                                rules: [{ required: (data.matchTypeRefId == 3 ? true : false), message: ValidationConstants.qtrBreak }]
+                                                rules: [{ required: (data.matchTypeRefId == 3 ? true : false), message: ValidationConstants.qtrBreak },
+                                                {
+                                                    type: "qtrBreak"
+                                                }
+                                                ]
                                             })(
-                                                <InputWithHead heading={AppConstants.qtrBreak} placeholder={AppConstants.mins}
+                                                <InputWithHead
+                                                    auto_Complete="new-qtrBreak"
+                                                    heading={AppConstants.qtrBreak} placeholder={AppConstants.mins}
                                                     required={(data.matchTypeRefId == 3) ? "required-field" : null}
                                                     setFieldsValue={item.qtrBreak}
                                                     onChange={(e) => this.onChangeSetCompFormatDivisionValue(e.target.value, 'qtrBreak',
@@ -727,7 +746,7 @@ class QuickCompetitionMatchFormat extends Component {
                                             {getFieldDecorator(`timeBetweenGames${index}`, {
                                                 rules: [{ required: true, message: ValidationConstants.timeBetweenGames }]
                                             })(
-                                                <InputWithHead heading={AppConstants.timeBetweenMatches} placeholder={AppConstants.mins}
+                                                <InputWithHead auto_Complete="new-timeBetweenGames" heading={AppConstants.timeBetweenMatches} placeholder={AppConstants.mins}
                                                     required={"required-field"}
                                                     setFieldsValue={item.timeBetweenGames}
                                                     onChange={(e) => this.onChangeSetCompFormatDivisionValue(e.target.value, 'timeBetweenGames',

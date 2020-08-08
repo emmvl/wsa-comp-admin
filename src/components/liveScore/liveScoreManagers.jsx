@@ -236,7 +236,7 @@ class LiveScoreManagerList extends Component {
                         }}
                     >
                         <Pagination
-                            className="auto-pagination"
+                            className="antd-pagination"
                             defaultCurrent={1}
                             total={8}
                         />

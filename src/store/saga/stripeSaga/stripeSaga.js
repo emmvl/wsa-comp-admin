@@ -207,3 +207,21 @@ export function* getPaymentListSaga(action) {
     }
 }
 
+//get invoice saga
+export function* exportpaymetSaga(action) {
+    try {
+        const result = yield call(AxiosApi.exportPaymentApi, action.key);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_PAYMENT_DASHBOARD_EXPORT_SUCCESS,
+                result: result.result.data,
+                status: result.result.status
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+

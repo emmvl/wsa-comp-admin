@@ -65,6 +65,15 @@ export function* saveQuickCompDivisionSaga(action) {
                         result: result.result.data,
                         status: result.status
                     });
+                    if (drawResult.status != 1) {
+                        setTimeout(() => {
+                            message.config({
+                                duration: 1,
+                                maxCount: 1
+                            })
+                            message.error(drawResult.result.data.message);
+                        }, 800);
+                    }
                 }
             }
             else {
@@ -171,9 +180,18 @@ export function* quickcompetitoTimeSlotsPostApi(action) {
                         result: result.result.data,
                         status: result.status,
                     });
-                    setTimeout(() => {
-                        message.success(result.result.data.message)
-                    }, 500);
+                    if (drawResult.status != 1) {
+                        setTimeout(() => {
+                            message.config({
+                                duration: 1,
+                                maxCount: 1
+                            })
+                            message.error(drawResult.result.data.message);
+                        }, 800);
+                    }
+                    // setTimeout(() => {
+                    //     message.success(result.result.data.message)
+                    // }, 500);
                 }
             }
             else {

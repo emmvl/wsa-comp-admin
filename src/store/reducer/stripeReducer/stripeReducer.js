@@ -249,6 +249,15 @@ function stripe(state = initialState, action) {
                     : 1,
             }
 
+        case ApiConstants.API_PAYMENT_DASHBOARD_EXPORT_LOAD:
+            return { ...state, onExportLoad: true }
+
+        case ApiConstants.API_PAYMENT_DASHBOARD_EXPORT_SUCCESS:
+            return {
+                ...state,
+                onExportLoad: false,
+            }
+
         default:
             return state;
     }

@@ -92,7 +92,7 @@ import { liveScoreBulkPushBack, liveScoreBulkBringForwardSaga, liveScoreMatchRes
 import { liveScorePlayerSaga, liveScoreAddEditPlayerSaga, liveScorePlayerImportSaga, getPlayerListPagginationSaga } from "./liveScoreSaga/liveScorePlayerSaga";
 import { liveScoreDashboardSaga } from './liveScoreSaga/liveScoreDashboardSaga';
 import { liveScoreCompetitionSaga, liveScoreCompetitionDelete } from './liveScoreSaga/liveScoreCompetionSaga'
-import { liveScoreDivisionsaga, liveScoreDeleteDivisionSaga, liveScoreCreateDivisionsaga, liveScoreDivisionImportSaga,liveScoreMainDivisionListsaga } from './liveScoreSaga/liveScoreDivisionSaga';
+import { liveScoreDivisionsaga, liveScoreDeleteDivisionSaga, liveScoreCreateDivisionsaga, liveScoreDivisionImportSaga, liveScoreMainDivisionListsaga } from './liveScoreSaga/liveScoreDivisionSaga';
 
 ////*******************Live Score********************************************End
 
@@ -813,17 +813,16 @@ export default function* root_saga() {
   yield takeEvery(ApiConstants.API_VENUE_ADDRESS_CHECK_DUPLICATION_LOAD, checkVenueAddressDuplicationSaga);
 
   // Umpire Round Saga
-
   yield takeEvery(ApiConstants.API_UMPIRE_ROUND_LIST_LOAD, umpireDashboardSaga.umpireRoundListSaga)
-
   yield takeEvery(ApiConstants.API_INNER_HORIZONTAL_COMPETITION_LIST_LOAD, getInnerHorizontalCompSaga)
-
 
   //add quick competition venue
   yield takeEvery(ApiConstants.API_QUICK_COMPETITION_ADDVENUE_LOAD, competitionQuickSaga.quickCompetitionAddVenueSaga)
 
   yield takeEvery(ApiConstants.API_LIVE_SCORE_POSITION_TRACKING_LOAD, liveScorePositionTrackSaga)
 
+  //export payment saga
+  yield takeEvery(ApiConstants.API_PAYMENT_DASHBOARD_EXPORT_LOAD, stripeSaga.exportpaymetSaga)
 
   yield takeEvery(ApiConstants.API_LIVE_SCORE_MAIN_DIVISION_LIST_LOAD, liveScoreMainDivisionListsaga)
 

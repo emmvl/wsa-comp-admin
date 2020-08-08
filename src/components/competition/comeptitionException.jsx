@@ -419,6 +419,7 @@ class CompetitionException extends Component {
                 <Layout>
                     {this.headerView()}
                     <Form
+                        autoComplete="off"
                         onSubmit={this.handleSubmit}
                         noValidate="noValidate">
                         <Content>

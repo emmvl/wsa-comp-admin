@@ -86,14 +86,14 @@ class CompetitionVenueTimesPrioritisation extends Component {
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
         if (yearId && storedCompetitionId && propsData && compData) {
-            let quickComp = this.props.appState.own_CompetitionArr.find(x=>x.competitionId == 
+            let quickComp = this.props.appState.own_CompetitionArr.find(x => x.competitionId ==
                 storedCompetitionId && x.isQuickCompetition == 1);
             this.setState({
                 yearRefId: JSON.parse(yearId),
                 firstTimeCompId: storedCompetitionId,
                 competitionStatus: storedCompetitionStatus,
                 getDataLoading: true,
-                isQuickCompetition: quickComp!= undefined ? true : false
+                isQuickCompetition: quickComp != undefined ? true : false
             })
             this.props.venueConstraintListAction(yearId, storedCompetitionId, 1)
         }
@@ -127,7 +127,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
             //         year_id = storedYearID ? storedYearID : yearList[0].id
             //         setOwnCompetitionYear(year_id)
             //     }
-			let competitionList = this.props.appState.own_CompetitionArr
+            let competitionList = this.props.appState.own_CompetitionArr
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
                     // let competitionId = null
@@ -138,12 +138,12 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
-                    let quickComp = this.props.appState.own_CompetitionArr.find(x=>x.competitionId == 
+                    let quickComp = this.props.appState.own_CompetitionArr.find(x => x.competitionId ==
                         competitionId && x.isQuickCompetition == 1);
                     this.props.venueConstraintListAction(this.state.yearRefId, competitionId, 1)
                     this.setState({
                         getDataLoading: true, loading: false, firstTimeCompId: competitionId,
-                        competitionStatus: statusRefId, isQuickCompetition: quickComp!= undefined ? true : false
+                        competitionStatus: statusRefId, isQuickCompetition: quickComp != undefined ? true : false
                     })
                 }
             }
@@ -286,10 +286,12 @@ class CompetitionVenueTimesPrioritisation extends Component {
     onCompetitionClick(competitionId, statusRefId) {
         setOwn_competition(competitionId)
         setOwn_competitionStatus(statusRefId)
-        let quickComp = this.props.appState.own_CompetitionArr.find(x=>x.competitionId == 
+        let quickComp = this.props.appState.own_CompetitionArr.find(x => x.competitionId ==
             competitionId && x.isQuickCompetition == 1);
-        this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId,
-            isQuickCompetition: quickComp!= undefined ? true : false })
+        this.setState({
+            firstTimeCompId: competitionId, competitionStatus: statusRefId,
+            isQuickCompetition: quickComp != undefined ? true : false
+        })
         this.props.clearVenueTimesDataAction(competitionId)
 
         if (this.props.venueTimeState.onVenueDataClear == true) {
@@ -366,6 +368,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     rules: [{ required: true, message: ValidationConstant.nameField[2] }]
                                 })(
                                     <InputWithHead
+                                        auto_Complete="new-name"
                                         placeholder={AppConstants.name}
                                         onChange={name => {
                                             this.props.updateVenueConstraintsData(name.target.value, index, 'name', 'nonPlayingDates')
@@ -1413,13 +1416,14 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     {this.headerView()}
                     {this.dropdownView()}
                     <Form
+                        autoComplete="off"
                         onSubmit={this.onSaveConstraints}
                         noValidate="noValidate"
                     >
                         <Content>
                             <div className="formView">{
-                            !this.state.isQuickCompetition ? this.contentView(getFieldDecorator) :
-                                this.qcWarningView()}</div>
+                                !this.state.isQuickCompetition ? this.contentView(getFieldDecorator) :
+                                    this.qcWarningView()}</div>
 
                             {/* {venueConstrainstData.competitionTypeRefId == 1 ? 
                                 <div>

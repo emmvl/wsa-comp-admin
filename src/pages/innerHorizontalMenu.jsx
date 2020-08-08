@@ -237,6 +237,11 @@ class InnerHorizontalMenu extends React.Component {
                                 <span>Registrations</span>
                             </NavLink>
                         </Menu.Item>
+                        <Menu.Item key="10">
+                            <NavLink to="/teamRegistrations">
+                                <span>Team Registrations</span>
+                            </NavLink>
+                        </Menu.Item>
                         <Menu.Item key="9">
                             <NavLink to="/registrationChange">
                                 <span>Registration Change</span>

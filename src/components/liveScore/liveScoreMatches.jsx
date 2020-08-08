@@ -230,7 +230,7 @@ class LiveScoreMatchesList extends Component {
             if (id !== null) {
                 this.handleMatchTableList(1, id)
                 this.props.getLiveScoreDivisionList(id)
-                this.props.liveScoreRoundListAction(id)
+                this.props.liveScoreRoundListAction(id, this.state.selectedDivision == 'All' ? '' : this.state.selectedDivision)
             } else {
                 history.push('/')
             }
@@ -316,14 +316,16 @@ class LiveScoreMatchesList extends Component {
                         ) : setMatchResult(records)}
                     </div>
                 ) : (
-                    <span className="white-space-nowrap">{setMatchResult(records)}</span>
-                )}
+                        <span className="white-space-nowrap">{setMatchResult(records)}</span>
+                    )}
             </div>
         )
     }
 
     ///////view for breadcrumb
     headerView = () => {
+        const { liveScoreMatchListData } = this.props.liveScoreMatchListState;
+        let matchData = isArrayNotEmpty(liveScoreMatchListData) ? liveScoreMatchListData : []
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="row">
@@ -352,7 +354,7 @@ class LiveScoreMatchesList extends Component {
                                     <Button
                                         type="primary"
                                         className="primary-add-comp-form"
-                                        disabled={this.state.isBulkUpload}
+                                        disabled={this.state.isBulkUpload || matchData.length === 0}
                                         onClick={() => this.setState({ isBulkUpload: true })}
                                     >
                                         {AppConstants.bulkScoreUpload}
@@ -465,10 +467,9 @@ class LiveScoreMatchesList extends Component {
 
     //////// tableView
     tableView = () => {
-        const { liveScoreMatchListState } = this.props;
-        let DATA = liveScoreMatchListState ? liveScoreMatchListState.liveScoreMatchListData : []
-        // const { id } = JSON.parse(getLiveScoreCompetiton())
-        let total = liveScoreMatchListState.liveScoreMatchListTotalCount;
+        const { liveScoreMatchListData, liveScoreMatchListPage, liveScoreMatchListTotalCount } = this.props.liveScoreMatchListState;
+        let DATA = isArrayNotEmpty(liveScoreMatchListData) ? liveScoreMatchListData : []
+        let total = liveScoreMatchListTotalCount;
 
         return (
             <div className="comp-dash-table-view mt-4">
@@ -484,7 +485,7 @@ class LiveScoreMatchesList extends Component {
                 <div className="d-flex justify-content-end" >
                     <Pagination
                         className="antd-pagination"
-                        current={liveScoreMatchListState.liveScoreMatchListPage}
+                        current={liveScoreMatchListPage}
                         total={total}
                         onChange={(page) => this.onPageChange(page)}
                         defaultPageSize={10}
@@ -567,11 +568,16 @@ class LiveScoreMatchesList extends Component {
     }
 
     onChangeDivision(division) {
+        this.setState({ selectedDivision: division, selectedRound: 'All' })
         let offset = 0;
         let start = 1
         const { competitionId, searchText, selectedRound } = this.state;
-        this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, division === 'All' ? null : division, selectedRound === 'All' ? null : selectedRound)
-        this.setState({ selectedDivision: division })
+
+        setTimeout(() => {
+            this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, division === 'All' ? null : division, selectedRound === 'All' ? null : selectedRound)
+        }, 200);
+        this.props.liveScoreRoundListAction(competitionId, division == 'All' ? '' : division)
+
     }
 
     onChangeRound(roundName) {

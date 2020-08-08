@@ -167,12 +167,13 @@ class LiveScoreAddPlayer extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
+                                    auto_Complete='new-firstName'
                                     required={"required-field pb-0"}
                                     heading={AppConstants.firstName}
                                     placeholder={AppConstants.enterFirstName}
                                     name={'firstName'}
                                     onChange={(firstName) => this.props.liveScoreUpdatePlayerDataAction(captializedString(firstName.target.value), firstName.target.name)}
-                                    onBlur={(i)=> this.props.form.setFieldsValue({
+                                    onBlur={(i) => this.props.form.setFieldsValue({
                                         'firstName': captializedString(i.target.value)
                                     })}
                                 />
@@ -187,12 +188,13 @@ class LiveScoreAddPlayer extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
+                                    auto_Complete='new-lastName'
                                     required={"required-field pb-0"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.enterLastName}
                                     name={'lastName'}
                                     onChange={(lastName) => this.props.liveScoreUpdatePlayerDataAction(captializedString(lastName.target.value), lastName.target.name)}
-                                    onBlur={(i)=> this.props.form.setFieldsValue({
+                                    onBlur={(i) => this.props.form.setFieldsValue({
                                         'lastName': captializedString(i.target.value)
                                     })}
                                 />
@@ -220,6 +222,7 @@ class LiveScoreAddPlayer extends Component {
                     </div>
                     <div className="col-sm" >
                         <InputWithHead
+                            auto_Complete='new-contact'
                             heading={AppConstants.contactNO}
                             placeholder={AppConstants.enterContactNo}
                             name={'contactNo'}
@@ -234,6 +237,7 @@ class LiveScoreAddPlayer extends Component {
                 <div className="row" >
                     <div className="col-sm" >
                         <InputWithHead
+                            auto_Complete='new-mnbId'
                             heading={AppConstants.playerId}
                             placeholder={AppConstants.enterPlayerID}
                             name={'playerId'}
@@ -392,6 +396,7 @@ class LiveScoreAddPlayer extends Component {
                 <Layout>
                     {this.headerView()}
                     <Form
+                        autoComplete='off'
                         onSubmit={this.onSaveClick}
                         noValidate="noValidate">
                         <Content>
