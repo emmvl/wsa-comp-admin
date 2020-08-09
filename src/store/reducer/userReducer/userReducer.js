@@ -118,6 +118,7 @@ const initialState = {
   defaultCharityRoundUp: [],
   impersonationLoad: false,
   impersonation: false,
+  userRoleEntity: [],
 };
 
 function userReducer(state = initialState, action) {

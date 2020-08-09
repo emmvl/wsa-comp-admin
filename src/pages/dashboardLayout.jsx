@@ -55,7 +55,9 @@ class DashboardLayout extends React.Component {
         this.setFullStory(organisationItem);
         await setOrganisationData(organisationItem);
         this.props.onOrganisationChangeAction(organisationItem, "organisationChange");
-        this.setState({dataOnload: false, impersonationOrgData});
+
+        const isImpersonation = this.props.userState.userRoleEntity.findIndex((role) => role.roleId === 10) > -1;
+        this.setState({dataOnload: false, impersonationOrgData: isImpersonation ? orgData : null});
       }
 
       if (this.props.userState.impersonation && !this.state.impersonationLoad && !this.state.dataOnload) {
