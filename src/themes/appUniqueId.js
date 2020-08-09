@@ -46,6 +46,7 @@ const AppUniqueId = {
     eventimeRotation_div: "eventimeRotation_div",
     eventimeRotation_grade: "eventimeRotation_grade",
     eventimeRotation_team: "eventimeRotation_team",
+    timeslotGenerationRemove_btn: "timeslotGenerationRemove_btn",
 
 
     //// Unique Ids for TeamGrading ////////
@@ -60,14 +61,15 @@ const AppUniqueId = {
     //// Unique Ids for PlayerGrading ////////
 
     PlayerGradingYear_dpdn: "playgrad_year_dpdn",
-    PlayerGradingYCompetition_dpdn: "playgrad_compname_dpdn",
-    PlayerGradingYDivisionName_dpdn: "playgrad_divname_dpdn",
+    PlayerGradingCompetition_dpdn: "playgrad_compname_dpdn",
+    PlayerGradingDivisionName_dpdn: "playgrad_divname_dpdn",
     PlayerGrading_ImportBtn: "playgrad_import_bn",
     PlayerGrading_ImportTeamBtn: "playgrad_importeam_bn",
     PlayerGrading_CreateTeam: "playgrad_create_team_bn",
     PlayerGrading_addTeamName: "playgrad_addTeamname",
     PlayerGrading_unassigned_Player_CheckBox: "playgrad_unassigned_chkbox",
     playgrad_Next_bn: "playgrad_Next_bn",
+    playgrad_newTeam_chkbx: "playgrad_newTeam_chkbx",
 
     //// Unique Ids for ImportPlayer ////////
 
@@ -191,6 +193,10 @@ const AppUniqueId = {
 
     qckcomp_genFixtures_btn: "qckcomp_genFixtures_btn",
     qckcomp_addTeams_btn: "qckcomp_addTeams_btn",
+
+    //import team button
+    impPlayerTeam_template_btn: "impPlayerTeam_template_btn",
+    importPlayerTeam_upload_btn: "importPlayerTeam_upload_btn"
 
 };
 

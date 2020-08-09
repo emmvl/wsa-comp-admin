@@ -249,7 +249,9 @@ let userHttpApi = {
     } else {
       url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&offset=${0}&limit=${10}`
     }
-
+    if (data.sortBy && data.sortOrder) {
+      url += `&sortBy=${data.sortBy}&sortOrder=${data.sortOrder}`;
+    }
     return Method.dataGet(url, localStorage.token);
   },
 

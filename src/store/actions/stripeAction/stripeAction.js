@@ -88,6 +88,15 @@ function getPaymentList(offset) {
     return action
 }
 
+//export payment dashboard data
+function exportPaymentApi(key) {
+    const action = {
+        type: ApiConstants.API_PAYMENT_DASHBOARD_EXPORT_LOAD,
+        key
+    }
+    return action
+}
+
 export {
     accountBalanceAction,
     chargingPaymentAction,
@@ -96,5 +105,6 @@ export {
     getStripeTransferListAction,
     getStripePayoutListAction,
     getTransactionPayoutListAction,
-    getInvoice, getPaymentList
+    getInvoice, getPaymentList,
+    exportPaymentApi
 }

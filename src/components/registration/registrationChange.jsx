@@ -165,7 +165,11 @@ const Data = [
         "approvalAffiliate_1": '$60',
         "approvalAffiliate_2": '$20',
         "state": '$20',
-        "status": 'Approved'
+        "status": 'Approved',
+        "transferAffiliate_1": '',
+        "transferAffiliate_2": '',
+        "transferCompetition": 'Winter 2020'
+
     },
     {
         "userName": 'Marissa Gaybo',
@@ -193,7 +197,10 @@ const Data = [
         "approvalAffiliate_1": '$45',
         "approvalAffiliate_2": 'N/A',
         "state": '$30',
-        "status": 'Partially Approved'
+        "status": 'Partially Approved',
+        "transferAffiliate_1": '',
+        "transferAffiliate_2": '',
+        "transferCompetition": 'Winter 2020'
     },
 ]
 

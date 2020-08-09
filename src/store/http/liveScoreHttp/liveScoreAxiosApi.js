@@ -879,14 +879,19 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
-    umpireRoasterList(competitionID, status, refRoleId, paginationBody) {
+    umpireRoasterList(competitionID, status, refRoleId, paginationBody, sortBy,
+        sortOrder) {
         let url = null
         let body = paginationBody
 
         if (status === "All") {
             url = `/roster/list?competitionId=${competitionID}&roleId=${refRoleId}`;
-        } else {
+        }
+        else {
             url = `/roster/list?competitionId=${competitionID}&status=${status}&roleId=${refRoleId}`;
+        }
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
         return Method.dataPost(url, token, body)
     },
@@ -902,7 +907,6 @@ let LiveScoreAxiosApi = {
     },
 
     umpireListDashboard(data) {
-        console.log(data)
         let body = data.pageData
         let url
         if (data.roundId) {
@@ -910,6 +914,9 @@ let LiveScoreAxiosApi = {
             url = `/matchUmpire/dashboard?competitionId=${data.compId}&divisionId=${data.divisionid}&venueId=${data.venueId}&organisationId=${data.orgId}&roundIds=${round}`;
         } else {
             url = `/matchUmpire/dashboard?competitionId=${data.compId}&divisionId=${data.divisionid}&venueId=${data.venueId}&organisationId=${data.orgId}`;
+        }
+        if (data.sortBy && data.sortOrder) {
+            url += `&sortBy=${data.sortBy}&sortOrder=${data.sortOrder}`;
         }
         // const url = `/matchUmpire/dashboard?competitionId=${1}&divisionId=${3}&venueId=${233}&organisationId=${3}`;
         return Method.dataPost(url, token, body)
@@ -1118,7 +1125,6 @@ const Method = {
                     }
                 })
                 .then(result => {
-                    console.log(result, 'resultChecking')
                     if (result.status === 200) {
                         return resolve({
                             status: 1,
@@ -1144,7 +1150,6 @@ const Method = {
                     }
                 })
                 .catch(err => {
-                    console.log(err.response, 'errorChecking')
                     if (err.response) {
                         if (err.response.status !== null || err.response.status !== undefined) {
                             if (err.response.status === 401) {
@@ -1412,7 +1417,6 @@ const Method = {
                     }
                 })
                 .catch(err => {
-                    console.log(err.response, 'errorChecking')
                     if (err.response) {
                         if (err.response.status !== null || err.response.status !== undefined) {
                             if (err.response.status === 401) {

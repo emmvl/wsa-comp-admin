@@ -94,7 +94,6 @@ const AppConstants = {
   OtherInfoReqd: 'Other information required',
   yourSupportImportant:
     'Your Support is important for the continued success of our Club. Can you help?',
-  childrenCheckNumber: 'Working with Children Check Number',
   childrenNumber: 'Children Check Number',
   childrenCheckNumberInfo:
     'Working with Children Check Number (You are required to have a working with Children Number. If you don’t have one you will need to apply.)',
@@ -1519,6 +1518,8 @@ const AppConstants = {
   childrenCheckNumber:"Requires Working with Children Check",
   regenerateDrawTitle:"Regenerate draw from which Round?",
   impersonationOrgSelect:"Choose an organization to access",
+  numberOfOrders: "Number of Orders",
+  teamRegistrations: "Team Registrations",
 };
 
 export default AppConstants;

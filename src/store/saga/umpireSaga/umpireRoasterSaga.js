@@ -35,7 +35,8 @@ export function* umpireRoasterListSaga(action) {
             action.competitionID,
             action.status,
             action.refRoleId,
-            action.paginationBody);
+            action.paginationBody, action.sortBy,
+            action.sortOrder);
 
         if (result.status === 1) {
             yield put({

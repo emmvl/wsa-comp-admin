@@ -40,7 +40,7 @@ let CompetitionAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    /////competition part player grade calculate player grading summmary get API
+    /////competition part player grade calculate player grading summary get API
     async getCompPartPlayerGradingSummary(yearRefId, competitionId) {
         let userId = await getUserId()
         let orgItem = await getOrganisationData()
@@ -110,7 +110,7 @@ let CompetitionAxiosApi = {
         return Method.dataPost(url, token, payload)
     },
 
-    ///////////save the competition part player grade calculate player grading summmary or say proposed player grading toggle
+    ///////////save the competition part player grade calculate player grading summary or say proposed player grading toggle
     async saveCompPartPlayerGradingSummary(payload) {
         let userId = await getUserId()
         var url = `api/playergrading/summary/save?userId=${userId}`
@@ -208,7 +208,7 @@ let CompetitionAxiosApi = {
         return Method.dataPost(url, token, payload);
     },
 
-    ////////team grading summmary publish
+    ////////team grading summary publish
     async publishGradeTeamSummary(yearRefId, competitionId) {
         let orgItem = await getOrganisationData()
         let userId = await getUserId()

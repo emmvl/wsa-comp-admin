@@ -71,6 +71,7 @@ import ShopSettingState from "./shopReducer/shopSettingReducer";
 import InnerHorizontalState from './liveScoreReducer/liveScoreInnerHorizontalReducer'
 
 import LiveScorePositionTrackState from './liveScoreReducer/liveScorePositionTrackReducer'
+import ShopOrderSummaryState from './shopReducer/orderSummaryReducer';
 
 const rootReducer = combineReducers({
   LoginState,
@@ -133,7 +134,8 @@ const rootReducer = combineReducers({
   RegistrationChangeState,
   ShopSettingState,
   InnerHorizontalState,
-  LiveScorePositionTrackState
+  LiveScorePositionTrackState,
+  ShopOrderSummaryState,
 });
 
 export default rootReducer;

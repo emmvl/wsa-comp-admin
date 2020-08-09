@@ -439,10 +439,10 @@ class UserOurOragnization extends Component {
     }
 
     handleForce = data => {
-        this.setState({ termsAndCondititionFile: data.target.files[0]})
+        this.setState({ termsAndCondititionFile: data.target.files[0] })
     };
 
-    onChangesetCharity = (value, index, key) =>{
+    onChangesetCharity = (value, index, key) => {
         this.props.updateCharityValue(value, index, key);
     }
 
@@ -504,7 +504,7 @@ class UserOurOragnization extends Component {
                             // formData.append("termsAndConditionsRefId", affiliate.termsAndConditionsRefId);
                             // formData.append("termsAndConditions", termsAndConditionsValue);
                             // formData.append("organisationLogo", this.state.termsAndCondititionFile);
-                           // formData.append("termsAndConditionId", this.state.termsAndCondititionFile == null ? 1 : 0);
+                            // formData.append("termsAndConditionId", this.state.termsAndCondititionFile == null ? 1 : 0);
 
                             this.setState({ loading: true });
                             this.props.saveAffiliateAction(formData);
@@ -531,14 +531,14 @@ class UserOurOragnization extends Component {
         });
     }
 
-    updateTermsAndCondition = () =>{
+    updateTermsAndCondition = () => {
         let affiliate = this.props.userState.affiliateOurOrg;
         let formData = new FormData();
         let termsAndConditionsValue = null;
-        if(affiliate.termsAndConditionsRefId == 1){
+        if (affiliate.termsAndConditionsRefId == 1) {
             termsAndConditionsValue = affiliate.termsAndConditionsLink;
         }
-        if(this.state.termsAndCondititionFile == null && affiliate.termsAndConditionsRefId == 2){
+        if (this.state.termsAndCondititionFile == null && affiliate.termsAndConditionsRefId == 2) {
             termsAndConditionsValue = affiliate.termsAndConditionsFile;
         }
         formData.append("organisationId", getOrganisationData().organisationUniqueKey);
@@ -548,16 +548,16 @@ class UserOurOragnization extends Component {
 
         this.setState({ loading: true });
         this.props.updateTermsAndCondtionAction(formData);
-        this.setState({termsAndCondititionFile: null});
+        this.setState({ termsAndCondititionFile: null });
     }
 
-    updateCharity = () =>{
+    updateCharity = () => {
         let affiliate = this.props.userState.affiliateOurOrg;
-        let charityRoundUpArr = affiliate.charityRoundUp.filter(x=>x.isSelected == true);
-       
+        let charityRoundUpArr = affiliate.charityRoundUp.filter(x => x.isSelected == true);
+
         let payload = {
-            organisationId:  getOrganisationData().organisationUniqueKey,
-            charityRoundUp : charityRoundUpArr,
+            organisationId: getOrganisationData().organisationUniqueKey,
+            charityRoundUp: charityRoundUpArr,
             charity: affiliate.charity
         }
         console.log("updateCharity::" + JSON.stringify(payload));
@@ -610,6 +610,7 @@ class UserOurOragnization extends Component {
                         rules: [{ required: true, message: ValidationConstants.nameField[2] }],
                     })(
                         <InputWithHead
+                            auto_Complete='new-name'
                             required={"required-field pt-0 pb-0"}
                             heading={AppConstants.organisationName}
                             placeholder={AppConstants.organisationName}
@@ -700,6 +701,7 @@ class UserOurOragnization extends Component {
                         rules: [{ required: true, message: ValidationConstants.addressField[2] }],
                     })(
                         <InputWithHead required={"required-field pt-0 pb-0"}
+                            auto_Complete='new-addressOne'
                             heading={AppConstants.addressOne}
                             placeholder={AppConstants.addressOne}
                             name={AppConstants.addressOne}
@@ -712,6 +714,7 @@ class UserOurOragnization extends Component {
                 </Form.Item>
 
                 <InputWithHead
+                    auto_Complete='new-addressTwo'
                     heading={AppConstants.addressTwo}
                     placeholder={AppConstants.addressTwo}
                     onChange={(e) => this.onChangeSetValue(e.target.value, "street2")}
@@ -724,6 +727,7 @@ class UserOurOragnization extends Component {
                         rules: [{ required: true, message: ValidationConstants.suburbField[0] }],
                     })(
                         <InputWithHead
+                            auto_Complete='new-suburb'
                             required={"required-field pt-3 pb-0"}
                             heading={AppConstants.suburb}
                             placeholder={AppConstants.suburb}
@@ -767,6 +771,7 @@ class UserOurOragnization extends Component {
                         rules: [{ required: true, message: ValidationConstants.postCodeField[0] }],
                     })(
                         <InputWithHead
+                            auto_Complete='new-postalCode'
                             required={"required-field"}
                             heading={AppConstants.postcode}
                             placeholder={AppConstants.postcode}
@@ -798,6 +803,7 @@ class UserOurOragnization extends Component {
                             onChange={(e) => this.onChangeSetValue(e.target.value, "email")}
                             value={affiliate.email}
                             disabled={!this.state.isEditable}
+                            auto_Complete='new-email'
                         />
                     )}
                 </Form.Item>
@@ -833,6 +839,7 @@ class UserOurOragnization extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }]
                             })(
                                 <InputWithHead
+                                    auto_Complete='new-firstName'
                                     required={"required-field pt-0 pb-0"}
                                     heading={AppConstants.firstName}
                                     placeholder={AppConstants.firstName}
@@ -849,6 +856,7 @@ class UserOurOragnization extends Component {
                             onChange={(e) => this.onChangeContactSetValue(e.target.value, "middleName", index)}
                             value={item.middleName}
                             disabled={!this.state.isEditable}
+                            auto_Complete='new-middleName'
                         />
 
 
@@ -861,6 +869,7 @@ class UserOurOragnization extends Component {
                                     onChange={(e) => this.onChangeContactSetValue(e.target.value, "lastName", index)}
                                     setFieldsValue={item.lastName}
                                     disabled={!this.state.isEditable}
+                                    auto_Complete='new-lastName'
                                 />
                             )}
                         </Form.Item>
@@ -868,9 +877,9 @@ class UserOurOragnization extends Component {
                         <Form.Item >
                             {getFieldDecorator(`email${index}`, {
                                 rules: [
-                                    { 
-                                        required: true, 
-                                        message: ValidationConstants.emailField[0] 
+                                    {
+                                        required: true,
+                                        message: ValidationConstants.emailField[0]
                                     },
                                     {
                                         type: "email",
@@ -880,6 +889,7 @@ class UserOurOragnization extends Component {
                                 ],
                             })(
                                 <InputWithHead
+                                    auto_Complete='new-email'
                                     required={"required-field pt-0 pb-0"}
                                     heading={AppConstants.email}
                                     placeholder={AppConstants.email}
@@ -903,6 +913,7 @@ class UserOurOragnization extends Component {
                             onChange={(e) => this.onChangeContactSetValue(e.target.value, "mobileNumber", index)}
                             value={item.mobileNumber}
                             disabled={!this.state.isEditable}
+                            auto_Complete='new-phoneNumber'
                         />
                         {this.state.isEditable &&
                             <div>
@@ -957,9 +968,9 @@ class UserOurOragnization extends Component {
                     onChange={(e) => this.onChangeSetValue(e.target.value, "termsAndConditionsRefId")}
                     value={affiliate.termsAndConditionsRefId}>
                     <Radio value={2}>{AppConstants.fileUploadPdf}</Radio>
-                        {affiliate.termsAndConditionsRefId == 2 && 
+                    {affiliate.termsAndConditionsRefId == 2 &&
                         <div className=" pl-5 pb-5 pt-4">
-                           
+
                             <label className="pt-2">
                                 <input
                                     type="file"
@@ -977,7 +988,7 @@ class UserOurOragnization extends Component {
                             </label>
                             <div className="pt-4">
                                 <div className="row">
-                                    <div className="col-sm"  style={{whiteSpace: 'break-spaces'}}>
+                                    <div className="col-sm" style={{ whiteSpace: 'break-spaces' }}>
                                         <a className="user-reg-link" href={affiliate.termsAndConditions} target='_blank' >
                                             {affiliate.termsAndConditionsFile}
                                         </a>
@@ -985,18 +996,20 @@ class UserOurOragnization extends Component {
                                 </div>
                             </div>
                         </div>
-                        }
+                    }
                     <Radio value={1}>{AppConstants.link}</Radio>
-                    {affiliate.termsAndConditionsRefId == 1 && 
+                    {affiliate.termsAndConditionsRefId == 1 &&
                         <div className=" pl-5 pb-5">
-                        <InputWithHead  placeholder={AppConstants.termsAndConditions}
-                            value={affiliate.termsAndConditionsLink}
-                            onChange={(e) => this.onChangeSetValue(e.target.value, "termsAndConditionsLink")}
+                            <InputWithHead
+                                auto_Complete='new-termsAndConditions'
+                                placeholder={AppConstants.termsAndConditions}
+                                value={affiliate.termsAndConditionsLink}
+                                onChange={(e) => this.onChangeSetValue(e.target.value, "termsAndConditionsLink")}
                             />
                         </div>
                     }
                 </Radio.Group>
-               
+
             </div >
         )
     }
@@ -1238,15 +1251,15 @@ class UserOurOragnization extends Component {
         );
     }
 
-     //////charity voucher view
+    //////charity voucher view
     charityVoucherView = (getFieldDecorator) => {
 
         let affiliate = this.props.userState.affiliateOurOrg;
         let charityRoundUp = affiliate.charityRoundUp;
         let checkCharityArray = affiliate.charity;
         return (
-        <div className="advanced-setting-view pt-5">
-            {/* <div className="contextualHelp-RowDirection">
+            <div className="advanced-setting-view pt-5">
+                {/* <div className="contextualHelp-RowDirection">
             <span className="form-heading">{AppConstants.charityRoundUp}</span>
             <div style={{ marginTop: 4 }}>
                 <CustumToolTip placement="top" background="#ff8237">
@@ -1254,9 +1267,9 @@ class UserOurOragnization extends Component {
                 </CustumToolTip>
             </div>
             </div> */}
-            {(checkCharityArray || []).map((item, index) => (
-            <div>
-                {/* <Form.Item>
+                {(checkCharityArray || []).map((item, index) => (
+                    <div>
+                        {/* <Form.Item>
                 {getFieldDecorator('charityTitle', {
                     rules: [
                     {
@@ -1265,16 +1278,17 @@ class UserOurOragnization extends Component {
                     },
                     ],
                 })( */}
-                    <InputWithHead
-                    heading={AppConstants.title}
-                    placeholder={AppConstants.title}
-                    value={item.name}
-                    onChange={(e) => this.onChangesetCharity(captializedString(e.target.value),index,'name')}
-                    />
-                {/* )}
+                        <InputWithHead
+                            auto_Complete='new-title'
+                            heading={AppConstants.title}
+                            placeholder={AppConstants.title}
+                            value={item.name}
+                            onChange={(e) => this.onChangesetCharity(captializedString(e.target.value), index, 'name')}
+                        />
+                        {/* )}
                 </Form.Item> */}
-                <InputWithHead heading={AppConstants.description} />
-                {/* <Form.Item>
+                        <InputWithHead heading={AppConstants.description} />
+                        {/* <Form.Item>
                 {getFieldDecorator('charityDescription', {
                     rules: [
                     {
@@ -1283,35 +1297,35 @@ class UserOurOragnization extends Component {
                     },
                     ],
                 })( */}
-                    <TextArea
-                    placeholder={AppConstants.addCharityDescription}
-                    value={item.description}
-                    allowClear
-                    onChange={(e) => this.onChangesetCharity(e.target.value,index,'description')}
-                    />
-                {/* )}
+                        <TextArea
+                            placeholder={AppConstants.addCharityDescription}
+                            value={item.description}
+                            allowClear
+                            onChange={(e) => this.onChangesetCharity(e.target.value, index, 'description')}
+                        />
+                        {/* )}
                 </Form.Item> */}
-            </div>
-            ))
-            }
-            <div className="inside-container-view">
-                <span className="form-heading">{AppConstants.roundUp}</span>
-                {charityRoundUp.map((item, index) => {
-                    return (
-                    <div className="row" key={index} style={{marginLeft: '0px'}}>
-                        <Checkbox
-                        className="single-checkbox mt-3"
-                        checked={item.isSelected}
-                        onChange={(e) => this.onChangesetCharity(e.target.checked,index,'charityRoundUp')}>
-                        {item.description}
-                        </Checkbox>
                     </div>
-                    );
-                })}
-            </div>
+                ))
+                }
+                <div className="inside-container-view">
+                    <span className="form-heading">{AppConstants.roundUp}</span>
+                    {charityRoundUp.map((item, index) => {
+                        return (
+                            <div className="row" key={index} style={{ marginLeft: '0px' }}>
+                                <Checkbox
+                                    className="single-checkbox mt-3"
+                                    checked={item.isSelected}
+                                    onChange={(e) => this.onChangesetCharity(e.target.checked, index, 'charityRoundUp')}>
+                                    {item.description}
+                                </Checkbox>
+                            </div>
+                        );
+                    })}
+                </div>
 
-            
-        </div>
+
+            </div>
         );
     };
 
@@ -1331,29 +1345,29 @@ class UserOurOragnization extends Component {
                         </div>
                         {this.state.isEditable &&
                             <div className="col-sm">
-                                {this.state.organisationTabKey == "1" && 
-                                <div className="comp-buttons-view">
-                                    <Button className="user-approval-button" type="primary" htmlType="submit" disabled={isSubmitting}
-                                        onClick={() => this.setState({ buttonPressed: "save" })}>
-                                        {AppConstants.updateAffiliates}
-                                    </Button>
-                                </div>
+                                {this.state.organisationTabKey == "1" &&
+                                    <div className="comp-buttons-view">
+                                        <Button className="user-approval-button" type="primary" htmlType="submit" disabled={isSubmitting}
+                                            onClick={() => this.setState({ buttonPressed: "save" })}>
+                                            {AppConstants.updateAffiliates}
+                                        </Button>
+                                    </div>
                                 }
-                                {this.state.organisationTabKey == "3" && 
-                                <div className="comp-buttons-view">
-                                    <Button className="user-approval-button" type="primary" htmlType="button" disabled={isSubmitting}
-                                        onClick={() => this.updateTermsAndCondition()}>
-                                        {AppConstants.updateAffiliates}
-                                    </Button>
-                                </div>
+                                {this.state.organisationTabKey == "3" &&
+                                    <div className="comp-buttons-view">
+                                        <Button className="user-approval-button" type="primary" htmlType="button" disabled={isSubmitting}
+                                            onClick={() => this.updateTermsAndCondition()}>
+                                            {AppConstants.updateAffiliates}
+                                        </Button>
+                                    </div>
                                 }
-                                {this.state.organisationTabKey == "4" && 
-                                <div className="comp-buttons-view">
-                                    <Button className="user-approval-button" type="primary" htmlType="button" disabled={isSubmitting}
-                                        onClick={() => this.updateCharity()}>
-                                        {AppConstants.updateAffiliates}
-                                    </Button>
-                                </div>
+                                {this.state.organisationTabKey == "4" &&
+                                    <div className="comp-buttons-view">
+                                        <Button className="user-approval-button" type="primary" htmlType="button" disabled={isSubmitting}
+                                            onClick={() => this.updateCharity()}>
+                                            {AppConstants.updateAffiliates}
+                                        </Button>
+                                    </div>
                                 }
                             </div>}
                     </div>
@@ -1413,20 +1427,20 @@ class UserOurOragnization extends Component {
                                             {this.termsAndConditionsView(getFieldDecorator)}
                                         </div>
                                     </TabPane>
-                                    {((getOrganisationData().organisationTypeRefId == 2 && this.state.sourcePage != "DIR") || 
-                                            (this.state.organisationTypeRefId == 2 && this.state.sourcePage == "DIR")) && 
-                                    <TabPane tab={AppConstants.charity} key="4">
-                                        <div className="tab-formView mt-5" >
-                                        {this.charityVoucherView(getFieldDecorator)}
-                                        </div>
-                                    </TabPane>
+                                    {((getOrganisationData().organisationTypeRefId == 2 && this.state.sourcePage != "DIR") ||
+                                        (this.state.organisationTypeRefId == 2 && this.state.sourcePage == "DIR")) &&
+                                        <TabPane tab={AppConstants.charity} key="4">
+                                            <div className="tab-formView mt-5" >
+                                                {this.charityVoucherView(getFieldDecorator)}
+                                            </div>
+                                        </TabPane>
                                     }
                                 </Tabs>
                             </div>
                             <Loader visible={userState.onLoad} />
                         </Content>
                         {(this.state.organisationTabKey == "1" || this.state.organisationTabKey == "3" ||
-                                    this.state.organisationTabKey == "4")  ?
+                            this.state.organisationTabKey == "4") ?
                             <Footer>{this.footerView()}</Footer>
                             : null
                         }

@@ -391,41 +391,43 @@ class UserEditAffiliates extends Component {
                     style={{ width: "100%", paddingRight: 1 }}
                     onChange={(e) => this.onChangeSetValue(e, AppConstants.organisationTypeRefId)}
                     value={affiliate.organisationTypeRefId}
-                    >
+                >
                     {(affiliateToData.organisationTypes || []).map((org, index) => (
                         <Option key={org.id} value={org.id}>{org.name}</Option>
                     ))}
                 </Select>
-                {!((this.state.loggedInuserOrgTypeRefId == 1 && (affiliate.organisationTypeRefId == 3 || 
-                        affiliate.organisationTypeRefId == 4)) || (this.state.loggedInuserOrgTypeRefId == 2 && affiliate.organisationTypeRefId == 4)) ?
+                {!((this.state.loggedInuserOrgTypeRefId == 1 && (affiliate.organisationTypeRefId == 3 ||
+                    affiliate.organisationTypeRefId == 4)) || (this.state.loggedInuserOrgTypeRefId == 2 && affiliate.organisationTypeRefId == 4)) ?
                     <div className="row mt-3" >
                         <div className="col-sm" >
                             <InputWithHead heading={AppConstants.affilatedTo} />
                         </div>
                         <div className="col-sm" style={{ display: "flex", alignItems: "center" }}>
-                            <InputWithHead heading={affiliate.affiliatedToOrgName}
-                            onChange={(e) => this.onChangeSetValue(e, AppConstants.organisationTypeRefId)} />
+                            <InputWithHead
+                                auto_Complete='new-affilatedTo'
+                                heading={affiliate.affiliatedToOrgName}
+                                onChange={(e) => this.onChangeSetValue(e, AppConstants.organisationTypeRefId)} />
                         </div>
                     </div>
                     :
                     <div>
-                        <InputWithHead heading={AppConstants.affilatedTo}  required={"required-field"}/>
+                        <InputWithHead heading={AppConstants.affilatedTo} required={"required-field"} />
                         <Form.Item >
-                        {getFieldDecorator('affiliatedToOrgId', {
-                        rules: [{ required: true, message: ValidationConstants.affiliateToRequired }],
-                        })(
-                        <Select
-                            style={{ width: "100%", paddingRight: 1 }}
-                            setFieldsValue={affiliate.affiliatedToOrgId}
-                            onChange={(e) => this.onChangeSetValue(e, AppConstants.affiliatedToOrgId )}>
-                            {(affiliateToData.affiliatedTo || []).filter(x=> 
-                                x.organisationtypeRefId == (organisationTypeRefId -1) 
-                                    && x.organisationId != this.state.affiliateOrgId).
-                             map((aff, index) => (
-                             <Option key={aff.organisationId} value={aff.organisationId}>{aff.name}</Option>
-                            ))}
-                        </Select>
-                        )}
+                            {getFieldDecorator('affiliatedToOrgId', {
+                                rules: [{ required: true, message: ValidationConstants.affiliateToRequired }],
+                            })(
+                                <Select
+                                    style={{ width: "100%", paddingRight: 1 }}
+                                    setFieldsValue={affiliate.affiliatedToOrgId}
+                                    onChange={(e) => this.onChangeSetValue(e, AppConstants.affiliatedToOrgId)}>
+                                    {(affiliateToData.affiliatedTo || []).filter(x =>
+                                        x.organisationtypeRefId == (organisationTypeRefId - 1)
+                                        && x.organisationId != this.state.affiliateOrgId).
+                                        map((aff, index) => (
+                                            <Option key={aff.organisationId} value={aff.organisationId}>{aff.name}</Option>
+                                        ))}
+                                </Select>
+                            )}
                         </Form.Item>
                     </div>
                 }
@@ -434,10 +436,11 @@ class UserEditAffiliates extends Component {
                         rules: [{ required: true, message: ValidationConstants.nameField[2] }],
                     })(
                         <InputWithHead
+                            auto_Complete='new-name'
                             required={"required-field pt-0 pb-0"}
                             heading={AppConstants.name}
                             placeholder={AppConstants.name}
-                            onChange={(e) => this.onChangeSetValue(e.target.value, "name" )}
+                            onChange={(e) => this.onChangeSetValue(e.target.value, "name")}
                             //value={affiliate.name}
                             setFieldsValue={affiliate.name}
                         />
@@ -448,20 +451,22 @@ class UserEditAffiliates extends Component {
                         rules: [{ required: true, message: ValidationConstants.addressField[2] }],
                     })(
                         <InputWithHead required={"required-field pt-0 pb-0"}
-                        heading={AppConstants.addressOne}
-                        placeholder={AppConstants.addressOne}
-                        name={AppConstants.addressOne}
-                        onChange={(e) => this.onChangeSetValue(e.target.value, "street1" )} 
-                        //value={affiliate.street1}
-                        setFieldsValue={affiliate.street1}
-                    />
+                            heading={AppConstants.addressOne}
+                            placeholder={AppConstants.addressOne}
+                            name={AppConstants.addressOne}
+                            onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
+                            //value={affiliate.street1}
+                            setFieldsValue={affiliate.street1}
+                            auto_Complete='new-addressOne'
+                        />
                     )}
                 </Form.Item>
 
                 <InputWithHead
+                    auto_Complete='new-addressTwo'
                     heading={AppConstants.addressTwo}
                     placeholder={AppConstants.addressTwo}
-                    onChange={(e) => this.onChangeSetValue(e.target.value, "street2" )} 
+                    onChange={(e) => this.onChangeSetValue(e.target.value, "street2")}
                     value={affiliate.street2}
                 />
 
@@ -470,10 +475,11 @@ class UserEditAffiliates extends Component {
                         rules: [{ required: true, message: ValidationConstants.suburbField[0] }],
                     })(
                         <InputWithHead
+                            auto_Complete='new-suburb'
                             required={"required-field pt-3 pb-0"}
                             heading={AppConstants.suburb}
                             placeholder={AppConstants.suburb}
-                            onChange={(e) => this.onChangeSetValue(e.target.value, "suburb" )}
+                            onChange={(e) => this.onChangeSetValue(e.target.value, "suburb")}
                             //value={affiliate.suburb}
                             setFieldsValue={affiliate.suburb}
                         />
@@ -511,10 +517,11 @@ class UserEditAffiliates extends Component {
                         rules: [{ required: true, message: ValidationConstants.postCodeField[0] }],
                     })(
                         <InputWithHead
+                            auto_Complete='new-postCode'
                             required={"required-field"}
                             heading={AppConstants.postcode}
                             placeholder={AppConstants.postcode}
-                            onChange={(e) => this.onChangeSetValue(e.target.value, "postalCode" )} 
+                            onChange={(e) => this.onChangeSetValue(e.target.value, "postalCode")}
                             //value={affiliate.postalCode}
                             setFieldsValue={affiliate.postalCode}
                             maxLength={4}
@@ -523,9 +530,10 @@ class UserEditAffiliates extends Component {
                 </Form.Item>
 
                 <InputWithHead heading={AppConstants.phoneNumber} placeholder={AppConstants.phoneNumber}
-                        onChange={(e) => this.onChangeSetValue(e.target.value, "phoneNo" )} 
-                        value={affiliate.phoneNo}
-                    />
+                    onChange={(e) => this.onChangeSetValue(e.target.value, "phoneNo")}
+                    value={affiliate.phoneNo}
+                    auto_Complete='new-phoneNo'
+                />
             </div>
         )
     }
@@ -534,116 +542,124 @@ class UserEditAffiliates extends Component {
     contacts = (getFieldDecorator) => {
         let userState = this.props.userState;
         let affiliate = this.props.userState.affiliateEdit;
-        let roles = this.props.userState.roles.filter(x=>x.applicableToWeb == 1);
+        let roles = this.props.userState.roles.filter(x => x.applicableToWeb == 1);
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading">{AppConstants.contacts}</span>
                 {(affiliate.contacts || []).map((item, index) => (
-                <div className="prod-reg-inside-container-view pt-4" key={"Contact" + (index+1)}>
-                    <div className="row" >
-                        <div className="col-sm" >
-                            <span className="user-contact-heading">{AppConstants.contact + (index+1)}</span>
+                    <div className="prod-reg-inside-container-view pt-4" key={"Contact" + (index + 1)}>
+                        <div className="row" >
+                            <div className="col-sm" >
+                                <span className="user-contact-heading">{AppConstants.contact + (index + 1)}</span>
+                            </div>
+                            {affiliate.contacts.length == 1 ? null :
+                                <div className="transfer-image-view pointer" onClick={() => this.deleteContact(index)}>
+                                    <span class="user-remove-btn" ><i class="fa fa-trash-o" aria-hidden="true"></i></span>
+                                    <span className="user-remove-text">
+                                        {AppConstants.remove}
+                                    </span>
+                                </div>
+                            }
                         </div>
-                        {affiliate.contacts.length == 1 ? null :
-                        <div className="transfer-image-view pointer" onClick={() => this.deleteContact(index)}>
-                            <span class="user-remove-btn" ><i class="fa fa-trash-o" aria-hidden="true"></i></span>
-                            <span className="user-remove-text">
-                                {AppConstants.remove}
-                            </span>
-                        </div>
-                        }
-                    </div>
-    
-                    <Form.Item >
-                    {getFieldDecorator(`firstName${index}`, {
-                        rules: [{ required: true, message: ValidationConstants.nameField[0] }]
-                    })(
+
+                        <Form.Item >
+                            {getFieldDecorator(`firstName${index}`, {
+                                rules: [{ required: true, message: ValidationConstants.nameField[0] }]
+                            })(
+                                <InputWithHead
+                                    auto_Complete='new-firstName'
+                                    required={"required-field pt-0 pb-0"}
+                                    heading={AppConstants.firstName}
+                                    placeholder={AppConstants.firstName}
+                                    onChange={(e) => this.onChangeContactSetValue(e.target.value, "firstName", index)}
+                                    //value={item.firstName}
+                                    setFieldsValue={item.firstName}
+                                />
+                            )}
+                        </Form.Item>
+
                         <InputWithHead
-                            required={"required-field pt-0 pb-0"}
-                            heading={AppConstants.firstName}
-                            placeholder={AppConstants.firstName}
-                            onChange={(e) => this.onChangeContactSetValue(e.target.value, "firstName", index )}
-                            //value={item.firstName}
-                            setFieldsValue={item.firstName}
-                        />
-                    )}
-                    </Form.Item>
-
-                    <InputWithHead heading={AppConstants.middleName}
-                        placeholder={AppConstants.middleName} 
-                        onChange={(e) => this.onChangeContactSetValue(e.target.value, "middleName", index )}
-                        value={item.middleName}
+                            auto_Complete='new-middleName'
+                            heading={AppConstants.middleName}
+                            placeholder={AppConstants.middleName}
+                            onChange={(e) => this.onChangeContactSetValue(e.target.value, "middleName", index)}
+                            value={item.middleName}
                         />
 
-                 
-                    <Form.Item >
-                        {getFieldDecorator(`lastName${index}`, {
-                            rules: [{ required: true, message: ValidationConstants.nameField[1] }],
-                        })(
-                        <InputWithHead required={"required-field pt-0 pb-0"}
-                        heading={AppConstants.lastName} placeholder={AppConstants.lastName} 
-                            onChange={(e) => this.onChangeContactSetValue(e.target.value, "lastName", index )}
-                            setFieldsValue={item.lastName}
-                            />
-                        )}
-                    </Form.Item>
 
-                    <Form.Item >
-                    {getFieldDecorator(`email${index}`, {
-                        rules: [{ required: true, message: ValidationConstants.emailField[0] }],
-                    })(
+                        <Form.Item >
+                            {getFieldDecorator(`lastName${index}`, {
+                                rules: [{ required: true, message: ValidationConstants.nameField[1] }],
+                            })(
+                                <InputWithHead
+                                    auto_Complete='new-lastName'
+                                    required={"required-field pt-0 pb-0"}
+                                    heading={AppConstants.lastName} placeholder={AppConstants.lastName}
+                                    onChange={(e) => this.onChangeContactSetValue(e.target.value, "lastName", index)}
+                                    setFieldsValue={item.lastName}
+                                />
+                            )}
+                        </Form.Item>
+
+                        <Form.Item >
+                            {getFieldDecorator(`email${index}`, {
+                                rules: [{ required: true, message: ValidationConstants.emailField[0] }],
+                            })(
+                                <InputWithHead
+                                    auto_Complete='new-email'
+                                    required={"required-field pt-0 pb-0"}
+                                    heading={AppConstants.email}
+                                    placeholder={AppConstants.email}
+                                    disabled={!item.isSameUser}
+                                    onChange={(e) => this.onChangeContactSetValue(e.target.value, "email", index)}
+                                    //value={item.email}
+                                    setFieldsValue={item.email}
+                                />
+                            )}
+                        </Form.Item>
+                        {(item.isSameUser && this.state.isSameUserEmailChanged) ?
+                            <div className="same-user-validation">
+                                {ValidationConstants.emailField[2]}
+                            </div>
+                            : null}
+
                         <InputWithHead
-                            required={"required-field pt-0 pb-0"}
-                            heading={AppConstants.email}
-                            placeholder={AppConstants.email}
-                            disabled={!item.isSameUser}
-                            onChange={(e) => this.onChangeContactSetValue(e.target.value, "email", index )}
-                            //value={item.email}
-                            setFieldsValue={item.email}
+                            auto_Complete='new-mobileNumber'
+                            heading={AppConstants.phoneNumber}
+                            placeholder={AppConstants.phoneNumber}
+                            onChange={(e) => this.onChangeContactSetValue(e.target.value, "mobileNumber", index)}
+                            value={item.mobileNumber}
                         />
-                    )}
-                    </Form.Item>
-                    {(item.isSameUser && this.state.isSameUserEmailChanged) ?
-                        <div className="same-user-validation"> 
-                            {ValidationConstants.emailField[2] }
-                        </div>
-                     : null}
-                    
-                    <InputWithHead heading={AppConstants.phoneNumber}
-                        placeholder={AppConstants.phoneNumber} 
-                        onChange={(e) => this.onChangeContactSetValue(e.target.value, "mobileNumber", index )}
-                        value={item.mobileNumber}
-                        />
-  
-                    <InputWithHead heading={AppConstants.permissionLevel} />
-                    <Form.Item >
-                    {getFieldDecorator(`permissions${index}`, {
-                        rules: [{ required: true, message: ValidationConstants.rolesField[0] }],
-                    })(
-                        <Select
-                            style={{ width: "100%", paddingRight: 1 }}
-                            onChange={(e) => this.onChangeContactSetValue(e, "roles", index )}
-                            setFieldsValue={item.roleId}
-                            >
-                            {(roles || []).map((role, index) => (
-                            <Option key={role.id} value={role.id}>{role.description}</Option>
-                            ))}
-                        </Select>
-                     )}
-                     </Form.Item>
-                </div >
+
+                        <InputWithHead heading={AppConstants.permissionLevel} />
+                        <Form.Item >
+                            {getFieldDecorator(`permissions${index}`, {
+                                rules: [{ required: true, message: ValidationConstants.rolesField[0] }],
+                            })(
+                                <Select
+                                    style={{ width: "100%", paddingRight: 1 }}
+                                    onChange={(e) => this.onChangeContactSetValue(e, "roles", index)}
+                                    setFieldsValue={item.roleId}
+                                >
+                                    {(roles || []).map((role, index) => (
+                                        <Option key={role.id} value={role.id}>{role.description}</Option>
+                                    ))}
+                                </Select>
+                            )}
+                        </Form.Item>
+                    </div >
                 ))}
-                 {this.deleteConfirmModalView()}
-                <div className="transfer-image-view mt-2 pointer"  onClick={() => this.addContact()}>
+                {this.deleteConfirmModalView()}
+                <div className="transfer-image-view mt-2 pointer" onClick={() => this.addContact()}>
                     <span className="user-remove-text">
                         + {AppConstants.addContact}
                     </span>
                 </div>
                 {
-                    (userState.error && userState.status == 4) ? 
-                    <div style={{color:'red'}}>{userState.error.result.data.message}</div> : null
+                    (userState.error && userState.status == 4) ?
+                        <div style={{ color: 'red' }}>{userState.error.result.data.message}</div> : null
                 }
-                
+
             </div >
         )
     }
@@ -658,9 +674,9 @@ class UserEditAffiliates extends Component {
                     onChange={(e) => this.onChangeSetValue(e.target.value, "termsAndConditionsRefId")}
                     value={affiliate.termsAndConditionsRefId}>
                     <Radio value={2}>{AppConstants.fileUploadPdf}</Radio>
-                        {affiliate.termsAndConditionsRefId == 2 && 
+                    {affiliate.termsAndConditionsRefId == 2 &&
                         <div className=" pl-5 pb-5 pt-4">
-                           
+
                             <label className="pt-2">
                                 <input
                                     type="file"
@@ -678,7 +694,7 @@ class UserEditAffiliates extends Component {
                             </label>
                             <div className="pt-4">
                                 <div className="row">
-                                    <div className="col-sm" style={{whiteSpace: 'break-spaces'}}>
+                                    <div className="col-sm" style={{ whiteSpace: 'break-spaces' }}>
                                         <a className="user-reg-link" href={affiliate.termsAndConditions} target='_blank' >
                                             {affiliate.termsAndConditionsFile}
                                         </a>
@@ -686,35 +702,37 @@ class UserEditAffiliates extends Component {
                                 </div>
                             </div>
                         </div>
-                        }
+                    }
                     <Radio value={1}>{AppConstants.link}</Radio>
-                    {affiliate.termsAndConditionsRefId == 1 && 
+                    {affiliate.termsAndConditionsRefId == 1 &&
                         <div className=" pl-5 pb-5">
-                        <InputWithHead  placeholder={AppConstants.termsAndConditions}
-                            value={affiliate.termsAndConditionsLink}
-                            onChange={(e) => this.onChangeSetValue(e.target.value, "termsAndConditionsLink")}
+                            <InputWithHead
+                                auto_Complete='new-termsAndConditionsLink'
+                                placeholder={AppConstants.termsAndConditions}
+                                value={affiliate.termsAndConditionsLink}
+                                onChange={(e) => this.onChangeSetValue(e.target.value, "termsAndConditionsLink")}
                             />
                         </div>
                     }
                 </Radio.Group>
-               
+
             </div >
         )
     }
 
     deleteConfirmModalView = () => {
         return (
-           <div>
-             <Modal
-               title="Affiliate"
-               visible={this.state.deleteModalVisible}
-               onOk={() => this.removeModalHandle("ok")}
-               onCancel={() => this.removeModalHandle("cancel")}>
-                 <p>Are you sure you want to remove the contact?.</p>
-             </Modal>
-           </div>
-         );
-   }
+            <div>
+                <Modal
+                    title="Affiliate"
+                    visible={this.state.deleteModalVisible}
+                    onOk={() => this.removeModalHandle("ok")}
+                    onCancel={() => this.removeModalHandle("cancel")}>
+                    <p>Are you sure you want to remove the contact?.</p>
+                </Modal>
+            </div>
+        );
+    }
 
     ///footer view containing all the buttons like submit and cancel
     footerView = (isSubmitting) => {

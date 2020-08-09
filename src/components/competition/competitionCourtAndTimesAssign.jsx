@@ -488,7 +488,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             <span className="user-remove-btn">
                                 <i className="fa fa-trash-o" aria-hidden="true"></i>
                             </span>
-                            <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                            <span id={AppUniqueId.timeslotGenerationRemove_btn} className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
                         </a>
                     </div>
                 }
@@ -524,11 +524,10 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     alignItems: "center"
                                 }}
                             >
-                                <span className="year-select-heading">
+                                <span id={AppUniqueId.compYear_dpdnTimeslot} className="year-select-heading">
                                     {AppConstants.year}:
                                   </span>
                                 <Select
-                                    id={AppUniqueId.compYear_dpdnTimeslot}
                                     name={"yearRefId"}
                                     className="year-select reg-filter-select-year ml-2"
                                     // style={{ width: 90 }}
@@ -551,9 +550,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 flexDirection: "row",
                                 alignItems: "center", marginRight: 50,
                             }} >
-                                <span className='year-select-heading'>{AppConstants.competition}:</span>
+                                <span id={AppUniqueId.competitionName_dpdnTimeslot} className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
-                                    id={AppUniqueId.competitionName_dpdnTimeslot}
                                     name={"competition"}
                                     className="year-select reg-filter-select-competition ml-2"
                                     onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)}
@@ -1347,6 +1345,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                 <Layout>
 
                     <Form
+                        autoComplete="off"
                         onSubmit={this.saveAPIsActionCall}
                         noValidate="noValidate"
                     >

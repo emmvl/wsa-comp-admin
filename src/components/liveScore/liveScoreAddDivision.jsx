@@ -89,6 +89,7 @@ class LiveScoreAddDivision extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameisrequired }],
                             })(
                                 <InputWithHead
+                                    auto_Complete='new-name'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.name}
                                     placeholder={AppConstants.name}
@@ -110,6 +111,7 @@ class LiveScoreAddDivision extends Component {
                                 rules: [{ required: true, message: ValidationConstants.divisionNameisrequired }],
                             })(
                                 <InputWithHead
+                                    auto_Complete='new-divisionName'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.divisionName}
                                     placeholder={AppConstants.divisionName}
@@ -131,6 +133,7 @@ class LiveScoreAddDivision extends Component {
                                 rules: [{ required: true, message: ValidationConstants.gradeisrequired }],
                             })(
                                 <InputWithHead
+                                    auto_Complete='new-gradeName'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.gradeName}
                                     placeholder={AppConstants.gradeName}
@@ -196,7 +199,7 @@ class LiveScoreAddDivision extends Component {
                     <Loader visible={this.props.liveScoreDivisionState.onLoad} />
 
                     {this.headerView()}
-                    <Form onSubmit={this.onSaveClick}
+                    <Form autoComplete='off' onSubmit={this.onSaveClick}
                         noValidate="novalidate"
                         className="login-form">
                         <Content>

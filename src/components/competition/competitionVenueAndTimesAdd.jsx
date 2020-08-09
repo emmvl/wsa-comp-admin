@@ -472,12 +472,13 @@ class CompetitionVenueAndTimesAdd extends Component {
                         rules: [{ required: true, message: ValidationConstants.nameField[2] }],
                     })(
                         <InputWithHead
+                            auto_Complete="new-name"
                             required={"required-field pt-0 pb-0"}
                             heading={AppConstants.name}
                             placeholder={AppConstants.name}
                             onChange={(name) => this.props.updateVenuAndTimeDataAction(captializedString(name.target.value), 'Venue', 'name')}
                             setFieldsValue={venuData.name}
-                            onBlur={(i)=> this.props.form.setFieldsValue({
+                            onBlur={(i) => this.props.form.setFieldsValue({
                                 'name': captializedString(i.target.value)
                             })}
                         />
@@ -488,6 +489,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                         rules: [{ required: true, message: ValidationConstants.nameField[3] }],
                     })(
                         <InputWithHead
+                            auto_Complete="new-shortName"
                             required={"required-field"}
                             heading={AppConstants.short_Name}
                             disabled={this.state.isUsed}
@@ -495,7 +497,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                             maxLength={4}
                             onChange={(name) => this.props.updateVenuAndTimeDataAction(captializedString(name.target.value), 'Venue', 'shortName')}
                             setFieldsValue={venuData.shortName}
-                            onBlur={(i)=> this.props.form.setFieldsValue({
+                            onBlur={(i) => this.props.form.setFieldsValue({
                                 'shortName': captializedString(i.target.value)
                             })}
                         />
@@ -517,6 +519,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                 <Form.Item >
                     {getFieldDecorator('addressOne')(
                         <InputWithHead
+                            auto_Complete="new-addressOne"
                             required={"required-field pt-3 pb-0"}
                             heading={AppConstants.addressOne}
                             placeholder={AppConstants.addressOne}
@@ -528,6 +531,7 @@ class CompetitionVenueAndTimesAdd extends Component {
 
 
                 <InputWithHead
+                    auto_Complete="new-addressTwo"
                     heading={AppConstants.addressTwo}
                     placeholder={AppConstants.addressTwo}
                     onChange={(street2) => this.props.updateVenuAndTimeDataAction(street2.target.value, 'Venue', 'street2')}
@@ -538,6 +542,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                 <Form.Item >
                     {getFieldDecorator('suburb')(
                         <InputWithHead
+                            auto_Complete="new-suburb"
                             required={"required-field pt-3 pb-0"}
                             heading={AppConstants.suburb}
                             placeholder={AppConstants.suburb}
@@ -571,6 +576,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                 <Form.Item >
                     {getFieldDecorator('postcode')(
                         <InputWithHead
+                            auto_Complete="new-postcode"
                             required={"required-field"}
                             heading={AppConstants.postcode}
                             placeholder={AppConstants.postcode}
@@ -582,6 +588,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                 </Form.Item>
 
                 <InputWithHead
+                    auto_Complete="new-contactNumber"
                     heading={AppConstants.contactNumber}
                     placeholder={AppConstants.contactNumber}
                     onChange={(contactNumber) => this.props.updateVenuAndTimeDataAction(contactNumber.target.value, 'Venue', 'contactNumber')}
@@ -888,7 +895,7 @@ class CompetitionVenueAndTimesAdd extends Component {
         }
 
         if (!this.state.venueAddress) {
-            this.setState({venueAddressError: ValidationConstants.venueAddressRequiredError});
+            this.setState({ venueAddressError: ValidationConstants.venueAddressRequiredError });
             message.error(AppConstants.venueAddressSelect);
             venueAddressError = true;
         }

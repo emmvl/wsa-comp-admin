@@ -565,7 +565,7 @@ class AddProduct extends Component {
                     )}
                 </Form.Item>
 
-                <InputWithHead heading={AppConstants.description}
+                <InputWithHead  required={"pb-0"} heading={AppConstants.description}
                 />
                 {this.editorView()}
 
@@ -1224,6 +1224,7 @@ class AddProduct extends Component {
                     <div className="col-sm">
                         <div className="reg-add-save-button">
                             <Button
+                                className="cancelBtnWidth"
                                 type="cancel-button"
                                 onClick={() => history.push('/listProducts')}>{AppConstants.cancel}</Button>
                         </div>

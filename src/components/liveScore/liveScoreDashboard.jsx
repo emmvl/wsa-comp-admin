@@ -753,7 +753,9 @@ class LiveScoreDashboard extends Component {
     ////////ownedView view for competition
     matchView = () => {
         const { dashboardMatchList } = this.props.liveScoreDashboardState
-        const { scoringType } = JSON.parse(getLiveScoreCompetiton())
+        let compDetails = getLiveScoreCompetiton() ? JSON.parse(getLiveScoreCompetiton()) : null
+        let scoringType = compDetails ? compDetails.scoringType : ""
+
         return (
             <div className="comp-dash-table-view mt-4">
                 {this.matchHeading()}
