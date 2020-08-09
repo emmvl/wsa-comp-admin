@@ -5,6 +5,12 @@ import appSaga from "./appSaga";
 import commonSaga from "./commonSaga";
 import authenticationSaga from "./authenticationSaga";
 import userSaga from "./userSaga";
+import homeDashboardSaga from "./homeDashboardSaga";
+import stripeSaga from "./stripeSaga";
+
+import shopOrderSummarySaga from "./shopSaga/shopOrderSummarySaga";
+import shopProductSaga from "./shopSaga/shopProductSaga";
+import shopSettingSaga from "./shopSaga/shopSettingSaga";
 
 import {
   getRegistrationFormSaga,
@@ -65,9 +71,8 @@ import { liveScoreNewsListSaga, liveScoreAddNewsSaga, liveScoreNewsNotificationS
 import { liveScoreBannerSaga, liveScoreAddBannerSaga, liveScoreRemoveBannerSaga } from './liveScoreSaga/liveScoreBannerSaga';
 import { liveScoreGoalSaga } from './liveScoreSaga/liveScoreGoalSaga'
 import { liveScoreManagerListSaga, liveScoreAddEditManagerSaga, liveScoreManagerSearch, liveScoreManagerImportSaga } from './liveScoreSaga/liveScoreManagerSaga';
-import { liveScoreScorerListSaga, liveScorerSearchUserSaga, liveScoreAssigneMatches, liveScoreChangeAssignStatus, liveScoreAddEditScorerSaga, liveScoreUnAssignMatcheSaga, liveScoreScorerSearchSaga } from '../saga/liveScoreSaga/liveScoreScorerSaga';
+import { liveScoreScorerListSaga, liveScoreAssigneMatches, liveScoreChangeAssignStatus, liveScoreAddEditScorerSaga, liveScoreUnAssignMatcheSaga, liveScoreScorerSearchSaga } from './liveScoreSaga/liveScoreScorerSaga';
 import { liveScoreBulkPushBack, liveScoreBulkBringForwardSaga, liveScoreMatchResult, liveScoreEndMatchesSaga, liveScoreDoubleHeaderSaga, liveScoreAbandonMatchSaga } from './liveScoreSaga/liveScoreBulkMatchSaga';
-
 
 import { liveScorePlayerSaga, liveScoreAddEditPlayerSaga, liveScorePlayerImportSaga, getPlayerListPagginationSaga } from "./liveScoreSaga/liveScorePlayerSaga";
 import { liveScoreDashboardSaga } from './liveScoreSaga/liveScoreDashboardSaga';
@@ -84,7 +89,7 @@ import * as competitionFinalSaga from '../saga/competitionManagementSaga/competi
 import * as ladderFormatSaga from '../saga/competitionManagementSaga/ladderFormatSaga';
 import { competitonWithTimeSlots, competitonWithTimeSlotsPostApi } from './competitionManagementSaga/competitionTimeAndSlotSaga';
 
-import { fixtureTemplateSaga } from '../saga/competitionManagementSaga/competitionManagementSaga';
+import { fixtureTemplateSaga } from './competitionManagementSaga/competitionManagementSaga';
 ////Venue constraints
 import { venueTimeSaga, venueConstraintPostSaga } from './competitionManagementSaga/venueTimeSaga'
 import {
@@ -120,8 +125,6 @@ import {
   teamChangeDivisionSaga
 } from './competitionManagementSaga/competitionTeamGradingSaga';
 
-import { homeDashboardSaga, actionBoxListSaga, updateActionBoxSaga } from "./homeDashboardSaga/homeDashboardSaga"
-
 ////////competition draws 
 import {
   getCompetitionDrawsSaga, getDrawsRoundsSaga,
@@ -142,7 +145,7 @@ import * as endUserRegSaga from '../saga/registrationSaga/endUserRegistrationSag
 
 import * as divisionsaga from "../saga/liveScoreSaga/liveScoreDivisionSaga"
 
-import { liveScoreGameTimeStatisticsSaga } from '../saga/liveScoreSaga/liveScoreGameTimeStatisticsSaga'
+import { liveScoreGameTimeStatisticsSaga } from './liveScoreSaga/liveScoreGameTimeStatisticsSaga'
 import { liveScoreSettingSaga, liveScorePostSaga, settingRegInviteesSaga } from './liveScoreSaga/liveScoreSettingSaga'
 import { liveScoreUmpiresSaga, liveScoreUmpiresImportSaga } from './liveScoreSaga/liveScoreUmpiresSaga'
 
@@ -152,25 +155,20 @@ import { laddersSettingGetMatchResult, laddersSettingGetData, laddersSettingPost
 
 import { liveScoreChangeVenueSaga } from "./liveScoreSaga/liveScoreVenueChangeSaga"
 import { getLiveScoreFixtureCompSaga } from "./liveScoreSaga/liveScoreFixtureCompSaga";
-import * as stripeSaga from "../saga/stripeSaga/stripeSaga"
 
-import { liveScoreCoachSaga, liveScoreAddCoachSaga, liveScoreCoachImportSaga } from "../saga/liveScoreSaga/liveScoreCoachSaga"
+import { liveScoreCoachSaga, liveScoreAddCoachSaga, liveScoreCoachImportSaga } from "./liveScoreSaga/liveScoreCoachSaga"
 
 import * as umpireDashboardSaga from "../saga/umpireSaga/umpireDashboardSaga"
 import * as umpireCompSaga from "../saga/umpireSaga/umpireCompetitionSaga"
 import * as umpireRoasterSaga from "../saga/umpireSaga/umpireRoasterSaga"
 import * as umpireSaga from "../saga/umpireSaga/umpireSaga"
 import * as assignUmpireSaga from "../saga/umpireSaga/assignUmpireSaga";
-import * as shopProductSaga from "../saga/shopSaga/productSaga";
 import * as competitionQuickSaga from "../saga/competitionManagementSaga/competitionQuickCompetitionSaga";
 import * as liveScoreMatchSheetSaga from './liveScoreSaga/liveScoreMatchSheetSaga';
-import * as shopSettingSaga from './shopSaga/shopSettingSaga';
 
 import { getInnerHorizontalCompSaga } from './liveScoreSaga/liveScoreInnerHorizontalSaga'
-import { quickCompetitionAddVenue } from "../actions/competitionModuleAction/competitionQuickCompetitionAction";
 
 import { liveScorePositionTrackSaga } from './liveScoreSaga/liveScorePositionTrackSaga'
-import * as shopOrderSummarySaga from './shopSaga/orderSummarySaga';
 
 export default function* rootSaga() {
   yield all([
@@ -178,6 +176,13 @@ export default function* rootSaga() {
     fork(commonSaga),
     fork(authenticationSaga),
     fork(userSaga),
+    fork(homeDashboardSaga),
+    fork(stripeSaga),
+
+    // Shop
+    fork(shopOrderSummarySaga),
+    fork(shopProductSaga),
+    fork(shopSettingSaga),
   ]);
 
 
@@ -299,7 +304,7 @@ export default function* rootSaga() {
   /********competition time slot post Api */
   yield takeEvery(ApiConstants.API_COMPETITION_TIMESLOT_POST_LOAD, competitonWithTimeSlotsPostApi)
 
-  ///////save the competition part player grade calculate player grading summmary or say proposed player grading toggle
+  ///////save the competition part player grade calculate player grading summary or say proposed player grading toggle
   yield takeEvery(ApiConstants.API_SAVE_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMMARY_LIST_LOAD, saveCompPartPlayerGradingSummarySaga)
 
   /////////get the own team grading summary listing data
@@ -472,7 +477,6 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_LIVE_SCORE_TEAM_WITH_PAGGING_LOAD, liveScoreTeamPaggingSaga);
   //Player list with paggination
   yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_LOAD, getPlayerListPagginationSaga);
-  yield takeEvery(ApiConstants.API_USERCOUNT_LOAD, homeDashboardSaga)
   //// Invitee Search SAGA
   yield takeEvery(ApiConstants.API_COMPETITION_FEE_INVITEES_SEARCH_LOAD, inviteeSearchSaga)
   yield takeEvery(ApiConstants.API_COMPETITION_PLAYER_IMPORT_LOAD, importCompetitionPlayer);
@@ -483,40 +487,21 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_LIVE_SCORE_GET_FIXTURE_COMP_LOAD, getLiveScoreFixtureCompSaga)
   //////////////////draws division grade names list
   yield takeEvery(ApiConstants.API_DRAWS_DIVISION_GRADE_NAME_LIST_LOAD, getDivisionGradeNameListSaga)
-  //////////stripe payment account balance API
-  yield takeEvery(ApiConstants.API_STRIPE_ACCOUNT_BALANCE_API_LOAD, stripeSaga.accountBalanceSaga)
-  ///////For stripe charging payment API
-  yield takeEvery(ApiConstants.API_STRIPE_CHARGING_PAYMENT_API_LOAD, stripeSaga.chargingPaymentSaga)
   yield takeEvery(ApiConstants.API_DRAW_PUBLISH_LOAD, publishDraws)
   //part proposed team grading comment 
   yield takeEvery(ApiConstants.API_COMPETITION_TEAM_DELETE_LOAD, deleteTeamSaga)
   //part proposed team grading comment 
   yield takeEvery(ApiConstants.API_COMPETITION_TEAM_DELETE_ACTION_LOAD, deleteTeamActionSaga)
-  //////////stripe payment account balance API
-  yield takeEvery(ApiConstants.API_SAVE_STRIPE_ACCOUNT_API_LOAD, stripeSaga.saveStripeAccountSaga)
   //Draws Matches List Export
   yield takeEvery(ApiConstants.API_DRAW_MATCHES_LIST_LOAD, drawsMatchesListExportSaga)
-  //////////stripe login link
-  yield takeEvery(ApiConstants.API_GET_STRIPE_LOGIN_LINK_API_LOAD, stripeSaga.getStripeLoginLinkSaga)
-  /////stripe payments transfer list
-  yield takeEvery(ApiConstants.API_GET_STRIPE_PAYMENTS_TRANSFER_LIST_API_LOAD, stripeSaga.getStripeTransferListSaga)
-  ///forgot password
-  //////stripe payout list
-  yield takeEvery(ApiConstants.API_GET_STRIPE_PAYOUT_LIST_API_LOAD, stripeSaga.getStripePayoutListSaga)
   //Final Teams Export
   yield takeEvery(ApiConstants.API_EXPORT_FINAL_TEAMS_LOAD, finalTeamsExportSaga)
   yield takeEvery(ApiConstants.API_EXPORT_FINAL_PLAYERS_LOAD, finalPlayersExportSaga)
   yield takeEvery(ApiConstants.API_EXPORT_PROPOSED_TEAMS_LOAD, proposedTeamsExportSaga)
   yield takeEvery(ApiConstants.API_EXPORT_PROPOSED_PLAYERS_LOAD, proposedPlayersExportSaga)
-  /////stripe single payout transaction list
-  yield takeEvery(ApiConstants.API_GET_STRIPE_TRANSACTION_PAYOUT_LIST_API_LOAD, stripeSaga.getTransactionPayoutListSaga)
   ////coach saga
   yield takeEvery(ApiConstants.API_LIVE_SCORE_COACH_LIST_LOAD, liveScoreCoachSaga)
   yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_EDIT_COACH_LOAD, liveScoreAddCoachSaga)
-  // Organisation Contat Delete
-  // Organisation Contat Delete
-  /////API_GET_INVOICE data
-  yield takeEvery(ApiConstants.API_GET_INVOICE_LOAD, stripeSaga.getInvoiceSaga)
   //fixtureSaga get division grade api
   yield takeEvery(ApiConstants.API_GET_DIVISION_LOAD, getDivisionSaga)
   yield takeEvery(ApiConstants.API_GET_FIXTURE_LOAD, competitionFixtureSaga)
@@ -540,17 +525,12 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_LIVE_SCORE_COACH_IMPORT_LOAD, liveScoreCoachImportSaga)
   yield takeEvery(ApiConstants.API_GET_ALL_COMPETITION_LOAD, getCompetitionSaga)
   yield takeEvery(ApiConstants.API_FIXTURE_TEMPLATE_ROUNDS_LOAD, fixtureTemplateSaga)
-  yield takeEvery(ApiConstants.API_PAYMENT_TYPE_LIST_LOAD, stripeSaga.getPaymentListSaga)
   yield takeEvery(ApiConstants.API_UMPIRE_ROASTER_LIST_LOAD, umpireRoasterSaga.umpireRoasterListSaga)
   yield takeEvery(ApiConstants.API_GET_UMPIRE_DASHBOARD_VENUE_LIST_LOAD, umpireDashboardSaga.umpireVenueListSaga)
   yield takeEvery(ApiConstants.API_UMPIRE_ROASTER_ACTION_CLICK_LOAD, umpireRoasterSaga.umpireActionPerofomSaga)
   yield takeEvery(ApiConstants.API_GET_UMPIRE_DASHBOARD_DIVISION_LIST_LOAD, umpireDashboardSaga.umpireDivisionListSaga)
   yield takeEvery(ApiConstants.API_GET_UMPIRE_DASHBOARD_LIST_LOAD, umpireDashboardSaga.umpireListDashboardSaga)
-  /// Disability Reference Saga
-  ///Action Box List
-  yield takeEvery(ApiConstants.API_GET_ACTION_BOX_LOAD, actionBoxListSaga)
   ///Update Action Box
-  yield takeEvery(ApiConstants.API_UPDATE_ACTION_BOX_LOAD, updateActionBoxSaga)
   yield takeEvery(ApiConstants.API_UMPIRE_IMPORT_LOAD, umpireDashboardSaga.umpireImportSaga)
   //////assign umpire get list
   yield takeEvery(ApiConstants.API_GET_ASSIGN_UMPIRE_LIST_LOAD, assignUmpireSaga.getAssignUmpireListSaga)
@@ -559,10 +539,6 @@ export default function* rootSaga() {
   /////unassign umpire from the match(delete)
   yield takeEvery(ApiConstants.API_UNASSIGN_UMPIRE_FROM_LIST_LOAD, assignUmpireSaga.unassignUmpireSaga)
   yield takeEvery(ApiConstants.CHANGE_PLAYER_LINEUP_LOAD, playerLineUpStatusChnage)
-  //////shop product listing
-  yield takeEvery(ApiConstants.API_GET_SHOP_PRODUCT_LISTING_LOAD, shopProductSaga.getProductListingSaga)
-  /////shop add product
-  yield takeEvery(ApiConstants.API_ADD_SHOP_PRODUCT_LOAD, shopProductSaga.addProductSaga)
   yield takeEvery(ApiConstants.API_LIVE_SCORE_UMPIRES_IMPORT_LOAD, liveScoreUmpiresImportSaga)
   yield takeEvery(ApiConstants.BULK_SCORE_UPDATE_LOAD, bulkScoreChange)
   //////////////////////registration main dashboard listing owned and participate registration
@@ -570,8 +546,6 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_YEAR_AND_QUICK_COMPETITION_LOAD, competitionQuickSaga.getquickYearAndCompetitionListSaga)
   ////////////////post/save quick competition division
   yield takeEvery(ApiConstants.API_SAVE_QUICK_COMPETITION_DIVISION_LOAD, competitionQuickSaga.saveQuickCompDivisionSaga)
-  ////////////get reference type in the add product screen
-  yield takeEvery(ApiConstants.API_GET_TYPES_LIST_IN_ADD_PROUCT_LOAD, shopProductSaga.getTypesOfProductSaga)
   /// create quick competition 
   yield takeEvery(ApiConstants.API_CREATE_QUICK_COMPETITION_LOAD, competitionQuickSaga.createQuickComptitionSaga)
   yield takeEvery(ApiConstants.API_GET_QUICK_COMPETITION_LOAD, competitionQuickSaga.getQuickComptitionSaga)
@@ -579,19 +553,10 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_QUICK_COMPETITION_TIMESLOT_POST_LOAD, competitionQuickSaga.quickcompetitoTimeSlotsPostApi)
   //////update quick competition
   yield takeEvery(ApiConstants.API_UPDATE_QUICK_COMPETITION_LOAD, competitionQuickSaga.updateQuickCompetitionSaga)
-  ///////////get state reference data
-  //////////////////delete product from the product listing API
-  yield takeEvery(ApiConstants.API_DELETE_SHOP_PRODUCT_LOAD, shopProductSaga.deleteProductSaga)
 
   yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_EDIT_INCIDENT_LOAD, liveScoreAddEditIncidentSaga)
   yield takeEvery(ApiConstants.API_LIVE_SCORE_INCIDENT_TYPE_LOAD, liveScoreIncidentTypeSaga)
   yield takeEvery(ApiConstants.QUICKCOMP_IMPORT_DATA_LOAD, competitionQuickSaga.quickCompetitionPlayer)
-  ///////////////////////////delete product variant API
-  yield takeEvery(ApiConstants.API_DELETE_SHOP_PRODUCT_VARIANT_LOAD, shopProductSaga.deleteProductVariantSaga)
-  /////////////////////////add type in the typelist array in from the API
-  yield takeEvery(ApiConstants.API_SHOP_ADD_TYPE_IN_TYPELIST_LOAD, shopProductSaga.addNewTypeSaga)
-  ///////////////////product details on id API
-  yield takeEvery(ApiConstants.API_SHOP_GET_PRODUCT_DETAILS_BY_ID_LOAD, shopProductSaga.getProductDetailsByIdSaga)
 
   // Get match sheet upload
   yield takeEvery(ApiConstants.API_MATCH_SHEET_PRINT_LOAD, liveScoreMatchSheetSaga.liveScoreMatchSheetPrintSaga)
@@ -604,17 +569,13 @@ export default function* rootSaga() {
 
   yield takeEvery(ApiConstants.API_LIVE_SCORE_MANAGER_IMPORT_LOAD, liveScoreManagerImportSaga)
 
-  ///////////shop setting get API
-  yield takeEvery(ApiConstants.API_GET_SHOP_SETTING_LOAD, shopSettingSaga.getShopSettingSaga);
-  ////shop setting create address API
-  yield takeEvery(ApiConstants.API_CREATE_SHOP_SETTING_ADDRESS_LOAD, shopSettingSaga.createAddressSaga);
 
-  ////organisation charity update API
+  // Organisation charity update API
 
-  ////organisation terms and conditions update API
+  // Organisation terms and conditions update API
   yield takeEvery(ApiConstants.API_COMPETITION_STATUS_UPDATE_LOAD, updateCompetitionStatusSaga)
 
-  ////////competition Active Draws rounds
+  // Competition Active Draws rounds
   yield takeEvery(ApiConstants.API_GET_DRAWS_ACTIVE_ROUNDS_LOAD, getActiveDrawsRoundsSaga)
 
   // Check venue address duplication
@@ -624,17 +585,12 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_UMPIRE_ROUND_LIST_LOAD, umpireDashboardSaga.umpireRoundListSaga)
   yield takeEvery(ApiConstants.API_INNER_HORIZONTAL_COMPETITION_LIST_LOAD, getInnerHorizontalCompSaga)
 
-  //add quick competition venue
+  // Add quick competition venue
   yield takeEvery(ApiConstants.API_QUICK_COMPETITION_ADDVENUE_LOAD, competitionQuickSaga.quickCompetitionAddVenueSaga)
 
   yield takeEvery(ApiConstants.API_LIVE_SCORE_POSITION_TRACKING_LOAD, liveScorePositionTrackSaga)
 
-  //export payment saga
-  yield takeEvery(ApiConstants.API_PAYMENT_DASHBOARD_EXPORT_LOAD, stripeSaga.exportpaymetSaga)
 
   yield takeEvery(ApiConstants.API_LIVE_SCORE_MAIN_DIVISION_LIST_LOAD, liveScoreMainDivisionListsaga)
 
-  ////////////shop order summmary listing get API
-  yield takeEvery(ApiConstants.API_GET_SHOP_ORDER_SUMMARY_LISTING_LOAD, shopOrderSummarySaga.getOrderSummaryListingSaga)
-  
 }

@@ -352,7 +352,7 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
 
 
 
-        ///////////////team grading summmary publish
+        ///////////////team grading summary publish
         case ApiConstants.API_PUBLISH_TEAM_GRADING_SUMMARY_LOAD:
             return { ...state, onLoad: true, error: null }
 

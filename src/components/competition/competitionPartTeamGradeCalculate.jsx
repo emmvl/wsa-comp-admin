@@ -167,7 +167,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
 
     }
 
-    ////publish the team grading summmary data
+    ////publish the team grading summary data
     publishtApiCall = () => {
         this.props.publishGradeTeamSummaryAction(this.state.yearRefId, this.state.firstTimeCompId)
     }

@@ -76,7 +76,7 @@ let AxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    ///////////shop order summmary listing get API
+    ///////////shop order summary listing get API
     getOrderSummaryListing(params) {
         let { limit, offset, search, year, postcode, organisationId, paymentMethod, order, sorterBy } = params
         var url = `/order/summary?limit=${limit}&offset=${offset}&search=${search}&year=${year}
