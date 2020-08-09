@@ -1516,7 +1516,7 @@ const AppConstants = {
   publishModalConfirmationMsg: "Would you like to adjust their ladder points?",
   videoSizeMessage: "The maximum file size can be 2 MB",
   childrenCheckNumber:"Requires Working with Children Check",
-  regenerateDrawTitle:"Regenerate draw from which Round?"											 
+  regenerateDrawTitle:"Regenerate draw from which Round?",										 
   numberOfOrders: "Number of Orders",
 
   teamRegistrations: "Team Registrations",
