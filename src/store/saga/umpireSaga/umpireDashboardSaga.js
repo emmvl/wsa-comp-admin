@@ -1,37 +1,42 @@
-import { put, call } from '../../../../node_modules/redux-saga/effects'
+import { put, call } from "redux-saga/effects"
 import ApiConstants from "../../../themes/apiConstants";
 import UserAxiosApi from "../../http/userHttp/userAxiosApi";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 import CommonAxiosApi from "../../http/commonHttp/commonAxios";
 import { message } from "antd";
 import history from "../../../util/history";
+import AppConstants from "../../../themes/appConstants";
 
 function* failSaga(result) {
-    console.log("failSaga", result.result.data)
     yield put({ type: ApiConstants.API_UMPIRE_FAIL });
-    setTimeout(() => {
-        message.config({
-            duration: 1.5,
-            maxCount: 1
-        })
-        message.error(result.result.data)
-    }, 800);
+    let msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong
+    message.config({
+        duration: 1.5,
+        maxCount: 1,
+    });
+    message.error(msg);
 }
 
 function* errorSaga(error) {
-    console.log("errorSaga", error)
     yield put({
         type: ApiConstants.API_UMPIRE_ERROR,
         error: error,
         status: error.status
     });
-    setTimeout(() => {
+    if (error.status == 400) {
+
         message.config({
             duration: 1.5,
-            maxCount: 1
-        })
-        message.error(error.error);
-    }, 800);
+            maxCount: 1,
+        });
+        message.error((error && error.error) ? error.error : AppConstants.somethingWentWrong);
+    } else {
+        message.config({
+            duration: 1.5,
+            maxCount: 1,
+        });
+        message.error(AppConstants.somethingWentWrong);
+    }
 }
 
 ////*********************** */

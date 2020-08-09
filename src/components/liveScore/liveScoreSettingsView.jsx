@@ -388,6 +388,7 @@ class LiveScoreSettingsView extends Component {
                         rules: [{ required: true, message: ValidationConstants.competitionField }]
                     })(
                         <InputWithHead
+                            auto_Complete='new-compName'
                             required={"required-field pb-0"}
                             heading={AppConstants.competition_name}
                             placeholder={AppConstants.competition_name}
@@ -417,6 +418,7 @@ class LiveScoreSettingsView extends Component {
                         rules: [{ required: true, message: ValidationConstants.shortField }]
                     })(
                         <InputWithHead
+                            auto_Complete='new-shortName'
                             required={"required-field pb-0"}
                             heading={AppConstants.short_Name}
                             placeholder={AppConstants.short_Name}
@@ -1262,7 +1264,7 @@ class LiveScoreSettingsView extends Component {
                 <Layout>
                     {this.headerView()}
                     {/* <Content> */}
-                    <Form onSubmit={this.handleSubmit} className="login-form">
+                    <Form autoComplete='off' onSubmit={this.handleSubmit} className="login-form">
                         {/* <Form onSubmit={this.checkSubmit} noValidate="novalidate" className="login-form"> */}
                         <div className="formView">{this.contentView(getFieldDecorator)}</div>
                     </Form>

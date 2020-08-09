@@ -231,7 +231,7 @@ class LiveScoreNewsList extends Component {
         let newsData = liveScoreNewsState ? liveScoreNewsState.liveScoreNewsListData : [];
         let stateWideMsg = getKeyForStateWideMessage()
         return (
-            <div className="comp-dash-table-view mt-4">
+            <div className="comp-dash-table-view mt-4 pb-5">
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         loading={this.props.liveScoreNewsState.onLoad}
@@ -242,45 +242,28 @@ class LiveScoreNewsList extends Component {
                     />
                 </div>
 
-
-
-                <div className="comp-dashboard-botton-view-mobile">
-                    <div
-                        className="comp-dashboard-botton-view-mobile"
-                        style={{
-                            width: "100%",
-                            display: "flex",
-                            flexDirection: "row",
-                            // alignItems: "center",
-                            justifyContent: "center"
-                        }} >
-                       
-                            <div className="col-sm">
-                            {
-                            stateWideMsg && <div className="reg-add-save-button">
-                                    <NavLink to={{
-                                        pathname: '/liveScoreCompetitions'
-                                    }}>
-                                        <Button className="button-spacing-style ml-2 mr-2 mt-3" type="cancel-button">{AppConstants.back}</Button>
-                                    </NavLink>
-                                </div>   }
-                            </div>
-                     
-                        <div className="d-flex justify-content-end">
-                            <Pagination
-                                className="antd-pagination"
-                                defaultCurrent={1}
-                                total={8}
-                            // onChange={this.handleTableChange}
-                            />
-                        </div>
-                    </div>
-
-                </div>
+                {stateWideMsg && this.footerView()}
 
             </div>
         );
     };
+
+    //////footer view containing all the buttons like submit and cancel
+    footerView = () => {
+        return (
+            <div className="fluid-width paddingBottom56px" >
+                <div className="row" >
+                    <div className="col-sm-3 mt-5" >
+                        <div className="reg-add-save-button">
+                            <NavLink to="/liveScoreCompetitions">
+                                <Button className="cancelBtnWidth" type="cancel-button"  >{AppConstants.back}</Button>
+                            </NavLink>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
 
     ////main render method
     render() {

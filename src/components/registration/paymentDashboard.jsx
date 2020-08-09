@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux';
 import AppImages from "../../themes/appImages";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { currencyFormat } from "../../util/currencyFormat";
-import { getPaymentList } from "../../store/actions/stripeAction/stripeAction"
+import { getPaymentList, exportPaymentApi } from "../../store/actions/stripeAction/stripeAction"
 import InputWithHead from "../../customComponents/InputWithHead"
 
 const { confirm } = Modal;
@@ -152,6 +152,10 @@ class PaymentDashboard extends Component {
         this.handlePaymentTableList(1)
     }
 
+    onExport() {
+        this.props.exportPaymentApi("paymentDashboard")
+    }
+
     ///////view for breadcrumb
     headerView = () => {
         return (
@@ -176,7 +180,9 @@ class PaymentDashboard extends Component {
                                             justifyContent: "flex-end"
                                         }}
                                     >
-                                        <Button className="primary-add-comp-form" type="primary">
+                                        <Button
+                                            onClick={() => this.onExport()}
+                                            className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">
                                                     <img
@@ -219,7 +225,7 @@ class PaymentDashboard extends Component {
                     <InputWithHead required={"pt-0"} heading={AppConstants.year} />
                     <Select
                         className="reg-payment-select"
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182, maxHeight: 60, minHeight: 44 }}
+                        style={{ width: "100%", paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
                         onChange={(year) => this.setState({ year })}
                         value={this.state.year}
                     >
@@ -235,7 +241,7 @@ class PaymentDashboard extends Component {
 
                     <Select
                         className="reg-payment-select"
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
                         onChange={(competition) => this.setState({ competition })}
                         value={this.state.competition}
                     >
@@ -251,7 +257,7 @@ class PaymentDashboard extends Component {
                     <InputWithHead required={"pt-0"} heading={AppConstants.paymentFor} />
                     <Select
                         className="reg-payment-select"
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
                         onChange={(paymentFor) => this.setState({ paymentFor })}
                         value={this.state.paymentFor}
                     >
@@ -268,7 +274,7 @@ class PaymentDashboard extends Component {
                     <DatePicker
                         className="reg-payment-datepicker"
                         size="large"
-                        style={{ width: "100%" }}
+                        style={{ width: "100%", minWidth: 160 }}
                         onChange={date => this.dateOnChangeFrom(date)}
                         format={'DD-MM-YYYY'}
                         showTime={false}
@@ -280,7 +286,7 @@ class PaymentDashboard extends Component {
                     <DatePicker
                         className="reg-payment-datepicker"
                         size="large"
-                        style={{ width: "100%" }}
+                        style={{ width: "100%", minWidth: 160 }}
                         onChange={date => this.dateOnChangeTo(date)}
                         format={'DD-MM-YYYY'}
                         showTime={false}
@@ -343,7 +349,8 @@ class PaymentDashboard extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getOnlyYearListAction,
-        getPaymentList
+        getPaymentList,
+        exportPaymentApi
     }, dispatch)
 }
 

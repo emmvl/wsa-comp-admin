@@ -40,7 +40,7 @@
 }
 
 .home-dashboard-table .ant-table-thead > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td, .home-dashboard-table .ant-table-tbody > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td, .home-dashboard-table .ant-table-thead > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td, .home-dashboard-table .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
-  background: var(--app-f1c2a2);
+  background: var(--app-f1c2a2) !important;
 }
 
 /*on Hover remove on link click */

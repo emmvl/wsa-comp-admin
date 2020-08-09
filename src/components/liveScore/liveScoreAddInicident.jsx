@@ -193,6 +193,7 @@ class LiveScoreAddIncident extends Component {
                 <div className="row" >
                     <div className="col-sm" >
                         <InputWithHead
+                            auto_Complete='new-mnbId'
                             heading={AppConstants.matchID}
                             placeholder={AppConstants.matchID}
                             onChange={(event) => this.props.liveScoreUpdateIncidentData(event.target.value, "mnbMatchId")}
@@ -473,7 +474,7 @@ class LiveScoreAddIncident extends Component {
                 <Layout>
                     {this.headerView()}
 
-                    <Form onSubmit={this.onSaveClick} className="login-form" noValidate="noValidate">
+                    <Form autoComplete='off' onSubmit={this.onSaveClick} className="login-form" noValidate="noValidate">
                         <Content>
                             <div className="formView">
                                 {this.contentView(getFieldDecorator)}

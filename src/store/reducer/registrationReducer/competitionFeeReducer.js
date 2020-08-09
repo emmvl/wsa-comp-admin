@@ -438,7 +438,7 @@ function checkSelectedSeasonalFee(paymentDataArray, seasonalFee, selectedSeasona
     selectedSeasonalInstalmentDates = [];
     if (paymentDataArray) {
         for (let i in paymentDataArray) {
-            if (paymentDataArray[i].feesTypeRefId == 3) {
+            if (paymentDataArray[i].feesTypeRefId == 2) {
                 selectedSeasonalFeeKey.push(paymentDataArray[i].paymentOptionRefId)
                 selectedSeasonalFee.push(paymentDataArray[i])
             }

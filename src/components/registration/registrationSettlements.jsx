@@ -9,7 +9,7 @@ import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
-    getStripePayoutListAction,
+    getStripePayoutListAction, exportPaymentApi
 } from "../../store/actions/stripeAction/stripeAction";
 import { getOrganisationData } from "../../util/sessionStorage";
 import { currencyFormat } from "../../util/currencyFormat";
@@ -106,7 +106,6 @@ const columns = [
 
 ];
 
-
 class RegistrationSettlements extends Component {
     constructor(props) {
         super(props);
@@ -121,13 +120,17 @@ class RegistrationSettlements extends Component {
         if (this.stripeConnected()) {
             this.props.getStripePayoutListAction(1, null, null)
         }
-
     }
 
     stripeConnected = () => {
         let orgData = getOrganisationData()
         let stripeAccountID = orgData ? orgData.stripeAccountID : null
         return stripeAccountID
+    }
+
+    //on export button click
+    onExport() {
+        this.props.exportPaymentApi("payout")
     }
 
     ///////view for breadcrumb
@@ -163,7 +166,9 @@ class RegistrationSettlements extends Component {
                                             justifyContent: "flex-end"
                                         }}
                                     >
-                                        <Button className="primary-add-comp-form" type="primary">
+                                        <Button
+                                            onClick={() => this.onExport()}
+                                            className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">
                                                     <img
@@ -184,8 +189,6 @@ class RegistrationSettlements extends Component {
             </div >
         )
     }
-
-
 
     handleStripePayoutList = (key) => {
         let page = this.props.stripeState.stripePayoutListPage
@@ -226,7 +229,6 @@ class RegistrationSettlements extends Component {
         }
     }
 
-
     payoutListView = () => {
         console.log("stripeState", this.props.stripeState)
         let stripePayoutList = this.props.stripeState.stripePayoutList
@@ -250,7 +252,7 @@ class RegistrationSettlements extends Component {
                     <span className="reg-payment-paid-reg-text">{AppConstants.currentPage + " - " + currentPage}</span>
                     <span className="reg-payment-paid-reg-text pt-2">{AppConstants.totalPages + " - " + totalPageCount}</span>
                 </div>
-                <div className="d-flex justify-content-end mb-5">
+                <div className="d-flex justify-content-end " style={{ paddingBottom: 100 }}>
                     <div className="pagination-button-div" onClick={() => previousEnabled && this.handleStripePayoutList("Previous")}>
                         <span style={!previousEnabled ? { color: "#9b9bad" } : null}
                             className="pagination-button-text">{AppConstants.previous}</span>
@@ -263,6 +265,7 @@ class RegistrationSettlements extends Component {
             </div>
         )
     }
+
     dropdownView = () => {
         return (
             <div className="row" >
@@ -270,7 +273,7 @@ class RegistrationSettlements extends Component {
                     <InputWithHead required={"pt-0"} heading={AppConstants.year} />
                     <Select
                         className="reg-payment-select"
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182, maxHeight: 60, minHeight: 44 }}
+                        style={{ width: "100%", paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
                         onChange={(year) => this.setState({ year })}
                         value={this.state.year}
                     >
@@ -286,7 +289,7 @@ class RegistrationSettlements extends Component {
 
                     <Select
                         className="reg-payment-select"
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
                         onChange={(competition) => this.setState({ competition })}
                         value={this.state.competition}
                     >
@@ -302,7 +305,7 @@ class RegistrationSettlements extends Component {
                     <InputWithHead required={"pt-0"} heading={AppConstants.paymentFor} />
                     <Select
                         className="reg-payment-select"
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
                         onChange={(paymentFor) => this.setState({ paymentFor })}
                         value={this.state.paymentFor}
                     >
@@ -319,7 +322,7 @@ class RegistrationSettlements extends Component {
                     <DatePicker
                         className="reg-payment-datepicker"
                         size="large"
-                        style={{ width: "100%" }}
+                        style={{ width: "100%", minWidth: 160 }}
                         onChange={date => this.dateOnChangeFrom(date)}
                         format={'DD-MM-YYYY'}
                         showTime={false}
@@ -331,7 +334,7 @@ class RegistrationSettlements extends Component {
                     <DatePicker
                         className="reg-payment-datepicker"
                         size="large"
-                        style={{ width: "100%" }}
+                        style={{ width: "100%", minWidth: 160 }}
                         onChange={date => this.dateOnChangeTo(date)}
                         format={'DD-MM-YYYY'}
                         showTime={false}
@@ -343,7 +346,6 @@ class RegistrationSettlements extends Component {
         )
     }
 
-
     ////////form content view
     contentView = () => {
         return (
@@ -353,7 +355,6 @@ class RegistrationSettlements extends Component {
             </div>
         )
     }
-
 
     render() {
         return (
@@ -371,16 +372,17 @@ class RegistrationSettlements extends Component {
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getStripePayoutListAction,
+        exportPaymentApi
     }, dispatch)
 }
 
 function mapStatetoProps(state) {
     return {
         stripeState: state.StripeState,
-
     }
 }
 

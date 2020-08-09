@@ -1,54 +1,60 @@
-
 import ApiConstants from "../../../themes/apiConstants";
 
-//Banners action
-function getLiveScoreDivisionList(competitionID, compKey) {
-
-    const action = {
+// Division action
+function getLiveScoreDivisionList(competitionID, compKey, sortBy, sortOrder) {
+    return {
         type: ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_LOAD,
-        competitionID: competitionID,
-        compKey: compKey
+        competitionID,
+        compKey,
+        sortBy,
+        sortOrder,
     };
-
-    return action;
 }
+
 //liveScoreUpdateDivisionAction
 function liveScoreUpdateDivisionAction(data, key, contentType) {
-    const action = {
+    return {
         type: ApiConstants.API_LIVE_SCORE_UPDATE_DIVISION,
-        data: data,
-        key: key,
-        contentType: contentType
-    }
-    return action
+        data,
+        key,
+        contentType,
+    };
 }
+
 //createDivisionAction
 function createDivisionAction(name, divisionName, gradeName, competitionId, divisionId) {
-    const action = {
+    return {
         type: ApiConstants.API_LIVE_SCORE_CREATE_DIVISION_LOAD,
-        name: name,
-        divisionName: divisionName,
-        gradeName: gradeName,
-        competitionId: competitionId,
-        divisionId: divisionId
-    }
-    return action
+        name,
+        divisionName,
+        gradeName,
+        competitionId,
+        divisionId,
+    };
 }
+
 //liveScoreDeleteDivision
 function liveScoreDeleteDivision(divisionId) {
-    const action = {
+    return {
         type: ApiConstants.API_LIVE_SCORE_DELETE_DIVISION_LOAD,
-        divisionId: divisionId,
+        divisionId,
     };
-
-    return action;
 }
 
-function liveScoreDivisionImportAction(data) {
+function liveScoreDivisionImportAction(payload) {
     return {
         type: ApiConstants.API_LIVE_SCORE_DIVISION_IMPORT_LOAD,
-        payload: data
-    }
+        payload,
+    };
+}
+
+//Division action
+function getMainDivisionListAction(competitionID,offset) {
+    return {
+        type: ApiConstants.API_LIVE_SCORE_MAIN_DIVISION_LIST_LOAD,
+        competitionID,
+        offset
+    };
 }
 
 export {
@@ -56,6 +62,6 @@ export {
     liveScoreUpdateDivisionAction,
     createDivisionAction,
     liveScoreDeleteDivision,
-    liveScoreDivisionImportAction
-
+    liveScoreDivisionImportAction,
+    getMainDivisionListAction,
 };

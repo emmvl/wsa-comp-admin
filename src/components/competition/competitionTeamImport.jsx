@@ -9,13 +9,15 @@ import AppImages from "../../themes/appImages";
 import CSVReader from 'react-csv-reader'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {competitionTeamsImportAction, competitionImportDataCleanUpAction
+import {
+    competitionTeamsImportAction, competitionImportDataCleanUpAction
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import Loader from '../../customComponents/loader'
 import { message } from "antd";
 import ValidationConstants from "../../themes/validationConstant";
 import { getOrganisationData } from "../../util/sessionStorage";
 import history from "../../util/history";
+import AppUniqueId from "../../themes/appUniqueId";
 
 
 const { Content, Header, Footer } = Layout;
@@ -61,33 +63,27 @@ class CompetitionTeamImport extends Component {
         }
     }
 
-    componentDidMount(){
-     this.props.competitionImportDataCleanUpAction("team");
-     let competitionId = this.props.location.state.competitionId;
-     let screenNavigationKey = this.props.location.state.screenNavigationKey;
-     console.log("competitionId" + competitionId);
-     this.setState({ competitionId: competitionId, screenNavigationKey: screenNavigationKey})
+    componentDidMount() {
+        this.props.competitionImportDataCleanUpAction("team");
+        let competitionId = this.props.location.state.competitionId;
+        let screenNavigationKey = this.props.location.state.screenNavigationKey;
+        console.log("competitionId" + competitionId);
+        this.setState({ competitionId: competitionId, screenNavigationKey: screenNavigationKey })
     }
 
-    componentDidUpdate(nextProps)
-    {
+    componentDidUpdate(nextProps) {
         let teamsImportData = this.props.partPlayerGradingState.teamsImportData;
-        if(nextProps.partPlayerGradingState!= this.props.partPlayerGradingState)
-        {
-            if(this.props.partPlayerGradingState.onLoad == false && this.state.loading === true)
-            {
+        if (nextProps.partPlayerGradingState != this.props.partPlayerGradingState) {
+            if (this.props.partPlayerGradingState.onLoad == false && this.state.loading === true) {
                 this.setState({ loading: false });
-                if(!this.props.partPlayerGradingState.error && this.props.partPlayerGradingState.status == 1)
-                {
-                    if(this.state.buttonPressed == "upload")
-                    {
-                        if(teamsImportData.length == 0)
-                        {
+                if (!this.props.partPlayerGradingState.error && this.props.partPlayerGradingState.status == 1) {
+                    if (this.state.buttonPressed == "upload") {
+                        if (teamsImportData.length == 0) {
                             this.props.competitionImportDataCleanUpAction("Team");
-                            if(this.state.screenNavigationKey == "ProposedPlayerGrading"){
+                            if (this.state.screenNavigationKey == "ProposedPlayerGrading") {
                                 history.push('/competitionPartPlayerGrades');
                             }
-                            else if(this.state.screenNavigationKey == "PlayerGrading"){
+                            else if (this.state.screenNavigationKey == "PlayerGrading") {
                                 history.push('/competitionPlayerGrades');
                             }
                         }
@@ -119,12 +115,12 @@ class CompetitionTeamImport extends Component {
     }
 
     handleForce = data => {
-        this.setState({ csvdata: data.target.files[0] , isProceed: 0})
+        this.setState({ csvdata: data.target.files[0], isProceed: 0 })
 
     };
 
     onUploadBtn() {
-       
+
         let payload = {
             competitionUniqueKey: this.state.competitionId,
             organisationUniqueKey: getOrganisationData().organisationUniqueKey,
@@ -135,7 +131,7 @@ class CompetitionTeamImport extends Component {
         console.log("******" + JSON.stringify(payload));
         if (this.state.csvdata) {
             this.props.competitionTeamsImportAction(payload)
-            this.setState({buttonPressed:"upload", loading: true});
+            this.setState({ buttonPressed: "upload", loading: true });
             let e = document.getElementById("teamImport");
             e.value = null;
         } else {
@@ -170,13 +166,13 @@ class CompetitionTeamImport extends Component {
                     style={{ marginTop: 10 }}>
                     <div className="row">
                         <div className="reg-add-save-button">
-                            <Button onClick={() => this.onUploadBtn()} className="primary-add-comp-form" type="primary">
+                            <Button id={AppUniqueId.importPlayerTeam_upload_btn} onClick={() => this.onUploadBtn()} className="primary-add-comp-form" type="primary">
                                 {AppConstants.upload}
                             </Button>
                         </div>
-                        <div className="reg-add-save-button" style={{marginLeft: '20px'}}>
+                        <div className="reg-add-save-button" style={{ marginLeft: '20px' }}>
                             <NavLink to="/templates/wsa-import-teams.csv" target="_blank" download>
-                                <Button className="primary-add-comp-form" type="primary">
+                                <Button id={AppUniqueId.impPlayerTeam_template_btn} className="primary-add-comp-form" type="primary">
                                     {AppConstants.downloadTemplate}
                                 </Button>
                             </NavLink>
@@ -189,15 +185,15 @@ class CompetitionTeamImport extends Component {
 
     invalidTeamsView = () => {
         let invalidTeams = this.props.partPlayerGradingState.teamsImportData;
-        console.log("invalidTeams" + JSON.stringify(invalidTeams) );
+        console.log("invalidTeams" + JSON.stringify(invalidTeams));
         return (
             <div className="comp-dash-table-view mt-2">
-                 <span className="user-contact-heading">{AppConstants.invalidPlayers}</span>
+                <span className="user-contact-heading">{AppConstants.invalidPlayers}</span>
                 <div className="table-responsive home-dash-table-view">
-                    <Table className="home-dashboard-table" 
-                    columns={columns}
-                    dataSource={invalidTeams} 
-                    pagination={false}
+                    <Table className="home-dashboard-table"
+                        columns={columns}
+                        dataSource={invalidTeams}
+                        pagination={false}
                     />
                 </div>
             </div>
@@ -210,7 +206,7 @@ class CompetitionTeamImport extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
-                <InnerHorizontalMenu menu={"competition"} compSelectedKey={ this.state.screenNavigationKey == "PlayerGrading"?"4" : "14"} />
+                <InnerHorizontalMenu menu={"competition"} compSelectedKey={this.state.screenNavigationKey == "PlayerGrading" ? "4" : "14"} />
                 <Loader visible={this.props.partPlayerGradingState.onLoad} />
                 <Layout>
                     {this.headerView()}
@@ -218,11 +214,11 @@ class CompetitionTeamImport extends Component {
                         <div className="formView">
                             {this.contentView()}
                         </div>
-                        {invalidTeams!= null && invalidTeams.length > 0 ? 
-                        <div className="formView">
-                             {this.invalidTeamsView()}
-                        </div>
-                        : null }
+                        {invalidTeams != null && invalidTeams.length > 0 ?
+                            <div className="formView">
+                                {this.invalidTeamsView()}
+                            </div>
+                            : null}
                     </Content>
                 </Layout>
             </div>
@@ -230,9 +226,10 @@ class CompetitionTeamImport extends Component {
     }
 }
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ competitionTeamsImportAction, 
+    return bindActionCreators({
+        competitionTeamsImportAction,
         competitionImportDataCleanUpAction
-     }, dispatch)
+    }, dispatch)
 }
 
 function mapStateToProps(state) {

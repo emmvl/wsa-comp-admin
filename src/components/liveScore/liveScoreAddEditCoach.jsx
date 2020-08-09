@@ -182,11 +182,12 @@ class LiveScoreAddEditCoach extends Component {
             <div className="content-view pt-4">
                 <div className="row" >
                     <div className="col-sm" >
-                        <Form.Item>
+                        <Form.Item >
                             {getFieldDecorator(AppConstants.firstName, {
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
+                                    auto_Complete='new-firstName'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.firstName}
                                     placeholder={AppConstants.firstName}
@@ -206,6 +207,7 @@ class LiveScoreAddEditCoach extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
+                                    auto_Complete='new-lastName'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.lastName}
@@ -237,6 +239,7 @@ class LiveScoreAddEditCoach extends Component {
                                 ]
                             })(
                                 <InputWithHead
+                                    auto_Complete='new-email'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.emailAdd}
                                     placeholder={AppConstants.enterEmail}
@@ -254,6 +257,7 @@ class LiveScoreAddEditCoach extends Component {
                                 rules: [{ required: true, message: ValidationConstants.contactField }]
                             })(
                                 <InputWithHead
+                                    auto_Complete='new-contact'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.contactNO}
                                     placeholder={AppConstants.enterContactNo}
@@ -466,7 +470,7 @@ class LiveScoreAddEditCoach extends Component {
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"23"} />
                 <Layout>
                     {this.headerView()}
-                    <Form onSubmit={this.onSaveClick} className="login-form" noValidate="noValidate">
+                    <Form autoComplete="off" onSubmit={this.onSaveClick} className="login-form" noValidate="noValidate">
                         <Content>
                             <div className="formView">
                                 {this.state.isEdit == true ? this.contentViewForEditCoach(getFieldDecorator) : this.contentViewForAddCoach(getFieldDecorator)}

@@ -319,19 +319,21 @@ class RegistrationCompetitionForm extends Component {
                 {
                     title: "Gender Restriction",
                     dataIndex: "genderRestriction",
-                    key: "genderRestriction",
+                    key: AppUniqueId.div_gender_chkbox,
                     render: (genderRestriction, record, index) => (
+                        <div>
                         <Checkbox
                             className="single-checkbox mt-1"
                             disabled={this.state.permissionState.divisionsDisable}
                             checked={genderRestriction}
                             onChange={e => this.divisionTableDataOnchange(e.target.checked, record, index, "genderRestriction")}
                         ></Checkbox>
+                        </div>
                     )
                 },
                 {
                     dataIndex: "genderRefId",
-                    key: "genderRefId",
+                    key: AppUniqueId.div_gender_refid,
                     // width:  ? "20%" : null,
                     render: (genderRefId, record, index) => {
                         const { getFieldDecorator } = this.props.form;
@@ -365,21 +367,23 @@ class RegistrationCompetitionForm extends Component {
                 {
                     title: "Age Restriction",
                     dataIndex: "ageRestriction",
-                    key: "ageRestriction",
+                    key: AppUniqueId.div_ageres_chkbox,
 
                     render: (ageRestriction, record, index) => (
+                        <div>
                         <Checkbox
                             className="single-checkbox mt-1"
                             checked={ageRestriction}
                             onChange={e => this.divisionTableDataOnchange(e.target.checked, record, index, "ageRestriction")}
                             disabled={this.state.permissionState.divisionsDisable}
                         ></Checkbox>
+                        </div>
                     )
                 },
                 {
                     title: "DOB From",
                     dataIndex: "fromDate",
-                    key: "fromDate",
+                    key: AppUniqueId.div_ageres_fromdate,
                     width: "25%",
                     render: (fromDate, record, index) => {
                         const { getFieldDecorator } = this.props.form;
@@ -409,7 +413,7 @@ class RegistrationCompetitionForm extends Component {
                     title: "DOB To",
                     dataIndex: "toDate",
                     width: "25%",
-                    key: "toDate",
+                    key: AppUniqueId.div_ageres_todate,
                     render: (toDate, record, index) => {
                         const { getFieldDecorator } = this.props.form;
                         return (
@@ -1209,6 +1213,7 @@ class RegistrationCompetitionForm extends Component {
                 <div className="row">
                     <div className="col-sm">
                         <InputWithHead
+                            auto_Complete="new-name"
                             placeholder={AppConstants.name}
                             value={item.name}
                             onChange={(e) => this.updateNonPlayingNames(e.target.value, index, "name")}
@@ -1392,6 +1397,7 @@ class RegistrationCompetitionForm extends Component {
                     {getFieldDecorator('competition_name',
                         { rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }] })(
                             <InputWithHead
+                                auto_Complete="new-compName"
                                 required={"required-field pb-0 "}
                                 heading={AppConstants.competition_name}
                                 placeholder={AppConstants.competition_name}
@@ -1560,8 +1566,8 @@ class RegistrationCompetitionForm extends Component {
                 </Form.Item>
                 <div className="fluid-width">
                     <div className="row">
-                        <div id={AppUniqueId.comp_start_date} className="col-sm">
-                            <InputWithHead heading={AppConstants.compStartDate} required={"required-field"} />
+                        <div className="col-sm">
+                            <InputWithHead headingId={AppUniqueId.comp_start_date} heading={AppConstants.compStartDate} required={"required-field"} />
 
                             <Form.Item >
                                 {getFieldDecorator('startDate',
@@ -1580,8 +1586,8 @@ class RegistrationCompetitionForm extends Component {
                             </Form.Item>
 
                         </div>
-                        <div id={AppUniqueId.comp_end_date} className="col-sm">
-                            <InputWithHead heading={AppConstants.compCloseDate} required={"required-field"} />
+                        <div className="col-sm">
+                            <InputWithHead headingId={AppUniqueId.comp_end_date} heading={AppConstants.compCloseDate} required={"required-field"} />
                             <Form.Item >
                                 {getFieldDecorator('endDate',
                                     { rules: [{ required: true, message: ValidationConstants.endDateIsRequired }] })(
@@ -1627,9 +1633,9 @@ class RegistrationCompetitionForm extends Component {
                 <InputWithHead heading={AppConstants.timeBetweenRounds} />
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.time_rounds_days} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
-                                id={AppUniqueId.time_rounds_days}
+                                auto_Complete="new-days"
                                 placeholder={AppConstants.days}
                                 value={detailsData.competitionDetailData.roundInDays}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInDays")}
@@ -1637,9 +1643,9 @@ class RegistrationCompetitionForm extends Component {
 
                             />
                         </div>
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.time_rounds_hrs} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
-                                id={AppUniqueId.time_rounds_hrs}
+                                auto_Complete="new-hours"
                                 placeholder={AppConstants.hours}
                                 value={detailsData.competitionDetailData.roundInHours}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInHours")}
@@ -1647,9 +1653,9 @@ class RegistrationCompetitionForm extends Component {
 
                             />
                         </div>
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.time_rounds_mins} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
-                                id={AppUniqueId.time_rounds_mins}
+                                auto_Complete="new-mins"
                                 placeholder={AppConstants.mins}
                                 value={detailsData.competitionDetailData.roundInMins}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInMins")}
@@ -1684,9 +1690,9 @@ class RegistrationCompetitionForm extends Component {
                 <InputWithHead heading={AppConstants.playerInEachTeam} />
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.team_min_players} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
-                                id={AppUniqueId.team_min_players}
+                                auto_Complete="new-minNumber"
                                 placeholder={AppConstants.minNumber}
                                 value={detailsData.competitionDetailData.minimunPlayers}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "minimunPlayers")}
@@ -1694,9 +1700,9 @@ class RegistrationCompetitionForm extends Component {
 
                             />
                         </div>
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div id={AppUniqueId.team_max_players} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
-                                id={AppUniqueId.team_max_players}
+                                auto_Complete="new-maxNumber"
                                 placeholder={AppConstants.maxNumber}
                                 value={detailsData.competitionDetailData.maximumPlayers}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "maximumPlayers")}
@@ -2895,6 +2901,7 @@ class RegistrationCompetitionForm extends Component {
                 <InnerHorizontalMenu menu={"competition"} compSelectedKey={"1"} />
                 <Layout>
                     <Form
+                        autoComplete="off"
                         onSubmit={this.saveAPIsActionCall}
                         noValidate="noValidate"
                     >
@@ -2906,8 +2913,8 @@ class RegistrationCompetitionForm extends Component {
                             {this.regCompetitionFeeNavigationView()}
                             <div className="tab-view">
                                 <Tabs activeKey={this.state.competitionTabKey} onChange={this.tabCallBack}>
-                                    <TabPane id={AppUniqueId.comp_details_tab} tab={AppConstants.details} key="1">
-                                        <div className="tab-formView mt-5">{this.contentView(getFieldDecorator)}</div>
+                                    <TabPane tab={AppConstants.details} key="1">
+                                        <div id={AppUniqueId.comp_details_tab} className="tab-formView mt-5">{this.contentView(getFieldDecorator)}</div>
                                         {/* <div className="tab-formView mt-5">{this.regInviteesView(getFieldDecorator)}</div> */}
                                     </TabPane>
                                     {/* {competitionId == null &&
@@ -2916,8 +2923,8 @@ class RegistrationCompetitionForm extends Component {
                                             <div className="tab-formView mt-5">{this.membershipTypeView(getFieldDecorator)}</div>
                                         </TabPane>
                                     } */}
-                                    <TabPane id={AppUniqueId.comp_division_tab} tab={AppConstants.divisions} key={"2"}>
-                                        <div className="tab-formView">{this.divisionsView(getFieldDecorator)}</div>
+                                    <TabPane tab={AppConstants.divisions} key={"2"}>
+                                        <div id={AppUniqueId.comp_division_tab} className="tab-formView">{this.divisionsView(getFieldDecorator)}</div>
                                     </TabPane>
                                     {/* {competitionId == null &&
                                         <TabPane tab={AppConstants.fees} key={"4"}>

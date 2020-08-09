@@ -124,6 +124,13 @@ function quickCompetitionPlayerImportAction(payload) {
     }
     return action
 }
+function quickCompetitionAddVenue(payload) {
+    const action = {
+        type: ApiConstants.API_QUICK_COMPETITION_ADDVENUE_LOAD,
+        payload
+    }
+    return action
+}
 
 export {
     updateQuickCompetitionData,
@@ -139,5 +146,6 @@ export {
     updateQuickCompetitionDraws,
     updateSelectedTeamPlayer,
     quickCompImportDataCleanUpAction,
-    quickCompetitionPlayerImportAction
+    quickCompetitionPlayerImportAction,
+    quickCompetitionAddVenue
 }

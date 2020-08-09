@@ -908,7 +908,7 @@ function CompetitionDraws(state = initialState, action) {
         updateLoad: false,
       };
 
-    //competition part player grade calculate player grading summmary get API
+    //competition part player grade calculate player grading summary get API
     case ApiConstants.API_GET_COMPETITION_DRAWS_LOAD:
       return { ...state, onLoad: true, error: null, spinLoad: true, };
 

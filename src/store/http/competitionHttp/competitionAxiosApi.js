@@ -26,7 +26,7 @@ let CompetitionAxiosApi = {
     },
 
     //get time slot
-    async  getTimeSlotData(yearRefId, competitionId) {
+    async getTimeSlotData(yearRefId, competitionId) {
         let userId = await getUserId()
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
@@ -40,7 +40,7 @@ let CompetitionAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    /////competition part player grade calculate player grading summmary get API
+    /////competition part player grade calculate player grading summary get API
     async getCompPartPlayerGradingSummary(yearRefId, competitionId) {
         let userId = await getUserId()
         let orgItem = await getOrganisationData()
@@ -72,7 +72,7 @@ let CompetitionAxiosApi = {
     },
 
     ////save the own competition final grading api
-    async  saveOwnFinalTeamGradingData(payload) {
+    async saveOwnFinalTeamGradingData(payload) {
         let userId = await getUserId()
         let organisationId = await getOrganisationData().organisationUniqueKey;
         payload['organisationId'] = organisationId;
@@ -82,7 +82,7 @@ let CompetitionAxiosApi = {
     },
 
     //////competition part proposed team grading get api
-    async  getCompPartProposedTeamGrading(yearRefId, competitionId, divisionId) {
+    async getCompPartProposedTeamGrading(yearRefId, competitionId, divisionId) {
         let orgItem = await getOrganisationData()
         let userId = await getUserId()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
@@ -97,21 +97,21 @@ let CompetitionAxiosApi = {
     },
 
     //////competition save own final team grading table data
-    async  savePartProposedTeamGradingData(payload) {
+    async savePartProposedTeamGradingData(payload) {
         let userId = await getUserId()
         var url = `/api/proposedteamgrading/save?userId=${userId}`;
         return Method.dataPost(url, token, payload);
     },
 
     //post TIme Slot
-    async  postTimeSlotData(payload) {
+    async postTimeSlotData(payload) {
         let userId = await getUserId()
         var url = `/api/competitiontimeslot/save?userId=${userId}`
         return Method.dataPost(url, token, payload)
     },
 
-    ///////////save the competition part player grade calculate player grading summmary or say proposed player grading toggle
-    async    saveCompPartPlayerGradingSummary(payload) {
+    ///////////save the competition part player grade calculate player grading summary or say proposed player grading toggle
+    async saveCompPartPlayerGradingSummary(payload) {
         let userId = await getUserId()
         var url = `api/playergrading/summary/save?userId=${userId}`
         return Method.dataPost(url, token, payload)
@@ -165,7 +165,7 @@ let CompetitionAxiosApi = {
     },
 
     ////////competition draws rounds 
-    async  getDrawsRounds(yearRefId, competitionId) {
+    async getDrawsRounds(yearRefId, competitionId) {
         let userId = await getUserId()
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
@@ -180,7 +180,7 @@ let CompetitionAxiosApi = {
     },
 
     ////own competition venue constraint list in the venue and times
-    async   venueConstraintList(yearRefId, competitionId, organisationId) {
+    async venueConstraintList(yearRefId, competitionId, organisationId) {
         let orgItem = await getOrganisationData()
         let userId = await getUserId()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
@@ -194,7 +194,7 @@ let CompetitionAxiosApi = {
     },
 
     //////save the venueConstraints in the venue and times
-    async    venueConstraintPost(data) {
+    async venueConstraintPost(data) {
         let body = data
         let userId = await getUserId()
         var url = `/api/venueconstraint/save?userId=${userId}`
@@ -202,13 +202,13 @@ let CompetitionAxiosApi = {
     },
 
     ///////save the changed grade name in own competition team grading summary data
-    async   saveUpdatedGradeTeamSummary(payload) {
+    async saveUpdatedGradeTeamSummary(payload) {
         let userId = await getUserId()
         var url = `/api/teamgrading/summary/grade?userId=${userId}`;
         return Method.dataPost(url, token, payload);
     },
 
-    ////////team grading summmary publish
+    ////////team grading summary publish
     async publishGradeTeamSummary(yearRefId, competitionId) {
         let orgItem = await getOrganisationData()
         let userId = await getUserId()
@@ -236,7 +236,7 @@ let CompetitionAxiosApi = {
     },
 
     ///// update Draws
-    async   updateDraws(data) {
+    async updateDraws(data) {
         let body = data
         let userId = await getUserId()
         var url = `/api/draws/update?userId=${userId}`
@@ -244,7 +244,7 @@ let CompetitionAxiosApi = {
     },
 
     /// Save Draws 
-    async  saveDrawsApi(yearId, competitionId, drawsId) {
+    async saveDrawsApi(yearId, competitionId, drawsId) {
         let userId = await getUserId()
         let body = {
             "competitionUniqueKey": competitionId,
@@ -256,7 +256,7 @@ let CompetitionAxiosApi = {
     },
 
     ////////////get the competition final grades on the basis of competition and division
-    async  getCompFinalGradesList(yearRefId, competitionId, divisionId) {
+    async getCompFinalGradesList(yearRefId, competitionId, divisionId) {
         let orgItem = await getOrganisationData()
         let userId = await getUserId()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
@@ -277,7 +277,7 @@ let CompetitionAxiosApi = {
     },
 
     // add new team  in part player grading 
-    async  addCompetitionTeam(competitionId, divisionId, name) {
+    async addCompetitionTeam(competitionId, divisionId, name) {
         let orgItem = await getOrganisationData()
         let userId = await getUserId()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
@@ -310,7 +310,7 @@ let CompetitionAxiosApi = {
 
     },
     //Generate Draw
-    async  competitionGenerateDraw(payload) {
+    async competitionGenerateDraw(payload) {
         let userId = await getUserId()
         var url = `/api/generatedraw?userId=${userId}`;
         return Method.dataPost(url, token, payload);
@@ -476,7 +476,7 @@ let CompetitionAxiosApi = {
         return Method.dataPost(url, token, body);
     },
     ///// update Draws
-    async   updateFixture(data) {
+    async updateFixture(data) {
         let body = data
         var url = `/api/draws/team/update`
         return Method.dataPut(url, token, body);
@@ -518,7 +518,7 @@ let CompetitionAxiosApi = {
         return Method.dataGet(url, token);
     },
     // get own competition list
-    async  getQuickCompetitionList(year) {
+    async getQuickCompetitionList(year) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem.organisationUniqueKey
         var url = `api/quickcompetition/${year}?organisationId=${organisationUniqueKey}`;
@@ -564,7 +564,7 @@ let CompetitionAxiosApi = {
         return Method.dataPost(url, token, body);
     },
     //Generate Draw quick competition
-    async  quickCompetitionGenerateDraw(yearRefId, competitionUniqueKey) {
+    async quickCompetitionGenerateDraw(yearRefId, competitionUniqueKey) {
         let organisationId = await getOrganisationData().organisationUniqueKey;
         let userId = await getUserId()
         let body = {
@@ -586,8 +586,8 @@ let CompetitionAxiosApi = {
         var url = `/api/quickcompetition/import/player`;
         return Method.dataPost(url, token, body);
     },
-     ////////competition draws rounds 
-     async  getActiveDrawsRounds(yearRefId, competitionId) {
+    ////////competition draws rounds 
+    async getActiveDrawsRounds(yearRefId, competitionId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
@@ -598,6 +598,11 @@ let CompetitionAxiosApi = {
         var url = `/api/activerounds`
         return Method.dataPost(url, token, body);
     },
+
+    async addVenueQuickCompetition(payload) {
+        var url = `/api/quickcompetitions/venues`
+        return Method.dataPost(url, token, payload);
+    }
 
 };
 

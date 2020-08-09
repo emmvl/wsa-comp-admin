@@ -13,6 +13,8 @@ import { liveScore_formateDateTime } from '../../themes/dateformate'
 import history from "../../util/history";
 import { isArrayNotEmpty } from '../../util/helpers'
 import { exportFilesAction } from "../../store/actions/appAction"
+import { getLiveScoreDivisionList } from "../../store/actions/LiveScoreAction/liveScoreDivisionAction";
+import { liveScoreRoundListAction } from "../../store/actions/LiveScoreAction/liveScoreRoundAction";
 
 /////function to sort table column
 function tableSort(a, b, key) {
@@ -119,7 +121,10 @@ class LiveScoreTeamAttendance extends Component {
             teamSelection: "WSA 1",
             selectStatus: "All",
             competitionId: null,
-            searchText: ""
+            searchText: "",
+            selectedDivision: "All",
+            selectedRound: "All",
+            divisionLoad: false
         }
     }
 
@@ -133,11 +138,24 @@ class LiveScoreTeamAttendance extends Component {
             },
         }
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ competitionId: id })
+        this.setState({ competitionId: id, divisionLoad: true })
         if (id !== null) {
             this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus)
+            this.props.getLiveScoreDivisionList(id)
+
         } else {
             history.pushState('/')
+        }
+    }
+
+    componentDidUpdate(nextProps) {
+        if (nextProps.liveScoreTeamAttendanceState !== this.props.liveScoreTeamAttendanceState) {
+            if (this.props.liveScoreTeamAttendanceState.onDivisionLoad === false && this.state.divisionLoad === true) {
+
+                this.props.liveScoreRoundListAction(this.state.competitionId, this.state.selectedDivision == 'All' ? "" : this.state.selectedDivision)
+                this.setState({ divisionLoad: false })
+
+            }
         }
     }
 
@@ -206,12 +224,6 @@ class LiveScoreTeamAttendance extends Component {
                 },
                 "search": e.target.value
             }
-            // if (this.state.selectStatus == 'All') {
-            //     this.props.liveScoreTeamAttendanceListAction(id, body)
-            // } else {
-            //     this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
-            // }
-
             this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
 
         }
@@ -230,11 +242,6 @@ class LiveScoreTeamAttendance extends Component {
                 },
                 "search": e.target.value
             }
-            // if (this.state.selectStatus == 'All') {
-            //     this.props.liveScoreTeamAttendanceListAction(id, body)
-            // } else {
-            //     this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
-            // }
 
             this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
         }
@@ -254,11 +261,6 @@ class LiveScoreTeamAttendance extends Component {
                 },
                 "search": this.state.searchText
             }
-            // if (this.state.selectStatus == 'All') {
-            //     this.props.liveScoreTeamAttendanceListAction(id, body)
-            // } else {
-            //     this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
-            // }
 
             this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
         }
@@ -327,7 +329,7 @@ class LiveScoreTeamAttendance extends Component {
                     </div >
                 </div >
                 {/* search box */}
-                <div className="col-sm pt-3 ml-3 " style={{ display: "flex", justifyContent: 'flex-end', }} >
+                {/* <div className="col-sm pt-3 ml-3 " style={{ display: "flex", justifyContent: 'flex-end', }} >
                     <div className="comp-product-search-inp-width" >
                         <Input className="product-reg-search-input"
                             onChange={(e) => this.onChangeSearchText(e)}
@@ -339,10 +341,86 @@ class LiveScoreTeamAttendance extends Component {
                             allowClear
                         />
                     </div>
+                </div> */}
+            </div>
+        )
+    }
+
+    onChangeDivision(division) {
+
+        this.props.liveScoreRoundListAction(this.state.competitionId, division == 'All' ? "" : division)
+        this.setState({ selectedDivision: division, selectedRound: 'All' })
+    }
+
+    onChangeRound(roundName) {
+
+        this.setState({ selectedRound: roundName })
+    }
+
+    ///dropdown view containing all the dropdown of header
+    dropdownView = () => {
+        let { divisionList, roundList } = this.props.liveScoreTeamAttendanceState
+        console.log(divisionList, 'divisionList')
+        let divisionListArr = isArrayNotEmpty(divisionList) ? divisionList : []
+        let roundListArr = isArrayNotEmpty(roundList) ? roundList : []
+        return (
+            <div className="comp-player-grades-header-drop-down-view">
+                <div className="row">
+                    <div className="col-sm">
+                        <div className="reg-filter-col-cont pb-3">
+                            <span className="year-select-heading">{AppConstants.division}:</span>
+                            <Select
+                                className="year-select reg-filter-select1 ml-2"
+                                style={{ minWidth: 160 }}
+                                onChange={(divisionId) => this.onChangeDivision(divisionId)}
+                                value={this.state.selectedDivision}
+                            >
+                                <Option value={'All'}>{'All'}</Option>
+                                {
+                                    divisionListArr.map((item, index) => {
+                                        return <Option key={"division" + item.id} value={item.id}>{item.name}</Option>
+                                    })
+                                }
+                            </Select>
+                        </div>
+                    </div>
+                    <div className="col-sm">
+                        <div className="reg-filter-col-cont pb-3">
+                            <span className="year-select-heading">{AppConstants.round}:</span>
+                            <Select
+                                className="year-select reg-filter-select1 ml-2"
+                                style={{ minWidth: 160 }}
+                                onChange={(roundName) => this.onChangeRound(roundName)}
+                                value={this.state.selectedRound}
+                            >
+                                <Option value={'All'}>{'All'}</Option>
+                                {
+                                    roundListArr.map((item) => {
+                                        return <Option key={"round" + item.id} value={item.name}>{item.name}</Option>
+                                    })
+                                }
+                            </Select>
+                        </div>
+                    </div>
+
+                    <div className="col-sm" style={{ display: "flex", justifyContent: 'flex-end', alignItems: "center" }}>
+                        <div className="comp-product-search-inp-width pb-3">
+                            <Input className="product-reg-search-input"
+                                onChange={(e) => this.onChangeSearchText(e)}
+                                placeholder="Search..."
+                                onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                    onClick={() => this.onClickSearchIcon()}
+                                />}
+                                allowClear
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         )
     }
+
 
 
     ////////form content view
@@ -359,7 +437,7 @@ class LiveScoreTeamAttendance extends Component {
                         columns={columns}
                         dataSource={dataSource}
                         pagination={false}
-                        rowKey={(record, index) => record.matchId + index}
+                    // rowKey={(record, index) => record.matchId + index}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
@@ -382,6 +460,7 @@ class LiveScoreTeamAttendance extends Component {
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"14"} />
                 <Layout>
                     {this.headerView()}
+                    {this.dropdownView()}
                     <Content>
                         {this.contentView()}
                     </Content>
@@ -393,7 +472,9 @@ class LiveScoreTeamAttendance extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         liveScoreTeamAttendanceListAction,
-        exportFilesAction
+        exportFilesAction,
+        getLiveScoreDivisionList,
+        liveScoreRoundListAction,
     }, dispatch)
 }
 function mapStateToProps(state) {

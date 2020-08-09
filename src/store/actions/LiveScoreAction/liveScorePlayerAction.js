@@ -1,55 +1,48 @@
 import ApiConstants from "../../../themes/apiConstants";
 
 function liveScorePlayerListAction(competitionID) {
-    const action = {
+    return {
         type: ApiConstants.API_LIVE_SCORE_PLAYER_LIST_LOAD,
-        competitionID: competitionID
+        competitionID,
     };
-
-    return action;
 }
 
 function liveScoreUpdatePlayerDataAction(data, key) {
-    const action = {
+    return {
         type: ApiConstants.API_LIVE_SCORE_UPDATE_PLAYER,
         data,
-        key
+        key,
     };
-
-    return action;
 }
 
-
 function liveScoreAddEditPlayerAction(data, playerId, propsData) {
-    const action = {
+    return {
         type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_PLAYER_LOAD,
         data,
         playerId,
         propsData,
     };
-    return action;
 }
 
 function liveScorePlayerImportAction(competitionID, csvFile) {
-    const action = {
+    return {
         type: ApiConstants.API_LIVE_SCORE_PLAYER_IMPORT_LOAD,
         competitionID,
-        csvFile
-
-    }
-    return action
+        csvFile,
+    };
 }
 
 /// Player list with pagination 
-function playerListWithPagginationAction(competitionID, offset, limit, serach) {
-    const action = {
+function playerListWithPagginationAction(competitionID, offset, limit, search, sortBy, sortOrder) {
+    return {
         type: ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_LOAD,
-        competitionID: competitionID,
-        offset: offset,
-        limit: limit,
-        search: serach
+        competitionID,
+        offset,
+        limit,
+        search,
+        sortBy,
+        sortOrder,
     };
-    return action;
 }
 
 export {
@@ -57,5 +50,5 @@ export {
     liveScoreAddEditPlayerAction,
     liveScoreUpdatePlayerDataAction,
     liveScorePlayerImportAction,
-    playerListWithPagginationAction
+    playerListWithPagginationAction,
 };

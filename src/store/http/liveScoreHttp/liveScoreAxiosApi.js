@@ -62,12 +62,16 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, null)
     },
 
-    liveScoreGetDivision(data, compKey) {
+    liveScoreGetDivision(data, compKey, sortBy, sortOrder) {
         let url = null
         if (compKey) {
             url = `/division?competitionKey=${compKey}`
         } else {
             url = `/division?competitionId=${data}`
+        }
+
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
 
         return Method.dataGet(url, null)
@@ -187,7 +191,7 @@ let LiveScoreAxiosApi = {
     liveScoreTeam(competitionID, divisionId) {
         let url;
         if (divisionId) {
-            url = `/teams/list?competitionId=${competitionID}&divisionId=${divisionId}`;
+            url = `/teams/list?competitionId=${competitionID}&divisionId=${divisionId}&includeBye=1`;
         } else {
             url = `/teams/list?competitionId=${competitionID}`;
         }
@@ -373,42 +377,51 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, token)
     },
 
-    liveScoreAddNews(data, imageData, newsId, competitionId) {
-        let mediaArray = [imageData]
+    liveScoreAddNews(data) {
         let body = new FormData();
-        // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
         let authorData = null
 
         if (JSON.parse(getLiveScoreCompetiton())) {
             authorData = JSON.parse(getLiveScoreCompetiton())
         }
 
-        body.append('id', newsId ? newsId : 0)
-        body.append('title', data.title)
-        body.append('body', data.body);
-        body.append("entityId", competitionId);
-        body.append("author", data.author ? data.author : authorData ? authorData.longName : 'World sport actioa');
-        body.append("recipients", data.recipients);
-        body.append("news_expire_date", data.news_expire_date);
+        body.append('id', data.newsId ? data.newsId : 0)
+        body.append('title', data.editData.title)
+        body.append('body', data.editData.body);
+        body.append("entityId", data.compId);
+        body.append("author", data.editData.author ? data.editData.author : authorData ? authorData.longName : 'World sport actioa');
+        body.append("recipients", data.editData.recipients);
+        body.append("news_expire_date", data.editData.news_expire_date);
         body.append("recipientRefId", 12)
-        // body.append("id", 20)
-        // body.append("newsMedia", imageData)
         body.append("entityTypeId", 1)
-        if (imageData !== []) {
-            for (let i in imageData)
-                body.append("newsMedia", imageData[i])
+
+        if (data.newsImage) {
+            body.append("newsImage", data.newsImage)
         }
+
+        if (data.newsVideo) {
+
+            body.append("newsVideo", data.newsVideo)
+        }
+
+
+        if (data.mediaArry !== []) {
+            for (let i in data.mediaArry) {
+                body.append(`newsMedia`, data.mediaArry[i]);
+            }
+        }
+
         let url = null;
         url = "/news";
         return Method.dataPost(url, token, body)
     },
 
-    liveScoreGoalList(compId, goaltype, search) {
+    liveScoreGoalList(compId, goaltype, search, offset) {
         let url = null
         if (goaltype === "By Match") {
-            url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}`
+            url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}&offset=${offset}&limit=${10}`
         } else if (goaltype === "Total") {
-            url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=ALL&search=${search}`
+            url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=ALL&search=${search}&offset=${offset}&limit=${10}`
         }
 
         return Method.dataGet(url, token)
@@ -420,11 +433,15 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, token)
     },
 
-    liveScoreScorerList(comID, roleId, body, search) {
+    liveScoreScorerList(comID, roleId, body, search, sortBy, sortOrder) {
         let competitionID = localStorage.getItem("competitionId");
         let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
 
-        const url = `/roster/admin?competitionId=${id}&roleId=${roleId}`;
+        let url = `/roster/admin?competitionId=${id}&roleId=${roleId}`;
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        }
+
         return Method.dataPost(url, token, body)
     },
 
@@ -804,12 +821,16 @@ let LiveScoreAxiosApi = {
     },
 
     /// Get Player list with paging
-    getPlayerWithPaggination(competitionID, offset, limit, search) {
+    getPlayerWithPaggination(competitionID, offset, limit, search, sortBy, sortOrder) {
         let url = null
         if (search && search.length > 0) {
             url = `/players/admin?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=${search}`;
         } else {
             url = `/players/admin?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=`;
+        }
+
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
 
         return Method.dataGet(url, localStorage.token);
@@ -858,14 +879,19 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
-    umpireRoasterList(competitionID, status, refRoleId, paginationBody) {
+    umpireRoasterList(competitionID, status, refRoleId, paginationBody, sortBy,
+        sortOrder) {
         let url = null
         let body = paginationBody
 
         if (status === "All") {
             url = `/roster/list?competitionId=${competitionID}&roleId=${refRoleId}`;
-        } else {
+        }
+        else {
             url = `/roster/list?competitionId=${competitionID}&status=${status}&roleId=${refRoleId}`;
+        }
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
         return Method.dataPost(url, token, body)
     },
@@ -882,8 +908,16 @@ let LiveScoreAxiosApi = {
 
     umpireListDashboard(data) {
         let body = data.pageData
-        const url = `/matchUmpire/dashboard?competitionId=${data.compId}&divisionId=${data.divisionid}&venueId=${data.venueId}&organisationId=${data.orgId}`;
-
+        let url
+        if (data.roundId) {
+            const round = JSON.stringify(data.roundId)
+            url = `/matchUmpire/dashboard?competitionId=${data.compId}&divisionId=${data.divisionid}&venueId=${data.venueId}&organisationId=${data.orgId}&roundIds=${round}`;
+        } else {
+            url = `/matchUmpire/dashboard?competitionId=${data.compId}&divisionId=${data.divisionid}&venueId=${data.venueId}&organisationId=${data.orgId}`;
+        }
+        if (data.sortBy && data.sortOrder) {
+            url += `&sortBy=${data.sortBy}&sortOrder=${data.sortOrder}`;
+        }
         // const url = `/matchUmpire/dashboard?competitionId=${1}&divisionId=${3}&venueId=${233}&organisationId=${3}`;
         return Method.dataPost(url, token, body)
     },
@@ -1057,6 +1091,24 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, null)
     },
 
+    liveScorePositionTrackList(data) {
+        let body = data.pagination
+        let url
+        if (data.reporting === 'PERCENT') {
+            url = `/stats/positionTracking?aggregate=${data.aggregate}&reporting=${'MINUTE'}&competitionId=${data.compId}&search=${data.search}`;
+        } else {
+            url = `/stats/positionTracking?aggregate=${data.aggregate}&reporting=${data.reporting}&competitionId=${data.compId}&search=${data.search}`;
+        }
+
+        return Method.dataPost(url, token, body)
+    },
+    liveScoreGetMainDivisionList(compId, offset) {
+
+        let url = `/division?competitionId=${compId}&offset=${offset}&limit=${10}`
+
+        return Method.dataGet(url, null)
+    },
+
 };
 
 const Method = {
@@ -1113,7 +1165,7 @@ const Method = {
                                 });
                                 message.error(err.response.data.message)
                                 return reject({
-                                    status: 5,
+                                    status: 400,
                                     error: err.response.data.message
                                 });
                             } else {
@@ -1148,6 +1200,7 @@ const Method = {
                     }
                 })
                 .then(result => {
+
                     if (result.status === 200) {
                         return resolve({
                             status: 1,
@@ -1379,7 +1432,7 @@ const Method = {
                                 });
                                 message.error(err.response.data.message)
                                 return reject({
-                                    status: 5,
+                                    status: 400,
                                     error: err.response.data.message
                                 });
                             } else {

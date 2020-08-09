@@ -46,6 +46,7 @@ const AppUniqueId = {
     eventimeRotation_div: "eventimeRotation_div",
     eventimeRotation_grade: "eventimeRotation_grade",
     eventimeRotation_team: "eventimeRotation_team",
+    timeslotGenerationRemove_btn: "timeslotGenerationRemove_btn",
 
 
     //// Unique Ids for TeamGrading ////////
@@ -60,14 +61,15 @@ const AppUniqueId = {
     //// Unique Ids for PlayerGrading ////////
 
     PlayerGradingYear_dpdn: "playgrad_year_dpdn",
-    PlayerGradingYCompetition_dpdn: "playgrad_compname_dpdn",
-    PlayerGradingYDivisionName_dpdn: "playgrad_divname_dpdn",
+    PlayerGradingCompetition_dpdn: "playgrad_compname_dpdn",
+    PlayerGradingDivisionName_dpdn: "playgrad_divname_dpdn",
     PlayerGrading_ImportBtn: "playgrad_import_bn",
     PlayerGrading_ImportTeamBtn: "playgrad_importeam_bn",
     PlayerGrading_CreateTeam: "playgrad_create_team_bn",
     PlayerGrading_addTeamName: "playgrad_addTeamname",
     PlayerGrading_unassigned_Player_CheckBox: "playgrad_unassigned_chkbox",
     playgrad_Next_bn: "playgrad_Next_bn",
+    playgrad_newTeam_chkbx: "playgrad_newTeam_chkbx",
 
     //// Unique Ids for ImportPlayer ////////
 
@@ -79,7 +81,7 @@ const AppUniqueId = {
     newCompetitionButton: "new_competition_button",
     replicateCompetitionButton: "replic_competition_button",
     ownedCompetition_column_headers_table: "owned_competition_headers",
-    ownedCompetition_Table: "owned_compet_content_table",
+    owned_compet_content_table: "owned_compet_content_table",
     defaultComp_logo_checkbox: "default_logo_chkbox",
     quickCom_Button: "quick_competition_button",
 
@@ -100,8 +102,8 @@ const AppUniqueId = {
     comp_format2: "comp_format2",
     comp_format3: "comp_format3",
     comp_format4: "comp_format4",
-    comp_start_date: "comp_start_date",
-    comp_end_date: "comp_end_date",
+    comp_start_date: "compstartDate",
+    comp_end_date: "compendDate",
     time_rounds_days: "time_rounds_days",
     time_rounds_hrs: "time_rounds_hrs",
     time_rounds_mins: "time_rounds_mins",
@@ -187,10 +189,14 @@ const AppUniqueId = {
     finals_extratime_duration: "finals_extratime_duration",
     finals_extratime_mainbreak: "finals_extratime_mainbreak",
     finals_extratime_break: "finals_extratime_break",
-    extratime_ifDraw_radiobtn: "extratime_ifDraw_radiobtn"
+    extratime_ifDraw_radiobtn: "extratime_ifDraw_radiobtn",
 
+    qckcomp_genFixtures_btn: "qckcomp_genFixtures_btn",
+    qckcomp_addTeams_btn: "qckcomp_addTeams_btn",
 
-
+    //import team button
+    impPlayerTeam_template_btn: "impPlayerTeam_template_btn",
+    importPlayerTeam_upload_btn: "importPlayerTeam_upload_btn"
 
 };
 

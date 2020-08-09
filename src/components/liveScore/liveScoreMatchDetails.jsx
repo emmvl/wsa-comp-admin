@@ -28,7 +28,6 @@ function tableSort(a, b, key) {
 var this_ = null
 
 
-
 const columns = [
     {
         title: 'Profile Picture',
@@ -109,11 +108,15 @@ const columnsTeam1 = [
             return (
                 <Checkbox
                     className={record.lineup ? record.lineup.playing ? "checkbox-green-color-outline mt-1" : 'single-checkbox mt-1' : 'single-checkbox mt-1'}
-                    // className={"checkbox-green-color-outline mt-1"}
                     checked={record.attendance && record.attendance.isPlaying}
-                    // checked={true}
                     onChange={(e) => this_.playingView(record, e.target.checked, index, 'team1Players')}
                 ></Checkbox>
+
+                //     <span style={{ display: 'flex', justifyContent: 'center', width: '50%',cursor:'pointer' }}>
+                //     <img className="dot-image"
+                //         src={ AppImages.greyDot}
+                //         alt="" width="12" height="12" />
+                // </span>
             )
         },
     },
@@ -156,6 +159,12 @@ const columnsTeam2 = [
                     checked={record.attendance && record.attendance.isPlaying}
                     onChange={(e) => this_.playingView(record, e.target.checked, index, 'team2Players')}
                 ></Checkbox>
+
+                //     <span style={{ display: 'flex', justifyContent: 'center', width: '50%',cursor:'pointer' }}>
+                //     <img className="dot-image"
+                //         src={ AppImages.greyDot}
+                //         alt="" width="12" height="12" />
+                // </span>
             )
         },
     },

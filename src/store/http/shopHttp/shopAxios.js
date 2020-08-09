@@ -76,6 +76,16 @@ let AxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
+    ///////////shop order summary listing get API
+    getOrderSummaryListing(params) {
+        let { limit, offset, search, year, postcode, organisationId, paymentMethod, order, sorterBy } = params
+        var url = `/order/summary?limit=${limit}&offset=${offset}&search=${search}&year=${year}
+        &postcode=${postcode}&organisationId=${organisationId}&paymentMethod=${paymentMethod}&order=${order}
+        &sorterBy=${sorterBy}`;
+        // var url = `/order/summary`
+        return Method.dataGet(url, token);
+    }
+
 };
 
 const Method = {

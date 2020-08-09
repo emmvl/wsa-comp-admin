@@ -1,16 +1,19 @@
-import { put, call } from '../../../../node_modules/redux-saga/effects'
+import { put, call } from "redux-saga/effects"
 import ApiConstants from '../../../themes/apiConstants'
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 import { message } from "antd";
 import history from '../../../util/history'
+import AppConstants from "../../../themes/appConstants";
 
 function* failSaga(result) {
 
     yield put({ type: ApiConstants.API_NEWS_SAGA_FAIL });
-    setTimeout(() => {
-        // alert(result.message);
-        message.error(result.message)
-    }, 800);
+    let msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong
+    message.config({
+        duration: 1.5,
+        maxCount: 1,
+    });
+    message.error(msg);
 }
 
 function* errorSaga(error) {
@@ -19,7 +22,20 @@ function* errorSaga(error) {
         error: error,
         status: error.status
     });
-    message.error("Something went wrong.")
+    if (error.status == 400) {
+
+        message.config({
+            duration: 1.5,
+            maxCount: 1,
+        });
+        message.error((error && error.error) ? error.error : AppConstants.somethingWentWrong);
+    } else {
+        message.config({
+            duration: 1.5,
+            maxCount: 1,
+        });
+        message.error(AppConstants.somethingWentWrong);
+    }
 }
 
 ////News List
@@ -44,14 +60,14 @@ export function* liveScoreNewsListSaga(action) {
 ////News AddNews
 export function* liveScoreAddNewsSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreAddNews, action.data, action.imageData, action.newsId, action.competitionId);
+        const result = yield call(LiveScoreAxiosApi.liveScoreAddNews, action.data);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_ADD_NEWS_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });
-            message.success(action.newsId ? 'News Edited Successfully.' : 'News Added Successfully .');
+            message.success(action.data.newsId ? 'News Edited Successfully.' : 'News Added Successfully.');
         } else {
             yield call(failSaga, result)
         }

@@ -23,6 +23,7 @@ class DrawsPublishModel extends React.Component {
     let filteredRounds = getDrawsRoundsData.filter(x => x.roundId != 0)
     return (
       <Modal
+        className="add-membership-type-modal"
         title={AppConstants.publish}
         visible={publishVisible}
         onOk={modalPublish}

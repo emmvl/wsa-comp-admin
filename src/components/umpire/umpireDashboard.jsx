@@ -9,7 +9,7 @@ import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { isArrayNotEmpty } from "../../util/helpers";
-import { getUmpireDashboardList, getUmpireDashboardVenueList, getUmpireDashboardDivisionList, umpireRoundListAction } from "../../store/actions/umpireAction/umpireDashboardAction"
+import { getUmpireDashboardList, getUmpireDashboardVenueList, getUmpireDashboardDivisionList, umpireRoundListAction, umpireDashboardUpdate } from "../../store/actions/umpireAction/umpireDashboardAction"
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { entityTypes } from '../../util/entityTypes'
 import { refRoleTypes } from '../../util/refRoles'
@@ -36,13 +36,33 @@ const { Content } = Layout;
 const { SubMenu } = Menu;
 const { Option } = Select;
 
-
-/////function to sort table column
-function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
+function tableSort(key, key2) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_obj.state.sortBy !== key) {
+        sortOrder = 'ASC';
+    } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'DESC') {
+        sortBy = sortOrder = null;
+    }
+    const body =
+    {
+        "paging": {
+            "limit": 10,
+            "offset": this_obj.state.offsetData
+        }
+    }
+    this_obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_obj.props.getUmpireDashboardList({ compId: this_obj.state.selectedComp, divisionid: this_obj.state.division == 'All' ? "" : this_obj.state.division, venueId: this_obj.state.venue == 'All' ? "" : this_obj.state.venue, orgId: this_obj.state.orgId, roundId: this_obj.state.round == 'All' ? "" : this_obj.state.round, pageData: body, sortBy: sortBy, sortOrder: sortOrder })
 }
+
+
+
+//listeners for sorting
+const listeners = (key, key2) => ({
+    onClick: () => tableSort(key, key2),
+});
 
 function validateColor(data) {
 
@@ -68,12 +88,12 @@ function checkUmpireType(umpireArray, key) {
 
 
 const columns_Invite = [
-
     {
         title: 'Match ID',
         dataIndex: 'id',
         key: 'id',
-        sorter: (a, b) => tableSort(a, b, "id"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (id) => {
             return (
                 <NavLink to={{
@@ -89,7 +109,8 @@ const columns_Invite = [
         title: 'Start Time',
         dataIndex: 'startTime',
         key: 'startTime',
-        sorter: (a, b) => tableSort(a, b, "startTime"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (startTime, record) =>
             <span >{moment(startTime).format("DD/MM/YYYY HH:mm")}</span>
     },
@@ -97,7 +118,8 @@ const columns_Invite = [
         title: 'Home',
         dataIndex: 'team1',
         key: 'team1',
-        sorter: (a, b) => tableSort(a, b, "team1"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (team1, record) =>
             <span >{team1.name}</span>
     },
@@ -105,7 +127,8 @@ const columns_Invite = [
         title: 'Away',
         dataIndex: 'team2',
         key: 'team2',
-        sorter: (a, b) => tableSort(a, b, "team2"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (team2, record) =>
             <span >{team2.name}</span>
     },
@@ -113,7 +136,8 @@ const columns_Invite = [
         title: 'Round',
         dataIndex: 'round',
         key: 'round',
-        sorter: (a, b) => tableSort(a, b, "round"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (round, record) =>
             <span >{round.name}</span>
     },
@@ -121,7 +145,8 @@ const columns_Invite = [
         title: 'Umpire 1',
         dataIndex: 'umpires',
         key: 'umpires_1',
-        sorter: (a, b) => tableSort(a, b, "umpires"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("umpire1"),
         render: (umpires, record) => {
             let umpire1 = checkUmpireType(umpires, 1) ? checkUmpireType(umpires, 1) : []
             return (
@@ -144,7 +169,8 @@ const columns_Invite = [
         title: 'Umpire 1 Organisation',
         dataIndex: 'umpires',
         key: 'umpires1_Org',
-        sorter: (a, b) => tableSort(a, b, "umpires"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (umpires, record) => {
             let umpire1 = checkUmpireType(umpires, 1) ? checkUmpireType(umpires, 1) : []
             return (
@@ -172,7 +198,8 @@ const columns_Invite = [
         title: 'Umpire 2',
         dataIndex: 'umpires',
         key: 'umpires_2',
-        sorter: (a, b) => tableSort(a, b, "umpires"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("umpire2"),
         render: (umpires, record) => {
             let umpire2 = checkUmpireType(umpires, 2) ? checkUmpireType(umpires, 2) : []
             return (
@@ -192,7 +219,8 @@ const columns_Invite = [
         title: 'Umpire 2 Organisation',
         dataIndex: 'umpires',
         key: 'umpires2_Org',
-        sorter: (a, b) => tableSort(a, b, "umpires"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (umpires, record) => {
             let umpire2 = checkUmpireType(umpires, 2) ? checkUmpireType(umpires, 2) : []
             return (
@@ -220,7 +248,8 @@ const columns_Invite = [
         title: 'Verified By',
         dataIndex: 'umpires',
         key: 'umpires',
-        sorter: (a, b) => tableSort(a, b, "umpires"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("verifiedBy"),
         render: (umpires, record) => <span className='multi-column-text-aligned'>{isArrayNotEmpty(record.umpires) ? record.umpires[0].verifiedBy : ""}</span>
     },
     {
@@ -288,7 +317,8 @@ const columns = [
         title: 'Match ID',
         dataIndex: 'id',
         key: '_id',
-        sorter: (a, b) => tableSort(a, b, "id"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (id) => {
             return (
                 <NavLink to={{
@@ -304,7 +334,8 @@ const columns = [
         title: 'Start Time',
         dataIndex: 'startTime',
         key: '_startTime',
-        sorter: (a, b) => tableSort(a, b, "startTime"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (startTime, record) =>
             <span >{moment(startTime).format("DD/MM/YYYY HH:mm")}</span>
     },
@@ -312,7 +343,8 @@ const columns = [
         title: 'Home',
         dataIndex: 'team1',
         key: '_team1',
-        sorter: (a, b) => tableSort(a, b, "team1"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (team1, record) =>
             <span >{team1.name}</span>
     },
@@ -320,7 +352,8 @@ const columns = [
         title: 'Away',
         dataIndex: 'team2',
         key: '_team2',
-        sorter: (a, b) => tableSort(a, b, "team2"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (team2, record) =>
             <span >{team2.name}</span>
     },
@@ -328,7 +361,8 @@ const columns = [
         title: 'Round',
         dataIndex: 'round',
         key: '_round',
-        sorter: (a, b) => tableSort(a, b, "round"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (round, record) =>
             <span >{round.name}</span>
     },
@@ -336,7 +370,8 @@ const columns = [
         title: 'Umpire 1',
         dataIndex: 'umpires',
         key: '_umpires_1',
-        sorter: (a, b) => tableSort(a, b, "umpires"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("umpire1"),
         render: (umpires, record) => {
             let umpire1 = checkUmpireType(umpires, 1) ? checkUmpireType(umpires, 1) : []
             return (
@@ -360,7 +395,8 @@ const columns = [
         title: 'Umpire 1 Organisation',
         dataIndex: 'umpires',
         key: '_umpires1_Org',
-        sorter: (a, b) => tableSort(a, b, "umpires"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (umpires, record) => {
             let umpire1 = checkUmpireType(umpires, 1) ? checkUmpireType(umpires, 1) : []
             return (
@@ -389,7 +425,8 @@ const columns = [
         title: 'Umpire 2',
         dataIndex: 'umpires',
         key: '_umpires_2',
-        sorter: (a, b) => tableSort(a, b, "umpires"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("umpire2"),
         render: (umpires, record) => {
             let umpire2 = checkUmpireType(umpires, 2) ? checkUmpireType(umpires, 2) : []
             return (
@@ -413,7 +450,8 @@ const columns = [
         title: 'Umpire 2 Organisation',
         dataIndex: 'umpires',
         key: '_umpires2_Org',
-        sorter: (a, b) => tableSort(a, b, "umpires"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (umpires, record) => {
             let umpire2 = checkUmpireType(umpires, 2) ? checkUmpireType(umpires, 2) : []
             return (
@@ -441,7 +479,8 @@ const columns = [
         title: 'Verified By',
         dataIndex: 'umpires',
         key: 'umpires',
-        sorter: (a, b) => tableSort(a, b, "umpires"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("verifiedBy"),
         render: (umpires, record) => <span className='multi-column-text-aligned'>{isArrayNotEmpty(record.umpires) ? record.umpires[0].verifiedBy : ""}</span>
     },
     {
@@ -515,7 +554,8 @@ class UmpireDashboard extends Component {
             compArray: [],
             compititionObj: null,
             liveScoreUmpire: props.location ? props.location.state ? props.location.state.liveScoreUmpire ? props.location.state.liveScoreUmpire : null : null : null,
-            round: "All"
+            round: "All",
+            offsetData: 0
         }
         this_obj = this
     }
@@ -608,7 +648,7 @@ class UmpireDashboard extends Component {
                     }
                 }
                 this.setState({ divisionLoad: false })
-                this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, pageData: body })
+                this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, roundId: this.state.round == 'All' ? "" : this.state.round, pageData: body })
                 this.props.umpireRoundListAction(this.state.selectedComp, this.state.division == 'All' ? "" : this.state.division)
 
             }
@@ -633,6 +673,9 @@ class UmpireDashboard extends Component {
     /// Handle Page change
     handlePageChnage(page) {
         let offset = page ? 10 * (page - 1) : 0;
+        this.setState({
+            offsetData: offset
+        })
         const body =
         {
             "paging": {
@@ -641,10 +684,9 @@ class UmpireDashboard extends Component {
             }
         }
 
-        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, pageData: body })
+        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, roundId: this.state.round == 'All' ? "" : this.state.round, pageData: body })
 
     }
-
 
     ////////form content view
     contentView = () => {
@@ -689,9 +731,6 @@ class UmpireDashboard extends Component {
         )
     }
 
-
-
-
     onChangeComp(compID) {
         let selectedComp = compID.comp
         let compKey = compID.competitionUniqueKey
@@ -711,7 +750,7 @@ class UmpireDashboard extends Component {
 
         setLiveScoreUmpireCompition(selectedComp)
         setLiveScoreUmpireCompitionData(JSON.stringify(compObj))
-        this.setState({ selectedComp, competitionUniqueKey: compKey, venueLoad: true, divisionLoad: true, venue: "All", division: "All", compititionObj: compObj })
+        this.setState({ selectedComp, competitionUniqueKey: compKey, venueLoad: true, divisionLoad: true, venue: "All", division: "All", compititionObj: compObj, round: 'All' })
 
     }
 
@@ -724,13 +763,13 @@ class UmpireDashboard extends Component {
             }
         }
 
-        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: venueId == 'All' ? "" : venueId, orgId: this.state.orgId, pageData: body })
+        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: venueId == 'All' ? "" : venueId, orgId: this.state.orgId, roundId: this.state.round == 'All' ? "" : this.state.round, pageData: body })
         this.setState({ venue: venueId })
 
     }
 
     onDivisionChange(divisionid) {
-
+        this.setState({ division: divisionid, round: 'All' })
         const body =
         {
             "paging": {
@@ -739,12 +778,31 @@ class UmpireDashboard extends Component {
             }
         }
 
-        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: divisionid == 'All' ? "" : divisionid, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, pageData: body })
+        setTimeout(() => {
+            this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: divisionid == 'All' ? "" : divisionid, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, roundId: this.state.round == 'All' ? "" : this.state.round, pageData: body })
+        }, 100);
         this.props.umpireRoundListAction(this.state.selectedComp, divisionid == 'All' ? "" : divisionid)
-        this.setState({ division: divisionid })
+        this.setState({ division: divisionid, round: 'All' })
     }
 
     onRoundChange(roundId) {
+
+        if (roundId == 'All') {
+
+        } else {
+            this.props.umpireDashboardUpdate(roundId)
+        }
+
+        const body =
+        {
+            "paging": {
+                "limit": 10,
+                "offset": 0
+            }
+        }
+        const { allRoundIds } = this.props.umpireDashboardState
+        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, roundId: roundId == 'All' ? "" : allRoundIds, pageData: body })
+
         this.setState({ round: roundId })
     }
 
@@ -755,7 +813,6 @@ class UmpireDashboard extends Component {
     }
     ///////view for breadcrumb
     headerView = () => {
-
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="fluid-width">
@@ -1001,7 +1058,6 @@ class UmpireDashboard extends Component {
         )
     }
 
-
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
@@ -1026,7 +1082,8 @@ function mapDispatchToProps(dispatch) {
         getUmpireDashboardDivisionList,
         getUmpireDashboardList,
         exportFilesAction,
-        umpireRoundListAction
+        umpireRoundListAction,
+        umpireDashboardUpdate
     }, dispatch)
 }
 

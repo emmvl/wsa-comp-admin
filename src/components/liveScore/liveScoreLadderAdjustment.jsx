@@ -222,6 +222,7 @@ class LiveScoreLadderAdjustment extends Component {
                                         rules: [{ required: true, message: ValidationConstants.point }],
                                     })(
                                         <InputWithHead
+                                            auto_Complete='new-points'
                                             placeholder={AppConstants.points}
                                             onChange={(e) => this.props.updateLadderSetting({ data: e.target.value, index: index, key: 'points' })}
                                         // value={ladderData[index] && ladderData[index].points}
@@ -242,6 +243,7 @@ class LiveScoreLadderAdjustment extends Component {
                                         rules: [{ required: true, message: ValidationConstants.reasonChange }],
                                     })(
                                         <InputWithHead
+                                            auto_Complete='new-reason'
                                             placeholder={AppConstants.reasonForChange}
                                             onChange={(e) => this.props.updateLadderSetting({ data: e.target.value, index: index, key: 'adjustmentReason' })}
                                         // value={ladderData[index] && ladderData[index].reasonforChange}
@@ -326,7 +328,7 @@ class LiveScoreLadderAdjustment extends Component {
                 <Layout>
                     {this.headerView()}
                     {this.dropdownView()}
-                    <Form onSubmit={this.onSaveClick} className="login-form">
+                    <Form autoComplete='off' onSubmit={this.onSaveClick} className="login-form">
                         <div className="formView">{this.contentView(getFieldDecorator)}</div>
                         <Footer>
                             {this.footerView()}

@@ -62,7 +62,6 @@ const columns = [
         dataIndex: 'umpire1FullName',
         key: 'umpire1FullName',
         sorter: (a, b) => tableSort(a, b, "umpire1FullName"),
-        key: 'umpire1FullName',
         render: (umpire1FullName) => <NavLink to={{
             // pathname: "/liveScoreMatchDetails",
             // state: { tableRecord: record }

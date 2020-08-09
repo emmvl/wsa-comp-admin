@@ -277,14 +277,18 @@ class UmpireDivisions extends Component {
                         />
                     </div>
                     <div className='col-sm-3 '>
-                        <InputWithHead heading={AppConstants.umpireReserve}
+                        <InputWithHead
+                            auto_Complete='new-umpireReserve'
+                            heading={AppConstants.umpireReserve}
                             placeholder={"Umpire Reserve"}
                             onChange={(e) => this.setState({ umpireReserve: e.target.value })}
                             value={this.state.umpireReserve}
                         />
                     </div>
                     <div className='col-sm-3 '>
-                        <InputWithHead heading={AppConstants.umpireCoach}
+                        <InputWithHead
+                            auto_Complete='new-umpireCoach'
+                            heading={AppConstants.umpireCoach}
                             placeholder={"Umpire Coach"}
                             onChange={(e) => this.setState({ umpireCoach: e.target.value })}
                             value={this.state.umpireCoach}
@@ -298,6 +302,7 @@ class UmpireDivisions extends Component {
                     </div>
                     <div className='col-sm-3 '>
                         <InputWithHead
+                            auto_Complete='new-umpireReserve'
                             placeholder={"Umpire Reserve"}
                             onChange={(e) => this.setState({ umpireReserve2: e.target.value })}
                             value={this.state.umpireReserve2}
@@ -305,6 +310,7 @@ class UmpireDivisions extends Component {
                     </div>
                     <div className='col-sm-3 '>
                         <InputWithHead
+                            auto_Complete='new-umpireCoach'
                             placeholder={"Umpire Coach"}
                             onChange={(e) => this.setState({ umpireCoach2: e.target.value })}
                             value={this.state.umpireCoach2}
@@ -357,7 +363,7 @@ class UmpireDivisions extends Component {
                 <Layout>
                     {this.headerView()}
                     {this.dropdownView()}
-                    <Form onSubmit={this.handleSubmit} className="login-form">
+                    <Form autoComplete='off' onSubmit={this.handleSubmit} className="login-form">
                         {/* <Form onSubmit={this.checkSubmit} noValidate="novalidate" className="login-form"> */}
                         <div className="formView">{this.contentView()}</div>
 

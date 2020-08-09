@@ -218,8 +218,8 @@ class RegistrationMembershipList extends Component {
                             <div className="com-year-select-heading-view pb-3" >
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
-                                   className="year-select reg-filter-select-year ml-2"
-                                    // style={{ width: 90 }}
+                                    className="year-select reg-filter-select-year ml-2"
+                                    style={{ width: 90 }}
                                     value={this.state.yearRefId}
                                     onChange={(e) => this.yearChange(e)}
                                 >

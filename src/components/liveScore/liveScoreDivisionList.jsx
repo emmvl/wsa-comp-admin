@@ -1,58 +1,77 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Pagination, Menu, Modal } from 'antd';
-import './liveScore.css';
-import { NavLink } from 'react-router-dom';
+import { NavLink } from "react-router-dom";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { Layout, Button, Table, Pagination, Menu, Modal } from "antd";
+
+import "./liveScore.css";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import { getLiveScoreDivisionList, liveScoreDeleteDivision } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction'
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { getLiveScoreCompetiton } from '../../util/sessionStorage'
-import { isArrayNotEmpty } from '../../util/helpers'
+import {
+    getMainDivisionListAction,
+    liveScoreDeleteDivision
+} from "../../store/actions/LiveScoreAction/liveScoreDivisionAction";
+import { getLiveScoreCompetiton } from "../../util/sessionStorage";
+import { isArrayNotEmpty } from "../../util/helpers";
 import history from "../../util/history";
+
 const { Content } = Layout;
 const { SubMenu } = Menu;
 const { confirm } = Modal;
+
 let this_Obj = null;
 //// table columns
 /////function to sort table column
-function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    const { id } = JSON.parse(getLiveScoreCompetiton());
+    if (this_Obj.state.sortBy !== key) {
+        sortOrder = 'ASC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
+        sortBy = sortOrder = null;
+    }
+    this_Obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_Obj.props.getLiveScoreDivisionList(id, undefined, sortBy, sortOrder);
 }
 
-
-
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
 
 const columns = [
     {
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
-        sorter: (a, b) => tableSort(a, b, "name")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
 
     {
         title: 'Division',
         dataIndex: 'divisionName',
         key: 'divisionName',
-        sorter: (a, b) => tableSort(a, b, "divisionName")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Grade',
         dataIndex: 'grade',
         key: 'grade',
-        sorter: (a, b) => tableSort(a, b, "grade")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Action',
         dataIndex: 'isUsed',
         key: 'isUsed',
         // width: 20,
-        render: (isUsed, record) =>
+        render: (isUsed, record) => (
             <Menu
                 className="action-triple-dot-submenu"
                 theme="light"
@@ -66,18 +85,21 @@ const columns = [
                     }
                 >
                     <Menu.Item key="1">
-                        <NavLink to={{
-                            pathname: "/liveScoreAddDivision",
-                            state: { isEdit: true, tableRecord: record }
-                        }}>
-                            <span >Edit</span>
+                        <NavLink
+                            to={{
+                                pathname: "/liveScoreAddDivision",
+                                state: { isEdit: true, tableRecord: record }
+                            }}
+                        >
+                            <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
                     <Menu.Item key="2" onClick={() => this_Obj.showDeleteConfirm(record.id)}>
-                        <span >Delete</span>
+                        <span>Delete</span>
                     </Menu.Item>
                 </SubMenu>
             </Menu>
+        )
     },
 ];
 
@@ -86,6 +108,7 @@ class LiveScoreDivisionList extends Component {
         super(props);
         this.state = {
             year: "2020",
+            competitionId: null
         }
 
         this_Obj = this;
@@ -93,21 +116,31 @@ class LiveScoreDivisionList extends Component {
 
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.props.getLiveScoreDivisionList(id)
+        this.setState({ competitionId: id })
+        let offset = 0
+        this.props.getMainDivisionListAction(id, offset)
+    }
+
+    onPageChange(page) {
+        let offset = page ? 10 * (page - 1) : 0;
+        this.props.getMainDivisionListAction(this.state.competitionId, offset)
     }
 
     ////////form content view
     contentView = () => {
-        let divisionList = isArrayNotEmpty(this.props.liveScoreDivisionState.liveScoreDivisionList) ? this.props.liveScoreDivisionState.liveScoreDivisionList : []
+        const { mainDivisionList, totalCount, currentPage } = this.props.liveScoreDivisionState;
+        let divisionList = isArrayNotEmpty(mainDivisionList) ? mainDivisionList : [];
 
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
-                    <Table className="home-dashboard-table"
-                        columns={columns} dataSource={divisionList}
+                    <Table
+                        className="home-dashboard-table"
+                        columns={columns}
+                        dataSource={divisionList}
                         pagination={false}
                         loading={this.props.liveScoreDivisionState.onLoad === true && true}
-                        rowKey={(record, index) => record.id + index}
+                        rowKey={(record) => record.id}
                     />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
@@ -119,11 +152,14 @@ class LiveScoreDivisionList extends Component {
                             flexDirection: "row",
                             alignItems: "center",
                             justifyContent: "flex-end"
-                        }} >
+                        }}
+                    >
                         <Pagination
-                            className="auto-pagination"
-                            defaultCurrent={1}
-                            total={8} />
+                            className="antd-pagination"
+                            current={currentPage}
+                            total={totalCount}
+                            onChange={(page) => this.onPageChange(page)}
+                        />
                     </div>
                 </div>
             </div>
@@ -141,14 +177,16 @@ class LiveScoreDivisionList extends Component {
                                 {AppConstants.divisionList}
                             </span>
                         </div>
-                        <div className="col-sm"
+                        <div
+                            className="col-sm"
                             style={{
                                 width: "100%",
                                 display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center",
                                 justifyContent: "flex-end"
-                            }}>
+                            }}
+                        >
                             <div className="row">
                                 <div className="col-sm">
                                     <div
@@ -200,7 +238,7 @@ class LiveScoreDivisionList extends Component {
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         );
     };
 
@@ -225,11 +263,14 @@ class LiveScoreDivisionList extends Component {
     }
 
     render() {
-
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"9"} />
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+                <DashboardLayout
+                    menuHeading={AppConstants.liveScores}
+                    menuName={AppConstants.liveScores}
+                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                />
+                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"9"}/>
                 <Layout>
                     {this.headerView()}
                     <Content>
@@ -242,16 +283,17 @@ class LiveScoreDivisionList extends Component {
 }
 
 
-function mapDispatchtoprops(dispatch) {
+function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getLiveScoreDivisionList,
+        getMainDivisionListAction,
         liveScoreDeleteDivision
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         liveScoreDivisionState: state.LiveScoreDivisionState
     }
 }
-export default connect(mapStatetoProps, mapDispatchtoprops)((LiveScoreDivisionList));
+
+export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreDivisionList);

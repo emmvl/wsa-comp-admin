@@ -188,6 +188,8 @@ class LiveScoreAddTeam extends Component {
                         rules: [{ required: true, message: ValidationConstants.teamName }],
                     })(
                         <InputWithHead
+                            auto_Complete='new-teamName'
+                            required={"required-field pb-0"}
                             heading={AppConstants.teamName}
                             placeholder={AppConstants.enterTeamName}
                             name={'teamName'}
@@ -212,9 +214,9 @@ if(x[0].charCodeAt()>=97)
                         rules: [{ required: true, message: "Team Alias is required" }],
                     })( */}
                 <InputWithHead
-                    // required={"required-field pt-3 pb-3"}
+                    auto_Complete='new-alias'
                     heading={"Team Alias"}
-                    placeholder={"please Enter Team Alias"}
+                    placeholder={"Team Alias"}
                     name={'teamAlias'}
                     conceptulHelp
                     conceptulHelpMsg={AppConstants.teamAliasMsg}
@@ -332,7 +334,7 @@ if(x[0].charCodeAt()>=97)
                                     this.props.liveScoreAddTeamform({ key: 'organisationId', data: affiliateId })
                                 }}
                                 // value={teamManagerData.divisionId}
-                                placeholder={"Select User"}  >
+                                placeholder={"Select Affiliate"}  >
                                 {affilateList.map((item) => {
                                     return <Option key={item.id} value={item.id}>
                                         {item.name}
@@ -458,6 +460,7 @@ if(x[0].charCodeAt()>=97)
                             {getFieldDecorator('firstName', {
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(<InputWithHead
+                                auto_Complete='new-firstName'
                                 required={"required-field pt-0 pb-0"}
                                 heading={AppConstants.firstName}
                                 placeholder={AppConstants.enterFirstName}
@@ -481,6 +484,7 @@ if(x[0].charCodeAt()>=97)
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
+                                    auto_Complete='new-lastName'
                                     required={"required-field pt-0 pb-0"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.enterLastName}
@@ -518,6 +522,7 @@ if(x[0].charCodeAt()>=97)
                                 ],
                             })(
                                 <InputWithHead
+                                    auto_Complete='new-email'
                                     required={"required-field pt-0 pb-0"}
                                     heading={AppConstants.emailAdd}
                                     placeholder={AppConstants.enterEmail}
@@ -537,6 +542,7 @@ if(x[0].charCodeAt()>=97)
                             {getFieldDecorator("contactNo", {
                                 rules: [{ required: true, message: ValidationConstants.contactField }]
                             })(<InputWithHead
+                                auto_Complete='new-contact'
                                 required={"required-field pt-0 pb-0"}
                                 heading={AppConstants.contactNO}
                                 placeholder={AppConstants.enterContactNo}
@@ -710,6 +716,7 @@ if(x[0].charCodeAt()>=97)
                 <Layout>
                     {this.headerView()}
                     <Form
+                        autoComplete="off"
                         onSubmit={this.handleSubmit}
                         noValidate="noValidate">
                         <Content>

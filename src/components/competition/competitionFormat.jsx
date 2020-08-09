@@ -546,18 +546,19 @@ class CompetitionFormat extends Component {
         });
 
     }
-    
+
     // Non playing dates view
     nonPlayingDateView(item, index) {
         let compDetailDisable = false;
         // this.state.permissionState.compDetailDisable
-        
+
         let disabledStatus = this.state.competitionStatus == 1 ? true : false
         return (
             <div className="fluid-width mt-3">
                 <div className="row">
                     <div className="col-sm">
                         <InputWithHead
+                            // auto_Complete='beforeExtraTime'
                             placeholder={AppConstants.name}
                             value={item.name}
                             onChange={(e) => this.updateNonPlayingNames(e.target.value, index, "name")}
@@ -590,8 +591,8 @@ class CompetitionFormat extends Component {
             </div >
         )
     }
-     ///// Add Non Playing dates
-     addNonPlayingDate() {
+    ///// Add Non Playing dates
+    addNonPlayingDate() {
         if (this.state.competitionStatus == 1) {
 
         } else {
@@ -604,8 +605,8 @@ class CompetitionFormat extends Component {
             this.props.updateCompetitionFormatAction(nonPlayingObject, "nonPlayingDates")
         }
     }
-     //remove non playing dates
-     removeNonPlaying(index) {
+    //remove non playing dates
+    removeNonPlaying(index) {
         if (this.state.competitionStatus == 1) {
 
         } else {
@@ -614,23 +615,23 @@ class CompetitionFormat extends Component {
     }
 
     updateNonPlayingNames(data, index, key) {
-        console.log("data",data)
-        if(key == "date"){
+        console.log("data", data)
+        if (key == "date") {
             let obj = {
-                data:moment(data).format("YYYY-MM-DD"),
-                index:index,
-                key:"nonPlayingDate"
+                data: moment(data).format("YYYY-MM-DD"),
+                index: index,
+                key: "nonPlayingDate"
             }
-            this.props.updateCompetitionFormatAction(obj, "nonPlayingUpdateDates");           
+            this.props.updateCompetitionFormatAction(obj, "nonPlayingUpdateDates");
         }
-        else{
+        else {
             let obj = {
-                data:data,
-                index:index,
-                key:key
+                data: data,
+                index: index,
+                key: key
             }
             this.props.updateCompetitionFormatAction(obj, "nonPlayingUpdateDates")
-        }            
+        }
     }
 
     ///////view for breadcrumb
@@ -820,34 +821,36 @@ class CompetitionFormat extends Component {
                 <div className="fluid-width">
                     <div className="row" >
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <InputWithHead disabled={disabledStatus} placeholder={AppConstants.days} value={data.roundInDays}
+                            <InputWithHead auto_Complete="new-roundInDays" disabled={disabledStatus} placeholder={AppConstants.days} value={data.roundInDays}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInDays')}></InputWithHead>
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <InputWithHead disabled={disabledStatus} placeholder={AppConstants.hours} value={data.roundInHours}
+                            <InputWithHead auto_Complete="new-roundInHours" disabled={disabledStatus} placeholder={AppConstants.hours} value={data.roundInHours}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInHours')}></InputWithHead>
 
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <InputWithHead disabled={disabledStatus} placeholder={AppConstants.mins} value={data.roundInMins}
+                            <InputWithHead auto_Complete="new-roundInDays" disabled={disabledStatus} placeholder={AppConstants.mins} value={data.roundInMins}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInMins')}></InputWithHead>
                         </div>
                     </div>
                 </div>
                 {data.IsQuickCompetition == 1 ?
-                <div className="inside-container-view pt-4">
-                    <InputWithHead heading={AppConstants.nonPlayingDates} />
-                    {nonPlayingDates.length>0 ?nonPlayingDates .map((item, index) =>
-                        this.nonPlayingDateView(item, index))
-                        :null
-                    }
-                    <a>
-                    <span onClick={() =>this.addNonPlayingDate() } className="input-heading-add-another">
-                        + {AppConstants.addAnotherNonPlayingDate}
-                    </span>
-                    </a>
-                </div>:null
-                }				 
+                    <div className="inside-container-view pt-4">
+                        <InputWithHead
+                            auto_Complete="new-nonPlayingDate"
+                            heading={AppConstants.nonPlayingDates} />
+                        {nonPlayingDates.length > 0 ? nonPlayingDates.map((item, index) =>
+                            this.nonPlayingDateView(item, index))
+                            : null
+                        }
+                        <a>
+                            <span onClick={() => this.addNonPlayingDate()} className="input-heading-add-another">
+                                + {AppConstants.addAnotherNonPlayingDate}
+                            </span>
+                        </a>
+                    </div> : null
+                }
                 {(data.competionFormatDivisions || []).map((item, index) => (
                     <div className="inside-container-view" key={"compFormat" + index}>
                         <div className="fluid-width" >
@@ -896,6 +899,7 @@ class CompetitionFormat extends Component {
                                             }]
                                         })(
                                             <InputWithHead
+                                                auto_Complete="new-matchDuration"
                                                 id={AppUniqueId.match_Duration}
                                                 heading={AppConstants.matchDuration}
                                                 disabled={disabledStatus}
@@ -914,6 +918,7 @@ class CompetitionFormat extends Component {
                                                 rules: [{ required: ((data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? true : false), message: ValidationConstants.mainBreak }]
                                             })(
                                                 <InputWithHead
+                                                    auto_Complete="new-mainBreak"
                                                     disabled={disabledStatus}
                                                     heading={AppConstants.mainBreak}
                                                     required={(data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? "required-field" : null}
@@ -933,6 +938,7 @@ class CompetitionFormat extends Component {
                                                 rules: [{ required: (data.matchTypeRefId == 3 ? true : false), message: ValidationConstants.qtrBreak }]
                                             })(
                                                 <InputWithHead
+                                                    auto_Complete="new-qtrBreak"
                                                     disabled={disabledStatus}
                                                     heading={AppConstants.qtrBreak} placeholder={AppConstants.mins}
                                                     required={(data.matchTypeRefId == 3) ? "required-field" : null}
@@ -950,6 +956,7 @@ class CompetitionFormat extends Component {
                                                 rules: [{ required: true, message: ValidationConstants.timeBetweenGames }]
                                             })(
                                                 <InputWithHead
+                                                    auto_Complete="new-timeBetweenGames"
                                                     id={AppUniqueId.timeBetween_Matches}
                                                     disabled={disabledStatus}
                                                     heading={AppConstants.timeBetweenMatches} placeholder={AppConstants.mins}
@@ -1027,7 +1034,7 @@ class CompetitionFormat extends Component {
                         <div className="col-sm">
                             <div className="reg-add-save-button">
                                 <NavLink to="/competitionVenueTimesPrioritisation">
-                                    <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
+                                    <Button disabled={isPublished} className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
                                 </NavLink>
                             </div>
                         </div>
@@ -1048,7 +1055,7 @@ class CompetitionFormat extends Component {
                                         title={AppConstants.statusPublishHover}
                                     >
                                         <Button
-                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 10 }}
+                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 6 }}
                                             className="publish-button save-draft-text"
                                             type="primary"
                                             htmlType="submit"
@@ -1060,6 +1067,7 @@ class CompetitionFormat extends Component {
                                     </Tooltip>
                                     <NavLink to="/competitionFinals">
                                         <Button
+                                            disabled={isPublished}
                                             className="publish-button margin-top-disabled-button"
                                             type="primary"
                                         >
@@ -1082,7 +1090,7 @@ class CompetitionFormat extends Component {
                                         title={AppConstants.statusPublishHover}
                                     >
                                         <Button
-                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 10 }}
+                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 6 }}
                                             className="publish-button save-draft-text"
                                             type="primary"
                                             htmlType="submit"
@@ -1107,7 +1115,7 @@ class CompetitionFormat extends Component {
                                     >
                                         <Button
                                             id={AppUniqueId.create_Draft_Draw_Btn}
-                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 10 }}
+                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 6 }}
                                             className="open-reg-button"
                                             type="primary"
                                             htmlType="submit"

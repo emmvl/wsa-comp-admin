@@ -15,6 +15,9 @@ const initialState = {
     gradeName: "",
     name: "",
     divisionData: divisionObj,
+    mainDivisionList: [],
+    totalCount: null,
+    currentPage: null
 };
 
 function liveScoreDivisionState(state = initialState, action) {
@@ -24,8 +27,8 @@ function liveScoreDivisionState(state = initialState, action) {
         //LIVESCORE DIVISION LIST
         case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_LOAD:
             return { ...state, onLoad: true };
-        case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_SUCCESS:
 
+        case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_SUCCESS:
             return {
                 ...state,
                 onLoad: false,
@@ -94,6 +97,19 @@ function liveScoreDivisionState(state = initialState, action) {
                 printLoad: false,
                 status: action.status
             }
+
+        case ApiConstants.API_LIVE_SCORE_MAIN_DIVISION_LIST_LOAD:
+            return { ...state, onLoad: true };
+        case ApiConstants.API_LIVE_SCORE_MAIN_DIVISION_LIST_SUCCESS:
+
+            return {
+                ...state,
+                onLoad: false,
+                mainDivisionList: action.result.divisions,
+                totalCount: action.result.page.totalCount,
+                currentPage: action.result.page.currentPage,
+                status: action.status
+            };
 
         default:
             return state;

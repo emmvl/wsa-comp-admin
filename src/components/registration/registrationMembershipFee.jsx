@@ -615,22 +615,36 @@ class RegistrationMembershipFee extends Component {
                                             </div>
                                         </div>
                                     )}
-                                    <Checkbox
-                                        className="single-checkbox"
-                                        style={{ marginLeft: "0px" }}
-                                        checked={item.isAllow}
-                                        onChange={e =>
-                                            this.membershipTypesAndAgeSelected(e.target.checked, index, "isAllow")
-                                        }
-                                        disabled={this.state.membershipIsUsed}
-                                    >
-                                        {AppConstants.allowTeamRegistration}
-                                    </Checkbox>
-
+									<div className="fluid-width">
+										<Checkbox
+											className="single-checkbox"
+											style={{ marginLeft: "0px" }}
+											checked={item.isAllow}
+											onChange={e =>
+												this.membershipTypesAndAgeSelected(e.target.checked, index, "isAllow")
+											}
+											disabled={this.state.membershipIsUsed}
+										>
+											{AppConstants.allowTeamRegistration}
+										</Checkbox>
+                                    </div>
+                                    {item.isPlaying != 1 && (
+                                        <Checkbox
+                                            className="single-checkbox"
+                                            style={{ marginLeft: "0px" }}
+                                            checked={item.isChildrenCheckNumber}
+                                            onChange={e =>
+                                                this.membershipTypesAndAgeSelected(e.target.checked, index, "isChildrenCheckNumber")
+                                            }
+                                            disabled={this.state.membershipIsUsed}
+                                        >
+                                            {AppConstants.childrenCheckNumber}
+                                        </Checkbox>
+                                    )}	
                                     {item.isAllow && item.isPlaying == 1 && (
                                         <div className="fluid-width" style={{ marginTop: "10px" }}>
                                             <div className="row">
-                                                <div className="col-sm">
+                                                <div className="col-sm"  style={{ marginLeft: 25}}>
 
                                                     <Form.Item  >
                                                         {getFieldDecorator(`allowTeamRegistrationTypeRefId${index}`, {
@@ -651,6 +665,7 @@ class RegistrationMembershipFee extends Component {
                                             </div>
                                         </div>
                                     )}
+																	  
                                 </div>
                             )
                         }
@@ -668,6 +683,7 @@ class RegistrationMembershipFee extends Component {
                     onCancel={this.handleCancel}
                 >
                     <InputWithHead
+                        auto_Complete="new-membershipTypeName"
                         required={"pt-0 mt-0"}
                         heading={AppConstants.membershipTypeName}
                         placeholder={AppConstants.pleaseEnterMembershipTypeName}
@@ -696,6 +712,7 @@ class RegistrationMembershipFee extends Component {
                     {getFieldDecorator('membershipProductName',
                         { rules: [{ required: true, message: ValidationConstants.membershipProductIsRequired }] })(
                             <InputWithHead
+                                auto_Complete="new-membershipProductName"
                                 required={"required-field pb-0 "}
                                 heading={AppConstants.membershipProductName}
                                 placeholder={AppConstants.membershipProductName}
@@ -824,6 +841,7 @@ class RegistrationMembershipFee extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <InputWithHead
+                                auto_Complete="new-number"
                                 heading={AppConstants.percentageOff_FixedAmount}
                                 placeholder={AppConstants.percentageOff_FixedAmount}
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
@@ -835,6 +853,7 @@ class RegistrationMembershipFee extends Component {
                         </div>
                         <div className="col-sm">
                             <InputWithHead
+                                auto_Complete="new-gernalDiscount"
                                 heading={AppConstants.description}
                                 placeholder={AppConstants.gernalDiscount}
                                 onChange={(e) => this.onChangeDescription(e.target.value, index)}
@@ -897,6 +916,7 @@ class RegistrationMembershipFee extends Component {
                         })}
                     </Select>
                     <InputWithHead
+                        auto_Complete="new-code"
                         heading={AppConstants.code}
                         placeholder={AppConstants.code}
                         onChange={(e) => this.onChangeDiscountCode(e.target.value, index)}
@@ -906,6 +926,7 @@ class RegistrationMembershipFee extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <InputWithHead
+                                auto_Complete="new-number"
                                 heading={AppConstants.percentageOff_FixedAmount}
                                 placeholder={AppConstants.percentageOff_FixedAmount}
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
@@ -917,6 +938,7 @@ class RegistrationMembershipFee extends Component {
                         </div>
                         <div className="col-sm">
                             <InputWithHead
+                                auto_Complete="new-gernalDiscount"
                                 heading={AppConstants.description}
                                 placeholder={AppConstants.gernalDiscount}
                                 onChange={(e) => this.onChangeDescription(e.target.value, index)}
@@ -1017,6 +1039,7 @@ class RegistrationMembershipFee extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <InputWithHead
+                                auto_Complete="new-number"
                                 heading={AppConstants.percentageOff_FixedAmount}
                                 placeholder={AppConstants.percentageOff_FixedAmount}
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
@@ -1027,6 +1050,7 @@ class RegistrationMembershipFee extends Component {
                         </div>
                         <div className="col-sm">
                             <InputWithHead
+                                auto_Complete="new-gernalDiscount"
                                 heading={AppConstants.description}
                                 placeholder={AppConstants.gernalDiscount}
                                 onChange={(e) => this.onChangeDescription(e.target.value, index)}
@@ -1074,6 +1098,7 @@ class RegistrationMembershipFee extends Component {
             case 5:
                 return <div>
                     <InputWithHead
+                        auto_Complete="new-description"
                         heading={AppConstants.description}
                         placeholder={AppConstants.description}
                         onChange={(e) => this.onChangeDescription(e.target.value, index)}
@@ -1081,6 +1106,7 @@ class RegistrationMembershipFee extends Component {
                         disabled={this.state.membershipIsUsed}
                     />
                     <InputWithHead
+                        auto_Complete="new-question"
                         heading={AppConstants.question}
                         placeholder={AppConstants.question}
                         onChange={(e) => this.onChangeQuestion(e.target.value, index)}
@@ -1375,6 +1401,7 @@ class RegistrationMembershipFee extends Component {
                 <InnerHorizontalMenu menu={"registration"} regSelectedKey={"6"} />
                 <Layout>
                     <Form
+                        autoComplete='off'
                         onSubmit={this.saveMembershipProductDetails}
                         noValidate="noValidate"
                     >

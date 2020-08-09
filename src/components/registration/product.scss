@@ -971,6 +971,10 @@ input[type=number] {
   margin-left: 24px;
 }
 
+.padding-right-reg-dropdown-zero{
+padding-right: 0px;;
+}
+
 @media (max-width: 767px) {
   .auth-form {
     width: 100%;
@@ -978,4 +982,10 @@ input[type=number] {
   .marginLeft24{
     margin-left: 0px;
   }
+  .padding-right-reg-dropdown-zero{
+    padding-right: 8px;;
+    }
+    .margin-top-24-mobile{
+      margin-top: 20px;
+    }
 }

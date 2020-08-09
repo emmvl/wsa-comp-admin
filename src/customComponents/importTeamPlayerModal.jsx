@@ -7,7 +7,7 @@ import { getOrganisationData } from "../util/sessionStorage";
 import ValidationConstants from "../themes/validationConstant";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { quickCompImportDataCleanUpAction, quickCompetitionPlayerImportAction, updateSelectedTeamPlayer } from '../store/actions/competitionModuleAction/competitionQuickAction'
+import { quickCompImportDataCleanUpAction, quickCompetitionPlayerImportAction, updateSelectedTeamPlayer } from '../store/actions/competitionModuleAction/competitionQuickCompetitionAction'
 const columns = [
     {
         title: 'FirstName',

@@ -1,6 +1,6 @@
 import React from "react";
 import { Switch, Route, Redirect, HashRouter } from "react-router-dom";
-import { Skeleton } from "antd";
+
 import PrivateRoute from "../util/protectedRoute";
 import ProductAdd from "../components/registration/productAdd";
 import Dashboard from "../components/dashboard";
@@ -147,9 +147,11 @@ import LiveScoreLadderAdjustment from "../components/liveScore/liveScoreLadderAd
 import LiveScorePositionTrackReport from "../components/liveScore/liveScorePositionTrackReport";
 
 import Account from "./Account";
+import HelpAndSupport from "./Support";
 import RegistrationChange from "../components/registration/registrationChange";
 import MultifieldDraws from "../components/competition/multifieldDraws";
 import RegistrationChangeReview from "../components/registration/registrationChangeReview"
+import TeamRegistrations from "../components/registration/teamRegistrations"
 
 import lazyLoad from "../components/lazyLoad";
 
@@ -784,7 +786,9 @@ class Routes extends React.Component {
         />
 
         <PrivateRoute path="/account" component={lazyLoad(Account)} />
+        <PrivateRoute path="/support" component={lazyLoad(HelpAndSupport)} />
         <PrivateRoute path="/registrationChangeReview" component={lazyLoad(RegistrationChangeReview)} />
+        <PrivateRoute path='/teamRegistrations' component={lazyLoad(TeamRegistrations)} />
 
         <Route path="/" component={lazyLoad(NotFound)} />
 

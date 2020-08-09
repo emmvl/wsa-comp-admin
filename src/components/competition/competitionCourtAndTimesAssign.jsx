@@ -488,7 +488,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             <span className="user-remove-btn">
                                 <i className="fa fa-trash-o" aria-hidden="true"></i>
                             </span>
-                            <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                            <span id={AppUniqueId.timeslotGenerationRemove_btn} className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
                         </a>
                     </div>
                 }
@@ -524,11 +524,10 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     alignItems: "center"
                                 }}
                             >
-                                <span className="year-select-heading">
+                                <span id={AppUniqueId.compYear_dpdnTimeslot} className="year-select-heading">
                                     {AppConstants.year}:
                                   </span>
                                 <Select
-                                    id={AppUniqueId.compYear_dpdnTimeslot}
                                     name={"yearRefId"}
                                     className="year-select reg-filter-select-year ml-2"
                                     // style={{ width: 90 }}
@@ -551,9 +550,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 flexDirection: "row",
                                 alignItems: "center", marginRight: 50,
                             }} >
-                                <span className='year-select-heading'>{AppConstants.competition}:</span>
+                                <span id={AppUniqueId.competitionName_dpdnTimeslot} className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
-                                    id={AppUniqueId.competitionName_dpdnTimeslot}
                                     name={"competition"}
                                     className="year-select reg-filter-select-competition ml-2"
                                     onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)}
@@ -1306,7 +1304,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                     <div className="col-sm">
                         <div className="reg-add-save-button">
                             <NavLink to="/competitionPartTeamGradeCalculate">
-                                <Button className="cancelBtnWidth" type="cancel-button"  >{AppConstants.back}</Button>
+                                <Button disabled={isPublished} className="cancelBtnWidth" type="cancel-button"  >{AppConstants.back}</Button>
                             </NavLink>
                         </div>
                     </div>
@@ -1326,10 +1324,10 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 visible={this.state.tooltipVisibleDelete}
                                 title={AppConstants.statusPublishHover}
                             >
-                                <Button id={AppUniqueId.timeSlotSaveBtn} disabled={isPublished} style={{ height: isPublished && "100%", borderRadius: isPublished && 10, width: isPublished && "inherit" }} className="publish-button save-draft-text" htmlType="submit" type="primary">{AppConstants.save}</Button>
+                                <Button id={AppUniqueId.timeSlotSaveBtn} disabled={isPublished} style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }} className="publish-button save-draft-text" htmlType="submit" type="primary">{AppConstants.save}</Button>
                             </Tooltip>
                             <NavLink to="/competitionVenueTimesPrioritisation">
-                                <Button className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
+                                <Button disabled={isPublished} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
                             </NavLink>
                         </div>
                     </div>
@@ -1347,6 +1345,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                 <Layout>
 
                     <Form
+                        autoComplete="off"
                         onSubmit={this.saveAPIsActionCall}
                         noValidate="noValidate"
                     >

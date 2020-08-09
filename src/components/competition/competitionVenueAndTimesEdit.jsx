@@ -19,8 +19,10 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { updateVenuAndTimeDataAction, updateVenuListAction, refreshVenueFieldsAction, 
-    removeObjectAction, venueByIdAction, clearVenueDataAction } from '../../store/actions/competitionModuleAction/venueTimeAction'
+import {
+    updateVenuAndTimeDataAction, updateVenuListAction, refreshVenueFieldsAction,
+    removeObjectAction, venueByIdAction, clearVenueDataAction
+} from '../../store/actions/competitionModuleAction/venueTimeAction'
 import { getYearAndCompetitionAction } from '../../store/actions/appAction'
 import { getCommonRefData, addVenueAction, checkVenueDuplication } from '../../store/actions/commonAction/commonAction'
 import { getOrganisationAction } from "../../store/actions/userAction/userAction";
@@ -40,19 +42,19 @@ const papaparseOptions = {
     dynamicTyping: true,
     skipEmptyLines: true,
     transformHeader: header =>
-      header
-        .toLowerCase()
-        .replace(/\W/g, '_'),
-    complete: function(results, file) {
-       // console.log("Parsing complete:", results, file);
+        header
+            .toLowerCase()
+            .replace(/\W/g, '_'),
+    complete: function (results, file) {
+        // console.log("Parsing complete:", results, file);
     }
-  }
+}
 
 class CompetitionVenueAndTimesEdit extends Component {
     constructor(props) {
         super(props);
         this.state = {
-           // initialData: null,
+            // initialData: null,
             getDataLoading: false,
             venueId: 0,
             saveContraintLoad: false,
@@ -61,7 +63,7 @@ class CompetitionVenueAndTimesEdit extends Component {
             screenNavigationKey: null,
             venueOrganisation: [],
             csvData: null,
-            loading:false,
+            loading: false,
             isUsed: false,
             venueAddress: null,
             venueAddressError: '',
@@ -73,7 +75,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     render: (courtNumber, record, index) => {
                         const { getFieldDecorator } = this.props.form;
                         return (
-                            <div style={{textAlign:'center'}}>
+                            <div style={{ textAlign: 'center' }}>
                                 {courtNumber}
                             </div>
                         )
@@ -159,7 +161,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     render: (overideSlot, record, index) => (
                         <div>
                             <Checkbox
-                                disabled={this.state.isUsed }
+                                disabled={this.state.isUsed}
                                 className="single-checkbox mt-1 d-flex justify-content-center"
                                 defaultChecked={overideSlot}
                                 onChange={e => this.overideVenueslotOnchange(e, index)}
@@ -172,16 +174,16 @@ class CompetitionVenueAndTimesEdit extends Component {
                     dataIndex: "clear",
                     key: "clear",
                     render: (clear, record, index) => (
-                        <span style={{ display: "flex", justifyContent: "center", width: "100%", cursor: 'pointer',  }}>
-                           {!record.isDisabled && (
-                            <img
-                                className="dot-image"
-                                src={AppImages.redCross}
-                                alt=""
-                                width="16"
-                                height="16"
-                                onClick={() => this.removeTableObj(clear, record, index)}
-                            />
+                        <span style={{ display: "flex", justifyContent: "center", width: "100%", cursor: 'pointer', }}>
+                            {!record.isDisabled && (
+                                <img
+                                    className="dot-image"
+                                    src={AppImages.redCross}
+                                    alt=""
+                                    width="16"
+                                    height="16"
+                                    onClick={() => this.removeTableObj(clear, record, index)}
+                                />
                             )}
                         </span>
                     )
@@ -192,7 +194,7 @@ class CompetitionVenueAndTimesEdit extends Component {
         this_Obj = this;
         this.props.getCommonRefData()
         this.props.getOrganisationAction()
-     
+
     }
 
 
@@ -205,15 +207,15 @@ class CompetitionVenueAndTimesEdit extends Component {
     }
 
     componentWillMount() {
-       //console.log("componentWillMount" + JSON.stringify(this.props.venueTimeState.venuData));
-      // this.setState({initialData: this.props.venueTimeState.venuData});
+        //console.log("componentWillMount" + JSON.stringify(this.props.venueTimeState.venuData));
+        // this.setState({initialData: this.props.venueTimeState.venuData});
     }
 
     componentDidMount() {
-      //  console.log("componentDidMount");
-        window.scroll(0,0);
+        //  console.log("componentDidMount");
+        window.scroll(0, 0);
         let venueId = this.props.location.state.venueId;
-        let isUsed  = this.props.location.state.isUsed;
+        let isUsed = this.props.location.state.isUsed;
         this.props.updateVenuAndTimeDataAction(isUsed, 'venueIsUsed', "venueIsUsed")
         this.setState({
             screenNavigationKey: this.props.location.state.key,
@@ -224,7 +226,7 @@ class CompetitionVenueAndTimesEdit extends Component {
             venueId: venueId
         }
         this.props.venueByIdAction(payload);
-        this.setState({getDataLoading: true});
+        this.setState({ getDataLoading: true });
         this.props.checkVenueDuplication();
     }
 
@@ -232,7 +234,7 @@ class CompetitionVenueAndTimesEdit extends Component {
         //console.log("componentDidUpdate" + JSON.stringify(nextProps));
         let competitionList = this.props.appState.competitionList
         if (this.state.saveContraintLoad == true && this.props.venueTimeState.onLoad == false) {
-           // console.log("this.state.screenNavigationKey:" + this.state.screenNavigationKey);
+            // console.log("this.state.screenNavigationKey:" + this.state.screenNavigationKey);
             this.navigateTo();
         }
 
@@ -258,17 +260,15 @@ class CompetitionVenueAndTimesEdit extends Component {
                 this.setVenueOrganisation();
             }
 
-            if(this.state.csvData != null)
-            {
-                this.setState({csvData: null, loading:false});
+            if (this.state.csvData != null) {
+                this.setState({ csvData: null, loading: false });
                 this.setFormFieldValue();
             }
-           
+
         }
 
-        if(nextProps.userState != this.props.userState){
-            if(this.props.userState.onLoad == false)
-            {
+        if (nextProps.userState != this.props.userState) {
+            if (this.props.userState.onLoad == false) {
                 this.setVenueOrganisation();
             }
         }
@@ -312,8 +312,7 @@ class CompetitionVenueAndTimesEdit extends Component {
         let affiliateData = venueData.affiliateData;
         let venueOrganisation = this.props.userState.venueOrganisation;
 
-        if(venueOrganisation!= null && venueOrganisation.length > 0)
-        {
+        if (venueOrganisation != null && venueOrganisation.length > 0) {
             venueOrganisation.map((item, index) => {
                 // let affiliate = affiliateData.find(x=>x == item.id);
                 // if(affiliate!= null && affiliate!= undefined)
@@ -323,15 +322,15 @@ class CompetitionVenueAndTimesEdit extends Component {
                 //     item["isDisabled"] = false;
                 // }
                 item["isDisabled"] = this.state.isUsed;
-                
+
             });
-            this.setState({venueOrganisation : venueOrganisation});
+            this.setState({ venueOrganisation: venueOrganisation });
         }
     }
 
     navigateTo = () => {
-       
-        if(this.state.screenNavigationKey == AppConstants.venuesList){
+
+        if (this.state.screenNavigationKey == AppConstants.venuesList) {
             setTimeout(() => {
                 this.props.clearVenueDataAction("venue");
                 history.push('/venuesList')
@@ -348,17 +347,17 @@ class CompetitionVenueAndTimesEdit extends Component {
     }
 
     readVenueCourtCSV = (data) => {
-       
-        this.setState({csvData: data, loading: true});
+
+        this.setState({ csvData: data, loading: true });
         this.props.updateVenuAndTimeDataAction(data, "addGameAndCourtThroughCSV", 'venueCourts');
         let e = document.getElementById("venueCourtUpload");
         e.value = null;
-      };
+    };
 
     getDisabledHours = (startTime) => {
         var hours = [];
         let startHour = startTime.split(':')[0];
-        for(var i = 0; i < Number(startHour); i++){
+        for (var i = 0; i < Number(startHour); i++) {
             hours.push(i);
         }
         return hours;
@@ -371,29 +370,29 @@ class CompetitionVenueAndTimesEdit extends Component {
         // console.log("*****selectedHour:::" + selectedHour);
         let hour = Number(startTime.split(":")[0]);
         let min = Number(startTime.split(":")[1]);
-        var minutes= [];
-        if (selectedHour === hour){
-            for(var i =0; i <= min; i++){
+        var minutes = [];
+        if (selectedHour === hour) {
+            for (var i = 0; i <= min; i++) {
                 minutes.push(i);
             }
         }
-        if (selectedHour < hour){
-            for(var i =0; i <= 60; i++){
+        if (selectedHour < hour) {
+            for (var i = 0; i <= 60; i++) {
                 minutes.push(i);
             }
         }
         return minutes;
-    
+
     }
 
     validateTime = (rule, value, callback, startTime, endTime, type) => {
         //console.log( "StartTime"+ startTime + "EndTime::" + endTime + "Type::" + type );
-        if(type == "end"){
-            if(startTime > endTime){
+        if (type == "end") {
+            if (startTime > endTime) {
                 callback('End time should be greater than start time');
                 return;
             }
-            
+
         }
         callback();
     }
@@ -444,8 +443,8 @@ class CompetitionVenueAndTimesEdit extends Component {
         });
 
         const stateRefId = stateList.length > 0 && address.state
-          ? stateList.find((state) => state.name === address.state).id
-          : null;
+            ? stateList.find((state) => state.name === address.state).id
+            : null;
 
         this.props.form.setFieldsValue({
             stateRefId,
@@ -468,19 +467,19 @@ class CompetitionVenueAndTimesEdit extends Component {
     contentView = (getFieldDecorator) => {
         const { venuData } = this.props.venueTimeState
         const { stateList } = this.props.commonReducerState
-       // const { venueOrganisation } = this.props.userState
+        // const { venueOrganisation } = this.props.userState
 
         const state = stateList.length > 0 && venuData.stateRefId
-          ? stateList.find((state) => state.id === venuData.stateRefId).name
-          : null;
+            ? stateList.find((state) => state.id === venuData.stateRefId).name
+            : null;
 
         let defaultVenueAddress = `${
             venuData.street1 ? `${venuData.street1},` : ''
-        } ${
+            } ${
             venuData.suburb ? `${venuData.suburb},` : ''
-        } ${
+            } ${
             state ? `${state},` : ''
-        } Australia`;
+            } Australia`;
 
         return (
             <div className="content-view">
@@ -492,6 +491,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         rules: [{ required: true, message: ValidationConstants.nameField[2] }],
                     })(
                         <InputWithHead
+                            auto_Complete="new-name"
                             required={"required-field pt-0 pb-0"}
                             heading={AppConstants.name}
                             disabled={this.state.isUsed}
@@ -506,6 +506,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         rules: [{ required: true, message: ValidationConstants.nameField[3] }],
                     })(
                         <InputWithHead
+                            auto_Complete="new-shortName"
                             required={"required-field"}
                             heading={AppConstants.short_Name}
                             disabled={this.state.isUsed}
@@ -518,23 +519,24 @@ class CompetitionVenueAndTimesEdit extends Component {
 
                 <Form.Item name="venueAddress">
                     <PlacesAutocomplete
-                      defaultValue={defaultVenueAddress}
-                      heading={AppConstants.venueSearch}
-                      required
-                      error={this.state.venueAddressError}
-                      disabled={this.state.isUsed}
-                      onBlur={() => {
-                          this.setState({
-                              venueAddressError: ''
-                          })
-                      }}
-                      onSetData={this.handlePlacesAutocomplete}
+                        defaultValue={defaultVenueAddress}
+                        heading={AppConstants.venueSearch}
+                        required
+                        error={this.state.venueAddressError}
+                        disabled={this.state.isUsed}
+                        onBlur={() => {
+                            this.setState({
+                                venueAddressError: ''
+                            })
+                        }}
+                        onSetData={this.handlePlacesAutocomplete}
                     />
                 </Form.Item>
 
                 <Form.Item >
                     {getFieldDecorator('addressOne')(
                         <InputWithHead
+                            auto_Complete="new-addressOne"
                             required={"required-field pt-3 pb-0"}
                             heading={AppConstants.addressOne}
                             placeholder={AppConstants.addressOne}
@@ -547,6 +549,7 @@ class CompetitionVenueAndTimesEdit extends Component {
 
 
                 <InputWithHead
+                    auto_Complete="new-addressTwo"
                     heading={AppConstants.addressTwo}
                     placeholder={AppConstants.addressTwo}
                     onChange={(street2) => this.props.updateVenuAndTimeDataAction(street2.target.value, 'Venue', 'street2')}
@@ -558,6 +561,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 <Form.Item >
                     {getFieldDecorator('suburb')(
                         <InputWithHead
+                            auto_Complete="new-suburb"
                             required={"required-field pt-3 pb-0"}
                             heading={AppConstants.suburb}
                             placeholder={AppConstants.suburb}
@@ -595,6 +599,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 <Form.Item >
                     {getFieldDecorator('postcode')(
                         <InputWithHead
+                            auto_Complete="new-postcode"
                             required={"required-field"}
                             heading={AppConstants.postcode}
                             placeholder={AppConstants.postcode}
@@ -607,6 +612,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 </Form.Item>
 
                 <InputWithHead
+                    auto_Complete="new-contactNumber"
                     heading={AppConstants.contactNumber}
                     placeholder={AppConstants.contactNumber}
                     onChange={(contactNumber) => this.props.updateVenuAndTimeDataAction(contactNumber.target.value, 'Venue', 'contactNumber')}
@@ -702,7 +708,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     <TimePicker
                         disabled={item.isDisabled}
                         key={"endTime"}
-                        disabledHours={()=>this.getDisabledHours(item.startTime)}
+                        disabledHours={() => this.getDisabledHours(item.startTime)}
                         disabledMinutes={(e) => this.getDisabledMinutes(e, item.startTime)}
                         className="comp-venue-time-timepicker"
                         style={{ width: "100%" }}
@@ -734,7 +740,7 @@ class CompetitionVenueAndTimesEdit extends Component {
             <div className="fees-view pt-5">
                 <span className="form-heading">
                     {AppConstants.game_Days}
-                    <span className="required-field" style={{fontSize:"14px"}}></span>
+                    <span className="required-field" style={{ fontSize: "14px" }}></span>
                 </span>
                 <div className="fluid-width">
                     {/* {this.gameData()} */}
@@ -742,18 +748,18 @@ class CompetitionVenueAndTimesEdit extends Component {
                         return this.gameData(item, index, getFieldDecorator)
                     })}
                 </div>
-                { !this.state.isUsed ? 
+                {!this.state.isUsed ?
                     <span style={{ cursor: 'pointer' }} onClick={() => this.props.updateVenuAndTimeDataAction(null, "addGameAndCourt", 'gameDays')} className="input-heading-add-another">
                         + {AppConstants.addAnotherDay}
                     </span> : null
-                }  
+                }
             </div>
         );
     };
 
     expendedRowData(item, index, tableIndex, getFieldDecorator) {
         const { daysList } = this.props.commonReducerState
-       // console.log(this.props.venueTimeState, 'this.props.venueTimeState')
+        // console.log(this.props.venueTimeState, 'this.props.venueTimeState')
         return (
             <div className="row" key={"expandedRow" + index}>
                 <div className="col-sm">
@@ -804,7 +810,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     <TimePicker
                         disabled={item.isDisabled}
                         className="comp-venue-time-timepicker"
-                        disabledHours={()=>this.getDisabledHours(item.startTime)}
+                        disabledHours={() => this.getDisabledHours(item.startTime)}
                         disabledMinutes={(e) => this.getDisabledMinutes(e, item.startTime)}
                         style={{ width: "100%" }}
                         onChange={(time) => time !== null && this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, 'endTime', "addTimeSlotField", tableIndex)}
@@ -816,15 +822,15 @@ class CompetitionVenueAndTimesEdit extends Component {
                     {/* )}
                     </Form.Item> */}
                 </div>
-                { !item.isDisabled && (
+                {!item.isDisabled && (
                     <div className="col-sm-2 delete-image-view pb-4" onClick={() => this.props.updateVenuAndTimeDataAction(null, index, 'removeButton', 'add_TimeSlot', tableIndex)}>
-                    <span className="user-remove-btn">
-                        <i className="fa fa-trash-o" aria-hidden="true"></i>
-                    </span>
-                    <span style={{ cursor: 'pointer' }} className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                        <span className="user-remove-btn">
+                            <i className="fa fa-trash-o" aria-hidden="true"></i>
+                        </span>
+                        <span style={{ cursor: 'pointer' }} className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
                     </div>
                 )}
-                
+
             </div>
         )
     }
@@ -851,34 +857,34 @@ class CompetitionVenueAndTimesEdit extends Component {
         //console.log(this.props.venueTimeState.venuData.expandedRowKeys)
         //console.log(this.props.venueTimeState.venuData);
         let venueTimestate = this.props.venueTimeState;
-        let {venueCourts}  = venueTimestate.venuData;
+        let { venueCourts } = venueTimestate.venuData;
         //console.log("venueCourts::" +JSON.stringify(venueCourts));
         return (
             <div className="fees-view pt-5">
-                <div style={{display:'flex'}}>
+                <div style={{ display: 'flex' }}>
                     <span className="form-heading">{AppConstants.courts}
-                    <span className="required-field" style={{fontSize:"14px", paddingTop: '5px'}}></span>
+                        <span className="required-field" style={{ fontSize: "14px", paddingTop: '5px' }}></span>
                     </span>
-                    {!this.state.isUsed  ? 
-                    <Button className="primary-add-comp-form" type="primary" style={{marginLeft:'auto'}}> 
-                        <div className="row">
-                            <div className="col-sm">
-                            <label for="venueCourtUpload" className="csv-reader">
-                                <img src={AppImages.import}  alt="" className="export-image"/> 
-                                {AppConstants.import}
-                            </label>
-                            <CSVReader
-                                inputId="venueCourtUpload"
-                                inputStyle={{display:'none'}}
-                                parserOptions={papaparseOptions}
-                                onFileLoaded={this.readVenueCourtCSV}
-                                />
+                    {!this.state.isUsed ?
+                        <Button className="primary-add-comp-form" type="primary" style={{ marginLeft: 'auto' }}>
+                            <div className="row">
+                                <div className="col-sm">
+                                    <label for="venueCourtUpload" className="csv-reader">
+                                        <img src={AppImages.import} alt="" className="export-image" />
+                                        {AppConstants.import}
+                                    </label>
+                                    <CSVReader
+                                        inputId="venueCourtUpload"
+                                        inputStyle={{ display: 'none' }}
+                                        parserOptions={papaparseOptions}
+                                        onFileLoaded={this.readVenueCourtCSV}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    </Button> : null
+                        </Button> : null
                     }
                 </div>
-                
+
                 <div className="inside-container-view">
                     <div className="table-responsive">
                         <Table
@@ -894,7 +900,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                             loading={this.state.loading == true && true}
                         />
                     </div>
-                    {!this.state.isUsed ? 
+                    {!this.state.isUsed ?
                         <span style={{ cursor: 'pointer' }} onClick={() => this.props.updateVenuAndTimeDataAction(null, "addGameAndCourt", 'venueCourts')} className="input-heading-add-another">
                             + {AppConstants.addCourt}
                         </span> : null
@@ -902,7 +908,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 </div>
             </div>
         );
-    };API_COMMON_SAGA_FAIL
+    }; API_COMMON_SAGA_FAIL
 
     onAddVenue = (e) => {
         e.preventDefault();
@@ -915,7 +921,7 @@ class CompetitionVenueAndTimesEdit extends Component {
         }
 
         if (!this.state.venueAddress) {
-            this.setState({venueAddressError: ValidationConstants.venueAddressRequiredError});
+            this.setState({ venueAddressError: ValidationConstants.venueAddressRequiredError });
             message.error(AppConstants.venueAddressSelect);
             venueAddressError = true;
         }
@@ -930,7 +936,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 if (venuData.venueCourts.length == 0) {
                     message.error(ValidationConstants.emptyAddCourtValidation);
                 }
-                else if(venuData.gameDays.length == 0){
+                else if (venuData.gameDays.length == 0) {
                     message.error(ValidationConstants.emptyGameDaysValidation);
                 }
                 else {
@@ -942,27 +948,25 @@ class CompetitionVenueAndTimesEdit extends Component {
 
                     venuData.venueCourts.map((item, index) => {
                         (item.availabilities || []).map((avItem, avIndex) => {
-                            if(avItem.startTime > avItem.endTime){
+                            if (avItem.startTime > avItem.endTime) {
                                 hasError = true;
                             }
                         })
                     });
 
-                    if(hasError)
-                    {
+                    if (hasError) {
                         message.error(ValidationConstants.venueCourtEndTimeValidation);
                         return;
                     }
 
                     venuData.gameDays.map((item, index) => {
-                        if(item.startTime > item.endTime){
+                        if (item.startTime > item.endTime) {
                             hasError = true;
-                           // break;
+                            // break;
                         }
                     });
 
-                    if(hasError)
-                    {
+                    if (hasError) {
                         message.error(ValidationConstants.gameDayEndTimeValidation);
                         return;
                     }
@@ -972,8 +976,8 @@ class CompetitionVenueAndTimesEdit extends Component {
                         return;
                     }
 
-                    if(!hasError){
-                       // console.log("venuData" + JSON.stringify(venuData));
+                    if (!hasError) {
+                        // console.log("venuData" + JSON.stringify(venuData));
                         this.props.addVenueAction(venuData)
                         this.setState({ saveContraintLoad: true });
                     }
@@ -1036,10 +1040,10 @@ class CompetitionVenueAndTimesEdit extends Component {
                             <div className="formView">{this.gameDayView(getFieldDecorator)}</div>
                             <div className="formView">{this.courtView(getFieldDecorator)}</div>
                             <Loader
-                              visible={
-                                  this.props.venueTimeState.onLoad
-                                  || this.props.commonReducerState.onLoad
-                              }
+                                visible={
+                                    this.props.venueTimeState.onLoad
+                                    || this.props.commonReducerState.onLoad
+                                }
                             />
                         </Content>
                         <Footer>{this.footerView()}</Footer>
