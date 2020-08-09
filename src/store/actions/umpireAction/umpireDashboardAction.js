@@ -41,10 +41,19 @@ function umpireRoundListAction(competitionID, divisionId) {
     return action;
 }
 
+function umpireDashboardUpdate(data) {
+    const action = {
+        type: ApiConstants.UPDATE_UMPIRE_DASHBOARD,
+        data
+    }
+    return action
+}
+
 export {
     getUmpireDashboardList,
     getUmpireDashboardVenueList,
     getUmpireDashboardDivisionList,
     umpireDashboardImportAction,
-    umpireRoundListAction
+    umpireRoundListAction,
+    umpireDashboardUpdate
 } 

@@ -1,13 +1,17 @@
-import { put, call } from '../../../../node_modules/redux-saga/effects'
+import { put, call } from "redux-saga/effects"
 import ApiConstants from "../../../themes/apiConstants";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 import { message } from "antd";
+import AppConstants from "../../../themes/appConstants";
 
 function* failSaga(result) {
     yield put({ type: ApiConstants.API_LIVE_SCORE_GOAL_FAIL });
-    setTimeout(() => {
-        message.error(result.message)
-    }, 800);
+    let msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong
+    message.config({
+        duration: 1.5,
+        maxCount: 1,
+    });
+    message.error(msg);
 }
 
 function* errorSaga(error) {
@@ -16,19 +20,23 @@ function* errorSaga(error) {
         error: error,
         status: error.status
     });
-    message.error("Something went wrong.")
+    message.config({
+        duration: 1.5,
+        maxCount: 1,
+    });
+    message.error(AppConstants.somethingWentWrong);
 }
 
 export function* liveScoreGoalSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreGoalList, action.competitionID, action.goalType, action.search,action.offset);
+        const result = yield call(LiveScoreAxiosApi.liveScoreGoalList, action.competitionID, action.goalType, action.search, action.offset);
         if (result.status === 1) {
             // console.log('saga', result)
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_GOAL_LIST_SUCCESS,
                 result: result.result.data,
                 status: result.status,
-                goalType:action.goalType
+                goalType: action.goalType
             });
         } else {
             yield call(failSaga, result)

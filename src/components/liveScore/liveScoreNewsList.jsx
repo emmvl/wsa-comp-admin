@@ -231,7 +231,7 @@ class LiveScoreNewsList extends Component {
         let newsData = liveScoreNewsState ? liveScoreNewsState.liveScoreNewsListData : [];
         let stateWideMsg = getKeyForStateWideMessage()
         return (
-            <div className="comp-dash-table-view mt-4">
+            <div className="comp-dash-table-view mt-4 pb-5">
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         loading={this.props.liveScoreNewsState.onLoad}

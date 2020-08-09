@@ -5,6 +5,8 @@ import AppImages from "../themes/appImages";
 import { currencyFormat } from "../util/currencyFormat";
 import { isArrayNotEmpty } from "../util/helpers";
 import { getOrganisationData } from '../util/sessionStorage';
+import { Carousel } from 'react-responsive-carousel';
+import styles from "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 
 const { SubMenu } = Menu;
 class ShopSingleProductComponent extends React.Component {
@@ -77,14 +79,33 @@ class ShopSingleProductComponent extends React.Component {
                     </Menu>
                 </div>
                 <div className="product-img-view">
-                    <img
+                    <div >
+                        <Carousel
+                            showStatus={false}
+                            showThumbs={false}
+                            infiniteLoop={true}
+                            showArrows={true}
+                        >
+                            {isArrayNotEmpty(productItem.images) && productItem.images.map(
+                                (item, index) => {
+                                    return (
+                                        <div className="carousel-div">
+                                            <img src={item.url} className="carousel-img" />
+                                        </div>
+                                    );
+                                }
+                            )}
+
+                        </Carousel>
+                    </div>
+                    {/* <img
                         src={isArrayNotEmpty(productItem.images) ? productItem.images[0].url : AppImages.squareImage}
                         name={'image'}
                         className="product-img"
                         onError={ev => {
                             ev.target.src = AppImages.squareImage;
                         }}
-                    />
+                    /> */}
                 </div>
                 <div className="product-text-view">
                     <span className="product-name">{productItem.productName}</span>

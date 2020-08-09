@@ -23,37 +23,66 @@ const { Option } = Select;
 
 let this_obj = null;
 
-/////function to sort table column
-function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_obj.state.sortBy !== key) {
+        sortOrder = 'ASC';
+    } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'DESC') {
+        sortBy = sortOrder = null;
+    }
+    console.log(sortBy, sortOrder)
+    const body =
+    {
+        "paging": {
+            "limit": 10,
+            "offset": this_obj.state.offsetData
+        }
+    }
+    this_obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_obj.props.umpireRoasterListAction(this_obj.state.selectedComp, this_obj.state.status, refRoleTypes('umpire'), body, sortBy, sortOrder)
 }
+/////function to sort table column
+// function tableSort(a, b, key) {
+//     let stringA = JSON.stringify(a[key])
+//     let stringB = JSON.stringify(b[key])
+//     return stringA.localeCompare(stringB)
+// }
+
+//listeners for sorting
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
 
 const columns = [
 
     {
         title: 'First Name',
-        dataIndex: 'user',
+        dataIndex: 'firstName',
         key: 'First Name',
-        sorter: (a, b) => tableSort(a, b, 'user'),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (firstName, record) =>
             <span className="input-heading-add-another pt-0" onClick={() => this_obj.checkUserId(record)}>{record.user.firstName}</span>
     },
     {
         title: 'Last Name',
-        dataIndex: 'user',
+        dataIndex: 'lastName',
         key: 'Last Name',
-        sorter: (a, b) => tableSort(a, b, "user"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (lastName, record) =>
 
             <span className="input-heading-add-another pt-0" onClick={() => this_obj.checkUserId(record)}>{record.user.lastName}</span>
     },
     {
         title: 'Organisation',
-        dataIndex: 'user',
+        dataIndex: 'organisation',
         key: 'Organisation',
-        sorter: (a, b) => a.user.length - b.user.length,
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (user, record) => {
             return (
                 <div>
@@ -68,7 +97,8 @@ const columns = [
         title: 'Match ID',
         dataIndex: 'matchId',
         key: 'matchId',
-        sorter: (a, b) => tableSort(a, b, "matchId"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (matchId) => {
             return (
                 <NavLink to={{
@@ -79,13 +109,13 @@ const columns = [
                 </NavLink>
             )
         }
-
     },
     {
         title: 'Start Time',
-        dataIndex: 'match',
+        dataIndex: 'startTime',
         key: 'Start Time',
-        sorter: (a, b) => tableSort(a, b, "match"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (startTime, record) =>
             <span >{moment(record.match.startTime).format("DD/MM/YYYY HH:mm")}</span>
     },
@@ -93,7 +123,8 @@ const columns = [
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
-        sorter: (a, b) => tableSort(a, b, "status"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: "Action",
@@ -141,7 +172,8 @@ class UmpireRoaster extends Component {
             competitionUniqueKey: null,
             status: 'All',
             roasterLoad: false,
-            compArray: []
+            compArray: [],
+            offsetData: 0
         }
         this_obj = this
     }
@@ -223,14 +255,16 @@ class UmpireRoaster extends Component {
             message.warn(ValidationConstants.umpireMessage)
         }
         else {
-            history.push("/userPersonal", { userId: record.userId, screenKey: "umpireRoaster", screen: "/umpireRoaster" })
+            history.push("/userPersonal", { userId: record.userId, screenKey: "umpireRoaster", screen: "/umpireRoster" })
         }
     }
 
     /// Handle Page change
     handlePageChnage(page) {
         let offset = page ? 10 * (page - 1) : 0;
-
+        this.setState({
+            offsetData: offset
+        })
         const body =
         {
             "paging": {

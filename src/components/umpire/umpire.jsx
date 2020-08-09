@@ -21,21 +21,35 @@ import history from "../../util/history";
 const { Content } = Layout;
 const { Option } = Select;
 
+let this_obj = null;
 
-/////function to sort table column
-function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
+//listeners for sorting
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
+
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_obj.state.sortBy !== key) {
+        sortOrder = 'ASC';
+    } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'DESC') {
+        sortBy = sortOrder = null;
+    }
+
+    this_obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_obj.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: this_obj.state.selectedComp, offset: this_obj.state.offsetData, sortBy: sortBy, sortOrder: sortOrder })
 }
 
 const columns = [
-
     {
         title: 'First Name',
         dataIndex: 'firstName',
         key: 'firstsName',
-        sorter: (a, b) => tableSort(a, b, "firstName"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (firstName, record) =>
             <NavLink to={{
                 pathname: '/userPersonal',
@@ -48,7 +62,8 @@ const columns = [
         title: 'Last Name',
         dataIndex: 'lastName',
         key: 'lastName',
-        sorter: (a, b) => tableSort(a, b, "lastName"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (lastName, record) =>
             <NavLink to={{
                 pathname: '/userPersonal',
@@ -61,19 +76,22 @@ const columns = [
         title: 'Email',
         dataIndex: 'email',
         key: 'email',
-        sorter: (a, b) => tableSort(a, b, "email")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Contact No',
         dataIndex: 'mobileNumber',
         key: 'mobileNumber',
-        sorter: (a, b) => tableSort(a, b, "mobileNumber"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Organisation',
         dataIndex: 'linkedEntity',
         key: 'linkedEntity',
-        sorter: (a, b) => tableSort(a, b, "linkedEntity"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("linkedEntityName"),
         render: (linkedEntity, record) => {
 
             return (
@@ -130,8 +148,10 @@ class Umpire extends Component {
             selectedComp: null,
             loading: false,
             competitionUniqueKey: null,
-            compArray: []
+            compArray: [],
+            offsetData: 0
         }
+        this_obj = this
     }
 
     componentDidMount() {
@@ -194,6 +214,9 @@ class Umpire extends Component {
     /// Handle Page change
     handlePageChnage(page) {
         let offset = page ? 10 * (page - 1) : 0;
+        this.setState({
+            offsetData: offset
+        })
         this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: this.state.selectedComp, offset: offset })
     }
 

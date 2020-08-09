@@ -151,6 +151,7 @@ import HelpAndSupport from "./Support";
 import RegistrationChange from "../components/registration/registrationChange";
 import MultifieldDraws from "../components/competition/multifieldDraws";
 import RegistrationChangeReview from "../components/registration/registrationChangeReview"
+import TeamRegistrations from "../components/registration/teamRegistrations"
 
 import lazyLoad from "../components/lazyLoad";
 
@@ -787,6 +788,7 @@ class Routes extends React.Component {
         <PrivateRoute path="/account" component={lazyLoad(Account)} />
         <PrivateRoute path="/support" component={lazyLoad(HelpAndSupport)} />
         <PrivateRoute path="/registrationChangeReview" component={lazyLoad(RegistrationChangeReview)} />
+        <PrivateRoute path='/teamRegistrations' component={lazyLoad(TeamRegistrations)} />
 
         <Route path="/" component={lazyLoad(NotFound)} />
 

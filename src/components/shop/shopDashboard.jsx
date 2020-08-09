@@ -59,7 +59,7 @@ class ShopDashboard extends Component {
             id: 1, name: "T-Shirt"
         }]
         return (
-            <div className="comp-player-grades-header-drop-down-view mt-4">
+            <div className="comp-player-grades-header-drop-down-view mt-4"style={{ paddingTop:'0px'}}>
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm-4 pt-1" >
@@ -120,7 +120,7 @@ class ShopDashboard extends Component {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
                 <div className="fluid-width" >
-                    <div className="row reg-filter-row" >
+                    <div className="row reg-filter-row" style={{ marginLeft:'0px'}} >
 
                         <div className="reg-col" >
                             <div className="reg-filter-col-cont">
@@ -135,11 +135,11 @@ class ShopDashboard extends Component {
                             </div>
                         </div>
 
-                        <div className="reg-col mr-3" >
+                        <div className="reg-col mr-5" >
                             <div className="reg-filter-col-cont">
-                                <div className='year-select-heading'>{AppConstants.productTypes} :</div>
+                                <div className='year-select-heading' style={{width: 200}}>{AppConstants.productType} :</div>
                                 <Select
-                                    style={{ minWidth: 160 }}
+                                    style={{ minWidth: 115 }}
                                     value={"All"}
                                     className="year-select reg-filter-select1 ml-2" >
                                     <Option key={"all"} value="all">{"All"}</Option>

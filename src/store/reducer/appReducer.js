@@ -143,7 +143,7 @@ function appState(state = initialState, action) {
 
 
     /////get the common year list reference
-    case ApiConstants.API_YEAR_LIST__LOAD:
+    case ApiConstants.API_YEAR_LIST_LOAD:
       state.competitionTypeList = [];
       return { ...state, onLoad: true };
 
@@ -157,7 +157,7 @@ function appState(state = initialState, action) {
       };
 
     /////get the common year list reference
-    case ApiConstants.API_ONLY_YEAR_LIST__LOAD:
+    case ApiConstants.API_ONLY_YEAR_LIST_LOAD:
       state.competitionTypeList = [];
       return { ...state, onLoad: true };
 
@@ -170,7 +170,7 @@ function appState(state = initialState, action) {
       };
 
     /////get the common membership product validity type list reference
-    case ApiConstants.API_PRODUCT_VALIDITY_LIST__LOAD:
+    case ApiConstants.API_PRODUCT_VALIDITY_LIST_LOAD:
       return { ...state, onLoad: true };
 
     case ApiConstants.API_PRODUCT_VALIDITY_LIST_SUCCESS:
@@ -182,7 +182,7 @@ function appState(state = initialState, action) {
       };
 
     /////get the common Competition type list reference
-    case ApiConstants.API_COMPETITION_TYPE_LIST__LOAD:
+    case ApiConstants.API_COMPETITION_TYPE_LIST_LOAD:
       state.competitionTypeList = [];
       return { ...state, onLoad: true };
 
@@ -196,7 +196,7 @@ function appState(state = initialState, action) {
       };
 
     ///get the common Membership Product Fees Type
-    case ApiConstants.API_COMMON_MEMBERSHIP_PRODUCT_FEES_TYPE__LOAD:
+    case ApiConstants.API_COMMON_MEMBERSHIP_PRODUCT_FEES_TYPE_LOAD:
       return { ...state, onLoad: true };
 
     case ApiConstants.API_COMMON_MEMBERSHIP_PRODUCT_FEES_TYPE_SUCCESS:
@@ -234,7 +234,7 @@ function appState(state = initialState, action) {
     //   };
 
     ////get commom reference discount type
-    case ApiConstants.API_COMMON_DISCOUNT_TYPE__LOAD:
+    case ApiConstants.API_COMMON_DISCOUNT_TYPE_LOAD:
       return { ...state, onLoad: true };
 
     case ApiConstants.API_COMMON_DISCOUNT_TYPE_SUCCESS:

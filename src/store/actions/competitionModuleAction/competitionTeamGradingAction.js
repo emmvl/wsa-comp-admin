@@ -92,7 +92,7 @@ function saveUpdatedGradeTeamSummaryAction(payload) {
 }
 
 
-///////team grading summmary publish
+///////team grading summary publish
 function publishGradeTeamSummaryAction(yearRefId, competitionId) {
     const action = {
         type: ApiConstants.API_PUBLISH_TEAM_GRADING_SUMMARY_LOAD,
@@ -101,7 +101,7 @@ function publishGradeTeamSummaryAction(yearRefId, competitionId) {
     return action;
 }
 
-//////team grading summmary on Change table data
+//////team grading summary on Change table data
 function onchangeTeamGradingSummaryData(value, index, key) {
     const action = {
         type: ApiConstants.ONCHANGE_COMPETITION_TEAM_GRADING_SUMMARY_DATA,

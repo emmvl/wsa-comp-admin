@@ -625,8 +625,13 @@ class CompetitionQuickCompetition extends Component {
                     <div className="col-sm-3 " >
                         <Form.Item >
                             {getFieldDecorator('competition_name',
-                                { rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }] })(
+                                {
+                                    rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }, {
+                                        type: "compName"
+                                    }]
+                                })(
                                     <InputWithHead
+                                        auto_Complete="new-compName"
                                         required={"required-field pb-0 pt-0"}
                                         placeholder={AppConstants.competition_name}
                                         onChange={(e) => this.props.updateQuickCompetitionData(
@@ -849,6 +854,7 @@ class CompetitionQuickCompetition extends Component {
                     {/* <div className="comp-draw-head-content-view"> */}
                     {this.headerView(getFieldDecorator)}
                     <Form
+                        autoComplete="off"
                         onSubmit={this.saveAPIsActionCall}
                         noValidate="noValidate"
                     >

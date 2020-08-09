@@ -1,15 +1,20 @@
-import { put, call } from '../../../../node_modules/redux-saga/effects';
-import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
-import ApiConstants from '../../../themes/apiConstants';
+import { put, call } from "redux-saga/effects";
 import { message } from "antd";
+
+import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
+import ApiConstants from "../../../themes/apiConstants";
 import history from "../../../util/history";
 import userHttpApi from "../../http/userHttp/userAxiosApi"
+import AppConstants from "../../../themes/appConstants";
 
 function* failSaga(result) {
     yield put({ type: ApiConstants.API_LIVE_SCORE_SCORER_LIST_FAIL });
-    setTimeout(() => {
-        message.error(result.message)
-    }, 800);
+    let msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong
+    message.config({
+        duration: 1.5,
+        maxCount: 1,
+    });
+    message.error(msg);
 }
 
 function* errorSaga(error) {
@@ -19,37 +24,45 @@ function* errorSaga(error) {
         status: error.status,
     });
 
-    setTimeout(() => {
-        message.error(error ? error.error ? error.error : "Something went wrong." : "Something went wrong.");
-        // message.error("Something went wrong.");
-    }, 800);
+    if (error.status == 400) {
+
+        message.config({
+            duration: 1.5,
+            maxCount: 1,
+        });
+        message.error((error && error.error) ? error.error : AppConstants.somethingWentWrong);
+    } else {
+        message.config({
+            duration: 1.5,
+            maxCount: 1,
+        });
+        message.error(AppConstants.somethingWentWrong);
+    }
 }
 
 //// get manager list
 export function* liveScoreScorerListSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreScorerList, action.competitionId, action.roleId, action.body, action.search)
-        if (result.status == 1) {
+        const result = yield call(LiveScoreAxiosApi.liveScoreScorerList, action.competitionId, action.roleId, action.body, action.search, action.sortBy, action.sortOrder);
+        if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_SCORER_LIST_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });
         } else {
-            yield call(failSaga, result)
+            yield call(failSaga, result);
         }
     } catch (error) {
-        yield call(errorSaga, error)
+        yield call(errorSaga, error);
     }
 }
 
 //// Add/Edit Scorer Saga
-//// Add/Edit Scorer Saga
 export function* liveScoreAddEditScorerSaga(action) {
-
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreAddEditScorer, action.body, action.teamId, action.existingScorerId)
-        if (result.status == 1) {
+        if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_SCORER_SUCCESS,
                 result: result.result.data,
@@ -61,9 +74,6 @@ export function* liveScoreAddEditScorerSaga(action) {
             } else {
                 history.push('/liveScoreAssignMatch', { record: result.result.data })
             }
-
-
-
         } else {
             yield call(failSaga, result)
         }
@@ -73,16 +83,14 @@ export function* liveScoreAddEditScorerSaga(action) {
 }
 
 export function* liveScoreAssigneMatches(action) {
-
     try {
         const result = yield call(LiveScoreAxiosApi.getAssignMatchesList, action.competitionId, action.teamId, action.body)
-        if (result.status == 1) {
+        if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVESCORE_ASSIGN_MATCHES_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });
-
         } else {
             yield call(failSaga, result)
         }
@@ -93,10 +101,9 @@ export function* liveScoreAssigneMatches(action) {
 
 // Assign Match saga
 export function* liveScoreChangeAssignStatus(action) {
-
     try {
         const result = yield call(LiveScoreAxiosApi.changeAssignStatus, action.roleId, action.records, action.teamID, action.teamkey, action.scorer_Id)
-        if (result.status == 1) {
+        if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVESCORE_ASSIGN_CHANGE_STATUS_SUCCESS,
                 result: result.result.data,
@@ -113,14 +120,11 @@ export function* liveScoreChangeAssignStatus(action) {
     }
 }
 
-
-// Unassign Matech status
-
+// Unassign Match status
 export function* liveScoreUnAssignMatcheSaga(action) {
-
     try {
         const result = yield call(LiveScoreAxiosApi.unAssignMatcheStatus, action.records)
-        if (result.status == 1) {
+        if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVESCORE_ASSIGN_CHANGE_STATUS_SUCCESS,
                 result: result.result.data,
@@ -138,12 +142,10 @@ export function* liveScoreUnAssignMatcheSaga(action) {
 }
 
 // Scorer search api saga
-
 export function* liveScoreScorerSearchSaga(action) {
-
     try {
         const result = yield call(userHttpApi.scorerSearchApi, action.roleId, action.entityTypeId, action.competitionId, action.searchText)
-        if (result.status == 1) {
+        if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVESCORE_SCORER_SEARCH_SUCCESS,
                 result: result.result.data,

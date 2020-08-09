@@ -88,6 +88,30 @@
     border: 1px solid rgb(212, 212, 212);
 }
 
+.order-summ-drop-down-padding {
+    padding-left: 1.4%;
+    padding-right: 1.8%;
+}
+
+.shop-decription-editor-main-div{
+    border-radius: 4px;
+}
+.dragDropLeft {
+    border-radius: 4px;
+    padding-bottom: 18px;
+    margin-bottom: 10px;
+
+
+}
+.livescore-editor-news:hover{
+    border-radius: 4px;
+
+}
+
+.notranslate.public-DraftEditor-content {
+    color: #000;
+}
+
 @media (max-width: 767px) {
     .shop-product-content-div{
         justify-content: center;
@@ -98,4 +122,14 @@
     .remove-cross-img-div{
         padding-bottom: 21px;
     }
+
 }
+@media only screen and (max-width: 991px) and (min-width: 600px) {
+   .order-summary-dropdown-view .reg-col {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+} 
+
+
+

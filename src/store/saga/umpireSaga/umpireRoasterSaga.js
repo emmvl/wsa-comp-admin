@@ -1,36 +1,32 @@
-import { put, call } from '../../../../node_modules/redux-saga/effects'
+import { put, call } from "redux-saga/effects"
 import ApiConstants from "../../../themes/apiConstants";
 import UserAxiosApi from "../../http/userHttp/userAxiosApi";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 import { message } from "antd";
 import history from "../../../util/history";
+import AppConstants from "../../../themes/appConstants";
 
 function* failSaga(result) {
-    console.log("failSaga", result.message)
     yield put({ type: ApiConstants.API_UMPIRE_FAIL });
-    setTimeout(() => {
-        message.config({
-            duration: 1.5,
-            maxCount: 1
-        })
-        message.error(result.message)
-    }, 800);
+    let msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong
+    message.config({
+        duration: 1.5,
+        maxCount: 1,
+    });
+    message.error(msg);
 }
 
 function* errorSaga(error) {
-    console.log("errorSaga", error)
     yield put({
         type: ApiConstants.API_UMPIRE_ERROR,
         error: error,
         status: error.status
     });
-    setTimeout(() => {
-        message.config({
-            duration: 1.5,
-            maxCount: 1
-        })
-        message.error(error.error);
-    }, 800);
+    message.config({
+        duration: 1.5,
+        maxCount: 1,
+    });
+    message.error(AppConstants.somethingWentWrong);
 }
 
 export function* umpireRoasterListSaga(action) {
@@ -39,7 +35,8 @@ export function* umpireRoasterListSaga(action) {
             action.competitionID,
             action.status,
             action.refRoleId,
-            action.paginationBody);
+            action.paginationBody, action.sortBy,
+            action.sortOrder);
 
         if (result.status === 1) {
             yield put({

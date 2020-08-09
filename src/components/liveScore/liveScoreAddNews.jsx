@@ -259,7 +259,8 @@ class LiveScoreAddNews extends Component {
     ////method to setimage
     setImage = (data) => {
 
-        console.log(data,'imageSelection~~~~~~')
+        this.setState({imageSelection:null,image:null})
+        this.props.liveScoreUpdateNewsAction(null, "newsImage")
 
         const { liveScoreNewsState } = this.props;
         let editData = liveScoreNewsState.addEditNews;
@@ -296,6 +297,10 @@ class LiveScoreAddNews extends Component {
     setVideo = (data) => {
         const { liveScoreNewsState } = this.props;
         let editData = liveScoreNewsState.addEditNews;
+
+        this.setState({ video: null, videoSelection: '', crossVideoIcon: false })
+        this.props.liveScoreUpdateNewsAction(null, "newsVideo")
+
         if (data.files[0] !== undefined) {
 
             if (data.files[0].size > AppConstants.video_size) {
@@ -467,9 +472,6 @@ class LiveScoreAddNews extends Component {
         let expiryTime = expire_time
         let expiryTime_formate = expiryTime ? moment(expiryTime).format("HH:mm") : null;
         let stateWideMsg = getKeyForStateWideMessage()
-
-        console.log(this.state.imageSelection,'imageSelection',this.state.videoSelection)
-
         return (
             <div className="content-view pt-4">
                 <Form.Item >

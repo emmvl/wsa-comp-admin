@@ -122,8 +122,9 @@ class LiveScoreTeamAttendance extends Component {
             selectStatus: "All",
             competitionId: null,
             searchText: "",
-            selectedDivision:"All",
-            selectedRound:"All"
+            selectedDivision: "All",
+            selectedRound: "All",
+            divisionLoad: false
         }
     }
 
@@ -137,13 +138,24 @@ class LiveScoreTeamAttendance extends Component {
             },
         }
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ competitionId: id })
+        this.setState({ competitionId: id, divisionLoad: true })
         if (id !== null) {
             this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus)
             this.props.getLiveScoreDivisionList(id)
-            this.props.liveScoreRoundListAction(id)
+
         } else {
             history.pushState('/')
+        }
+    }
+
+    componentDidUpdate(nextProps) {
+        if (nextProps.liveScoreTeamAttendanceState !== this.props.liveScoreTeamAttendanceState) {
+            if (this.props.liveScoreTeamAttendanceState.onDivisionLoad === false && this.state.divisionLoad === true) {
+
+                this.props.liveScoreRoundListAction(this.state.competitionId, this.state.selectedDivision == 'All' ? "" : this.state.selectedDivision)
+                this.setState({ divisionLoad: false })
+
+            }
         }
     }
 
@@ -212,12 +224,6 @@ class LiveScoreTeamAttendance extends Component {
                 },
                 "search": e.target.value
             }
-            // if (this.state.selectStatus == 'All') {
-            //     this.props.liveScoreTeamAttendanceListAction(id, body)
-            // } else {
-            //     this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
-            // }
-
             this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
 
         }
@@ -236,11 +242,6 @@ class LiveScoreTeamAttendance extends Component {
                 },
                 "search": e.target.value
             }
-            // if (this.state.selectStatus == 'All') {
-            //     this.props.liveScoreTeamAttendanceListAction(id, body)
-            // } else {
-            //     this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
-            // }
 
             this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
         }
@@ -260,11 +261,6 @@ class LiveScoreTeamAttendance extends Component {
                 },
                 "search": this.state.searchText
             }
-            // if (this.state.selectStatus == 'All') {
-            //     this.props.liveScoreTeamAttendanceListAction(id, body)
-            // } else {
-            //     this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
-            // }
 
             this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
         }
@@ -351,18 +347,20 @@ class LiveScoreTeamAttendance extends Component {
     }
 
     onChangeDivision(division) {
-    
-        this.setState({ selectedDivision: division })
+
+        this.props.liveScoreRoundListAction(this.state.competitionId, division == 'All' ? "" : division)
+        this.setState({ selectedDivision: division, selectedRound: 'All' })
     }
 
     onChangeRound(roundName) {
-       
+
         this.setState({ selectedRound: roundName })
     }
 
-      ///dropdown view containing all the dropdown of header
-      dropdownView = () => {
+    ///dropdown view containing all the dropdown of header
+    dropdownView = () => {
         let { divisionList, roundList } = this.props.liveScoreTeamAttendanceState
+        console.log(divisionList, 'divisionList')
         let divisionListArr = isArrayNotEmpty(divisionList) ? divisionList : []
         let roundListArr = isArrayNotEmpty(roundList) ? roundList : []
         return (
@@ -407,15 +405,15 @@ class LiveScoreTeamAttendance extends Component {
 
                     <div className="col-sm" style={{ display: "flex", justifyContent: 'flex-end', alignItems: "center" }}>
                         <div className="comp-product-search-inp-width pb-3">
-                        <Input className="product-reg-search-input"
-                            onChange={(e) => this.onChangeSearchText(e)}
-                            placeholder="Search..."
-                            onKeyPress={(e) => this.onKeyEnterSearchText(e)}
-                            prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                onClick={() => this.onClickSearchIcon()}
-                            />}
-                            allowClear
-                        />
+                            <Input className="product-reg-search-input"
+                                onChange={(e) => this.onChangeSearchText(e)}
+                                placeholder="Search..."
+                                onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                    onClick={() => this.onClickSearchIcon()}
+                                />}
+                                allowClear
+                            />
                         </div>
                     </div>
                 </div>

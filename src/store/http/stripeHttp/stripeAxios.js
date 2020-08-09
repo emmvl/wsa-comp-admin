@@ -4,6 +4,7 @@ import { getUserId, getAuthToken, getOrganisationData } from "../../../util/sess
 import history from "../../../util/history";
 import { message } from "antd";
 import ValidationConstants from "../../../themes/validationConstant";
+import competitionHttp from "../competitionHttp/competitionHttp";
 
 async function logout() {
     await localStorage.clear();
@@ -118,7 +119,7 @@ let AxiosApi = {
     },
 
     //get payment list 
-    async  getPaymentList(offset) {
+    async getPaymentList(offset) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
@@ -130,6 +131,22 @@ let AxiosApi = {
         };
         var url = `/api/payments/transactions`;
         return Method.dataPost(url, token, body);
+    },
+    async exportPaymentApi(key) {
+
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        var url
+        if (key == "paymentDashboard") {
+            url = `/api/payments/dashboard/export?organisationUniqueKey=${organisationUniqueKey}`;
+        }
+        else if (key == "payout") {
+            url = `/api/payments/gateway/export?organisationUniqueKey=${organisationUniqueKey}&type=payout`
+        }
+        else if (key == "transfer") {
+            url = `/api/payments/gateway/export?organisationUniqueKey=${organisationUniqueKey}&type=transfer`
+        }
+        return Method.dataGetDownload(url, token, key);
     }
 
 };
@@ -204,6 +221,9 @@ const Method = {
                 });
         });
     },
+
+
+
 
 
 
@@ -349,7 +369,84 @@ const Method = {
                     }
                 });
         });
-    }
+    },
+    async dataGetDownload(newurl, authorization, fileName) {
+        const url = newurl;
+        return await new Promise((resolve, reject) => {
+            http
+                .get(url, {
+                    responseType: 'arraybuffer',
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/csv",
+                        Authorization: "BWSA " + authorization,
+                        "Access-Control-Allow-Origin": "*",
+                        "SourceSystem": "WebAdmin"
+                    }
+                })
+
+                .then(result => {
+                    if (result.status === 200) {
+                        const url = window.URL.createObjectURL(new Blob([result.data]));
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', fileName + '.csv'); //or any other extension
+                        document.body.appendChild(link);
+                        link.click();
+                        return resolve({
+                            status: 1,
+                            result: result
+                        });
+                    }
+                    else if (result.status == 212) {
+                        return resolve({
+                            status: 4,
+                            result: result
+                        });
+                    }
+                    else {
+                        if (result) {
+                            return reject({
+                                status: 3,
+                                error: result.data.message,
+                            });
+                        } else {
+                            return reject({
+                                status: 4,
+                                error: "Something went wrong."
+                            });
+                        }
+                    }
+                })
+                .catch(err => {
+                    if (err.response) {
+                        if (err.response.status !== null && err.response.status !== undefined) {
+                            if (err.response.status == 401) {
+                                let unauthorizedStatus = err.response.status
+                                if (unauthorizedStatus == 401) {
+                                    logout()
+                                    message.error(ValidationConstants.messageStatus401)
+                                }
+                            }
+                            else {
+                                return reject({
+                                    status: 5,
+                                    error: err
+                                })
+
+                            }
+                        }
+                    }
+                    else {
+                        return reject({
+                            status: 5,
+                            error: err
+                        });
+
+                    }
+                });
+        });
+    },
 };
 
 

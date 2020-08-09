@@ -2131,10 +2131,11 @@ class RegistrationCompetitionFee extends Component {
       item.applyDiscount = parseInt(item.applyDiscount);
       if (item.amount !== null) {
         if (item.amount.length > 0) {
-          item.amount = parseInt(item.amount);
-        } else {
-          item['amount'] = null;
-        }
+          item.amount = parseInt(item.amount); 
+		} 
+        // else {
+        //   item['amount'] = null;
+        // }
       } else {
         item['amount'] = null;
       }
@@ -3236,6 +3237,7 @@ class RegistrationCompetitionFee extends Component {
         <div className="row">
           <div className="col-sm">
             <InputWithHead
+              auto_Complete="new-name"
               placeholder={AppConstants.name}
               value={item.name}
               onChange={(e) =>
@@ -3373,6 +3375,7 @@ class RegistrationCompetitionFee extends Component {
             ],
           })(
             <InputWithHead
+              auto_Complete="new-competitionName"
               required={'required-field pb-0 '}
               heading={AppConstants.competition_name}
               placeholder={AppConstants.competition_name}
@@ -3741,6 +3744,7 @@ class RegistrationCompetitionFee extends Component {
           <div className="row">
             <div className="col-sm" style={{ marginTop: 5 }}>
               <InputWithHead
+                auto_Complete="new-days"
                 placeholder={AppConstants.days}
                 value={detailsData.competitionDetailData.roundInDays}
                 onChange={(e) =>
@@ -3754,6 +3758,7 @@ class RegistrationCompetitionFee extends Component {
             </div>
             <div className="col-sm" style={{ marginTop: 5 }}>
               <InputWithHead
+                auto_Complete="new-hours"
                 placeholder={AppConstants.hours}
                 value={detailsData.competitionDetailData.roundInHours}
                 onChange={(e) =>
@@ -3767,6 +3772,7 @@ class RegistrationCompetitionFee extends Component {
             </div>
             <div className="col-sm" style={{ marginTop: 5 }}>
               <InputWithHead
+                auto_Complete="new-mins"
                 placeholder={AppConstants.mins}
                 value={detailsData.competitionDetailData.roundInMins}
                 onChange={(e) =>
@@ -3830,6 +3836,7 @@ class RegistrationCompetitionFee extends Component {
           <div className="row">
             <div className="col-sm" style={{ marginTop: 5 }}>
               <InputWithHead
+                auto_Complete="new-minNumber"
                 placeholder={AppConstants.minNumber}
                 value={detailsData.competitionDetailData.minimunPlayers}
                 onChange={(e) =>
@@ -3843,6 +3850,7 @@ class RegistrationCompetitionFee extends Component {
             </div>
             <div className="col-sm" style={{ marginTop: 5 }}>
               <InputWithHead
+                auto_Complete="new-maxNumber"
                 placeholder={AppConstants.maxNumber}
                 value={detailsData.competitionDetailData.maximumPlayers}
                 onChange={(e) =>
@@ -5044,6 +5052,7 @@ class RegistrationCompetitionFee extends Component {
                 ],
               })(
                 <InputWithHead
+                  auto_Complete="new-title"
                   heading={AppConstants.title}
                   placeholder={AppConstants.title}
                   // value={charityTitle}
@@ -5191,6 +5200,7 @@ class RegistrationCompetitionFee extends Component {
             <div className="row">
               <div className="col-sm">
                 <InputWithHead
+                  auto_Complete="new-number"
                   heading={AppConstants.percentageOff_FixedAmount}
                   placeholder={AppConstants.percentageOff_FixedAmount}
                   onChange={(e) =>
@@ -5206,6 +5216,7 @@ class RegistrationCompetitionFee extends Component {
               </div>
               <div className="col-sm">
                 <InputWithHead
+                  auto_Complete="new-description"
                   heading={AppConstants.description}
                   placeholder={AppConstants.gernalDiscount}
                   onChange={(e) =>
@@ -5281,6 +5292,7 @@ class RegistrationCompetitionFee extends Component {
               })}
             </Select>
             <InputWithHead
+              auto_Complete="new-code"
               heading={AppConstants.code}
               placeholder={AppConstants.code}
               onChange={(e) => this.onChangeDiscountCode(e.target.value, index)}
@@ -5290,6 +5302,7 @@ class RegistrationCompetitionFee extends Component {
             <div className="row">
               <div className="col-sm">
                 <InputWithHead
+                  auto_Complete="new-number"
                   heading={AppConstants.percentageOff_FixedAmount}
                   placeholder={AppConstants.percentageOff_FixedAmount}
                   onChange={(e) =>
@@ -5305,6 +5318,7 @@ class RegistrationCompetitionFee extends Component {
               </div>
               <div className="col-sm">
                 <InputWithHead
+                  auto_Complete="new-description"
                   heading={AppConstants.description}
                   placeholder={AppConstants.gernalDiscount}
                   onChange={(e) =>
@@ -5383,6 +5397,7 @@ class RegistrationCompetitionFee extends Component {
                       }
                     )(
                       <InputWithHead
+                        auto_Complete="new-child"
                         heading={`Child ${childindex + 1}%`}
                         placeholder={`Child ${childindex + 1}%`}
                         onChange={(e) =>
@@ -5462,6 +5477,7 @@ class RegistrationCompetitionFee extends Component {
             <div className="row">
               <div className="col-sm">
                 <InputWithHead
+                  auto_Complete="new-percentageOff"
                   heading={AppConstants.percentageOff_FixedAmount}
                   placeholder={AppConstants.percentageOff_FixedAmount}
                   onChange={(e) =>
@@ -5473,6 +5489,7 @@ class RegistrationCompetitionFee extends Component {
               </div>
               <div className="col-sm">
                 <InputWithHead
+                  auto_Complete="new-gernalDiscount"
                   heading={AppConstants.description}
                   placeholder={AppConstants.gernalDiscount}
                   onChange={(e) =>
@@ -5531,6 +5548,7 @@ class RegistrationCompetitionFee extends Component {
         return (
           <div>
             <InputWithHead
+              auto_Complete="new-description"
               heading={AppConstants.description}
               placeholder={AppConstants.description}
               onChange={(e) => this.onChangeDescription(e.target.value, index)}
@@ -5538,6 +5556,7 @@ class RegistrationCompetitionFee extends Component {
               disabled={this.checkDiscountDisable(item.organisationId)}
             />
             <InputWithHead
+              auto_Complete="new-question"
               heading={AppConstants.question}
               placeholder={AppConstants.question}
               onChange={(e) => this.onChangeQuestion(e.target.value, index)}
@@ -6112,7 +6131,7 @@ class RegistrationCompetitionFee extends Component {
         />
         <InnerHorizontalMenu menu={'registration'} regSelectedKey={'7'} />
         <Layout>
-          <Form onSubmit={this.saveAPIsActionCall} noValidate="noValidate">
+          <Form autoComplete="off" onSubmit={this.saveAPIsActionCall} noValidate="noValidate">
             {this.headerView()}
             {this.dropdownView(getFieldDecorator)}
             <Content>

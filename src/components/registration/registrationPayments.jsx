@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
     accountBalanceAction, saveStripeAccountAction,
-    getStripeLoginLinkAction, getStripeTransferListAction,
+    getStripeLoginLinkAction, getStripeTransferListAction, exportPaymentApi
 } from "../../store/actions/stripeAction/stripeAction";
 import { getOrganisationData } from "../../util/sessionStorage";
 import { currencyFormat } from "../../util/currencyFormat";
@@ -145,6 +145,10 @@ class RegistrationPayments extends Component {
         });
     };
 
+    //on export button click
+    onExport() {
+        this.props.exportPaymentApi("transfer")
+    }
 
     ///////view for breadcrumb
     headerView = () => {
@@ -180,7 +184,9 @@ class RegistrationPayments extends Component {
                                         justifyContent: "flex-end"
                                     }}
                                 >
-                                    <Button className="primary-add-comp-form" type="primary">
+                                    <Button
+                                        onClick={() => this.onExport()}
+                                        className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img
@@ -210,7 +216,7 @@ class RegistrationPayments extends Component {
                     <InputWithHead required={"pt-0"} heading={AppConstants.year} />
                     <Select
                         className="reg-payment-select"
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182, maxHeight: 60, minHeight: 44 }}
+                        style={{ width: "100%", paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
                         onChange={(year) => this.setState({ year })}
                         value={this.state.year}
                     >
@@ -226,7 +232,7 @@ class RegistrationPayments extends Component {
 
                     <Select
                         className="reg-payment-select"
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
                         onChange={(competition) => this.setState({ competition })}
                         value={this.state.competition}
                     >
@@ -242,7 +248,7 @@ class RegistrationPayments extends Component {
                     <InputWithHead required={"pt-0"} heading={AppConstants.paymentFor} />
                     <Select
                         className="reg-payment-select"
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
                         onChange={(paymentFor) => this.setState({ paymentFor })}
                         value={this.state.paymentFor}
                     >
@@ -259,7 +265,7 @@ class RegistrationPayments extends Component {
                     <DatePicker
                         className="reg-payment-datepicker"
                         size="large"
-                        style={{ width: "100%" }}
+                        style={{ width: "100%", minWidth: 160 }}
                         onChange={date => this.dateOnChangeFrom(date)}
                         format={'DD-MM-YYYY'}
                         showTime={false}
@@ -271,12 +277,11 @@ class RegistrationPayments extends Component {
                     <DatePicker
                         className="reg-payment-datepicker"
                         size="large"
-                        style={{ width: "100%" }}
+                        style={{ width: "100%", minWidth: 160 }}
                         onChange={date => this.dateOnChangeTo(date)}
                         format={'DD-MM-YYYY'}
                         showTime={false}
                         placeholder={"dd-mm-yyyy"}
-
                     />
                 </div>
             </div>
@@ -590,6 +595,7 @@ function mapDispatchToProps(dispatch) {
         saveStripeAccountAction,
         getStripeLoginLinkAction,
         getStripeTransferListAction,
+        exportPaymentApi
     }, dispatch)
 }
 

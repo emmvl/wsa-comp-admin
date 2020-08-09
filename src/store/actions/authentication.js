@@ -3,14 +3,14 @@ import ApiConstants from "../../themes/apiConstants";
 function loginAction(payload) {
   return {
     type: ApiConstants.API_LOGIN_LOAD,
-    payload: payload
+    payload
   };
 }
 
 function qrSubmitAction(payload) {
   return {
     type: ApiConstants.API_QR_CODE_LOAD,
-    payload: payload
+    payload
   };
 }
 

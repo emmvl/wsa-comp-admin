@@ -49,7 +49,7 @@ export default function liveScoreCompetition(state = initialState, payload) {
 
         //LIve score year reducer 
 
-        case ApiConstants.API_ONLY_YEAR_LIST__LOAD:
+        case ApiConstants.API_ONLY_YEAR_LIST_LOAD:
             return { ...state, loader: true };
 
         case ApiConstants.API_ONLY_YEAR_LIST_SUCCESS:

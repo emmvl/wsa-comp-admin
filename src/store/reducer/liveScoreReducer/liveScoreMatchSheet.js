@@ -25,6 +25,7 @@ function liveScoreMatchSheetState(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_LOAD:
             return { ...state, onDivisionLoad: true };
+
         case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_SUCCESS:
             let divisionArray = JSON.parse(JSON.stringify(action.result))
             state.allDivisionData = JSON.parse(JSON.stringify(action.result))

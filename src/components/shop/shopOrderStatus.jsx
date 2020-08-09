@@ -12,8 +12,8 @@ const { SubMenu } = Menu
 const { Option } = Select
 
 function tableSort(a, b, key) {
-    let stringA = JSON.stringify(key[a])
-    let stringB = JSON.stringify(key[b])
+    let stringA = JSON.stringify(a[key])
+    let stringB = JSON.stringify(b[key])
     return stringA.localeCompare(stringB)
 }
 
@@ -185,7 +185,7 @@ class ShopOrderStatus extends Component {
 
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-drop-down-view mt-4">
+            <div className="comp-player-grades-header-drop-down-view mt-4 pt-2">
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
@@ -248,13 +248,13 @@ class ShopOrderStatus extends Component {
 
     dropdownView = () => {
         return (
-            <div className="comp-player-grades-header-drop-down-view mt-1">
+            <div className="comp-player-grades-header-drop-down-view mt-1 order-summ-drop-down-padding order-summary-dropdown-view">
                 <div className="fluid-width" >
                     <div className="row reg-filter-row" >
 
-                        <div className="reg-col" >
+                        <div className="reg-col col-md-4 col-sm-6" >
                             <div className="reg-filter-col-cont">
-                                <div className='year-select-heading'>{AppConstants.year} :</div>
+                                <div style={{width:120}}  className='year-select-heading'>{AppConstants.year} :</div>
                                 <Select
                                     style={{ minWidth: 160 }}
                                     onChange={(year) => this.onChangeYear({ year })}
@@ -266,9 +266,9 @@ class ShopOrderStatus extends Component {
                             </div>
                         </div>
 
-                        <div className="reg-col" >
+                        <div className="reg-col col-md-4 col-sm-6" >
                             <div className="reg-filter-col-cont">
-                                <div className='year-select-heading'>{AppConstants.paymentStatus} :</div>
+                                <div style={{width:180}} className='year-select-heading'>{AppConstants.paymentStatus} :</div>
                                 <Select
                                     style={{ minWidth: 160 }}
                                     onChange={(paymentStatus) => this.onChangePaymentStatus({ paymentStatus })}
@@ -282,9 +282,9 @@ class ShopOrderStatus extends Component {
 
 
 
-                        <div className="reg-col" >
+                        <div className="reg-col col-md-4 col-sm-6" >
                             <div className="reg-filter-col-cont" >
-                                <div className='year-select-heading'>{AppConstants.fullFillmentStatus} :</div>
+                                <div style={{width:180}} className='year-select-heading'>{AppConstants.fullFillmentStatus} :</div>
                                 <Select
                                     //  mode="multiple"
                                     className="year-select reg-filter-select mr-3"

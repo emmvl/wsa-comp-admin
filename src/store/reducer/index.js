@@ -69,6 +69,7 @@ import RegistrationChangeState from "./registrationReducer/registrationChangeRed
 import ShopSettingState from "./shopReducer/shopSettingReducer";
 import InnerHorizontalState from "./liveScoreReducer/liveScoreInnerHorizontalReducer";
 import LiveScorePositionTrackState from "./liveScoreReducer/liveScorePositionTrackReducer";
+import ShopOrderSummaryState from "./shopReducer/orderSummaryReducer";
 import SupportState from "./supportReducer";
 
 const rootReducer = combineReducers({
@@ -133,6 +134,7 @@ const rootReducer = combineReducers({
   ShopSettingState,
   InnerHorizontalState,
   LiveScorePositionTrackState,
+  ShopOrderSummaryState,
   SupportState,
 });
 
