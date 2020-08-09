@@ -501,6 +501,7 @@ class DashboardLayout extends React.Component {
               filterOption={(input, option) =>
                 option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
+              loading={this.props.userState.onLoad}
             >
               {(this.props.userState.venueOrganisation || []).map((org, dIndex) => (
                 <Option key={org.id} value={org.id}>{org.name}</Option>
