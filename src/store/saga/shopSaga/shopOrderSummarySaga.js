@@ -56,6 +56,25 @@ function* getOrderSummaryListingSaga(action) {
   }
 }
 
+// //// //////export order summary  API 
+function* exportOrderSummarySaga(action) {
+  try {
+    const result = yield call(AxiosApi.exportOrderSummary, action.params);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_EXPORT_ORDER_SUMMARY_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield call(failSaga, result)
+    }
+  } catch (error) {
+    yield call(errorSaga, error)
+  }
+}
 export default function* rootShopOrderSummarySaga() {
   yield takeEvery(ApiConstants.API_GET_SHOP_ORDER_SUMMARY_LISTING_LOAD, getOrderSummaryListingSaga);
+  yield takeEvery(ApiConstants.API_GET_EXPORT_ORDER_SUMMARY_LOAD, exportOrderSummarySaga);
 }
