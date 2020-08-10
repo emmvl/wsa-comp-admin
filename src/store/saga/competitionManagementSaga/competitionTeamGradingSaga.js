@@ -151,7 +151,7 @@ export function* saveUpdatedGradeTeamSummarySaga(action) {
 }
 
 
-///////////team grading summmary publish
+///////////team grading summary publish
 export function* publishGradeTeamSummarySaga(action) {
     try {
         const result = yield call(CompetitionAxiosApi.publishGradeTeamSummary,

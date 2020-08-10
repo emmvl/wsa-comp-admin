@@ -34,7 +34,7 @@ function* errorSaga(error) {
     }, 800);
 }
 
-//competition part player grade calculate player grading summmary get API
+//competition part player grade calculate player grading summary get API
 export function* getCompPartPlayerGradingSummarySaga(action) {
     try {
         const result = yield call(CompetitionAxiosApi.getCompPartPlayerGradingSummary, action.yearRefId, action.competitionId);
@@ -53,7 +53,7 @@ export function* getCompPartPlayerGradingSummarySaga(action) {
 }
 
 
-///////save the competition part player grade calculate player grading summmary or say proposed player grading toggle
+///////save the competition part player grade calculate player grading summary or say proposed player grading toggle
 export function* saveCompPartPlayerGradingSummarySaga(action) {
     try {
         const result = yield call(CompetitionAxiosApi.saveCompPartPlayerGradingSummary, action.payload);

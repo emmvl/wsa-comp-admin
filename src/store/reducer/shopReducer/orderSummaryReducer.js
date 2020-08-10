@@ -33,7 +33,7 @@ function shopOrderSummaryState(state = initialState, action) {
             };
 
 
-        //// ///////shop order summmary listing get API
+        //// ///////shop order summary listing get API
         case ApiConstants.API_GET_SHOP_ORDER_SUMMARY_LISTING_LOAD:
             return { ...state, onLoad: true, error: null };
 

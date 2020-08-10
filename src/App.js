@@ -12,7 +12,7 @@ import Routes from "./pages/routes";
 import history from "./util/history";
 import PrivateRoute from "./util/protectedRoute";
 import Login from "./components/login";
-import ForgotPassword from "./components/forgot-password";
+import ForgotPassword from "./components/ForgotPassword";
 import lazyLoad from "./components/lazyLoad";
 
 import "./customStyles/customStyles.css";

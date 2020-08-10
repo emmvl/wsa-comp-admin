@@ -2,7 +2,7 @@
 
 import ApiConstants from "../../../themes/apiConstants"
 
-//competition part player grade calculate player grading summmary get API
+//competition part player grade calculate player grading summary get API
 function getCompPartPlayerGradingSummaryAction(yearRefId, competitionId) {
     const action = {
         type: ApiConstants.API_GET_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMMARY_LIST_LOAD,
@@ -12,7 +12,7 @@ function getCompPartPlayerGradingSummaryAction(yearRefId, competitionId) {
     return action;
 }
 
-//////competition part player grade calculate player grading summmary data on Change table input
+//////competition part player grade calculate player grading summary data on Change table input
 function onchangeCompPartPlayerGradingSummaryData(value, index, key) {
     const action = {
         type: ApiConstants.ONCHANGE_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMMARY_DATA,
@@ -23,7 +23,7 @@ function onchangeCompPartPlayerGradingSummaryData(value, index, key) {
     return action;
 }
 
-/////save the competition part player grade calculate player grading summmary or say proposed player grading toggle
+/////save the competition part player grade calculate player grading summary or say proposed player grading toggle
 function saveCompPartPlayerGradingSummaryAction(payload) {
     const action = {
         type: ApiConstants.API_SAVE_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMMARY_LIST_LOAD,
