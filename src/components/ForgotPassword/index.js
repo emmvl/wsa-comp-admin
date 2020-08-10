@@ -8,8 +8,8 @@ import * as Yup from "yup";
 import AppImages from "../../themes/appImages";
 import { forgotPasswordAction, clearReducerAction } from "../../store/actions/authentication"
 import Loader from "../../customComponents/loader";
-import SelectResetType from "./select-reset-type";
-import ContentView from "./content-view";
+import SelectResetType from "./SelectResetType";
+import ContentView from "./ContentView";
 
 import "./style.scss";
 

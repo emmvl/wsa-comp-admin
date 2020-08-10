@@ -67,11 +67,10 @@ import AssignUmpireState from "./umpireReducer/assignUmpireReducer";
 import UmpireSettingState from "./umpireReducer/umpireSettingReducer"
 import RegistrationChangeState from "./registrationReducer/registrationChangeReducer";
 import ShopSettingState from "./shopReducer/shopSettingReducer";
-
-import InnerHorizontalState from './liveScoreReducer/liveScoreInnerHorizontalReducer'
-
-import LiveScorePositionTrackState from './liveScoreReducer/liveScorePositionTrackReducer'
-import ShopOrderSummaryState from './shopReducer/orderSummaryReducer';
+import InnerHorizontalState from "./liveScoreReducer/liveScoreInnerHorizontalReducer";
+import LiveScorePositionTrackState from "./liveScoreReducer/liveScorePositionTrackReducer";
+import ShopOrderSummaryState from "./shopReducer/orderSummaryReducer";
+import SupportState from "./supportReducer";
 
 const rootReducer = combineReducers({
   LoginState,
@@ -136,6 +135,7 @@ const rootReducer = combineReducers({
   InnerHorizontalState,
   LiveScorePositionTrackState,
   ShopOrderSummaryState,
+  SupportState,
 });
 
 export default rootReducer;

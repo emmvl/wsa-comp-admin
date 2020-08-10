@@ -321,7 +321,7 @@ class DashboardLayout extends React.Component {
               <NavLink id={AppConstants.acct_settings_label} to="/account/profile">Account Settings</NavLink>
             </li>
             <li>
-              <a id={AppConstants.help_support_label} href="#">Help & Support</a>
+              <NavLink id={AppConstants.help_support_label} to="/support">Help & Support</NavLink>
             </li>
           </div>
 

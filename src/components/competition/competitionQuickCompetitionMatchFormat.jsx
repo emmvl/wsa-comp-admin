@@ -682,10 +682,7 @@ class QuickCompetitionMatchFormat extends Component {
                                                 required: true, pattern: new RegExp("^[1-9][0-9]*$"),
                                                 message: ValidationConstants.matchDuration
                                             },
-                                            {
-                                                type: "matchDuration"
-                                            }
-                                            ]
+                                                                                       ]
                                         })(
                                             <InputWithHead
                                                 auto_Complete="new-matchDuration"
@@ -702,9 +699,7 @@ class QuickCompetitionMatchFormat extends Component {
                                     <div className="col-sm-3" >
                                         <Form.Item >
                                             {getFieldDecorator(`mainBreak${index}`, {
-                                                rules: [{ required: ((data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? true : false), message: ValidationConstants.mainBreak }, {
-                                                    type: "mainBreak"
-                                                }]
+                                                rules: [{ required: ((data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? true : false), message: ValidationConstants.mainBreak }, ]
                                             })(
                                                 <InputWithHead
                                                     auto_Complete="new-mainBreak"
@@ -724,9 +719,7 @@ class QuickCompetitionMatchFormat extends Component {
                                         <Form.Item >
                                             {getFieldDecorator(`qtrBreak${index}`, {
                                                 rules: [{ required: (data.matchTypeRefId == 3 ? true : false), message: ValidationConstants.qtrBreak },
-                                                {
-                                                    type: "qtrBreak"
-                                                }
+                                               
                                                 ]
                                             })(
                                                 <InputWithHead

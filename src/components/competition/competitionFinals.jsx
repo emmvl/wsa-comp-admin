@@ -527,9 +527,6 @@ class CompetitionFinals extends Component {
                                                         required: true, pattern: new RegExp("^[1-9][0-9]*$"),
                                                         message: ValidationConstants.matchDuration
                                                     },
-                                                    {
-                                                        type: "matchDuration"
-                                                    }
                                                     ]
                                                 })(
                                                     <InputWithHead
@@ -545,7 +542,7 @@ class CompetitionFinals extends Component {
                                             <div id={AppUniqueId.finals_mainbreak} className="col-sm-3" >
                                                 <Form.Item >
                                                     {getFieldDecorator(`mainBreak${index}`, {
-                                                        rules: [{ required: true, message: ValidationConstants.mainBreak }, { type: "mainBreak", }]
+                                                        rules: [{ required: true, message: ValidationConstants.mainBreak }, ]
                                                     })(
                                                         <InputWithHead
                                                             auto_Complete="new-mainBreak"
@@ -561,7 +558,7 @@ class CompetitionFinals extends Component {
                                             <div id={AppUniqueId.finals_qtrbreak} className="col-sm-3" >
                                                 <Form.Item >
                                                     {getFieldDecorator(`qtrBreak${index}`, {
-                                                        rules: [{ required: true, message: ValidationConstants.qtrBreak }, { type: "qtrBreak", }]
+                                                        rules: [{ required: true, message: ValidationConstants.qtrBreak }, ]
                                                     })(
                                                         <InputWithHead
                                                             auto_Complete="new-qtrBreak"
@@ -577,7 +574,7 @@ class CompetitionFinals extends Component {
                                             <div className="col-sm-3">
                                                 <Form.Item >
                                                     {getFieldDecorator(`timeBetweenGames${index}`, {
-                                                        rules: [{ required: true, message: ValidationConstants.timeBetweenGames }, { type: "timeBetweenGames", }]
+                                                        rules: [{ required: true, message: ValidationConstants.timeBetweenGames },]
                                                     })(
                                                         <InputWithHead
                                                             auto_Complete='new-timeBetweenGames'
@@ -635,9 +632,7 @@ class CompetitionFinals extends Component {
                                                         required: true, pattern: new RegExp("^[1-9][0-9]*$"),
                                                         message: ValidationConstants.extraTimeDurationRequired
                                                     },
-                                                    {
-                                                        type: "extraTimeDuration"
-                                                    }]
+                                                    ]
                                                 })(
                                                     <InputWithHead
                                                         auto_Complete='new-extraTimeDuration'
@@ -654,9 +649,7 @@ class CompetitionFinals extends Component {
                                                 <Form.Item >
                                                     {getFieldDecorator(`extraTimeMainBreak${index}`, {
                                                         rules: [{ required: true, message: ValidationConstants.extraTimeMainBreakRequired },
-                                                        {
-                                                            type: "extraTimeMainBreak"
-                                                        }
+                                                        
                                                         ]
                                                     })(
                                                         <InputWithHead
@@ -675,9 +668,7 @@ class CompetitionFinals extends Component {
                                                 <Form.Item >
                                                     {getFieldDecorator(`extraTimeBreak${index}`, {
                                                         rules: [{ required: true, message: ValidationConstants.extraTimeBreakRequired },
-                                                        {
-                                                            type: "extraTimeBreak"
-                                                        }]
+                                                     ]
                                                     })(
                                                         <InputWithHead
                                                             auto_Complete='new-extraTimeBreak'
@@ -694,9 +685,7 @@ class CompetitionFinals extends Component {
                                                 <Form.Item >
                                                     {getFieldDecorator(`beforeExtraTime${index}`, {
                                                         rules: [{ required: true, message: ValidationConstants.beforeExtraTimeRequired },
-                                                        {
-                                                            type: "beforeExtraTime"
-                                                        }]
+                                                      ]
                                                     })(
                                                         <InputWithHead
                                                             auto_Complete='new-beforeExtraTime'

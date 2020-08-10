@@ -626,9 +626,7 @@ class CompetitionQuickCompetition extends Component {
                         <Form.Item >
                             {getFieldDecorator('competition_name',
                                 {
-                                    rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }, {
-                                        type: "compName"
-                                    }]
+                                    rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }, ]
                                 })(
                                     <InputWithHead
                                         auto_Complete="new-compName"

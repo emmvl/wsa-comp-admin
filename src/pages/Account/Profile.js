@@ -104,6 +104,7 @@ function Profile(props) {
           </div>
 
           <InputWithHead
+            disabled
             heading={AppConstants.firstName}
             placeholder={AppConstants.enterFirstName}
             readOnly
@@ -111,6 +112,7 @@ function Profile(props) {
           />
 
           <InputWithHead
+            disabled
             heading={AppConstants.lastName}
             placeholder={AppConstants.enterLastName}
             readOnly
@@ -118,6 +120,7 @@ function Profile(props) {
           />
 
           <InputWithHead
+            disabled
             heading={AppConstants.dateOfBirth}
             placeholder={AppConstants.enterDateOfBirth}
             readOnly

@@ -2,15 +2,15 @@ import { all, fork, takeEvery } from "redux-saga/effects";
 
 import ApiConstants from "../../themes/apiConstants";
 import appSaga from "./appSaga";
-import commonSaga from "./commonSaga";
 import authenticationSaga from "./authenticationSaga";
-import userSaga from "./userSaga";
+import commonSaga from "./commonSaga";
 import homeDashboardSaga from "./homeDashboardSaga";
-import stripeSaga from "./stripeSaga";
-
 import shopOrderSummarySaga from "./shopSaga/shopOrderSummarySaga";
 import shopProductSaga from "./shopSaga/shopProductSaga";
 import shopSettingSaga from "./shopSaga/shopSettingSaga";
+import stripeSaga from "./stripeSaga";
+import supportSaga from "./supportSaga";
+import userSaga from "./userSaga";
 
 import {
   getRegistrationFormSaga,
@@ -183,6 +183,9 @@ export default function* rootSaga() {
     fork(shopOrderSummarySaga),
     fork(shopProductSaga),
     fork(shopSettingSaga),
+
+    // Support
+    fork(supportSaga),
   ]);
 
 
@@ -589,7 +592,6 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_QUICK_COMPETITION_ADDVENUE_LOAD, competitionQuickSaga.quickCompetitionAddVenueSaga)
 
   yield takeEvery(ApiConstants.API_LIVE_SCORE_POSITION_TRACKING_LOAD, liveScorePositionTrackSaga)
-
 
   yield takeEvery(ApiConstants.API_LIVE_SCORE_MAIN_DIVISION_LIST_LOAD, liveScoreMainDivisionListsaga)
 }
