@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux';
 import Loader from '../../customComponents/loader';
 import history from "../../util/history";
 import { isArrayNotEmpty } from "../../util/helpers";
-import { getOrderSummaryListingAction } from "../../store/actions/shopAction/orderSummaryAction";
+import { getOrderSummaryListingAction, exportOrderSummaryAction } from "../../store/actions/shopAction/orderSummaryAction";
 import { currencyFormat } from "../../util/currencyFormat";
 import moment from "moment";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
@@ -212,6 +212,25 @@ class OrderSummary extends Component {
         }
     }
 
+    ///////export button on click
+    onExport = () => {
+        let { yearRefId, affiliateOrgId, postcode, searchText, paymentMethod } = this.state
+        let { orderSummaryCurrentPage } = this.props.shopOrderSummaryState
+        let params =
+        {
+            limit: 10,
+            offset: (orderSummaryCurrentPage ? (10 * (orderSummaryCurrentPage - 1)) : 0),
+            search: searchText,
+            year: yearRefId,
+            postcode: postcode,
+            organisationId: affiliateOrgId,
+            paymentMethod: paymentMethod,
+            order: "",
+            sorterBy: ""
+        }
+        this.props.exportOrderSummaryAction(params)
+    }
+
     headerView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4 pt-2">
@@ -250,7 +269,7 @@ class OrderSummary extends Component {
                                         justifyContent: "flex-end"
                                     }}
                                 >
-                                    <Button className="primary-add-comp-form" type="primary">
+                                    <Button className="primary-add-comp-form" type="primary" onClick={() => this.onExport()}>
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img
@@ -442,6 +461,7 @@ function mapDispatchToProps(dispatch) {
         getOrderSummaryListingAction,
         getOnlyYearListAction,
         getAffiliateToOrganisationAction,
+        exportOrderSummaryAction,
     }, dispatch)
 }
 

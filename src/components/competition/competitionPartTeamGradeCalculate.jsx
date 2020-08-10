@@ -8,6 +8,7 @@ import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getYearAndCompetitionOwnAction, clearYearCompetitionAction } from "../../store/actions/appAction";
+import history from "../../util/history";
 import {
     getTeamGradingSummaryAction,
     saveUpdatedGradeTeamSummaryAction,
@@ -93,7 +94,8 @@ class CompetitionPartTeamGradeCalculate extends Component {
                     // sorter: (a, b) => tableSort(a, b, "finalGradeOrganisationCount")
 
                 },
-            ]
+            ],
+            nextButtonClicked: false
         };
         // this.props.clearYearCompetitionAction()
         this.props.clearTeamGradingReducerDataAction("ownTeamGradingSummaryGetData")
@@ -135,6 +137,19 @@ class CompetitionPartTeamGradeCalculate extends Component {
             })
 
         }
+        if (this.props.ownTeamGradingState.onLoad === false && this.state.nextButtonClicked === true) {
+            if (!this.props.ownTeamGradingState.error) {
+                this.setState({
+                    nextButtonClicked: false
+                })
+                history.push('/competitionCourtAndTimesAssign')
+            }
+            else {
+                this.setState({
+                    nextButtonClicked: false
+                })
+            }
+        }
     }
 
     componentDidMount() {
@@ -167,9 +182,17 @@ class CompetitionPartTeamGradeCalculate extends Component {
 
     }
 
-    ////publish the team grading summary data
-    publishtApiCall = () => {
-        this.props.publishGradeTeamSummaryAction(this.state.yearRefId, this.state.firstTimeCompId)
+    ////publish the team grading summmary data
+    publishtApiCall = (key) => {
+        if (key == "next") {
+            this.setState({
+                nextButtonClicked: true
+            })
+            this.props.publishGradeTeamSummaryAction(this.state.yearRefId, this.state.firstTimeCompId)
+        }
+        else {
+            this.props.publishGradeTeamSummaryAction(this.state.yearRefId, this.state.firstTimeCompId)
+        }
     }
 
 
@@ -484,20 +507,16 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                     disabled={isPublished}
                                     style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }}
                                     type="primary"
-                                    onClick={() => this.publishtApiCall()}
+                                    onClick={() => this.publishtApiCall("submit")}
                                 >{AppConstants.save}
                                 </Button>
                             </Tooltip>
-                            <NavLink id={AppUniqueId.teamGrading_NextBtn} to="/competitionCourtAndTimesAssign">
-                                <Button disabled={isPublished} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
-                            </NavLink>
+                            <Button
+                                id={AppUniqueId.teamGrading_NextBtn}
+                                onClick={() => this.publishtApiCall("next")}
+                                disabled={isPublished} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
                         </div>
                     </div>
-                    {/* <div className="col-sm-1">
-                        <div className="comp-buttons-view">
-                           
-                        </div>
-                    </div> */}
                 </div>
             </div >
         )
