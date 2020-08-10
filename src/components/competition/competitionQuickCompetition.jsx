@@ -860,7 +860,7 @@ class CompetitionQuickCompetition extends Component {
                             {this.contentView(getFieldDecorator)}
                         </Content>
                         {/* </div> */}
-                        <Footer >
+                        <Footer className="pr-4" >
                             {this.footerView()}
                         </Footer>
                     </Form>

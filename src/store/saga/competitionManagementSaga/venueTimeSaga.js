@@ -28,7 +28,9 @@ export function* venueTimeSaga(action) {
             }
         }
         else {
-            yield put({ type: ApiConstants.API_VENUE_CONSTRAINTS_LIST_FAIL });
+            yield put({
+                type: ApiConstants.API_VENUE_CONSTRAINTS_LIST_FAIL,
+            });
             setTimeout(() => {
                 // alert(result.data.message);
             }, 800);
@@ -58,7 +60,11 @@ export function* venueConstraintPostSaga(action) {
                 message.success(result.result.data.message);
             }, 800);
         } else {
-            yield put({ type: ApiConstants.API_VENUE_CONSTRAINT_POST_FAIL });
+            yield put({
+                type: ApiConstants.API_VENUE_CONSTRAINT_POST_FAIL,
+                error: result,
+                status: result.status
+            });
             setTimeout(() => {
             }, 800);
         }

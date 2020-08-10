@@ -7,6 +7,7 @@ import AppConstants from "../../../themes/appConstants";
 function* failSaga(result) {
     console.log("failSaga", result.message)
     yield put({ type: ApiConstants.API_COMPETITION_OWN_TEAM_GRADING_FAIL });
+
     setTimeout(() => {
         message.config({
             duration: 1.5,
@@ -168,6 +169,7 @@ export function* publishGradeTeamSummarySaga(action) {
             let res = JSON.parse(JSON.stringify(result));
             yield put({
                 type: ApiConstants.API_COMPETITION_OWN_TEAM_GRADING_FAIL,
+                error: result,
                 status: result.status
             });
             setTimeout(() => {

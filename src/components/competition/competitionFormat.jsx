@@ -131,7 +131,14 @@ class CompetitionFormat extends Component {
                         if (this.state.buttonClicked == "save") {
                             message.success(AppConstants.successMessage)
 
-                        } else if (this.state.buttonClicked == "createDraw") {
+                        }
+                        else if (this.state.buttonClicked == "next") {
+                            if (this.state.isFinalAvailable) {
+                                history.push('/competitionFinals');
+                            }
+                        }
+
+                        else if (this.state.buttonClicked == "createDraw") {
                             if (this.state.buttonPressed == "save") {
                                 if (this.state.isFinalAvailable) {
                                     history.push('/competitionFinals');
@@ -1065,15 +1072,17 @@ class CompetitionFormat extends Component {
                                             {AppConstants.save}
                                         </Button>
                                     </Tooltip>
-                                    <NavLink to="/competitionFinals">
-                                        <Button
-                                            disabled={isPublished}
-                                            className="publish-button margin-top-disabled-button"
-                                            type="primary"
-                                        >
-                                            {AppConstants.next}
-                                        </Button>
-                                    </NavLink>
+
+                                    <Button
+                                        htmlType='submit'
+                                        disabled={isPublished}
+                                        onClick={() => this.setState({ buttonClicked: "next" })}
+                                        className="publish-button margin-top-disabled-button"
+                                        type="primary"
+                                    >
+                                        {AppConstants.next}
+                                    </Button>
+
                                 </div>
                                 : <div className="comp-buttons-view">
                                     <Tooltip
