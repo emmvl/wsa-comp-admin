@@ -1363,9 +1363,7 @@ class CompetitionOpenRegForm extends Component {
                 <Form.Item >
                     {getFieldDecorator('competition_name',
                         {
-                            rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }, {
-                                type: "name"
-                            }]
+                            rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }]
                         })(
                             <InputWithHead
                                 auto_Complete="new-name"
