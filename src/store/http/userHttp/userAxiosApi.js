@@ -51,7 +51,7 @@ let userHttpApi = {
   async impersonation(payload) {
     const userId = await getUserId();
     const {orgId, orgTypeRefId, access} = payload;
-    const url = `/ure/impersonation?userId=${userId}&entityId=${orgId}&entityTypeId=${orgTypeRefId}&access=${access}`;
+    const url = `/ure/impersonation?userId=${userId}&organisationUniqueKey=${orgId}&entityTypeId=${orgTypeRefId}&access=${access}`;
 
     return Method.dataPost(url, token);
   },
