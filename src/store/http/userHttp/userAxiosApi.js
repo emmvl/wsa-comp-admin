@@ -50,8 +50,8 @@ let userHttpApi = {
 
   async impersonation(payload) {
     const userId = await getUserId();
-    const {orgId, orgTypeRefId, access} = payload;
-    const url = `/ure/impersonation?userId=${userId}&organisationUniqueKey=${orgId}&entityTypeId=${orgTypeRefId}&access=${access}`;
+    const {orgId, access} = payload;
+    const url = `/ure/impersonation?userId=${userId}&organisationUniqueKey=${orgId}&access=${access}`;
 
     return Method.dataPost(url, token);
   },

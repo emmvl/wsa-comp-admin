@@ -114,7 +114,6 @@ class DashboardLayout extends React.Component {
     if (impersonationOrg) {
       this.props.impersonationAction({
         orgId: impersonationOrg.affiliateOrgId,
-        orgTypeRefId: impersonationOrg.organisationTypeRefId,
         access: false,
       });
       await setImpersonation(null);
@@ -129,7 +128,6 @@ class DashboardLayout extends React.Component {
     if (impersonationOrg) {
       this.props.impersonationAction({
         orgId: impersonationOrg.affiliateOrgId,
-        orgTypeRefId: impersonationOrg.organisationTypeRefId,
         access: false,
       });
 
@@ -237,7 +235,6 @@ class DashboardLayout extends React.Component {
       if (orgData) {
         this.props.impersonationAction({
           orgId: orgData.affiliateOrgId,
-          orgTypeRefId: orgData.organisationTypeRefId,
           access: true,
         });
       }
