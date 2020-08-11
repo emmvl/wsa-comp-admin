@@ -203,10 +203,13 @@ const getImpersonation = async () => {
   return null;
 };
 
-module.exports = {
-  setCompetitionID, getCompetitonId,
-  setAuthToken, getAuthToken,
-  setUserId, getUserId,
+export {
+  setCompetitionID,
+  getCompetitonId,
+  setAuthToken,
+  getAuthToken,
+  setUserId,
+  getUserId,
   setOwnCompetitionYear,
   getOwnCompetitionYear,
   setOwn_competition,

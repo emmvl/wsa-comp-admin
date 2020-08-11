@@ -1,6 +1,6 @@
 import React from "react";
 import {NavLink} from "react-router-dom";
-import {Button, Icon, Modal, Select} from "antd";
+import {Icon, Modal, Select} from "antd";
 import "./layout.css";
 import history from "../util/history";
 import AppConstants from "../themes/appConstants";
@@ -19,7 +19,7 @@ import {
   getOrganisationData,
   clearUmpireStorage,
   setImpersonation,
-  getImpersonation, getLiveScoreCompetiton,
+  getImpersonation,
 } from "../util/sessionStorage";
 import {clearHomeDashboardData,} from "../store/actions/homeAction/homeAction";
 import Loader from "../customComponents/loader";
