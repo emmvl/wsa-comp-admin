@@ -18,8 +18,8 @@ import {
   setOrganisationData,
   getOrganisationData,
   clearUmpireStorage,
-  setImpersonation,
-  getImpersonation,
+  setImpersonationAffiliate,
+  getImpersonationAffiliate,
 } from "../util/sessionStorage";
 import {clearHomeDashboardData,} from "../store/actions/homeAction/homeAction";
 import Loader from "../customComponents/loader";
@@ -34,54 +34,44 @@ class DashboardLayout extends React.Component {
       dataOnload: false,
       impersonationLoad: true,
       openImpersonationModal: false,
-      impersonationOrg: null,
+      impersonationAffiliateOrgId: null,
       impersonationOrgData: null,
       logout: false,
     };
   }
 
   async componentDidUpdate(nextProps) {
-    if (this.props.userState.onLoad === false && this.state.dataOnload === true) {
-      let organisationData = this.props.userState.getUserOrganisation;
+    if (this.props.userState !== nextProps.userState) {
+      if (this.props.userState.onLoad === false && this.state.dataOnload === true) {
+        let organisationData = this.props.userState.getUserOrganisation;
 
-      if (organisationData.length > 0) {
-        const impersonationOrg = await getImpersonation();
-        let impersonationOrgData = null;
-        if (!impersonationOrg) {
-          impersonationOrgData = this.state.impersonationOrg
-            ? organisationData.find((org) => org.organisationUniqueKey === this.state.impersonationOrg)
-            : null;
-        } else {
-          impersonationOrgData = organisationData
-            .find((org) => org.organisationUniqueKey === impersonationOrg.affiliateOrgId);
+        if (organisationData.length > 0) {
+          let presetOrganisation = await this.getPresetOrganisation();
+
+          let orgData = presetOrganisation ? presetOrganisation : getOrganisationData();
+          let organisationItem = orgData ? orgData : organisationData[0];
+
+          await setOrganisationData(organisationItem);
+          this.props.onOrganisationChangeAction(organisationItem, "organisationChange");
+
+          const isImpersonation = this.props.userState.userRoleEntity
+            .findIndex((role) => role.roleId === 10) > -1;
+
+          this.setState({dataOnload: false, impersonationOrgData: isImpersonation ? orgData : null});
         }
 
-        let orgData = impersonationOrgData ? impersonationOrgData : getOrganisationData();
-        let organisationItem = orgData ? orgData : organisationData[0];
+        if (this.props.userState.impersonation && !this.state.impersonationLoad && !this.state.dataOnload) {
+          const impersonationAffiliate = this.state.impersonationAffiliateOrgId
+            ? this.props.userState.affiliateList
+              .find((affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId)
+            : null;
+          await setImpersonationAffiliate(impersonationAffiliate);
 
-        this.setFullStory(organisationItem);
-        await setOrganisationData(organisationItem);
-
-        this.props.onOrganisationChangeAction(organisationItem, "organisationChange");
-
-        const isImpersonation = this.props.userState.userRoleEntity
-          .findIndex((role) => role.roleId === 10) > -1;
-
-        this.setState({dataOnload: false, impersonationOrgData: isImpersonation ? orgData : null});
+          history.push("/");
+          window.location.reload();
+        }
       }
 
-      if (this.props.userState.impersonation && !this.state.impersonationLoad && !this.state.dataOnload) {
-        const impersonationOrgData = this.state.impersonationOrg
-          ? this.props.userState.affiliateList
-            .find((affiliate) => affiliate.affiliateOrgId === this.state.impersonationOrg)
-          : null;
-        await setImpersonation(impersonationOrgData);
-        history.push("/");
-        window.location.reload();
-      }
-    }
-
-    if (this.props.userState !== nextProps.userState) {
       if (this.props.userState.impersonation && this.state.impersonationLoad) {
         if (this.state.logout) {
           await localStorage.clear();
@@ -100,6 +90,22 @@ class DashboardLayout extends React.Component {
     this.setOrganisationKey();
   }
 
+  async getPresetOrganisation() {
+    const userOrganisationData = this.props.userState.getUserOrganisation;
+    const impersonationAffiliate = await getImpersonationAffiliate();
+
+    if (!impersonationAffiliate) {
+      if (this.state.impersonationAffiliateOrgId) {
+        return userOrganisationData.find((org) => org.organisationUniqueKey === this.state.impersonationAffiliateOrgId);
+      }
+
+      return null;
+    }
+
+    return userOrganisationData
+      .find((org) => org.organisationUniqueKey === impersonationAffiliate.affiliateOrgId);
+  }
+
   setOrganisationKey() {
     let organisationData = getOrganisationData();
     if (!organisationData) {
@@ -112,13 +118,15 @@ class DashboardLayout extends React.Component {
   }
 
   endImpersonation = async () => {
-    const impersonationOrg = await getImpersonation();
-    if (impersonationOrg) {
+    const impersonationAffiliate = await getImpersonationAffiliate();
+
+    if (impersonationAffiliate) {
       this.props.impersonationAction({
-        orgId: impersonationOrg.affiliateOrgId,
+        orgId: impersonationAffiliate.affiliateOrgId,
         access: false,
       });
-      await setImpersonation(null);
+
+      await setImpersonationAffiliate(null);
       await setOrganisationData(null);
 
       this.setState({impersonationLoad: true, endImpersonation: true});
@@ -126,7 +134,7 @@ class DashboardLayout extends React.Component {
   };
 
   logout = async () => {
-    const impersonationOrg = await getImpersonation();
+    const impersonationOrg = await getImpersonationAffiliate();
     if (impersonationOrg) {
       this.props.impersonationAction({
         orgId: impersonationOrg.affiliateOrgId,
@@ -233,7 +241,7 @@ class DashboardLayout extends React.Component {
   handleImpersonationModal = (button) => {
     if (button === 'ok') {
       this.setState({openImpersonationModal: false});
-      const orgData = this.props.userState.affiliateList.find((affiliate) => affiliate.affiliateOrgId === this.state.impersonationOrg);
+      const orgData = this.props.userState.affiliateList.find((affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId);
       if (orgData) {
         this.props.impersonationAction({
           orgId: orgData.affiliateOrgId,
@@ -246,7 +254,7 @@ class DashboardLayout extends React.Component {
   };
 
   handleImpersonationOrg = (e) => {
-    this.setState({impersonationOrg: e});
+    this.setState({impersonationAffiliateOrgId: e});
   };
 
   // user profile dropdown
