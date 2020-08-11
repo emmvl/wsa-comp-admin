@@ -56,6 +56,8 @@ class DashboardLayout extends React.Component {
             .find((org) => org.organisationUniqueKey === impersonationOrg.affiliateOrgId);
         }
 
+        this.setState({impersonationOrgData});
+
         let orgData = impersonationOrgData ? impersonationOrgData : getOrganisationData();
         let organisationItem = orgData ? orgData : organisationData[0];
 
