@@ -1811,8 +1811,12 @@ class RegistrationCompetitionForm extends Component {
         if (keyword == "add") {
             this.props.addRemoveDivisionAction(index, item, keyword);
         }
-        else {
+        else if(item.competitionDivisionId != 0 && this.state.statusRefId == 2) {
             this.setState({ deleteDivModalVisible: true, divisionIndex: index, competitionDivision: item })
+        }
+        else {
+            this.props.addRemoveDivisionAction(index, this.state.competitionDivision, "removeDivision");
+            this.setDivisionFormFields();
         }
     }
 
