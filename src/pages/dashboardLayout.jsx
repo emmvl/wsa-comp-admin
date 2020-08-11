@@ -56,8 +56,6 @@ class DashboardLayout extends React.Component {
             .find((org) => org.organisationUniqueKey === impersonationOrg.affiliateOrgId);
         }
 
-        this.setState({impersonationOrgData});
-
         let orgData = impersonationOrgData ? impersonationOrgData : getOrganisationData();
         let organisationItem = orgData ? orgData : organisationData[0];
 
@@ -68,6 +66,7 @@ class DashboardLayout extends React.Component {
 
         const isImpersonation = this.props.userState.userRoleEntity
           .findIndex((role) => role.roleId === 10) > -1;
+
         this.setState({dataOnload: false, impersonationOrgData: isImpersonation ? orgData : null});
       }
 
@@ -77,6 +76,7 @@ class DashboardLayout extends React.Component {
             .find((affiliate) => affiliate.affiliateOrgId === this.state.impersonationOrg)
           : null;
         await setImpersonation(impersonationOrgData);
+        history.push("/");
         window.location.reload();
       }
     }
