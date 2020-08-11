@@ -51,6 +51,17 @@ function shopOrderSummaryState(state = initialState, action) {
                 error: null
             };
 
+        //// //////export order summary  API 
+        case ApiConstants.API_GET_EXPORT_ORDER_SUMMARY_LOAD:
+            return { ...state, onLoad: true, error: null };
+
+        case ApiConstants.API_GET_EXPORT_ORDER_SUMMARY_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
 
         default:
             return state;

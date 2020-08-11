@@ -458,6 +458,7 @@ class CompetitionOpenRegForm extends Component {
                 }
             ],
             divisionState: false,
+            nextButtonClicked: false
 
         };
         this_Obj = this;
@@ -532,6 +533,28 @@ class CompetitionOpenRegForm extends Component {
                 this.setDetailsFieldValue();
             }, 100);
             this.setState({ divisionState: false });
+        }
+        if (competitionFeesState.onLoad === false && this.state.loading === true) {
+            if (!competitionFeesState.error) {
+                if (this.state.nextButtonClicked === true) {
+                    this.setState({
+                        nextButtonClicked: false,
+                        loading: false
+                    })
+                    history.push("/competitionPlayerGrades")
+                }
+                else {
+                    this.setState({
+                        loading: false
+                    })
+                }
+            }
+            else {
+                this.setState({
+                    nextButtonClicked: false,
+                    loading: false
+                })
+            }
         }
     }
 
@@ -2781,9 +2804,9 @@ class CompetitionOpenRegForm extends Component {
                                         </Button>
                                     </Tooltip>
                                     {tabKey == "2" &&
-                                        <NavLink to="/competitionPlayerGrades">
-                                            <Button className="publish-button" type="primary" htmlType="submit" disabled={this.state.competitionStatus == 1 ? true : false} >{AppConstants.next}</Button>
-                                        </NavLink>
+
+                                        <Button onClick={() => this.setState({ nextButtonClicked: true })} className="publish-button" type="primary" htmlType="submit" disabled={this.state.competitionStatus == 1 ? true : false} >{AppConstants.next}</Button>
+
                                     }
                                 </div>
                                 :
@@ -2811,9 +2834,9 @@ class CompetitionOpenRegForm extends Component {
                                         </Button>
                                     </Tooltip>
                                     {tabKey == "2" &&
-                                        <NavLink to="/competitionPlayerGrades">
-                                            <Button className="publish-button" type="primary">{AppConstants.next}</Button>
-                                        </NavLink>
+                                        // <NavLink to="/competitionPlayerGrades">
+                                        <Button onClick={() => this.setState({ nextButtonClicked: true })} htmlType='submit' className="publish-button" type="primary">{AppConstants.next}</Button>
+                                        // </NavLink>
                                     }
                                 </div>
                             }

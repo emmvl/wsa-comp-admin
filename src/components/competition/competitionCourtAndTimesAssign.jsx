@@ -34,6 +34,7 @@ import AppImages from "../../themes/appImages";
 import Loader from '../../customComponents/loader'
 import CustomTooltip from 'react-png-tooltip'
 import AppUniqueId from "../../themes/appUniqueId";
+import history from "../../util/history"
 
 
 
@@ -49,7 +50,9 @@ class CompetitionCourtAndTimesAssign extends Component {
             getDataLoading: false,
             competitionStatus: 0,
             tooltipVisibleDelete: false,
-            isQuickCompetition: false
+            isQuickCompetition: false,
+            onNextLoad: false,
+            nextButtonClicked: false
         }
         // this.props.timeSlotInit()
         this.props.clearYearCompetitionAction()
@@ -63,17 +66,17 @@ class CompetitionCourtAndTimesAssign extends Component {
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
-        let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined	 
+        let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
         if (storedCompetitionId && yearId && propsData && compData) {
-            let quickComp = this.props.appState.own_CompetitionArr.find(x=>x.competitionId == 
+            let quickComp = this.props.appState.own_CompetitionArr.find(x => x.competitionId ==
                 storedCompetitionId && x.isQuickCompetition == 1);
-           
+
             this.setState({
                 yearRefId: JSON.parse(yearId),
                 firstTimeCompId: storedCompetitionId,
                 competitionStatus: storedCompetitionStatus,
                 getDataLoading: true,
-                isQuickCompetition: quickComp!= undefined ? true : false
+                isQuickCompetition: quickComp != undefined ? true : false
             })
             // if (this.props.competitionTimeSlots.allrefernceData.length > 0) {
             this.props.getCompetitionWithTimeSlots(yearId, storedCompetitionId);
@@ -112,14 +115,41 @@ class CompetitionCourtAndTimesAssign extends Component {
                     let statusRefId = competitionList[0].statusRefId
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
-                    let quickComp = this.props.appState.own_CompetitionArr.find(x=>x.competitionId == 
+                    let quickComp = this.props.appState.own_CompetitionArr.find(x => x.competitionId ==
                         competitionId && x.isQuickCompetition == 1);
                     this.props.getCompetitionWithTimeSlots(this.state.yearRefId, competitionId);
-                    this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId,
-                        isQuickCompetition: quickComp!= undefined ? true : false })
+                    this.setState({
+                        getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId,
+                        isQuickCompetition: quickComp != undefined ? true : false
+                    })
 
                 }
             }
+        }
+        if (competitionTimeSlots.onLoad === false && this.state.onNextLoad === true) {
+            if (!competitionTimeSlots.error) {
+                if (this.state.nextButtonClicked == true) {
+                    this.setState({
+                        onNextLoad: false,
+                        nextButtonClicked: false
+                    })
+                    history.push("competitionVenueTimesPrioritisation")
+                }
+                else {
+                    this.setState({
+                        onNextLoad: false,
+                    })
+                }
+            }
+            else {
+                this.setState({
+                    onNextLoad: false,
+                    nextButtonClicked: false
+                })
+            }
+
+
+
         }
     }
 
@@ -346,7 +376,11 @@ class CompetitionCourtAndTimesAssign extends Component {
                     message.error(ValidationConstants.pleaseSelectCompetition)
                 }
                 else {
+
                     this.props.addTimeSlotDataPost(timeSlotData)
+                    this.setState({
+                        onNextLoad: true
+                    })
                 }
             }
         })
@@ -403,11 +437,13 @@ class CompetitionCourtAndTimesAssign extends Component {
     onCompetitionChange(competitionId, statusRefId) {
         setOwn_competition(competitionId)
         setOwn_competitionStatus(statusRefId)
-        let quickComp = this.props.appState.own_CompetitionArr.find(x=>x.competitionId == 
+        let quickComp = this.props.appState.own_CompetitionArr.find(x => x.competitionId ==
             competitionId && x.isQuickCompetition == 1);
         this.props.getCompetitionWithTimeSlots(this.state.yearRefId, competitionId);
-        this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId,
-            isQuickCompetition: quickComp!= undefined ? true : false })
+        this.setState({
+            getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId,
+            isQuickCompetition: quickComp != undefined ? true : false
+        })
     }
 
     //add obj on click of time slot allocation based on match duration
@@ -1326,9 +1362,11 @@ class CompetitionCourtAndTimesAssign extends Component {
                             >
                                 <Button id={AppUniqueId.timeSlotSaveBtn} disabled={isPublished} style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }} className="publish-button save-draft-text" htmlType="submit" type="primary">{AppConstants.save}</Button>
                             </Tooltip>
-                            <NavLink to="/competitionVenueTimesPrioritisation">
-                                <Button disabled={isPublished} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
-                            </NavLink>
+                            {/* <NavLink to="/competitionVenueTimesPrioritisation"> */}
+                            <Button
+                                onClick={() => this.setState({ nextButtonClicked: true })}
+                                htmlType="submit" disabled={isPublished} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
+                            {/* </NavLink> */}
                         </div>
                     </div>
                 </div>
@@ -1352,17 +1390,17 @@ class CompetitionCourtAndTimesAssign extends Component {
                         {this.headerView()}
                         <Content>
                             {this.dropdownView(getFieldDecorator)}
-                            <Loader visible={this.props.competitionTimeSlots.onGetTimeSlotLoad} />
+                            <Loader visible={this.props.competitionTimeSlots.onGetTimeSlotLoad || this.props.competitionTimeSlots.onLoad} />
                             <div className="formView">
                                 {
                                     !this.state.isQuickCompetition ?
-                                    this.contentView(getFieldDecorator) :
-                                    this.qcWarningView()
+                                        this.contentView(getFieldDecorator) :
+                                        this.qcWarningView()
                                 }
                             </div>
                         </Content>
                         <Footer>
-                            { !this.state.isQuickCompetition ?  this.footerView(getFieldDecorator) : null}
+                            {!this.state.isQuickCompetition ? this.footerView(getFieldDecorator) : null}
                         </Footer>
                     </Form>
                 </Layout>

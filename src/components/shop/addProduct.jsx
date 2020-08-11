@@ -134,6 +134,7 @@ class AddProduct extends Component {
         if (productDetailData.variantsChecked === false) {
             productDetailData.variants = []
         }
+        productDetailData.images = urls
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 let formData = new FormData();
@@ -565,7 +566,7 @@ class AddProduct extends Component {
                     )}
                 </Form.Item>
 
-                <InputWithHead  required={"pb-0"} heading={AppConstants.description}
+                <InputWithHead required={"pb-0"} heading={AppConstants.description}
                 />
                 {this.editorView()}
 
