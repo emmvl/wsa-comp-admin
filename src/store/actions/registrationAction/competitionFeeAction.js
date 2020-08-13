@@ -2,12 +2,13 @@ import ApiConstants from "../../../themes/apiConstants";
 import { func } from "prop-types";
 
 // get the competition fees list in registration
-function regCompetitionListAction(offset, yearRefId, searchText) {
+function regCompetitionListAction(offset, yearRefId, searchText, sortBy, sortOrder) {
     const action = {
         type: ApiConstants.API_REG_COMPETITION_LIST_LOAD,
         offset: offset,
         yearRefId: yearRefId,
-        searchText: searchText
+        searchText: searchText,
+        sortBy, sortOrder
     };
     return action;
 }
@@ -27,7 +28,7 @@ function getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration, sour
         type: ApiConstants.API_GET_COMPETITION_FEES_DETAILS_LOAD,
         competitionId: competitionId,
         hasRegistration,
-        sourceModule: sourceModule							  
+        sourceModule: sourceModule
     };
     return action;
 }
@@ -40,7 +41,7 @@ function saveCompetitionFeesDetailsAction(payload, logoOrgId, sourceModule) {
         type: ApiConstants.API_SAVE_COMPETITION_FEES_DETAILS_LOAD,
         payload: payload,
         logoOrgId,
-        sourceModule: sourceModule							  
+        sourceModule: sourceModule
     };
     return action;
 }
@@ -144,16 +145,16 @@ function updatePaymentFeeOption(value, key) {
 
 function paymentFeeDeafault() {
     const action = {
-        type: ApiConstants.GET_CASUAL_FEE_DETAIL_API_LOAD,			   
+        type: ApiConstants.GET_CASUAL_FEE_DETAIL_API_LOAD,
     }
     return action
 }
 
-function instalmentDateAction(value,key) {
+function instalmentDateAction(value, key) {
     const action = {
         type: ApiConstants.UPDATE_INSTALMENT_DATE,
-        value:value,
-        key:key
+        value: value,
+        key: key
     }
     return action
 }
@@ -299,17 +300,17 @@ function getDefaultCompFeesLogoAction() {
 
 
 ///// On invitees serach action 
-function onInviteesSearchAction(value, inviteesType){
+function onInviteesSearchAction(value, inviteesType) {
     const action = {
-        type :  ApiConstants.API_COMPETITION_FEE_INVITEES_SEARCH_LOAD,
-        value : value,
+        type: ApiConstants.API_COMPETITION_FEE_INVITEES_SEARCH_LOAD,
+        value: value,
         inviteesType: inviteesType
     }
     return action
 }
 
 //Delete Competition Division from Comp Details
-function removeCompetitionDivisionAction(payload){
+function removeCompetitionDivisionAction(payload) {
     const action = {
         type: ApiConstants.API_COMPETITION_DIVISION_DELETE_LOAD,
         payload: payload
@@ -346,6 +347,6 @@ export {
     getDefaultCharity,
     getDefaultCompFeesLogoAction,
     onInviteesSearchAction,
-    removeCompetitionDivisionAction	,
-    instalmentDateAction			
+    removeCompetitionDivisionAction,
+    instalmentDateAction
 };

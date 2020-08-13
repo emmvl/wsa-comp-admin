@@ -80,10 +80,12 @@ function getInvoice(registrationid) {
 }
 
 /// payment dashboard
-function getPaymentList(offset) {
+function getPaymentList(offset, sortBy, sortOrder) {
     const action = {
         type: ApiConstants.API_PAYMENT_TYPE_LIST_LOAD,
-        offset
+        offset,
+        sortBy,
+        sortOrder
     }
     return action
 }

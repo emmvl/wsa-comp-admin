@@ -119,7 +119,7 @@ let AxiosApi = {
     },
 
     //get payment list 
-    async getPaymentList(offset) {
+    async getPaymentList(offset, sortBy, sortOrder) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
@@ -129,11 +129,14 @@ let AxiosApi = {
                 limit: 10
             }
         };
+
         var url = `/api/payments/transactions`;
+        if (sortBy && sortOrder) {
+            url += `?sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        }
         return Method.dataPost(url, token, body);
     },
     async exportPaymentApi(key) {
-
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         var url

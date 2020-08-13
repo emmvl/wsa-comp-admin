@@ -10,67 +10,101 @@ import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import { getOrganisationData } from "../../util/sessionStorage";
-import {getUserReferFriendAction} from "../../store/actions/userAction/userAction";
+import { getUserReferFriendAction } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
 const { confirm } = Modal;
 const { SubMenu } = Menu;
+let this_Obj = null
+
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
+
+/////function to sort table column
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_Obj.state.sortBy !== key) {
+        sortOrder = 'ASC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
+        sortBy = sortOrder = null;
+    }
+
+    let filterData = {
+        organisationUniqueKey: this_Obj.state.organisationId,
+        yearRefId: this_Obj.state.yearRefId,
+        paging: {
+            limit: 10,
+            offset: (this_Obj.state.pageNo ? (10 * (this_Obj.state.pageNo - 1)) : 0)
+        }
+    }
+
+    this_Obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_Obj.props.getUserReferFriendAction(filterData, sortBy, sortOrder);
+}
 
 const columns = [
-
     {
         title: 'Registered User',
         dataIndex: 'name',
         key: 'name',
-        sorter: (a, b) => a.name.localeCompare(b.name),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("registeredUser"),
     },
     {
         title: 'Affiliate Name',
         dataIndex: 'affiliateName',
         key: 'affiliateName',
-        sorter: (a, b) => a.affiliateName.localeCompare(b.affiliateName),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("affiliateName"),
     },
     {
         title: 'Competition Name',
         dataIndex: 'competitionName',
         key: 'competitionName',
-        sorter: (a, b) => a.competitionName.localeCompare(b.competitionName),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Division',
         dataIndex: 'divisionName',
         key: 'divisionName',
-        sorter: (a, b) => a.divisionName.localeCompare(b.divisionName),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("division"),
     },
     {
         title: 'Friend Name',
         dataIndex: 'friendName',
         key: 'friendName',
-        sorter: (a, b) => a.name.localeCompare(b.name)
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Friend Email',
         dataIndex: 'email',
         key: 'email',
-        sorter: (a, b) => a.email.localeCompare(b.email),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("friendEmail"),
     },
     {
         title: 'Friend Phone',
         dataIndex: 'mobileNumber',
         key: 'mobileNumber',
-        sorter: (a, b) => a.mobileNumber.localeCompare(b.mobileNumber),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("friendPhone"),
     },
     {
         title: 'Friend Status',
         dataIndex: 'friendStatus',
         key: 'friendStatus',
-        sorter: (a, b) => a.friendStatus.localeCompare(b.friendStatus),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
-    
-    
-
 ];
 
 class ReferFriend extends Component {
@@ -79,18 +113,23 @@ class ReferFriend extends Component {
         this.state = {
             organisationId: getOrganisationData().organisationUniqueKey,
             yearRefId: -1,
+            pageNo: 1
         }
+        this_Obj = this
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.referenceCalls();
         this.handleFriendTableList(1);
     }
-    componentDidUpdate(nextProps){
+    componentDidUpdate(nextProps) {
 
     }
 
     handleFriendTableList = (page) => {
+        this.setState({
+            pageNo: page
+        })
         let filter =
         {
             organisationUniqueKey: this.state.organisationId,
@@ -108,8 +147,8 @@ class ReferFriend extends Component {
     }
 
     onChangeDropDownValue = async (value, key) => {
-        if(key == "yearRefId")
-          await this.setState({yearRefId: value});
+        if (key == "yearRefId")
+            await this.setState({ yearRefId: value });
 
         this.handleFriendTableList(1);
     }
@@ -169,23 +208,23 @@ class ReferFriend extends Component {
         let total = userState.referFriendTotalCount;
         return (
             <div className="comp-dash-table-view mt-2">
-            <div className="table-responsive home-dash-table-view">
-                <Table className="home-dashboard-table"
-                    columns={columns}
-                    dataSource={friendList}
-                    pagination={false}
-                    loading={this.props.onLoad === true && true}
-                />
+                <div className="table-responsive home-dash-table-view">
+                    <Table className="home-dashboard-table"
+                        columns={columns}
+                        dataSource={friendList}
+                        pagination={false}
+                        loading={this.props.onLoad === true && true}
+                    />
+                </div>
+                <div className="d-flex justify-content-end">
+                    <Pagination
+                        className="antd-pagination"
+                        current={userState.referFriendPage}
+                        total={total}
+                        onChange={(page) => this.handleFriendTableList(page)}
+                    />
+                </div>
             </div>
-            <div className="d-flex justify-content-end">
-                <Pagination
-                    className="antd-pagination"
-                    current={userState.referFriendPage}
-                    total={total}
-                    onChange={(page) => this.handleFriendTableList(page)}
-                />
-            </div>
-        </div>
         )
     }
 
@@ -193,7 +232,7 @@ class ReferFriend extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
-                <InnerHorizontalMenu  menu={"user"} userSelectedKey={"6"} />
+                <InnerHorizontalMenu menu={"user"} userSelectedKey={"6"} />
                 <Layout>
                     {this.headerView()}
                     <Content>

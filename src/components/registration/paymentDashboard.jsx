@@ -19,12 +19,25 @@ const { Option } = Select;
 const { SubMenu } = Menu;
 let this_Obj = null;
 
+//listeners for sorting
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
 
 /////function to sort table column
-function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_Obj.state.sortBy !== key) {
+        sortOrder = 'ASC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
+        sortBy = sortOrder = null;
+    }
+
+    this_Obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_Obj.props.getPaymentList(this_Obj.state.offset, sortBy, sortOrder);
 }
 
 
@@ -33,7 +46,8 @@ const columns = [
         title: "Name",
         dataIndex: "userFirstName",
         key: "userFirstName",
-        sorter: (a, b) => tableSort(a, b, "userFirstName"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("name"),
         render: (userFirstName, record) => (
             <span>{record.userFirstName + " " + record.userLastName}</span>
         )
@@ -42,56 +56,66 @@ const columns = [
         title: "Affiliate",
         dataIndex: "affiliateName",
         key: "affiliateName",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("affiliate"),
         render: affiliateName => (
             <span>{affiliateName === null || affiliateName === "" ? "N/A" : affiliateName}</span>
 
         ),
-        sorter: (a, b) => tableSort(a, b, "affiliateName")
+
     },
     {
         title: "Competition",
         dataIndex: "competitionName",
         key: "competitionName",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("competition"),
         render: competitionName => (
             <span>{competitionName}</span>
         ),
-        sorter: (a, b) => tableSort(a, b, "competitionName")
+
     },
     {
         title: "Fee Type",
         dataIndex: "feeType",
         key: "feeType",
-        sorter: (a, b) => tableSort(a, b, "feeType")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: "Total Fee (inc GST)",
         dataIndex: "invoiceTotal",
         key: "invoiceTotal",
         render: (invoiceTotal, record) => currencyFormat(invoiceTotal),
-        sorter: (a, b) => tableSort(a, b, "invoiceTotal")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("totalFee"),
     },
     {
         title: "Our Portion",
         dataIndex: "affiliatePortion",
         key: "affiliatePortion",
         render: (affiliatePortion, record) => currencyFormat(affiliatePortion),
-        sorter: (a, b) => tableSort(a, b, "affiliatePortion")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("ourPortion"),
     },
     {
         title: "Payment",
         dataIndex: "paymentType",
         key: "paymentType",
-        sorter: (a, b) => tableSort(a, b, "paymentType")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("payment"),
     },
     {
         title: "Status",
         dataIndex: "paymentStatus",
         key: "paymentStatus",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("status"),
         render: paymentStatus => (
             <span>{paymentStatus == "pending" ? "Not Paid" : "Paid"}</span>
 
         ),
-        sorter: (a, b) => tableSort(a, b, "paymentStatus")
+
     },
     {
         title: "Action",
@@ -143,6 +167,7 @@ class PaymentDashboard extends Component {
             competition: "all",
             paymentFor: "all",
             loadingSave: false,
+            offset: 0
 
         };
         this_Obj = this;
@@ -216,6 +241,9 @@ class PaymentDashboard extends Component {
 
     handlePaymentTableList = (page) => {
         let offset = page ? 10 * (page - 1) : 0;
+        this.setState({
+            offset
+        })
         this.props.getPaymentList(offset);
     };
     dropdownView = () => {

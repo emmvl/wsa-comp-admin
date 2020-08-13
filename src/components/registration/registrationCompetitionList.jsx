@@ -22,10 +22,18 @@ let this_Obj = null;
 
 
 /////function to sort table column
-function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_Obj.state.sortBy !== key) {
+        sortOrder = 'ASC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
+        sortBy = sortOrder = null;
+    }
+    this_Obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_Obj.props.regCompetitionListAction(this_Obj.state.offset, this_Obj.state.yearRefId, this_Obj.state.searchText, sortBy, sortOrder);
 }
 
 function totalSeasonalFees(seasonalFees1, record) {
@@ -90,66 +98,80 @@ function totalCasualFees(casualFees1, record) {
     )
 }
 
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
 
 const columns = [
     {
         title: "Competition Name",
         dataIndex: "competitionName",
         key: "competitionName",
-        sorter: (a, b) => tableSort(a, b, "competitionName")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: "Organiser",
         dataIndex: "organiser",
         key: "organiser",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: organiser => (
             <span>{organiser === null || organiser === "" ? "N/A" : organiser}</span>
         ),
-        sorter: (a, b) => tableSort(a, b, "organiser")
+
     },
     {
         title: "Affiliate",
         dataIndex: "affiliateName",
         key: "affiliateName",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("affiliate"),
         render: affiliateName => (
             <span>{affiliateName === null || affiliateName === "" ? "N/A" : affiliateName}</span>
         ),
-        sorter: (a, b) => tableSort(a, b, "affiliateName")
+
     },
     {
         title: "Membership Product",
         dataIndex: "membershipProductName",
         key: "membershipProductName",
-        sorter: (a, b) => tableSort(a, b, "membershipProductName")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("membershipProduct"),
     },
     {
         title: "Membership Type",
         dataIndex: "membershipProductTypeName",
         key: "membershipProductTypeName",
-        sorter: (a, b) => tableSort(a, b, "membershipProductTypeName")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("membershipType"),
     },
     {
         title: "Registration Divisions",
         dataIndex: "divisionName",
         key: "divisionName",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("registrationDivisions"),
         render: divisionName => (
             <span>{divisionName === null || divisionName === "" ? "N/A" : divisionName}</span>
         ),
-        sorter: (a, b) => tableSort(a, b, "divisionName")
+
     },
     {
         title: "Total Fee - Seasonal (inc GST)",
         dataIndex: "seasonalFees",
         key: "seasonalFees",
         render: (seasonalFees, record) => totalSeasonalFees(seasonalFees, record),
-        sorter: (a, b) => tableSort(a, b, "seasonalFees")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("totalSeasonalFee"),
     },
     {
         title: "Total Fee - Casual (inc GST)",
         dataIndex: "casualFees",
         key: "casualFees",
         render: (casualFees, record) => totalCasualFees(casualFees, record),
-        sorter: (a, b) => tableSort(a, b, "totalCasualFee")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("totalCasualFee"),
     },
     {
         title: "Action",
@@ -198,6 +220,7 @@ class RegistrationCompetitionList extends Component {
             deleteLoading: false,
             userRole: "",
             searchText: '',
+            offset: 0
         };
         this_Obj = this;
         this.props.CLEAR_OWN_COMPETITION_DATA()
@@ -358,6 +381,9 @@ class RegistrationCompetitionList extends Component {
 
     handleCompetitionTableList = (page, yearRefId, searchText) => {
         let offset = page ? 10 * (page - 1) : 0;
+        this.setState({
+            offset,
+        })
         this.props.regCompetitionListAction(offset, yearRefId, searchText);
     };
 

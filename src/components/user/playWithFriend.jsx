@@ -10,65 +10,103 @@ import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import { getOrganisationData } from "../../util/sessionStorage";
-import {getUserFriendAction} from "../../store/actions/userAction/userAction";
+import { getUserFriendAction } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
 const { confirm } = Modal;
 const { SubMenu } = Menu;
+let this_Obj = null
 
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
+
+
+/////function to sort table column
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_Obj.state.sortBy !== key) {
+        sortOrder = 'ASC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
+        sortBy = sortOrder = null;
+    }
+
+    let filterData = {
+        organisationUniqueKey: this_Obj.state.organisationId,
+        yearRefId: this_Obj.state.yearRefId,
+        paging: {
+            limit: 10,
+            offset: (this_Obj.state.pageNo ? (10 * (this_Obj.state.pageNo - 1)) : 0)
+        }
+    }
+
+    this_Obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_Obj.props.getUserFriendAction(filterData, sortBy, sortOrder);
+}
 const columns = [
 
     {
         title: 'Registered User',
         dataIndex: 'name',
         key: 'name',
-        sorter: (a, b) => a.name.localeCompare(b.name),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("registeredUser"),
     },
     {
         title: 'Affiliate Name',
         dataIndex: 'affiliateName',
         key: 'affiliateName',
-        sorter: (a, b) => a.affiliateName.localeCompare(b.affiliateName),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Competition Name',
         dataIndex: 'competitionName',
         key: 'competitionName',
-        sorter: (a, b) => a.competitionName.localeCompare(b.competitionName),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Division',
         dataIndex: 'divisionName',
         key: 'divisionName',
-        sorter: (a, b) => a.divisionName.localeCompare(b.divisionName),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("division"),
     },
     {
         title: 'Friend Name',
         dataIndex: 'friendName',
         key: 'friendName',
-        sorter: (a, b) => a.name.localeCompare(b.name)
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Friend Status',
         dataIndex: 'friendStatus',
         key: 'friendStatus',
-        sorter: (a, b) => a.friendStatus.localeCompare(b.friendStatus),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Competition Name',
         dataIndex: 'friendCompetitionName',
         key: 'friendCompetitionName',
-        sorter: (a, b) => a.friendCompetitionName.localeCompare(b.friendCompetitionName),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Division',
         dataIndex: 'friendCompDivision',
         key: 'friendCompDivision',
-        sorter: (a, b) => a.friendCompDivision.localeCompare(b.friendCompDivision),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
-    
+
 
 ];
 
@@ -78,18 +116,23 @@ class PlayWithFriend extends Component {
         this.state = {
             organisationId: getOrganisationData().organisationUniqueKey,
             yearRefId: -1,
+            pageNo: 1
         }
+        this_Obj = this
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.referenceCalls();
         this.handleFriendTableList(1);
     }
-    componentDidUpdate(nextProps){
+    componentDidUpdate(nextProps) {
 
     }
 
     handleFriendTableList = (page) => {
+        this.setState({
+            pageNo: page
+        })
         let filter =
         {
             organisationUniqueKey: this.state.organisationId,

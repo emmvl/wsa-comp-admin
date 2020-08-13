@@ -819,14 +819,14 @@ class CompetitionQuickCompetition extends Component {
     // footer view
     footerView = () => {
         return (
-            <div className="fluid-width" >
+            <div className="fluid-width paddingBottom56px" >
                 <div className="row" >
-                    <div className="col-sm-3">
+                    <div className="col-sm-3" >
                         <div className="reg-add-save-button">
-                            {/* <Button type="cancel-button">{AppConstants.back}</Button> */}
+
                         </div>
                     </div>
-                    <div className="col-sm" >
+                    <div className="col-sm">
                         <div className="comp-buttons-view">
                             <Button id={AppUniqueId.qckcomp_genFixtures_btn} className="save-draft-text" htmlType="submit" type="save-draft-text" style={{ width: 160 }}
                                 onClick={() => this.setState({ buttonPressed: "saveDraft" })}>{AppConstants.generateFixtures}</Button>
@@ -836,11 +836,12 @@ class CompetitionQuickCompetition extends Component {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         )
     }
 
-    /// render function 
+
+    /// render function
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
