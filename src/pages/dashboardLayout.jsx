@@ -545,7 +545,7 @@ class DashboardLayout extends React.Component {
               ))}
             </Select>
           </Modal>
-          <Loader visible={this.props.userState.impersonationLoad || this.props.userState.onLoad}/>
+          <Loader visible={this.props.userState.impersonationLoad}/>
         </header>
       </>
     );
