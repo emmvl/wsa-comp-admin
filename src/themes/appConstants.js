@@ -1298,7 +1298,7 @@ const AppConstants = {
   addOrder: "Add Order",
   paymentStatus: "Payment Status",
 
-  fullFillmentStatus: "Fullfilment Status",
+  fulfilmentStatus: "Fulfilment Status",
   attendence_Recording_Time: "Attendance Recording Time",
   lineupSelection: "Lineup Selection",
   _days: "Days",
@@ -1520,6 +1520,10 @@ const AppConstants = {
   teamRegistrations: "Team Registrations",
   childrenCheckNumber: "Requires Working with Children Check",
   regenerateDrawTitle: "Regenerate draw from which Round?",
+  refundFullAmount: "Refund Full Amount",
+  refundPartialAmount: "Refund Partial Amount",
+  pickedUp: "Picked Up",
+  shipped: "Shipped",
 };
 
 export default AppConstants;

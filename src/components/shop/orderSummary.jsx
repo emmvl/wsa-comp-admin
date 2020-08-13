@@ -34,7 +34,6 @@ const columns = [
         title: 'Date',
         dataIndex: 'date',
         key: 'date',
-        width: 140,
         sorter: (a, b) => tableSort(a, b, "date"),
         render: (date) => {
             return (
@@ -116,7 +115,7 @@ class OrderSummary extends Component {
             search: searchText,
             year: yearRefId,
             postcode: postcode,
-            organisationId: affiliateOrgId,
+            affiliate: "all",
             paymentMethod: paymentMethod,
             order: "",
             sorterBy: ""
@@ -139,7 +138,7 @@ class OrderSummary extends Component {
             search: searchText,
             year: yearRefId,
             postcode: postcode,
-            organisationId: affiliateOrgId,
+            affiliate: affiliateOrgId,
             paymentMethod: paymentMethod,
             order: "",
             sorterBy: ""
@@ -176,10 +175,6 @@ class OrderSummary extends Component {
             else if (value.length == 0) {
                 this.handleTableList(1);
             }
-        }
-        else if (key == "searchText") {
-            await this.setState({ searchText: value });
-            this.handleTableList(1);
         }
         else if (key == "paymentMethod") {
             await this.setState({ paymentMethod: value });
@@ -223,7 +218,7 @@ class OrderSummary extends Component {
             search: searchText,
             year: yearRefId,
             postcode: postcode,
-            organisationId: affiliateOrgId,
+            affiliate: affiliateOrgId,
             paymentMethod: paymentMethod,
             order: "",
             sorterBy: ""
@@ -306,8 +301,8 @@ class OrderSummary extends Component {
         }
         let paymentData = [
             { name: "Cash", value: "cash" },
-            { name: "Direct Debit", value: "credit card" },
-            { name: "Credit Card", value: "direct debit" }
+            { name: "Direct Debit", value: "direct debit" },
+            { name: "Credit Card", value: "credit card" }
         ]
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1 order-summ-drop-down-padding order-summary-dropdown-view">
@@ -434,7 +429,8 @@ class OrderSummary extends Component {
                         onChange={(page) => this.handleTableList(page)}
                     />
                 </div>
-            </div>)
+            </div>
+        )
 
     }
 
