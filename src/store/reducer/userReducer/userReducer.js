@@ -115,7 +115,10 @@ const initialState = {
   userDetailUpdate: false,
   userPhotoUpdate: false,
   userPasswordUpdate: false,
-  defaultCharityRoundUp: []
+  defaultCharityRoundUp: [],
+  impersonationLoad: false,
+  impersonation: false,
+  userRoleEntity: [],
 };
 
 function userReducer(state = initialState, action) {
@@ -124,6 +127,7 @@ function userReducer(state = initialState, action) {
       return {
         ...state,
         onLoad: false,
+        impersonationLoad: false,
         userDetailUpdate: false,
         userPhotoUpdate: false,
         userPasswordUpdate: false,
@@ -135,6 +139,7 @@ function userReducer(state = initialState, action) {
       return {
         ...state,
         onLoad: false,
+        impersonationLoad: false,
         userDetailUpdate: false,
         userPhotoUpdate: false,
         userPasswordUpdate: false,
@@ -689,7 +694,16 @@ function userReducer(state = initialState, action) {
         affiliateOurOrg: ourOrgTCData
       };
 
-    
+    case ApiConstants.API_IMPERSONATION_LOAD:
+      return { ...state, impersonationLoad: true };
+
+    case ApiConstants.API_IMPERSONATION_SUCCESS:
+      return {
+        ...state,
+        impersonationLoad: false,
+        impersonation: action.result.success,
+        status: action.status,
+      };
 
     default:
       return state;

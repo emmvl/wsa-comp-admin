@@ -48,6 +48,14 @@ let userHttpApi = {
     return Method.dataGet(url, token);
   },
 
+  async impersonation(payload) {
+    const userId = await getUserId();
+    const {orgId, access} = payload;
+    const url = `/ure/impersonation?userId=${userId}&organisationUniqueKey=${orgId}&access=${access}`;
+
+    return Method.dataPost(url, token);
+  },
+
   async saveAffiliate(payload) {
     let userId = await getUserId()
     const url = `api/affiliates/save?userId=${userId}`;

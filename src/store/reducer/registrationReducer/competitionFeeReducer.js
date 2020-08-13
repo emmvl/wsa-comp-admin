@@ -1971,6 +1971,9 @@ function competitionFees(state = initialState, action) {
                     state.competitionDivisionsData[removeDivisionIndex].divisions.splice(action.index, 1)
                 }
             }
+			else if (action.keyword == "removeDivision") {
+                state.competitionDivisionsData[0].divisions.splice(action.index,1);
+            }		 
 
             return {
                 ...state,

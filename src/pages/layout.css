@@ -143,6 +143,10 @@
   width: auto;
 }
 
+.impersonation-site-header {
+  padding: 65px 30px 20px 30px;
+}
+
 .org-select .ant-select-selection {
   min-height: initial;
 }
@@ -227,6 +231,18 @@
     padding-right: 10px;
   }
 
+  .impersonation-site-header {
+    padding: 20px 10px;
+  }
+
+  .impersonation-bar {
+    font-size: 13px !important;
+  }
+
+  .impersonation-bar a {
+    min-width: 80px;
+  }
+
   .header-wrap .col-sm.dashboard-layout-menu-heading-view {
     display: inline-block;
     margin-left: 0;
@@ -263,4 +279,19 @@
 
 .form-field-error {
   color: var(--app-f5222d);
+}
+
+.impersonation-bar {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 45px;
+  background: var(--app-color);
+  color: white;
+  font-size: 18px;
+}
+
+.impersonation-bar a {
+  margin-left: 24px;
+  text-decoration: underline;
 }

@@ -1,65 +1,165 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
-import { Input, Icon, Select } from "antd";
+import {NavLink} from "react-router-dom";
+import {Icon, Modal, Select} from "antd";
 import "./layout.css";
 import history from "../util/history";
 import AppConstants from "../themes/appConstants";
 import AppImages from "../themes/appImages";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { getUserOrganisationAction, onOrganisationChangeAction } from "../store/actions/userAction/userAction";
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {
+  getAffiliatesListingAction,
+  getOrganisationAction,
+  getUserOrganisationAction,
+  impersonationAction,
+  onOrganisationChangeAction
+} from "../store/actions/userAction/userAction";
 import {
   setOrganisationData,
   getOrganisationData,
   clearUmpireStorage,
+  setImpersonationAffiliate,
+  getImpersonationAffiliate,
 } from "../util/sessionStorage";
-import { clearHomeDashboardData, } from "../store/actions/homeAction/homeAction";
-import { setUserVars } from 'react-fullstory';
+import {clearHomeDashboardData,} from "../store/actions/homeAction/homeAction";
+import Loader from "../customComponents/loader";
 
-const { Option } = Select;
+const {Option} = Select;
 
 class DashboardLayout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       windowMobile: false,
-      dataOnload: false
+      dataOnload: false,
+      impersonationLoad: true,
+      openImpersonationModal: false,
+      impersonationAffiliateOrgId: null,
+      impersonationOrgData: null,
+      logout: false,
     };
   }
 
   async componentDidUpdate(nextProps) {
-    if (this.props.userState.onLoad == false && this.state.dataOnload == true) {
-      let organisationData = this.props.userState.getUserOrganisation
-      if (organisationData.length > 0) {
-        let orgData = getOrganisationData();
-        let organisationItem = orgData ? orgData : organisationData[0];
-        this.setFullStory(organisationItem);
-        await setOrganisationData(organisationItem);
-        this.props.onOrganisationChangeAction(organisationItem, "organisationChange");
-        this.setState({ dataOnload: false });
+    if (this.props.userState !== nextProps.userState) {
+      if (this.props.userState.onLoad === false && this.state.dataOnload === true) {
+        let organisationData = this.props.userState.getUserOrganisation;
+
+        if (organisationData.length > 0) {
+          let presetOrganisation = await this.getPresetOrganisation();
+
+          let orgData = presetOrganisation ? presetOrganisation : getOrganisationData();
+          let organisationItem = orgData ? orgData : organisationData[0];
+
+          await setOrganisationData(organisationItem);
+          this.props.onOrganisationChangeAction(organisationItem, "organisationChange");
+
+          const isImpersonation = this.props.userState.userRoleEntity
+            .findIndex((role) => role.roleId === 10) > -1;
+
+          this.setState({
+            dataOnload: false,
+            impersonationOrgData: isImpersonation ? orgData : null
+          });
+        }
+
+        if (this.props.userState.impersonation
+          && !this.state.impersonationLoad
+          && !this.state.dataOnload
+          && !this.props.userState.onLoad
+        ) {
+          const impersonationAffiliate = this.state.impersonationAffiliateOrgId
+            ? this.props.userState.affiliateList
+              .find((affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId)
+            : null;
+          await setImpersonationAffiliate(impersonationAffiliate);
+
+          history.push("/");
+          window.location.reload();
+        }
+      }
+
+      if (
+        this.props.userState.impersonation
+        && this.state.impersonationLoad
+        && !this.props.userState.impersonationLoad
+      ) {
+        if (this.state.logout) {
+          await localStorage.clear();
+          history.push("/");
+          window.location.reload();
+        } else {
+          this.props.getUserOrganisationAction();
+          this.setState({
+            dataOnload: true,
+            impersonationLoad: false
+          });
+        }
       }
     }
   }
 
   componentDidMount() {
-    this.setOrganisationKey()
+    this.setOrganisationKey();
+  }
+
+  async getPresetOrganisation() {
+    const userOrganisationData = this.props.userState.getUserOrganisation;
+    const impersonationAffiliate = await getImpersonationAffiliate();
+
+    if (!impersonationAffiliate) {
+      if (this.state.impersonationAffiliateOrgId) {
+        return userOrganisationData.find((org) => org.organisationUniqueKey === this.state.impersonationAffiliateOrgId);
+      }
+
+      return null;
+    }
+
+    return userOrganisationData
+      .find((org) => org.organisationUniqueKey === impersonationAffiliate.affiliateOrgId);
   }
 
   setOrganisationKey() {
-    let organisationData = getOrganisationData()
+    let organisationData = getOrganisationData();
     if (!organisationData) {
-      this.props.userState.getUserOrganisation.length == 0 && this.props.getUserOrganisationAction()
-      this.setState({ dataOnload: true })
+      this.props.userState.getUserOrganisation.length === 0 && this.props.getUserOrganisationAction();
+      this.setState({dataOnload: true});
     } else {
-      this.props.userState.getUserOrganisation.length === 0 && this.props.getUserOrganisationAction()
-      this.setState({ dataOnload: true })
+      this.props.userState.getUserOrganisation.length === 0 && this.props.getUserOrganisationAction();
+      this.setState({dataOnload: true});
     }
   }
 
+  endImpersonation = async () => {
+    const impersonationAffiliate = await getImpersonationAffiliate();
+
+    if (impersonationAffiliate) {
+      this.props.impersonationAction({
+        orgId: impersonationAffiliate.affiliateOrgId,
+        access: false,
+      });
+
+      await setImpersonationAffiliate(null);
+      await setOrganisationData(null);
+
+      this.setState({impersonationLoad: true, endImpersonation: true});
+    }
+  };
+
   logout = async () => {
-    await localStorage.clear();
-    history.push("/");
-    window.location.reload();
+    const impersonationOrg = await getImpersonationAffiliate();
+    if (impersonationOrg) {
+      this.props.impersonationAction({
+        orgId: impersonationOrg.affiliateOrgId,
+        access: false,
+      });
+
+      this.setState({logout: true})
+    } else {
+      await localStorage.clear();
+      history.push("/");
+      window.location.reload();
+    }
   };
 
   changeId = menuName => {
@@ -113,7 +213,7 @@ class DashboardLayout extends React.Component {
 
   ////search view input on width<767px
   searchView = () => {
-    this.setState({ windowMobile: !this.state.windowMobile });
+    this.setState({windowMobile: !this.state.windowMobile});
   };
 
   onOrganisationChange = async (organisationData) => {
@@ -137,11 +237,42 @@ class DashboardLayout extends React.Component {
     //      });
     //   }
     // }
-  }
+  };
 
-  ///////user profile dropdown
+  handleImpersonation = () => {
+    const organisationData = getOrganisationData();
+    this.props.getAffiliatesListingAction({
+      organisationId: organisationData.organisationUniqueKey,
+      affiliatedToOrgId: -1,
+      organisationTypeRefId: -1,
+      statusRefId: -1,
+      paging: {limit: -1, offset: 0}
+    });
+    this.setState({openImpersonationModal: true});
+  };
+
+  handleImpersonationModal = (button) => {
+    if (button === 'ok') {
+      this.setState({openImpersonationModal: false});
+      const orgData = this.props.userState.affiliateList.find((affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId);
+      if (orgData) {
+        this.props.impersonationAction({
+          orgId: orgData.affiliateOrgId,
+          access: true,
+        });
+      }
+    } else {
+      this.setState({openImpersonationModal: false});
+    }
+  };
+
+  handleImpersonationOrg = (e) => {
+    this.setState({impersonationAffiliateOrgId: e});
+  };
+
+  // user profile dropdown
   userProfileDropdown() {
-    const { menuName } = this.props;
+    const {menuName} = this.props;
     let userData = this.props.userState.getUserOrganisation;
     let selectedOrgData = getOrganisationData();
     let userImage = (selectedOrgData && selectedOrgData.photoUrl)
@@ -155,7 +286,7 @@ class DashboardLayout extends React.Component {
           type="button"
           data-toggle="dropdown"
         >
-          <img id={AppConstants.user_profile_icon} src={userImage} alt="" />
+          <img id={AppConstants.user_profile_icon} src={userImage} alt=""/>
         </button>
 
         <ul className="dropdown-menu">
@@ -163,7 +294,7 @@ class DashboardLayout extends React.Component {
             <div className="media">
               <div className="media-left">
                 <figure className="user-img-wrap">
-                  <img src={userImage} alt="" />
+                  <img src={userImage} alt=""/>
                 </figure>
               </div>
 
@@ -176,7 +307,7 @@ class DashboardLayout extends React.Component {
 
                 <span className="user-name-btm pt-3">
                   {selectedOrgData && (
-                    <span style={{ textTransform: "capitalize" }}>
+                    <span style={{textTransform: "capitalize"}}>
                       {selectedOrgData.name + "(" + selectedOrgData.userRole + ")"}
                     </span>
                   )}
@@ -191,7 +322,7 @@ class DashboardLayout extends React.Component {
                 return (
                   <li key={"user" + index}>
                     <a onClick={() => this.onOrganisationChange(item)}>
-                      <span style={{ textTransform: "capitalize" }}>{item.name + "(" + item.userRole + ")"}</span>
+                      <span style={{textTransform: "capitalize"}}>{item.name + "(" + item.userRole + ")"}</span>
                     </a>
                   </li>
                 )
@@ -200,6 +331,12 @@ class DashboardLayout extends React.Component {
           )}
 
           <div className="acc-help-support-list-view">
+            {!this.state.impersonationOrgData && (
+              <li>
+                <a id={AppConstants.impersonation}
+                  onClick={() => this.handleImpersonation()}>{AppConstants.impersonation}</a>
+              </li>
+            )}
             <li className={menuName === AppConstants.account ? "active" : ""}>
               <NavLink id={AppConstants.acct_settings_label} to="/account/profile">Account Settings</NavLink>
             </li>
@@ -209,7 +346,7 @@ class DashboardLayout extends React.Component {
           </div>
 
           <li className="log-out">
-            <a id={AppConstants.log_out} onClick={this.logout}>Log Out</a>
+            <a id={AppConstants.log_out} onClick={() => this.logout()}>Log Out</a>
           </li>
         </ul>
       </div>
@@ -218,258 +355,199 @@ class DashboardLayout extends React.Component {
 
   render() {
     let menuName = this.props.menuName;
-    return (
-      <header className="site-header">
-        <div className="header-wrap">
-          <div className="row m-0-res">
-            <div className="col-sm-12 d-flex">
-              <div className="logo-box">
-                <NavLink to="/" className="site-brand">
-                  <img src={AppImages.netballLogo1} alt="" />
-                </NavLink>
 
-                <div className="col-sm dashboard-layout-menu-heading-view" onClick={this.props.onMenuHeadingClick}>
+    return (
+      <>
+        {this.state.impersonationLoad && this.state.impersonationOrgData && (
+          <div className="col-sm-12 d-flex impersonation-bar">
+            You are impersonating access to {this.state.impersonationOrgData.name}.
+            <a onClick={this.endImpersonation}>End access</a>
+          </div>
+        )}
+        <header className={`site-header ${
+          this.state.impersonationLoad && this.state.impersonationOrgData 
+            ? 'impersonation-site-header' 
+            : ''
+        }`}>
+          <div className="header-wrap">
+            <div className="row m-0-res">
+              <div className="col-sm-12 d-flex">
+                <div className="logo-box">
+                  <NavLink to="/" className="site-brand">
+                    <img src={AppImages.netballLogo1} alt=""/>
+                  </NavLink>
+
+                  <div className="col-sm dashboard-layout-menu-heading-view" onClick={this.props.onMenuHeadingClick}>
                   <span id={this.props.menuId} className="dashboard-layout-menu-heading">
                     {this.props.menuHeading}
                   </span>
+                  </div>
                 </div>
-
-                {/* <div className="col-sm width_200 mt-1">
-                  <div
-                    style={{
-                      width: "fit-content",
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginRight: 50,
-                    }}
-                  >
-                    <span className="year-select-heading">
-                      {AppConstants.organisation}:
-                    </span>
-                    <Select
-                      style={{ minWidth: 160, minHeight: "initial" }}
-                      name={"competition"}
-                      className="year-select org-select"
-                      onChange={organisationUniqueKey => this.onOrganisationChange(organisationUniqueKey)}
-                      value={JSON.parse(JSON.stringify(this.state.organisationUniqueKey))}
-                    >
-                      {this.props.userState.venueOrganisation.map(item => {
-                        return (
-                          <Option key={"organisationUniqueKey" + item.organisationUniqueKey} value={item.organisationUniqueKey}>
-                            {item.name}
-                          </Option>
-                        );
-                      })}
-                    </Select>
-                  </div>
-                </div> */}
-              </div>
-              <div className="user-right">
-                <ul className="d-flex">
-                  {/* <li>
-                    <button
-                      className="dashboard-lay-search-button"
-                      onClick={() => this.searchView()}
-                    >
-                      <img
-                        src={AppImages.searchIcon}
-                        height="15"
-                        width="15"
-                        alt=""
-                      />
-                    </button>
-                    <form className="search-form">
-                      <div className="reg-product-search-inp-width">
-                        <Input
-                          className="product-reg-search-input"
-                          placeholder="Search..."
-                          prefix={
-                            <Icon
-                              type="search"
-                              style={{
-                                color: "rgba(0,0,0,.25)",
-                                height: 16,
-                                width: 16
-                              }}
-                            />
-                          }
-                        />
+                <div className="user-right">
+                  <ul className="d-flex">
+                    <li>
+                      <div className="site-menu">
+                        <div className="dropdown">
+                          {this.props.isManuNotVisible !== true && <button
+                            className="dropdown-toggle"
+                            type="button"
+                            data-toggle="dropdown"
+                          >
+                            <img id={this.changeId(menuName)} src={this.menuImageChange(menuName)} alt=""/>
+                          </button>}
+                          <ul className="dropdown-menu">
+                            <li
+                              className={
+                                menuName === AppConstants.home ? "active" : ""
+                              }
+                            >
+                              <div className="home-menu menu-wrap">
+                                <NavLink to="/homeDashboard">
+                                  <span className="icon"/>
+                                  {AppConstants.home}
+                                </NavLink>
+                              </div>
+                            </li>
+                            <li
+                              className={
+                                menuName === AppConstants.user ? "active" : ""
+                              }
+                            >
+                              <div className="user-menu menu-wrap">
+                                <NavLink to="/userTextualDashboard">
+                                  <span className="icon"/>
+                                  {AppConstants.user}
+                                </NavLink>
+                              </div>
+                            </li>
+                            <li
+                              className={
+                                menuName === AppConstants.registration
+                                  ? "active"
+                                  : ""
+                              }
+                            >
+                              <div id={AppConstants.registration_icon} className="registration-menu menu-wrap">
+                                <NavLink to="/registrationDashboard">
+                                  <span id={AppConstants.registrations_label} className="icon"/>
+                                  {AppConstants.registration}
+                                </NavLink>
+                              </div>
+                            </li>
+                            <li
+                              className={
+                                menuName === AppConstants.competitions
+                                  ? "active"
+                                  : ""
+                              }
+                            >
+                              <div id={AppConstants.competition_icon} className="competitions-menu menu-wrap">
+                                <NavLink to="/competitionDashboard">
+                                  <span id={AppConstants.competitions_label} className="icon"/>
+                                  {AppConstants.competitions}
+                                </NavLink>
+                              </div>
+                            </li>
+                            <li
+                              className={
+                                menuName === AppConstants.liveScores
+                                  ? "active"
+                                  : ""
+                              }
+                            >
+                              <div className="lives-cores menu-wrap">
+                                <NavLink to="/liveScoreCompetitions">
+                                  <span className="icon"/>
+                                  {AppConstants.liveScores}
+                                </NavLink>
+                              </div>
+                            </li>
+                            <li
+                              className={
+                                menuName === AppConstants.events ? "active" : ""
+                              }
+                            >
+                              <div className="events-menu menu-wrap">
+                                <a href="#">
+                                  <span className="icon"/>
+                                  {AppConstants.events}
+                                </a>
+                              </div>
+                            </li>
+                            <li
+                              className={
+                                menuName === AppConstants.shop ? "active" : ""
+                              }
+                            >
+                              <div className="shop-menu menu-wrap">
+                                <NavLink to="/shopDashboard">
+                                  <span className="icon"/>
+                                  {AppConstants.shop}
+                                </NavLink>
+                              </div>
+                            </li>
+                            <li
+                              className={
+                                menuName === AppConstants.umpires ? "active" : ""
+                              }
+                            >
+                              <div className="umpires-menu menu-wrap">
+                                <NavLink to="/umpireDashboard">
+                                  <span className="icon"/>
+                                  {AppConstants.umpires}
+                                </NavLink>
+                              </div>
+                            </li>
+                            <li
+                              className={
+                                menuName === AppConstants.finance ? "active" : ""
+                              }
+                            >
+                              <div className="finance-menu menu-wrap">
+                                <a href="#">
+                                  <span className="icon"/>
+                                  {AppConstants.finance}
+                                </a>
+                              </div>
+                            </li>
+                          </ul>
+                        </div>
                       </div>
-                    </form>
-                  </li> */}
-                  <li>
-                    <div className="site-menu">
-                      <div className="dropdown">
-                        {this.props.isManuNotVisible !== true && <button
-                          className="dropdown-toggle"
-                          type="button"
-                          data-toggle="dropdown"
-                        >
-                          <img id={this.changeId(menuName)} src={this.menuImageChange(menuName)} alt="" />
-                        </button>}
-                        <ul className="dropdown-menu">
-                          <li
-                            className={
-                              menuName === AppConstants.home ? "active" : ""
-                            }
-                          >
-                            <div className="home-menu menu-wrap">
-                              <NavLink to="/homeDashboard">
-                                <span className="icon" />
-                                {AppConstants.home}
-                              </NavLink>
-                            </div>
-                          </li>
-                          <li
-                            className={
-                              menuName === AppConstants.user ? "active" : ""
-                            }
-                          >
-                            <div className="user-menu menu-wrap">
-                              <NavLink to="/userTextualDashboard">
-                                <span className="icon" />
-                                {AppConstants.user}
-                              </NavLink>
-                            </div>
-                          </li>
-                          <li
-                            className={
-                              menuName === AppConstants.registration
-                                ? "active"
-                                : ""
-                            }
-                          >
-                            <div id={AppConstants.registration_icon} className="registration-menu menu-wrap">
-                              <NavLink to="/registrationDashboard">
-                                <span id={AppConstants.registrations_label} className="icon" />
-                                {AppConstants.registration}
-                              </NavLink>
-                            </div>
-                          </li>
-                          <li
-                            className={
-                              menuName === AppConstants.competitions
-                                ? "active"
-                                : ""
-                            }
-                          >
-                            <div id={AppConstants.competition_icon} className="competitions-menu menu-wrap">
-                              <NavLink to="/competitionDashboard">
-                                <span id={AppConstants.competitions_label} className="icon" />
-                                {AppConstants.competitions}
-                              </NavLink>
-                            </div>
-                          </li>
-                          <li
-                            className={
-                              menuName === AppConstants.liveScores
-                                ? "active"
-                                : ""
-                            }
-                          >
-                            <div className="lives-cores menu-wrap">
-                              <NavLink to="/liveScoreCompetitions">
-                                <span className="icon" />
-                                {AppConstants.liveScores}
-                              </NavLink>
-                            </div>
-                          </li>
-                          <li
-                            className={
-                              menuName === AppConstants.events ? "active" : ""
-                            }
-                          >
-                            <div className="events-menu menu-wrap">
-                              <a href="#">
-                                <span className="icon" />
-                                {AppConstants.events}
-                              </a>
-                            </div>
-                          </li>
-                          <li
-                            className={
-                              menuName === AppConstants.shop ? "active" : ""
-                            }
-                          >
-                            <div className="shop-menu menu-wrap">
-                              <NavLink to="/shopDashboard">
-                                <span className="icon" />
-                                {AppConstants.shop}
-                              </NavLink>
-                            </div>
-                          </li>
-                          <li
-                            className={
-                              menuName === AppConstants.umpires ? "active" : ""
-                            }
-                          >
-                            <div className="umpires-menu menu-wrap">
-                              <NavLink to="/umpireDashboard">
-                                <span className="icon" />
-                                {AppConstants.umpires}
-                              </NavLink>
-                            </div>
-                          </li>
-                          {/* <li
-                            className={
-                              menuName === AppConstants.incidents
-                                ? "active"
-                                : ""
-                            }
-                          >
-                            <div className="incidents-menu menu-wrap">
-                              <a href="#">
-                                <span className="icon"></span>
-                                {AppConstants.incidents}
-                              </a>
-                            </div>
-                          </li> */}
-                          <li
-                            className={
-                              menuName === AppConstants.finance ? "active" : ""
-                            }
-                          >
-                            <div className="finance-menu menu-wrap">
-                              <a href="#">
-                                <span className="icon" />
-                                {AppConstants.finance}
-                              </a>
-                            </div>
-                          </li>
-                        </ul>
+                    </li>
+                    <li>
+                      <div className="user-profile-box">
+                        {this.userProfileDropdown()}
                       </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="user-profile-box">
-                      {this.userProfileDropdown()}
-                    </div>
-                  </li>
-                </ul>
-                {/* {this.state.windowMobile && (
-                  <div className="dash-search-inp-width">
-                    <Input
-                      className="product-reg-search-input"
-                      placeholder="Search..."
-                      prefix={
-                        <Icon
-                          type="search"
-                          style={{
-                            color: "rgba(0,0,0,.25)",
-                            height: 16,
-                            width: 16
-                          }}
-                        />
-                      }
-                    />
-                  </div>
-                )} */}
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </header>
+          <Modal
+            className="add-membership-type-modal"
+            title={AppConstants.impersonationOrgSelect}
+            visible={this.state.openImpersonationModal}
+            onOk={() => this.handleImpersonationModal("ok")}
+            onCancel={() => this.handleImpersonationModal("cancel")}>
+            <Select
+              className="w-100 reg-filter-select-competition"
+              onChange={(e) => this.handleImpersonationOrg(e)}
+              placeholder="Organisation"
+              showSearch
+              filterOption={(input, option) =>
+                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              loading={this.props.userState.onLoad}
+            >
+              {(this.props.userState.affiliateList || []).map((affiliate, dIndex) => (
+                <Option key={affiliate.id} value={affiliate.affiliateOrgId}>{affiliate.affiliateName}</Option>
+              ))}
+            </Select>
+          </Modal>
+          <Loader visible={this.props.userState.impersonationLoad}/>
+        </header>
+      </>
     );
   }
 }
@@ -479,6 +557,9 @@ function mapDispatchToProps(dispatch) {
     getUserOrganisationAction,
     onOrganisationChangeAction,
     clearHomeDashboardData,
+    getOrganisationAction,
+    impersonationAction,
+    getAffiliatesListingAction,
   }, dispatch);
 }
 

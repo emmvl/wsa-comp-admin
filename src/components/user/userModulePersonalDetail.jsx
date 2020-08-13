@@ -62,8 +62,15 @@ const columns = [
     },
     {
         title: 'Payment Method',
-        dataIndex: 'vouchers',
-        key: 'vouchers'
+        dataIndex: 'paymentType',
+        key: 'paymentType',
+        render:(paymentType, record, index) =>{
+            return(
+                <span style={{textTransform:'capitalize'}}>
+                    {paymentType}
+                </span>
+            )
+        }
     },
     {
         title: 'Shop Purchases',
@@ -73,7 +80,14 @@ const columns = [
     {
         title: 'Status',
         dataIndex: 'paymentStatus',
-        key: 'paymentStatus'
+        key: 'paymentStatus',
+        render: (paymentStatus, record, index) =>{
+            return(
+                <span style={{textTransform:'capitalize'}}>
+                {paymentStatus}
+            </span>
+            )
+        }
     },
     {
         title: "Reg.Form",
@@ -1164,13 +1178,17 @@ class UserModulePersonalDetail extends Component {
         let countryName = "";
         let nationalityName = "";
         let languages = "";
+        let childrenCheckNumber = "";
+        let childrenCheckExpiryDate = "";	 
         let userRegId = null;
 
         if (personalByCompData != null && personalByCompData.length > 0) {
             countryName = personalByCompData[0].countryName;
             nationalityName = personalByCompData[0].nationalityName;
             languages = personalByCompData[0].languages;
-            userRegId = personalByCompData[0].userRegistrationId
+            userRegId = personalByCompData[0].userRegistrationId;
+            childrenCheckNumber = personalByCompData[0].childrenCheckNumber;
+            childrenCheckExpiryDate = personalByCompData[0].childrenCheckExpiryDate;								
         }
 
         return (
@@ -1248,9 +1266,17 @@ class UserModulePersonalDetail extends Component {
                                     <div className="desc-text-style side-bar-profile-data other-info-font">{nationalityName}</div>
                                 </div>
                                 <div className="other-info-row">
-                                    <div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.childLangSpoken}</div>
+                                    <div className="year-select-heading other-info-label">{AppConstants.childLangSpoken}</div>
                                     <div className="desc-text-style side-bar-profile-data other-info-font">{languages}</div>
                                 </div>
+                                <div className="other-info-row">
+                                    <div className="year-select-heading other-info-label">{AppConstants.childrenNumber}</div>
+                                    <div className="desc-text-style side-bar-profile-data other-info-font" >{childrenCheckNumber}</div>
+                                </div>
+                                <div className="other-info-row">
+                                    <div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.checkExpiryDate}</div>
+                                    <div className="desc-text-style side-bar-profile-data other-info-font" >{childrenCheckExpiryDate != null ? moment(childrenCheckExpiryDate).format("DD/MM/YYYY") : ""}</div>
+                                </div>  
                             </div>}
                         {/* <div className="other-info-row">
 							<div className="year-select-heading other-info-label" style={{ paddingBottom: '20px' }}>{AppConstants.disability}</div>
