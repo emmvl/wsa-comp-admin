@@ -138,17 +138,10 @@ class CompetitionPartTeamGradeCalculate extends Component {
 
         }
         if (this.props.ownTeamGradingState.onLoad === false && this.state.nextButtonClicked === true) {
-            if (!this.props.ownTeamGradingState.error) {
-                this.setState({
-                    nextButtonClicked: false
-                })
-                history.push('/competitionCourtAndTimesAssign')
-            }
-            else {
-                this.setState({
-                    nextButtonClicked: false
-                })
-            }
+            this.setState({
+                nextButtonClicked: false
+            })
+            history.push('/competitionCourtAndTimesAssign')
         }
     }
 
@@ -343,8 +336,9 @@ class CompetitionPartTeamGradeCalculate extends Component {
                     <div className="row" >
                         <div className="col-sm-3" >
                             <div className="com-year-select-heading-view pb-3" >
-                                <span id={AppUniqueId.teamGradingYear_dpdn} className='year-select-heading'>{AppConstants.year}:</span>
+                                <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
+                                    id={AppUniqueId.teamGradingYear_dpdn}
                                     name={"yearRefId"}
                                     style={{ width: 90 }}
                                     className="year-select reg-filter-select-year ml-2"
@@ -367,8 +361,9 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                 flexDirection: "row",
                                 alignItems: "center", marginRight: 50
                             }} >
-                                <span id={AppUniqueId.teamGradingYCompetition_dpdn} className='year-select-heading'>{AppConstants.competition}:</span>
+                                <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
+                                    id={AppUniqueId.teamGradingYCompetition_dpdn}
                                     name={"competition"}
                                     className="year-select reg-filter-select-competition ml-2"
                                     onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)
@@ -489,7 +484,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                     <div className="col-sm">
                         <div className="comp-buttons-view">
                             <Tooltip
-                                key={AppUniqueId.teamGrading_PublishBtn}
+
                                 style={{ height: '100%' }}
                                 onMouseEnter={() =>
                                     this.setState({
@@ -503,6 +498,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                 title={AppConstants.statusPublishHover}
                             >
                                 <Button
+                                    id={AppUniqueId.teamGrading_PublishBtn}
                                     className="publish-button save-draft-text"
                                     disabled={isPublished}
                                     style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }}
@@ -511,12 +507,19 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                 >{AppConstants.save}
                                 </Button>
                             </Tooltip>
+                            {/* <NavLink id={AppUniqueId.teamGrading_NextBtn} to="/competitionCourtAndTimesAssign"> */}
                             <Button
                                 id={AppUniqueId.teamGrading_NextBtn}
                                 onClick={() => this.publishtApiCall("next")}
                                 disabled={isPublished} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
+                            {/* </NavLink> */}
                         </div>
                     </div>
+                    {/* <div className="col-sm-1">
+                        <div className="comp-buttons-view">
+                           
+                        </div>
+                    </div> */}
                 </div>
             </div >
         )

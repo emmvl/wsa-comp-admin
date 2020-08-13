@@ -549,6 +549,7 @@ class AddProduct extends Component {
                         }
                     )(
                         <InputWithHead
+                            auto_Complete='new-title'
                             required={"required-field pb-0"}
                             heading={AppConstants.title}
                             placeholder={AppConstants.enterTitle}
@@ -710,6 +711,7 @@ class AddProduct extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <InputWithHead
+                                auto_Complete='new-price'
                                 heading={AppConstants.price}
                                 placeholder={AppConstants.price}
                                 prefix="$"
@@ -726,6 +728,7 @@ class AddProduct extends Component {
                         </div>
                         <div className="col-sm">
                             <InputWithHead
+                                auto_Complete='new-cost'
                                 heading={AppConstants.costPerItem}
                                 placeholder={AppConstants.costPerItem}
                                 prefix="$"
@@ -803,6 +806,7 @@ class AddProduct extends Component {
                         <div className="row">
                             <div className="col-sm">
                                 <InputWithHead
+                                    auto_Complete='new-sku'
                                     heading={AppConstants.skuHeader}
                                     placeholder={AppConstants.StockKeepingUnit}
                                     onChange={(e) =>
@@ -817,6 +821,7 @@ class AddProduct extends Component {
                             </div>
                             <div className="col-sm">
                                 <InputWithHead
+                                    auto_Complete='new-barcode'
                                     heading={AppConstants.barcodeHeading}
                                     placeholder={AppConstants.barcode}
                                     onChange={(e) =>
@@ -918,6 +923,7 @@ class AddProduct extends Component {
                                         }
                                     )(
                                         <InputWithHead
+                                            auto_Complete='new-varientName'
                                             required={"required-field pb-0"}
                                             heading={AppConstants.variantName}
                                             placeholder={AppConstants.variantName}
@@ -934,6 +940,7 @@ class AddProduct extends Component {
                                 <div className="row"  >
                                     <div className="col-sm">
                                         <InputWithHead
+                                            auto_Complete='new-option'
                                             heading={AppConstants.option}
                                             placeholder={AppConstants.option}
                                             onChange={(e) => this.onVariantOptionOnChange(e.target.value, "optionName", 0, subIndex)}
@@ -943,6 +950,7 @@ class AddProduct extends Component {
                                     </div>
                                     <div className="col-sm">
                                         <InputWithHead
+                                            auto_Complete='new-price'
                                             heading={AppConstants.price}
                                             placeholder={AppConstants.price}
                                             prefix="$"
@@ -954,6 +962,7 @@ class AddProduct extends Component {
                                     </div>
                                     <div className="col-sm">
                                         <InputWithHead
+                                            auto_Complete='new-cost'
                                             heading={AppConstants.cost}
                                             placeholder={AppConstants.cost}
                                             prefix="$"
@@ -965,6 +974,7 @@ class AddProduct extends Component {
                                     </div>
                                     <div className="col-sm">
                                         <InputWithHead
+                                            auto_Complete='new-sku'
                                             heading={AppConstants.sku}
                                             placeholder={AppConstants.sku}
                                             onChange={(e) => this.onVariantOptionOnChange(e.target.value, "skuCode", 0, subIndex)}
@@ -974,6 +984,7 @@ class AddProduct extends Component {
                                     </div>
                                     <div className="col-sm">
                                         <InputWithHead
+                                            auto_Complete='new-barCode'
                                             heading={AppConstants.barcode}
                                             placeholder={AppConstants.barcode}
                                             onChange={(e) => this.onVariantOptionOnChange(e.target.value, "barcode", 0, subIndex)}
@@ -1078,6 +1089,7 @@ class AddProduct extends Component {
                                         }
                                     )(
                                         <InputWithHead
+                                            auto_Complete='new-dimensionLength'
                                             required={"required-field "}
                                             placeholder={"Length"}
                                             suffix="cm"
@@ -1118,6 +1130,7 @@ class AddProduct extends Component {
                                         }
                                     )(
                                         <InputWithHead
+                                            auto_Complete='new-width'
                                             required={"required-field "}
                                             placeholder={"Width"}
                                             suffix="cm"
@@ -1158,6 +1171,7 @@ class AddProduct extends Component {
                                         }
                                     )(
                                         <InputWithHead
+                                            auto_Complete='new-height'
                                             placeholder={"Height"}
                                             required={"required-field "}
                                             suffix="cm"
@@ -1191,6 +1205,7 @@ class AddProduct extends Component {
                                         }
                                     )(
                                         <InputWithHead
+                                            auto_Complete='new-weightDimension'
                                             heading={AppConstants.dimensions}
                                             required={"required-field "}
                                             placeholder={"Weight"}
@@ -1253,6 +1268,7 @@ class AddProduct extends Component {
                 <InnerHorizontalMenu menu={"shop"} shopSelectedKey={"2"} />
                 <Layout>
                     <Form
+                        autoComplete='off'
                         onSubmit={this.addProductPostAPI}
                         noValidate="noValidate">
                         <Content >

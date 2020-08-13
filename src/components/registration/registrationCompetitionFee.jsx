@@ -2131,8 +2131,8 @@ class RegistrationCompetitionFee extends Component {
       item.applyDiscount = parseInt(item.applyDiscount);
       if (item.amount !== null) {
         if (item.amount.length > 0) {
-          item.amount = parseInt(item.amount); 
-		} 
+          item.amount = parseInt(item.amount);
+        }
         // else {
         //   item['amount'] = null;
         // }
@@ -3237,7 +3237,7 @@ class RegistrationCompetitionFee extends Component {
         <div className="row">
           <div className="col-sm">
             <InputWithHead
-              auto_Complete="new-name"
+              auto_Complete={`new-name${index}`}
               placeholder={AppConstants.name}
               value={item.name}
               onChange={(e) =>

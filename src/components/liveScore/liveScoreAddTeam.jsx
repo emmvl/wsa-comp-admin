@@ -192,7 +192,6 @@ class LiveScoreAddTeam extends Component {
                             required={"required-field pb-0"}
                             heading={AppConstants.teamName}
                             placeholder={AppConstants.enterTeamName}
-                            name={'teamName'}
                             onChange={(event) => {
                                 this.props.liveScoreAddTeamform({ key: 'name', data: captializedString(event.target.value) })
                             }
@@ -217,7 +216,6 @@ if(x[0].charCodeAt()>=97)
                     auto_Complete='new-alias'
                     heading={"Team Alias"}
                     placeholder={"Team Alias"}
-                    name={'teamAlias'}
                     conceptulHelp
                     conceptulHelpMsg={AppConstants.teamAliasMsg}
                     onChange={(event) => {
@@ -464,7 +462,6 @@ if(x[0].charCodeAt()>=97)
                                 required={"required-field pt-0 pb-0"}
                                 heading={AppConstants.firstName}
                                 placeholder={AppConstants.enterFirstName}
-                                name={'firstName'}
                                 onChange={(event) => {
                                     this.props.liveScoreAddTeamform({ key: 'firstName', data: captializedString(event.target.value) })
 
@@ -488,7 +485,6 @@ if(x[0].charCodeAt()>=97)
                                     required={"required-field pt-0 pb-0"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.enterLastName}
-                                    name={'lastName'}
                                     onChange={(event) => {
                                         this.props.liveScoreAddTeamform({ key: 'lastName', data: captializedString(event.target.value) })
                                     }}
@@ -526,7 +522,6 @@ if(x[0].charCodeAt()>=97)
                                     required={"required-field pt-0 pb-0"}
                                     heading={AppConstants.emailAdd}
                                     placeholder={AppConstants.enterEmail}
-                                    name={'emailAddress'}
                                     onChange={(event) => {
                                         this.props.liveScoreAddTeamform({ key: 'email', data: event.target.value })
                                     }}
@@ -546,7 +541,6 @@ if(x[0].charCodeAt()>=97)
                                 required={"required-field pt-0 pb-0"}
                                 heading={AppConstants.contactNO}
                                 placeholder={AppConstants.enterContactNo}
-                                name={'contactNo'}
                                 maxLength={10}
                                 onChange={(event) => {
                                     this.props.liveScoreAddTeamform({ key: 'mobileNumber', data: event.target.value })

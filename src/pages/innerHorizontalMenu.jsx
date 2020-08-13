@@ -50,7 +50,7 @@ class InnerHorizontalMenu extends React.Component {
         if (this.props.userState.onLoad == false && this.state.orgState == true) {
             if (JSON.parse(localStorage.getItem('setOrganisationData'))) {
                 let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
-                if(this.props.menu === "liveScore"){
+                if (this.props.menu === "liveScore") {
                     this.props.innerHorizontalCompetitionListAction(organisationId)
                     this.setState({ loading: true, orgId: organisationId, orgState: false })
                 }
@@ -62,9 +62,9 @@ class InnerHorizontalMenu extends React.Component {
             if (this.state.loading == true && this.props.innerHorizontalState.onLoad == false) {
                 let compList = isArrayNotEmpty(this.props.innerHorizontalState.competitionList) ? this.props.innerHorizontalState.competitionList : []
                 let firstComp = 1
-              
+
                 let isCompetition = await getLiveScoreCompetiton()
-            
+
                 if (isCompetition) {
                     const { id } = JSON.parse(isCompetition)
                     firstComp = id
@@ -508,46 +508,75 @@ class InnerHorizontalMenu extends React.Component {
                             <span>Dashboard</span>
                         </NavLink>
                     </Menu.Item>
-                    <Menu.Item key="2">
-                        <NavLink to="/umpire">
-                            <span>Umpires</span>
-                        </NavLink>
-                    </Menu.Item>
-                    <Menu.Item key="3">
-                        <NavLink to="/umpireRoster">
-                            <span>Umpire Roster</span>
-                        </NavLink>
-                    </Menu.Item>
-                    {/* <Menu.Item key="4">
-                        <NavLink to="/umpireAllocation">
-                            <span>Umpire Allocation</span>
-                        </NavLink>
-                    </Menu.Item> */}
+
 
                     <SubMenu
-                        key="umpireAllocation"
+                        key="Umpires"
                         title={
-                            <span>Umpire Allocation</span>
+                            <span>Umpires</span>
                         }
                     >
-                        <Menu.Item key="4">
-                            <NavLink to="/umpireDivisions">
-                                <span>Divisions</span>
+                        <Menu.Item key="2">
+                            <NavLink to="/umpire">
+                                <span>Umpires</span>
                             </NavLink>
                         </Menu.Item>
-                        <Menu.Item key="5">
-                            <NavLink to="/umpirePoolAllocation">
-                                <span>Pool</span>
+                        <Menu.Item key="3">
+                            <NavLink to="/umpireRoster">
+                                <span>Umpire Roster</span>
                             </NavLink>
                         </Menu.Item>
-                        <Menu.Item key="6">
-                            <NavLink to="/umpireSetting">
+                        <SubMenu
+                            key="umpireAllocation"
+                            title={
+                                <span>Umpire Allocation</span>
+                            }
+                        >
+                            <Menu.Item key="4">
+                                <NavLink to="/umpireDivisions">
+                                    <span>Divisions</span>
+                                </NavLink>
+                            </Menu.Item>
+                            <Menu.Item key="5">
+                                <NavLink to="/umpirePoolAllocation">
+                                    <span>Pool</span>
+                                </NavLink>
+                            </Menu.Item>
+                            <Menu.Item key="6">
+                                <NavLink to="/umpireSetting">
+                                    <span>Settings</span>
+                                </NavLink>
+                            </Menu.Item>
+                        </SubMenu>
+                    </SubMenu>
+
+                    <SubMenu
+                        key="payments"
+                        title={
+                            <span>Payments</span>
+                        }
+                    >
+                        <Menu.Item key="7">
+                            <NavLink to="/umpirePayment">
+                                <span>Payments</span>
+                            </NavLink>
+                        </Menu.Item>
+                        <Menu.Item key="8">
+                            <NavLink to="/umpirePayout">
+                                <span>Payouts</span>
+                            </NavLink>
+                        </Menu.Item>
+                        <Menu.Item key="9">
+                            <NavLink to="/umpirePaymentSetting">
                                 <span>Settings</span>
                             </NavLink>
                         </Menu.Item>
                     </SubMenu>
+
+
                 </Menu>
                 }
+
 
                 {menu === "user" && (
                     <Menu
