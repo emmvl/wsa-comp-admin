@@ -53,6 +53,11 @@ let CompManagementAxiosApi = {
     var url = `/api/template/download`;
     return Method.dataGetDownload(url, token);
   },
+   async competitionDashboardDelete(competitionId)
+  {
+    var url = `/api/competition/delete?competitionId=${competitionId}`;
+    return Method.dataDelete(url, token);
+  }
 };
 
 
