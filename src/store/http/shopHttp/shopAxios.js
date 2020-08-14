@@ -29,8 +29,10 @@ let AxiosApi = {
     },
 
     ////////get reference type in the add product screen
-    getTypesOfProduct() {
-        var url = `/type/list`;
+    async getTypesOfProduct() {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem.organisationUniqueKey
+        var url = `/type/list?organisationUniqueKey=${organisationUniqueKey}`;
         return Method.dataGet(url, token);
     },
 
@@ -47,9 +49,12 @@ let AxiosApi = {
     },
 
     //////add type in the typelist array in from the API
-    addNewType(typeName) {
+    async addNewType(typeName) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem.organisationUniqueKey
         let body = {
-            "typeName": typeName
+            "typeName": typeName,
+            "organisationUniqueKey": organisationUniqueKey,
         }
         var url = `/type`;
         return Method.dataPost(url, token, body);
@@ -77,22 +82,37 @@ let AxiosApi = {
     },
 
     ///////////shop order summary listing get API
-    getOrderSummaryListing(params) {
-        let { limit, offset, search, year, postcode, organisationId, paymentMethod, order, sorterBy } = params
-        var url = `/order/summary?limit=${limit}&offset=${offset}&search=${search}&year=${year}
-        &postcode=${postcode}&organisationId=${organisationId}&paymentMethod=${paymentMethod}&order=${order}
+    async getOrderSummaryListing(params) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem.organisationUniqueKey
+        let { limit, offset, search, year, postcode, affiliate, paymentMethod, order, sorterBy } = params
+        var url = `/order/summary?organisationUniqueKey=${organisationUniqueKey}&limit=${limit}&offset=${offset}&search=${search}&year=${year}
+        &postcode=${postcode}&affiliate=${affiliate}&paymentMethod=${paymentMethod}&order=${order}
         &sorterBy=${sorterBy}`;
         // var url = `/order/summary`
         return Method.dataGet(url, token);
     },
 
     // //// //////export order summary  API
-    exportOrderSummary(params){
-        let { limit, offset, search, year, postcode, organisationId, paymentMethod, order, sorterBy } = params
-        var url = `/order/export/summary?limit=${limit}&offset=${offset}&search=${search}&year=${year}
-        &postcode=${postcode}&organisationId=${organisationId}&paymentMethod=${paymentMethod}&order=${order}
+    async exportOrderSummary(params) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem.organisationUniqueKey
+        let { limit, offset, search, year, postcode, affiliate, paymentMethod, order, sorterBy } = params
+        var url = `/order/export/summary?organisationUniqueKey=${organisationUniqueKey}&limit=${limit}&offset=${offset}&search=${search}&year=${year}
+        &postcode=${postcode}&affiliate=${affiliate}&paymentMethod=${paymentMethod}&order=${order}
         &sorterBy=${sorterBy}`;
-        return Method.dataGetDownload(url, token,"orderSummary");
+        return Method.dataGetDownload(url, token, "orderSummary");
+    },
+
+    /////// //order status status listing get API 
+    async getOrderStatusListing(params) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem.organisationUniqueKey
+        // let { limit, offset, search, year, paymentStatus, fulfilmentStatus, product } = params
+        // var url = `/order/statusList?organisationUniqueKey=${organisationUniqueKey}&limit=${limit}&offset=${offset}&search=${search}&year=${year}
+        // &paymentStatus=${paymentStatus}&fulfilmentStatus=${fulfilmentStatus}&product=${product}`;
+        var url = `/order/statusList?organisationUniqueKey=${organisationUniqueKey}`
+        return Method.dataGet(url, token);
     }
 };
 

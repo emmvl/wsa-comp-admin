@@ -290,12 +290,12 @@ function checkUmpireType(umpireArray, key) {
 
 // Remove duplicate rounds names 
 
-function removeDuplicateValues(array){
+function removeDuplicateValues(array) {
     return array.filter((obj, index, self) =>
-    index === self.findIndex((el) => (
-        el["name"] === obj["name"]
-    ))
-)
+        index === self.findIndex((el) => (
+            el["name"] === obj["name"]
+        ))
+    )
 
 }
 
@@ -303,7 +303,7 @@ function liveScoreMatchReducer(state = initialState, action) {
     switch (action.type) {
         //LIVESCORE Match LIST
         case ApiConstants.API_LIVE_SCORE_MATCH_LIST_LOAD:
-            return { ...state, onLoad: true, isFetchingMatchList: true, liveScoreMatchListData:[] };
+            return { ...state, onLoad: true, isFetchingMatchList: true, liveScoreMatchListData: [] };
 
         case ApiConstants.API_LIVE_SCORE_MATCH_LIST_SUCCESS:
 

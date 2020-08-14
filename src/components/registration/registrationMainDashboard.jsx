@@ -20,12 +20,25 @@ import { getAllCompetitionAction } from "../../store/actions/registrationAction/
 
 const { Content } = Layout;
 const { Option } = Select;
+let this_Obj = null
+
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
 
 /////function to sort table column
-function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_Obj.state.sortBy !== key) {
+        sortOrder = 'ASC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
+        sortBy = sortOrder = null;
+    }
+    this_Obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_Obj.props.registrationMainDashboardListAction(this_Obj.state.year, sortBy, sortOrder);
 }
 
 const columns = [
@@ -33,7 +46,8 @@ const columns = [
         title: "Competition Name",
         dataIndex: "competitionName",
         key: "competitionName",
-        sorter: (a, b) => tableSort(a, b, "competitionName")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("pcompetitionName"),
 
     },
     {
@@ -58,7 +72,8 @@ const columns = [
                 </span >
             )
         },
-        sorter: (a, b) => tableSort(a, b, "divisions")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("pregistrationDivisions"),
     },
     {
         title: "Registration Type",
@@ -73,13 +88,15 @@ const columns = [
                 </span >
             )
         },
-        sorter: (a, b) => tableSort(a, b, "invitees")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("pregistrationType"),
     },
     {
         title: "Status",
         dataIndex: "statusName",
         key: "statusName",
-        sorter: (a, b) => tableSort(a, b, "statusName"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("pstatus"),
     },
 ];
 
@@ -88,7 +105,8 @@ const columnsOwned = [
         title: "Competition Name",
         dataIndex: "competitionName",
         key: "competitionName",
-        sorter: (a, b) => tableSort(a, b, "competitionName")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("ocompetitionName"),
     },
     {
         title: "Registration Divisions",
@@ -112,7 +130,8 @@ const columnsOwned = [
                 </span >
             )
         },
-        sorter: (a, b) => tableSort(a, b, "divisions")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("oregistrationDivisions"),
     },
     {
         title: "Registration Type",
@@ -127,13 +146,15 @@ const columnsOwned = [
                 </span >
             )
         },
-        sorter: (a, b) => tableSort(a, b, "invitees")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("oregistrationType"),
     },
     {
         title: "Status",
         dataIndex: "statusName",
         key: "statusName",
-        sorter: (a, b) => tableSort(a, b, "statusName")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("ostatus"),
 
     },
 
@@ -158,6 +179,7 @@ class RegistrationMainDashboard extends Component {
             compName: "",
             regStatus: false
         };
+        this_Obj = this
     }
 
     componentDidMount() {

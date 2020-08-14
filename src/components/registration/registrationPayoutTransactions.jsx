@@ -32,13 +32,13 @@ const columns = [
         title: "Transaction Id",
         dataIndex: 'id',
         key: 'id',
-        sorter: (a, b) => tableSort(a, b, "id")
+        sorter: false,
     },
     {
         title: "Description",
         dataIndex: 'source_transfer',
         key: 'source_transfer',
-        sorter: (a, b) => tableSort(a, b, "description"),
+        sorter: false,
         render: source_transfer => (
             <span >{source_transfer ? source_transfer.description : "N/A"}</span>
         )
@@ -47,7 +47,7 @@ const columns = [
         title: "Date",
         dataIndex: 'created',
         key: 'created',
-        sorter: (a, b) => tableSort(a, b, "created"),
+        sorter: false,
         render: created => {
             var date = new Date(created * 1000);
             let finalDate = liveScore_formateDate(date)
@@ -63,13 +63,13 @@ const columns = [
         render: amount => (
             <span>{currencyFormat(amount)}</span>
         ),
-        sorter: (a, b) => tableSort(a, b, "amount")
+        sorter: false,
     },
     {
         title: "Status",
         dataIndex: 'status',
         key: 'status',
-        sorter: (a, b) => tableSort(a, b, "status")
+        sorter: false,
     },
 
 ];

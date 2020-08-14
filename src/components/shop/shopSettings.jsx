@@ -174,6 +174,7 @@ class ShopSettings extends Component {
                         }
                     )(
                         <InputWithHead
+                            auto_Complete='new-address'
                             required={"required-field pb-0"}
                             heading={AppConstants.address}
                             placeholder={AppConstants.address}
@@ -198,6 +199,7 @@ class ShopSettings extends Component {
                         }
                     )(
                         <InputWithHead
+                            auto_Complete='new-suburb'
                             required={"required-field pb-0"}
                             heading={AppConstants.suburb}
                             placeholder={AppConstants.suburb}
@@ -254,6 +256,7 @@ class ShopSettings extends Component {
                         }
                     )(
                         <InputWithHead
+                            auto_Complete='new-postCode'
                             required={"required-field pb-0"}
                             heading={AppConstants.postCode}
                             placeholder={AppConstants.postcode}
@@ -279,6 +282,7 @@ class ShopSettings extends Component {
                     <div className="row mt-4" key={"settingDetailsData" + index}>
                         <div className=" col-sm">
                             <InputWithHead
+                                auto_Complete='new-productType'
                                 required={"required-field "}
                                 placeholder={AppConstants.productTypes}
                                 onChange={(e) => this.props.onChangeSettingsData(
@@ -346,6 +350,7 @@ class ShopSettings extends Component {
                 <InnerHorizontalMenu menu={"shop"} shopSelectedKey={"4"} />
                 <Layout>
                     <Form
+                        autoComplete='off'
                         onSubmit={this.saveSettings}
                         noValidate="noValidate">
                         <Content>

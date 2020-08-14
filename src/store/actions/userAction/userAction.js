@@ -23,11 +23,13 @@ function impersonationAction(payload) {
 }
 
 /* Affiliates Listing */
-function getAffiliatesListingAction(payload) {
+function getAffiliatesListingAction(payload, sortBy, sortOrder) {
   return {
     type: ApiConstants.API_AFFILIATES_LISTING_LOAD,
-    payload: payload
-  };
+    payload: payload,
+    sortBy: sortBy,
+    sortOrder: sortOrder
+  }
 }
 
 /* Save Affiliate */
@@ -120,10 +122,12 @@ function onOrganisationChangeAction(organisationData, key) {
 }
 
 /* User Dashboard Textual Listing */
-function getUserDashboardTextualAction(payload) {
+function getUserDashboardTextualAction(payload, sortBy, sortOrder) {
   return {
     type: ApiConstants.API_USER_DASHBOARD_TEXTUAL_LOAD,
-    payload: payload
+    payload: payload,
+    sortBy: sortBy,
+    sortOrder: sortOrder
   };
 }
 
@@ -183,17 +187,21 @@ function getUserModuleActivityManagerAction(userId) {
   };
 }
 
-function getUserFriendAction(payload) {
+function getUserFriendAction(payload, sortBy, sortOrder) {
   return {
     type: ApiConstants.API_USER_FRIEND_LOAD,
-    payload: payload
+    payload: payload,
+    sortBy: sortBy,
+    sortOrder: sortOrder
   };
 }
 
-function getUserReferFriendAction(payload) {
+function getUserReferFriendAction(payload, sortBy, sortOrder) {
   return {
     type: ApiConstants.API_USER_REFER_FRIEND_LOAD,
-    payload: payload
+    payload: payload,
+    sortBy: sortBy,
+    sortOrder: sortOrder
   };
 }
 
@@ -234,10 +242,13 @@ function exportOrgRegQuestionAction(payload) {
 }
 
 /* Affiliate Directory Listing */
-function getAffiliateDirectoryAction(payload) {
+function getAffiliateDirectoryAction(payload, sortBy, sortOrder) {
+
   return {
     type: ApiConstants.API_AFFILIATE_DIRECTORY_LOAD,
-    payload: payload
+    payload: payload,
+    sortBy: sortBy,
+    sortOrder: sortOrder
   };
 }
 
@@ -295,15 +306,15 @@ function getUserProfileAction() {
 //update charity value
 function updateCharityValue(value, index, key) {
   const action = {
-      type: ApiConstants.UPDATE_ORGANISATION_CHARITY_ROUND_UP,
-      value: value,
-      index: index,
-      key: key
+    type: ApiConstants.UPDATE_ORGANISATION_CHARITY_ROUND_UP,
+    value: value,
+    index: index,
+    key: key
   }
   return action;
 }
 
-function updateCharityAction(payload){
+function updateCharityAction(payload) {
   const action = {
     type: ApiConstants.API_UPDATE_CHARITY_ROUND_UP_LOAD,
     payload: payload
@@ -312,7 +323,7 @@ function updateCharityAction(payload){
   return action;
 }
 
-function updateTermsAndCondtionAction(payload){
+function updateTermsAndCondtionAction(payload) {
   const action = {
     type: ApiConstants.API_UPDATE_TERMS_AND_CONDITION_LOAD,
     payload: payload

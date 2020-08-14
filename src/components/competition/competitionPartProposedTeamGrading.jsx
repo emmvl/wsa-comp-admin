@@ -36,6 +36,8 @@ import {
     clearReducerCompPartPlayerGradingAction,
     commentListingAction,
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
+import AppUniqueId from "../../themes/appUniqueId";
+
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 let this_obj = null;
@@ -641,7 +643,7 @@ class CompetitionPartProposedTeamGrading extends Component {
                                     title={AppConstants.statusPublishHover}
                                 >
                                     {/* <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button> */}
-                                    <Button disabled={isPublished} className="publish-button save-draft-text"
+                                    <Button id={AppUniqueId.finalteamgrad_save_bn} disabled={isPublished} className="publish-button save-draft-text"
                                         style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }}
                                         onClick={() => this.submitApiCall("save")}
                                         type="primary">{AppConstants.save}
@@ -661,6 +663,7 @@ class CompetitionPartProposedTeamGrading extends Component {
                                     title={AppConstants.statusPublishHover}
                                 >
                                     <Button
+                                        id={AppUniqueId.finalteamgrad_submit_bn}
                                         disabled={isPublished}
                                         style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }} className="publish-button save-draft-text"
                                         type="primary"

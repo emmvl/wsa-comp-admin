@@ -19,7 +19,7 @@ function InputWithHead(props) {
     tooltiprequired,
     id,
     headingId,
-    auto_Complete
+    auto_Complete,
   } = props;
 
   return (
@@ -46,7 +46,7 @@ function InputWithHead(props) {
           id={id}
           className="input"
           placeholder={placeholder}
-          name={name}
+          name={name ? name : 'hidden'}
           maxLength={maxLength}
           // handleChange={(name) => alert(name)}
           onBlur={handleBlur}

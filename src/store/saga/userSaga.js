@@ -93,8 +93,8 @@ function* getUreSaga(action) {
 // Get the Affiliates Listing
 function* getAffiliatesListingSaga(action) {
   try {
-    const result = yield call(userHttpApi.affiliatesListing, action.payload);
-
+    const result = yield call(userHttpApi.affiliatesListing, action.payload, action.sortBy, action.sortOrder);
+    console.log(result)
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_AFFILIATES_LISTING_SUCCESS,
@@ -251,7 +251,7 @@ function* getUserOrganisationSaga(action) {
 // Get the User Dashboard Textual Listing 
 function* getUserDashboardTextualListingSaga(action) {
   try {
-    const result = yield call(userHttpApi.getUserDashboardTextualListing, action.payload);
+    const result = yield call(userHttpApi.getUserDashboardTextualListing, action.payload, action.sortBy, action.sortOrder);
 
     if (result.status === 1) {
       yield put({
@@ -290,7 +290,6 @@ function* getUserModulePersonalDataSaga(action) {
 function* getUserModulePersonalByCompDataSaga(action) {
   try {
     const result = yield call(userHttpApi.getUserModulePersonalByCompData, action.payload);
-
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_USER_MODULE_PERSONAL_BY_COMPETITION_SUCCESS,
@@ -422,7 +421,7 @@ function* getUserModuleActivityManagerSaga(action) {
 // Get the User  Friend List
 function* getUserFriendListSaga(action) {
   try {
-    const result = yield call(userHttpApi.getUserFriendList, action.payload);
+    const result = yield call(userHttpApi.getUserFriendList, action.payload, action.sortBy, action.sortOrder);
 
     if (result.status === 1) {
       yield put({
@@ -441,7 +440,8 @@ function* getUserFriendListSaga(action) {
 // Get the User Refer Friend List 
 function* getUserReferFriendListSaga(action) {
   try {
-    const result = yield call(userHttpApi.getUserReferFriendList, action.payload);
+    const result = yield call(userHttpApi.getUserReferFriendList, action.payload, action.sortBy,
+      action.sortOrder);
 
     if (result.status === 1) {
       yield put({
@@ -559,7 +559,7 @@ function* exportOrgRegQuestionsSaga(action) {
 // Get the Affiliate Directory 
 function* getAffiliateDirectorySaga(action) {
   try {
-    const result = yield call(userHttpApi.affiliateDirectory, action.payload);
+    const result = yield call(userHttpApi.affiliateDirectory, action.payload, action.sortBy, action.sortOrder);
 
     if (result.status === 1) {
       yield put({

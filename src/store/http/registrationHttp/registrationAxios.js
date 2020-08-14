@@ -37,7 +37,7 @@ let AxiosApi = {
     },
 
     ////registrationMembershipFeeList in membership table in the registration tab
-    async registrationCompetitionFeeList(offset, yearRefId, searchText) {
+    async registrationCompetitionFeeList(offset, yearRefId, searchText, sortBy, sortOrder) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
@@ -47,12 +47,16 @@ let AxiosApi = {
             }
         };
         var url = `/api/competitionfee/listing/${yearRefId}?organisationUniqueKey=${organisationUniqueKey}&search=${searchText}`;
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        }
+
         // var url = `/api/competitionfee/listing/${yearRefId}?organisationUniqueKey=${organisationUniqueKey}&search=${"umpire"}`;
         return Method.dataPost(url, token, body);
     },
 
     ////registrationMembershipFeeList in membership table in the registration tab
-    async registrationMembershipFeeList(offset, yearRefId) {
+    async registrationMembershipFeeList(offset, yearRefId, sortBy, sortOrder) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
@@ -62,13 +66,16 @@ let AxiosApi = {
             }
         };
         var url = `/api/membershipproductfee/${yearRefId}?organisationUniqueKey=${organisationUniqueKey}`;
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        }
         return Method.dataPost(url, token, body);
     },
 
 
 
     ///registration Competition fee list product delete
-    async  registrationCompetitionFeeListDelete(competitionId) {
+    async registrationCompetitionFeeListDelete(competitionId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         var url = `/api/competitionfee/${competitionId}?organisationUniqueKey=${organisationUniqueKey}`;
@@ -129,7 +136,7 @@ let AxiosApi = {
     },
 
     /////get the common Competition type list reference
-    async  getCompetitionTypeList(year) {
+    async getCompetitionTypeList(year) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem.organisationUniqueKey
         // var url = `/api/orgregistration/competitionyear/${year}`;
@@ -137,7 +144,7 @@ let AxiosApi = {
         return Method.dataGet(url, token);
     },
     // get own competition list
-    async  getOwnCompetitionList(year) {
+    async getOwnCompetitionList(year) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem.organisationUniqueKey
         // var url = `/api/orgregistration/competitionyear/${year}`;
@@ -145,7 +152,7 @@ let AxiosApi = {
         return Method.dataGet(url, token);
     },
     // get participate competition list
-    async  getParticipateCompetitionList(year) {
+    async getParticipateCompetitionList(year) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem.organisationUniqueKey
         // var url = `/api/orgregistration/competitionyear/${year}`;
@@ -177,7 +184,7 @@ let AxiosApi = {
     },
 
     // get registration form  data
-    async   getRegistrationForm(year, CompetitionId) {
+    async getRegistrationForm(year, CompetitionId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
@@ -201,7 +208,7 @@ let AxiosApi = {
         return Method.dataPost(url, token, payload);
     },
     //////save the membership  product Discount
-    async  regSaveMembershipProductDiscount(payload) {
+    async regSaveMembershipProductDiscount(payload) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         var url = `/api/membershipproduct/discount?organisationUniqueKey=${organisationUniqueKey}`;
@@ -277,7 +284,7 @@ let AxiosApi = {
     },
 
     /////save the competition membership tab details
-    async  saveCompetitionFeesMembershipTab(payload, competitionId) {
+    async saveCompetitionFeesMembershipTab(payload, competitionId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         var url = `api/competitionfee/membership?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`;
@@ -293,7 +300,7 @@ let AxiosApi = {
     },
 
     /////save the division table data  in the competition fees section
-    async  saveCompetitionFeesDivisionAction(payload, competitionId) {
+    async saveCompetitionFeesDivisionAction(payload, competitionId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let sourceModule = payload.sourceModule != undefined ? payload.sourceModule : "REG";
@@ -374,13 +381,13 @@ let AxiosApi = {
         return Method.dataPost(url, token, payload);
     },
     // save end user registration
-    async  getOrgRegistrationRegistrationSettings(payload) {
+    async getOrgRegistrationRegistrationSettings(payload) {
         let userId = await getUserId()
         var url = `/api/registration/registrationsettings?userId=${userId}`;
         return Method.dataPost(url, token, payload);
     },
     //get end user membership products
-    async  getEndUserRegMembershipProducts(payload) {
+    async getEndUserRegMembershipProducts(payload) {
         let userId = await getUserId()
         var url = `/api/registration/membershipproducts?userId=${userId}`;
         return Method.dataPost(url, token, payload);
@@ -388,7 +395,7 @@ let AxiosApi = {
 
 
     //registration dash list 
-    async registrationDashboardList(offset, yearRefId) {
+    async registrationDashboardList(offset, yearRefId, sortBy, sortOrder) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
@@ -398,6 +405,9 @@ let AxiosApi = {
             }
         };
         var url = `/api/orgregistration/dashboard/${yearRefId}?organisationUniqueKey=${organisationUniqueKey}`;
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        }
         return Method.dataPost(url, token, body);
     },
 
@@ -427,8 +437,11 @@ let AxiosApi = {
         var url = `api/affiliates/affiliatedOrganisation`;
         return Method.dataPost(url, token, body);
     },
-    endUserRegDashboardList(payload) {
+    endUserRegDashboardList(payload, sortBy, sortOrder) {
         var url = `/api/registration/dashboard`;
+        if (sortBy && sortOrder) {
+            url += `?sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        }
         return Method.dataPost(url, token, payload);
     },
 
@@ -448,7 +461,7 @@ let AxiosApi = {
     },
 
     ////////////get the membership fee list in registration
-    async registrationMainDashboardList(yearId) {
+    async registrationMainDashboardList(yearId, sortBy, sortOrder) {
         let orgItem = await getOrganisationData()
         let organisationKey = orgItem.organisationUniqueKey
         let body = {
@@ -456,6 +469,9 @@ let AxiosApi = {
             yearRefId: yearId
         }
         var url = `/api/homedashboard/registration`;
+        if (sortBy && sortOrder) {
+            url += `?sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        }
         return Method.dataPost(url, token, body);
     },
     updateCompetitionStatus(payload) {

@@ -169,6 +169,7 @@ import * as liveScoreMatchSheetSaga from './liveScoreSaga/liveScoreMatchSheetSag
 import { getInnerHorizontalCompSaga } from './liveScoreSaga/liveScoreInnerHorizontalSaga'
 
 import { liveScorePositionTrackSaga } from './liveScoreSaga/liveScorePositionTrackSaga'
+import shopOrderStatusSaga from "./shopSaga/shopOrderStatusSaga";
 
 export default function* rootSaga() {
   yield all([
@@ -183,7 +184,8 @@ export default function* rootSaga() {
     fork(shopOrderSummarySaga),
     fork(shopProductSaga),
     fork(shopSettingSaga),
-
+    fork(shopOrderStatusSaga),
+    
     // Support
     fork(supportSaga),
   ]);

@@ -21,25 +21,25 @@ import StripeKeys from "../stripe/stripeKeys";
 const { Header, Content } = Layout;
 const { Option } = Select;
 const { SubMenu } = Menu;
-/////function to sort table column
-function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
-}
+
+let this_obj = null;
+
 
 const columns = [
     {
         title: "Transaction Id",
         dataIndex: 'balance_transaction',
         key: 'balance_transaction',
-        sorter: (a, b) => tableSort(a, b, "balance_transaction")
+        sorter: false,
+
+
     },
     {
         title: "Description",
         dataIndex: 'description',
         key: 'description',
-        sorter: (a, b) => tableSort(a, b, "description"),
+        sorter: false,
+
         render: description => (
             <span >{description ? description : "N/A"}</span>
         )
@@ -48,7 +48,8 @@ const columns = [
         title: "Date",
         dataIndex: 'created',
         key: 'created',
-        sorter: (a, b) => tableSort(a, b, "created"),
+        sorter: false,
+
         render: created => {
             var date = new Date(created * 1000);
             let finalDate = liveScore_formateDate(date)
@@ -61,10 +62,10 @@ const columns = [
         title: 'Amount',
         dataIndex: 'amount',
         key: 'amount',
+        sorter: false,
         render: amount => (
             <span>{currencyFormat(amount)}</span>
         ),
-        sorter: (a, b) => tableSort(a, b, "amount")
     },
     {
         title: 'Action',

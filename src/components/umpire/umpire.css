@@ -11,3 +11,21 @@
     display: flex;
     align-items: center
 }
+
+.umpire-delete-image-view {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding-top: 3%;
+    padding-left: 5%;
+    cursor: pointer;
+  }
+
+  .umpire-form-view{
+      min-width: 330px;
+  }
+
+@media (max-width: 767px) {
+    
+}

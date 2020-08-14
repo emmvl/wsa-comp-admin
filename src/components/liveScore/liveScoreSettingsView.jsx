@@ -422,7 +422,6 @@ class LiveScoreSettingsView extends Component {
                             required={"required-field pb-0"}
                             heading={AppConstants.short_Name}
                             placeholder={AppConstants.short_Name}
-                            name="shortName"
                             conceptulHelp
                             conceptulHelpMsg={AppConstants.shortNameMsg}
                             marginTop={10}

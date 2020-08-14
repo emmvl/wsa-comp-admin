@@ -1,185 +1,72 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Table, Select, Menu, Pagination, Modal, Button, DatePicker } from "antd";
-import "./product.scss";
-import { NavLink } from "react-router-dom";
+import { Layout, Breadcrumb, Select, DatePicker, Button, Table, Menu, Pagination } from 'antd';
+import './umpire.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
+import InputWithHead from "../../customComponents/InputWithHead";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
+import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import AppImages from "../../themes/appImages";
-import { getOnlyYearListAction } from "../../store/actions/appAction";
-import { currencyFormat } from "../../util/currencyFormat";
-import { getPaymentList, exportPaymentApi } from "../../store/actions/stripeAction/stripeAction"
-import InputWithHead from "../../customComponents/InputWithHead"
 
-const { confirm } = Modal;
-const { Content } = Layout;
+
+const { Header, Content } = Layout;
 const { Option } = Select;
 const { SubMenu } = Menu;
-let this_Obj = null;
-
-//listeners for sorting
-const listeners = (key) => ({
-    onClick: () => tableSort(key),
-});
-
 /////function to sort table column
-function tableSort(key) {
-    let sortBy = key;
-    let sortOrder = null;
-    if (this_Obj.state.sortBy !== key) {
-        sortOrder = 'ASC';
-    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
-        sortOrder = 'DESC';
-    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
-        sortBy = sortOrder = null;
-    }
-
-    this_Obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
-    this_Obj.props.getPaymentList(this_Obj.state.offset, sortBy, sortOrder);
+function tableSort(a, b, key) {
+    let stringA = JSON.stringify(a[key])
+    let stringB = JSON.stringify(b[key])
+    return stringA.localeCompare(stringB)
 }
-
 
 const columns = [
     {
-        title: "Name",
-        dataIndex: "userFirstName",
-        key: "userFirstName",
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("name"),
-        render: (userFirstName, record) => (
-            <span>{record.userFirstName + " " + record.userLastName}</span>
-        )
+        title: "Transaction Id",
+        dataIndex: 'balance_transaction',
+        key: 'balance_transaction',
+        sorter: (a, b) => tableSort(a, b, "balance_transaction"),
     },
     {
-        title: "Affiliate",
-        dataIndex: "affiliateName",
-        key: "affiliateName",
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("affiliate"),
-        render: affiliateName => (
-            <span>{affiliateName === null || affiliateName === "" ? "N/A" : affiliateName}</span>
+        title: "Description",
+        dataIndex: 'description',
+        key: 'description',
+        sorter: (a, b) => tableSort(a, b, "description"),
+    },
+    {
+        title: "Date",
+        dataIndex: 'created',
+        key: 'created',
+        sorter: (a, b) => tableSort(a, b, "created"),
+    },
+    {
+        title: 'Amount',
+        dataIndex: 'amount',
+        key: 'amount',
 
-        ),
-
-    },
-    {
-        title: "Competition",
-        dataIndex: "competitionName",
-        key: "competitionName",
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("competition"),
-        render: competitionName => (
-            <span>{competitionName}</span>
-        ),
-
-    },
-    {
-        title: "Fee Type",
-        dataIndex: "feeType",
-        key: "feeType",
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-    },
-    {
-        title: "Total Fee (inc GST)",
-        dataIndex: "invoiceTotal",
-        key: "invoiceTotal",
-        render: (invoiceTotal, record) => currencyFormat(invoiceTotal),
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("totalFee"),
-    },
-    {
-        title: "Our Portion",
-        dataIndex: "affiliatePortion",
-        key: "affiliatePortion",
-        render: (affiliatePortion, record) => currencyFormat(affiliatePortion),
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("ourPortion"),
-    },
-    {
-        title: "Payment",
-        dataIndex: "paymentType",
-        key: "paymentType",
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("payment"),
+        sorter: (a, b) => tableSort(a, b, "amount")
     },
     {
         title: "Status",
-        dataIndex: "paymentStatus",
-        key: "paymentStatus",
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("status"),
-        render: paymentStatus => (
-            <span>{paymentStatus == "pending" ? "Not Paid" : "Paid"}</span>
-
-        ),
-
+        dataIndex: 'status',
+        key: 'status',
+        sorter: (a, b) => tableSort(a, b, "status")
     },
-    {
-        title: "Action",
-        dataIndex: "isUsed",
-        key: "isUsed",
-        render: (isUsed, record) => (
-            <Menu
-                className="action-triple-dot-submenu "
-                theme="light"
-                mode="horizontal"
-                style={{ lineHeight: "25px" }}
-            >
-                <SubMenu
-                    key="sub1"
-                    style={{ borderBottomStyle: "solid", borderBottom: 0 }}
-                    title={
-                        <img
-                            className="dot-image"
-                            src={AppImages.moreTripleDot}
-                            alt=""
-                            width="16"
-                            height="16"
-                        />
-                    }
-                >
-                    <Menu.Item key="1">
-                        <span>Redeem Voucher</span>
-                    </Menu.Item>
-                    <Menu.Item key="2"
-                    >
-                        <span>Cash Payment received</span>
-                    </Menu.Item>
-                    <Menu.Item key="3"
-                    >
-                        <span>Refund</span>
-                    </Menu.Item>
-                </SubMenu>
-            </Menu>
-        )
-    }
 ];
 
-class PaymentDashboard extends Component {
+const data = []
+
+class UmpirePayout extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            deleteLoading: false,
             year: "2020",
             competition: "all",
             paymentFor: "all",
-            loadingSave: false,
-            offset: 0
-
-        };
-        this_Obj = this;
-
-    }
-    componentDidMount() {
-        this.handlePaymentTableList(1)
+        }
     }
 
-    onExport() {
-        this.props.exportPaymentApi("paymentDashboard")
-    }
+
 
     ///////view for breadcrumb
     headerView = () => {
@@ -189,7 +76,7 @@ class PaymentDashboard extends Component {
                     <div className="row">
                         <div className='col-sm' style={{ display: "flex", alignContent: "center" }}>
                             <span className="form-heading">
-                                {AppConstants.dashboard}
+                                {AppConstants.payouts}
                             </span>
                         </div>
                         <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
@@ -206,7 +93,6 @@ class PaymentDashboard extends Component {
                                         }}
                                     >
                                         <Button
-                                            onClick={() => this.onExport()}
                                             className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">
@@ -226,29 +112,46 @@ class PaymentDashboard extends Component {
                     </div>
                 </div>
             </div >
-        );
-    };
-    ///setting the available from date
-    dateOnChangeFrom = date => {
-        // this.setState({ endDate: moment(date).utc().toISOString() })
-        console.log(date)
+        )
     }
 
-    ////setting the available to date
-    dateOnChangeTo = date => {
-        console.log(date)
+
+    payoutListView = () => {
+
+        let currentPage = 1
+
+        let previousEnabled = currentPage == 1 ? false : true
+        return (
+            <div>
+                <div className="table-responsive home-dash-table-view mt-5 mb-5">
+                    <Table
+                        className="home-dashboard-table"
+                        columns={columns}
+                        dataSource={data}
+                        pagination={false}
+                    />
+                </div>
+                <div className="reg-payment-pages-div mb-5">
+                    <span className="reg-payment-paid-reg-text">{AppConstants.currentPage + " - " + currentPage}</span>
+                    <span className="reg-payment-paid-reg-text pt-2">{AppConstants.totalPages + " - " + currentPage}</span>
+                </div>
+                <div className="d-flex justify-content-end " style={{ paddingBottom: 100 }}>
+                    <div className="pagination-button-div" >
+                        <span style={!previousEnabled ? { color: "#9b9bad" } : null}
+                            className="pagination-button-text">{AppConstants.previous}</span>
+                    </div>
+                    <div className="pagination-button-div" >
+                        <span style={!previousEnabled ? { color: "#9b9bad" } : null}
+                            className="pagination-button-text">{AppConstants.next}</span>
+                    </div>
+                </div>
+            </div>
+        )
     }
 
-    handlePaymentTableList = (page) => {
-        let offset = page ? 10 * (page - 1) : 0;
-        this.setState({
-            offset
-        })
-        this.props.getPaymentList(offset);
-    };
     dropdownView = () => {
         return (
-            <div className="row pb-5" >
+            <div className="row" >
                 <div className="col-sm" >
                     <InputWithHead required={"pt-0"} heading={AppConstants.year} />
                     <Select
@@ -303,7 +206,7 @@ class PaymentDashboard extends Component {
                         className="reg-payment-datepicker"
                         size="large"
                         style={{ width: "100%", minWidth: 160 }}
-                        onChange={date => this.dateOnChangeFrom(date)}
+                        // onChange={date => this.dateOnChangeFrom(date)}
                         format={'DD-MM-YYYY'}
                         showTime={false}
                         placeholder={"dd-mm-yyyy"}
@@ -315,7 +218,7 @@ class PaymentDashboard extends Component {
                         className="reg-payment-datepicker"
                         size="large"
                         style={{ width: "100%", minWidth: 160 }}
-                        onChange={date => this.dateOnChangeTo(date)}
+                        // onChange={date => this.dateOnChangeTo(date)}
                         format={'DD-MM-YYYY'}
                         showTime={false}
                         placeholder={"dd-mm-yyyy"}
@@ -328,43 +231,20 @@ class PaymentDashboard extends Component {
 
     ////////form content view
     contentView = () => {
-        const { paymentState } = this.props;
-        let total = paymentState.paymentListTotalCount;
-        console.log(paymentState)
         return (
-
             <div className="comp-dash-table-view mt-2">
                 {this.dropdownView()}
-                <div className="table-responsive home-dash-table-view">
-                    <Table
-                        className="home-dashboard-table"
-                        columns={columns}
-                        dataSource={paymentState.paymentListData}
-                        pagination={false}
-                        loading={this.props.paymentState.onLoad == true && true}
-                    />
-                </div>
-                <div className="d-flex justify-content-end">
-                    <Pagination
-                        className="antd-pagination"
-                        current={paymentState.paymentListPage}
-                        total={total}
-                        onChange={(page) => this.handlePaymentTableList(page)}
-                    />
-                </div>
+                {this.payoutListView()}
             </div>
-        );
-    };
+        )
+    }
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout
-                    menuHeading={AppConstants.registration}
-                    menuName={AppConstants.registration}
-                />
-                <InnerHorizontalMenu menu={"registration"} regSelectedKey={"8"} />
-                <Layout>
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+                <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
+                <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"8"} />
+                <Layout >
                     {this.headerView()}
                     <Content>
                         {this.contentView()}
@@ -374,18 +254,16 @@ class PaymentDashboard extends Component {
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getOnlyYearListAction,
-        getPaymentList,
-        exportPaymentApi
+
     }, dispatch)
 }
 
 function mapStatetoProps(state) {
     return {
-        paymentState: state.StripeState,
-        appState: state.AppState,
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)((PaymentDashboard));
+
+export default connect(mapStatetoProps, mapDispatchToProps)((UmpirePayout));

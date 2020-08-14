@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Table, Select, Menu, Pagination,Button, Input,Icon, DatePicker} from 'antd';
+import { Layout, Breadcrumb, Table, Select, Menu, Pagination, Button, Input, Icon, DatePicker } from 'antd';
 import './user.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -9,7 +9,7 @@ import { NavLink } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 import { getOrganisationData } from "../../util/sessionStorage";
-import {getUserDashboardTextualAction, exportOrgRegQuestionAction} from "../../store/actions/userAction/userAction";
+import { getUserDashboardTextualAction, exportOrgRegQuestionAction } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 import { getGenderAction } from '../../store/actions/commonAction/commonAction';
 import moment from 'moment';
@@ -21,25 +21,46 @@ const { Option } = Select;
 const { SubMenu } = Menu;
 let this_Obj = null;
 
-const columns = [
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
 
+/////function to sort table column
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_Obj.state.sortBy !== key) {
+        sortOrder = 'ASC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
+        sortBy = sortOrder = null;
+    }
+    this_Obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_Obj.props.getUserDashboardTextualAction(this_Obj.state.filter, sortBy, sortOrder);
+}
+
+
+const columns = [
     {
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
-        sorter: (a, b) => a.name.localeCompare(b.name),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (name, record) =>
-        <NavLink to={{ pathname: `/userPersonal`, state: {userId: record.userId} }}>
-            <span className="input-heading-add-another pt-0" >{name}</span>
-        </NavLink>
+            <NavLink to={{ pathname: `/userPersonal`, state: { userId: record.userId } }}>
+                <span className="input-heading-add-another pt-0" >{name}</span>
+            </NavLink>
     },
     {
         title: 'Role',
         dataIndex: 'role',
         key: 'role',
-        sorter: (a, b) => a.role.localeCompare(b.role),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (role, record, index) => {
-            
+
             return (
                 <div>
                     {(role || []).map((item, index) => (
@@ -53,7 +74,8 @@ const columns = [
         title: 'Linked',
         dataIndex: 'linked',
         key: 'linked',
-        sorter: (a, b) => a.linked.localeCompare(b.linked),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (linked, record, index) => {
             return (
                 <div>
@@ -68,7 +90,8 @@ const columns = [
         title: 'Competition',
         dataIndex: 'competition',
         key: 'competition',
-        sorter: (a, b) => a.competition.localeCompare(b.competition),
+        sorter: false,
+        // onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (competition, record, index) => {
             return (
                 <div>
@@ -83,7 +106,8 @@ const columns = [
         title: 'Team',
         dataIndex: 'team',
         key: 'team',
-        sorter: (a, b) => a.team.localeCompare(b.team),
+        sorter: false,
+        // onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (team, record, index) => {
             return (
                 <div>
@@ -98,11 +122,12 @@ const columns = [
         title: 'DOB',
         dataIndex: 'dateOfBirth',
         key: 'dateOfBirth',
-        sorter: (a, b) => a.dateOfBirth.localeCompare(b.dateOfBirth),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("dob"),
         render: (dateOfBirth, record, index) => {
             return (
                 <div>
-                   {dateOfBirth!= null ? moment(dateOfBirth).format("DD/MM/YYYY") : ""}
+                    {dateOfBirth != null ? moment(dateOfBirth).format("DD/MM/YYYY") : ""}
                 </div>
             )
         }
@@ -112,7 +137,7 @@ const columns = [
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, e) => (
-            isUsed == false ? <Menu 
+            isUsed == false ? <Menu
                 className="action-triple-dot-submenu"
                 theme="light"
                 mode="horizontal"
@@ -120,10 +145,10 @@ const columns = [
             >
                 <SubMenu
                     key="sub1"
-                    title={ <img className="dot-image" src={AppImages.moreTripleDot}
-                            alt="" width="16" height="16" /> }>
+                    title={<img className="dot-image" src={AppImages.moreTripleDot}
+                        alt="" width="16" height="16" />}>
                     <Menu.Item key="1">
-                        <NavLink to={{ pathname: `/userPersonal`, state: {userId: e.userId} }} >
+                        <NavLink to={{ pathname: `/userPersonal`, state: { userId: e.userId } }} >
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
@@ -136,7 +161,7 @@ const columns = [
     }
 ];
 
-class UserTextualDashboard extends Component{
+class UserTextualDashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -155,14 +180,14 @@ class UserTextualDashboard extends Component{
         this_Obj = this;
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.referenceCalls();
         this.handleTextualTableList(1)
     }
 
-    componentDidUpdate(nextProps){
+    componentDidUpdate(nextProps) {
         console.log("Component componentDidUpdate");
-       let userState = this.props.userState;
+        let userState = this.props.userState;
         if (userState.onLoad === false && this.state.loading === true) {
             if (!userState.error) {
                 this.setState({
@@ -178,24 +203,24 @@ class UserTextualDashboard extends Component{
     }
 
     onChangeDropDownValue = async (value, key) => {
-        if(key == "yearRefId"){
-          await this.setState({yearRefId: value});
-          this.handleTextualTableList(1);
-        }
-        else if (key == "competitionId"){
-            await   this.setState({competitionUniqueKey: value});
+        if (key == "yearRefId") {
+            await this.setState({ yearRefId: value });
             this.handleTextualTableList(1);
         }
-        else if (key == "genderRefId"){
-            await this.setState({genderRefId: value});
+        else if (key == "competitionId") {
+            await this.setState({ competitionUniqueKey: value });
             this.handleTextualTableList(1);
         }
-        else if (key == "linkedEntityId"){
-            await  this.setState({linkedEntityId: value});
+        else if (key == "genderRefId") {
+            await this.setState({ genderRefId: value });
             this.handleTextualTableList(1);
         }
-        else if (key == "roleId"){
-            await  this.setState({roleId: value});
+        else if (key == "linkedEntityId") {
+            await this.setState({ linkedEntityId: value });
+            this.handleTextualTableList(1);
+        }
+        else if (key == "roleId") {
+            await this.setState({ roleId: value });
             this.handleTextualTableList(1);
         }
         else if (key == "dobFrom") {
@@ -209,95 +234,96 @@ class UserTextualDashboard extends Component{
             await this.setState({ dobTo: d });
             this.handleTextualTableList(1);
         }
-        else if(key == "postalCode"){
+        else if (key == "postalCode") {
             const regex = /,/gi;
             let canCall = false;
             let newVal = value.toString().split(',');
-            newVal.map((x,index) => {
+            newVal.map((x, index) => {
                 console.log("Val::" + x + "**" + x.length);
-                if(Number(x.length)%4 == 0 &&  x.length > 0){
+                if (Number(x.length) % 4 == 0 && x.length > 0) {
                     canCall = true;
                 }
-                else{
-                    canCall = false; 
+                else {
+                    canCall = false;
                 }
             })
 
 
-            await this.setState({postalCode: value});
-            if(canCall){
+            await this.setState({ postalCode: value });
+            if (canCall) {
                 this.handleTextualTableList(1);
-           }
-           else if(value.length == 0)
-           {
-            this.handleTextualTableList(1);
-           }
+            }
+            else if (value.length == 0) {
+                this.handleTextualTableList(1);
+            }
         }
     }
 
-    onKeyEnterSearchText = async(e) =>{
+    onKeyEnterSearchText = async (e) => {
         var code = e.keyCode || e.which;
-        if(code === 13) { //13 is the enter keycode
+        if (code === 13) { //13 is the enter keycode
             this.handleTextualTableList(1);
-        } 
-    }
-
-    onChangeSearchText = async(e) =>{
-        let value = e.target.value;
-        await this.setState({searchText: e.target.value})
-        if(value == null || value == "")
-        {
-            this.handleTextualTableList(1); 
         }
     }
 
-    onClickSearchIcon = async() =>{
+    onChangeSearchText = async (e) => {
+        let value = e.target.value;
+        await this.setState({ searchText: e.target.value })
+        if (value == null || value == "") {
+            this.handleTextualTableList(1);
+        }
+    }
+
+    onClickSearchIcon = async () => {
         this.handleTextualTableList(1);
     }
 
 
     handleTextualTableList = (page) => {
         console.log("RoleId:;" + this.state.roleId);
-        let filter = 
+        let filter =
         {
             organisationId: this.state.organisationId,
-            yearRefId:this.state.yearRefId,
+            yearRefId: this.state.yearRefId,
             competitionUniqueKey: this.state.competitionUniqueKey,
             roleId: this.state.roleId,
             genderRefId: this.state.genderRefId,
             linkedEntityId: this.state.linkedEntityId,
             dobFrom: (this.state.dobFrom != '-1' && !isNaN(this.state.dobFrom)) ? moment(this.state.dobFrom).format('YYYY-MM-DD') : '-1',
             dobTo: (this.state.dobTo != '-1' && !isNaN(this.state.dobTo)) ? moment(this.state.dobTo).format('YYYY-MM-DD') : '-1',
-            postCode: (this.state.postalCode!= '' && this.state.postalCode!= null) ? this.state.postalCode.toString() : '-1',
+            postCode: (this.state.postalCode != '' && this.state.postalCode != null) ? this.state.postalCode.toString() : '-1',
             searchText: this.state.searchText,
-            paging : {
-                limit : 10,
-                offset: (page ? (10 * (page -1)) : 0)
+            paging: {
+                limit: 10,
+                offset: (page ? (10 * (page - 1)) : 0)
             }
         }
         this.props.getUserDashboardTextualAction(filter);
+        this.setState({
+            filter
+        })
     };
 
     exportOrgRegistrationQuestions = () => {
-        let filter = 
+        let filter =
         {
             organisationId: this.state.organisationId,
-            yearRefId:this.state.yearRefId,
+            yearRefId: this.state.yearRefId,
             competitionUniqueKey: this.state.competitionUniqueKey,
             roleId: this.state.roleId,
             genderRefId: this.state.genderRefId,
             linkedEntityId: this.state.linkedEntityId,
-            postCode: (this.state.postalCode!= '' && this.state.postalCode!= null) ? this.state.postalCode.toString() : '-1',
+            postCode: (this.state.postalCode != '' && this.state.postalCode != null) ? this.state.postalCode.toString() : '-1',
             searchText: this.state.searchText
         }
 
         this.props.exportOrgRegQuestionAction(filter);
     }
 
-     ///////view for breadcrumb
-     headerView = () => {
+    ///////view for breadcrumb
+    headerView = () => {
         return (
-            <Header className="comp-player-grades-header-view" style={{padding: '0px 50px 0 45px'}} >
+            <Header className="comp-player-grades-header-view" style={{ padding: '0px 50px 0 45px' }} >
                 <div className="row" >
                     <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
                         <Breadcrumb separator=" > ">
@@ -306,12 +332,12 @@ class UserTextualDashboard extends Component{
                     </div>
                     <div className="col-sm search-flex" >
                         <div className="row">
-                            <div style={{marginRight: "25px", marginTop: '-14px'}} >
+                            <div style={{ marginRight: "25px", marginTop: '-14px' }} >
                                 <div className="reg-product-search-inp-width">
-                                    <Input className="product-reg-search-input" 
+                                    <Input className="product-reg-search-input"
                                         onChange={(e) => this.onChangeSearchText(e)}
                                         placeholder="Search..." onKeyPress={(e) => this.onKeyEnterSearchText(e)}
-                                        prefix={ <Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16}}
+                                        prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
                                             onClick={() => this.onClickSearchIcon()} />}
                                         allowClear
                                     />
@@ -319,17 +345,17 @@ class UserTextualDashboard extends Component{
                             </div>
                             <div>
                                 <div className="comp-dashboard-botton-view-mobile">
-                                    <Button className="primary-add-comp-form" type="primary" onClick={()=> this.exportOrgRegistrationQuestions()}>
-                                            <div className="row">
-                                                <div className="col-sm">
-                                                    <img
-                                                        src={AppImages.export}
-                                                        alt=""
-                                                        className="export-image"
-                                                    />
-                                                    {AppConstants.export}
-                                                </div>
+                                    <Button className="primary-add-comp-form" type="primary" onClick={() => this.exportOrgRegistrationQuestions()}>
+                                        <div className="row">
+                                            <div className="col-sm">
+                                                <img
+                                                    src={AppImages.export}
+                                                    alt=""
+                                                    className="export-image"
+                                                />
+                                                {AppConstants.export}
                                             </div>
+                                        </div>
                                     </Button>
                                 </div>
                             </div>
@@ -340,22 +366,22 @@ class UserTextualDashboard extends Component{
         )
     }
 
-      ///dropdown view containing all the dropdown of header
+    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         let uniqueValues = [];
-        const {genderData} = this.props.commonReducerState;
-        const {competitions, organisations, roles} = this.props.userState;
+        const { genderData } = this.props.commonReducerState;
+        const { competitions, organisations, roles } = this.props.userState;
         let competitionList = [];
-        if(this.state.yearRefId != -1){
-            competitionList = competitions.filter(x=>x.yearRefId == this.state.yearRefId);
+        if (this.state.yearRefId != -1) {
+            competitionList = competitions.filter(x => x.yearRefId == this.state.yearRefId);
         }
-        else{
-            competitionList =  competitions;
+        else {
+            competitionList = competitions;
         }
-        
+
         return (
-            <div style={{paddingLeft: '3.0%'}}>
-                <div className="fluid-width" style={{ marginRight: 35}}>
+            <div style={{ paddingLeft: '3.0%' }}>
+                <div className="fluid-width" style={{ marginRight: 35 }}>
                     <div className="row user-filter-row" >
                         <div className="user-col col-lg-3 col-md-6" >
                             <div className="user-filter-col-cont">
@@ -365,7 +391,7 @@ class UserTextualDashboard extends Component{
                                     className="year-select user-filter-select-drop"
                                     onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
                                     value={this.state.yearRefId}>
-                                        <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {this.props.appState.yearList.map(item => {
                                         return (
                                             <Option key={"yearRefId" + item.id} value={item.id}>
@@ -385,8 +411,8 @@ class UserTextualDashboard extends Component{
                                     className="year-select user-filter-select-drop"
                                     onChange={competitionId => this.onChangeDropDownValue(competitionId, "competitionId")}
                                     value={this.state.competitionUniqueKey}>
-                                        <Option key={-1} value={'-1'}>{AppConstants.all}</Option>
-                                    {(competitionList || []).map((item,cIndex) => {
+                                    <Option key={-1} value={'-1'}>{AppConstants.all}</Option>
+                                    {(competitionList || []).map((item, cIndex) => {
                                         return (
                                             <Option key={"competition" + item.competitionUniqueKey + "" + cIndex} value={item.competitionUniqueKey}>
                                                 {item.name}
@@ -397,7 +423,7 @@ class UserTextualDashboard extends Component{
                             </div>
                         </div>
                         <div className="user-col col-lg-3 col-md-6" >
-                            <div  className="user-filter-col-cont" >
+                            <div className="user-filter-col-cont" >
                                 <div className='year-select-heading  select-heading-wid'>{AppConstants.roles}</div>
                                 <Select
                                     className="year-select user-filter-select-drop"
@@ -411,7 +437,7 @@ class UserTextualDashboard extends Component{
                             </div>
                         </div>
                         <div className="user-col col-lg-3 col-md-6" >
-                            <div  className="user-filter-col-cont" >
+                            <div className="user-filter-col-cont" >
                                 <div className='year-select-heading  select-heading-wid'>{AppConstants.gender}</div>
                                 <Select
                                     className="year-select user-filter-select-drop"
@@ -427,7 +453,7 @@ class UserTextualDashboard extends Component{
                     </div>
                     <div className="row user-filter-row" >
                         <div className="user-col col-lg-3 col-md-6" >
-                            <div  className="user-filter-col-cont" >
+                            <div className="user-filter-col-cont" >
                                 <div className='year-select-heading  select-heading-wid'>{AppConstants.linked}</div>
                                 <Select
                                     showSearch
@@ -444,14 +470,14 @@ class UserTextualDashboard extends Component{
                             </div>
                         </div>
                         <div className="user-col col-lg-3 col-md-6" >
-                            <div  className="user-filter-col-postal" >
+                            <div className="user-filter-col-postal" >
                                 <div className='year-select-heading  select-heading-wid'>{AppConstants.postCode}</div>
-								<div style={{width:'100%'}}>
+                                <div style={{ width: '100%' }}>
                                     <InputWithHead
-										placeholder={AppConstants.postCode}
-										onChange={(e) => this.onChangeDropDownValue(e.target.value, 'postalCode')}
-										value={this.state.postalCode}
-									/>
+                                        placeholder={AppConstants.postCode}
+                                        onChange={(e) => this.onChangeDropDownValue(e.target.value, 'postalCode')}
+                                        value={this.state.postalCode}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -490,11 +516,11 @@ class UserTextualDashboard extends Component{
         )
     }
 
-    countView = () =>{
-        const {userDashboardCounts} = this.props.userState;
-        let noOfRegisteredUsers = userDashboardCounts!= null ? userDashboardCounts.noOfRegisteredUsers: 0;
-        let noOfUsers  = userDashboardCounts!= null ? userDashboardCounts.noOfUsers: 0;
-        return(
+    countView = () => {
+        const { userDashboardCounts } = this.props.userState;
+        let noOfRegisteredUsers = userDashboardCounts != null ? userDashboardCounts.noOfRegisteredUsers : 0;
+        let noOfUsers = userDashboardCounts != null ? userDashboardCounts.noOfUsers : 0;
+        return (
             <div className="comp-dash-table-view mt-2">
                 <div>
                     <div className="row">
@@ -523,11 +549,11 @@ class UserTextualDashboard extends Component{
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
-                    <Table className="home-dashboard-table" 
-                    columns={columns}
-                    dataSource={userDashboardTextualList} 
-                    pagination={false}
-                    loading={this.props.userState.onTextualLoad == true && true}
+                    <Table className="home-dashboard-table"
+                        columns={columns}
+                        dataSource={userDashboardTextualList}
+                        pagination={false}
+                        loading={this.props.userState.onTextualLoad == true && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
@@ -566,8 +592,7 @@ class UserTextualDashboard extends Component{
 
 }
 
-function mapDispatchToProps(dispatch)
-{
+function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getUserDashboardTextualAction,
         getOnlyYearListAction,
@@ -577,7 +602,7 @@ function mapDispatchToProps(dispatch)
 
 }
 
-function mapStatetoProps(state){
+function mapStatetoProps(state) {
     return {
         userState: state.UserState,
         appState: state.AppState,
@@ -585,4 +610,4 @@ function mapStatetoProps(state){
     }
 }
 
-export default connect(mapStatetoProps,mapDispatchToProps)(UserTextualDashboard);
+export default connect(mapStatetoProps, mapDispatchToProps)(UserTextualDashboard);

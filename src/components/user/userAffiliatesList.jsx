@@ -19,44 +19,80 @@ const { Option } = Select;
 const { confirm } = Modal;
 const { SubMenu } = Menu;
 let this_Obj = null;
+
+/////function to sort table column
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_Obj.state.sortBy !== key) {
+        sortOrder = 'ASC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
+        sortBy = sortOrder = null;
+    }
+
+    let filterData =
+    {
+        organisationId: this_Obj.state.organisationId,
+        affiliatedToOrgId: this_Obj.state.affiliatedToOrgId,
+        organisationTypeRefId: this_Obj.state.organisationTypeRefId,
+        statusRefId: this_Obj.state.statusRefId,
+        paging: {
+            limit: 10,
+            offset: (this_Obj.state.pageNo ? (10 * (this_Obj.state.pageNo - 1)) : 0)
+        }
+    }
+    this_Obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_Obj.props.getAffiliatesListingAction(filterData, sortBy, sortOrder);
+}
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
 const columns = [
 
     {
         title: 'Name',
         dataIndex: 'affiliateName',
         key: 'affiliateName',
-        sorter: (a, b) => a.affiliateName.localeCompare(b.affiliateName),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("name"),
 
     },
     {
         title: 'Affiliated To',
         dataIndex: 'affiliatedToName',
         key: 'affiliatedToName',
-        sorter: (a, b) => a.affiliatedToName.localeCompare(b.affiliatedToName),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("affiliatedTo"),
     },
     {
         title: 'Organisation Type',
         dataIndex: 'organisationTypeRefName',
         key: 'organisationTypeRefName',
-        sorter: (a, b) => a.organisationTypeRefName.localeCompare(b.organisationTypeRefName),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("organisationType"),
     },
     {
         title: 'Contact 1',
         dataIndex: 'contact1Name',
         key: 'contact1Name',
-        sorter: (a, b) => a.contact1Name.localeCompare(b.contact1Name),
+        sorter: false,
+        // onHeaderCell: ({ dataIndex }) => listeners("contact1"),
     },
     {
         title: 'Contact 2',
         dataIndex: 'contact2Name',
         key: 'contact2Name',
-        sorter: (a, b) => a.contact2Name.localeCompare(b.contact2Name),
+        sorter: false,
+        // onHeaderCell: ({ dataIndex }) => listeners("contact2"),
     },
     {
         title: 'Status',
         dataIndex: 'statusRefName',
         key: 'statusRefName',
-        sorter: (a, b) => a.statusRefName.localeCompare(b.statusRefName),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("status"),
     },
     {
         title: "Action",
@@ -104,6 +140,7 @@ class UserAffiliatesList extends Component {
             organisationTypeRefId: -1,
             statusRefId: -1,
             deleteLoading: false,
+            pageNo: 1
         }
         this_Obj = this;
         // this.props.getUreAction();
@@ -141,6 +178,9 @@ class UserAffiliatesList extends Component {
     }
 
     handleAffiliateTableList = (page, organisationId, affiliatedToOrgId, organisationTypeRefId, statusRefId) => {
+        this.setState({
+            pageNo: page
+        })
         let filter =
         {
             organisationId: organisationId,
@@ -226,7 +266,7 @@ class UserAffiliatesList extends Component {
                     <div className="row" >
                         <div className="col-lg-3 col-md-6" >
                             <div style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center" }} >
-                                <span className='year-select-heading' style={{width:120}}>{AppConstants.affiliatedTo}</span>
+                                <span className='year-select-heading' style={{ width: 120 }}>{AppConstants.affiliatedTo}</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
                                     style={{ minWidth: 160 }}
@@ -241,7 +281,7 @@ class UserAffiliatesList extends Component {
                         </div>
                         <div className="col-lg-4 col-md-6" >
                             <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }} >
-                                <span className='year-select-heading' style={{width:240}}>{AppConstants.organisationType}</span>
+                                <span className='year-select-heading' style={{ width: 240 }}>{AppConstants.organisationType}</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
                                     style={{ minWidth: 160 }}
@@ -256,8 +296,8 @@ class UserAffiliatesList extends Component {
                             </div>
                         </div>
                         <div className="col-lg-3 col-md-6" >
-                            <div style={{  display: "flex", flexDirection: "row", alignItems: "center" }} >
-                                <span className='year-select-heading' style={{width:120}}>{AppConstants.status}</span>
+                            <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }} >
+                                <span className='year-select-heading' style={{ width: 120 }}>{AppConstants.status}</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
                                     style={{ minWidth: 160 }}

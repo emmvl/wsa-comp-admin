@@ -3,11 +3,12 @@ import ApiConstants from "../../../themes/apiConstants";
 
 
 //////get the membership fee list in registration
-function regMembershipListAction(offset, yearRefId) {
+function regMembershipListAction(offset, yearRefId, sortBy, sortOrder) {
   const action = {
     type: ApiConstants.API_REG_MEMBERSHIP_LIST_LOAD,
     offset: offset,
     yearRefId: yearRefId,
+    sortBy, sortOrder
   };
   return action;
 }

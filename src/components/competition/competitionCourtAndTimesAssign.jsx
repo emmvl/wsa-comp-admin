@@ -560,10 +560,11 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     alignItems: "center"
                                 }}
                             >
-                                <span id={AppUniqueId.compYear_dpdnTimeslot} className="year-select-heading">
+                                <span className="year-select-heading">
                                     {AppConstants.year}:
                                   </span>
                                 <Select
+                                    id={AppUniqueId.compYear_dpdnTimeslot}
                                     name={"yearRefId"}
                                     className="year-select reg-filter-select-year ml-2"
                                     // style={{ width: 90 }}
@@ -586,8 +587,9 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 flexDirection: "row",
                                 alignItems: "center", marginRight: 50,
                             }} >
-                                <span id={AppUniqueId.competitionName_dpdnTimeslot} className='year-select-heading'>{AppConstants.competition}:</span>
+                                <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
+                                    id={AppUniqueId.competitionName_dpdnTimeslot}
                                     name={"competition"}
                                     className="year-select reg-filter-select-competition ml-2"
                                     onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)}
