@@ -7,7 +7,7 @@ import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { clearCompReducerDataAction } from "../../store/actions/registrationAction/competitionFeeAction";
-import { competitionDashboardAction, updateCompetitionStatus } from '../../store/actions/competitionModuleAction/competitionDashboardAction';
+import { competitionDashboardAction, updateCompetitionStatus, deleteCompetitionAction } from '../../store/actions/competitionModuleAction/competitionDashboardAction';
 import history from "../../util/history";
 import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from '../../store/actions/appAction'
 import { isArrayNotEmpty } from "../../util/helpers";
@@ -168,7 +168,7 @@ const columnsOwned = [
         key: 'statusRefId',
         render: (statusRefId, record) => {
             return (
-                statusRefId == 1 &&
+                statusRefId == 1 ?
                 <div onClick={(e) => e.stopPropagation()}>
                     <Menu
                         className="action-triple-dot-submenu"
@@ -187,10 +187,35 @@ const columnsOwned = [
                             >
                                 <span>{AppConstants.editRegrade}</span>
                             </Menu.Item>
-
+                            <Menu.Item key="2"
+                                onClick={() => this_Obj.deleteCompetition("show" , record.competitionId)}
+                            >
+                                <span>{AppConstants.delete}</span>
+                            </Menu.Item>
                         </SubMenu>
                     </Menu>
-                </div>
+                </div> : 
+                <div onClick={(e) => e.stopPropagation()}>
+                <Menu
+                    className="action-triple-dot-submenu"
+                    theme="light"
+                    mode="horizontal"
+                    style={{ lineHeight: '25px' }}
+                >
+                    <SubMenu
+                        key="sub1"
+                        title={
+                            <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
+                        }
+                    >
+                        <Menu.Item key="1"
+                            onClick={() => this_Obj.deleteCompetition("show" , record.competitionId)}
+                        >
+                            <span>{AppConstants.delete}</span>
+                        </Menu.Item>
+                    </SubMenu>
+                </Menu>
+            </div>
             )
         }
     },
@@ -201,7 +226,9 @@ class CompetitionDashboard extends Component {
         super(props);
         this.state = {
             year: "2019",
-            loading: false
+            loading: false,
+			modalVisible: false,
+            competitionId: ""		 
         };
         this.props.CLEAR_OWN_COMPETITION_DATA("participate_CompetitionArr")
         this_Obj = this
@@ -217,17 +244,33 @@ class CompetitionDashboard extends Component {
         const { yearList } = this.props.appState
         if (this.state.loading == true && this.props.appState.onLoad == false) {
             if (yearList.length > 0) {
-                let storedYearID = localStorage.getItem("yearId");
-                let yearRefId = null
-                if (storedYearID == null || storedYearID == "null") {
-                    yearRefId = yearList[0].id
-                } else {
-                    yearRefId = storedYearID
-                }
+                let yearRefId = this.getYearRefId();
                 this.props.competitionDashboardAction(yearRefId)
                 this.setState({ loading: false })
             }
         }
+
+        if(this.state.loading == true && this.props.competitionDashboardState.onDeleteOwnedComp == false){
+            this.setState({ loading: false });
+            if (yearList.length > 0) {
+                let yearRefId = this.getYearRefId();
+                this.props.competitionDashboardAction(yearRefId)
+                this.setState({ loading: false })
+            }
+        }
+    }
+
+    getYearRefId = () =>{
+        const { yearList } = this.props.appState;
+        let storedYearID = localStorage.getItem("yearId");
+        let yearRefId = null
+        if (storedYearID == null || storedYearID == "null") {
+            yearRefId = yearList[0].id
+        } else {
+            yearRefId = storedYearID
+        }
+
+        return yearRefId;
     }
     updateCompetitionStatus = (record) => {
         let storedYearID = localStorage.getItem("yearId");
@@ -237,6 +280,30 @@ class CompetitionDashboard extends Component {
             statusRefId: 2
         }
         this.props.updateCompetitionStatus(payload, selectedYearId)
+    }
+	deleteCompetition = (key, competitionId) => {
+        console.log("competitionId"+ competitionId)
+        if(key == "show")
+        {
+            this.setState({
+                modalVisible:true,
+                competitionId: competitionId
+            })
+        }
+        else if(key == "ok")
+        {
+            this.props.deleteCompetitionAction(competitionId)
+            this.setState({
+                modalVisible:false,
+                loading: true
+            })
+        }
+        else if(key == "cancel")
+        {
+            this.setState({
+                modalVisible:false
+            })
+        }
     }
     onChange = e => {
         this.setState({
@@ -468,6 +535,14 @@ class CompetitionDashboard extends Component {
                         key={AppUniqueId.owned_compet_content_table}
                     />
                 </div>
+				<Modal
+                    className="add-membership-type-modal"
+                    title={AppConstants.delete}
+                    visible={this.state.modalVisible}
+                    onOk={() => this.deleteCompetition("ok" , this.state.competitionId)}
+                    onCancel={() => this.deleteCompetition("cancel" , this.state.competitionId)}>
+                    <p>{AppConstants.compDeleteConfirm}</p>
+                </Modal>
             </div >
         );
     };
@@ -499,7 +574,8 @@ function mapDispatchToProps(dispatch) {
         competitionDashboardAction,
         getOnlyYearListAction,
         CLEAR_OWN_COMPETITION_DATA,
-        updateCompetitionStatus
+        updateCompetitionStatus,
+		deleteCompetitionAction	 
     }, dispatch)
 }
 

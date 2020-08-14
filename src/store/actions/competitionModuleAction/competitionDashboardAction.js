@@ -25,8 +25,16 @@ function updateCompetitionStatus(payload, yearId) {
     return action
 }
 
+function deleteCompetitionAction(competitionId) {
+    const action = {
+        type: ApiConstants.API_COMPETITION_DASHBOARD_DELETE_LOAD,
+        competitionId: competitionId
+    };
+    return action;
+}
 export {
     competitionDashboardAction,
     fixtureTemplateRoundsAction,
-    updateCompetitionStatus
+    updateCompetitionStatus,
+	deleteCompetitionAction
 }
