@@ -75,7 +75,7 @@ const columns = [
         dataIndex: 'name',
         key: 'name',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("customer"),
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (name, record) =>
             // <NavLink to={{
             //     pathname: `/userPersonal`,

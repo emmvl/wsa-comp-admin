@@ -44,7 +44,7 @@ function tableSort(key) {
         paymentStatus: paymentStatus,
         fulfilmentStatus: fulfilmentStatus,
         product: product,
-        sortOrder: sortOrder ? sortOrder : "",
+        order: sortOrder ? sortOrder : "",
         sorterBy: sortBy ? sortBy : ""
     }
     this_obj.props.getOrderStatusListingAction(params)
@@ -192,7 +192,7 @@ class ShopOrderStatus extends Component {
             paymentStatus: paymentStatus,
             fulfilmentStatus: fulfilmentStatus,
             product: product,
-            sortOrder: "",
+            order: "",
             sorterBy: ""
         }
         this.props.getOrderStatusListingAction(params)
@@ -213,7 +213,7 @@ class ShopOrderStatus extends Component {
             paymentStatus: paymentStatus,
             fulfilmentStatus: fulfilmentStatus,
             product: product,
-            sortOrder: "",
+            order: "",
             sorterBy: ""
         }
         this.props.getOrderStatusListingAction(params)

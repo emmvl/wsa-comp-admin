@@ -1536,6 +1536,7 @@ const AppConstants = {
   refundPartialAmount: "Refund Partial Amount",
   pickedUp: "Picked up",
   shipped: "Shipped",
+  extraTime: "Extra Time"
 };
 
 export default AppConstants;

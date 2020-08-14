@@ -26,6 +26,28 @@
       min-width: 330px;
   }
 
+  .single-checkbox-width{
+      min-width: 140px;
+  }
+
+  .umpire-btn-width{
+      min-width: 145px;
+  }
+
 @media (max-width: 767px) {
     
+    .input-width{
+        min-width: fit-content
+    }
+    .single-checkbox-width{
+        min-width: 0px;
+    }
 }
+
+@media (max-width: 1024px) {
+    
+    .single-checkbox-width{
+        min-width: 0px;
+    }
+}
+
