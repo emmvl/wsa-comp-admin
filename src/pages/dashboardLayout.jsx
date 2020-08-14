@@ -65,8 +65,6 @@ class DashboardLayout extends React.Component {
 
         if (this.props.userState.impersonation
           && !this.state.impersonationLoad
-          && !this.state.dataOnload
-          && !this.props.userState.onLoad
         ) {
           const impersonationAffiliate = this.state.impersonationAffiliateOrgId
             ? this.props.userState.affiliateList
@@ -74,7 +72,6 @@ class DashboardLayout extends React.Component {
             : null;
           await setImpersonationAffiliate(impersonationAffiliate);
 
-          history.push("/");
           window.location.reload();
         }
       }
@@ -88,13 +85,24 @@ class DashboardLayout extends React.Component {
           await localStorage.clear();
           history.push("/");
           window.location.reload();
-        } else {
+        } else if (!this.state.dataOnload) {
           this.props.getUserOrganisationAction();
           this.setState({
             dataOnload: true,
             impersonationLoad: false
           });
         }
+      }
+
+      if (this.props.userState.userRoleEntity !== nextProps.userState.userRoleEntity) {
+        const isImpersonation = this.props.userState.userRoleEntity
+          .findIndex((role) => role.roleId === 10) > -1;
+
+        const orgData = await getOrganisationData();
+
+        this.setState({
+          impersonationOrgData: isImpersonation ? orgData : null,
+        });
       }
     }
   }
@@ -358,7 +366,7 @@ class DashboardLayout extends React.Component {
 
     return (
       <>
-        {this.state.impersonationLoad && this.state.impersonationOrgData && (
+        {this.state.impersonationOrgData && (
           <div className="col-sm-12 d-flex impersonation-bar">
             You are impersonating access to {this.state.impersonationOrgData.name}.
             <a onClick={this.endImpersonation}>End access</a>
@@ -541,7 +549,7 @@ class DashboardLayout extends React.Component {
               loading={this.props.userState.onLoad}
             >
               {(this.props.userState.affiliateList || []).map((affiliate, dIndex) => (
-                <Option key={affiliate.id} value={affiliate.affiliateOrgId}>{affiliate.affiliateName}</Option>
+                <Option key={affiliate.affiliateOrgId} value={affiliate.affiliateOrgId}>{affiliate.affiliateName}</Option>
               ))}
             </Select>
           </Modal>
