@@ -187,14 +187,7 @@ class umpirePayments extends Component {
 
                                 <div className="col-sm pt-1">
                                     <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: "100%",
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
+                                        className="comp-product-search-inp-width"
                                     >
                                         <Input className="product-reg-search-input"
                                             // onChange={(e) => this.onChangeSearchText(e)}
@@ -270,14 +263,15 @@ class umpirePayments extends Component {
                                     flexDirection: "column",
                                     alignItems: "flex-end",
                                     justifyContent: "flex-end",
-                                }}>
+                                }}
+                            >
                                 <Button
                                     type="primary"
-                                    className="primary-add-comp-form"
+                                    className="primary-add-comp-form umpire-btn-width"
                                 >{AppConstants.bulkPayment}
                                 </Button>
 
-                                <div>
+                                <div className='single-checkbox-width'>
                                     <Checkbox
                                         className="single-checkbox"
                                         defaultChecked={false}

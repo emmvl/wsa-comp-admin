@@ -104,8 +104,8 @@ let AxiosApi = {
     async getOrderStatusListing(params) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem.organisationUniqueKey
-        let { limit, offset, search, year, paymentStatus, fulfilmentStatus, product,sortOrder,sorterBy } = params
-        var url = `/order/statusList?organisationUniqueKey=${organisationUniqueKey}&limit=${limit}&offset=${offset}&search=${search}&year=${year}&paymentStatus=${paymentStatus}&fulfilmentStatus=${fulfilmentStatus}&product=${product}&sortOrder=${sortOrder}&sorterBy=${sorterBy}`;
+        let { limit, offset, search, year, paymentStatus, fulfilmentStatus, product,order,sorterBy } = params
+        var url = `/order/statusList?organisationUniqueKey=${organisationUniqueKey}&limit=${limit}&offset=${offset}&search=${search}&year=${year}&paymentStatus=${paymentStatus}&fulfilmentStatus=${fulfilmentStatus}&product=${product}&order=${order}&sorterBy=${sorterBy}`;
         return Method.dataGet(url, token);
     },
 

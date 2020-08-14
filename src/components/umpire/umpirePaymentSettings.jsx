@@ -308,7 +308,7 @@ class UmpirePaymentSetting extends Component {
             <div>
                 <div className="row pt-3" >
 
-                    <div className='col-sm' style={{ minWidth: 'fit-content' }}>
+                    <div className='col-sm input-width'>
                         <InputWithHead
                             auto_Complete='new-name'
                             heading={AppConstants.name}
@@ -317,7 +317,7 @@ class UmpirePaymentSetting extends Component {
                             value={inputFieldArray[index].name}
                         />
                     </div>
-                    <div className='col-sm' style={{ minWidth: 'fit-content' }}>
+                    <div className='col-sm input-width'>
                         <InputWithHead
                             auto_Complete='new-umpireRate'
                             heading={AppConstants.umpireRate}
@@ -327,7 +327,7 @@ class UmpirePaymentSetting extends Component {
                         />
                     </div>
 
-                    <div className='col-sm' style={{ minWidth: 'fit-content' }}>
+                    <div className='col-sm input-width'>
                         <InputWithHead
                             auto_Complete='new-umpireResRate'
                             heading={AppConstants.umpireResRate}
@@ -337,7 +337,7 @@ class UmpirePaymentSetting extends Component {
                         />
                     </div>
 
-                    <div className='col-sm' style={{ minWidth: 'fit-content' }}>
+                    <div className='col-sm input-width'>
                         <InputWithHead
                             auto_Complete='new-umpireRate'
                             heading={AppConstants.umpireCoachrate}
