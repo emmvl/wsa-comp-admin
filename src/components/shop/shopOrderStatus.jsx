@@ -8,18 +8,46 @@ import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getOnlyYearListAction } from '../../store/actions/appAction';
-import { getOrderStatusListingAction } from '../../store/actions/shopAction/orderStatusAction';
+import { getOrderStatusListingAction, updateOrderStatusAction } from '../../store/actions/shopAction/orderStatusAction';
 import { currencyFormat } from "../../util/currencyFormat";
 import moment from "moment";
 
 const { Content } = Layout
 const { SubMenu } = Menu
 const { Option } = Select
+let this_obj = null;
 
-function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
+//listeners for sorting
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
+
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_obj.state.sortBy !== key) {
+        sortOrder = 'asc';
+    } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'asc') {
+        sortOrder = 'desc';
+    } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'desc') {
+        sortBy = sortOrder = null;
+    }
+    this_obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    let { yearRefId, searchText, paymentStatus, fulfilmentStatus, product } = this_obj.state
+    let page = this_obj.props.shopOrderStatusState.orderStatusCurrentPage
+    let params =
+    {
+        limit: 10,
+        offset: (page ? (10 * (page - 1)) : 0),
+        search: searchText,
+        year: yearRefId,
+        paymentStatus: paymentStatus,
+        fulfilmentStatus: fulfilmentStatus,
+        product: product,
+        sortOrder: sortOrder ? sortOrder : "",
+        sorterBy: sortBy ? sortBy : ""
+    }
+    this_obj.props.getOrderStatusListingAction(params)
 }
 
 const columns = [
@@ -27,13 +55,22 @@ const columns = [
         title: 'Order ID',
         dataIndex: 'orderId',
         key: 'orderId',
-        sorter: (a, b) => tableSort(a, b, "orderId"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("id"),
+        render: (orderId, record) =>
+            // <NavLink to={{
+            //     pathname: `/userPersonal`,
+            //     state: { userId: record.userId, screenKey: 'registration', screen: "/registration" }
+            // }}>
+            <span className="input-heading-add-another pt-0" >{orderId}</span>
+        // </NavLink>
     },
     {
         title: 'Date',
         dataIndex: 'date',
         key: 'date',
-        sorter: (a, b) => tableSort(a, b, "date"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("createdOn"),
         render: (date) => {
             return (
                 <span>{date ? moment(date).format("DD-MM-YYYY") : "N/A"}</span>
@@ -44,32 +81,44 @@ const columns = [
         title: 'Customer',
         dataIndex: 'customer',
         key: 'customer',
-        sorter: (a, b) => tableSort(a, b, "customer"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (customer, record) =>
+            // <NavLink to={{
+            //     pathname: `/userPersonal`,
+            //     state: { userId: record.userId, screenKey: 'registration', screen: "/registration" }
+            // }}>
+            <span className="input-heading-add-another pt-0" >{customer}</span>
+        // </NavLink>
     },
 
     {
         title: 'Products',
         dataIndex: 'products',
         key: 'products',
-        sorter: (a, b) => tableSort(a, b, "products"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Payment Status',
         dataIndex: 'paymentStatus',
         key: 'paymentStatus',
-        sorter: (a, b) => tableSort(a, b, "paymentStatus"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Fulfilment Status',
         dataIndex: 'fulfilmentStatus',
         key: 'fulfilmentStatus',
-        sorter: (a, b) => tableSort(a, b, "fulfilmentStatus"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Total',
         dataIndex: 'total',
         key: 'total',
-        sorter: (a, b) => tableSort(a, b, "total"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: total => (
             <span>{currencyFormat(total)}</span>
         )
@@ -91,29 +140,24 @@ const columns = [
                         <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                     }>
 
-                    <Menu.Item key="1">
-                        {/* <NavLink to={{
-                            pathname: "/liveScoreAddDivision",
-                            // state: { isEdit: true, tableRecord: record }
-                        }}> */}
+                    <Menu.Item key="1" onClick={() => this_obj.updateOrderStatusApi(record, AppConstants.paid)}>
                         <span >{AppConstants.paid}</span>
-                        {/* </NavLink> */}
                     </Menu.Item>
 
-                    <Menu.Item key="2" >
-                    <span >{AppConstants.refundFullAmount}</span>
+                    <Menu.Item key="2" onClick={() => this_obj.updateOrderStatusApi(record, AppConstants.refundFullAmount)}>
+                        <span >{AppConstants.refundFullAmount}</span>
                     </Menu.Item>
 
-                    <Menu.Item key="3" >
-                    <span >{AppConstants.refundPartialAmount}</span>
+                    <Menu.Item key="3" onClick={() => this_obj.updateOrderStatusApi(record, AppConstants.refundPartialAmount)}>
+                        <span >{AppConstants.refundPartialAmount}</span>
                     </Menu.Item>
 
-                    <Menu.Item key="4" >
-                    <span >{AppConstants.pickedUp}</span>
+                    <Menu.Item key="4" onClick={() => this_obj.updateOrderStatusApi(record, AppConstants.pickedUp)}>
+                        <span >{AppConstants.pickedUp}</span>
                     </Menu.Item>
 
-                    <Menu.Item key="5" >
-                    <span >{AppConstants.shipped}</span>
+                    <Menu.Item key="5" onClick={() => this_obj.updateOrderStatusApi(record, AppConstants.shipped)}>
+                        <span >{AppConstants.shipped}</span>
                     </Menu.Item>
                 </SubMenu>
 
@@ -130,8 +174,10 @@ class ShopOrderStatus extends Component {
             yearRefId: -1,
             paymentStatus: -1,
             fulfilmentStatus: -1,
-            product: -1
+            product: -1,
+            searchText: "",
         }
+        this_obj = this
     }
 
     componentDidMount() {
@@ -146,6 +192,8 @@ class ShopOrderStatus extends Component {
             paymentStatus: paymentStatus,
             fulfilmentStatus: fulfilmentStatus,
             product: product,
+            sortOrder: "",
+            sorterBy: ""
         }
         this.props.getOrderStatusListingAction(params)
     }
@@ -165,8 +213,20 @@ class ShopOrderStatus extends Component {
             paymentStatus: paymentStatus,
             fulfilmentStatus: fulfilmentStatus,
             product: product,
+            sortOrder: "",
+            sorterBy: ""
         }
         this.props.getOrderStatusListingAction(params)
+    }
+
+    ////update order status api call
+    updateOrderStatusApi = (record, actionValue) => {
+        let payload = {
+            orderId: record.orderId,
+            action: actionValue,
+            amount: record.total
+        }
+        this.props.updateOrderStatusAction(payload)
     }
 
     onChangeDropDownValue = async (value, key) => {
@@ -189,9 +249,10 @@ class ShopOrderStatus extends Component {
     }
 
     // on change search text
-    onChangeSearchText = (e) => {
-        this.setState({ searchText: e.target.value })
-        if (e.target.value === null || e.target.value === "") {
+    onChangeSearchText = async (e) => {
+        let value = e.target.value;
+        await this.setState({ searchText: e.target.value })
+        if (value == null || value == "") {
             this.handleTableList(1);
         }
     }
@@ -427,6 +488,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getOnlyYearListAction,
         getOrderStatusListingAction,
+        updateOrderStatusAction,
     }, dispatch)
 }
 
