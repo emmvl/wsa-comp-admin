@@ -153,9 +153,11 @@ const columns = [
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
+                    {e.role.find(x=>x.role == "Admin")!= undefined ? 
                     <Menu.Item key="2" onClick={() => this_Obj.showDeleteConfirm(e)}>
                         <span>Delete</span>
                     </Menu.Item>
+                     : null}
                 </SubMenu>
             </Menu> : null
         )
@@ -191,8 +193,10 @@ class UserTextualDashboard extends Component {
 		if (userState.onLoad === false && this.state.deleteLoading === true) {
             this.setState({
                 deleteLoading: false,
+                searchText: ''
             })
-            this.handleTextualTableList(userState.userDashboardTextualPage);
+
+            this.handleTextualTableList(1);
         }
         if (userState.onLoad === false && this.state.loading === true) {
             if (!userState.error) {
