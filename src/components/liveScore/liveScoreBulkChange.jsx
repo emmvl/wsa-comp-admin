@@ -931,7 +931,7 @@ class LiveScoreBulkChange extends Component {
 
     ////this method called after slecting Double Header option from drop down
     doublwHeaderView(getFieldDecorator) {
-        const { roundList } = this.props.liveScoreRoundState
+        const { roundList } = this.props.liveScoreBulkMatchState
 
         let roundResult = isArrayNotEmpty(roundList) ? roundList : []
 

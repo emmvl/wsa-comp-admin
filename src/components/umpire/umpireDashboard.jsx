@@ -395,8 +395,8 @@ const columns = [
         title: 'Umpire 1 Organisation',
         dataIndex: 'umpires',
         key: '_umpires1_Org',
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        sorter: false,
+        // onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (umpires, record) => {
             let umpire1 = checkUmpireType(umpires, 1) ? checkUmpireType(umpires, 1) : []
             return (
@@ -450,8 +450,8 @@ const columns = [
         title: 'Umpire 2 Organisation',
         dataIndex: 'umpires',
         key: '_umpires2_Org',
-        sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        sorter: false,
+        // onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (umpires, record) => {
             let umpire2 = checkUmpireType(umpires, 2) ? checkUmpireType(umpires, 2) : []
             return (
