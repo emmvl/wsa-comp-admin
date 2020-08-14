@@ -12,7 +12,7 @@ import { getOrganisationData } from "../../util/sessionStorage";
 import { getUserDashboardTextualAction, exportOrgRegQuestionAction, userDeleteAction } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 import { getGenderAction } from '../../store/actions/commonAction/commonAction';
-import moment from 'moment';`
+import moment from 'moment';
 import InputWithHead from "../../customComponents/InputWithHead";
 import Loader from '../../customComponents/loader';
 
