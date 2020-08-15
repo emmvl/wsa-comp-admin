@@ -83,9 +83,21 @@ const initialState = {
     end_Time: "",
     matchResult: [],
     bulkRadioBtn: 'fixedDuration',
-    mainCourtList: []
+    mainCourtList: [],
+    roundList: []
 
 };
+
+// Remove duplicate rounds names 
+
+function removeDuplicateValues(array) {
+    return array.filter((obj, index, self) =>
+        index === self.findIndex((el) => (
+            el["name"] === obj["name"]
+        ))
+    )
+
+}
 
 function LiveScoreBulkMatchState(state = initialState, action) {
 
@@ -402,6 +414,20 @@ function LiveScoreBulkMatchState(state = initialState, action) {
                 endCourtData: state.mainCourtList,
             }
 
+        case ApiConstants.API_LIVE_SCORE_ROUND_LIST_LOAD:
+            return { ...state, rounLoad: true };
+
+
+        case ApiConstants.API_LIVE_SCORE_ROUND_LIST_SUCCESS:
+            let roundListArray = action.result
+            roundListArray.sort((a, b) => Number(a.sequence) - Number(b.sequence));
+            state.roundList = removeDuplicateValues(roundListArray)
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                rounLoad: false
+            };
         default:
             return state;
     }

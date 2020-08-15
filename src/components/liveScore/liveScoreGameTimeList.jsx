@@ -81,6 +81,17 @@ function checkPlayTime(record) {
     }
 }
 
+function checkPlayerId(player) {
+
+    if (player.mnbPlayerId == "undefined" || player.mnbPlayerId == "") {
+
+        return player.id
+    } else {
+
+        return player.mnbPlayerId
+    }
+}
+
 ////columens data
 const columns = [
 
@@ -92,9 +103,10 @@ const columns = [
 
         render: (player, record) => <NavLink to={{
             pathname: '/liveScorePlayerView',
-            state: { tableRecord: player }
+            state: { tableRecord: record }
         }} >
-            <span className="input-heading-add-another pt-0" >{player.mnbPlayerId ? player.mnbPlayerId : player.id}</span>
+            <span className="input-heading-add-another pt-0" >{checkPlayerId(player)}</span>
+            {/* <span className="input-heading-add-another pt-0" >{player.mnbPlayerId ? player.mnbPlayerId : player.id}</span> */}
         </NavLink>
 
         // sorter: (a, b) => tableSort(a, b, "id"),

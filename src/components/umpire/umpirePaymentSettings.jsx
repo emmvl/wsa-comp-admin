@@ -146,13 +146,13 @@ class UmpirePaymentSetting extends Component {
                         <div className="col-sm-3">
                             <div className="reg-add-save-button">
                                 {/* <NavLink to='/umpire'> */}
-                                <Button type="cancel-button">{AppConstants.cancel}</Button>
+                                <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.cancel}</Button>
                                 {/* </NavLink> */}
                             </div>
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button className="open-reg-button" type="primary" htmlType="submit" disabled={isSubmitting}>
+                                <Button className="publish-button save-draft-text" type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.save}
                                 </Button>
                             </div>
@@ -308,7 +308,7 @@ class UmpirePaymentSetting extends Component {
             <div>
                 <div className="row pt-3" >
 
-                    <div className='col-sm' style={{ minWidth: 'fit-content' }}>
+                    <div className='col-sm input-width'>
                         <InputWithHead
                             auto_Complete='new-name'
                             heading={AppConstants.name}
@@ -317,7 +317,7 @@ class UmpirePaymentSetting extends Component {
                             value={inputFieldArray[index].name}
                         />
                     </div>
-                    <div className='col-sm' style={{ minWidth: 'fit-content' }}>
+                    <div className='col-sm input-width'>
                         <InputWithHead
                             auto_Complete='new-umpireRate'
                             heading={AppConstants.umpireRate}
@@ -327,7 +327,7 @@ class UmpirePaymentSetting extends Component {
                         />
                     </div>
 
-                    <div className='col-sm' style={{ minWidth: 'fit-content' }}>
+                    <div className='col-sm input-width'>
                         <InputWithHead
                             auto_Complete='new-umpireResRate'
                             heading={AppConstants.umpireResRate}
@@ -337,7 +337,7 @@ class UmpirePaymentSetting extends Component {
                         />
                     </div>
 
-                    <div className='col-sm' style={{ minWidth: 'fit-content' }}>
+                    <div className='col-sm input-width'>
                         <InputWithHead
                             auto_Complete='new-umpireRate'
                             heading={AppConstants.umpireCoachrate}

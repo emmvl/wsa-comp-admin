@@ -704,6 +704,17 @@ function userReducer(state = initialState, action) {
         impersonation: action.result.success,
         status: action.status,
       };
+	case ApiConstants.API_USER_DELETE_LOAD:
+		return {
+			...state,
+			onLoad: true,
+		};
+	case ApiConstants.API_USER_DELETE_SUCCESS:
+		return {
+			...state,
+			onLoad: false,
+		};    
+
 
     default:
       return state;

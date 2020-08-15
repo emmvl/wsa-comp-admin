@@ -331,6 +331,15 @@ function updateTermsAndCondtionAction(payload) {
 
   return action;
 }
+
+function userDeleteAction(payload) {
+    const action = {
+        type: ApiConstants.API_USER_DELETE_LOAD,
+        payload:payload
+    };
+    return action
+}
+
 export {
   getRoleAction,
   getUreAction,
@@ -374,4 +383,5 @@ export {
   updateCharityAction,
   updateTermsAndCondtionAction,
   impersonationAction,
+  userDeleteAction
 }

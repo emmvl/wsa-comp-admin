@@ -779,6 +779,23 @@ export function* impersonationSaga(action) {
   }
 }
 
+function* userDeleteSaga(action) {
+  try {
+    const result = yield call(userHttpApi.deleteUserById, action.payload);
+    if (result.status === 1) {      
+      yield put({
+        type: ApiConstants.API_USER_DELETE_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
 export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_ROLE_LOAD, getRoleSaga);
   yield takeEvery(ApiConstants.API_URE_LOAD, getUreSaga);
@@ -817,4 +834,5 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_UPDATE_CHARITY_ROUND_UP_LOAD, updateCharitySaga);
   yield takeEvery(ApiConstants.API_UPDATE_TERMS_AND_CONDITION_LOAD, updateTermsAndConditionsSaga);
   yield takeEvery(ApiConstants.API_IMPERSONATION_LOAD, impersonationSaga);
+  yield takeEvery(ApiConstants.API_USER_DELETE_LOAD, userDeleteSaga);																		   
 }

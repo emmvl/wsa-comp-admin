@@ -330,6 +330,11 @@ let userHttpApi = {
     const url = `api/termsandcondition/update`;
     return Method.dataPost(url, token, payload);
   },
+
+  deleteUserById(payload) {
+    const url = `api/user/delete`;
+    return Method.dataPost(url, token, payload);
+  },
 }
 
 let Method = {

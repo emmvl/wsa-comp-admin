@@ -1534,8 +1534,10 @@ const AppConstants = {
   umpirePaymentSetting: "Umpire Payment Settings",
   refundFullAmount: "Refund Full Amount",
   refundPartialAmount: "Refund Partial Amount",
-  pickedUp: "Picked Up",
+  pickedUp: "Picked up",
   shipped: "Shipped",
+  extraTime: "Extra Time",
+  compDeleteConfirm: 'Are you sure you want to delete this competition?',
 };
 
 export default AppConstants;
