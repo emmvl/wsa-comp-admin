@@ -1466,7 +1466,7 @@ class RegistrationForm extends Component {
                                     </Button>
                                 </Tooltip>
 
-                                <Button className="save-draft-text" type="save-draft-text">
+                                <Button className="save-draft-text" type="save-draft-text"  onClick={()=>this.navigateToEndUserRegistration(registrationData.userRegistrationUrl)}>
                                     {AppConstants.preview}
                                 </Button>
                                 {/* <Tooltip style={{ height: "100%" }}
@@ -1494,8 +1494,10 @@ class RegistrationForm extends Component {
         );
     };
 
-    navigateToExternalUrl = (url) =>
-        window.open(url, "_blank");
+    navigateToEndUserRegistration = (url) =>{
+        let regUrl= url+"&sourceSystem=WebAdmin" 
+        window.open(regUrl, "_blank");
+    }
 
     userRegisrationLinkView = () => {
         let formDataValue = this.props.registrationState.registrationFormData !== 0 ?
